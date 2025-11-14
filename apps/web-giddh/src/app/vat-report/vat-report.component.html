@@ -5,7 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
 >
     <nav class="navbar">
-        <div class="relative w-100">
+        <div class="position-relative w-100">
             <hamburger-menu></hamburger-menu>
             <div
                 class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
@@ -474,9 +474,9 @@
                                 *ngIf="!isTaxApiInProgress && !vatReport?.length && !taxes?.length"
                                 class="no-data no-report"
                             >
-                                <h1>
+                                <h2>
                                     {{ isKenyaCompany ? localeData?.no_vat_available : localeData?.no_trn_available }}
-                                </h1>
+                                </h2>
                             </div>
                         </ng-container>
                         <!-- uk-vrn-report -->
@@ -487,7 +487,7 @@
                                         <p>
                                             <strong class="table-heading">{{ report.section }}</strong>
                                         </p>
-                                        <p class="inner-table-heading">
+                                        <p>
                                             {{ commonLocaleData?.app_amount }}
                                             ({{ activeCompany?.baseCurrency }})
                                         </p>
@@ -528,7 +528,7 @@
                                         <p>
                                             <strong class="table-heading">{{ report.section }}</strong>
                                         </p>
-                                        <p class="inner-table-heading">
+                                        <p>
                                             {{ commonLocaleData?.app_amount }}
                                             ({{ activeCompany?.baseCurrency }})
                                         </p>
@@ -576,7 +576,7 @@
                                 *ngIf="!isTaxApiInProgress && !vatReport?.length && !taxes?.length"
                                 class="no-data no-report"
                             >
-                                <h1>{{ localeData?.no_vrn_available }}</h1>
+                                <h2>{{ localeData?.no_vrn_available }}</h2>
                             </div>
                         </ng-container>
                         <ng-container *ngIf="isZimbabweCompany && !isLoading">
@@ -612,7 +612,7 @@
                                             </ng-container>
                                             <ng-container matColumnDef="mat-code">
                                                 <th width="10%" mat-header-cell *matHeaderCellDef>
-                                                    <p class="inner-table-heading text-center">
+                                                    <p class="text-center">
                                                         {{ localeData?.mat_code }}
                                                     </p>
                                                 </th>
@@ -658,7 +658,7 @@
                                             </ng-container>
                                             <ng-container matColumnDef="vos-amount">
                                                 <th mat-header-cell *matHeaderCellDef>
-                                                    <p class="inner-table-heading text-right font-weight-bold">
+                                                    <p class="text-right font-weight-bold">
                                                         {{ vatReportCurrencyMap[0] }}
                                                     </p>
                                                 </th>
@@ -678,7 +678,7 @@
                                             </ng-container>
                                             <ng-container matColumnDef="vos-decimal">
                                                 <th mat-header-cell *matHeaderCellDef>
-                                                    <p class="inner-table-heading text-right font-weight-bold">
+                                                    <p class="text-right font-weight-bold">
                                                         {{ vatReportCurrencyMap[1] }}
                                                     </p>
                                                 </th>
@@ -698,7 +698,7 @@
                                             </ng-container>
                                             <ng-container matColumnDef="ot-amount">
                                                 <th mat-header-cell *matHeaderCellDef>
-                                                    <p class="inner-table-heading text-right font-weight-bold">
+                                                    <p class="text-right font-weight-bold">
                                                         {{ vatReportCurrencyMap[0] }}
                                                     </p>
                                                 </th>
@@ -739,7 +739,7 @@
                                             </ng-container>
                                             <ng-container matColumnDef="ot-decimal">
                                                 <th mat-header-cell *matHeaderCellDef>
-                                                    <p class="inner-table-heading text-right font-weight-bold">
+                                                    <p class="text-right font-weight-bold">
                                                         {{ vatReportCurrencyMap[1] }}
                                                     </p>
                                                 </th>
@@ -911,7 +911,7 @@
                                 *ngIf="!isTaxApiInProgress && !vatReport?.length && !taxes?.length"
                                 class="no-data no-report"
                             >
-                                <h1>{{ localeData?.no_vat_available }}</h1>
+                                <h2>{{ localeData?.no_vat_available }}</h2>
                             </div>
                         </ng-container>
                         <div *ngIf="isLoading">

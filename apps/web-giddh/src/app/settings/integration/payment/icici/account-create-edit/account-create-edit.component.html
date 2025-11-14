@@ -28,7 +28,7 @@
         </div>
         <mat-dialog-content class="dialog-body icici-account-create-edit">
                 <ng-container *ngIf="!isLoading && localeData?.payment">
-                    <div class="" *ngIf="!activeBankAccount">
+                    <div *ngIf="!activeBankAccount">
                         <input-field
                             [label]="localeData?.payment?.icici_login_id"
                             [required]="true"
@@ -74,8 +74,8 @@
                             (selectedOption)="accountForm?.get('userUniqueName').patchValue($event.value)"
                         ></reactive-dropdown-field>
                     </div>
-                    <div class="mr-t1 custom-mat-form-field">
-                        <mat-form-field class="w-100" appearance="outline">
+                    <div class="mr-t1">
+                        <mat-form-field class="initial-height w-100" appearance="outline">
                             <mat-label>{{ localeData?.payment?.payment_updates }}</mat-label>
                             <mat-select formControlName="paymentAlerts" name="paymentAlerts" [multiple]="paymentAlertsUsersList?.length === 0">
                                 <ng-container *ngFor="let item of paymentAlertsUsersList">

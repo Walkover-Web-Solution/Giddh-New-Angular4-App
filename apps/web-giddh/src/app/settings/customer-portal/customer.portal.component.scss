@@ -3,9 +3,11 @@
     width: 100% !important;
 }
 
+/* UNUSED COMPONENT CLASS: form-control - Auto-commented by script
 .form-control {
     width: 100% !important;
 }
+*/
 
 .linked-account {
     width: calc(100% - 42px);
@@ -18,7 +20,7 @@
 
 .input-group-btn {
     font-size: var(--font-size-24);
-    color: var(--color-blue-primary) !important;
+    color: var(--text-primary-color) !important;
 }
 
 .copy-text-position {

@@ -20,8 +20,8 @@
         <div class="d-flex flex-column px-3 pt-2 discount-wrapper" (click)="$event.stopPropagation()">
             <div class="value-wrapper">
                 <div class="d-flex align-items-center mr-b1">
-                    <div class="position-relative percent-wrapper custom-mat-form-field">
-                        <mat-form-field appearance="outline" class="w-100">
+                    <div class="position-relative percent-wrapper">
+                        <mat-form-field appearance="outline" class="initial-height w-100">
                             <mat-label>{{ commonLocaleData?.app_percent }}</mat-label>
                             <input
                                 (keydown.enter)="$event.preventDefault()"
@@ -39,8 +39,8 @@
                         </mat-form-field>
                     </div>
                 </div>
-                <div class="d-flex align-items-center mr-b1 custom-mat-form-field">
-                    <mat-form-field appearance="outline" class="w-100">
+                <div class="d-flex align-items-center mr-b1">
+                    <mat-form-field appearance="outline" class="initial-height w-100">
                         <mat-label>{{ commonLocaleData?.app_value }}</mat-label>
                         <input
                             matInput
@@ -86,7 +86,7 @@
             </div>
         </div>
         <div class="create-new pt-2 mt-2 text-center cursor-pointer mr-l15 mr-r15" (click)="createNew()">
-            <span class="text-blue">{{ commonLocaleData?.app_create_new }}</span>
+            <span class="text-primary">{{ commonLocaleData?.app_create_new }}</span>
         </div>
         <div tabindex="0" (focus)="onFocusLastDiv($event)"></div>
     </mat-menu>

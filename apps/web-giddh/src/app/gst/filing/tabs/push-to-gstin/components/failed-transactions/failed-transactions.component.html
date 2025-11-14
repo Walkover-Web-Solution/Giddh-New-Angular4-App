@@ -1,10 +1,10 @@
 <div class="inner-tabs">
     <div class="gst-error">
         <div class="table-responsive table-sgt">
-            <table class="table basic table-bordered custom-table on-mobile-view">
+            <table class="table basic border custom-table on-mobile-view">
                 <thead>
                     <tr>
-                        <th>#</th>
+                        <th class="serial-no-column">#</th>
                         <th>
                             {{ localeData?.filing?.invoice_voucher_number }}
                             <span class="sort-table">
@@ -46,18 +46,17 @@
             </table>
         </div>
 
-        <div class="mb-4" *ngIf="failedTransactions?.length > pageSizeOptions[0]">
-            <mat-paginator
-                [length]="failedTransactions?.length"
-                [pageSize]="itemsPerPage"
-                [pageSizeOptions]="pageSizeOptions"
-                [pageIndex]="0"
-                [showFirstLastButtons]="true"
-                [hidePageSize]="false"
-                (page)="handlePageEvent($event)"
-            ></mat-paginator>
-            <section class="mr-b8"></section>
-        </div>
+        <mat-paginator
+            *ngIf="failedTransactions?.length > pageSizeOptions[0]"
+            [length]="failedTransactions?.length"
+            [pageSize]="itemsPerPage"
+            [pageSizeOptions]="pageSizeOptions"
+            [pageIndex]="0"
+            [showFirstLastButtons]="true"
+            [hidePageSize]="false"
+            (page)="handlePageEvent($event)"
+        ></mat-paginator>
+        <section class="mr-b8"></section>
 
         <div *ngIf="!failedTransactions?.length">
             <div class="filings-empty-state">

@@ -2,11 +2,12 @@
 
 /*typography styles*/
 
-body.unresponsive {
-    padding: 0;
-    background: var(--color-black);
-}
+// body.unresponsive {
+//     padding: 0;
+//     background: var(--color-black);
+// }
 
+/* UNUSED COMPONENT CLASS: intro - Auto-commented by script
 .intro.login {
     -webkit-background-size: cover;
     -moz-background-size: cover;
@@ -14,12 +15,15 @@ body.unresponsive {
     width: 100%;
     display: table;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: btn-lg - Auto-commented by script
 .btn-lg {
     padding: 10px 16px;
     font-size: var(--font-size-15);
     line-height: 1.3333333;
 }
+*/
 
 .btn {
     cursor: pointer;
@@ -29,20 +33,25 @@ body.unresponsive {
     outline: 0;
 }
 
+/* UNUSED COMPONENT CLASS: modal-header - Auto-commented by script
 .modal-header h3 {
     color: var(--color-white);
     font-size: var(--font-size-16);
 }
+*/
 
 .login {
     padding-top: 0;
 }
 
-.login .brand-heading {
+/* UNUSED COMPONENT CLASS: brand-heading - Auto-commented by script
+.login 
+.brand-heading {
     color: var(--color-white);
     font-size: var(--font-size-32);
     margin-bottom: 80px;
 }
+*/
 
 #box {
     background-color: var(--color-white);
@@ -56,9 +65,11 @@ body.unresponsive {
     text-transform: uppercase;
 }
 
+/* UNUSED COMPONENT CLASS: login-btn - Auto-commented by script
 .login-btn {
     position: relative;
 }
+*/
 
 #box img {
     max-height: 30px;
@@ -67,12 +78,15 @@ body.unresponsive {
     top: 4px;
 }
 
-#box .glyphicon {
+/* UNUSED COMPONENT CLASS: glyphicon - Auto-commented by script
+#box 
+.glyphicon {
     max-height: 30px;
     position: absolute;
     left: 15px;
     top: 13px;
 }
+*/
 
 #box .btn:hover,
 #box .btn:hover {
@@ -83,22 +97,27 @@ body.unresponsive {
     margin-bottom: 10px;
 }
 
+/* UNUSED COMPONENT CLASS: twitter - Auto-commented by script
 .twitter {
-    background: var(--color-blue-primary);
+    background: var(--bg-primary-color);
 }
+*/
 
 .google {
     background: var(--color-red);
 }
 
+/* UNUSED COMPONENT CLASS: linkedin - Auto-commented by script
 .linkedin {
-    background: var(--color-blue-primary);
+    background: var(--bg-primary-color);
 }
+*/
 
 .mobile {
     background: var(--color-black);
 }
 
+/* UNUSED COMPONENT CLASS: btn-login - Auto-commented by script
 .btn-login {
     text-transform: uppercase;
     color: var(--color-white);
@@ -117,6 +136,7 @@ body.unresponsive {
     transition-property: transform;
     padding: 10px 16px !important;
 }
+*/
 
 .btn-login:hover,
 .btn-login:focus,
@@ -124,19 +144,22 @@ body.unresponsive {
     -webkit-transform: scale(1.1);
     transform: scale(1.1);
 }
-.btn-blue {
+/* UNUSED COMPONENT CLASS: btn-text-primary - Auto-commented by script
+.btn-text-primary {
     color: var(--color-white) !important;
-    border-color: var(--color-blue-primary);
-    background: var(--color-blue-primary);
+    border-color: var(--theme-primary-color);
+    background: var(--bg-primary-color);
 }
+*/
 
-.btn-blue:hover {
+.btn-text-primary:hover {
     color: var(--color-white) !important;
-    border-color: var(--color-blue-primary);
-    background: var(--color-blue-primary);
+    border-color: var(--theme-primary-color);
+    background: var(--bg-primary-color);
 }
 /*giddh loader*/
 
+/* UNUSED COMPONENT CLASS: giddh-spinner - Auto-commented by script
 .giddh-spinner {
     animation: rotate 1.5s infinite linear;
     background: var(--color-black) none repeat scroll 0 0;
@@ -148,6 +171,7 @@ body.unresponsive {
     width: 60px;
     margin: 0 auto 20px;
 }
+*/
 
 .form-inline {
     width: 80px;
@@ -166,25 +190,33 @@ body.unresponsive {
     }
 }
 
-.intro .lead {
+/* UNUSED COMPONENT CLASS: lead - Auto-commented by script
+.intro 
+.lead {
     text-align: center;
     font-size: var(--font-size-16);
 }
+*/
 
-.btn-login.btn-default {
+/* UNUSED COMPONENT CLASS: btn-default - Auto-commented by script
+.btn-login
+.btn-default {
     color: var(--color-black);
     background-color: var(--color-white);
-    border-color: var(--color-silver);
+    border-color: var(--border-color);
 }
+*/
 
 .btn-login.btn-default:hover {
     color: var(--color-black) !important;
     background-color: var(--color-white);
-    border-color: var(--color-silver);
+    border-color: var(--border-color);
     box-shadow: none;
 }
 
-.intro .intro-body {
+/* UNUSED COMPONENT CLASS: intro-body - Auto-commented by script
+.intro 
+.intro-body {
     display: table-cell;
     vertical-align: middle;
     text-align: center;
@@ -195,6 +227,7 @@ body.unresponsive {
     top: 0;
     left: 0;
 }
+*/
 
 button.close {
     float: right;
@@ -207,7 +240,7 @@ button.close {
 }
 
 .email {
-    background: var(--color-blue-primary);
+    background: var(--bg-primary-color);
 }
 
 /************* end login page *************/
@@ -221,15 +254,21 @@ button.close {
     color: var(--color-black) !important;
 }
 
-:host ::ng-deep .clear {
+/* UNUSED COMPONENT CLASS: clear - Auto-commented by script
+:host ::ng-deep 
+.clear {
     top: 50% !important;
     font-size: var(--font-size-24) !important;
     right: 6px !important;
 }
+*/
 
-:host ::ng-deep .btn-success {
+/* UNUSED COMPONENT CLASS: btn-success - Auto-commented by script
+:host ::ng-deep 
+.btn-success {
     color: var(--color-white);
 }
+*/
 
 strong {
     font-weight: var(--font-weight-bold);
@@ -243,6 +282,7 @@ h1 {
     font-size: var(--font-size-24);
 }
 
+/* UNUSED COMPONENT CLASS: slide-content - Auto-commented by script
 .slide-content {
     padding: 0 100px;
     color: var(--color-white);
@@ -252,6 +292,7 @@ h1 {
     flex-direction: column;
     justify-content: space-evenly;
 }
+*/
 
 .login-box h1 {
     color: var(--color-black);
@@ -277,7 +318,7 @@ small {
 }
 
 .social-login li {
-    list-style: none;
+    // list-style: none;
     display: inline-block;
     margin-right: 15px;
 }
@@ -297,16 +338,17 @@ small {
     padding: 0 15px;
 }
 
-/* social icon */
-
+/* UNUSED COMPONENT CLASS: linkedin-ico - Auto-commented by script
+// social icon
 .linkedin-ico a {
-    color: var(--color-blue-primary);
-    border-color: var(--color-blue-primary);
+    color: var(--text-primary-color);
+    border-color: var(--theme-primary-color);
 }
+*/
 
 .google-ico a {
-    background: var(--color-blue-primary);
-    border-color: var(--color-blue-primary) !important;
+    background: var(--bg-primary-color);
+    border-color: var(--theme-primary-color) !important;
     color: var(--color-white);
     padding-left: 40px !important;
 }
@@ -326,15 +368,17 @@ small {
     height: 18px;
 }
 
+/* UNUSED COMPONENT CLASS: login-option - Auto-commented by script
 .login-option,
 .login-option a {
-    color: var(--color-blue-primary);
+    color: var(--text-primary-color);
     margin-top: 55px;
     font-weight: 500;
 }
+*/
 
 .login-option a {
-    border-bottom: 2px dotted var(--color-blue-primary);
+    border-bottom: 2px dotted var(--theme-primary-color);
 }
 
 .slide-content h1 {
@@ -344,6 +388,7 @@ small {
     line-height: 34px;
 }
 
+/* UNUSED COMPONENT CLASS: feature-list - Auto-commented by script
 .feature-list {
     display: flex;
     flex-direction: column;
@@ -351,15 +396,18 @@ small {
     justify-content: space-evenly;
     align-self: self-start;
 }
+*/
 
 .feature-list li {
-    list-style: none;
+    // list-style: none;
     margin-bottom: 70px;
     padding-left: 55px;
     position: relative;
 }
 
-.feature-list li .signup-ico {
+/* UNUSED COMPONENT CLASS: signup-ico - Auto-commented by script
+.feature-list li 
+.signup-ico {
     position: absolute;
     left: 0;
     height: 100%;
@@ -368,19 +416,22 @@ small {
     top: 7px;
     bottom: 0;
 }
+*/
 
 .feature-list li > p {
     font-size: var(--font-size-16);
     text-align: left;
 }
 
+/* UNUSED COMPONENT CLASS: client-testimonial - Auto-commented by script
 .client-testimonial {
     align-self: flex-start;
     position: relative;
     width: 100%;
-    background: var(--color-blue-light);
+    background: var(--theme-primary-light);
     margin: 0 -15px;
 }
+*/
 
 .client-testimonial .content {
     display: flex;
@@ -401,10 +452,13 @@ small {
     font-size: var(--font-size-16);
 }
 
+/* UNUSED COMPONENT CLASS: hash-tag - Auto-commented by script
 .hash-tag {
     color: var(--color-red);
 }
+*/
 
+/* UNUSED COMPONENT CLASS: blockquote-ico - Auto-commented by script
 .blockquote-ico {
     position: absolute;
     left: 15px;
@@ -414,13 +468,14 @@ small {
     top: 30px;
     bottom: 0;
 }
+*/
 
 /* new theme login page css start */
 .login-box {
     position: relative;
 }
 .login-left {
-    background-color: var(--color-blue-primary);
+    background-color: var(--bg-primary-color);
     position: absolute;
     left: 0;
     height: 100vh;
@@ -447,11 +502,11 @@ small {
     max-width: 476px;
     width: 90%;
     margin: 0 auto;
-    border-radius: 8px;
+    border-radius: var(--mat-border-radius-8);
     overflow: hidden;
 }
 .logo-login {
-    background-color: var(--color-blue-primary);
+    background-color: var(--bg-primary-color);
     height: 98px;
     display: flex;
     align-items: center;
@@ -460,54 +515,62 @@ small {
 }
 .accounting-space {
     padding: 30px;
-    border-radius: 0;
+    border-radius: var(--mat-border-radius-0);
     background-color: var(--color-white) !important;
     border: 2px solid var(--color-white);
     border-bottom-right-radius: 7px;
     border-bottom-left-radius: 7px;
 }
 .accounting-space h4 {
-    color: var(--color-blue-primary);
+    color: var(--text-primary-color);
     font-size: var(--font-size-16);
 }
+/* UNUSED COMPONENT CLASS: btn-outline-primary - Auto-commented by script
 .btn-outline-primary {
-    background-color: var(--color-blue-primary);
-    border-radius: 3px;
+    background-color: var(--bg-primary-color);
+    border-radius: var(--mat-border-radius-4);
     min-width: 160px;
-    border-radius: 5px;
+    border-radius: var(--mat-border-radius-4);
     color: var(--color-white);
     margin-bottom: 10px;
     font-size: var(--font-size-15);
 }
+*/
 .btn-outline-primary:hover,
 .btn-outline-primary:focus {
-    background-color: var(--color-blue-primary);
+    background-color: var(--bg-primary-color);
     box-shadow: none;
     outline: none;
 }
+/* UNUSED COMPONENT CLASS: login-with - Auto-commented by script
 .login-with {
-    color: var(--color-blue-primary);
+    color: var(--text-primary-color);
     font-size: var(--font-size-15);
     margin-top: 10px;
     a {
-        color: var(--color-blue-primary);
+        color: var(--text-primary-color);
         text-decoration: none;
     }
 }
+*/
+/* UNUSED COMPONENT CLASS: btn-secondary - Auto-commented by script
 .btn-secondary {
-    border-radius: 5px;
+    border-radius: var(--mat-border-radius-4);
     color: var(--color-white);
-    background-color: var(--color-blue-primary);
-    border: 1px solid var(--color-blue-primary);
+    background-color: var(--bg-primary-color);
+    border: 1px solid var(--theme-primary-color);
 }
+*/
 .btn-secondary:hover {
     color: var(--color-white) !important;
-    background-color: var(--color-blue-primary);
-    border-color: var(--color-blue-primary);
+    background-color: var(--bg-primary-color);
+    border-color: var(--theme-primary-color);
 }
+/* UNUSED COMPONENT CLASS: forgotStep - Auto-commented by script
 .forgotStep {
     display: none;
 }
+*/
 .msg91-ico {
     a {
         width: 199px;
@@ -523,9 +586,11 @@ small {
 }
 
 @media only screen and (min-width: 767px) {
-    .hidden-md {
+    /* UNUSED COMPONENT CLASS: hidden-md - Auto-commented by script
+.hidden-md {
         display: none;
     }
+*/
 }
 @media only screen and (max-width: 767px) {
     .giddh-login {

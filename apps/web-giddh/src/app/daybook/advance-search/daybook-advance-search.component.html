@@ -6,7 +6,7 @@
         </button>
     </div>
     <mat-dialog-content class="dialog-body max-height-80vh">
-        <form [formGroup]="advanceSearchForm" class="daybook-advance-search">
+        <form [formGroup]="advanceSearchForm" class="daybook-advance-search theme-foreground-color">
             <div class="row">
                 <div class="col-xs-12 col-sm-12">
                     <div class="row">
@@ -60,7 +60,7 @@
                     </div>
                 </div>
 
-                <div class="col-xs-12 col-sm-12 mr-t2 pd-t2 bd-rt">
+                <div class="col-xs-12 col-sm-12 mr-t2 pd-t2 border-top">
                     <div class="row">
                         <div class="col-sm-5 col-xs-12">
                             <label>{{ commonLocaleData?.app_particulars }}</label>
@@ -89,7 +89,7 @@
                                     </mat-slide-toggle>
                                 </div>
                                 <div class="col-9">
-                                    <div class="form-group" [ngClass]="{'custom-mat-form-field': !advanceSearchForm?.controls['particulars']?.value?.length}">
+                                    <div class="form-group">
                                         <select-multiple-fields
                                             [name]="'particulars'"
                                             [appearance]="'outline'"
@@ -142,7 +142,7 @@
                                     </mat-slide-toggle>
                                 </div>
                                 <div class="col-9">
-                                    <div class="form-group" [ngClass]="{'custom-mat-form-field': !advanceSearchForm?.controls['vouchers']?.value?.length}">
+                                    <div class="form-group">
                                         <select-multiple-fields
                                             [name]="'vouchers'"
                                             [appearance]="'outline'"
@@ -163,7 +163,7 @@
                     </div>
                 </div>
 
-                <div class="col-xs-12 col-sm-12 mr-t2 pd-t2 bd-rt">
+                <div class="col-xs-12 col-sm-12 mr-t2 pd-t2 border-top">
                     <div class="row">
                         <div class="col-sm-5 col-xs-12">
                             <label>{{ localeData?.tags }}</label>
@@ -185,7 +185,7 @@
                                     </mat-slide-toggle>
                                 </div>
                                 <div class="col-sm-9">
-                                    <div class="form-group" [ngClass]="{'custom-mat-form-field': !advanceSearchForm?.controls['tags']?.value?.length}">
+                                    <div class="form-group">
                                         <select-multiple-fields
                                             [name]="'tags'"
                                             [appearance]="'outline'"
@@ -234,8 +234,8 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-9 col-8 col-12">
-                                    <div class="custom-mat-form-field mr-t15">
-                                        <mat-form-field appearance="outline">
+                                    <div class="mr-t15">
+                                        <mat-form-field appearance="outline" class="initial-height">
                                             <mat-label>{{ commonLocaleData?.app_sales_person }}</mat-label>
                                             <mat-select
                                                 panelClass="py-0"
@@ -315,7 +315,7 @@
                         </mat-expansion-panel-header>
 
                         <div class="col-xs-12 col-sm-12 mr-t2">
-                            <div class="mr-b1 clearfix">
+                            <div class="mr-b1 clear-both">
                                 <div class="row">
                                     <div class="col-sm-5 col-xs-12">
                                         <label>{{ commonLocaleData?.app_inventory }}</label>
@@ -347,7 +347,7 @@
                                                 </mat-slide-toggle>
                                             </div>
                                             <div class="col-sm-9 col-12">
-                                                <div class="form-group" [ngClass]="{'custom-mat-form-field': !advanceSearchForm?.controls['inventory'].controls['inventories']?.value?.length}">
+                                                <div class="form-group">
                                                     <select-multiple-fields
                                                         [name]="'inventory'"
                                                         [appearance]="'outline'"

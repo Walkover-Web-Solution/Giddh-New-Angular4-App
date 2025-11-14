@@ -5,9 +5,9 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="primary-sidebar py-3 position-relative" (clickOutside)="hidePrimarySidebarCompanyList()">
+    <div class="primary-sidebar py-3 position-relative " (clickOutside)="hidePrimarySidebarCompanyList()">
         <div
-            class="company-branch-block pd-l2 pd-r2 position-relative"
+            class="company-branch-block pd-l2 pd-r2 position-relative "
             [ngClass]="{ 'padding-14': !currentBranch && (currentCompanyBranches$ | async)?.length > 1 }"
             >
             <ul
@@ -19,17 +19,17 @@
                     <span class="inner-span"></span>
                 </span>
                 <li
-                    class="company-name position-relative"
+                    class="company-name position-relative "
                     >
                     <h3
-                    class="font-15 d-flex flex-column cursor-pointer"
+                    class="font-size-15 d-flex flex-column cursor-pointer"
                     [checkPermission]="['MENU', 'MANAGE']"
                     >
                         <div class="d-flex flex-column">
                             <div class="d-flex align-items-center">
                                 <span class="company-alice mr-r05 text-uppercase">{{ companyInitials }}</span>
                                 <span class="d-flex justify-content-between w-100 company-full-name flex-column">
-                                    <span class="company-ellipsis">{{ selectedCompanyDetails?.name }}</span>
+                                    <span class="company-ellipsis" [matTooltip]="selectedCompanyDetails?.name" matTooltipPosition="above">{{ selectedCompanyDetails?.name }}</span>
                                     <span
                                         class="branch-ellipsis"
                                         *ngIf="currentBranch && (currentCompanyBranches$ | async)?.length > 1"
@@ -40,20 +40,20 @@
                                         *ngIf="currentBranch && (currentCompanyBranches$ | async)?.length > 1"
                                     ></i>
                                 </span>
-                                <span class="d-flex">
+                                <button mat-icon-button class="ml-1 toggle-btn">
                                     <i
-                                        [ngClass]="{
-                                            'icon-cross': showCompanyBranchSwitch,
-                                            'icon-down-new': !showCompanyBranchSwitch
-                                        }"
-                                    ></i>
-                                </span>
+                                    [ngClass]="{
+                                        'icon-cross font-size-15': showCompanyBranchSwitch,
+                                        'icon-down-new': !showCompanyBranchSwitch
+                                    }"
+                                ></i>
+                                </button>
                             </div>
                         </div>
                     </h3>
                 </li>
             </ul>
-            <div class="dropdown-menu company-branch-nav" *ngIf="showCompanyBranchSwitch">
+            <div class="dropdown-menu company-branch-nav left-0" *ngIf="showCompanyBranchSwitch">
                 <company-branch
                     [localeData]="localeData"
                     [commonLocaleData]="commonLocaleData"
@@ -65,11 +65,11 @@
             <div class="wrap-menus mr-t15">
                 <div class="account-block mr-b2 pd-l2 pd-r2" *ngIf="accountItemsFromIndexDB?.length > 0">
                     <div class="account-collapse">
-                        <p class="font-12 d-flex justify-content-between">
+                        <p class="font-size-12 d-flex justify-content-between">
                             {{ localeData?.accounts }}
                             <i class="icon-add-new cursor-pointer" (click)="showManageGroupsModal()"></i>
                         </p>
-                        <ul class="left-fixed-header list-style-none font-15 lh33 mr-t05">
+                        <ul class="left-fixed-header list-style-none font-size-15 lh33 mr-t05">
                             <li *ngFor="let acc of accountItemsFromIndexDB">
                                 <a
                                     aria-label="account"
@@ -106,7 +106,7 @@
                             class="dropdown-toggle"
                         >
                             <span [matTooltip]="localeData?.accounts"><i class="icon-accounts-new"></i> </span>
-                            <i class="icon-right mr-l1 font-15"></i>
+                            <i class="icon-right mr-l1 font-size-15"></i>
                         </a>
                         <ul
                             class="dropdown-menu account-dropdown-collapse list-style-none sub-menu"
@@ -135,9 +135,9 @@
                     </div>
                 </div>
                 <div class="menu-block">
-                    <div class="menu-item-wrapper font-15">
+                    <div class="menu-item-wrapper font-size-15">
                         <div class="menu-item pd-l2 pd-r2">
-                            <p class="font-12">
+                            <p class="font-size-12">
                                 <span
                                     [routerLink]="['/pages/giddh-all-items']"
                                     class="d-inline-flex align-items-center cursor-pointer"
@@ -145,8 +145,8 @@
                                     {{ localeData?.menu }}
                                     <i class="icon-down-new mr-l05"></i>
                                 </span>
-                                <span class="text-gray cursor-pointer" [routerLink]="['/pages/giddh-all-items']">
-                                    <i class="icon-go font-16"></i>
+                                <span class="text-light cursor-pointer" [routerLink]="['/pages/giddh-all-items']">
+                                    <i class="icon-go font-size-16"></i>
                                 </span>
                             </p>
                         </div>
@@ -158,8 +158,7 @@
                                 [style.padding-left.px]="node.level * 20"
                             >
                                 <div class="main-item-wrapper">
-                                    <a 
-                                        href="javascript:;" 
+                                    <span 
                                         aria-label="menu" 
                                         (click)="toggleNode(node)" 
                                         class="main-item"
@@ -168,8 +167,8 @@
                                             <i [ngClass]="node?.icon"></i>
                                             <span class="item-name">{{ node.label }}</span>
                                         </span>
-                                        <i class="mr-l1 font-15 icon-right" [ngClass]="{'rotate-270': isExpanded(node)}"></i>
-                                    </a>
+                                        <i class="mr-l1 font-size-15 icon-right" [ngClass]="{'rotate-270': isExpanded(node)}"></i>
+                                    </span>
                                 </div>
                             </cdk-tree-node>
                             
@@ -184,8 +183,7 @@
                             >
                                 <!-- Parent menu without children -->
                                 <div class="main-item-wrapper" *ngIf="node?.link && node?.level === 0">
-                                    <a
-                                        href="javascript:;"
+                                    <span
                                         aria-label="menu"
                                         (click)="toggleNode(node)" 
                                         [routerLink]="[node?.link]"
@@ -196,12 +194,11 @@
                                             <i [ngClass]="node?.icon"></i>
                                             <span class="item-name">{{ node?.label }}</span>
                                         </span>
-                                    </a>
+                                    </span>
                                 </div>
                                 <!-- Child menu without link -->
                                 <div class="main-item-wrapper sub-menu pr-0" *ngIf="node?.level === 1 && !node?.link">
-                                    <a
-                                        href="javascript:;"
+                                    <span
                                         class="main-item"
                                         aria-label="menu"
                                         (click)="handleItemClick(node)"
@@ -210,7 +207,7 @@
                                             <i [ngClass]="node?.icon"></i>
                                             {{ node?.label }}
                                         </span>
-                                    </a>
+                                    </span>
                                 </div>
                                 <!-- Child menu with link -->
                                 <div class="main-item-wrapper sub-menu pr-0" *ngIf="node?.level === 1 && node?.link">
@@ -220,7 +217,7 @@
                                         [routerLink]="[node?.link]"
                                         [queryParams]="node?.additional?.queryParams"
                                     >
-                                        <span class="item-label">
+                                    <span class="item-label">
                                             <i [ngClass]="node?.icon"></i>
                                             {{ node?.label }}
                                         </span>
@@ -241,7 +238,7 @@
                                                     )
                                                 "
                                             >
-                                                <strong
+                                                <span
                                                     class="ml-auto create-new"
                                                     *ngIf="node?.additional?.createNew"
                                                     (click)="$event.stopPropagation()"
@@ -251,7 +248,7 @@
                                                     "
                                                 >
                                                     {{ node?.additional?.createNew?.label }}
-                                                </strong>
+                                                </span>
                                             </ng-container>
                                             <ng-container
                                                 *ngIf="
@@ -261,7 +258,7 @@
                                                         ?.addCustomer
                                                 "
                                             >
-                                                <strong
+                                                <span
                                                     class="ml-auto create-new"
                                                     (click)="
                                                         $event.stopPropagation();
@@ -273,7 +270,7 @@
                                                     "
                                                 >
                                                     {{ node?.additional?.createNew?.label }}
-                                                </strong>
+                                                </span>
                                             </ng-container>
                                         </ng-container>
                                     </div>

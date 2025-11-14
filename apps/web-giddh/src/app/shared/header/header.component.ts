@@ -29,7 +29,7 @@ import { userLoginStateEnum, OrganizationType } from '../../models/user-login-st
 import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
 import { environment } from 'apps/web-giddh/src/environments/environment';
 import { CurrentPage, OnboardingFormRequest } from '../../models/api-models/Common';
-import { ASIDE_PANE_CONFIG, BranchHierarchyType, CALENDLY_URL, GIDDH_DATE_RANGE_PICKER_RANGES, ROUTES_WITH_HEADER_BACK_BUTTON } from '../../app.constant';
+import { ACCOUNTING_BREAKPOINTS, ASIDE_PANE_CONFIG, BranchHierarchyType, BREAKPOINT_SCREEN_SIZE, CALENDLY_URL, GIDDH_DATE_RANGE_PICKER_RANGES, ROUTES_WITH_HEADER_BACK_BUTTON } from '../../app.constant';
 import { CommonService } from '../../services/common.service';
 import { Location } from '@angular/common';
 import { SettingsProfileService } from '../../services/settings.profile.service';
@@ -203,8 +203,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isSidebarExpanded: boolean = false;
     /** This will hold if setting icon is disabled */
     public isSettingsIconDisabled: boolean = false;
-    /* This will hold if resolution is more than 768 to consider as ipad screen */
-    public isIpadScreen: boolean = false;
     /** True if sidebar is forcely expanded */
     public sidebarForcelyExpanded: boolean = false;
     /** True if calendly model is activated */
@@ -564,11 +562,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         });
 
         this.getCurrentCompanyData();
-        this._breakpointObserver.observe([
-            '(max-width: 768px)'
-        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isIpadScreen = result?.breakpoints['(max-width: 768px)'];
-        });
 
         this.store.pipe(select(state => state.general.openSideMenu), takeUntil(this.destroyed$)).subscribe(response => {
             this.sideBarStateChange(response);
@@ -662,12 +655,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         // Observes when screen resolution is 1440 or less close navigation bar for few pages...
         this._breakpointObserver
-            .observe(['(min-width: 1280px)'])
+            .observe([
+                ACCOUNTING_BREAKPOINTS.SIDEBAR_COMFORTABLE
+            ])
             .pipe(takeUntil(this.destroyed$))
             .subscribe((state: BreakpointState) => {
                 this.isLargeWindow = state.matches;
                 this.adjustNavigationBar();
-                if (state.matches) {
+                if (state.breakpoints[ACCOUNTING_BREAKPOINTS.SIDEBAR_COMFORTABLE]) {
                     this.expandSidebar(true);
                 } else {
                     this.collapseSidebar(true);

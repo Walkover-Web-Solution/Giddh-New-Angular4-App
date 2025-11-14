@@ -117,8 +117,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public isBankOrCashAccount: boolean;
     public failedBulkEntries$: Observable<string[]>;
     public isFileUploading: boolean = false;
-    /** Boolean for mobile screen or not  */
-    public isMobileScreen: boolean = true;
+    /** Boolean for tablet screen or not  */
+    public isTabletScreen: boolean = true;
     public closingBalanceBeforeReconcile: { amount: number, type: string };
     public reconcileClosingBalanceForBank: { amount: number, type: string };
     public needToShowLoader: boolean = true;
@@ -646,8 +646,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.enableAutopaid = false;
         }
 
-        if (!this.generalService.checkIfCssExists("./assets/style/ledgerfont/ledgerfont.css")) {
-            this.generalService.addLinkTag("./assets/style/ledgerfont/ledgerfont.css");
+        if (!this.generalService.checkIfCssExists("./assets/styles/ledgerfont/ledgerfont.css")) {
+            this.generalService.addLinkTag("./assets/styles/ledgerfont/ledgerfont.css");
         }
         document.querySelector('body').classList.add('ledger-body');
 
@@ -665,40 +665,34 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.currentOrganizationType = this.generalService.currentOrganizationType;
-        this.breakpointObserver.observe([
-            '(max-width: 991px)'
-        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isMobileScreen = result.matches;
-            if (this.isMobileScreen) {
-                this.arrangeLedgerTransactionsForMobile();
-            }
-        });
 
         this.breakpointObserver.observe([
-            BREAKPOINT_SCREEN_SIZE.SMALL_DESKTOP_SCREEN_SIZE,
-            BREAKPOINT_SCREEN_SIZE.MEDIUM_DESKTOP_SCREEN_SIZE,
-            BREAKPOINT_SCREEN_SIZE.TAB_SCREEN_SIZE
+            BREAKPOINT_SCREEN_SIZE.SMALL_DESKTOP,
+            BREAKPOINT_SCREEN_SIZE.MEDIUM_DESKTOP,
+            BREAKPOINT_SCREEN_SIZE.TABLET
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            if (result?.matches) {
+            if (result) {
                 // Reset all breakpoint screen size
                 Object.keys(this.breakpointScreenSize).forEach(key => {
                     this.breakpointScreenSize[key] = false;
                 });
-                if (result.breakpoints[BREAKPOINT_SCREEN_SIZE.SMALL_DESKTOP_SCREEN_SIZE]) {
+                this.isTabletScreen = result.breakpoints[BREAKPOINT_SCREEN_SIZE.TABLET];
+                if (result.breakpoints[BREAKPOINT_SCREEN_SIZE.SMALL_DESKTOP]) {
                     this.breakpointScreenSize.smallDesktopScreen = true;
                     this.ledgerGridTotalColumns = 3
                     this.ledgerGridColumnsValue = [1, 1, 1]
                     this.getLedgerStatementViewGridColumnsValue();
-                } else if (result.breakpoints[BREAKPOINT_SCREEN_SIZE.MEDIUM_DESKTOP_SCREEN_SIZE]) {
+                } else if (result.breakpoints[BREAKPOINT_SCREEN_SIZE.MEDIUM_DESKTOP]) {
                     this.breakpointScreenSize.mediumDesktopScreen = true;
                     this.ledgerGridTotalColumns = 8;
                     this.ledgerGridColumnsValue = [2, 3, 3]
                     this.getLedgerStatementViewGridColumnsValue();
-                } else if (result.breakpoints[BREAKPOINT_SCREEN_SIZE.TAB_SCREEN_SIZE]) {
-                    this.breakpointScreenSize.tabScreen = true;
-                    this.ledgerGridTotalColumns = 8;
-                    this.ledgerGridColumnsValue = [2, 3, 3];
-                    this.getLedgerStatementViewGridColumnsValue();
+                } else if (result.breakpoints[BREAKPOINT_SCREEN_SIZE.TABLET]) {
+                    // this.breakpointScreenSize.tabScreen = true;
+                    // this.ledgerGridTotalColumns = 8;
+                    // this.ledgerGridColumnsValue = [2, 3, 3];
+                    // this.getLedgerStatementViewGridColumnsValue();
+                    this.arrangeLedgerTransactionsForMobile();
                 } else {
                     this.ledgerGridTotalColumns = 4
                     this.ledgerGridColumnsValue = [1, 2, 1]
@@ -904,7 +898,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
                 this.ledgerTransactions = lt;
 
-                if (this.isMobileScreen) {
+                if (this.isTabletScreen) {
                     this.arrangeLedgerTransactionsForMobile();
                 }
 
@@ -2430,7 +2424,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             } else {
                 let itemIndx = this.checkedTrxWhileHovering?.findIndex((item) => item?.uniqueName === uniqueName);
                 this.checkedTrxWhileHovering.splice(itemIndx, 1);
-                const currentLength = this.isMobileScreen ?
+                const currentLength = this.isTabletScreen ?
                     this.checkedTrxWhileHovering?.length
                     : this.checkedTrxWhileHovering?.filter(transaction => transaction?.type === type)?.length;
                 if (this.checkedTrxWhileHovering && (currentLength === 0 || currentLength < totalLength)) {
@@ -2449,7 +2443,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (event?.checked) {
                 this.checkedTrxWhileHovering.push({ type, uniqueName });
                 this.store.dispatch(this.ledgerActions.SelectGivenEntries([uniqueName]));
-                const currentLength = this.isMobileScreen ?
+                const currentLength = this.isTabletScreen ?
                     this.checkedTrxWhileHovering?.length
                     : this.checkedTrxWhileHovering.filter(transaction => transaction?.type === type)?.length;
                 if (currentLength === totalLength) {
@@ -2472,7 +2466,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             } else {
                 let itemIndx = this.checkedTrxWhileHovering?.findIndex((item) => item?.uniqueName === uniqueName);
                 this.checkedTrxWhileHovering.splice(itemIndx, 1);
-                const currentLength = this.isMobileScreen ?
+                const currentLength = this.isTabletScreen ?
                     this.checkedTrxWhileHovering?.length
                     : this.checkedTrxWhileHovering?.filter(transaction => transaction?.type === type)?.length;
                 if (this.checkedTrxWhileHovering && (currentLength === 0 || currentLength < totalLength)) {
@@ -2968,9 +2962,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     private getActiveDatepickerTrigger(): MatMenuTrigger {
         // Try to get the currently visible trigger based on screen size
-        if (this.isMobileScreen && this.mobileUniversalDatepickerTrigger) {
+        if (this.isTabletScreen && this.mobileUniversalDatepickerTrigger) {
             return this.mobileUniversalDatepickerTrigger;
-        } else if (!this.isMobileScreen && this.desktopUniversalDatepickerTrigger) {
+        } else if (!this.isTabletScreen && this.desktopUniversalDatepickerTrigger) {
             return this.desktopUniversalDatepickerTrigger;
         } else if (this.ipadUniversalDatepickerTrigger) {
             return this.ipadUniversalDatepickerTrigger;
@@ -3417,8 +3411,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let dialogRef = this.dialog.open(templateRef, {
             width: '70%',
             height: '790px',
+            maxHeight: '90vh',
             role: 'alertdialog',
-            ariaLabel: 'template'
+            ariaLabel: 'template',
+            autoFocus: false
         });
 
         dialogRef.afterClosed().subscribe(response => {

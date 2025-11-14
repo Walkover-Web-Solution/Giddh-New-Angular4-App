@@ -1,4 +1,4 @@
-<div class="inventory-filter-bar top-main-bar align-items-center">
+<div class="inventory-filter-bar d-flex top-main-bar align-items-center">
     <div class="back-btnn" *ngIf="reportUniqueName">
         <button mat-stroked-button class="report-back-button" (click)="backToPreviousPage()">
             {{ commonLocaleData?.app_back }}
@@ -72,61 +72,54 @@
             <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
         </button>
     </div>
-    <div
-        class="clear-filter ml-auto"
-        *ngIf="
-            (stockReportRequest.stockGroupUniqueNames?.length ||
-                stockReportRequest.stockUniqueNames?.length ||
-                stockReportRequest.variantUniqueNames?.length) &&
-            searchPage === 'TRANSACTION'
-        "
-    >
-        <span
-            class="edit-btn-inventory ml-3 mr-0"
-            (click)="editInventory()"
-            *ngIf="filtersChipList?.length === 1 && !isVariantSelected"
+    <div class="ml-auto d-flex align-items-center">
+        <div
+            class="clear-filter"
+            *ngIf="
+                (stockReportRequest.stockGroupUniqueNames?.length ||
+                    stockReportRequest.stockUniqueNames?.length ||
+                    stockReportRequest.variantUniqueNames?.length) &&
+                searchPage === 'TRANSACTION'
+            "
         >
-            <i class="icon-edit-pencil text-blue font-16 cursor-pointer"></i>
-        </span>
-    </div>
-</div>
-<div class="d-flex mb-3">
-    <ng-container *ngIf="moduleName === 'GROUP_WISE_REPORT'">
-        <span class="ml-auto">
-            <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'INVENTORY_REPORT_GROUPWISE'"></watch-video>
-        </span>
-    </ng-container>
-    <ng-container *ngIf="moduleName === 'ITEM_WISE_REPORT'">
-        <span class="ml-auto">
-            <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'INVENTORY_REPORT_ITEMWISE'"></watch-video>
-        </span>
-    </ng-container>
-    <ng-container *ngIf="moduleName === 'VARIANT_WISE_REPORT'">
-        <span class="ml-auto">
-            <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'INVENTORY_REPORT_VARIANTWISE'"></watch-video>
-        </span>
-    </ng-container>
-</div>
-<div class="inventory-filter-bar">
-    <div class="search-control align-items-center">
-        <div class="icon-input flex-grow-1">
-            <i class="icon-search search-icon" *ngIf="!filtersChipList?.length"></i>
-            <mat-form-field
-                floatLabel="never"
-                class="select-multiple-chiplist-inventory"
-                [ngClass]="{ 'searching-bar-chiplist': filtersChipList?.length }"
+            <span
+                class="edit-btn-inventory ml-3 mr-0"
+                (click)="editInventory()"
+                *ngIf="filtersChipList?.length === 1 && !isVariantSelected"
             >
-                <mat-chip-grid #matChipList>
-                    <mat-chip-row
-                        *ngFor="let chip of filtersChipList; let indx = index"
-                        [selectable]="true"
-                        [removable]="true"
-                        (removed)="removeOption(chip, indx)"
-                        class="mr-r1"
-                    >
-                        {{ chip?.name }}
+                <i class="icon-edit-pencil text-primary font-size-16 cursor-pointer"></i>
+            </span>
+        </div>
+        <!-- Video Links -->
+        <ng-container *ngIf="moduleName === 'GROUP_WISE_REPORT'">
+            <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'INVENTORY_REPORT_GROUPWISE'"></watch-video>
+        </ng-container>
+        <ng-container *ngIf="moduleName === 'ITEM_WISE_REPORT'">
+            <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'INVENTORY_REPORT_ITEMWISE'"></watch-video>
+        </ng-container>
+        <ng-container *ngIf="moduleName === 'VARIANT_WISE_REPORT'">
+            <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'INVENTORY_REPORT_VARIANTWISE'"></watch-video>
+        </ng-container>
+    </div>
+
+</div>
+<div class="inventory-filter-bar d-flex">
+    <div class="search-control w-100 d-flex align-items-center mat-form-field-clean">
+            <mat-form-field
+            floatLabel="never"
+            class="initial-height d-block flex-grow-1 select-multiple-chiplist-inventory"
+            >
+            <mat-chip-grid #matChipList>
+                <mat-chip-row
+                *ngFor="let chip of filtersChipList; let indx = index"
+                [selectable]="true"
+                [removable]="true"
+                (removed)="removeOption(chip, indx)"
+                class="mr-r1"
+                >
+                {{ chip?.name }}
                         <span matChipRemove>
-                            <i class="icon-cross font-12"></i>
+                            <i class="icon-cross font-size-12"></i>
                         </span>
                     </mat-chip-row>
                     <input
@@ -181,10 +174,11 @@
                         </app-cdk-scroll>
                     </ng-template>
                 </mat-autocomplete>
+
+            <i class="icon-search search-icon mr-l1 mr-r1" matIconPrefix *ngIf="!filtersChipList?.length"></i>
             </mat-form-field>
-        </div>
         <div class="menu-btn-control d-flex justify-content-end align-items-center">
-            <button mat-icon-button aria-hidden="true" class="advance-filter-button font-14" (click)="exportReport()" [disabled]="isLoading$ | async">
+            <button mat-stroked-button aria-hidden="true" class="advance-filter-button font-size-14" (click)="exportReport()" [disabled]="isLoading$ | async">
                 <i class="icon-download-circle mr-1"></i>
                 {{ commonLocaleData?.app_export }}
             </button>
@@ -201,9 +195,9 @@
                 [localeData]="localeData"
                 [commonLocaleData]="commonLocaleData"
                 [iconClass]="'icon-options'"
-                [cssClass]="'customise-filter-button'"
+                [cssClass]="'border-radius-0 h-100 w-100 font-size-15'"
                 [buttonText]="localeData?.header?.customise"
-                class="customise-width"
+                class="customise-width d-inline-block h-100"
             >
             </select-table-column>
         </div>

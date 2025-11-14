@@ -14,7 +14,7 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -105,6 +105,7 @@ jobs:
           cp -r /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/dist/apps/web-giddh /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/public/website/
       - name: Create ZIP folder
         run: zip -r public.zip public
+<<<<<<< HEAD
       - name: Deploy to TEST env.
         if: ${{ env.BUILD_ENV == 'Test' }}
         env:
@@ -115,6 +116,8 @@ jobs:
             --acl private \
             --region ap-south-1 \
             /home/runner/work/Giddh-New-Angular4-App/Giddh-New-Angular4-App/public.zip s3://${{ secrets.UI_TEST_BUILD_S3_FOLDER }}
+=======
+>>>>>>> ab2a8fad785a698e7144eefc916c8a318a8f6bc7
       - name: Deploy to STAGE env.
         if: ${{ env.BUILD_ENV == 'Stage' }}
         env:

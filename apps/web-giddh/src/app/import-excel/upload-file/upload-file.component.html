@@ -1,12 +1,12 @@
 <!-- upload And Map Content start-->
 <div class="upload-and-map-content">
-    <h2 class="text-center">{{ localeData?.import }} 
+    <p class="text-center">{{ localeData?.import }} 
         {{ (entity === voucherType.AccountWise || entity === voucherType.VoucherWise) 
             ? (commonLocaleData?.app_import_type?.voucher + ' - ' + 
                (entity === voucherType.AccountWise 
                   ? commonLocaleData?.app_import_type?.account_wise 
                   : commonLocaleData?.app_import_type?.voucher_wise)) 
-            : (title | titlecase) }}</h2>
+            : (title | titlecase) }}</p>
     <div
         *ngIf="currentCompanyBranches?.length > 1 && entity === 'entries' && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
         class="form-group max-width-500 center-block"
@@ -29,7 +29,7 @@
             </div>
         </div>
     </div>
-    <div class="upload-excel max-width-500 center-block box mr-t2 dashed-border">
+    <div class="upload-excel max-width-500 center-block pd-15 mr-t2 dashed-border">
         <input
             type="file"
             id="csvUploadInput"
@@ -38,13 +38,13 @@
             droppable="true"
             class="form-control"
         />
-        <div class="clearfix position-relative width-100">
+        <div class="clear-both position-relative width-100">
             <div class="file-input-wrapper text-center">
-                <div class="clearfix mr-b2">
+                <div class="clear-both mr-b2">
                     <img src="assets/images/new/import_icon.svg" [style.width.px]="100" alt="import img" />
                 </div>
-                <div class="clearfix pd-r2 pd-l2">
-                    <label class="clearfix font-15">{{ localeData?.upload_message }}</label>
+                <div class="clear-both pd-r2 pd-l2">
+                    <label class="clear-both font-size-15">{{ localeData?.upload_message }}</label>
 
                     <div class="mr-t3">
                         <label class="file-upload-panel" for="csvUploadInput">
@@ -69,8 +69,8 @@
             <div class="mr-t1">
                 <reactive-dropdown-field
                     *ngIf="entity === voucherType.AccountWise"
-                    [label]="commonLocaleData?.app_select_account"
-                    [placeholder]="commonLocaleData?.app_select"
+                    [label]="commonLocaleData?.app_account"
+                    [placeholder]="commonLocaleData?.app_select_account"
                     [options]="accountSearchResponse"
                     [enableDynamicSearch]="true"
                     [isPaginationEnabled]="true"

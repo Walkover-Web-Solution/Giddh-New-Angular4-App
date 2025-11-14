@@ -1,9 +1,11 @@
 #export-body {
     .ledger-btn {
         button {
-            &.mat-stroked-button {
+            /*& UNUSED COMPONENT CLASS: mat-stroked-button - Auto-commented by script
+.mat-stroked-button {
                 min-width: 165px;
             }
+*/
         }
     }
 }

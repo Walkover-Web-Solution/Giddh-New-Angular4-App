@@ -1,13 +1,13 @@
 <ng-container appTranslate [file]="'vouchers'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete()">
     <hamburger-menu class="position-absolute"></hamburger-menu>
-    <div class="vouchers">
-        <mat-card class="container-lg">
+    <div class="vouchers bg-light-gray">
+        <mat-card class="container-lg mt-4">
             <form autocomplete="off" novalidate name="invoiceForm" [formGroup]="invoiceForm">
                 <mat-card-content>
                     <div class="vouchers-title d-flex align-items-center" [ngClass]="{'pd-b1': ocrDataEnabled}">
                         <div class="d-flex align-items-center">
-                            <h1 [ngClass]="{'voucher-heading': !(invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote) || ((invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote) && !invoiceForm.get('salesPurchaseAsReceiptPayment')?.value), 'cursor-pointer': invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote}"
+                            <p [ngClass]="{'voucher-heading': !(invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote) || ((invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote) && !invoiceForm.get('salesPurchaseAsReceiptPayment')?.value), 'cursor-pointer': invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote}"
                                 (click)="invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote ? invoiceForm.get('salesPurchaseAsReceiptPayment')?.patchValue(!invoiceForm.get('salesPurchaseAsReceiptPayment')?.value) : ''">
                                 {{ invoiceType.isCashInvoice && invoiceType.isSalesInvoice ?
                                 localeData?.invoice_types?.cash_invoice : invoiceType.isCashInvoice &&
@@ -15,7 +15,7 @@
                                 invoiceType.isCashInvoice && invoiceType.isDebitNote ?
                                 localeData?.invoice_types?.cash_debit_note : invoiceType.isCashInvoice &&
                                 invoiceType.isCreditNote ? localeData?.invoice_types?.cash_credit_note : (voucherType |
-                                voucherName: localeData | titlecase) }}</h1>
+                                voucherName: localeData | titlecase) }}</p>
                                 
                             <mat-slide-toggle color="primary" class="ml-4"
                                 *ngIf="invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote && !(invoiceType.isReceiptInvoice || invoiceType.isPaymentInvoice)"
@@ -28,7 +28,7 @@
                                 </span>
                             </mat-slide-toggle>
                             <button 
-                                class="h-auto p-0"
+                                class="ml-1 p-0"
                                 mat-icon-button
                                 [matTooltip]="commonLocaleData?.app_filter"
                                 [matTooltipPosition]="'above'"
@@ -53,7 +53,7 @@
                         </div>
                         <div class="ml-auto d-flex align-items-center" *ngIf="invoiceType.isSalesInvoice || invoiceType.isCashInvoice || ocrDataEnabled">
                             <div  *ngIf="invoiceType.isSalesInvoice || invoiceType.isCashInvoice">
-                                <watch-video [showIcon]="true" [iconCssClass]="'text-blue mr-r1 cursor-pointer'"
+                                <watch-video [showIcon]="true" [iconCssClass]="'text-primary mr-r1 cursor-pointer'"
                                     [moduleName]="invoiceType.isSalesInvoice ? 'VOUCHER_SALES' : 'VOUCHER_CASH'"></watch-video>
                             </div>
                             <button
@@ -125,7 +125,7 @@
                                                     <button mat-menu-item
                                                         *ngFor="let voucher of lastVouchersList$ | async"
                                                         (click)="copyInvoice(voucher)" class="line-height-initial">
-                                                        <div class="pd">
+                                                        <div class="pd-05">
                                                             <div class="d-flex flex-column">
                                                                 <div class="d-flex justify-content-between">
                                                                     <span>{{ invoiceType.isProformaInvoice ?
@@ -159,12 +159,12 @@
                                     <div class="balance-due-label">{{ invoiceType.isProformaInvoice ||
                                         invoiceType.isEstimateInvoice ? commonLocaleData?.app_total_amount :
                                         localeData?.balance_due }}</div>
-                                    <h2 class="d-inline-block">
+                                    <p class="d-inline-block">
                                         <amount-field [amount]="voucherTotals.balanceDue"
                                             [currencySymbol]="isMultiCurrencyVoucher ? account.baseCurrencySymbol : false"
                                             [currencyCode]="isMultiCurrencyVoucher ? account.baseCurrency : false">
                                         </amount-field>
-                                    </h2>
+                                    </p>
                                 </div>
                                 <div class="col-12">
                                     <span
@@ -176,23 +176,23 @@
                                         localeData?.edit_customer : localeData?.edit_vendor }}</span>
                                     <ng-container
                                         *ngIf="!invoiceType.isCashInvoice && (invoiceType.isSalesInvoice || invoiceType.isCreditNote || invoiceType.isReceiptInvoice)">
-                                        <img src="{{ imgPath }}new/search_customer.svg" height="70" class="mb-3"
+                                        <img src="{{ imgPath }}new/search_customer.svg" height="70" class="image-as-icon-color mb-3"
                                             *ngIf="!invoiceForm.controls['account'].get('customerName')?.value" />
                                     </ng-container>
                                     <ng-container
                                         *ngIf="!invoiceType.isCashInvoice && (invoiceType.isPurchaseInvoice || invoiceType.isDebitNote || invoiceType.isPurchaseOrder || invoiceType.isPaymentInvoice)">
-                                        <img src="{{ imgPath }}new/search-vendor.svg" height="70" class="mb-3"
+                                        <img src="{{ imgPath }}new/search-vendor.svg" height="70" class="image-as-icon-color mb-3"
                                             *ngIf="!invoiceForm.controls['account'].get('customerName')?.value" />
                                     </ng-container>
                                     <ng-container
                                         *ngIf="invoiceType.isCashInvoice && !invoiceType.isPurchaseInvoice && !invoiceType.isDebitNote">
                                         <img src="{{ imgPath }}new/search-customer-cash-invoice.svg" height="70"
-                                            class="mb-3"
+                                            class="image-as-icon-color mb-3"
                                             *ngIf="!invoiceForm.controls['account'].get('customerName')?.value" />
                                     </ng-container>
                                     <ng-container
                                         *ngIf="invoiceType.isCashInvoice && (invoiceType.isPurchaseInvoice || invoiceType.isDebitNote)">
-                                        <img src="{{ imgPath }}search-vendor-cash-invoice.svg" height="70" class="mb-3"
+                                        <img src="{{ imgPath }}search-vendor-cash-invoice.svg" height="70" class="image-as-icon-color mb-3"
                                             *ngIf="!invoiceForm.controls['account'].get('customerName')?.value" />
                                     </ng-container>
                                 </div>
@@ -201,7 +201,7 @@
                                     <p>
                                         <small>{{ localeData?.pending_po }}</small>
                                     </p>
-                                    <p class="font-15">
+                                    <p class="font-size-15">
                                         <a href="javascript:;" aria-label="number" (click)="
                                                 openPurchaseOrderPreviewPopup(
                                                     purchaseOrderPreviewModal,
@@ -218,11 +218,11 @@
                         </div>
 
                         <!-- Voucher Form Main Section -->
-                        <div class="vouchers-secondary-form position-relative"
+                        <div class="vouchers-secondary-form position-relative "
                             [ngClass]="{'vouchers-form-disable' : !invoiceForm.controls['account'].get('customerName')?.value }">
                             <div class="vouchers-small-container">
                                 <!-- Row 1 -->
-                                <div class="row">
+                                <div class="row mt-3">
                                     <ng-container formGroupName="account">
                                         <!-- Billing Address -->
                                         <div class="col-12 mr-t15" *ngIf="invoiceType.isPurchaseOrder">
@@ -241,7 +241,7 @@
                                                 </span>
                                             </label>
                                             <i *ngIf="!invoiceType.isCashInvoice" [matMenuTriggerFor]="billingDetails"
-                                                class="icon-edit text-blue pl-2 font-12">
+                                                class="icon-edit text-primary pl-2 font-size-12">
                                             </i>
                                             <mat-menu #billingDetails="matMenu">
                                                 <div class="mat-menu-width-large vouchers-address-menu">
@@ -266,7 +266,7 @@
                                                         localeData?.add_new_address }}</button>
                                                 </div>
                                             </mat-menu>
-                                            <div class="vouchers-address-form pd-15 border-radius-5"
+                                            <div class="vouchers-address-form pd-15 border-radius-4"
                                                 [ngClass]="{'without-taxnumber': !account?.taxTypeLabel}"
                                                 *ngIf="invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled || invoiceType.isCashInvoice">
                                                 <div class="address-field">
@@ -275,13 +275,15 @@
                                                         class="w-100" name="billingDetails"
                                                         formControlName="address"></textarea>
                                                 </div>
-                                                <div class="d-flex column-gap15 mb-3">
+                                                <div class="d-flex column-gap-15 mb-3">
                                                     <div class="w-50 border-bottom">
                                                         <span>{{ invoiceType?.isCashInvoice ? company?.countryName :
                                                             account?.countryName }}</span>
                                                     </div>
                                                     <div class="state-field w-50 border-bottom" formGroupName="state">
-                                                        <reactive-dropdown-field [cssClass]="'border-0 w-100'"
+                                                        <reactive-dropdown-field 
+                                                            [cssClass]="'border-none w-100'"
+                                                            [forceClear]="forceClear"
                                                             formControlName="code" [name]="'billingStateCode'"
                                                             [label]="isUkAccount ? commonLocaleData?.app_county : commonLocaleData?.app_state"
                                                             [placeholder]="isUkAccount ? commonLocaleData?.app_county : commonLocaleData?.app_state"
@@ -291,12 +293,12 @@
                                                             (selectedOption)="selectState('account', 'billingDetails', $event); copyAccountBillingAddressToShippingAddress()"></reactive-dropdown-field>
                                                     </div>
                                                 </div>
-                                                <div class="d-flex column-gap15">
+                                                <div class="d-flex column-gap-15">
                                                     <div *ngIf="account?.taxTypeLabel" class="w-50 border-bottom">
                                                         <text-field [type]="'text'" [name]="'billingTaxNumber'"
                                                             (keyup)="copyAccountBillingAddressToShippingAddress()"
                                                             [placeholder]="account?.taxTypeLabel"
-                                                            [cssClass]="'border-0 w-100'"
+                                                            [cssClass]="'border-none w-100'"
                                                             [showError]="taxNumberValidations['account']['billingDetails'] | async"
                                                             formControlName="taxNumber"></text-field>
                                                     </div>
@@ -304,7 +306,7 @@
                                                         <text-field [type]="'text'" [name]="'billingPinCode'"
                                                             (keyup)="copyAccountBillingAddressToShippingAddress()"
                                                             [placeholder]="zipCodeSupportedCountryList.includes(activeCompany?.countryV2?.alpha2CountryCode) ? commonLocaleData?.app_zip_code : commonLocaleData?.app_pin_code"
-                                                            [cssClass]="'border-0 w-100'"
+                                                            [cssClass]="'border-none w-100'"
                                                             formControlName="pincode"></text-field>
                                                     </div>
                                                 </div>
@@ -331,7 +333,7 @@
                                                 </span>
                                             </label> <i *ngIf="!invoiceType.isCashInvoice"
                                                 [matMenuTriggerFor]="shippingDetails"
-                                                class="icon-edit text-blue pl-2 font-12"></i>
+                                                class="icon-edit text-primary pl-2 font-size-12"></i>
 
                                             <mat-menu #shippingDetails="matMenu">
                                                 <div class="mat-menu-width-large vouchers-address-menu">
@@ -356,20 +358,22 @@
                                                 </div>
                                             </mat-menu>
 
-                                            <div class="vouchers-address-form pd-15 border-radius-5"
+                                            <div class="vouchers-address-form pd-15 border-radius-4"
                                                 [ngClass]="{'form-disabled': copyAccountBillingInShippingAddress, 'without-taxnumber': !account?.taxTypeLabel}"
                                                 *ngIf="invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled || invoiceType.isCashInvoice">
                                                 <div class="address-field">
                                                     <textarea rows="2" matInput class="w-100" name="shippingDetails"
                                                         formControlName="address"></textarea>
                                                 </div>
-                                                <div class="d-flex column-gap15 mb-3">
+                                                <div class="d-flex column-gap-15 mb-3">
                                                     <div class="w-50 border-bottom">
                                                         <span>{{ invoiceType?.isCashInvoice ? company?.countryName :
                                                             account?.countryName }}</span>
                                                     </div>
                                                     <div class="state-field w-50 border-bottom" formGroupName="state">
-                                                        <reactive-dropdown-field [cssClass]="'border-0 w-100'"
+                                                        <reactive-dropdown-field 
+                                                            [cssClass]="'border-none w-100'"
+                                                            [forceClear]="forceClear"
                                                             formControlName="code" [name]="'shippingStateCode'"
                                                             [label]="isUkAccount ? commonLocaleData?.app_county : commonLocaleData?.app_state"
                                                             [placeholder]="isUkAccount ? commonLocaleData?.app_county : commonLocaleData?.app_state"
@@ -379,18 +383,18 @@
                                                             (selectedOption)="selectState('account', 'shippingDetails', $event)"></reactive-dropdown-field>
                                                     </div>
                                                 </div>
-                                                <div class="d-flex column-gap15">
+                                                <div class="d-flex column-gap-15">
                                                     <div *ngIf="account?.taxTypeLabel" class="w-50 border-bottom">
                                                         <text-field [type]="'text'" [name]="'shippingTaxNumber'"
                                                             [placeholder]="account?.taxTypeLabel"
-                                                            [cssClass]="'border-0 w-100'"
+                                                            [cssClass]="'border-none w-100'"
                                                             [showError]="taxNumberValidations['account']['shippingDetails'] | async"
                                                             formControlName="taxNumber"></text-field>
                                                     </div>
                                                     <div class="w-50 border-bottom zip-field-width">
                                                         <text-field [type]="'text'" [name]="'shippingPinCode'"
                                                             [placeholder]="zipCodeSupportedCountryList.includes(activeCompany?.countryV2?.alpha2CountryCode) ? commonLocaleData?.app_zip_code : commonLocaleData?.app_pin_code"
-                                                            [cssClass]="'border-0 w-100'"
+                                                            [cssClass]="'border-none w-100'"
                                                             formControlName="pincode"></text-field>
                                                     </div>
                                                 </div>
@@ -415,9 +419,9 @@
 
                                             <!-- Mobile Number -->
                                             <div class="col-6 mr-t15">
-                                                <div id="init-contact-wrapper" class="position-relative w-100">
+                                                <!-- <div id="init-contact-wrapper" class="position-relative w-100">
                                                     <input type="tel"
-                                                        class="mat-form-field-border mat-form-field-height" #initContact
+                                                        class="mat-form-field-border mat-form-field-height bg-transparent" #initContact
                                                         aria-autocomplete="none" autocomplete="off"
                                                         (keypress)="intlClass?.onlyPhoneNumber($event); validateMobileField()"
                                                         id="init-contact"
@@ -427,7 +431,14 @@
                                                     <mat-error
                                                         *ngIf="invoiceForm.controls['account'].get('mobileNumber')?.value && (invoiceForm.controls['account'].get('mobileNumber')?.touched) && !intlClass?.isRequiredValidNumber">{{
                                                         localeData?.invalid_mobile }}</mat-error>
-                                                </div>
+                                                </div> -->
+                                                <mobile-number-input
+                                                    *ngIf="!forceClear"
+                                                    formControlName="mobileNumber"
+                                                    [label]="commonLocaleData?.app_mobile_number"
+                                                    [required]="false"
+                                                    [useImageFlags]="true">
+                                                </mobile-number-input>
                                             </div>
                                         </ng-container>
                                     </ng-container>
@@ -451,7 +462,7 @@
                                     <!-- Warehouse -->
                                     <div class="col-6 mr-t15" *ngIf="showWarehouse && warehouses?.length > 1"
                                         formGroupName="warehouse">
-                                        <reactive-dropdown-field [cssClass]="'border-0'" [name]="'warehouse'"
+                                        <reactive-dropdown-field [cssClass]="'border-none'" [name]="'warehouse'"
                                             formControlName="uniqueName"
                                             [label]="localeData?.select_warehouse_placeholder"
                                             [placeholder]="commonLocaleData?.app_select" [options]="warehouses"
@@ -479,7 +490,7 @@
                                 <div class="row pd-b1"
                                     *ngIf="invoiceType.isPurchaseOrder || (invoiceType.isPurchaseInvoice && !invoiceType.isCashInvoice)"
                                     formGroupName="company">
-                                    <div class="col-12 mr-t15">
+                                    <div class="col-12 mr-t15 mr-b15">
                                         <span class="billing-deliver-label">{{ localeData?.deliver_to }}</span>
                                     </div>
 
@@ -498,7 +509,7 @@
                                         </label>
                                         <i *ngIf="!invoiceType.isCashInvoice"
                                             [matMenuTriggerFor]="companyBillingAddress"
-                                            class="icon-edit text-blue pl-2 font-12">
+                                            class="icon-edit text-primary pl-2 font-size-12">
                                         </i>
                                         <mat-menu #companyBillingAddress="matMenu">
                                             <div class="mat-menu-width-large vouchers-address-menu">
@@ -517,7 +528,7 @@
                                                 </ng-container>
                                             </div>
                                         </mat-menu>
-                                        <div class="vouchers-address-form pd-15 border-radius-5"
+                                        <div class="vouchers-address-form pd-15 border-radius-4"
                                             [ngClass]="{'without-taxnumber': !company?.taxTypeLabel}"
                                             *ngIf="invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled || invoiceType.isCashInvoice">
                                             <div class="address-field">
@@ -525,12 +536,14 @@
                                                     (keyup)="copyCompanyBillingAddressToShippingAddress()" class="w-100"
                                                     name="companyBillingAddress" formControlName="address"></textarea>
                                             </div>
-                                            <div class="d-flex column-gap15 mb-3">
+                                            <div class="d-flex column-gap-15 mb-3">
                                                 <div class="w-50 border-bottom">
                                                     <span>{{ company?.countryName }}</span>
                                                 </div>
                                                 <div class="state-field w-50 border-bottom" formGroupName="state">
-                                                    <reactive-dropdown-field [cssClass]="'border-0 w-100'"
+                                                    <reactive-dropdown-field 
+                                                        [cssClass]="'border-none w-100'"
+                                                        [forceClear]="forceClear"
                                                         formControlName="code" [name]="'companyBillingStateCode'"
                                                         [label]="isUkCompany ? commonLocaleData?.app_county : commonLocaleData?.app_state"
                                                         [placeholder]="isUkCompany ? commonLocaleData?.app_county : commonLocaleData?.app_state"
@@ -540,12 +553,12 @@
                                                         (selectedOption)="selectState('company', 'billingDetails', $event); copyCompanyBillingAddressToShippingAddress()"></reactive-dropdown-field>
                                                 </div>
                                             </div>
-                                            <div class="d-flex column-gap15 mb-3">
+                                            <div class="d-flex column-gap-15 mb-3">
                                                 <div class="w-50 border-bottom" *ngIf="company?.taxTypeLabel">
                                                     <text-field [type]="'text'" [name]="'companyBillingTaxNumber'"
                                                         (keyup)="copyCompanyBillingAddressToShippingAddress()"
                                                         [placeholder]="company.taxTypeLabel"
-                                                        [cssClass]="'border-0 w-100'"
+                                                        [cssClass]="'border-none w-100'"
                                                         [showError]="taxNumberValidations['company']['billingDetails'] | async"
                                                         formControlName="taxNumber"></text-field>
                                                 </div>
@@ -553,7 +566,7 @@
                                                     <text-field [type]="'text'" [name]="'companyBillingPinCode'"
                                                         (keyup)="copyCompanyBillingAddressToShippingAddress()"
                                                         [placeholder]="zipCodeSupportedCountryList.includes(activeCompany?.countryV2?.alpha2CountryCode) ? commonLocaleData?.app_zip_code : commonLocaleData?.app_pin_code"
-                                                        [cssClass]="'border-0 w-100'"
+                                                        [cssClass]="'border-none w-100'"
                                                         formControlName="pincode"></text-field>
                                                 </div>
                                             </div>
@@ -578,7 +591,7 @@
                                             </span>
                                         </label> <i *ngIf="!invoiceType.isCashInvoice"
                                             [matMenuTriggerFor]="companyShippingAddress"
-                                            class="icon-edit text-blue pl-2 font-12"></i>
+                                            class="icon-edit text-primary pl-2 font-size-12"></i>
 
                                         <mat-menu #companyShippingAddress="matMenu">
                                             <div class="mat-menu-width-large vouchers-address-menu">
@@ -599,19 +612,21 @@
                                             </div>
                                         </mat-menu>
 
-                                        <div class="vouchers-address-form pd-15 border-radius-5"
+                                        <div class="vouchers-address-form pd-15 border-radius-4"
                                             [ngClass]="{'form-disabled': copyCompanyBillingInShippingAddress, 'without-taxnumber': !company?.taxTypeLabel}"
                                             *ngIf="invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled || invoiceType.isCashInvoice">
                                             <div class="address-field">
                                                 <textarea rows="2" matInput class="w-100" name="companyShippingAddress"
                                                     formControlName="address"></textarea>
                                             </div>
-                                            <div class="d-flex column-gap15 mb-3">
+                                            <div class="d-flex column-gap-15 mb-3">
                                                 <div class="w-50 border-bottom">
                                                     <span>{{ company?.countryName }}</span>
                                                 </div>
                                                 <div class="state-field w-50 border-bottom" formGroupName="state">
-                                                    <reactive-dropdown-field [cssClass]="'border-0 w-100'"
+                                                    <reactive-dropdown-field 
+                                                        [cssClass]="'border-none w-100'"
+                                                        [forceClear]="forceClear"
                                                         formControlName="code" [name]="'companyShippingStateCode'"
                                                         [label]="isUkCompany ? commonLocaleData?.app_county : commonLocaleData?.app_state"
                                                         [placeholder]="isUkCompany ? commonLocaleData?.app_county : commonLocaleData?.app_state"
@@ -621,18 +636,18 @@
                                                         (selectedOption)="selectState('company', 'shippingDetails', $event)"></reactive-dropdown-field>
                                                 </div>
                                             </div>
-                                            <div class="d-flex column-gap15 mb-3">
+                                            <div class="d-flex column-gap-15 mb-3">
                                                 <div class="w-50 border-bottom" *ngIf="company?.taxTypeLabel">
                                                     <text-field [type]="'text'" [name]="'companyShippingTaxNumber'"
                                                         [placeholder]="company.taxTypeLabel"
-                                                        [cssClass]="'border-0 w-100'"
+                                                        [cssClass]="'border-none w-100'"
                                                         [showError]="taxNumberValidations['company']['shippingDetails'] | async"
                                                         formControlName="taxNumber"></text-field>
                                                 </div>
                                                 <div class="w-50 border-bottom zip-field-width">
                                                     <text-field [type]="'text'" [name]="'companyShippingPinCode'"
                                                         [placeholder]="zipCodeSupportedCountryList.includes(activeCompany?.countryV2?.alpha2CountryCode) ? commonLocaleData?.app_zip_code : commonLocaleData?.app_pin_code"
-                                                        [cssClass]="'border-0 w-100'"
+                                                        [cssClass]="'border-none w-100'"
                                                         formControlName="pincode"></text-field>
                                                 </div>
                                             </div>
@@ -641,7 +656,7 @@
                                 </div>
 
                                 <!-- Row 3 -->
-                                <div class="row row-gap mr-t15 mr-b15"
+                                <div class="row row-gap-15 mr-t15 mr-b15"
                                     *ngIf="invoiceType.isPurchaseInvoice && ((vendorPurchaseOrders$ | async)?.length || fieldFilteredOptions?.length)">
                                     <!-- Purchase Order -->
                                     <div class="col-6">
@@ -682,7 +697,7 @@
                                 </div>
 
                                 <!-- Row 4 -->
-                                <div class="row row-gap mr-t15">
+                                <div class="row row-gap-15 mr-t15">
 
                                     <!-- Voucher Number -->
                                     <div class="col-6">
@@ -717,7 +732,7 @@
                                     <!-- Select Voucher -->
                                     <div class="col-6"
                                         *ngIf="!invoiceType.isCashInvoice && (invoiceType.isCreditNote || invoiceType.isDebitNote)">
-                                        <reactive-dropdown-field [cssClass]="'border-0'" [name]="'invoiceLinking'"
+                                        <reactive-dropdown-field [cssClass]="'border-none'" [name]="'invoiceLinking'"
                                             [label]="commonLocaleData?.app_select_voucher"
                                             [placeholder]="commonLocaleData?.app_select_voucher"
                                             [options]="vouchersListForCreditDebitNote$ | async"
@@ -739,7 +754,7 @@
                                                         ({{ commonLocaleData?.app_dated }}:
                                                         {{ option.additional?.voucherDate }})
                                                     </div>
-                                                    <div class="option-value-stock font-12">
+                                                    <div class="option-value-stock font-size-12">
                                                         ({{ commonLocaleData?.app_amount }}:
                                                         {{ option.additional?.unadjustedAmount?.amountForAccount |
                                                         giddhCurrency }})
@@ -751,14 +766,17 @@
                                 </div>
 
                                 <!-- Row 5 -->
-                                <div class="row row-gap mr-t15">
+                                <div class="row row-gap-15 mr-t15">
                                     <!-- Reverse Charge Checkbox -->
                                     <div class="col-12"
                                         *ngIf="showTaxColumn && (invoiceType.isPurchaseInvoice || (currentVoucherFormDetails?.rcmAllowed && (company.countryName === 'India' || company.countryName === 'United Kingdom')))">
-                                        <mat-checkbox (keydown.enter)="$event.preventDefault()" #rcmCheckbox
-                                            id="reverse-charge" formControlName="isRcmEntry"
-                                            (change)="changeRcmCheckboxState($event)" class="mr-r1" name="rcmEntry"
-                                            [disabled]="isEinvoiceGenerated" color="primary">
+                                        <mat-checkbox 
+                                            (keydown.enter)="$event.preventDefault()"
+                                            #rcmCheckbox
+                                            class="mr-r05"
+                                            [disabled]="isEinvoiceGenerated"
+                                            color="primary"
+                                        >
                                         </mat-checkbox>
                                         <label for="reverse-charge"
                                             (click)="!isEinvoiceGenerated ? toggleRcmCheckbox(rcmCheckbox, 'label') : ''"
@@ -799,7 +817,7 @@
                             </div>
 
                             <div class="vouchers-large-container mr-t15 pt-4">
-                                <div class="change-currency  d-flex justify-content-end align-items-center column-gap1 text-uppercase pb-2"
+                                <div class="change-currency  d-flex justify-content-end align-items-center column-gap-1 text-uppercase pb-2"
                                     *ngIf="isMultiCurrencyVoucher">
                                     <span>{{ commonLocaleData?.app_numbers?.one }} <ng-container
                                             *ngIf="currencySwitched">{{ company?.baseCurrency
@@ -816,9 +834,9 @@
                                             [matSuffix]="account?.baseCurrency"
                                             formControlName="exchangeRate"></text-field>
                                     </div>
-                                    <i class="icon-edit text-blue" (click)="showExchangeRateEditField = true"
+                                    <i class="icon-edit text-primary" (click)="showExchangeRateEditField = true"
                                         *ngIf="!showExchangeRateEditField"></i>
-                                    <i class="icon-save text-blue cursor-pointer"
+                                    <i class="icon-save text-primary cursor-pointer"
                                         (click)="showExchangeRateEditField = false"
                                         *ngIf="showExchangeRateEditField"></i>
                                 </div>
@@ -872,7 +890,7 @@
                                                                 <ng-container formGroupName="account">
                                                                     <ng-container
                                                                         *ngIf="activeEntryIndex !== entryIndex">
-                                                                        <div class="select-account-label">{{
+                                                                        <div>{{
                                                                             transaction.get('account.name')?.value ?
                                                                             transaction.get('stock.name')?.value
                                                                             ? transaction.get('account.name')?.value
@@ -884,6 +902,7 @@
                                                                             : localeData?.select_account }}</div>
                                                                     </ng-container>
                                                                     <reactive-dropdown-field
+                                                                        class="mat-form-field-clean"
                                                                         #accountDropdown
                                                                         (click)="setUserManuallyClicked()"
                                                                         *ngIf="activeEntryIndex === entryIndex"
@@ -911,7 +930,8 @@
                                                                         (createOption)="toggleStockAsidePane()"
                                                                         [openDropdown]="entryIndex === activeEntryIndex && !transaction.get('account.uniqueName')?.value"
                                                                         [showOptionDivider]="true"
-                                                                        [showMatLabel]="false" [showCaretIcon]="false"
+                                                                        [showMatLabel]="false" 
+                                                                        [showCaretIcon]="false"
                                                                         [appearance]="'fill'">
                                                                         <ng-template #optionTemplate let-option="option">
                                                                             <ng-container
@@ -945,7 +965,7 @@
                                                                                         }}
                                                                                     </div>
                                                                                     <div
-                                                                                        class="option-value-stock font-12">
+                                                                                        class="option-value-stock font-size-12">
                                                                                         {{ commonLocaleData?.app_stock
                                                                                         }}: {{
                                                                                         option.additional?.stock?.uniqueName
@@ -962,13 +982,14 @@
                                                                     <ng-container formGroupName="variant">
                                                                         <ng-container
                                                                             *ngIf="activeEntryIndex !== entryIndex">
-                                                                            <span class="select-account-label">{{
+                                                                            <span>{{
                                                                                 localeData?.variant + ": " +
                                                                                 transaction.get('stock.variant.name')?.value
                                                                                 }}</span>
                                                                         </ng-container>
                                                                         <div class="mr-t1">
                                                                             <reactive-dropdown-field
+                                                                                class="mat-form-field-clean"
                                                                                 *ngIf="activeEntryIndex === entryIndex"
                                                                                 [label]="localeData?.select_variant"
                                                                                 [placeholder]="localeData?.select_variant"
@@ -995,7 +1016,7 @@
                                                                 <ng-container formGroupName="0">
                                                                     <ng-container
                                                                         *ngIf="transaction.get('stock.skuCode')?.value">
-                                                                        <span class="font-12">{{
+                                                                        <span class="font-size-12">{{
                                                                             transaction.get('stock.skuCodeHeading')?.value
                                                                             }}: {{
                                                                             transaction.get('stock.skuCode')?.value
@@ -1008,7 +1029,7 @@
                                                             [ngClass]="{'justify-content-between': (!invoiceType.isPurchaseOrder && !invoiceType.isEstimateInvoice && !invoiceType.isProformaInvoice)}">
                                                             <div class="w-50"
                                                                 *ngIf="!invoiceType.isPurchaseOrder && !invoiceType.isEstimateInvoice && !invoiceType.isProformaInvoice">
-                                                                <div class="mt-2 font-12">
+                                                                <div class="mt-2 font-size-12">
                                                                     <span>{{ localeData?.entry_date }}</span>
                                                                     <div class="mt-1"
                                                                         *ngIf="activeEntryIndex !== entryIndex">
@@ -1027,14 +1048,14 @@
                                                                                 (dateSelected)="onBlurEntryDate(entry, entryIndex); openEntryDatepicker = false"
                                                                                 id="transactionDate{{ entryIndex }}"
                                                                                 [disabled]="isUpdateMode"
-                                                                                [cssClass]="'entry-custom-date width-80 border-0'"
+                                                                                [cssClass]="'entry-custom-date width-80 border-none'"
                                                                                 name="transactionDate{{ entryIndex }}"
                                                                                 formControlName="date"
                                                                                 [appearance]="'fill'"
                                                                                 (datepickerState)="openEntryDatepicker = $event"
                                                                                 [isOpened]="openEntryDatepicker">
                                                                             </giddh-datepicker>
-                                                                            <i class="icon-edit text-blue"
+                                                                            <i class="icon-edit text-primary"
                                                                                 (click)="openEntryDatepicker = true"></i>
                                                                         </ng-container>
                                                                     </div>
@@ -1043,7 +1064,7 @@
 
                                                             <div *ngIf="!invoiceType.isReceiptInvoice && !invoiceType.isPaymentInvoice"
                                                                 [ngClass]="{'w-50 text-right': (!invoiceType.isPurchaseOrder && !invoiceType.isEstimateInvoice && !invoiceType.isProformaInvoice),'w-100': (invoiceType.isPurchaseOrder || invoiceType.isEstimateInvoice || invoiceType.isProformaInvoice)}">
-                                                                <div class="mt-2 font-12">
+                                                                <div class="mt-2 font-size-12">
                                                                     <span>{{ entry.get('showCodeType')?.value ===
                                                                         'hsn' ? commonLocaleData?.app_hsn_code :
                                                                         commonLocaleData?.app_sac_code }}:</span>
@@ -1058,7 +1079,7 @@
                                                                         entry.get('hsnNumber')?.value :
                                                                         entry.get('sacNumber')?.value
                                                                         }}
-                                                                        <i class="icon-edit text-blue"
+                                                                        <i class="icon-edit text-primary"
                                                                             (click)="updateCurrentHsnSac(entry)"
                                                                             #menuTrigger="matMenuTrigger"
                                                                             [matMenuTriggerFor]="update"></i>
@@ -1139,13 +1160,13 @@
                                                     <td [width]="hasStock ? '15%' : '17%'" class="text-left description"
                                                         *ngIf="!invoiceType.isReceiptInvoice && !invoiceType.isPaymentInvoice">
                                                         <ng-container *ngIf="activeEntryIndex === entryIndex">
-                                                            <textarea rows="2" matInput class="form-control mt-2"
+                                                            <textarea rows="2" matInput class="form-control"
                                                                 placeholder="Add Description"
                                                                 name="transactionDescription{{entryIndex}}"
                                                                 formControlName="description"
                                                                 [maxlength]="entryDescriptionLength"></textarea>
                                                             <span *ngIf="activeEntryIndex === entryIndex"
-                                                                class="font-12 characters-left-text">
+                                                                class="font-size-12 characters-left-text">
                                                                 {{ commonLocaleData?.app_characters_left }}: {{
                                                                 entryDescriptionLength -
                                                                 entry.get("description")?.value?.length }}
@@ -1197,7 +1218,7 @@
                                                                             [cssClass]="'form-control text-right'"
                                                                             [name]="'transactionQuantity' + entryIndex"
                                                                             (change)="handleQuantityBlur(transaction)"
-                                                                            [type]="'text'"></text-field>
+                                                                            [type]="'number'"></text-field>
                                                                         <ng-container formGroupName="stockUnit">
                                                                             <ng-container
                                                                                 *ngIf="activeEntryIndex !== entryIndex">
@@ -1253,7 +1274,7 @@
                                                                                 [name]="'transactionRate' + entryIndex"
                                                                                 formControlName="rateForAccount"></text-field>
                                                                             <span
-                                                                                class="font-14 text-gray mt-1 d-inline-block"
+                                                                                class="font-size-14 text-light mt-1 d-inline-block"
                                                                                 *ngIf="isMultiCurrencyVoucher">
                                                                                 <amount-field
                                                                                     [amount]="currencySwitched ? transaction.get('stock.rate.rateForAccount')?.value / invoiceForm.get('exchangeRate')?.value : transaction.get('stock.rate.rateForAccount')?.value * invoiceForm.get('exchangeRate')?.value"
@@ -1297,7 +1318,7 @@
                                                                             (calculatedAmount)="updateTransactionAmount(transaction, $event)" />
                                                                     </div>
                                                                     <span
-                                                                        class="font-14 text-gray mt-1 d-inline-block wrap-td-data"
+                                                                        class="font-size-14 text-light mt-1 d-inline-block wrap-td-data"
                                                                         *ngIf="isMultiCurrencyVoucher">
                                                                         <amount-field
                                                                             [amount]="currencySwitched ? transaction.get('amount.amountForAccount')?.value / invoiceForm.get('exchangeRate')?.value : transaction.get('amount.amountForAccount')?.value * invoiceForm.get('exchangeRate')?.value"
@@ -1339,7 +1360,7 @@
                                                                         (selectedDiscounts)="getSelectedDiscounts(entryIndex, $event)"
                                                                         (totalDiscount)="updateTotalDiscount($event, entry, activeEntryIndex === entryIndex)"></discount-dropdown>
                                                                     <span
-                                                                        class="font-14 text-gray mt-1 d-inline-block wrap-td-data"
+                                                                        class="font-size-14 text-light mt-1 d-inline-block wrap-td-data"
                                                                         *ngIf="isMultiCurrencyVoucher">
                                                                         <amount-field
                                                                             [amount]="currencySwitched ? entry.get('totalDiscount')?.value / invoiceForm.get('exchangeRate')?.value : entry.get('totalDiscount')?.value * invoiceForm.get('exchangeRate')?.value"
@@ -1385,7 +1406,7 @@
                                                                         (totalTax)="updateTotalTax($event, entry)">
                                                                     </tax-dropdown>
                                                                     <span
-                                                                        class="font-14 text-gray mt-1 d-inline-block wrap-td-data"
+                                                                        class="font-size-14 text-light mt-1 d-inline-block wrap-td-data"
                                                                         *ngIf="isMultiCurrencyVoucher">
                                                                         <amount-field
                                                                             [amount]="currencySwitched ? entry.get('totalTax')?.value / invoiceForm.get('exchangeRate')?.value : entry.get('totalTax')?.value * invoiceForm.get('exchangeRate')?.value"
@@ -1400,7 +1421,7 @@
 
                                                     <!-- Total -->
                                                     <td [width]="hasStock ? '16%' : '16%'"
-                                                        class="total-column item-tax position-relative">
+                                                        class="total-column item-tax position-relative ">
                                                         <ng-container formGroupName="total">
                                                             <ng-container *ngIf="activeEntryIndex !== entryIndex">
                                                                 <div class="wrap-td-data">
@@ -1430,7 +1451,7 @@
                                                                         (input)="doReverseCalculation(entry)"
                                                                         (calculatedAmount)="updateEntryTotal(entry, $event)" />
                                                                 </div>
-                                                                <span class="font-14 text-gray mt-1 d-inline-block"
+                                                                <span class="font-size-14 text-light mt-1 d-inline-block"
                                                                     *ngIf="isMultiCurrencyVoucher">
                                                                     <amount-field
                                                                         [amount]="currencySwitched ? entry.get('total.amountForAccount')?.value / invoiceForm.get('exchangeRate')?.value : entry.get('total.amountForAccount')?.value * invoiceForm.get('exchangeRate')?.value"
@@ -1456,7 +1477,7 @@
                                                         </div>
                                                         <div class="wrap-td-data"
                                                             [ngClass]="{ 'mb-4': entry.get('otherTax.name')?.value && isMultiCurrencyVoucher }">
-                                                            <div class="d-flex justify-content-end column-gap5">
+                                                            <div class="d-flex justify-content-end column-gap-05">
                                                                 <ng-container
                                                                     *ngIf="entry.get('otherTax.name')?.value && (activeEntryIndex === entryIndex)">
                                                                     <span>
@@ -1484,7 +1505,7 @@
                                                                 </amount-field>
                                                             </ng-container>
                                                         </div>
-                                                        <div class="font-14 text-gray mt-1"
+                                                        <div class="font-size-14 text-light mt-1"
                                                             *ngIf="entry.get('otherTax.name')?.value && isMultiCurrencyVoucher">
                                                             <amount-field
                                                                 [amount]="currencySwitched ? entry.get('otherTax.amount')?.value / invoiceForm.get('exchangeRate')?.value : entry.get('otherTax.amount')?.value * invoiceForm.get('exchangeRate')?.value"
@@ -1495,7 +1516,7 @@
                                                         </div>
 
                                                         <!-- Delete Row Button -->
-                                                        <i class="icon-trash font-16 cursor-pointer delete-btn position-absolute"
+                                                        <i class="icon-trash font-size-16 cursor-pointer delete-btn position-absolute"
                                                             (click)="deleteLineEntry(entryIndex)"></i>
                                                     </td>
                                                 </tr>
@@ -1504,7 +1525,7 @@
                                     </table>
                                 </div>
                                 <!-- Add new row/line -->
-                                <div class="text-blue mt-2 px-0">
+                                <div class="text-primary mt-2 px-0">
                                     <span class="cursor-pointer" (click)="addNewLineEntry()">{{ localeData?.add_new_line
                                         }}</span> <span class="grey-color px-2">|</span>
                                     <span class="cursor-pointer" (click)="openBulkEntryDialog()">{{
@@ -1522,7 +1543,7 @@
                                                             <mat-card-header
                                                                 *ngIf="!invoiceType.isReceiptInvoice && !invoiceType.isPaymentInvoice">
                                                                 <mat-card-title>
-                                                                    <p class="font-16 mb-3">{{ localeData?.deposit }}
+                                                                    <p class="font-size-16 mb-3">{{ localeData?.deposit }}
                                                                     </p>
                                                                 </mat-card-title>
                                                             </mat-card-header>
@@ -1565,12 +1586,12 @@
                                                                             <div class="col"
                                                                                 *ngIf="(currentVoucherFormDetails?.depositAllowed && !isUpdateMode && !invoiceType.isCashInvoice) || (invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice || invoiceType.isCreditNote || invoiceType.isDebitNote || invoiceType.isReceiptInvoice || invoiceType.isPaymentInvoice) && (vouchersForAdjustment?.length || isAdjustAmount)">
                                                                                 <div class="d-flex align-items-center">
-                                                                                    <div class="d-flex align-items-center column-gap1"
+                                                                                    <div class="d-flex align-items-center column-gap-1"
                                                                                         *ngIf="(invoiceType.isSalesInvoice || invoiceType.isPurchaseInvoice || invoiceType.isCreditNote || invoiceType.isDebitNote || invoiceType.isReceiptInvoice || invoiceType.isPaymentInvoice) && (vouchersForAdjustment?.length || isAdjustAmount)">
                                                                                         <span>{{
                                                                                             localeData?.adjust_amount
                                                                                             }}</span>
-                                                                                        <span class="text-gray">
+                                                                                        <span class="text-light">
                                                                                             <amount-field [amount]="
                                                                                                     adjustPaymentData.totalAdjustedAmount
                                                                                                         | replace
@@ -1587,9 +1608,9 @@
                                                                                                 "></amount-field>
                                                                                         </span>
                                                                                         <i (click)="openAdjustmentDialog(true)"
-                                                                                            class="icon-edit text-blue font-12"></i>
+                                                                                            class="icon-edit text-primary font-size-12"></i>
                                                                                     </div>
-                                                                                    <i class="icon-trash font-16 cursor-pointer mr-l1"
+                                                                                    <i class="icon-trash font-size-16 cursor-pointer mr-l1"
                                                                                         *ngIf="currentVoucherFormDetails?.depositAllowed && !isUpdateMode && !invoiceType.isCashInvoice"
                                                                                         (click)="deleteDepositRow(depositIndex)"></i>
                                                                                 </div>
@@ -1597,7 +1618,7 @@
                                                                         </div>
                                                                     </ng-container>
                                                                 </div>
-                                                                <div class="text-blue mt-2 px-0"
+                                                                <div class="text-primary mt-2 px-0"
                                                                     *ngIf="currentVoucherFormDetails?.depositAllowed && !isUpdateMode && !invoiceType.isCashInvoice">
                                                                     <span class="cursor-pointer"
                                                                         (click)="addNewDepositRow()">{{
@@ -1616,7 +1637,7 @@
                                                                     </mat-panel-title>
                                                                 </mat-expansion-panel-header>
 
-                                                                <div class="row row-gap mx-0 px-2 pb-3"
+                                                                <div class="row row-gap-15 mx-0 px-2 pb-3"
                                                                     formGroupName="other">
                                                                     <ng-container
                                                                         *ngIf="!invoiceType.isReceiptInvoice && !invoiceType.isPaymentInvoice">
@@ -1672,7 +1693,7 @@
                                                                     </ng-container>
                                                                     <div class="col-12 px-2"
                                                                         *ngIf="!invoiceType.isPurchaseInvoice">
-                                                                        <mat-form-field class="w-100"
+                                                                        <mat-form-field class="initial-height w-100"
                                                                             appearance="outline">
                                                                             <mat-label>{{ commonLocaleData?.app_note
                                                                                 }}</mat-label>
@@ -1696,7 +1717,7 @@
                                                                     <div class="col-12 px-2"
                                                                         *ngIf="!invoiceType.isPurchaseOrder && !invoiceType.isEstimateInvoice && !invoiceType.isProformaInvoice">
                                                                         <ng-container *ngIf="!selectedFileName">
-                                                                            <div class="vouchers-attachment mat-form-field-border d-flex align-items-center column-gap1 p-2"
+                                                                            <div class="vouchers-attachment mat-form-field-border d-flex align-items-center column-gap-1 p-2"
                                                                                 [matTooltip]="'No file chosen'"
                                                                                 matTooltipPosition="right">
                                                                                 <input type="file"
@@ -1722,7 +1743,7 @@
                                                                         <ng-container
                                                                             *ngIf="!isFileUploading && selectedFileName">
                                                                             <div
-                                                                                class="vouchers-attachment mat-form-field-border d-flex align-items-center column-gap1 p-2 text-success">
+                                                                                class="vouchers-attachment mat-form-field-border d-flex align-items-center column-gap-1 p-2 text-green">
                                                                                 <div class="attachment-add-icon">
                                                                                     <i class="icon-tick"></i>
                                                                                 </div>
@@ -1731,7 +1752,7 @@
                                                                                     }}</span>
                                                                                 <button mat-icon-button
                                                                                     (click)="deleteAttachementConfirmation()"
-                                                                                    class="ml-auto remove-attachment font-16">
+                                                                                    class="ml-auto remove-attachment font-size-16">
                                                                                     <i class="icon-cross"></i>
                                                                                 </button>
                                                                             </div>
@@ -1865,7 +1886,7 @@
                                                         <td>
                                                             <text-field [id]="'grandTotalMultiCurrency'"
                                                                 #grandTotalMultiCurrency [type]="'text'"
-                                                                [cssClass]="'form-control mat-field-border'"
+                                                                [cssClass]="'form-control border'"
                                                                 [name]="'grandTotalMultiCurrency'"
                                                                 [prefix]="company?.baseCurrencySymbol"
                                                                 [mask]="company?.inputMaskFormat" [useMask]="true"
@@ -1909,7 +1930,7 @@
                                     </div>
                                 </div>
 
-                                <div class="vouchers-actions d-flex justify-content-end column-gap1 pd-t2 pd-b2 mt-4"  *ngIf="isMainVoucher">
+                                <div class="vouchers-actions d-flex justify-content-end column-gap-1 pd-t2 pd-b2 mt-4"  *ngIf="isMainVoucher">
                                     <ng-container *ngIf="!isUpdateMode">
                                         <button mat-stroked-button (click)="resetVoucherForm()">{{
                                             commonLocaleData?.app_clear }}</button>
@@ -1945,9 +1966,9 @@
                                         <button mat-raised-button color="primary" *ngIf="invoiceType.isPaymentInvoice"
                                             (click)="generateVoucher()">{{ localeData?.create_payment }}</button>
                                         <button mat-stroked-button [matMenuTriggerFor]="moreOptions"
-                                            class="vouchers-more-option-btn"
+                                            class="min-width-unset"
                                             *ngIf="invoiceType.isSalesInvoice || invoiceType.isEstimateInvoice || invoiceType.isProformaInvoice || invoiceType.isReceiptInvoice || invoiceType.isPaymentInvoice"><i
-                                                class="caret"></i></button>
+                                                class="caret rotate-180"></i></button>
                                         <mat-menu #moreOptions="matMenu">
                                             <button mat-menu-item (click)="createSendVoucher()">{{
                                                 localeData?.create_send
@@ -1964,7 +1985,7 @@
                                             updateVoucherText }}</button>
                                     </ng-container>
                                 </div>
-                                <div class="vouchers-actions d-flex justify-content-end column-gap1 pd-t2 pd-b2 mt-4" *ngIf="!isMainVoucher">
+                                <div class="vouchers-actions d-flex justify-content-end column-gap-1 pd-t2 pd-b2 mt-4" *ngIf="!isMainVoucher">
                                     <button mat-stroked-button (click)="resetVoucherForm()">{{
                                         commonLocaleData?.app_clear }}</button>
                                     <button mat-raised-button color="primary" (click)="generateVoucher('skip')">
@@ -1980,6 +2001,7 @@
                 </mat-card-content>
             </form>
         </mat-card>
+        <section class="mr-b8"></section>
     </div>
 </ng-container>
 

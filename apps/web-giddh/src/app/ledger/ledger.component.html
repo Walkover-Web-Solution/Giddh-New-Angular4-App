@@ -11,7 +11,7 @@
                 class="position-absolute"
                 [pageHeading]="
                     lc?.activeAccount?.name
-                        ? (!isMobileScreen ? localeData?.page_heading : '') +
+                        ? (!isTabletScreen ? localeData?.page_heading : '') +
                           lc?.activeAccount?.name +
                           ' ' +
                           commonLocaleData?.app_ac
@@ -20,7 +20,7 @@
             >
             </hamburger-menu>
             <section class="container-fluid ledger-section pd-t15" [hidden]="isShowLedgerColumnarReportTable">
-                <div class="custom-tabs mt-2 mb-2 position-static" *ngIf="isMobileScreen && ledgerView == ledgerViewEnum.TView">
+                <div class="custom-tabs mt-2 mb-2 position-static" *ngIf="isTabletScreen && ledgerView == ledgerViewEnum.TView">
                     <ul class="nav nav-tabs pt-0">
                         <li [ngClass]="{ 'active': visibleTransactionTypeMobile === 'all' }">
                             <a
@@ -52,17 +52,17 @@
                     </ul>
                 </div>
                 <!-- region ledger table-->
-                <div class="ledg-head transactions-page position-relative">
-                    <p class="w-100 float-left text-center font-16 pb-2 text-saffron" *ngIf="searchText || isAdvanceSearchImplemented">{{localeData?.opening_closing_balance_filter_message}}</p>
+                <div class="ledg-head transactions-page position-relative ">
+                    <p class="w-100 float-left text-center font-size-16 pb-2 text-saffron" *ngIf="searchText || isAdvanceSearchImplemented">{{localeData?.opening_closing_balance_filter_message}}</p>
                     <!-- region ledger header -->
-                    <div class="clearfix row mr-b15" [ngClass]="{ 'mr-b5': currentCompanyBranches?.length > 2 }">
+                    <div class="clear-both row mr-b15" [ngClass]="{ 'mr-b5': currentCompanyBranches?.length > 2 }">
                         <!-- region currency toggle -->
                         <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12 search-ledger-wrapper">
-                            <div class="d-flex column-gap1 search-ledger-field">
+                            <div class="d-flex column-gap-1 search-ledger-field">
                                 <!-- please remove hidden attribute after functionality works -->
                                 <div
                                     class="select-all-icons"
-                                    *ngIf="checkedTrxWhileHovering?.length > 0 && isMobileScreen"
+                                    *ngIf="checkedTrxWhileHovering?.length > 0 && isTabletScreen"
                                 >
                                     <div *ngIf="visibleTransactionTypeMobile && checkedTrxWhileHovering?.length > 0 && (ledgerView == ledgerViewEnum.TView)">
                                         <mat-checkbox
@@ -88,7 +88,7 @@
                                         ></mat-checkbox>
                                         {{ commonLocaleData?.app_select_all }}
                                     </div>
-                                    <div class="d-flex mr-l15 column-gap1">
+                                    <div class="d-flex mr-l15 column-gap-1">
                                         <button
                                             aria-label="delete"
                                             mat-stroked-button
@@ -101,9 +101,8 @@
                                             (click)="performBulkAction('delete')"
                                             [matTooltip]="commonLocaleData?.app_delete"
                                             [matTooltipPosition]="'above'"
-                                            matTooltipClass="tooltip-black"
                                         >
-                                            <i class="icon-trash font-15"></i>
+                                            <i class="icon-trash font-size-15"></i>
                                         </button>
 
                                         <button
@@ -117,9 +116,9 @@
                                             (click)="performBulkAction('generate')"
                                             [matTooltip]="commonLocaleData?.app_generate_voucher"
                                             [matTooltipPosition]="'above'"
-                                            matTooltipClass="tooltip-black"
+                                            
                                         >
-                                            <i class="icon-generate-invoice font-15"></i>
+                                            <i class="icon-generate-invoice font-size-15"></i>
                                         </button>
                                     </div>
                                     <button
@@ -129,12 +128,11 @@
                                             (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                             currentCompanyBranches?.length > 2
                                         "
-                                        class="mr-0 font-15"
+                                        class="mr-0 font-size-15"
                                         id="attach-file-mobile-view"
                                         (click)="performBulkAction('upload', BulkUploadfileInput)"
                                         [matTooltip]="localeData?.attach_file"
                                         [matTooltipPosition]="'above'"
-                                        matTooltipClass="tooltip-black"
                                     >
                                         <i class="icon-file-path"></i>
                                     </button>
@@ -155,20 +153,19 @@
                                         (keyup)="search(searchText)"
                                         [label]="commonLocaleData?.app_search"
                                         [placeholder]="localeData?.search_ledger"
-                                        [matPrefixIcon]="'icon-search font-15'"
+                                        [matPrefixIcon]="'icon-search font-size-15 px-2'"
                                         (suffixClick)="searchText = ''; search(searchText)"
-                                        [matSuffixIcon]="searchText ? 'icon-cross font-12' : ''"
+                                        [matSuffixIcon]="searchText ? 'icon-cross font-size-12' : ''"
                                     >
                                     </input-field>
                                     <a
                                         aria-label="clear"
-                                        class="cp mr-l1 clear-filter-btn"
-                                        *ngIf="(searchText || isAdvanceSearchImplemented) && isMobileScreen && (ledgerView == ledgerViewEnum.StatementView)"
+                                        class="cursor-pointer mr-l1 clear-filter-btn"
+                                        *ngIf="(searchText || isAdvanceSearchImplemented) && isTabletScreen && (ledgerView == ledgerViewEnum.StatementView)"
                                         href="javascript:;"
                                         (click)="resetAdvanceSearch(); getTransactionData()"
                                         [matTooltip]="commonLocaleData?.app_reset_advance_search"
                                         [matTooltipPosition]="'above'"
-                                        matTooltipClass="tooltip-black"
                                     >
                                         <i aria-hidden="true" class="icon-refresh"></i>
                                     </a>
@@ -179,7 +176,7 @@
                                     class="ledger-datepicker"
                                     id="giddh-datepicker-mobile-view mr-r05"
                                     container="body"
-                                    *ngIf="isMobileScreen && (ledgerView == ledgerViewEnum.StatementView)"
+                                    *ngIf="isTabletScreen && (ledgerView == ledgerViewEnum.StatementView)"
                                     [matMenuTriggerFor]="universalDatepicker"
                                     #mobileUniversalDatepickerTrigger="matMenuTrigger"
                                     role="button"
@@ -218,27 +215,25 @@
                                     class="advance-icon d-flex advance-search-filter icon-button-width pointer mx-0"
                                     [matTooltip]="commonLocaleData?.app_advance_search"
                                     [matTooltipPosition]="'above'"
-                                    matTooltipClass="tooltip-black"
                                     [ngStyle]="{ 'margin-left': checkedTrxWhileHovering?.length === 0 ? '7px' : '0px' }"
                                 >
                                     <span class="icon-advance-filter"></span>
                                 </button>
                                 <button
                                     aria-label="clear"
-                                    class="cp clear-filter-btn"
+                                    class="cursor-pointer clear-filter-btn"
                                     id="clear-filter"
-                                    *ngIf="isAdvanceSearchImplemented && !isMobileScreen"
+                                    *ngIf="isAdvanceSearchImplemented && !isTabletScreen"
                                     href="javascript:;"
                                     (click)="resetAdvanceSearch(); getTransactionData()"
                                     [matTooltip]="commonLocaleData?.app_reset_advance_search"
                                     [matTooltipPosition]="'above'"
-                                    matTooltipClass="tooltip-black"
                                 >
                                     <i aria-hidden="true" class="icon-refresh"></i>
                                 </button>
                                 <div
-                                    class="d-flex xs-mb-1 column-gap1"
-                                    *ngIf="checkedTrxWhileHovering?.length > 0 && !isMobileScreen"
+                                    class="d-flex xs-mb-1 column-gap-1"
+                                    *ngIf="checkedTrxWhileHovering?.length > 0 && !isTabletScreen"
                                 >
                                     <button
                                         aria-label="delete"
@@ -252,7 +247,6 @@
                                         (click)="performBulkAction('delete')"
                                         [matTooltip]="commonLocaleData?.app_delete"
                                         [matTooltipPosition]="'above'"
-                                        matTooltipClass="tooltip-black"
                                     >
                                         <i class="icon-trash"></i>
                                     </button>
@@ -269,7 +263,6 @@
                                         (click)="performBulkAction('generate')"
                                         [matTooltip]="commonLocaleData?.app_generate_voucher"
                                         [matTooltipPosition]="'above'"
-                                        matTooltipClass="tooltip-black"
                                     >
                                         <i class="icon-generate-invoice"></i>
                                     </button>
@@ -286,7 +279,6 @@
                                         (click)="performBulkAction('upload', BulkUploadfileInput)"
                                         [matTooltip]="localeData?.attach_file"
                                         [matTooltipPosition]="'above'"
-                                        matTooltipClass="tooltip-black"
                                     >
                                         <i class="icon-file-path"></i>
                                     </button>
@@ -300,7 +292,7 @@
                                     />
                                 </div>
 
-                                <ng-container *ngIf="isMobileScreen">
+                                <ng-container *ngIf="isTabletScreen">
                                     <button
                                         aria-label="threedots"
                                         mat-stroked-button
@@ -342,7 +334,7 @@
                                     showBranchSwitcher &&
                                     currentCompanyBranches?.length > 2 &&
                                     (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
-                                    isMobileScreen && (ledgerView == ledgerViewEnum.StatementView)
+                                    isTabletScreen && (ledgerView == ledgerViewEnum.StatementView)
                                 "
                             >
                                 <div class="form-group">
@@ -353,7 +345,7 @@
 
                         <div
                             class="col-lg-4 col-md-12 col-sm-12 col-xs-12 text-center date-range-options d-flex justify-content-center align-items-center"
-                            *ngIf="!isMobileScreen"
+                            *ngIf="!isTabletScreen"
                         >
                             <div
                                 class="advance-search-by-date date-advance-search ledger-date"
@@ -366,7 +358,7 @@
                                 <span class="input-wrapper">
                                     <mat-form-field
                                         appearance="fill"
-                                        class="w-100 custom-input-field"
+                                        class="w-100 custom-input-field mat-form-field-clean"
                                     >
                                         <input
                                             matInput
@@ -404,11 +396,11 @@
                         <!-- endregion -->
                         <div
                             class="col-lg-4 col-md-12 col-sm-12 col-xs-12 text-right C-flex-end align-items-center search-options"
-                            *ngIf="!isMobileScreen"
+                            *ngIf="!isTabletScreen"
                         >
                             <div class="d-flex xs-width-100 ledger-head-top">
                                 <div *ngIf="isLedgerAccountAllowsMultiCurrency" class="advance-search-block">
-                                    <span class="mr-r15 d-inline-block font-15">{{ baseCurrencyDetails?.code }}</span>
+                                    <span class="mr-r15 d-inline-block font-size-15">{{ baseCurrencyDetails?.code }}</span>
                                     <div class="toggle d-inline-block currency-toggler" data-key="disabled">
                                         <mat-slide-toggle
                                             aria-label="currency"
@@ -417,7 +409,7 @@
                                             (change)="toggleCurrency($event)"
                                         ></mat-slide-toggle>
                                     </div>
-                                    <span class="mr-l15 d-inline-block font-15">{{
+                                    <span class="mr-l15 d-inline-block font-size-15">{{
                                         foreignCurrencyDetails?.code
                                     }}</span>
                                 </div>
@@ -435,7 +427,6 @@
                                             class="icomoon-ico d-flex align-items-center"
                                             [matTooltip]="commonLocaleData?.app_refresh"
                                             [matTooltipPosition]="'above'"
-                                            matTooltipClass="tooltip-black"
                                             (click)="getBankTransactions()"
                                         >
                                             <i aria-hidden="true" class="icon-refresh lh-0"></i>
@@ -451,7 +442,6 @@
                                             class="icomoon-ico d-flex align-items-center"
                                             [matTooltip]="commonLocaleData?.app_refresh"
                                             [matTooltipPosition]="'above'"
-                                            matTooltipClass="tooltip-black"
                                             (click)="refreshBankTransactions()"
                                             [disabled]="(isBankRefreshing$ | async)"
                                         >
@@ -463,7 +453,6 @@
                                             id="connect-bank"
                                             class="icomoon-ico d-flex align-items-center"
                                             [matTooltip]="localeData?.connect_bank"
-                                            matTooltipClass="tooltip-black"
                                             [matTooltipPosition]="'above'"
                                             (click)="openBankLinkDialog()"
                                         >
@@ -477,7 +466,6 @@
                                         id="upload"
                                         class="icomoon-ico d-flex align-items-center"
                                         [matTooltip]="localeData?.import_statement"
-                                        matTooltipClass="tooltip-black"
                                         [matTooltipPosition]="'above'"
                                         (click)="showUploadBankStatementModal()"
                                     >
@@ -491,7 +479,6 @@
                                         class="icomoon-ico d-flex align-items-center"
                                         [matTooltip]="localeData?.share_ledger"
                                         [matTooltipPosition]="'above'"
-                                        matTooltipClass="tooltip-black"
                                         (click)="showShareLedgerModal()"
                                     >
                                         <i class="icon-ledger-path lh-0"></i>
@@ -504,7 +491,6 @@
                                         href="javascript:void(0)"
                                         [matTooltip]="commonLocaleData?.app_export"
                                         [matTooltipPosition]="'above'"
-                                        matTooltipClass="tooltip-black"
                                         (click)="showExportLedgerModal()"
                                     >
                                         <i class="icon-ledger-union-5 lh-0"></i>
@@ -517,7 +503,6 @@
                                         href="javascript:void(0)"
                                         [matTooltip]="localeData?.delete_bank_transactions"
                                         [matTooltipPosition]="'above'"
-                                        matTooltipClass="tooltip-black"
                                         (click)="showBulkDeleteBankTransactionsConfirmationModal()"
                                         *ngIf="
                                             entryUniqueNamesForBulkAction?.length > 0 ||
@@ -542,7 +527,6 @@
                                         href="javascript:void(0)"
                                         [matTooltip]="this.localeData?.autopaid_title"
                                         [matTooltipPosition]="'above'"
-                                        matTooltipClass="tooltip-black"
                                         (click)="showAutopaidModal()"
                                     >
                                         <img
@@ -573,30 +557,30 @@
 
                         <!-- Middle Element | Current Account Name in Statement view -->
                          <div class="col-4 d-grid align-content-center">
-                            <p *ngIf="ledgerView == ledgerViewEnum.StatementView" class="ledger-head border-none text-center mt-0">
-                                <b class="blue-heading font-15 mr-auto cursor-pointer" (dblclick)="openAccountAsidePane()"> {{ lc.ledgerUnderStandingObj.accountName }}</b>
+                            <p *ngIf="ledgerView == ledgerViewEnum.StatementView" class="ledger-head mat-app-background border-none text-center mt-0">
+                                <b class="text-primary-heading font-size-15 mr-auto cursor-pointer" (dblclick)="openAccountAsidePane()"> {{ lc.ledgerUnderStandingObj.accountName }}</b>
                             </p>
                          </div>
 
                         <!-- Right Element | Ledger View Toggle Button -->
                          <div class="col-4 d-grid align-content-center justify-content-end">
-                             <div class="d-inline-flex align-items-center column-gap1" [ngClass]="{ 'ml-auto': ledgerView !== ledgerViewEnum.StatementView }">
-                                 <span class="font-15">{{ commonLocaleData?.app_ledger_view?.statement_view }}</span>
+                             <div class="d-inline-flex align-items-center column-gap-1" [ngClass]="{ 'ml-auto': ledgerView !== ledgerViewEnum.StatementView }">
+                                 <span class="font-size-15">{{ commonLocaleData?.app_ledger_view?.statement_view }}</span>
                                  <mat-slide-toggle
                                      aria-label="ledger-view"
                                      color="primary"
                                      [checked]="ledgerView === ledgerViewEnum.TView"
                                      (change)="toggleLedgerView($event)"
                                  ></mat-slide-toggle>
-                                 <span class="font-15">{{ commonLocaleData?.app_ledger_view?.t_view }}</span>
+                                 <span class="font-size-15">{{ commonLocaleData?.app_ledger_view?.t_view }}</span>
                              </div>
                          </div>
                     </div>
                     <div
-                        *ngIf="isLedgerAccountAllowsMultiCurrency && isMobileScreen && (ledgerView == ledgerViewEnum.StatementView)"
+                        *ngIf="isLedgerAccountAllowsMultiCurrency && isTabletScreen && (ledgerView == ledgerViewEnum.StatementView)"
                         class="advance-search-block mr-t05"
                     >
-                        <span class="mr-r15 d-inline-block font-15">{{ baseCurrencyDetails?.code }}</span>
+                        <span class="mr-r15 d-inline-block font-size-15">{{ baseCurrencyDetails?.code }}</span>
                         <div class="toggle d-inline-block currency-toggler" data-key="disabled">
                             <mat-slide-toggle
                                 aria-label="currency"
@@ -605,16 +589,16 @@
                                 (change)="toggleCurrency($event)"
                             ></mat-slide-toggle>
                         </div>
-                        <span class="mr-l15 d-inline-block font-15">{{ foreignCurrencyDetails?.code }}</span>
+                        <span class="mr-l15 d-inline-block font-size-15">{{ foreignCurrencyDetails?.code }}</span>
                     </div>
                     <!-- endregion -->
 
                     <!-- region bank ledgers-->
-                    <div class="clearfix"></div>
-                    <div *ngIf="!isMobileScreen">
-                        <h1 class="mr-t2 primary-color" [hidden]="!isBankTransactionLoading">
+                    <div class="clear-both"></div>
+                    <div *ngIf="!isTabletScreen">
+                        <p class="mr-t2 text-primary" [hidden]="!isBankTransactionLoading">
                             {{ localeData?.loading_transactions }}
-                        </h1>
+                        </p>
                         <section id="eledgerwrap" class="mr-t2" [hidden]="!lc.showEledger || isBankTransactionLoading">
                             <div class="alert alert-danger ledger-book fade in position-relative pd-r15">
                                 <p *ngIf="bankAccount?.gocardlessMessage" class="mt-1 mb-1">
@@ -627,12 +611,12 @@
                                     >
                                 </p>
                                 <div class="d-flex align-items-start justify-content-between">
-                                    <div class="clearfix ledger-top-header-left" id="ledgerBankTransactionsHeader">
-                                        <h3 class="ledger-main-head">
+                                    <div class="clear-both ledger-top-header-left" id="ledgerBankTransactionsHeader">
+                                        <p class="ledger-main-head">
                                             <span>{{ localeData?.mapped_account_transactions }}</span>
-                                        </h3>
+                                        </p>
                                     </div>
-                                    <div class="d-flex align-items-center column-gap2">
+                                    <div class="d-flex align-items-center column-gap-2">
                                         <button
                                             mat-raised-button
                                             color="primary"
@@ -648,18 +632,19 @@
                                         </button>
                                         <button
                                             mat-stroked-button
+                                            (click)="hideEledgerWrap()"
                                             type="button"
                                             class="min-width-unset"
                                             aria-label="close"
                                         >
-                                            <span class="font-12 font-weight-normal" (click)="hideEledgerWrap()">{{
+                                            <span class="font-size-12 font-weight-font-weight-regular">{{
                                                 commonLocaleData?.app_close
                                             }}</span>
                                         </button>
                                     </div>
                                 </div>
-                                <div class="wrap-transaction-map clearfix">
-                                    <div class="w-100 ledger-head mt-0">
+                                <div class="wrap-transaction-map clear-both">
+                                    <div class="w-100 ledger-head mat-app-background mt-0">
                                         <mat-grid-list cols="2" rowHeight="37px">
                                             <mat-grid-tile>
                                                 {{ commonLocaleData?.app_debit }}
@@ -678,13 +663,13 @@
                                                 rowHeight="43px"
                                                 class="ledger-table transaction-mapped-table"
                                             >
-                                                <mat-grid-tile class="bold no-right-border" colspan={{ledgerGridColumnsValue[0]}}>
+                                                <mat-grid-tile class="font-weight-semibold no-right-border" colspan={{ledgerGridColumnsValue[0]}}>
                                                     {{ commonLocaleData?.app_date }}
                                                 </mat-grid-tile>
-                                                <mat-grid-tile class="bold no-right-border" colspan={{ledgerGridColumnsValue[1]}}>
+                                                <mat-grid-tile class="font-weight-semibold no-right-border" colspan={{ledgerGridColumnsValue[1]}}>
                                                     {{ commonLocaleData?.app_particular }}
                                                 </mat-grid-tile>
-                                                <mat-grid-tile class="bold text-right no-right-border" colspan={{ledgerGridColumnsValue[2]}}>
+                                                <mat-grid-tile class="font-weight-semibold text-right no-right-border" colspan={{ledgerGridColumnsValue[2]}}>
                                                     {{ commonLocaleData?.app_amount }}
                                                 </mat-grid-tile>
                                             </mat-grid-list>
@@ -770,7 +755,7 @@
                                                                             "
                                                                         ></mat-checkbox>
                                                                     </span>
-                                                                    <span class="custom-input-field mr-l05" [ngClass]="{'pd-l2': !(selectedBankTrxWhileHovering !==
+                                                                    <span class="custom-input-field mat-form-field-clean mr-l05" [ngClass]="{'pd-l2': !(selectedBankTrxWhileHovering !==
                                                                     txn.id && !selectedDebitTransactionIds.has(txn?.id))}">
                                                                         <giddh-datepicker
                                                                             name="bsdateledger"
@@ -848,7 +833,7 @@
                                                             <mat-grid-tile
                                                                 class="
                                                                     no-right-border
-                                                                    position-relative
+                                                                    position-relative 
                                                                     top-position-fix-{{ i }}
                                                                 "
                                                                 colspan={{ledgerGridColumnsValue[2]}}
@@ -950,13 +935,13 @@
                                                 rowHeight="43px"
                                                 class="ledger-table transaction-mapped-table"
                                             >
-                                                <mat-grid-tile class="bold no-right-border" colspan={{ledgerGridColumnsValue[0]}}>
+                                                <mat-grid-tile class="font-weight-semibold no-right-border" colspan={{ledgerGridColumnsValue[0]}}>
                                                     {{ commonLocaleData?.app_date }}
                                                 </mat-grid-tile>
-                                                <mat-grid-tile class="bold no-right-border" colspan={{ledgerGridColumnsValue[1]}}>
+                                                <mat-grid-tile class="font-weight-semibold no-right-border" colspan={{ledgerGridColumnsValue[1]}}>
                                                     {{ commonLocaleData?.app_particular }}
                                                 </mat-grid-tile>
-                                                <mat-grid-tile class="bold text-right no-right-border" colspan={{ledgerGridColumnsValue[2]}}>
+                                                <mat-grid-tile class="font-weight-semibold text-right no-right-border" colspan={{ledgerGridColumnsValue[2]}}>
                                                     {{ commonLocaleData?.app_amount }}
                                                 </mat-grid-tile>
                                             </mat-grid-list>
@@ -1042,7 +1027,7 @@
                                                                             "
                                                                         ></mat-checkbox>
                                                                     </span>
-                                                                    <span class="custom-input-field ml-1">
+                                                                    <span class="custom-input-field mat-form-field-clean ml-1">
                                                                         <giddh-datepicker
                                                                             name="bsDates"
                                                                             [(ngModel)]="item.entryDate"
@@ -1220,7 +1205,7 @@
                                     </div>
                                     <mat-paginator
                                         *ngIf="bankTransactionsResponse?.totalItems > pageSizeOptions[0]"
-                                        class="hide-total-items"
+                                        class="hide-total-items mat-app-background"
                                         [length]="bankTransactionsResponse?.totalPages * bankTransactionsResponse.countPerPage" 
                                         [pageSize]="bankTransactionsResponse.countPerPage" 
                                         [pageSizeOptions]="pageSizeOptions" 
@@ -1232,11 +1217,11 @@
                                 </div>
                                 <table class="w-100">
                                     <tr>
-                                        <td colspan="12" class="py-2 px-3 font-15">
+                                        <td colspan="12" class="py-2 px-3 font-size-15">
                                             <div class="pull-right" *ngIf="eLedgType == transactionType.Credit">
                                                 {{ localeData?.cf_balance }}
                                                 <span
-                                                    class="pd-l15 digit-blue d-inline-flex"
+                                                    class="pd-l15 d-inline-flex"
                                                     *ngIf="eLedgType == transactionType.Credit"
                                                 >
                                                     <amount-field
@@ -1248,11 +1233,11 @@
                                                 </span>
                                             </div>
                                         </td>
-                                        <td colspan="12" class="bd-rl py-2 px-3 font-15" *ngIf="eLedgType == transactionType.Debit">
+                                        <td colspan="12" class="border-left py-2 px-3 font-size-15" *ngIf="eLedgType == transactionType.Debit">
                                             <div class="pull-right">
                                                 {{ localeData?.cf_balance }}
                                                 <span
-                                                    class="pd-l15 digit-blue d-inline-flex"
+                                                    class="pd-l15 d-inline-flex"
                                                     *ngIf="eLedgType == transactionType.Debit"
                                                 >
                                                     <amount-field
@@ -1277,51 +1262,51 @@
                             commonLocaleData?.app_click_here
                         }}</a>
                     </p>
-                    <div class="clearfix"></div>
+                    <div class="clear-both"></div>
                     <mat-grid-list
                         cols="2"
                         rowHeight="50px"
-                        class="ledger-head"
-                        *ngIf="ledgerView == ledgerViewEnum?.TView && !isMobileScreen || (isMobileScreen && (ledgerView == ledgerViewEnum.StatementView) && visibleTransactionTypeMobile !== 'all')"
+                        class="ledger-head mat-app-background"
+                        *ngIf="ledgerView == ledgerViewEnum?.TView && !isTabletScreen || (isTabletScreen && (ledgerView == ledgerViewEnum.StatementView) && visibleTransactionTypeMobile !== 'all')"
                     >
                         <mat-grid-tile
                             [ngClass]="
-                                (Shown && !isMobileScreen) ||
-                                (isMobileScreen && (ledgerView == ledgerViewEnum.StatementView) && visibleTransactionTypeMobile === 'debit')
+                                (Shown && !isTabletScreen) ||
+                                (isTabletScreen && (ledgerView == ledgerViewEnum.StatementView) && visibleTransactionTypeMobile === 'debit')
                                     ? 'active'
                                     : ''
                             "
                             class="hidden-xs sticky-header pr-0 no-right-border"
                         >
-                            <b class="blue-heading font-15 cursor-pointer" (dblclick)="openAccountAsidePane()"> {{ lc.ledgerUnderStandingObj.text.dr }}</b>
-                            <span class="dr-cr-category font-15 pull-right">{{ localeData?.dr }}</span>
+                            <b class="text-primary-heading font-size-15 cursor-pointer" (dblclick)="openAccountAsidePane()"> {{ lc.ledgerUnderStandingObj.text.dr }}</b>
+                            <span class="dr-cr-category font-size-15 pull-right">{{ localeData?.dr }}</span>
                         </mat-grid-tile>
                         <mat-grid-tile
                             [ngClass]="
-                                (!Shown && !isMobileScreen) ||
-                                (isMobileScreen && (ledgerView == ledgerViewEnum.StatementView) && visibleTransactionTypeMobile === 'credit')
+                                (!Shown && !isTabletScreen) ||
+                                (isTabletScreen && (ledgerView == ledgerViewEnum.StatementView) && visibleTransactionTypeMobile === 'credit')
                                     ? 'active'
                                     : ''
                             "
                             class="hidden-xs sticky-header pl-0 no-right-border"
                         >
-                            <b class="blue-heading font-15 cursor-pointer" (dblclick)="openAccountAsidePane()">{{ lc.ledgerUnderStandingObj.text.cr }}</b>
-                            <span class="dr-cr-category font-15 pull-right">{{ localeData?.cr }}</span>
+                            <b class="text-primary-heading font-size-15 cursor-pointer" (dblclick)="openAccountAsidePane()">{{ lc.ledgerUnderStandingObj.text.cr }}</b>
+                            <span class="dr-cr-category font-size-15 pull-right">{{ localeData?.cr }}</span>
                         </mat-grid-tile>
                     </mat-grid-list>
                     <ng-container *ngIf="ledgerView == ledgerViewEnum?.StatementView">
-                        <div class="ledger-book" *ngIf="isMobileScreen">
+                        <div class="ledger-book" *ngIf="isTabletScreen">
                             <!-- Statement View for Mobile -->
                             <ng-container *ngTemplateOutlet="ledgerStatementView"></ng-container>
                         </div>
                     </ng-container>
 
                     <!-- endregion -->
-                    <div class="mobile-ledger-view clearfix" *ngIf="isMobileScreen && (ledgerView == ledgerViewEnum.TView)">
+                    <div class="mobile-ledger-view clear-both" *ngIf="isTabletScreen && (ledgerView == ledgerViewEnum.TView)">
                         <ng-container *ngIf="allTransactionDates && allTransactionDates.length > 0">
                             <ng-container *ngFor="let transactionDate of allTransactionDates">
                                 <div class="border-none pt-0 pb-0 pd-l15 pd-r15">
-                                    <div class="transaction-date pd-t2 bold">
+                                    <div class="transaction-date pd-t2 font-weight-semibold">
                                         {{ transactionDate }}
                                     </div>
                                     <mat-grid-list cols="2" rowHeight="55px">
@@ -1333,7 +1318,7 @@
                                         >
                                             <mat-grid-tile>
                                                 <div
-                                                    class="relative w-100 text-center d-flex align-items-center"
+                                                    class="position-relative w-100 text-center d-flex align-items-center"
                                                     [ngClass]="{
                                                         'compound-entry':
                                                             transactions.entryUniqueName === lc.selectedTxnUniqueName ||
@@ -1368,12 +1353,12 @@
                                                     <span class="account-holder-name">
                                                         <span
                                                             *ngIf="transactions.type === transactionType.Credit"
-                                                            class="text-gray mr-r05"
+                                                            class="text-light mr-r05"
                                                             >{{ localeData?.by }}</span
                                                         >
                                                         <span
                                                             *ngIf="transactions.type === transactionType.Debit"
-                                                            class="text-gray mr-r05"
+                                                            class="text-light mr-r05"
                                                             >{{ localeData?.to }}</span
                                                         >
                                                         <span class="mr-r15 text-ellipsis">{{
@@ -1409,7 +1394,6 @@
                                                             (click)="openAttachmentsDialog(attachments, transactions, true)"
                                                             [matTooltip]="transactions.attachedFileName"
                                                             [matTooltipPosition]="'right'"
-                                                            matTooltipClass="tooltip-black"
                                                         >
                                                             <i class="icon-attachment pull-left"></i>
                                                         </span>
@@ -1483,25 +1467,25 @@
                     </div>
                     <!-- end mobile view -->
                     <!-- region main transactions-->
-                    <div class="ledger-book" *ngIf="!isMobileScreen">
+                    <div class="ledger-book" *ngIf="!isTabletScreen">
                         <ng-container *ngIf="ledgerView == ledgerViewEnum.TView; else statementView">
                         <!-- region debit transaction-->
                         <div
                             class="left-col-new"
                             [ngClass]="{
                                 'active': Shown,
-                                'bd-rr':  (lc.transactionData$ | async)?.debitTransactions?.length >= (lc.transactionData$ | async)?.creditTransactions?.length
+                                'border-right':  (lc.transactionData$ | async)?.debitTransactions?.length >= (lc.transactionData$ | async)?.creditTransactions?.length
                             }"
                         >
                             <!-- region debit transaction header-->
-                            <mat-grid-list cols={{ledgerGridTotalColumns}} rowHeight="50px">
-                                <mat-grid-tile class="bold" colspan={{ledgerGridColumnsValue[0]}}>
-                                    <span class="cp">{{ commonLocaleData?.app_date }}</span>
+                            <mat-grid-list class="mat-app-background" cols={{ledgerGridTotalColumns}} rowHeight="50px">
+                                <mat-grid-tile class="font-weight-semibold" colspan={{ledgerGridColumnsValue[0]}}>
+                                    <span class="cursor-pointer">{{ commonLocaleData?.app_date }}</span>
                                 </mat-grid-tile>
-                                <mat-grid-tile class="bold" colspan={{ledgerGridColumnsValue[1]}}>
+                                <mat-grid-tile class="font-weight-semibold" colspan={{ledgerGridColumnsValue[1]}}>
                                     {{ commonLocaleData?.app_particular }}
                                 </mat-grid-tile>
-                                <mat-grid-tile class="bold text-right no-right-border" colspan={{ledgerGridColumnsValue[2]}}>
+                                <mat-grid-tile class="font-weight-semibold text-right no-right-border" colspan={{ledgerGridColumnsValue[2]}}>
                                     {{ commonLocaleData?.app_amount }}
                                 </mat-grid-tile>
                             </mat-grid-list>
@@ -1605,12 +1589,11 @@
                                 }"
                                 [matTooltip]="txn.description"
                                 [matTooltipPosition]="'above'"
-                                matTooltipClass="tooltip-black"
                                 (mouseover)="entryHovered(txn.entryUniqueName)"
                                 (mouseout)="selectedTrxWhileHovering = ''"
                             >
                                 <mat-grid-tile [attr.data-title]="commonLocaleData?.app_date" colspan={{ledgerGridColumnsValue[0]}}>
-                                    <div class="d-flex align-items-center column-gap5">
+                                    <div class="d-flex align-items-center column-gap-05">
                                         <span class="float-left">
                                             <mat-checkbox
                                                 color="primary"
@@ -1647,7 +1630,6 @@
                                             (click)="downloadFiles(txn, 'ATTACHMENT', $event)"
                                             [matTooltip]="localeData?.download_file + ' : ' + txn.attachedFileName"
                                             [matTooltipPosition]="'right'"
-                                            matTooltipClass="tooltip-black"
                                         >
                                             <i class="icon-attachment pull-left"></i>
                                         </span>
@@ -1665,7 +1647,6 @@
                                                 (txn.voucherNumber || commonLocaleData?.app_not_available)
                                             "
                                             [matTooltipPosition]="'right'"
-                                            matTooltipClass="tooltip-black"
                                         >
                                             <i class="icon-download-circle pull-left"></i>
                                         </span>
@@ -1675,7 +1656,6 @@
                                             (click)="openAttachmentsDialog(attachments, txn, true)"
                                             [matTooltip]="txn.attachedFileName"
                                             [matTooltipPosition]="'right'"
-                                            matTooltipClass="tooltip-black"
                                         >
                                             <i class="icon-attachment pull-left"></i>
                                         </span>
@@ -1701,7 +1681,6 @@
                                                         : txn.voucherNumber || commonLocaleData?.app_not_available
                                                 "
                                                 [matTooltipPosition]="'right'"
-                                                matTooltipClass="tooltip-black"
                                             >
                                                 <i class="icon-eye pull-left"></i>
                                             </span>
@@ -1747,10 +1726,10 @@
                                                         colspan={{ledgerGridColumnsValue[0]}}
                                                         [attr.data-title]="commonLocaleData?.app_date"
                                                     >
-                                                        <div class="d-flex align-items-center column-gap5">
+                                                        <div class="d-flex align-items-center column-gap-05">
                                                             <span class="ledger-checkbox pull-left"> </span>
                                                             <giddh-datepicker
-                                                                class="custom-input-field pd-t1"
+                                                                class="custom-input-field mat-form-field-clean pd-t1"
                                                                 name="ledgDate"
                                                                 [(ngModel)]="lc.blankLedger.entryDate"
                                                                 [placeholder]="lc.formatPlaceholder"
@@ -1770,7 +1749,7 @@
                                                         class="select2-parent select2-ledger new-entry-ledger"
                                                         (mousedown)="showNewLedgerEntryPopup(txn)"
                                                     >
-                                                        <div class="ledger-account-label d-flex column-gap5">
+                                                        <div class="ledger-account-label d-flex column-gap-05">
                                                             <span *ngIf="txn?.particular">{{ localeData?.to }}</span>
                                                             <ng-container *ngTemplateOutlet="accountSearchTemplate; context: { $implicit: true, txn: txn, index: i, dr: true }"></ng-container>
                                                         </div>
@@ -1827,7 +1806,7 @@
                                             </div>
                                             <!--new ledge popup-->
                                             <div
-                                                class="pos-abs entry-modal"
+                                                class="position-absolute entry-modal"
                                                 (click)="closeAllAccountDropdown()"
                                                 *ngIf="
                                                     lc.showNewLedgerPanel &&
@@ -1891,20 +1870,20 @@
                                 [ngClass]="isHide ? 'active' : 'right-col-new'"
                                 class="right-col-new"
                                 [ngClass]="{
-                                    'bd-rl':
+                                    'border-left':
                                         (lc.transactionData$ | async)?.debitTransactions?.length <
                                         (lc.transactionData$ | async)?.creditTransactions?.length
                                 }"
                             >
                                 <!-- region credit transaction header-->
                                 <mat-grid-list cols={{ledgerGridTotalColumns}} rowHeight="50px">
-                                    <mat-grid-tile class="bold" colspan={{ledgerGridColumnsValue[0]}}>
-                                        <span class="cp">{{ commonLocaleData?.app_date }}</span>
+                                    <mat-grid-tile class="font-weight-semibold" colspan={{ledgerGridColumnsValue[0]}}>
+                                        <span class="cursor-pointer">{{ commonLocaleData?.app_date }}</span>
                                     </mat-grid-tile>
-                                    <mat-grid-tile class="bold" colspan={{ledgerGridColumnsValue[1]}}>
+                                    <mat-grid-tile class="font-weight-semibold" colspan={{ledgerGridColumnsValue[1]}}>
                                         {{ commonLocaleData?.app_particular }}
                                     </mat-grid-tile>
-                                    <mat-grid-tile class="bold text-right no-right-border" colspan={{ledgerGridColumnsValue[2]}}>
+                                    <mat-grid-tile class="font-weight-semibold text-right no-right-border" colspan={{ledgerGridColumnsValue[2]}}>
                                         {{ commonLocaleData?.app_amount }}
                                     </mat-grid-tile>
                                 </mat-grid-list>
@@ -2011,12 +1990,11 @@
                                     }"
                                     [matTooltip]="txn.description"
                                     [matTooltipPosition]="'above'"
-                                    matTooltipClass="tooltip-black"
                                     (mouseover)="entryHovered(txn.entryUniqueName)"
                                     (mouseout)="selectedTrxWhileHovering = ''"
                                 >
                                     <mat-grid-tile colspan={{ledgerGridColumnsValue[0]}} [attr.data-title]="commonLocaleData?.app_date">
-                                        <div class="d-flex align-items-center column-gap5">
+                                        <div class="d-flex align-items-center column-gap-05">
                                             <span class="ledger-checkbox pull-left">
                                                 <mat-checkbox
                                                     color="primary"
@@ -2052,7 +2030,6 @@
                                                 (click)="downloadFiles(txn, 'ATTACHMENT', $event)"
                                                 [matTooltip]="localeData?.download_file + ' : ' + txn.attachedFileName"
                                                 [matTooltipPosition]="'right'"
-                                                matTooltipClass="tooltip-black"
                                             >
                                                 <i class="icon-attachment pull-left"></i>
                                             </span>
@@ -2070,7 +2047,6 @@
                                                     (txn.voucherNumber || commonLocaleData?.app_not_available)
                                                 "
                                                 [matTooltipPosition]="'right'"
-                                                matTooltipClass="tooltip-black"
                                             >
                                                 <i class="icon-download-circle pull-left"></i>
                                             </span>
@@ -2080,7 +2056,6 @@
                                                 (click)="openAttachmentsDialog(attachments, txn, true)"
                                                 [matTooltip]="txn.attachedFileName"
                                                 [matTooltipPosition]="'right'"
-                                                matTooltipClass="tooltip-black"
                                             >
                                                 <i class="icon-attachment pull-left"></i>
                                             </span>
@@ -2106,7 +2081,6 @@
                                                         : txn.voucherNumber || commonLocaleData?.app_not_available
                                                 "
                                                 [matTooltipPosition]="'right'"
-                                                matTooltipClass="tooltip-black"
                                             >
                                                 <i class="icon-eye pull-left"></i>
                                             </span>
@@ -2148,11 +2122,11 @@
                                                         [attr.data-title]="commonLocaleData?.app_date"
                                                     >
                                                         <div
-                                                            class="d-flex align-items-center column-gap5 custom-input-field pd-t1"
+                                                            class="d-flex align-items-center column-gap-05 custom-input-field pd-t1"
                                                         >
                                                             <span class="ledger-checkbox pull-left"> </span>
                                                             <giddh-datepicker
-                                                                class="custom-input-field"
+                                                                class="custom-input-field mat-form-field-clean"
                                                                 name="bsdateledger"
                                                                 (datepickerState)="datepickerState($event)"
                                                                 [(ngModel)]="lc.blankLedger.entryDate"
@@ -2166,7 +2140,7 @@
                                                         [attr.data-title]="commonLocaleData?.app_particular"
                                                         (mousedown)="showNewLedgerEntryPopup(txn)"
                                                     >
-                                                        <div class="ledger-account-label d-flex column-gap5">
+                                                        <div class="ledger-account-label d-flex column-gap-05">
                                                             <span *ngIf="txn?.particular">{{ localeData?.by }} </span>
                                                             <ng-container *ngTemplateOutlet="accountSearchTemplate; context: { $implicit: true, txn: txn, index: i, cr: true }"></ng-container>
                                                         </div>
@@ -2296,14 +2270,13 @@
                             <table class="ledger-footer-1 left-align">
                                 <tbody>
                                     <tr class="total-col" *ngIf="ledgerTxnBalance?.closingBalance?.type === transactionType.Credit">
-                                        <td colspan="12" class="col-xs-12 text-right white h32 pd-r1">
+                                        <td colspan="12" class="col-xs-12 text-right h32 pd-r1">
                                             <span
                                                 [matTooltip]="lc.ledgerUnderStandingObj.balanceText.cr"
                                                 [matTooltipPosition]="'right'"
-                                                matTooltipClass="tooltip-black"
                                             >
                                                 {{ localeData?.to_balance_cf }}:
-                                                <span class="digit-blue">
+                                                <span>
                                                     <div class="d-inline-flex">
                                                         <amount-field
                                                             [amount]="ledgerTxnBalance?.closingBalance?.amount"
@@ -2320,9 +2293,9 @@
                                         class="total-col"
                                         *ngIf="!(isAdvanceSearchImplemented || (searchTermStream | async)?.length)"
                                     >
-                                        <td colspan="12" class="col-xs-12 text-right white h32 border-top pd-r1">
+                                        <td colspan="12" class="col-xs-12 text-right h32 border-top pd-r1">
                                             <div class="d-flex flex-column align-items-end">
-                                                <span class="bd-rt padding-ledger">
+                                                <span class="padding-ledger">
                                                     <amount-field
                                                         [amount]="lc.reckoningDebitTotal"
                                                         [currencySymbol]="ledgerTxnBalance?.currencySymbol"
@@ -2331,7 +2304,7 @@
                                                     </amount-field>
                                                 </span>
                                                 <span
-                                                    class="bd-rt text-gray padding-ledger"
+                                                    class="border-top text-light padding-ledger"
                                                     *ngIf="isLedgerAccountAllowsMultiCurrency"
                                                 >
                                                     <amount-field
@@ -2349,15 +2322,14 @@
                             <table class="ledger-footer-1 right-align">
                                 <tbody>
                                     <tr class="total-col" *ngIf="ledgerTxnBalance?.closingBalance?.type === transactionType.Debit">
-                                        <td colspan="12" class="col-xs-12 text-right white h32 pd-r1">
+                                        <td colspan="12" class="col-xs-12 text-right h32 pd-r1">
                                             <span
                                                 [matTooltip]="lc.ledgerUnderStandingObj.balanceText.dr"
                                                 [matTooltipPosition]="'right'"
-                                                matTooltipClass="tooltip-black"
                                             >
                                                 <!-- By -->
                                                 {{ localeData?.by_balance_cf }}:
-                                                <span class="digit-blue d-inline-flex">
+                                                <span class="d-inline-flex">
                                                     <amount-field
                                                         [amount]="ledgerTxnBalance?.closingBalance?.amount"
                                                         [currencySymbol]="ledgerTxnBalance?.currencySymbol"
@@ -2372,9 +2344,9 @@
                                         class="total-col"
                                         *ngIf="!(isAdvanceSearchImplemented || (searchTermStream | async)?.length)"
                                     >
-                                        <td colspan="12" class="col-xs-12 text-right white h32 border-top pd-r1">
+                                        <td colspan="12" class="col-xs-12 text-right h32 border-top pd-r1">
                                             <div class="d-flex flex-column align-items-end">
-                                                <span class="bd-rt padding-ledger">
+                                                <span class="padding-ledger">
                                                     <amount-field
                                                         [amount]="lc.reckoningCreditTotal"
                                                         [currencySymbol]="ledgerTxnBalance?.currencySymbol"
@@ -2383,7 +2355,7 @@
                                                     </amount-field>
                                                 </span>
                                                 <span
-                                                    class="bd-rt text-gray padding-ledger"
+                                                    class="border-top text-light padding-ledger"
                                                     *ngIf="isLedgerAccountAllowsMultiCurrency"
                                                 >
                                                     <amount-field
@@ -2441,12 +2413,12 @@
                         </button>
                         <div
                             *ngIf="closingBalanceBeforeReconcile && !showLoader"
-                            class="box balance-detail mr-t2 mr-b2 clearfix text-center"
+                            class=" pd-15 balance-detail mr-t2 mr-b2 clear-both text-center"
                         >
                             <div class="row">
                                 <div class="col-md-6 col-sm-6 col-12 text-right">
                                     {{ localeData?.balance_bank }}
-                                    <h3 class="font-16 primary-color">
+                                    <p class="font-size-16 text-primary">
                                         <span class="d-inline-flex">
                                             <amount-field
                                                 [amount]="reconcileClosingBalanceForBank?.amount"
@@ -2456,11 +2428,11 @@
                                             </amount-field>
                                             {{ reconcileClosingBalanceForBank?.type }}
                                         </span>
-                                    </h3>
+                                    </p>
                                 </div>
                                 <div class="col-md-6 col-sm-6 col-12 text-left">
                                     {{ localeData?.pending_cheque }}
-                                    <h3 class="font-16 primary-color">
+                                    <p class="font-size-16 text-primary">
                                         <span class="d-inline-flex">
                                             <amount-field
                                                 [amount]="closingBalanceBeforeReconcile?.amount"
@@ -2470,7 +2442,7 @@
                                             </amount-field>
                                             {{ closingBalanceBeforeReconcile?.type }}
                                         </span>
-                                    </h3>
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -2490,7 +2462,7 @@
             <!-- commented due to API  -->
             <div class="transaction-in-short" *ngIf="!isShowLedgerColumnarReportTable">
                 <div class="container">
-                    <section class="ledger-stat mr-t3" *ngIf="!showLoader">
+                    <section class="ledger-stat" *ngIf="!showLoader">
                         <div class="row">
                             <div
                                 class="stat-block"
@@ -2499,9 +2471,9 @@
                                 "
                             >
                                 <div class="ledger-state-box">
-                                    <h1>
+                                    <p>
                                         {{ localeData?.total_transactions }}
-                                        <span class="digit-blue d-inline-flex">
+                                        <span class="d-inline-flex">
                                             <amount-field
                                                 [amount]="
                                                     (lc.transactionData$ | async)?.debitTransactionsCount +
@@ -2512,10 +2484,10 @@
                                             >
                                             </amount-field>
                                         </span>
-                                    </h1>
+                                    </p>
                                     <span class="mr-r2 grey-text-color"
                                         >{{ commonLocaleData?.app_debit }}
-                                        <span class="digit-blue d-inline-flex">
+                                        <span class="d-inline-flex">
                                             <amount-field
                                                 [amount]="(lc.transactionData$ | async)?.debitTransactionsCount"
                                                 [currencySymbol]="false"
@@ -2526,7 +2498,7 @@
                                     ><br />
                                     <span class="mr-r2 grey-text-color"
                                         >{{ commonLocaleData?.app_credit }}
-                                        <span class="digit-blue d-inline-flex">
+                                        <span class="d-inline-flex">
                                             <amount-field
                                                 [amount]="(lc.transactionData$ | async)?.creditTransactionsCount"
                                                 [currencySymbol]="false"
@@ -2542,8 +2514,8 @@
                                 class="col-3 stat-block"
                             >
                                 <div class="ledger-state-box">
-                                    <h1>{{ localeData?.opening_balance }}</h1>
-                                    <h2 class="digit-blue d-flex">
+                                    <p>{{ localeData?.opening_balance }}</p>
+                                    <p class="d-flex">
                                         <amount-field
                                             [amount]="ledgerTxnBalance?.forwardedBalance?.amount"
                                             [currencySymbol]="ledgerTxnBalance?.currencySymbol"
@@ -2558,10 +2530,10 @@
                                                     : localeData?.cr
                                                 : ""
                                         }}
-                                    </h2>
+                                    </p>
 
-                                    <h2
-                                        class="digit-blue font-12 sub-total d-inline-flex"
+                                    <p
+                                        class="font-size-12 sub-total d-inline-flex"
                                         *ngIf="isLedgerAccountAllowsMultiCurrency"
                                     >
                                         <amount-field
@@ -2578,7 +2550,7 @@
                                                     : localeData?.cr
                                                 : ""
                                         }}
-                                    </h2>
+                                    </p>
                                 </div>
                             </div>
                             <div
@@ -2588,13 +2560,13 @@
                                 "
                             >
                                 <div class="ledger-state-box">
-                                    <h1>{{ localeData?.net_total }}</h1>
+                                    <p>{{ localeData?.net_total }}</p>
                                     <div class="d-flex justify-content-between">
                                         <div
                                             class="d-flex flex-column justify-content-between"
                                             *ngIf="ledgerTxnBalance?.creditTotal > ledgerTxnBalance?.debitTotal"
                                         >
-                                            <h2 class="digit-blue d-flex">
+                                            <p class="d-flex">
                                                 <amount-field
                                                     [amount]="
                                                         ledgerTxnBalance?.creditTotal - ledgerTxnBalance?.debitTotal
@@ -2612,9 +2584,9 @@
                                                     &nbsp;
                                                     <span class="text-capitalize">{{ commonLocaleData?.app_cr }}</span>
                                                 </ng-container>
-                                            </h2>
-                                            <h2
-                                                class="digit-blue sub-total font-12 d-flex"
+                                            </p>
+                                            <p
+                                                class="sub-total font-size-12 d-flex"
                                                 *ngIf="isLedgerAccountAllowsMultiCurrency"
                                             >
                                                 <amount-field
@@ -2636,7 +2608,7 @@
                                                     &nbsp;
                                                     <span class="text-capitalize">{{ commonLocaleData?.app_cr }}</span>
                                                 </ng-container>
-                                            </h2>
+                                            </p>
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-between">
@@ -2644,7 +2616,7 @@
                                             class="d-flex flex-column justify-content-between"
                                             *ngIf="ledgerTxnBalance?.creditTotal < ledgerTxnBalance?.debitTotal"
                                         >
-                                            <h3 class="digit-blue d-inline-flex">
+                                            <p class="d-inline-flex">
                                                 <amount-field
                                                     [amount]="
                                                         ledgerTxnBalance?.debitTotal - ledgerTxnBalance?.creditTotal
@@ -2662,9 +2634,9 @@
                                                     &nbsp;
                                                     <span class="text-capitalize">{{ commonLocaleData?.app_dr }}</span>
                                                 </ng-container>
-                                            </h3>
-                                            <h3
-                                                class="digit-blue sub-total font-12 d-flex"
+                                            </p>
+                                            <p
+                                                class="sub-total font-size-12 d-flex"
                                                 *ngIf="isLedgerAccountAllowsMultiCurrency"
                                             >
                                                 <amount-field
@@ -2686,14 +2658,14 @@
                                                     &nbsp;
                                                     <span class="text-capitalize">{{ commonLocaleData?.app_dr }}</span>
                                                 </ng-container>
-                                            </h3>
+                                            </p>
                                         </div>
                                     </div>
                                     <br />
                                     <div class="d-flex debit-credit-amount">
-                                        <h1 class="mr-t05 grey-text-color d-flex flex-column mr-r2">
+                                        <p class="mr-t05 grey-text-color d-flex flex-column mr-r2">
                                             {{ commonLocaleData?.app_debit }}
-                                            <span class="digit-blue mt-1 d-inline-flex">
+                                            <span class="mt-1 d-inline-flex">
                                                 <amount-field
                                                     [amount]="ledgerTxnBalance?.debitTotal"
                                                     [currencySymbol]="ledgerTxnBalance?.currencySymbol"
@@ -2702,7 +2674,7 @@
                                                 </amount-field>
                                             </span>
                                             <span
-                                                class="digit-blue font-12 sub-total d-inline-flex"
+                                                class="font-size-12 sub-total d-inline-flex"
                                                 *ngIf="isLedgerAccountAllowsMultiCurrency"
                                             >
                                                 <amount-field
@@ -2712,10 +2684,10 @@
                                                 >
                                                 </amount-field>
                                             </span>
-                                        </h1>
-                                        <h1 class="mr-t05 grey-text-color d-flex flex-column">
+                                        </p>
+                                        <p class="mr-t05 grey-text-color d-flex flex-column">
                                             {{ commonLocaleData?.app_credit }}
-                                            <span class="digit-blue d-flex mt-1">
+                                            <span class="d-flex mt-1">
                                                 <amount-field
                                                     [amount]="ledgerTxnBalance?.creditTotal"
                                                     [currencySymbol]="ledgerTxnBalance?.currencySymbol"
@@ -2724,7 +2696,7 @@
                                                 </amount-field>
                                             </span>
                                             <span
-                                                class="digit-blue font-12 sub-total d-flex"
+                                                class="font-size-12 sub-total d-flex"
                                                 *ngIf="isLedgerAccountAllowsMultiCurrency"
                                             >
                                                 <amount-field
@@ -2734,7 +2706,7 @@
                                                 >
                                                 </amount-field>
                                             </span>
-                                        </h1>
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -2743,9 +2715,9 @@
                                 class="col-3 stat-block"
                             >
                                 <div class="ledger-state-box">
-                                    <h1>{{ localeData?.closing_balance }}</h1>
+                                    <p>{{ localeData?.closing_balance }}</p>
                                     <div class="d-flex flex-column justify-content-between">
-                                        <h2 class="digit-blue d-inline-flex">
+                                        <p class="d-inline-flex">
                                             <span
                                                 class="d-flex"
                                                 [matTooltip]="
@@ -2769,9 +2741,9 @@
                                                         : ""
                                                 }}
                                             </span>
-                                        </h2>
-                                        <h2
-                                            class="digit-blue font-12 d-flex"
+                                        </p>
+                                        <p
+                                            class="font-size-12 d-flex"
                                             *ngIf="isLedgerAccountAllowsMultiCurrency"
                                         >
                                             <span
@@ -2798,7 +2770,7 @@
                                                         : ""
                                                 }}
                                             </span>
-                                        </h2>
+                                        </p>
                                     </div>
                                 </div>
                             </div>
@@ -2815,7 +2787,7 @@
                     <button
                         aria-label="back"
                         mat-stroked-button
-                        class="bdr"
+                        class="border"
                         (click)="isShowLedgerColumnarReportTable = false"
                     >
                         {{ commonLocaleData?.app_back }}
@@ -2893,7 +2865,7 @@
                 <reactive-dropdown-field
                     [data]="isLedgerEntry ? (cr ? transactionType.Credit : transactionType.Debit) : null "
                     *ngIf="isLedgerEntry || txn.showDropdown"
-                    class="w-100"
+                    class="w-100 mat-form-field-clean"
                     [cssClass]="'bg-transparent pd-l1 pd-r1 ' + (isLedgerEntry ? (cr ? ' CREDIT' : ' DEBIT') : '')"
                     (keydown.enter)="$event.preventDefault()"
                     [disabled]="
@@ -2939,11 +2911,11 @@
                         <ng-container
                             *ngIf="!option.additional?.stock">
                             <a href="javascript:;"
-                                class="d-block py-1 text-black">
-                                <div class="font-15">
+                                class="d-block py-1 theme-foreground-color">
+                                <div class="font-size-15">
                                     {{ option?.label }}
                                 </div>
-                                <div class="font-15 text-gray">
+                                <div class="font-size-15 text-light">
                                     {{ option.additional?.uniqueName
                                     }}
                                 </div>
@@ -2952,16 +2924,16 @@
                         <ng-container
                             *ngIf="option.additional?.stock">
                             <a href="javascript:;"
-                                class="py-1 text-black">
-                                <div class="font-15">
+                                class="py-1 theme-foreground-color">
+                                <div class="font-size-15">
                                     {{ option?.label }}
                                 </div>
-                                <div class="font-15 text-gray">
+                                <div class="font-size-15 text-light">
                                     {{ option.additional?.uniqueName
                                     }}
                                 </div>
                                 <div
-                                    class="text-gray font-12">
+                                    class="text-light font-size-12">
                                     {{ commonLocaleData?.app_stock
                                     }}: {{
                                     option.additional?.stock?.name
@@ -3017,40 +2989,41 @@
                 <section class="statement-view">
                     <!-- Mat grid list #1 (Statement Header) -->
                     <mat-grid-list
+                        class="mat-app-background"
                         cols={{ledgerStatementViewGridTotalColumns}}
                         rowHeight="50px"
                     >
                         <!-- Date Column -->
-                        <mat-grid-tile class="bold" colspan={{ledgerStatementViewGridColumnsValue[0]}}>
-                            <div class="p-2 d-flex align-items-center column-gap5 w-100 h-100">
+                        <mat-grid-tile class="font-weight-semibold" colspan={{ledgerStatementViewGridColumnsValue[0]}}>
+                            <div class="p-2 d-flex align-items-center column-gap-05 w-100 h-100">
                                 {{ commonLocaleData?.app_date }}
                             </div>
                         </mat-grid-tile>
 
                         <!-- Particular Column -->
-                        <mat-grid-tile class="bold" colspan={{ledgerStatementViewGridColumnsValue[1]}}>
-                            <div class="p-2 d-flex align-items-center column-gap5 w-100 h-100">
+                        <mat-grid-tile class="font-weight-semibold" colspan={{ledgerStatementViewGridColumnsValue[1]}}>
+                            <div class="p-2 d-flex align-items-center column-gap-05 w-100 h-100">
                                 {{ commonLocaleData?.app_particular }}
                             </div>
                         </mat-grid-tile>
 
                         <!-- Debit Column -->
-                        <mat-grid-tile class="bold" colspan="{{ledgerStatementViewGridColumnsValue[2]}}">
-                            <div class="p-2 d-flex align-items-center justify-content-end column-gap5 w-100 h-100">
+                        <mat-grid-tile class="font-weight-semibold" colspan="{{ledgerStatementViewGridColumnsValue[2]}}">
+                            <div class="p-2 d-flex align-items-center justify-content-end column-gap-05 w-100 h-100">
                                 {{ commonLocaleData?.app_debit }}
                             </div>
                         </mat-grid-tile>
 
                         <!-- Credit Column -->
-                        <mat-grid-tile class="bold" colspan="{{ledgerStatementViewGridColumnsValue[3]}}">
-                            <div class="p-2 d-flex align-items-center justify-content-end column-gap5 w-100 h-100">
+                        <mat-grid-tile class="font-weight-semibold" colspan="{{ledgerStatementViewGridColumnsValue[3]}}">
+                            <div class="p-2 d-flex align-items-center justify-content-end column-gap-05 w-100 h-100">
                                 {{ commonLocaleData?.app_credit }}
                             </div>
                         </mat-grid-tile>
 
                         <!-- Balance Column -->
-                        <mat-grid-tile class="bold" *ngIf="ledgerStatementViewGridColumnsValue.length > 4" colspan="{{ledgerStatementViewGridColumnsValue[4]}}">
-                            <div class="p-2 d-flex align-items-center justify-content-end column-gap5 w-100 h-100">
+                        <mat-grid-tile class="font-weight-semibold" *ngIf="ledgerStatementViewGridColumnsValue.length > 4" colspan="{{ledgerStatementViewGridColumnsValue[4]}}">
+                            <div class="p-2 d-flex align-items-center justify-content-end column-gap-05 w-100 h-100">
                                 {{ commonLocaleData?.app_closing_balance }}
                             </div>
                         </mat-grid-tile>
@@ -3066,7 +3039,7 @@
                             [attr.data-title]="commonLocaleData?.app_select_all"
                             colspan={{ledgerStatementViewGridColumnsValue[0]}}
                         >
-                            <div class="p-2 d-flex align-items-center column-gap5 w-100 h-100">
+                            <div class="p-2 d-flex align-items-center column-gap-05 w-100 h-100">
                                 <mat-checkbox
                                     *ngIf="checkedTrxWhileHovering?.length > 0"
                                     color="primary"
@@ -3081,7 +3054,7 @@
                         <mat-grid-tile colspan={{ledgerStatementViewGridColumnsValue[1]}}>
                             <div
                                 *ngIf="ledgerTxnBalance?.forwardedBalance?.amount > 0 && (lc.transactionData$ | async)?.page <= 1 && !searchText && !isAdvanceSearchImplemented"
-                                class="p-2 d-flex align-items-center column-gap5 w-100 h-100"
+                                class="p-2 d-flex align-items-center column-gap-05 w-100 h-100"
                             >
                                 <span>{{ localeData?.to_balance_bf }}</span>
                             </div>
@@ -3182,13 +3155,12 @@
                         }"
                         [matTooltip]="txn.description"
                         [matTooltipPosition]="'above'"
-                        [matTooltipClass]="tooltip-black"
                         (mouseover)="entryHovered(txn.entryUniqueName)"
                         (mouseout)="selectedTrxWhileHovering = ''"
                     >
                         <!-- Date Column -->
                         <mat-grid-tile [attr.data-title]="commonLocaleData?.app_date" colspan={{ledgerStatementViewGridColumnsValue[0]}}>
-                            <div class="p-2 d-flex align-items-center column-gap5 w-100 h-100">
+                            <div class="p-2 d-flex align-items-center column-gap-05 w-100 h-100">
                                 <mat-checkbox
                                     color="primary"
                                     [id]="'select-entry-dr-' + i"
@@ -3203,7 +3175,7 @@
 
                         <!-- Particular Column -->
                         <mat-grid-tile [attr.data-title]="commonLocaleData?.app_particular" colspan={{ledgerStatementViewGridColumnsValue[1]}}>
-                            <div class="p-2 d-flex align-items-center justify-content-between column-gap1 w-100 h-100">
+                            <div class="p-2 d-flex align-items-center justify-content-between column-gap-1 w-100 h-100">
                                 <div class="text-ellipsis">
                                     {{
                                         txn
@@ -3213,7 +3185,7 @@
                                                 : localeData?.to_particular
                                     }}
                                 </div>
-                                <div class="d-flex column-gap1">
+                                <div class="d-flex column-gap-1">
                                     <span
                                         class="d-flex cursor-pointer"
                                         *ngIf="voucherApiVersion === 2 && txn.attachedFileUniqueName"
@@ -3245,7 +3217,6 @@
                                                 : txn.voucherNumber || commonLocaleData?.app_not_available
                                         "
                                         [matTooltipPosition]="'right'"
-                                        [matTooltipClass]="tooltip-black"
                                     >
                                         <i class="icon-eye"></i>
                                     </span>
@@ -3256,7 +3227,7 @@
                         <!-- Debit Column -->
                         <mat-grid-tile [attr.data-title]="commonLocaleData?.app_debit" colspan="{{ledgerStatementViewGridColumnsValue[2]}}">
                             <ng-container *ngIf="txn.type === transactionType.Debit">
-                                <div class="p-2 d-flex flex-column align-items-end justify-content-center column-gap1 w-100 h-100">
+                                <div class="p-2 d-flex flex-column align-items-end justify-content-center column-gap-1 w-100 h-100">
                                     <ng-container *ngTemplateOutlet="amountFieldTemplate; context: { $implicit: txn }"></ng-container>
                                 </div>
                             </ng-container>
@@ -3265,7 +3236,7 @@
                         <!-- Credit Column -->
                         <mat-grid-tile [attr.data-title]="commonLocaleData?.app_credit" colspan="{{ledgerStatementViewGridColumnsValue[3]}}">
                             <ng-container *ngIf="txn.type === transactionType.Credit">
-                                <div class="p-2 d-flex flex-column align-items-end justify-content-center column-gap1 w-100 h-100">
+                                <div class="p-2 d-flex flex-column align-items-end justify-content-center column-gap-1 w-100 h-100">
                                     <ng-container *ngTemplateOutlet="amountFieldTemplate; context: { $implicit: txn }"></ng-container>
                                 </div>
                             </ng-container>
@@ -3327,9 +3298,9 @@
                         >
                             <!-- Date Column -->
                             <mat-grid-tile [attr.data-title]="commonLocaleData?.app_date" colspan={{ledgerStatementViewGridColumnsValue[0]}}>
-                                <div class="p-2 d-flex align-items-center column-gap5 w-100 h-100">
+                                <div class="p-2 d-flex align-items-center column-gap-05 w-100 h-100">
                                     <giddh-datepicker
-                                        class="custom-input-field pd-t1"
+                                        class="custom-input-field pd-t1 mat-form-field-clean"
                                         name="bsdateledger"
                                         (datepickerState)="datepickerState($event)"
                                         [(ngModel)]="lc.blankLedger.entryDate"
@@ -3340,8 +3311,8 @@
 
                             <!-- Particular Column -->
                             <mat-grid-tile [attr.data-title]="commonLocaleData?.app_particular" colspan={{ledgerStatementViewGridColumnsValue[1]}} (mousedown)="showNewLedgerEntryPopup(txn)">
-                                <div class="p-2 d-flex align-items-center justify-content-between column-gap1 w-100 h-100">
-                                    <div class="ledger-account-label d-flex column-gap5">
+                                <div class="p-2 d-flex align-items-center justify-content-between column-gap-1 w-100 h-100">
+                                    <div class="ledger-account-label d-flex column-gap-05">
                                         <span *ngIf="txn?.particular">{{ txn.type === transactionType.Credit ? localeData?.by : localeData?.to }}</span>
                                         <ng-container *ngTemplateOutlet="accountSearchTemplate; context: { $implicit: true, txn: txn, index: i, cr: txn.type === transactionType.Credit, dr: txn.type === transactionType.Debit}"></ng-container>
                                     </div>
@@ -3356,7 +3327,7 @@
 
                             <!-- Debit Column -->
                             <mat-grid-tile [attr.data-title]="commonLocaleData?.app_debit" colspan="{{ledgerStatementViewGridColumnsValue[2]}}">
-                                <div class="p-2 d-flex flex-column align-items-end justify-content-center column-gap1 w-100 h-100">
+                                <div class="p-2 d-flex flex-column align-items-end justify-content-center column-gap-1 w-100 h-100">
                                     <input
                                         matInput
                                         class="text-right form-control"
@@ -3400,7 +3371,7 @@
 
                             <!-- Credit Column -->
                             <mat-grid-tile [attr.data-title]="commonLocaleData?.app_credit" colspan="{{ledgerStatementViewGridColumnsValue[3]}}" (mousedown)="showNewLedgerEntryPopup(txn)">
-                                <div class="p-2 d-flex flex-column align-items-end justify-content-center column-gap1 w-100 h-100">
+                                <div class="p-2 d-flex flex-column align-items-end justify-content-center column-gap-1 w-100 h-100">
                                     <input
                                         matInput
                                         class="text-right form-control"

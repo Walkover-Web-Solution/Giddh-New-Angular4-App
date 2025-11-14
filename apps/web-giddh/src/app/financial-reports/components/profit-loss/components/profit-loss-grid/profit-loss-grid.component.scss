@@ -28,10 +28,12 @@
     padding: 8px 8px;
 }
 
+/* UNUSED COMPONENT CLASS: max-980 - Auto-commented by script
 .max-980 {
     max-width: 980px;
     margin: 0 auto;
 }
+*/
 
 :host ::ng-deep .table-container section div .group {
     text-transform: capitalize;
@@ -43,8 +45,8 @@
 .pl-table-grid {
     th {
         border: none !important;
-        border-bottom: 1px solid var(--color-silver) !important;
-        padding: 13px 0 14px 0 !important;
+        border-bottom: 1px solid var(--border-color) !important;
+        padding: 13px 5px 14px 0 !important;
         min-width: 275px;
 
         &:first-child {
@@ -53,7 +55,8 @@
             max-width: 300px;
             width: 300px;
         }
-        i.glyphicon-search {
+        /* i UNUSED COMPONENT CLASS: glyphicon-search - Auto-commented by script
+.glyphicon-search {
             position: relative;
             z-index: 1;
             font-size: 13px;
@@ -63,6 +66,7 @@
             display: flex;
             align-items: center;
         }
+*/
         input {
             height: 47px;
         }
@@ -79,6 +83,7 @@
         min-width: 275px;
         padding-block: 10px;
         background: var(--color-light-gray);
+        color: var(--color-black);
     }
 }
 
@@ -88,7 +93,7 @@
 }
 
 .row-height {
-    min-height: 38px;
+    min-height: 37px;
 }
 
 @media (max-width: 1024px) {

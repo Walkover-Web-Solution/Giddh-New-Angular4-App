@@ -110,6 +110,7 @@ import { AiOcrService } from "../../services/ai-ocr.service";
 import { EWayBillCreateComponent } from "../../shared/eWayBill/create/e-way-bill-create-component";
 import { ReactiveDropdownFieldComponent } from "../../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component";
 import { ActionTypeEnum } from "../../shared/sales-person/utility/sales-person.constant";
+import { Country } from "../../shared/mobile-number-input/countries-data";
 
 @Component({
     selector: "create",
@@ -497,6 +498,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public selectedVoucherType: string = "";
     /** This will use for row data */
     public rowData: any = null;
+    /** This will use for force clear reactive dropdown */
+    public forceClear: boolean = false;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -1072,8 +1075,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             ?.get("mobileNumber")
                             .patchValue(voucherDetails.account?.mobileNumber ?? "");
                         this.account.mobileNumber = voucherDetails.account?.mobileNumber ?? "";
-                        this.initIntl(this.invoiceForm.controls["account"]?.get("mobileNumber")?.value);
-                        this.checkMobileNumber();
+                        // Disabled old mobile input initialization as we're using mobile-number-input component
+                        // this.initIntl(this.invoiceForm.controls["account"]?.get("mobileNumber")?.value);
+                        // this.checkMobileNumber();
                     }
 
                     if (voucherDetails?.purchaseOrderDetails?.length && !this.isCopyMode) {
@@ -1638,7 +1642,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             }
         });
 
-        this.salesPersonList$.pipe(takeUntil(this.destroyed$)).subscribe((salesPersonList: IOption[]) => {
+        this.salesPersonList$.pipe(takeUntil(this.destroyed$), filter(Boolean)).subscribe((salesPersonList: IOption[]) => {
             if (!this.isUpdateMode) {
                 if (!this.isSalesPersonExists(this.invoiceForm.get('salesPersonUniqueName').value, salesPersonList)) {
                     let salesPersonName = "";
@@ -1705,7 +1709,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public ngAfterViewInit(): void {
-        this.initIntl();
+        // Removed initIntl() call as we're now using mobile-number-input component
+        // this.initIntl();
     }
 
     /**
@@ -2641,9 +2646,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.invoiceForm.controls["account"]?.get("email").setValue(accountData?.email);
             this.invoiceForm.controls["account"]?.get("mobileNumber").setValue(accountData?.mobileNo ?? "");
             this.account.mobileNumber = accountData?.mobileNo ?? "";
-            this.initIntl(this.invoiceForm.controls["account"]?.get("mobileNumber")?.value);
+            // Disabled old mobile input initialization as we're using mobile-number-input component
+            // this.initIntl(this.invoiceForm.controls["account"]?.get("mobileNumber")?.value);
             this.updateDueDate();
-            this.checkMobileNumber();
+            // this.checkMobileNumber();
         } else {
             if (
                 !this.invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled &&
@@ -3844,17 +3850,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
 
         this.dateChangeType = "voucher";
+        if (!(this.invoiceType.isEstimateInvoice || this.invoiceType.isProformaInvoice || this.invoiceType.isPurchaseOrder)) {
+            const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+                panelClass: "mat-dialog-sm",
+                data: {
+                    configuration: this.generalService.deleteConfiguration(this.localeData?.change_single_entry_date, this.commonLocaleData),
+                },
+            });
+            dialogRef.afterClosed().subscribe((response) => {
+                this.handleDateChangeConfirmation(response);
+            });
+        }
 
-        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
-            panelClass: "mat-dialog-sm",
-            data: {
-                configuration: this.generalService.deleteConfiguration(this.localeData?.change_single_entry_date, this.commonLocaleData),
-            },
-        });
-
-        dialogRef.afterClosed().subscribe((response) => {
-            this.handleDateChangeConfirmation(response);
-        });
     }
 
     /**
@@ -4002,6 +4009,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public initIntl(inputValue?: string): void {
+        return;
         let times = 0;
         const parentDom = document.querySelector("create");
         const input = document.getElementById("init-contact");
@@ -4741,11 +4749,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         invoiceForm = this.vouchersUtilityService.formatVoucherObject(invoiceForm);
 
-        if (invoiceForm.account.mobileNumber != this.account.mobileNumber) {
-            invoiceForm.account.mobileNumber = invoiceForm.account.mobileNumber
-                ? this.intlClass.selectedCountryData.dialCode + invoiceForm.account.mobileNumber?.replace(/\s+/g, "")
-                : "";
-        }
+        // This is not used in New Mobile 
+        // if (invoiceForm.account.mobileNumber != this.account.mobileNumber) {
+        //     invoiceForm.account.mobileNumber = invoiceForm.account.mobileNumber
+        //         ? this.intlClass.selectedCountryData.dialCode + invoiceForm.account.mobileNumber?.replace(/\s+/g, "")
+        //         : "";
+        // }
 
         if (!this.currentVoucherFormDetails?.depositAllowed) {
             delete invoiceForm.deposits;
@@ -5345,8 +5354,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (this.invoiceType.isCashInvoice) {
             this.invoiceForm.get("account.uniqueName")?.patchValue("cash");
         }
+        this.forceClear = true;
 
         setTimeout(() => {
+            this.forceClear = false;
             this.openAccountDropdown = openAccountDropdown;
         }, 200);
     }
@@ -6468,7 +6479,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             barcodeValue: this.barcodeValue,
             customerUniqueName: this.invoiceForm.controls["account"]?.get("uniqueName")?.value ?? ""
         };
-                
+
         if (this.invoiceType.isPurchaseOrder) {
             params.invoiceType = VoucherTypeEnum.purchase;
         } else if (this.invoiceType.isCashInvoice) {
@@ -6477,7 +6488,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         } else {
             params.invoiceType = this.invoiceForm.get("type")?.value || VoucherTypeEnum.sales;
         }
-        
+
         this.commonService
             .getBarcodeScanData(params)
             .pipe(takeUntil(this.destroyed$))
@@ -6960,11 +6971,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
       */
     public selectVoucherType(value: string): void {
         this.selectedVoucherType = value?.toLowerCase();
-        
+
         // Optimize type mapping using object lookup instead of if-else chain
         const typeMapping = { 'bill': 'purchase', 'invoice': 'sales' };
         const mappedType = typeMapping[this.selectedVoucherType] || this.selectedVoucherType;
-        
+
         const req = {
             row: this.rowData,
             type: mappedType,

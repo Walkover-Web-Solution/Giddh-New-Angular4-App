@@ -25,26 +25,26 @@
             </div>
             <div class="row pd-b1 mt-3 unique-name">
                 <div class="col-md-6 col-sm-12 col-lg-3 col-xl-3 col-xxl-2">
-                    <label class="font-15">{{ commonLocaleData?.app_unique_name }}:</label>
+                    <label class="font-size-15">{{ commonLocaleData?.app_unique_name }}:</label>
                 </div>
                 <div class="col-md-6 col-sm-12 col-lg-3 col-xl-3 col-xxl-2 view-txt">
-                    <div class="font-15">{{ profileData?.uniqueName }}</div>
+                    <div class="font-size-15">{{ profileData?.uniqueName }}</div>
                 </div>
             </div>
             <div *ngIf="(organizationType === 'BRANCH'  || isConsolidatedBranch)" class="row pb-1 mt-3 parent-name">
                 <div class="col-md-6 col-sm-12 col-lg-3 col-xl-3 col-xxl-2">
-                    <label class="font-15">{{ localeData?.parent }}:</label>
+                    <label class="font-size-15">{{ localeData?.parent }}:</label>
                 </div>
                 <div class="col-md-6 col-sm-12 col-lg-3 col-xl-3 col-xxl-2 view-txt">
-                    <div *ngIf="profileData?.parent?.name" class="font-15">
+                    <div *ngIf="profileData?.parent?.name" class="font-size-15">
                         {{ profileData?.parent?.name }} ({{ profileData?.parent?.businessType }})
                     </div>
-                    <div *ngIf="!profileData?.parent?.name" class="font-15">{{ profileData?.companyName }}</div>
+                    <div *ngIf="!profileData?.parent?.name" class="font-size-15">{{ profileData?.companyName }}</div>
                 </div>
             </div>
             <div class="row country-name pd-b1 mt-3">
                 <div class="col-md-6 col-sm-12 col-lg-3 col-xl-3 col-xxl-2">
-                    <label class="font-15">{{ localeData?.country_currency }}:</label>
+                    <label class="font-size-15">{{ localeData?.country_currency }}:</label>
                 </div>
                 <div class="country-info col-md-6 col-sm-12 col-lg-3 col-xl-3 col-xxl-2 view-txt">
                     <div class="d-flex align-items-center">
@@ -56,7 +56,7 @@
                             }}.svg"
                             alt="flag img"
                         />
-                        <div class="font-15">
+                        <div class="font-size-15">
                             {{ profileData?.country?.countryName }} - {{ profileData?.baseCurrency }}
                             {{ profileData?.baseCurrencySymbol }}
                         </div>

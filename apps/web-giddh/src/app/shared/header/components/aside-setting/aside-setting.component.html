@@ -6,29 +6,25 @@
         (commonLocaleData)="commonLocaleData = $event"
         (translationComplete)="translationComplete($event)"
     >
-        <div class="aside-pane" (clickOutside)="closeAsidePaneIfMobile($event)">
+        <div class="aside-pane mat-app-background mat-app-background" (clickOutside)="closeAsidePaneIfMobile($event)">
             <div class="aside-help-header relative" *ngIf="showSettingHeading">
-                <h4 class="font-15">{{ localeData?.page_heading }}</h4>
+                <p class="font-size-15">{{ localeData?.page_heading }}</p>
                 <div hidden class="cursor-pointer" (click)="closeAsidePane($event)">
                     <i class="icon-cross"></i>
                 </div>
             </div>
             <div class="help-aside-body">
-                <div class="back-to-main-slider" [ngClass]="{ 'setting-close-icon': isMobileScreen }">
+                <div class="back-to-main-slider">
                     <a href="javascript:;" aria-label="back icon">
                         <span
                             class="d-flex align-items-center"
-                            *ngIf="!isMobileScreen && !showSettingHeading"
+                            *ngIf="!showSettingHeading"
                             (click)="goToPreviousPage()"
                             aria-label="back"
                             role="button"
                         >
                             <i class="icon-left font-22"></i>
                             <span>{{ commonLocaleData?.app_back }}</span>
-                        </span>
-                        <span *ngIf="isMobileScreen" (click)="closeAsidePane($event)">
-                            <i class="icon-cross"></i>
-                            {{ localeData?.setting }}
                         </span>
                     </a>
                 </div>
@@ -55,7 +51,7 @@
                                             <a
                                                 href="javascript:;"
                                                 aria-label="icon"
-                                                class="d-block clearfix"
+                                                class="d-block clear-both"
                                                 [routerLink]="tab?.link"
                                             >
                                                 <span [innerHTML]="tab?.icon"></span>
@@ -70,7 +66,7 @@
                                     <a
                                         href="javascript:;"
                                         aria-label="icon"
-                                        class="d-block clearfix"
+                                        class="d-block clear-both"
                                         [matMenuTriggerFor]="tagsMenu"
                                         #tagsMenuTrigger="matMenuTrigger"
                                         (menuOpened)="toggleTagMenu(true)"

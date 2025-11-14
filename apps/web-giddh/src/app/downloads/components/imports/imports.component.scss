@@ -1,37 +1,43 @@
 .import-table-container {
     .import-table {
         width: 100%;
-        .import-table-btn {
+        /* UNUSED COMPONENT CLASS: import-table-btn - Auto-commented by script
+.import-table-btn {
             color: var(--color-dark-gray);
             background-color: var(--color-transparent);
             box-shadow: none;
-            border-radius: 4px;
+            border-radius: var(--mat-border-radius-4);
             i {
                 font-size: 16px;
             }
         }
+*/
         .mat-row {
             .mat-cell:first-child {
                 color: var(--color-dark-gray) !important;
             }
         }
     }
-    .custom-datepicker-wrapper {
+    /* UNUSED COMPONENT CLASS: custom-datepicker-wrapper - Auto-commented by script
+.custom-datepicker-wrapper {
         display: flex;
         text-align: center;
         justify-content: center;
     }
+*/
     .clear-filter {
-        color: var(--color-blue-primary);
+        color: var(--text-primary-color);
         cursor: pointer;
     }
-    .btn-success {
+    /* UNUSED COMPONENT CLASS: btn-success - Auto-commented by script
+.btn-success {
         background-color: var(--color-green);
         color: var(--color-white);
         &:hover {
             background-color: var(--color-green) !important;
         }
     }
+*/
     .import-button-status {
         min-width: 160px;
         max-width: 160px;
@@ -41,24 +47,28 @@
         width: 160px;
         min-width: 160px;
     }
-    .btn-filter {
+    /* UNUSED COMPONENT CLASS: btn-filter - Auto-commented by script
+.btn-filter {
         background: var(--color-border-light);
-        border: 1px solid var(--color-silver);
+        border: 1px solid var(--border-color);
         font-size: var(--font-size-15);
-        color: var(--color-blue-primary);
+        color: var(--text-primary-color);
         display: inline-flex;
         justify-content: space-between;
         align-items: center;
         padding: 4px 10px;
     }
+*/
 }
 
 @media screen and (max-width: 1280px) {
     .import-table-container {
         .table-content {
-            .mdc-data-table__cell {
+            /* UNUSED COMPONENT CLASS: mdc-data-table__cell - Auto-commented by script
+.mdc-data-table__cell {
                 padding: 0 8px 0 8px;
             }
+*/
         }
     }
 }

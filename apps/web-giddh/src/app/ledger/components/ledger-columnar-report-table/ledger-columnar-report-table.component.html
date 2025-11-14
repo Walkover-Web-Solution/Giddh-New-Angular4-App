@@ -9,8 +9,8 @@
             <div class="invoice-preview table-responsive">
                 <table mat-table [dataSource]="reportResponseResult" class="table basic giddh-table on-mobile-view">
                     <ng-container matColumnDef="sno">
-                        <th mat-header-cell *matHeaderCellDef class="text-center">#</th>
-                        <td class="s-no-column-width" mat-cell *matCellDef="let item; let i = index">{{ i + 1 }}</td>
+                        <th mat-header-cell *matHeaderCellDef class="text-center serial-no-column">#</th>
+                        <td mat-cell *matCellDef="let item; let i = index">{{ i + 1 }}</td>
                     </ng-container>
                     <ng-container matColumnDef="date">
                         <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_date }}</th>
@@ -191,19 +191,18 @@
                     <tr mat-row *matRowDef="let row; columns: tableHeadingColumns"></tr>
                 </table>
             </div>
-            <div class="mt-4" *ngIf="reportResponse && reportResponse?.totalItems > pageSizeOptions[0]">
-                <mat-paginator
-                    [length]="reportResponse.totalItems"
-                    [pageSize]="columnarReportExportRequest.count"
-                    [pageSizeOptions]="pageSizeOptions"
-                    [pageIndex]="columnarReportExportRequest.page - 1"
-                    [showFirstLastButtons]="true"
-                    [hidePageSize]="false"
-                    (page)="handlePageEvent($event)"
-                    aria-label="Select page of columnar report"
-                ></mat-paginator>
-                <section class="mr-b8"></section>
-            </div>
+            <mat-paginator
+                *ngIf="reportResponse && reportResponse?.totalItems > pageSizeOptions[0]"
+                [length]="reportResponse.totalItems"
+                [pageSize]="columnarReportExportRequest.count"
+                [pageSizeOptions]="pageSizeOptions"
+                [pageIndex]="columnarReportExportRequest.page - 1"
+                [showFirstLastButtons]="true"
+                [hidePageSize]="false"
+                (page)="handlePageEvent($event)"
+                aria-label="Select page of columnar report"
+            ></mat-paginator>
+            <section class="mr-b8"></section>
             <div class="no-data" *ngIf="reportResponse && reportResponse?.totalItems === 0">
                 <no-data [secondaryMessageClass]="'p-0'"></no-data>
             </div>

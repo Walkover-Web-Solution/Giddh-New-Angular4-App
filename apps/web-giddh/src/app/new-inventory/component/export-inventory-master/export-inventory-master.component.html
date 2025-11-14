@@ -5,14 +5,14 @@
   </button>
 </div>
 <mat-dialog-content class="dialog-body">
-    <p class="pd-l15 pb-3">
+    <p class="pb-3">
       {{ inputData?.commonLocaleData?.app_note }} :
       <span [innerHTML] = "inputData?.localeData?.export_note">
         {{ inputData?.localeData?.export_note }}
       </span>
     </p>
-    <form [formGroup]="exportForm" class="d-flex justify-content-between px-3 pt-2">
-      <div class="export-border position-relative">
+    <form [formGroup]="exportForm" class="d-flex px-3 pt-2">
+      <div class="export-border position-relative w-50">
         <div class="mr-b15">
           <label class="label-width">{{ inputData?.localeData?.opening_amount }} :</label>
             <mat-slide-toggle color="primary" formControlName="openingAmount" class="ml-2 toggle-width">

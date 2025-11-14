@@ -6,7 +6,7 @@
 
     .bulk-entry-body {
         .bulk-entry-list {
-            border-right: 1px solid var(--color-silver);
+            border-right: 1px solid var(--border-color);
             padding-right: 16px;
             width: 40%;
 
@@ -40,9 +40,11 @@
                 }
 
                 .mat-expansion-panel-header {
-                    &.mat-expanded {
+                    /*& UNUSED COMPONENT CLASS: mat-expanded - Auto-commented by script
+.mat-expanded {
                         height: unset;
                     }
+*/
                 }
             }
         }
@@ -70,8 +72,8 @@
                 padding-top: 10px;
                 padding-bottom: 10px;
                 height: calc(#{$height} - 196px);
-                border-top: 1px solid var(--color-silver);
-                border-bottom: 1px solid var(--color-silver);
+                border-top: 1px solid var(--border-color);
+                border-bottom: 1px solid var(--border-color);
 
                 mat-list-item {
                     height: auto;

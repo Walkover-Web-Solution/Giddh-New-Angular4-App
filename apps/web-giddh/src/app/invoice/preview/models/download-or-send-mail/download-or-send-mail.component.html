@@ -138,7 +138,7 @@
 <!-- Invoice Copy Options (checkbox) -->
 <ng-template #invoiceCopyOptions>
     <div>
-        <h3 class="font-15 mr-b15">{{ localeData?.invoice_copy }}</h3>
+        <p class="font-size-15 mr-b15">{{ localeData?.invoice_copy }}</p>
         <mat-divider></mat-divider>
         <div>
             <mat-checkbox color="primary" value="Original" checked (change)="onSelectInvoiceCopy($event)">{{
