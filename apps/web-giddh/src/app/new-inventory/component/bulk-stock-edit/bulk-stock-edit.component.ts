@@ -18,6 +18,7 @@ import { cloneDeep, isEqual } from '../../../lodash-optimized';
 import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groups-with-stocks.interface';
 import { ManufacturingService } from '../../../services/manufacturing.service';
 import { MatMenuTrigger } from '@angular/material/menu';
+import { FieldTypes } from '../../../custom-fields/custom-fields.constant';
 
 @Component({
     selector: 'bulk-stock',
@@ -200,11 +201,15 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
     public taxTempArray: any[][] = [];
     /** This will use for taxes list Observable - index wise for each row */
     public taxesList: any[][] = [];
+    /** Available field types list */
+    public availableFieldTypes: any = FieldTypes;
     /** Number of menus per row */
     public get menusPerRow(): number {
         const firstRowMenus = document.querySelectorAll('tr:first-child mat-menu').length;
         return firstRowMenus || 1;
     }
+    /** All custom fields */
+    public allCustomField: any = {};
 
     constructor(
         private route: ActivatedRoute,
@@ -224,6 +229,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
         this.customFieldsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 const results = response.map(result => {
+                    this.allCustomField[result.uniqueName] = result;
                     return {
                         label: result.fieldName,
                         value: result.uniqueName,
@@ -232,6 +238,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
                 }) || [];
                 this.newCustomFieldsColumns = results;
+                this.cdr.detectChanges();
             }
         });
     }
