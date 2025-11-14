@@ -12,10 +12,10 @@
             class="gst-sidebar"
         ></tax-sidebar>
     </div>
-    <div class="reverse-table-report overflow-visible pd-15">
+    <div class="reverse-table-report overflow-visible p-3">
         <div class="container-fluid overflow-visible px-0">
-            <div class="position-sticky left-0 mr-b15">
-                <div class="d-flex align-items-center column-gap-1 mr-b1">
+            <div class="position-sticky left-0 mb-3">
+                <div class="d-flex align-items-center column-gap-1 mb-2">
                     <reactive-dropdown-field
                         *ngIf="
                             currentCompanyBranches?.length > 2 &&
@@ -51,7 +51,7 @@
                 </div>
                 <div class="top-content" [hidden]="!reverseChargeReportResults?.items?.length">
                     <div class="d-flex w-100 justify-content-between overflow-x-auto">
-                        <div class="total-due-sale total-details-box opening-box border-none mr-r05">
+                        <div class="total-due-sale total-details-box opening-box border-none mr-1">
                             <h5>
                                 {{ localeData?.total_taxable_value }}
                                 <div>
@@ -296,7 +296,7 @@
                     [pageSizeOptions]="pageSizeOptions"
                     [pageIndex]="reverseChargeReportResults.page - 1"
                 ></mat-paginator>
-                <section class="mr-b8"></section>
+                <section class="mb-custom-80"></section>
             </div>
             <no-data
                 class="d-block no-data"
@@ -352,7 +352,7 @@
             </span>
             <span>{{ title }}</span>
         </div>
-        <div class="align-items-center d-flex pd-l14" [hidden]="!show">
+        <div class="align-items-center d-flex pl-3" [hidden]="!show">
             <text-field
                 [type]="'text'"
                 [placeholder]="placeholder"

@@ -11,7 +11,7 @@
         <!-- form -->
         <div class="col-12 col-sm-12">
             <div class="clear-both">
-                <form name="branchTransferHeaderForm" class="col-12 pl-0 pr-0 mr-b05">
+                <form name="branchTransferHeaderForm" class="col-12 pl-0 pr-0 mb-1">
                     <div class="row">
                         <div class="d-flex flex-wrap align-items-center w-100 mb-3 column-gap-15">
                             <div
@@ -289,7 +289,7 @@
                     [hidePageSize]="false"
                     (page)="handlePageEvent($event)"
                 ></mat-paginator>
-                <section class="mr-b8"></section>
+                <section class="mb-custom-80"></section>
             </div>
         </section>
 
@@ -313,11 +313,11 @@
                 </button>
             </div>
             <mat-dialog-content class="dialog-body">
-                <form class="col-md-12 pl-0 pr-0 mr-b05">
+                <form class="col-md-12 pl-0 pr-0 mb-1">
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="row">
-                                <div class="col-12 mr-b15">
+                                <div class="col-12 mb-3">
                                     <reactive-dropdown-field
                                         [placeholder]="commonLocaleData?.app_select_voucher + commonLocaleData.app_type"
                                         [options]="voucherTypes"
@@ -334,7 +334,7 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="row">
-                                <div class="col-12 mr-b15">
+                                <div class="col-12 mb-3">
                                     <reactive-dropdown-field
                                         [placeholder]="localeData?.select_condition"
                                         [options]="amountOperators"
@@ -351,7 +351,7 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="row">
-                                <div class="col-12 mr-b15">
+                                <div class="col-12 mb-3">
                                     <input-field
                                         [type]="'number'"
                                         [placeholder]="'0'"

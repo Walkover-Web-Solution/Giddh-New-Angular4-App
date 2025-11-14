@@ -799,7 +799,6 @@ no-data,
         padding-top: 15px;
         padding-bottom: 15px;
     }
-
 }
 
 .ledger-table {
@@ -1368,10 +1367,7 @@ form {
 .ledg-head .mat-grid-list .mat-grid-tile.new-entry-date .mat-grid-tile-content {
     padding-left: 2px !important;
 }
-.ledg-head
-
-    .ledger-account-label
-    input.form-control.focused {
+.ledg-head .ledger-account-label input.form-control.focused {
     padding-left: 1px !important;
     background-color: transparent !important;
 }
@@ -1480,7 +1476,6 @@ form {
     }
 }
 .account-aside-menu-state {
-
     .mat-input-element.mat-form-field-autofill-control.mat-datepicker-input {
         position: absolute;
         padding-top: 12px !important;
@@ -1552,7 +1547,6 @@ form {
     .balance-options {
         height: auto !important;
         padding-bottom: 5px !important;
-
     }
 }
 
@@ -1585,7 +1579,6 @@ form {
     max-height: 80vh;
     .inventory-checkbox {
         width: 100%;
-
     }
 
     button.mat-menu-item {
@@ -1594,7 +1587,6 @@ form {
         align-items: center;
         padding: 0 6px !important;
     }
-
 }
 
 .variant-row {
@@ -1615,7 +1607,6 @@ form {
 }
 
 .giddh-table {
-
     .second-header-border {
         th {
             border-top: 1px solid var(--border-color) !important;
@@ -1695,7 +1686,6 @@ form {
 
 .subscription-page {
     .td-search-box {
-
         .input-container {
             position: relative;
 
@@ -1783,9 +1773,7 @@ form {
 }
 
 .product-option {
-
     .product-option-wrapper {
-
         .data-wrap {
             .dot-img {
                 img {
@@ -1848,7 +1836,6 @@ aside-create-group {
         .inventory-sub-sideabar {
             .item-list {
                 a {
-
                     &.isActive {
                         background-color: var(--bg-primary-color);
 
@@ -1966,7 +1953,6 @@ aside-create-group {
 
             .mdc-list-item__content {
                 padding: 0;
-
             }
 
             &.mat-left {
@@ -2574,7 +2560,6 @@ ul.sub-list {
     }
 
     &.custom-new-datepicker {
-
         i {
             top: 5px;
         }
@@ -3391,7 +3376,6 @@ a.btn.btn-xs.btn-link.pull-right {
     padding: 0 15px;
 }
 
-.form-group.mr-b05,
 .margin-child-label .form-group label {
     margin-bottom: 5px;
 }
@@ -3454,7 +3438,6 @@ select.form-control {
 .grp-list,
 .new-btn-u {
     li {
-
         a {
             padding: 4px 15px !important;
             display: block;
@@ -4027,7 +4010,6 @@ label {
         border-radius: var(--mat-border-radius-0);
         padding-right: 22px !important;
     }
-
 }
 
 #manufacture .section-title {
@@ -4190,11 +4172,8 @@ label {
 
             &:hover {
                 background-color: var(--color-border-light) !important;
-
             }
-
         }
-
     }
 }
 
@@ -4219,12 +4198,10 @@ label {
                     .mat-form-field-infix {
                         border: 0 !important;
                         width: 100%;
-
                     }
                 }
             }
         }
-
     }
 }
 
@@ -5129,7 +5106,6 @@ a {
     font-size: var(--font-size-15) !important;
     font-family: var(--font-family);
     height: 36px;
-
 }
 
 .form-group {
@@ -6227,7 +6203,6 @@ hamburger-menu {
 }
 
 .dropdown-menu {
-
     > li {
         > a {
             padding: 4px 10px;
@@ -7240,7 +7215,6 @@ footer#footer.absolute-footer {
             }
         }
     }
-
 }
 
 .master-page {
@@ -7377,7 +7351,6 @@ ul#dropdown-nested .dropdown-menu li .dropdown-item {
     input::placeholder {
         color: var(--color-silver) !important;
     }
-
 }
 
 .btn-group.btn-block.invoice-btn .btn-block {
@@ -7748,7 +7721,6 @@ button.ladda-button .ladda-label {
 .page-has-tabs,
 .ledger-body,
 .on-setting-page {
-
     .options-class-create {
         text-decoration: underline;
     }
@@ -7837,7 +7809,6 @@ button.ladda-button .ladda-label {
         padding: 10px 0;
         font-size: var(--font-size-12);
         height: 48px;
-
     }
 
     .po-options-line {
@@ -7864,7 +7835,6 @@ button.ladda-button .ladda-label {
     .create-new-command {
         font-size: var(--font-size-15);
     }
-
 }
 
 .aside-panel-ledger {
@@ -8004,7 +7974,6 @@ button.ladda-button .ladda-label {
 .select2-parent.select2-ledger .ledger-account-label sh-select .header input {
     padding-left: 3px !important;
     font-size: var(--font-size-15) !important;
-
 }
 
 .select2-parent.select2-ledger .ledger-account-label input.form-control.focused {
@@ -8070,7 +8039,6 @@ ul {
                 .icon-circle {
                     color: var(--color-black) !important;
                     background-color: var(--color-white) !important;
-
                 }
             }
         }
@@ -8264,7 +8232,6 @@ span#HW_badge_cont {
         position: fixed !important;
         right: 0px;
     }
-
 }
 
 .update-ledger-overlay .modal-backdrop.show {
@@ -8332,7 +8299,6 @@ ul.dropdown-menu.action-dropdown {
 }
 ngx-daterangepicker-material,
 giddh-datepicker {
-
     .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mat-icon-button,
     .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button {
         width: 26px;
@@ -8341,12 +8307,10 @@ giddh-datepicker {
 
     .mat-form-field-appearance-fill:not(.mat-form-field-disabled).mat-form-field-flex:hover
         ~ .mat-form-field-underline
-
-    input.mat-input-element {
+        input.mat-input-element {
         margin-top: 0;
         padding: 9px 6px;
         font-size: var(--font-size-15);
-
     }
 
     .giddh-limit {
@@ -8370,7 +8334,6 @@ giddh-datepicker {
 }
 
 .ledger-body {
-
     overflow-y: auto !important;
     height: auto;
 
@@ -8457,7 +8420,6 @@ giddh-datepicker {
                 display: flex;
                 align-items: center;
             }
-
         }
     }
 
@@ -8653,9 +8615,7 @@ giddh-datepicker {
                 .select-physical-product {
                     .product-detail-content {
                         .account-inventory-other-tab {
-
                             .sales-purchase-details {
-
                                 .sales-information,
                                 .purchase-information {
                                     .add-new-field {
@@ -8703,7 +8663,6 @@ giddh-datepicker {
             }
         }
     }
-
 }
 
 .gst-sidebar-open {
@@ -8864,7 +8823,6 @@ body.update-scroll-hidden {
                     }
                 }
             }
-
         }
     }
 }
@@ -8890,14 +8848,12 @@ body.update-scroll-hidden {
     overflow: auto;
 }
 .ledger-attachments-popup {
-
     button.mat-menu-item {
         height: 40px;
         display: flex;
         align-items: center;
         padding: 0 16px !important;
     }
-
 }
 
 .custom-cdk-overlay-wrapper {
@@ -8909,7 +8865,6 @@ body.update-scroll-hidden {
 
 .universal-datepicker-menu-panel {
     max-width: 100% !important;
-
 }
 .select-multiple-chiplist {
     mat-chip-grid {
@@ -8918,7 +8873,6 @@ body.update-scroll-hidden {
                 &:not(.mdc-evolution-chip--disabled) {
                     --mdc-chip-elevated-container-color: var(--color-border-light) !important;
                     border: 1px solid var(--border-color);
-
                 }
             }
         }
@@ -9107,7 +9061,6 @@ activity-compare-json {
     .dropdown-bg {
         display: none !important;
     }
-
 }
 .custom-btn {
     color: var(--color-black);
@@ -9131,7 +9084,6 @@ activity-compare-json {
             &:focus {
                 border-color: var(--color-black) !important;
             }
-
         }
     }
 }
@@ -9175,9 +9127,7 @@ body.hide-scroll-body.master-page {
 }
 
 .stock-balance-wrapper {
-
     .searching-stocks {
-
         select-field {
             input {
                 &.mat-form-field-autofill-control {
@@ -9187,7 +9137,6 @@ body.hide-scroll-body.master-page {
                     font-size: var(--font-size-15) !important;
                     padding-top: 7px !important;
                     border-radius: var(--mat-border-radius-4);
-
                 }
             }
         }
@@ -9285,7 +9234,6 @@ body.hide-scroll-body.master-page {
     min-height: 100% !important;
     height: 100% !important;
     width: 760px !important;
-
 }
 
 .subscription-sidebar {
@@ -9331,14 +9279,11 @@ body.hide-scroll-body.master-page {
         min-height: 100% !important;
         height: 100% !important;
         width: 760px !important;
-
     }
 }
 
 .stock-balance-wrapper {
-
     .searching-stocks {
-
         select-field,
         text-field {
             input {
@@ -9347,7 +9292,6 @@ body.hide-scroll-body.master-page {
 
                 &.bg-dropdown {
                     padding-left: 28px !important;
-
                 }
             }
         }
@@ -9365,7 +9309,6 @@ body.hide-scroll-body.master-page {
                         input {
                             padding-left: 5px !important;
                             padding-right: 17px !important;
-
                         }
                     }
                 }
@@ -9378,11 +9321,9 @@ body.hide-scroll-body.master-page {
     min-height: 100% !important;
     height: 100% !important;
     width: 760px !important;
-
 }
 
 .custom-mat-tabs {
-
     .mat-mdc-tab-header {
         display: none;
     }
@@ -9439,7 +9380,6 @@ input[type="checkbox"].cdk-visually-hidden::after {
 }
 
 .billing-wrapper {
-
     .form-group {
         float: left;
         width: 93%;
@@ -9456,7 +9396,6 @@ input[type="checkbox"].cdk-visually-hidden::after {
 
     &:hover {
         color: var(--color-dark-gray) !important;
-
     }
 }
 @media (max-height: 999px) {
@@ -9579,11 +9518,9 @@ input[type="checkbox"].cdk-visually-hidden::after {
     giddh-datepicker .mat-form-field {
         min-width: 100% !important;
     }
-
 }
 
 @media (max-width: 840px) {
-
     .bulk-create-table sh-select input,
     .bulk-create-table .mat-form-field-wrapper input,
     .bulk-create-table .mat-form-field-appearance-fill .mat-form-field-flex {
@@ -9613,7 +9550,6 @@ input[type="checkbox"].cdk-visually-hidden::after {
 }
 
 @media only screen and (max-width: 1030px) {
-
     .account-wrapper {
         width: 100% !important;
     }
@@ -9689,11 +9625,9 @@ input[type="checkbox"].cdk-visually-hidden::after {
     .HW_frame_cont.HW_visible.HW_bottom {
         max-width: 300px;
     }
-
 }
 
 @media (min-width: 768px) {
-
     .top-content {
         .count-box {
             min-width: fit-content !important;
@@ -9717,7 +9651,6 @@ input[type="checkbox"].cdk-visually-hidden::after {
     .receipt-note-modal {
         max-width: 100% !important;
     }
-
 }
 
 @media (max-width: 1300px) and (min-width: 1024px) {
@@ -9727,11 +9660,9 @@ input[type="checkbox"].cdk-visually-hidden::after {
             min-height: 452px;
         }
     }
-
 }
 
 @media (max-width: 1440px) {
-
     .date-column {
         min-width: 100px !important;
     }
@@ -9857,7 +9788,6 @@ body.prevent-body-scroll {
     .balance-options {
         height: auto !important;
         padding-bottom: 5px !important;
-
     }
 }
 .icon-sort-asc {
@@ -10022,7 +9952,7 @@ body {
                         background-color: var(--theme-primary-light) !important;
                         color: var(--color-black);
                         .mat-mdc-checkbox {
-                           --mdc-checkbox-unselected-focus-icon-color: var(--color-black) !important;
+                            --mdc-checkbox-unselected-focus-icon-color: var(--color-black) !important;
                             --mdc-checkbox-unselected-hover-icon-color: var(--color-black) !important;
                             --mdc-checkbox-unselected-icon-color: var(--color-black) !important;
                         }

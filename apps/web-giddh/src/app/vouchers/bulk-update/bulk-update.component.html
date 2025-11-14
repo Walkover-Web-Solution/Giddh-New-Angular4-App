@@ -4,8 +4,8 @@
 </div>
 <ng-container *ngIf="!isPOVoucher">
     <div mat-dialog-content class="dialog-body" [formGroup]="bulkUpdateForm">
-        <p class="mr-b1">{{ localeData?.choose_field_bulk_update }}</p>
-        <div class="d-flex column-gap-1 mr-b15">
+        <p class="mb-2">{{ localeData?.choose_field_bulk_update }}</p>
+        <div class="d-flex column-gap-1 mb-3">
             <reactive-dropdown-field
                 [name]="'invoice'"
                 [placeholder]="commonLocaleData?.app_select"
@@ -29,7 +29,7 @@
             <!-- notes-click -->
             <mat-form-field
                 appearance="outline"
-                class="initial-height w-100 mr-b15"
+                class="initial-height w-100 mb-3"
                 *ngIf="bulkUpdateForm.get('selectedField')?.value === 'notes'"
             >
                 <textarea
@@ -69,7 +69,7 @@
         </div>
         <!-- signature-image-click -->
         <div
-            class="bulk-upload mr-b15"
+            class="bulk-upload mb-3"
             *ngIf="
                 bulkUpdateForm.get('selectedField')?.value === 'signature' &&
                 bulkUpdateForm.get('signatureOption')?.value === 'image'
@@ -79,7 +79,7 @@
                 <input type="file" name="bulkUploadfileInput" id="bulkUploadfileInput" (change)="uploadImage()" />
                 <label
                     for="bulkUploadfileInput"
-                    class="upload-logo cursor-pointer w-100 border d-flex align-items-center justify-content-center overflow-hidden pd-15"
+                    class="upload-logo cursor-pointer w-100 border d-flex align-items-center justify-content-center overflow-hidden p-3"
                     >{{ localeData?.upload_logo }}</label
                 >
             </ng-container>
@@ -97,7 +97,7 @@
         <!-- signature-slogan-click -->
         <mat-form-field
             appearance="outline"
-            class="initial-height w-100 mr-b15"
+            class="initial-height w-100 mb-3"
             *ngIf="
                 bulkUpdateForm.get('selectedField')?.value === 'signature' &&
                 bulkUpdateForm.get('signatureOption')?.value === 'slogan'
@@ -107,7 +107,7 @@
         </mat-form-field>
 
         <!-- custom-field-click -->
-        <div class="d-flex column-gap-1 mr-b15" *ngIf="bulkUpdateForm.get('selectedField')?.value === 'customFields'">
+        <div class="d-flex column-gap-1 mb-3" *ngIf="bulkUpdateForm.get('selectedField')?.value === 'customFields'">
             <input-field
                 [type]="'text'"
                 [placeholder]="localeData?.custom_field1"
@@ -134,7 +134,7 @@
             </input-field>
         </div>
         <p>{{ localeData?.bulk_invoice_update_note }}</p>
-        <div class="d-flex justify-content-end column-gap-1 mr-t15">
+        <div class="d-flex justify-content-end column-gap-1 mt-3">
             <button
                 mat-raised-button
                 color="primary"
@@ -149,8 +149,8 @@
 </ng-container>
 <ng-container *ngIf="isPOVoucher">
     <div mat-dialog-content class="dialog-body" [formGroup]="bulkUpdateForm">
-        <p class="mr-b1">{{ localeData?.choose_field_bulk_update }}</p>
-        <div class="d-flex column-gap-1 mr-t15 mr-b15">
+        <p class="mb-2">{{ localeData?.choose_field_bulk_update }}</p>
+        <div class="d-flex column-gap-1 mt-3 mb-3">
             <reactive-dropdown-field
                 [name]="'invoice'"
                 [placeholder]="commonLocaleData?.app_select"
@@ -199,7 +199,7 @@
         </div>
 
         <p>{{ localeData?.bulk_invoice_update_note }}</p>
-        <div class="d-flex column-gap-1 mr-t15">
+        <div class="d-flex column-gap-1 mt-3">
             <button
                 mat-stroked-button
                 color="primary"

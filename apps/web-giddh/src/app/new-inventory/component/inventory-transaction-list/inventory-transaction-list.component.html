@@ -27,7 +27,7 @@
         ></report-filters>
         <div class="inventory-transaction-list" *ngIf="!isLoading">
             <div
-                class="mr-b15"
+                class="mb-3"
                 *ngIf="
                     isDataAvailable ||
                     stockReportRequest?.voucherTypes?.length ||
@@ -38,7 +38,7 @@
                     <div class="col-12">
                         <div class="top-content">
                             <div class="d-flex w-100 justify-content-between overflow-x-auto">
-                                <div class="total-details-box mr-r05 count-box mat-app-background">
+                                <div class="total-details-box mr-1 count-box mat-app-background">
                                     <h5>
                                         {{ localeData?.reports?.transaction_count }}
                                         <div class="mt-2">
@@ -48,7 +48,7 @@
                                         </div>
                                     </h5>
                                 </div>
-                                <div class="total-details-box mr-r05 border-none opening-box">
+                                <div class="total-details-box mr-1 border-none opening-box">
                                     <h5 class="float-left">
                                         {{ localeData?.reports?.profit_loss }}
                                         <div class="mt-2">
@@ -82,7 +82,7 @@
                                         </div>
                                     </h5>
                                 </div>
-                                <div class="total-details-box mr-r05 border-none sales-purchase">
+                                <div class="total-details-box mr-1 border-none sales-purchase">
                                     <h5 class="float-left">
                                         {{ localeData?.reports?.opening }}
                                         <div class="mt-2">
@@ -141,7 +141,7 @@
                                         </div>
                                     </h5>
                                 </div>
-                                <div class="total-details-box mr-r05 border-none payment-receipt">
+                                <div class="total-details-box mr-1 border-none payment-receipt">
                                     <h5 class="float-left">
                                         {{ localeData?.reports?.inward }}
                                         <div class="mt-2">
@@ -200,7 +200,7 @@
                                         </div>
                                     </h5>
                                 </div>
-                                <div class="total-details-box mr-r05 border-none due-box">
+                                <div class="total-details-box mr-1 border-none due-box">
                                     <h5 class="float-left">
                                         {{ localeData?.reports?.outward }}
                                         <div class="mt-2">
@@ -580,7 +580,7 @@
                         [hidePageSize]="false"
                         (page)="handlePageEvent($event)"
                     ></mat-paginator>
-                    <section class="mr-b8"></section>
+                    <section class="mb-custom-80"></section>
                 </div>
             </div>
         </div>

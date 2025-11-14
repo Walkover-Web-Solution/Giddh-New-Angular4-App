@@ -76,9 +76,9 @@
             </div>
         </div>
     
-        <div class="top-content pd-l15 pd-r15" [hidden]="!(salesRegisteDetailedResponse$ | async)?.items?.length">
+        <div class="top-content pl-3 pr-3" [hidden]="!(salesRegisteDetailedResponse$ | async)?.items?.length">
             <div class="d-flex justify-content-between w-100 overflow-x-auto" *ngIf="SalesRegisteDetailedItems">
-                <div class="total-details-box mr-r05 count-box mat-app-background">
+                <div class="total-details-box mr-1 count-box mat-app-background">
                     <h5>
                         {{ localeData?.transaction_count }}
                         <div>
@@ -89,7 +89,7 @@
                     </h5>
                 </div>
                 <div
-                    class="total-details-box mr-r05 border-none opening-box"
+                    class="total-details-box mr-1 border-none opening-box"
                     *ngIf="(salesRegisteDetailedResponse$ | async)?.creditTotal"
                 >
                     <h5>
@@ -107,7 +107,7 @@
                     </h5>
                 </div>
                 <div
-                    class="total-details-box mr-r05 border-none sales-purchase"
+                    class="total-details-box mr-1 border-none sales-purchase"
                     *ngIf="(salesRegisteDetailedResponse$ | async)?.debitTotal"
                 >
                     <h5>
@@ -124,7 +124,7 @@
                         </div>
                     </h5>
                 </div>
-                <div class="total-details-box mr-r05 border-none payment-receipt" *ngIf="displayedColumns?.includes('discount')">
+                <div class="total-details-box mr-1 border-none payment-receipt" *ngIf="displayedColumns?.includes('discount')">
                     <h5>
                         {{ localeData?.net_discount }}
                         <div>
@@ -140,7 +140,7 @@
                     </h5>
                 </div>
                 <div
-                    class="total-details-box mr-r05 border-none due-box"
+                    class="total-details-box mr-1 border-none due-box"
                     *ngIf="isTcsTdsApplicable && (salesRegisteDetailedResponse$ | async).tcsTotal"
                 >
                     <h5>
@@ -158,7 +158,7 @@
                     </h5>
                 </div>
                 <div
-                    class="total-details-box mr-r05 border-none due-box"
+                    class="total-details-box mr-1 border-none due-box"
                     *ngIf="isTcsTdsApplicable && (salesRegisteDetailedResponse$ | async).tdsTotal"
                 >
                     <h5>
@@ -175,7 +175,7 @@
                         </div>
                     </h5>
                 </div>
-                <div class="total-details-box mr-r05 border-none due-box" *ngIf="displayedColumns?.includes('tax')">
+                <div class="total-details-box mr-1 border-none due-box" *ngIf="displayedColumns?.includes('tax')">
                     <h5>
                         {{ localeData?.net_tax }}
                         <div>
@@ -210,7 +210,7 @@
     </div>
 
     <ng-container *ngIf="isGetSalesDetailsSuccess$ | async">
-        <div class="sales-register-table pd-15 overflow-visible" *ngIf="(salesRegisteDetailedResponse$ | async)?.items?.length">
+        <div class="sales-register-table p-3 overflow-visible" *ngIf="(salesRegisteDetailedResponse$ | async)?.items?.length">
             <div class="table-responsive overflow-visible table-header-sticky">
                 <table mat-table [dataSource]="dataSource" class="manufacturing-table">
                     <!-- Date Column -->
@@ -559,7 +559,7 @@
                     [hidePageSize]="false"
                     [pageIndex]="getDetailedsalesRequestFilter.page - 1"
                 ></mat-paginator>
-                <section class="mr-b8"></section>
+                <section class="mb-custom-80"></section>
             </div>
         </div>
         <div

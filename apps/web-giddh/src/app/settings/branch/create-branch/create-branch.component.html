@@ -6,18 +6,18 @@
 >
     <hamburger-menu></hamburger-menu>
     <div class="container-fluid setting-data">
-        <div class="create-branch-page mr-b15">
-            <div class="create-branch-under mr-b15">
+        <div class="create-branch-page mb-3">
+            <div class="create-branch-under mb-3">
                 <div class="row">
                     <div class="col-lg-10 col-sm-10">
                         <div class="branch-under-company">
-                            <p class="heading mr-t15 mr-b15">{{ localeData?.create_branch_under }}:</p>
+                            <p class="heading mt-3 mb-3">{{ localeData?.create_branch_under }}:</p>
                             <div class="branch-company-name">
-                                <div class="label-wrapper mr-b15">
+                                <div class="label-wrapper mb-3">
                                     <label>{{ commonLocaleData?.app_company }}:</label>
                                     <span>{{ companyDetails?.name }} ({{ companyDetails?.businessType }})</span>
                                 </div>
-                                <div class="label-wrapper mr-b15">
+                                <div class="label-wrapper mb-3">
                                     <label>{{ localeData?.country_currency }}:</label>
                                     <span
                                         ><img
@@ -44,7 +44,7 @@
             <form [formGroup]="branchForm" novalidate (ngSubmit)="handleFormSubmit()">
                 <div class="branch-form">
                     <div
-                        class="filter-dropdown-branch mr-b15"
+                        class="filter-dropdown-branch mb-3"
                         *ngIf="allBranches?.length > 1 && (isCompany || isConsolidatedBranch)"
                     >
                         <reactive-dropdown-field
@@ -150,12 +150,12 @@
                                                     <i
                                                         (click)="setDefault(option, $event)"
                                                         *ngIf="!option.isDefault"
-                                                        class="icon-no-selected mr-r05"
+                                                        class="icon-no-selected mr-1"
                                                     ></i>
                                                     <i
                                                         (click)="setDefault(option, $event)"
                                                         *ngIf="option.isDefault"
-                                                        class="icon-favorite-selected mr-r05"
+                                                        class="icon-favorite-selected mr-1"
                                                     ></i>
                                                 </span>
                                             </div>
@@ -169,7 +169,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="pd-l15 pd-r15">
+                <div class="pl-3 pr-3">
                     <div class="row">
                         <div class="button-group">
                             <button mat-stroked-button type="reset" (click)="handleFormClear()" class="btn custom-btn">

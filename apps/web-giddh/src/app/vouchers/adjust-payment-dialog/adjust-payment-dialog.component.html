@@ -16,7 +16,7 @@
                     {{ localeData?.adjusted_amount_error }}
                 </span>
                 <div class="row mb-2" *ngIf="isModal">
-                    <div class="col-6 mr-t15">
+                    <div class="col-6 mt-3">
                         <div class="form-group">
                             <input-field
                                 [id]="'customerName'"
@@ -251,7 +251,7 @@
                                 >
                                 </amount-field>
                             </span>
-                            <i class="icon-info pointer mr-l1" [matTooltip]="localeData?.adjustment_amount_error"></i>
+                            <i class="icon-info pointer ml-2" [matTooltip]="localeData?.adjustment_amount_error"></i>
                         </div>
                         <div class="note-message mt-3" *ngIf="isVoucherModule && isModal">
                             <p>{{ commonLocaleData?.app_note }}:</p>

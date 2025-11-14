@@ -1,7 +1,7 @@
 <div class="transactions-overview">
     <div class="gstr-transactions-summary" *ngIf="isTransactionSummary">
         <p class="clear-both gstr-summary-title">{{ localeData?.filing?.transaction_summary }}</p>
-        <p class="text-muted half pd-t05">{{ localeData?.filing?.transaction_summary_filing }}</p>
+        <p class="text-muted half pt-1">{{ localeData?.filing?.transaction_summary_filing }}</p>
     </div>
 
     <hr class="m-0" *ngIf="isTransactionSummary && selectedGst === GstReport.Gstr2" />

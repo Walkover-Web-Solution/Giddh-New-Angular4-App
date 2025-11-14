@@ -12,7 +12,7 @@
     <div class="col-8 border-left group pull-right" *ngIf="!groupDetail.level1">
         <div class="row">
             <span
-                class="col border-left text-right px-0 pd-r15"
+                class="col border-left text-right px-0 pr-3"
                 [ngClass]="{
                     'invisible':
                         groupDetail?.isOpen && (groupDetail?.accounts?.length || groupDetail?.childGroups?.length)
@@ -45,7 +45,7 @@
             </span>
         </div>
     </div>
-    <div class="col-8 border-left group text-right pull-right pd-1" *ngIf="groupDetail.level1">&nbsp;</div>
+    <div class="col-8 border-left group text-right pull-right p-2" *ngIf="groupDetail.level1">&nbsp;</div>
 </div>
 <cdk-virtual-scroll-viewport
     *ngIf="
@@ -85,7 +85,7 @@
             ></div>
             <div class="col-8 border-left text-left pull-right">
                 <div class="row d-flex">
-                    <span class="col text-right px-0 pd-r15">
+                    <span class="col text-right px-0 pr-3">
                         <span
                             *ngIf="
                                 account.category === 'income' &&

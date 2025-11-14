@@ -7,7 +7,7 @@
     <giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
     <ng-container *ngIf="!isLoading">
         <form autocomplete="off" novalidate name="unitForm" [formGroup]="unitForm" class="container p-0">
-            <div class="row mr-b15">
+            <div class="row mb-3">
                 <div class="col-xl-5 col-lg-5 col-sm-5">
                     <reactive-dropdown-field
                         [label]="localeData?.unit_group + '*'"
@@ -22,7 +22,7 @@
                     </reactive-dropdown-field>
                 </div>
             </div>
-            <div class="row mr-b15">
+            <div class="row mb-3">
                 <div class="col-xl-5 col-lg-5 col-sm-5">
                     <reactive-dropdown-field
                         [label]="commonLocaleData?.app_name + '*'"
@@ -53,7 +53,7 @@
             </div>
             <div class="unit-quantity" formArrayName="mappings">
                 <div
-                    class="row mr-b15 align-items-center"
+                    class="row mb-3 align-items-center"
                     *ngFor="let mapping of unitForm?.get('mappings')['controls']; let i = index"
                     [formGroupName]="i"
                 >

@@ -16,10 +16,10 @@
         ></tax-sidebar>
     </div>
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
-    <div class="clear-both pd-15">
+    <div class="clear-both p-3">
         <div class="input-group flex-nowrap column-gap-15 align-items-center mx-0">
             <div
-                class="form-group linked-entities mr-r15 mb-0"
+                class="form-group linked-entities mr-3 mb-0"
                 *ngIf="(currentCompanyBranches?.length > 2) && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
             >
                 <reactive-dropdown-field
@@ -198,7 +198,7 @@
         <mat-dialog-content class="dialog-body">
             <form #updateVehicleForm="ngForm" autocomplete="off" name="updateEwayVehicleform">
                 <div class="p-3">
-                    <div class="d-flex column-gap-15 mr-b15">
+                    <div class="d-flex column-gap-15 mb-3">
                         <!-- Mode of Transportation -->
                         <label>{{ commonLocaleData?.app_transportation_mode }}</label>
                         <mat-radio-group name="transMode" [(ngModel)]="updateEwayVehicleform.transMode" class="d-flex flex-wrap">
@@ -527,7 +527,7 @@
             [hidePageSize]="false"
             [pageIndex]="EwayBillfilterRequest.page - 1"
         ></mat-paginator>
-        <section class="mr-b8"></section>
+        <section class="mb-custom-80"></section>
 
         <div
             class="no-data"

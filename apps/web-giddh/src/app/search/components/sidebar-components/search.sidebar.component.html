@@ -3,7 +3,7 @@
         <div>
             <form #search="ngForm" name="searchFormClb" novalidate="" class="form-inline flex-row flex-nowrap">
                 <div
-                    class="select-entity mr-r15 select-entity-height"
+                    class="select-entity mr-3 select-entity-height"
                     *ngIf="currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
                 >
                     <div class="linked-entities">
@@ -19,7 +19,7 @@
                         </reactive-dropdown-field>
                     </div>
                 </div>
-                <div class="mr-r15">
+                <div class="mr-3">
                     <reactive-dropdown-field
                         [options]="searchedGroups"
                         [name]="'groups'"
@@ -33,7 +33,7 @@
                     >
                     </reactive-dropdown-field>
                 </div>
-                <div class="mr-r15">
+                <div class="mr-3">
                     <div class="custom-datepicker custom-new-datepicker"
                         [matMenuTriggerFor]="universalDatepicker"
                         #universalDatepickerTrigger="matMenuTrigger"

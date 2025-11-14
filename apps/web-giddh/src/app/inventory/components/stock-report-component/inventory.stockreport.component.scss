@@ -67,7 +67,6 @@
 .total-footer {
     background-color: var(--color-white);
     display: flex;
-
 }
 
 .journal-voucher {
@@ -214,10 +213,6 @@ button[aria-expanded="true"] i {
     color: var(--text-primary-color);
 }
 
-.mr-b100 {
-    margin-bottom: 100px;
-}
-
 .advance-icon {
     width: 36px;
     height: 36px;
@@ -299,7 +294,6 @@ button[aria-expanded="true"] i {
         align-items: flex-start;
         flex-direction: row !important;
         text-align: right;
-
     }
 }
 @media (max-width: 1024px) {

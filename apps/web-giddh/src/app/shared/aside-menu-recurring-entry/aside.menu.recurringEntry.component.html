@@ -15,7 +15,7 @@
                 <form [formGroup]="form">
                     <div class="row">
                         <div class="col-xs-4 col-sm-4 form-group">
-                            <label class="mr-b1"
+                            <label class="mb-2"
                                 >{{ commonLocaleData?.app_start_date }}<span class="text-danger">*</span></label
                             >
                             <giddh-datepicker
@@ -30,7 +30,7 @@
                         </div>
 
                         <div class="col-xs-4 col-sm-4 form-group" *ngIf="!IsNotExpirable">
-                            <label class="mr-b1"
+                            <label class="mb-2"
                                 >{{ commonLocaleData?.app_end_date }}<span class="text-danger">*</span></label
                             >
                             <giddh-datepicker
@@ -51,7 +51,7 @@
                     </div>
 
                     <div class="form-group ng-select-wrap select-list select-group">
-                        <label class="mr-b1">{{ localeData?.interval }}<span class="text-danger">*</span></label>
+                        <label class="mb-2">{{ localeData?.interval }}<span class="text-danger">*</span></label>
                         <select-field
                             [cssClass]="'form-control border'"
                             [name]="'duration'"

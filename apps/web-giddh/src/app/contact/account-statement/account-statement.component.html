@@ -8,7 +8,7 @@
     <giddh-page-loader></giddh-page-loader>
 </div>
     <div class="common-wrapper">
-        <div class="account-statement p-20 mr-t20">
+        <div class="account-statement p-20 mt-4">
             <table class="w-100">
                 <tr>
                     <td width="65%" class="vertical-align-top">
@@ -195,7 +195,7 @@
                     <div class="d-flex justify-content-between">
                         <button
                             mat-stroked-button
-                            class="mr-r1"
+                            class="mr-2"
                             [matTooltip]="commonLocaleData?.app_export"
                             [matTooltipPosition]="'above'"  
                             (click)="exportAccountStatement()"
@@ -214,7 +214,7 @@
                         </button>
                     </div>
                 </div>
-                <div class="invoice-table mr-t15">
+                <div class="invoice-table mt-3">
                     <div class="table-responsive position-relative ">
                         <table
                             mat-table
@@ -356,15 +356,15 @@
                         </table>
                         <hr class="border-grey" />
                             <div class="d-flex justify-content-end">
-                                <span class="font-size-16 font-weight-bold pd-1">{{ localeData?.balance_due }}</span>
-                                <span class="pd-1">
+                                <span class="font-size-16 font-weight-bold p-2">{{ localeData?.balance_due }}</span>
+                                <span class="p-2">
                                         {{
                                             balanceDue
                                         }}
                                     </span>
                             </div>
                         <div
-                            class="text-center pd-t1 pd-b1"
+                            class="text-center pt-2 pb-2"
                             *ngIf="isLoading || (!isLoading && !accountListData?.length)"
                         >
                             <div class="no-data" *ngIf="isLoading">
@@ -387,7 +387,7 @@
                             [pageIndex]="accountListRequest.page - 1"
                         >
                         </mat-paginator>
-                        <section class="mr-b8"></section>
+                        <section class="mb-custom-80"></section>
                     </div>
                 </div>
             </div>

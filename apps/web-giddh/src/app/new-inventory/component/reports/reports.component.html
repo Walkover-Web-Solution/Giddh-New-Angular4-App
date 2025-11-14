@@ -31,12 +31,12 @@
             ></report-filters>
         </div>
         <div class="inventory-transaction-list overflow-visible" *ngIf="!isLoading">
-            <div *ngIf="isDataAvailable" class="position-sticky mr-b15">
+            <div *ngIf="isDataAvailable" class="position-sticky mb-3">
                 <div class="row">
                     <div class="col-12">
                         <div class="top-content">
                             <div class="d-flex w-100 justify-content-between overflow-x-auto">
-                                <div class="total-details-box mr-r05 count-box mat-app-background">
+                                <div class="total-details-box mr-1 count-box mat-app-background">
                                     <div>
                                         <span *ngIf="reportType === 'GROUP'">
                                             {{ localeData?.reports?.group_count }}</span
@@ -57,7 +57,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="total-details-box mr-r05 border-none opening-box">
+                                <div class="total-details-box mr-1 border-none opening-box">
                                     <div class="float-left">
                                         {{ localeData?.reports?.profit_loss }}
                                         <div class="mt-2">
@@ -91,7 +91,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="total-details-box mr-r05 border-none sales-purchase">
+                                <div class="total-details-box mr-1 border-none sales-purchase">
                                     <div class="float-left">
                                         {{ localeData?.reports?.opening }}
                                         <div class="mt-2">
@@ -149,7 +149,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="total-details-box mr-r05 border-none payment-receipt">
+                                <div class="total-details-box mr-1 border-none payment-receipt">
                                     <div class="float-left">
                                         {{ localeData?.reports?.inward }}
                                         <div class="mt-2">
@@ -207,7 +207,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="total-details-box mr-r05 border-none due-box">
+                                <div class="total-details-box mr-1 border-none due-box">
                                     <div class="float-left">
                                         {{ localeData?.reports?.outward }}
                                         <div class="mt-2">
@@ -332,7 +332,7 @@
             <div class="row overflow-visible" *ngIf="isDataAvailable">
                 <div class="col-12 horizontal-padding overflow-visible">
                     <div
-                        class="table-responsive inventory-report-table overflow-visible table-header-sticky pd-t5"
+                        class="table-responsive inventory-report-table overflow-visible table-header-sticky pt-5"
                         *ngIf="displayedColumns?.length"
                     >
                         <table
@@ -722,7 +722,7 @@
                             [hidePageSize]="false"
                             (page)="handlePageEvent($event)"
                         ></mat-paginator>
-                        <section class="mr-b8"></section>
+                        <section class="mb-custom-80"></section>
                     </div>
                 </div>
             </div>

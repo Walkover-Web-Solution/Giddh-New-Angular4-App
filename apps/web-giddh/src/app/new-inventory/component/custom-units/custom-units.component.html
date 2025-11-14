@@ -9,7 +9,7 @@
             <mat-grid-list cols="10" rowHeight="500px">
                 <mat-grid-tile [colspan]="2" class="border-grid">
                     <mat-list class="item-list group-list">
-                        <strong class="pb-2 list-font pd-l15">{{ commonLocaleData?.app_group }}</strong>
+                        <strong class="pb-2 list-font pl-3">{{ commonLocaleData?.app_group }}</strong>
                         <giddh-page-loader *ngIf="isGroupListLoading"></giddh-page-loader>
                         <ng-container *ngIf="!isGroupListLoading">
                             <ng-container *ngIf="!unitGroups?.length">
@@ -47,7 +47,7 @@
                 </mat-grid-tile>
                 <mat-grid-tile [colspan]="3" class="border-grid">
                     <mat-list class="item-list">
-                        <strong class="pb-2 list-font pd-l15">{{ commonLocaleData?.app_unit }}</strong>
+                        <strong class="pb-2 list-font pl-3">{{ commonLocaleData?.app_unit }}</strong>
                         <mat-divider></mat-divider>
                         <giddh-page-loader *ngIf="isUnitListLoading"></giddh-page-loader>
                         <ng-container *ngIf="!isUnitListLoading">
@@ -59,11 +59,11 @@
                                 </mat-list>
                             </ng-container>
                             <ng-container *ngIf="unitMappings?.length">
-                                <mat-list role="list" class="list-head pd-l15">
+                                <mat-list role="list" class="list-head pl-3">
                                     <mat-list-item role="listitem" class="items px-0">
                                         <strong>{{ commonLocaleData?.app_name }}</strong>
                                     </mat-list-item>
-                                    <mat-list-item role="listitem" class="items map-item pd-r2">
+                                    <mat-list-item role="listitem" class="items map-item pr-4">
                                         <strong>{{ localeData?.mapped_unit }}</strong>
                                     </mat-list-item>
                                 </mat-list>

@@ -14,7 +14,7 @@
         </div>
         <mat-dialog-content class="dialog-body">
             <form>
-                <div class="row mr-b15">
+                <div class="row mb-3">
                     <div class="col-lg-12">
                         <div class="form-group date-advance-search">
                             <div class="custom-datepicker w-100" [matMenuTriggerFor]="universalDatepicker" #universalDatepickerTrigger="matMenuTrigger" role="button" aria-haspopup="true" aria-controls="universalDatepicker">
@@ -34,7 +34,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="row">
-                            <div class="col-lg-6 col-sm-6 col-12 mr-b15 pr-2">
+                            <div class="col-lg-6 col-sm-6 col-12 mb-3 pr-2">
                                 <ng-container *ngIf="reportType === 'TRANSACTION'">
                                     <reactive-dropdown-field
                                         [placeholder]="localeData?.advance_search_filter?.select_category"
@@ -57,7 +57,7 @@
                                     ></reactive-dropdown-field>
                                 </ng-container>
                             </div>
-                            <div class="col-lg-6 col-sm-6 col-12 mr-b15 pl-2">
+                            <div class="col-lg-6 col-sm-6 col-12 mb-3 pl-2">
                                 <reactive-dropdown-field
                                     [placeholder]="localeData?.advance_search_filter?.select_type"
                                     [options]="advanceSearchCategoryOptions"
@@ -73,7 +73,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="row">
-                            <div class="col-lg-6 col-sm-6 mr-b15 pr-2">
+                            <div class="col-lg-6 col-sm-6 mb-3 pr-2">
                                 <reactive-dropdown-field
                                     [placeholder]="localeData?.advance_search_filter?.select_value"
                                     [options]="advanceSearchValue"
@@ -83,7 +83,7 @@
                                     [label]="localeData?.advance_search_filter?.value"
                                 ></reactive-dropdown-field>
                             </div>
-                            <div class="col-lg-6 col-sm-6 mr-b15 pl-2">
+                            <div class="col-lg-6 col-sm-6 mb-3 pl-2">
                                 <input-field
                                     [type]="'number'"
                                     [placeholder]="localeData?.advance_search_filter?.enter_amount"

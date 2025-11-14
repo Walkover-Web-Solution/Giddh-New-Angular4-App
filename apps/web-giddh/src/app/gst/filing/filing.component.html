@@ -74,7 +74,7 @@
                             <!-- File Return -->
                             <mat-tab [label]="localeData?.filing?.tabs?.push_to_portal" *ngIf="isCompany && selectedGst !== GstReport.Gstr2 && showGstFiling">
                                 <div class="transactions-overview">
-                                    <div class="gstr-transactions-summary mr-t4 mr-b4 text-center">
+                                    <div class="gstr-transactions-summary mt-5 mb-5 text-center">
                                         <div class="gst-return-date">
                                             <img src="assets/images/return-date.svg" />
                                             <p>{{ localeData?.filing?.click_to_proceed }}</p>
@@ -88,7 +88,7 @@
                                             </button>
                                         </div>
             
-                                        <p *ngIf="fileReturnSucces" class="mr-t2">
+                                        <p *ngIf="fileReturnSucces" class="mt-4">
                                             {{ getGstReturnFieldText() }}
                                         </p>
                                     </div>

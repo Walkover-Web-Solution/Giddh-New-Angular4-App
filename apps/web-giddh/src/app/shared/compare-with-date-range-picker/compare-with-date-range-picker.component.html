@@ -23,7 +23,7 @@
                 [formGroup]="compareOptionsForm"
             >
                 <div class="w-100">
-                    <label class="d-block pd-l15 pd-r15 text-primary" matListItemTitle>{{
+                    <label class="d-block pl-3 pr-3 text-primary" matListItemTitle>{{
                         localeData?.compare_with
                     }}</label>
                     <mat-selection-list
@@ -86,7 +86,7 @@
                 </div>
                 <mat-divider class="w-100"></mat-divider>
                 <div class="w-100">
-                    <label class="d-block pd-l15 pd-r15 mr-t2 text-primary" matListItemTitle>{{
+                    <label class="d-block pl-3 pr-3 mt-4 text-primary" matListItemTitle>{{
                         localeData?.previous
                     }}</label>
                     <mat-selection-list [multiple]="false" color="primary" formControlName="compareType">
@@ -134,7 +134,7 @@
                             </span>
                         </mat-list-option>
                     </mat-selection-list>
-                    <p class="m-0 pd-l15 pd-r15 text-light" *ngIf="dateRangeInfo.isMonthSelected && dateRangeInfo.isQuarterSelected && dateRangeInfo.isYearSelected">{{ localeData?.options_are_disabled_message }}</p>
+                    <p class="m-0 pl-3 pr-3 text-light" *ngIf="dateRangeInfo.isMonthSelected && dateRangeInfo.isQuarterSelected && dateRangeInfo.isYearSelected">{{ localeData?.options_are_disabled_message }}</p>
                 </div>
             </form>
         </mat-menu>

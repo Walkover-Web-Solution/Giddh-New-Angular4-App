@@ -8,7 +8,7 @@
     <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
     <ng-container *ngIf="!showLoader">
         <div class="transactions-page position-relative clear-both">
-            <div class="d-flex align-items-center column-gap-1 pd-15">
+            <div class="d-flex align-items-center column-gap-1 p-3">
                     <div
                         *ngIf="currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY'|| isConsolidatedBranch)"
                     >
@@ -62,7 +62,7 @@
                         mat-raised-button
                         color="primary"
                     >
-                        <span class="pd-r05">{{ commonLocaleData?.app_filter }}</span>
+                        <span class="pr-1">{{ commonLocaleData?.app_filter }}</span>
                         <i class="icon-advance-filter"></i>
                     </button>
                     <button
@@ -634,7 +634,7 @@
                     [hidePageSize]="false"
                     [showFirstLastButtons]="true">
                 </mat-paginator>
-                <section class="mr-b8"></section>
+                <section class="mb-custom-80"></section>
             </div>
             <div class="no-data" *ngIf="!daybookData?.entries?.length">
                 <no-data></no-data>

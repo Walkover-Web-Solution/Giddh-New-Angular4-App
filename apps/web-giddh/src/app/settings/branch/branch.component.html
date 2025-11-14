@@ -20,9 +20,9 @@
             >
                 <mat-tab [label]="localeData?.flat_view">
                     <ng-container *ngIf="selectedTabIndex === 0">
-                        <div class="clear-both pd-15 pb-0">
+                        <div class="clear-both p-3 pb-0">
                             <div class="date-advance-search row">
-                                <div class="col-sm-12 mr-b15 d-flex justify-content-between">
+                                <div class="col-sm-12 mb-3 d-flex justify-content-between">
                                     <form class="form-inline input-group-date-range-picker position-relative d-flex flex-row mr-0">
                                         <div class="mr-1 branch-header-content w-100">
                                             <div class="search-field form-top-fields w-100">
@@ -38,7 +38,7 @@
                                                 </div>
                                                 <button
                                                     *ngIf="searchBranchQuery.value"
-                                                    class="w-100 mr-l1"
+                                                    class="w-100 ml-2"
                                                     mat-stroked-button
                                                     (click)="resetFilter()"
                                                     aria-label="cross icon"
@@ -56,7 +56,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div *ngIf="(branches$ | async)?.length === 0 && !showLoader" class="no-data mr-t2">
+                        <div *ngIf="(branches$ | async)?.length === 0 && !showLoader" class="no-data mt-4">
                             <div class="no-data">
                                 <h2>{{ localeData?.no_branch_found }}</h2>
                             </div>
@@ -65,7 +65,7 @@
                             <div class="cube1"></div>
                             <div class="cube2"></div>
                         </div>
-                        <div *ngIf="(branches$ | async)?.length > 0 && !showLoader" class="pd-15">
+                        <div *ngIf="(branches$ | async)?.length > 0 && !showLoader" class="p-3">
                             <div class="branch-card-view" *ngIf="branchViewType === 'card'">
                                 <div class="row">
                                     <div class="col-12" *ngFor="let branch of branches$ | async">
@@ -165,12 +165,12 @@
                                                                     <i
                                                                         (click)="setDefault(address, branch, 'address')"
                                                                         *ngIf="!address?.isDefault"
-                                                                        class="cursor-pointer icon-no-selected mr-r05"
+                                                                        class="cursor-pointer icon-no-selected mr-1"
                                                                     ></i>
                                                                     <i
                                                                         (click)="setDefault(address, branch, 'address')"
                                                                         *ngIf="address?.isDefault"
-                                                                        class="cursor-pointer icon-favorite-selected mr-r05"
+                                                                        class="cursor-pointer icon-favorite-selected mr-1"
                                                                     ></i>
                                                                         {{ address?.name }}
                                                                     </span>
@@ -228,14 +228,14 @@
                                                                             setDefault(warehouse, branch, 'warehouse')
                                                                         "
                                                                         *ngIf="!warehouse?.isDefault"
-                                                                        class="cursor-pointer icon-no-selected mr-r05"
+                                                                        class="cursor-pointer icon-no-selected mr-1"
                                                                     ></i>
                                                                     <i
                                                                         (click)="
                                                                             setDefault(warehouse, branch, 'warehouse')
                                                                         "
                                                                         *ngIf="warehouse?.isDefault"
-                                                                        class="cursor-pointer icon-favorite-selected mr-r05"
+                                                                        class="cursor-pointer icon-favorite-selected mr-1"
                                                                     ></i>
                                                                     <label class="cursor-pointer">{{
                                                                         warehouse?.name
@@ -301,7 +301,7 @@
                     </ng-container>
                 </mat-tab>
                 <mat-tab [label]="localeData?.hierarchy_view">
-                    <div class="pd-t2 pd-b2 h-100">
+                    <div class="pt-4 pb-4 h-100">
                         <d3-tree-chart [data]="data" [localeData]="localeData"> </d3-tree-chart>
                     </div>
                 </mat-tab>

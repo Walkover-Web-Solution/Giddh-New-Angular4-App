@@ -7,9 +7,9 @@
     </div>
     <mat-dialog-content class="dialog-body">
         <form #bulkUpdateForm="ngForm" autocomplete="off" (ngSubmit)="updateBulkInvoice()">
-            <div class="modal-body pd-l2 pd-r2 clear-both" id="export-body">
+            <div class="modal-body pl-4 pr-4 clear-both" id="export-body">
                 <small>{{ localeData?.choose_field_bulk_update }}</small>
-                <div class="row mr-b1 mt-2">
+                <div class="row mb-2 mt-2">
                     <div class="col-md-6 col-sm-6">
                         <div class="form-group">
                             <reactive-dropdown-field
@@ -212,11 +212,11 @@
     </div>
     <div mat-dialog-content class="dialog-body max-height-65vh">
         <p>{{ localeData?.bulk_image_note }}</p>
-        <p class="mr-t2">
+        <p class="mt-4">
             <b> {{ localeData?.want_proceed }}</b>
         </p>
     </div>
-    <div mat-dialog-actions class="text-left mr-t2 clear-both">
+    <div mat-dialog-actions class="text-left mt-4 clear-both">
         <button
             type="submit"
             mat-raised-button color="primary"

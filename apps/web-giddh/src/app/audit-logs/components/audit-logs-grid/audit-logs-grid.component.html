@@ -11,26 +11,26 @@
                 - {{ log.accountName }} ({{ log.accountUniqueName }})</span
             >
         </p>
-        <div class="mr-t05 border-top-btm clear-both">
+        <div class="mt-1 border-top-btm clear-both">
             <div>
                 <label class="pull-left">{{ commonLocaleData?.app_entity }}:</label>
-                <p class="pull-left mr-l05">{{ log.entityType }}</p>
+                <p class="pull-left ml-1">{{ log.entityType }}</p>
             </div>
             <div>
-                <label class="pull-left mr-l2">{{ localeData?.date }}:</label>
-                <p class="pull-left mr-l05">{{ log.createdAt }}</p>
+                <label class="pull-left ml-4">{{ localeData?.date }}:</label>
+                <p class="pull-left ml-1">{{ log.createdAt }}</p>
             </div>
             <div>
-                <label class="pull-left mr-l2">{{ localeData?.user }}:</label>
-                <p class="pull-left mr-l05">{{ log.user?.name }}</p>
+                <label class="pull-left ml-4">{{ localeData?.user }}:</label>
+                <p class="pull-left ml-1">{{ log.user?.name }}</p>
             </div>
             <div *ngIf="log && log.groupName && log.groupName != null">
-                <label class="pull-left mr-l2">{{ localeData?.group }}:</label>
-                <p class="pull-left mr-l05">{{ log.groupName }}</p>
+                <label class="pull-left ml-4">{{ localeData?.group }}:</label>
+                <p class="pull-left ml-1">{{ log.groupName }}</p>
             </div>
             <div>
-                <label class="pull-left mr-l2">{{ localeData?.company }}:</label>
-                <p class="pull-left mr-l05">{{ log.companyName }}</p>
+                <label class="pull-left ml-4">{{ localeData?.company }}:</label>
+                <p class="pull-left ml-1">{{ log.companyName }}</p>
             </div>
             <div
                 *ngIf="
@@ -40,8 +40,8 @@
                     log.log?.sharedWith?.name?.length > 0
                 "
             >
-                <label class="pull-left mr-l2">{{ localeData?.shared_with }}:</label>
-                <p class="pull-left mr-l05">
+                <label class="pull-left ml-4">{{ localeData?.shared_with }}:</label>
+                <p class="pull-left ml-1">
                     {{ log.log?.sharedWith?.name }}
                     <span
                         *ngIf="
@@ -55,13 +55,13 @@
                 </p>
             </div>
             <div *ngIf="log && log.log && log.log?.description != undefined && log.log?.description?.length > 0">
-                <label class="pull-left mr-l2">{{ localeData?.description }}:</label>
-                <p class="pull-left mr-l05">{{ log.log?.description }}</p>
+                <label class="pull-left ml-4">{{ localeData?.description }}:</label>
+                <p class="pull-left ml-1">{{ log.log?.description }}</p>
             </div>
         </div>
 
         <div
-            class="mr-t05 table-container"
+            class="mt-1 table-container"
             *ngIf="log.log != null && log.log?.transactions != undefined && log.log?.transactions?.length > 0"
         >
             <table
@@ -113,7 +113,7 @@
             </table>
         </div>
         <div
-            class="mr-t05 text-center table-container"
+            class="mt-1 text-center table-container"
             *ngIf="
                 log &&
                 log.log &&
@@ -221,7 +221,7 @@
             </table>
         </div>
         <div
-            class="mr-t05 text-center table-container"
+            class="mt-1 text-center table-container"
             *ngIf="
                 log &&
                 log.log &&
@@ -319,7 +319,7 @@
         </div>
     </section>
     <button
-        mat-raised-button color="primary" class="pull-left mr-t2 mr-b2"
+        mat-raised-button color="primary" class="pull-left mt-4 mb-4"
         [ladda]="loadMoreInProcess$ | async"
         (click)="loadMoreLogs()"
         *ngIf="(page$ | async) > 0 && (page$ | async) < (totalPages$ | async)"
