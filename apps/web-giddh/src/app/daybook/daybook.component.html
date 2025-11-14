@@ -9,47 +9,52 @@
     <ng-container *ngIf="!showLoader">
         <div class="transactions-page position-relative clear-both">
             <div class="d-flex align-items-center column-gap-1 p-3">
+                <div
+                    *ngIf="
+                        currentCompanyBranches?.length > 2 &&
+                        (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
+                    "
+                >
+                    <reactive-dropdown-field
+                        [options]="currentCompanyBranches"
+                        [(ngModel)]="currentBranch.uniqueName"
+                        [name]="'currentBranch'"
+                        (selectedOption)="handleBranchChange($event)"
+                        [placeholder]="localeData?.select_entity"
+                        [labelValue]="currentBranch?.name"
+                    ></reactive-dropdown-field>
+                </div>
+                <div class="custom-datepicker-wrapper">
                     <div
-                        *ngIf="currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY'|| isConsolidatedBranch)"
+                        class="custom-datepicker"
+                        [matMenuTriggerFor]="universalDatepicker"
+                        #universalDatepickerTrigger="matMenuTrigger"
+                        role="button"
+                        aria-haspopup="true"
+                        aria-controls="universalDatepicker"
                     >
-                            <reactive-dropdown-field
-                                [options]="currentCompanyBranches"
-                                [(ngModel)]="currentBranch.uniqueName"
-                                [name]="'currentBranch'"
-                                (selectedOption)="handleBranchChange($event)"
-                                [placeholder]="localeData?.select_entity"
-                                [labelValue]="currentBranch?.name"
-                            ></reactive-dropdown-field>
+                        <input
+                            matInput
+                            type="text"
+                            name="selectedDateRange"
+                            [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                            class="giddh-datepicker date-range-picker"
+                            readonly
+                        />
                     </div>
-                    <div class="custom-datepicker-wrapper">
-                        <div class="custom-datepicker" 
-                                [matMenuTriggerFor]="universalDatepicker" 
-                                #universalDatepickerTrigger="matMenuTrigger"
-                                role="button"
-                                aria-haspopup="true"
-                                aria-controls="universalDatepicker">
-                            <input
-                                matInput
-                                type="text"
-                                name="selectedDateRange"
-                                [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                                class="giddh-datepicker date-range-picker"
-                                readonly
-                            />
-                        </div>
-                    </div>
-                    <div class="expand-collapse-btn">
-                        <button 
-                            mat-stroked-button 
-                            aria-label="expand icon"
-                            [matTooltip]="commonLocaleData?.app_expand_all"
-                            [matTooltipPosition]="'above'"
-                            (click)="toggleExpand()"
-                            class="btn-stroked-icon"
-                        >
-                            <span [ngClass]="isAllExpanded ? 'icon-collapse' : 'icon-expandIcon'"></span>
-                        </button>
-                    </div>
+                </div>
+                <div class="expand-collapse-btn">
+                    <button
+                        mat-stroked-button
+                        aria-label="expand icon"
+                        [matTooltip]="commonLocaleData?.app_expand_all"
+                        [matTooltipPosition]="'above'"
+                        (click)="toggleExpand()"
+                        class="btn-stroked-icon"
+                    >
+                        <span [ngClass]="isAllExpanded ? 'icon-collapse' : 'icon-expandIcon'"></span>
+                    </button>
+                </div>
                 <button *ngIf="showAdvanceSearchIcon" mat-stroked-button (click)="initialRequest()" class="mx-0">
                     <span class="icon-cross icon-font-size-14"></span> {{ commonLocaleData?.app_clear_filter }}
                 </button>
@@ -80,13 +85,8 @@
 
         <div class="container-fluid overflow-visible">
             <div class="clear-both daybook-table overflow-visible">
-                <div class="clear-both trial-balance table-responsive table-header-sticky overflow-visible">
-                    <table
-                        mat-table
-                        class="w-100"
-                        [dataSource]="daybookData?.entries"
-                        multiTemplateDataRows
-                    >
+                <div class="clear-both trial-balance table-responsive overflow-visible">
+                    <table mat-table class="w-100" [dataSource]="daybookData?.entries" multiTemplateDataRows>
                         <ng-container matColumnDef="entry_date">
                             <th
                                 mat-header-cell
@@ -623,7 +623,6 @@
                         ></tr>
                     </table>
                 </div>
-
                 <mat-paginator
                     *ngIf="daybookData?.totalItems > pageSizeOptions[0]"
                     [length]="daybookData?.totalItems"
@@ -632,7 +631,8 @@
                     [pageIndex]="daybookData?.page - 1"
                     (page)="handlePageEvent($event)"
                     [hidePageSize]="false"
-                    [showFirstLastButtons]="true">
+                    [showFirstLastButtons]="true"
+                >
                 </mat-paginator>
                 <section class="mb-custom-80"></section>
             </div>

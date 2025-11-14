@@ -5901,7 +5901,6 @@ hamburger-menu {
 
 .table {
     width: 100%;
-    margin-bottom: 20px;
     background-color: var(--table-background-color);
 
     th,
@@ -5943,12 +5942,6 @@ hamburger-menu {
     overflow-x: auto;
     border: 1px solid var(--border-color);
     border-radius: var(--mat-border-radius-4);
-}
-
-.table-header-sticky {
-    position: sticky;
-    top: 0;
-    z-index: 10;
 }
 
 .mat-table {
