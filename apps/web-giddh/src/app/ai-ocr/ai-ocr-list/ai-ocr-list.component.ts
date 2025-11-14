@@ -451,7 +451,6 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
         this.ocrDocumentsRequestParams.from = res.from;
         this.ocrDocumentsRequestParams.to = res.to;
         this.getAllOcrDocuments(true);
-        this.changeDetection.detectChanges();
     }
 
     /**
