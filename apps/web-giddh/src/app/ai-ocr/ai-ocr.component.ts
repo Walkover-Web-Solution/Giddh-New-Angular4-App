@@ -10,7 +10,7 @@ import { AiOcrService } from "../services/ai-ocr.service";
 import { GeneralService } from "../services/general.service";
 import { OrganizationType } from "../models/user-login-state";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../shared/helpers/defaultDateFormat";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 dayjs.extend(duration);
 
 export enum OcrAction {
@@ -143,7 +143,8 @@ export class AiOcrComponent implements OnInit, OnDestroy {
         private aiOcrService: AiOcrService,
         private changeDetection: ChangeDetectorRef,
         private generalService: GeneralService,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
+        private router: Router
     ) {
         this.selectedToggle = OcrAction.List;
     }
@@ -186,6 +187,12 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                 this.listCount = 0;
                 this.countVariable = 0;
                 this.ocrType = response.type;
+                
+                // Redirect to default 'income' type if no type is provided or invalid
+                if (!this.ocrType || (this.ocrType !== 'income' && this.ocrType !== 'expense')) {
+                    this.router.navigate(['/pages/ai-ocr/income']);
+                    return;
+                }
 
                 this.aiOcrStore.branchConsolidated$.pipe(takeUntil(this.routeScope$)).subscribe((response) => {
                     if (response) {
