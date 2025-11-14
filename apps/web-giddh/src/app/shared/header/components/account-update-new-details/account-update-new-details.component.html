@@ -438,7 +438,7 @@
                 [label]="localeData?.tabs?.contact"
                 class="contact-form-wrap"
             >
-                <div class="pd-t15 overflow-hidden padding-bottom-100" *ngIf="isTabActivated(localeData?.tabs?.contact)">
+                <div class="pd-t15 overflow-hidden padding-bottom-100">
                     <div class="row pd-b2">
                         <div class="col-sm-6">
                             <input-field
@@ -507,7 +507,7 @@
                 class="contact-form-wrap"
                 *ngIf="voucherApiVersion === 2 && (activeGroupUniqueName === accountingGroupEnum.SundryDebtors || isParentSundryDebtors)"
             >
-                <div formArrayName="portalDomain" class="pd-t15 overflow-hidden padding-bottom-100" *ngIf="isTabActivated(localeData?.tabs?.portal)">
+                <div formArrayName="portalDomain" class="pd-t15 overflow-hidden padding-bottom-100">
                     <div
                         class="row pd-b2"
                         *ngFor="let domain of addAccountForm?.get('portalDomain')['controls']; let i = index"
