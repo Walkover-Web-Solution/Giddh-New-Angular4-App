@@ -7,14 +7,12 @@
             color: var(--text-primary-color);
         }
         label {
-            // color: var(--color-dark-gray);
             font-size: var(--font-size-12);
             width: 20%;
             font-weight: 800;
         }
         span {
             font-size: var(--font-size-12);
-            // color: var(--color-black);
         }
     }
 }
@@ -30,7 +28,6 @@
     margin-left: -10px;
 
     li {
-        // padding: 10px;
         display: flex;
         align-items: center;
         -moz-transition: 1ms all;
@@ -50,76 +47,19 @@
     }
 }
 
-/* UNUSED COMPONENT CLASS: list-icon-group - Auto-commented by script
-.list-icon-group label {
-    padding: 10px;
-    margin-right: 15px;
-    border-radius: var(--mat-border-radius-4);
-    cursor: pointer;
-}
-*/
-
 .list-icon-group input:checked + label {
     background-color: var(--color-white);
     box-shadow: 2px 2px 5px var(--color-shadow-light);
 }
-
-/* UNUSED COMPONENT CLASS: select-style - Auto-commented by script
-.select-style {
-    width: 300px;
-}
-*/
 
 .select-style select {
     padding: 6px !important;
     border-radius: var(--mat-border-radius-0);
 }
 
-// modal css start
-/* UNUSED COMPONENT CLASS: aside-pane - Auto-commented by script
-.aside-pane {
-    overflow: auto;
-    width: 475px;
-    position: fixed;
-    top: var(--top-distance);
-    right: 0;
-    padding: 0px;
-}
-*/
-
 .aside-pane.aside-right.out button#close {
     right: -60px;
 }
-
-/* UNUSED COMPONENT CLASS: aside-right - Auto-commented by script
-.aside-right {
-    font-size: var(--font-size-15);
-    background: var(--color-white);
-    right: -530px;
-    transition: 0.5s all ease;
-    z-index: 999;
-}
-*/
-
-/* UNUSED COMPONENT CLASS: bg-white - Auto-commented by script
-.bg-white {
-    background: var(--color-white) !important;
-}
-*/
-
-/* UNUSED COMPONENT CLASS: control-label - Auto-commented by script
-.aside-right
-.control-label {
-    padding-left: 20px;
-    text-align: left;
-}
-*/
-
-/* UNUSED COMPONENT CLASS: bg-gray - Auto-commented by script
-.bg-gray {
-    background: var(--color-light-gray);
-}
-*/
 
 .aside-right .list-icon-group label {
     margin: 0px !important;
@@ -149,12 +89,6 @@
     border-right: 1px solid var(--border-color) !important;
 }
 
-/* UNUSED COMPONENT CLASS: table-modal - Auto-commented by script
-.table-modal {
-    border-bottom: 1px solid var(--border-color) !important;
-}
-*/
-
 .table-modal tbody tr td button {
     background: none;
     border: 0px;
@@ -168,10 +102,3 @@
 .table-modal tbody tr td .icon-edit {
     border-bottom: 2px solid var(--border-color);
 }
-
-/* UNUSED COMPONENT CLASS: date-input-icon - Auto-commented by script
-.date-input-icon {
-    top: 9px;
-    right: 8px;
-}
-*/

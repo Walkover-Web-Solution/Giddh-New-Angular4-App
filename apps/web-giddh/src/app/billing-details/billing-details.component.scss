@@ -19,15 +19,6 @@
                 line-height: 34px;
             }
         }
-        /* UNUSED COMPONENT CLASS: giddh-heading - Auto-commented by script
-.giddh-heading {
-            font-size: var(--font-size-32);
-            font-weight: bold;
-            float: left;
-            width: 30%;
-            text-align: center;
-        }
-*/
     }
     .welcome-msg {
         margin-bottom: 5px;
@@ -74,14 +65,6 @@
             .text-red-content {
                 display: none;
             }
-            /* UNUSED COMPONENT CLASS: mat-input-field - Auto-commented by script
-.mat-input-field {
-                float: left;
-                width: 100%;
-                height: 37px;
-                border: 1px solid var(--color-border-light);
-            }
-*/
         }
         .mat-input {
             float: left;
@@ -180,20 +163,6 @@
                 box-shadow: 1px 0px 4px var(--color-shadow-light);
                 padding: 16px;
             }
-            /* UNUSED COMPONENT CLASS: renewal-off - Auto-commented by script
-.renewal-off {
-                color: var(--color-dark-gray);
-                font-size: var(--font-size-12);
-                font-weight: 600;
-                padding-left: 4px;
-            }
-*/
-            /* UNUSED COMPONENT CLASS: discount-off - Auto-commented by script
-.discount-off {
-                color: var(--color-green);
-                font-weight: bold;
-            }
-*/
             .features {
                 line-height: 1.7;
                 color: var(--color-dark-gray);
@@ -254,18 +223,6 @@
         color: var(--color-medium-gray);
         font-size: var(--font-size-15);
         padding-left: 5px;
-        /* UNUSED COMPONENT CLASS: renewal-subscription-extra - Auto-commented by script
-.renewal-subscription-extra {
-            height: 20px;
-            float: left;
-            width: 79%;
-        }
-*/
-        /* UNUSED COMPONENT CLASS: renewal-subscription-content - Auto-commented by script
-.renewal-subscription-content {
-            display: none;
-        }
-*/
     }
 
     .display-line {
@@ -282,16 +239,6 @@
     }
 }
 @media screen and (min-width: 768px) and (orientation: portrait) {
-    #main {
-        .main-heading-billing {
-            /* UNUSED COMPONENT CLASS: back-button - Auto-commented by script
-.back-button {
-                width: 90px;
-                height: 40px;
-            }
-*/
-        }
-    }
     .left-side {
         float: left !important;
         width: 100% !important;
@@ -343,7 +290,7 @@
     .billing-name {
         padding-left: 0px;
     }
-} /* Landscape */
+}
 @media screen and (max-width: 1024px) and (orientation: landscape) {
     #main {
         .main-heading-billing {

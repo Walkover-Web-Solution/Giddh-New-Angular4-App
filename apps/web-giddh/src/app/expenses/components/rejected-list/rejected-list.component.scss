@@ -1,8 +1,3 @@
-/* UNUSED COMPONENT CLASS: basic - Auto-commented by script
-.basic > thead > tr > th {
-    position: relative;
-}
-*/
 .action-btns {
     display: flex;
     height: 52px;
@@ -22,22 +17,12 @@
     border-radius: var(--mat-border-radius-4);
     height: 34px;
     width: 34px;
-    // background-color: var(--color-white);
 }
 
 .btn-icon .icon-trash {
     font-size: 20px;
 }
-/* .icon-pointer  UNUSED COMPONENT CLASS: active-text-color - Auto-commented by script
-.active-text-color {
-    color: var(--text-primary-color) !important;
-}
-*/
-/* UNUSED COMPONENT CLASS: icon-pointer - Auto-commented by script
-.icon-pointer {
-    cursor: pointer;
-}
-*/
+
 .responsive-label {
     display: none;
 }

@@ -1,11 +1,7 @@
-/* create warehouse css starts */
 .create-warehouse-page {
     .create-warehouse-under {
         border-bottom: 1px solid var(--border-color);
         .warehouse-under-company {
-            // p {
-            //     color: var(--color-black);
-            // }
             .warehouse-company-name {
                 .label-wrapper {
                     display: flex;
@@ -30,11 +26,7 @@
                 width: 100%;
                 max-width: 200px;
             }
-            /* img UNUSED COMPONENT CLASS: branch-image - Auto-commented by script
-.branch-image {
-                max-width: 140px;
-            }
-*/
+
         }
     }
     .warehouse-form {
@@ -42,7 +34,6 @@
             font-size: var(--font-size-15);
             display: flex;
             align-items: center;
-            // color: var(--color-black);
             margin-bottom: 15px;
             label {
                 min-width: 200px;
@@ -64,11 +55,7 @@
                     i {
                         padding: 5px;
                         cursor: pointer;
-                        /*& UNUSED COMPONENT CLASS: icon-plus - Auto-commented by script
-.icon-plus {
-                            color: var(--color-green);
-                        }
-*/
+
                     }
                 }
             }
@@ -77,38 +64,6 @@
 }
 .footer-btn {
     padding: 15px;
-}
-.linked-entities {
-    .list-item {
-        /* UNUSED COMPONENT CLASS: entity-icon - Auto-commented by script
-.entity-icon {
-            padding: 4px;
-        }
-*/
-        /* UNUSED COMPONENT CLASS: entity-details - Auto-commented by script
-.entity-details {
-            margin-left: 6px;
-            flex: 1;
-            /* UNUSED COMPONENT CLASS: item - Auto-commented by script
-.item {
-                font-weight: var(--font-weight-semibold);
-            }
-}
-*/
-        /* UNUSED COMPONENT CLASS: default-entity - Auto-commented by script
-.default-entity {
-            align-items: center;
-            display: flex;
-            &:hover:after {
-                color: var(--text-primary-color);
-            }
-            /* UNUSED COMPONENT CLASS: icon-favorite-selected - Auto-commented by script
-.icon-favorite-selected {
-                color: var(--text-primary-color);
-            }
-}
-*/
-    }
 }
 
 @media (max-width: 1023px) {
@@ -120,4 +75,3 @@
         }
     }
 }
-/* create warehouse css end */

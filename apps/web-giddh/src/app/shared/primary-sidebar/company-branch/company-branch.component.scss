@@ -4,11 +4,9 @@
         padding: 0 20px;
         .input-group-text {
             padding: 8px !important;
-            // color: var(--color-dark-gray);
             background-color: var(--color-light-gray);
             border: none;
             position: relative;
-            // left: -1px;
             border-top-left-radius: var(--mat-border-radius-4) !important;
             border-bottom-left-radius: var(--mat-border-radius-4) !important;
             border-top-right-radius: 0 !important;
@@ -29,38 +27,10 @@
             &:focus {
                 border-color: var(--border-color) !important;
             }
-            // &::placeholder {
-            //     color: var(--color-dark-gray) !important;
-            // }
         }
-        /* UNUSED COMPONENT CLASS: input-group-append - Auto-commented by script
-.input-group-append {
-            font-size: var(--font-size-12);
-            color: var(--color-medium-gray);
-            right: 10px;
-            top: 0;
-            padding: 0 5px;
-            height: 36px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: var(--color-light-gray);
-            border: 1px solid var(--border-color);
-            border-radius: var(--mat-border-radius-4);
-            border-left: none;
-            border-top-left-radius: 0px !important;
-            border-bottom-left-radius: 0px !important;
-        }
-*/
+
     }
-    /* UNUSED COMPONENT CLASS: total-company - Auto-commented by script
-.total-company {
-        /* UNUSED COMPONENT CLASS: company-count - Auto-commented by script
-.company-count {
-            color: var(--color-dark-gray);
-        }
-    }
-*/
+
     tab {
         position: relative;
         font-family: var(--font-family) !important;
@@ -71,14 +41,7 @@
             display: none;
         }
     }
-    /* tab UNUSED COMPONENT CLASS: icon-branch1 - Auto-commented by script
-.icon-branch1 {
-        margin: 0 -20px;
-        &::before {
-            display: none;
-        }
-    }
-*/
+
     .company-branch-opt-1 {
         .wrap-company-refresh {
             padding: 0 20px !important;
@@ -148,13 +111,7 @@
                     span {
                         background-color: var(--theme-primary-light);
                     }
-                    /* UNUSED COMPONENT CLASS: dropdown-menu - Auto-commented by script
-.dropdown-menu {
-                        span {
-                            background-color: transparent !important;
-                        }
-                    }
-*/
+
                 }
                 &.btn-group {
                     display: flex;
@@ -186,24 +143,7 @@
                             padding: 0;
                         }
                     }
-                    /* UNUSED COMPONENT CLASS: open - Auto-commented by script
-&
-.open {
-                        background-color: var(--theme-primary-light);
-                        margin: 0 -20px;
-                        /* p UNUSED COMPONENT CLASS: show-more-branches - Auto-commented by script
-.show-more-branches {
-                            padding: 6px 15px;
-                        }
 
-                        li.create-branch {
-                            padding: 10px 15px;
-                        }
-                        .dropdown-toggle {
-                            padding: 0 20px;
-                        }
-                    }
-*/
                     .dropdown-menu {
                         position: static !important;
                         box-shadow: none;
@@ -274,18 +214,7 @@
                 }
             }
         }
-        /* & UNUSED COMPONENT CLASS: company-branches-list - Auto-commented by script
-.company-branches-list {
-            .branch-alias,
-            .branch-company-name {
-                text-overflow: ellipsis;
-                white-space: nowrap;
-                overflow: hidden;
-                max-width: 150px;
-                padding: 3px 0;
-            }
-        }
-*/
+
         &.branch-list {
             height: calc(100vh - 250px) !important;
             ul {
@@ -308,14 +237,7 @@
                             background-color: initial !important;
                             color: var(--color-dark-gray) !important;
                         }
-                        /* UNUSED COMPONENT CLASS: main-company - Auto-commented by script
-.main-company {
-                            text-overflow: ellipsis;
-                            white-space: nowrap;
-                            overflow: hidden;
-                            max-width: 200px;
-                        }
-*/
+
                     }
                     &:hover {
                         a {
@@ -335,16 +257,6 @@
         }
     }
 
-    /* UNUSED COMPONENT CLASS: custom-tabs - Auto-commented by script
-.custom-tabs {
-        /* UNUSED COMPONENT CLASS: icon-company-branch-connect - Auto-commented by script
-.icon-company-branch-connect {
-            position: absolute;
-            top: 5px;
-            left: 100px;
-        }
-}
-*/
 .company-branch-opt-2 {
     .wrap-company-refresh {
         padding: 0 20px;
@@ -390,19 +302,7 @@
                                 float: left;
                                 width: 14px;
                             }
-                            /* UNUSED COMPONENT CLASS: select-company-name - Auto-commented by script
-                                span
-.select-company-name {
-                                    float: left;
-                                    width: 100%;
-                                    padding: 0;
-                                    text-overflow: ellipsis;
-                                    white-space: nowrap;
-                                    overflow: hidden;
-                                    max-width: 150px;
-                                    padding: 3px 0;
-                                }
-*/
+
                         }
                     }
                 }
@@ -421,11 +321,7 @@
                                 top: 0;
                                 z-index: 991;
                             }
-                            /* UNUSED COMPONENT CLASS: icon-down-new - Auto-commented by script
-.icon-down-new {
-                                    transform: rotate(180deg);
-                                }
-*/
+
                         }
                         background-color: transparent !important;
                         ul {
@@ -436,11 +332,7 @@
                                 }
                             }
                         }
-                        /* UNUSED COMPONENT CLASS: total-branches - Auto-commented by script
-.total-branches {
-                                padding: 10px 20px;
-                            }
-*/
+
                     }
                 }
                 a {
@@ -451,32 +343,10 @@
     }
 }
 }
-/* UNUSED COMPONENT CLASS: digit-text-primary - Auto-commented by script
-.digit-text-primary {
-    color: var(--text-primary-color) !important;
-}
-*/
-/* UNUSED COMPONENT CLASS: digit-orange - Auto-commented by script
-.digit-orange {
-    color: var(--color-orange) !important;
-}
-*/
+
 .icon-reload {
     color: var(--color-dark-gray);
 }
-// .icon-plus,
-/* UNUSED COMPONENT CLASS: icon-link-arrow - Auto-commented by script
-.icon-link-arrow {
-    width: 20px;
-    display: inline-flex;
-    margin-right: 2px;
-}
-*/
-/* UNUSED COMPONENT CLASS: font-semibold - Auto-commented by script
-.font-semibold {
-    font-weight: var(--font-weight-semibold);
-}
-*/
 
 ::ng-deep {
     .custom-tabs {

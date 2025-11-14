@@ -1,29 +1,7 @@
 .wrapper {
-//     .header {
-//         display: flex;
-//         align-items: center;
-//         background-color: var(--bg-primary-color);
-//         color: var(--color-white);
-//         width: 100%;
-//         padding-left: 10px;
-//         height: 50px;
-//         .attachment-back-button {
-//             width: 64px;
-//             color: var(--color-white) !important;
-//             i {
-//                 margin-right: 2px;
-//             }
-//             /* UNUSED COMPONENT CLASS: mdc-button__label - Auto-commented by script
-// .mdc-button__label{
-//                 color: var(--color-white);
-//             }
-// */
-//         }
-//     }
     .section {
         display: flex;
         height: 77vh;
-        // background-color: var(--color-white);
         .left-side {
             border-right: 1px solid var(--border-color);
             width: 35%;
@@ -94,7 +72,6 @@
             padding: 10px 13px;
             .right-side-buttons {
                 display: flex;
-                // background-color: var(--color-white);
                 border: 1px solid var(--border-color);
                 border-radius: var(--mat-border-radius-4);
                 min-width: 67px;
@@ -146,13 +123,4 @@
 .disabled {
     background-color: var(--color-silver) !important;
     cursor: not-allowed !important;
-}
-::ng-deep {
-    /* UNUSED COMPONENT CLASS: mat-list-item-content - Auto-commented by script
-.mat-list-item-content {
-        height: auto !important;
-        padding: 0px !important;
-        align-items: flex-start !important;
-    }
-*/
 }

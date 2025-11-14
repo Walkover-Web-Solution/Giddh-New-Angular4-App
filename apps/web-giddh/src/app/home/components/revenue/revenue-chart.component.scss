@@ -58,12 +58,10 @@ span.this-week {
 }
 .total-sale-detail h3 {
     font-size: var(--font-size-24);
-    // color: var(--color-black);
 }
 
 .total-sale-detail span {
     font-size: var(--font-size-16);
-    // color: var(--color-black);
 }
 .single-sale-detail {
     padding-top: 30px;
@@ -77,36 +75,6 @@ span.icon-collapse-icon:hover {
     color: var(--text-primary-color);
 }
 
-/* CSS FOR LINE CHART */
-
-/* p UNUSED COMPONENT CLASS: bankName - Auto-commented by script
-.bankName {
-    font-size: var(--font-size-15);
-    color: var(--text-primary-color);
-    margin-bottom: 5px;
-}
-*/
-
-/* p UNUSED COMPONENT CLASS: bank-balance - Auto-commented by script
-.bank-balance {
-    color: var(--color-dark-gray);
-    font-size: var(--font-size-15);
-    display: flex;
-    justify-content: space-between;
-}
-*/
-/* UNUSED COMPONENT CLASS: single-bank-detail - Auto-commented by script
-.single-bank-detail {
-    border-bottom: 1px solid var(--border-color);
-    padding-bottom: 10px;
-    margin-bottom: 10px;
-}
-*/
-/* UNUSED COMPONENT CLASS: dashboard-container - Auto-commented by script
-.dashboard-container {
-    padding: 15px;
-}
-*/
 .total-sales-header {
     background-color: var(--theme-background-color);
     border: 1px solid var(--border-color);
@@ -118,27 +86,11 @@ span.icon-collapse-icon:hover {
     color: var(--color-black);
     margin-bottom: 3px;
 }
-/* UNUSED COMPONENT CLASS: form-control - Auto-commented by script
-.date-range-block 
-.form-control {
-    border: 1px solid var(--theme-primary-color);
-}
-*/
+
 .date-range-input {
     position: relative;
 }
-/* UNUSED COMPONENT CLASS: icon-calender - Auto-commented by script
-.date-range-input span
-.icon-calender {
-    position: absolute;
-    width: 32px;
-    height: 32px;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    color: var(--color-black);
-}
-*/
+
 .date-range-input input {
     color: var(--color-black);
 }
@@ -166,7 +118,6 @@ span.icon-collapse-icon:hover {
     display: inline;
     text-align: right;
     font-size: 24px;
-    // color: var(--text-primary-color);
 }
 .date-range-input.disabled {
     opacity: 0.5;
@@ -183,7 +134,6 @@ span.icon-collapse-icon:hover {
     font-size: var(--font-size-16);
 }
 .active-date {
-    // color: var(--text-primary-color);
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -221,7 +171,6 @@ span.icon-collapse-icon:hover {
     min-height: 60px;
 }
 .single-sale-data .small-heading {
-    // color: var(--color-black);
     font-size: var(--font-size-15);
 }
 .single-sale-data h3 {
@@ -245,7 +194,6 @@ span.date-wise-sale {
     border-right: none;
 }
 .total-sales-tabs a {
-    // color: var(--color-black);
     cursor: pointer;
     padding-right: 3px;
     padding-left: 3px;
@@ -272,36 +220,7 @@ input:read-only:focus {
     display: flex;
     flex-direction: row-reverse;
 }
-/*============Mat Range Date Picker Default CSS Overide =====Start===================*/
-/* UNUSED COMPONENT CLASS: mat-datepicker-toggle - Auto-commented by script
-.mat-datepicker-toggle {
-    color: var(--color-black) !important;
-}
-*/
-/* UNUSED COMPONENT CLASS: mat-form-field-flex - Auto-commented by script
-.mat-form-field-flex {
-    align-items: center !important;
-}
-*/
-/* UNUSED COMPONENT CLASS: mat-calendar-header - Auto-commented by script
-.mat-calendar-header {
-    background-color: var(--bg-primary-color) !important;
-}
-*/
-/* UNUSED COMPONENT CLASS: mat-form-field-type-mat-date-range-input - Auto-commented by script
-.mat-form-field-type-mat-date-range-input {
-    /* UNUSED COMPONENT CLASS: mat-form-field-infix - Auto-commented by script
-.mat-form-field-infix {
-        width: 206px !important;
-    }
-}
-*/
-/* UNUSED COMPONENT CLASS: mat-form-field-wrapper - Auto-commented by script
-.mat-form-field-wrapper {
-    padding-bottom: 0 !important;
-}
-*/
-/*============Mat Range Date Picker Default CSS Overide =====End=====================*/
+
 @media (max-width: 991px) {
     .about-date {
         font-size: var(--font-size-15);

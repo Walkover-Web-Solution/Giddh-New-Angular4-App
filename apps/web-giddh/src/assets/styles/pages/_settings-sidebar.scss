@@ -3,7 +3,6 @@
 
     mat-list {
         padding: 0;
-        // list-style: none;
         font-size: var(--font-size-15);
         font-weight: var(--font-weight-semibold);
 
@@ -83,7 +82,6 @@
         }
     }
 }
-
 
 body {
     &.tags-menu-open {

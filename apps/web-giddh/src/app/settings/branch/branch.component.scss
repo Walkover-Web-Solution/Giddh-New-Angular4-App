@@ -1,16 +1,3 @@
-/* UNUSED COMPONENT CLASS: form-horizontal - Auto-commented by script
-.form-horizontal /* UNUSED COMPONENT CLASS: control-label - Auto-commented by script
-.control-label {
-    text-align: left;
-}
-*/
-
-/* UNUSED COMPONENT CLASS: dropdown-menu - Auto-commented by script
-.dropdown-menu {
-    overflow-y: auto;
-}
-*/
-
 .dropdown-menu li {
     font-size: var(--font-size-15);
 }
@@ -31,53 +18,7 @@
     }
 }
 
-/* UNUSED COMPONENT CLASS: select-companies - Auto-commented by script
-.select-companies {
-    font-size: var(--font-size-15);
-    margin-bottom: 5px;
-}
-*/
-
-/* UNUSED COMPONENT CLASS: button-yes-cancel - Auto-commented by script
-.button-yes-cancel {
-    margin-top: 25px;
-    margin-bottom: 20px;
-}
-*/
-
-/* UNUSED COMPONENT CLASS: icon-calender - Auto-commented by script
-.icon-calender {
-    position: absolute;
-    z-index: 9;
-    height: 32px;
-    width: 32px;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    border-right: 1px solid var(--border-color);
-    color: var(--color-medium-gray);
-    left: 0;
-}
-*/
-
-/* UNUSED COMPONENT CLASS: form-control - Auto-commented by script
-.input-group-date-range-picker input
-.form-control {
-    padding-left: 35px !important;
-    width: 210px;
-}
-*/
-
-/* UNUSED COMPONENT CLASS: content-view - Auto-commented by script
-.content-view {
-    display: flex;
-    align-items: center;
-    font-size: var(--font-size-15);
-}
-*/
-
 .branch-card {
-    // background-color: var(--color-white);
     margin-bottom: 15px;
     font-size: var(--font-size-15);
     border: 1px solid var(--border-color);
@@ -89,7 +30,6 @@
 
 .card-basic-details .clear-both {
     margin-bottom: 10px;
-    // color: var(--color-black);
 }
 
 .clear-both {
@@ -97,14 +37,6 @@
         color: var(--text-primary-color);
     }
 
-    // .icon-branch-icon,
-    /* UNUSED COMPONENT CLASS: icon-company-HO - Auto-commented by script
-.icon-company-HO {
-        padding: 4px 5px 0 0;
-        color: var(--text-primary-color);
-        font-size: var(--font-size-12);
-    }
-*/
 }
 
 .card-basic-details h2 {
@@ -123,30 +55,6 @@
     padding: 20px;
     border-bottom: 1px solid var(--border-color);
 }
-
-/* UNUSED COMPONENT CLASS: branch-sales-details - Auto-commented by script
-.branch-sales-details {
-    border-top: 1px solid var(--border-color);
-    padding-top: 20px;
-
-    label {
-        font-weight: var(--font-weight-semibold);
-        margin-bottom: 10px;
-        color: var(--color-black);
-    }
-
-    /* UNUSED COMPONENT CLASS: total-amount - Auto-commented by script
-.total-amount {
-        width: 70%;
-    }
-}
-/* UNUSED COMPONENT CLASS: unlink - Auto-commented by script
-
-.unlink a {
-    color: var(--text-primary-color) !important;
-    cursor: pointer;
-}
-*/
 
 .card-basic-details ul.dropdown-menu {
     padding-left: 0;
@@ -177,19 +85,6 @@
     right: -15px;
 }
 
-/* UNUSED COMPONENT CLASS: branch-views - Auto-commented by script
-.branch-views {
-    cursor: pointer;
-}
-*/
-
-/* UNUSED COMPONENT CLASS: btn-link - Auto-commented by script
-.btn-link {
-    border-width: 0px !important;
-    background: var(--color-white) !important;
-}
-*/
-
 .modal-width {
     width: 900px !important;
 }
@@ -214,28 +109,6 @@
     flex-direction: row;
     align-items: center;
 
-    /* UNUSED COMPONENT CLASS: clear-filter-btn - Auto-commented by script
-.clear-filter-btn {
-        color: var(--text-primary-color);
-        font-size: var(--font-size-15);
-        border: 1px solid var(--theme-primary-color);
-        border-radius: var(--mat-border-radius-16);
-        padding: 0 12px;
-        width: 150px !important;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background-color: var(--color-white);
-        height: 40px;
-
-        i {
-            font-size: var(--font-size-12);
-            padding-right: 8px;
-            top: 0;
-            color: var(--text-primary-color);
-        }
-    }
-*/
 }
 
 .advance-icon {
@@ -256,31 +129,6 @@
         }
     }
 }
-
-/* UNUSED COMPONENT CLASS: branch-sales-collapsed - Auto-commented by script
-.branch-sales-collapsed {
-    display: none;
-}
-*/
-
-/* UNUSED COMPONENT CLASS: active-status - Auto-commented by script
-.active-status {
-    color: var(--color-green);
-}
-*/
-
-/* UNUSED COMPONENT CLASS: status-bullet - Auto-commented by script
-.status-bullet {
-    &:before {
-        content: " \2022";
-        font-size: 34px;
-    }
-}
-*/
-
-// .parent-branch {
-//     color: var(--color-dark-gray);
-// }
 
 .star-radio {
     visibility: hidden;
@@ -306,37 +154,10 @@
     }
 }
 
-/* UNUSED COMPONENT CLASS: icon-advance-search - Auto-commented by script
-.icon-advance-search {
-    font-size: var(--font-size-16);
-    color: var(--color-dark-gray);
-}
-*/
-
 .advance-search-list {
     min-width: 123px;
 
-    /* UNUSED COMPONENT CLASS: search-checkbox - Auto-commented by script
-.search-checkbox {
-        label {
-            padding-bottom: 5px;
-            padding-left: 5px;
-        }
-    }
-*/
 }
-
-/* UNUSED COMPONENT CLASS: dropdown-toggle - Auto-commented by script
-.btn-primary.active,
-.btn-primary:active,
-.open>.dropdown-toggle/* UNUSED COMPONENT CLASS: btn-primary - Auto-commented by script
-.btn-primary {
-    color: var(--color-black);
-    background-color: var(--color-border-light);
-    border-color: var(--color-border-light);
-    box-shadow: none !important;
-}
-*/
 
 .linked-add {
     margin-bottom: 5px;
@@ -400,16 +221,6 @@ button {
             flex: 0 0 50% !important;
             max-width: 50% !important;
         }
-    }
-}
-
-@media (min-width: 1020px) and (max-width: 1092px) {
-    .form-top-fields {
-        /* UNUSED COMPONENT CLASS: input-addon - Auto-commented by script
-.input-addon {
-            top: 18px;
-        }
-*/
     }
 }
 
