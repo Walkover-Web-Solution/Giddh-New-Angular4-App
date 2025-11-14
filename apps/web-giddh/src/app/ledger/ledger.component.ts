@@ -400,6 +400,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     };
     /** Holds Update Account Dialog Ref */
     public updateAccountDialogRef: MatDialogRef<any>;
+    /** True if particular currency differs from account currency, even when account and company currencies are same. */
+    public particularMultiCurrency: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -525,7 +527,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
     }
 
-    public selectAccount(e: IOption, txn: TransactionVM, clearAccount?: boolean, isBankTransaction?: boolean, allowChangeDetection?: boolean) {
+    public selectAccount(e: IOption, txn: TransactionVM, clearAccount?: boolean, isBankTransaction?: boolean, allowChangeDetection?: boolean, transactionType?: string) {
         this.keydownClassAdded = false;
         this.selectedTxnAccUniqueName = '';
         this.selectedAccountDetails = e;
@@ -559,7 +561,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (txn.duplicateEntry) {
             this.handeLoadDetailsForDuplicateEntry(e, txn);
         } else if (!txn.isStock) {
-            this.loadDetails(e, txn, '', allowChangeDetection);
+            this.loadDetails(e, txn, '', allowChangeDetection, isBankTransaction, transactionType);
         }
         this.cdRf.markForCheck();
     }
@@ -1602,7 +1604,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
     }
 
-    public getCurrencyRate(mode: string = null) {
+    public getCurrencyRate(mode: string = null, isBankTransaction?: boolean, bankTransaction?: any) {
         let from: string;
         let to: string;
         if (mode === 'blankLedger') {
@@ -1617,12 +1619,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.ledgerService.GetCurrencyRateNewApi(from, to, date).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 let rate = response.body;
                 if (rate) {
-                    this.lc.blankLedger = { ...this.lc.blankLedger, exchangeRate: rate };
+                    if (isBankTransaction) {
+                        bankTransaction.exchangeRate = rate;
+                    } else {
+                        this.lc.blankLedger = { ...this.lc.blankLedger, exchangeRate: rate };
+                    }
                 }
             }, (error => {
                 this.lc.blankLedger = { ...this.lc.blankLedger, exchangeRate: 1 };
             }));
         }
+        this.cdRf.detectChanges();
     }
 
     public toggleTransactionType(event: any) {
@@ -3477,7 +3484,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @param {string} [variantUniqueName] Uniquename of the variant
      * @memberof LedgerComponent
      */
-    private loadDetails(event: IOption, txn: TransactionVM, variantUniqueName?: string, allowChangeDetection?: boolean): void {
+    private loadDetails(event: IOption, txn: TransactionVM, variantUniqueName?: string, allowChangeDetection?: boolean, isBankTransaction?: boolean, transactionType?: string): void {
         let requestObject;
         if (event.additional?.stock) {
             requestObject = {
@@ -3510,6 +3517,71 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         tax.isDisabled = false;
                     });
                 }
+
+                if (this.profileObj?.baseCurrency === this.lc.activeAccount?.currency) {
+                    if (this.lc.activeAccount?.currency !== data.body?.currency.code) {
+                        this.particularMultiCurrency = true;
+                        this.baseCurrencyDetails = { code: this.lc.activeAccount?.currency, symbol: this.lc.activeAccount?.currencySymbol };
+                        this.foreignCurrencyDetails = { code: data.body?.currency.code, symbol: data.body?.currency.symbol };
+                        if (isBankTransaction) {
+                            (transactionType === this.transactionType.Debit
+                                ? this.lc.bankTransactionsDebitData
+                                : this.lc.bankTransactionsCreditData)
+                                .forEach((item) => {
+                                    if (item.transactionId === txn.id) {
+                                        item.baseCurrencyToDisplay = cloneDeep(this.baseCurrencyDetails);
+                                        item.foreignCurrencyToDisplay = cloneDeep(this.foreignCurrencyDetails);
+                                        item.valuesInAccountCurrency = false;
+                                        item.selectedCurrencyToDisplay = this.selectedCurrency;
+                                        this.getCurrencyRate(null, isBankTransaction, item);
+                                        this.cdRf.detectChanges();
+                                        return item;
+                                    } else {
+                                        this.cdRf.detectChanges();
+                                        return item;
+                                    }
+                                });
+                        } else {
+                            this.lc.blankLedger.baseCurrencyToDisplay = cloneDeep(this.baseCurrencyDetails);
+                            this.lc.blankLedger.foreignCurrencyToDisplay = cloneDeep(this.foreignCurrencyDetails);
+                            this.lc.blankLedger.valuesInAccountCurrency = false;
+                            this.getCurrencyRate();
+                        }
+                    } else {
+                        this.particularMultiCurrency = false;
+                        this.baseCurrencyDetails = { code: this.profileObj?.baseCurrency, symbol: this.profileObj?.baseCurrencySymbol };
+                        this.foreignCurrencyDetails = this.baseCurrencyDetails;
+                        if (isBankTransaction) {
+                            (transactionType === this.transactionType.Debit
+                                ? this.lc.bankTransactionsDebitData
+                                : this.lc.bankTransactionsCreditData)
+                                .forEach((item) => {
+                                    if (item.transactionId === txn.id) {
+                                        item.baseCurrencyToDisplay = cloneDeep(this.baseCurrencyDetails);
+                                        item.foreignCurrencyToDisplay = cloneDeep(this.foreignCurrencyDetails);
+                                        item.valuesInAccountCurrency = true;
+                                        item.selectedCurrencyToDisplay = this.selectedCurrency;
+                                        item.exchangeRate = 1;
+                                        this.cdRf.detectChanges();
+                                        return item;
+                                    } else {
+                                        this.cdRf.detectChanges();
+                                        return item;
+                                    }
+                                });
+                        } else {
+                            this.lc.blankLedger.baseCurrencyToDisplay = cloneDeep(this.baseCurrencyDetails);
+                            this.lc.blankLedger.foreignCurrencyToDisplay = cloneDeep(this.foreignCurrencyDetails);
+                            this.lc.blankLedger.valuesInAccountCurrency = true;
+                            this.lc.blankLedger.exchangeRate = 1;
+                        }
+                    }
+                    setTimeout(() => {
+                        this.cdRf.detectChanges();
+                        this.needToReCalculate.next(true);
+                    }, 500);
+                }
+
                 txn.selectedAccount = {
                     ...event.additional,
                     label: event.label,

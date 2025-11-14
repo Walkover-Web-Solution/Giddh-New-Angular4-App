@@ -83,6 +83,15 @@ export class LedgerComponentStore extends ComponentStore<LedgerState> implements
 
 
     /**
+     * Reset ledger store state to defaults
+     *
+     * @memberof LedgerComponentStore
+     */
+    public reset(): void {
+        this.setState(() => DEFAULT_LEDGER_STATE);
+    }
+
+    /**
      * Upload voucher
      *
      * @memberof LedgerComponentStore
