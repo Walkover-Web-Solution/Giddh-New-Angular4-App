@@ -6,7 +6,7 @@
     (commonLocaleData)="commonLocaleData = $event"
 >
     <hamburger-menu></hamburger-menu>
-    <div class="trigger position-relative pd-15 overflow-visible">
+    <div class="trigger position-relative p-3 overflow-visible">
         <div class="container-fluid overflow-visible">
             <div class="position-center position-absolute" *ngIf="isLoading$ | async">
                 <giddh-page-loader class="unset-loader-margin"></giddh-page-loader>
@@ -123,7 +123,7 @@
                             [hidePageSize]="false"
                             [pageIndex]="triggerListRequest.page - 1"
                         ></mat-paginator>
-                        <section class="mr-b8"></section>
+                        <section class="mb-custom-80"></section>
                     </div>
                 </div>
             </div>

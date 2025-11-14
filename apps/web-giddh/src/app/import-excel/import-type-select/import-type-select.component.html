@@ -7,8 +7,8 @@
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="row width-100">
         <div class="col-12">
-            <div class="pd-t2 mt-2">
-                <div class="text-center mr-t2 mr-b2">
+            <div class="pt-4 mt-2">
+                <div class="text-center mt-4 mb-4">
                     <p class="lead">{{ localeData?.section_heading }}</p>
                     <p>{{ localeData?.easy_import }}</p>
                     <a
@@ -18,7 +18,7 @@
                         >{{ localeData?.previous_imports }}</a
                     >
                 </div>
-                <ul class="import-type mr-b2 mr-t4 pd-t3">
+                <ul class="import-type mb-4 mt-5 pt-5">
                     <li *ngIf="!isBranch">
                         <a class="theme-foreground-color h-100" [routerLink]="['/pages', 'import', 'master']" href="javascript:void(0);">
                             <img src="{{ imgPath }}new/group-import.svg" alt="group import" />

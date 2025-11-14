@@ -1,5 +1,5 @@
 <div class="container-fluid">
-    <div class="header-content-sticky aging-report-z-index mr-b15">
+    <div class="header-content-sticky aging-report-z-index mb-3">
         <div
             *ngIf="
                 (dueAmountReportData$ | async)?.results?.length ||
@@ -16,7 +16,7 @@
                     </button>
                 </div>
                 <div
-                    class="form-group mr-r15 pull-left linked-entities mb-0"
+                    class="form-group mr-3 pull-left linked-entities mb-0"
                     *ngIf="
                         currentCompanyBranches?.length > 2 &&
                         (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
@@ -44,7 +44,7 @@
                 </button>
             </div>
             <div class="d-flex justify-content-between align-items-center">
-                <watch-video class="mr-r1" [cssClass]="'text-primary'" [moduleName]="'AGING_REPORT'"></watch-video>
+                <watch-video class="mr-2" [cssClass]="'text-primary'" [moduleName]="'AGING_REPORT'"></watch-video>
                 <div class="pull-left d-flex wrap-searching-aging">
                     <div class="form-group search-field max-width-250">
                         <text-field
@@ -84,7 +84,7 @@
                     </button>
                 </div>
             </div>
-            <div class="btn-group mr-t15 pull-left mobile-view">
+            <div class="btn-group mt-3 pull-left mobile-view">
                 <button
                     mat-raised-button
                     color="primary"
@@ -99,7 +99,7 @@
         </div>
         <div class="top-content" [hidden]="!(dueAmountReportData$ | async)?.results?.length">
             <div class="d-flex w-100 justify-content-between overflow-x-auto">
-                <div class="total-due-sale total-details-box opening-box border-none mr-r05">
+                <div class="total-due-sale total-details-box opening-box border-none mr-1">
                     <h5>
                         {{ commonLocaleData?.app_upcoming }}
                         <div>
@@ -135,7 +135,7 @@
         </div>
     </div>
     <div class="contact-main aging-page overflow-visible" *ngIf="!isLoading">
-        <div class="pd-b2 mr-b1 on-mobile-view mobile-card-wrapper overflow-visible">
+        <div class="pb-4 mb-2 on-mobile-view mobile-card-wrapper overflow-visible">
             <div class="table-responsive overflow-visible">
                 <ng-container *ngTemplateOutlet="mainTable"></ng-container>
             </div>
@@ -265,7 +265,7 @@
                     </div>
                 </th>
                 <td mat-cell *matCellDef="let element" [attr.data-title]="commonLocaleData?.app_name">
-                    <span class="pd-l15 text-ellipsis">{{ element.name }}</span>
+                    <span class="pl-3 text-ellipsis">{{ element.name }}</span>
                 </td>
             </ng-container>
 
@@ -538,7 +538,7 @@
         (page)="handlePageEvent($event)"
         aria-label="Select page of aging report results">
     </mat-paginator>
-    <section class="mr-b8"></section>
+    <section class="mb-custom-80"></section>
 
 </ng-template>
 <ng-template

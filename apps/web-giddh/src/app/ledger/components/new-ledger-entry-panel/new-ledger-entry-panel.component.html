@@ -59,7 +59,7 @@
         <!--  tourist scheme template start      -->
         <ng-container *ngTemplateOutlet="touristSchemeTemplate"></ng-container>
         <!--        tourist scheme template end-->
-        <div class="basic-detail mr-b05 mr-t1" *ngIf="showTaxationDiscountBox || shouldShowAdvanceReceiptMandatoryFields">
+        <div class="basic-detail mb-1 mt-2" *ngIf="showTaxationDiscountBox || shouldShowAdvanceReceiptMandatoryFields">
             
             <div 
                 class="d-grid" 
@@ -355,7 +355,7 @@
                 </div>
             </div>
         </div>
-        <div class="row warehouse-field mr-b15 mr-t15">
+        <div class="row warehouse-field mb-3 mt-3">
             <!-- Sales Person -->
             <div class="col-5 pr-0">
                 <reactive-dropdown-field 
@@ -388,8 +388,8 @@
                         >
                         <div class="clear-both">
                             <div *ngIf="blankLedger.isOtherTaxesApplicable" class="pull-right">
-                                <span class="d-flex mr-b05">
-                                    <span class="d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1 pd-r1">{{ blankLedger.otherTaxModal?.appliedOtherTax?.name }}</span>
+                                <span class="d-flex mb-1">
+                                    <span class="d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1 pr-2">{{ blankLedger.otherTaxModal?.appliedOtherTax?.name }}</span>
                                     <span class="d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1">
                                         <a
                                             href="javascript:void(0)"
@@ -399,7 +399,7 @@
                                         </a>
                                     </span>
                                     <input-field
-                                        class="d-inline-block mr-l1 w125"
+                                        class="d-inline-block ml-2 w125"
                                         [type]="'text'"
                                         [name]="'otherTaxesSum'"
                                         [placeholder]="commonLocaleData?.app_other_tax"
@@ -461,7 +461,7 @@
                 </mat-expansion-panel-header>
                 <div class="more-details">
                     <div>
-                        <div class="cheque pd-t05 clear-both">
+                        <div class="cheque pt-1 clear-both">
                             <table>
                                 <tr>
                                     <td>
@@ -590,7 +590,7 @@
                                             <span class="remove-invoice-icon"><i class="icon-trash"></i></span>
                                         </div>
                                         <div
-                                            [ngClass]="{ 'mr-l1': selectedInvoiceForCreditNote }"
+                                            [ngClass]="{ 'ml-2': selectedInvoiceForCreditNote }"
                                             *ngIf="voucherApiVersion === 2"
                                         >
                                             <input-field
@@ -659,7 +659,7 @@
                                         class="cursor-pointer pr-0 w-auto"
                                         *ngIf="currentTxn?.voucherAdjustments?.totalAdjustmentAmount"
                                     >
-                                        <div class="text-light advance-receipt-edit mr-l1 d-flex align-items-baseline ">
+                                        <div class="text-light advance-receipt-edit ml-2 d-flex align-items-baseline ">
                                             <i class="icon-edit-pencil pr-1"></i>
 
                                             <div class="d-flex" [ngClass]="{ 'flex-column' : currentTxn?.voucherAdjustments?.totalAdjustmentAmount > 999999999 }">
@@ -678,7 +678,7 @@
                                 </tr>
                             </table>
 
-                            <table class="mr-t1 cheque-no-clear">
+                            <table class="mt-2 cheque-no-clear">
                                 <tbody>
                                     <tr>
                                         <td>
@@ -711,7 +711,7 @@
                                 </tbody>
                             </table>
 
-                            <table class="mr-t2 tag-wrapper w-100">
+                            <table class="mt-4 tag-wrapper w-100">
                                 <tbody>
                                     <tr>
                                         <td>
@@ -778,7 +778,7 @@
         </div>
 
         <div class="row">
-            <div class="col-12 pd-t1 pd-b1">
+            <div class="col-12 pt-2 pb-2">
                 <div class="row align-items-end">
                     <div class="col-5 pr-0">
                         <div class="clear-both">
@@ -795,7 +795,7 @@
                             </mat-form-field>
                         </div>
 
-                        <div class="d-flex column-gap-2 mr-t1">
+                        <div class="d-flex column-gap-2 mt-2">
                             <div class="d-flex align-items-center">
                                 <input
                                     [disabled]="isReadOnly"
@@ -807,7 +807,7 @@
                                     (change)="uploadFile()"
                                 />
                                 <label
-                                    class="upload-div pd-r1"
+                                    class="upload-div pr-2"
                                     [ngClass]="{ hide: blankLedger?.generateInvoice || blankLedger?.attachedFile }"
                                 >
                                     <label for="invoiceFile" class="align-items-center cursor-pointer d-inline-flex font-size-15">
@@ -862,7 +862,7 @@
                                         (change)="manualGenerateVoucherChecked = $event?.checked"
                                         ><span class="font-size-16">{{ commonLocaleData?.app_generate_voucher }}</span></mat-checkbox
                                     >
-                                    <span class="pd-l05" *ngIf="autoGenerateVoucherFromEntry">
+                                    <span class="pl-1" *ngIf="autoGenerateVoucherFromEntry">
                                         <span class="icon-info text-dark p-1" [matMenuTriggerFor]="toolTip" #trigger="matMenuTrigger" (mouseenter)="showAutoPaidTooltip()" (mouseleave)="hideAutoPaidTooltip()" aria-expanded="false"></span>
                                         <mat-menu #toolTip="matMenu" class="custom-tooltip" [disableRipple]="true" hasBackdrop="false" xPosition="after" yPosition="above">
                                         <div (mouseenter)="tooltipHoveredStatus = true" (mouseleave)="tooltipHoveredStatus = false; hideAutoPaidTooltipOnMouseLeaveFromTooltip()" (click)="$event.stopPropagation()">
@@ -906,13 +906,13 @@
                                     <td class="text-right d-flex justify-content-end column-gap-1" [ngClass]="{ 'flex-column-reverse' : blankLedger.compoundTotal > 9999 || blankLedger.compoundTotal }" >
                                         <span
                                         [class.float-right]="shouldShowRcmTaxableAmount || shouldShowItcSection"
-                                        class="pd-b1 text-right text-transform-capitalize text-primary"
+                                        class="pb-2 text-right text-transform-capitalize text-primary"
                                         *ngIf="currentTxn?.total"
                                     >
                                         {{ currentTxn?.total | myNumberToWordsPipe | lowercase }}
                                     </span>
 
-                                        <span class="pd-b1 text-primary">
+                                        <span class="pb-2 text-primary">
                                             {{
                                                 localeData?.total_in_currency
                                                     | replace
@@ -975,7 +975,7 @@
                             </tbody>
                         </table>
 
-                    <div class="d-flex justify-content-end column-gap-15 mr-t1">
+                    <div class="d-flex justify-content-end column-gap-15 mt-2">
                         <button
                             mat-stroked-button
                             id="ledger-reset-button"
@@ -1050,7 +1050,7 @@
             id="tourist-scheme-1"
             [(ngModel)]="isRcmEntry"
             (change)="changeRcmCheckboxState($event)"
-            class="mr-r1"
+            class="mr-2"
         >
         </mat-checkbox>
         <label
@@ -1062,7 +1062,7 @@
     </div>
 </ng-template>
 <ng-template #touristSchemeTemplate>
-    <div class="row font-size-15 mr-b1 mr-t15" *ngIf="isTouristSchemeApplicable">
+    <div class="row font-size-15 mb-2 mt-3" *ngIf="isTouristSchemeApplicable">
         <div class="col-md-6">
             <div class="d-flex align-items-center">
                 <span class="pull-left">

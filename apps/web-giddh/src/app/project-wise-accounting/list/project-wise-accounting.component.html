@@ -9,7 +9,7 @@
   <div *ngIf="(isFetchingProjects$ | async) && !totalResults && !isSearch && !(isShowSearchBox.name || isShowSearchBox.status)">
     <giddh-page-loader></giddh-page-loader>
   </div>
-   <div class="project clear-both section-center position-relative overflow-visible pd-15">
+   <div class="project clear-both section-center position-relative overflow-visible p-3">
       <div class="d-flex align-items-center justify-content-between section-center column-gap-1" *ngIf="totalResults || isSearch || isShowSearchBox.name || isShowSearchBox.status">
         <div class="d-flex justify-content-center align-items-center column-gap-1">
           <div class="custom-datepicker" 
@@ -38,7 +38,7 @@
               [labelValue]="activeCompany?.name"
               [placeholder]="commonLocaleData?.app_select_branch"
           ></reactive-dropdown-field>
-          <button *ngIf="(projectName.value?.length || projectStatus.value?.length)" mat-stroked-button class="min-width-100 mr-l1" (click)="resetFilter()">
+          <button *ngIf="(projectName.value?.length || projectStatus.value?.length)" mat-stroked-button class="min-width-100 ml-2" (click)="resetFilter()">
               <span class="icon-cross icon-font-size-14"></span> {{ commonLocaleData?.app_clear_filter }}
           </button>
         </div>
@@ -47,7 +47,7 @@
       <div *ngIf="!(isFetchingProjects$ | async) && !(totalResults || isSearch)" class="min-height d-flex align-items-center justify-content-center">
         <button *ngIf="!isCompany" mat-raised-button color="primary" (click)="openCreateProjectDialog(true)">+ {{ localeData?.create_project }}</button>
         <div class="d-flex justify-content-center align-items-center" *ngIf="isCompany">
-            <span class="font-size-24 mr-r1">{{ localeData?.go_to_branch_information }} </span>
+            <span class="font-size-24 mr-2">{{ localeData?.go_to_branch_information }} </span>
             <button
                 mat-raised-button
                 color="primary"
@@ -57,7 +57,7 @@
             </button>
         </div>
       </div>
-      <div class="mr-t5 overflow-visible table-header-sticky" *ngIf="totalResults || isSearch || isShowSearchBox.name || isShowSearchBox.status">
+      <div class="mt-5 overflow-visible table-header-sticky" *ngIf="totalResults || isSearch || isShowSearchBox.name || isShowSearchBox.status">
         <table
           *ngIf="(!isCompany || totalResults || projectName.value?.length || projectStatus.value?.length || isShowSearchBox.name || isShowSearchBox.status)"
           mat-table
@@ -179,7 +179,7 @@
         <div class="no-data" *ngIf="!(isFetchingProjects$ | async) && !totalResults">
           <no-data *ngIf="(projectName.value?.length || projectStatus.value?.length)" [primaryMessage]="commonLocaleData?.app_no_data_found" [secondaryMessage]="' '"></no-data>
           <div *ngIf="!(projectName.value?.length || projectStatus.value?.length) && !(isShowSearchBox.name || isShowSearchBox.status)" class="d-flex justify-content-center align-items-center">
-            <span class="font-size-24 mr-r1">{{ localeData?.go_to_branch_information }} </span>
+            <span class="font-size-24 mr-2">{{ localeData?.go_to_branch_information }} </span>
             <button
                 mat-raised-button
                 color="primary"
@@ -199,7 +199,7 @@
             [hidePageSize]="false"
             [pageIndex]="projectListRequest.page - 1"
         ></mat-paginator>
-        <section class="mr-b8"></section>
+        <section class="mb-custom-80"></section>
       </div>
    </div>
 </ng-container>

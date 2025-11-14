@@ -41,9 +41,9 @@
                 </div>
             </div>
             <div class="chart-div mt-auto" *ngIf="!requestInFlight">
-                <div class="clear-both mr-b2">
+                <div class="clear-both mb-4">
                     <div class="due">
-                        <span class="mr-b1 due-amount">{{ localeData?.invoice_due }}</span>
+                        <span class="mb-2 due-amount">{{ localeData?.invoice_due }}</span>
                         <span class="total-amount pull-right vendor-due-text">
                             <span class="d-inline-flex">
                                 <amount-field
@@ -66,7 +66,7 @@
                 </div>
                 <div class="clear-both">
                     <div class="due">
-                        <span class="mr-b1 due-amount">{{ localeData?.bill_due }}</span>
+                        <span class="mb-2 due-amount">{{ localeData?.bill_due }}</span>
                         <span class="total-amount pull-right customer-due-text">
                             <span class="d-inline-flex">
                                 <amount-field

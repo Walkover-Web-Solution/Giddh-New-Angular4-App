@@ -46,7 +46,7 @@
                 </div>
 
                 <div class="col-xs-6 form-group" *ngIf="mode === 'receiver'">
-                    <label class="mr-b1">Product Name <sup>*</sup></label>
+                    <label class="mb-2">Product Name <sup>*</sup></label>
                     <reactive-dropdown-field
                         [options]="stockListOptions"
                         [placeholder]="'Select Product'"
@@ -58,7 +58,7 @@
                 </div>
 
                 <div class="col-xs-6 form-group" *ngIf="mode === 'product'">
-                    <label class="mr-b1">Receiver <sup>*</sup></label>
+                    <label class="mb-2">Receiver <sup>*</sup></label>
                     <reactive-dropdown-field
                         [options]="userListOptions"
                         [placeholder]="'Select Receiver'"
@@ -133,7 +133,7 @@
                                 <input name="" type="text" formControlName="quantity" class="form-control" />
                             </div>
 
-                            <div class="pull-right mr-t05 unit-add">
+                            <div class="pull-right mt-1 unit-add">
                                 <button
                                     mat-stroked-button
                                     (click)="addTransactionItem(transactions.controls[i])"
@@ -158,7 +158,7 @@
             </div>
 
             <div class="row">
-                <div class="col-xs-12 text-left mr-t1">
+                <div class="col-xs-12 text-left mt-2">
                     <button mat-stroked-button (click)="onCancel.emit($event)">Cancel</button>
                     <button mat-raised-button color="primary" [ladda]="isLoading" [disabled]="form.invalid" (click)="save()">
                         Save

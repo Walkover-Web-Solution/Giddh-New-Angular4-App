@@ -174,7 +174,7 @@
                     [hidePageSize]="false"
                     (page)="handlePageEvent($event)">
                 </mat-paginator>
-                <section class="mr-b8"></section>
+                <section class="mb-custom-80"></section>
             </div>
         </ng-container>
         <div class="no-data" *ngIf="!(searchResponseFiltered$ | async)?.length">
@@ -191,11 +191,11 @@
             <i class="icon-cross"></i>
         </button>
     </div>
-    <mat-dialog-content class="modal-body pd-l2 pd-r2 clear-both">
+    <mat-dialog-content class="modal-body pl-4 pr-4 clear-both">
         <input-field
             *ngIf="messageBody.type == 'Email'"
             [type]="'text'"
-            class="mr-b1"
+            class="mb-2"
             #subject
             [(ngModel)]="messageBody.subject"
             [placeholder]="localeData?.subject_placeholder"
@@ -214,8 +214,8 @@
             >
             </textarea>
         </mat-form-field>
-        <small class="mr-t05 mr-b05 grey">{{ localeData?.message_body_tips }}</small>
-        <div class="row mr-t2">
+        <small class="mt-1 mb-1 grey">{{ localeData?.message_body_tips }}</small>
+        <div class="row mt-4">
             <div class="mx-3">
                 <mat-chip-listbox>
                     <mat-chip
@@ -228,8 +228,8 @@
                 </mat-chip-listbox>
             </div>
         </div>
-        <div class="mr-t4">
-            <button mat-raised-button color="primary" class="pull-right mr-l1 mr-0" (click)="send()">
+        <div class="mt-5">
+            <button mat-raised-button color="primary" class="pull-right ml-2 mr-0" (click)="send()">
                 {{ messageBody.btn.set }}
             </button>
         </div>

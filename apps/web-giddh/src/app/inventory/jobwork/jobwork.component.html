@@ -7,7 +7,7 @@
         <welcome-jobwork></welcome-jobwork>
     </div>
     <section class="right-bar" *ngIf="!showWelcomePage">
-        <section class="container-fluid clear-both pd-t15">
+        <section class="container-fluid clear-both pt-3">
             <section class="h-100">
                 <div class="d-flex justify-content-center align-items-center">
                     <div class="d-flex job-work-content">
@@ -54,7 +54,7 @@
                                 <div class="btn-group">
                                     <button
                                         type="button"
-                                        class="btn mr-b05 cursor-pointer mr-1"
+                                        class="btn mb-1 cursor-pointer mr-1"
                                         mat-stroked-button
                                         [matMenuTriggerFor]="downloadMenu"
                                     >
@@ -81,7 +81,7 @@
                     </div>
                 </div>
 
-                <section class="mr-t15">
+                <section class="mt-3">
                     <div class="table-responsive">
                         <table mat-table [dataSource]="inventoryReport?.transactions || []" class="table basic m-0">
                             <!-- Date Column -->
@@ -295,7 +295,7 @@
                                 [hidePageSize]="false"
                                 (page)="handlePageEvent($event)"
                             ></mat-paginator>
-                            <section class="mr-b8"></section>
+                            <section class="mb-custom-80"></section>
                         </div>
                     </div>
                 </section>
@@ -314,7 +314,7 @@
     </div>
     <div mat-dialog-content class="clear-both max-height-65vh">
         <form action="" [formGroup]="advanceSearchForm">
-            <div class="row mr-t2">
+            <div class="row mt-4">
                 <div class="col-md-4">Trading Qty.</div>
                 <div class="col-md-4">
                     <reactive-dropdown-field

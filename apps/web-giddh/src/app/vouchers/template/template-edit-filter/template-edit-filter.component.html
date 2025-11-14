@@ -97,21 +97,21 @@
                                         </label>
                                     </span>
                                     <span
-                                        class="start-upload-btn float-right mr-l2 position-relative "
+                                        class="start-upload-btn float-right ml-4 position-relative "
                                         *ngIf="isFileUploadInProgress"
                                         ><b>{{ localeData?.uploading }}</b></span
                                     >
                                     <button
                                         *ngIf="showDeleteButton"
                                         type="button"
-                                        class="start-upload-btn mr-l2"
+                                        class="start-upload-btn ml-4"
                                         (click)="deleteLogo()"
                                         mat-stroked-button
                                         [matTooltip]="localeData?.delete_image_from_server"
                                     >
                                         {{ commonLocaleData?.app_delete }}
                                     </button>
-                                    <div class="pull-left mr-l1 mr-t1 choose-size">
+                                    <div class="pull-left ml-2 mt-2 choose-size">
                                         <div class="d-block">
                                             <p>{{ localeData?.size }}</p>
                                             <div class="d-flex column-gap-1">
@@ -149,11 +149,11 @@
                                 </mat-panel-title>
                             </mat-expansion-panel-header>
                             <div class="swatch text-center">
-                                <span class="swatch-preview mr-b3"
+                                <span class="swatch-preview mb-5"
                                     ><span [ngStyle]="{ 'background-color': customTemplate?.templateColor }"></span>
-                                    <span class="mr-t05"> {{ customTemplate?.templateColor }}</span>
+                                    <span class="mt-1"> {{ customTemplate?.templateColor }}</span>
                                 </span>
-                                <div class="mr-l1 pull-left">
+                                <div class="ml-2 pull-left">
                                     <ul>
                                         <li
                                             *ngFor="let color of colorPalette; trackBy: trackByColor"
@@ -286,7 +286,7 @@
                                     ></input-field>
                                 </div>
 
-                                <a href="javascript:;" (click)="resetPrintSetting()" class="mr-l1">{{
+                                <a href="javascript:;" (click)="resetPrintSetting()" class="ml-2">{{
                                     localeData?.reset
                                 }}</a>
                             </div>
@@ -326,7 +326,7 @@
 
         <mat-tab [label]="localeData?.content_tab">
             <form #templateForm="ngForm" novalidate>
-                <div class="mr-t1">
+                <div class="mt-2">
                     <mat-accordion class="template-design-wrap">
                         <div>
                             <mat-expansion-panel class="mb-2" [expanded]="templateSectionsVisible.header">
@@ -338,7 +338,7 @@
                                 </mat-expansion-panel-header>
                                 <div class="template-scroll">
                                     <div>
-                                        <div class="mr-t1 px-3 d-flex flex-column row-gap-05">
+                                        <div class="mt-2 px-3 d-flex flex-column row-gap-05">
                                             <!-- company name -->
                                             <div *ngIf="sectionSettings?.header.companyName">
                                                 <div class="d-flex">
@@ -621,7 +621,7 @@
                                             </div>
                                             <!-- gst composition -->
                                             <div
-                                                class="mr-t1"
+                                                class="mt-2"
                                                 *ngIf="
                                                     sectionSettings?.header.gstComposition &&
                                                     showGstComposition &&
@@ -701,7 +701,7 @@
                                                 "
                                             >
                                                 <!-- invoice date -->
-                                                <div *ngIf="sectionSettings?.header.invoiceDate" class="mr-t1">
+                                                <div *ngIf="sectionSettings?.header.invoiceDate" class="mt-2">
                                                     <div class="d-flex">
                                                         <mat-checkbox
                                                             color="primary"
@@ -776,7 +776,7 @@
                                                     </div>
                                                 </div>
                                                 <!-- invoice number -->
-                                                <div *ngIf="sectionSettings?.header.invoiceNumber" class="mr-t1">
+                                                <div *ngIf="sectionSettings?.header.invoiceNumber" class="mt-2">
                                                     <div class="d-flex">
                                                         <mat-checkbox
                                                             color="primary"
@@ -859,7 +859,7 @@
                                                 "
                                             >
                                                 <!-- voucher date -->
-                                                <div *ngIf="sectionSettings?.header.voucherDate" class="mr-t1">
+                                                <div *ngIf="sectionSettings?.header.voucherDate" class="mt-2">
                                                     <div class="d-flex">
                                                         <mat-checkbox
                                                             color="primary"
@@ -907,7 +907,7 @@
                                                     </div>
                                                 </div>
                                                 <!-- voucher number -->
-                                                <div *ngIf="sectionSettings?.header.voucherNumber" class="mr-t1">
+                                                <div *ngIf="sectionSettings?.header.voucherNumber" class="mt-2">
                                                     <div class="d-flex">
                                                         <mat-checkbox
                                                             color="primary"
@@ -961,7 +961,7 @@
                                                     customTemplate?.templateType !== templateTypeEnum.ThermalTemplate &&
                                                     customTemplate?.templateType !== templateTypeEnum.TallyTemplate
                                                 "
-                                                class="mr-t1"
+                                                class="mt-2"
                                             >
                                                 <div class="d-flex">
                                                     <mat-checkbox
@@ -1008,7 +1008,7 @@
                                         </div>
                                         <div
                                             *ngIf="customTemplate?.templateType !== templateTypeEnum.TallyTemplate"
-                                            class="px-3 mr-t2"
+                                            class="px-3 mt-4"
                                         >
                                             <p class="font-size-16 my-2">{{ localeData?.form }}</p>
 
@@ -1027,7 +1027,7 @@
                                                 >
                                                 </mat-checkbox>
                                                 <div class="w-100 ml-2">
-                                                    <div class="d-flex flex-column row-gap-1 mr-t1">
+                                                    <div class="d-flex flex-column row-gap-1 mt-2">
                                                         <span>{{ localeData?.document_title }}</span>
                                                         <!-- form name invoice -->
                                                         <div
@@ -1102,7 +1102,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="px-3 d-flex flex-column row-gap-05 mr-t2">
+                                        <div class="px-3 d-flex flex-column row-gap-05 mt-4">
                                             <p class="font-size-16 my-2">{{ localeData?.customer_details }}</p>
                                             <!-- customer name -->
                                             <div *ngIf="sectionSettings?.header.customerName">
@@ -1178,12 +1178,12 @@
                                             </div>
                                         </div>
                                         <div
-                                            class="px-3 d-flex flex-column row-gap-05 mr-t2"
+                                            class="px-3 d-flex flex-column row-gap-05 mt-4"
                                             *ngIf="customTemplate?.templateType !== templateTypeEnum.ThermalTemplate"
                                         >
                                             <p class="font-size-16 my-2">{{ localeData?.billing_details }}</p>
                                             <!-- billing address -->
-                                            <div *ngIf="sectionSettings?.header.billingAddress" class="mr-t2">
+                                            <div *ngIf="sectionSettings?.header.billingAddress" class="mt-4">
                                                 <div class="d-flex">
                                                     <mat-checkbox
                                                         color="primary"
@@ -1272,7 +1272,7 @@
                                                 </mat-checkbox>
                                             </div>
                                             <!-- billing gstin -->
-                                            <div *ngIf="sectionSettings?.header.billingGstin" class="mr-t1">
+                                            <div *ngIf="sectionSettings?.header.billingGstin" class="mt-2">
                                                 <div class="d-flex">
                                                     <mat-checkbox
                                                         color="primary"
@@ -1345,12 +1345,12 @@
                                             </div>
                                         </div>
                                         <div
-                                            class="px-3 pb-3 mr-t2 d-flex flex-column row-gap-05"
+                                            class="px-3 pb-3 mt-4 d-flex flex-column row-gap-05"
                                             *ngIf="customTemplate?.templateType !== templateTypeEnum.ThermalTemplate"
                                         >
                                             <p class="font-size-16 my-2">{{ localeData?.shipping_details }}</p>
                                             <!-- shipping address -->
-                                            <div *ngIf="sectionSettings?.header.shippingAddress" class="mr-t2">
+                                            <div *ngIf="sectionSettings?.header.shippingAddress" class="mt-4">
                                                 <div class="d-flex">
                                                     <mat-checkbox
                                                         color="primary"
@@ -1430,7 +1430,7 @@
                                                 </mat-checkbox>
                                             </div>
                                             <!-- shipping gstin -->
-                                            <div *ngIf="sectionSettings?.header.shippingGstin" class="mr-t1">
+                                            <div *ngIf="sectionSettings?.header.shippingGstin" class="mt-2">
                                                 <div class="d-flex">
                                                     <mat-checkbox
                                                         color="primary"
@@ -1506,7 +1506,7 @@
                                                 </mat-expansion-panel-header>
                                                 <div class="px-3 pb-3 template-scroll d-flex flex-column row-gap-05">
                                                     <!-- shipping date -->
-                                                    <div *ngIf="sectionSettings?.header.shippingDate" class="mr-t1">
+                                                    <div *ngIf="sectionSettings?.header.shippingDate" class="mt-2">
                                                         <div class="d-flex">
                                                             <mat-checkbox
                                                                 color="primary"
@@ -1556,7 +1556,7 @@
                                                         </div>
                                                     </div>
                                                     <!-- ship via -->
-                                                    <div *ngIf="sectionSettings?.header.shippedVia" class="mr-t1">
+                                                    <div *ngIf="sectionSettings?.header.shippedVia" class="mt-2">
                                                         <div class="d-flex">
                                                             <mat-checkbox
                                                                 color="primary"
@@ -1611,7 +1611,7 @@
                                                             customTemplate?.templateType !==
                                                                 templateTypeEnum.ThermalTemplate
                                                         "
-                                                        class="mr-t1"
+                                                        class="mt-2"
                                                     >
                                                         <div class="d-flex">
                                                             <mat-checkbox
@@ -1682,7 +1682,7 @@
                                                     </mat-panel-title>
                                                 </mat-expansion-panel-header>
                                                 <div class="px-3 pb-3 template-scroll d-flex flex-column row-gap-05">
-                                                    <div *ngIf="sectionSettings?.header.customField1" class="mr-t1">
+                                                    <div *ngIf="sectionSettings?.header.customField1" class="mt-2">
                                                         <div class="d-flex">
                                                             <mat-checkbox
                                                                 color="primary"
@@ -1733,7 +1733,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div *ngIf="sectionSettings?.header.customField2" class="mr-t1">
+                                                    <div *ngIf="sectionSettings?.header.customField2" class="mt-2">
                                                         <div class="d-flex">
                                                             <mat-checkbox
                                                                 color="primary"
@@ -1784,7 +1784,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div *ngIf="sectionSettings?.header.customField3" class="mr-t1">
+                                                    <div *ngIf="sectionSettings?.header.customField3" class="mt-2">
                                                         <div class="d-flex">
                                                             <mat-checkbox
                                                                 color="primary"
@@ -1854,14 +1854,14 @@
                                 <div class="template-scroll px-3">
                                     <div
                                         *ngIf="customTemplate.sections['table']"
-                                        class="d-flex flex-column row-gap-05 mr-t1"
+                                        class="d-flex flex-column row-gap-05 mt-2"
                                     >
                                         <div
                                             *ngIf="
                                                 sectionSettings?.table.sNo &&
                                                 customTemplate?.templateType !== templateTypeEnum.ThermalTemplate
                                             "
-                                            class="mr-t1"
+                                            class="mt-2"
                                         >
                                             <div class="d-flex">
                                                 <mat-checkbox
@@ -1925,7 +1925,7 @@
                                                 customTemplate.templateType !== templateTypeEnum.ThermalTemplate &&
                                                 sectionSettings?.table.date
                                             "
-                                            class="mr-t1"
+                                            class="mt-2"
                                         >
                                             <div class="d-flex">
                                                 <mat-checkbox
@@ -1990,7 +1990,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div *ngIf="sectionSettings?.table.item" class="mr-t1">
+                                        <div *ngIf="sectionSettings?.table.item" class="mt-2">
                                             <div
                                                 *ngIf="
                                                     customTemplate?.templateType !== templateTypeEnum.ThermalTemplate
@@ -2116,7 +2116,7 @@
                                                 sectionSettings?.table.hsnSac &&
                                                 customTemplate.templateType !== templateTypeEnum.ThermalTemplate
                                             "
-                                            class="mr-t1"
+                                            class="mt-2"
                                         >
                                             <div class="d-flex">
                                                 <mat-checkbox
@@ -2162,7 +2162,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div *ngIf="sectionSettings?.table.quantity" class="mr-t1">
+                                        <div *ngIf="sectionSettings?.table.quantity" class="mt-2">
                                             <div
                                                 *ngIf="
                                                     customTemplate?.templateType !== templateTypeEnum.ThermalTemplate
@@ -2315,7 +2315,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div *ngIf="sectionSettings?.table.rate" class="mr-t1">
+                                        <div *ngIf="sectionSettings?.table.rate" class="mt-2">
                                             <div
                                                 *ngIf="
                                                     customTemplate?.templateType !== templateTypeEnum.ThermalTemplate
@@ -2425,7 +2425,7 @@
                                                 sectionSettings?.table.discount &&
                                                 customTemplate.templateType !== templateTypeEnum.ThermalTemplate
                                             "
-                                            class="mr-t1"
+                                            class="mt-2"
                                         >
                                             <div class="d-flex">
                                                 <mat-checkbox
@@ -2477,7 +2477,7 @@
                                                 customTemplate.templateType !== templateTypeEnum.ThermalTemplate &&
                                                 customTemplate?.templateType !== templateTypeEnum.TallyTemplate
                                             "
-                                            class="mr-t1"
+                                            class="mt-2"
                                         >
                                             <div class="d-flex">
                                                 <mat-checkbox
@@ -2526,7 +2526,7 @@
                                             </div>
                                         </div>
                                         <div *ngIf="sectionSettings?.table.tax">
-                                            <div class="d-flex mr-t1">
+                                            <div class="d-flex mt-2">
                                                 <mat-checkbox
                                                     color="primary"
                                                     name="ta"
@@ -2567,7 +2567,7 @@
                                             </div>
                                         </div>
                                         <div *ngIf="sectionSettings?.table.total">
-                                            <div class="d-flex mr-t1">
+                                            <div class="d-flex mt-2">
                                                 <div
                                                     *ngIf="
                                                         customTemplate.templateType !== templateTypeEnum.ThermalTemplate
@@ -2640,7 +2640,7 @@
                                                 voucherType === voucherTypeEnum.sales
                                             "
                                         >
-                                            <div class="d-flex mr-t1">
+                                            <div class="d-flex mt-2">
                                                 <mat-checkbox
                                                     color="primary"
                                                     name="preDue"
@@ -2748,7 +2748,7 @@
                                             *ngIf="customTemplate?.templateType === templateTypeEnum.TallyTemplate"
                                         >
                                             <div
-                                                class="mr-t1"
+                                                class="mt-2"
                                                 *ngIf="
                                                     templateType !== voucherTypeEnum.purchase_order &&
                                                     templateType !== voucherTypeEnum.purchase_bill
@@ -2820,7 +2820,7 @@
                                                     customTemplate.sections['footer'].data['tcs']
                                                 "
                                             >
-                                                <div *ngIf="isTcsTdsApplicable" class="mr-t1">
+                                                <div *ngIf="isTcsTdsApplicable" class="mt-2">
                                                     <div class="d-flex">
                                                         <mat-checkbox
                                                             color="primary"
@@ -2872,7 +2872,7 @@
                                                         isTcsTdsApplicable &&
                                                         customTemplate?.templateType !== templateTypeEnum.TallyTemplate
                                                     "
-                                                    class="mr-t1"
+                                                    class="mt-2"
                                                 >
                                                     <div class="d-flex">
                                                         <mat-checkbox
@@ -2926,7 +2926,7 @@
                                                             templateTypeEnum.TallyTemplate &&
                                                         customTemplate.sections['footer'].data['totalDue']
                                                     "
-                                                    class="mr-t1"
+                                                    class="mt-2"
                                                 >
                                                     <div class="d-flex">
                                                         <mat-checkbox
@@ -2983,7 +2983,7 @@
                                                     sectionSettings?.footer.companyName &&
                                                     customTemplate?.templateType !== templateTypeEnum.ThermalTemplate
                                                 "
-                                                class="mr-t1"
+                                                class="mt-2"
                                             >
                                                 <div class="d-flex">
                                                     <mat-checkbox
@@ -3072,7 +3072,7 @@
                                                     customTemplate?.templateType !== templateTypeEnum.ThermalTemplate &&
                                                     customTemplate?.templateType !== templateTypeEnum.TallyTemplate
                                                 "
-                                                class="mr-t1"
+                                                class="mt-2"
                                             >
                                                 <div class="d-flex">
                                                     <mat-checkbox
@@ -3163,7 +3163,7 @@
                                                     customTemplate.sections['table'].data['totalQuantity'] &&
                                                     customTemplate?.templateType !== templateTypeEnum.TallyTemplate
                                                 "
-                                                class="mr-t1"
+                                                class="mt-2"
                                             >
                                                 <div class="d-flex">
                                                     <mat-checkbox
@@ -3216,7 +3216,7 @@
                                                     sectionSettings?.table.discount &&
                                                     customTemplate?.templateType === templateTypeEnum.ThermalTemplate
                                                 "
-                                                class="mr-t1"
+                                                class="mt-2"
                                             >
                                                 <div class="d-flex">
                                                     <mat-checkbox
@@ -3269,7 +3269,7 @@
                                                     sectionSettings?.footer.taxableAmount &&
                                                     customTemplate?.templateType !== templateTypeEnum.TallyTemplate
                                                 "
-                                                class="mr-t1"
+                                                class="mt-2"
                                             >
                                                 <div class="d-flex">
                                                     <mat-checkbox
@@ -3426,7 +3426,7 @@
                                             <ng-container
                                                 *ngIf="customTemplate?.templateType === templateTypeEnum.GstTemplateA"
                                             >
-                                                <div class="mr-t1 d-flex">
+                                                <div class="mt-2 d-flex">
                                                     <mat-checkbox
                                                         color="primary"
                                                         name="bankQrCodeCheckbox"
@@ -3550,7 +3550,7 @@
                                                     </mat-radio-group>
                                                 </div>
                                             </div>
-                                            <div *ngIf="sectionSettings?.footer.message1" class="mr-t1 mb-2">
+                                            <div *ngIf="sectionSettings?.footer.message1" class="mt-2 mb-2">
                                                 <div class="d-flex">
                                                     <mat-checkbox
                                                         color="primary"
@@ -3726,7 +3726,7 @@
                                                     customTemplate?.templateType !== templateTypeEnum.ThermalTemplate &&
                                                     customTemplate.sections['footer'].data['textUnderSlogan']
                                                 "
-                                                class="mr-t1"
+                                                class="mt-2"
                                             >
                                                 <div class="d-flex">
                                                     <mat-checkbox
@@ -3780,7 +3780,7 @@
                                                 *ngIf="
                                                     customTemplate?.templateType !== templateTypeEnum.ThermalTemplate
                                                 "
-                                                class="clear-both mr-t1"
+                                                class="clear-both mt-2"
                                             >
                                                 <mat-radio-group
                                                     [(ngModel)]="selectedSignatureType"
@@ -3811,7 +3811,7 @@
                                                             >
                                                                 {{ localeData?.image_signature }}
                                                             </div>
-                                                            <div class="form-group mr-l3 clear-both d-flex column-gap-15">
+                                                            <div class="form-group ml-5 clear-both d-flex column-gap-15">
                                                                 <span class="clear-both">
                                                                     <label
                                                                         class="upload-button text-center cursor-pointer"
@@ -3860,7 +3860,7 @@
                                                                 <button
                                                                     *ngIf="signatureImgAttached"
                                                                     type="button"
-                                                                    class="start-upload-btn mr-l2"
+                                                                    class="start-upload-btn ml-4"
                                                                     (click)="removeFile()"
                                                                     mat-stroked-button
                                                                     [matTooltip]="localeData?.delete_image_from_server"

@@ -1,7 +1,7 @@
-<div class="portal mt-5 pd-t15 pd-b15">
+<div class="portal mt-5 pt-3 pb-3">
     <div class="portal-header">
         <div class="d-flex align-items-center">
-            <div class="dropdown-wrapper mr-r2" *ngIf="domainList?.length">
+            <div class="dropdown-wrapper mr-4" *ngIf="domainList?.length">
                 <mat-form-field class="w-100 select-domain" appearance="outline">
                     <mat-label>{{ localeData?.select_domain }}</mat-label>
                     <mat-select [(value)]="domain.uniqueName" [placeholder]="localeData?.select_domain">
@@ -12,7 +12,7 @@
                                         setPrimaryAndDeleteDomain('set-primary', domain?.value);
                                         $event.stopPropagation()
                                     "
-                                    class="fa fa-star mr-r2 default-status"
+                                    class="fa fa-star mr-4 default-status"
                                     [ngClass]="{ 'fill-status': domain.status }"
                                 ></i>
                                 {{ domain?.label }}</span
@@ -66,14 +66,14 @@
                     <td mat-cell *matCellDef="let element" class="content-table">
                         <div>
                             {{ element.hostName }}
-                            <span class="input-group-btn mr-l05">
+                            <span class="input-group-btn ml-1">
                                 <i
                                     class="icon-copy-file cursor-pointer"
                                     (click)="copyUrl(element.hostName, element, 'host')"
                                     [matTooltip]="commonLocaleData?.app_copy"
                                 ></i>
                             </span>
-                            <span class="success mr-l05 copied-url" *ngIf="element.isCopiedHostName">{{
+                            <span class="success ml-1 copied-url" *ngIf="element.isCopiedHostName">{{
                                 localeData?.copied
                             }}</span>
                         </div>
@@ -83,14 +83,14 @@
                     <th mat-header-cell *matHeaderCellDef width="30%">{{ commonLocaleData?.app_value }}</th>
                     <td mat-cell *matCellDef="let element" class="content-table">
                         {{ element.value }}
-                        <span class="input-group-btn mr-l05">
+                        <span class="input-group-btn ml-1">
                             <i
                                 class="icon-copy-file cursor-pointer"
                                 (click)="copyUrl(element.value, element, 'value')"
                                 [matTooltip]="commonLocaleData?.app_copy"
                             ></i>
                         </span>
-                        <span class="success mr-l05 copied-url" *ngIf="element.isCopiedValue">{{
+                        <span class="success ml-1 copied-url" *ngIf="element.isCopiedValue">{{
                             localeData?.copied
                         }}</span>
                     </td>

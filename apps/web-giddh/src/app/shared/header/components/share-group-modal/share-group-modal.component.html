@@ -6,11 +6,11 @@
         </button>
     </div>
     <mat-dialog-content class="dialog-body">
-        <div class="pd-b3">
-            <p class="pd-b1">{{ localeData?.share_with }}</p>
+        <div class="pb-5">
+            <p class="pb-2">{{ localeData?.share_with }}</p>
             <!--share group from-->
             <form [formGroup]="shareGroupForm" novalidate autocomplete="off">
-                <div class="row pd-b2">
+                <div class="row pb-4">
                     <div class="col-md-6">
                         <input-field
                             formControlName="email"
@@ -51,13 +51,13 @@
             [isUserRestricted]="isUserRestricted" (onUpgradePlan)="buyPlan($event)">
         </restricted-module-message>
         <!--shared with array-->
-        <div class="pd-t1" *ngIf="(activeGroupSharedWith$ | async)?.length">
+        <div class="pt-2" *ngIf="(activeGroupSharedWith$ | async)?.length">
             <mat-list role="list" class="shared-list group-shared-list">
                 <ng-container *ngFor="let val of activeGroupSharedWith$ | async; let i = index">
                     <mat-list-item class="p-0 mat-list-item-height">
-                        <div class="d-flex pd-t1 pd-b1">
+                        <div class="d-flex pt-2 pb-2">
                             <div class="user-name-email col-md-6">
-                                <i class="icon-user1 pd-r1"></i>
+                                <i class="icon-user1 pr-2"></i>
                                 <span class="user-email">
                                     <small *ngIf="val.emailId !== val.userName">{{ val.userName }}</small>
                                     <small>{{ val.emailId }}</small>

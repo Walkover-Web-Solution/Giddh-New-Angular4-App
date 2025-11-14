@@ -12,7 +12,7 @@
         <ng-container *ngIf="!showLoader">
             <form autocomplete="off" novalidate name="groupForm" [formGroup]="groupForm" class="new-account-form">          
                 <div class="container-fluid">
-                    <div class="row mr-t15">
+                    <div class="row mt-3">
                         <div class="col-12 text-right">
                             <span *ngIf="!showLoader && !addGroup" class="mt-3 mr-2">
                                 <button
@@ -27,7 +27,7 @@
                                 </button>
                             </span>
                             <span  class="mt-3">
-                                <watch-video [cssClass]="'text-primary pd-t05'" [moduleName]="'INVENTORY_MASTER_GROUP'"></watch-video>
+                                <watch-video [cssClass]="'text-primary pt-1'" [moduleName]="'INVENTORY_MASTER_GROUP'"></watch-video>
                             </span>
                         </div>
                         <div class="col-12">
@@ -156,7 +156,7 @@
                                         </reactive-dropdown-field>
                                     </div>
                                 </div>
-                                <div class="row mr-t15">
+                                <div class="row mt-3">
                                     <div class="col-sm-12 col-lg-6 ml-lg-2">
                                         <div
                                             class="
@@ -191,7 +191,7 @@
                                                     ></reactive-dropdown-field>
                                                 </div>
                                             </div>
-                                            <div class="d-flex toggle-childgroup pd-t05 mt-1">
+                                            <div class="d-flex toggle-childgroup pt-1 mt-1">
                                                 <mat-slide-toggle
                                                     color="primary"
                                                     name="runtimeManufacturing"

@@ -17,9 +17,9 @@
     ></input-field>
     
     <mat-menu #discountMenu="matMenu" [hasBackdrop]="false">
-        <div (click)="$event.stopPropagation()" class="discount-wrapper pd-1">
+        <div (click)="$event.stopPropagation()" class="discount-wrapper p-2">
             <div class="value-wrapper">
-                <div class="mr-b1">
+                <div class="mb-2">
                     <input-field
                         [type]="'number'"
                         [id]="'ledger-discount-percent'"
@@ -35,7 +35,7 @@
                         (input)="discountFromInput('PERCENTAGE', $event.target?.value)"
                     ></input-field>
                 </div>
-                <div class="mr-b1">
+                <div class="mb-2">
                     <input-field
                         [type]="'number'"
                         [id]="'ledger-discount-value'"

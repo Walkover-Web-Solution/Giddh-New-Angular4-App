@@ -5,7 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
 >
     <div class="tb-wrapper clear-both">
-        <div class="mt-1 mr-b1 pull-right">
+        <div class="mt-1 mb-2 pull-right">
             <div class="tbpl-list">
                 <ul class="list-inline color-codes pull-right">
                     <li>
@@ -36,11 +36,11 @@
                         (clickOutside)="clickedOutside($event, searchContainer)"
                     >
                         <span [ngClass]="{ 'd-none': showClearSearch }" class="d-flex align-items-center">
-                            <span class="pd-r1"
+                            <span class="pr-2"
                                 ><strong>{{ localeData?.particular }}</strong></span
                             >
                             <i
-                                class="position-relative font-size-14 pd-r1 cursor-pointer d-flex align-items-center light-gray"
+                                class="position-relative font-size-14 pr-2 cursor-pointer d-flex align-items-center light-gray"
                                 id="showSearch"
                                 (click)="toggleSearch()"
                             ></i>

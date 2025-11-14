@@ -38,7 +38,7 @@
                                     >
                                         <div *ngIf="!(isLoginWithEmailSubmited$ | async)" class="clear-both">
                                             <input
-                                                class="form-control mr-b1"
+                                                class="form-control mb-2"
                                                 formControlName="email"
                                                 type="email"
                                                 placeholder="Email address"
@@ -55,13 +55,13 @@
                                         </div>
                                         <div *ngIf="isLoginWithEmailSubmited$ | async" class="clear-both">
                                             <input
-                                                class="form-control mr-b1"
+                                                class="form-control mb-2"
                                                 formControlName="token"
                                                 type="text"
                                                 placeholder="Enter verification code here"
                                                 required
                                             />
-                                            <div class="clear-both mr-b2">
+                                            <div class="clear-both mb-4">
                                                 <button
                                                     mat-raised-button color="primary"
                                                     [disabled]="!emailVerifyForm.controls['token'].valid"
@@ -99,7 +99,7 @@
                                     >
                                         <div class="clear-both form-group">
                                             <input
-                                                class="form-control mr-b1"
+                                                class="form-control mb-2"
                                                 type="text"
                                                 formControlName="email"
                                                 placeholder="Email Id"
@@ -116,7 +116,7 @@
                                             />
                                             <button
                                                 mat-raised-button color="primary"
-                                                class="mr-t1"
+                                                class="mt-2"
                                                 type="submit"
                                                 [disabled]="
                                                     !signUpWithPasswdForm.controls['email'].valid ||
@@ -137,13 +137,13 @@
                                     >
                                         <div class="clear-both">
                                             <input
-                                                class="form-control mr-b1"
+                                                class="form-control mb-2"
                                                 formControlName="verificationCode"
                                                 type="text"
                                                 placeholder="Enter verification code here"
                                                 required
                                             />
-                                            <div class="clear-both mr-b2">
+                                            <div class="clear-both mb-4">
                                                 <button
                                                     mat-raised-button color="primary"
                                                     [disabled]="!signupVerifyForm.controls['verificationCode'].valid"
@@ -211,7 +211,7 @@
         <form class="col-xs-12" name="verifyEmailForm" novalidate [formGroup]="emailVerifyForm">
             <div *ngIf="!(isLoginWithEmailSubmited$ | async)" class="clear-both form-group form-group-lg">
                 <input
-                    class="form-control mr-t1"
+                    class="form-control mt-2"
                     formControlName="email"
                     type="email"
                     placeholder="Enter your email address"
@@ -222,7 +222,7 @@
                     [ladda]="isLoginWithEmailInProcess$ | async"
                     mat-raised-button
                     color="primary"
-                    class="sharp mr-t1"
+                    class="sharp mt-2"
                     (click)="LoginWithEmail(emailVerifyForm.controls['email']?.value)"
                 >
                     Submit
@@ -230,7 +230,7 @@
             </div>
             <div *ngIf="isLoginWithEmailSubmited$ | async" class="clear-both form-group form-group-lg">
                 <input
-                    class="form-control mr-t1"
+                    class="form-control mt-2"
                     formControlName="token"
                     type="text"
                     placeholder="Enter verification code here"
@@ -241,7 +241,7 @@
                     [disabled]="!emailVerifyForm.controls['token'].valid"
                     mat-raised-button
     color="primary"
-    class="sharp mr-t1"
+    class="sharp mt-2"
                     [ladda]="isVerifyEmailInProcess$ | async"
                     (click)="
                         VerifyEmail(
@@ -303,7 +303,7 @@
                 *ngIf="!(isLoginWithMobileSubmited$ | async)"
                 mat-raised-button
                 color="primary"
-                class="sharp mr-t1"
+                class="sharp mt-2"
                 (click)="
                     getOtp(
                         mobileVerifyForm.controls['mobileNumber']?.value,
@@ -322,7 +322,7 @@
                     type="login"
                     mat-raised-button
                     color="primary"
-                    class="sharp mr-t1"
+                    class="sharp mt-2"
                     [ladda]="isVerifyMobileInProcess$ | async"
                     (click)="
                         VerifyCode(
@@ -364,7 +364,7 @@
                     type="login"
                     mat-raised-button
                     color="primary"
-                    class="sharp mr-t1"
+                    class="sharp mt-2"
                     [ladda]="isTwoWayAuthInProcess$ | async"
                     (click)="verifyTwoWayCode()"
                     [disabled]="twoWayOthForm.get('otp').invalid"

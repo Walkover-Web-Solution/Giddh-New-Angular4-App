@@ -38,7 +38,7 @@
                             [placeholder]="localeData?.payment?.login_id_placeholder"
                         ></input-field>
                     </div>
-                    <div class="mr-t1">
+                    <div class="mt-2">
                         <input-field
                             [label]="localeData?.payment?.account_number_label"
                             [required]="true"
@@ -54,7 +54,7 @@
                             [maxlength]="18"
                         ></input-field>
                     </div>
-                    <div class="mr-t1">
+                    <div class="mt-2">
                         <reactive-dropdown-field
                             [label]="localeData?.payment?.link_account_label"
                             [name]="'accountUniqueName'"
@@ -64,7 +64,7 @@
                             (selectedOption)="accountForm?.get('accountUniqueName').patchValue($event.value)"
                         ></reactive-dropdown-field>
                     </div>
-                    <div class="mr-t1" *ngIf="!activeBankAccount">
+                    <div class="mt-2" *ngIf="!activeBankAccount">
                         <reactive-dropdown-field
                             [label]="localeData?.payment?.user"
                             [name]="'userUniqueName'"
@@ -74,7 +74,7 @@
                             (selectedOption)="accountForm?.get('userUniqueName').patchValue($event.value)"
                         ></reactive-dropdown-field>
                     </div>
-                    <div class="mr-t1">
+                    <div class="mt-2">
                         <mat-form-field class="initial-height w-100" appearance="outline">
                             <mat-label>{{ localeData?.payment?.payment_updates }}</mat-label>
                             <mat-select formControlName="paymentAlerts" name="paymentAlerts" [multiple]="paymentAlertsUsersList?.length === 0">

@@ -8,7 +8,7 @@
                     <div class="inventory-sub-sideabar">
                         <mat-list class="item-list border-grid pt-0">
                             <div class="list-head-gap">
-                                <div class="search-list position-relative mr-t15 mr-b1" [formGroup]="searchForm">
+                                <div class="search-list position-relative mt-3 mb-2" [formGroup]="searchForm">
                                     <text-field type="text" [placeholder]="commonLocaleData?.app_search"
                                         formControlName="userSearch"
                                         [cssClass]="'form-control search-bar'"></text-field>
@@ -16,12 +16,12 @@
                                         <i class="icon-search"></i>
                                     </span>
                                 </div>
-                                <div class="mr-b1">
+                                <div class="mb-2">
                                     <button mat-raised-button aria-label="customer group" color="primary" class="w-100" (click)="openSearchModal('users')">
                                         {{localeData?.add_customer_group }}
                                     </button>
                                 </div>
-                                <div class="mr-b1">
+                                <div class="mb-2">
                                     <div class="custom-tab w-100 d-flex">
                                         <button mat-button aria-label="account" (click)="getUsersByType('account')" [ngClass]="{'active': userFilterType === 'account'}">
                                             {{ commonLocaleData?.app_account }}
@@ -42,10 +42,10 @@
                                         <a href="javascript:;" (click)="selectUser(user)">
                                             <span>
                                                 <ng-container *ngIf="user.type === 'GROUP'">
-                                                    <span class="icon-users font-size-16 font-weight-bold pd-r05"></span>
+                                                    <span class="icon-users font-size-16 font-weight-bold pr-1"></span>
                                                 </ng-container>
                                                 <ng-container *ngIf="user.type === 'ACCOUNT'">
-                                                    <span class="icon-user font-size-12 pd-r05"></span>
+                                                    <span class="icon-user font-size-12 pr-1"></span>
                                                 </ng-container>
 
                                                 {{ user?.name }}
@@ -77,11 +77,11 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="pull-right mr-t05" *ngIf="isTabScreen">
+                                <div class="pull-right mt-1" *ngIf="isTabScreen">
                                     <watch-video [cssClass]="'text-primary'" [moduleName]="'MRP_DISCOUNT'"></watch-video>
                                 </div>
                             <ng-container *ngIf="currentUserStocks?.length && !isStockLoading">
-                                <div class="stocks-wrapper mr-t4 overflow-auto w-100" [formGroup]="discountForm">
+                                <div class="stocks-wrapper mt-5 overflow-auto w-100" [formGroup]="discountForm">
                                     <ng-container *ngIf="showSaveDiscardButton">
                                         <div class="save-discount-header position-fixed pr-4" >
                                             <div class="d-flex justify-content-end align-items-center h-100">
@@ -292,7 +292,7 @@
                                         [hidePageSize]="false"
                                         (page)="handlePageEvent($event)">
                                     </mat-paginator>
-                                    <section class="mr-b8"></section>
+                                    <section class="mb-custom-80"></section>
                                 </div>
                             </ng-container>
                             <div class="no-data"
@@ -317,9 +317,9 @@
         [apiData]="apiData"></items-list-popup>
     <div class="shortcuts">
         <strong>↑</strong> <strong>↓</strong>&nbsp; {{ localeData?.to_navigate }}
-        <strong class="mr-l1" [attr.aria-label]="commonLocaleData?.app_return">↵</strong>&nbsp;
+        <strong class="ml-2" [attr.aria-label]="commonLocaleData?.app_return">↵</strong>&nbsp;
         {{ localeData?.to_select }}
-        <strong class="mr-l1" [attr.aria-label]="commonLocaleData?.app_escape">{{
+        <strong class="ml-2" [attr.aria-label]="commonLocaleData?.app_escape">{{
             commonLocaleData?.app_esc
             }}</strong>&nbsp;
         {{ localeData?.to_dismiss }}

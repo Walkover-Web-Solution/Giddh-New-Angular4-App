@@ -16,7 +16,7 @@
             <a
                 href="javascript:void(0);"
                 aria-label="add financial year"
-                class="d-block position-relative mr-r1 modal-title bg underline"
+                class="d-block position-relative mr-2 modal-title bg underline"
                 (click)="archivedDropdownIsOpen = true"
                 *ngIf="!archivedDropdownIsOpen; else archivedDropdown"
             >
@@ -24,7 +24,7 @@
             </a>
             <ng-template #archivedDropdown>
                 <select-field
-                    class="d-block position-relative mr-r1"
+                    class="d-block position-relative mr-2"
                     [cssClass]="'form-control border bg-white text-black'"
                     [placeholder]="commonLocaleData?.app_account_status"
                     [options]="archivedOptions"
@@ -36,7 +36,7 @@
                     [showDropdownIcon]="true"
                 ></select-field>
             </ng-template>
-            <div class="pull-right mr-r1 search-bar-wrapper">
+            <div class="pull-right mr-2 search-bar-wrapper">
                 <div class="form-inline">
                     <div class="form-group search-bar mb-0">
                         <input
@@ -68,7 +68,7 @@
             <i aria-label="close icon" class="icon-cross cursor-pointer" (click)="closePopupEvent()"></i>
         </span>
         <span>
-            <p class="bg pd-t05">{{ localeData?.page_heading }}</p>
+            <p class="bg pt-1">{{ localeData?.page_heading }}</p>
         </span>
     </div>
     <!-- end header -->

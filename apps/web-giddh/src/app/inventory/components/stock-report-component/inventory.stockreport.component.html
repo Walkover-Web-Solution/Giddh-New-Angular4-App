@@ -1,9 +1,9 @@
 <section class="h-100">
-    <form [formGroup]="entityAndInventoryTypeForm" class="form-inline mr-b1">
+    <form [formGroup]="entityAndInventoryTypeForm" class="form-inline mb-2">
         <div class="position-relative d-flex mb-2 inventory-branch-dropdown justify-content-between">
             <!-- enable branch selection after implimentation from api-->
             <div class="d-flex">
-                <div class="mr-r15 sh-select-dropdown">
+                <div class="mr-3 sh-select-dropdown">
                     <div class="select-style vertical-align-middle ">
                         <reactive-dropdown-field
                             [placeholder]="'Select Branch'"
@@ -37,7 +37,7 @@
                 <div class="btn-group">
                     <button
                         type="button"
-                        class="cursor-pointer mr-r15 icon-btn icon-btn"
+                        class="cursor-pointer mr-3 icon-btn icon-btn"
                         [matMenuTriggerFor]="downloadMenu"
                         matTooltip="Download"
                     >
@@ -61,7 +61,7 @@
             <table
                 class="table basic on-mobile-view table-responsive"
                 [ngClass]="{
-                    'mr-b100': stockReport && stockReport.transactions && stockReport.transactions.length > 6
+                    'mb-custom-100': stockReport && stockReport.transactions && stockReport.transactions.length > 6
                 }"
             >
                 <thead>
@@ -516,7 +516,7 @@
                                 [hidePageSize]="false"
                                 (page)="handlePageEvent($event)"
                             ></mat-paginator>
-                            <section class="mr-b8"></section>
+                            <section class="mb-custom-80"></section>
                         </td>
                     </tr>
                 </tfoot>
@@ -702,7 +702,7 @@
                     </mat-menu>
                 </div>
             </div>
-            <div class="row mr-t2">
+            <div class="row mt-4">
                 <div class="col-sm-4">Select Category</div>
                 <div class="col-sm-4">
                     <div class="select-style vertical-align-middle ">

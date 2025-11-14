@@ -125,7 +125,7 @@
                                 <input name="" type="text" formControlName="quantity" class="form-control" />
                             </div>
 
-                            <div class="pull-right mr-t05 unit-add">
+                            <div class="pull-right mt-1 unit-add">
                                 <button
                                     mat-stroked-button
                                     (click)="addTransactionItem(transactions.controls[i])"
@@ -144,7 +144,7 @@
 
             <ng-container *ngIf="mode === 'sender'">
                 <div class="row">
-                    <div class="mr-t1 pd-l05 pd-r05">
+                    <div class="mt-2 pl-1 pr-1">
                         <div class="col-12">
                             <div class="checkbox">
                                 <mat-checkbox
@@ -164,7 +164,7 @@
                             </p>
 
                             <div formGroupName="manufacturingDetails">
-                                <div class="row pd-t05">
+                                <div class="row pt-1">
                                     <div class="col-4">
                                         <label class="font-size-15">Output Qty <sup>*</sup></label>
                                     </div>
@@ -259,7 +259,7 @@
                                             >
                                             </reactive-dropdown-field>
                                         </div>
-                                        <div class="pull-right mr-t05 unit-add">
+                                        <div class="pull-right mt-1 unit-add">
                                             <button
                                                 mat-stroked-button
                                                 (click)="addItemInLinkedStocks(list, i, i)"
@@ -288,7 +288,7 @@
             </ng-container>
 
             <div class="row">
-                <div class="col-12 text-left mr-t1">
+                <div class="col-12 text-left mt-2">
                     <button mat-stroked-button (click)="onCancel.emit($event)">Cancel</button>
                     <button mat-stroked-button [ladda]="isLoading" [disabled]="form.invalid" (click)="save()">
                         Save
