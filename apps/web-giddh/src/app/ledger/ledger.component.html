@@ -648,11 +648,12 @@
                                         </button>
                                         <button
                                             mat-stroked-button
+                                            (click)="hideEledgerWrap()"
                                             type="button"
                                             class="min-width-unset"
                                             aria-label="close"
                                         >
-                                            <span class="font-12 font-weight-normal" (click)="hideEledgerWrap()">{{
+                                            <span class="font-12 font-weight-normal">{{
                                                 commonLocaleData?.app_close
                                             }}</span>
                                         </button>
