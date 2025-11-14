@@ -17,7 +17,7 @@
                             <strong>{{ localeData?.part_a }}</strong>
                         </div>
 
-                        <div class="row row-gap15">
+                        <div class="row row-gap-15">
                             <div class="col-6">
                                 <reactive-dropdown-field
                                     class="input"
@@ -90,7 +90,7 @@
 
                         <strong class="d-block mr-t15 mr-b15 text-center">{{ commonLocaleData?.app_transport_details }}</strong>
 
-                        <div class="row row-gap15">
+                        <div class="row row-gap-15">
                             <div class="col-6" [keyboardShortcut]="'alt+c'"
                             (onShortcutPress)="openTransporterDialog()">
                                 <reactive-dropdown-field
@@ -137,17 +137,25 @@
 
                             <div class="col-md-8 col-lg-8 col-sm-12 mr-t15">
                                 <mat-radio-group name="transMode" [(ngModel)]="generateEwayBillform.transMode" class="d-flex flex-wrap">
-                                    <mat-radio-button color="primary" value="1" (change)="selectedModeOfTrans('road')" class="mr-3 mb-2">
-                                        <img src="assets/icon/4.svg" class="mr-1" /> {{ commonLocaleData?.app_road }}
+                                     <mat-radio-button color="primary" value="1" (change)="selectedModeOfTrans('road')" class="mr-3 mb-2">
+                                        <div class="d-inline-flex column-gap-05">
+                                            <img class="image-as-icon-color" src="assets/icon/4.svg" /> {{ commonLocaleData?.app_road }}
+                                        </div>
                                     </mat-radio-button>
                                     <mat-radio-button color="primary" value="2" (change)="selectedModeOfTrans('rail')" class="mr-3 mb-2">
-                                        <img src="assets/icon/3.svg" class="mr-1" /> {{ commonLocaleData?.app_rail }}
+                                        <div class="d-inline-flex column-gap-05">
+                                            <img class="image-as-icon-color" src="assets/icon/3.svg" /> {{ commonLocaleData?.app_rail }}
+                                        </div>
                                     </mat-radio-button>
                                     <mat-radio-button color="primary" value="3" (change)="selectedModeOfTrans('air')" class="mr-3 mb-2">
-                                        <img src="assets/icon/1.svg" class="mr-1" /> {{ commonLocaleData?.app_air }}
+                                        <div class="d-inline-flex column-gap-05">
+                                            <img class="image-as-icon-color" src="assets/icon/1.svg" /> {{ commonLocaleData?.app_air }}
+                                        </div>
                                     </mat-radio-button>
                                     <mat-radio-button color="primary" value="4" (change)="selectedModeOfTrans('ship')" class="mb-2">
-                                        <img src="assets/icon/2.svg" class="mr-1" /> {{ commonLocaleData?.app_ship }}
+                                        <div class="d-inline-flex column-gap-05">
+                                            <img class="image-as-icon-color" src="assets/icon/2.svg" /> {{ commonLocaleData?.app_ship }}
+                                        </div>
                                     </mat-radio-button>
                                 </mat-radio-group>
                             </div>
@@ -170,7 +178,7 @@
                             </div>
                         </div>
 
-                        <div class="row row-gap15">
+                        <div class="row row-gap-15">
                             <div class="col-6">
                                 <input-field
                                     [placeholder]="localeData?.vehicle_no_placeholder"
@@ -216,7 +224,7 @@
 
                         <div class="row">
                             <div class="col-12 mt-4">
-                                <div class="d-flex column-gap1">
+                                <div class="d-flex column-gap-1">
                                     <button
                                         mat-raised-button color="primary"
                                         [disabled]="generateInvForm.invalid"
@@ -240,7 +248,7 @@
         <div class="right-panel pd-15 overflow-auto">
             <ng-container *ngFor="let invoice of selectedInvoices">
                 <mat-card class="mr-b15">
-                    <mat-card-title class="pd-15">
+                    <mat-card-title class=" pd-15 ">
                         <p class="text-primary">{{ invoice?.voucherNumber }}</p>
                     </mat-card-title>
                     <mat-card-content>
@@ -332,7 +340,7 @@
                 </div>
             </div>
             
-            <div class="d-flex column-gap1 mt-3">
+            <div class="d-flex column-gap-1 mt-3">
                 <ng-container *ngIf="!transportEditMode">
                     <button
                         mat-raised-button color="primary"
@@ -393,7 +401,7 @@
                 <ng-container matColumnDef="actions">
                     <th mat-header-cell *matHeaderCellDef class="nowrap">{{ commonLocaleData?.app_actions }}</th>
                     <td mat-cell *matCellDef="let element">
-                        <div class="d-flex column-gap1">
+                        <div class="d-flex column-gap-1">
                             <button mat-stroked-button (click)="editTransporter(element)"><i class="icon-edit"></i></button>
                             <button mat-stroked-button (click)="deleteTransporter(element)"><i class="fa fa-trash"></i></button>
                         </div>
@@ -404,16 +412,16 @@
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
         </div>
-        <div class="mt-1 mb-5" *ngIf="transporterListDetails?.totalItems > pageSizeOptions[0]">
-            <mat-paginator
-                [length]="transporterListDetails.totalItems"
-                [pageSize]="transporterFilterRequest.count"
-                [pageIndex]="transporterFilterRequest.page - 1"
-                [pageSizeOptions]="pageSizeOptions"
-                [showFirstLastButtons]="true"
-                [hidePageSize]="false"
-                (page)="handlePageEvent($event)">
-            </mat-paginator>
-        </div>
+        <mat-paginator
+            *ngIf="transporterListDetails?.totalItems > pageSizeOptions[0]"
+            [length]="transporterListDetails.totalItems"
+            [pageSize]="transporterFilterRequest.count"
+            [pageIndex]="transporterFilterRequest.page - 1"
+            [pageSizeOptions]="pageSizeOptions"
+            [showFirstLastButtons]="true"
+            [hidePageSize]="false"
+            (page)="handlePageEvent($event)">
+        </mat-paginator>
+        <section class="mr-b8"></section>
     </mat-dialog-content>
 </ng-template>

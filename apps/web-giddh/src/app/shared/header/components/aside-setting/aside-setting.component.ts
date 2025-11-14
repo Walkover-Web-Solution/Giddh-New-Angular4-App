@@ -1,5 +1,4 @@
 import { Component, EventEmitter, OnInit, Output, OnDestroy, Inject } from '@angular/core';
-import { BreakpointObserver } from '@angular/cdk/layout';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { NavigationEnd, NavigationStart, Router } from '@angular/router';
 import { AppState } from 'apps/web-giddh/src/app/store';
@@ -25,7 +24,6 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
     public settingsPageTabs: any[] = [];
     public search: any = "";
     public filteredSettingsPageTabs: any[] = [];
-    public isMobileScreen: boolean = true;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /* This will hold local JSON data */
@@ -57,7 +55,7 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
     /** Observable for branch list */
     public branchList$: Observable<any>;
 
-    constructor(@Inject(ServiceConfig) private serviceConfig, private breakPointObservar: BreakpointObserver, private generalService: GeneralService, private router: Router, private store: Store<AppState>, private localeService: LocaleService) {
+    constructor(@Inject(ServiceConfig) private serviceConfig, private generalService: GeneralService, private router: Router, private store: Store<AppState>, private localeService: LocaleService) {
     }
 
     /**
@@ -71,11 +69,6 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
-        });
-        this.breakPointObservar.observe([
-            '(max-width:767px)'
-        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isMobileScreen = result.matches;
         });
 
         this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
@@ -151,9 +144,7 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
      * @memberof AsideSettingComponent
      */
     public closeAsidePaneIfMobile(event?: any): void {
-        if (this.isMobileScreen && event && event.target.className !== "icon-bar") {
-            this.closeAsideEvent.emit(event);
-        } else if (!this.isMobileScreen && event && event.target.className !== "icon-settings-cog" && !this.router.url.includes("/pages/settings") && !this.router.url.includes("/pages/invoice/preview/settings/sales") && !this.router.url.includes("/pages/vouchers/preview/sales/settings")) {
+        if (event?.target?.className !== "icon-settings-cog" && !this.router.url.includes("/pages/settings") && !this.router.url.includes("/pages/invoice/preview/settings/sales") && !this.router.url.includes("/pages/vouchers/preview/sales/settings")) {
             this.closeAsideEvent.emit(event);
         }
     }

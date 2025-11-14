@@ -2,7 +2,7 @@
     <input
         type="text"
         [ngClass]="cssClass"
-        class="select-field-input"
+        [class]="'select-field-input'"
         [placeholder]="placeholder"
         matInput
         [matAutocomplete]="auto"
@@ -18,6 +18,7 @@
         (keydown.enter)="$event.preventDefault()"
         (clickOutside)="closeDropdownPanel($event)"
         matAutocompletePosition="auto"
+        [style.padding-right]="showDropdownIcon ? '18px' : '0'"
     />
     <mat-autocomplete
         autoActiveFirstOption

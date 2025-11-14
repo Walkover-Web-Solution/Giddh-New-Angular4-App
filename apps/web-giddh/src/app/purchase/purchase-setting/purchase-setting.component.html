@@ -19,11 +19,11 @@
                     </ng-template>
                     <div class="pd-t15 pd-b15">
                         <div class="single-tab-block">
-                        <div class="box clearfix mb-2">
-                            <h4 class="clearfix bd-rb mb-3">
+                        <div class=" pd-15 clear-both mb-2">
+                            <p class="clear-both border-bottom mb-3">
                                 {{ localeData?.integration }}<span> {{ localeData?.settings_note }}</span>
-                            </h4>
-                            <div class="clearfix">
+                            </p>
+                            <div class="clear-both">
                                 <div class="row">
                                     <div class="col-sm-12 col-md-12 col-lg-3 lh-34">
                                         <label>{{ localeData?.from_email }}</label>
@@ -115,7 +115,7 @@
                                 </div>
                             </div>
 
-                            <div class="clearfix pd-t1">
+                            <div class="clear-both pd-t1">
                                 <div class="row">
                                     <div class="col-sm-12 col-md-12 col-lg-3">
                                         <mat-slide-toggle
@@ -157,9 +157,9 @@
                     </ng-template>
                     <div class="pd-t15 pd-b15">
                         <div class="sales-order-tab single-tab-block">
-                        <div class="box clearfix mb-2">
-                            <h4 class="clearfix bd-rb mb-3">{{ localeData?.purchase_order }}</h4>
-                            <div class="clearfix">
+                        <div class=" pd-15 clear-both mb-2">
+                            <p class="clear-both border-bottom mb-3">{{ localeData?.purchase_order }}</p>
+                            <div class="clear-both">
                                 <div class="row">
                                     <div class="col-sm-12 col-md-12 col-lg-3 lh-34">
                                         <label>{{ localeData?.default_expiry_days }}</label>
@@ -187,7 +187,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="clearfix pd-t1">
+                                <div class="clear-both pd-t1">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-3">
                                             <mat-slide-toggle
@@ -216,7 +216,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="clearfix pd-t1" *ngIf="voucherApiVersion === 2">
+                                <div class="clear-both pd-t1" *ngIf="voucherApiVersion === 2">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-3">
                                             <mat-slide-toggle
@@ -245,7 +245,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="clearfix pd-t1">
+                                <div class="clear-both pd-t1">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-3">
                                             <mat-slide-toggle
@@ -259,7 +259,7 @@
                                             <label>{{ localeData?.custom_po_number }}</label>
                                         </div>
                                         <div class="col-sm-12 col-md-12 col-lg-9 custom-purchase-order-input-fields">
-                                            <div class="form-group clearfix">
+                                            <div class="form-group clear-both">
                                                 <mat-slide-toggle
                                                     [(ngModel)]="invoiceSettings.purchaseBillSettings.useCustomPONumber"
                                                     class="hide-on-mobile"
@@ -272,7 +272,7 @@
                                                     class="d-inline-flex custom-estimation"
                                                     *ngIf="invoiceSettings.purchaseBillSettings.useCustomPONumber"
                                                 >
-                                                    <div class="d-inline-flex position-relative">
+                                                    <div class="d-inline-flex position-relative ">
                                                         <label>{{ localeData?.initial_number }}</label>
                                                         <input
                                                             type="text"
@@ -283,7 +283,7 @@
                                                             "
                                                         />
                                                     </div>
-                                                    <div class="d-inline-flex position-relative">
+                                                    <div class="d-inline-flex position-relative ">
                                                         <label class="r-0">{{ commonLocaleData?.app_prefix }}</label>
                                                         <input
                                                             type="text"
@@ -299,7 +299,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="clearfix pd-t1" *ngIf="voucherApiVersion === 2">
+                                <div class="clear-both pd-t1" *ngIf="voucherApiVersion === 2">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
                                             <label>{{ commonLocaleData?.app_custom_email_template }}</label>
@@ -327,10 +327,10 @@
                     </ng-template>
                     <div class="pd-t15 pd-b15">
                         <div class="single-tab-block">
-                        <div class="box clearfix mb-2">
-                            <h4 class="clearfix bd-rb mb-3">{{ localeData?.purchase_bill }}</h4>
-                            <div class="clearfix">
-                                <div class="clearfix">
+                        <div class=" pd-15 clear-both mb-2">
+                            <p class="clear-both border-bottom mb-3">{{ localeData?.purchase_bill }}</p>
+                            <div class="clear-both">
+                                <div class="clear-both">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-3">
                                             <label>{{ localeData?.bill_lock_date }}</label>
@@ -348,7 +348,7 @@
                                     </div>
                                 </div>
 
-                                <div class="clearfix pd-t2">
+                                <div class="clear-both pd-t2">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-3">
                                             <mat-slide-toggle
@@ -374,7 +374,7 @@
                                     </div>
                                 </div>
                                 <ng-container *ngIf="voucherApiVersion === 2">
-                                    <div class="clearfix pd-t1 row" >
+                                    <div class="clear-both pd-t1 row" >
                                         <div class="col-sm-12 col-md-12 col-lg-3">
                                             <mat-slide-toggle
                                                 [(ngModel)]="invoiceSettings.purchaseBillSettings.enableVoucherDownload"
@@ -397,7 +397,7 @@
                                             </mat-slide-toggle>
                                         </div>
                                     </div>
-                                    <div class="clearfix pd-t1 row"> 
+                                    <div class="clear-both pd-t1 row"> 
                                         <div class="col-sm-12 col-md-12 col-lg-3">
                                             <mat-slide-toggle
                                                 [(ngModel)]="invoiceSettings.invoiceSettings.autoWhatsAppPayment"
@@ -420,7 +420,7 @@
                                             </mat-slide-toggle>
                                         </div>
                                     </div>
-                                    <div class="clearfix pd-t1 row"> 
+                                    <div class="clear-both pd-t1 row"> 
                                         <div class="col-sm-12 col-md-12 col-lg-3">
                                             <mat-slide-toggle
                                                 [(ngModel)]="invoiceSettings.purchaseBillSettings.autoWhatsApp"
@@ -443,7 +443,7 @@
                                             </mat-slide-toggle>
                                         </div>
                                     </div>
-                                    <div class="clearfix pd-t1 row">
+                                    <div class="clear-both pd-t1 row">
                                         <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
                                             <mat-slide-toggle
                                                 [(ngModel)]="invoiceSettings.invoiceSettings.purchaseRoundOff"
@@ -466,7 +466,7 @@
                                             </mat-slide-toggle>
                                         </div>
                                     </div>
-                                    <div class="clearfix pd-t1 row">
+                                    <div class="clear-both pd-t1 row">
                                         <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
                                             <mat-slide-toggle
                                                 [(ngModel)]="invoiceSettings.invoiceSettings.generateAutoPurchaseNumber"
@@ -490,7 +490,7 @@
                                         </div>
                                         
                                     </div>
-                                    <div class="clearfix pd-t1 row">
+                                    <div class="clear-both pd-t1 row">
                                         <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
                                             <label>{{ commonLocaleData?.app_custom_email_template }}</label>
                                         </div>
@@ -514,7 +514,7 @@
         </div>
     </section>
     <ng-template #buttonsSection>
-        <div class="d-flex column-gap1">
+        <div class="d-flex column-gap-1">
             <button mat-raised-button color="primary" type="button" (click)="updateForm()">
                 {{ commonLocaleData?.app_save }}
             </button>

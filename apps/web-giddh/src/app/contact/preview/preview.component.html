@@ -9,9 +9,9 @@
         *ngIf="!isSearching && !isLoadMore && (getAccountsInProgress$ | async)"
         [cssClass]="'no-data'"
     ></giddh-page-loader>
-    <div class="invoice-preview-wrapper d-flex" *ngIf="isSearching || isLoadMore || !(getAccountsInProgress$ | async)">
+    <div class="invoice-preview-wrapper d-flex full-viewport-height" *ngIf="isSearching || isLoadMore || !(getAccountsInProgress$ | async)">
         <div class="preview-list pd-b15">
-            <div class="d-flex align-items-center column-gap5 pd-15 w-100 list-responsive row-gap1">
+            <div class="d-flex align-items-center column-gap-05 pd-15 w-100 list-responsive row-gap-1">
                 <div class="position-relative search-field flex-grow-1">
                     <text-field
                         class="width-inherit"
@@ -39,12 +39,12 @@
                                 }"
                                 (click)="setSelectedContact(item?.uniqueName, true)"
                             >
-                                <div class="d-flex justify-content-between align-items-center column-gap5">
+                                <div class="d-flex justify-content-between align-items-center column-gap-05">
                                     <div>
-                                        <span class="font-12 text-blue">
+                                        <span class="font-size-12 title-text">
                                             {{ item?.uniqueName }}
                                         </span>
-                                        <p class="black-color pd-r3 text-wrap">
+                                        <p class="text-light pd-r3 text-wrap">
                                             {{ item?.name }}
                                         </p>
                                     </div>
@@ -63,8 +63,8 @@
             </div>
         </div>
         <div class="preview-content">
-            <div class="relative overflow-visible">
-                <div class="clearfix overflow-visible">
+            <div class="position-relative overflow-visible">
+                <div class="clear-both overflow-visible">
                     <div class="position-absolute back-button">
                         <button mat-stroked-button (click)="redirectToGetAllPage()">
                             {{ commonLocaleData?.app_back }}
@@ -79,10 +79,10 @@
                         class="table-header-sticky"
                     >
                         <mat-tab [label]="localeData?.statement">
-                            <div class="wrapper-background pd-1 pd-t05 pd-b05 overflow-auto">
+                            <div class="wrapper-background bg-light-gray pd-1 pd-t05 pd-b05 overflow-auto">
                                 <div class="account-statement-wrapper h-100">
                                     <mat-card
-                                        class="pd-15 mat-card-wrapper"
+                                        class=" pd-15 mat-card-wrapper"
                                         *ngIf="selectedContact?.uniqueName && !isContactNotFound"
                                     >
                                         <account-statement
@@ -99,7 +99,7 @@
                             </div>
                         </mat-tab>
                         <mat-tab [label]="localeData?.transaction">
-                            <div class="wrapper-background pd-1 overflow-auto">
+                            <div class="wrapper-background bg-light-gray pd-1 overflow-auto">
                                 <div class="account-statement-wrapper">
                                     <mat-card>
                                         <ledger-statement
@@ -117,16 +117,16 @@
                             </div>
                         </mat-tab>
                         <mat-tab [label]="localeData?.account_details">
-                            <div class="wrapper-background d-flex flex-column overflow-auto">
+                            <div class="wrapper-background bg-light-gray d-flex flex-column overflow-auto">
                                 <div
-                                    class="account-details-wrapper pd-t15 pd-b15 pd-l05 pd-r05 flex-grow-1 d-flex flex-column"
+                                    class="account-details-wrapper w-100 pd-t15 pd-b15 pd-l05 pd-r05 flex-grow-1 d-flex flex-column"
                                 >
                                     <div class="no-data" *ngIf="updateAccountInProcess$ | async">
                                         <giddh-page-loader></giddh-page-loader>
                                     </div>
                                     <mat-card *ngIf="!(updateAccountInProcess$ | async)">
                                         <div
-                                            class="pd-15 flex-grow-1"
+                                            class=" pd-15 flex-grow-1"
                                             *ngIf="
                                                 !(updateAccountInProcess$ | async) &&
                                                 (activeAccount$ | async) &&
@@ -179,6 +179,6 @@
 <!-- Single template for user not found -->
 <ng-template #noContactFound>
     <div class="text-center contact-no-data-message">
-        <h1>{{ localeData?.user_not_found_message }}</h1>
+        <p>{{ localeData?.user_not_found_message }}</p>
     </div>
 </ng-template>

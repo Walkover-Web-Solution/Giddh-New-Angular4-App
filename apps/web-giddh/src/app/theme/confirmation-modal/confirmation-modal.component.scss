@@ -6,7 +6,8 @@
     box-shadow: 0 0 6px var(--color-shadow-light);
     font-family: var(--font-family);
     background-color: var(--color-white);
-    .modal-header {
+    /* UNUSED COMPONENT CLASS: modal-header - Auto-commented by script
+.modal-header {
         padding: 10px 15px;
         .close {
             font-size: var(--font-size-16);
@@ -14,6 +15,7 @@
             top: 0px;
         }
     }
+*/
 
     p {
         font-size: var(--font-size-15);

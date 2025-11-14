@@ -7,7 +7,7 @@
 >
     <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
     <div [style.display]="showLoader ? 'none' : 'block'">
-        <div class="relative create-new-inventory-page static-tabs-on-page">
+        <div class="position-relative create-new-inventory-page static-tabs-on-page">
             <hamburger-menu *ngIf="!addStock"></hamburger-menu>
             <div class="select-physical-product input-border-wrapper">
                 <span class="pull-right position-relative z-index-1" [ngClass]="{ 'top-right-spacing': queryParams?.stockUniqueName && !addStock }">
@@ -40,7 +40,7 @@
                         <div class="stock-width">
                             <div class="row flex-column-reverse flex-md-row">
                                 <div class="col-12 upper-common-form-label-field">
-                                    <div class="row row-gap">
+                                    <div class="row row-gap-15">
                                         <div class="col-sm-6 col-lg-6">
                                             <input-field
                                                 [name]="'productName'"
@@ -135,7 +135,7 @@
                                             </mat-form-field>
                                         </div>
                                         <div
-                                            class="col-sm-6 col-lg-6 under-group-field-button-wrapper position-relative"
+                                            class="col-sm-6 col-lg-6 under-group-field-button-wrapper position-relative "
                                         >
                                             <mat-form-field class="w-100" appearance="outline">
                                                 <mat-select
@@ -194,16 +194,16 @@
                                         <div class="col-6" *ngIf="!isVariantAvailable">
                                             <div class="variant-image">
                                                 <div *ngIf="!stockForm.variants[0].attachmentUniqueName">
-                                                    <div class="variant-attachment mat-form-field-border d-flex align-items-center column-gap1 p-2 position-relative"
+                                                    <div class="variant-attachment mat-form-field-border d-flex align-items-center column-gap-1 p-2 position-relative "
                                                         [matTooltip]="localeData?.no_file_chosen" matTooltipPosition="right">
                                                         <input accept="image/png, image/jpeg" [ngClass]="{'cursor-disable':uploadAttachmentInProgress$ | async}"
-                                                            [disabled]="uploadAttachmentInProgress$ | async" type="file" class="position-absolute cursor-pointer opacity-hidden"
+                                                            [disabled]="uploadAttachmentInProgress$ | async" type="file" class="position-absolute cursor-pointer opacity-0"
                                                             name="variantImage" id="Variant Image" (change)="uploadFile($event,0)" />
                                                         <ng-container *ngIf="uploadAttachmentInProgress$ | async">
                                                             <mat-spinner [diameter]="30"></mat-spinner>
                                                         </ng-container>
                                                         <ng-container *ngIf="!(uploadAttachmentInProgress$ | async)">
-                                                            <div class="attachment-add-icon font-12 text-center rounded-circle">
+                                                            <div class="attachment-add-icon font-size-12 text-center border-radius-circle">
                                                                 <i class="icon-add"></i>
                                                             </div>
                                                             <span class="attachment-placeholder text-ellipsis">{{ localeData?.add_image }}</span>
@@ -212,15 +212,15 @@
                                                 </div>
                                                 <div *ngIf="stockForm.variants[0].attachmentUniqueName">
                                                     <div
-                                                        class="variant-attachment mat-form-field-border d-flex align-items-center column-gap1 p-2 text-success position-relative">
-                                                        <div class="attachment-add-icon font-12 text-center rounded-circle">
+                                                        class="variant-attachment mat-form-field-border d-flex align-items-center column-gap-1 p-2 text-green position-relative ">
+                                                        <div class="attachment-add-icon font-size-12 text-center border-radius-circle">
                                                             <i class="icon-tick"></i>
                                                         </div>
                                                         <img class="cursor-pointer" [matTooltip]="localeData?.preview_image" matTooltipPosition="above"
                                                             height="30" width="30" [src]="stockForm.variants[0].attachmentName"
                                                             (click)="previewVariantImage(stockForm.variants[0].attachmentUniqueName)" alt="Variant Image" />
                                                         <button mat-icon-button (click)="deleteAttachment(0)" class="ml-auto remove-attachment">
-                                                            <i class="icon-cross font-16"></i>
+                                                            <i class="icon-cross font-size-16"></i>
                                                         </button>
                                                     </div>
                                                 </div>
@@ -249,14 +249,14 @@
                                                             *ngIf="stockForm.type === 'FIXED_ASSETS'"
                                                         >
                                                             <div class="purchase-information fixed-assets-information">
-                                                                <div class="row row-gap">
+                                                                <div class="row row-gap-15">
                                                                     <div
                                                                         class="col-lg-12 d-flex align-items-center rate-head"
                                                                     >
                                                                         <div>
-                                                                            <h1 class="section-head p-0">
+                                                                            <p class="section-head p-0">
                                                                                 {{ commonLocaleData?.app_rate }} :
-                                                                            </h1>
+                                                                            </p>
                                                                         </div>
                                                                         <div>
                                                                             <mat-radio-group
@@ -413,14 +413,14 @@
                                                         <ng-container *ngIf="stockForm.type !== 'FIXED_ASSETS'">
                                                             <div class="col-xl-6 col-12">
                                                                 <div class="purchase-information account-tab-3">
-                                                                    <div class="row align-items-center row-gap">
+                                                                    <div class="row align-items-center row-gap-15">
                                                                         <div
                                                                             class="col-lg-12 d-flex align-items-center rate-head"
                                                                         >
                                                                             <div>
-                                                                                <h1 class="section-head p-0">
+                                                                                <p class="section-head p-0">
                                                                                     {{ commonLocaleData?.app_rate }} :
-                                                                                </h1>
+                                                                                </p>
                                                                             </div>
                                                                             <div>
                                                                                 <mat-radio-group
@@ -580,14 +580,14 @@
                                                             <div class="col-xl-6 col-12 pl-4">
                                                                 <div class="sales-information which-tab-4">
                                                                     <!-- input field will disabled if sales info unchecked -->
-                                                                    <div class="row row-gap">
+                                                                    <div class="row row-gap-15">
                                                                         <div
                                                                             class="col-lg-12 d-flex align-items-center rate-head"
                                                                         >
                                                                             <div>
-                                                                                <h1 class="section-head p-0">
+                                                                                <p class="section-head p-0">
                                                                                     {{ commonLocaleData?.app_rate }} :
-                                                                                </h1>
+                                                                                </p>
                                                                             </div>
                                                                             <div>
                                                                                 <mat-radio-group
@@ -825,7 +825,7 @@
                                                                                     (ngModelChange)="
                                                                                         validateOptionValue(i, j)
                                                                                     "
-                                                                                    class="inventory-category-field-input"
+                                                                                    [cssClass]="'d-block w-100'"
                                                                                     [type]="'text'"
                                                                                 ></text-field>
                                                                             </div>
@@ -926,7 +926,7 @@
                                                     <div class="row px-3">
                                                         <div class="col-lg-12 pl-0 mr-b15">
                                                             <a
-                                                                class="text-primary cp another-option-btn mt-2"
+                                                                class="text-primary cursor-pointer another-option-btn mt-2"
                                                                 disableRipple
                                                                 *ngIf="stockForm.options?.length < 3"
                                                                 (click)="addVariantOption()"
@@ -942,29 +942,29 @@
                                                             stockForm.variants[0]?.name
                                                         "
                                                     >
-                                                        <table class="stock-table font-15">
+                                                        <table class="stock-table font-size-15">
                                                             <tr>
-                                                                <th class="variant-image table-heading-color">
+                                                                <th class="variant-image">
                                                                     Variant Image
                                                                 </th>
-                                                                <th class="variant-name-column table-heading-color">
+                                                                <th class="variant-name-column">
                                                                     {{ localeData?.variant_name
-                                                                    }}<span class="red-text">*</span>
+                                                                    }}<span class="text-red">*</span>
                                                                 </th>
-                                                                <th class="unit-name table-heading-color">
+                                                                <th class="unit-name">
                                                                     {{ commonLocaleData?.app_unit }}
                                                                 </th>
-                                                                <th class="opening-qty table-heading-color">
+                                                                <th class="opening-qty">
                                                                     {{ localeData?.opening_quantity }}
                                                                 </th>
-                                                                <th class="opening-amount table-heading-color">
+                                                                <th class="opening-amount">
                                                                     {{ localeData?.opening_amount }}
                                                                 </th>
-                                                                <th class="sku-code table-heading-color">
+                                                                <th class="sku-code">
                                                                     {{ commonLocaleData?.app_sku_code }}
                                                                 </th>
                                                                 <th
-                                                                    class="sales-purchase-info table-heading-color"
+                                                                    class="sales-purchase-info"
                                                                     *ngIf="
                                                                         stockForm?.purchaseAccountDetails
                                                                             .accountUniqueName
@@ -973,7 +973,7 @@
                                                                     {{ localeData?.purchase_unit }}
                                                                 </th>
                                                                 <th
-                                                                    class="sales-purchase-info table-heading-color"
+                                                                    class="sales-purchase-info"
                                                                     *ngIf="
                                                                         stockForm?.salesAccountDetails.accountUniqueName
                                                                     "
@@ -981,7 +981,7 @@
                                                                     {{ localeData?.sales_unit }}
                                                                 </th>
                                                                 <th
-                                                                    class="sales-purchase-info table-heading-color"
+                                                                    class="sales-purchase-info"
                                                                     *ngIf="
                                                                         stockForm?.fixedAssetAccountDetails
                                                                             .accountUniqueName
@@ -992,16 +992,16 @@
                                                                 <ng-container
                                                                     *ngFor="let customField of variantCustomFields"
                                                                 >
-                                                                    <th class="sales-purchase-info table-heading-color">
+                                                                    <th class="sales-purchase-info">
                                                                         {{ customField?.fieldName }}
                                                                         <span
                                                                             *ngIf="customField?.isMandatory"
-                                                                            class="red-text"
+                                                                            class="text-red"
                                                                             >*</span
                                                                         >
                                                                     </th>
                                                                 </ng-container>
-                                                                <th class="archive table-heading-color">
+                                                                <th class="archive">
                                                                     {{ commonLocaleData?.app_archive }}
                                                                 </th>
                                                             </tr>
@@ -1015,14 +1015,14 @@
                                                                 <tr class="variant-row" *ngIf="variant.name">
                                                                     <td class="text-center variant-image">
                                                                         <div *ngIf="!variant.attachmentUniqueName">
-                                                                            <div class="variant-attachment mat-form-field-border d-flex align-items-center column-gap1 p-2 position-relative"
+                                                                            <div class="variant-attachment mat-form-field-border d-flex align-items-center column-gap-1 p-2 position-relative "
                                                                                 [matTooltip]="localeData?.no_file_chosen" matTooltipPosition="right">
                                                                                 <input accept="image/png, image/jpeg" [ngClass]="{'cursor-disable':uploadAttachmentInProgress$ | async}"
-                                                                                    [disabled]="uploadAttachmentInProgress$ | async" type="file" class="position-absolute cursor-pointer opacity-hidden"
+                                                                                    [disabled]="uploadAttachmentInProgress$ | async" type="file" class="position-absolute cursor-pointer opacity-0"
                                                                                     name="variantFile{{ i }}" id="variantFile{{ i }}" (change)="uploadFile($event, i)" />
                                                                                 <mat-spinner *ngIf="variant.isUploading"  [diameter]="30"></mat-spinner>
                                                                                 <ng-container *ngIf="!variant.isUploading">
-                                                                                    <div class="attachment-add-icon text-center font-12 rounded-circle">
+                                                                                    <div class="attachment-add-icon text-center font-size-12 border-radius-circle">
                                                                                         <i class="icon-add"></i>
                                                                                     </div>
                                                                                     <span class="attachment-placeholder text-ellipsis">{{ localeData?.add_image }}</span>
@@ -1031,15 +1031,15 @@
                                                                         </div>
                                                                         <div *ngIf="variant.attachmentUniqueName">
                                                                             <div
-                                                                                class="variant-attachment mat-form-field-border d-flex align-items-center column-gap1 p-2 text-success position-relative">
-                                                                                <div class="attachment-add-icon text-center font-12 rounded-circle">
+                                                                                class="variant-attachment mat-form-field-border d-flex align-items-center column-gap-1 p-2 text-green position-relative ">
+                                                                                <div class="attachment-add-icon text-center font-size-12 border-radius-circle">
                                                                                     <i class="icon-tick"></i>
                                                                                 </div>
                                                                                 <img class="cursor-pointer" [matTooltip]="localeData?.preview_image" matTooltipPosition="above"
                                                                                     height="30" width="30" (click)="previewVariantImage(variant.attachmentUniqueName)"
                                                                                     [src]="variant.attachmentName" alt="Variant Image{{index}}" />
                                                                                 <button mat-icon-button (click)="deleteAttachment(i)" class="ml-auto remove-attachment">
-                                                                                    <i class="icon-cross font-16"></i>
+                                                                                    <i class="icon-cross font-size-16"></i>
                                                                                 </button>
                                                                             </div>
                                                                         </div>
@@ -1301,7 +1301,7 @@
                                             {{ localeData?.save_stock_for_recipe }}
                                         </button>
                                     </div>
-                                    <div class="d-flex align-items-center column-gap1 pd-l15 mt-3" [ngClass]="queryParams?.stockUniqueName ? 'mb-2' : 'mb-5'">
+                                    <div class="d-flex align-items-center column-gap-1 pd-l15 mt-3" [ngClass]="queryParams?.stockUniqueName ? 'mb-2' : 'mb-5'">
                                         <mat-slide-toggle
                                             class="mr-b05"
                                             color="primary"
@@ -1322,7 +1322,7 @@
                                 <mat-tab [label]="localeData?.other">
                                     <div class="tab-container-new px-3">
                                         <div class="other-width">
-                                            <div class="row row-gap align-items-center">
+                                            <div class="row row-gap-15 align-items-center">
                                                 <div class="col-12 mb-3">
                                                     <mat-radio-group
                                                         color="primary"
@@ -1365,7 +1365,7 @@
                                                     </input-field>
                                                 </div>
                                                 <div class="col-sm-6 col-lg-3 custom-label">
-                                                    <label *ngIf="inlineEditCustomField !== 1"
+                                                    <label class="text-ellipsis" *ngIf="inlineEditCustomField !== 1" [matTooltip]="stockForm.customField1Heading" matTooltipPosition="above"
                                                         >{{ stockForm.customField1Heading || localeData?.custom_field }}
                                                         :
                                                     </label>
@@ -1448,7 +1448,7 @@
                                                     </input-field>
                                                 </div>
                                                 <div class="col-sm-6 col-lg-3 custom-label">
-                                                    <label *ngIf="inlineEditCustomField !== 2"
+                                                    <label class="text-ellipsis" *ngIf="inlineEditCustomField !== 2" [matTooltip]="stockForm.customField2Heading" matTooltipPosition="above"
                                                         >{{ stockForm.customField2Heading || localeData?.custom_field }}
                                                         :
                                                     </label>
@@ -1509,7 +1509,7 @@
                                                             >
                                                             <span
                                                                 *ngIf="customField?.isMandatory"
-                                                                class="red-text pd-r05"
+                                                                class="text-red pd-r05"
                                                                 >*</span
                                                             >
                                                             :
@@ -1637,7 +1637,7 @@
                                                     <div>
                                                         <a
                                                             href="javascript:void(0);"
-                                                            class="font-15 mr-t1 d-flex"
+                                                            class="font-size-15 mr-t1 d-flex"
                                                             id="add-more-variant"
                                                         >
                                                             {{ localeData?.add_more }}</a
@@ -1708,7 +1708,7 @@
                                                     <div>
                                                         <a
                                                             href="javascript:void(0);"
-                                                            class="font-15 mr-t1 d-flex"
+                                                            class="font-size-15 mr-t1 d-flex"
                                                             id="add-more-addon"
                                                         >
                                                             {{ localeData?.add_more }}</a
@@ -1748,7 +1748,7 @@
                                                                     <label class="d-block hide-label-on-mobile">
                                                                         &nbsp;
                                                                     </label>
-                                                                    <span class="text-primary font-15">{{
+                                                                    <span class="text-primary font-size-15">{{
                                                                         localeData?.variant_name_linked
                                                                     }}</span>
                                                                 </div>
@@ -1862,19 +1862,19 @@
                                                 </div>
                                                 <div class="row flex-column mr-t15">
                                                     <div
-                                                        class="text-primary cursor-pointer px-3 d-flex justify-content-between mr-b1 font-15"
+                                                        class="text-primary cursor-pointer px-3 d-flex justify-content-between mr-b1 font-size-15"
                                                         (click)="toggleExpense()"
                                                     >
                                                         <a
                                                             href="javascript:void(0);"
-                                                            class="text-primary font-15"
+                                                            class="text-primary font-size-15"
                                                             id="add-expense-btn"
                                                         >
                                                             {{ localeData?.add_expense }}
                                                         </a>
                                                         <a
                                                             href="javascript:void(0);"
-                                                            class="text-primary font-15 text-right add-new-final-product"
+                                                            class="text-primary font-size-15 text-right add-new-final-product"
                                                             id="add-new-product-btn"
                                                         >
                                                             {{ localeData?.add_row }}</a
@@ -1921,7 +1921,7 @@
                                                 </div>
                                             </div>
                                             <a
-                                                class="text-primary font-15"
+                                                class="text-primary font-size-15"
                                                 id="add-more-recipe-btn"
                                                 href="javascript:void(0);"
                                             >
@@ -1944,7 +1944,7 @@
                                         <div class="row mr-b15">
                                             <div class="col-sm-12 col-md-4 col-lg-6">
                                                 <label
-                                                    >{{ localeData?.combo_name }}<span class="red-text">*</span></label
+                                                    >{{ localeData?.combo_name }}<span class="text-red">*</span></label
                                                 >
                                             </div>
                                             <div class="col-sm-12 col-md-6 col-lg-6">
@@ -1959,7 +1959,7 @@
                                             <div class="col-sm-12 col-md-4 col-lg-6">
                                                 <label
                                                     >{{ commonLocaleData?.app_unit
-                                                    }}<span class="red-text">*</span></label
+                                                    }}<span class="text-red">*</span></label
                                                 >
                                             </div>
                                             <div class="col-sm-12 col-md-6 col-lg-6">
@@ -1973,7 +1973,7 @@
                                             <div class="col-sm-12 col-md-4 col-lg-6">
                                                 <label
                                                     >{{ localeData?.under_group }}
-                                                    <span class="red-text">*</span></label
+                                                    <span class="text-red">*</span></label
                                                 >
                                             </div>
                                             <div class="col-sm-12 col-md-6 col-lg-6">
@@ -1987,7 +1987,7 @@
                                             <div class="col-sm-12 col-md-4 col-lg-6">
                                                 <label
                                                     >{{ commonLocaleData?.app_unique_name
-                                                    }}<span class="red-text">*</span></label
+                                                    }}<span class="text-red">*</span></label
                                                 >
                                             </div>
                                             <div class="col-sm-12 col-md-6 col-lg-6">
@@ -2029,12 +2029,12 @@
                         </div>
                         <div class="bg-white px-3 py-3">
                             <div class="table-responsive">
-                                <table class="table combo-table font-15">
+                                <table class="table combo-table font-size-15">
                                     <thead>
                                         <th width="3%">&nbsp;</th>
-                                        <th width="20%">Stock Name <span class="red-text">*</span></th>
-                                        <th width="20%">Unit <span class="red-text">*</span></th>
-                                        <th width="16%">Qty <span class="red-text">*</span></th>
+                                        <th width="20%">Stock Name <span class="text-red">*</span></th>
+                                        <th width="20%">Unit <span class="text-red">*</span></th>
+                                        <th width="16%">Qty <span class="text-red">*</span></th>
                                         <th width="20%">Selling Price</th>
                                         <th width="20%">Purchase Price</th>
                                     </thead>
@@ -2124,13 +2124,13 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <p class="add-new-line font-15 my-3">
+                            <p class="add-new-line font-size-15 my-3">
                                 <button aria-label="add line" mat-button class="text-primary">+ Add New Line</button>
                             </p>
 
                             <div class="sales-purchase-details bg-light">
                                 <div class="mb-3">
-                                    <mat-checkbox color="primary" class="font-15"
+                                    <mat-checkbox color="primary" class="font-size-15"
                                         >Is the Product/Service eligible for Sale or Purchase?
                                     </mat-checkbox>
                                 </div>
@@ -2328,8 +2328,8 @@
                                                                     <div class="col-sm-6 col-lg-6">
                                                                         <label
                                                                             >Inventory Type
-                                                                            <span class="red-text"></span>
-                                                                            <i class="icon-info text-gray"></i
+                                                                            <span class="text-red"></span>
+                                                                            <i class="icon-info text-light"></i
                                                                         ></label>
                                                                     </div>
                                                                     <div class="col-sm-6 col-lg-6">
@@ -2347,7 +2347,7 @@
                                                                     <div class="col-sm-6 col-lg-6">
                                                                         <label
                                                                             >{{ localeData?.opening_quantity }}
-                                                                            <span class="red-text"></span
+                                                                            <span class="text-red"></span
                                                                         ></label>
                                                                     </div>
                                                                     <div class="col-sm-6 col-lg-6">
@@ -2365,7 +2365,7 @@
                                                                     <div class="col-sm-6 col-lg-6">
                                                                         <label
                                                                             >{{ commonLocaleData?.app_rate }}
-                                                                            <span class="red-text"></span
+                                                                            <span class="text-red"></span
                                                                         ></label>
                                                                     </div>
                                                                     <div class="col-sm-6 col-lg-6">
@@ -2386,8 +2386,8 @@
                                                                     <div class="col-sm-6 col-lg-6">
                                                                         <label
                                                                             >Low stock alert
-                                                                            <span class="red-text"></span>
-                                                                            <i class="icon-info text-gray"></i
+                                                                            <span class="text-red"></span>
+                                                                            <i class="icon-info text-light"></i
                                                                         ></label>
                                                                     </div>
                                                                     <div class="col-sm-6 col-lg-6">
@@ -2405,7 +2405,7 @@
                                                                 <div class="row mr-b15">
                                                                     <div class="col-sm-6 col-lg-6">
                                                                         <label
-                                                                            >Amount <span class="red-text"></span
+                                                                            >Amount <span class="text-red"></span
                                                                         ></label>
                                                                     </div>
                                                                     <div class="col-sm-6 col-lg-6">
@@ -2436,7 +2436,7 @@
                                                                 <div class="row mr-b15">
                                                                     <div class="col-sm-6 col-lg-6">
                                                                         <label
-                                                                            >Output Qty<span class="red-text">*</span>
+                                                                            >Output Qty<span class="text-red">*</span>
                                                                         </label>
                                                                     </div>
                                                                     <div class="col-sm-6 col-lg-6">
@@ -2451,7 +2451,7 @@
                                                                 <div class="row mr-b15">
                                                                     <div class="col-sm-6 col-lg-6">
                                                                         <label
-                                                                            >Combo Unit <span class="red-text">*</span>
+                                                                            >Combo Unit <span class="text-red">*</span>
                                                                         </label>
                                                                     </div>
                                                                     <div class="col-sm-6 col-lg-6">
@@ -2493,7 +2493,7 @@
                                                                 >
                                                                 </reactive-dropdown-field>
                                                                 <button aria-label="add icon" mat-icon-button role="button" type="button">
-                                                                    <i class="icon-plus pd cp"></i>
+                                                                    <i class="icon-plus pd-05 cursor-pointer"></i>
                                                                 </button>
                                                             </div>
                                                         </div>
@@ -2534,7 +2534,7 @@
                                                                     [placeholder]="commonLocaleData?.app_select_tax"
                                                                 >
                                                                 </reactive-dropdown-field>
-                                                                <p class="mt-1 font-15">
+                                                                <p class="mt-1 font-size-15">
                                                                     <mat-checkbox
                                                                         color="primary"
                                                                         id="purchase-price-tax"
@@ -2570,7 +2570,7 @@
                                                                         role="button"
                                                                         type="button"
                                                                     >
-                                                                        <i class="icon-plus pd cursor-pointer"></i>
+                                                                        <i class="icon-plus pd-05 cursor-pointer"></i>
                                                                     </button>
                                                                 </div>
                                                                 <div class="row add-new-field">
@@ -2596,7 +2596,7 @@
                                                                         role="button"
                                                                         type="button"
                                                                     >
-                                                                        <i class="icon-cross pd cursor-pointer"></i>
+                                                                        <i class="icon-cross pd-05 cursor-pointer"></i>
                                                                     </button>
                                                                 </div>
                                                             </div>
@@ -2637,7 +2637,7 @@
                                                                     disabled
                                                                 >
                                                                 </reactive-dropdown-field>
-                                                                <p class="mt-1 font-15">
+                                                                <p class="mt-1 font-size-15">
                                                                     <mat-checkbox
                                                                         color="primary"
                                                                         id="sales-price-tax"
@@ -2699,7 +2699,7 @@
 
                                 <mat-tab label="Inventory">
                                     <div class="tab-container-new">
-                                        <p class="mr-b15 font-15" hidden>
+                                        <p class="mr-b15 font-size-15" hidden>
                                             <span>
                                                 <mat-checkbox
                                                     color="primary"
@@ -2716,7 +2716,7 @@
                                                 <div class="col-sm-6">
                                                     <div class="row">
                                                         <div class="col-sm-6 col-lg-6 mr-b15">
-                                                            <label>Output Qty <span class="red-text">*</span></label>
+                                                            <label>Output Qty <span class="text-red">*</span></label>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6 mr-b15">
                                                             <input-field
@@ -2728,7 +2728,7 @@
                                                     </div>
                                                     <div class="row">
                                                         <div class="col-sm-6 col-lg-6 mr-b15">
-                                                            <label>Combo Unit<span class="red-text">*</span></label>
+                                                            <label>Combo Unit<span class="text-red">*</span></label>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6 mr-b15">
                                                             <input-field
@@ -2743,7 +2743,7 @@
                                                     <div class="row">
                                                         <div class="col-sm-6 col-lg-6 mr-b15">
                                                             <label
-                                                                >Input Combo Name<span class="red-text">*</span></label
+                                                                >Input Combo Name<span class="text-red">*</span></label
                                                             >
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6 mr-b15">
@@ -2757,7 +2757,7 @@
                                                     </div>
                                                     <div class="row">
                                                         <div class="col-sm-6 col-lg-6 mr-b15">
-                                                            <label>Combo Qty.<span class="red-text">*</span></label>
+                                                            <label>Combo Qty.<span class="text-red">*</span></label>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6 mr-b15">
                                                             <input-field
@@ -2769,7 +2769,7 @@
                                                     </div>
                                                     <div class="row">
                                                         <div class="col-sm-6 col-lg-6 mr-b15">
-                                                            <label>Combo Unit<span class="red-text">*</span></label>
+                                                            <label>Combo Unit<span class="text-red">*</span></label>
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6 mr-b15">
                                                             <input-field
@@ -2782,21 +2782,21 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <p class="mr-b15 font-15">
+                                        <p class="mr-b15 font-size-15">
                                             <span>
                                                 <mat-checkbox color="primary" name="stock" id="stock">
                                                     Continue selling when out of Combo?</mat-checkbox
                                                 >>
                                             </span>
                                         </p>
-                                        <p class="mr-b15 font-15">
+                                        <p class="mr-b15 font-size-15">
                                             <span>
                                                 <mat-checkbox color="primary" name="return-policy" id="return-policy">
                                                     Is this Combo eligible for return policy?</mat-checkbox
                                                 >
                                             </span>
                                         </p>
-                                        <p class="mr-b15 font-15">
+                                        <p class="mr-b15 font-size-15">
                                             <span>
                                                 <mat-checkbox
                                                     color="primary"
@@ -2852,7 +2852,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <a href="javascript:void(0)" class="text-primary mr-b15 d-block cp"
+                                                <a href="javascript:void(0)" class="text-primary mr-b15 d-block cursor-pointer"
                                                     >+ another option</a
                                                 >
                                             </div>
@@ -2989,7 +2989,7 @@
                                                     <div>
                                                         <a
                                                             href="javascript:void(0);"
-                                                            class="font-15 mr-t1 d-flex"
+                                                            class="font-size-15 mr-t1 d-flex"
                                                             id="combo-add-more-variant"
                                                         >
                                                             {{ localeData?.add_more }}</a
@@ -3061,7 +3061,7 @@
                                                     <div>
                                                         <a
                                                             href="javascript:void(0);"
-                                                            class="font-15 mr-t1 d-flex"
+                                                            class="font-size-15 mr-t1 d-flex"
                                                             id="add-more-addon"
                                                         >
                                                             {{ localeData?.add_more }}
@@ -3100,7 +3100,7 @@
                                                                     <label class="d-block hide-label-on-mobile">
                                                                         &nbsp;
                                                                     </label>
-                                                                    <span class="text-primary font-15"
+                                                                    <span class="text-primary font-size-15"
                                                                         >Variant Name (linked)</span
                                                                     >
                                                                 </div>
@@ -3208,19 +3208,19 @@
                                                 </div>
                                                 <div class="row flex-column mr-t15">
                                                     <div
-                                                        class="text-primary cursor-pointer px-3 d-flex justify-content-between mr-b1 font-15"
+                                                        class="text-primary cursor-pointer px-3 d-flex justify-content-between mr-b1 font-size-15"
                                                         (click)="toggleExpense()"
                                                     >
                                                         <a
                                                             href="javascript:void(0);"
-                                                            class="text-primary font-15"
+                                                            class="text-primary font-size-15"
                                                             id="combo-add-expense-btn"
                                                         >
                                                             + Add Expense
                                                         </a>
                                                         <a
                                                             href="javascript:void(0);"
-                                                            class="text-primary font-15 text-right add-new-final-product"
+                                                            class="text-primary font-size-15 text-right add-new-final-product"
                                                             id="combo-add-new-product-btn"
                                                             >+ Add New Row</a
                                                         >
@@ -3264,7 +3264,7 @@
                                                 </div>
                                             </div>
                                             <a
-                                                class="text-primary font-15"
+                                                class="text-primary font-size-15"
                                                 id="combo-add-more-recipe-btn"
                                                 href="javascript:void(0);"
                                             >
@@ -3352,24 +3352,24 @@
                                 <table class="table giddh-table bulk-create-table on-mobile-view">
                                     <thead>
                                         <tr>
-                                            <th>#</th>
-                                            <th>Stock Name <span class="red-text">*</span></th>
-                                            <th>Unique Name <span class="red-text">*</span></th>
-                                            <th>Inventory Type <span class="red-text">*</span></th>
-                                            <th>Inventory Unit <span class="red-text">*</span></th>
-                                            <th>Parent Group <span class="red-text">*</span></th>
-                                            <th>Inventory Account <span class="red-text">*</span></th>
-                                            <th>Low Stock Alert <span class="red-text">*</span></th>
-                                            <th>Opening Qty <span class="red-text">*</span></th>
-                                            <th>Opening Amount <span class="red-text">*</span></th>
-                                            <th>Purchase Account Name <span class="red-text">*</span></th>
-                                            <th>Linked Tax <span class="red-text">*</span></th>
-                                            <th>Purchase Unit <span class="red-text">*</span></th>
-                                            <th>Purchase Rate <span class="red-text">*</span></th>
-                                            <th>Sales Account Name <span class="red-text">*</span></th>
-                                            <th>Linked Tax <span class="red-text">*</span></th>
-                                            <th>Sales Unit <span class="red-text">*</span></th>
-                                            <th>Sales Rate <span class="red-text">*</span></th>
+                                            <th class="serial-no-column">#</th>
+                                            <th>Stock Name <span class="text-red">*</span></th>
+                                            <th>Unique Name <span class="text-red">*</span></th>
+                                            <th>Inventory Type <span class="text-red">*</span></th>
+                                            <th>Inventory Unit <span class="text-red">*</span></th>
+                                            <th>Parent Group <span class="text-red">*</span></th>
+                                            <th>Inventory Account <span class="text-red">*</span></th>
+                                            <th>Low Stock Alert <span class="text-red">*</span></th>
+                                            <th>Opening Qty <span class="text-red">*</span></th>
+                                            <th>Opening Amount <span class="text-red">*</span></th>
+                                            <th>Purchase Account Name <span class="text-red">*</span></th>
+                                            <th>Linked Tax <span class="text-red">*</span></th>
+                                            <th>Purchase Unit <span class="text-red">*</span></th>
+                                            <th>Purchase Rate <span class="text-red">*</span></th>
+                                            <th>Sales Account Name <span class="text-red">*</span></th>
+                                            <th>Linked Tax <span class="text-red">*</span></th>
+                                            <th>Sales Unit <span class="text-red">*</span></th>
+                                            <th>Sales Rate <span class="text-red">*</span></th>
                                             <th>HSN/SAC Code</th>
                                             <th>SKU Code</th>
                                             <th>Barcode</th>
@@ -3378,7 +3378,7 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td data-title="#" class="pd list-number">1</td>
+                                            <td data-title="#" class="pd-05 list-number">1</td>
                                             <td data-title="Stock Name">
                                                 <input-field type="text" id="stock-name-field" readonly> </input-field>
                                             </td>
@@ -3473,7 +3473,7 @@
                                 </button>
                                 <span class="d-flex align-items-center">
                                     <input-field class="mr-1" id="fill-number" placeholder="0"> </input-field>
-                                    <span class="font-15">More rows at bottom</span>
+                                    <span class="font-size-15">More rows at bottom</span>
                                 </span>
                             </div>
                         </div>
@@ -3483,7 +3483,7 @@
             </div>
         </div>
         <div class="inner-content-footer">
-            <div class="button-group d-flex column-gap15">
+            <div class="button-group d-flex column-gap-15">
                 <button
                     aria-label="create"
                     *ngIf="!queryParams?.stockUniqueName"
@@ -3497,7 +3497,7 @@
                     aria-label="clear"
                     *ngIf="!queryParams?.stockUniqueName"
                     mat-stroked-button
-                    (click)="resetForm(stockCreateEditForm)"
+                    (click)="resetForm(stockCreateEditForm); getVariantCustomFields()"
                 >
                     {{ commonLocaleData?.app_clear }}
                 </button>

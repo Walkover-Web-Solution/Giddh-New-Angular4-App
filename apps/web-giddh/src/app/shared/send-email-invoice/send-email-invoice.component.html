@@ -17,14 +17,14 @@
                 <input
                     matInput
                     type="text"
-                    class="form-control mat-field-border"
+                    class="form-control border"
                     [placeholder]="localeData?.enter_email_address"
                     [(ngModel)]="emailAddresses"
                 />
             </div>
         </div>
         <div
-            class="clearfix"
+            class="clear-both"
             *ngIf="
                 voucherType !== 'proforma' &&
                 voucherType !== 'proformas' &&
@@ -34,7 +34,7 @@
                 voucherType !== 'credit note'
             "
         >
-            <h3 class="font-15 mr-b05">{{ localeData?.invoice_copy }}</h3>
+            <p class="font-size-15 mr-b05">{{ localeData?.invoice_copy }}</p>
             <hr />
 
             <div class="checkbox" *ngIf="voucherApiVersion === 2">
@@ -79,7 +79,7 @@
         <!-- region buttons -->
         <div class="row mr-t2 mr-b1">
             <div class="col-sm-12">
-                <div class="btn-group column-gap15" role="group">
+                <div class="btn-group column-gap-15" role="group">
                     <button
                         mat-raised-button
                         color="primary"

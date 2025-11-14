@@ -5,9 +5,11 @@
 .btn-group.open.show {
     display: inline-block !important;
 }
-.bd-rt {
-    border-color: var(--color-silver);
+/* UNUSED COMPONENT CLASS: border-top - Auto-commented by script
+.border-top {
+    border-color: var(--border-color);
 }
+*/
 
 :host ::ng-deep .fb-1-container {
     justify-content: flex-start;
@@ -35,7 +37,7 @@
 }
 .td-search-box div i {
     margin-top: 1px;
-    color: var(--color-blue-primary);
+    // color: var(--text-primary-color);
     padding-right: 8px;
     cursor: pointer;
     display: flex;
@@ -59,19 +61,23 @@
     right: 0px;
     top: 10px;
 }
+/* UNUSED COMPONENT CLASS: table-border - Auto-commented by script
 .table-border {
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
 }
+*/
 .basic > thead > tr > th {
-    border-right: 1px solid var(--color-silver);
+    border-right: 1px solid var(--border-color);
 }
-.icon-pointer .glyphicon {
+/* .icon-pointer  UNUSED COMPONENT CLASS: glyphicon - Auto-commented by script
+.glyphicon {
     cursor: pointer;
 }
+*/
 
-.td-search-box div i:hover {
-    color: var(--color-medium-gray);
-}
+// .td-search-box div i:hover {
+//     color: var(--color-medium-gray);
+// }
 
 /* class name same as what we are getting data */
 
@@ -79,7 +85,7 @@
     color: var(--color-green);
 }
 .Outward.Note {
-    color: var(--color-blue-primary);
+    color: var(--text-primary-color);
 }
 .Transfer.Note {
     color: var(--color-dark-gray);
@@ -116,10 +122,10 @@
     width: 115%;
     right: -7.5% !important;
     top: 118% !important;
-    border-radius: 0px;
+    border-radius: var(--mat-border-radius-0);
     padding: 0px;
     input[type="checkbox"]:after {
-        border: 1px solid var(--color-silver);
+        border: 1px solid var(--border-color);
         width: 15px;
         height: 15px;
         top: 2px;
@@ -150,10 +156,12 @@ button[aria-expanded="true"] i {
 }
 /* voucher type DDL */
 
+/* UNUSED COMPONENT CLASS: modal-content - Auto-commented by script
 .modal-content {
-    border-radius: 0px;
+    border-radius: var(--mat-border-radius-0);
     margin-top: 200px;
 }
+*/
 .right-bar {
     width: calc(100% - 260px);
     margin-top: 45px;
@@ -169,10 +177,10 @@ button[aria-expanded="true"] i {
 .icon-pointer .icon-sort-asc {
     line-height: 20px;
     width: 15px;
-    color: var(--color-blue-primary);
+    color: var(--text-primary-color);
 }
 .icon-pointer .active-text-color {
-    color: var(--color-blue-primary);
+    color: var(--text-primary-color);
 }
 
 .dropdown-menu > li > a:hover {
@@ -186,9 +194,9 @@ button[aria-expanded="true"] i {
     align-items: center;
     font-size: var(--font-size-16);
     margin-left: 10px;
-    border: 1px solid var(--color-blue-primary);
-    border-radius: 5px;
-    color: var(--color-blue-primary);
+    border: 1px solid var(--theme-primary-color);
+    border-radius: var(--mat-border-radius-4);
+    color: var(--text-primary-color);
     background: var(--color-white);
 }
 .table-border .d-flex {
@@ -198,16 +206,19 @@ button[aria-expanded="true"] i {
     padding-left: 5px;
     cursor: pointer;
 }
-button.btn.btn-filter {
+/* UNUSED COMPONENT CLASS: btn-filter - Auto-commented by script
+button.btn
+.btn-filter {
     background: var(--color-border-light);
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     font-size: var(--font-size-15);
-    color: var(--color-blue-primary);
+    color: var(--text-primary-color);
     display: inline-flex;
     justify-content: space-between;
     align-items: center;
     padding: 4px 10px;
 }
+*/
 .job-work-content {
     width: 100%;
     justify-content: space-between;

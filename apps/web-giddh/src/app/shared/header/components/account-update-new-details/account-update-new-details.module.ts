@@ -15,6 +15,7 @@ import { NewConfirmModalModule } from "apps/web-giddh/src/app/theme/new-confirm-
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { SalesPersonService } from "../../../sales-person/utility/sales-person.service";
 import { OverlayModule } from "@angular/cdk/overlay";
+import { MobileNumberInputComponent } from "../../../mobile-number-input";
 
 @NgModule({
     declarations: [
@@ -35,7 +36,8 @@ import { OverlayModule } from "@angular/cdk/overlay";
         MatTabsModule,
         NewConfirmModalModule,
         MatTooltipModule,
-        OverlayModule
+        OverlayModule,
+        MobileNumberInputComponent
     ],
     exports: [
         AccountUpdateNewDetailsComponent,

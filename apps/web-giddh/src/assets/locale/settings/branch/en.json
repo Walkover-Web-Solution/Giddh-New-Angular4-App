@@ -22,7 +22,7 @@
         "taxes": "Taxes",
         "bank": "Bank"
     },
-    "remove_branch": "Are you sure want to remove <p class='remvBrnchName'><b>[COMPANY_NAME]?</b></p>",
+    "remove_branch": "Are you sure want to remove <strong>[COMPANY_NAME]?<strong>",
     "branch_updated": "Branch updated successfully",
     "create_branch_under": "Create Branch under",
     "country_currency": "Country & Currency",

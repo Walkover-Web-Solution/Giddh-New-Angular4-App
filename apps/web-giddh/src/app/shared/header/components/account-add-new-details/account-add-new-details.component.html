@@ -91,12 +91,12 @@
                             </input-field>
                             <div class="d-flex">
                                 <div
-                                    class="input-group-addon d-flex align-item-center"
+                                    class="input-group-addon d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1"
                                     (click)="openingBalanceTypeChanged('DEBIT')"
                                     [ngClass]="{
                                         'active-toggle-btn':
                                             addAccountForm.get('openingBalanceType')?.value === 'DEBIT',
-                                        'cp': addAccountForm.get('openingBalance')?.value > 0
+                                        'cursor-pointer': addAccountForm.get('openingBalance')?.value > 0
                                     }"
                                     *ngIf="
                                         addAccountForm.get('openingBalance')?.value > 0
@@ -105,12 +105,12 @@
                                     {{ commonLocaleData?.app_dr?.toUpperCase() }}
                                 </div>
                                 <div
-                                    class="input-group-addon only-right-radius d-flex align-item-center"
+                                    class="input-group-addon only-right-radius d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1"
                                     (click)="openingBalanceTypeChanged('CREDIT')"
                                     [ngClass]="{
                                         'active-toggle-btn':
                                             addAccountForm.get('openingBalanceType')?.value === 'CREDIT',
-                                        'cp':
+                                        'cursor-pointer':
                                             addAccountForm.get('openingBalance')?.value > 0 ||
                                             addAccountForm.get('foreignOpeningBalance')?.value > 0
                                     }"
@@ -123,7 +123,7 @@
                             </div>
                         </div>
                         <div *ngIf="company?.isActive" class="d-flex justify-content-end">
-                            <span (click)="openBulkAddDialog()" class="font-14 cursor-pointer text-primary">{{
+                            <span (click)="openBulkAddDialog()" class="font-size-14 cursor-pointer text-primary">{{
                                 localeData?.bulk_add
                             }}</span>
                         </div>
@@ -167,12 +167,12 @@
                             </input-field>
                             <div class="d-flex">
                                 <div
-                                    class="input-group-addon d-flex align-item-center"
+                                    class="input-group-addon d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1"
                                     (click)="openingBalanceTypeChanged('DEBIT')"
                                     [ngClass]="{
                                         'active-toggle-btn':
                                             addAccountForm.get('openingBalanceType')?.value === 'DEBIT',
-                                        'cp':
+                                        'cursor-pointer':
                                             addAccountForm.get('foreignOpeningBalance')?.value > 0
                                     }"
                                     *ngIf="addAccountForm.get('foreignOpeningBalance')?.value > 0"
@@ -180,12 +180,12 @@
                                     {{ commonLocaleData?.app_dr?.toUpperCase() }}
                                 </div>
                                 <div
-                                    class="input-group-addon only-right-radius d-flex align-item-center"
+                                    class="input-group-addon only-right-radius d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1"
                                     (click)="openingBalanceTypeChanged('CREDIT')"
                                     [ngClass]="{
                                         'active-toggle-btn':
                                             addAccountForm.get('openingBalanceType')?.value === 'CREDIT',
-                                        'cp':
+                                        'cursor-pointer':
                                             addAccountForm.get('foreignOpeningBalance')?.value > 0
                                     }"
                                     *ngIf="addAccountForm.get('foreignOpeningBalance')?.value > 0"
@@ -195,7 +195,7 @@
                             </div>
                         </div>
                         <div *ngIf="company?.isActive" class="d-flex justify-content-end">
-                            <span href="javascript:;" (click)="openBulkAddDialog()" class="font-14 cursor-pointer text-primary">{{
+                            <span href="javascript:;" (click)="openBulkAddDialog()" class="font-size-14 cursor-pointer text-primary">{{
                                 localeData?.bulk_add
                             }}</span>
                         </div>
@@ -275,7 +275,7 @@
                         <div class="row">
                             <div class="col-sm-12">
                                 <div class="add-address-default">
-                                    <h3>{{ commonLocaleData?.app_address }} {{ i + 1 }}</h3>
+                                    <p class="text-black">{{ commonLocaleData?.app_address }} {{ i + 1 }}</p>
                                     <div class="remove-radio-btn">
                                         <span class="pd-r1" *ngIf="!firstItem">
                                             <button
@@ -283,7 +283,10 @@
                                                 (click)="removeGstDetailsForm(i)"
                                                 class="bg-white"
                                             >
-                                                <i class="icon-cross"> </i> {{ commonLocaleData?.app_remove }}
+                                                <span class="text-red d-inline-flex align-items-center column-gap-1">
+                                                    <i class="icon-cross"></i>
+                                                    <span>{{ commonLocaleData?.app_remove }}</span>
+                                                </span>
                                             </button>
                                         </span>
                                         <span
@@ -404,7 +407,7 @@
                             </ng-container>
                         </div>
                         <div
-                            class="d-flex justify-content-between column-gap15 pd-b2"
+                            class="d-flex justify-content-between column-gap-15 pd-b2"
                             *ngIf="
                                 lastItem &&
                                 addAccountForm.get('addresses')['controls']?.length > 3 &&
@@ -457,7 +460,16 @@
                             </input-field>
                         </div>
                         <div class="col-sm-6 mobile-number mobile-number-wrapper voucher-preview-edit">
-                            <div class="form-group">
+                             <mobile-number-input
+                                formControlName="mobileNo"
+                                [label]="commonLocaleData?.app_mobile_number"
+                                [placeholder]="localeData?.mobile_no_placeholder"
+                                [required]="false"
+                                [useImageFlags]="true"
+                                (change)="openConfirmLeaveDialog()"
+                            >
+                            </mobile-number-input>
+                            <!-- <div class="form-group">
                                 <div class="d-flex">
                                     <input-field
                                         [name]="'accountDetails.mobileNumber'"
@@ -476,7 +488,7 @@
                                 </div>
                                 <span id="init-contact-add-valid-msg" class="d-none"></span>
                                 <span id="init-contact-add-error-msg" class="d-none"></span>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                     <div class="row">
@@ -556,7 +568,25 @@
                             </span>
                         </div>
                         <div class="w-30 pl-2 mobile-number mobile-number-wrapper voucher-preview-edit" [ngClass]="{'load-bar-wrap': isActivePortalMobileNumber === i}" (click)="isActivePortalMobileNumber = i">
-                            <input-field
+                           <mobile-number-input
+                                [id]="'mobile-input-' + i"
+                                [name]="'contactNo_' + i"
+                                formControlName="contactNo"
+                                [label]="commonLocaleData?.app_mobile_number"
+                                [placeholder]="localeData?.mobile_no_placeholder"
+                                [required]="false"
+                                [useImageFlags]="true"
+                                (input)="portalIndex = i"
+                                (change)="openConfirmLeaveDialog()"
+                            >
+                            </mobile-number-input>
+                            <span
+                                class="error-msg"
+                                *ngIf="domain.get('contactNo').hasError('duplicate') && i === lastDuplicateContactIndex"
+                                id="contactValidationError_{{ i }}"
+                                >{{ localeData?.duplicate_mobile_number }}
+                            </span>
+                            <!-- <input-field
                                 [name]="'contactNo_' + i"
                                 [type]="'tel'"
                                 #initContactAdd2
@@ -570,16 +600,17 @@
                                 [floatLabel]="intl?.['init-contact-portal_' + i]?.getNumber() ? 'always' : 'auto'"
                             ></input-field>
                             <span [id]="'init-contact-portal_' + i + '-valid-msg'" class="d-none"></span>
-                            <span [id]="'init-contact-portal_' + i + '-error-msg'" class="d-none"></span>
+                            <span [id]="'init-contact-portal_' + i + '-error-msg'" class="d-none"></span> -->
                         </div>
                         <div class="pl-2 mr-t05">
                             <button
                                 mat-stroked-button
-                                color="primary" 
+                                color="primary"
+                                type="button"
                                 aria-label="delete icon" 
                                 (click)="removePortalUser(i)"
                             >
-                                <i class="icon-trash delete"></i>
+                                <i class="icon-trash text-red"></i>
                             </button>
                         </div>
                     </div>
@@ -740,24 +771,24 @@
                                 </input-field>
                                 <div class="d-flex">
                                     <div
-                                        class="input-group-addon d-flex align-item-center"
+                                        class="input-group-addon d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1"
                                         (click)="closingBalanceTypeChanged('DEBIT')"
                                         [ngClass]="{
                                             'active-toggle-btn':
                                                 addAccountForm.get('closingBalanceTriggerAmountType')?.value === 'DEBIT',
-                                            'cp': addAccountForm.get('closingBalanceTriggerAmount')?.value > 0
+                                            'cursor-pointer': addAccountForm.get('closingBalanceTriggerAmount')?.value > 0
                                         }"
                                         *ngIf="addAccountForm.get('closingBalanceTriggerAmount')?.value > 0"
                                     >
                                         {{ commonLocaleData?.app_dr?.toUpperCase() }}
                                     </div>
                                     <div
-                                        class="input-group-addon only-right-radius d-flex align-item-center"
+                                        class="input-group-addon only-right-radius d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1"
                                         (click)="closingBalanceTypeChanged('CREDIT')"
                                         [ngClass]="{
                                             'active-toggle-btn':
                                                 addAccountForm.get('closingBalanceTriggerAmountType')?.value === 'CREDIT',
-                                            'cp': addAccountForm.get('closingBalanceTriggerAmount')?.value > 0
+                                            'cursor-pointer': addAccountForm.get('closingBalanceTriggerAmount')?.value > 0
                                         }"
                                         *ngIf="addAccountForm.get('closingBalanceTriggerAmount')?.value > 0"
                                     >
@@ -825,7 +856,7 @@
                                         <div class="name-of-field">
                                             <label for="values"
                                                 >{{ item.fieldName }}
-                                                <span class="red-text" *ngIf="item.isMandatory">*</span>
+                                                <span class="text-red" *ngIf="item.isMandatory">*</span>
                                             </label>
                                             <input-field
                                                 *ngIf="

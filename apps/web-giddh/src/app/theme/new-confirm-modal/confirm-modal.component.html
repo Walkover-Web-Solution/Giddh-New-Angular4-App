@@ -7,10 +7,10 @@
     </div>
     <mat-dialog-content class="dialog-body">
         <p [innerHTML]="inputData?.body"></p>
-        <p class="text-gray font-15 mr-t05" *ngIf="inputData?.permanentlyDeleteMessage">
+        <p class="text-light font-size-15 mr-t05" *ngIf="inputData?.permanentlyDeleteMessage">
             {{ inputData?.permanentlyDeleteMessage }}
         </p>
-        <div class="d-flex column-gap1 mt-3 justify-content-end">
+        <div class="d-flex column-gap-1 mt-3 justify-content-end">
             <button mat-raised-button color="primary" (click)="sendResponse(true)">{{ inputData?.ok }}</button>
             <button mat-stroked-button (click)="sendResponse(false)">{{ inputData?.cancel }}</button>
         </div>

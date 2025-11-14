@@ -15,7 +15,6 @@ import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, IOption } from '..
 import { GeneralService } from '../../../services/general.service';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../../models/user-login-state';
-import { BreakpointObserver } from '@angular/cdk/layout';
 import { cloneDeep, orderBy } from '../../../lodash-optimized';
 import { SettingsTagService } from '../../../services/settings.tag.service';
 import { ToasterService } from '../../../services/toaster.service';

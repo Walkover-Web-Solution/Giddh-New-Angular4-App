@@ -6,7 +6,7 @@
     (translationComplete)="translationComplete($event)"
 >
     <hamburger-menu class="hamburger-menu"></hamburger-menu>
-    <div class="position-relative invoice-list overflow-visible" *ngIf="showContent">
+    <div class="position-relative invoice-list" *ngIf="showContent">
         <mat-tab-group
             mat-stretch-tabs="false"
             mat-align-tabs="start"
@@ -17,11 +17,11 @@
             <!-- estimate-content-start -->
             <mat-tab [label]="localeData?.tabs?.estimates" *ngIf="activeTabGroup === 0">
                 <div
-                    class="vouchers-wrapper pt-3 px-4 overflow-visible"
+                    class="vouchers-wrapper pd-15 overflow-visible"
                     *ngIf="voucherType === voucherTypeEnum.generateEstimate && activeModule === 'list'"
                 >
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
-                        <div class="d-flex align-items-center column-gap1">
+                        <div class="d-flex align-items-center column-gap-1">
                             <button
                                 mat-raised-button
                                 color="primary"
@@ -56,12 +56,12 @@
                             class="mx-auto"
                             *ngIf="advanceFiltersApplied && !(getVouchersInProgress$ | async)"
                         >
-                            <span class="d-inline-flex align-items-center column-gap5">
-                                <span class="icon-cross font-12"></span>
+                            <span class="d-inline-flex align-items-center column-gap-05">
+                                <span class="icon-cross font-size-12"></span>
                                 <span>{{ commonLocaleData?.app_clear_filter }}</span>
                             </span>
                         </button>
-                        <div class="d-flex align-items-center column-gap1">
+                        <div class="d-flex align-items-center column-gap-1">
                             <button
                                 mat-raised-button
                                 color="primary"
@@ -77,7 +77,7 @@
                                 </button>
                             </mat-menu>
                             <button mat-raised-button color="primary" (click)="advanceSearchDialog()">
-                                <span class="d-inline-flex align-items-center column-gap5">
+                                <span class="d-inline-flex align-items-center column-gap-05">
                                     {{ commonLocaleData?.app_filter }}
                                     <i class="icon-advance-filter"></i>
                                 </span>
@@ -113,7 +113,7 @@
                         >
                             <!-- S No. -->
                             <ng-container matColumnDef="index">
-                                <th mat-header-cell *matHeaderCellDef>
+                                <th mat-header-cell *matHeaderCellDef class="serial-no-column">
                                     <ng-container *ngIf="!selectedVouchers?.length">#</ng-container>
                                     <span *ngIf="selectedVouchers?.length">
                                         <mat-checkbox
@@ -155,7 +155,7 @@
                                                 "
                                                 width="15%"
                                             >
-                                                <div class="d-flex align-items-center column-gap5">
+                                                <div class="d-flex align-items-center column-gap-05">
                                                     <ng-container
                                                         *ngTemplateOutlet="
                                                             searchTemplate;
@@ -204,7 +204,7 @@
                                                 "
                                                 width="15%"
                                             >
-                                                <div class="d-flex align-items-center column-gap5">
+                                                <div class="d-flex align-items-center column-gap-05">
                                                     <ng-container
                                                         *ngTemplateOutlet="
                                                             searchTemplate;
@@ -232,16 +232,16 @@
                                                     }}
                                                 </div>
                                                 <mat-card
-                                                    class="outline-card account-detail-wrapper"
+                                                    class="outline-card account-detail-wrapper border"
                                                     *ngIf="element?.showAccountDetails"
                                                     (clickOutside)="element.showAccountDetails = false"
                                                 >
                                                     <div
-                                                        class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header"
+                                                        class="d-flex align-items-center justify-content-between column-gap-15 p-3 border-bottom account-header only-top-radius"
                                                     >
-                                                        <h3>{{ element?.customerName | titlecase }}</h3>
+                                                        <p>{{ element?.customerName | titlecase }}</p>
                                                         <a (click)="editAccount(element)" class="edit-icon pl-1 pd-t05">
-                                                            <i class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
+                                                            <i class="icon-edit-pencil font-size-16 pr-1 cursor-pointer"></i>
                                                         </a>
                                                     </div>
                                                     <mat-card-content class="pt-3">
@@ -249,7 +249,7 @@
                                                             <li class="text-left">
                                                                 <a
                                                                     href="javascript:;"
-                                                                    class="default-color"
+                                                                    class="theme-foreground-color"
                                                                     (click)="goToLedger(element)"
                                                                     >{{ commonLocaleData?.app_goto_ledger }}</a
                                                                 >
@@ -257,7 +257,7 @@
                                                             <li class="text-left mr-t1">
                                                                 <a
                                                                     href="javascript:;"
-                                                                    class="default-color"
+                                                                    class="theme-foreground-color"
                                                                     (click)="generateVoucher(element)"
                                                                     >{{ commonLocaleData?.app_generate_invoice }}</a
                                                                 >
@@ -456,7 +456,6 @@
                         </table>
                         <mat-paginator
                             *ngIf="!(getVouchersInProgress$ | async) && totalResults > pageSizeOptions[0]"
-                            class="mt-3"
                             (page)="handlePageChange($event)"
                             [length]="totalResults"
                             [pageSize]="advanceFilters.count"
@@ -468,6 +467,7 @@
                         <ng-container
                             *ngTemplateOutlet="noDataFoundMessage; context: { $implicit: !dataSource?.length }"
                         ></ng-container>
+                        <section class="mr-b8"></section>
                     </div>
                 </div>
             </mat-tab>
@@ -476,11 +476,11 @@
             <!-- proforma-content-start -->
             <mat-tab [label]="localeData?.tabs?.proformas" *ngIf="activeTabGroup === 0">
                 <div
-                    class="vouchers-wrapper pt-3 px-4 overflow-visible"
+                    class="vouchers-wrapper pd-15 overflow-visible"
                     *ngIf="voucherType === voucherTypeEnum.generateProforma && activeModule === 'list'"
                 >
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
-                        <div class="d-flex align-items-center column-gap1">
+                        <div class="d-flex align-items-center column-gap-1">
                             <button
                                 mat-raised-button
                                 color="primary"
@@ -515,12 +515,12 @@
                             class="mx-auto"
                             *ngIf="advanceFiltersApplied && !(getVouchersInProgress$ | async)"
                         >
-                            <span class="d-inline-flex align-items-center column-gap5">
-                                <span class="icon-cross font-12"></span>
+                            <span class="d-inline-flex align-items-center column-gap-05">
+                                <span class="icon-cross font-size-12"></span>
                                 <span>{{ commonLocaleData?.app_clear_filter }}</span>
                             </span>
                         </button>
-                        <div class="d-flex align-items-center column-gap1">
+                        <div class="d-flex align-items-center column-gap-1">
                             <button
                                 mat-raised-button
                                 color="primary"
@@ -536,7 +536,7 @@
                                 </button>
                             </mat-menu>
                             <button mat-raised-button color="primary" (click)="advanceSearchDialog()">
-                                <span class="d-inline-flex align-items-center column-gap5">
+                                <span class="d-inline-flex align-items-center column-gap-05">
                                     {{ commonLocaleData?.app_filter }}
                                     <i class="icon-advance-filter"></i>
                                 </span>
@@ -572,7 +572,7 @@
                         >
                             <!-- S No. -->
                             <ng-container matColumnDef="index">
-                                <th mat-header-cell *matHeaderCellDef>
+                                <th mat-header-cell *matHeaderCellDef class="serial-no-column">
                                     <ng-container *ngIf="!selectedVouchers?.length">#</ng-container>
                                     <span *ngIf="selectedVouchers?.length">
                                         <mat-checkbox
@@ -614,7 +614,7 @@
                                                 "
                                                 width="15%"
                                             >
-                                                <div class="d-flex align-items-center column-gap5">
+                                                <div class="d-flex align-items-center column-gap-05">
                                                     <ng-container
                                                         *ngTemplateOutlet="
                                                             searchTemplate;
@@ -654,7 +654,7 @@
                                                 "
                                                 width="15%"
                                             >
-                                                <div class="d-flex align-items-center column-gap5">
+                                                <div class="d-flex align-items-center column-gap-05">
                                                     <ng-container
                                                         *ngTemplateOutlet="
                                                             searchTemplate;
@@ -682,20 +682,20 @@
                                                     }}
                                                 </div>
                                                 <mat-card
-                                                    class="outline-card account-detail-wrapper"
+                                                    class="outline-card account-detail-wrapper border"
                                                     *ngIf="element?.showAccountDetails"
                                                     (clickOutside)="element.showAccountDetails = false"
                                                 >
                                                     <div
-                                                        class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header"
+                                                        class="d-flex align-items-center justify-content-between column-gap-15 p-3 border-bottom account-header only-top-radius"
                                                     >
-                                                        <h3>
+                                                        <p>
                                                             {{
                                                                 element?.account?.customerName || element?.account?.name
                                                             }}
-                                                        </h3>
+                                                        </p>
                                                         <a (click)="editAccount(element)" class="edit-icon pl-1 pd-t05">
-                                                            <i class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
+                                                            <i class="icon-edit-pencil font-size-16 pr-1 cursor-pointer"></i>
                                                         </a>
                                                     </div>
                                                     <mat-card-content class="pt-3">
@@ -703,7 +703,7 @@
                                                             <li class="text-left">
                                                                 <a
                                                                     href="javascript:;"
-                                                                    class="default-color"
+                                                                    class="theme-foreground-color"
                                                                     (click)="goToLedger(element)"
                                                                     >{{ commonLocaleData?.app_goto_ledger }}</a
                                                                 >
@@ -711,7 +711,7 @@
                                                             <li class="text-left mr-t1">
                                                                 <a
                                                                     href="javascript:;"
-                                                                    class="default-color"
+                                                                    class="theme-foreground-color"
                                                                     (click)="generateVoucher(element)"
                                                                     >{{ commonLocaleData?.app_generate_invoice }}</a
                                                                 >
@@ -913,7 +913,6 @@
                         </table>
                         <mat-paginator
                             *ngIf="!(getVouchersInProgress$ | async) && totalResults > pageSizeOptions[0]"
-                            class="mt-3"
                             (page)="handlePageChange($event)"
                             [length]="totalResults"
                             [pageSize]="advanceFilters.count"
@@ -925,6 +924,7 @@
                         <ng-container
                             *ngTemplateOutlet="noDataFoundMessage; context: { $implicit: !dataSource?.length }"
                         ></ng-container>
+                        <section class="mr-b8"></section>
                     </div>
                 </div>
             </mat-tab>
@@ -933,13 +933,13 @@
             <!-- invoice-content-start -->
             <mat-tab [label]="localeData?.tabs?.invoices" *ngIf="activeTabGroup === 0">
                 <div
-                    class="vouchers-wrapper pt-3 px-4 overflow-visible"
+                    class="vouchers-wrapper pd-15 overflow-visible"
                     *ngIf="voucherType === voucherTypeEnum.sales && activeModule === 'list'"
                 >
                     <div
-                        class="invoice-header d-flex align-items-center justify-content-between mr-b15 flex-wrap row-gap1"
+                        class="invoice-header d-flex align-items-center justify-content-between mr-b15 flex-wrap row-gap-1"
                     >
-                        <div class="d-flex align-items-center column-gap1">
+                        <div class="d-flex align-items-center column-gap-1">
                             <button
                                 mat-raised-button
                                 color="primary"
@@ -984,12 +984,12 @@
                             class="mx-auto"
                             *ngIf="advanceFiltersApplied && !(getVouchersInProgress$ | async)"
                         >
-                            <span class="d-inline-flex align-items-center column-gap5">
-                                <span class="icon-cross font-12"></span>
+                            <span class="d-inline-flex align-items-center column-gap-05">
+                                <span class="icon-cross font-size-12"></span>
                                 <span>{{ commonLocaleData?.app_clear_filter }}</span>
                             </span>
                         </button>
-                        <div class="d-flex align-items-center column-gap1">
+                        <div class="d-flex align-items-center column-gap-1">
                             <!-- Cancel e-invoice button -->
                             <button
                                 mat-raised-button
@@ -1029,7 +1029,7 @@
                                 </button>
                             </mat-menu>
                             <button mat-raised-button color="primary" (click)="advanceSearchDialog()">
-                                <span class="d-inline-flex align-items-center column-gap5">
+                                <span class="d-inline-flex align-items-center column-gap-05">
                                     {{ commonLocaleData?.app_filter }}
                                     <i class="icon-advance-filter"></i>
                                 </span>
@@ -1049,10 +1049,10 @@
                             </select-table-column>
                         </div>
                     </div>
-                    <div class="total-wrapper d-flex column-gap5 w-100">
+                    <div class="total-wrapper d-flex column-gap-05 w-100 mr-b15">
                         <div class="total-sale opening-box pd-1 w-50">
-                            <p class="font-12">{{ localeData?.total_sale }}</p>
-                            <span class="font-16">
+                            <p class="font-size-12">{{ localeData?.total_sale }}</p>
+                            <span class="font-size-16">
                                 <amount-field
                                     [amount]="voucherBalances.grandTotal"
                                     [currencySymbol]="company.baseCurrencySymbol"
@@ -1062,8 +1062,8 @@
                             </span>
                         </div>
                         <div class="total-sale due-box pd-1 w-50">
-                            <p class="font-12">{{ commonLocaleData?.app_total_due }}:</p>
-                            <span class="font-16">
+                            <p class="font-size-12">{{ commonLocaleData?.app_total_due }}:</p>
+                            <span class="font-size-16">
                                 <amount-field
                                     [amount]="voucherBalances.totalDue"
                                     [currencySymbol]="company.baseCurrencySymbol"
@@ -1089,7 +1089,7 @@
                         >
                             <!-- S No. -->
                             <ng-container matColumnDef="index">
-                                <th mat-header-cell *matHeaderCellDef>
+                                <th mat-header-cell *matHeaderCellDef class="serial-no-column">
                                     <ng-container *ngIf="!selectedVouchers?.length">#</ng-container>
                                     <span *ngIf="selectedVouchers?.length">
                                         <mat-checkbox
@@ -1129,7 +1129,7 @@
                                                 (clickOutside)="handleClickOutside($event, invoiceNo, 'invoiceNumber')"
                                                 width="15%"
                                             >
-                                                <div class="d-flex align-items-center column-gap5">
+                                                <div class="d-flex align-items-center column-gap-05">
                                                     <ng-container
                                                         *ngTemplateOutlet="
                                                             searchTemplate;
@@ -1179,7 +1179,7 @@
                                                 "
                                                 width="15%"
                                             >
-                                                <div class="d-flex align-items-center column-gap5">
+                                                <div class="d-flex align-items-center column-gap-05">
                                                     <ng-container
                                                         *ngTemplateOutlet="
                                                             searchTemplate;
@@ -1207,20 +1207,20 @@
                                                     }}
                                                 </div>
                                                 <mat-card
-                                                    class="outline-card account-detail-wrapper"
+                                                    class="outline-card account-detail-wrapper border"
                                                     *ngIf="element?.showAccountDetails"
                                                     (clickOutside)="element.showAccountDetails = false"
                                                 >
                                                     <div
-                                                        class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header"
+                                                        class="d-flex align-items-center justify-content-between column-gap-15 p-3 border-bottom account-header only-top-radius"
                                                     >
-                                                        <h3>
+                                                        <p>
                                                             {{
                                                                 element?.account?.customerName || element?.account?.name
                                                             }}
-                                                        </h3>
+                                                        </p>
                                                         <a (click)="editAccount(element)" class="edit-icon pl-1 pd-t05">
-                                                            <i class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
+                                                            <i class="icon-edit-pencil font-size-16 pr-1 cursor-pointer"></i>
                                                         </a>
                                                     </div>
                                                     <mat-card-content class="pt-3">
@@ -1228,7 +1228,7 @@
                                                             <li class="text-left">
                                                                 <a
                                                                     href="javascript:;"
-                                                                    class="default-color"
+                                                                    class="theme-foreground-color"
                                                                     (click)="goToLedger(element)"
                                                                     >{{ commonLocaleData?.app_goto_ledger }}</a
                                                                 >
@@ -1236,7 +1236,7 @@
                                                             <li class="text-left mr-t1">
                                                                 <a
                                                                     href="javascript:;"
-                                                                    class="default-color"
+                                                                    class="theme-foreground-color"
                                                                     (click)="generateVoucher(element)"
                                                                     >{{ commonLocaleData?.app_generate_invoice }}</a
                                                                 >
@@ -1477,7 +1477,6 @@
                                 dataSource?.length &&
                                 totalResults > pageSizeOptions[0]
                             "
-                            class="mt-3"
                             (page)="handlePageChange($event)"
                             [length]="totalResults"
                             [pageSize]="advanceFilters.count"
@@ -1489,6 +1488,7 @@
                         <ng-container
                             *ngTemplateOutlet="noDataFoundMessage; context: { $implicit: !dataSource?.length }"
                         ></ng-container>
+                        <section class="mr-b8"></section>
                     </div>
                 </div>
             </mat-tab>
@@ -1497,11 +1497,11 @@
             <!-- debit-note-content-start -->
             <mat-tab [label]="localeData?.tabs?.debit_note" *ngIf="activeTabGroup === 1">
                 <div
-                    class="vouchers-wrapper pt-3 px-4 overflow-visible"
+                    class="vouchers-wrapper pd-15 overflow-visible"
                     *ngIf="voucherType === voucherTypeEnum.debitNote && activeModule === 'list'"
                 >
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
-                        <div class="d-flex align-items-center column-gap1">
+                        <div class="d-flex align-items-center column-gap-1">
                             <button
                                 mat-raised-button
                                 color="primary"
@@ -1536,12 +1536,12 @@
                             class="mx-auto"
                             *ngIf="advanceFiltersApplied && !(getVouchersInProgress$ | async)"
                         >
-                            <span class="d-inline-flex align-items-center column-gap5">
-                                <span class="icon-cross font-12"></span>
+                            <span class="d-inline-flex align-items-center column-gap-05">
+                                <span class="icon-cross font-size-12"></span>
                                 <span>{{ commonLocaleData?.app_clear_filter }}</span>
                             </span>
                         </button>
-                        <div class="d-flex align-items-center column-gap1">
+                        <div class="d-flex align-items-center column-gap-1">
                             <!-- Cancel e-invoice button -->
                             <button
                                 mat-raised-button
@@ -1574,7 +1574,7 @@
                                 </button>
                             </mat-menu>
                             <button mat-raised-button color="primary" (click)="advanceSearchDialog()">
-                                <span class="d-inline-flex align-items-center column-gap5">
+                                <span class="d-inline-flex align-items-center column-gap-05">
                                     {{ commonLocaleData?.app_filter }}
                                     <i class="icon-advance-filter"></i>
                                 </span>
@@ -1594,10 +1594,10 @@
                             </select-table-column>
                         </div>
                     </div>
-                    <div class="total-wrapper d-flex column-gap5 w-100">
+                    <div class="total-wrapper d-flex column-gap-05 w-100 mr-b15">
                         <div class="total-sale opening-box pd-1 w-100">
-                            <p class="font-12">{{ localeData?.total_sale }}</p>
-                            <span class="font-16">
+                            <p class="font-size-12">{{ localeData?.total_sale }}</p>
+                            <span class="font-size-16">
                                 <amount-field
                                     [amount]="voucherBalances.grandTotal"
                                     [currencySymbol]="company.baseCurrencySymbol"
@@ -1623,7 +1623,7 @@
                         >
                             <!-- S No. -->
                             <ng-container matColumnDef="index">
-                                <th mat-header-cell *matHeaderCellDef width="50px">
+                                <th mat-header-cell *matHeaderCellDef class="serial-no-column">
                                     <ng-container *ngIf="!selectedVouchers?.length">#</ng-container>
                                     <span *ngIf="selectedVouchers?.length">
                                         <mat-checkbox
@@ -1665,7 +1665,7 @@
                                                 "
                                                 width="15%"
                                             >
-                                                <div class="d-flex align-items-center column-gap5">
+                                                <div class="d-flex align-items-center column-gap-05">
                                                     <ng-container
                                                         *ngTemplateOutlet="
                                                             searchTemplate;
@@ -1702,7 +1702,7 @@
                                                 "
                                                 width="15%"
                                             >
-                                                <div class="d-flex align-items-center column-gap5">
+                                                <div class="d-flex align-items-center column-gap-05">
                                                     <ng-container
                                                         *ngTemplateOutlet="
                                                             searchTemplate;
@@ -1730,18 +1730,18 @@
                                                     }}
                                                 </div>
                                                 <mat-card
-                                                    class="outline-card account-detail-wrapper"
+                                                    class="outline-card account-detail-wrapper border"
                                                     *ngIf="element?.showAccountDetails"
                                                     (clickOutside)="element.showAccountDetails = false"
                                                 >
                                                     <div
-                                                        class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header"
+                                                        class="d-flex align-items-center justify-content-between column-gap-15 p-3 border-bottom account-header only-top-radius"
                                                     >
-                                                        <h3>
+                                                        <p>
                                                             {{
                                                                 element?.account?.customerName || element?.account?.name
                                                             }}
-                                                        </h3>
+                                                        </p>
                                                         <button
                                                             mat-mini-fab
                                                             color="primary"
@@ -1756,7 +1756,7 @@
                                                             <li class="text-left">
                                                                 <a
                                                                     href="javascript:;"
-                                                                    class="default-color"
+                                                                    class="theme-foreground-color"
                                                                     (click)="goToLedger(element)"
                                                                     >{{ commonLocaleData?.app_goto_ledger }}</a
                                                                 >
@@ -1764,7 +1764,7 @@
                                                             <li class="text-left mr-t1">
                                                                 <a
                                                                     href="javascript:;"
-                                                                    class="default-color"
+                                                                    class="theme-foreground-color"
                                                                     (click)="generateVoucher(element)"
                                                                     >{{ commonLocaleData?.app_generate_invoice }}</a
                                                                 >
@@ -1950,7 +1950,6 @@
                         </table>
                         <mat-paginator
                             *ngIf="!(getVouchersInProgress$ | async) && totalResults > pageSizeOptions[0]"
-                            class="mt-3"
                             (page)="handlePageChange($event)"
                             [length]="totalResults"
                             [pageSize]="advanceFilters.count"
@@ -1962,6 +1961,7 @@
                         <ng-container
                             *ngTemplateOutlet="noDataFoundMessage; context: { $implicit: !dataSource?.length }"
                         ></ng-container>
+                        <section class="mr-b8"></section>
                     </div>
                 </div>
             </mat-tab>
@@ -1970,11 +1970,11 @@
             <!-- credit-note-content-start -->
             <mat-tab [label]="localeData?.tabs?.credit_note" *ngIf="activeTabGroup === 1">
                 <div
-                    class="vouchers-wrapper pt-3 px-4 overflow-visible"
+                    class="vouchers-wrapper pd-15 overflow-visible"
                     *ngIf="voucherType === voucherTypeEnum.creditNote && activeModule === 'list'"
                 >
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
-                        <div class="d-flex align-items-center column-gap1">
+                        <div class="d-flex align-items-center column-gap-1">
                             <button
                                 mat-raised-button
                                 color="primary"
@@ -2010,12 +2010,12 @@
                             class="mx-auto"
                             *ngIf="advanceFiltersApplied && !(getVouchersInProgress$ | async)"
                         >
-                            <span class="d-inline-flex align-items-center column-gap5">
-                                <span class="icon-cross font-12"></span>
+                            <span class="d-inline-flex align-items-center column-gap-05">
+                                <span class="icon-cross font-size-12"></span>
                                 <span>{{ commonLocaleData?.app_clear_filter }}</span>
                             </span>
                         </button>
-                        <div class="d-flex align-items-center column-gap1">
+                        <div class="d-flex align-items-center column-gap-1">
                             <!-- Cancel e-invoice button -->
                             <button
                                 mat-raised-button
@@ -2048,7 +2048,7 @@
                                 </button>
                             </mat-menu>
                             <button mat-raised-button color="primary" (click)="advanceSearchDialog()">
-                                <span class="d-inline-flex align-items-center column-gap5">
+                                <span class="d-inline-flex align-items-center column-gap-05">
                                     {{ commonLocaleData?.app_filter }}
                                     <i class="icon-advance-filter"></i>
                                 </span>
@@ -2068,10 +2068,10 @@
                             </select-table-column>
                         </div>
                     </div>
-                    <div class="total-wrapper d-flex column-gap5 w-100">
+                    <div class="total-wrapper d-flex column-gap-05 w-100 mr-b15">
                         <div class="total-sale opening-box pd-1 w-100">
-                            <p class="font-12">{{ localeData?.total_sale }}</p>
-                            <span class="font-16">
+                            <p class="font-size-12">{{ localeData?.total_sale }}</p>
+                            <span class="font-size-16">
                                 <amount-field
                                     [amount]="voucherBalances.grandTotal"
                                     [currencySymbol]="company.baseCurrencySymbol"
@@ -2097,7 +2097,7 @@
                         >
                             <!-- S No. -->
                             <ng-container matColumnDef="index">
-                                <th mat-header-cell *matHeaderCellDef>
+                                <th mat-header-cell *matHeaderCellDef class="serial-no-column">
                                     <ng-container *ngIf="!selectedVouchers?.length">#</ng-container>
                                     <span *ngIf="selectedVouchers?.length">
                                         <mat-checkbox
@@ -2139,7 +2139,7 @@
                                                 "
                                                 width="15%"
                                             >
-                                                <div class="d-flex align-items-center column-gap5 text-ellipsis">
+                                                <div class="d-flex align-items-center column-gap-05 text-ellipsis">
                                                     <ng-container
                                                         *ngTemplateOutlet="
                                                             searchTemplate;
@@ -2176,7 +2176,7 @@
                                                 "
                                                 width="15%"
                                             >
-                                                <div class="d-flex align-items-center column-gap5">
+                                                <div class="d-flex align-items-center column-gap-05">
                                                     <ng-container
                                                         *ngTemplateOutlet="
                                                             searchTemplate;
@@ -2204,16 +2204,16 @@
                                                     }}
                                                 </div>
                                                 <mat-card
-                                                    class="outline-card account-detail-wrapper"
+                                                    class="outline-card account-detail-wrapper border"
                                                     *ngIf="element?.showAccountDetails"
                                                     (clickOutside)="element.showAccountDetails = false"
                                                 >
                                                     <div
-                                                        class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header"
+                                                        class="d-flex align-items-center justify-content-between column-gap-15 p-3 border-bottom account-header only-top-radius"
                                                     >
-                                                        <h3>{{ element?.customerName | titlecase }}</h3>
+                                                        <h3>{{ element.account?.customerName || element?.account?.name | titlecase }}</h3>
                                                         <a (click)="editAccount(element)" class="edit-icon pl-1 pd-t05">
-                                                            <i class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
+                                                            <i class="icon-edit-pencil font-size-16 pr-1 cursor-pointer"></i>
                                                         </a>
                                                     </div>
                                                     <mat-card-content class="pt-3">
@@ -2221,7 +2221,7 @@
                                                             <li class="text-left">
                                                                 <a
                                                                     href="javascript:;"
-                                                                    class="default-color"
+                                                                    class="theme-foreground-color"
                                                                     (click)="goToLedger(element)"
                                                                     >{{ commonLocaleData?.app_goto_ledger }}</a
                                                                 >
@@ -2229,7 +2229,7 @@
                                                             <li class="text-left mr-t1">
                                                                 <a
                                                                     href="javascript:;"
-                                                                    class="default-color"
+                                                                    class="theme-foreground-color"
                                                                     (click)="generateVoucher(element)"
                                                                     >{{ commonLocaleData?.app_generate_invoice }}</a
                                                                 >
@@ -2417,7 +2417,6 @@
                         </table>
                         <mat-paginator
                             *ngIf="!(getVouchersInProgress$ | async) && totalResults > pageSizeOptions[0]"
-                            class="mt-3"
                             (page)="handlePageChange($event)"
                             [length]="totalResults"
                             [pageSize]="advanceFilters.count"
@@ -2429,6 +2428,7 @@
                         <ng-container
                             *ngTemplateOutlet="noDataFoundMessage; context: { $implicit: !dataSource?.length }"
                         ></ng-container>
+                        <section class="mr-b8"></section>
                     </div>
                 </div>
             </mat-tab>
@@ -2437,9 +2437,9 @@
             <!-- pending-content-start -->
             <mat-tab [label]="localeData?.tabs?.pending" *ngIf="activeTabGroup === 0 || activeTabGroup === 1">
                 <div *ngIf="activeModule === 'pending'">
-                    <div class="vouchers-wrapper pt-3 px-4 overflow-visible">
+                    <div class="vouchers-wrapper pd-15 overflow-visible">
                         <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
-                            <div class="d-flex align-items-center column-gap1">
+                            <div class="d-flex align-items-center column-gap-1">
                                 <reactive-dropdown-field
                                     *ngIf="
                                         voucherType === voucherTypeEnum.creditNote ||
@@ -2503,8 +2503,8 @@
                                 *ngIf="customDateSelected && !(isGetAllRequestInProcess$ | async)"
                                 (click)="resetDateSearch()"
                             >
-                                <span class="d-inline-flex align-items-center column-gap5">
-                                    <span class="icon-cross font-12"></span>
+                                <span class="d-inline-flex align-items-center column-gap-05">
+                                    <span class="icon-cross font-size-12"></span>
                                     <span>{{ commonLocaleData?.app_clear_filter }}</span>
                                 </span>
                             </button>
@@ -2518,7 +2518,7 @@
                                 [hidden]="(isGetAllRequestInProcess$ | async) || !ledgersData?.length"
                             >
                                 <ng-container matColumnDef="position">
-                                    <th mat-header-cell *matHeaderCellDef>
+                                    <th mat-header-cell *matHeaderCellDef class="serial-no-column">
                                         <ng-container *ngIf="!selectedPendingVouchers?.length">#</ng-container>
                                         <span *ngIf="selectedPendingVouchers?.length">
                                             <mat-checkbox
@@ -2591,16 +2591,16 @@
                                             {{ element?.account?.name | titlecase }}
                                         </div>
                                         <mat-card
-                                            class="outline-card account-detail-wrapper"
+                                            class="outline-card account-detail-wrapper border"
                                             *ngIf="element?.showAccountDetails"
                                             (clickOutside)="element.showAccountDetails = false"
                                         >
                                             <div
-                                                class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header"
+                                                class="d-flex align-items-center justify-content-between column-gap-15 p-3 border-bottom account-header only-top-radius"
                                             >
-                                                <h3>{{ element?.account?.name }}</h3>
+                                                <p>{{ element?.account?.name }}</p>
                                                 <a (click)="editAccount(element)" class="edit-icon pl-1 pd-t05">
-                                                    <i class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
+                                                    <i class="icon-edit-pencil font-size-16 pr-1 cursor-pointer"></i>
                                                 </a>
                                             </div>
                                             <mat-card-content class="pt-3">
@@ -2608,7 +2608,7 @@
                                                     <li class="text-left">
                                                         <a
                                                             href="javascript:;"
-                                                            class="default-color"
+                                                            class="theme-foreground-color"
                                                             (click)="goToLedger(element)"
                                                             >{{ commonLocaleData?.app_goto_ledger }}</a
                                                         >
@@ -2616,7 +2616,7 @@
                                                     <li class="text-left mr-t1">
                                                         <a
                                                             href="javascript:;"
-                                                            class="default-color"
+                                                            class="theme-foreground-color"
                                                             (click)="generateVoucher(element)"
                                                             >{{ commonLocaleData?.app_generate_invoice }}</a
                                                         >
@@ -2662,7 +2662,6 @@
                             </table>
                             <mat-paginator
                                 *ngIf="!(isGetAllRequestInProcess$ | async) && pendingTotalResults > pageSizeOptions[0]"
-                                class="mt-3"
                                 (page)="handlePageChange($event)"
                                 [length]="pendingTotalResults"
                                 [pageSize]="ledgerSearchRequest.count"
@@ -2674,6 +2673,7 @@
                             <ng-container
                                 *ngTemplateOutlet="noDataFoundMessage; context: { $implicit: !ledgersData?.length }"
                             ></ng-container>
+                            <section class="mr-b8"></section>
                         </div>
                     </div>
                 </div>
@@ -2683,11 +2683,11 @@
             <!-- purchase-order-start -->
             <mat-tab [label]="localeData?.po_number" *ngIf="activeTabGroup === 2">
                 <div
-                    class="vouchers-wrapper pt-3 px-4 overflow-visible"
+                    class="vouchers-wrapper pd-15 overflow-visible"
                     *ngIf="voucherType === voucherTypeEnum.purchaseOrder && activeModule === 'list'"
                 >
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
-                        <div class="d-flex align-items-center column-gap1">
+                        <div class="d-flex align-items-center column-gap-1">
                             <button
                                 mat-raised-button
                                 color="primary"
@@ -2722,12 +2722,12 @@
                             class="mx-auto"
                             *ngIf="advanceFiltersApplied && !(getVouchersInProgress$ | async)"
                         >
-                            <span class="d-inline-flex align-items-center column-gap5">
-                                <span class="icon-cross font-12"></span>
+                            <span class="d-inline-flex align-items-center column-gap-05">
+                                <span class="icon-cross font-size-12"></span>
                                 <span>{{ commonLocaleData?.app_clear_filter }}</span>
                             </span>
                         </button>
-                        <div class="d-flex align-items-center column-gap1">
+                        <div class="d-flex align-items-center column-gap-1">
                             <button
                                 mat-raised-button
                                 color="primary"
@@ -2752,7 +2752,7 @@
                                 </button>
                             </mat-menu>
                             <button mat-raised-button color="primary" (click)="advanceSearchDialog()">
-                                <span class="d-inline-flex align-items-center column-gap5">
+                                <span class="d-inline-flex align-items-center column-gap-05">
                                     {{ commonLocaleData?.app_filter }}
                                     <i class="icon-advance-filter"></i>
                                 </span>
@@ -2788,7 +2788,7 @@
                         >
                             <!-- S No. -->
                             <ng-container matColumnDef="index">
-                                <th mat-header-cell *matHeaderCellDef width="50px">
+                                <th mat-header-cell *matHeaderCellDef class="serial-no-column">
                                     <ng-container *ngIf="!selectedVouchers?.length">#</ng-container>
                                     <span *ngIf="selectedVouchers?.length">
                                         <mat-checkbox
@@ -2840,7 +2840,7 @@
                                                 "
                                                 width="15%"
                                             >
-                                                <div class="d-flex align-items-center column-gap5">
+                                                <div class="d-flex align-items-center column-gap-05">
                                                     <ng-container
                                                         *ngTemplateOutlet="
                                                             searchTemplate;
@@ -2885,7 +2885,7 @@
                                                 "
                                                 width="15%"
                                             >
-                                                <div class="d-flex align-items-center column-gap5">
+                                                <div class="d-flex align-items-center column-gap-05">
                                                     <ng-container
                                                         *ngTemplateOutlet="
                                                             searchTemplate;
@@ -3050,11 +3050,11 @@
                             <ng-container matColumnDef="more_options">
                                 <th mat-header-cell *matHeaderCellDef class="w125">&nbsp;</th>
                                 <td mat-cell *matCellDef="let element">
-                                    <div class="d-flex action-btn column-gap5">
+                                    <div class="d-flex action-btn column-gap-05">
                                         <button
                                             *ngIf="element?.status === 'open' && !isCompany && !isConsolidatedBranch"
                                             mat-stroked-button
-                                            class="mat-icon-sm-btn icon-font-11"
+                                            class="icon-font-11"
                                             [matTooltip]="localeData?.convert_to_bill"
                                             [matTooltipPosition]="'above'"
                                             (click)="convertBillDialog(element)"
@@ -3063,7 +3063,7 @@
                                         </button>
                                         <button
                                             mat-stroked-button
-                                            class="mat-icon-sm-btn icon-font-11"
+                                            class="icon-font-11"
                                             [matTooltip]="commonLocaleData?.app_send_email"
                                             [matTooltipPosition]="'above'"
                                             (click)="openEmailSendDialog(element)"
@@ -3099,7 +3099,6 @@
                         </table>
                         <mat-paginator
                             *ngIf="!(getVouchersInProgress$ | async) && totalResults > pageSizeOptions[0]"
-                            class="mt-3"
                             (page)="handlePageChange($event)"
                             [length]="totalResults"
                             [pageSize]="advanceFilters.count"
@@ -3111,6 +3110,7 @@
                         <ng-container
                             *ngTemplateOutlet="noDataFoundMessage; context: { $implicit: !dataSource?.length }"
                         ></ng-container>
+                        <section class="mr-b8"></section>
                     </div>
                 </div>
             </mat-tab>
@@ -3119,11 +3119,11 @@
             <!-- bill-content-start -->
             <mat-tab [label]="localeData?.bill" *ngIf="activeTabGroup === 2">
                 <div
-                    class="vouchers-wrapper pt-3 px-4 overflow-visible"
+                    class="vouchers-wrapper pd-15 overflow-visible"
                     *ngIf="voucherType === voucherTypeEnum.purchase && activeModule === 'list'"
                 >
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
-                        <div class="d-flex align-items-center column-gap1">
+                        <div class="d-flex align-items-center column-gap-1">
                             <button
                                 mat-raised-button
                                 color="primary"
@@ -3152,9 +3152,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="d-flex align-items-center column-gap1">
+                        <div class="d-flex align-items-center column-gap-1">
                             <button mat-raised-button color="primary" (click)="advanceSearchDialog()">
-                                <span class="d-inline-flex align-items-center column-gap5">
+                                <span class="d-inline-flex align-items-center column-gap-05">
                                     {{ commonLocaleData?.app_filter }}
                                     <i class="icon-advance-filter"></i>
                                 </span>
@@ -3174,10 +3174,10 @@
                             </select-table-column>
                         </div>
                     </div>
-                    <div class="total-wrapper d-flex column-gap5 w-100">
+                    <div class="total-wrapper d-flex column-gap-05 w-100 mr-b15">
                         <div class="total-sale opening-box pd-1 w-100">
-                            <p class="font-12">{{ localeData?.total_purchases }}</p>
-                            <span class="font-16">
+                            <p class="font-size-12">{{ localeData?.total_purchases }}</p>
+                            <span class="font-size-16">
                                 <amount-field
                                     [amount]="voucherBalances.grandTotal"
                                     [currencySymbol]="company.baseCurrencySymbol"
@@ -3203,7 +3203,7 @@
                         >
                             <!-- S No. -->
                             <ng-container matColumnDef="index">
-                                <th mat-header-cell *matHeaderCellDef width="50px">
+                                <th mat-header-cell *matHeaderCellDef class="serial-no-column">
                                     <ng-container *ngIf="!selectedVouchers?.length">#</ng-container>
                                     <span *ngIf="selectedVouchers?.length">
                                         <mat-checkbox
@@ -3243,7 +3243,7 @@
                                                 (clickOutside)="handleClickOutside($event, invoiceNo, 'billNumber')"
                                                 width="15%"
                                             >
-                                                <div class="d-flex align-items-center column-gap5 text-ellipsis">
+                                                <div class="d-flex align-items-center column-gap-05 text-ellipsis">
                                                     <ng-container
                                                         *ngTemplateOutlet="
                                                             searchTemplate;
@@ -3294,7 +3294,7 @@
                                                 "
                                                 width="15%"
                                             >
-                                                <div class="d-flex align-items-center column-gap5 text-ellipsis">
+                                                <div class="d-flex align-items-center column-gap-05 text-ellipsis">
                                                     <ng-container
                                                         *ngTemplateOutlet="
                                                             searchTemplate;
@@ -3352,7 +3352,7 @@
                                                 "
                                                 width="15%"
                                             >
-                                                <div class="d-flex align-items-center column-gap5">
+                                                <div class="d-flex align-items-center column-gap-05">
                                                     <ng-container
                                                         *ngTemplateOutlet="
                                                             searchTemplate;
@@ -3537,7 +3537,6 @@
                         </table>
                         <mat-paginator
                             *ngIf="!(getVouchersInProgress$ | async) && totalResults > pageSizeOptions[0]"
-                            class="mt-3"
                             (page)="handlePageChange($event)"
                             [length]="totalResults"
                             [pageSize]="advanceFilters.count"
@@ -3549,6 +3548,7 @@
                         <ng-container
                             *ngTemplateOutlet="noDataFoundMessage; context: { $implicit: !dataSource?.length }"
                         ></ng-container>
+                        <section class="mr-b8"></section>
                     </div>
                 </div>
             </mat-tab>
@@ -3557,11 +3557,11 @@
             <!-- receipt-content-start -->
             <mat-tab [label]="localeData?.tabs?.receipt" *ngIf="activeTabGroup === 3">
                 <div
-                    class="vouchers-wrapper pt-3 px-4 overflow-visible"
+                    class="vouchers-wrapper pd-15 overflow-visible"
                     *ngIf="voucherType === voucherTypeEnum.receipt && activeModule === 'list'"
                 >
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
-                        <div class="d-flex align-items-center column-gap1">
+                        <div class="d-flex align-items-center column-gap-1">
                             <button
                                 mat-raised-button
                                 color="primary"
@@ -3596,12 +3596,12 @@
                             class="mx-auto"
                             *ngIf="advanceFiltersApplied && !(getVouchersInProgress$ | async)"
                         >
-                            <span class="d-inline-flex align-items-center column-gap5">
-                                <span class="icon-cross font-12"></span>
+                            <span class="d-inline-flex align-items-center column-gap-05">
+                                <span class="icon-cross font-size-12"></span>
                                 <span>{{ commonLocaleData?.app_clear_filter }}</span>
                             </span>
                         </button>
-                        <div class="d-flex align-items-center column-gap1">
+                        <div class="d-flex align-items-center column-gap-1">
                             <button
                                 mat-raised-button
                                 color="primary"
@@ -3617,7 +3617,7 @@
                                 </button>
                             </mat-menu>
                             <button mat-raised-button color="primary" (click)="advanceSearchDialog()">
-                                <span class="d-inline-flex align-items-center column-gap5">
+                                <span class="d-inline-flex align-items-center column-gap-05">
                                     {{ commonLocaleData?.app_filter }}
                                     <i class="icon-advance-filter"></i>
                                 </span>
@@ -3637,10 +3637,10 @@
                             </select-table-column>
                         </div>
                     </div>
-                    <div class="total-wrapper d-flex column-gap5 w-100">
+                    <div class="total-wrapper d-flex column-gap-05 w-100 mr-b15">
                         <div class="total-sale opening-box pd-1 w-25">
-                            <p class="font-12">{{ localeData?.advanced_receipts }}</p>
-                            <span class="font-16">
+                            <p class="font-size-12">{{ localeData?.advanced_receipts }}</p>
+                            <span class="font-size-16">
                                 <amount-field
                                     [amount]="voucherBalances.advanceReceiptTotal"
                                     [currencySymbol]="company.baseCurrencySymbol"
@@ -3650,8 +3650,8 @@
                             </span>
                         </div>
                         <div class="total-sale due-box pd-1 w-25">
-                            <p class="font-12">{{ localeData?.normal_receipts }}:</p>
-                            <span class="font-16">
+                            <p class="font-size-12">{{ localeData?.normal_receipts }}:</p>
+                            <span class="font-size-16">
                                 <amount-field
                                     [amount]="voucherBalances.normalReceiptTotal"
                                     [currencySymbol]="company.baseCurrencySymbol"
@@ -3661,8 +3661,8 @@
                             </span>
                         </div>
                         <div class="total-sale payment-receipt pd-1 w-25">
-                            <p class="font-12">{{ localeData?.total_receipts }}:</p>
-                            <span class="font-16">
+                            <p class="font-size-12">{{ localeData?.total_receipts }}:</p>
+                            <span class="font-size-16">
                                 <amount-field
                                     [amount]="voucherBalances.grandTotal"
                                     [currencySymbol]="company.baseCurrencySymbol"
@@ -3672,8 +3672,8 @@
                             </span>
                         </div>
                         <div class="total-sale closing-box pd-1 w-25">
-                            <p class="font-12">{{ localeData?.unused_receipts }}:</p>
-                            <span class="font-16">
+                            <p class="font-size-12">{{ localeData?.unused_receipts }}:</p>
+                            <span class="font-size-16">
                                 <amount-field
                                     [amount]="voucherBalances.totalDue"
                                     [currencySymbol]="company.baseCurrencySymbol"
@@ -3699,7 +3699,7 @@
                         >
                             <!-- S No. -->
                             <ng-container matColumnDef="index">
-                                <th mat-header-cell *matHeaderCellDef width="50px">
+                                <th mat-header-cell *matHeaderCellDef class="serial-no-column">
                                     <ng-container *ngIf="!selectedVouchers?.length">#</ng-container>
                                     <span *ngIf="selectedVouchers?.length">
                                         <mat-checkbox
@@ -3739,7 +3739,7 @@
                                                 (clickOutside)="handleClickOutside($event, receiptNo, 'receiptNumber')"
                                                 width="15%"
                                             >
-                                                <div class="d-flex align-items-center column-gap5">
+                                                <div class="d-flex align-items-center column-gap-05">
                                                     <ng-container
                                                         *ngTemplateOutlet="
                                                             searchTemplate;
@@ -3831,7 +3831,7 @@
                                                 "
                                                 width="15%"
                                             >
-                                                <div class="d-flex align-items-center column-gap5">
+                                                <div class="d-flex align-items-center column-gap-05">
                                                     <ng-container
                                                         *ngTemplateOutlet="
                                                             searchTemplate;
@@ -3957,7 +3957,6 @@
                         </table>
                         <mat-paginator
                             *ngIf="!(getVouchersInProgress$ | async) && totalResults > pageSizeOptions[0]"
-                            class="mt-3"
                             (page)="handlePageChange($event)"
                             [length]="totalResults"
                             [pageSize]="advanceFilters.count"
@@ -3969,6 +3968,7 @@
                         <ng-container
                             *ngTemplateOutlet="noDataFoundMessage; context: { $implicit: !dataSource?.length }"
                         ></ng-container>
+                        <section class="mr-b8"></section>
                     </div>
                 </div>
             </mat-tab>
@@ -3977,11 +3977,11 @@
             <!-- payment-content-start -->
             <mat-tab [label]="localeData?.tabs?.payment" *ngIf="activeTabGroup === 4">
                 <div
-                    class="vouchers-wrapper pt-3 px-4 overflow-visible"
+                    class="vouchers-wrapper pd-15 overflow-visible"
                     *ngIf="voucherType === voucherTypeEnum.payment && activeModule === 'list'"
                 >
                     <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
-                        <div class="d-flex align-items-center column-gap1">
+                        <div class="d-flex align-items-center column-gap-1">
                             <button
                                 mat-raised-button
                                 color="primary"
@@ -4016,12 +4016,12 @@
                             class="mx-auto"
                             *ngIf="advanceFiltersApplied && !(getVouchersInProgress$ | async)"
                         >
-                            <span class="d-inline-flex align-items-center column-gap5">
-                                <span class="icon-cross font-12"></span>
+                            <span class="d-inline-flex align-items-center column-gap-05">
+                                <span class="icon-cross font-size-12"></span>
                                 <span>{{ commonLocaleData?.app_clear_filter }}</span>
                             </span>
                         </button>
-                        <div class="d-flex align-items-center column-gap1">
+                        <div class="d-flex align-items-center column-gap-1">
                             <button
                                 mat-raised-button
                                 color="primary"
@@ -4037,7 +4037,7 @@
                                 </button>
                             </mat-menu>
                             <button mat-raised-button color="primary" (click)="advanceSearchDialog()">
-                                <span class="d-inline-flex align-items-center column-gap5">
+                                <span class="d-inline-flex align-items-center column-gap-05">
                                     {{ commonLocaleData?.app_filter }}
                                     <i class="icon-advance-filter"></i>
                                 </span>
@@ -4057,10 +4057,10 @@
                             </select-table-column>
                         </div>
                     </div>
-                    <div class="total-wrapper d-flex column-gap5 w-100">
+                    <div class="total-wrapper d-flex column-gap-05 w-100 mr-b15">
                         <div class="total-sale payment-receipt pd-1 w-50">
-                            <p class="font-12">{{ localeData?.total_payments }}:</p>
-                            <span class="font-16">
+                            <p class="font-size-12">{{ localeData?.total_payments }}:</p>
+                            <span class="font-size-16">
                                 <amount-field
                                     [amount]="voucherBalances.grandTotal"
                                     [currencySymbol]="company.baseCurrencySymbol"
@@ -4070,8 +4070,8 @@
                             </span>
                         </div>
                         <div class="total-sale closing-box pd-1 w-50">
-                            <p class="font-12">{{ localeData?.unused_payments }}:</p>
-                            <span class="font-16">
+                            <p class="font-size-12">{{ localeData?.unused_payments }}:</p>
+                            <span class="font-size-16">
                                 <amount-field
                                     [amount]="voucherBalances.totalDue"
                                     [currencySymbol]="company.baseCurrencySymbol"
@@ -4097,7 +4097,7 @@
                         >
                             <!-- S No. -->
                             <ng-container matColumnDef="index">
-                                <th mat-header-cell *matHeaderCellDef width="50px">
+                                <th mat-header-cell *matHeaderCellDef class="serial-no-column">
                                     <ng-container *ngIf="!selectedVouchers?.length">#</ng-container>
                                     <span *ngIf="selectedVouchers?.length">
                                         <mat-checkbox
@@ -4137,7 +4137,7 @@
                                                 (clickOutside)="handleClickOutside($event, paymentNo, 'paymentNumber')"
                                                 width="15%"
                                             >
-                                                <div class="d-flex align-items-center column-gap5">
+                                                <div class="d-flex align-items-center column-gap-05">
                                                     <ng-container
                                                         *ngTemplateOutlet="
                                                             searchTemplate;
@@ -4193,7 +4193,7 @@
                                                 "
                                                 width="15%"
                                             >
-                                                <div class="d-flex align-items-center column-gap5">
+                                                <div class="d-flex align-items-center column-gap-05">
                                                     <ng-container
                                                         *ngTemplateOutlet="
                                                             searchTemplate;
@@ -4316,7 +4316,6 @@
                         </table>
                         <mat-paginator
                             *ngIf="!(getVouchersInProgress$ | async) && totalResults > pageSizeOptions[0]"
-                            class="mt-3"
                             (page)="handlePageChange($event)"
                             [length]="totalResults"
                             [pageSize]="advanceFilters.count"
@@ -4328,6 +4327,7 @@
                         <ng-container
                             *ngTemplateOutlet="noDataFoundMessage; context: { $implicit: !dataSource?.length }"
                         ></ng-container>
+                        <section class="mr-b8"></section>
                     </div>
                 </div>
             </mat-tab>
@@ -4336,9 +4336,9 @@
             <!-- pending-content-start -->
             <mat-tab [label]="localeData?.tabs?.pending" *ngIf="activeTabGroup === 3 || activeTabGroup === 4">
                 <div *ngIf="activeModule === 'pending'">
-                    <div class="vouchers-wrapper pt-3 px-4 overflow-visible">
+                    <div class="vouchers-wrapper pd-15 overflow-visible">
                         <div class="invoice-header d-flex align-items-center justify-content-between mr-b15">
-                            <div class="d-flex align-items-center column-gap1">
+                            <div class="d-flex align-items-center column-gap-1">
                                 <div class="custom-datepicker-wrapper">
                                     <div 
                                         class="custom-datepicker" 
@@ -4384,8 +4384,8 @@
                                 *ngIf="customDateSelected && !(isGetAllRequestInProcess$ | async)"
                                 (click)="resetDateSearch()"
                             >
-                                <span class="d-inline-flex align-items-center column-gap5">
-                                    <span class="icon-cross font-12"></span>
+                                <span class="d-inline-flex align-items-center column-gap-05">
+                                    <span class="icon-cross font-size-12"></span>
                                     <span>{{ commonLocaleData?.app_clear_filter }}</span>
                                 </span>
                             </button>
@@ -4399,7 +4399,7 @@
                                 [hidden]="(isGetAllRequestInProcess$ | async) || !ledgersData?.length"
                             >
                                 <ng-container matColumnDef="position">
-                                    <th mat-header-cell *matHeaderCellDef>
+                                    <th mat-header-cell *matHeaderCellDef class="serial-no-column">
                                         <ng-container *ngIf="!selectedPendingVouchers?.length">#</ng-container>
                                         <span *ngIf="selectedPendingVouchers?.length">
                                             <mat-checkbox
@@ -4472,16 +4472,16 @@
                                             {{ element?.account?.name | titlecase }}
                                         </div>
                                         <mat-card
-                                            class="outline-card account-detail-wrapper"
+                                            class="outline-card account-detail-wrapper border"
                                             *ngIf="element?.showAccountDetails"
                                             (clickOutside)="element.showAccountDetails = false"
                                         >
                                             <div
-                                                class="d-flex align-items-center justify-content-between column-gap15 p-3 border-bottom account-header"
+                                                class="d-flex align-items-center justify-content-between column-gap-15 p-3 border-bottom account-header only-top-radius"
                                             >
-                                                <h3>{{ element?.account?.name }}</h3>
+                                                <p>{{ element?.account?.name }}</p>
                                                 <a (click)="editAccount(element)" class="edit-icon pl-1 pd-t05">
-                                                    <i class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
+                                                    <i class="icon-edit-pencil font-size-16 pr-1 cursor-pointer"></i>
                                                 </a>
                                             </div>
                                             <mat-card-content class="pt-3">
@@ -4489,7 +4489,7 @@
                                                     <li class="text-left">
                                                         <a
                                                             href="javascript:;"
-                                                            class="default-color"
+                                                            class="theme-foreground-color"
                                                             (click)="goToLedger(element)"
                                                             >{{ commonLocaleData?.app_goto_ledger }}</a
                                                         >
@@ -4535,7 +4535,6 @@
                             </table>
                             <mat-paginator
                                 *ngIf="!(isGetAllRequestInProcess$ | async) && pendingTotalResults > pageSizeOptions[0]"
-                                class="mt-3"
                                 (page)="handlePageChange($event)"
                                 [length]="pendingTotalResults"
                                 [pageSize]="ledgerSearchRequest.count"
@@ -4547,6 +4546,7 @@
                             <ng-container
                                 *ngTemplateOutlet="noDataFoundMessage; context: { $implicit: !ledgersData?.length }"
                             ></ng-container>
+                            <section class="mr-b8"></section>
                         </div>
                     </div>
                 </div>
@@ -4588,12 +4588,12 @@
                                         </ng-template>
                                         <ng-container formGroupName="invoiceSettings">
                                             <div class="tabs-box-content py-3">
-                                                <h4 class="font-16 border-bottom pb-2 mb-3">
+                                                <p class="font-size-16 border-bottom pb-2 mb-3">
                                                     {{ localeData?.general }}
-                                                    <span class="text-gray font-12">{{
+                                                    <span class="text-light font-size-12">{{
                                                         localeData?.general_settings_applicable
                                                     }}</span>
-                                                </h4>
+                                                </p>
                                                 <div>
                                                     <mat-slide-toggle
                                                         aria-label="enable narration onin voucher"
@@ -4628,14 +4628,14 @@
                                             {{ commonLocaleData?.app_email }}
                                         </ng-template>
                                         <div class="tabs-box-content py-3">
-                                            <h4 class="font-16 border-bottom pb-2 mb-3">
+                                            <p class="font-size-16 border-bottom pb-2 mb-3">
                                                 {{ localeData?.email_sms }}
-                                                <span class="text-gray font-12">{{
+                                                <span class="text-light font-size-12">{{
                                                     localeData?.general_settings_applicable
                                                 }}</span>
-                                            </h4>
+                                            </p>
                                             <ng-container formGroupName="invoiceSettings">
-                                                <div class="d-flex column-gap1 align-items-center mb-3">
+                                                <div class="d-flex column-gap-1 align-items-center mb-3">
                                                     <input-field
                                                         [name]="'invoiceEmail'"
                                                         [label]="localeData?.from_email"
@@ -4681,7 +4681,7 @@
                                                         {{ localeData?.verify }}
                                                     </button>
                                                     <span
-                                                        class="text-success"
+                                                        class="text-green"
                                                         *ngIf="settingForm.get('invoiceSettings.emailVerified').value"
                                                     >
                                                         {{ localeData?.verified }}
@@ -4689,7 +4689,7 @@
                                                     <button
                                                         mat-stroked-button
                                                         *ngIf="voucherApiVersion === 2"
-                                                        class="mat-icon-md-btn"
+                                                        class="btn-stroked-icon"
                                                         [ngClass]="{
                                                             'opacity-5':
                                                                 !settingForm.get('invoiceSettings.email').value ||
@@ -4724,7 +4724,7 @@
                                                     </mat-slide-toggle>
                                                     {{ localeData?.send_email_gmail }}
                                                     <span class="ml-5 integrated-email" *ngIf="!isGmailIntegrated">
-                                                        <a [href]="gmailAuthCodeUrl$ | async">{{
+                                                        <a [href]="gmailAuthCodeUrl$ | async" class="text-underline">{{
                                                             localeData?.integrate_gmail
                                                         }}</a>
                                                     </span>
@@ -4742,10 +4742,10 @@
                                         </ng-template>
                                         <ng-container formGroupName="estimateSettings">
                                             <div class="tabs-box-content py-3">
-                                                <h4 class="font-16 border-bottom pb-2 mb-3">
+                                                <p class="font-size-16 border-bottom pb-2 mb-3">
                                                     {{ localeData?.estimate_quotation }}
-                                                </h4>
-                                                <div class="d-flex column-gap1 mb-3">
+                                                </p>
+                                                <div class="d-flex column-gap-1 mb-3">
                                                     <input-field
                                                         [name]="'headerName'"
                                                         [label]="localeData?.heading_name"
@@ -4773,7 +4773,7 @@
                                                 </div>
                                                 <label
                                                     >{{ localeData?.estimate_next_step
-                                                    }}<span class="red-text">*</span></label
+                                                    }}<span class="text-red">*</span></label
                                                 >
                                                 <mat-radio-group
                                                     formControlName="nextStepToEstimate"
@@ -4817,7 +4817,7 @@
                                                     </mat-slide-toggle>
                                                     <a
                                                         href="javascript:;"
-                                                        class="cursor-pointer ml-3"
+                                                        class="cursor-pointer ml-3 text-underline theme-primary-color"
                                                         (click)="openCustomEmailDialog(voucherTypeEnum.estimate)"
                                                         >{{ commonLocaleData?.app_custom_email }}</a
                                                     >
@@ -4835,10 +4835,10 @@
                                         </ng-template>
                                         <ng-container formGroupName="proformaSettings">
                                             <div class="tabs-box-content py-3">
-                                                <h4 class="font-16 border-bottom pb-2 mb-3">
+                                                <p class="font-size-16 border-bottom pb-2 mb-3">
                                                     {{ localeData?.proforma_invoice }}
-                                                </h4>
-                                                <div class="d-flex column-gap1 mb-3">
+                                                </p>
+                                                <div class="d-flex column-gap-1 mb-3">
                                                     <input-field
                                                         [name]="'headerName'"
                                                         [label]="localeData?.heading_name"
@@ -4894,7 +4894,7 @@
                                                     </mat-slide-toggle>
                                                     <a
                                                         href="javascript:;"
-                                                        class="cursor-pointer ml-3"
+                                                        class="cursor-pointer ml-3 text-underline theme-primary-color"
                                                         (click)="openCustomEmailDialog(voucherTypeEnum.proforma)"
                                                         >{{ commonLocaleData?.app_custom_email }}</a
                                                     >
@@ -4928,10 +4928,10 @@
                                         </ng-template>
                                         <ng-container formGroupName="invoiceSettings">
                                             <div class="tabs-box-content py-3">
-                                                <h4 class="font-16 border-bottom pb-2 mb-3">
+                                                <p class="font-size-16 border-bottom pb-2 mb-3">
                                                     {{ commonLocaleData?.app_invoice }}
-                                                </h4>
-                                                <div class="d-flex column-gap1 mb-3">
+                                                </p>
+                                                <div class="d-flex column-gap-1 mb-3">
                                                     <input-field
                                                         [name]="'duePeriod'"
                                                         [label]="localeData?.default_expiry_days"
@@ -4979,12 +4979,12 @@
                                                     </mat-slide-toggle>
                                                     <a
                                                         href="javascript:;"
-                                                        class="cursor-pointer ml-3"
+                                                        class="cursor-pointer ml-3 text-underline theme-primary-color"
                                                         (click)="openCustomEmailDialog(voucherTypeEnum.sales)"
                                                         >{{ commonLocaleData?.app_custom_email }}</a
                                                     >
                                                 </div>
-                                                <div class="mb-3 d-flex align-items-center column-gap15">
+                                                <div class="mb-3 d-flex align-items-center column-gap-15">
                                                     <mat-slide-toggle
                                                         name="useCustomInvoiceNumber"
                                                         aria-label="invoice no"
@@ -5075,7 +5075,7 @@
                                                     }}
                                                 </mat-slide-toggle>
                                                 <div *ngIf="activeCompany?.countryV2?.alpha2CountryCode === 'IN'">
-                                                    <div class="mb-3 d-flex align-items-center column-gap15">
+                                                    <div class="mb-3 d-flex align-items-center column-gap-15">
                                                         <mat-slide-toggle
                                                             aria-label="gst invoice"
                                                             name="gstEInvoiceEnable"
@@ -5174,10 +5174,10 @@
                                         </ng-template>
                                         <ng-container formGroupName="invoiceSettings">
                                             <div class="tabs-box-content py-3">
-                                                <h4 class="font-16 border-bottom pb-2 mb-3">
+                                                <p class="font-size-16 border-bottom pb-2 mb-3">
                                                     {{ commonLocaleData?.app_receipt }}
-                                                </h4>
-                                                <div class="mb-3 d-flex align-items-center column-gap15">
+                                                </p>
+                                                <div class="mb-3 d-flex align-items-center column-gap-15">
                                                     <mat-slide-toggle
                                                         name="useCustomReceiptNumber"
                                                         class="disable-toggle slide-toggle d-block"
@@ -5239,7 +5239,7 @@
                                                     </mat-slide-toggle>
                                                     <a
                                                         href="javascript:;"
-                                                        class="cursor-pointer ml-3"
+                                                        class="cursor-pointer ml-3 text-underline theme-primary-color"
                                                         (click)="openCustomEmailDialog(voucherTypeEnum.receipt)"
                                                         >{{ commonLocaleData?.app_custom_email }}</a
                                                     >
@@ -5272,10 +5272,10 @@
                                         </ng-template>
                                         <ng-container formGroupName="invoiceSettings">
                                             <div class="tabs-box-content py-3">
-                                                <h4 class="font-16 border-bottom pb-2 mb-3">
+                                                <p class="font-size-16 border-bottom pb-2 mb-3">
                                                     {{ commonLocaleData?.app_voucher_types?.debit_note }}
-                                                </h4>
-                                                <div class="mb-3 d-flex align-items-center column-gap15">
+                                                </p>
+                                                <div class="mb-3 d-flex align-items-center column-gap-15">
                                                     <mat-slide-toggle
                                                         aria-label="debit no"
                                                         class="disable-toggle slide-toggle d-block"
@@ -5346,7 +5346,7 @@
                                                     </mat-slide-toggle>
                                                     <a
                                                         href="javascript:;"
-                                                        class="cursor-pointer ml-3"
+                                                        class="cursor-pointer ml-3 text-underline theme-primary-color"
                                                         (click)="openCustomEmailDialog(voucherTypeEnum.debitNote)"
                                                         >{{ commonLocaleData?.app_custom_email }}</a
                                                     >
@@ -5379,10 +5379,10 @@
                                         </ng-template>
                                         <ng-container formGroupName="invoiceSettings">
                                             <div class="tabs-box-content py-3">
-                                                <h4 class="font-16 border-bottom pb-2 mb-3">
+                                                <p class="font-size-16 border-bottom pb-2 mb-3">
                                                     {{ commonLocaleData?.app_voucher_types?.credit_note }}
-                                                </h4>
-                                                <div class="mb-3 d-flex align-items-center column-gap15">
+                                                </p>
+                                                <div class="mb-3 d-flex align-items-center column-gap-15">
                                                     <mat-slide-toggle
                                                         aria-label="custom invoice"
                                                         name="useCustomCreditNoteNumber"
@@ -5454,7 +5454,7 @@
                                                     </mat-slide-toggle>
                                                     <a
                                                         href="javascript:;"
-                                                        class="cursor-pointer ml-3"
+                                                        class="cursor-pointer ml-3 text-underline theme-primary-color"
                                                         (click)="openCustomEmailDialog(voucherTypeEnum.creditNote)"
                                                         >{{ commonLocaleData?.app_custom_email }}</a
                                                     >
@@ -5473,11 +5473,11 @@
                                     </ng-template>
                                     <ng-container formGroupName="purchaseBillSettings">
                                         <div class="tabs-box-content py-3">
-                                            <h4 class="font-16 border-bottom pb-2 mb-3">
+                                            <p class="font-size-16 border-bottom pb-2 mb-3">
                                                 {{ localeData?.integration }}
-                                                <span class="text-gray font-12"> {{ localeData?.settings_note }}</span>
-                                            </h4>
-                                            <div class="d-flex column-gap1 align-items-center mb-3">
+                                                <span class="text-light font-size-12"> {{ localeData?.settings_note }}</span>
+                                            </p>
+                                            <div class="d-flex column-gap-1 align-items-center mb-3">
                                                 <input-field
                                                     [name]="'email'"
                                                     [label]="localeData?.from_email"
@@ -5523,7 +5523,7 @@
                                                     {{ localeData?.verify }}
                                                 </button>
                                                 <span
-                                                    class="text-success"
+                                                    class="text-green"
                                                     *ngIf="settingForm.get('purchaseBillSettings.emailVerified').value"
                                                 >
                                                     {{ localeData?.verified }}
@@ -5531,7 +5531,7 @@
                                                 <button
                                                     mat-stroked-button
                                                     *ngIf="voucherApiVersion === 2"
-                                                    class="mat-icon-md-btn"
+                                                    class="btn-stroked-icon"
                                                     [ngClass]="{
                                                         'opacity-5':
                                                             !settingForm.get('purchaseBillSettings.email').value ||
@@ -5553,7 +5553,7 @@
                                                     <i class="icon-trash"></i>
                                                 </button>
                                             </div>
-                                            <div class="d-flex column-gap10 align-baseline mr-5">
+                                            <div class="d-flex column-gap-10 align-baseline mr-5">
                                                 <mat-slide-toggle
                                                     aria-label="send email"
                                                     formControlName="sendThroughGmail"
@@ -5564,7 +5564,7 @@
                                                 </mat-slide-toggle>
                                                 {{ localeData?.send_email_gmail }}
                                                 <span class="ml-3 integrated-email" *ngIf="!isGmailIntegrated">
-                                                    <a [href]="gmailAuthCodeUrl$ | async">{{
+                                                    <a [href]="gmailAuthCodeUrl$ | async" class="text-underline">{{
                                                         localeData?.integrate_gmail
                                                     }}</a>
                                                 </span>
@@ -5582,10 +5582,10 @@
                                     </ng-template>
                                     <ng-container formGroupName="purchaseBillSettings">
                                         <div class="tabs-box-content py-3">
-                                            <h4 class="font-16 border-bottom pb-2 mb-3">
+                                            <p class="font-size-16 border-bottom pb-2 mb-3">
                                                 {{ localeData?.purchase_order }}
-                                            </h4>
-                                            <div class="d-flex column-gap1 mb-3">
+                                            </p>
+                                            <div class="d-flex column-gap-1 mb-3">
                                                 <input-field
                                                     [name]="'poDuePeriod'"
                                                     [label]="localeData?.default_expiry_days"
@@ -5616,7 +5616,7 @@
                                             >
                                                 {{ getWhatsappSettingLabel("purchase order") }}
                                             </mat-slide-toggle>
-                                            <div class="mb-3 d-flex align-items-center column-gap15">
+                                            <div class="mb-3 d-flex align-items-center column-gap-15">
                                                 <mat-slide-toggle
                                                     aria-label="custom po number"
                                                     name="useCustomPONumber"
@@ -5646,11 +5646,11 @@
                                                     [type]="'text'"
                                                 ></input-field>
                                             </div>
-                                            <div class="d-flex column-gap1 mb-3">
+                                            <div class="d-flex column-gap-1 mb-3">
                                                 {{ commonLocaleData?.app_custom_email_template }}
                                                 <a
                                                     href="javascript:;"
-                                                    class="cursor-pointer"
+                                                    class="cursor-pointer text-underline theme-primary-color"
                                                     (click)="openCustomEmailDialog('purchase order')"
                                                     >{{ commonLocaleData?.app_custom_email }}</a
                                                 >
@@ -5679,9 +5679,9 @@
                                     </ng-template>
                                     <div class="tabs-box-content py-3">
                                         <ng-container formGroupName="purchaseBillSettings">
-                                            <h4 class="font-16 border-bottom pb-2 mb-3">
+                                            <p class="font-size-16 border-bottom pb-2 mb-3">
                                                 {{ localeData?.purchase_bill }}
-                                            </h4>
+                                            </p>
                                             <giddh-datepicker
                                                 *ngIf="showPurchaseDate"
                                                 type="text"
@@ -5743,11 +5743,11 @@
                                                 {{ localeData?.generate_auto_purchase_number }}
                                             </mat-slide-toggle>
                                         </ng-container>
-                                        <div class="d-flex column-gap1 mb-3">
+                                        <div class="d-flex column-gap-1 mb-3">
                                             {{ commonLocaleData?.app_custom_email_template }}
                                             <a
                                                 href="javascript:;"
-                                                class="cursor-pointer"
+                                                class="cursor-pointer text-underline theme-primary-color"
                                                 (click)="openCustomEmailDialog(voucherTypeEnum.purchase)"
                                                 >{{ commonLocaleData?.app_custom_email }}</a
                                             >
@@ -5779,10 +5779,10 @@
                                     </ng-template>
                                     <ng-container formGroupName="invoiceSettings">
                                         <div class="tabs-box-content py-3">
-                                            <h4 class="font-16 border-bottom pb-2 mb-3">
+                                            <p class="font-size-16 border-bottom pb-2 mb-3">
                                                 {{ commonLocaleData?.app_payment }}
-                                            </h4>
-                                            <div class="mb-3 d-flex align-items-center column-gap15">
+                                            </p>
+                                            <div class="mb-3 d-flex align-items-center column-gap-15">
                                                 <mat-slide-toggle
                                                     name="useCustomPaymentNumber"
                                                     aria-label="custom payment no"
@@ -5833,7 +5833,7 @@
                                                 </mat-slide-toggle>
                                                 <a
                                                     href="javascript:;"
-                                                    class="cursor-pointer ml-3"
+                                                    class="cursor-pointer ml-3 text-underline theme-primary-color"
                                                     (click)="openCustomEmailDialog(voucherTypeEnum.payment)"
                                                     >{{ commonLocaleData?.app_custom_email }}</a
                                                 >
@@ -5864,7 +5864,7 @@
                 [label]="localeData?.tabs?.templates"
                 *ngIf="activeTabGroup === 0 || activeTabGroup === 1 || activeTabGroup === 2"
             >
-                <div class="vouchers-wrapper pt-3 px-4" *ngIf="activeModule === 'templates'">
+                <div class="vouchers-wrapper pd-15" *ngIf="activeModule === 'templates'">
                     <reactive-dropdown-field
                         *ngIf="voucherType === voucherTypeEnum.purchase && selectedTemplate?.label"
                         [name]="'design'"
@@ -5879,7 +5879,7 @@
                     <div class="template-wrapper mt-3">
                         <mat-card class="outline-card add-template-wrapper">
                             <mat-card-content class="pt-3">
-                                <h3 class="fonr-16">{{ localeData?.design_template }}</h3>
+                                <p class="fonr-16">{{ localeData?.design_template }}</p>
                                 <p class="my-3">
                                     {{ localeData?.template_gallery_info }}
                                 </p>
@@ -5902,18 +5902,18 @@
                                 "
                             >
                                 <mat-card-content class="pt-3 d-flex flex-column align-items-center template-box-gap">
-                                    <h3 class="fonr-16">{{ template.name }}</h3>
+                                    <p class="fonr-16">{{ template.name }}</p>
                                     <span
                                         *ngIf="template.isDefault"
                                         [ngClass]="{ 'active': template.isDefault }"
-                                        class="default-wrap font-12 p-2 cursor-pointer"
+                                        class="default-wrap font-size-12 p-2 cursor-pointer"
                                     >
                                         <i class="icon-favorite-selected"></i>
                                         {{ localeData?.default_template }}
                                     </span>
                                     <span
                                         *ngIf="!template.isDefault"
-                                        class="default-wrap font-12 p-2 cursor-pointer"
+                                        class="default-wrap font-size-12 p-2 cursor-pointer"
                                         (click)="
                                             setTemplateAsDefault(
                                                 template.uniqueName,
@@ -5928,10 +5928,10 @@
                                         <i class="icon-favorite-selected"></i>
                                         {{ localeData?.set_as_default }}
                                     </span>
-                                    <div class="d-flex column-gap1 justify-content-center">
+                                    <div class="d-flex column-gap-1 justify-content-center">
                                         <button
                                             mat-stroked-button
-                                            class="mat-icon-md-btn"
+                                            class="btn-stroked-icon"
                                             matTooltip="{{ localeData?.preview }}"
                                             matTooltipPosition="above"
                                             (click)="previewTemplate(template)"
@@ -5940,7 +5940,7 @@
                                         </button>
                                         <button
                                             mat-stroked-button
-                                            class="mat-icon-md-btn"
+                                            class="btn-stroked-icon"
                                             [matTooltip]="localeData?.edit_template"
                                             matTooltipPosition="above"
                                             (click)="templateAction(template, 'edit')"
@@ -5949,7 +5949,7 @@
                                         </button>
                                         <button
                                             mat-stroked-button
-                                            class="mat-icon-md-btn cursor-pointer"
+                                            class="btn-stroked-icon cursor-pointer"
                                             [disabled]="template.isDefault"
                                             [matTooltip]="localeData?.delete"
                                             matTooltipPosition="above"
@@ -5988,27 +5988,27 @@
                                 "
                             >
                                 <mat-card-content class="pt-3 d-flex flex-column align-items-center template-box-gap">
-                                    <h3 class="fonr-16">{{ template.name }}</h3>
+                                    <p class="fonr-16">{{ template.name }}</p>
                                     <span
                                         *ngIf="template.isDefaultForVoucher"
                                         [ngClass]="{ 'active': template.isDefaultForVoucher }"
-                                        class="default-wrap font-12 p-2 cursor-pointer"
+                                        class="default-wrap font-size-12 p-2 cursor-pointer"
                                     >
                                         <i class="icon-favorite-selected"></i>
                                         {{ localeData?.default_template }}
                                     </span>
                                     <span
                                         *ngIf="!template.isDefaultForVoucher"
-                                        class="default-wrap font-12 p-2 cursor-pointer"
+                                        class="default-wrap font-size-12 p-2 cursor-pointer"
                                         (click)="setTemplateAsDefault(template.uniqueName, voucherTypeEnum.voucher)"
                                     >
                                         <i class="icon-favorite-selected"></i>
                                         {{ localeData?.set_as_default }}
                                     </span>
-                                    <div class="d-flex column-gap1 justify-content-center">
+                                    <div class="d-flex column-gap-1 justify-content-center">
                                         <button
                                             mat-stroked-button
-                                            class="mat-icon-md-btn"
+                                            class="btn-stroked-icon"
                                             matTooltip="{{ localeData?.preview }}"
                                             matTooltipPosition="above"
                                             (click)="previewTemplate(template)"
@@ -6017,7 +6017,7 @@
                                         </button>
                                         <button
                                             mat-stroked-button
-                                            class="mat-icon-md-btn"
+                                            class="btn-stroked-icon"
                                             matTooltip="{{ localeData?.edit_template }}"
                                             matTooltipPosition="above"
                                             (click)="templateAction(template, 'edit')"
@@ -6027,7 +6027,7 @@
                                         <button
                                             mat-stroked-button
                                             [disabled]="template.isDefaultForVoucher"
-                                            class="mat-icon-md-btn cursor-pointer"
+                                            class="btn-stroked-icon cursor-pointer"
                                             matTooltip="{{ localeData?.delete }}"
                                             *ngIf="voucherApiVersion === 2"
                                             matTooltipPosition="above"
@@ -6057,7 +6057,7 @@
             <!-- template-content-end -->
         </mat-tab-group>
         <div class="video-link position-absolute" *ngIf="activeTabGroup === 0 && selectedTabIndex === 2">
-            <watch-video [cssClass]="'text-blue'" [moduleName]="'SALES_PREVIEW'"></watch-video>
+            <watch-video [cssClass]="'text-primary'" [moduleName]="'SALES_PREVIEW'"></watch-video>
         </div>
     </div>
 
@@ -6071,12 +6071,12 @@
         let-formControl="formControl"
     >
         <div class="search-table">
-            <div class="d-flex align-items-center column-gap1" [hidden]="show">
+            <div class="d-flex align-items-center column-gap-1" [hidden]="show">
                 <span
                     class="cursor-pointer"
                     (click)="toggleSearch($event, fieldName, voucherType); activeSearchField = 'search' + fieldName"
                 >
-                    <i class="icon-search icon-font-16"></i>
+                    <i class="icon-search icon-font-size-16"></i>
                 </span>
                 <span>{{ title }}</span>
             </div>
@@ -6086,7 +6086,7 @@
                     [id]="'search' + fieldName"
                     [type]="'text'"
                     [placeholder]="commonLocaleData?.app_search"
-                    [cssClass]="'form-control mat-field-border'"
+                    [cssClass]="'form-control border'"
                     [autoFocus]="show"
                     [formControl]="formControl"
                 ></text-field>
@@ -6149,7 +6149,7 @@
 
     <!-- setting-tab-btn -->
     <ng-template #actionButtons>
-        <div class="d-flex column-gap1 mt-4">
+        <div class="d-flex column-gap-1 mt-4">
             <button (click)="onSubmit()" mat-raised-button color="primary">{{ commonLocaleData?.app_save }}</button>
             <button (click)="resetForm()" mat-stroked-button>{{ commonLocaleData?.app_cancel }}</button>
         </div>
@@ -6199,7 +6199,7 @@
                 : !(getVouchersInProgress$ | async) && !dataSource?.length
         "
         [primaryMessage]="commonLocaleData?.app_no_data_found"
-        [primaryMessageClass]="'font-24 text-center mr-t100'"
+        [primaryMessageClass]="'font-size-24 text-center mr-t100'"
         [secondaryMessage]="' '"
     ></no-data>
 </ng-template>

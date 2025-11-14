@@ -4,30 +4,13 @@
     left: 0;
     width: 100%;
     padding: 7px 0px 10px 36px !important;
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
     .nav-report {
         li {
             font-weight: var(--font-weight-semibold);
             font-size: var(--font-size-16);
             a {
-                color: var(--color-blue-primary);
-            }
-        }
-    }
-}
-@media (max-width: 767px) {
-    .report-breadcrum {
-        position: static !important;
-        padding-left: 15px !important;
-        padding-top: 0 !important;
-        .nav-report {
-            li {
-                font-size: var(--font-size-15);
-            }
-        }
-        .custom-month-select {
-            .btn {
-                font-size: var(--font-size-15);
+                color: var(--text-primary-color);
             }
         }
     }

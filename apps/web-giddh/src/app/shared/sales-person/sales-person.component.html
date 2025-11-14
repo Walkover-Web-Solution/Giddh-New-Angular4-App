@@ -6,8 +6,9 @@
     [keyboardShortcut]="'esc'"
     (onShortcutPress)="closeDialog()"
 >
+<div class="aside-dialog-wrapper">
     <div class="dialog-header">
-        <h3 class="modal-title">{{ commonLocaleData?.app_sales_person }}</h3>
+        <p class="modal-title">{{ commonLocaleData?.app_sales_person }}</p>
         <i (click)="closeDialog()" aria-label="close icon" class="icon-cross"></i>
     </div>
     <mat-dialog-content class="dialog-body sales-person">
@@ -15,13 +16,13 @@
             <mat-expansion-panel [expanded]="openMatExpansionPanel" class="overflow-visible">
                 <mat-expansion-panel-header>
                     <mat-panel-title class="p-0">
-                        <span class="text-primary">
+                        <span>
                             {{ isEditMode ? commonLocaleData?.app_edit : commonLocaleData?.app_create }} {{ commonLocaleData?.app_sales_person }}
                         </span>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
                 <form [formGroup]="salesPersonForm" (ngSubmit)="onSubmit()">
-                    <div class="d-grid grid-column-3 column-gap15 row-gap15 mr-l15 mr-r15 mr-b15">
+                    <div class="d-grid grid-column-3 column-gap-15 row-gap-15 mr-b15">
                         <div>
                             <input-field
                                 tabindex="1"
@@ -68,7 +69,7 @@
                             <span id="init-sales-person-contact-valid-msg" class="d-none"></span>
                             <span id="init-sales-person-contact-error-msg" class="d-none"></span>
                         </div>
-                        <div class="grid-child-column-full d-flex justify-content-end column-gap15">
+                        <div class="grid-child-column-full d-flex justify-content-end column-gap-15">
                             <button mat-raised-button color="primary" [disabled]="(salesPersonSaveInProgress$ | async) || salesPersonForm?.invalid">
                                 {{ isEditMode ? commonLocaleData?.app_update : commonLocaleData?.app_save }}
                             </button>
@@ -122,7 +123,7 @@
                                 [matMenuTriggerFor]="menu"
                                 aria-label="Sales person actions"
                             >
-                                <i class="icon-dots-three-vertical font-15"></i>
+                                <i class="icon-dots-three-vertical font-size-15"></i>
                             </button>
                             <mat-menu #menu="matMenu">
                                 <ng-container *ngIf="element?.archiveStatus === salesPersonArchiveEnum.UNARCHIVED">
@@ -140,12 +141,11 @@
                         </td>
                     </ng-container>
                     
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                     <tr mat-row *matRowDef="let rowHistory; columns: displayedColumns; let i = index" (mouseover)="activeRowIndex = i" (mouseout)="activeRowIndex = -1"></tr>
                 </table>
                 <mat-paginator
                     *ngIf="!(salesPersonListInProgress$ | async) && (salesPersonList$ | async)?.totalItems > pageSizeOptions[0]"
-                    class="mt-3"
                     (page)="handlePageChange($event)"
                     [length]="(salesPersonList$ | async)?.totalItems"
                     [pageSize]="requestParams.count"
@@ -154,7 +154,9 @@
                     [hidePageSize]="false"
                     [pageIndex]="requestParams.page - 1"
                 ></mat-paginator>
+                <section class="mr-b8"></section>
             </ng-template>
         </section>
     </mat-dialog-content>
+</div>
 </ng-container>

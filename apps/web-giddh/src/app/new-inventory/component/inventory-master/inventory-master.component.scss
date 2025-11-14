@@ -2,7 +2,7 @@
     justify-content: space-between;
     padding: 0 0 15px 0;
     flex-wrap: wrap;
-    background-color: var(--color-white);
+    // background-color: var(--color-white);
     height: calc(100vh - 90px);
     position: relative;
     margin-left: -15px;
@@ -88,11 +88,11 @@
 
                     &:last-child {
                         a {
-                            color: var(--color-blue-primary);
+                            color: var(--text-primary-color);
                         }
                     }
 
-                    &+li {
+                    & + li {
                         &::before {
                             padding-right: 4px;
                         }
@@ -102,7 +102,7 @@
 
             .searchbar {
                 padding-left: 25px;
-                border-bottom: 1px solid var(--color-silver);
+                border-bottom: 1px solid var(--border-color);
             }
         }
 
@@ -120,7 +120,7 @@
             }
 
             .create-head {
-                color: var(--color-blue-primary);
+                color: var(--theme-primary-color);
                 font-size: var(--font-size-15);
                 background-color: var(--color-light-gray);
                 width: 100%;
@@ -138,7 +138,7 @@
                 height: auto;
                 cursor: pointer;
 
-                &.map-item {
+                .map-item {
                     .mat-list-item-content {
                         float: right !important;
                         width: 140px;
@@ -158,7 +158,7 @@
         }
 
         .border-grid {
-            border-right: 1px solid var(--color-silver);
+            border-right: 1px solid var(--border-color);
         }
 
         .horizontal-scroll {

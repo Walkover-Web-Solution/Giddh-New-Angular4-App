@@ -3,7 +3,7 @@
     top: var(--top-sidebar);
     bottom: 0;
     min-height: 100vh;
-    background-color: var(--color-white);
+    // background-color: var(--color-white);
     width: 240px;
     left: -240px;
     z-index: 991;
@@ -17,7 +17,7 @@
     }
 
     .aside-pane {
-        background-color: var(--color-white) !important;
+        // background-color: var(--color-white) !important;
         overflow-x: hidden;
         overflow-y: auto;
         z-index: unset;
@@ -67,7 +67,7 @@
                 }
                 mat-tree {
                     width: 240px;
-                    background-color: var(--color-white);
+                    background-color: var(--color-transparent);
 
                     mat-tree-node {
                         min-height: 30px;
@@ -91,15 +91,15 @@
                         left: 220px;
                     }
                     .sub-option {
-                        cursor: pointer;
-                        color: var(--color-black);
-                        letter-spacing: 0.14px;
-                        height: 27px;
-                        align-items: center;
-                        font: normal normal 600 var(--font-size-15) / 30px var(--font-family);
+                        // cursor: pointer;
+                        // color: var(--color-black);
+                        // letter-spacing: 0.14px;
+                        // height: 27px;
+                        // align-items: center;
+                        // font: normal normal 600 var(--font-size-15) / 30px var(--font-family);
                         &:hover {
                             color: var(--color-white);
-                            background-color: var(--color-blue-primary);
+                            background-color: var(--bg-primary-color);
                             .sidebar-menu-icons {
                                 filter: var(--filter-image-color-white);
                             }
@@ -110,17 +110,14 @@
                             height: 27px;
                             width: 100%;
                             line-height: 15px;
-                            &:hover {
-                                color: var(--color-blue-primary);
-                                background-color: var(--color-white);
-                                .sidebar-menu-icons {
-                                    filter: brightness(0) saturate(100%) invert(15%) sepia(31%) saturate(4938%) hue-rotate(224deg) brightness(91%) contrast(104%);
-                                }
-                            }
+                            // &:hover {
+                                // color: var(--text-primary-color);
+                                // background-color: var(--color-white);
+                                // .sidebar-menu-icons {
+                                //     filter: brightness(0) saturate(100%) invert(15%) sepia(31%) saturate(4938%) hue-rotate(224deg) brightness(91%) contrast(104%);
+                                // }
+                            // }
                         }
-                    }
-                    .hide-node {
-                        display: none;
                     }
                     .list {
                         width: 260px;
@@ -131,20 +128,20 @@
                         height: 27px;
                         font: normal normal 600 var(--font-size-15) / 30px;
                         font-family: var(--font-family);
-                        color: var(--color-black);
+                        // color: var(--color-black);
                         &:last-child {
                             min-height: 37px;
                         }
                         &:hover {
-                            color: var(--color-blue-primary);
+                            color: var(--text-primary-color);
                             .sidebar-list-icon {
-                                color: var(--color-blue-primary);
+                                color: var(--text-primary-color);
                             }
-                            .sidebar-menu-icons {
-                                filter: brightness(0) saturate(100%) invert(15%) sepia(31%) saturate(4938%) hue-rotate(224deg) brightness(91%) contrast(104%);
-                            }
+                            // .sidebar-menu-icons {
+                            //     filter: brightness(0) saturate(100%) invert(15%) sepia(31%) saturate(4938%) hue-rotate(224deg) brightness(91%) contrast(104%);
+                            // }
                             .sidebar-icon {
-                                color: var(--color-blue-primary);
+                                color: var(--text-primary-color);
                             }
                         }
                     }
@@ -160,7 +157,7 @@
 
     ul {
         padding: 0;
-        list-style: none;
+        // list-style: none;
         font-size: var(--font-size-15);
         font-weight: var(--font-weight-semibold);
 
@@ -195,7 +192,7 @@
             }
 
             &:hover {
-                background-color: var(--color-blue-light);
+                background-color: var(--theme-primary-light);
             }
         }
     }
@@ -215,38 +212,24 @@
 
             &:hover {
                 background-color: var(--color-border-light);
-                color: var(--color-blue-primary) !important;
+                color: var(--text-primary-color) !important;
             }
 
             &.active {
                 background-color: var(--color-border-light);
-                color: var(--color-blue-primary) !important;
+                color: var(--text-primary-color) !important;
             }
         }
     }
 }
 .active {
-    background-color: var(--color-blue-primary) !important;
+    background-color: var(--bg-primary-color) !important;
     color: var(--color-white) !important;
     .sidebar-menu-icons {
         filter: var(--filter-image-color-white) !important;
     }
     &:hover {
-        background-color: var(--color-blue-primary) !important;
+        background-color: var(--bg-primary-color) !important;
         color: var(--color-white) !important;
-    }
-}
-
-@media (max-width: 767px) {
-    :host.inventory-sidebar {
-        z-index: 9999;
-        top: var(--top-sidebar);
-    }
-}
-
-@media (max-height: 700px) {
-    .help-aside-body {
-        height: 100%;
-        overflow-y: scroll;
     }
 }

@@ -33,7 +33,7 @@
 }
 .left-column {
     margin: 5px 0;
-    border-right: 1px solid var(--color-silver);
+    border-right: 1px solid var(--border-color);
 
     .panel-body {
         .chart-div {
@@ -58,12 +58,12 @@ span.this-week {
 }
 .total-sale-detail h3 {
     font-size: var(--font-size-24);
-    color: var(--color-black);
+    // color: var(--color-black);
 }
 
 .total-sale-detail span {
     font-size: var(--font-size-16);
-    color: var(--color-black);
+    // color: var(--color-black);
 }
 .single-sale-detail {
     padding-top: 30px;
@@ -74,35 +74,43 @@ span.icon-collapse-icon {
     cursor: pointer;
 }
 span.icon-collapse-icon:hover {
-    color: var(--color-blue-primary);
+    color: var(--text-primary-color);
 }
 
 /* CSS FOR LINE CHART */
 
-p.bankName {
+/* p UNUSED COMPONENT CLASS: bankName - Auto-commented by script
+.bankName {
     font-size: var(--font-size-15);
-    color: var(--color-blue-primary);
+    color: var(--text-primary-color);
     margin-bottom: 5px;
 }
+*/
 
-p.bank-balance {
+/* p UNUSED COMPONENT CLASS: bank-balance - Auto-commented by script
+.bank-balance {
     color: var(--color-dark-gray);
     font-size: var(--font-size-15);
     display: flex;
     justify-content: space-between;
 }
+*/
+/* UNUSED COMPONENT CLASS: single-bank-detail - Auto-commented by script
 .single-bank-detail {
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
     padding-bottom: 10px;
     margin-bottom: 10px;
 }
+*/
+/* UNUSED COMPONENT CLASS: dashboard-container - Auto-commented by script
 .dashboard-container {
     padding: 15px;
 }
+*/
 .total-sales-header {
-    background-color: var(--color-white);
-    border: 1px solid var(--color-silver);
-    border-radius: 4px;
+    background-color: var(--theme-background-color);
+    border: 1px solid var(--border-color);
+    border-radius: var(--mat-border-radius-4);
     padding: 15px 15px 20px;
 }
 .dashboard-container label {
@@ -110,13 +118,18 @@ p.bank-balance {
     color: var(--color-black);
     margin-bottom: 3px;
 }
-.date-range-block .form-control {
-    border: 1px solid var(--color-blue-primary);
+/* UNUSED COMPONENT CLASS: form-control - Auto-commented by script
+.date-range-block 
+.form-control {
+    border: 1px solid var(--theme-primary-color);
 }
+*/
 .date-range-input {
     position: relative;
 }
-.date-range-input span.icon-calender {
+/* UNUSED COMPONENT CLASS: icon-calender - Auto-commented by script
+.date-range-input span
+.icon-calender {
     position: absolute;
     width: 32px;
     height: 32px;
@@ -125,15 +138,15 @@ p.bank-balance {
     align-items: center;
     color: var(--color-black);
 }
+*/
 .date-range-input input {
     color: var(--color-black);
 }
 .page-title h1 {
-    color: var(--color-blue-primary);
     font-size: var(--font-size-24);
     text-align: center;
-    font-weight: 600;
-    line-height: 2.3;
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-36);
     display: inline-flex;
     float: right;
 }
@@ -153,13 +166,16 @@ p.bank-balance {
     display: inline;
     text-align: right;
     font-size: 24px;
-    color: var(--color-blue-primary);
+    // color: var(--text-primary-color);
 }
 .date-range-input.disabled {
     opacity: 0.5;
 }
 .page-title {
     margin: 0;
+    display: flex;
+    align-items: center;
+    flex-direction: row-reverse;
 }
 
 .about-date {
@@ -167,7 +183,7 @@ p.bank-balance {
     font-size: var(--font-size-16);
 }
 .active-date {
-    color: var(--color-blue-primary);
+    // color: var(--text-primary-color);
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -177,11 +193,10 @@ p.bank-balance {
     width: 15px;
     height: 15px;
     display: inline-block;
-    background-color: var(--color-blue-primary);
+    background-color: var(--bg-primary-color);
     margin-right: 5px;
 }
 .in-active-date {
-    color: var(--color-blue-primary);
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -191,14 +206,14 @@ p.bank-balance {
     width: 15px;
     height: 15px;
     display: inline-block;
-    background-color: var(--color-blue-primary);
+    background-color: var(--bg-primary-color);
     margin-right: 5px;
 }
 
 .panel {
     padding: 15px;
-    border-radius: 2px;
-    border: 1px solid var(--color-silver);
+    border-radius: var(--mat-border-radius-0);
+    border: 1px solid var(--border-color);
 
     position: relative;
 }
@@ -206,21 +221,20 @@ p.bank-balance {
     min-height: 60px;
 }
 .single-sale-data .small-heading {
-    color: var(--color-black);
+    // color: var(--color-black);
     font-size: var(--font-size-15);
 }
 .single-sale-data h3 {
     font-size: var(--font-size-24);
-    color: var(--color-blue-primary);
+    color: var(--text-primary-color);
     margin-top: 6px;
 }
 span.date-wise-sale {
-    color: var(--color-blue-primary);
     font-size: var(--font-size-16);
 }
 
 .single-sale-data {
-    border-right: 1px solid var(--color-silver);
+    border-right: 1px solid var(--border-color);
     min-height: 78px;
 }
 .total-sale-data {
@@ -231,19 +245,19 @@ span.date-wise-sale {
     border-right: none;
 }
 .total-sales-tabs a {
-    color: var(--color-black);
+    // color: var(--color-black);
     cursor: pointer;
     padding-right: 3px;
     padding-left: 3px;
 }
-.total-sales-tabs a.active-graph {
+.total-sales-tabs span.active-graph {
     font-weight: var(--font-weight-semibold);
 }
 input:read-only {
-    border-color: var(--color-silver) !important;
+    border-color: var(--border-color) !important;
 }
 input:read-only:focus {
-    border-color: var(--color-silver) !important;
+    border-color: var(--border-color) !important;
 }
 .total-sales-header label {
     margin-bottom: 5px;
@@ -259,23 +273,34 @@ input:read-only:focus {
     flex-direction: row-reverse;
 }
 /*============Mat Range Date Picker Default CSS Overide =====Start===================*/
+/* UNUSED COMPONENT CLASS: mat-datepicker-toggle - Auto-commented by script
 .mat-datepicker-toggle {
     color: var(--color-black) !important;
 }
+*/
+/* UNUSED COMPONENT CLASS: mat-form-field-flex - Auto-commented by script
 .mat-form-field-flex {
     align-items: center !important;
 }
+*/
+/* UNUSED COMPONENT CLASS: mat-calendar-header - Auto-commented by script
 .mat-calendar-header {
-    background-color: var(--color-blue-primary) !important;
+    background-color: var(--bg-primary-color) !important;
 }
+*/
+/* UNUSED COMPONENT CLASS: mat-form-field-type-mat-date-range-input - Auto-commented by script
 .mat-form-field-type-mat-date-range-input {
-    .mat-form-field-infix {
+    /* UNUSED COMPONENT CLASS: mat-form-field-infix - Auto-commented by script
+.mat-form-field-infix {
         width: 206px !important;
     }
 }
+*/
+/* UNUSED COMPONENT CLASS: mat-form-field-wrapper - Auto-commented by script
 .mat-form-field-wrapper {
     padding-bottom: 0 !important;
 }
+*/
 /*============Mat Range Date Picker Default CSS Overide =====End=====================*/
 @media (max-width: 991px) {
     .about-date {
@@ -302,94 +327,5 @@ input:read-only:focus {
                 font-size: var(--font-size-16);
             }
         }
-    }
-}
-@media (max-width: 767px) {
-    .total-sale-detail {
-        text-align: left;
-        padding-right: 0;
-        .single-sale-detail {
-            padding-top: 0;
-            padding-bottom: 10px;
-        }
-        p {
-            font-size: var(--font-size-15);
-        }
-        h3 {
-            padding-top: 3px;
-            font-size: var(--font-size-16);
-        }
-    }
-    .left-column {
-        border-right: none;
-    }
-    .panel-heading-inner-content {
-        display: flex;
-        justify-content: normal;
-        flex-direction: column;
-        text-align: left;
-        align-items: flex-start;
-        position: relative;
-        .refresh-btn {
-            padding-left: 15px;
-            padding-top: 10px;
-            .glyphicon-refresh {
-                margin-left: 10px !important;
-                position: absolute !important;
-                right: 0;
-                top: 2px !important;
-            }
-        }
-        .this-week {
-            position: absolute;
-            right: -15px;
-            top: 0;
-        }
-    }
-    .revenue-tabs {
-        float: none !important;
-        padding-top: 5px;
-    }
-    .single-sale-data {
-        min-height: auto;
-        margin-bottom: 15px;
-        p {
-            font-size: var(--font-size-15);
-        }
-        h3 {
-            font-size: var(--font-size-16);
-        }
-    }
-    .about-date {
-        display: flex;
-        font-size: var(--font-size-15);
-        flex-direction: column;
-        align-items: baseline;
-    }
-    .date-range-block {
-        padding-bottom: 10px;
-        font-size: var(--font-size-15);
-    }
-    .page-title {
-        h1 {
-            display: flex;
-            float: left;
-            font-size: var(--font-size-16);
-        }
-        .collapse-close {
-            height: 40px;
-            width: 40px;
-            span.icon-collapse-icon {
-                font-size: 20px;
-            }
-        }
-    }
-    .total-sales-header {
-        padding: 15px 15px 0;
-    }
-}
-@media (max-width: 575px) {
-    .about-date {
-        float: none !important;
     }
 }

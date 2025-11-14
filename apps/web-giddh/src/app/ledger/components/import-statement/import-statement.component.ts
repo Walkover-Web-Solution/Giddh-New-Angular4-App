@@ -48,6 +48,8 @@ export class ImportStatementComponent implements OnDestroy {
     public signedUrlResponse: any = {};
     /** Holds  file type enum */
     public fileType: typeof FileTypeEnum = FileTypeEnum;
+    /** Holds  entity type */
+    public entity: string;
 
     constructor(
         private ledgerService: LedgerService,
@@ -78,13 +80,19 @@ export class ImportStatementComponent implements OnDestroy {
 
         this.ledgerComponentStore.uploadVoucherSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(voucherResponse => {
             if (voucherResponse) {
+                const type = this.entity === ImportStatementType.BankTransactions ? VoucherImportType.BankTransactionsImport : VoucherImportType.AccountWiseImport;
                 const requestObject = {
                     accountUniqueName: this.inputData?.accountUniqueName,
                     subType: "VOUCHER",
-                    type: VoucherImportType.AccountWiseImport,
-                    isHeaderProvided: this.postRequest.isHeaderProvided
+                    type: type,
+                    voucherType: '',
+                    isHeaderProvided: this.postRequest.isHeaderProvided,
+                    sameDebitCreditAmountColumn: this.postRequest.sameDebitCreditAmountColumn ?? false
                 }
-                this.ledgerComponentStore.importVoucher({ requestObject, signedUrlResponse: this.signedUrlResponse });
+                if (this.entity === ImportStatementType.BankTransactions) {
+                    requestObject.subType = '';
+                }
+                    this.ledgerComponentStore.importVoucher({ requestObject, signedUrlResponse: this.signedUrlResponse });
             }
         });
 
@@ -93,9 +101,41 @@ export class ImportStatementComponent implements OnDestroy {
                 this.store.dispatch(this.commonAction.setImportBankTransactionsResponse(importVoucherSuccessResponse));
                 this.toaster.showSnackBar("success", this.inputData?.localeData?.import_success);
                 this.dialogRef.close(true);
-                this.router.navigate(['pages', 'import', VoucherType.AccountWise]);
+                this.router.navigate(['pages', 'import', this.entity === ImportStatementType.BankTransactions ? ImportStatementType.BankTransactions : VoucherType.AccountWise]);
             }
         });
+    }
+
+    /**
+ * This will call the api to upload file
+ *
+ * @memberof ImportStatementComponent
+ */
+    public importStatement(): void {
+        this.getRequest.companyUniqueName = this.generalService.companyUniqueName;
+        this.getRequest.accountUniqueName = this.inputData?.accountUniqueName;
+        if (this.getRequest.entity === this.fileType.PDF) {
+            this.ledgerService.importStatement(this.getRequest, this.postRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response?.status === 'success') {
+                    this.toaster.showSnackBar("success", this.inputData?.localeData?.import_success);
+                    this.dialogRef.close(true);
+                } else {
+                    this.toaster.showSnackBar("error", response?.message, response?.code);
+                }
+            });
+        } else {
+            this.postRequest.accountUniqueName = this.getRequest.accountUniqueName;
+            this.importExcelService.uploadFile("BANK_TRANSACTIONS_IMPORT", this.postRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                if (response?.status === "success" && response.body) {
+                    this.store.dispatch(this.commonAction.setImportBankTransactionsResponse(response.body));
+                    this.toaster.showSnackBar("success", this.inputData?.localeData?.import_success);
+                    this.dialogRef.close(true);
+                    this.router.navigate(['/pages/import/banktransactions']);
+                } else {
+                    this.toaster.showSnackBar("error", response?.message, response?.code);
+                }
+            });
+        }
     }
 
     /**
@@ -127,43 +167,12 @@ export class ImportStatementComponent implements OnDestroy {
     }
 
     /**
-     * This will call the api to upload file
-     *
-     * @memberof ImportStatementComponent
-     */
-    public importStatement(): void {
-        this.getRequest.companyUniqueName = this.generalService.companyUniqueName;
-        this.getRequest.accountUniqueName = this.inputData?.accountUniqueName;
-        if (this.getRequest.entity === this.fileType.PDF) {
-            this.ledgerService.importStatement(this.getRequest, this.postRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                if (response?.status === 'success') {
-                    this.toaster.showSnackBar("success", this.inputData?.localeData?.import_success);
-                    this.dialogRef.close(true);
-                } else {
-                    this.toaster.showSnackBar("error", response?.message, response?.code);
-                }
-            });
-        } else {
-            this.postRequest.accountUniqueName = this.getRequest.accountUniqueName;
-            this.importExcelService.uploadFile("BANK_TRANSACTIONS_IMPORT", this.postRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                if (response?.status === "success" && response.body) {
-                    this.store.dispatch(this.commonAction.setImportBankTransactionsResponse(response.body));
-                    this.toaster.showSnackBar("success", this.inputData?.localeData?.import_success);
-                    this.dialogRef.close(true);
-                    this.router.navigate(['/pages/import/banktransactions']);
-                } else {
-                    this.toaster.showSnackBar("error", response?.message, response?.code);
-                }
-            });
-        }
-    }
-
-    /**
      *  Import voucher
      *
      * @memberof ImportStatementComponent
      */
-    public uploadFile(): void {
+    public uploadFile(type: string): void {
+        this.entity = type;
         this.ledgerComponentStore.getSignedUrl(this.selectedFile);
     }
 

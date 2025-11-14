@@ -8,9 +8,9 @@
         }
         .max-width-stock {
             max-width: 1400px;
-            .section-head {
-                color: var(--color-blue-primary);
-            }
+            // .section-head {
+            //     color: var(--text-primary-color);
+            // }
         }
         .less-than-text {
             font-size: 32px;
@@ -20,7 +20,7 @@
         }
 
         .branch-msg {
-            color: var(--color-blue-primary);
+            color: var(--text-primary-color);
             background-color: var(--color-light-gray);
             display: flex;
             justify-content: center;
@@ -30,10 +30,12 @@
         }
 
         .form-fields {
-            .max-width-230 {
+            /* UNUSED COMPONENT CLASS: max-width-230 - Auto-commented by script
+.max-width-230 {
                 display: block;
                 width: auto;
             }
+*/
             .gap-between {
                 gap: 1rem;
             }
@@ -70,10 +72,10 @@
                 }
 
                 thead {
-                    border-bottom: 1px solid var(--color-silver);
+                    border-bottom: 1px solid var(--border-color);
                     tr {
                         th {
-                            color: var(--color-blue-primary);
+                            // color: var(--text-primary-color);
                             font-weight: 500;
                         }
                     }
@@ -81,7 +83,8 @@
                 tbody {
                     tr {
                         td {
-                            &.before-line {
+                            /*& UNUSED COMPONENT CLASS: before-line - Auto-commented by script
+.before-line {
                                 &::before {
                                     content: "";
                                     position: absolute;
@@ -96,6 +99,7 @@
                                     border-radius: 3px 0 0 3px;
                                 }
                             }
+*/
 
                             .mat-stroked-button {
                                 padding: 4px 6px !important;
@@ -120,10 +124,10 @@
                     }
                 }
                 tfoot {
-                    border-top: 1px solid var(--color-silver);
+                    border-top: 1px solid var(--border-color);
                     tr {
                         td {
-                            color: var(--color-black);
+                            // color: var(--color-black);
                             font-weight: 100;
                             &:nth-child(2) {
                                 text-align: right;
@@ -162,9 +166,11 @@
                     width: 10%;
                 }
             }
-            .icon-cross {
+            /* UNUSED COMPONENT CLASS: icon-cross - Auto-commented by script
+.icon-cross {
                 color: var(--color-red);
             }
+*/
         }
         .total-cost-card {
             padding: 15px 0;
@@ -181,23 +187,27 @@
 
                 .col-5 {
                     flex: unset !important;
-                    & ~ .col-5 {
+                    /* & ~  UNUSED COMPONENT CLASS: col-5 - Auto-commented by script
+.col-5 {
                         text-align: right;
                     }
+*/
                 }
             }
         }
-        .arrow {
+        /* UNUSED COMPONENT CLASS: arrow - Auto-commented by script
+.arrow {
             display: flex;
             justify-content: center;
             align-items: center;
             font-weight: 600;
             font-size: 44px;
         }
+*/
 
         .custom-card {
             padding: 12px 15px;
-            border-radius: 5px;
+            border-radius: var(--mat-border-radius-4);
             min-width: 280px;
 
             &.bg-green {
@@ -210,7 +220,7 @@
             }
             &.bg-expense {
                 background-color: var(--color-border-light);
-                color: var(--color-blue-primary);
+                color: var(--text-primary-color);
             }
             .card-head-text {
                 font-size: var(--font-size-12);
@@ -220,6 +230,16 @@
                 font-size: var(--font-size-16);
                 font-weight: 500;
             }
+        }
+    }
+}
+::ng-deep .disable-bg {
+    border: 0;
+    background-color: transparent !important;
+
+    &.mat-datepicker-input {
+        &:disabled {
+            background-color: transparent !important;
         }
     }
 }

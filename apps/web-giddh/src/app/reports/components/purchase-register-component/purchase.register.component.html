@@ -6,9 +6,9 @@
     (translationComplete)="translationComplete($event)"
 >
     <div class="relative">
-        <hamburger-menu [pageHeading]="isMobileScreen ? localeData?.page_heading_single : ''"></hamburger-menu>
+        <hamburger-menu></hamburger-menu>
         <div class="report-breadcrum d-md-none d-lg-none">
-            <ul class="list-inline d-inline-block middle nav-report">
+            <ul class="list-inline d-inline-block vertical-align-middle nav-report">
                 <li class="active">
                     <a href="javascript:void(0)" (click)="goToDashboard()">{{ commonLocaleData?.app_report }}</a>
                     <span class="d-inline-block pl-1"> ></span>
@@ -19,9 +19,9 @@
             </ul>
         </div>
     </div>
-    <div class="container-fluid font-15 mr-t1">
+    <div class="container-fluid font-size-15 mr-t1">
         <div class="d-flex justify-content-between" [formGroup]="reportForm">
-            <div class="d-flex mr-b15 column-gap15">
+            <div class="d-flex mr-b15 column-gap-15">
                 <div
                     *ngIf="
                         currentCompanyBranches?.length > 2 &&
@@ -66,8 +66,8 @@
                         >
                         </reactive-dropdown-field>
                     </div>
-                    <div class="mr-r15 custom-mat-form-field">
-                        <mat-form-field appearance="outline" class="duration-dropdown">
+                    <div class="mr-r15">
+                        <mat-form-field appearance="outline" class="duration-dropdown w-100">
                             <mat-label>{{ commonLocaleData?.app_duration?.duration }}</mat-label>
                             <mat-select #durationMatSelect [value]="selectedType">
                                 <mat-option (click)="populateRecords(durationEnum.Monthly)" [value]="commonLocaleData?.app_duration?.monthly">
@@ -93,7 +93,7 @@
                             </mat-select>
                         </mat-form-field>
                         <mat-menu #monthMenu="matMenu" xPosition="after" yPosition="below">
-                            <div class="grid-columns-3 d-grid column-gap5 pd-1">
+                            <div class="grid-columns-3 d-grid column-gap-05 pd-1">
                             <button 
                                 mat-menu-item 
                                 *ngFor="let month of monthNames" 
@@ -107,8 +107,8 @@
                     </div>
                 </ng-container>
                 <ng-template #salesPersonBlock>
-                    <div class="custom-mat-form-field dropdown-width" *ngIf="(salesPersonList$ | async)?.length">
-                        <mat-form-field appearance="outline">
+                    <div class="dropdown-width" *ngIf="(salesPersonList$ | async)?.length">
+                        <mat-form-field appearance="outline" class="w-100">
                             <mat-label>{{ commonLocaleData?.app_sales_person }}</mat-label>
                             <mat-select
                                 panelClass="py-0"
@@ -153,8 +153,8 @@
                         </div>
                     </div>
                 </ng-template>
-                <div class="custom-mat-form-field dropdown-width">
-                    <mat-form-field appearance="outline">
+                <div class="dropdown-width">
+                    <mat-form-field appearance="outline" class="w-100">
                         <mat-label>{{ commonLocaleData?.app_account }}</mat-label>
                         <mat-select
                             panelClass="py-0"

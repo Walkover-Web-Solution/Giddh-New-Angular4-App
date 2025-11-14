@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostListener, Input, OnChanges, OnDestroy, OnInit, QueryList, SimpleChanges, TemplateRef, ViewChild, ViewChildren } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, RouteConfigLoadEnd, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
-import { Observable, ReplaySubject, Subscription } from 'rxjs';
+import { firstValueFrom, Observable, ReplaySubject, Subscription } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { CompanyActions } from '../../actions/company.actions';
 import { GeneralActions } from '../../actions/general/general.actions';
@@ -11,7 +11,6 @@ import { CompanyResponse, Organization } from '../../models/api-models/Company';
 import { SalesActions } from '../../actions/sales/sales.action';
 import { AccountResponse, AccountResponseV2, AddAccountRequest } from '../../models/api-models/Account';
 import { CompAidataModel } from '../../models/db';
-import { DEFAULT_AC } from '../../models/default-menus';
 import { ICompAidata, IUlist } from '../../models/interfaces/ulist.interface';
 import { OrganizationType } from '../../models/user-login-state';
 import { DbService } from '../../services/db.service';
@@ -59,7 +58,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     /** True, if ledger account is selected */
     public isLedgerAccSelected: boolean = false;
     /** Holds the navigated accounts */
-    public accountItemsFromIndexDB: any[] = DEFAULT_AC;
+    public accountItemsFromIndexDB: any[] = [];
     /** Company name initials (upto 2 characters) */
     public companyInitials: any = '';
     /** Stores the total company list */
@@ -268,8 +267,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                             } else {
                                 this.accountItemsFromIndexDB = accountList.slice(0, 5);
                             }
-                        } else {
-                            this.accountItemsFromIndexDB = DEFAULT_AC;
                         }
                         this.changeDetectorRef.detectChanges();
                     });
@@ -304,7 +301,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         this.updateIndexDbSuccess$.subscribe(res => {
             if (res) {
                 if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
-                    this.dbService.getItemDetails(this.activeCompanyForDb.uniqueName).toPromise().then(dbResult => {
+                    firstValueFrom(this.dbService.getItemDetails(this.activeCompanyForDb.uniqueName)).then(dbResult => {
                         this.findListFromDb(dbResult);
                         this.generalActions.updateUiFromDb();
                     });
@@ -445,13 +442,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             this.activeCompanyForDb.aidata = {
                 menus: [],
                 groups: [],
-                accounts: DEFAULT_AC
+                accounts: []
             };
             this.dbService.insertFreshData(this.activeCompanyForDb);
-            // slice default menus and account on small screen
-            if (!(window.innerWidth > 1440 && window.innerHeight > 717)) {
-                this.accountItemsFromIndexDB = slice(this.accountItemsFromIndexDB, 0, 5);
-            }
         }
         this.changeDetectorRef.detectChanges();
     }
@@ -584,17 +577,35 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         }
 
         if (this.activeCompanyForDb && this.activeCompanyForDb.uniqueName) {
-            let isSmallScreen: boolean = !(window.innerWidth > 1440 && window.innerHeight > 717);
-            let branches = [];
-            this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
-                branches = response || [];
-            });
-            this.dbService.addItem(this.activeCompanyForDb.uniqueName, entity, item, fromInvalidState, isSmallScreen,
-                this.currentOrganizationType === OrganizationType.Company && branches?.length > 1).then((res) => {
-                    this.findListFromDb(res);
-                }, (err: any) => {
-                    console.log('%c Error: %c ' + err + '', 'background: #c00; color: #ccc', 'color: #333');
+            // First ensure company exists in DB
+            firstValueFrom(this.dbService.getItemDetails(this.activeCompanyForDb.uniqueName)).then(dbResult => {
+                if (!dbResult) {
+                    // Create fresh data structure if company doesn't exist
+                    this.activeCompanyForDb.aidata = {
+                        menus: [],
+                        groups: [],
+                        accounts: []
+                    };
+                    return firstValueFrom(this.dbService.insertFreshData(this.activeCompanyForDb)).then(() => {
+                        // Convert Promise<number> to Promise<void>
+                        return Promise.resolve();
+                    });
+                }
+                return Promise.resolve();
+            }).then(() => {
+                // Now add the item
+                let isSmallScreen: boolean = !(window.innerWidth > 1440 && window.innerHeight > 717);
+                let branches = [];
+                this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(response => {
+                    branches = response || [];
                 });
+                this.dbService.addItem(this.activeCompanyForDb.uniqueName, entity, item, fromInvalidState, isSmallScreen,
+                    this.currentOrganizationType === OrganizationType.Company && branches?.length > 1).then((res) => {
+                        this.findListFromDb(res);
+                    }, (err: any) => {
+                        console.log('%c Error: %c ' + err + '', 'background: #c00; color: #ccc', 'color: #333');
+                    });
+            });
         }
     }
 

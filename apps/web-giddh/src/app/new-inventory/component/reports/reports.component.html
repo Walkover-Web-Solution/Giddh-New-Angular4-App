@@ -22,22 +22,22 @@
                 [stockReportRequestExport]="stockReportRequestExport"
                 [advanceSearchModalResponse]="advanceSearchModalResponse"
                 [pullUniversalDate]="pullUniversalDate"
-                (filters)="getSelectedFilters($event)"
+                (filters)="filtersSubject$.next($event)"
                 (resetFilters)="resetFilter()"
                 [searchPage]="reportType"
                 (isLoading)="isLoading = $event"
                 (selectedColumns)="getCustomiseHeaderColumns($event)"
-                (selectedDynamicColumns)="getCustomiseDynamicHeaderColumns($event)"
+                (selectedDynamicColumns)="dynamicColumnsSubject$.next($event)"
             ></report-filters>
         </div>
         <div class="inventory-transaction-list overflow-visible" *ngIf="!isLoading">
-            <div *ngIf="isDataAvailable" class="position-sticky">
+            <div *ngIf="isDataAvailable" class="position-sticky mr-b15">
                 <div class="row">
                     <div class="col-12">
                         <div class="top-content">
                             <div class="d-flex w-100 justify-content-between overflow-x-auto">
-                                <div class="total-details-box mr-r05 count-box">
-                                    <h2>
+                                <div class="total-details-box mr-r05 count-box mat-app-background">
+                                    <div>
                                         <span *ngIf="reportType === 'GROUP'">
                                             {{ localeData?.reports?.group_count }}</span
                                         >
@@ -55,10 +55,10 @@
                                                 >{{ stockReportRequest?.totalItems ?? "-" }}
                                             </span>
                                         </div>
-                                    </h2>
+                                    </div>
                                 </div>
                                 <div class="total-details-box mr-r05 border-none opening-box">
-                                    <h2 class="float-left">
+                                    <div class="float-left">
                                         {{ localeData?.reports?.profit_loss }}
                                         <div class="mt-2">
                                             <span
@@ -89,10 +89,10 @@
                                             <br />
                                             <span class="d-inline-flex mt-1"> ({{ selectedDateRangeUi }}) </span>
                                         </div>
-                                    </h2>
+                                    </div>
                                 </div>
                                 <div class="total-details-box mr-r05 border-none sales-purchase">
-                                    <h2 class="float-left">
+                                    <div class="float-left">
                                         {{ localeData?.reports?.opening }}
                                         <div class="mt-2">
                                             <span
@@ -147,10 +147,10 @@
                                                 >)
                                             </span>
                                         </div>
-                                    </h2>
+                                    </div>
                                 </div>
                                 <div class="total-details-box mr-r05 border-none payment-receipt">
-                                    <h2 class="float-left">
+                                    <div class="float-left">
                                         {{ localeData?.reports?.inward }}
                                         <div class="mt-2">
                                             <span
@@ -205,10 +205,10 @@
                                                 >)
                                             </span>
                                         </div>
-                                    </h2>
+                                    </div>
                                 </div>
                                 <div class="total-details-box mr-r05 border-none due-box">
-                                    <h2 class="float-left">
+                                    <div class="float-left">
                                         {{ localeData?.reports?.outward }}
                                         <div class="mt-2">
                                             <span
@@ -263,10 +263,10 @@
                                                 >)
                                             </span>
                                         </div>
-                                    </h2>
+                                    </div>
                                 </div>
                                 <div class="total-details-box border-none closing-box">
-                                    <h2 class="float-left">
+                                    <div class="float-left">
                                         {{ localeData?.reports?.closing }}
                                         <div class="mt-2">
                                             <span
@@ -322,7 +322,7 @@
                                                 >)
                                             </span>
                                         </div>
-                                    </h2>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -364,7 +364,7 @@
                                             class="edit-icon pl-1"
                                             *ngIf="reportType === 'GROUP'"
                                         >
-                                            <i class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
+                                            <i class="icon-edit-pencil font-size-16 pr-1 cursor-pointer"></i>
                                         </a>
                                     </div>
                                 </td>
@@ -389,7 +389,7 @@
                                             class="edit-icon pl-1"
                                             *ngIf="reportType === 'STOCK'"
                                         >
-                                            <i class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
+                                            <i class="icon-edit-pencil font-size-16 pr-1 cursor-pointer"></i>
                                         </a>
                                     </div>
                                 </td>
@@ -414,7 +414,7 @@
                                             class="edit-icon pl-1"
                                             *ngIf="reportType === 'VARIANT'"
                                         >
-                                            <i class="icon-edit-pencil font-16 pr-1 cursor-pointer"></i>
+                                            <i class="icon-edit-pencil font-size-16 pr-1 cursor-pointer"></i>
                                         </a>
                                     </div>
                                 </td>
@@ -707,7 +707,6 @@
                         </table>
                     </div>
                     <div
-                        class="mt-2"
                         *ngIf="
                             stockReportRequest?.totalItems > pageSizeOptions[0] &&
                             !isLoading &&
@@ -723,13 +722,14 @@
                             [hidePageSize]="false"
                             (page)="handlePageEvent($event)"
                         ></mat-paginator>
+                        <section class="mr-b8"></section>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="no-data-inventory" *ngIf="!isLoading && !dataSource?.length">
-            <h1>{{ localeData?.reports?.no_entries_found_1 }}</h1>
-            <h1>{{ localeData?.reports?.no_entries_found_2 }}</h1>
+        <div class="no-data" *ngIf="!isLoading && !dataSource?.length">
+            <h2>{{ localeData?.reports?.no_entries_found_1 }}</h2>
+            <h3>{{ localeData?.reports?.no_entries_found_2 }}</h3>
         </div>
         <div class="no-data" *ngIf="isLoading">
             <giddh-page-loader></giddh-page-loader>

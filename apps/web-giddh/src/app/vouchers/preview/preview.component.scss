@@ -9,7 +9,15 @@
     }
 }
 
-.invoice-preview-wrapper {
+
+::ng-deep .dark-theme .single-invoice-detail {
+    &:hover,
+    &.active {
+        background-color: var(--theme-primary-light) !important;
+    }
+}
+
+:host ::ng-deep .invoice-preview-wrapper {
     display: flex;
     height: calc(100vh - (var(--header-height) + 30px));
 
@@ -23,6 +31,13 @@
             &:hover,
             &.active {
                 background-color: var(--color-light-gray);
+
+                // .text-primary {
+                //     color: var(--theme-primary-color) !important;
+                // }
+                // .text-default {
+                //     color: var(--color-black) !important;
+                // }
             }
         }
     }
@@ -32,7 +47,7 @@
         overflow-y: auto;
 
         .preview-header {
-            background-color: var(--color-light-gray);
+            // background-color: var(--theme-primary-light);
             .action-btn {
                 column-gap: 6px;
 
@@ -51,10 +66,10 @@
             .invoice-status {
                 user-select: none;
                 max-height: 36px;
-                padding: 5px 10px;
+                padding: 8px 10px;
                 color: var(--color-black);
                 background-color: var(--color-silver);
-                border: 1px solid var(--color-silver);
+                border: 1px solid var(--border-color);
             }
         }
 
@@ -76,7 +91,7 @@
                 li {
                     &:not(:last-child) {
                         &::after {
-                            content: '';
+                            content: "";
                             position: absolute;
                             top: 20px;
                             left: -10px;
@@ -120,6 +135,18 @@
             }
         }
     }
+}
+
+::ng-deep .default-theme {
+    .preview-header {
+        background-color: var(--color-light-gray);
+    }   
+}
+
+::ng-deep .dark-theme {
+    .preview-header {
+        background-color: var(--color-transparent);
+    }  
 }
 
 @media screen and (max-width: 1199px) {

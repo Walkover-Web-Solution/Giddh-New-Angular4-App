@@ -1,18 +1,18 @@
 <ng-container appTranslate [file]="'ledger/export-ledger'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
-    <div id="exportModal" class="disable-ripple">
+    <div id="exportModal">
         <div class="dialog-header">
             <span>{{ localeData?.page_heading }}</span>
             <button mat-icon-button aria-label="close" mat-dialog-close>
                 <i class="icon-cross"></i>
             </button>
         </div>
-        <mat-dialog-content class="dialog-body" id="export-body">
+        <mat-dialog-content class="dialog-body max-height-65vh" id="export-body">
             <form name="addShareEmailForm" novalidate autocomplete="off">
                 <p class="mr-b1">
                     {{ commonLocaleData?.app_note }}: {{ commonLocaleData?.app_export_file_name_change_note }}
                 </p>
-                <div class="pd-b3 clearfix">
+                <div class="pd-b3 clear-both">
                     <div class="form-inline">
                         <div class="form-group">
                             <label class="w120 justify-content-start">{{ commonLocaleData?.app_date_range }}:
@@ -39,7 +39,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="pd-b2 clearfix export-type" *ngIf="emailTypeSelected === emailTypeDetail">
+                <div class="pd-b2 clear-both export-type" *ngIf="emailTypeSelected === emailTypeDetail">
                     <label class="w125">{{ localeData?.ledger_view }}:</label>
                     <mat-slide-toggle color="primary" name="ledgerView" [attr.aria-label]="localeData?.ledger_view"
                         [(ngModel)]="exportRequest.ledgerView"
@@ -49,7 +49,7 @@
                             }}</span>
                     </mat-slide-toggle>
                 </div>
-                <div class="pd-b2 clearfix export-type">
+                <div class="pd-b2 clear-both export-type">
                     <label class="w125">{{ commonLocaleData?.app_type }}:</label>
                     <div>
                         <mat-radio-group color="primary" [attr.aria-label]="commonLocaleData?.app_type"
@@ -70,7 +70,7 @@
                     </div>
                 </div>
                 <ng-container *ngIf="emailTypeSelected === 'voucher'">
-                    <div class="pd-b1 clearfix export-type d-flex column-gap15">
+                    <div class="pd-b1 clear-both export-type d-flex column-gap-15">
                         <div class="d-flex align-items-center">
                             <label class="w125">{{ localeData?.attachment }}:</label>
                             <mat-slide-toggle color="primary" name="attachmentExport"
@@ -84,7 +84,7 @@
                         </div>
                         <i class="icon-info1 cursor-pointer d-flex align-items-center" [matTooltip]="localeData?.export_attachment_info" matTooltipPosition="above"></i>
                     </div>
-                    <div class="d-flex column-gap15 align-items-center"
+                    <div class="d-flex column-gap-15 align-items-center"
                         *ngIf="exportRequest.attachmentExport">
                         <div class="mb-2">
                             {{ commonLocaleData?.app_file_format }}
@@ -96,19 +96,19 @@
                                 (click)="tribute?.open()"
                                 [(ngModel)]="selectedFormatList"
                                 [placeholder]="commonLocaleData?.app_variable_search_hint"
-                                class="form-control radius-none border-0 border-bottom"
+                                class="form-control radius-none border-none border-bottom"
                                 name="formatList"
                                 (ngModelChange)="getFileFormat()"
                                 [appTributeMention]="tributeConfig"
                                 [appTributeMentionValues]="fileFormatList"
                             />
-                            <div class="font-12 word-break pd-t05 pd-b05">
+                            <div class="font-size-12 word-break pd-t05 pd-b05">
                                 {{ exportRequest.fileNameFormat }}
                             </div>
                         </div>
                     </div>
                     <mat-divider [ngClass]="{'mr-t1': exportRequest.attachmentExport && !selectedFormatList?.trim().length}"></mat-divider>
-                    <div class="pd-b2 pd-t1 clearfix export-type">
+                    <div class="pd-b2 pd-t1 clear-both export-type">
                         <label class="w125">{{ commonLocaleData?.app_voucher }}:</label>
                         <mat-slide-toggle color="primary" name="voucherExport"
                             [(ngModel)]="exportRequest.voucherExport">
@@ -159,7 +159,7 @@
                 </div>
                 <ng-template [ngIf]="exportRequest.ledgerView">
                     <div class="row">
-                        <div class="col position-relative"
+                        <div class="col position-relative "
                             [ngClass]="{'export-ledger-right-tview': inputData?.isLedgerAccountAllowsMultiCurrency, 'export-border': inputData?.isLedgerAccountAllowsMultiCurrency}">
                             <div class="pd-b2 export-type"
                                 [hidden]="['billToBill', 'voucher'].includes(emailTypeSelected)">
@@ -199,7 +199,7 @@
                     </div>
                 </ng-template>
                 <div class="row">
-                    <div class="col export-border position-relative"
+                    <div class="col export-border position-relative "
                         [ngClass]="{'export-ledger-right': inputData?.isLedgerAccountAllowsMultiCurrency}">
                         <ng-template [ngIf]="!exportRequest.ledgerView">
                             <div class="pd-b2 export-type"
@@ -332,7 +332,7 @@
         </mat-dialog-content>
         <mat-dialog-actions align="end">
             <div class="pd-b15">
-                <button mat-raised-button color="primary" class="unbold mr-l1 mr-r1" (click)="exportLedger()"
+                <button mat-raised-button color="primary" class="mr-l1 mr-r1" (click)="exportLedger()"
                     [disabled]="
             isLoading ||
             (emailTypeSelected === 'voucher' &&
@@ -341,7 +341,7 @@
         ">
                     {{ commonLocaleData?.app_download }}
                 </button>
-                <button mat-raised-button color="primary" class="show-columnar-button unbold mr-l1"
+                <button mat-raised-button color="primary" class="show-columnar-button mr-l1"
                     [hidden]="emailTypeSelected !== 'columnar'" (click)="showColumnarReport()">
                     {{ commonLocaleData?.app_show }}
                 </button>

@@ -1,15 +1,18 @@
-.bd-rt {
-    border-color: var(--color-silver);
+.border-top {
+    border-color: var(--border-color);
 }
 
 :host ::ng-deep .fb-1-container {
     justify-content: flex-start;
 }
 
-:host ::ng-deep .fb-1-container .form-group {
+/* UNUSED COMPONENT CLASS: form-group - Auto-commented by script
+:host ::ng-deep .fb-1-container 
+.form-group {
     margin-right: 10px;
     margin-bottom: 0;
 }
+*/
 
 :host ::ng-deep .fb-1-container .date-range-picker {
     min-width: 150px;
@@ -19,12 +22,14 @@ a:hover {
     text-decoration: none;
 }
 
+/* UNUSED COMPONENT CLASS: flex-container - Auto-commented by script
 .flex-container {
     display: flex;
     flex-direction: row;
     align-items: flex-start;
     flex-flow: row wrap;
 }
+*/
 
 table {
     table-layout: fixed;
@@ -41,19 +46,23 @@ table {
     max-width: 600px;
 }
 
+/* UNUSED COMPONENT CLASS: check-image - Auto-commented by script
 .check-image img {
     max-height: 20px;
     cursor: pointer;
 }
+*/
 
 .flex-fill {
     flex: 1 1 auto;
     padding-right: 2px;
 }
 
+/* UNUSED COMPONENT CLASS: sh-select-dropdown - Auto-commented by script
 .sh-select-dropdown {
     width: 230px;
 }
+*/
 
 /*td-in-searchbox_style*/
 
@@ -70,7 +79,7 @@ table {
 
 .td-search-box div i {
     margin-top: 1px;
-    color: var(--color-blue-primary);
+    // color: var(--text-primary-color);
     padding-right: 8px;
     cursor: pointer;
     display: flex;
@@ -108,22 +117,27 @@ table {
 }
 
 .basic > thead > tr > th {
-    border-right: 1px solid var(--color-silver);
+    border-right: 1px solid var(--border-color);
 }
 
-.icon-pointer .glyphicon {
+/* .icon-pointer  UNUSED COMPONENT CLASS: glyphicon - Auto-commented by script
+.glyphicon {
     cursor: pointer;
 }
+*/
 
-.td-search-box div i:hover {
-    color: var(--color-medium-gray);
-}
+// .td-search-box div i:hover {
+//     color: var(--color-medium-gray);
+// }
 
+/* UNUSED COMPONENT CLASS: dropdown-menu - Auto-commented by script
 .dropdown-menu > li > a:hover {
-    color: var(--color-blue-primary);
+    color: var(--text-primary-color);
     background: var(--color-border-light);
 }
+*/
 
+/* UNUSED COMPONENT CLASS: stock-input - Auto-commented by script
 .stock-input {
     background-color: transparent !important;
     border-bottom: 1px dotted var(--color-white) !important;
@@ -135,15 +149,19 @@ table {
     min-width: 155px;
     color: var(--color-white);
 }
+*/
 
+/* UNUSED COMPONENT CLASS: footer-tr - Auto-commented by script
 .footer-tr td {
     background-color: var(--color-border-light);
 }
+*/
 
 .total-footer {
     background-color: var(--color-white);
     display: flex;
-    .foot-item {
+    /* UNUSED COMPONENT CLASS: foot-item - Auto-commented by script
+.foot-item {
         padding: 41px;
         h2 {
             color: var(--color-medium-gray);
@@ -154,36 +172,48 @@ table {
             font-size: var(--font-size-32);
         }
     }
+*/
 }
 
+/* UNUSED COMPONENT CLASS: modal-content - Auto-commented by script
 .modal-content {
-    border-radius: 0px;
+    border-radius: var(--mat-border-radius-0);
     margin-top: 200px;
 }
+*/
 
+/* UNUSED COMPONENT CLASS: btn-download - Auto-commented by script
 .btn-download {
     font-size: var(--font-size-15);
 }
+*/
 
 .btn-group.open.show {
     display: inline-block !important;
 }
 
-.dropdown-menu.dropdown-menu-download {
+/* UNUSED COMPONENT CLASS: dropdown-menu-download - Auto-commented by script
+.dropdown-menu
+.dropdown-menu-download {
     min-width: 110px;
-    border-radius: 0px;
+    border-radius: var(--mat-border-radius-0);
 }
+*/
 
 .dropdown-menu-download li {
     cursor: pointer;
 }
 
+/* UNUSED COMPONENT CLASS: capitalize - Auto-commented by script
 .capitalize {
     text-transform: capitalize;
 }
+*/
+/* UNUSED COMPONENT CLASS: border-none - Auto-commented by script
 .border-none {
     border: none !important;
 }
+*/
 
 .unit-badge {
     display: inline-block;
@@ -196,11 +226,11 @@ table {
 .icon-pointer .icon-sort-asc {
     line-height: 20px;
     width: 15px;
-    color: var(--color-blue-primary);
+    color: var(--text-primary-color);
 }
 
 .icon-pointer .active-text-color {
-    color: var(--color-blue-primary);
+    color: var(--text-primary-color);
 }
 
 .custom-datepicker-wrapper-group {
@@ -264,13 +294,15 @@ table {
     width: 100% !important;
 }
 
-.text-purple {
-    color: var(--color-blue-primary);
+.text-primary {
+    color: var(--text-primary-color);
 }
 
+/* UNUSED COMPONENT CLASS: btn-link-2 - Auto-commented by script
 .btn-link-2 {
-    color: var(--color-blue-primary);
+    color: var(--text-primary-color);
 }
+*/
 
 .mr-b100 {
     margin-bottom: 100px;
@@ -296,9 +328,9 @@ td.border-right-none {
     justify-content: center;
     align-items: center;
     font-size: var(--font-size-16);
-    border: 1px solid var(--color-silver);
-    border-radius: 5px;
-    color: var(--color-blue-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--mat-border-radius-4);
+    color: var(--text-primary-color);
     background: var(--color-white);
 }
 
@@ -314,16 +346,19 @@ td.border-right-none {
     cursor: pointer;
 }
 
-button.btn.btn-filter {
+/* UNUSED COMPONENT CLASS: btn-filter - Auto-commented by script
+button.btn
+.btn-filter {
     background: var(--color-border-light);
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     font-size: var(--font-size-15);
-    color: var(--color-blue-primary);
+    color: var(--text-primary-color);
     display: inline-flex;
     justify-content: space-between;
     align-items: center;
     padding: 4px 10px;
 }
+*/
 
 .table-border .d-flex {
     align-items: center;
@@ -334,20 +369,25 @@ button.btn.btn-filter {
     text-align: left;
 }
 
-.recept-modal .modal-title {
+/* UNUSED COMPONENT CLASS: modal-title - Auto-commented by script
+.recept-modal 
+.modal-title {
     color: var(--color-white);
 }
+*/
 
+/* UNUSED COMPONENT CLASS: mt-0 - Auto-commented by script
 .mt-0 {
     margin-top: 0px !important;
 }
+*/
 
 .group-not-found {
     text-transform: none;
 }
 .icon-btn {
-    border: 1px solid var(--color-silver);
-    border-radius: 5px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--mat-border-radius-4);
     height: 36px;
     width: 36px;
     margin-top: 0;
@@ -379,11 +419,13 @@ button.btn.btn-filter {
     }
 }
 
+/* UNUSED COMPONENT CLASS: input-group-addon - Auto-commented by script
 .input-group-addon {
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     border-left: 0;
     background-color: var(--color-border-light);
 }
+*/
 
 @media (max-width: 1622px) {
     .inventory-stock-table {
