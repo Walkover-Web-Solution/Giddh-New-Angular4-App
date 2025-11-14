@@ -14,12 +14,12 @@
                 (selectedTabChange)="tabChanged($event)">
                 <mat-tab>
                     <ng-template mat-tab-label>
-                        <i class="icon-mail mr-r1"></i>
+                        <i class="icon-mail mr-2"></i>
                         <span>{{ localeData?.integration }}</span>
                     </ng-template>
-                    <div class="pd-t15 pd-b15">
+                    <div class="pt-3 pb-3">
                         <div class="single-tab-block">
-                        <div class=" pd-15 clear-both mb-2">
+                        <div class=" p-3 clear-both mb-2">
                             <p class="clear-both border-bottom mb-3">
                                 {{ localeData?.integration }}<span> {{ localeData?.settings_note }}</span>
                             </p>
@@ -65,7 +65,7 @@
                                                 >
                                                     <button
                                                         mat-raised-button color="primary"
-                                                        class="mr-r15"
+                                                        class="mr-3"
                                                         (click)="
                                                             verifyEmail(invoiceSettings.purchaseBillSettings.email)
                                                         "
@@ -115,7 +115,7 @@
                                 </div>
                             </div>
 
-                            <div class="clear-both pd-t1">
+                            <div class="clear-both pt-2">
                                 <div class="row">
                                     <div class="col-sm-12 col-md-12 col-lg-3">
                                         <mat-slide-toggle
@@ -152,12 +152,12 @@
                 </mat-tab>
                 <mat-tab>
                     <ng-template mat-tab-label>
-                        <i class="icon-sales-order mr-r1"></i>
+                        <i class="icon-sales-order mr-2"></i>
                         <span>{{ localeData?.pur_order }}</span>
                     </ng-template>
-                    <div class="pd-t15 pd-b15">
+                    <div class="pt-3 pb-3">
                         <div class="sales-order-tab single-tab-block">
-                        <div class=" pd-15 clear-both mb-2">
+                        <div class=" p-3 clear-both mb-2">
                             <p class="clear-both border-bottom mb-3">{{ localeData?.purchase_order }}</p>
                             <div class="clear-both">
                                 <div class="row">
@@ -180,14 +180,14 @@
                                                                 invoiceSettings.purchaseBillSettings.poDuePeriod
                                                             "
                                                         />
-                                                        <span class="mr-l05"> {{ commonLocaleData?.app_days }} </span>
+                                                        <span class="ml-1"> {{ commonLocaleData?.app_days }} </span>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="clear-both pd-t1">
+                                <div class="clear-both pt-2">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-3">
                                             <mat-slide-toggle
@@ -216,7 +216,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="clear-both pd-t1" *ngIf="voucherApiVersion === 2">
+                                <div class="clear-both pt-2" *ngIf="voucherApiVersion === 2">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-3">
                                             <mat-slide-toggle
@@ -245,7 +245,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="clear-both pd-t1">
+                                <div class="clear-both pt-2">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-3">
                                             <mat-slide-toggle
@@ -299,7 +299,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="clear-both pd-t1" *ngIf="voucherApiVersion === 2">
+                                <div class="clear-both pt-2" *ngIf="voucherApiVersion === 2">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
                                             <label>{{ commonLocaleData?.app_custom_email_template }}</label>
@@ -322,12 +322,12 @@
                 </mat-tab>
                 <mat-tab>
                     <ng-template mat-tab-label>
-                        <i class="icon-invoice-icon mr-r1"></i>
+                        <i class="icon-invoice-icon mr-2"></i>
                         <span>{{ localeData?.pur_bill }}</span>
                     </ng-template>
-                    <div class="pd-t15 pd-b15">
+                    <div class="pt-3 pb-3">
                         <div class="single-tab-block">
-                        <div class=" pd-15 clear-both mb-2">
+                        <div class=" p-3 clear-both mb-2">
                             <p class="clear-both border-bottom mb-3">{{ localeData?.purchase_bill }}</p>
                             <div class="clear-both">
                                 <div class="clear-both">
@@ -348,7 +348,7 @@
                                     </div>
                                 </div>
 
-                                <div class="clear-both pd-t2">
+                                <div class="clear-both pt-4">
                                     <div class="row">
                                         <div class="col-sm-12 col-md-12 col-lg-3">
                                             <mat-slide-toggle
@@ -374,7 +374,7 @@
                                     </div>
                                 </div>
                                 <ng-container *ngIf="voucherApiVersion === 2">
-                                    <div class="clear-both pd-t1 row" >
+                                    <div class="clear-both pt-2 row" >
                                         <div class="col-sm-12 col-md-12 col-lg-3">
                                             <mat-slide-toggle
                                                 [(ngModel)]="invoiceSettings.purchaseBillSettings.enableVoucherDownload"
@@ -397,7 +397,7 @@
                                             </mat-slide-toggle>
                                         </div>
                                     </div>
-                                    <div class="clear-both pd-t1 row"> 
+                                    <div class="clear-both pt-2 row"> 
                                         <div class="col-sm-12 col-md-12 col-lg-3">
                                             <mat-slide-toggle
                                                 [(ngModel)]="invoiceSettings.invoiceSettings.autoWhatsAppPayment"
@@ -420,7 +420,7 @@
                                             </mat-slide-toggle>
                                         </div>
                                     </div>
-                                    <div class="clear-both pd-t1 row"> 
+                                    <div class="clear-both pt-2 row"> 
                                         <div class="col-sm-12 col-md-12 col-lg-3">
                                             <mat-slide-toggle
                                                 [(ngModel)]="invoiceSettings.purchaseBillSettings.autoWhatsApp"
@@ -443,7 +443,7 @@
                                             </mat-slide-toggle>
                                         </div>
                                     </div>
-                                    <div class="clear-both pd-t1 row">
+                                    <div class="clear-both pt-2 row">
                                         <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
                                             <mat-slide-toggle
                                                 [(ngModel)]="invoiceSettings.invoiceSettings.purchaseRoundOff"
@@ -466,7 +466,7 @@
                                             </mat-slide-toggle>
                                         </div>
                                     </div>
-                                    <div class="clear-both pd-t1 row">
+                                    <div class="clear-both pt-2 row">
                                         <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
                                             <mat-slide-toggle
                                                 [(ngModel)]="invoiceSettings.invoiceSettings.generateAutoPurchaseNumber"
@@ -490,7 +490,7 @@
                                         </div>
                                         
                                     </div>
-                                    <div class="clear-both pd-t1 row">
+                                    <div class="clear-both pt-2 row">
                                         <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
                                             <label>{{ commonLocaleData?.app_custom_email_template }}</label>
                                         </div>

@@ -1,9 +1,9 @@
 <ng-container appTranslate [file]="'settings/permission'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event">
-    <section class="pd-15">
-        <div class="pd-b2" *ngIf="localeData?.give_permission">
+    <section class="p-3">
+        <div class="pb-4" *ngIf="localeData?.give_permission">
             <div class="d-flex justify-content-between">
-                <p class="mr-b2">
+                <p class="mb-4">
                     <strong>{{ localeData?.give_permission }}:</strong>
                 </p>
                 <watch-video [cssClass]="'text-primary'" [moduleName]="'MULTI_USER_ACCESS'"></watch-video>
@@ -15,7 +15,7 @@
         </div>
     
         <div *ngIf="localeData?.give_permission">
-            <p class="mr-b1">
+            <p class="mb-2">
                 <strong>{{ localeData?.form_heading }}</strong>
             </p>
             <ng-container *ngIf="currentUser && usersList?.length > 0">
@@ -24,8 +24,8 @@
                         <div class="row">
                             <div class="col-xl-2 col-lg-3 col-md-6 col-sm-6 user">
                                 <div class="text-ellipsis">
-                                    <div class="text-ellipsis"><i class="icon-user-black pd-r1"></i>{{ usrGrp.name }}</div>
-                                    <small class="mr-l2">{{ usrGrp.rows[0].emailId }}</small>
+                                    <div class="text-ellipsis"><i class="icon-user-black pr-2"></i>{{ usrGrp.name }}</div>
+                                    <small class="ml-4">{{ usrGrp.rows[0].emailId }}</small>
                                 </div>
                             </div>
                             <div class="col-12 col-lg-9 col-md-6 col-sm-6">
@@ -68,8 +68,8 @@
                                                     </div>
                                                 </div>
     
-                                                <div class="ico-btn pull-left col-12 col-lg-4 col-md-12 col-sm-12 mr-t05">
-                                                    <button mat-stroked-button class="action-icon-btn mr-r1" type="button"
+                                                <div class="ico-btn pull-left col-12 col-lg-4 col-md-12 col-sm-12 mt-1">
+                                                    <button mat-stroked-button class="action-icon-btn mr-2" type="button"
                                                         [hidden]="usrGrp.rows[0].isLoggedInUser"
                                                         (click)="showModalForEdit(user)" aria-label="edit icon">
                                                         <i aria-hidden="true" class="icon-edit-pencil"></i>

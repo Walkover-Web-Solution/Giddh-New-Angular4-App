@@ -39,7 +39,7 @@
                     type="text"
                     name="selectedDateRange"
                     [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
-                    class="giddh-datepicker date-range-picker text-center pd-l1 pd-r1"
+                    class="giddh-datepicker date-range-picker text-center pl-2 pr-2"
                     readonly
                 />
             </div>
@@ -77,7 +77,7 @@
         <div *ngIf="adjustInventoryInProgress$ | async">
             <giddh-page-loader></giddh-page-loader>
         </div>
-        <div class="custom-field-list mr-t15">
+        <div class="custom-field-list mt-3">
             <section *ngIf="showData && !(adjustInventoryInProgress$ | async)" class="mt-4">
                 <form
                     class="table-responsive"
@@ -102,7 +102,7 @@
                                 mat-header-cell
                                 *matHeaderCellDef
                                 #searchReferenceNoContainer
-                                class="td-search-box pd-l1"
+                                class="td-search-box pl-2"
                                 (clickOutside)="
                                     handleClickOutside($event, searchReferenceNoContainer, localeData?.reference_no)
                                 "
@@ -131,7 +131,7 @@
                                 mat-header-cell
                                 *matHeaderCellDef
                                 #searchNameContainer
-                                class="td-search-box pd-l1"
+                                class="td-search-box pl-2"
                                 (clickOutside)="handleClickOutside($event, searchNameContainer, localeData?.stock_name)"
                             >
                                 <ng-container
@@ -156,7 +156,7 @@
                                 mat-header-cell
                                 *matHeaderCellDef
                                 #searchReasonContainer
-                                class="td-search-box pd-l1"
+                                class="td-search-box pl-2"
                                 (clickOutside)="handleClickOutside($event, searchReasonContainer, localeData?.reason)"
                             >
                                 <ng-container
@@ -181,7 +181,7 @@
                                 mat-header-cell
                                 *matHeaderCellDef
                                 #searchStatusContainer
-                                class="td-search-box pd-l1"
+                                class="td-search-box pl-2"
                                 (clickOutside)="
                                     handleClickOutside($event, searchStatusContainer, localeData?.request_status)
                                 "
@@ -208,7 +208,7 @@
                                 mat-header-cell
                                 *matHeaderCellDef
                                 #searchAdjustedByContainer
-                                class="td-search-box pd-l1"
+                                class="td-search-box pl-2"
                                 (clickOutside)="
                                     handleClickOutside($event, searchAdjustedByContainer, localeData?.adjusted_by)
                                 "
@@ -235,7 +235,7 @@
                                 mat-header-cell
                                 *matHeaderCellDef
                                 #searchAdjustmentMethodContainer
-                                class="td-search-box pd-l1"
+                                class="td-search-box pl-2"
                                 (clickOutside)="
                                     handleClickOutside(
                                         $event,
@@ -266,7 +266,7 @@
                                 mat-header-cell
                                 *matHeaderCellDef
                                 #searchTypeContainer
-                                class="td-search-box pd-l1"
+                                class="td-search-box pl-2"
                                 (clickOutside)="handleClickOutside($event, searchTypeContainer, localeData?.type)"
                             >
                                 <ng-container
@@ -341,7 +341,7 @@
                     [pageIndex]="pageIndex"
                 >
                 </mat-paginator>
-                <section class="mr-b8"></section>
+                <section class="mb-custom-80"></section>
             </div>
         </div>
     </div>
@@ -356,7 +356,7 @@
             <text-field
                 [type]="'text'"
                 [placeholder]="getSearchFieldText(fieldName)"
-                [cssClass]="'form-control border w-100 min-width-unset pd-15 pr-0'"
+                [cssClass]="'form-control border w-100 min-width-unset p-3 pr-0'"
                 [formControl]="formControl"
                 [autoFocus]="show"
             >

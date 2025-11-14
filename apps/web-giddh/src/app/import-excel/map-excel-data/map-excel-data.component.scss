@@ -1,71 +1,17 @@
-/* UNUSED COMPONENT CLASS: max-width-500 - Auto-commented by script
-.max-width-500 {
-    max-width: 500px;
-}
-*/
-/* UNUSED COMPONENT CLASS: right-bar - Auto-commented by script
-.right-bar {
-    position: absolute;
-    top: -49px;
-    background-color: var(--color-white);
-    right: -15px;
-    height: unset;
-    width: 310px;
-    padding: 15px;
-    bottom: 0;
-}
-*/
-
-/* UNUSED COMPONENT CLASS: green-checkbox - Auto-commented by script
-input.green-checkbox[type="checkbox"]:after {
-    left: -3px !important;
-    border: 0px solid transparent !important;
-    background-color: var(--color-border-light);
-    border-radius: 27px !important;
-}
-*/
 input.green-checkbox[type="checkbox"]:before {
     border: 2px solid var(--color-white) !important;
     border-top-style: none !important;
     border-right-style: none !important;
     left: 0px !important;
 }
-/* UNUSED COMPONENT CLASS: font-12 - Auto-commented by script
-.font-12 {
-    font-size: var(--font-size-12);
-}
-*/
+
 input.green-checkbox[type="checkbox"]:checked:after {
     background-color: var(--color-green) !important;
 }
-/* UNUSED COMPONENT CLASS: group-card - Auto-commented by script
-.group-card {
-    border: 1px solid var(--color-medium-gray);
-    padding: 0 13px;
-    border-radius: var(--mat-border-radius-4);
-    margin: 15px 0;
-    /* UNUSED COMPONENT CLASS: inner-row - Auto-commented by script
-.inner-row {
-        margin: 15px -13px !important;
-    }
-}
-*/
 
 .select-field-width {
     width: 100% !important;
 }
-
-/* UNUSED COMPONENT CLASS: group-model - Auto-commented by script
-.group-model {
-    margin-top: 50px;
-}
-*/
-
-/* UNUSED COMPONENT CLASS: success-label - Auto-commented by script
-.success-label {
-    color: var(--color-green) !important;
-}
-*/
 
 @media (max-width: 1140px) {
     .left-bar-width {

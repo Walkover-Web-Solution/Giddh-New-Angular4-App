@@ -1,22 +1,16 @@
 @use "@angular/material" as mat;
-// @use "../../../assets/styles/global/mat-button" as mat-button;
 @use "../../../assets/styles/themes/_custom-palette" as palette;
 @use "../../../assets/styles/themes/custom_typography" as typography;
-/**
- * Material Button Theme Mixin
- * Applies Angular Material button theme styles for shadow DOM components
- */
+
  @mixin mat-button-theme($theme) {
     @include mat.button-color($theme);
     @include mat.button-typography($theme);
     @include mat.button-density($theme);
 }
-// Define both light and dark themes for this component
 $primary-palette: palette.$giddh-primary;
 $accent-palette: palette.$giddh-accent;
 $warn-palette: palette.$giddh-warn;
 
-// Dark theme palettes
 $primary-palette-dark: palette.$giddh-primary-dark;
 $accent-palette-dark: palette.$giddh-accent-dark;
 $warn-palette-dark: palette.$giddh-warn-dark;
@@ -43,7 +37,6 @@ $dark-theme: mat.define-dark-theme(
     )
 );
 
-// Apply Material button theme for both themes in this shadow DOM component
 :host-context(.default-theme) {
     @include mat-button-theme($light-theme);
 }
@@ -76,24 +69,7 @@ $dark-theme: mat.define-dark-theme(
         border-bottom-color: var(--color-silver);
         content: "";
     }
-    /*& UNUSED COMPONENT CLASS: openscenter - Auto-commented by script
-.openscenter {
-        &:before {
-            left: 0;
-            right: 0;
-            width: 0;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        &:after {
-            left: 0;
-            right: 0;
-            width: 0;
-            margin-left: auto;
-            margin-right: auto;
-        }
-    }
-*/
+
     &.single {
         .ranges,
         .calendar {
@@ -109,36 +85,7 @@ $dark-theme: mat.define-dark-theme(
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
-        /*& UNUSED COMPONENT CLASS: drops-up-left - Auto-commented by script
-.drops-up-left {
-            transform-origin: 100% 100%;
-        }
-*/
-        /*& UNUSED COMPONENT CLASS: drops-up-right - Auto-commented by script
-.drops-up-right {
-            transform-origin: 0 100%;
-        }
-*/
-        /*& UNUSED COMPONENT CLASS: drops-down-left - Auto-commented by script
-.drops-down-left {
-            transform-origin: 100% 0;
-        }
-*/
-        /*& UNUSED COMPONENT CLASS: drops-down-right - Auto-commented by script
-.drops-down-right {
-            transform-origin: 0 0;
-        }
-*/
-        /*& UNUSED COMPONENT CLASS: drops-down-center - Auto-commented by script
-.drops-down-center {
-            transform-origin: 50%% 0;
-        }
-*/
-        /*& UNUSED COMPONENT CLASS: drops-up-center - Auto-commented by script
-.drops-up-center {
-            transform-origin: 50%% 100%;
-        }
-*/
+
         .calendar {
             display: block;
         }
@@ -205,7 +152,6 @@ $dark-theme: mat.define-dark-theme(
                 pointer-events: none;
             }
         }
-        /* new calendar */
         .th-div,
         .td-div {
             padding: 0;
@@ -219,7 +165,6 @@ $dark-theme: mat.define-dark-theme(
                 font-size: var(--font-size-15);
             }
         }
-        /* new calendar */
     }
     .calendar-table {
         border: 1px solid var(--color-transparent);
@@ -240,7 +185,7 @@ $dark-theme: mat.define-dark-theme(
         color: var(--color-medium-gray);
     }
     th.month.drp-animate,
-    .month.drp-animate {    
+    .month.drp-animate {
         font-size: var(--font-size-12);
         text-align: left;
         color: var(--theme-foreground-color);
@@ -311,7 +256,6 @@ $dark-theme: mat.define-dark-theme(
         }
     }
 
-    /* new calendar */
     .td-div,
     .th-div {
         text-align: center;
@@ -409,12 +353,10 @@ $dark-theme: mat.define-dark-theme(
                 }
             }
         }
-        // Date Range
         &.in-range {
             background-color: var(--theme-primary-light);
             border-color: transparent;
             color: var(--theme-foreground-color);
-            // TODO: Should this be static or should it be parameterized?
             border-radius: var(--mat-border-radius-0);
             z-index: 9;
             position: relative;
@@ -507,9 +449,7 @@ $dark-theme: mat.define-dark-theme(
     .justify-content-between {
         justify-content: space-between;
     }
-    /* new calendar */
 
-    // disabled controls
     td,
     option {
         &.disabled {
@@ -519,7 +459,6 @@ $dark-theme: mat.define-dark-theme(
         }
     }
 
-    /* new calendar */
     .td-div,
     option {
         &.disabled {
@@ -528,9 +467,7 @@ $dark-theme: mat.define-dark-theme(
             text-decoration: line-through;
         }
     }
-    /* new calendar */
 
-    /* new calendar */
     .td-div,
     option {
         &.disabled {
@@ -539,7 +476,6 @@ $dark-theme: mat.define-dark-theme(
             text-decoration: line-through;
         }
     }
-    /* new calendar */
 
     select {
         display: inline-block;
@@ -585,12 +521,10 @@ $dark-theme: mat.define-dark-theme(
         display: inline-block;
     }
 
-    /* new calendar */
     .th-div.month > div {
         position: relative;
         display: inline-block;
     }
-    /* new calendar */
 
     .calendar-time {
         text-align: center;
@@ -629,25 +563,12 @@ $dark-theme: mat.define-dark-theme(
         }
     }
     &.rtl {
-        /* UNUSED COMPONENT CLASS: label-input - Auto-commented by script
-.label-input {
-            padding-right: 28px;
-            padding-left: 6px;
-        }
-*/
+
         .md-drppicker_input i,
         .md-drppicker_input svg {
             left: auto;
             right: 8px;
         }
-    }
-    /* ranges */
-    .show-ranges {
-        /* UNUSED COMPONENT CLASS: drp-calendar - Auto-commented by script
-.drp-calendar.left {
-            border-left: 1px solid var(--border-color);
-        }
-*/
     }
     .ranges {
         float: none;
@@ -660,7 +581,6 @@ $dark-theme: mat.define-dark-theme(
         height: 490px !important;
         .range-container {
             ul {
-                // list-style: none;
                 margin: 0 auto;
                 padding: 0;
                 width: 212px;
@@ -686,34 +606,7 @@ $dark-theme: mat.define-dark-theme(
                         .available.prev {
                             transform: rotate(180deg);
                         }
-                        /* UNUSED COMPONENT CLASS: drop-down - Auto-commented by script
-.drop-down {
-                            position: absolute;
-                            z-index: 1017;
-                            min-width: 96px;
-                            background-color: var(--theme-background-color);
-                            box-shadow: 0px 2px 8px var(--color-shadow-light);
-                            left: 28px;
-                            top: -3px;
-                            border-radius: var(--mat-border-radius-0);
-                        }
-*/
-                        /* UNUSED COMPONENT CLASS: mat-select-arrow - Auto-commented by script
-.mat-select-arrow {
-                            background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAABAhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDY3IDc5LjE1Nzc0NywgMjAxNS8wMy8zMC0yMzo0MDo0MiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIgeG1wTU06T3JpZ2luYWxEb2N1bWVudElEPSJ1dWlkOjY1RTYzOTA2ODZDRjExREJBNkUyRDg4N0NFQUNCNDA3IiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOkYzRkRFQjcxODUzNTExRTU4RTQwRkQwODFEOUZEMEE3IiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOkYzRkRFQjcwODUzNTExRTU4RTQwRkQwODFEOUZEMEE3IiB4bXA6Q3JlYXRvclRvb2w9IkFkb2JlIFBob3Rvc2hvcCBDQyAyMDE1IChNYWNpbnRvc2gpIj4gPHhtcE1NOkRlcml2ZWRGcm9tIHN0UmVmOmluc3RhbmNlSUQ9InhtcC5paWQ6MTk5NzA1OGEtZDI3OC00NDZkLWE4ODgtNGM4MGQ4YWI1NzNmIiBzdFJlZjpkb2N1bWVudElEPSJhZG9iZTpkb2NpZDpwaG90b3Nob3A6YzRkZmQxMGMtY2NlNS0xMTc4LWE5OGQtY2NkZmM5ODk5YWYwIi8+IDxkYzp0aXRsZT4gPHJkZjpBbHQ+IDxyZGY6bGkgeG1sOmxhbmc9IngtZGVmYXVsdCI+Z2x5cGhpY29uczwvcmRmOmxpPiA8L3JkZjpBbHQ+IDwvZGM6dGl0bGU+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+5iogFwAAAGhJREFUeNpiYGBgKABigf///zOQg0EARH4A4gZyDIIZ8B/JoAJKDIDhB0CcQIkBRBtEyABkgxwoMQCGD6AbRKoBGAYxQgXIBRuZGKgAKPIC3QLxArnRSHZCIjspk52ZKMrOFBUoAAEGAKnq593MQAZtAAAAAElFTkSuQmCC);
-                            background-repeat: no-repeat;
-                            height: 23px;
-                            width: 23px;
-                            display: flex;
-                            background-size: 7px;
-                            background-position-x: center;
-                            background-position-y: center;
-                            border-radius: 50%;
-                            &:active {
-                                background-color: var(--color-medium-gray);
-                            }
-                        }
-*/
+
                         &:hover {
                             background-color: var(--bg-primary-color);
                             color: var(--color-white);
@@ -798,17 +691,10 @@ $dark-theme: mat.define-dark-theme(
             }
         }
     }
-    /* UNUSED COMPONENT CLASS: show-calendar - Auto-commented by script
-.show-calendar {
-        .ranges {
-            margin-top: 8px;
-        }
-    }
-*/
+
     [hidden] {
         display: none;
     }
-    /* button */
     .buttons {
         text-align: center;
         padding-top: 20px;
@@ -819,13 +705,7 @@ $dark-theme: mat.define-dark-theme(
             padding: 0 3rem;
         }
     }
-    /* UNUSED COMPONENT CLASS: mat-icon-button - Auto-commented by script
-.mat-button,
-    .mat-icon-button,
-    .mat-stroked-button {
-        background-color: initial;
-    }
-*/
+
     .clear {
         box-shadow: none;
         background-color: var(--theme-background-color) !important;
@@ -872,7 +752,6 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before {
     border: none !important;
 }
 
-/* new calendar */
 .md-drppicker .td-div.in-range.in-range-start::before {
     border-radius: 50% 0 0 50% !important;
 }
@@ -894,7 +773,6 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before {
 .td-div.in-range.in-range-start.in-range-hovered.in-range-end::before {
     border: none !important;
 }
-/* new calendar */
 
 .invalid-date.error-msg {
     font-size: var(--font-size-12);
@@ -903,11 +781,7 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before {
     left: 0;
     color: var(--color-red) !important;
 }
-/* UNUSED COMPONENT CLASS: mb-3 - Auto-commented by script
-.mb-3 {
-    margin-bottom: 30px;
-}
-*/
+
 .md-drppicker.inline {
     width: 100%;
 }
@@ -945,11 +819,7 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before {
                     }
                 }
             }
-            /* UNUSED COMPONENT CLASS: md-drppicker_input - Auto-commented by script
-.left .md-drppicker_input {
-                padding-right: 35px;
-            }
-*/
+
             .right .md-drppicker_input {
                 padding-right: 35px;
             }
@@ -996,25 +866,6 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before {
             }
         }
     }
-    .drp-animate {
-        /*& UNUSED COMPONENT CLASS: drp-picker-site-this - Auto-commented by script
-.drp-picker-site-this {
-            transition-timing-function: linear;
-        }
-*/
-        /*& UNUSED COMPONENT CLASS: drp-animate-right - Auto-commented by script
-.drp-animate-right {
-            transform: translateX(10%);
-            opacity: 0;
-        }
-*/
-        /*& UNUSED COMPONENT CLASS: drp-animate-left - Auto-commented by script
-.drp-animate-left {
-            transform: translateX(-10%);
-            opacity: 0;
-        }
-*/
-    }
 
     .wrap-selected-date {
         .date-container-one {
@@ -1035,7 +886,6 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before {
             .ranges {
                 float: left;
             }
-            // Datepicker Scrollbar
             .ranges::-webkit-scrollbar {
                 width: 6px;
                 background-color: transparent;
@@ -1079,7 +929,6 @@ td:hover span {
     border: 1px solid var(--color-dark-gray);
 }
 
-/* new calendar */
 .td-div span {
     border: 1px solid transparent;
 }
@@ -1087,7 +936,6 @@ td:hover span {
     background-color: var(--color-light-gray);
     border: 1px solid var(--color-dark-gray);
 }
-/* new calendar */
 
 .off.in-range {
     &::before {
@@ -1104,7 +952,6 @@ td:hover span {
     }
 }
 
-/* new calendar */
 .md-drppicker .td-div.start-date.active {
     span {
         background-color: var(--bg-primary-color) !important;
@@ -1112,7 +959,6 @@ td:hover span {
         border-color: var(--theme-primary-color) !important;
     }
 }
-/* new calendar */
 
 .md-drppicker td.end-date.active,
 .md-drppicker .td-div.end-date.active {
@@ -1133,7 +979,6 @@ td:hover span {
         }
     }
 }
-/* new calendar */
 
 td span {
     position: relative;
@@ -1150,7 +995,6 @@ td span {
     display: block;
 }
 
-/* new calendar */
 .td-div span {
     position: relative;
     z-index: 999;
@@ -1166,7 +1010,6 @@ td span {
     display: block;
     margin-left: 3px;
 }
-/* new calendar */
 
 .se {
     width: 270px;
@@ -1178,21 +1021,7 @@ td span {
     flex-wrap: wrap;
     width: 95%;
     padding: 7px;
-    /* UNUSED COMPONENT CLASS: d-month - Auto-commented by script
-.d-month {
-        width: 20%;
-        padding: 6px 4px;
-        text-align: center;
-        text-transform: uppercase;
-        font-size: var(--font-size-12);
-        font-style: normal;
-        &:hover {
-            border-radius: 50px;
-            background-color: var(--color-border-light);
-            cursor: pointer;
-        }
-    }
-*/
+
 }
 
 .available.prev {
@@ -1317,7 +1146,6 @@ td span {
 }
 
 .menu-li {
-    // Datepicker Scrollbar
     .date-picker-scroll::-webkit-scrollbar {
         width: 6px;
         background-color: transparent;
@@ -1342,11 +1170,6 @@ td span {
 }
 
 .yearselect,
-/* UNUSED COMPONENT CLASS: monthselect - Auto-commented by script
-.monthselect {
-    display: none !important;
-}
-*/
 
 .md-drppicker .calendar th,
 .md-drppicker .calendar td {
@@ -1364,11 +1187,6 @@ td span {
 .md-drppicker .calendar .td-div.hide-date {
     visibility: hidden;
 }
-/* UNUSED COMPONENT CLASS: close-calender - Auto-commented by script
-.close-calender {
-    display: none;
-}
-*/
 
 .calender-container {
     display: flex;
@@ -1633,14 +1451,12 @@ cdk-virtual-scroll-viewport {
     }
 }
 
-/* Track */
 cdk-virtual-scroll-viewport {
     ::-webkit-scrollbar-track {
         border-radius: var(--mat-border-radius-4);
     }
 }
 
-/* Handle */
 cdk-virtual-scroll-viewport {
     ::-webkit-scrollbar-thumb {
         background: var(--color-medium-gray);
@@ -1668,5 +1484,3 @@ cdk-virtual-scroll-viewport {
 .md-drppicker [hidden] {
     display: none !important;
 }
-
-// Material button theme is now properly imported above via @include mat-button.mat-button-theme($light-theme)

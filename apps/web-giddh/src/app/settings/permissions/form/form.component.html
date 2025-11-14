@@ -28,8 +28,8 @@
                     </span>
                 </button>
                 <mat-menu #menu="matMenu">
-                    <section class="mr-b1 time-span-dropdown custom-date-range-menu" (click)="$event.stopPropagation()">
-                        <div class=" pd-15 ">
+                    <section class="mb-2 time-span-dropdown custom-date-range-menu" (click)="$event.stopPropagation()">
+                        <div class=" p-3 ">
                             <mat-radio-group formControlName="periodOptions" class="d-flex flex-column">
                                 <mat-radio-button value="daterange" id="dateRange" color="primary"
                                     (click)="isOpenedInModal ? handleTimeSpanChange('daterange') : ''"
@@ -38,13 +38,13 @@
                                 </mat-radio-button>
                                 <mat-radio-button value="pastperiod" id="pastPeriod" color="primary"
                                     (click)="isOpenedInModal ? handleTimeSpanChange('pastperiod') : ''"
-                                    class="w-100 mr-0 mr-t1">
+                                    class="w-100 mr-0 mt-2">
                                     {{ localeData?.past_period }}
                                 </mat-radio-button>
                             </mat-radio-group>
                         </div>
 
-                        <section class="periods container-fluid mr-b1 mt-3"
+                        <section class="periods container-fluid mb-2 mt-3"
                             *ngIf="permissionForm.get('periodOptions')?.value === 'daterange'">
                             <div>
                                 <div>
@@ -65,7 +65,7 @@
                             </div>
                         </section>
 
-                        <section class="periods container-fluid mr-b1 mt-2"
+                        <section class="periods container-fluid mb-2 mt-2"
                             *ngIf="permissionForm.get('periodOptions')?.value === 'pastperiod'">
                             <div>
                                 <div>
@@ -91,7 +91,7 @@
                     </button>
                     <mat-menu #menurange="matMenu">
                         <section class="ip-addresses-dropdown" role="menu" (click)="$event.stopPropagation()">
-                            <div class=" pd-15 ">
+                            <div class=" p-3 ">
                                 <mat-radio-group formControlName="ipOptions" class="d-flex flex-column">
                                     <mat-radio-button value="cidr_range" id="cidrRange" color="primary"
                                         (click)="isOpenedInModal ? handleIpAddressChange('cidr_range') : ''"
@@ -100,7 +100,7 @@
                                     </mat-radio-button>
                                     <mat-radio-button value="ip_address" id="address" color="primary"
                                         (click)="isOpenedInModal ? handleIpAddressChange('ip_address') : ''"
-                                        class="w-100 mr-0 mr-t1">
+                                        class="w-100 mr-0 mt-2">
                                         {{ commonLocaleData?.app_address }}
                                     </mat-radio-button>
                                 </mat-radio-group>
@@ -108,7 +108,7 @@
 
                             <section formArrayName="allowedCidrs" class="ip-range container-fluid mt-2"
                                 *ngIf="permissionForm.get('ipOptions')?.value === 'cidr_range'">
-                                <div class="d-flex column-gap-1 align-items-center mr-b1" *ngFor="
+                                <div class="d-flex column-gap-1 align-items-center mb-2" *ngFor="
                                         let item of permissionForm.get('allowedCidrs')['controls'];
                                         let i = index;
                                         let l = last
@@ -128,7 +128,7 @@
 
                             <section formArrayName="allowedIps" class="ip-range container-fluid mt-2"
                                 *ngIf="permissionForm.get('ipOptions')?.value === 'ip_address'">
-                                <div class="d-flex column-gap-1 align-items-center mr-b1" *ngFor="
+                                <div class="d-flex column-gap-1 align-items-center mb-2" *ngFor="
                                         let item of permissionForm.get('allowedIps')['controls'];
                                         let i = index;
                                         let l = last

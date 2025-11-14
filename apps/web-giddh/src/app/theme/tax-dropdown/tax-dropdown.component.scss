@@ -1,10 +1,3 @@
-/* UNUSED COMPONENT CLASS: single-item - Auto-commented by script
-.single-item /* UNUSED COMPONENT CLASS: dropdown-menu - Auto-commented by script
-.dropdown-menu {
-    height: 50px !important;
-}
-*/
-
 :host .dropdown-menu {
     width: 100%;
     height: inherit;
@@ -13,34 +6,7 @@
     z-index: 1;
 }
 
-/* UNUSED COMPONENT CLASS: fake-label - Auto-commented by script
-.fake-label {
-    cursor: pointer;
-    padding: 5px 10px;
-    line-height: 24px;
-}
-*/
-
-/* UNUSED COMPONENT CLASS: disabled-label - Auto-commented by script
-.disabled-label {
-    cursor: not-allowed;
-    opacity: 0.5;
-}
-*/
-
-/* UNUSED COMPONENT CLASS: caret - Auto-commented by script
-.multi-select 
-.caret {
-    display: block !important;
-}
-*/
-su/* p UNUSED COMPONENT CLASS: mandatory-asterisk - Auto-commented by script
-.mandatory-asterisk {
-    font-size: var(--font-size-15);
-    top: 0;
-    color: var(--color-red);
-}
-*/
+su
 
 .dropdown-menu {
     left: unset !important;

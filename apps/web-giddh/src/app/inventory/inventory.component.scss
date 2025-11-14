@@ -2,33 +2,6 @@
     min-height: 100%;
 }
 
-/* UNUSED COMPONENT CLASS: nav - Auto-commented by script
-.inventory-control ::ng-deep.nav > li > a {
-    padding: 2px 0px !important;
-    margin-right: 35px !important;
-    border-bottom: 4px solid transparent !important;
-    color: var(--color-dark-gray) !important;
-    border-top: transparent !important;
-    border-right: transparent !important;
-    border-left: transparent !important;
-    font-size: var(--font-size-16);
-    height: 36px;
-}
-*/
-/* UNUSED COMPONENT CLASS: nav-tabs - Auto-commented by script
-.inventory-control ::ng-deep.nav
-.nav-tabs {
-    margin-bottom: 0;
-    padding: 0 0px 0 15px !important;
-    background-color: var(--color-white);
-    position: absolute !important;
-    top: 0;
-    left: 0;
-    width: 100%;
-    padding: 10px 0px 0 15px !important;
-    border-bottom: 1px solid var(--border-color);
-}
-*/
 .inventory-control ::ng-deep.nav-tabs > li > a:hover {
     border-color: transparent !important;
     color: var(--text-primary-color) !important;
@@ -48,12 +21,7 @@
     color: var(--text-primary-color) !important;
     border-bottom: 4px solid var(--theme-primary-color) !important;
 }
-/* UNUSED COMPONENT CLASS: navbar - Auto-commented by script
-.navbar {
-    min-height: auto;
-    margin-bottom: 10px;
-}
-*/
+
 .inventory-control ::ng-deep.nav > li > a:focus,
 .inventory-control ::ng-deep.nav > li > a:hover {
     background-color: unset !important;

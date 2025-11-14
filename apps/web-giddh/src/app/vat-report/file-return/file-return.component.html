@@ -10,7 +10,7 @@
     </div>
 
     <ng-container *ngIf="!isLoading && vatReport?.length">
-        <div *ngFor="let report of vatReport; let i = index" class=" pd-15 ">
+        <div *ngFor="let report of vatReport; let i = index" class=" p-3 ">
             <div class="white-box" *ngIf="i < 2">
                 <div class="d-flex justify-content-between align-items-center">
                     <p>
@@ -23,7 +23,7 @@
                 </div>
                 <div class="table-responsive">
                     <table mat-table [dataSource]="report.sections"
-                        class="table basic mr-t2 on-mobile-view vat-report-table">
+                        class="table basic mt-4 on-mobile-view vat-report-table">
                         <ng-container matColumnDef="number">
                             <td mat-cell *matCellDef="let element" width="5%">
                                 {{ localeData?.box }} {{ element.order }}
@@ -59,7 +59,7 @@
                             table-hide-title table
                             basic
                             table-border-bottom
-                            mr-t2
+                            mt-4
                             on-mobile-view
                             table-border-top
                         ">

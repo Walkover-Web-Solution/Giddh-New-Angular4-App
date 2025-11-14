@@ -7,7 +7,7 @@
     <giddh-page-loader *ngIf="isTransactionRequestInProcess$ | async" [cssClass]="'no-data'"></giddh-page-loader>
     <div class="content-wrapper-statement">
         <ng-container *ngIf="!(isTransactionRequestInProcess$ | async)">
-            <section class="container-fluid ledger-section pd-t15">
+            <section class="container-fluid ledger-section pt-3">
                 <!-- region ledger table-->
                 <div class="ledg-head transactions-page position-relative ">
                     <!-- region bank ledgers-->
@@ -421,7 +421,7 @@
                         </div>
                         <!--endregion-->
                         <!-- region pagination -->
-                        <div class="text-center mr-t2 page-count position-absolute">
+                        <div class="text-center mt-4 page-count position-absolute">
                             <span class="grey"
                                 >{{ (lc.transactionData$ | async)?.totalItems }} {{ localeData?.transactions }},
                             </span>
@@ -445,7 +445,7 @@
                             <table class="ledger-footer-1 left-align">
                                 <tbody>
                                     <tr class="total-col" *ngIf="ledgerTxnBalance?.closingBalance?.type === 'CREDIT'">
-                                        <td colspan="12" class="col-xs-12 text-right h32 pd-r1">
+                                        <td colspan="12" class="col-xs-12 text-right h32 pr-2">
                                             <span
                                                 [matTooltip]="lc.ledgerUnderStandingObj.balanceText.cr"
                                                 [matTooltipPosition]="'right'"
@@ -465,7 +465,7 @@
                                         </td>
                                     </tr>
                                     <tr class="total-col">
-                                        <td colspan="12" class="col-xs-12 text-right h32 border-top pd-r1">
+                                        <td colspan="12" class="col-xs-12 text-right h32 border-top pr-2">
                                             <div class="d-flex flex-column align-items-end">
                                                 <span class="padding-ledger">
                                                     <amount-field
@@ -494,7 +494,7 @@
                             <table class="ledger-footer-1 right-align">
                                 <tbody>
                                     <tr class="total-col" *ngIf="ledgerTxnBalance?.closingBalance?.type === 'DEBIT'">
-                                        <td colspan="12" class="col-xs-12 text-right h32 pd-r1">
+                                        <td colspan="12" class="col-xs-12 text-right h32 pr-2">
                                             <span
                                                 [matTooltip]="lc.ledgerUnderStandingObj.balanceText.dr"
                                                 [matTooltipPosition]="'right'"
@@ -513,7 +513,7 @@
                                         </td>
                                     </tr>
                                     <tr class="total-col">
-                                        <td colspan="12" class="col-xs-12 text-right h32 border-top pd-r1">
+                                        <td colspan="12" class="col-xs-12 text-right h32 border-top pr-2">
                                             <div class="d-flex flex-column align-items-end">
                                                 <span class="padding-ledger">
                                                     <amount-field
@@ -569,7 +569,7 @@
                                             </amount-field>
                                         </span>
                                     </p>
-                                    <span class="mr-r2 grey-text-color"
+                                    <span class="mr-4 grey-text-color"
                                         >{{ commonLocaleData?.app_debit }}
                                         <span class="d-inline-flex">
                                             <amount-field
@@ -580,7 +580,7 @@
                                             </amount-field>
                                         </span> </span
                                     ><br />
-                                    <span class="mr-r2 grey-text-color"
+                                    <span class="mr-4 grey-text-color"
                                         >{{ commonLocaleData?.app_credit }}
                                         <span class="d-inline-flex">
                                             <amount-field
@@ -739,7 +739,7 @@
                                     </div>
                                     <br />
                                     <div class="d-flex debit-credit-amount">
-                                        <p class="mr-t05 grey-text-color d-flex flex-column mr-r2">
+                                        <p class="mt-1 grey-text-color d-flex flex-column mr-4">
                                             {{ commonLocaleData?.app_debit }}
                                             <span class="mt-1 d-inline-flex">
                                                 <amount-field
@@ -761,7 +761,7 @@
                                                 </amount-field>
                                             </span>
                                         </p>
-                                        <p class="mr-t05 grey-text-color d-flex flex-column">
+                                        <p class="mt-1 grey-text-color d-flex flex-column">
                                             {{ commonLocaleData?.app_credit }}
                                             <span class="d-flex mt-1">
                                                 <amount-field

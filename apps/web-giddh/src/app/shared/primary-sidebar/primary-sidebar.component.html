@@ -7,7 +7,7 @@
 >
     <div class="primary-sidebar py-3 position-relative " (clickOutside)="hidePrimarySidebarCompanyList()">
         <div
-            class="company-branch-block pd-l2 pd-r2 position-relative "
+            class="company-branch-block pl-4 pr-4 position-relative "
             [ngClass]="{ 'padding-14': !currentBranch && (currentCompanyBranches$ | async)?.length > 1 }"
             >
             <ul
@@ -27,7 +27,7 @@
                     >
                         <div class="d-flex flex-column">
                             <div class="d-flex align-items-center">
-                                <span class="company-alice mr-r05 text-uppercase">{{ companyInitials }}</span>
+                                <span class="company-alice mr-1 text-uppercase">{{ companyInitials }}</span>
                                 <span class="d-flex justify-content-between w-100 company-full-name flex-column">
                                     <span class="company-ellipsis" [matTooltip]="selectedCompanyDetails?.name" matTooltipPosition="above">{{ selectedCompanyDetails?.name }}</span>
                                     <span
@@ -62,14 +62,14 @@
             </div>
         </div>
         <div>
-            <div class="wrap-menus mr-t15">
-                <div class="account-block mr-b2 pd-l2 pd-r2" *ngIf="accountItemsFromIndexDB?.length > 0">
+            <div class="wrap-menus mt-3">
+                <div class="account-block mb-4 pl-4 pr-4" *ngIf="accountItemsFromIndexDB?.length > 0">
                     <div class="account-collapse">
                         <p class="font-size-12 d-flex justify-content-between">
                             {{ localeData?.accounts }}
                             <i class="icon-add-new cursor-pointer" (click)="showManageGroupsModal()"></i>
                         </p>
-                        <ul class="left-fixed-header list-style-none font-size-15 lh33 mr-t05">
+                        <ul class="left-fixed-header list-style-none font-size-15 lh33 mt-1">
                             <li *ngFor="let acc of accountItemsFromIndexDB">
                                 <a
                                     aria-label="account"
@@ -106,7 +106,7 @@
                             class="dropdown-toggle"
                         >
                             <span [matTooltip]="localeData?.accounts"><i class="icon-accounts-new"></i> </span>
-                            <i class="icon-right mr-l1 font-size-15"></i>
+                            <i class="icon-right ml-2 font-size-15"></i>
                         </a>
                         <ul
                             class="dropdown-menu account-dropdown-collapse list-style-none sub-menu"
@@ -136,14 +136,14 @@
                 </div>
                 <div class="menu-block">
                     <div class="menu-item-wrapper font-size-15">
-                        <div class="menu-item pd-l2 pd-r2">
+                        <div class="menu-item pl-4 pr-4">
                             <p class="font-size-12">
                                 <span
                                     [routerLink]="['/pages/giddh-all-items']"
                                     class="d-inline-flex align-items-center cursor-pointer"
                                 >
                                     {{ localeData?.menu }}
-                                    <i class="icon-down-new mr-l05"></i>
+                                    <i class="icon-down-new ml-1"></i>
                                 </span>
                                 <span class="text-light cursor-pointer" [routerLink]="['/pages/giddh-all-items']">
                                     <i class="icon-go font-size-16"></i>
@@ -167,7 +167,7 @@
                                             <i [ngClass]="node?.icon"></i>
                                             <span class="item-name">{{ node.label }}</span>
                                         </span>
-                                        <i class="mr-l1 font-size-15 icon-right" [ngClass]="{'rotate-270': isExpanded(node)}"></i>
+                                        <i class="ml-2 font-size-15 icon-right" [ngClass]="{'rotate-270': isExpanded(node)}"></i>
                                     </span>
                                 </div>
                             </cdk-tree-node>
@@ -295,9 +295,9 @@
         ></command-k>
         <div class="shortcuts">
             <strong>↑</strong> <strong>↓</strong>&nbsp; {{ localeData?.to_navigate }}
-            <strong class="mr-l1" [attr.aria-label]="commonLocaleData?.app_return">↵</strong>&nbsp;
+            <strong class="ml-2" [attr.aria-label]="commonLocaleData?.app_return">↵</strong>&nbsp;
             {{ localeData?.to_select }}
-            <strong class="mr-l1" [attr.aria-label]="commonLocaleData?.app_escape">{{
+            <strong class="ml-2" [attr.aria-label]="commonLocaleData?.app_escape">{{
                 commonLocaleData?.app_esc
             }}</strong
             >&nbsp;

@@ -5,17 +5,17 @@
     (commonLocaleData)="commonLocaleData = $event"
 >
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
-    <div class=" pd-15 ">
+    <div class=" p-3 ">
         <div class="d-flex flex-column">
             <div class="text-right">
                 <button mat-raised-button color="primary" (click)="importFiles()">{{ localeData?.import_files }}</button>
             </div>
-            <div class="mr-t15 import-data-table" *ngIf="!isLoading">
+            <div class="mt-3 import-data-table" *ngIf="!isLoading">
                 <div class="no-data h-100" *ngIf="!importStatusResponse?.results?.length">
                     <h2>{{ localeData?.import_status_unavailable }}</h2>
                 </div>
                 <div class="row import-data-row">
-                    <div class="col-lg-6 col-md-12 mr-b15" *ngFor="let item of importStatusResponse?.results">
+                    <div class="col-lg-6 col-md-12 mb-3" *ngFor="let item of importStatusResponse?.results">
                         <div class="import-card">
                             <i class="hover-orange" (click)="downloadItem(item)">
                                 <svg
@@ -85,7 +85,7 @@
                 [hidePageSize]="false"
                 (page)="handlePageEvent($event)">
             </mat-paginator>
-            <section class="mr-b8"></section>
+            <section class="mb-custom-80"></section>
             <giddh-page-loader *ngIf="isLoading" [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
         </div>
     </div>

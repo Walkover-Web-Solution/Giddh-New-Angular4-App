@@ -4,7 +4,7 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-    <div class="tb-wrapper mr-t2 clear-both table-container">
+    <div class="tb-wrapper mt-4 clear-both table-container">
         <div class="income">
             <div class="clear-both profit-loss">
                 <table class="table basic pl-table-grid">
@@ -13,9 +13,9 @@
                             <th class="p-0 font-size-16" width="60%">
                                 <div #searchContainer (clickOutside)="clickedOutside($event, searchContainer)">
                                     <div [ngClass]="{ 'd-none': showClearSearch }" class="d-flex align-items-center">
-                                        <span class="mr-l15 mr-r05">{{ localeData?.account }}</span>
+                                        <span class="ml-3 mr-1">{{ localeData?.account }}</span>
                                         <i
-                                            class="position-relative font-size-14 pd-r1 cursor-pointer d-flex align-items-center light-gray"
+                                            class="position-relative font-size-14 pr-2 cursor-pointer d-flex align-items-center light-gray"
                                             (click)="toggleSearch()"
                                         ></i>
                                     </div>
@@ -82,7 +82,7 @@
                     </ng-container>
                     <section>
                         <div class="flex-nowrap row">
-                            <div class="col-4 group pl-sticky-group pd-l1">
+                            <div class="col-4 group pl-sticky-group pl-2">
                                 {{ localeData?.total_cost_of_goods_sold }}
                             </div>
                             <div class="col border-left group text-right pull-right">
@@ -104,7 +104,7 @@
                     <div class="col-4 group pl-sticky-group">
                         <strong class="font-size-15">{{ localeData?.gross_profit }}</strong>
                     </div>
-                    <div class="col group text-right pull-right border-left pd-1">
+                    <div class="col group text-right pull-right border-left p-2">
                         <span class="d-flex justify-content-between">
                             <ng-container *ngFor="let key of getKeys(plData?.incomeStatement.grossProfit)">
                                 <strong class="font-size-15">
@@ -147,8 +147,8 @@
                         </section>
                         <section *ngIf="grp.groupName && grp?.uniqueName === 'revenue'">
                             <div class="flex-nowrap row">
-                                <div class="col-4 group pl-sticky-group pd-l1">{{ localeData?.total_revenue }}</div>
-                                <div class="col border-left group text-right pull-right pd-l1">
+                                <div class="col-4 group pl-sticky-group pl-2">{{ localeData?.total_revenue }}</div>
+                                <div class="col border-left group text-right pull-right pl-2">
                                     <span>
                                         <ng-container
                                             *ngTemplateOutlet="
@@ -173,7 +173,7 @@
                             </div>
                         </section>
                         <div class="group clear-both row" *ngIf="grp.groupName && grp?.uniqueName === 'operatingcost'">
-                            <div class="col-4 group pl-sticky-group pd-l1">
+                            <div class="col-4 group pl-sticky-group pl-2">
                                 {{ localeData?.total_operating_expenses }}
                             </div>
                             <div class="col group text-right pull-right p-0">
@@ -212,7 +212,7 @@
                             <div class="col-4 group pl-sticky-group">
                                 <strong class="font-size-15">{{ localeData?.operating_profit_loss }}</strong>
                             </div>
-                            <div class="col group text-right pull-right border-left pd-1">
+                            <div class="col group text-right pull-right border-left p-2">
                                 <span class="d-flex justify-content-between">
                                     <ng-container *ngFor="let key of getKeys(plData?.incomeStatement.operatingProfit)">
                                         <strong class="font-size-15">
@@ -231,10 +231,10 @@
                         </div>
                         <section *ngIf="grp.groupName && grp?.uniqueName === 'otherexpenses'">
                             <div class="flex-nowrap row">
-                                <div class="col-4 group pl-sticky-group pd-l1">
+                                <div class="col-4 group pl-sticky-group pl-2">
                                     {{ localeData?.total_other_expense }}
                                 </div>
-                                <div class="col border-left group text-right pull-right pd-l1">
+                                <div class="col border-left group text-right pull-right pl-2">
                                     <span>
                                         <ng-container
                                             *ngTemplateOutlet="
@@ -273,7 +273,7 @@
             <div class="col-4 group pl-sticky-group">
                 <strong class="font-size-15">{{ localeData?.income_before_taxes }}</strong>
             </div>
-            <div class="col group text-right pull-right border-left pd-1">
+            <div class="col group text-right pull-right border-left p-2">
                 <span class="d-flex justify-content-between">
                     <ng-container *ngFor="let key of getKeys(plData?.incomeStatement.operatingProfit)">
                         <strong class="font-size-15">
@@ -301,7 +301,7 @@
             *ngIf="plData && plData?.incomeStatement && plData?.incomeStatement.incomeBeforeTaxes.type === 'CREDIT'"
         >
             <div class="group clear-both font-size-15 row">
-                <div class="col-4 group pl-sticky-group pd-l1">
+                <div class="col-4 group pl-sticky-group pl-2">
                     {{ localeData?.taxes_30 }}
                 </div>
                 <div class="col group text-right pull-right border-left p-0">

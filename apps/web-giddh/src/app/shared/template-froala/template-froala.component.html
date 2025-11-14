@@ -322,8 +322,8 @@
                     (click)="clickedInsideEmailSection && setEmailFocus(emailType.To)"
                 >
                     <div class="d-flex border-bottom">
-                        <label *ngIf="clickedInsideEmailSection" class="mr-r1">{{ localeData?.to }}</label>
-                        <div [hidden]="!allStaticEmails.length" class="w-100 mr-b05">
+                        <label *ngIf="clickedInsideEmailSection" class="mr-2">{{ localeData?.to }}</label>
+                        <div [hidden]="!allStaticEmails.length" class="w-100 mb-1">
                             {{ allStaticEmails }}
                             <span
                                 class="suffix-emails font-size-15 d-inline-block text-primary"
@@ -379,7 +379,7 @@
                     (click)="setEmailFocus(emailType.Cc)"
                 >
                     <div class="d-flex border-bottom">
-                        <label class="mr-r1">{{ localeData?.cc }}</label>
+                        <label class="mr-2">{{ localeData?.cc }}</label>
                         <div class="d-flex w-100" [ngClass]="{ 'flex-column': selectedCcEmails.length }">
                             <select-multiple-fields
                                 [options]="ccEmails"
@@ -413,7 +413,7 @@
                     (click)="setEmailFocus(emailType.Bcc)"
                 >
                     <div class="d-flex border-bottom">
-                        <label class="mr-r1">{{ localeData?.bcc }}</label>
+                        <label class="mr-2">{{ localeData?.bcc }}</label>
                         <div class="d-flex w-100" [ngClass]="{ 'flex-column': selectedBccEmails.length }">
                             <select-multiple-fields
                                 [options]="bccEmails"

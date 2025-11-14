@@ -21,9 +21,9 @@
             </ul>
         </div>
     </div>
-    <div class="container-fluid font-size-15 mr-t1">
+    <div class="container-fluid font-size-15 mt-2">
         <div class="d-flex justify-content-between" [formGroup]="reportForm">
-            <div class="d-flex mr-b15 column-gap-15">
+            <div class="d-flex mb-3 column-gap-15">
                 <div
                     *ngIf="currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
                 >
@@ -52,7 +52,7 @@
                     </reactive-dropdown-field>
                 </div>
                 <ng-container *ngIf="reportForm?.get('groupBy')?.value === groupByEnum.Duration; else salesPersonBlock">
-                    <div class="mr-r15 dropdown-width">
+                    <div class="mr-3 dropdown-width">
                         <reactive-dropdown-field
                             [name]="'country'"
                             [label]="commonLocaleData?.app_financial_year"
@@ -64,7 +64,7 @@
                         >
                         </reactive-dropdown-field>
                     </div>
-                    <div class="mr-r15">
+                    <div class="mr-3">
                         <mat-form-field appearance="outline" class="duration-dropdown w-100">
                             <mat-label>{{ commonLocaleData?.app_duration?.duration }}</mat-label>
                             <mat-select #durationMatSelect [value]="getSelectedDuration()">
@@ -83,7 +83,7 @@
                                         <div class="w-50">
                                             {{ commonLocaleData?.app_duration?.weekly }}
                                         </div>
-                                        <div class="w-50 pd-l4">
+                                        <div class="w-50 pl-5">
                                             <i class="icon-dots-three-vertical"></i>
                                         </div>
                                     </span>
@@ -91,7 +91,7 @@
                             </mat-select>
                         </mat-form-field>
                         <mat-menu #monthMenu="matMenu" xPosition="after" yPosition="below">
-                            <div class="grid-columns-3 d-grid column-gap-05 pd-1">
+                            <div class="grid-columns-3 d-grid column-gap-05 p-2">
                               <button 
                                 mat-menu-item 
                                 *ngFor="let month of monthNames"

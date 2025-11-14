@@ -37,38 +37,11 @@
     max-height: 200px;
 }
 
-/* UNUSED COMPONENT CLASS: img-zoom - Auto-commented by script
-.img-zoom {
-    max-height: 300px;
-    min-width: 300px;
-    max-width: 300px;
-    position: relative;
-}
-*/
-
 .img-zoom img {
     max-height: 300px;
     min-width: 300px;
     max-width: 300px;
 }
-
-/* UNUSED COMPONENT CLASS: img-close - Auto-commented by script
-.img-zoom 
-.img-close {
-    position: absolute;
-    top: 0;
-    right: -29px;
-    z-index: 99;
-    background: var(--color-silver);
-    width: 30px;
-    height: 30px;
-    text-align: center;
-    line-height: 30px;
-    color: var(--color-dark-gray);
-    border-radius: var(--mat-border-radius-4);
-    cursor: pointer;
-}
-*/
 
 .textarea.form-control {
     height: 70px;
@@ -124,16 +97,6 @@ span {
     }
 }
 
-/* UNUSED COMPONENT CLASS: list-item - Auto-commented by script
-.list-item {
-    border-bottom: 1px solid var(--border-color);
-}
-*/
-// .entry-against {
-//     &.error-box {
-//         border-radius: var(--mat-border-radius-8);
-//     }
-// }
 @media only screen and (max-width: 1440px) {
     .petty-cash {
         height: initial;

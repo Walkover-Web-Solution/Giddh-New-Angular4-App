@@ -16,13 +16,18 @@
 .mdc-text-field--disabled,
 .mat-mdc-tab-disabled,
 .mat-mdc-option.mdc-list-item--disabled,
-.mat-expansion-panel-header[aria-disabled=true],
-.mat-mdc-button[disabled], .mat-mdc-icon-button[disabled], .mat-mdc-unelevated-button[disabled], .mat-mdc-raised-button[disabled], .mat-mdc-outlined-button[disabled],
+.mat-expansion-panel-header[aria-disabled="true"],
+.mat-mdc-button[disabled],
+.mat-mdc-icon-button[disabled],
+.mat-mdc-unelevated-button[disabled],
+.mat-mdc-raised-button[disabled],
+.mat-mdc-outlined-button[disabled],
 .mat-button-toggle-disabled,
-.mdc-radio--disabled, .mdc-radio--disabled+label,
-.mdc-switch--disabled, .mdc-switch--disabled+label,
-.mat-sort-header-disabled .mat-sort-header-container 
-.form-control:disabled {
+.mdc-radio--disabled,
+.mdc-radio--disabled + label,
+.mdc-switch--disabled,
+.mdc-switch--disabled + label,
+.mat-sort-header-disabled .mat-sort-header-container .form-control:disabled {
     @include cursor(not-allowed);
     @include pointer-events(auto);
     * {

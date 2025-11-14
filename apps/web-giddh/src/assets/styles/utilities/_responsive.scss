@@ -1,12 +1,5 @@
 @use '../abstracts/mixins' as *;
 
-/**
- * Responsive utility classes
- * Generated using optimized responsive mixins based on BREAKPOINT_SCREEN_SIZE from app.constant.ts
- * No support for screens < 768px (UNSUPPORTED devices)
- */
-
-// Display utilities for different screen sizes (768px+)
 .d-tablet-none {
   @include exact-breakpoint('tablet') {
     display: none !important;
@@ -37,7 +30,6 @@
   }
 }
 
-// Display block utilities
 .d-tablet-block {
   @include exact-breakpoint('tablet') {
     display: block !important;
@@ -68,7 +60,6 @@
   }
 }
 
-// Display flex utilities
 .d-tablet-flex {
   @include exact-breakpoint('tablet') {
     display: flex !important;
@@ -99,7 +90,6 @@
   }
 }
 
-// Text alignment utilities for different screen sizes
 .text-tablet-center {
   @include exact-breakpoint('tablet') {
     text-align: center !important;
@@ -160,7 +150,6 @@
   }
 }
 
-// Responsive spacing utilities
 .p-tablet-1 {
   @include exact-breakpoint('tablet') {
     padding: 0.25rem !important;
@@ -191,7 +180,6 @@
   }
 }
 
-// Responsive flex utilities
 .flex-tablet-column {
   @include exact-breakpoint('tablet') {
     flex-direction: column !important;
@@ -222,7 +210,6 @@
   }
 }
 
-// Responsive width utilities
 .w-tablet-100 {
   @include exact-breakpoint('tablet') {
     width: 100% !important;
@@ -253,7 +240,6 @@
   }
 }
 
-// Container responsive utilities based on accounting breakpoints
 .container-tablet-fixed {
   @include exact-breakpoint('tablet') {
     max-width: 720px !important;
@@ -289,10 +275,8 @@
   }
 }
 
-// Accounting-specific utility classes
 .sidebar-comfortable {
   @include accounting-breakpoint('sidebar-comfortable') {
-    // Styles when sidebar can display comfortably
     .sidebar {
       width: 280px;
     }

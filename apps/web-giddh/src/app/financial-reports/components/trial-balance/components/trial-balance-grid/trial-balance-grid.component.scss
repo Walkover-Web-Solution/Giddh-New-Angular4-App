@@ -1,24 +1,4 @@
-/* UNUSED COMPONENT CLASS: liabilities-assets - Auto-commented by script
-.liabilities-assets {
-    max-width: 760px;
-    width: 100%;
-}
-*/
 .trial-balance {
-    span {
-        /* i UNUSED COMPONENT CLASS: glyphicon-search - Auto-commented by script
-.glyphicon-search {
-            position: relative;
-            z-index: 1;
-            font-size: 13px;
-            color: var(--color-dark-gray);
-            padding-right: 8px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-        }
-*/
-    }
     input {
         height: 47px;
     }
@@ -29,7 +9,6 @@
 }
 .list-inline {
     padding-left: 0;
-    // list-style: none;
     > li {
         display: inline-block;
         padding-right: 5px;
@@ -40,7 +19,6 @@
 }
 .tb-section {
     padding-left: 7px;
-    // background-color: var(--color-white);
     .search-container {
         padding: 0;
         display: flex;

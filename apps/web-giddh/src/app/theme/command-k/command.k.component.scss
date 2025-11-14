@@ -46,12 +46,7 @@
                 text-overflow: ellipsis;
                 direction: ltr;
             }
-            /* UNUSED COMPONENT CLASS: vM - Auto-commented by script
-.vM {
-                font-size: var(--font-size-24);
-                margin-left: 6px;
-            }
-*/
+
         }
     }
 }
@@ -66,40 +61,8 @@
     &.isVisible {
         display: block;
     }
-    /*& UNUSED COMPONENT CLASS: isFlying - Auto-commented by script
-.isFlying {
-        position: absolute;
-        z-index: 10;
-        box-shadow: 0 2px 3px 0 var(--color-shadow-light);
-        border: 1px solid var(--border-color);
-        border-radius: var(--mat-border-radius-0);
-    }
-*/
-    &:not(.isFlying),
-    &.wider {
-        .universal-members-list {
-            .item {
-                /* UNUSED COMPONENT CLASS: member-details - Auto-commented by script
-.member-details {
-                    max-width: inherit;
-                }
-*/
-            }
-        }
-    }
-    /*& UNUSED COMPONENT CLASS: isOpenFromBottom - Auto-commented by script
-.isOpenFromBottom {
-        bottom: 0;
-    }
-*/
-    /* UNUSED COMPONENT CLASS: inner - Auto-commented by script
-.inner {
-        position: relative;
-        overflow: auto;
-    }
-*/
+
     ul {
-        // list-style: none;
         margin: 0;
         padding: 0;
     }
@@ -155,7 +118,6 @@
                     display: block;
                 }
                 .command-hover-text {
-                    // color: var(--color-black);
                     right: 0;
                     text-transform: initial;
                     width: 25%;
@@ -164,18 +126,12 @@
                     display: inline;
                     white-space: initial;
                 }
-                /* UNUSED COMPONENT CLASS: command-bread-crumb - Auto-commented by script
-.command-bread-crumb {
-                    max-width: 150px;
-                    overflow: hidden;
-                }
-*/
+
                 p{
                     display: inline;
                     white-space: initial;
                 }
             }
-            // hover effect
             &.selected {
                 background-color: var(--bg-primary-color);
                 .item-details {
@@ -205,13 +161,4 @@
     padding: 10px;
     font-size: 16px;
     cursor: pointer;
-    // color: var(--color-black);
 }
-
-// ::ng-deep {
-//     .jumper-results {
-//         .block {
-//             color: var(--color-black);
-//         }
-//     }
-// }

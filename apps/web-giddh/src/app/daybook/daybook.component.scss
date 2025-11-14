@@ -12,13 +12,7 @@
 .date-range-picker:focus {
     border-color: var(--border-color) !important;
 }
-/* UNUSED COMPONENT CLASS: input-wrapper - Auto-commented by script
-.input-wrapper {
-    position: relative;
-    display: block;
-    background-color: var(--color-white);
-}
-*/
+
 .input-wrapper:before {
     position: absolute;
     content: "";
@@ -36,61 +30,17 @@
 .table > tbody + tbody {
     border-top: none;
 }
-/* UNUSED COMPONENT CLASS: expand-btn-hide-desktop - Auto-commented by script
-.expand-btn-hide-desktop {
-    display: none;
-}
-*/
+
 .warehouse-name {
     white-space: normal;
 }
-/* UNUSED COMPONENT CLASS: icon-calender - Auto-commented by script
-.icon-calender {
-    position: absolute;
-    z-index: 9;
-    height: 32px;
-    width: 36px;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    height: 36px !important;
-    cursor: pointer;
-}
-*/
+
 .linked-entities {
     width: 200px;
 }
 .mobile-view {
     display: none !important;
 }
-
-// .expand-collapse-btn a {
-//     width: 40px;
-//     height: 40px;
-//     background-color: var(--color-white);
-//     border: 1px solid var(--border-color);
-//     border-radius: var(--mat-border-radius-4);
-//     display: flex;
-//     justify-content: center;
-//     align-items: center;
-//     font-size: var(--font-size-16);
-//     color: var(--text-primary-color);
-//     &:hover {
-//         background: var(--bg-primary-color);
-//         color: var(--color-white);
-//     }
-// }
-
-/* UNUSED COMPONENT CLASS: btn-filter - Auto-commented by script
-button.btn
-.btn-filter {
-    background: var(--color-border-light);
-    border: 1px solid var(--color-border-light);
-    font-size: var(--font-size-15);
-    color: var(--text-primary-color);
-    align-items: center;
-}
-*/
 
 .daybook-w-100 {
     width: 100px;
@@ -127,7 +77,6 @@ button.btn
                     border: 0 !important;
                     padding: 8px 0;
                 }
-                // border-top: 1px solid var(--border-color);
                 &:first-child {
                     border-top: none !important;
                 }

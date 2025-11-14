@@ -5,11 +5,11 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="pd-t15 pd-b15 clear-both" [keyboardShortcut]="'alt+c'" (onShortcutPress)="openCreateUpdateDialog()">
+    <div class="pt-3 pb-3 clear-both" [keyboardShortcut]="'alt+c'" (onShortcutPress)="openCreateUpdateDialog()">
         <div class="d-flex justify-content-between">
             <p class="section-head m-0 p-0">{{ localeData?.added_taxes }}</p>
             <div>
-                <watch-video [cssClass]="'text-primary mr-r15'" [moduleName]="'TAX_CREATION'"></watch-video>
+                <watch-video [cssClass]="'text-primary mr-3'" [moduleName]="'TAX_CREATION'"></watch-video>
                 <button
                     mat-raised-button
                     *ngIf="voucherApiVersion === 2"
@@ -24,7 +24,7 @@
             </div>
         </div>
 
-        <div class="pd-t15 clear-both">
+        <div class="pt-3 clear-both">
             <div class="table-responsive">
                 <giddh-page-loader *ngIf="isLoading" [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
 

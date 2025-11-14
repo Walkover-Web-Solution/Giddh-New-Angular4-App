@@ -12,13 +12,13 @@
     <!-- nodata end -->
     <div>
         <div *ngIf="!noData" class="tb-wrapper">
-            <div class="mr-t2 clear-both">
+            <div class="mt-4 clear-both">
                 <!--top heading  labels-->
                 <!--Main Grid-->
                 <div class="table-container" *ngIf="!hideData">
-                    <div class="income mr-b1">
+                    <div class="income mb-2">
                         <div class="clear-both profit-loss">
-                            <table class="mr-b05 table basic bs-table-grid">
+                            <table class="mb-1 table basic bs-table-grid">
                                 <thead>
                                     <tr>
                                         <th class="p-0 font-size-16" width="33.33%">
@@ -31,7 +31,7 @@
                                                     class="d-flex align-items-center"
                                                 >
                                                     <span
-                                                        class="tailed-checkbox pd-1"
+                                                        class="tailed-checkbox p-2"
                                                         [matTooltip]="commonLocaleData?.app_clear_selected"
                                                         matTooltipPosition="before"
                                                         (click)="openConfirmDialog()"
@@ -39,7 +39,7 @@
                                                     >
                                                         <img src="{{ imgPath }}deselect-all.svg" class="uncheck-all-icon" aria-label="clear selection icon" /> 
                                                     </span>
-                                                    <span class="mr-l05 mr-1">{{ localeData?.particular }}</span>
+                                                    <span class="ml-1 mr-1">{{ localeData?.particular }}</span>
                                                     <i class="icon-search" (click)="toggleSearch()"></i>
                                                 </div>
                                                 <div [hidden]="!showClearSearch">
@@ -92,7 +92,7 @@
                                 </thead>
                             </table>
                             <!--Grid-->
-                            <div class="m-10">
+                            <div class="m-2">
                                 <div>
                                     <strong class="font-size-15">{{ localeData?.equity_liabilities }}</strong>
                                 </div>
@@ -165,7 +165,7 @@
                     <div class="expenses">
                         <div class="clear-both profit-loss">
                             <!--Grid-->
-                            <div class="m-10">
+                            <div class="m-2">
                                 <div>
                                     <strong class="font-size-15">{{ localeData?.ii_assets }}</strong>
                                 </div>

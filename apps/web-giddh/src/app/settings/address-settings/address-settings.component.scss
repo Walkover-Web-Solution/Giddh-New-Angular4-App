@@ -41,15 +41,6 @@
             }
         }
     }
-    &:hover {
-        td {
-            /* UNUSED COMPONENT CLASS: action-icon - Auto-commented by script
-.action-icon {
-                display: flex !important;
-            }
-*/
-        }
-    }
 }
 
 .address-list-top {
@@ -99,9 +90,7 @@
     transform: inherit !important;
 }
 
-/* branch profile */
 .branch-profile-address-content {
-    // background-color: var(--color-white);
     border: 1px solid var(--border-color);
     padding: 15px;
     margin-bottom: 15px;

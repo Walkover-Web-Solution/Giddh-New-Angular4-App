@@ -88,16 +88,16 @@
                     <span class="responsive-label" [hidden]="!expensesItems?.length">{{
                         localeData?.payment_receipt
                     }}</span>
-                    <span *ngIf="expenses.baseAccountCategory === 'OTHER'" class="font-size-12 text-light mr-r05">{{
+                    <span *ngIf="expenses.baseAccountCategory === 'OTHER'" class="font-size-12 text-light mr-1">{{
                         commonLocaleData?.app_ac
                     }}</span>
                     <span
                         *ngIf="expenses.baseAccountCategory === 'BANK'"
-                        class="font-size-12 text-light icon-atm-card mr-r05"
+                        class="font-size-12 text-light icon-atm-card mr-1"
                     ></span>
                     <span
                         *ngIf="expenses.baseAccountCategory === 'CASH'"
-                        class="font-size-12 text-light icon-cash mr-r05"
+                        class="font-size-12 text-light icon-cash mr-1"
                     ></span>
                     {{ expenses?.baseAccount?.name }}
                 </td>
@@ -140,14 +140,14 @@
                         mat-raised-button
                         color="primary"
                         (click)="showApproveConfirmPopup(approveConfirm, expenses); $event.stopPropagation()"
-                        class="mr-t1"
+                        class="mt-2"
                     >
                         {{ localeData?.approve }}
                     </button>
                     <button
                         mat-stroked-button
                         (click)="showRejectConfirmPopup(rejectConfirm, expenses); $event.stopPropagation()"
-                        class="mr-t1 mr-b1"
+                        class="mt-2 mb-2"
                     >
                         {{ localeData?.reject }}
                     </button>
@@ -182,7 +182,7 @@
 <div class="no-data" *ngIf="pettyCashPendingReportResponse?.totalItems === 0">
     <no-data></no-data>
 </div>
-<section class="mr-b8"></section>
+<section class="mb-custom-80"></section>
 
 <ng-template #approveConfirm>
     <petty-cash-approve-confirm-dialog

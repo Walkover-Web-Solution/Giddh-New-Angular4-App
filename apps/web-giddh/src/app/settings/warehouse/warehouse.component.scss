@@ -4,11 +4,7 @@
     justify-content: center;
     align-items: center;
     height: calc(100vh - 250px);
-    /* UNUSED COMPONENT CLASS: spinner2 - Auto-commented by script
-.spinner2 {
-        text-align: center;
-    }
-*/
+
 }
 .create-warehouse h2 {
     font-size: var(--font-size-16);
@@ -26,7 +22,6 @@
     margin-bottom: 20px;
 }
 .warehouse-card {
-    // background-color: var(--theme-background-color);
     padding: 15px;
     margin-bottom: 15px;
     border: 1px solid var(--border-color);
@@ -104,16 +99,7 @@
     word-break: break-all;
     color: var(--text-primary-color);
 }
-/* span UNUSED COMPONENT CLASS: set-as-default - Auto-commented by script
-.set-as-default {
-    background-color: var(--color-silver);
-    padding: 5px 10px;
-    font-size: var(--font-size-15);
-    border-radius: var(--mat-border-radius-12);
-    margin-right: 10px;
-    cursor: pointer;
-}
-*/
+
 .warehouse-details {
     font-size: var(--font-size-15);
 }
@@ -135,38 +121,18 @@
     margin: 0 0 15px;
     display: flex;
     flex-direction: column;
-    /* UNUSED COMPONENT CLASS: icon-favorite-selected - Auto-commented by script
-.icon-favorite-selected {
-        color: var(--text-primary-color);
-    }
-*/
+
 }
-/* UNUSED COMPONENT CLASS: gray-text - Auto-commented by script
-.gray-text {
-    color: var(--color-dark-gray);
-    font-size: var(--font-size-12);
-}
-*/
+
 .set-as-default i.icon-favorite-selected {
     color: var(--text-primary-color);
 }
-/* UNUSED COMPONENT CLASS: create-new-warehouse-btn - Auto-commented by script
-.create-new-warehouse-btn {
-    justify-content: center;
-    align-items: center;
-    display: flex;
-}
-*/
+
 .warehouse-pagination {
     width: 100%;
     text-align: center;
 }
-/* UNUSED COMPONENT CLASS: dropdown-item - Auto-commented by script
-.dropdown-item.warehouse-options {
-    justify-content: flex-start;
-    text-align: left;
-}
-*/
+
 .search-warehouse-box {
     max-width: 200px;
     width: 100%;
@@ -185,7 +151,6 @@
     }
     ul {
         padding: 0;
-        // list-style: none;
         li {
             margin-bottom: 12px;
             color: var(--color-black);

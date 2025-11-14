@@ -3,7 +3,6 @@
     max-width: 600px;
     margin: 0 auto;
 
-    // Ensure stepper icons are visible
     ::ng-deep .mat-step-icon {
         .mat-step-icon-content {
             font-size: 14px !important;
@@ -71,12 +70,6 @@
             min-width: 112px;
         }
     }
-
-    /* UNUSED COMPONENT CLASS: portal-height - Auto-commented by script
-.portal-height {
-        height: 85px !important;
-    }
-*/
 
     .inc-dec {
         position: relative;

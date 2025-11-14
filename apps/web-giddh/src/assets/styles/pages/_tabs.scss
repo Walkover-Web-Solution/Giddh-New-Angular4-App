@@ -2,34 +2,16 @@
     .mat-mdc-tab-header {
         border-bottom: 1px solid var(--border-color);
 
-        // .mat-mdc-tab-header {
-        //     padding-left: 15px !important;
-        //     background-color: var(--color-white);
-        // }
-
         .mat-mdc-tab {
             .mdc-tab__text-label {
-                // font-size: var(--font-size-16);
-                // color: var(--color-dark-gray);
-                // for voucher
                 .voucher-svg {
                     fill: var(--color-dark-gray);
-                }
-            }
-
-            &.mdc-tab--active {
-                .mdc-tab__text-label {
-                    // color: var(--text-primary-color);
-                    .voucher-svg {
-                        // fill: var(--theme-primary-color);
-                    }
                 }
             }
         }
     }
 }
 
-// // custom
 .custom-tab {
     .mat-button-toggle-appearance-standard {
         &.mat-button-toggle-checked {
@@ -40,13 +22,11 @@
 
     .mat-button-toggle-appearance-standard {
         .mat-button-toggle-label-content {
-            // line-height: 36px;
             --mat-standard-button-toggle-height: 36px;
         }
     }
 }
 
-// // for-box-tabs
 .tabs-box-wrap {
     &.mat-mdc-tab-group {
         .mat-mdc-tab-header {

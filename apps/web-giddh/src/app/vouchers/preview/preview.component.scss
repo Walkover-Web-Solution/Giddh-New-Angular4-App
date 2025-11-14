@@ -9,7 +9,6 @@
     }
 }
 
-
 ::ng-deep .dark-theme .single-invoice-detail {
     &:hover,
     &.active {
@@ -32,12 +31,6 @@
             &.active {
                 background-color: var(--color-light-gray);
 
-                // .text-primary {
-                //     color: var(--theme-primary-color) !important;
-                // }
-                // .text-default {
-                //     color: var(--color-black) !important;
-                // }
             }
         }
     }
@@ -47,7 +40,6 @@
         overflow-y: auto;
 
         .preview-header {
-            // background-color: var(--theme-primary-light);
             .action-btn {
                 column-gap: 6px;
 
@@ -140,13 +132,13 @@
 ::ng-deep .default-theme {
     .preview-header {
         background-color: var(--color-light-gray);
-    }   
+    }
 }
 
 ::ng-deep .dark-theme {
     .preview-header {
         background-color: var(--color-transparent);
-    }  
+    }
 }
 
 @media screen and (max-width: 1199px) {

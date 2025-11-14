@@ -13,7 +13,7 @@
     <div *ngIf="!noData" class="tb-wrapper">
         <div class="clear-both">
             <!-- start main content -->
-            <div class="mt-1 mr-b1 pull-right">
+            <div class="mt-1 mb-2 pull-right">
                 <div class="tbpl-list">
                     <ul class="list-inline color-codes pull-right">
                         <li>
@@ -49,7 +49,7 @@
                                 class="align-items-center"
                             >
                                 <span
-                                    class="tailed-checkbox pd-1"
+                                    class="tailed-checkbox p-2"
                                     [matTooltip]="commonLocaleData?.app_clear_selected"
                                     matTooltipPosition="before"
                                     (click)="openConfirmDialog()"
@@ -57,7 +57,7 @@
                                 >
                                     <img src="{{ imgPath }}deselect-all.svg" class="uncheck-all-icon" aria-label="clear selection icon" /> 
                                 </span> 
-                                <span class="mr-l05 mr-1"
+                                <span class="ml-1 mr-1"
                                     ><strong>{{ localeData?.particular }}</strong></span
                                 >
                                 <i class="icon-search" id="showSearch" (click)="toggleSearch()"></i>

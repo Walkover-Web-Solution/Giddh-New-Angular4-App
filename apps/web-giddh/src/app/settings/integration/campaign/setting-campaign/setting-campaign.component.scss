@@ -1,4 +1,3 @@
-// Communication Page Styling
 .msg91-container:hover {
     background-color: var(--color-light-gray);
 }
@@ -31,17 +30,6 @@
         width: 64px;
     }
 }
-
-/* UNUSED COMPONENT CLASS: auth-label - Auto-commented by script
-.auth-label {
-    float: left;
-    width: 100%;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    color: var(--color-black);
-    font-size: var(--font-size-15) !important;
-}
-*/
 
 .msg91-container {
     position: relative;
@@ -131,12 +119,6 @@
             visibility: hidden;
         }
 
-        /* UNUSED COMPONENT CLASS: active-trigger-search - Auto-commented by script
-.active-trigger-search {
-            position: relative;
-            bottom: 2px;
-        }
-*/
     }
 }
 
@@ -146,12 +128,6 @@
     width: 100%;
     border-radius: var(--mat-border-radius-4);
 }
-
-/* UNUSED COMPONENT CLASS: mandatory-label - Auto-commented by script
-.mandatory-label {
-    color: var(--color-red);
-}
-*/
 
 .dropdown-heading {
     font-size: var(--font-size-15) !important;
@@ -185,22 +161,6 @@
             }
         }
 
-        .trigger-input {
-            /* UNUSED COMPONENT CLASS: trigger-input-label - Auto-commented by script
-.trigger-input-label {
-                font-size: var(--font-size-15);
-                float: left;
-                width: 100%;
-                margin-top: 5px;
-                margin-bottom: 5px;
-
-                span {
-                    color: var(--color-red);
-                }
-            }
-*/
-        }
-
         button {
             margin-top: 15px;
         }
@@ -231,23 +191,6 @@
             margin-top: 53px;
             width: 35%;
 
-            /* UNUSED COMPONENT CLASS: right-label - Auto-commented by script
-.right-label {
-                margin-left: 25px;
-            }
-*/
-
-            /* UNUSED COMPONENT CLASS: bottom-label - Auto-commented by script
-.bottom-label {
-                margin-top: 12px;
-            }
-*/
-
-            /* UNUSED COMPONENT CLASS: preview-button - Auto-commented by script
-.preview-button {
-                margin-top: 25px;
-            }
-*/
         }
 
         .dropdown-box-2 {

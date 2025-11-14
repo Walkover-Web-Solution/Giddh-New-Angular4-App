@@ -1,59 +1,4 @@
 .vat-report {
-    .vat-report-table {
-        // &.mat-mdc-table {
-        //     &.zimbabwe-vat-report-table {
-        //         tr {
-        //             height: 44px !important;
-
-        //             th {
-        //                 padding: 5px 10px !important;
-        //             }
-
-        //             th,
-        //             td {
-        //                 &[colspan="2"] {
-        //                     text-align: center;
-        //                 }
-
-        //                 &.d-none {
-        //                     display: none !important;
-        //                 }
-        //             }
-        //         }
-
-        //     }
-
-        //     &.hide-last-row {
-        //         tbody {
-        //             tr {
-        //                 &:last-child {
-        //                     display: none !important;
-        //                 }
-        //             }
-        //         }
-        //     }
-        //     &.bordered-table {
-        //         tr {
-        //             th,td {
-        //                 border: 1px solid var(--border-color) !important;
-        //             }
-        //         }
-        //     }
-
-        //     tr {
-        //         th,
-        //         td {
-        //             &.bg-grey {
-        //                 background-color: var(--color-light-gray) !important;
-        //             }
-        //         }
-        //     }
-        // }
-
-        // tfoot {
-        //     background-color: var(--color-light-gray);
-        // }
-    }
 
     .vat-report-action-wrapper {
         max-width: var(--center-content-max-width);
@@ -85,34 +30,6 @@
 }
 
 .gst-sidebar-open {
-    // .mat-menu-item {
-    //     height: 40px !important;
-    //     line-height: 34px !important;
-    // }
-
-    // #cdk-overlay-1 {
-    //     .mat-menu-panel {
-    //         max-width: 340px !important;
-
-    //         .mat-menu-content {
-    //             width: 288px !important;
-    //         }
-    //     }
-    // }
-
-    // #cdk-overlay-2 {
-    //     .mat-menu-panel {
-    //         max-width: 330px !important;
-
-    //         .mat-menu-content {
-    //             width: 230px !important;
-    //         }
-    //     }
-    // }
-
-    // .mat-dialog-container {
-    //     overflow: hidden;
-    // }
 
     .modal-dialog {
         max-width: unset !important;
@@ -127,18 +44,6 @@
         }
     }
 }
-
-// .obligations {
-//     .mat-mdc-table {
-//         .mdc-data-table__content {
-//             .mat-mdc-row {
-//                 .mat-mdc-cell {
-//                     background-color: var(--color-white) !important;
-//                 }
-//             }
-//         }
-//     }
-// }
 
 .no-report {
     margin: 100px auto;

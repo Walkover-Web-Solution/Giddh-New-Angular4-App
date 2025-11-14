@@ -3,7 +3,7 @@
 
     .discount-separator {
         color: var(--color-dark-gray);
-    
+
         .discount-separator-msg {
             z-index: 1;
             position: relative;
@@ -11,8 +11,8 @@
             padding: 0 8px;
             font-weight: 600;
         }
-    
-        .discount-separator-line {  
+
+        .discount-separator-line {
             height: 1px;
             background-color: var(--color-silver);
             position: absolute;

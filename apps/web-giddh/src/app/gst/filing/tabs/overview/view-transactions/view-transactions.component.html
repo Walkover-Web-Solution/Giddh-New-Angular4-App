@@ -21,7 +21,7 @@
             </svg>
             {{ commonLocaleData?.app_back }}
         </button>
-        <div class="filter-row mr-l1" *ngIf="selectedGst === GstReport.Gstr1 && (filterParam.type === 'nil' || filterParam.type === 'b2cs')">
+        <div class="filter-row ml-2" *ngIf="selectedGst === GstReport.Gstr1 && (filterParam.type === 'nil' || filterParam.type === 'b2cs')">
             <div class="name">{{ localeData?.filing?.transaction_type }}:</div>
             <div class="btn-group filter d-inline-block">
                 <button
@@ -244,7 +244,7 @@
             class="mt-15"
         >
         </mat-paginator>
-        <section class="mr-b8"></section>
+        <section class="mb-custom-80"></section>
         <!-- no records -->
         <div
             class="filings-empty-state"

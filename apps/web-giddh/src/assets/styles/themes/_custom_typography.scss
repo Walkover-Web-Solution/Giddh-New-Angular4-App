@@ -1,6 +1,5 @@
 @use '@angular/material' as mat;
 
-// Custom Typography Configuration for Angular Material 16
 $custom-typography: mat.define-typography-config(
     $font-family: var(--font-family),
     $headline-1: mat.define-typography-level(var(--font-size-48), var(--line-height-36), var(--font-weight-medium), var(--font-family), var(--letter-spacing-normal)),

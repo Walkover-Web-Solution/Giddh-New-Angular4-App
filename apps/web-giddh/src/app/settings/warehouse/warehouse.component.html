@@ -5,9 +5,9 @@
     (commonLocaleData)="commonLocaleData = $event"
 >
     <ng-container *ngIf="warehouses">
-        <div class="warehouse-card-view pd-15">
+        <div class="warehouse-card-view p-3">
             <div class="row">
-                <div class="mr-b15 col-sm-12 mr-0 d-flex justify-content-between warehouse-header">
+                <div class="mb-3 col-sm-12 mr-0 d-flex justify-content-between warehouse-header">
                     <div class="d-flex align-items-center">
                         <div class="search-warehouse-box">
                             <input-field
@@ -19,7 +19,7 @@
                         </div>
                         <button
                             *ngIf="searchWarehouseQuery"
-                            class="mr-l1"
+                            class="ml-2"
                             mat-stroked-button
                             (click)="resetFilter()"
                             aria-label="cross icon"
@@ -91,7 +91,7 @@
                         <div class="warehouse-details">
                             <div class="clear-both about-warehouse">
                                 <!-- <div class="col-xl-3 col-lg-4 col-md-6"> -->
-                                <div class="parent-branch pd-t1 pd-b1">{{ localeData?.linked_address }}:</div>
+                                <div class="parent-branch pt-2 pb-2">{{ localeData?.linked_address }}:</div>
                                 <div>
                                     <div *ngFor="let address of warehouse?.addresses" class="linked-add">
                                         <ng-container *ngIf="address">
@@ -157,7 +157,7 @@
                 (page)="handlePageEvent($event)"
                 aria-label="Select page of warehouses"
             ></mat-paginator>
-            <section class="mr-b8"></section>
+            <section class="mb-custom-80"></section>
         </div>
         <br />
         <br />

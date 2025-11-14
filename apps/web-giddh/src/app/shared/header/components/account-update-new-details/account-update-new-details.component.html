@@ -8,7 +8,7 @@
     <form name="addAccountForm" class="create-acc-form" [formGroup]="addAccountForm">
         <div>
             <div class="upper-form">
-                <div class="row pd-b2">
+                <div class="row pb-4">
                     <div class="col-sm-4">
                         <reactive-dropdown-field
                             [label]="commonLocaleData?.app_group"
@@ -37,7 +37,7 @@
                         </input-field>
                     </div>
                 </div>
-                <div class="row pd-b2">
+                <div class="row pb-4">
                     <div class="col-sm-4" formGroupName="country">
                         <reactive-dropdown-field
                             [label]="commonLocaleData?.app_country"
@@ -129,7 +129,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row pd-b2">
+                <div class="row pb-4">
                     <div class="col-sm-4">
                         <!-- Sales Person -->
                         <reactive-dropdown-field 
@@ -204,7 +204,7 @@
                     </div>
                 </div>
                 <ng-container *ngIf="isHsnSacEnabledAcc">
-                    <div class="row pd-l2 d-flex"> 
+                    <div class="row pl-4 d-flex"> 
                         <div class="d-flex align-items-center">
                             <mat-radio-group name="hsnOrSac" formControlName="hsnOrSac">
                                 <mat-radio-button
@@ -263,7 +263,7 @@
                 class="gstin-address"
                 *ngIf="!isHsnSacEnabledAcc"
             >
-                <div class="pd-t15 overflow-hidden" formArrayName="addresses">
+                <div class="pt-3 overflow-hidden" formArrayName="addresses">
                     <ng-container
                         *ngFor="
                             let gst of addAccountForm.get('addresses')['controls']
@@ -311,7 +311,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-sm-4 mr-b2">
+                            <div class="col-sm-4 mb-4">
                                 <reactive-dropdown-field
                                     *ngIf="(statesSource$ | async)?.length"
                                     [label]="commonLocaleData?.app_state"
@@ -343,7 +343,7 @@
                                 >
                                 </reactive-dropdown-field>
                             </div>
-                            <div class="col-sm-4 mr-b2" *ngIf="GSTIN_OR_TRN">
+                            <div class="col-sm-4 mb-4" *ngIf="GSTIN_OR_TRN">
                                 <input-field
                                     [name]="'gstNumber'"
                                     [label]="formFields['taxName']?.label"
@@ -359,7 +359,7 @@
                                 </input-field>
                             </div>
                             <!-- static code added for the pincode -->
-                            <div class="col-sm-4 mr-b2">
+                            <div class="col-sm-4 mb-4">
                                 <input-field
                                     [name]="'pinCodeNum'"
                                     [label]="zipCodeSupportedCountryList.includes(
@@ -381,7 +381,7 @@
                             </div>
                             <!-- end -->
                             <ng-container *ngIf="['IN', 'ZW', 'KE'].includes(companyCountry)">
-                                <div class="col-sm-4 mr-b2" *ngIf="partyTypeSource.length">
+                                <div class="col-sm-4 mb-4" *ngIf="partyTypeSource.length">
                                     <reactive-dropdown-field
                                         [label]="localeData?.party_type"
                                         [placeholder]="commonLocaleData?.app_select"
@@ -393,7 +393,7 @@
                                     </reactive-dropdown-field>
                                 </div>
                             </ng-container>
-                            <div class="col-sm-12 mr-b2" *ngIf="!firstItem">
+                            <div class="col-sm-12 mb-4" *ngIf="!firstItem">
                                 <button
                                     mat-stroked-button
                                     (click)="removeGstDetailsForm(i)"
@@ -404,12 +404,12 @@
                             </div>
                         </div>
                         <div
-                            class="d-flex justify-content-between column-gap-15 pd-b2"
+                            class="d-flex justify-content-between column-gap-15 pb-4"
                             *ngIf="lastItem && addAccountForm.get('addresses')['controls']?.length > 3 && !moreGstDetailsVisible"
                         >
                             <button
                                 mat-stroked-button
-                                class="text-left w-50 pd-r2"
+                                class="text-left w-50 pr-4"
                                 (click)="showMoreGst()"
                             > {{ commonLocaleData?.app_show_all }} ({{
                                     addAccountForm.get("addresses")["controls"]?.length
@@ -438,8 +438,8 @@
                 [label]="localeData?.tabs?.contact"
                 class="contact-form-wrap"
             >
-                <div class="pd-t15 overflow-hidden padding-bottom-100">
-                    <div class="row pd-b2">
+                <div class="pt-3 overflow-hidden pb-5">
+                    <div class="row pb-4">
                         <div class="col-sm-6">
                             <input-field
                                 [name]="'attention'"
@@ -507,9 +507,9 @@
                 class="contact-form-wrap"
                 *ngIf="voucherApiVersion === 2 && (activeGroupUniqueName === accountingGroupEnum.SundryDebtors || isParentSundryDebtors)"
             >
-                <div formArrayName="portalDomain" class="pd-t15 overflow-hidden padding-bottom-100">
+                <div formArrayName="portalDomain" class="pt-3 overflow-hidden pb-5">
                     <div
-                        class="row pd-b2"
+                        class="row pb-4"
                         *ngFor="let domain of addAccountForm?.get('portalDomain')['controls']; let i = index"
                         [formGroupName]="i"
                     >
@@ -590,7 +590,7 @@
                             <span [id]="'init-contact-portal_' + i + '-valid-msg'" class="d-none"></span>
                             <span [id]="'init-contact-portal_' + i + '-error-msg'" class="d-none"></span> -->
                         </div>
-                        <div class="pl-2 mr-t05">
+                        <div class="pl-2 mt-1">
                             <button
                                 mat-stroked-button
                                 (click)="removePortalUser(domain, i)"
@@ -617,7 +617,7 @@
                 class="bank-details-form"
                 *ngIf="showBankDetail"
             >
-                <div *ngIf="showBankDetail" class="pd-t15 overflow-hidden">
+                <div *ngIf="showBankDetail" class="pt-3 overflow-hidden">
                     <div formArrayName="accountBankDetails">
                         <div
                             class="row"
@@ -728,7 +728,7 @@
             </mat-tab>
 
             <mat-tab [label]="localeData?.tabs?.others" class="other-form-wrap"> 
-                <div class="pd-t15 overflow-hidden">
+                <div class="pt-3 overflow-hidden">
                     <div class="row">
                         <div class="col-sm-6">
                             <input-field
@@ -796,7 +796,7 @@
                         </div>
                     </div>
 
-                    <div class="row pd-b2">
+                    <div class="row pb-4">
                         <div class="col-sm-6">
                             <input-field
                                 [name]="'duePeriod'"
@@ -812,7 +812,7 @@
                         </div>
                     </div>
                     
-                    <div class="row pd-b2">
+                    <div class="row pb-4">
                         <div class="col-sm-12">
                             <div class="form-group">
                                 <label>{{ commonLocaleData?.app_note }}</label>
@@ -831,7 +831,7 @@
             
             <mat-tab [label]="localeData?.tabs?.custom">
                 <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isCustomFieldLoading"></giddh-page-loader>
-                <div class="pd-t15 overflow-hidden">
+                <div class="pt-3 overflow-hidden">
                     <ng-container *ngIf="addAccountForm?.get('addresses')?.value?.length" formArrayName="customFields">
                         <ng-container
                             *ngFor="
@@ -849,7 +849,7 @@
                                 "
                             >
                                 <div
-                                    class="row mr-b15"
+                                    class="row mb-3"
                                     *ngIf="item?.uniqueName === customFieldsItem.get('uniqueName')?.value"
                                 >
                                     <div class="col-lg-8">
@@ -915,7 +915,7 @@
                 </div>
                 <a
                     href="javascript:;"
-                    class="btn-link mr-t15"
+                    class="btn-link mt-3"
                     [routerLink]="'/pages/custom-fields/list'"
                     *ngIf="!companyCustomFields?.length"
                     (click)="closeMaster()"
@@ -977,7 +977,7 @@
                             >{{ localeData?.select_account_merge }}
                             <span class="font-weight-semibold">{{ (activeAccount$ | async)?.name }}</span></label
                         >
-                        <div class="d-flex justify-content-between align-items-center pd-t1" #accountSelect2>
+                        <div class="d-flex justify-content-between align-items-center pt-2" #accountSelect2>
                             <reactive-dropdown-field
                                 class="width-select"
                                 [label]="commonLocaleData?.app_select_accounts"
@@ -1002,7 +1002,7 @@
                         </div>
                         <small class="clear-both">{{ localeData?.merge_account_note }}</small>
                         <ul
-                            class="accmerge mr-t1"
+                            class="accmerge mt-2"
                             *ngIf="
                                 (activeAccount$ | async)?.mergedAccounts.split(',')?.length > 0 &&
                                 (activeAccount$ | async)?.mergedAccounts.split(',')[0] !== ''
@@ -1024,10 +1024,10 @@
             </div>
         </div>
         <div class="form" *ngIf="isDebtorCreditor && isOtherSelectedTab">
-            <div class="mr-b2 select-box">
+            <div class="mb-4 select-box">
                 <div class="form-group">
                     <label>{{ localeData?.default_discounts }} <span class="text-primary"></span></label>
-                    <div class="d-flex justify-content-between align-items-center pd-t1">
+                    <div class="d-flex justify-content-between align-items-center pt-2">
                         <reactive-dropdown-field
                             class="adjusted-content-width"
                             [label]="localeData?.select_discounts"
@@ -1201,11 +1201,11 @@
             {{ commonLocaleData?.app_delete }}
         </button>
         </div>
-        <section class="mr-b8"></section>
+        <section class="mb-custom-80"></section>
     </div>
 </ng-container>
 <ng-template #templateForDeleteAndUpdate>
-    <div class="d-flex column-gap-15 pd-t2">
+    <div class="d-flex column-gap-15 pt-4">
         <button
         *ngIf="voucherApiVersion === 2"
         (click)="submit()"
@@ -1233,5 +1233,5 @@
         {{ commonLocaleData?.app_delete }}
     </button>
     </div>
-    <section class="mr-b8"></section>
+    <section class="mb-custom-80"></section>
 </ng-template>
