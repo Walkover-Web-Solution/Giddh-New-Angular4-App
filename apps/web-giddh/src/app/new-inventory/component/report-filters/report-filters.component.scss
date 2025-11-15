@@ -6,47 +6,14 @@
     min-width: 250px;
 }
 
-/* UNUSED COMPONENT CLASS: transactional-filter-section - Auto-commented by script
-.transactional-filter-section {
-    /* UNUSED COMPONENT CLASS: transactional-wise-common-btn - Auto-commented by script
-.transactional-wise-common-btn {
-        height: 42px;
-        width: 42px;
-        border: 1px solid var(--color-medium-gray);
-        border-radius: var(--mat-border-radius-16);
-        box-shadow: none;
-        background: var(--color-white);
-    }
-
-    .icon-download-circle {
-        font-size: 16px;
-        color: var(--color-medium-gray);
-    }
-}
-*/
-
 .virtual-group-list {
     height: 193px;
 }
 
 .select-multiple-chiplist-inventory {
-    // font-weight: 400 !important;
     font-size: var(--font-size-15) !important;
 
-    /* .mat-chi p UNUSED COMPONENT CLASS: mat-standard-chip - Auto-commented by script
-.mat-standard-chip {
-        color: var(--color-dark-black) !important;
-        background-color: var(--color-white) !important;
-        border: 1px solid var(--theme-primary-color) !important;
-        border-radius: var(--mat-border-radius-4) !important;
-        font-size: var(--font-size-12) !important;
-    }
-*/
 }
-
-// .searching-bar-chiplist {
-//     width: 98% !important;
-// }
 
 .filter-dropdown-branch {
     max-width: 250px;
@@ -68,7 +35,6 @@
 }
 
 .top-main-bar {
-    // padding-top: 15px;
     column-gap: 5px;
 }
 

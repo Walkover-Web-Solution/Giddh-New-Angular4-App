@@ -1,26 +1,3 @@
-/* UNUSED COMPONENT CLASS: basic - Auto-commented by script
-.basic > thead > tr > th {
-    position: relative;
-}
-*/
-
-/* UNUSED COMPONENT CLASS: icon-pointer - Auto-commented by script
-.icon-pointer {
-    cursor: pointer;
-    /* UNUSED COMPONENT CLASS: active-text-color - Auto-commented by script
-.active-text-color {
-        color: var(--text-primary-color) !important;
-    }
-}
-*/
-/* UNUSED COMPONENT CLASS: icon-sort-asc - Auto-commented by script
-.icon-sort-asc {
-    display: inline-block;
-    cursor: pointer;
-    float: left;
-    margin-left: 6px;
-}
-*/
 .icon-sort-asc.active-text-color {
     color: var(--text-primary-color) !important;
 }
@@ -29,7 +6,6 @@
         display: flex;
         i {
             margin-top: 1px;
-            // color: var(--text-primary-color);
             padding-right: 8px;
             cursor: pointer;
             display: flex;
@@ -39,22 +15,6 @@
     }
 }
 
-/* UNUSED COMPONENT CLASS: input-container - Auto-commented by script
-.td-search-box .input-container input {
-    height: 36px;
-    min-width: 100%;
-    padding: 11px;
-    padding-right: 40px;
-    color: var(--color-black);
-    border: none;
-    background-color: var(--color-light-gray);
-}
-*/
-/* UNUSED COMPONENT CLASS: td-search-box - Auto-commented by script
-.td-search-box {
-    position: relative;
-}
-*/
 .action-btn{
     button{
         min-width: 90px;

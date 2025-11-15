@@ -16,25 +16,6 @@
             border-radius: var(--mat-border-radius-8) !important;
         }
 
-        // .mat-card {
-        //     transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
-        //     display: block;
-        //     position: relative;
-        //     padding: 16px;
-        //     border-radius: var(--mat-border-radius-4);
-
-        //     .mat-mdc-card-content {
-        //         padding: 0px !important;
-        //     }
-
-        //     .mat-mdc-card-content {
-        //         &:last-child {
-        //             padding-bottom: 0px !important;
-        //         }
-        //     }
-        // }
-
-
         .portal-body {
             table {
                 background: var(--color-transparent-backgrounds);
@@ -48,7 +29,7 @@
                     color: var(--color-green);
                     background: var(--color-success-light);
                 }
-    
+
                 .unverified {
                     color: var(--color-red);
                     background: var(--color-danger-light);

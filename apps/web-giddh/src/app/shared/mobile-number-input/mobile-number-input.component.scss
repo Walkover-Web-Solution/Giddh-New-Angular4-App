@@ -1,9 +1,7 @@
-// CSS Variables for theming
 :host {
     display: block;
 }
 
-// Shared flag and country styles
 .input-wrapper {
     &> * {
         pointer-events: auto;

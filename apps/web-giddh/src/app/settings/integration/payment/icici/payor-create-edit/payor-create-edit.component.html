@@ -40,7 +40,7 @@
                                 <span class="font-weight-semibold font-size-15">{{ activeBankAccount?.account?.name }}</span>
                             </div>
                         </div>
-                        <div class="clear-both mr-t2" *ngIf="!activePayorAccount">
+                        <div class="clear-both mt-4" *ngIf="!activePayorAccount">
                             <input-field
                                 [label]="localeData?.payment?.login_id_label"
                                 [required]="true"
@@ -51,7 +51,7 @@
                             >
                             </input-field>
                         </div>
-                        <div class="clear-both mr-t1">
+                        <div class="clear-both mt-2">
                             <reactive-dropdown-field
                                 (selectedOption)="accountUserForm.get('userUniqueName').patchValue($event.value)"
                                 [label]="localeData?.payment?.user"
@@ -61,7 +61,7 @@
                                 [required]="true"
                             ></reactive-dropdown-field>
                         </div>
-                        <div class="clear-both mr-t1">
+                        <div class="clear-both mt-2">
                             <div class="clear-both">
                                 <div class="d-inline-block col-md-6 pl-0">
                                     <input-field

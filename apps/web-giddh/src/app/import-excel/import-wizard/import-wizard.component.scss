@@ -35,16 +35,3 @@
 .steps-wizard li.active > label {
     color: var(--color-white);
 }
-
-/* UNUSED COMPONENT CLASS: steps-wizard - Auto-commented by script
-.steps-wizard:before {
-    content: " ";
-    position: absolute;
-    border-top: 2px solid var(--border-color);
-    right: 0;
-    left: 0;
-    top: 40%;
-    width: calc(100% - 172px);
-    margin: 0 auto;
-}
-*/

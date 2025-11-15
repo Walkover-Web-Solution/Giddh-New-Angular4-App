@@ -86,7 +86,7 @@
                         </span>
                     </button>
                 </div>
-                <div class="logo-wrapper pd-l4">
+                <div class="logo-wrapper pl-5">
                     <img
                         [src]="giddhLogoSrc"
                         width="127"
@@ -134,10 +134,10 @@
                                                     (currentOrganizationType === 'COMPANY' || isConsolidatedBranch))
                                             "
                                         >
-                                            <div class="mr-t2 mr-b05 d-flex justify-content-between">
+                                            <div class="mt-4 mb-1 d-flex justify-content-between">
                                                 <div class="d-flex align-items-center">
                                                     <span class="d-flex">
-                                                        <i class="icon-credit-note-new theme-foreground-color mr-r1"></i>
+                                                        <i class="icon-credit-note-new theme-foreground-color mr-2"></i>
                                                     </span>
                                                     <span
                                                         >{{ localeData?.credit }}
@@ -145,7 +145,7 @@
                                                             [matTooltip]="localeData?.credit_information"
                                                             [matTooltipPosition]="'above'"
                                                         >
-                                                            <i class="icon-info mr-l15"></i>
+                                                            <i class="icon-info ml-3"></i>
                                                         </a>
                                                     </span>
                                                 </div>
@@ -196,9 +196,9 @@
                                                     (currentOrganizationType === 'COMPANY' || isConsolidatedBranch))
                                             "
                                         >
-                                            <div class="mr-t2 mr-b05 d-flex align-items-center">
+                                            <div class="mt-4 mb-1 d-flex align-items-center">
                                                 <span class="d-flex">
-                                                    <i class="icon-invoice-new theme-foreground-color mr-r1"></i>
+                                                    <i class="icon-invoice-new theme-foreground-color mr-2"></i>
                                                 </span>
                                                 <span
                                                     >{{ localeData?.cash }}
@@ -206,7 +206,7 @@
                                                         [matTooltip]="localeData?.cash_information"
                                                         [matTooltipPosition]="'above'"
                                                     >
-                                                        <i class="icon-info mr-l15"></i>
+                                                        <i class="icon-info ml-3"></i>
                                                     </a>
                                                 </span>
                                             </div>
@@ -259,9 +259,9 @@
                                                     (currentOrganizationType === 'COMPANY' || isConsolidatedBranch))
                                             "
                                         >
-                                            <div class="mr-t2 mr-b05 d-flex align-items-center">
+                                            <div class="mt-4 mb-1 d-flex align-items-center">
                                                 <span class="d-flex">
-                                                    <i class="icon-branch-transfer theme-foreground-color mr-r1"></i>
+                                                    <i class="icon-branch-transfer theme-foreground-color mr-2"></i>
                                                 </span>
                                                 <span> {{ localeData?.branch_transfer }} </span>
                                             </div>
@@ -289,9 +289,9 @@
                                             </ul>
                                         </div>
                                         <div>
-                                            <div class="mr-t2 mr-b05 d-flex align-items-center">
+                                            <div class="mt-4 mb-1 d-flex align-items-center">
                                                 <span class="d-flex">
-                                                    <i class="icon-stock theme-foreground-color mr-r1"></i>
+                                                    <i class="icon-stock theme-foreground-color mr-2"></i>
                                                 </span>
                                                 <span> {{ localeData?.stock }} </span>
                                             </div>
@@ -334,7 +334,7 @@
                                             </ul>
                                         </div>
                                         <div
-                                            class="mr-t2 mr-b05 align-items-center"
+                                            class="mt-4 mb-1 align-items-center"
                                             *ngIf="
                                                 currentCompanyBranches?.length > 1 &&
                                                 (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
@@ -344,7 +344,7 @@
                                             <button
                                                 mat-raised-button
                                                 color="primary"
-                                                class="mr-t2"
+                                                class="mt-4"
                                                 (click)="gotToBranchTab()"
                                             >
                                                 {{ localeData?.go_to_branch }}
@@ -357,9 +357,9 @@
                                                     (currentOrganizationType === 'COMPANY' || isConsolidatedBranch))
                                             "
                                         >
-                                            <div class="menu-link mr-t2 mr-b05 d-flex align-items-center">
+                                            <div class="menu-link mt-4 mb-1 d-flex align-items-center">
                                                 <span class="d-flex">
-                                                    <i class="icon-estimate-new mr-r1"></i>
+                                                    <i class="icon-estimate-new mr-2"></i>
                                                 </span>
                                                 <span>
                                                     <a
@@ -370,9 +370,9 @@
                                                     </a>
                                                 </span>
                                             </div>
-                                            <div class="menu-link mr-t2 mr-b05 d-flex align-items-center">
+                                            <div class="menu-link mt-4 mb-1 d-flex align-items-center">
                                                 <span class="d-flex">
-                                                    <i class="icon-proforma mr-r1"></i>
+                                                    <i class="icon-proforma mr-2"></i>
                                                 </span>
                                                 <span>
                                                     <a
@@ -383,9 +383,9 @@
                                                     </a>
                                                 </span>
                                             </div>
-                                            <div class="menu-link mr-t2 mr-b05 d-flex align-items-center">
+                                            <div class="menu-link mt-4 mb-1 d-flex align-items-center">
                                                 <span class="d-flex">
-                                                    <i class="icon-purchase-order mr-r1"></i>
+                                                    <i class="icon-purchase-order mr-2"></i>
                                                 </span>
                                                 <span>
                                                     <a
@@ -398,9 +398,9 @@
                                                     </a>
                                                 </span>
                                             </div>
-                                            <div class="menu-link mr-t2 mr-b05 d-flex align-items-center">
+                                            <div class="menu-link mt-4 mb-1 d-flex align-items-center">
                                                 <span class="d-flex">
-                                                    <i class="icon-invoice-new mr-r1"></i>
+                                                    <i class="icon-invoice-new mr-2"></i>
                                                 </span>
                                                 <span>
                                                     <a
@@ -411,9 +411,9 @@
                                                     </a>
                                                 </span>
                                             </div>
-                                            <div class="menu-link mr-t2 mr-b05 d-flex align-items-center">
+                                            <div class="menu-link mt-4 mb-1 d-flex align-items-center">
                                                 <span class="d-flex">
-                                                    <i class="icon-invoice-new mr-r1"></i>
+                                                    <i class="icon-invoice-new mr-2"></i>
                                                 </span>
                                                 <span>
                                                     <a
@@ -424,9 +424,9 @@
                                                     </a>
                                                 </span>
                                             </div>
-                                            <div class="menu-link mr-t2 mr-b05 d-flex align-items-center">
+                                            <div class="menu-link mt-4 mb-1 d-flex align-items-center">
                                                 <span class="d-flex">
-                                                    <i class="icon-manufacturing1 mr-r1"></i>
+                                                    <i class="icon-manufacturing1 mr-2"></i>
                                                 </span>
                                                 <span>
                                                     <a
@@ -445,7 +445,7 @@
                             </mat-menu>
                         </li>
                         <li
-                            class="border-none pd-r15 notification"
+                            class="border-none pr-3 notification"
                             [ngClass]="{ 'mr-0': isTodaysDateSelected }"
                             [matTooltip]="localeData?.notifications"
                             [matTooltipPosition]="'below'"
@@ -603,12 +603,12 @@
     >
         <div class="warning-msg-row plan-issue d-flex justify-content-between">
             <p>
-                <i class="icon-traingle-info font-size-15 mr-r1"></i> {{ getSubscriptionEndNote() }}
+                <i class="icon-traingle-info font-size-15 mr-2"></i> {{ getSubscriptionEndNote() }}
                 <a href="javascript:void(0);" class="theme-primary-color cursor-pointer text-decoration-underline" aria-label="go to plan" (click)="goToSelectPlan()">{{
                     localeData?.click_here
                 }}</a>
             </p>
-            <i class="icon-cross mr-t05 cursor-pointer" (click)="showAlertMessage.isSubscriptionEnded = false"></i>
+            <i class="icon-cross mt-1 cursor-pointer" (click)="showAlertMessage.isSubscriptionEnded = false"></i>
         </div>
     </div>
 
@@ -620,12 +620,12 @@
     >
         <div class="warning-msg-row plan-issue d-flex justify-content-between">
             <p>
-                <i class="icon-traingle-info font-size-15 mr-r1"></i> {{ getSubscriptionEndedNote() }}
+                <i class="icon-traingle-info font-size-15 mr-2"></i> {{ getSubscriptionEndedNote() }}
                 <a *ngIf="subscribedPlan?.duration === 'YEARLY'" href="javascript:;" class="theme-primary-color cursor-pointer text-decoration-underline" aria-label="get select " (click)="goToSelectPlan()">
                     {{ localeData?.click_here }}
                 </a>
             </p>
-            <i class="icon-cross mr-t05 cursor-pointer" (click)="showAlertMessage.isSubscriptionRenewalExpired = false"></i>
+            <i class="icon-cross mt-1 cursor-pointer" (click)="showAlertMessage.isSubscriptionRenewalExpired = false"></i>
         </div>
     </div>
 
@@ -637,12 +637,12 @@
     >
         <div class="warning-msg-row plan-issue d-flex justify-content-between">
             <p>
-                <i class="icon-traingle-info font-size-15 mr-r1"></i> {{ getSubscriptionTransactionEndedNote() }}
+                <i class="icon-traingle-info font-size-15 mr-2"></i> {{ getSubscriptionTransactionEndedNote() }}
                 <a href="javascript:void(0);" class="theme-primary-color cursor-pointer text-decoration-underline" aria-label="get plan" (click)="goToSelectPlan()">{{
                     localeData?.click_here
                 }}</a>
             </p>
-            <i class="icon-cross mr-t05 cursor-pointer" (click)="showAlertMessage.isTransactionLimitExceeded = false"></i>
+            <i class="icon-cross mt-1 cursor-pointer" (click)="showAlertMessage.isTransactionLimitExceeded = false"></i>
         </div>
     </div>
 
@@ -653,12 +653,12 @@
     >
         <div class="warning-msg-row plan-issue d-flex justify-content-between" (mouseenter)="addListenerErrorMessage()">
             <p>
-                <i class="icon-traingle-info font-size-15 mr-r1"></i>
+                <i class="icon-traingle-info font-size-15 mr-2"></i>
                 <span *ngIf="obligation.daysRemaining" [innerHTML]="getExpiredMessage(localeData?.obligation_expired, obligation.daysRemaining)"></span>
                 <span *ngIf="obligation.daysRemaining === 0 && !obligation.isExpired" [innerHTML]="localeData?.obligation_today_expired"></span>
                 <span *ngIf="obligation.isExpired" [innerHTML]="localeData?.obligation_expired_passed"></span>
             </p>
-            <i class="icon-cross mr-t05 cursor-pointer" (click)="showAlertMessage.isObligationExpired = false"></i>
+            <i class="icon-cross mt-1 cursor-pointer" (click)="showAlertMessage.isObligationExpired = false"></i>
         </div>
     </div>
 
@@ -669,12 +669,12 @@
     >
         <div class="warning-msg-row plan-issue d-flex justify-content-between" (mouseenter)="addListenerErrorMessage()">
             <p>
-                <i class="icon-traingle-info font-size-15 mr-r1"></i>
+                <i class="icon-traingle-info font-size-15 mr-2"></i>
                 <span *ngIf="liabilities.daysRemaining" [innerHTML]="getExpiredMessage(localeData?.liabilities_expired, liabilities.daysRemaining)"></span>
                 <span *ngIf="liabilities.daysRemaining === 0 && !liabilities.isExpired" [innerHTML]="localeData?.liabilities_today_expired"></span>
                 <span *ngIf="liabilities.isExpired" [innerHTML]="localeData?.liabilities_expired_passed"></span>
             </p>
-            <i class="icon-cross mr-t05 cursor-pointer" (click)="showAlertMessage.isLiabilitiesExpired = false"></i>
+            <i class="icon-cross mt-1 cursor-pointer" (click)="showAlertMessage.isLiabilitiesExpired = false"></i>
         </div>
     </div>
     <ng-template #expiredPlanModel>

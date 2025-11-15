@@ -19,7 +19,7 @@
                     {{ localeData?.adjusted_amount_error }}
                 </span>
                 <div class="row mb-2" *ngIf="isModal">
-                    <div class="col-md-8 mr-t05">
+                    <div class="col-md-8 mt-1">
                         <div class="form-group">
                             <input-field
                                 id="customerName"
@@ -289,7 +289,7 @@
                                 mat-raised-button
                                 color="primary"
                                 *ngIf="!isUpdateMode"
-                                class="mr-r1"
+                                class="mr-2"
                                 [disabled]="isInvalidForm"
                                 (click)="saveAdjustAdvanceReceipt(adjustAdvancePaymentForm)"
                             >
@@ -299,7 +299,7 @@
                                 mat-raised-button
                                 color="primary"
                                 *ngIf="isUpdateMode"
-                                class="mr-r1"
+                                class="mr-2"
                                 [disabled]="isInvalidForm"
                                 (click)="saveAdjustAdvanceReceipt(adjustAdvancePaymentForm)"
                             >

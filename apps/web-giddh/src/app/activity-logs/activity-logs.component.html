@@ -6,10 +6,10 @@
     (translationComplete)="translationComplete($event)"
 >
     <hamburger-menu class="hamburger-menu"></hamburger-menu>
-    <div class="activity-container pd-15">
+    <div class="activity-container p-3">
         <div class="activity-filter-wrap mb-2">
             <div *ngFor="let selectedField of selectedFields; let i = index" class="filter-wrapper">
-                <div class="mr-l05">
+                <div class="ml-1">
                     <select-field
                         [cssClass]="'form-control border bg-white'"
                         [name]="'fields'"
@@ -60,7 +60,7 @@
                         </ng-template>
                     </mat-menu>
                 </div>
-                <div class="entity-wrapper mr-l1" *ngIf="selectedField?.value === 'ENTITY'">
+                <div class="entity-wrapper ml-2" *ngIf="selectedField?.value === 'ENTITY'">
                     <select-field
                         [cssClass]="'form-control border bg-white'"
                         [name]="'entity'"
@@ -87,7 +87,7 @@
                             type="text"
                             name="selectedEntryDateRange"
                             [value]="selectedEntryDateRangeUi ? selectedEntryDateRangeUi : ''"
-                            class="giddh-datepicker date-range-picker h-100 bg-white "
+                            class="giddh-datepicker date-range-picker h-100 bg-white"
                             readonly
                         />
                     </div>
@@ -153,7 +153,7 @@
                         </ng-template>
                     </mat-menu>
                 </div>
-                <div class="operation-wrapper mr-l1" *ngIf="selectedField?.value === 'OPERATION'">
+                <div class="operation-wrapper ml-2" *ngIf="selectedField?.value === 'OPERATION'">
                     <select-field
                         [cssClass]="'form-control border bg-white'"
                         [name]="'operation'"
@@ -168,7 +168,7 @@
                     >
                     </select-field>
                 </div>
-                <div class="user-wrapper mr-l1" *ngIf="selectedField?.value === 'USERS'">
+                <div class="user-wrapper ml-2" *ngIf="selectedField?.value === 'USERS'">
                     <select-field
                         [cssClass]="'form-control border bg-white'"
                         [name]="'user'"
@@ -181,7 +181,7 @@
                     >
                     </select-field>
                 </div>
-                <div class="user-wrapper mr-l1" *ngIf="selectedField?.value === 'ACCOUNTS'">
+                <div class="user-wrapper ml-2" *ngIf="selectedField?.value === 'ACCOUNTS'">
                     <select-field
                         [cssClass]="'form-control border bg-white'"
                         [name]="'accounts'"
@@ -225,7 +225,7 @@
         <div *ngIf="isLoading">
             <giddh-page-loader></giddh-page-loader>
         </div>
-        <div *ngIf="!isLoading" class="table-header-sticky">
+        <div *ngIf="!isLoading">
             <table
                 mat-table
                 [dataSource]="dataSource"
@@ -452,6 +452,6 @@
             (page)="handlePageEvent($event)"
         >
         </mat-paginator>
-        <section class="mr-b8"></section>
+        <section class="mb-custom-80"></section>
     </div>
 </ng-container>

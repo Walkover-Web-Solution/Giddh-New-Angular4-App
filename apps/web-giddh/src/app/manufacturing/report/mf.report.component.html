@@ -1,7 +1,7 @@
 <section id="manufacture" class="clear-both">
     <hamburger-menu *ngIf="!isInventoryPage" [pageHeading]="'Mfg. Journal Register'"></hamburger-menu>
-    <div class="clear-both mr-r15 create-btn" *ngIf="isTabletScreen">
-        <div class="mr-r15" *ngIf="showClearFilter()">
+    <div class="clear-both mr-3 create-btn" *ngIf="isTabletScreen">
+        <div class="mr-3" *ngIf="showClearFilter()">
             <label class="d-none">&nbsp;</label>
             <button mat-stroked-button type="button" (click)="clearFilters()">Clear Filter</button>
         </div>
@@ -20,7 +20,7 @@
             >
                 <div class="row">
                     <div
-                        class="col-xl-3 col-lg-4 col-md-6 mr-b15"
+                        class="col-xl-3 col-lg-4 col-md-6 mb-3"
                         *ngIf="currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
                     >
                         <div class="link-entity-dropdown">
@@ -38,7 +38,7 @@
                         </div>
                     </div>
                     <div
-                        class="col-md-6 mr-b15 datepicker-flex"
+                        class="col-md-6 mb-3 datepicker-flex"
                         [ngClass]="
                             currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
                                 ? 'col-xl-3 col-lg-4 '
@@ -128,7 +128,7 @@
         <div class="mf-stock-search-request-form clear-both">
             <form
                 #mfStockSearchRequestForm="ngForm"
-                class="mt-0 col-12 pl-0 pr-0 mr-t15 mr-b05 manufacturing-form"
+                class="mt-0 col-12 pl-0 pr-0 mt-3 mb-1 manufacturing-form"
                 (submit)="getReports()"
                 autocomplete="off"
             >
@@ -198,11 +198,11 @@
         </div>
     </div>
     <!-- search form end -->
-    <section *ngIf="isReportLoading$ | async" class="clear-both mr-t100 col-md-12">
+    <section *ngIf="isReportLoading$ | async" class="clear-both mt-custom-100 col-md-12">
         <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
     </section>
     <div
-        class="no-data mr-t100 col-12 col-sm-12"
+        class="no-data mt-custom-100 col-12 col-sm-12"
         *ngIf="!(isReportLoading$ | async) && reportData && reportData.results?.length === 0"
     >
         <h2>No entries found within given criteria.</h2>
@@ -275,7 +275,7 @@
                         </th>
                         <td mat-cell *matCellDef="let item" class="material-data" (dblclick)="editMFItem(item)">
                             <div class="d-flex flex-column data-title-td">
-                                <div *ngFor="let row of item.linkedStocks" class="mr-b15">
+                                <div *ngFor="let row of item.linkedStocks" class="mb-3">
                                     <div>Material Used</div>
                                     <div>Qty Inwards</div>
                                     <div>Unit</div>
@@ -323,7 +323,7 @@
                     [hidePageSize]="false"
                     (page)="handlePageEvent($event)"
                 ></mat-paginator>
-                <section class="mr-b8"></section>
+                <section class="mb-custom-80"></section>
             </div>
         </div>
     </section>

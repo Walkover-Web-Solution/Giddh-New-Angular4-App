@@ -2,10 +2,8 @@
 @use "./_custom-palette" as palette;
 @use "./custom_typography" as typography;
 @use "../material/material-mixins" as mixins;
-// Base theme styles (common to all themes)
 @include mat.core();
 
-// Use Giddh default palettes for compilation
 $primary-palette: palette.$giddh-primary;
 $accent-palette: palette.$giddh-accent;
 $warn-palette: palette.$giddh-warn;
@@ -66,9 +64,3 @@ $dark-theme: mat.define-dark-theme(
 body.mat-typography {
     font-family: var(--font-family), sans-serif !important;
 }
-
-// Override any inherited font families for nested elements
-// [class*="mat-"] *,
-// [class^="mat-"] * {
-//     font-family: inherit !important;
-// }

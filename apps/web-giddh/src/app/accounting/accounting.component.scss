@@ -1,87 +1,3 @@
-// :host ::ng-deep .parent-group {
-//     padding-left: 0;
-// }
-
-// :host ::ng-deep .account-accordion .main-account-list .title:before {
-//     content: none;
-// }
-
-// :host ::ng-deep .accountli {
-//     margin: 7px;
-//     text-transform: capitalize;
-// }
-
-// :host ::ng-deep .accounts-side-bar {
-//     box-shadow: none;
-//     overflow: auto;
-//     width: 100%;
-// }
-
-// .custom-input-group-addon {
-//     min-width: 40px;
-//     border-radius: var(--mat-border-radius-0);
-//     padding: 0;
-//     border: none;
-// }
-
-// .bg-wrap {
-//     background: var(--color-white);
-// }
-
-// .entry-table thead th {
-//     font-weight: normal;
-//     padding: 8px 6px;
-//     color: var(--color-black);
-//     border-color: var(--border-color);
-// }
-
-// .entry-table {
-//     tbody {
-//         tr {
-//             td {
-//                 padding: 5px;
-//                 border: 0;
-//             }
-//         }
-//     }
-// }
-
-// .entry-table tbody tr td .form-control {
-//     border: 0;
-//     border-radius: var(--mat-border-radius-0) !important;
-//     height: 28px;
-//     line-height: 28px;
-//     padding: 0 6px !important;
-//     color: var(--color-black) !important;
-//     background: transparent !important;
-// }
-
-// .entry-table tbody tr td .form-control.focus:focus {
-//     background: transparent !important;
-//     border: 1px solid var(--border-color) !important;
-// }
-
-// .active-row-transparent {
-//     background: white !important;
-// }
-
-// .active-row {
-//     background: var(--theme-primary-light) !important;
-// }
-
-// .confirmation-box {
-//     background: var(--color-white);
-//     display: inline-block;
-//     padding: 20px;
-//     width: 230px;
-//     position: absolute;
-//     right: 15px;
-//     z-index: 9;
-//     min-height: 135px;
-//     margin: 20px 0;
-//     top: -200px;
-// }
-
 .total-box {
     padding: 5px 0;
     border-top: 1px solid;
@@ -92,63 +8,19 @@
     margin-bottom: 3px;
 }
 
-// .min-150 {
-//     min-width: 150px;
-// }
-
-// .custom-border {
-//     width: 100%;
-// }
-
-.total-box>span {
+.total-box > span {
     margin: 0 8px;
     display: inline-block;
     min-width: 80px;
 }
-
-// .appearance-none {
-//     background: var(--color-border-light) !important;
-//     border: 0 !important;
-//     font-size: var(--font-size-15);
-//     color: var(--color-black);
-// }
-
-// .account-listbar {
-//     overflow-y: hidden;
-//     height: 100vh;
-//     width: 250px;
-//     background: var(--color-white);
-//     position: absolute;
-//     left: -250px;
-//     z-index: 0;
-// }
 
 .sidebar-menu {
     min-height: 100vh;
     background: var(--color-black);
     color: var(--color-white);
     float: right;
-    /* width: 250px; */
     position: relative;
 }
-
-// .menu-list {
-//     padding: 15px 0;
-// }
-
-// .menu-list li {
-//     list-style: none;
-// }
-
-// .menu-list li a {
-//     color: var(--color-white);
-//     padding: 4px 12px;
-//     display: block;
-// }
-
-// .menu-list li a.isHidden {
-//     color: var(--color-dark-gray);
-// }
 
 .sidebar-list {
     width: 300px;
@@ -167,47 +39,10 @@
     background: var(--color-white);
 }
 
-// input[name="entryDate"] {
-//     background: transparent !important;
-//     border: 0;
-//     padding: 0 !important;
-//     color: var(--color-black);
-//     height: auto;
-//     width: 100px;
-//     font-size: var(--font-size-15);
-// }
-
-// textarea[name="narration"]:focus {
-//     border: 1px solid var(--border-color) !important;
-// }
-
-// .custom-entry-date {
-//     .form-control {
-//         border: none;
-//         background: transparent !important;
-//     }
-// }
-
-// input[name="entryDate"]:focus {
-//     border: 1px solid var(--border-color) !important;
-//     background-color: transparent !important;
-// }
-
 :host ::ng-deep .menu {
     box-shadow: none !important;
 }
 
-/* UNUSED COMPONENT CLASS: item - Auto-commented by script
-:host ::ng-deep .item /* UNUSED COMPONENT CLASS: list-item - Auto-commented by script
-.list-item {
-    border: 0 !important;
-}
-*/
-
 :host ::ng-deep .menu {
     border-left: 0 !important;
 }
-
-// .modal-voucher {
-//     width: 298px !important;
-// }

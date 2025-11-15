@@ -17,7 +17,7 @@
             ></tax-sidebar>
         </div>
         <div class="container-fluid">
-            <div class="pd-t15 d-flex justify-content-end align-items-center">
+            <div class="pt-3 d-flex justify-content-end align-items-center">
                 <div class="mr-auto" *ngIf="vatReportTransactions.results?.length">
                     <ol class="breadcrumb">
                         <li>
@@ -111,7 +111,7 @@
                     [hidePageSize]="false"
                     [pageIndex]="vatReportTransactionsRequest.page - 1"
                 ></mat-paginator>
-                <section class="mr-b8"></section>
+                <section class="mb-custom-80"></section>
             </div>
         </div>
         <ng-template #downloadOrSendMailModel>

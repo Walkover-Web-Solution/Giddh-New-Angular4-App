@@ -92,13 +92,13 @@
         </div>
         <!-- Video Links -->
         <ng-container *ngIf="moduleName === 'GROUP_WISE_REPORT'">
-            <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'INVENTORY_REPORT_GROUPWISE'"></watch-video>
+            <watch-video [cssClass]="'text-primary pr-3'" [moduleName]="'INVENTORY_REPORT_GROUPWISE'"></watch-video>
         </ng-container>
         <ng-container *ngIf="moduleName === 'ITEM_WISE_REPORT'">
-            <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'INVENTORY_REPORT_ITEMWISE'"></watch-video>
+            <watch-video [cssClass]="'text-primary pr-3'" [moduleName]="'INVENTORY_REPORT_ITEMWISE'"></watch-video>
         </ng-container>
         <ng-container *ngIf="moduleName === 'VARIANT_WISE_REPORT'">
-            <watch-video [cssClass]="'text-primary pd-r15'" [moduleName]="'INVENTORY_REPORT_VARIANTWISE'"></watch-video>
+            <watch-video [cssClass]="'text-primary pr-3'" [moduleName]="'INVENTORY_REPORT_VARIANTWISE'"></watch-video>
         </ng-container>
     </div>
 
@@ -115,7 +115,7 @@
                 [selectable]="true"
                 [removable]="true"
                 (removed)="removeOption(chip, indx)"
-                class="mr-r1"
+                class="mr-2"
                 >
                 {{ chip?.name }}
                         <span matChipRemove>
@@ -175,7 +175,7 @@
                     </ng-template>
                 </mat-autocomplete>
 
-            <i class="icon-search search-icon mr-l1 mr-r1" matIconPrefix *ngIf="!filtersChipList?.length"></i>
+            <i class="icon-search search-icon ml-2 mr-2" matIconPrefix *ngIf="!filtersChipList?.length"></i>
             </mat-form-field>
         <div class="menu-btn-control d-flex justify-content-end align-items-center">
             <button mat-stroked-button aria-hidden="true" class="advance-filter-button font-size-14" (click)="exportReport()" [disabled]="isLoading$ | async">

@@ -1,62 +1,7 @@
-/* UNUSED COMPONENT CLASS: new-inventory-page-header - Auto-commented by script
-.new-inventory-page-header {
-    padding: 0 15px 15px;
-    margin-bottom: 15px;
-    display: flex;
-    justify-content: space-between;
-    border-bottom: 1px solid var(--color-medium-gray);
-    align-items: center;
-
-    /* UNUSED COMPONENT CLASS: inventory-header-right - Auto-commented by script
-.inventory-header-right {
-        display: flex;
-    }
-}
-*/
-
-/* UNUSED COMPONENT CLASS: page-title-inventory - Auto-commented by script
-.page-title-inventory {
-    font-weight: bold;
-    color: var(--text-primary-color);
-    font-size: var(--font-size-15);
-}
-*/
-
 .create-new-inventory-page {
     padding-top: 15px;
 
-    /* UNUSED COMPONENT CLASS: back-to-page - Auto-commented by script
-.back-to-page {
-        position: absolute;
-        right: 5px;
-        top: 0;
-        padding: 10px;
-        z-index: 10;
-        color: var(--text-primary-color);
-    }
-*/
-
-    /* UNUSED COMPONENT CLASS: select-product-type - Auto-commented by script
-.select-product-type {
-        .form-body {
-            background-color: transparent;
-        }
-
-        display: flex;
-        justify-content: space-between;
-        border-bottom: 1px solid var(--border-color);
-        margin-bottom: 15px;
-        font-size: var(--font-size-15);
-        padding-bottom: 5px;
-
-        img {
-            width: 86px;
-        }
-    }
-*/
-
     .sales-purchase-details {
-        // background-color: var(--color-white);
         padding: 0 15px;
         border-radius: var(--mat-border-radius-8);
 
@@ -84,26 +29,8 @@
                 overflow: hidden;
                 font-family: var(--font-family) !important;
 
-                /* UNUSED COMPONENT CLASS: add-new-text-container - Auto-commented by script
-.add-new-text-container {
-                    font-family: var(--font-family);
-                    position: relative;
-                    cursor: pointer;
-                    font-size: var(--font-size-12);
-                }
-*/
             }
 
-            /* UNUSED COMPONENT CLASS: icon-button-remove - Auto-commented by script
-.icon-button-remove {
-                color: var(--color-medium-gray);
-                position: absolute;
-                right: -20px;
-                font-size: 20px;
-                top: -5px;
-                z-index: 1;
-            }
-*/
         }
 
         .sales-information {
@@ -119,21 +46,8 @@
                 top: 0;
             }
 
-            /* UNUSED COMPONENT CLASS: bg-transparent - Auto-commented by script
-.bg-transparent {
-                background-color: var(--color-transparent) !important;
-            }
-*/
         }
 
-        /* UNUSED COMPONENT CLASS: stock-check - Auto-commented by script
-.stock-check {
-            mat-checkbox {
-                display: flex;
-                justify-content: flex-end;
-            }
-        }
-*/
     }
 
     .stock-made-with {
@@ -172,41 +86,13 @@
         }
     }
 
-    // Inventory
     .product-option {
         border-bottom: 1px solid var(--border-color);
     }
 
     .product-option-wrapper {
-        // background-color: var(--color-white);
         padding: 20px 15px;
         border-radius: var(--mat-border-radius-8);
-
-        /* UNUSED COMPONENT CLASS: multi-select-input - Auto-commented by script
-.multi-select-input {
-            width: 85%;
-            margin-right: 10px;
-            border-radius: var(--mat-border-radius-0);
-            display: inline-block;
-            position: relative;
-            bottom: 2px;
-            border-color: var(--border-color);
-
-            .chip-close-btn {
-                color: var(--color-black);
-            }
-
-            .inventory-category-field-input::placeholder {
-                font-size: var(--font-size-15);
-                color: var(--color-silver);
-            }
-
-            /* UNUSED COMPONENT CLASS: s-chip - Auto-commented by script
-.s-chip {
-                background-color: var(--color-light-gray) !important;
-            }
-        }
-*/
 
         .delete-btn-wrapper {
             width: 10%;
@@ -235,12 +121,6 @@
             color: var(--text-primary-color) !important;
         }
 
-        /* UNUSED COMPONENT CLASS: category-label - Auto-commented by script
-.category-label {
-            display: block;
-        }
-*/
-
         .color-field {
             align-items: baseline;
         }
@@ -249,17 +129,6 @@
             display: flex;
             column-gap: 40px;
             align-items: center;
-
-            /* UNUSED COMPONENT CLASS: mat-standard-chip - Auto-commented by script
-.mat-standard-chip {
-                padding: 5px;
-                min-height: 25px;
-                min-width: 25px;
-                justify-content: center;
-                background-color: var(--color-border-light);
-                font-size: var(--font-size-12);
-            }
-*/
 
             .dot-img {
                 img {
@@ -339,16 +208,6 @@
                     }
                 }
 
-                /* UNUSED COMPONENT CLASS: product-name-label - Auto-commented by script
-.product-name-label {
-                    position: relative;
-
-                    /* UNUSED COMPONENT CLASS: product-name-star - Auto-commented by script
-.product-name-star {
-                        position: absolute;
-                    }
-                }
-*/
             }
 
             .other-group {
@@ -369,50 +228,6 @@
 
     .icon-plus {
         color: var(--text-primary-color);
-    }
-}
-
-/* UNUSED COMPONENT CLASS: add-image-button - Auto-commented by script
-.add-image-button {
-    button {
-        padding: 0;
-        margin: 0 !important;
-        height: auto;
-        border: 2px dashed var(--color-silver);
-        overflow: hidden;
-    }
-
-    img {
-        height: 87px;
-        width: 87px;
-        object-fit: contain;
-        transform: scale(1.2);
-    }
-}
-*/
-
-.inner-content-footer {
-    padding: 0px 22px 15px;
-
-    /* UNUSED COMPONENT CLASS: create-inventory-btn - Auto-commented by script
-.create-inventory-btn {
-        width: 198px;
-        height: 36px;
-        color: var(--color-white);
-        background-color: var(--color-green);
-
-        &:disabled {
-            background-color: var(--color-green-light);
-        }
-    }
-*/
-
-    .button-group {
-        /* UNUSED COMPONENT CLASS: btn-danger - Auto-commented by script
-.btn-danger {
-            background-color: var(--color-white) !important;
-        }
-*/
     }
 }
 
@@ -457,18 +272,6 @@ table.stock-table {
                     }
                 }
             }
-
-            /* UNUSED COMPONENT CLASS: icon-button-remove-sales - Auto-commented by script
-.icon-button-remove-sales {
-                width: 20px !important;
-            }
-*/
-
-            /* UNUSED COMPONENT CLASS: icon-button-add-sales - Auto-commented by script
-.icon-button-add-sales {
-                width: 40px !important;
-            }
-*/
 
             &.variant-name-column {
                 max-width: 180px;
@@ -538,7 +341,6 @@ table.stock-table {
         border-radius: var(--mat-border-radius-4);
         z-index: 1;
 
-        //  This will hide "Default Choose file" button
         &::-webkit-file-upload-button {
             display: none;
         }
@@ -556,22 +358,6 @@ table.stock-table {
     max-width: 1000px;
     width: 100%;
     margin-bottom: 0;
-
-    /* UNUSED COMPONENT CLASS: delete-row - Auto-commented by script
-.delete-row {
-        position: absolute;
-        right: -40px;
-        width: 25px;
-        height: 25px;
-        border: 1px solid var(--color-medium-gray);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border-radius: 40px;
-        color: var(--color-dark-gray);
-        font-size: 17px;
-    }
-*/
 
     .delete-tb-tr-icon {
         position: absolute;
@@ -628,13 +414,6 @@ table.stock-table {
                 }
             }
         }
-
-        /* UNUSED COMPONENT CLASS: checkbox-custom-label - Auto-commented by script
-.checkbox-custom-label {
-            padding-bottom: 0;
-            width: 100%;
-        }
-*/
 
         .search-field {
             display: flex;
@@ -718,25 +497,9 @@ table.stock-table {
         max-width: 30%;
     }
 
-    /* UNUSED COMPONENT CLASS: col-sm-1 - Auto-commented by script
-.col-sm-1 {
-        flex: 0 0 5.333333%;
-        max-width: 5.333333%;
-    }
-*/
-
     .to-span {
         position: relative;
         right: 1%;
-    }
-
-    .recipe-input-tab {
-        /* UNUSED COMPONENT CLASS: col-sm-3 - Auto-commented by script
-.col-sm-3 {
-            flex: 0 0 27%;
-            max-width: 27%;
-        }
-*/
     }
 
     .add-new-final-product {
@@ -748,7 +511,6 @@ table.stock-table {
     min-width: unset !important;
 }
 
-/* responsive */
 @media (max-width: 1440px) {
     .final-product-recipe {
         .width-30-percent {
@@ -776,19 +538,9 @@ table.stock-table {
 }
 
 @media (max-width: 1199px) {
-    /* UNUSED COMPONENT CLASS: pl-5 - Auto-commented by script
-.pl-5 {
-        padding-left: 15px !important;
-    }
-*/
 
     .create-new-inventory-page {
         .sales-purchase-details {
-            /* UNUSED COMPONENT CLASS: mt-5 - Auto-commented by script
-.mt-5 {
-                margin-top: 0 !important;
-            }
-*/
 
             .pl-5 {
                 padding-left: 15px !important;
@@ -831,17 +583,6 @@ table.stock-table {
         font-size: 20px;
     }
 }
-
-/* UNUSED COMPONENT CLASS: ng-valid - Auto-commented by script
-/* UNUSED COMPONENT CLASS: ng-pristine - Auto-commented by script
-/* UNUSED COMPONENT CLASS: mat-input-element - Auto-commented by script
-/* UNUSED COMPONENT CLASS: mat-form-field-autofill-control - Auto-commented by script
-/* UNUSED COMPONENT CLASS: cdk-text-field-autofill-monitored - Auto-commented by script
-.mat-input-element.mat-form-field-autofill-control.form-control.form-check.ng-pristine.ng-valid.cdk-text-field-autofill-monitored/* UNUSED COMPONENT CLASS: ng-touched - Auto-commented by script
-.ng-touched {
-    border: none !important;
-}
-*/
 
 @media (min-width: 1200px) and (max-width: 1650px) {
     .col-xl-8 {

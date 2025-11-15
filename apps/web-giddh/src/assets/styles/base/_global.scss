@@ -1,7 +1,6 @@
 @charset "utf-8";
 @use "../abstracts/mixins" as *;
 
-/* Font rendering optimizations to prevent blurry text */
 * {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -26,16 +25,10 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
-// Content wrapper
 #content-wrapper {
-    /* padding-bottom: 80px; */
-    // padding-top: 60px;
     height: calc(100vh - var(--header-height));
     overflow-y: scroll;
     padding-left: 60px;
-    // padding-bottom: 15px;
-    // min-height: 100vh;
-    // transition: all 0.3s ease;
 }
 
 .company-list {
@@ -161,7 +154,6 @@ body {
         }
     }
 }
-/*manage company detail*/
 .delete-icon {
     float: right;
     width: 34px;
@@ -186,7 +178,6 @@ body {
 .error.glyphicon {
     color: var(--color-red);
 }
-/*overriding tabs style*/
 .nav {
     &.nav-tabs {
         margin: 0;
@@ -209,7 +200,6 @@ body {
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
 }
-/*accounts list style*/
 .search-loading {
     color: var(--color-dark-gray);
     display: block;
@@ -229,7 +219,6 @@ body {
     width: 30px;
     background-image: url("data:image/gif;base64,R0lGODlhPAA8AMQaAKOjo6SkpKenp6Wlpaampqmpqaurq6ioqKqqqq6urqysrK2tra+vr7CwsNDQ0LGxsbKystnZ2dHR0dXV1dPT09TU1NbW1tLS0qKioqGhof///wAAAAAAAAAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh/wtYTVAgRGF0YVhNUDw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNSBNYWNpbnRvc2giIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MThFODNCRUE5MTY2MTFFMTlCMUM4NUJBMTJFQjM0MDEiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MThFODNCRUI5MTY2MTFFMTlCMUM4NUJBMTJFQjM0MDEiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDoxOEU4M0JFODkxNjYxMUUxOUIxQzg1QkExMkVCMzQwMSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDoxOEU4M0JFOTkxNjYxMUUxOUIxQzg1QkExMkVCMzQwMSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PgH//v38+/r5+Pf29fTz8vHw7+7t7Ovq6ejn5uXk4+Lh4N/e3dzb2tnY19bV1NPS0dDPzs3My8rJyMfGxcTDwsHAv769vLu6ubi3trW0s7KxsK+urayrqqmop6alpKOioaCfnp2cm5qZmJeWlZSTkpGQj46NjIuKiYiHhoWEg4KBgH9+fXx7enl4d3Z1dHNycXBvbm1sa2ppaGdmZWRjYmFgX15dXFtaWVhXVlVUU1JRUE9OTUxLSklIR0ZFRENCQUA/Pj08Ozo5ODc2NTQzMjEwLy4tLCsqKSgnJiUkIyIhIB8eHRwbGhkYFxYVFBMSERAPDg0MCwoJCAcGBQQDAgEAACH5BAUAABoALAAAAAA8ADwAAAWioCaOZGmeaKqubOu+cCzPdG3feK7vfO//wKDwJRkICoZFI4IqHpPLphGpZM4AgSkUhdUqudnnd4bpilHlMBVtXpPTWjT8KW8baBnMvIDK7/t6bXh+Zn2EYYaBiDMZjYoDhoeQJ42SNA6VgRIomI5lmyedhKBDpaanqKmqq6ytrq+wsbKztLW2t7i5uru8vb6/wMHCw8TFxsfIycrLzM3Oz6shACH5BAUAABoALAoACgAYABAAAAVvIFUgSsI8kaau6kUcZIIKx1ieLBsMb/wQNJsptwLseiVeMEZUYYw8mOK4VDQ1mOcRBgXWENdMtnsAdINhsZb3PB/Sauj4DI8Hsu3j1ZHpqyVqeQNXaXhmAYRNfoYAiUR+gY2OLJCBkyx8kBgOlyshACH5BAUAABoALAoACgAoACAAAAX/4LQkTPNAWqqqlaGQDbqu1IEYC/No7lieM1Xh9irJggSBDacj+kzB1GHogkU1g+QyR1U8r8ou6RrIKm+LqXMcFYSJiSugrL0d1L14NPl2yedmNkp4XldmfVcYAIBaWoRkh2qJiowCBI5UZHRuU1cZGJR0WZgIcgGbSp6foQOtl4MFf6eHqquLs6ODf3Obtba8rlqJi8AEvranZbmTxLNXDhnR0RgOvMqXk5S8V7K4xlGgoM3cUc24nuHa5EHayQOq6YvrM+K3p7Xx8yvh5r7p+iri3ToWDmCKdOqiSJMGyqCGVfwAHJvmcFq+KNAWZnBQ0WJBhwYX/gMJUONHkvM0F65CqU/lJ5YpXcJc5zLDTHIZF3K8eSUEACH5BAkAABoALAoACgAoACgAAAX/oJVoZGma05IwzXOelaGsDaQp6qvLKuvqmgJCRoPwRsCS4egDHoRE1hKHTA6ZDaDgOZwxrtRkENzTbqEz6DFZUId1BMG52yZXT0/3AjiIzw15ZFqBU0ABfXJcZ25mhAaGh35PiXVLQJKVQAABkYmYUJefCJqbnQIEonyolAWkpYion3x9mEAYALicfbS1Ooe0iba3ub+8wb6/qwLCw6XJypDPyzoY1c2cz3Ga2AO0QBnW17q8pNx93+DWuM7dqK7m6OnV6+YEtvS68fLiv8L4AfrkrWPHDF9Agf+YXTuIkJjCZkAcZJhI0YE6eg+HiXkRbuC3cPM2ngC5Dh1IDCJNTJzEFQ9kSpUk9YV7CXOmDooTrdGsWe1gT5oZSth8gZMiSqA4dd4sOnEn059EmQZFWvRoVKZOpUZk6iAr1p1Ui4INi3PsS4lFu5oVGQIAIfkECQAAGgAsAAAAADwAPAAABf+gJo5kaZ5oqq5s675wLM90bd94ru987//AoPA1WSQYjQckgrIkjsklqghVMmcGhRGpRGmfXAgqu43SDOTq+Ks+ob9cGuJdHqehqHkaSSvo4Xl0YCh+ggx9hWmEf0YJhIlfNAcFkAuPjI4nk5U0Apt/KJ90KJ6UoDMCpYmkolmkqno0BKmir60os7AGsrmfuLSmuycEvaY0A8TABbjFfijIzcfQwMzRJwPTpTQB2Mmez8TFKNzZB9vk3s/QvePouefuAuPd6ScB9/TyMwD37u30s1DwwweNBoCB6Nq5IyAQYTeDB/thEyix4ImDDgfQwIBRYsOKDE9wjIhv40iEDTOxosBwsp/JlgFSOlzJsmPMGSxrRlyJEaXInB1f6gRAs+c9mkAPCtWJ1CjSpDQy5AT6tCcKqVM5RsU69enJq1xzbg2LwetIsGTHhr2aVeuJDHDXzogLV+xbsmXvxrUrg27dvCb2dtUrWO1etHID+5VqOC5iro8dz12cITLLyHAbZyZ8mLNkGQ4WO8Bc+URov6OHUC495MXq1jBew3Zxmm7q2bhz697Nu7fv38CDCx9OXEMIACH5BAkAABoALAAAAAA8ADwAAAX/oCaOZGmeaKqubOu+cCzPdG3feK7vfO//wKDwVTEoEowGJIKaLJCNxxJlSUClzFkBYYRCUMZnUopSPK/f2WHbTYLDV7DZOqYJ1twjA8WFu08GcFB2d2xHKGx+fIFzSDQEAoV5iIlziH2NNAOQkgYoa5ULlJhPNAGbkXgohZWfBaGmp5xrq6x9q6CYNAABsqkos69ctbmBu7y+AsDBW8Cpwp4zANO9qCibzMvPzTMY08ib19jPy9nd3tSnKKfjd9cE8OTn6Mjr7PHKJwPYszQY//QC2LsHad0+eJxoZABIDwUygvYOxlO4EOA0hw8PDpRIgGLFfwAwZhzgsBfEGRlSnn7EgCJgNYwmNaJU+bGlS4EnvsUkOZPmP5suRWb06BNowJbfHtJwQDOlA6MNT4DUiVMIw6lAk1YNshKk0aRDNKS8ylIqw29hVV6Fii6tWoAounpz+7asibFrhzStGBcvXL177Zbw+VfI3pR969JtmvjtYpqN1YZl2vTpicMZwsLArPkF584tPoNeQZmm5dGoU6tezbq169ewY8uerSIEACH5BAkAABoALAAAAAA8ADwAAAX/oCaOZGmeaKqubOu+cCzPdG3feK7vfO//wKDwRTkgDAvGI4KqGBQJRgPCPE0W0caDSiMIjEglqnCESiGoJ1a6pQ284CTqQH5m0+rsgxZ4f48LKF91ZihHeVI0AH1wR4KDZQljhwpriot+RihekE9jdXk0GACYcCh+nXMFoJWio6UCKIwCkIJ0rDQZGK+MsrODj7eHubq8AyiLvwebtMIGxMWkAcjJqJucwtDRANTVXqcE2Kva0Siv3qdv4jQOGe7uGA7m5wF9sgPqzUMau/TTJ/XwhaO1rx89X33y7Su2ixS3E8kShlvI8BW1ehIpVnxowiFGfBormvMYMCTDeST/Xgl5927XPH8m4b08OKQdywzyThg8tw/GTos9XVRsGFToUAxFW7Q0mJQFS6ZNVdzsF1XqVKRVUdyUmfXEVnddvX4Na+JrBrIlbLLMibat27dw48qdS7eu3bt48+q9EQIAIfkEBQAAGgAsAAAAADwAPAAABdWgJo5kaZ5oqq5s675wLM90bd94ru987//AoPAlGQgKhkUjgroQDghF4sE8UQrRBINKAwSMSCXq+8w+UIIDVrqlYbzgJApelqII6bXW/f4eDSh9A3Uog3lZNBkYgkeBgmVjhmpRiYqMKJZ0B3Nkh5WZX5igg3N0eTQOGaqLABKio4EApptDqqt9jrKdQxqptouuJ4tvdLwwlsShxi63ycvMzbLPLbbIANMs1cjYK76/Dtzh4uPk5ebn6Onq6+zt7u/w8fLz9PX29/j5+vv8/f7/AAPOCwEAOw==");
 }
-/*----------css for loader animation big------------*/
 .loader {
     text-align: center;
     display: block !important;
@@ -311,7 +300,6 @@ body {
     -moz-animation-delay: 0.4s;
     -webkit-animation-delay: 0.4s;
 }
-/*ledger style*/
 .ledg-head {
     a {
         i {
@@ -328,7 +316,6 @@ body {
     .alert-danger {
         color: inherit;
         border: 2px dashed var(--color-red-light);
-        // background-color: var(--color-white);
     }
 
     .alert .close {
@@ -378,7 +365,6 @@ body {
         color: var(--color-dark-gray);
     }
 }
-/* styles for trial-balance */
 .page-title {
     font-size: var(--font-size-15);
     margin: 10px 0 0 10px;
@@ -465,8 +451,7 @@ body {
         background: var(--color-red);
     }
 }
-/* Theme: default
-***************************************/
+
 .export {
     margin-right: 10px;
     min-height: 34px;
@@ -594,7 +579,6 @@ no-data,
         color: var(--color-dark-gray);
     }
 }
-/* reports */
 .ui-select-multiple.ui-select-bootstrap,
 .ui-select-bootstrap.dropdown,
 .ui-select-bootstrap.dropdown span.ui-select-toggle,
@@ -614,7 +598,6 @@ no-data,
     margin: 20px auto 20px;
 }
 
-/*tbpl list*/
 .tbpl-list {
     .list-inline {
         line-height: normal;
@@ -740,7 +723,6 @@ no-data,
     line-height: 18px;
 }
 
-/* for audit logs */
 .audit-log {
     width: 100%;
     min-height: 70px;
@@ -780,7 +762,6 @@ no-data,
     position: relative;
     box-shadow: 0 1px 3px var(--color-shadow-light), 0 1px 2px var(--color-shadow-light);
 }
-/*make un-responsive*/
 .navbar-right.navbar-nav {
     > li {
         > a {
@@ -818,28 +799,8 @@ no-data,
         padding-top: 15px;
         padding-bottom: 15px;
     }
-    /* UNUSED GLOBAL CLASS: navbar-inverse - Auto-commented by script
-    .navbar-inverse .navbar-nav > li > a {
-        line-height: 24px;
-    }
-    */
-    /* UNUSED GLOBAL CLASS: modal-liq-90 - Auto-commented by script
-    .modal-liq-90 {
-        width: 900px;
-    }
-    */
-    /* UNUSED GLOBAL CLASS: manage-account-popup - Auto-commented by script
-    .manage-account-popup .modal-liq-90 {
-        width: 100%;
-    }
-    */
 }
 
-// .table-striped {
-//     .selected-for-inv {
-//         background-color: var(--color-silver) !important;
-//     }
-// }
 .ledger-table {
     td {
         > input {
@@ -848,17 +809,6 @@ no-data,
     }
 }
 
-// .thead-background1 {
-//     th {
-//         background: var(--color-dark-gray);
-//         color: var(--color-black);
-//     }
-
-//     th,
-//     td {
-//         background: var(--color-border-light);
-//     }
-// }
 .compound-entry {
     td,
     td input,
@@ -1084,7 +1034,6 @@ no-data,
     margin: 2px 0 0;
     font-size: var(--font-size-15) !important;
     text-align: left;
-    // list-style: none;
     background-color: var(--color-white);
     background-clip: padding-box;
     border: 1px solid var(--border-color);
@@ -1113,7 +1062,6 @@ no-data,
 
     ul {
         &.discount-list {
-            // list-style: none;
             overflow: auto;
             max-height: 100px;
             min-height: 88px;
@@ -1227,7 +1175,6 @@ no-data,
     }
 }
 .panel-heading {
-    // color: var(--color-black) !important;
     text-transform: capitalize;
     padding: 10px 15px;
     border-bottom: 1px solid transparent;
@@ -1340,7 +1287,6 @@ form {
 .right-col-new {
     width: 50% !important;
 }
-/* responsive */
 @media (min-width: 768px) {
     .form-inline {
         &.financial-select-year .form-group {
@@ -1400,7 +1346,6 @@ form {
     position: relative;
     z-index: 5;
     height: 100vh;
-    // background-color: var(--color-light-gray) !important;
 }
 
 .help-support-aside {
@@ -1422,37 +1367,11 @@ form {
 .ledg-head .mat-grid-list .mat-grid-tile.new-entry-date .mat-grid-tile-content {
     padding-left: 2px !important;
 }
-.ledg-head
-    /* UNUSED GLOBAL CLASS: mat-grid-list - Auto-commented by script
-    .mat-grid-list
-    .mat-grid-tile.new-entry-ledger.select2-parent.select2-ledger
-*/
-    .ledger-account-label
-    input.form-control.focused {
+.ledg-head .ledger-account-label input.form-control.focused {
     padding-left: 1px !important;
     background-color: transparent !important;
-    // &::placeholder {
-    //     color: var(--color-dark-gray);
-    // }
 }
-// .ledger-advance-search-field {
-//     .mat-form-field-suffix {
-//         right: 10px !important;
-//         position: absolute;
-//         .cursor-pointer {
-//             .icon-calender {
-//                 color: var(--color-black);
-//             }
-//         }
-//     }
-// }
-// .mat-input-element {
-//     box-sizing: border-box !important;
-// }
 
-// update-ledger-entry-panel .ledger-main .mat-form-field {
-//     min-width: auto !important;
-// }
 .expense-ledger {
     update-ledger-entry-panel {
         #entryModal {
@@ -1557,19 +1476,6 @@ form {
     }
 }
 .account-aside-menu-state {
-    /* UNUSED GLOBAL CLASS: mat-datepicker-toggle - Auto-commented by script
-    .mat-datepicker-toggle .mat-button-wrapper .mat-datepicker-toggle-default-icon {
-        color: var(--color-black);
-        position: absolute;
-        bottom: 8px !important;
-        right: 10px !important;
-    }
-    */
-
-    /* UNUSED GLOBAL CLASS: mat-form-field-wrapper - Auto-commented by script
-    .mat-form-field-wrapper
-        .mat-form-field-infix
-*/
     .mat-input-element.mat-form-field-autofill-control.mat-datepicker-input {
         position: absolute;
         padding-top: 12px !important;
@@ -1641,32 +1547,6 @@ form {
     .balance-options {
         height: auto !important;
         padding-bottom: 5px !important;
-
-        /* UNUSED GLOBAL CLASS: mat-select-search-input - Auto-commented by script
-        .mat-select-search-input {
-            padding: 16px 36px 16px 16px !important;
-            box-sizing: border-box !important;
-        }
-        */
-
-        /* UNUSED GLOBAL CLASS: mat-select-search-inner - Auto-commented by script
-        .mat-select-search-inner {
-            position: absolute !important;
-            top: 0 !important;
-            border-bottom-width: 1px !important;
-            border-bottom-style: solid !important;
-            z-index: 100 !important;
-            font-size: inherit !important;
-            box-shadow: none !important;
-            border-radius: var(--mat-border-radius-0) !important;
-        }
-        */
-
-        /* UNUSED GLOBAL CLASS: mat-select-search-clear - Auto-commented by script
-        .mat-select-search-clear {
-            margin-right: 0 !important;
-        }
-        */
     }
 }
 
@@ -1699,19 +1579,6 @@ form {
     max-height: 80vh;
     .inventory-checkbox {
         width: 100%;
-
-        /* UNUSED GLOBAL CLASS: mat-checkbox-layout - Auto-commented by script
-        .mat-checkbox-layout {
-            float: left;
-            width: 100%;
-            padding: 10px;
-
-            .mat-checkbox-inner-container {
-                float: left;
-                margin-left: 0 !important;
-            }
-        }
-        */
     }
 
     button.mat-menu-item {
@@ -1720,20 +1587,7 @@ form {
         align-items: center;
         padding: 0 6px !important;
     }
-
-    /* UNUSED GLOBAL CLASS: mat-menu-content - Auto-commented by script
-    .mat-menu-content {
-        padding-top: 2px !important;
-        padding-bottom: 2px !important;
-    }
-    */
 }
-
-/* UNUSED GLOBAL CLASS: icon-calender - Auto-commented by script
-.icon-calender {
-    cursor: pointer;
-}
-*/
 
 .variant-row {
     .form-control {
@@ -1753,16 +1607,6 @@ form {
 }
 
 .giddh-table {
-    /* UNUSED GLOBAL CLASS: top-header-columns - Auto-commented by script
-    thead {
-        tr {
-            .top-header-columns {
-                border: none !important;
-            }
-        }
-    }
-    */
-
     .second-header-border {
         th {
             border-top: 1px solid var(--border-color) !important;
@@ -1780,12 +1624,6 @@ form {
 .create-update-no-data {
     cursor: default !important;
 
-    /* UNUSED GLOBAL CLASS: mat-pseudo-checkbox - Auto-commented by script
-    .mat-pseudo-checkbox {
-        display: none !important;
-    }
-    */
-
     .mat-option-text {
         color: var(--color-black) !important;
     }
@@ -1793,13 +1631,6 @@ form {
 .purchase-customise-column-button {
     float: right !important;
 }
-// .gstin-field {
-//     .error-box {
-//         border: 0 !important;
-//         border-bottom: 1px solid var(--color-red) !important;
-//         width: 100% !important;
-//     }
-// }
 
 .journal-voucher {
     .particular-account {
@@ -1855,8 +1686,6 @@ form {
 
 .subscription-page {
     .td-search-box {
-        // padding: 0 0 0 10px !important;
-
         .input-container {
             position: relative;
 
@@ -1944,25 +1773,7 @@ form {
 }
 
 .product-option {
-    /* UNUSED GLOBAL CLASS: cdk-drop-list - Auto-commented by script
-    .cdk-drop-list {
-        width: 50%;
-    }
-    */
-
     .product-option-wrapper {
-        /* UNUSED GLOBAL CLASS: mat-select - Auto-commented by script
-        .mat-select {
-            border: 1px solid var(--border-color);
-            border-radius: var(--mat-border-radius-4);
-            height: 35px;
-            display: flex !important;
-            flex-direction: column;
-            justify-content: center;
-            padding: 0px 5px;
-        }
-        */
-
         .data-wrap {
             .dot-img {
                 img {
@@ -1987,8 +1798,6 @@ form {
     }
 }
 
-/********************* Custom-Units-Css  ********************/
-
 aside-create-unit,
 aside-create-group {
     position: fixed;
@@ -2010,13 +1819,11 @@ aside-create-group {
         z-index: 5;
         height: 100vh;
         color: var(--color-black);
-        // background-color: var(--color-light-gray) !important;
         max-width: 760px;
         width: 100%;
     }
 }
 
-/*--- custom-unit ---*/
 .mat-grid-wrapper {
     .mat-list-wrap {
         width: 100%;
@@ -2029,14 +1836,6 @@ aside-create-group {
         .inventory-sub-sideabar {
             .item-list {
                 a {
-                    // &.group-name {
-                    //     .mdc-list-item__content {
-                    //         .mdc-list-item__primary-text {
-                    //             color: var(--color-medium-gray);
-                    //         }
-                    //     }
-                    // }
-
                     &.isActive {
                         background-color: var(--bg-primary-color);
 
@@ -2075,7 +1874,6 @@ aside-create-group {
                     }
                 }
 
-                // Units are not displaying after creation once the scroll comes on the page
                 &:first-child {
                     mat-list {
                         .cdk-virtual-scroll-viewport {
@@ -2155,10 +1953,6 @@ aside-create-group {
 
             .mdc-list-item__content {
                 padding: 0;
-
-                // a {
-                //     color: var(--color-black);
-                // }
             }
 
             &.mat-left {
@@ -2186,7 +1980,6 @@ aside-create-group {
     border-left: 4px solid transparent;
 }
 
-// Toggle component styles
 .toggle-inner {
     &:before,
     &:after {
@@ -2252,22 +2045,6 @@ aside-create-group {
         .mat-option-text {
             line-height: 23px;
         }
-    }
-
-    #content-wrapper {
-        /* UNUSED GLOBAL CLASS: invoice-container - Auto-commented by script
-        .invoice-container {
-            .modal-content {
-                #export-body {
-                    sh-select {
-                        input::placeholder {
-                            color: var(--color-silver) !important;
-                        }
-                    }
-                }
-            }
-        }
-        */
     }
 }
 
@@ -2708,7 +2485,6 @@ ul.sub-list {
 .price-input {
     border: 1px solid var(--border-color) !important;
     font-size: var(--font-size-15) !important;
-    // background: var(--color-white) !important;
     padding: 1px 2px !important;
     display: inline-block;
     max-width: 90px !important;
@@ -2778,33 +2554,12 @@ ul.sub-list {
         color: inherit !important;
         font-size: inherit !important;
         background: none !important;
-        // height: 33px;
-        // border: 0px;
-        // padding: 3px !important;
-        // text-align: center;
         &.bg-white {
             background: var(--color-white) !important;
         }
     }
-    // input {
-    //     position: relative;
-    //     display: block;
-    //     text-align: center;
-    //     width: 230px !important;
-    //     padding: 0 10px !important;
-    //     height: var(--custom-mat-form-field-height);
-    //     border-radius: var(--mat-border-radius-4);
-    //     // border: 1px solid var(--border-color);
-    //     // font-size: var(--font-size-15);
-    //     // background: var(--color-transparent) !important;
-    // }
 
     &.custom-new-datepicker {
-        // input {
-        //     height: var(--custom-mat-form-field-height);
-        //     border-radius: var(--mat-border-radius-8);
-        // }
-
         i {
             top: 5px;
         }
@@ -2852,8 +2607,6 @@ header .navbar {
 }
 
 .thead-background1 th {
-    // background: var(--color-white);
-    // color: var(--color-black);
     padding: 11px !important;
     font-weight: 400;
 }
@@ -2970,16 +2723,6 @@ p.table-email {
     width: 200px;
 }
 
-// .top-five-cr-dr-table .basic > tbody > tr td:last-child,
-// .top-five-cr-dr-table .basic > thead > tr th:last-child {
-//     border-right: none !important;
-// }
-
-// .top-five-cr-dr-table .basic > tbody > tr td:first-child,
-// .top-five-cr-dr-table .basic > thead > tr th:first-child {
-//     border-left: none !important;
-//     border-color: var(--border-color) !important;
-// }
 .tab-integration {
     .tab-pane.active {
         .connected-accounts {
@@ -3326,7 +3069,6 @@ footer > div > a:last-child {
     display: none !important;
 }
 
-/*stock page*/
 .right-bar {
     float: left;
     width: calc(100% - 320px);
@@ -3349,22 +3091,6 @@ footer > div > a:last-child {
     padding: 20px;
     border: 1px solid var(--color-light-gray);
 }
-
-// .form-theme .form-control {
-//     background: var(--color-white) !important;
-// }
-
-// .form-theme .form-control[disabled],
-// .form-theme .form-control[readonly],
-// .form-theme fieldset[disabled] .form-control {
-//     background-color: var(--color-border-light) !important;
-// }
-
-/* UNUSED GLOBAL CLASS: btn-default-focus - Auto-commented by script
-.btn-default-focus {
-    box-shadow: none !important;
-}
-*/
 
 .form-title {
     padding: 12px 20px;
@@ -3533,7 +3259,6 @@ a.btn.btn-xs.btn-link.pull-right {
 
 #tax-control-multi-select.multi-select input.form-control[readonly] {
     background-image: var(--url-caret-image) !important;
-    // background-color: var(--color-white) !important;
     background-position: 97% !important;
 
     &.field-disabled {
@@ -3651,7 +3376,6 @@ a.btn.btn-xs.btn-link.pull-right {
     padding: 0 15px;
 }
 
-.form-group.mr-b05,
 .margin-child-label .form-group label {
     margin-bottom: 5px;
 }
@@ -3697,13 +3421,7 @@ select.form-control {
     overflow-y: auto;
     height: 100%;
     padding-bottom: 60px;
-    // background-color: var(--color-white);
 }
-
-// .grp-list .master-list,
-// .new-btn-ul .new-btn {
-// list-style: none;
-// }
 
 .grp-list .master-list a,
 .new-btn-ul .new-btn a {
@@ -3720,8 +3438,6 @@ select.form-control {
 .grp-list,
 .new-btn-u {
     li {
-        // list-style: none;
-
         a {
             padding: 4px 15px !important;
             display: block;
@@ -3777,7 +3493,6 @@ select.form-control {
 form label {
     padding-bottom: 0;
     font-size: var(--font-size-15);
-    // line-height: var(--line-height-36);
     margin-bottom: 0 !important;
 }
 
@@ -3857,7 +3572,6 @@ label {
 .grp-wrapper {
     min-height: 100%;
     height: 100%;
-    /* overflow x css*/
     overflow: hidden;
     overflow-x: auto;
     white-space: nowrap;
@@ -3970,7 +3684,6 @@ label {
 }
 
 .accmerge li {
-    // list-style: none;
     display: inline-block;
     margin: 0px 0 4px 4px;
 }
@@ -4255,7 +3968,6 @@ label {
     font-size: var(--font-size-24);
 }
 
-/**************** Create company modal **********************/
 .grp-col::-webkit-scrollbar {
     width: 2em;
     position: relative;
@@ -4284,7 +3996,6 @@ label {
 
 .col-wrapper:first-child .grp-list {
     padding-top: 10px;
-    // background-color: var(--color-light-gray);
 }
 
 .custom-select {
@@ -4299,16 +4010,6 @@ label {
         border-radius: var(--mat-border-radius-0);
         padding-right: 22px !important;
     }
-
-    /* UNUSED GLOBAL CLASS: select-drop - Auto-commented by script
-    .select-drop {
-        position: absolute;
-        bottom: 16px;
-        top: inherit;
-        z-index: 9;
-        right: 6px;
-    }
-    */
 }
 
 #manufacture .section-title {
@@ -4397,7 +4098,6 @@ label {
     margin-bottom: 0;
 }
 
-/*************************************************** Dashboard CSS  ****************************************************/
 #dashboard .panel-default {
     color: var(--color-dark-gray);
     border-color: var(--border-color);
@@ -4418,7 +4118,6 @@ label {
     padding: 8px 8px;
 }
 
-/*************************************************** input CSS  ****************************************************/
 .radio-theme {
     position: relative;
     margin: 0px 5px !important;
@@ -4473,33 +4172,8 @@ label {
 
             &:hover {
                 background-color: var(--color-border-light) !important;
-
-                /* UNUSED GLOBAL CLASS: mat-checkbox-label - Auto-commented by script
-                .mat-checkbox-label {
-                    color: var(--text-primary-color) !important;
-                }
-                */
             }
-
-            /* UNUSED GLOBAL CLASS: mat-checkbox-label - Auto-commented by script
-            .mat-checkbox-label {
-                margin-left: -17px;
-            }
-            */
         }
-
-        /* UNUSED GLOBAL CLASS: mat-checkbox-layout - Auto-commented by script
-        .mat-checkbox-layout {
-            float: left !important;
-            width: 100% !important;
-        }
-        */
-
-        /* UNUSED GLOBAL CLASS: mat-checkbox-inner-container - Auto-commented by script
-        .mat-checkbox-inner-container {
-            margin-left: 0 !important;
-        }
-        */
     }
 }
 
@@ -4524,22 +4198,10 @@ label {
                     .mat-form-field-infix {
                         border: 0 !important;
                         width: 100%;
-
-                        // input {
-                        //     border: 1px solid var(--border-color) !important;
-                        // }
                     }
                 }
             }
         }
-
-        // .mdc-text-field--no-label:not(.mdc-text-field--textarea) {
-        //     .mat-mdc-form-field-input-control.mdc-text-field__input {
-        //         .mat-mdc-text-field-wrapper .mat-mdc-form-field-input-control {
-        //             border: 1px solid var(--border-color) !important;
-        //         }
-        //     }
-        // }
     }
 }
 
@@ -4576,7 +4238,6 @@ label {
     margin: 0;
 }
 
-/*************************************************** Custom Invoice CSS  ****************************************************/
 #customInvoice .template-editor input[type="checkbox"] {
     margin-right: 12px !important;
     left: 0;
@@ -4696,7 +4357,6 @@ label {
     float: left;
     width: 190px;
     margin: 0px;
-    // list-style: none;
     height: 240px;
     padding: 10px 10px 0 0;
     position: relative;
@@ -4748,23 +4408,6 @@ label {
     border-radius: var(--mat-border-radius-8);
 }
 
-/* disabled css */
-// .form-control[disabled],
-// .form-control[readonly],
-// fieldset[disabled] .form-control {
-//     color: var(--color-black) !important;
-
-//     &:not(.bg-transparent) {
-//         background-color: var(--color-light-gray) !important;
-//     }
-// }
-
-// .disable-bg[disabled],
-// .disable-bg[readonly],
-// fieldset[disabled] .disable-bg {
-//     background-color: transparent !important;
-// }
-
 input[type="checkbox"][disabled] {
     opacity: 2.2;
 }
@@ -4779,7 +4422,6 @@ input[type="checkbox"][disabled] {
     padding-bottom: 10px;
     font-weight: var(--font-weight-semibold);
     font-size: var(--font-size-16);
-    // color: var(--color-black);
 }
 
 .ico-btn .btn-xs {
@@ -4951,10 +4593,6 @@ input[type="checkbox"][disabled]:after {
     color: var(--text-primary-color);
     font-size: var(--font-size-15);
 }
-
-// .table-container {
-//     background: var(--color-white);
-// }
 
 .table-container section div .group {
     font-family: var(--font-family);
@@ -5157,11 +4795,6 @@ virtual-scroll .scrollable-content .item.selected > a {
     color: var(--text-primary-color) !important;
 }
 
-// virtual-scroll .scrollable-content .item:hover .item,
-// .item.hilighted > a > .item {
-//     color: var(--text-primary-color);
-// }
-
 virtual-scroll {
     .scrollable-content {
         .item {
@@ -5196,7 +4829,6 @@ table input[type="number"] {
     }
 }
 
-/**end new modal design**/
 .col-wrapper .btn-link {
     color: var(--text-primary-color) !important;
 }
@@ -5207,10 +4839,6 @@ table input[type="number"] {
     color: var(--color-red);
 }
 
-/* UNUSED GLOBAL CLASS: btn-share - Auto-commented by script
-.btn-share,
-.btn-share:hover,
-*/
 .btn-share:focus {
     background: var(--bg-primary-color);
     color: var(--color-white);
@@ -5242,14 +4870,12 @@ table input[type="number"] {
     left: 4px;
 }
 
-/* =========================== LEDGER CSS ============================ */
 .ledg-head table td[class*="col-"],
 .ledg-head table td .select2-container {
     padding: 8px !important;
     border-bottom: 1px solid var(--border-color);
     border-right: 1px solid var(--border-color);
     font-size: var(--font-size-15);
-    // color: var(--color-dark-gray);
     text-overflow: ellipsis;
     white-space: nowrap;
 }
@@ -5258,7 +4884,6 @@ table input[type="number"] {
     border-bottom: 1px solid var(--border-color);
     border-right: 1px solid var(--border-color);
     font-size: var(--font-size-15);
-    // color: var(--color-dark-gray);
     text-overflow: ellipsis;
     white-space: nowrap;
     position: relative;
@@ -5282,10 +4907,8 @@ table input[type="number"] {
 
 .ledger-stat {
     padding: 50px 0;
-    // background: var(--color-white);
     color: var(--color-dark-gray);
     font-size: var(--font-size-16);
-    // margin: 100px 0;
 }
 
 .ledger-stat h3 {
@@ -5327,10 +4950,8 @@ table input[type="number"] {
     width: 50%;
     left: 25%;
     bottom: 100px;
-    // background: var(--color-white);
     padding: 5px;
     font-size: var(--font-size-12);
-    // color: var(--color-black);
 }
 
 #pagination {
@@ -5344,8 +4965,6 @@ table input[type="number"] {
 }
 
 .thead-background1 th {
-    // background: var(--color-light-gray);
-    // color: var(--color-black);
     border-right: 1px solid var(--border-color);
     padding: 11px !important;
     font-weight: var(--font-weight-semibold);
@@ -5358,7 +4977,6 @@ table input[type="number"] {
     position: relative;
     float: left;
     width: 100%;
-    // background: var(--color-white);
 }
 
 .table-amount label {
@@ -5385,7 +5003,6 @@ table input[type="number"] {
     top: 1px;
 }
 
-/* =========================== LEDGER CSS ============================ */
 .input-group sh-select .menu {
     top: 33px;
 }
@@ -5399,26 +5016,6 @@ table input[type="number"] {
     border-bottom: none !important;
 }
 
-/* ============================= GLOBAL STYLES ============================= */
-/*
- * This file contains global styles organized according to SCSS 7-1 architecture
- * 
- * Table of Contents:
- * 1. Base HTML Elements
- * 2. Form Elements & Controls
- * 3. Button Styles
- * 4. Navigation & Layout
- * 5. Modal & Dialog Styles
- * 6. Table Styles
- * 7. Component-Specific Styles
- * 8. Utility Classes
- * 9. Angular Material Overrides
- * 10. Media Queries
- */
-
-/* ============================= 1. BASE HTML ELEMENTS ============================= */
-
-// Base HTML element styles
 html {
     height: 100%;
 }
@@ -5480,33 +5077,6 @@ body {
     }
 }
 
-// Input elements
-// input {
-//     &[type="text"],
-//     &[type="email"],
-//     &[type="password"],
-//     &[type="number"] {
-//         font-family: var(--font-family);
-//         font-size: var(--font-size-15);
-
-//         &::placeholder {
-//             color: var(--color-medium-gray);
-//         }
-//     }
-
-//     &[type="checkbox"].cdk-visually-hidden {
-//         &::before,
-//         &::after {
-//             height: 1px !important;
-//             position: absolute !important;
-//             width: 1px !important;
-//             outline: 0px !important;
-//             border: none !important;
-//         }
-//     }
-// }
-
-// Table elements
 table {
     font-family: var(--font-family);
 
@@ -5516,7 +5086,6 @@ table {
     }
 }
 
-// Link elements
 a {
     color: var(--text-primary-color);
     text-decoration: none;
@@ -5527,9 +5096,6 @@ a {
     }
 }
 
-/* ============================= 2. FORM ELEMENTS & CONTROLS ============================= */
-
-// Base form control styles
 .form-control {
     padding: 6px !important;
     width: 100%;
@@ -5540,35 +5106,12 @@ a {
     font-size: var(--font-size-15) !important;
     font-family: var(--font-family);
     height: 36px;
-
-    // &:focus {
-    //     border-color: var(--theme-primary-color);
-    //     box-shadow: none;
-    // }
-
-    // &::placeholder {
-    //     color: var(--color-medium-gray);
-    // }
-
-    // &[readonly] {
-    //     background-color: var(--color-light-gray);
-    //     cursor: not-allowed;
-    // }
-
-    // &:disabled {
-    //     background-color: var(--color-light-gray);
-    //     cursor: not-allowed;
-    //     opacity: 0.6;
-    // }
 }
 
-// Form groups and layouts
 .form-group {
     margin-bottom: 15px;
 
     label {
-        // font-weight: var(--font-weight-semibold);
-        // color: var(--color-black);
         margin-bottom: 5px;
         display: block;
     }
@@ -5579,7 +5122,6 @@ a {
     }
 }
 
-// Input groups
 .input-group {
     position: relative;
     display: flex;
@@ -5602,7 +5144,6 @@ a {
     }
 }
 
-// Select elements
 select {
     &.form-control {
         appearance: none;
@@ -5614,7 +5155,6 @@ select {
     }
 }
 
-// Textarea elements
 textarea {
     &.form-control {
         resize: vertical;
@@ -5622,7 +5162,6 @@ textarea {
     }
 }
 
-// Checkbox and radio styles
 .form-check {
     position: relative;
     display: block;
@@ -5641,7 +5180,6 @@ textarea {
     }
 }
 
-// Custom form field styles
 .mat-form-field-border {
     border-radius: var(--mat-border-radius-4) !important;
     border: 1px solid var(--border-color) !important;
@@ -5655,16 +5193,12 @@ textarea {
     }
 }
 
-// Readonly field styles
 .readonly-field {
     .dropdown-bg {
         display: none !important;
     }
 }
 
-/* ============================= 3. BUTTON STYLES ============================= */
-
-// Base button styles
 .btn {
     display: inline-block;
     font-weight: var(--font-weight-normal);
@@ -5694,7 +5228,6 @@ textarea {
     }
 }
 
-// Primary button
 .btn-primary {
     color: var(--color-white);
     background-color: var(--theme-primary-color);
@@ -5716,7 +5249,6 @@ textarea {
     }
 }
 
-// Success button
 .btn-success {
     color: var(--color-white);
     background-color: var(--color-green);
@@ -5738,7 +5270,6 @@ textarea {
     }
 }
 
-// Danger button
 .btn-danger {
     color: var(--color-white);
     background-color: var(--color-red);
@@ -5760,7 +5291,6 @@ textarea {
     }
 }
 
-// Secondary/Default button
 .btn-default,
 .btn-secondary {
     color: var(--color-black);
@@ -5781,7 +5311,6 @@ textarea {
     }
 }
 
-// Link button
 .btn-link {
     font-weight: var(--font-weight-normal);
     color: var(--text-primary-color);
@@ -5804,7 +5333,6 @@ textarea {
     }
 }
 
-// Custom button variants
 .btn-cancel {
     background: var(--color-border-light);
     color: var(--color-black);
@@ -5847,7 +5375,6 @@ textarea {
     }
 }
 
-// Button sizes
 .btn-sm {
     padding: 4px 8px;
     font-size: var(--font-size-12);
@@ -5860,7 +5387,6 @@ textarea {
     border-radius: var(--mat-border-radius-6);
 }
 
-// Button groups
 .btn-group {
     position: relative;
     display: inline-flex;
@@ -5886,26 +5412,14 @@ textarea {
     }
 }
 
-// Custom button styles
 .custom-btn {
     color: var(--color-black);
 }
-
-// .small-button {
-//     // width: 100% !important;
-//     margin-right: 0 !important;
-//     float: left !important;
-//     margin-bottom: 12px !important;
-//     min-width: auto !important;
-// }
 
 .create-btn-inventory {
     padding: 0 26px;
 }
 
-/* ============================= 4. NAVIGATION & LAYOUT ============================= */
-
-// Container and layout styles
 .container {
     width: 100%;
     padding-right: 15px;
@@ -5922,7 +5436,6 @@ textarea {
     margin-left: auto;
 }
 
-// Grid system
 .row {
     display: flex;
     flex-wrap: wrap;
@@ -5930,7 +5443,6 @@ textarea {
     margin-left: -15px;
 }
 
-// Navigation styles
 .nav {
     display: flex;
     flex-wrap: wrap;
@@ -5968,7 +5480,6 @@ textarea {
     }
 }
 
-// Sidebar styles
 .sidebar {
     background: var(--color-border-light);
     min-height: 100vh;
@@ -5979,17 +5490,6 @@ textarea {
     transition: all 0.3s ease;
 }
 
-// .nav-left-bar {
-//     position: fixed;
-//     top: var(--top-sidebar);
-//     bottom: 0;
-//     min-height: calc(100vh - var(--header-height));
-//     // background-color: var(--color-white);
-//     width: 60px;
-//     left: 0;
-//     z-index: 991;
-//     box-shadow: 1px 0px 4px var(--color-shadow-light) !important;
-// }
 .nav-left-bar {
     position: fixed;
     top: var(--top-sidebar);
@@ -5997,12 +5497,8 @@ textarea {
     bottom: 0;
     min-height: calc(100vh - var(--header-height));
     width: 60px;
-    // height: 100vh;
-    // background-color: var(--color-white);
-    // border-right: 1px solid var(--border-color);
     box-shadow: 1px 0px 4px var(--color-shadow-light) !important;
     z-index: 990 !important;
-    // z-index: 999;
     transition: all 0.3s ease;
 
     &.width-60 {
@@ -6014,7 +5510,6 @@ textarea {
     }
 }
 
-// Menu states
 .menu_open {
     padding-left: 240px !important;
 }
@@ -6046,7 +5541,6 @@ textarea {
         padding-left: 240px !important;
     }
 }
-// Plan wrapper
 .plan-wrapper {
     padding-left: 60px;
 
@@ -6059,7 +5553,6 @@ textarea {
         margin-left: 240px;
     }
 }
-// Header styles
 .header {
     background-color: var(--color-white);
     border-bottom: 1px solid var(--border-color);
@@ -6080,13 +5573,9 @@ textarea {
     }
 }
 
-// Breadcrumbs
 .breadcrumbs {
     padding: 8px 15px;
-    // margin-bottom: 20px;
     list-style: none;
-    // background-color: var(--color-light-gray);
-    // border-radius: var(--mat-border-radius-4);
 
     .breadcrumb-item {
         display: inline-block;
@@ -6112,13 +5601,11 @@ textarea {
     }
 }
 
-// Hamburger menu
 hamburger-menu {
     position: absolute;
     z-index: 990;
 }
 
-// Company name styles
 .company-name {
     ul li > span {
         color: var(--color-black) !important;
@@ -6128,7 +5615,6 @@ hamburger-menu {
     }
 }
 
-// Setting sidebar states
 .setting-sidebar-open {
     &.on-setting-page,
     &.on-user-page {
@@ -6154,7 +5640,6 @@ hamburger-menu {
     }
 }
 
-// GST sidebar states
 .gst-sidebar-open {
     .nav-left-bar {
         transition: all 100ms linear;
@@ -6203,14 +5688,10 @@ hamburger-menu {
     }
 }
 
-// Sales register layout
 .sales-register {
     width: calc(100% - 60px) !important;
 }
 
-/* ============================= 5. MODAL & DIALOG STYLES ============================= */
-
-// Base modal styles
 .modal {
     position: fixed;
     top: 0;
@@ -6333,7 +5814,6 @@ hamburger-menu {
     }
 }
 
-// Angular Material Dialog overrides
 .mat-dialog-container {
     background-color: var(--color-white);
     border-radius: var(--mat-border-radius-6);
@@ -6368,7 +5848,6 @@ hamburger-menu {
     }
 }
 
-// Custom modal classes
 .receipt-note-modal {
     max-width: 100% !important;
 }
@@ -6386,12 +5865,10 @@ hamburger-menu {
     }
 }
 
-// Specific modal styles
 .update-ledger-overlay .modal-backdrop.show {
     z-index: 991 !important;
 }
 
-// Dialog panel classes for Angular Material
 .mat-dialog-sm {
     width: 500px;
     max-width: 90vw;
@@ -6407,7 +5884,6 @@ hamburger-menu {
     max-width: 80vw;
 }
 
-// Custom overlay styles
 .custom-cdk-overlay-wrapper {
     padding: 4px 8px;
     border-radius: var(--mat-border-radius-4);
@@ -6415,7 +5891,6 @@ hamburger-menu {
     background-color: var(--color-border-light);
 }
 
-// Sidebar modal styles
 .json-sidebar,
 .logs-sidebar,
 .subscription-sidebar {
@@ -6424,30 +5899,21 @@ hamburger-menu {
     width: 760px !important;
 }
 
-/* ============================= 6. TABLE STYLES ============================= */
-
-// Base table styles
 .table {
     width: 100%;
-    margin-bottom: 20px;
-    // color: var(--color-black);
     background-color: var(--table-background-color);
-    // border-collapse: collapse;
 
     th,
     td {
         padding: 8px 12px;
-        // vertical-align: top;
         border-top: 1px solid var(--border-color);
         font-size: var(--font-size-15);
         line-height: 1.5;
     }
 
     thead th {
-        // vertical-align: bottom;
         border-bottom: 2px solid var(--border-color);
         font-weight: var(--font-weight-semibold);
-        // background-color: var(--color-light-gray);
     }
 
     tbody + tbody {
@@ -6455,24 +5921,12 @@ hamburger-menu {
     }
 }
 
-// Table variants
-// .table-striped {
-//     tbody tr:nth-of-type(odd) {
-//         background-color: rgba(0, 0, 0, 0.05);
-//     }
-
-//     &.transactions-table {
-//         white-space: nowrap;
-//     }
-// }
-
 .table-hover {
     tbody tr:hover {
         background-color: rgba(0, 0, 0, 0.075);
     }
 }
 
-// Table responsive wrapper
 .table-responsive {
     display: block;
     width: 100%;
@@ -6484,20 +5938,12 @@ hamburger-menu {
     }
 }
 
-// Custom table classes
 .table-container {
     overflow-x: auto;
     border: 1px solid var(--border-color);
     border-radius: var(--mat-border-radius-4);
 }
 
-.table-header-sticky {
-    position: sticky;
-    top: 0;
-    z-index: 10;
-}
-
-// Angular Material table overrides
 .mat-table {
     background-color: var(--color-white);
     font-family: var(--font-family);
@@ -6521,7 +5967,6 @@ hamburger-menu {
     }
 }
 
-// List table wrapper
 .list-table-wrapper {
     th.mat-header-cell {
         padding: 0 6px !important;
@@ -6537,19 +5982,10 @@ hamburger-menu {
     }
 }
 
-// Specific table styles
-// .transactions-table {
-//     &.table-striped {
-//         white-space: nowrap;
-//     }
-// }
-
 .reconciliations-table {
-    // Specific styles for reconciliation tables can be added here
     font-size: var(--font-size-15);
 }
 
-// Table amount styles
 .table-amount {
     &[disabled] {
         input {
@@ -6558,7 +5994,6 @@ hamburger-menu {
     }
 }
 
-// Serial number column
 .serial-no-column {
     min-width: 40px !important;
     width: 60px !important;
@@ -6572,7 +6007,6 @@ hamburger-menu {
     max-width: $name-column-width !important;
 }
 
-// Main table responsive styles
 .main-table {
     tbody {
         tr {
@@ -6585,7 +6019,6 @@ hamburger-menu {
     }
 }
 
-// Empty table state
 .empty-table {
     text-align: center;
     padding: 40px 20px;
@@ -6602,7 +6035,6 @@ hamburger-menu {
     }
 }
 
-// Table row states
 .table-row {
     &:hover {
         .table-menu-first-td {
@@ -6619,9 +6051,6 @@ hamburger-menu {
     width: 18px;
 }
 
-/* ============================= 7. COMPONENT-SPECIFIC STYLES ============================= */
-
-// Custom utility classes
 .section-center {
     max-width: var(--center-content-max-width) !important;
     margin-left: auto !important;
@@ -6639,7 +6068,6 @@ hamburger-menu {
     white-space: nowrap !important;
 }
 
-// Icon utilities
 .icon-user {
     background-position: 0 -360px;
 }
@@ -6652,32 +6080,19 @@ hamburger-menu {
 
 .icon-arrow-down.open {
     -ms-transform: rotate(180deg);
-    /* IE 9 */
     -webkit-transform: rotate(180deg);
-    /* Chrome, Safari, Opera */
     transform: rotate(180deg);
 }
 
-// Image utilities
-
-/** Use this class on black color image (icon)
- to  change color in dark theme **/
 .image-as-icon-color {
     filter: var(--color-image-filter-quaternary);
 }
-
-// Error and validation utilities
-// .error-box {
-//     border-color: var(--color-red) !important;
-//     background-color: rgba(255, 0, 0, 0.05) !important;
-// }
 
 .success-box {
     border-color: var(--color-green) !important;
     background-color: rgba(0, 255, 0, 0.05) !important;
 }
 
-// Loading and skeleton utilities
 .skeleton-common-class {
     background: var(--color-border-light);
     color: transparent !important;
@@ -6715,9 +6130,6 @@ hamburger-menu {
     }
 }
 
-/* ============================= 9. ANGULAR MATERIAL OVERRIDES ============================= */
-
-/* ============================= ICONS ============================= */
 .form-header {
     height: 57.8px;
     padding: 20px 15px;
@@ -6761,7 +6173,6 @@ hamburger-menu {
 }
 
 .long-code-details figure ul li {
-    // list-style: none;
     padding: 12px 0;
     border-bottom: 1px solid var(--border-color);
 }
@@ -6785,15 +6196,6 @@ hamburger-menu {
 }
 
 .dropdown-menu {
-    /* UNUSED GLOBAL CLASS: divider - Auto-commented by script
-    .divider {
-        height: 1px;
-        margin: 9px 0;
-        overflow: hidden;
-        background-color: var(--color-border-light);
-    }
-    */
-
     > li {
         > a {
             padding: 4px 10px;
@@ -6880,7 +6282,6 @@ hamburger-menu {
                 td {
                     border: 1px solid var(--border-color) !important;
                     padding: 10px 30px 10px 10px !important;
-                    // background-color: var(--color-white) !important;
                 }
             }
         }
@@ -6948,16 +6349,7 @@ hamburger-menu {
     border-color: transparent;
 }
 
-// .tax-engine .btn-link,
-// .tax-engine .btn-link:active,
-// .tax-engine .btn-link[disabled],
-// .tax-engine fieldset[disabled] .btn-link {
-//     background-color: transparent;
-//     box-shadow: none;
-// }
-
 .tax-engine .btn-link {
-    // color: var(--text-primary-color);
     font-weight: 400;
     cursor: pointer;
     border-radius: var(--mat-border-radius-0);
@@ -7012,7 +6404,6 @@ hamburger-menu {
     width: 16px;
     height: 16px;
     fill: currentColor;
-    // filter: invert(0);
 }
 
 .text-bottom {
@@ -7022,7 +6413,6 @@ hamburger-menu {
 .tax-engine .icon.icon-sm {
     height: 14px;
     width: 14px;
-    // filter: invert(0);
 }
 
 .tax-engine .transactions-list .list-filter .list-style .gstr-icon {
@@ -7032,7 +6422,6 @@ hamburger-menu {
 .tax-engine .icon.gstr-icon {
     width: 42px;
     height: 42px;
-    // filter: invert(0);
 }
 
 .tax-engine .transactions-list .list-filter .list-style .nav-top {
@@ -7053,16 +6442,9 @@ hamburger-menu {
 }
 
 .tax-engine .dropdown-menu li .help-text,
-// .tax-engine .modal-header .help-text,
 .tax-engine .text-muted {
     color: var(--color-dark-gray);
 }
-
-/* UNUSED GLOBAL CLASS: space - Auto-commented by script
-.space {
-    margin-top: 10px;
-}
-*/
 
 .tax-engine .nav > li,
 .tax-engine .nav > li > a {
@@ -7138,10 +6520,6 @@ hamburger-menu {
     margin-bottom: 20px;
 }
 
-// .tax-engine .table.transactions-table thead:first-child tr:first-child th:first-child {
-//     padding-left: 20px;
-// }
-
 .tax-engine .table.transactions-table thead:first-child tr:first-child th {
     padding: 16px 12px;
     font-size: var(--font-size-15);
@@ -7184,11 +6562,6 @@ hamburger-menu {
     vertical-align: middle;
 }
 
-// .table-striped > tbody > tr:nth-child(even) > td,
-// .table-striped > tbody > tr:nth-child(odd) > th {
-//     background-color: var(--color-light-gray);
-// }
-
 .tax-engine .table tbody > tr > td,
 .tax-engine .table tbody > tr > th,
 .tax-engine .table tfoot > tr > td,
@@ -7219,7 +6592,6 @@ hamburger-menu {
 
                         & > td {
                             border: none !important;
-                            // background-color: var(--color-white) !important;
                             border-right: 1px solid var(--border-color) !important;
                             font-size: var(--font-size-15) !important;
                             padding: 13px !important;
@@ -7313,7 +6685,6 @@ hamburger-menu {
 
 .tax-engine .transactions-list .filter-band {
     padding: 15px 20px;
-    // background-color: var(--color-light-gray);
 }
 
 .tax-engine .transactions-list .filter-row.back-button {
@@ -7405,25 +6776,13 @@ hamburger-menu {
     max-width: 100%;
 }
 
-/* UNUSED GLOBAL CLASS: list-notes - Auto-commented by script
-.list-header .list-title > a,
-.list-notes,
-.list-primary .name,
-*/
 .over-flow {
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
 }
 
-/* UNUSED GLOBAL CLASS: font-xxlarge - Auto-commented by script
-.font-xxlarge {
-    font-size: var(--font-size-24);
-}
-*/
-
 .tax-engine .sub-filter-nav-band ul {
-    // list-style: none;
     margin-bottom: 0;
 }
 
@@ -7466,11 +6825,6 @@ hamburger-menu {
 .daybook-table .mat-table {
     table-layout: fixed;
 }
-
-// .tax-engine .table.reconciliations-table tbody > tr > td:first-child,
-// .tax-engine .table.reconciliations-table thead > tr > th:first-child {
-//     padding: 13px 13px 13px 20px;
-// }
 
 .tax-engine .table thead:first-child tr:first-child th {
     border-top: 1px solid var(--border-color);
@@ -7535,11 +6889,6 @@ hamburger-menu {
 .tax-engine .sub-filter-nav-band > ul > li.active > a .count {
     color: var(--color-dark-gray);
 }
-
-// .tax-engine .table-striped > tbody > tr:nth-child(even) > td,
-// .tax-engine .table-striped > tbody > tr:nth-child(even) > th {
-//     background-color: var(--color-white);
-// }
 
 .tax-engine .sub-filter-nav-band .nav-tabs > li.active > a::before {
     content: none;
@@ -7623,10 +6972,6 @@ app-header {
     margin-left: 0px !important;
 }
 
-// .error-box {
-//     border: 2px solid var(--color-red) !important;
-// }
-
 .heightVH-100 {
     height: 100vh;
 }
@@ -7667,7 +7012,6 @@ app-header {
     background-color: var(--color-light-gray);
 }
 
-/* sticky footer css merged */
 .sticky-footer.sticky-footer-sale-amount {
     background: var(--color-white);
     padding: 10px;
@@ -7701,7 +7045,6 @@ app-header {
     margin-top: 3px;
 }
 
-/* my css */
 .ledger-book .right-col-new .entry-modal {
     width: 165%;
     left: -65%;
@@ -7805,11 +7148,6 @@ footer#footer.absolute-footer {
     background-color: transparent !important;
 }
 
-// .amount-filed-cash.form-control[readonly] {
-//     border: none;
-//     background-color: transparent !important;
-// }
-
 .modal-open {
     overflow: hidden !important;
 
@@ -7870,22 +7208,6 @@ footer#footer.absolute-footer {
             }
         }
     }
-
-    // login {
-    //     .modal.fade {
-    //         .modal-body.clear-both {
-    //             #authModal {
-    //                 button[type="login"].ladda-button {
-    //                     /* UNUSED GLOBAL CLASS: ladda-label - Auto-commented by script
-    //                     .ladda-label {
-    //                         color: var(--color-white);
-    //                     }
-    //                     */
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
 }
 
 .master-page {
@@ -7935,7 +7257,6 @@ section.ledger-stat.sticky-footer.sticky-footer-sale-amount {
 
 div#getGroupModal {
     height: 100vh;
-    // background-color: var(--color-white);
 }
 
 .template-view li .beta-img {
@@ -8023,12 +7344,6 @@ ul#dropdown-nested .dropdown-menu li .dropdown-item {
     input::placeholder {
         color: var(--color-silver) !important;
     }
-
-    /* UNUSED GLOBAL CLASS: mdc-list-item__content - Auto-commented by script
-    .mdc-list-item__content {
-        overflow: unset !important;
-    }
-    */
 }
 
 .btn-group.btn-block.invoice-btn .btn-block {
@@ -8042,10 +7357,6 @@ ul#dropdown-nested .dropdown-menu li .dropdown-item {
 .icon-pointer .fa.fa-long-arrow-up {
     color: var(--color-medium-gray);
 }
-
-// span.text-red {
-//     color: var(--color-red);
-// }
 
 #invoice-setting .nav > li > a:focus,
 #invoice-setting .nav > li > a:hover {
@@ -8087,7 +7398,6 @@ ul#dropdown-nested .dropdown-menu li .dropdown-item {
 }
 
 .total-sales-tabs .nav-tabs li a {
-    // color: var(--color-black);
     font-size: var(--font-size-15);
     padding: 0 5px;
     position: relative;
@@ -8143,19 +7453,6 @@ ul#dropdown-nested .dropdown-menu li .dropdown-item {
 .ratio-chart-block:nth-child(4) span.pie-text_center {
     color: var(--color-green);
 }
-
-// .dashboard-container input[type="checkbox"]:checked:after {
-//     background-color: var(--bg-primary-color);
-//     border: 1px solid var(--border-color);
-// }
-
-// .dashboard-container input[type="checkbox"]:checked:before {
-//     border-color: var(--border-color);
-// }
-
-// .dashboard-container input[type="checkbox"]:after {
-//     border: 1px solid var(--border-color);
-// }
 
 .nav-tabs > li.active > a,
 .invoice-control .nav-tabs > li.active > a {
@@ -8308,10 +7605,6 @@ ul#dropdown-nested .dropdown-menu li .dropdown-item {
     border-color: var(--border-color) !important;
 }
 
-// table.basic td {
-//     color: var(--color-black);
-// }
-
 .invoice-table td > a {
     color: var(--color-black);
 }
@@ -8352,7 +7645,6 @@ button.btn.btn-filter {
 }
 
 .td-search-box div i.icon-search {
-    // color: var(--text-primary-color) !important;
     font-size: 16px;
 }
 
@@ -8422,24 +7714,8 @@ button.ladda-button .ladda-label {
 .page-has-tabs,
 .ledger-body,
 .on-setting-page {
-    /* UNUSED GLOBAL CLASS: other-taxes-input - Auto-commented by script
-    .other-taxes-input {
-        border: 1px solid var(--border-color) !important;
-    }
-    */
-
     .options-class-create {
         text-decoration: underline;
-    }
-
-    .stock-unit {
-        /* UNUSED GLOBAL CLASS: stock1 - Auto-commented by script
-        .stock1 {
-            float: left;
-            width: 100%;
-            margin-bottom: 10px;
-        }
-        */
     }
 
     .primary-main-header {
@@ -8457,51 +7733,6 @@ button.ladda-button .ladda-label {
             }
         }
     }
-
-    /* UNUSED GLOBAL CLASS: select-customers-name - Auto-commented by script
-    .select-customers-name {
-        select-field {
-            width: 62.7% !important;
-            min-width: 62.7% !important;
-        }
-
-        text-field {
-            width: 62.7% !important;
-            min-width: 62.7% !important;
-        }
-    }
-    */
-
-    /* UNUSED GLOBAL CLASS: bill-add - Auto-commented by script
-    .bill-add {
-        text-field {
-            input {
-                border: none;
-                border-bottom: 1px solid var(--border-color);
-            }
-        }
-    }
-    */
-
-    /* UNUSED GLOBAL CLASS: mat-select-panel - Auto-commented by script
-    .mat-select-panel {
-        z-index: 9999 !important;
-    }
-    */
-
-    /* UNUSED GLOBAL CLASS: custom-class-create - Auto-commented by script
-    .custom-class-create {
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        padding: 5px;
-
-        &:hover {
-            background: var(--color-border-light);
-            text-decoration: underline;
-        }
-    }
-    */
 
     .option-value-more {
         float: left !important;
@@ -8565,63 +7796,17 @@ button.ladda-button .ladda-label {
         }
     }
 
-    /* UNUSED GLOBAL CLASS: purchase-link - Auto-commented by script
-    .purchase-link {
-        .mat-select-disabled {
-            background-color: var(--color-light-gray) !important;
-        }
-    }
-    */
-
     .po-mat-select {
         border: 1px solid var(--border-color);
         border-radius: var(--mat-border-radius-4) !important;
         padding: 10px 0;
         font-size: var(--font-size-12);
         height: 48px;
-
-        /* UNUSED GLOBAL CLASS: mat-mdc-select-trigger - Auto-commented by script
-        .mat-mdc-select-trigger {
-            padding: 0 10px;
-        }
-        */
     }
 
     .po-options-line {
         height: auto !important;
         padding-bottom: 5px !important;
-
-        /* UNUSED GLOBAL CLASS: mat-select-search-input - Auto-commented by script
-        .mat-select-search-input {
-            padding: 16px 36px 16px 16px !important;
-            box-sizing: border-box !important;
-        }
-        */
-
-        /* UNUSED GLOBAL CLASS: mat-select-search-inner - Auto-commented by script
-        .mat-select-search-inner {
-            position: absolute !important;
-            top: 0 !important;
-            border-bottom-width: 1px !important;
-            border-bottom-style: solid !important;
-            z-index: 100 !important;
-            font-size: inherit !important;
-            box-shadow: none !important;
-            border-radius: var(--mat-border-radius-0) !important;
-        }
-        */
-
-        /* UNUSED GLOBAL CLASS: mat-select-search-clear - Auto-commented by script
-        .mat-select-search-clear {
-            margin-right: 0 !important;
-        }
-        */
-
-        /* UNUSED GLOBAL CLASS: mat-pseudo-checkbox-checked - Auto-commented by script
-        .mat-pseudo-checkbox-checked {
-            background: var(--bg-primary-color) !important;
-        }
-        */
 
         .po-option-value {
             float: left !important;
@@ -8636,21 +7821,6 @@ button.ladda-button .ladda-label {
         }
     }
 
-    /* UNUSED GLOBAL CLASS: purchase-link - Auto-commented by script
-    .purchase-link {
-        .mat-select-placeholder {
-            font-size: var(--font-size-15) !important;
-        }
-    }
-    */
-
-    /* UNUSED GLOBAL CLASS: common-uniquename - Auto-commented by script
-    .common-uniquename {
-        color: var(--color-medium-gray) !important;
-        font-size: var(--font-size-12);
-    }
-    */
-
     .create-new {
         font-size: var(--font-size-15);
     }
@@ -8658,22 +7828,6 @@ button.ladda-button .ladda-label {
     .create-new-command {
         font-size: var(--font-size-15);
     }
-
-    /* UNUSED GLOBAL CLASS: warehouse-wrapper - Auto-commented by script
-    .warehouse-wrapper {
-        .select-field-input {
-            padding-left: 5px;
-            font-size: var(--font-size-15);
-        }
-    }
-    */
-
-    /* UNUSED GLOBAL CLASS: input-bill - Auto-commented by script
-    .input-bill {
-        border-radius: var(--mat-border-radius-0) !important;
-        background-color: transparent !important;
-    }
-    */
 }
 
 .aside-panel-ledger {
@@ -8735,7 +7889,6 @@ button.ladda-button .ladda-label {
     color: inherit !important;
     background: inherit !important;
 }
-/* radio & checkbox new CSS start */
 .radio-custom {
     opacity: 0;
     position: absolute;
@@ -8814,10 +7967,6 @@ button.ladda-button .ladda-label {
 .select2-parent.select2-ledger .ledger-account-label sh-select .header input {
     padding-left: 3px !important;
     font-size: var(--font-size-15) !important;
-
-    // &::placeholder {
-    //     color: var(--color-dark-gray);
-    // }
 }
 
 .select2-parent.select2-ledger .ledger-account-label input.form-control.focused {
@@ -8845,7 +7994,6 @@ button.ladda-button .ladda-label {
     min-height: 361px;
 }
 
-/*notofication css*/
 #HW_badge {
     transition: none !important;
     transform: scale(1) !important;
@@ -8884,20 +8032,12 @@ ul {
                 .icon-circle {
                     color: var(--color-black) !important;
                     background-color: var(--color-white) !important;
-
-                    // i[class^="icon-"],
-                    // i[class*=" icon-"] {
-                    //     color: var(--text-primary-color) !important;
-                    // }
                 }
             }
         }
     }
 }
 
-/*notofication css end*/
-
-// Setting sidebar and data styles
 .setting-data,
 .setting-sidebar-open {
     .warning-msg-row {
@@ -8940,12 +8080,10 @@ ul {
     padding-left: 15px !important;
 }
 
-// Date field styles
 .date-field {
     flex-direction: column;
 }
 
-// Mobile sidebar overlay
 .mobile-sidebar-open {
     &::after {
         position: absolute;
@@ -8959,19 +8097,16 @@ ul {
     }
 }
 
-// Hide specific badge element
 span#HW_badge_cont {
     &:nth-child(3) {
         display: none !important;
     }
 }
 
-// Datepicker cursor
 .giddh-datepicker {
     cursor: pointer !important;
 }
 
-// Navigation bar states
 .on-setting-page,
 .on-user-page {
     .nav-left-bar {
@@ -8984,7 +8119,6 @@ span#HW_badge_cont {
     }
 }
 
-// Menu open states
 .menu_open {
     aside-setting.setting-sidebar {
         right: 0 !important;
@@ -9003,7 +8137,6 @@ span#HW_badge_cont {
     }
 }
 
-// Dropdown toggle
 .dropdown-toggle {
     &::after {
         display: none;
@@ -9015,7 +8148,6 @@ span#HW_badge_cont {
         margin-bottom: 20px;
         min-height: 426px;
         border: 1px solid var(--border-color);
-        // background-color: var(--color-white);
         box-shadow: none !important;
         padding: 0 !important;
         overflow: hidden;
@@ -9093,15 +8225,6 @@ span#HW_badge_cont {
         position: fixed !important;
         right: 0px;
     }
-
-    /* UNUSED GLOBAL CLASS: mat-dialog-content - Auto-commented by script
-    .mat-dialog-content {
-        margin: 0 !important;
-        padding: 0 !important;
-        max-height: 90%;
-        width: 100%;
-    }
-    */
 }
 
 .update-ledger-overlay .modal-backdrop.show {
@@ -9169,69 +8292,6 @@ ul.dropdown-menu.action-dropdown {
 }
 ngx-daterangepicker-material,
 giddh-datepicker {
-    /* UNUSED GLOBAL CLASS: recurring-form - Auto-commented by script
-    .recurring-form .mat-form-field {
-        max-width: 170px;
-    }
-    */
-
-    /* UNUSED GLOBAL CLASS: collapse-pane - Auto-commented by script
-    .collapse-pane .mat-form-field {
-        min-width: 100%;
-        max-width: 100%;
-    }
-    */
-
-    /* UNUSED GLOBAL CLASS: mat-form-field - Auto-commented by script
-    .mat-form-field {
-        min-width: 170px;
-        width: 100%;
-        display: inline-block;
-    }
-    */
-
-    /* UNUSED GLOBAL CLASS: mat-form-field-suffix - Auto-commented by script
-    .mat-form-field-suffix {
-        right: 0;
-        position: absolute !important;
-    }
-    */
-
-    /* UNUSED GLOBAL CLASS: mat-form-field-appearance-fill - Auto-commented by script
-    .mat-form-field-appearance-fill .mat-form-field-flex {
-        height: 36px;
-        background-color: var(--color-white);
-        padding: 0;
-    }
-    */
-
-    /* UNUSED GLOBAL CLASS: mat-form-field-appearance-fill - Auto-commented by script
-    .mat-form-field-appearance-fill .mat-form-field-underline::before {
-        display: none !important;
-        opacity: 0 !important;
-    }
-    */
-
-    /* UNUSED GLOBAL CLASS: mat-form-field-appearance-fill - Auto-commented by script
-    .mat-form-field-appearance-fill .mat-form-field-infix {
-        padding: 0;
-        margin: 0;
-        border: 0;
-
-        ::placeholder {
-            color: var(--color-dark-gray);
-        }
-    }
-    */
-
-    /* UNUSED GLOBAL CLASS: mat-form-field-appearance-fill - Auto-commented by script
-    .mat-form-field-appearance-fill .mat-form-field-flex {
-        padding: 0 !important;
-        display: flex !important;
-        align-items: center !important;
-    }
-    */
-
     .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mat-icon-button,
     .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button {
         width: 26px;
@@ -9240,39 +8300,11 @@ giddh-datepicker {
 
     .mat-form-field-appearance-fill:not(.mat-form-field-disabled).mat-form-field-flex:hover
         ~ .mat-form-field-underline
-        /* UNUSED GLOBAL CLASS: mat-form-field-ripple - Auto-commented by script
-        .mat-form-field-ripple {
-        opacity: 0 !important;
-    }
-    */
-
-    input.mat-input-element {
+        input.mat-input-element {
         margin-top: 0;
         padding: 9px 6px;
         font-size: var(--font-size-15);
-
-        // &::placeholder {
-        //     color: var(--color-silver) !important;
-        // }
     }
-
-    /* UNUSED GLOBAL CLASS: mat-form-field-wrapper - Auto-commented by script
-    .mat-form-field-wrapper {
-        padding-bottom: 0;
-    }
-    */
-
-    /* UNUSED GLOBAL CLASS: mat-form-field-underline - Auto-commented by script
-    .mat-form-field-underline {
-        display: none !important;
-    }
-    */
-
-    /* UNUSED GLOBAL CLASS: mat-calendar-body-selected - Auto-commented by script
-    .mat-calendar-body-selected {
-        background-color: var(--bg-primary-color);
-    }
-    */
 
     .giddh-limit {
         &.single-line-clamp {
@@ -9295,15 +8327,6 @@ giddh-datepicker {
 }
 
 .ledger-body {
-    &:not(.page-leave-confirmation-modal-wrapper) {
-        // .cdk-overlay-container, <- check this.
-        /* UNUSED GLOBAL CLASS: cdk-global-overlay-wrapper - Auto-commented by script
-        .cdk-global-overlay-wrapper {
-            z-index: 1000 !important;
-        }
-        */
-    }
-
     overflow-y: auto !important;
     height: auto;
 
@@ -9390,12 +8413,6 @@ giddh-datepicker {
                 display: flex;
                 align-items: center;
             }
-
-            /* UNUSED GLOBAL CLASS: mdc-button__label - Auto-commented by script
-            .mdc-button__label {
-                color: var(--color-white);
-            }
-            */
         }
     }
 
@@ -9591,26 +8608,7 @@ giddh-datepicker {
                 .select-physical-product {
                     .product-detail-content {
                         .account-inventory-other-tab {
-                            /* UNUSED GLOBAL CLASS: mat-tab-labels - Auto-commented by script
-                            .mat-tab-labels {
-                                margin-left: 20px;
-                            }
-                            */
-
                             .sales-purchase-details {
-                                #purchase-info-check,
-                                #sales-info-check {
-                                    /* UNUSED GLOBAL CLASS: mat-checkbox-label - Auto-commented by script
-                                    .mat-checkbox-label {
-                                        font: normal normal 600 var(--font-size-15) / 17px;
-                                        font-family: var(--font-family);
-                                        letter-spacing: 0px;
-                                        position: relative;
-                                        bottom: 1px;
-                                    }
-                                    */
-                                }
-
                                 .sales-information,
                                 .purchase-information {
                                     .add-new-field {
@@ -9658,22 +8656,6 @@ giddh-datepicker {
             }
         }
     }
-
-    /* UNUSED GLOBAL CLASS: cdk-overlay-connected-position-bounding-box - Auto-commented by script
-    .cdk-overlay-connected-position-bounding-box {
-        .mat-select-panel {
-            .mat-option-disabled {
-                cursor: not-allowed;
-                color: var(--color-silver) !important;
-
-                .mat-pseudo-checkbox {
-                    cursor: not-allowed;
-                    color: var(--color-silver) !important;
-                }
-            }
-        }
-    }
-    */
 }
 
 .gst-sidebar-open {
@@ -9732,27 +8714,6 @@ giddh-datepicker {
         }
     }
 }
-
-// .unit-mapping-page {
-//     .grid-box {
-//         .mat-grid-tile-content {
-//             justify-content: space-around;
-//         }
-//     }
-
-//     .unit-mapping-grid-list {
-//         .grid-box-content {
-//             .map-unit-value {
-//                 .map-unit-select-field {
-//                     input {
-//                         width: 160px;
-//                         min-width: 160px;
-//                     }
-//                 }
-//             }
-//         }
-//     }
-// }
 
 body.update-scroll-hidden {
     overflow-y: hidden;
@@ -9855,40 +8816,6 @@ body.update-scroll-hidden {
                     }
                 }
             }
-
-            /* UNUSED GLOBAL CLASS: nav-item - Auto-commented by script
-            .nav-item {
-                &.icon-company {
-                    &.active {
-                        &::before {
-                            color: var(--text-primary-color);
-                        }
-                    }
-
-                    &::before {
-                        position: absolute !important;
-                        left: 20px !important;
-                        top: 5px;
-                        color: var(--color-gray);
-                    }
-                }
-
-                &.icon-branch1 {
-                    &.active {
-                        &::before {
-                            color: var(--text-primary-color);
-                        }
-                    }
-
-                    &::before {
-                        position: absolute !important;
-                        left: 20px !important;
-                        top: 5px;
-                        color: var(--color-gray);
-                    }
-                }
-            }
-            */
         }
     }
 }
@@ -9909,49 +8836,17 @@ body.update-scroll-hidden {
     }
 }
 
-// .transactions-table.table-striped {
-//     white-space: nowrap;
-// }
-
 .stock-group-parent > ul {
     height: calc(100vh - 320px);
     overflow: auto;
 }
 .ledger-attachments-popup {
-    .cdk-overlay-container {
-        /* UNUSED GLOBAL CLASS: mat-dialog-container - Auto-commented by script
-        .mat-dialog-container {
-            background-color: var(--color-white);
-        }
-        */
-
-        /* UNUSED GLOBAL CLASS: cdk-overlay-connected-position-bounding-box - Auto-commented by script
-        .cdk-overlay-connected-position-bounding-box {
-            .mat-menu-panel {
-                .mat-menu-content {
-                    button:focus {
-                        box-shadow: none !important;
-                        background-color: var(--theme-primary-light);
-                    }
-                }
-            }
-        }
-        */
-    }
-
     button.mat-menu-item {
         height: 40px;
         display: flex;
         align-items: center;
         padding: 0 16px !important;
     }
-
-    /* UNUSED GLOBAL CLASS: mat-menu-content - Auto-commented by script
-    .mat-menu-content {
-        padding-top: 2px !important;
-        padding-bottom: 2px !important;
-    }
-    */
 }
 
 .custom-cdk-overlay-wrapper {
@@ -9963,13 +8858,6 @@ body.update-scroll-hidden {
 
 .universal-datepicker-menu-panel {
     max-width: 100% !important;
-
-    /* UNUSED GLOBAL CLASS: mat-mdc-menu-content - Auto-commented by script
-    .mat-mdc-menu-content {
-        padding-top: 0 !important;
-        padding-bottom: 0 !important;
-    }
-    */
 }
 .select-multiple-chiplist {
     mat-chip-grid {
@@ -9978,18 +8866,6 @@ body.update-scroll-hidden {
                 &:not(.mdc-evolution-chip--disabled) {
                     --mdc-chip-elevated-container-color: var(--color-border-light) !important;
                     border: 1px solid var(--border-color);
-
-                    /* UNUSED GLOBAL CLASS: mdc-evolution-chip__text-label - Auto-commented by script
-                    .mdc-evolution-chip__text-label {
-                        --mdc-chip-label-text-color: var(--color-black) !important;
-                    }
-                    */
-
-                    /* UNUSED GLOBAL CLASS: mdc-evolution-chip__icon--trailing - Auto-commented by script
-                    .mdc-evolution-chip__icon--trailing {
-                        --mdc-chip-with-trailing-icon-trailing-icon-color: var(--color-black) !important;
-                    }
-                    */
                 }
             }
         }
@@ -10022,19 +8898,16 @@ mat-list {
     }
 }
 
-// Subscription Page Country List Dropdown
 .country-dropdown-list {
     min-width: 300px;
 }
 
-// Global Class to align main container center
 .section-center {
     max-width: var(--center-content-max-width) !important;
     margin-left: auto !important;
     margin-right: auto !important;
 }
 
-// Dropdown data is not getting visible properly on import
 import-wizard {
     sh-select {
         sh-select-menu {
@@ -10056,32 +8929,11 @@ import-wizard {
         border-color: var(--border-color) !important;
     }
 }
-
-// Ledger Create Panel text color
-.new-ledger-panel {
-    // color: var(--color-black) !important;
-
-    // label,
-    // strong {
-    //     color: var(--color-black) !important;
-    // }
-
-    /* UNUSED GLOBAL CLASS: mat-expansion-panel - Auto-commented by script
-    .mat-expansion-panel {
-        .mat-expansion-panel-header {
-            .mat-expansion-panel-header-title {
-                color: var(--color-black) !important;
-            }
-        }
-    }
-    */
-}
 .preview-list {
     .form-control {
         padding-left: 30px !important;
     }
 }
-// show voucher message
 .depreciation-message {
     .message-wrapper {
         background-color: var(--color-red);
@@ -10164,8 +9016,7 @@ import-wizard {
         }
     }
 }
-/** In mobile number field if multiple flag are visible,
- use this class to fix the issue */
+
 .show-single-flag {
     .iti--allow-dropdown {
         &:has(.iti--allow-dropdown) {
@@ -10203,34 +9054,11 @@ activity-compare-json {
     .dropdown-bg {
         display: none !important;
     }
-
-    /* UNUSED GLOBAL CLASS: mat-mdc-form-field - Auto-commented by script
-    .mat-mdc-form-field {
-        background-color: var(--color-light-gray) !important;
-    }
-    */
-
-    // .dropdown-bg {
-    //     background-color: var(--color-transparent) !important;
-    // }
-
-    /* UNUSED GLOBAL CLASS: mdc-text-field__input - Auto-commented by script
-    .mdc-text-field__input {
-        background-color: var(--color-transparent) !important;
-    }
-    */
-
-    /* UNUSED GLOBAL CLASS: mat-mdc-form-field - Auto-commented by script
-    .mat-mdc-form-field input {
-        background-color: var(--color-transparent) !important;
-    }
-    */
 }
 .custom-btn {
     color: var(--color-black);
 }
 
-/*--- inventory-search ---*/
 .inventory-search {
     text-field {
         .form-control {
@@ -10249,10 +9077,6 @@ activity-compare-json {
             &:focus {
                 border-color: var(--color-black) !important;
             }
-
-            // &::placeholder {
-            //     color: var(--color-medium-gray);
-            // }
         }
     }
 }
@@ -10296,107 +9120,7 @@ body.hide-scroll-body.master-page {
 }
 
 .stock-balance-wrapper {
-    /* UNUSED GLOBAL CLASS: search-warehouse-bar - Auto-commented by script
-    .search-warehouse-bar {
-        .mat-form-field-infix {
-            height: 60px;
-            width: 200px;
-            margin-top: -16px;
-            padding: 16px 0px;
-            padding-top: 17px;
-            font-size: var(--font-size-15);
-
-            .mat-select-placeholder,
-            mat-select-trigger {
-                color: var(--color-medium-gray);
-            }
-
-            .mat-select-arrow {
-                position: relative;
-                top: 5px;
-            }
-        }
-    }
-    */
-
-    /* UNUSED GLOBAL CLASS: mat-form-field-appearance-outline - Auto-commented by script
-    .mat-form-field-appearance-outline {
-        .mat-form-field-outline {
-            color: var(--color-silver);
-        }
-    }
-    */
-
-    .stock-list-body {
-        .stock-list-expanded-content {
-            /* UNUSED GLOBAL CLASS: mat-form-field-infix - Auto-commented by script
-            .mat-form-field-infix {
-                border: 1px solid;
-                border-radius: var(--mat-border-radius-4);
-                width: 112px;
-                height: 34px;
-                color: var(--color-white);
-                background-color: var(--color-white);
-
-                .mat-select-value {
-                    position: relative;
-                    padding-left: 8px;
-                    top: 4px;
-                    height: 20px;
-                }
-
-                .mat-select-arrow-wrapper {
-                    position: relative;
-                    top: 13px;
-                    right: 3px;
-                }
-
-                .mat-select-placeholder {
-                    color: var(--color-medium-gray);
-                }
-            }
-            */
-        }
-    }
-
     .searching-stocks {
-        .custom-material-search-bar {
-            /* UNUSED GLOBAL CLASS: mat-form-field-outline - Auto-commented by script
-            .mat-form-field-outline {
-                height: 33px;
-                background-color: var(--color-light-gray);
-                border-radius: var(--mat-border-radius-4);
-            }
-            */
-        }
-
-        .stock-searchbar {
-            /* UNUSED GLOBAL CLASS: mat-form-field-outline - Auto-commented by script
-            .mat-form-field-outline {
-                width: 230px;
-                color: var(--color-light-gray);
-            }
-            */
-
-            /* UNUSED GLOBAL CLASS: mat-form-field-infix - Auto-commented by script
-            .mat-form-field-infix {
-                width: 112px;
-                height: 34px;
-                color: var(--color-white);
-                padding-top: 22px;
-                font-size: var(--font-size-15);
-            }
-            */
-        }
-
-        .group-searchbar {
-            /* UNUSED GLOBAL CLASS: mat-form-field-outline - Auto-commented by script
-            .mat-form-field-outline {
-                color: var(--color-light-gray);
-            }
-            */
-        }
-
         select-field {
             input {
                 &.mat-form-field-autofill-control {
@@ -10406,10 +9130,6 @@ body.hide-scroll-body.master-page {
                     font-size: var(--font-size-15) !important;
                     padding-top: 7px !important;
                     border-radius: var(--mat-border-radius-4);
-
-                    // &::placeholder {
-                    //     color: var(--text-primary-color) !important;
-                    // }
                 }
             }
         }
@@ -10438,17 +9158,10 @@ body.hide-scroll-body.master-page {
 
 .inventory-filter-bar {
     padding-bottom: 15px;
-    // display: flex;
-    // padding: 0px;
-    // padding-left: 0px;
-    // padding-right: 0px;
 
     .search-control {
         border: 1px solid var(--color-medium-gray);
         border-radius: var(--mat-border-radius-4);
-        // float: left;
-        // width: 100%;
-        // display: inherit !important;
 
         .search-icon {
             line-height: 44px;
@@ -10457,12 +9170,6 @@ body.hide-scroll-body.master-page {
         input.form-control {
             border: none !important;
         }
-
-        /* UNUSED GLOBAL CLASS: mat-form-field-underline - Auto-commented by script
-        .mat-form-field-underline {
-            display: none;
-        }
-        */
 
         .menu-btn-control {
             border-top-right-radius: 20px;
@@ -10494,32 +9201,6 @@ body.hide-scroll-body.master-page {
         }
     }
 
-    /* UNUSED GLOBAL CLASS: round-btn - Auto-commented by script
-    .round-btn {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border: 1px solid var(--color-medium-gray);
-        border-radius: 50px;
-
-        i.svg {
-            display: flex;
-        }
-
-        &:hover {
-            background: var(--color-light-gray);
-            color: var(--text-primary-color) !important;
-        }
-    }
-    */
-
-    /* UNUSED GLOBAL CLASS: action-button-container - Auto-commented by script
-    .action-button-container {
-        display: flex;
-        flex: 1;
-    }
-    */
-
     span.dots-select {
         font-size: var(--font-size-15);
         padding-left: 17px;
@@ -10546,22 +9227,6 @@ body.hide-scroll-body.master-page {
     min-height: 100% !important;
     height: 100% !important;
     width: 760px !important;
-
-    /* UNUSED GLOBAL CLASS: mat-dialog-content - Auto-commented by script
-    .mat-dialog-content {
-        margin: 0 !important;
-        padding: 0 !important;
-        max-height: 90%;
-        float: left;
-        width: 100%;
-    }
-    */
-
-    /* UNUSED GLOBAL CLASS: mat-dialog-container - Auto-commented by script
-    .mat-dialog-container {
-        overflow: hidden;
-    }
-    */
 }
 
 .subscription-sidebar {
@@ -10607,116 +9272,11 @@ body.hide-scroll-body.master-page {
         min-height: 100% !important;
         height: 100% !important;
         width: 760px !important;
-
-        /* UNUSED GLOBAL CLASS: mat-dialog-content - Auto-commented by script
-        .mat-dialog-content {
-            margin: 0 !important;
-            padding: 0 !important;
-            max-height: 90%;
-            float: left;
-            width: 100%;
-        }
-        */
-
-        /* UNUSED GLOBAL CLASS: mat-dialog-container - Auto-commented by script
-        .mat-dialog-container {
-            overflow: hidden;
-            background-color: var(--color-white);
-        }
-        */
     }
 }
 
 .stock-balance-wrapper {
-    /* UNUSED GLOBAL CLASS: search-warehouse-bar - Auto-commented by script
-    .search-warehouse-bar {
-        .mat-form-field-infix {
-            height: 58px;
-            width: 200px;
-            margin-top: -16px;
-            padding: 16px 0px;
-
-            .mat-select-placeholder,
-            mat-select-trigger {
-                color: var(--color-medium-gray);
-            }
-
-            .mat-select-arrow {
-                position: relative;
-                top: 5px;
-            }
-        }
-    }
-    */
-
-    /* UNUSED GLOBAL CLASS: mat-form-field-appearance-outline - Auto-commented by script
-    .mat-form-field-appearance-outline {
-        .mat-form-field-outline {
-            color: var(--color-silver);
-        }
-    }
-    */
-
-    .stock-list-body {
-        .stock-list-expanded-content {
-            /* UNUSED GLOBAL CLASS: mat-form-field-infix - Auto-commented by script
-            .mat-form-field-infix {
-                border: 1px solid;
-                border-radius: var(--mat-border-radius-4);
-                width: 112px;
-                height: 34px;
-                color: var(--color-white);
-                background-color: var(--color-white);
-
-                .mat-select-value {
-                    position: relative;
-                    padding-left: 8px;
-                    top: 4px;
-                    height: 20px;
-                }
-
-                .mat-select-arrow-wrapper {
-                    position: relative;
-                    top: 13px;
-                    right: 3px;
-                }
-
-                .mat-select-placeholder {
-                    color: var(--color-medium-gray);
-                }
-            }
-            */
-        }
-    }
-
     .searching-stocks {
-        .custom-material-search-bar {
-            /* UNUSED GLOBAL CLASS: mat-form-field-outline - Auto-commented by script
-            .mat-form-field-outline {
-                height: 33px;
-                background-color: var(--color-light-gray);
-                border-radius: var(--mat-border-radius-4);
-            }
-            */
-        }
-
-        .stock-searchbar {
-            /* UNUSED GLOBAL CLASS: mat-form-field-outline - Auto-commented by script
-            .mat-form-field-outline {
-                width: 230px;
-                color: var(--color-light-gray);
-            }
-            */
-        }
-
-        .group-searchbar {
-            /* UNUSED GLOBAL CLASS: mat-form-field-outline - Auto-commented by script
-            .mat-form-field-outline {
-                color: var(--color-light-gray);
-            }
-            */
-        }
-
         select-field,
         text-field {
             input {
@@ -10725,11 +9285,6 @@ body.hide-scroll-body.master-page {
 
                 &.bg-dropdown {
                     padding-left: 28px !important;
-                    // background-color: var(--color-light-gray) !important;
-
-                    // &::placeholder {
-                    //     color: var(--text-primary-color) !important;
-                    // }
                 }
             }
         }
@@ -10747,12 +9302,6 @@ body.hide-scroll-body.master-page {
                         input {
                             padding-left: 5px !important;
                             padding-right: 17px !important;
-                            // background-color: var(--theme-primary-light) !important;
-
-                            // &:active,
-                            // &:focus {
-                            //     background-color: var(--color-white) !important;
-                            // }
                         }
                     }
                 }
@@ -10765,63 +9314,14 @@ body.hide-scroll-body.master-page {
     min-height: 100% !important;
     height: 100% !important;
     width: 760px !important;
-
-    /* UNUSED GLOBAL CLASS: mat-dialog-content - Auto-commented by script
-    .mat-dialog-content {
-        margin: 0 !important;
-        padding: 0 !important;
-        max-height: 90%;
-        float: left;
-        width: 100%;
-    }
-    */
-
-    /* UNUSED GLOBAL CLASS: mat-dialog-container - Auto-commented by script
-    .mat-dialog-container {
-        overflow: hidden;
-        background-color: var(--color-white);
-    }
-    */
 }
 
 .custom-mat-tabs {
-    /* UNUSED GLOBAL CLASS: mat-tab-label - Auto-commented by script
-    .mat-tab-label {
-        padding: 0 20px !important;
-        min-width: 100px !important;
-    }
-    */
-
-    /* UNUSED GLOBAL CLASS: mat-ink-bar - Auto-commented by script
-    .mat-ink-bar {
-        height: 3px !important;
-    }
-    */
-
-    /* NEED TO CORRECT THIS APPROCH */
     .mat-mdc-tab-header {
         display: none;
     }
 }
 
-// .grid-title-list {
-/* UNUSED GLOBAL CLASS: mat-grid-tile-content - Auto-commented by script
-    .mat-grid-tile-content {
-        display: block !important;
-        justify-content: left;
-    }
-    */
-// }
-
-// .grid-title-left {
-/* UNUSED GLOBAL CLASS: mat-grid-tile-content - Auto-commented by script
-    .mat-grid-tile-content {
-        justify-content: left;
-    }
-    */
-// }
-
-/** Skeleton Effects  **/
 .skeleton-common-class {
     background: var(--color-border-light);
     color: transparent !important;
@@ -10863,8 +9363,6 @@ mat-year-view table tr td.mat-calendar-body-label {
     display: none !important;
 }
 
-/** Angular material datepicker **/
-
 input[type="checkbox"].cdk-visually-hidden::before,
 input[type="checkbox"].cdk-visually-hidden::after {
     height: 1px !important;
@@ -10875,24 +9373,6 @@ input[type="checkbox"].cdk-visually-hidden::after {
 }
 
 .billing-wrapper {
-    /* UNUSED GLOBAL CLASS: mat-form-field-wrapper - Auto-commented by script
-    .mat-form-field-wrapper {
-        padding-bottom: 0 !important;
-    }
-    */
-
-    /* UNUSED GLOBAL CLASS: mat-form-field-appearance-fill - Auto-commented by script
-    .mat-form-field-appearance-fill .mat-form-field-flex {
-        padding: 0 !important;
-    }
-    */
-
-    /* UNUSED GLOBAL CLASS: mat-form-field-appearance-fill - Auto-commented by script
-    .mat-form-field-appearance-fill .mat-form-field-infix {
-        padding: 0 !important;
-    }
-    */
-
     .form-group {
         float: left;
         width: 93%;
@@ -10907,20 +9387,8 @@ input[type="checkbox"].cdk-visually-hidden::after {
 .btn-success:disabled {
     color: var(--color-dark-gray) !important;
 
-    /* UNUSED GLOBAL CLASS: ladda-label - Auto-commented by script
-    .ladda-label {
-        color: var(--color-dark-gray) !important;
-    }
-    */
-
     &:hover {
         color: var(--color-dark-gray) !important;
-
-        /* UNUSED GLOBAL CLASS: ladda-label - Auto-commented by script
-        .ladda-label {
-            color: var(--color-dark-gray) !important;
-        }
-        */
     }
 }
 @media (max-height: 999px) {
@@ -11021,46 +9489,15 @@ input[type="checkbox"].cdk-visually-hidden::after {
         position: relative;
     }
 
-    /* UNUSED GLOBAL CLASS: inventory-footer - Auto-commented by script
-    .inventory-footer,
-    .create-group-footer,
-*/
     .stock-group-footer {
         left: 0px !important;
     }
-
-    /* UNUSED GLOBAL CLASS: stock-lists - Auto-commented by script
-    .stock-lists {
-        position: absolute;
-        box-shadow: 0 3px 6px var(--color-shadow-light);
-        background: var(--color-white);
-        min-width: 200px;
-        display: inline-block;
-        z-index: 9;
-        max-height: 400px;
-        overflow-y: auto;
-    }
-    */
 
     .stock-grp-list > li {
         display: inline-block;
         border: 0px;
         position: relative;
     }
-
-    /* UNUSED GLOBAL CLASS: sub-filter-nav-band - Auto-commented by script
-    .sub-filter-nav-band .nav-tabs {
-        overflow-x: auto;
-        overflow-y: hidden;
-        display: inline-flex;
-        white-space: nowrap;
-        width: 100%;
-
-        li {
-            white-space: normal;
-        }
-    }
-    */
 
     .tax-engine .nav-band .nav-tabs {
         white-space: nowrap;
@@ -11074,22 +9511,9 @@ input[type="checkbox"].cdk-visually-hidden::after {
     giddh-datepicker .mat-form-field {
         min-width: 100% !important;
     }
-
-    /* UNUSED GLOBAL CLASS: mat-raised-button - Auto-commented by script
-    .mat-raised-button {
-        min-width: auto !important;
-    }
-    */
 }
 
 @media (max-width: 840px) {
-    /* UNUSED GLOBAL CLASS: card-invoice-table - Auto-commented by script
-    .card-invoice-table #tax-control-multi-select.multi-select input.form-control[readonly],
-    .card-invoice-table .multi-select input.form-control {
-        background-position: 98% !important;
-    }
-    */
-
     .bulk-create-table sh-select input,
     .bulk-create-table .mat-form-field-wrapper input,
     .bulk-create-table .mat-form-field-appearance-fill .mat-form-field-flex {
@@ -11112,37 +9536,13 @@ input[type="checkbox"].cdk-visually-hidden::after {
     }
 }
 
-@media only screen and (max-width: 1400px) {
-    /* UNUSED GLOBAL CLASS: font-xxlarge - Auto-commented by script
-    .font-xxlarge {
-        font-size: var(--font-size-16);
-    }
-    */
-}
-
 @media only screen and (min-width: 1280px) {
     .multi-select input.form-control {
         padding-right: 20px !important;
     }
 }
 
-// @media only screen and (max-width: 1130px) {
-//     #accountSearch {
-//         width: 150px !important;
-//     }
-// }
-
 @media only screen and (max-width: 1030px) {
-    /* UNUSED GLOBAL CLASS: header-container - Auto-commented by script
-    .header-container {
-        position: relative;
-    }
-    */
-
-    // body.unresponsive {
-    //     padding-top: 0;
-    // }
-
     .account-wrapper {
         width: 100% !important;
     }
@@ -11153,26 +9553,6 @@ input[type="checkbox"].cdk-visually-hidden::after {
         padding: 7px 10px;
     }
 
-    .voucher-preview-edit {
-        /* UNUSED GLOBAL CLASS: shipping-date - Auto-commented by script
-        .shipping-date {
-            padding-top: 50px !important;
-        }
-        */
-
-        /* UNUSED GLOBAL CLASS: invoice-other-details-row - Auto-commented by script
-        .invoice-other-details-row {
-            margin-top: 10px;
-        }
-        */
-    }
-
-    /* UNUSED GLOBAL CLASS: sm-d-block - Auto-commented by script
-    .sm-d-block {
-        display: block;
-    }
-    */
-
     .users-last-list > li:last-child {
         height: inherit !important;
     }
@@ -11180,12 +9560,6 @@ input[type="checkbox"].cdk-visually-hidden::after {
     .xs-left {
         text-align: left !important;
     }
-
-    /* UNUSED GLOBAL CLASS: customer-right-wrap - Auto-commented by script
-    .customer-right-wrap .text-right.xs-left {
-        text-align: right !important;
-    }
-    */
 
     .col-wrapper:nth-child(1) .master-list a {
         text-transform: uppercase;
@@ -11221,23 +9595,10 @@ input[type="checkbox"].cdk-visually-hidden::after {
         opacity: 1;
     }
 
-    /* UNUSED GLOBAL CLASS: manage-account-popup - Auto-commented by script
-    .manage-account-popup .modal-content.full-screen-modal {
-        box-shadow: none;
-        border: none;
-    }
-    */
-
     .wrap-account-sidebar,
     .wrap-account-sidebar .grp-wrapper {
         width: 100% !important;
     }
-
-    /* UNUSED GLOBAL CLASS: add-manage-group-acc - Auto-commented by script
-    .add-manage-group-acc {
-        overflow-y: auto !important;
-    }
-    */
 
     .grp-list .master-list a,
     .new-btn-ul .new-btn a {
@@ -11254,64 +9615,12 @@ input[type="checkbox"].cdk-visually-hidden::after {
         width: 180px !important;
     }
 
-    /* manage group account*/
-    /* UNUSED GLOBAL CLASS: add-manage-group-acc - Auto-commented by script
-    .add-manage-group-acc .get-group-modal .breadcrumbs .col-xs-8,
-    .add-manage-group-acc .get-group-modal .breadcrumbs .col-xs-4 {
-        width: 100%;
-    }
-    */
-
-    /* UNUSED GLOBAL CLASS: add-manage-group-acc - Auto-commented by script
-    .add-manage-group-acc .getGroupModal .breadcrumbs .col-xs-4 {
-        margin-top: 5px;
-    }
-    */
-
     .HW_frame_cont.HW_visible.HW_bottom {
         max-width: 300px;
     }
-
-    /* UNUSED GLOBAL CLASS: edit-modal - Auto-commented by script
-    .edit-modal {
-        .modal-content {
-            max-width: 300px;
-        }
-    }
-    */
 }
 
 @media (min-width: 768px) {
-    /* UNUSED GLOBAL CLASS: mobile-invoice-date-due-date - Auto-commented by script
-    .mobile-invoice-date-due-date {
-        .mat-datepicker-toggle .mat-button-wrapper .mat-datepicker-toggle-default-icon {
-            color: var(--color-black);
-            position: absolute;
-            bottom: 8px !important;
-            right: 10px !important;
-        }
-
-        .mat-form-field-wrapper
-            .mat-form-field-infix
-            .mat-input-element.mat-form-field-autofill-control.mat-datepicker-input {
-            position: absolute;
-            padding-top: 11px !important;
-        }
-    }
-    */
-
-    /* UNUSED GLOBAL CLASS: invoice-modal-content - Auto-commented by script
-    .invoice-modal-content .modal-dialog {
-        margin: 70px auto;
-    }
-    */
-
-    /* UNUSED GLOBAL CLASS: shipping-date - Auto-commented by script
-    .shipping-date {
-        padding-top: 50px !important;
-    }
-    */
-
     .top-content {
         .count-box {
             min-width: fit-content !important;
@@ -11321,15 +9630,6 @@ input[type="checkbox"].cdk-visually-hidden::after {
     .edit-modal.modal-small {
         display: none;
     }
-
-    /* UNUSED GLOBAL CLASS: mat-dialog-container - Auto-commented by script
-    .mat-dialog-container {
-        .modal-dialog {
-            margin: 0px auto;
-            padding: 0px;
-        }
-    }
-    */
 
     .modal-dialog {
         max-width: 650px !important;
@@ -11344,13 +9644,6 @@ input[type="checkbox"].cdk-visually-hidden::after {
     .receipt-note-modal {
         max-width: 100% !important;
     }
-
-    /* UNUSED GLOBAL CLASS: po-preview-modal - Auto-commented by script
-    .po-preview-modal {
-        max-width: 100% !important;
-        width: 900px !important;
-    }
-    */
 }
 
 @media (max-width: 1300px) and (min-width: 1024px) {
@@ -11360,26 +9653,9 @@ input[type="checkbox"].cdk-visually-hidden::after {
             min-height: 452px;
         }
     }
-
-    /* UNUSED GLOBAL CLASS: recurring-form - Auto-commented by script
-    .recurring-form {
-        sh-select,
-        input {
-            min-width: 130px;
-            max-width: 130px;
-        }
-    }
-    */
 }
 
-/* responsive  starts here*/
 @media (max-width: 1440px) {
-    /* UNUSED GLOBAL CLASS: font-xxlarge - Auto-commented by script
-    .font-xxlarge {
-        font-size: var(--font-size-16);
-    }
-    */
-
     .date-column {
         min-width: 100px !important;
     }
@@ -11393,23 +9669,6 @@ input[type="checkbox"].cdk-visually-hidden::after {
         }
     }
 
-    .unit-mapping-page {
-        .unit-mapping-grid-list {
-            .grid-box-content {
-                .map-unit-value {
-                    /* UNUSED GLOBAL CLASS: map-unit-select-field - Auto-commented by script
-                    .map-unit-select-field {
-                        input {
-                            width: 130px;
-                            min-width: 130px;
-                        }
-                    }
-                    */
-                }
-            }
-        }
-    }
-
     .inventory-search {
         text-field {
             .form-control {
@@ -11419,26 +9678,9 @@ input[type="checkbox"].cdk-visually-hidden::after {
     }
 }
 
-@media (max-width: 1366px) {
-    /*--- tooltip ----*/
-    /* UNUSED GLOBAL CLASS: mat-tooltip - Auto-commented by script
-    .mat-tooltip {
-        margin-bottom: 100px !important;
-    }
-    */
-}
-
 @media (max-width: 1024px) {
     .trigger-form-left-side {
         width: 30% !important;
-    }
-
-    .search-control {
-        /* UNUSED GLOBAL CLASS: mat-form-field-wrapper - Auto-commented by script
-        .mat-form-field-wrapper {
-            width: 95%;
-        }
-        */
     }
 
     .small-button {
@@ -11493,12 +9735,6 @@ input[type="checkbox"].cdk-visually-hidden::after {
         display: none !important;
     }
 
-    /* UNUSED GLOBAL CLASS: text-left-sm - Auto-commented by script
-    .text-left-sm {
-        text-align: left !important;
-    }
-    */
-
     .move-wrapper {
         float: left;
         max-width: 100% !important;
@@ -11523,13 +9759,6 @@ input[type="checkbox"].cdk-visually-hidden::after {
         }
     }
 
-    /* UNUSED GLOBAL CLASS: all-features-modal - Auto-commented by script
-    .all-features-modal {
-        width: 90%;
-        margin: 0 auto;
-    }
-    */
-
     .auto-save {
         top: 96px;
     }
@@ -11543,29 +9772,6 @@ input[type="checkbox"].cdk-visually-hidden::after {
             z-index: 99999;
         }
     }
-
-    .unit-mapping-page {
-        .unit-mapping-grid-list {
-            .grid-box-content {
-                .map-unit-value {
-                    /* UNUSED GLOBAL CLASS: map-unit-select-field - Auto-commented by script
-                    .map-unit-select-field {
-                        input {
-                            width: 87px;
-                            min-width: 87px;
-                        }
-                    }
-                    */
-                }
-            }
-        }
-
-        /* UNUSED GLOBAL CLASS: mat-autocomplete-panel - Auto-commented by script
-        .mat-autocomplete-panel {
-            min-width: 87px;
-        }
-        */
-    }
 }
 
 body.prevent-body-scroll {
@@ -11575,39 +9781,12 @@ body.prevent-body-scroll {
     .balance-options {
         height: auto !important;
         padding-bottom: 5px !important;
-
-        /* UNUSED GLOBAL CLASS: mat-select-search-input - Auto-commented by script
-        .mat-select-search-input {
-            padding: 16px 36px 16px 16px !important;
-            box-sizing: border-box !important;
-        }
-        */
-
-        /* UNUSED GLOBAL CLASS: mat-select-search-inner - Auto-commented by script
-        .mat-select-search-inner {
-            position: absolute !important;
-            top: 0 !important;
-            border-bottom-width: 1px !important;
-            border-bottom-style: solid !important;
-            z-index: 100 !important;
-            font-size: inherit !important;
-            box-shadow: none !important;
-            border-radius: var(--mat-border-radius-0) !important;
-        }
-        */
-
-        /* UNUSED GLOBAL CLASS: mat-select-search-clear - Auto-commented by script
-        .mat-select-search-clear {
-            margin-right: 0 !important;
-        }
-        */
     }
 }
 .icon-sort-asc {
     font-size: 16px !important;
 }
 .giddh-table {
-    // font-weight: var(--font-weight-semibold);
     border: 1px solid var(--color-silver);
     width: 100%;
     max-width: 100%;
@@ -11616,24 +9795,13 @@ body.prevent-body-scroll {
 
     thead > tr > td,
     thead > tr > th {
-        // vertical-align: middle;
-        // font-size: var(--font-size-15);
         border-left: none;
         border-right: none;
-        // background: var(--color-white);
-        // padding: 15px 11px;
-        // border-bottom: 1px solid var(--color-silver);
-        // font-weight: var(--font-weight-semibold);
     }
     thead > tr > th {
-        // border-top: none;
-        // white-space: nowrap;
-        // color: var(--color-blue-primary) !important;
         position: sticky !important;
         top: 0;
         z-index: 1;
-        // border-bottom: 1px solid var(--color-silver) !important;
-        // background-color: var(--color-white);
         .d-flex {
             align-items: center;
         }
@@ -11643,9 +9811,7 @@ body.prevent-body-scroll {
         }
     }
     thead > .register-table-th > th {
-        // color: var(--color-black) !important;
         border-bottom: none !important;
-        // background: var(--color-orange-light);
         font-size: var(--font-size-16);
     }
     thead > .register-sales-purchase > th {
@@ -11655,66 +9821,13 @@ body.prevent-body-scroll {
     thead > tr > th.td-search-box {
         min-width: 190px !important;
     }
-    // tbody > tr > td {
-    //     font-weight: 400;
-    //     padding: 14px 10px;
-    //     text-transform: capitalize;
-    //     border-right: none;
-    //     vertical-align: middle !important;
-    //     font-size: var(--font-size-15);
-    //     word-break: break-word;
-    //     border-left: none;
-    //     border-right: none;
-    //     font-family: var(--font-family);
-    //     border-bottom: none !important;
-    //     white-space: nowrap !important;
-    //     color: var(--color-black);
-    //     border-top: 1px solid var(--color-silver) !important;
-    //     background-color: var(--color-white) !important;
-    //     &.text-break {
-    //         white-space: normal !important;
-    //     }
-    // }
-    // tbody > tr > td:first-child {
-    //     color: var(--color-black);
-    // }
-    // thead > tr > th:first-child,
-    // tbody > tr > td:first-child {
-    //     border-left: none;
-    //     white-space: normal !important;
-    //     word-break: inherit;
-    // }
-    // tbody > tr > td.no-wrap {
-    //     white-space: nowrap !important;
-    // }
-    // thead > tr > th:last-child,
-    // tbody > tr > td:last-child {
-    //     border-right: none;
-    // }
-    // tfoot > tr > td {
-    //     vertical-align: middle !important;
-    //     font-size: var(--font-size-15);
-    //     word-break: break-word;
-    //     white-space: nowrap;
-    // }
-    // tbody tr:hover td {
-    //     background: var(--theme-primary-light) !important;
-    // }
-    // tbody tr:last-child td {
-    //     border-bottom: 1px solid var(--color-silver) !important;
-    // }
     tbody tr:last-child .status-mobile {
         border-bottom: none !important;
     }
     tbody tr:first-child .status-mobile {
         border-top: none !important;
     }
-    // .icon-sort-asc {
-    //     // color: var(--color-dark-gray);
-    //     font-size: 16px !important;
-    // }
     .icon-pointer .active-text-color {
-        // color: var(--color-blue-primary);
         opacity: 1;
     }
     .td-search-box {
@@ -11729,7 +9842,6 @@ body.prevent-body-scroll {
         }
         div i {
             margin-top: 1px;
-            // color: var(--color-blue-primary);
             padding-right: 8px;
             cursor: pointer;
             display: flex;
@@ -11742,15 +9854,12 @@ body.prevent-body-scroll {
             min-width: 100%;
             padding: 11px;
             padding-right: 40px;
-            // color: var(--color-black);
             border: none;
-            // background-color: var(--color-light-gray) !important;
             border-radius: 5px;
         }
     }
 }
 
-// Class with respect to body
 body {
     &.fixed {
         overflow-y: hidden;
@@ -11789,32 +9898,9 @@ body {
     }
 }
 
-// Temp Code to fix Only CSS Version 2 bugs
-// button {
-//     &.mat-mdc-icon-button {
-//         .mat-mdc-button-persistent-ripple {
-//             display: none;
-//         }
-//     }
-// }
-// .mat-mdc-form-field {
-//     .mat-mdc-form-field-focus-overlay {
-//         display: none;
-//     }
-//     .mdc-line-ripple {
-//         display: none;
-//     }
-//     .mdc-text-field--filled {
-//         &:not(.mdc-text-field--disabled) {
-//             background-color: var(--color-transparent) !important;
-//         }
-//     }
-// }
-
 .mobile-number-container {
     mat-select {
         width: auto;
-        // border: 1px dashed blue;
         padding: 0 !important;
         .mat-mdc-select-arrow {
             svg {
@@ -11825,7 +9911,6 @@ body {
     }
     input,
     input.mat-mdc-text-field-wrapper {
-        // border: 1px dashed red !important;
         height: inherit !important;
     }
 }
@@ -11840,7 +9925,6 @@ body {
     background: #ffa01b;
     border-radius: 50%;
 }
-
 
 .activity-log-page {
     .giddh-table.mat-mdc-table {
@@ -11861,7 +9945,7 @@ body {
                         background-color: var(--theme-primary-light) !important;
                         color: var(--color-black);
                         .mat-mdc-checkbox {
-                           --mdc-checkbox-unselected-focus-icon-color: var(--color-black) !important;
+                            --mdc-checkbox-unselected-focus-icon-color: var(--color-black) !important;
                             --mdc-checkbox-unselected-hover-icon-color: var(--color-black) !important;
                             --mdc-checkbox-unselected-icon-color: var(--color-black) !important;
                         }

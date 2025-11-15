@@ -21,7 +21,7 @@
                 [id]="activeTab !== 'aging-report' ? 'giddh-page-heading' : ''"
             >
                 <div class="container-fluid">
-                    <div class="header-content-sticky vendor-z-index mr-b15">
+                    <div class="header-content-sticky vendor-z-index mb-3">
                         <div
                             class="top-bar customer-top-bar clear-both"
                             [ngClass]="{ 'vendor-top-bar': activeTab === 'vendor' }"
@@ -176,7 +176,7 @@
                                 "
                             >
                                 <div
-                                    class="total-details-box mr-r05 d-flex justify-content-between count-box align-items-end position-relative min-width-230 max-width-378 mat-app-background"
+                                    class="total-details-box mr-1 d-flex justify-content-between count-box align-items-end position-relative min-width-230 max-width-378 mat-app-background"
                                 >
                                     <h5>
                                         <ng-container *ngIf="!selectedCheckedContacts?.length">{{
@@ -232,7 +232,7 @@
                                         </mat-menu>
                                     </div>
                                 </div>
-                                <div class="total-details-box mr-r05 border-none opening-box min-width-230 max-width-378">
+                                <div class="total-details-box mr-1 border-none opening-box min-width-230 max-width-378">
                                     <h5>
                                         {{ localeData?.opening }}
                                         <div>
@@ -265,7 +265,7 @@
                                         </div>
                                     </h5>
                                 </div>
-                                <div class="total-details-box mr-r05 border-none sales-purchase min-width-230 max-width-378">
+                                <div class="total-details-box mr-1 border-none sales-purchase min-width-230 max-width-378">
                                     <h5>
                                         <span *ngIf="activeTab === 'vendor'">{{ commonLocaleData?.app_purchase }}</span>
                                         <span *ngIf="activeTab === 'customer'">{{ commonLocaleData?.app_sales }}</span>
@@ -282,7 +282,7 @@
                                         </div>
                                     </h5>
                                 </div>
-                                <div class="total-details-box mr-r05 border-none payment-receipt min-width-230 max-width-378">
+                                <div class="total-details-box mr-1 border-none payment-receipt min-width-230 max-width-378">
                                     <h5>
                                         <span *ngIf="activeTab === 'vendor'">{{ commonLocaleData?.app_payment }}</span>
                                         <span *ngIf="activeTab === 'customer'">{{
@@ -321,7 +321,7 @@
                         </div>
                     </div>
                     <div class="contact-main customer-page on-mobile-view overflow-visible">
-                        <div class="pd-b2 mr-b1 overflow-visible">
+                        <div class="pb-4 mb-2 overflow-visible">
                             <div class="overflow-visible">
                                 <div *ngIf="!isGetAccountsInProcess">
                                     <ng-container *ngTemplateOutlet="mainTable"></ng-container>
@@ -356,17 +356,17 @@
                 </button>
             </div>
             <mat-dialog-content class="dialog-body">
-                <p class="mr-b1 font-size-15" *ngIf="messageBody.type == 'Email'">{{ localeData?.enter_subject }}:</p>
+                <p class="mb-2 font-size-15" *ngIf="messageBody.type == 'Email'">{{ localeData?.enter_subject }}:</p>
                 <text-field
                     *ngIf="messageBody.type == 'Email'"
-                    [cssClass]="'form-control mr-b1'"
+                    [cssClass]="'form-control mb-2'"
                     #subject
                     [(ngModel)]="messageBody.subject"
                     type="text"
                     [placeholder]="localeData?.enter_subject_placeholder"
                 >
                 </text-field>
-                <p class="mr-b1 font-size-15">{{ localeData?.type_message_body }}:</p>
+                <p class="mb-2 font-size-15">{{ localeData?.type_message_body }}:</p>
                 <textarea
                     matInput
                     #messageBox
@@ -375,7 +375,7 @@
                     rows="4"
                     [placeholder]="localeData?.type_message_body_placeholder"
                 ></textarea>
-                <small class="mr-t05 mr-b05 grey">{{ localeData?.tip }}</small>
+                <small class="mt-1 mb-1 grey">{{ localeData?.tip }}</small>
 
                 <div class="mt-3">
                     <mat-chip-listbox class="font-size-12">
@@ -384,11 +384,11 @@
                         }}</mat-chip>
                     </mat-chip-listbox>
                 </div>
-                <div class="mr-t4">
+                <div class="mt-5">
                     <button
                         mat-raised-button
                         color="primary"
-                        class="pull-right mr-l1"
+                        class="pull-right ml-2"
                         (click)="send('sundrycreditors')"
                         aria-label="set"
                     >
@@ -411,10 +411,10 @@
             </div>
 
             <mat-dialog-content class="dialog-body">
-                <p class="mr-b1 font-size-15" *ngIf="messageBody.type == 'Email'">{{ localeData?.enter_subject }}:</p>
+                <p class="mb-2 font-size-15" *ngIf="messageBody.type == 'Email'">{{ localeData?.enter_subject }}:</p>
                 <text-field
                     *ngIf="messageBody.type == 'Email'"
-                    [cssClass]="'form-control mr-b1'"
+                    [cssClass]="'form-control mb-2'"
                     #subject
                     [(ngModel)]="messageBody.subject"
                     type="text"
@@ -422,7 +422,7 @@
                 >
                 </text-field>
 
-                <p class="mr-b1 font-size-15">{{ localeData?.type_message_body }}:</p>
+                <p class="mb-2 font-size-15">{{ localeData?.type_message_body }}:</p>
                 <textarea
                     matInput
                     #messageBox
@@ -431,7 +431,7 @@
                     rows="4"
                     [placeholder]="localeData?.type_message_body_placeholder"
                 ></textarea>
-                <small class="mr-t05 mr-b05 grey">{{ localeData?.tip }}</small>
+                <small class="mt-1 mb-1 grey">{{ localeData?.tip }}</small>
 
                 <div class="mt-3">
                     <mat-chip-listbox class="font-size-12">
@@ -441,11 +441,11 @@
                     </mat-chip-listbox>
                 </div>
 
-                <div class="mr-t4">
+                <div class="mt-5">
                     <button
                         mat-stroked-button
                         color="primary"
-                        class="pull-right mr-l1"
+                        class="pull-right ml-2"
                         (click)="send('sundrydebtors')"
                         aria-label="set"
                     >
@@ -506,7 +506,7 @@
                                         [(ngModel)]="allSelectionModel"
                                         (ngModelChange)="toggleAllSelection(allSelectionModel)"
                                     ></mat-checkbox>
-                                    <div class="d-flex align-items-center mr-l1">
+                                    <div class="d-flex align-items-center ml-2">
                                         <div>
                                             <ng-container
                                                 *ngTemplateOutlet="
@@ -535,7 +535,7 @@
                                 [attr.data-title]="localeData?.customer"
                                 [matTooltip]="account?.name"
                                 matTooltipPosition="above"
-                                class="hover-trigger name-column-td pd-l1"
+                                class="hover-trigger name-column-td pl-2"
                                 [ngClass]="{'hover-trigger--active': selectedCheckedContacts.length}"
                             >
                                 <div class="d-flex align-items-center w-100 cursor-pointer" (dblclick)="trigger?.openMenu()">
@@ -579,7 +579,7 @@
                                             <a
                                                 *ngIf="voucherApiVersion === 2"
                                                 (click)="updateCustomerAcc('customer', account)"
-                                                class="edit-icon pl-1 pd-t05"
+                                                class="edit-icon pl-1 pt-1"
                                             >
                                                 <i class="icon-edit-pencil font-size-16 pr-1 cursor-pointer"></i>
                                             </a>
@@ -912,7 +912,7 @@
                                         [(ngModel)]="allSelectionModel"
                                         (ngModelChange)="toggleAllSelection(allSelectionModel)"
                                     ></mat-checkbox>
-                                    <div class="d-flex align-items-center mr-l1">
+                                    <div class="d-flex align-items-center ml-2">
                                         <div>
                                             <ng-container
                                                 *ngTemplateOutlet="
@@ -942,7 +942,7 @@
                                 [attr.data-title]="commonLocaleData?.app_vendor_name"
                                 [matTooltip]="account?.name"
                                 matTooltipPosition="above"
-                                class="hover-trigger name-column-td pd-l1"
+                                class="hover-trigger name-column-td pl-2"
                                 [ngClass]="{'hover-trigger--active': selectedCheckedContacts.length}"
                             >
                                 <div class="d-flex align-items-center w-100 cursor-pointer" (dblclick)="trigger?.openMenu()">
@@ -986,7 +986,7 @@
                                                 <a
                                                     *ngIf="voucherApiVersion === 2"
                                                     (click)="updateCustomerAcc('vendor', account)"
-                                                    class="edit-icon pl-1 pd-t05"
+                                                    class="edit-icon pl-1 pt-1"
                                                 >
                                                     <i class="icon-edit-pencil font-size-16 pr-1 cursor-pointer"></i>
                                                 </a>
@@ -1035,18 +1035,18 @@
                                             </div>
 
                                             <mat-dialog-content class="dialog-body">
-                                                <p class="mr-b1 mr-t15" *ngIf="messageBody.type == 'Email'">
+                                                <p class="mb-2 mt-3" *ngIf="messageBody.type == 'Email'">
                                                     {{ localeData?.enter_subject }}:
                                                 </p>
                                                 <text-field
                                                     *ngIf="messageBody.type == 'Email'"
-                                                    [cssClass]="'form-control mr-b1'"
+                                                    [cssClass]="'form-control mb-2'"
                                                     #subject
                                                     [(ngModel)]="messageBody.subject"
                                                     type="text"
                                                     [placeholder]="localeData?.enter_subject_placeholder"
                                                 ></text-field>
-                                                <p class="mr-b1 mr-t15">{{ localeData?.type_message_body }}:</p>
+                                                <p class="mb-2 mt-3">{{ localeData?.type_message_body }}:</p>
                                                 <textarea
                                                     matInput
                                                     #messageBox
@@ -1055,7 +1055,7 @@
                                                     rows="4"
                                                     [placeholder]="localeData?.type_message_body_placeholder"
                                                 ></textarea>
-                                                <small class="mr-t05 mr-b05 grey mr-t15 d-block">{{
+                                                <small class="mt-1 mb-1 grey mt-3 d-block">{{
                                                     localeData?.tip
                                                 }}</small>
 
@@ -1068,11 +1068,11 @@
                                                         >
                                                     </mat-chip-listbox>
                                                 </div>
-                                                <div class="mr-t4">
+                                                <div class="mt-5">
                                                     <button
                                                         mat-stroked-button
                                                         color="primary"
-                                                        class="btn-sm pull-right mr-l1"
+                                                        class="btn-sm pull-right ml-2"
                                                         (click)="send('sundrycreditors')"
                                                         aria-label="set"
                                                     >
@@ -1486,7 +1486,7 @@
                 [hidePageSize]="false"
                 (page)="handlePageEvent($event);">
             </mat-paginator>
-            <section class="mr-b8"></section>
+            <section class="mb-custom-80"></section>
         </ng-container>
 
         <ng-container
@@ -1506,7 +1506,7 @@
                 [hidePageSize]="false"
                 (page)="handlePageEvent($event)">
             </mat-paginator>
-            <section class="mr-b8"></section>
+            <section class="mb-custom-80"></section>
         </ng-container>
         <div
             class="no-data"

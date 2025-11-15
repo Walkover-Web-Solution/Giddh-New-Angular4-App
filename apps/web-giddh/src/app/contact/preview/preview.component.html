@@ -10,8 +10,8 @@
         [cssClass]="'no-data'"
     ></giddh-page-loader>
     <div class="invoice-preview-wrapper d-flex full-viewport-height" *ngIf="isSearching || isLoadMore || !(getAccountsInProgress$ | async)">
-        <div class="preview-list pd-b15">
-            <div class="d-flex align-items-center column-gap-05 pd-15 w-100 list-responsive row-gap-1">
+        <div class="preview-list pb-3">
+            <div class="d-flex align-items-center column-gap-05 p-3 w-100 list-responsive row-gap-1">
                 <div class="position-relative search-field flex-grow-1">
                     <text-field
                         class="width-inherit"
@@ -44,7 +44,7 @@
                                         <span class="font-size-12 title-text">
                                             {{ item?.uniqueName }}
                                         </span>
-                                        <p class="text-light pd-r3 text-wrap">
+                                        <p class="text-light pr-5 text-wrap">
                                             {{ item?.name }}
                                         </p>
                                     </div>
@@ -79,10 +79,10 @@
                         class="table-header-sticky"
                     >
                         <mat-tab [label]="localeData?.statement">
-                            <div class="wrapper-background bg-light-gray pd-1 pd-t05 pd-b05 overflow-auto">
+                            <div class="wrapper-background bg-light-gray p-2 pt-1 pb-1 overflow-auto">
                                 <div class="account-statement-wrapper h-100">
                                     <mat-card
-                                        class=" pd-15 mat-card-wrapper"
+                                        class=" p-3 mat-card-wrapper"
                                         *ngIf="selectedContact?.uniqueName && !isContactNotFound"
                                     >
                                         <account-statement
@@ -99,7 +99,7 @@
                             </div>
                         </mat-tab>
                         <mat-tab [label]="localeData?.transaction">
-                            <div class="wrapper-background bg-light-gray pd-1 overflow-auto">
+                            <div class="wrapper-background bg-light-gray p-2 overflow-auto">
                                 <div class="account-statement-wrapper">
                                     <mat-card>
                                         <ledger-statement
@@ -119,14 +119,14 @@
                         <mat-tab [label]="localeData?.account_details">
                             <div class="wrapper-background bg-light-gray d-flex flex-column overflow-auto">
                                 <div
-                                    class="account-details-wrapper w-100 pd-t15 pd-b15 pd-l05 pd-r05 flex-grow-1 d-flex flex-column"
+                                    class="account-details-wrapper w-100 pt-3 pb-3 pl-1 pr-1 flex-grow-1 d-flex flex-column"
                                 >
                                     <div class="no-data" *ngIf="updateAccountInProcess$ | async">
                                         <giddh-page-loader></giddh-page-loader>
                                     </div>
                                     <mat-card *ngIf="!(updateAccountInProcess$ | async)">
                                         <div
-                                            class=" pd-15 flex-grow-1"
+                                            class=" p-3 flex-grow-1"
                                             *ngIf="
                                                 !(updateAccountInProcess$ | async) &&
                                                 (activeAccount$ | async) &&

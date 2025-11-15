@@ -32,33 +32,6 @@
     }
 }
 
-/*---- report-filter-chip ----*/
-// report-filters {
-//     .inventory-filter-bar {
-//         .select-multiple-chiplist-inventory {
-//             .mat-mdc-standard-chip {
-//                 color: var(--color-dark-black) !important;
-//                 background-color: var(--color-white) !important;
-//                 border: 1px solid var(--theme-primary-color) !important;
-//                 font-size: var(--font-size-12) !important;
-//                 border-radius: var(--mat-border-radius-4) !important;
-//             }
-//         }
-//     }
-// }
-
-/*---- inventory-stock ----*/
-// .back-btn-align {
-//     .mdc-button {
-//         .mdc-button__label {
-//             display: flex;
-//             align-items: center;
-//             column-gap: 2px;
-//         }
-//     }
-// }
-
-/*---- inventory-sidebar ----*/
 inventory-sidebar {
     .mat-mdc-icon-button {
         &.mat-mdc-button-base {
@@ -67,7 +40,6 @@ inventory-sidebar {
     }
 }
 
-/*---- variant ----*/
 .option-value-field {
     text-field,
     select-field {
@@ -104,7 +76,6 @@ inventory-sidebar {
             transform: translateY(-50%);
         }
     }
-    /* common text-field */
     &.text-value-field {
         text-field {
             input {
@@ -114,47 +85,11 @@ inventory-sidebar {
     }
 }
 
-// body {
-//     &.fixed {
-//         .mat-grid-wrapper {
-//             .inventory-search {
-//                 z-index: 99 !important;
-//             }
-//         }
-//     }
-// }
-
 .text-field-right {
     .select-field-input {
         text-align: right !important;
-        // border: 0;
-        // padding: 6px;
-        // background-color: transparent;
     }
 }
-
-// .inventory-report-table {
-//     .mat-mdc-table {
-//         .mat-mdc-header-row {
-//             .mat-mdc-header-cell {
-//                 .mat-mdc-icon-button.mat-mdc-button-base {
-//                     font-size: var(--font-size-15) !important;
-//                     padding: 0;
-//                 }
-//             }
-//         }
-//     }
-// }
-
-// .consumption-details-wrapper {
-//     .mat-expansion-panel {
-//         .mat-expansion-panel-header {
-//             .mat-expansion-panel-header-title {
-//                 color: var(--text-primary-color) !important;
-//             }
-//         }
-//     }
-// }
 
 .field-m-width {
     max-width: 170px;
@@ -170,11 +105,6 @@ inventory-master {
             .inventory-sub-sideabar {
                 .item-list {
                     a {
-                        // mat-list-item {
-                        //     .mdc-list-item__primary-text {
-                        //         color: var(--color-field-hover) !important;
-                        //     }
-                        // }
 
                         &.isActive {
                             mat-list-item {
@@ -190,47 +120,6 @@ inventory-master {
     }
 }
 
-/*--- branch-transfer ---*/
-// #branch-transfer-list {
-//     table {
-//         .bg-transparent {
-//             &.mat-mdc-button {
-//                 .mdc-button__label {
-//                     padding: 0 5px;
-//                 }
-//             }
-//         }
-//     }
-// }
-
-// .manage-table {
-//     table {
-//         thead {
-//             th {
-//                 &.mat-table-name {
-//                     width: 30%;
-//                 }
-
-//                 &.mat-table-id {
-//                     width: 40%;
-//                 }
-
-//                 &.mat-table-action {
-//                     width: 30%;
-//                 }
-//             }
-//         }
-//     }
-// }
-
-// Mat-Select search input
-// .mat-mdc-option {
-//     &.contains-mat-select-search {
-//         background-color: var(--color-white);
-//     }
-// }
-
-// For Bulk Stock Edit
 .bulk-stock {
     .bulk-stock-hide-show-button {
         display: flex;
@@ -263,31 +152,3 @@ inventory-master {
         }
     }
 }
-
-    /*---- create-menufacturing ----*/
-    // .consumption-details-wrapper {
-    //     .mat-expansion-panel {
-    //         .mat-expansion-panel-header {
-    //             height: 45px;
-
-    //             &.mat-expanded {
-    //                 height: 45px;
-    //             }
-    //         }
-    //     }
-    // }
-
-// Mat-Select search input
-// .mat-mdc-option {
-//     &.contains-mat-select-search {
-//         background-color: var(--color-white);
-//     }
-// }
-// Removed background-color from mat-madc-button-persistent-ripple
-// .advance-filter-button {
-//     &.mat-mdc-button {
-//         .mat-mdc-button-persistent-ripple {
-//             display: none;
-//         }
-//     }
-// }

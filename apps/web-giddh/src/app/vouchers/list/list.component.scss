@@ -1,16 +1,7 @@
-// .invoice-list {
-//     height: calc(100vh - (var(--header-height) + 30px));
-//     overflow-y: auto;
-// }
-
 .vouchers-wrapper {
     .total-wrapper {
         .total-sale {
             border-radius: var(--mat-border-radius-4);
-
-            // p {
-            //     color: var(--color-dark-gray);
-            // }
 
             &.opening-box {
                 span {
@@ -24,12 +15,6 @@
                 }
             }
 
-            // &.payment-receipt,
-            // &.closing-box {
-            //     span {
-            //         color: var(--color-dark-gray);
-            //     }
-            // }
         }
     }
 
@@ -55,16 +40,10 @@
         }
     }
 
-    // template field
     .template-design {
         max-width: 258px;
     }
 
-    /* UNUSED COMPONENT CLASS: invoice-video - Auto-commented by script
-.invoice-video {
-        display: none;
-    }
-*/
 }
 
 table {
@@ -97,7 +76,6 @@ table {
     }
 }
 
-// account-detail
 .account-detail-wrapper {
     max-width: 250px;
     margin-block: 6px;
@@ -109,21 +87,18 @@ table {
     }
 }
 
-// video link
 .video-link {
     top: 15px;
     right: 15px;
     z-index: 10;
 }
 
-// setting-tabs
 .tabs-box-content {
     .settings-field {
         width: 290px;
     }
 }
 
-// template 
 .template-wrapper {
     display: grid;
     grid-gap: 16px;
@@ -152,11 +127,6 @@ table {
 .ontime-delivery {
     color: var(--color-green);
 }
-
-// :host ::ng-deep select-table-column > button {
-//     height: 42px !important;
-//     padding: 0 !important;
-// }
 
 @media screen and (max-width: 1199px) {
     .vouchers-wrapper {

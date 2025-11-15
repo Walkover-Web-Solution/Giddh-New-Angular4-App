@@ -9,7 +9,6 @@
 .sh-select-dropdown {
     width: 230px;
 }
-/*td-in-searchbox_style*/
 
 .td-search-box div {
     display: flex;
@@ -21,7 +20,6 @@
 
 .td-search-box div i {
     margin-top: 1px;
-    // color: var(--text-primary-color);
     padding-right: 8px;
     cursor: pointer;
     display: flex;
@@ -56,64 +54,19 @@
     border-right: 1px solid var(--border-color);
 }
 
-/* .icon-pointer  UNUSED COMPONENT CLASS: glyphicon - Auto-commented by script
-.glyphicon {
-    cursor: pointer;
-}
-*/
-
-// .td-search-box div i:hover {
-//     color: var(--color-medium-gray);
-// }
-
 .dropdown-menu > li > a:hover {
     color: var(--text-primary-color);
     background: var(--color-border-light);
 }
-/* UNUSED COMPONENT CLASS: stock-input - Auto-commented by script
-.stock-input {
-    background-color: transparent !important;
-    border-bottom: 1px dotted var(--color-white) !important;
-    border: none;
-    width: auto;
-    padding: 0 !important;
-    height: auto;
-    text-align: center;
-    min-width: 155px;
-    color: var(--color-white);
-}
-*/
-/* UNUSED COMPONENT CLASS: inventory-stock-table - Auto-commented by script
-.inventory-stock-table input.form-control.stock-input {
-    color: var(--color-black);
-    text-align: left;
-}
-*/
+
 .table-border input.form-control.stock-input {
     color: var(--color-black);
     text-align: left;
 }
-/* UNUSED COMPONENT CLASS: footer-tr - Auto-commented by script
-.footer-tr td {
-    background-color: var(--color-border-light);
-}
-*/
+
 .total-footer {
     background-color: var(--color-white);
     display: flex;
-    /* UNUSED COMPONENT CLASS: foot-item - Auto-commented by script
-.foot-item {
-        padding: 41px;
-        h2 {
-            color: var(--color-medium-gray);
-            font-size: var(--font-size-16);
-            margin-bottom: 10px;
-        }
-        h1 {
-            font-size: var(--font-size-32);
-        }
-    }
-*/
 }
 
 .journal-voucher {
@@ -127,8 +80,6 @@
     color: var(--color-green);
 }
 
-/* class name same as what we are getting data */
-
 .journal {
     color: var(--color-green);
 }
@@ -138,17 +89,7 @@
 .debit {
     color: var(--color-orange);
 }
-/* UNUSED COMPONENT CLASS: modal-content - Auto-commented by script
-.modal-content {
-    border-radius: var(--mat-border-radius-0);
-    margin-top: 200px;
-}
-*/
-/* UNUSED COMPONENT CLASS: btn-download - Auto-commented by script
-.btn-download {
-    font-size: var(--font-size-15);
-}
-*/
+
 .btn-group.open.show {
     display: inline-flex !important;
 }
@@ -160,7 +101,6 @@
     cursor: pointer;
 }
 
-/* voucher type DDL */
 .c-3 {
     color: var(--color-white);
 }
@@ -220,23 +160,7 @@
 button[aria-expanded="true"] i {
     color: var(--color-medium-gray);
 }
-/* voucher type DDL */
 
-/* UNUSED COMPONENT CLASS: capitalize - Auto-commented by script
-.capitalize {
-    text-transform: capitalize;
-}
-*/
-/* UNUSED COMPONENT CLASS: table-border - Auto-commented by script
-.table-border {
-    border: 1px solid var(--border-color);
-}
-*/
-/* UNUSED COMPONENT CLASS: border-none - Auto-commented by script
-.border-none {
-    border: none !important;
-}
-*/
 .unit-badge {
     display: inline-block;
     min-width: 30px;
@@ -288,19 +212,6 @@ button[aria-expanded="true"] i {
 .text-primary {
     color: var(--text-primary-color);
 }
-/* UNUSED COMPONENT CLASS: bg-white - Auto-commented by script
-.bg-white {
-    background: var(--color-white);
-}
-*/
-/* UNUSED COMPONENT CLASS: btn-link-2 - Auto-commented by script
-.btn-link-2 {
-    color: var(--text-primary-color);
-}
-*/
-.mr-b100 {
-    margin-bottom: 100px;
-}
 
 .advance-icon {
     width: 36px;
@@ -325,19 +236,7 @@ button[aria-expanded="true"] i {
     padding-left: 5px;
     cursor: pointer;
 }
-/* UNUSED COMPONENT CLASS: btn-filter - Auto-commented by script
-button.btn
-.btn-filter {
-    background: var(--color-border-light);
-    border: 1px solid var(--border-color);
-    font-size: var(--font-size-15);
-    color: var(--text-primary-color);
-    display: inline-flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 4px 10px;
-}
-*/
+
 .stock-not-found {
     text-transform: none;
 }
@@ -395,12 +294,6 @@ button.btn
         align-items: flex-start;
         flex-direction: row !important;
         text-align: right;
-        /* UNUSED COMPONENT CLASS: transfer-btn - Auto-commented by script
-.transfer-btn {
-            margin-top: 0;
-            margin-right: 15px;
-        }
-*/
     }
 }
 @media (max-width: 1024px) {

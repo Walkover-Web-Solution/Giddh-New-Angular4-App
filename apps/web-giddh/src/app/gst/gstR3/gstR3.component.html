@@ -142,7 +142,7 @@
                     </div>
                 </div>
             </div>
-            <div *ngIf="isTabScreen" class="pull-right pd-r15">
+            <div *ngIf="isTabScreen" class="pull-right pr-3">
                 <ng-container *ngTemplateOutlet="watchVideoTemplateGSTR3"></ng-container>
             </div>
             <div *ngIf="isCompany && showGstFiling" class="px-1">
@@ -750,7 +750,7 @@
                                 </ng-container>
                                 <!-- Number Column Headers -->
                                 <ng-container matColumnDef="1">
-                                    <th mat-header-cell *matHeaderCellDef class="text-center pd-r190">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center pr-5">
                                         {{ commonLocaleData?.app_numbers?.one }}
                                     </th>
                                 </ng-container>
@@ -777,7 +777,7 @@
                     </div>
                 </div>
                 <div class="transactions-overview" *ngIf="selectedGstr3BTab === 'filing'">
-                    <div class="gstr-transactions-summary mr-t4 mr-b4 text-center">
+                    <div class="gstr-transactions-summary mt-5 mb-5 text-center">
                         <div class="gst-return-date">
                             <img src="assets/images/return-date.svg" />
                             <p>{{ localeData?.gstr3b?.click_proceed }}</p>
@@ -786,7 +786,7 @@
                             </button>
                         </div>
 
-                        <p *ngIf="fileReturnSucces" class="mr-t2">
+                        <p *ngIf="fileReturnSucces" class="mt-4">
                             {{ getGstReturnFieldText() }}
                         </p>
                     </div>
@@ -803,7 +803,7 @@
     ></filing-header>
 </ng-container>
 <ng-template #watchVideoTemplateGSTR3>
-    <watch-video [cssClass]="'text-primary'" [moduleName]="'GSTR3B'" class="pull-right pd-r15"></watch-video>
+    <watch-video [cssClass]="'text-primary'" [moduleName]="'GSTR3B'" class="pull-right pr-3"></watch-video>
 </ng-template>
 
 <!-- Authentication Dialog -->

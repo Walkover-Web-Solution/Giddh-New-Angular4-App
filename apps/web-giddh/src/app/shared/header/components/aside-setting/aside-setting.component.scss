@@ -26,23 +26,7 @@
         transform: rotate(45deg);
     }
 }
-/* UNUSED COMPONENT CLASS: setting-sidebar - Auto-commented by script
-:host
-.setting-sidebar {
-    position: fixed;
-    top: var(--top-distance);
-    bottom: 0;
-    min-height: 100vh;
-    background: var(--color-white);
-    width: 240px;
-    left: auto;
-    right: 0;
-    z-index: 999;
-    .aside-help-header {
-        display: none;
-    }
-}
-*/
+
 :host.in #close {
     display: block;
     position: fixed;
@@ -54,27 +38,13 @@
     cursor: pointer;
 }
 
-/* UNUSED COMPONENT CLASS: container-fluid - Auto-commented by script
-:host 
-.container-fluid {
-    padding-left: 0;
-    padding-right: 0;
-}
-*/
-
 :host .aside-pane {
     max-width: 240px;
     width: 100%;
 }
-/* UNUSED COMPONENT CLASS: aside-header - Auto-commented by script
-.aside-header {
-    background-color: var(--color-white);
-    padding: 20px 10px;
-}
-*/
+
 .aside-pane {
     padding: 0;
-    // background-color: var(--color-white);
     .aside-help-header {
         display: flex;
         justify-content: space-between;
@@ -89,18 +59,6 @@
         }
     }
 }
-/* UNUSED COMPONENT CLASS: aside-pane-form - Auto-commented by script
-.aside-pane-form {
-    background-color: var(--color-white);
-    box-shadow: 0px 3px 6px var(--color-shadow-light);
-    padding: 15px 15px;
-    height: calc(100vh - 90px);
-    overflow: auto;
-    scroll-behavior: smooth;
-    position: relative;
-    margin-top: 15px;
-}
-*/
 
 :host.setting-sidebar {
     position: fixed;
@@ -117,7 +75,6 @@
         display: none;
     }
     .aside-pane {
-        // background: var(--color-white);
         overflow: initial;
         z-index: unset;
         .aside-help-header {
@@ -127,11 +84,7 @@
             display: block;
             padding: 15px 15px 3px;
             margin-bottom: 0;
-            /*& UNUSED COMPONENT CLASS: setting-close-icon - Auto-commented by script
-.setting-close-icon {
-                padding: 15px 15px 15px;
-            }
-*/
+
             img {
                 width: 15px;
             }
@@ -160,16 +113,6 @@
                 }
             }
         }
-    }
-}
-
-::ng-deep {
-    .back-to-main-slider {
-        /* UNUSED COMPONENT CLASS: ng-star-inserted - Auto-commented by script
-.ng-star-inserted {
-            color: var(--text-primary-color);
-        }
-*/
     }
 }
 

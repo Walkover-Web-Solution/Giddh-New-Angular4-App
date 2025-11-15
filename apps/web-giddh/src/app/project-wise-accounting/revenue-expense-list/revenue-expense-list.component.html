@@ -21,7 +21,7 @@
                 <ng-container *ngTemplateOutlet="commonTemplateForIncomeAndExpense"></ng-container>
             </mat-tab>
             <mat-tab [label]="localeData?.profit_and_loss">
-                <div class=" pd-15 " *ngIf="defaultParamsValue?.projectUniqueName && selectedTabIndex === 2">
+                <div class=" p-3 " *ngIf="defaultParamsValue?.projectUniqueName && selectedTabIndex === 2">
                     <profit-loss [projectUniqueName]="defaultParamsValue.projectUniqueName" [selectedCompany]="activeCompany"></profit-loss>
                 </div>
             </mat-tab>
@@ -30,7 +30,7 @@
 </ng-container>
 
 <ng-template #commonTemplateForIncomeAndExpense>
-    <div class="section-center pd-15">
+    <div class="section-center p-3">
        <header class="d-flex align-items-center justify-content-between">
             <div class="custom-datepicker" 
                  [matMenuTriggerFor]="universalDatepicker" 
@@ -315,7 +315,7 @@
                 [hidePageSize]="false"
                 [pageIndex]="getProjectEntryListRequest.page - 1"
             ></mat-paginator>
-            <section class="mr-b8"></section>
+            <section class="mb-custom-80"></section>
         </div>
     </div>
 </ng-template>

@@ -1,6 +1,6 @@
 <ng-container appTranslate [file]="'gst'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event">
-    <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper mr-t05"
+    <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper mt-1"
         *ngIf="asideGstSidebarMenuState">
         <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
             *ngIf="asideGstSidebarMenuState">
@@ -8,7 +8,7 @@
             </tax-sidebar>
         </div>
 
-        <div class="filing-status pd-15">
+        <div class="filing-status p-3">
             <div class="py-2">
                 <div class="d-flex align-items-center">
                     <div class="form-group date-picker-invoice invoice-lock-date mb-0 custom-input-field">
@@ -79,7 +79,7 @@
                         [showFirstLastButtons]="true"
                         [hidePageSize]="false"
                     ></mat-paginator>
-                    <section class="mr-b8"></section>
+                    <section class="mb-custom-80"></section>
                 </ng-container>
                 <ng-container *ngIf="!dataSource.length && !isLoading">
                     <div class="no-data mb-5">

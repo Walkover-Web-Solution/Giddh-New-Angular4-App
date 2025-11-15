@@ -30,12 +30,12 @@ export class VoucherUtilityService {
         }];
         const headerText: string = localeData?.purchase_record_confirmation_heading;
         const headerCssClass: string = 'd-inline-block mr-1 purchase-record-confirm-header';
-        const messageCssClass: string = 'mr-b1';
-        const footerCssClass: string = 'mr-b1 text-light';
+        const messageCssClass: string = 'mb-2';
+        const footerCssClass: string = 'mb-2 text-light';
         return {
             headerText,
             headerCssClass,
-            messageText: '<span class="mr-b1 text-light">' + localeData?.purchase_record_note1 + '</span><span class="mr-b1"> ' + localeData?.purchase_record_note2 + '<span>',
+            messageText: '<span class="mb-2 text-light">' + localeData?.purchase_record_note1 + '</span><span class="mb-2"> ' + localeData?.purchase_record_note2 + '<span>',
             messageCssClass,
             footerText: localeData?.purchase_record_footer_note,
             footerCssClass,

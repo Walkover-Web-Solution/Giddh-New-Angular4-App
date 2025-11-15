@@ -38,47 +38,7 @@
     &.isVisible {
         display: block;
     }
-    /*& UNUSED COMPONENT CLASS: isFlying - Auto-commented by script
-.isFlying {
-        position: absolute;
-        z-index: 10;
-        box-shadow: 0 2px 3px 0 var(--color-shadow-light);
-        border: 1px solid var(--border-color);
-        border-radius: var(--mat-border-radius-0);
-    }
-*/
-    &:not(.isFlying),
-    &.wider {
-        .universal-members-list {
-            .item {
-                /* UNUSED COMPONENT CLASS: member-details - Auto-commented by script
-.member-details {
-                    max-width: inherit;
-                }
-*/
-            }
-        }
-    }
-    /*& UNUSED COMPONENT CLASS: isOpenFromBottom - Auto-commented by script
-.isOpenFromBottom {
-        bottom: 0;
-    }
-*/
-    /* UNUSED COMPONENT CLASS: inner - Auto-commented by script
-.inner {
-        position: relative;
-        overflow: auto;
-    }
-*/
-    // ul {
-    //     list-style: none;
-    //     margin: 0;
-    //     padding: 0;
-    // }
-    // a,
-    // a:hover {
-    //     text-decoration: none;
-    // }
+
     .universal-list-items {
         position: relative;
         overflow: auto;
@@ -106,7 +66,7 @@
                     font-size: 16px;
                 }
                 .icon-stock {
-                    filter: var(--color-image-filter-quaternary);                  
+                    filter: var(--color-image-filter-quaternary);
                 }
             }
             .item-details {
@@ -119,22 +79,13 @@
                 .width-65 {
                     width: 65%;
                 }
-                /* UNUSED COMPONENT CLASS: small-para-details - Auto-commented by script
-.small-para-details {
-                    margin: 0;
-                    width: 320px;
-                    white-space: nowrap;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                }
-*/
+
                 small {
                     font-size: var(--font-size-12);
                     color: var(--color-dark-gray);
                     display: block;
                 }
                 .command-hover-text {
-                    // color: var(--color-black);
                     right: 0;
                     text-transform: initial;
                     width: 40%;
@@ -148,7 +99,6 @@
                     white-space: initial;
                 }
             }
-            // hover effect
             &.selected {
                 background-color: var(--bg-primary-color);
                 cursor: pointer;
@@ -169,13 +119,7 @@
                 }
             }
         }
-        /* UNUSED COMPONENT CLASS: list-viewport - Auto-commented by script
-.list-viewport {
-            min-height: 520px;
-            height: 520px;
-            width: 580px;
-        }
-*/
+
     }
     .jumper-results {
         overflow: hidden;
@@ -189,13 +133,4 @@
     padding: 10px;
     font-size: 16px;
     cursor: pointer;
-    // color: var(--color-black);
 }
-
-// ::ng-deep {
-//     .jumper-results {
-//         .block {
-//             color: var(--color-black);
-//         }
-//     }
-// }

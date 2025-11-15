@@ -7,7 +7,7 @@
             <div class="search-container">
                 <div class="font-size-15">{{ localeData?.company_address_list }}</div>
                 <a
-                    class="cursor-pointer mr-l1 clear-filter-btn"
+                    class="cursor-pointer ml-2 clear-filter-btn"
                     *ngIf="searchStateInput?.value || searchAddressInput?.value || searchAddressNameInput?.value"
                     href="javascript:;"
                     (click)="resetFilter()"
@@ -198,12 +198,12 @@
                                             <i
                                                 [matTooltip]="commonLocaleData?.app_branch"
                                                 *ngIf="entity.isBranch"
-                                                class="icon-branch-icon mr-r05"
+                                                class="icon-branch-icon mr-1"
                                             ></i>
                                             <i
                                                 [matTooltip]="commonLocaleData?.app_warehouse"
                                                 *ngIf="entity.isWarehouse"
-                                                class="icon-warehouse-icon mr-r05"
+                                                class="icon-warehouse-icon mr-1"
                                             ></i>
                                             <span class="entity-alias"> {{ entity.name }} </span>
                                         </span>
@@ -254,9 +254,9 @@
         <!-- branch profile element start -->
         <div class="d-flex flex-column w-100" *ngIf="organizationType === 'BRANCH' || isConsolidatedBranch">
             <div *ngFor="let address of addresses; index as addressIndex">
-                <div class="branch-profile-address-content col-md-12 mr-b15">
-                    <div class="single-branch-detail mr-b15">
-                        <p><i class="icon-branch-icon mr-r05"></i>{{ address?.name }}</p>
+                <div class="branch-profile-address-content col-md-12 mb-3">
+                    <div class="single-branch-detail mb-3">
+                        <p><i class="icon-branch-icon mr-1"></i>{{ address?.name }}</p>
                         <div class="row">
                             <div class="col-md-4">
                                 <label>{{ commonLocaleData?.app_address }}:</label>
@@ -285,18 +285,18 @@
                             <div class="col-md-4">
                                 <div class="set-default float-left w-auto">
                                     <p class="no-selected mb-1 cursor-pointer" hidden>
-                                        <i class="icon-no-selected mr-r05"></i>{{ localeData?.set_default }}
+                                        <i class="icon-no-selected mr-1"></i>{{ localeData?.set_default }}
                                     </p>
                                     <p
                                         (click)="handleSetDefaultAddress(address)"
                                         class="selected-defualt mb-1 cursor-pointer"
                                     >
-                                        <i *ngIf="address.isDefault" class="icon-favorite-selected mr-r05"></i>
-                                        <i *ngIf="!address.isDefault" class="icon-no-selected mr-r05"></i>
+                                        <i *ngIf="address.isDefault" class="icon-favorite-selected mr-1"></i>
+                                        <i *ngIf="!address.isDefault" class="icon-no-selected mr-1"></i>
                                         {{ localeData?.set_default }}
                                     </p>
                                     <p (click)="showConfirmationModal(address)" class="cursor-pointer">
-                                        <i class="icon-unlink mr-r05"></i>{{ localeData?.unlink_address }}
+                                        <i class="icon-unlink mr-1"></i>{{ localeData?.unlink_address }}
                                     </p>
                                 </div>
                             </div>
@@ -321,7 +321,7 @@
                 (page)="handlePageEvent($event)"
                 aria-label="Select page of addresses"
             ></mat-paginator>
-            <section class="mr-b8"></section>
+            <section class="mb-custom-80"></section>
         </div>
     </div>
 </div>
@@ -378,7 +378,7 @@
                 </div>
                 <mat-dialog-content class="dialog-body">
                     <form name="newRole" novalidate autocomplete="off">
-                        <div class="modal-wrap mr-b2">
+                        <div class="modal-wrap mb-4">
                             <p>{{ localeData?.want_to_continue }}</p>
                         </div>
                         <div class="d-flex justify-content-end column-gap-1">

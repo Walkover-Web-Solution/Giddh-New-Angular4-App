@@ -17,12 +17,12 @@
                     <div class="vertical-center">{{ledgerData.companyName}}</div>
                 </div>
             </section>
-            <section class="pd-b1">
-                <div id="web-bg" class="container mr-t3">
+            <section class="pb-2">
+                <div id="web-bg" class="container mt-5">
                     <div class="row">
                         <div class="col-sm-12 col-md-3">
                             <div class="row">
-                                <div v-bind:class="{'mr-b2': isResponsive}">
+                                <div v-bind:class="{'mb-4': isResponsive}">
                                     <date-range-picker id="dateRangePicker" :range="dateRange"
                                         v-on:dateRangeChanged="onDateRangeChanged">
                                     </date-range-picker>
@@ -46,10 +46,10 @@
                     </div>
                 </div>
             </section>
-            <section class="pd-t3">
+            <section class="pt-5">
                 <!-- v-if="!isResponsive" -->
                 <div id="mob-cont" class="container">
-                    <div class="row bg-white pd-b1 pd-t1">
+                    <div class="row bg-white pb-2 pt-2">
                         <div class="col-4">
                             <div class="font-size-12 text-color">Opening</div>
                             <div v-if="legderBalanceData && legderBalanceData.forwardedBalance">
@@ -60,7 +60,7 @@
                                     'Dr' : 'Cr' }}</span>
                             </div>
                         </div>
-                        <div class="col-4 font-size-12 pd-t15">
+                        <div class="col-4 font-size-12 pt-3">
                         </div>
                         <div class="col-4 text-right">
                             <div class="font-size-12 text-color">
@@ -159,7 +159,7 @@
                                                                                 txn.particular.name}}
                                                                             </td>
                                                                             <td class="col-3 border-left position-relative "
-                                                                                v-bind:class="{'pd-r2': ledger.voucherGenerated || ledger.attachedFileUniqueName}"
+                                                                                v-bind:class="{'pr-4': ledger.voucherGenerated || ledger.attachedFileUniqueName}"
                                                                                 align="right">
                                                                                 {{txn.amount}}
                                                                                 <template
@@ -204,7 +204,7 @@
                                                         </td>
                                                     </tr>
                                                     <tr v-if="isResponsive" class="row mr-0 ml-0">
-                                                        <td colspan="12" class="col-12 text-right h32 pd-r1">
+                                                        <td colspan="12" class="col-12 text-right h32 pr-2">
                                                             <!-- | number: '1.2-2'  -->
                                                             <span class="currency-width d-block float-right">{{
                                                                 reckoningDebitTotal | currency }}</span>
@@ -276,7 +276,7 @@
                                                                                 txn.particular.name}}
                                                                             </td>
                                                                             <td class="col-3 border-left position-relative border-right"
-                                                                                v-bind:class="{'pd-r2': ledger.voucherGenerated || ledger.attachedFileUniqueName}"
+                                                                                v-bind:class="{'pr-4': ledger.voucherGenerated || ledger.attachedFileUniqueName}"
                                                                                 align="right">
                                                                                 {{txn.amount}}
                                                                                 <template
@@ -326,7 +326,7 @@
                                                         </td>
                                                     </tr>
                                                     <tr v-if="isResponsive" class="row mr-0 ml-0">
-                                                        <td colspan="12" class="col-12 text-right h32 pd-r1">
+                                                        <td colspan="12" class="col-12 text-right h32 pr-2">
                                                             <!-- | number: '1.2-2'  -->
                                                             <span
                                                                 class="currency-width d-block float-right">{{reckoningCreditTotal
@@ -343,7 +343,7 @@
                                     <table class="ledger-footer-1 float-left">
                                         <tbody>
                                             <tr class="total-col row mr-0 ml-0">
-                                                <td colspan="12" class="col-12 text-right h32 pd-r1">
+                                                <td colspan="12" class="col-12 text-right h32 pr-2">
                                                     <!-- [tooltip]="'(-) Asset ( ohh no!)'" -->
                                                     <!-- [placement]="'top'" -->
                                                     <span
@@ -356,10 +356,10 @@
                                                 </td>
                                             </tr>
                                             <tr class="total-col row mr-0 ml-0">
-                                                <td colspan="12" class="col-12 text-right h32 pd-r1">
+                                                <td colspan="12" class="col-12 text-right h32 pr-2">
                                                     <!-- | number: '1.2-2'  -->
                                                     <span
-                                                        class="border-top currency-width d-block float-right pd-t1 pd-b1">{{
+                                                        class="border-top currency-width d-block float-right pt-2 pb-2">{{
                                                         reckoningDebitTotal | currency }}</span>
                                                 </td>
                                             </tr>
@@ -368,7 +368,7 @@
                                     <table class="ledger-footer-1 float-right">
                                         <tbody>
                                             <tr class="total-col row mr-0 ml-0">
-                                                <td colspan="12" class="col-12 text-right h32 pd-r1">
+                                                <td colspan="12" class="col-12 text-right h32 pr-2">
                                                     <!-- tooltip="" [placement]="'top'" -->
                                                     <span
                                                         v-if="legderBalanceData.closingBalance && legderBalanceData.closingBalance.type === 'DEBIT'">
@@ -382,10 +382,10 @@
                                                 </td>
                                             </tr>
                                             <tr class="total-col row mr-0 ml-0">
-                                                <td colspan="12" class="col-12 text-right h32 pd-r1">
+                                                <td colspan="12" class="col-12 text-right h32 pr-2">
                                                     <!-- | number: '1.2-2'  -->
                                                     <span
-                                                        class="border-top currency-width d-block float-right pd-t1 pd-b1">{{reckoningCreditTotal
+                                                        class="border-top currency-width d-block float-right pt-2 pb-2">{{reckoningCreditTotal
                                                         | currency }}</span>
                                                 </td>
                                             </tr>
@@ -407,9 +407,9 @@
                             <h1>Total Transactions
                                 <span class="text-primary">{{ledgerData.ledgersTransactions.totalItems}}</span>
                             </h1>
-                            <span class="mr-t1 mr-r2">Dr
+                            <span class="mt-2 mr-4">Dr
                                 {{ledgerData.ledgersTransactions.debitTransactionsCount}}</span>
-                            <span class="mr-t1 mr-r2">Cr
+                            <span class="mt-2 mr-4">Cr
                                 {{ledgerData.ledgersTransactions.creditTransactionsCount}}</span>
                         </div>
                         <div class="col-3">
@@ -435,9 +435,9 @@
                                 {{legderBalanceData.debitTotal - legderBalanceData.creditTotal | currency}}
                             </h3>
                             <!-- | number:'1.2-2' -->
-                            <h1 class="mr-t05">Dr Total {{legderBalanceData.debitTotal | currency}}</h1>
+                            <h1 class="mt-1">Dr Total {{legderBalanceData.debitTotal | currency}}</h1>
                             <!-- | number:'1.2-2' -->
-                            <h1 class="mr-t05">Cr Total {{legderBalanceData.creditTotal | currency}}</h1>
+                            <h1 class="mt-1">Cr Total {{legderBalanceData.creditTotal | currency}}</h1>
                         </div>
                         <div class="col-3">
                             <h1>Closing Balance</h1>
@@ -542,7 +542,7 @@
                                 </div>
                                 <div class="col-sm-12 col-md-6">
                                     <div class="contact_form" v-show="!formSubmitted">
-                                        <h4 class="header-line mr-b2">Contact Us</h4>
+                                        <h4 class="header-line mb-4">Contact Us</h4>
                                         <p class="mb-5">For complete accounting solution for your business</p>
                                         <form novalidate name="contactForm" action="#">
                                             <div class="row">

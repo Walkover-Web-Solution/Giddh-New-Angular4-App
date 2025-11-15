@@ -22,7 +22,7 @@
                     </mat-panel-title>
                 </mat-expansion-panel-header>
                 <form [formGroup]="salesPersonForm" (ngSubmit)="onSubmit()">
-                    <div class="d-grid grid-column-3 column-gap-15 row-gap-15 mr-b15">
+                    <div class="d-grid grid-column-3 column-gap-15 row-gap-15 mb-3">
                         <div>
                             <input-field
                                 tabindex="1"
@@ -154,7 +154,7 @@
                     [hidePageSize]="false"
                     [pageIndex]="requestParams.page - 1"
                 ></mat-paginator>
-                <section class="mr-b8"></section>
+                <section class="mb-custom-80"></section>
             </ng-template>
         </section>
     </mat-dialog-content>

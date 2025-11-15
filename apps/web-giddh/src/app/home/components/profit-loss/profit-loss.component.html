@@ -42,7 +42,7 @@
             <div class="chart-div mt-auto" *ngIf="!requestInFlight">
                 <div class="clear-both mb-2 total-income">
                     <div>
-                        <span class="mr-b1 due-amount">{{ localeData?.net_profit_loss }}</span>
+                        <span class="mb-2 due-amount">{{ localeData?.net_profit_loss }}</span>
                         <span class="total-amount pull-right">
                             {{ netProfitLossType }}
                             <span class="d-inline-flex">
@@ -58,7 +58,7 @@
                 </div>
                 <div class="clear-both mb-2 total-income">
                     <div>
-                        <span class="mr-b1 due-amount">{{ localeData?.total_income }}</span>
+                        <span class="mb-2 due-amount">{{ localeData?.total_income }}</span>
                         <span class="total-amount pull-right total-expenses-text">
                             <span class="d-inline-flex">
                                 <amount-field
@@ -74,7 +74,7 @@
                 </div>
                 <div class="clear-both total-income">
                     <div>
-                        <span class="mr-b1 due-amount">{{ localeData?.total_expense }}</span>
+                        <span class="mb-2 due-amount">{{ localeData?.total_expense }}</span>
                         <span class="total-amount pull-right total-income-text">
                             <span class="d-inline-flex">
                                 <amount-field
