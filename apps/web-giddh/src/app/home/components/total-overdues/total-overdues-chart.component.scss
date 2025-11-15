@@ -10,55 +10,25 @@
     color: var(--color-red);
 }
 
-span.month-dropdown {
-    font-size: var(--font-size-12);
-    color: var(--color-dark-gray);
-    vertical-align: top;
-}
-
-.dashboard-filter .btn-group {
-    display: block;
-    line-height: 1;
-}
-
 .dashboard-filter .btn-group span {
     vertical-align: middle;
-    color: var(--color-dark-gray);
-}
-
-.underline {
-    text-decoration: underline;
 }
 
 .dashboard-filter {
     display: inline-flex;
-    color: var(--color-dark-gray);
     align-items: center;
 }
 
-.dashboard-filter .icon-collapse-icon {
-    margin-left: 8px;
-    font-size: var(--font-size-15);
-}
-
 .due-amount {
-    color: var(--color-black);
     font-size: var(--font-size-15);
     margin: 0;
     padding: 0;
 }
 
-span.icon-rupees {
-    font-size: 12px;
-}
-
-.panel-body small {
-    color: var(--color-dark-gray);
-}
 .dashboard-datepicker {
     min-width: 218px;
     border-radius: 30px;
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
 }
 .mt-auto{
     margin-top: auto;
@@ -74,41 +44,5 @@ span.icon-rupees {
                 margin-left: 15px;
             }
         }
-    }
-}
-@media (max-width: 480px) {
-    .dashboard-filter {
-        display: flex;
-        float: none !important;
-        margin-top: 10px;
-    }
-    .panel-heading {
-        align-items: baseline;
-        flex-direction: column;
-        .dashboard-filter {
-            flex-direction: row-reverse;
-            margin-top: 5px;
-            i {
-                margin-left: 15px;
-            }
-        }
-    }
-}
-@media (max-width: 360px) {
-    .due-amount {
-        font-size: var(--font-size-15);
-        display: block;
-    }
-    .vendor-due-text,
-    .customer-due-text {
-        font-size: var(--font-size-15);
-        float: none !important;
-    }
-    .panel-body small {
-        display: block;
-        float: none !important;
-    }
-    .due {
-        margin-bottom: 10px;
     }
 }

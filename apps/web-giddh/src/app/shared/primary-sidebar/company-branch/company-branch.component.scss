@@ -4,52 +4,33 @@
         padding: 0 20px;
         .input-group-text {
             padding: 8px !important;
-            color: var(--color-dark-gray);
             background-color: var(--color-light-gray);
             border: none;
             position: relative;
-            left: -1px;
+            border-top-left-radius: var(--mat-border-radius-4) !important;
+            border-bottom-left-radius: var(--mat-border-radius-4) !important;
+            border-top-right-radius: 0 !important;
+            border-bottom-right-radius: 0 !important;
+            height: 34px;
         }
         input {
             border-left: none;
             padding-left: 0 !important;
             padding-right: 6px !important;
+            color: var(--color-black);
             background-color: var(--color-light-gray) !important;
             border-top-left-radius: 0px !important;
             border-bottom-left-radius: 0px !important;
-            border-top-right-radius: 5px !important;
-            border-bottom-right-radius: 5px !important;
+            border-top-right-radius: var(--mat-border-radius-4) !important;
+            border-bottom-right-radius: var(--mat-border-radius-4) !important;
             border: none;
             &:focus {
-                border-color: var(--color-silver) !important;
-            }
-            &::placeholder {
-                color: var(--color-dark-gray) !important;
+                border-color: var(--border-color) !important;
             }
         }
-        .input-group-append {
-            font-size: var(--font-size-12);
-            color: var(--color-medium-gray);
-            right: 10px;
-            top: 0;
-            padding: 0 5px;
-            height: 36px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: var(--color-light-gray);
-            border: 1px solid var(--color-silver);
-            border-radius: 5px;
-            border-left: none;
-            border-top-left-radius: 0px !important;
-            border-bottom-left-radius: 0px !important;
-        }
+
     }
-    .total-company {
-        .company-count {
-            color: var(--color-dark-gray);
-        }
-    }
+
     tab {
         position: relative;
         font-family: var(--font-family) !important;
@@ -60,12 +41,7 @@
             display: none;
         }
     }
-    tab.icon-branch1 {
-        margin: 0 -20px;
-        &::before {
-            display: none;
-        }
-    }
+
     .company-branch-opt-1 {
         .wrap-company-refresh {
             padding: 0 20px !important;
@@ -76,21 +52,11 @@
                         line-height: 12.4px;
                         font-weight: 500;
                         padding: 2px 5px;
-                        border-radius: 5px;
+                        border-radius: var(--mat-border-radius-4);
                         color: var(--color-dark-gray);
                         background-color: var(--color-border-light);
                     }
                 }
-            }
-            .btn-sky-blue {
-                padding: 5px 7px;
-                color: var(--color-white);
-                background-color: var(--color-blue-primary);
-                border: 1px solid var(--color-blue-primary);
-            }
-            .btn-sky-blue:hover {
-                background-color: var(--color-blue-primary) !important;
-                border-color: var(--color-blue-primary) !important;
             }
         }
         .company-list {
@@ -105,7 +71,7 @@
                             }
                             .branch-count {
                                 width: 50px;
-                                color: var(--color-blue-primary);
+                                color: var(--text-primary-color);
                                 padding-left: 10px;
                                 white-space: nowrap;
                             }
@@ -131,7 +97,7 @@
         }
     }
     .company-list {
-        height: calc(100vh - 285px) !important;
+        height: calc(100vh - 274px) !important;
         overflow: auto;
         margin: 0;
         padding: 0;
@@ -143,13 +109,9 @@
                 color: var(--color-dark-gray);
                 &:hover {
                     span {
-                        background-color: var(--color-blue-light);
+                        background-color: var(--theme-primary-light);
                     }
-                    .dropdown-menu {
-                        span {
-                            background-color: transparent !important;
-                        }
-                    }
+
                 }
                 &.btn-group {
                     display: flex;
@@ -157,10 +119,10 @@
                     margin-bottom: 0 !important;
                     padding: 0 20px;
                     &.active {
-                        background-color: var(--color-light-gray) !important;
+                        background-color: var(--theme-primary-light) !important;
                     }
                     &:hover {
-                        background-color: var(--color-light-gray) !important;
+                        background-color: var(--theme-primary-light) !important;
                     }
                     span {
                         white-space: normal;
@@ -181,19 +143,7 @@
                             padding: 0;
                         }
                     }
-                    &.open {
-                        background-color: var(--color-blue-light);
-                        margin: 0 -20px;
-                        p.show-more-branches {
-                            padding: 6px 15px;
-                        }
-                        li.create-branch {
-                            padding: 10px 15px;
-                        }
-                        .dropdown-toggle {
-                            padding: 0 20px;
-                        }
-                    }
+
                     .dropdown-menu {
                         position: static !important;
                         box-shadow: none;
@@ -217,7 +167,7 @@
                                     color: var(--color-dark-gray) !important;
                                 }
                                 &.head-branch {
-                                    color: var(--color-blue-primary);
+                                    color: var(--text-primary-color);
                                     .branch-company-name {
                                         max-width: 150px;
                                         text-overflow: ellipsis;
@@ -247,15 +197,13 @@
 
                             &:hover {
                                 a {
-                                    background-color: var(
-                                        --color-orange-light
-                                    ) !important;
+                                    background-color: var(--color-orange-light) !important;
                                 }
                             }
                         }
                     }
                     p.show-more-branches {
-                        color: var(--color-blue-primary);
+                        color: var(--text-primary-color);
                         padding: 10px 0;
                         text-decoration: underline;
                     }
@@ -266,16 +214,7 @@
                 }
             }
         }
-        &.company-branches-list {
-            .branch-alias,
-            .branch-company-name {
-                text-overflow: ellipsis;
-                white-space: nowrap;
-                overflow: hidden;
-                max-width: 150px;
-                padding: 3px 0;
-            }
-        }
+
         &.branch-list {
             height: calc(100vh - 250px) !important;
             ul {
@@ -292,22 +231,17 @@
                         word-break: break-all;
                         &.active {
                             color: var(--color-dark-gray) !important;
-                            background-color: var(--color-blue-light) !important;
+                            background-color: var(--theme-primary-light) !important;
                         }
                         &:hover {
                             background-color: initial !important;
                             color: var(--color-dark-gray) !important;
                         }
-                        .main-company {
-                            text-overflow: ellipsis;
-                            white-space: nowrap;
-                            overflow: hidden;
-                            max-width: 200px;
-                        }
+
                     }
                     &:hover {
                         a {
-                            background-color: var(--color-blue-light) !important;
+                            background-color: var(--theme-primary-light) !important;
                         }
                     }
                     .branch-alias,
@@ -322,142 +256,103 @@
             }
         }
     }
-   
-    .custom-tabs {
-        .icon-company-branch-connect {
-            position: absolute;
-            top: 5px;
-            left: 100px;
+
+.company-branch-opt-2 {
+    .wrap-company-refresh {
+        padding: 0 20px;
+        p {
+            span {
+                small {
+                    background: var(--color-border-light);
+                    color: var(--color-dark-gray);
+                    font-size: var(--font-size-9);
+                    line-height: 12.4px;
+                    font-weight: 700;
+                    padding: 2px 5px;
+                    border-radius: var(--mat-border-radius-4);
+                }
+            }
+        }
+        .btn-sky-text-primary {
+            padding: 0px 10px;
+            height: 30px;
         }
     }
-    .company-branch-opt-2 {
-        .wrap-company-refresh {
-            padding: 0 20px;
-            p {
+    .company-list {
+        height: calc(100vh - 292px) !important;
+        overflow-x: hidden;
+        padding: 0 !important;
+        ul {
+            position: relative;
+            li {
+                padding: 0;
+                margin: 0;
+                &:last-child {
+                    margin-bottom: 10px !important;
+                }
                 span {
-                    small {
-                        background: var(--color-border-light);
-                        color: var(--color-dark-gray);
-                        font-size: var(--font-size-9);
-                        line-height: 12.4px;
-                        font-weight: 700;
-                        padding: 2px 5px;
-                        border-radius: 5px;
+                    padding: 8px 20px;
+                    margin: 0;
+                    &.company-name {
+                        display: flex !important;
+                        align-items: center !important;
+                        justify-content: space-between !important;
+                        span {
+                            i {
+                                float: left;
+                                width: 14px;
+                            }
+
+                        }
                     }
                 }
-            }
-            .btn-sky-blue {
-                padding: 0px 10px;
-                height: 30px;
-            }
-        }
-        .company-list {
-            height: calc(100vh - 292px) !important;
-            overflow-x: hidden;
-            padding: 0 !important;
-            ul {
-                position: relative;
-                li {
-                    padding: 0;
-                    margin: 0;
-                    &:last-child {
-                        margin-bottom: 10px !important;
-                    }
-                    span {
-                        padding: 8px 20px;
-                        margin: 0;
-                        &.company-name {
-                            display: flex !important;
-                            align-items: center !important;
-                            justify-content: space-between !important;
-                            span {
-                                i {
-                                    float: left;
-                                    width: 14px;
+                &.btn-group {
+                    &.open {
+                        span {
+                            &.dropdown-toggle {
+                                padding: 8px 20px;
+                                span {
+                                    color: var(--color-dark-gray);
                                 }
-                                span.select-company-name {
-                                    float: left;
-                                    width: 100%;
+                            }
+                            &.active {
+                                background-color: var(--theme-primary-light);
+                                position: sticky;
+                                top: 0;
+                                z-index: 991;
+                            }
+
+                        }
+                        background-color: transparent !important;
+                        ul {
+                            padding: 0;
+                            li {
+                                span {
                                     padding: 0;
-                                    text-overflow: ellipsis;
-                                    white-space: nowrap;
-                                    overflow: hidden;
-                                    max-width: 150px;
-                                    padding: 3px 0;
                                 }
                             }
                         }
+
                     }
-                    &.btn-group {
-                        &.open {
-                            span {
-                                &.dropdown-toggle {
-                                    padding: 8px 20px;
-                                    span {
-                                        color: var(--color-dark-gray);
-                                    }
-                                }
-                                &.active {
-                                    background-color: var(--color-blue-light);
-                                    position: sticky;
-                                    top: 0;
-                                    z-index: 991;
-                                }
-                                .icon-down-new {
-                                    transform: rotate(180deg);
-                                }
-                            }
-                            background-color: transparent !important;
-                            ul {
-                                padding: 0;
-                                li {
-                                    span {
-                                        padding: 0;
-                                    }
-                                }
-                            }
-                            .total-branches {
-                                padding: 10px 20px;
-                                .btn-sky-blue {
-                                    width: 145px;
-                                    padding: 0px 10px;
-                                    height: 30px;
-                                }
-                            }
-                        }
-                    }
-                    a {
-                        padding: 10px 20px !important;
-                    }
+                }
+                a {
+                    padding: 10px 20px !important;
                 }
             }
         }
     }
 }
-.digit-blue {
-    color: var(--color-blue-primary) !important;
 }
-.digit-orange {
-    color: var(--color-orange) !important;
-}
+
 .icon-reload {
     color: var(--color-dark-gray);
-}
-.icon-plus,
-.icon-link-arrow {
-    width: 20px;
-    display: inline-flex;
-    margin-right: 2px;
-}
-.font-semibold {
-    font-weight: var(--font-weight-semibold);
 }
 
 ::ng-deep {
     .custom-tabs {
         .nav-link.active {
             span {
-                color: var(--color-blue-primary) !important;
+                color: var(--text-primary-color) !important;
             }
         }
     }

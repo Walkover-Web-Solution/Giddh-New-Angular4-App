@@ -1,6 +1,6 @@
 <ng-container appTranslate [file]="'gst'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event">
-    <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper mr-t05"
+    <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper mt-1"
         *ngIf="asideGstSidebarMenuState">
         <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
             *ngIf="asideGstSidebarMenuState">
@@ -8,14 +8,14 @@
             </tax-sidebar>
         </div>
 
-        <div class="filing-status pd-15">
+        <div class="filing-status p-3">
             <div class="py-2">
                 <div class="d-flex align-items-center">
                     <div class="form-group date-picker-invoice invoice-lock-date mb-0 custom-input-field">
                         <giddh-datepicker
                             [monthYearMode]="true"
                             [startView]="'multi-year'"
-                            [cssClass]="'text-center w150'"
+                            [cssClass]="'text-center width-150'"
                             [startAt]="startAt"
                             [placeholder]="date?.value"
                             [appearance]="'outline'"
@@ -68,24 +68,22 @@
                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                     </table>
-                    <div class="d-flex justify-content-end" *ngIf="pagination.totalItems > pageSizeOptions[0] && !isLoading">
-                        <mat-paginator
-                            class="mt-3"
-                            [showFirstLastButtons]="true"
-                            [pageSizeOptions]="pageSizeOptions"
-                            [pageIndex]="pageIndex"
-                            (page)="pageChanged($event)"
-                            [length]="pagination.totalItems"
-                            [pageSize]="pagination.count"
-                            [showFirstLastButtons]="true"
-                            [hidePageSize]="false"
-                        ></mat-paginator>
-                        <section class="mr-b8"></section>
-                    </div>
+                    <mat-paginator
+                        *ngIf="pagination.totalItems > pageSizeOptions[0] && !isLoading"
+                        [showFirstLastButtons]="true"
+                        [pageSizeOptions]="pageSizeOptions"
+                        [pageIndex]="pageIndex"
+                        (page)="pageChanged($event)"
+                        [length]="pagination.totalItems"
+                        [pageSize]="pagination.count"
+                        [showFirstLastButtons]="true"
+                        [hidePageSize]="false"
+                    ></mat-paginator>
+                    <section class="mb-custom-80"></section>
                 </ng-container>
                 <ng-container *ngIf="!dataSource.length && !isLoading">
                     <div class="no-data mb-5">
-                        <h1 class="mb-5">{{ commonLocaleData?.app_no_data_found }}</h1>
+                        <h2 class="mb-5">{{ commonLocaleData?.app_no_data_found }}</h2>
                     </div>
                 </ng-container>
             </div>

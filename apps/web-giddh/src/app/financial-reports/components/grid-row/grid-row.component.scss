@@ -1,60 +1,7 @@
-.tb-pl-modal-header {
-    position: absolute;
-    top: 20px;
-    left: 30%;
-    right: auto;
-    z-index: 1;
-    margin: 0px;
-    background: var(--color-white);
-    width: 50%;
-    padding: 1px;
-    box-shadow: 1px 0px 9px var(--color-shadow-light);
-}
-
-.tb-pl-modal-header-div {
-    padding: 0px;
-    border-radius: 0px;
-}
-
-.tb-pl-modal-div {
-    height: 100%;
-    padding: 0;
-}
-
-.tb-pl-custom-header {
-    border-right: 0px;
-    padding: 11px 10px 10px 10px;
-    width: 100%;
-    background: var(--color-light-gray);
-}
-.tb-pl-custom-title {
-    font-weight: var(--font-weight-semibold) !important;
-    font-size: var(--font-size-15) !important;
-}
-
-.tb-pl-padding {
-    padding: 1px;
-}
-
-.custom-detail h4 {
-    color: var(--color-dark-gray);
-    margin-top: 7px;
-    font-size: var(--font-size-15) !important;
-}
-
-.height-82px {
-    padding: 10px 10px 15px 10px;
-    border-top: 1px solid var(--color-silver);
-}
-
-ul.list-unstyled li {
-    margin-top: 7px;
-}
-
 ul.list-unstyled li a {
     color: var(--color-black);
 }
-.no-select {
+.user-select {
     -moz-user-select: none;
     -webkit-user-select: none;
     -ms-user-select: none;
@@ -72,7 +19,7 @@ ul.list-unstyled li a {
     height: 35px !important;
 }
 .trial-balance-viewport {
-    background-color: var(--color-silver);
+    background-color: var(--color-white);
 }
 .row-height {
     height: 34px;

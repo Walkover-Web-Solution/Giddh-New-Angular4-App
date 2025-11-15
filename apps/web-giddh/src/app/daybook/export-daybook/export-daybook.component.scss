@@ -1,6 +1,12 @@
-.modal-header > .close {
-    top: 10px !important;
-}
-.mat-mdc-dialog-title{
-    color: var(--color-white);
+#exportModal {
+    #export-body {
+        .clear-both {
+            .radio-inline {
+                mat-slide-toggle {
+                    position: relative;
+                    top: 8px;
+                }
+            }
+        }
+    }
 }

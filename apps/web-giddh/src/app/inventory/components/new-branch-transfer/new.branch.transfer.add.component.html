@@ -1,13 +1,13 @@
 <section class="receipt-note" autocomplete="off">
-    <div class="receipt-note-header d-flex pd-l15 pd-r15">
-        <h3 *ngIf="branchTransferMode === 'receiptnote'">Receipt Note</h3>
-        <h3 *ngIf="branchTransferMode === 'deliverynote'">Delivery Challan</h3>
+    <div class="receipt-note-header d-flex pl-3 pr-3">
+        <p *ngIf="branchTransferMode === 'receiptnote'">Receipt Note</p>
+        <p *ngIf="branchTransferMode === 'deliverynote'">Delivery Challan</p>
         <div class="close-receipt pointer" (click)="closeBranchTransferPopup()">
             <span class="icon-cross"></span>
         </div>
     </div>
     <div class="receipt-note-content">
-        <div class="receipt-note-radio-btn pd-r15 pd-l15 mr-b15" *ngIf="!editBranchTransferUniqueName">
+        <div class="receipt-note-radio-btn pr-3 pl-3 mb-3" *ngIf="!editBranchTransferUniqueName">
             <mat-radio-group name="transferType" [(ngModel)]="transferType" (change)="changeTransferType()" class="d-flex">
                 <mat-radio-button color="primary" value="products" class="mr-3">
                     Multiple Products
@@ -21,13 +21,13 @@
         <div class="mb-2" *ngIf="editBranchTransferUniqueName"></div>
         <div class="multiple-products-wrapper">
             <form #newBranchTransferForm="ngForm" novalidate="">
-                <div class="multiple-products row clearfix pd-l15 pd-r15">
+                <div class="multiple-products row clear-both pl-3 pr-3">
                     <div class="col-lg-6 col-md-8" *ngIf="branchTransferMode === 'deliverynote'">
-                        <div class="row mr-b2">
+                        <div class="row mb-4">
                             <div class="col-xl-3 col-lg-4">
                                 <label>
                                     {{ branchTransferMode === "receiptnote" ? "Date of Receipt" : "Date of Supply" }}
-                                    <span class="red-text">*</span>
+                                    <span class="text-red">*</span>
                                 </label>
                             </div>
                             <div class="col-xl-6 col-lg-8">
@@ -42,9 +42,9 @@
                                 ></giddh-datepicker>
                             </div>
                         </div>
-                        <div *ngIf="transferType === 'senders'" class="row mr-b2">
+                        <div *ngIf="transferType === 'senders'" class="row mb-4">
                             <div class="col-xl-3 col-lg-4">
-                                <label> Product's Name <span class="red-text">*</span> </label>
+                                <label> Product's Name <span class="text-red">*</span> </label>
                             </div>
                             <div class="col-xl-6 col-lg-8">
                                 <reactive-dropdown-field
@@ -59,7 +59,7 @@
                                 </reactive-dropdown-field>
                             </div>
                         </div>
-                        <div *ngIf="transferType === 'senders'" class="row mr-b2">
+                        <div *ngIf="transferType === 'senders'" class="row mb-4">
                             <div class="col-xl-3 col-lg-4">
                                 <label> SKU Code </label>
                             </div>
@@ -72,7 +72,7 @@
                                 />
                             </div>
                         </div>
-                        <div *ngIf="transferType === 'senders'" class="row mr-b2">
+                        <div *ngIf="transferType === 'senders'" class="row mb-4">
                             <div class="col-xl-3 col-lg-4">
                                 <label>
                                     <div class="d-flex wrap-hsn-sac align-items-center">
@@ -106,11 +106,11 @@
                                 />
                             </div>
                         </div>
-                        <div class="row mr-b2">
+                        <div class="row mb-4">
                             <div class="col-xl-3 col-lg-4">
-                                <label> Sender's Name <span class="red-text">*</span> </label>
+                                <label> Sender's Name <span class="text-red">*</span> </label>
                             </div>
-                            <div class="col-xl-6 col-lg-8 position-relative">
+                            <div class="col-xl-6 col-lg-8 position-relative ">
                                 <input
                                     *ngIf="(isBranch || isCompanyWithSingleBranch) && !isUpdateMode"
                                     name="sourceName"
@@ -131,9 +131,9 @@
                                 </reactive-dropdown-field>
                             </div>
                         </div>
-                        <div class="row mr-b2">
+                        <div class="row mb-4">
                             <div class="col-xl-3 col-lg-4">
-                                <label class="nowrap"> Sender's Warehouse <span class="red-text">*</span> </label>
+                                <label class="nowrap"> Sender's Warehouse <span class="text-red">*</span> </label>
                             </div>
                             <div class="col-xl-6 col-lg-8">
                                 <reactive-dropdown-field
@@ -146,7 +146,7 @@
                             </div>
                         </div>
                         <div
-                            class="row mr-b2"
+                            class="row mb-4"
                             *ngIf="
                                 branchTransfer.sources[0].warehouse.taxNumber &&
                                 branchTransfer.sources[0].warehouse?.uniqueName &&
@@ -170,7 +170,7 @@
                                 />
                             </div>
                         </div>
-                        <div class="row mr-b2">
+                        <div class="row mb-4">
                             <div class="col-xl-3 col-lg-4">
                                 <label> Sender's Address </label>
                             </div>
@@ -184,9 +184,9 @@
                                 ></textarea>
                             </div>
                         </div>
-                        <div class="row mr-b2" *ngIf="transferType !== 'senders'">
+                        <div class="row mb-4" *ngIf="transferType !== 'senders'">
                             <div class="col-xl-3 col-lg-4">
-                                <label> Receiver's Name <span class="red-text">*</span> </label>
+                                <label> Receiver's Name <span class="text-red">*</span> </label>
                                 <reactive-dropdown-field
                                     *ngIf="isUpdateMode"
                                     [name]="'destinationName'"
@@ -198,9 +198,9 @@
                                 </reactive-dropdown-field>
                             </div>
                         </div>
-                        <div class="row mr-b2" *ngIf="transferType !== 'senders'">
+                        <div class="row mb-4" *ngIf="transferType !== 'senders'">
                             <div class="col-xl-3 col-lg-4 nowrap">
-                                <label class="nowrap"> Receiver's Warehouse <span class="red-text">*</span> </label>
+                                <label class="nowrap"> Receiver's Warehouse <span class="text-red">*</span> </label>
                                 <reactive-dropdown-field
                                     [name]="'destinationWarehouse'"
                                     [enableDynamicSearch]="true"
@@ -212,7 +212,7 @@
                             </div>
                         </div>
                         <div
-                            class="row mr-b2"
+                            class="row mb-4"
                             *ngIf="
                                 branchTransfer.destinations[0].warehouse.taxNumber &&
                                 branchTransfer.destinations[0].warehouse?.uniqueName &&
@@ -236,7 +236,7 @@
                                 />
                             </div>
                         </div>
-                        <div class="row mr-b2" *ngIf="transferType !== 'senders'">
+                        <div class="row mb-4" *ngIf="transferType !== 'senders'">
                             <div class="col-xl-3 col-lg-4">
                                 <label> Receiver's Address </label>
                             </div>
@@ -252,11 +252,11 @@
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-8" *ngIf="branchTransferMode === 'receiptnote'">
-                        <div class="row mr-b2">
+                        <div class="row mb-4">
                             <div class="col-xl-3 col-lg-4">
                                 <label>
                                     {{ branchTransferMode === "receiptnote" ? "Date of Receipt" : "Date of Supply" }}
-                                    <span class="red-text">*</span>
+                                    <span class="text-red">*</span>
                                 </label>
                             </div>
                             <div class="col-xl-6 col-lg-8">
@@ -271,9 +271,9 @@
                                 ></giddh-datepicker>
                             </div>
                         </div>
-                        <div *ngIf="transferType === 'senders'" class="row mr-b2">
+                        <div *ngIf="transferType === 'senders'" class="row mb-4">
                             <div class="col-xl-3 col-lg-4">
-                                <label> Product's Name <span class="red-text">*</span> </label>
+                                <label> Product's Name <span class="text-red">*</span> </label>
                             </div>
                             <div class="col-xl-6 col-lg-8">
                                 <reactive-dropdown-field
@@ -288,7 +288,7 @@
                                 </reactive-dropdown-field>
                             </div>
                         </div>
-                        <div *ngIf="transferType === 'senders'" class="row mr-b2">
+                        <div *ngIf="transferType === 'senders'" class="row mb-4">
                             <div class="col-xl-3 col-lg-4">
                                 <label> SKU Code </label>
                             </div>
@@ -301,7 +301,7 @@
                                 />
                             </div>
                         </div>
-                        <div *ngIf="transferType === 'senders'" class="row mr-b2">
+                        <div *ngIf="transferType === 'senders'" class="row mb-4">
                             <div class="col-12">
                                 <label>
                                     <div class="d-flex wrap-hsn-sac align-items-center">
@@ -335,9 +335,9 @@
                                 />
                             </div>
                         </div>
-                        <div class="row mr-b2" *ngIf="transferType !== 'senders'">
+                        <div class="row mb-4" *ngIf="transferType !== 'senders'">
                             <div class="col-xl-3 col-lg-4 transfer-type-based">
-                                <label> Sender's Name <span class="red-text">*</span> </label>
+                                <label> Sender's Name <span class="text-red">*</span> </label>
                                 <reactive-dropdown-field
                                     [name]="'sourceName'"
                                     [enableDynamicSearch]="true"
@@ -347,7 +347,7 @@
                                     [required]="true">
                                 </reactive-dropdown-field>
                                 <i
-                                    class="icon-info text-gray"
+                                    class="icon-info text-light"
                                     *ngIf="
                                         senderWarehouses[branchTransfer.sources[0]?.uniqueName]?.length !==
                                         allWarehouses[branchTransfer.sources[0]?.uniqueName]?.length
@@ -356,9 +356,9 @@
                                 ></i>
                             </div>
                         </div>
-                        <div class="row mr-b2" *ngIf="transferType !== 'senders'">
+                        <div class="row mb-4" *ngIf="transferType !== 'senders'">
                             <div class="col-xl-3 col-lg-4">
-                                <label class="nowrap"> Sender's Warehouse <span class="red-text">*</span> </label>
+                                <label class="nowrap"> Sender's Warehouse <span class="text-red">*</span> </label>
                             </div>
                             <div class="col-xl-6 col-lg-8">
                                 <reactive-dropdown-field
@@ -380,7 +380,7 @@
                                 formFields &&
                                 formFields['taxName']
                             "
-                            class="row mr-b2"
+                            class="row mb-4"
                         >
                             <div class="col-xl-3 col-lg-4">
                                 <label> Sender's {{ formFields["taxName"].label }} </label>
@@ -398,7 +398,7 @@
                                 />
                             </div>
                         </div>
-                        <div class="row mr-b2" *ngIf="transferType !== 'senders'">
+                        <div class="row mb-4" *ngIf="transferType !== 'senders'">
                             <div class="col-xl-3 col-lg-4">
                                 <label> Sender's Address </label>
                             </div>
@@ -412,11 +412,11 @@
                                 ></textarea>
                             </div>
                         </div>
-                        <div class="row mr-b2">
+                        <div class="row mb-4">
                             <div class="col-xl-3 col-lg-4">
-                                <label> Receiver's Name <span class="red-text">*</span> </label>
+                                <label> Receiver's Name <span class="text-red">*</span> </label>
                             </div>
-                            <div class="col-xl-6 col-lg-8 position-relative">
+                            <div class="col-xl-6 col-lg-8 position-relative ">
                                 <reactive-dropdown-field
                                     *ngIf="isUpdateMode"
                                     [name]="'destinationName'"
@@ -447,9 +447,9 @@
                                 ></i>
                             </div>
                         </div>
-                        <div class="row mr-b2">
+                        <div class="row mb-4">
                             <div class="col-xl-3 col-lg-4 nowrap">
-                                <label class="nowrap"> Receiver's Warehouse <span class="red-text">*</span> </label>
+                                <label class="nowrap"> Receiver's Warehouse <span class="text-red">*</span> </label>
                             </div>
                             <div class="col-xl-6 col-lg-8">
                                 <reactive-dropdown-field
@@ -464,7 +464,7 @@
                             </div>
                         </div>
                         <div
-                            class="row mr-b2"
+                            class="row mb-4"
                             *ngIf="
                                 branchTransfer.destinations[0].warehouse.taxNumber &&
                                 branchTransfer.destinations[0].warehouse?.uniqueName &&
@@ -488,7 +488,7 @@
                                 />
                             </div>
                         </div>
-                        <div class="row mr-b2">
+                        <div class="row mb-4">
                             <div class="col-xl-3 col-lg-4">
                                 <label> Receiver's Address </label>
                             </div>
@@ -506,7 +506,7 @@
                     <div class="col-lg-6 col-md-4">
                         <div class="right-total-amount">
                             <p>Total Amount</p>
-                            <h3>{{ activeCompany?.baseCurrencySymbol }} {{ overallTotal | giddhCurrency }}</h3>
+                            <p>{{ activeCompany?.baseCurrencySymbol }} {{ overallTotal | giddhCurrency }}</p>
                         </div>
                     </div>
                 </div>
@@ -515,7 +515,7 @@
                         <table class="table basic mb-0" id="table-receipt">
                             <thead *ngIf="transferType === 'products'">
                                 <tr>
-                                    <th width="2%">#</th>
+                                    <th class="serial-no-column">#</th>
                                     <th data-title="Product Description" width="30%" class="min-wid-product">
                                         Product Description
                                     </th>
@@ -526,7 +526,7 @@
                             </thead>
                             <thead *ngIf="transferType !== 'products'">
                                 <tr>
-                                    <th width="2%">#</th>
+                                    <th class="serial-no-column">#</th>
                                     <th width="30%" *ngIf="branchTransferMode === 'deliverynote'">
                                         Receiver’s Details
                                     </th>
@@ -564,7 +564,7 @@
                                                     <label >SKU Code: </label>
                                                     <span
                                                         >{{ product.skuCode }}
-                                                        <span class="edit-icon cp">
+                                                        <span class="edit-icon cursor-pointer">
                                                             <img src="assets/images/edit-pencilicon.svg" />
                                                         </span>
                                                     </span>
@@ -648,7 +648,7 @@
                                                             ? product.hsnNumber
                                                             : product.sacNumber
                                                     }}
-                                                    <span class="edit-icon cp">
+                                                    <span class="edit-icon cursor-pointer">
                                                         <img src="assets/images/edit-pencilicon.svg" />
                                                     </span>
                                                 </span>
@@ -757,7 +757,7 @@
                                                 {{ product.stockDetails.amount | giddhCurrency }}
                                             </div>
                                         </div>
-                                        <div class="trash-icon-delete cp">
+                                        <div class="trash-icon-delete cursor-pointer">
                                             <a (click)="removeProduct(i)" *ngIf="branchTransfer.products?.length > 1"
                                                 ><i class="fa fa-trash"></i
                                             ></a>
@@ -880,7 +880,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="position-relative">
+                                    <td class="position-relative ">
                                         <div *ngIf="activeRow === i">
                                             <input
                                                 type="text"
@@ -901,7 +901,7 @@
                                                 {{ destination.warehouse.stockDetails.amount | giddhCurrency }}
                                             </div>
                                         </div>
-                                        <div class="trash-icon-delete cp">
+                                        <div class="trash-icon-delete cursor-pointer">
                                             <a
                                                 (click)="removeReceiver(i)"
                                                 *ngIf="branchTransfer.destinations?.length > 1"
@@ -1032,7 +1032,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="position-relative">
+                                    <td class="position-relative ">
                                         <div *ngIf="activeRow === i">
                                             <input
                                                 type="text"
@@ -1053,7 +1053,7 @@
                                                 {{ source.warehouse.stockDetails.amount | giddhCurrency }}
                                             </div>
                                         </div>
-                                        <div class="trash-icon-delete cp">
+                                        <div class="trash-icon-delete cursor-pointer">
                                             <a (click)="removeSender(i)" *ngIf="branchTransfer.sources?.length > 1">
                                                 <i class="fa fa-trash"></i
                                             ></a>
@@ -1075,7 +1075,7 @@
                             <tfoot id="tfoot">
                                 <tr>
                                     <td colspan="4" class="p-0">
-                                        <div class="add-new-line mr-t1">
+                                        <div class="add-new-line mt-2">
                                             <a
                                                 class="multiple-receivers"
                                                 (click)="addReceiver()"
@@ -1106,10 +1106,10 @@
                                     <td colspan="4">
                                         <section class="table-sec form-group">
                                             <div class="table-row">
-                                                <div class="table-cell bigger-dollar">
+                                                <div class="d-table-cell bigger-dollar">
                                                     <strong>Total</strong>
                                                 </div>
-                                                <div class="table-cell figure-cell">
+                                                <div class="d-table-cell figure-cell">
                                                     {{ activeCompany?.baseCurrencySymbol }}
                                                     {{ overallTotal | giddhCurrency }}
                                                 </div>
@@ -1121,9 +1121,9 @@
                         </table>
                     </div>
                     <div class="transportation-details mb-2">
-                        <h3 class="mr-b1">Transportation Details</h3>
+                        <p class="mb-2">Transportation Details</p>
                         <div class="row">
-                            <div class="col-sm-6 mr-b2">
+                            <div class="col-sm-6 mb-4">
                                 <giddh-datepicker
                                     name="dispatchedDate"
                                     [placeholder]="'Dispatched Date'"
@@ -1133,7 +1133,7 @@
                                     [appearance]="'outline'"
                                 ></giddh-datepicker>
                             </div>
-                            <div class="col-sm-6 mr-b2">
+                            <div class="col-sm-6 mb-4">
                                 <reactive-dropdown-field
                                     [placeholder]="'Transport Company'"
                                     [name]="'transporterId'"
@@ -1145,7 +1145,7 @@
                                     (createOption)="openTransporterPopupDialog()"
                                 ></reactive-dropdown-field>
                             </div>
-                            <div class="col-sm-6 mr-b2">
+                            <div class="col-sm-6 mb-4">
                                 <reactive-dropdown-field
                                     [placeholder]="'Transport Mode'"
                                     [name]="'transportMode'"
@@ -1155,7 +1155,7 @@
                                     (selectedOption)="focusVehicleNumber()"
                                 ></reactive-dropdown-field>
                             </div>
-                            <div class="col-sm-6 mr-b2">
+                            <div class="col-sm-6 mb-4">
                                 <input
                                     #vehicleNumber
                                     type="text"
@@ -1169,7 +1169,7 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-12">
-                                <h3 class="mr-b1">Note</h3>
+                                <p class="mb-2">Note</p>
                                 <textarea
                                     class="form-control"
                                     maxlength="100"
@@ -1182,12 +1182,12 @@
                         </div>
                     </div>
                 </div>
-                <section id="actionPane" class="text-center clearfix">
+                <section id="actionPane" class="text-center clear-both">
                     <div class="col-xs-12">
-                        <div class="pull-right position-relative d-flex column-gap15">
+                        <div class="pull-right position-relative d-flex column-gap-15">
                             <button
                                 type="button"
-                                mat-stroked-button class="d-inline-block v-align-middle"
+                                mat-stroked-button class="d-inline-block vertical-align-middle "
                                 [disabled]="isLoading"
                                 (click)="closeBranchTransferPopup()"
                             >
@@ -1196,7 +1196,7 @@
                             <button
                                 *ngIf="isBranch || isCompanyWithSingleBranch"
                                 type="button"
-                                mat-raised-button color="primary" class="d-inline-block v-align-middle {{
+                                mat-raised-button color="primary" class="d-inline-block vertical-align-middle {{
                                     newBranchTransferForm.invalid
                                 }}-{{ isValidSourceTaxNumber }}-{{ isValidDestinationTaxNumber }}"
                                 [disabled]="
@@ -1219,9 +1219,9 @@
 <ng-template #transporterPopupTemplate>
     <div>
         <div class="form-header">
-            <h3 class="aside-title">Manage Transporter</h3>
+            <p class="aside-title">Manage Transporter</p>
         </div>
-        <button mat-stroked-button type="button" class="mr-t05" (click)="openTransporterPopupDialog()">
+        <button mat-stroked-button type="button" class="mt-1" (click)="openTransporterPopupDialog()">
             <i class="icon-cross"></i>
         </button>
         <form #generateTransporterForm="ngForm" autocomplete="off">
@@ -1284,10 +1284,10 @@
                     >
                 </div>
                 <div class="form-group mt-3">
-                    <div class="clearfix" *ngIf="!transportEditMode">
+                    <div class="clear-both" *ngIf="!transportEditMode">
                         <button
                             mat-raised-button color="primary"
-                            class="mr-r1"
+                            class="mr-2"
                             [disabled]="generateTransporterForm.invalid"
                             [ladda]="isGenarateTransporterInProcess$ | async"
                             (click)="generateTransporter(generateTransporterForm)"
@@ -1299,10 +1299,10 @@
                             Clear
                         </button>
                     </div>
-                    <div class="clearfix" *ngIf="transportEditMode">
+                    <div class="clear-both" *ngIf="transportEditMode">
                         <button
                             mat-raised-button color="primary"
-                            class="mr-r1"
+                            class="mr-2"
                             [disabled]="generateTransporterForm.invalid"
                             [ladda]="updateTransporterInProcess$ | async"
                             (click)="updateTransporter(generateTransporterForm)"
@@ -1323,7 +1323,7 @@
                             Name
                             <div class="icon-pointer pull-right">
                                 <div
-                                    class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
+                                    class="glyphicon glyphicon-triangle-top text-light d-block font-size-9"
                                     (click)="sortButtonClicked('asc', 'transporterName')"
                                     [ngClass]="{
                                         'active-text-color':
@@ -1332,7 +1332,7 @@
                                     }"
                                 ></div>
                                 <div
-                                    class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
+                                    class="glyphicon glyphicon-triangle-bottom text-light d-block font-size-9"
                                     (click)="sortButtonClicked('desc', 'transporterName')"
                                     [ngClass]="{
                                         'active-text-color':
@@ -1346,7 +1346,7 @@
                             Transporter ID
                             <div class="icon-pointer pull-right">
                                 <div
-                                    class="glyphicon glyphicon-triangle-top text-light-2 d-block font-xxs"
+                                    class="glyphicon glyphicon-triangle-top text-light d-block font-size-9"
                                     (click)="sortButtonClicked('asc', 'transporterId')"
                                     [ngClass]="{
                                         'active-text-color':
@@ -1355,7 +1355,7 @@
                                     }"
                                 ></div>
                                 <div
-                                    class="glyphicon glyphicon-triangle-bottom text-light-2 d-block font-xxs"
+                                    class="glyphicon glyphicon-triangle-bottom text-light d-block font-size-9"
                                     (click)="sortButtonClicked('desc', 'transporterId')"
                                     [ngClass]="{
                                         'active-text-color':
@@ -1378,18 +1378,17 @@
                 </tr>
             </table>
         </div>
-        <div class="text-center mt-4 mb-5" *ngIf="transporterListDetails?.totalItems > pageSizeOptions[0]">
-            <mat-paginator
-                [length]="transporterListDetails.totalPages"
-                [pageSize]="transporterFilterRequest.count"
-                [pageIndex]="transporterFilterRequest.page - 1"
-                [pageSizeOptions]="pageSizeOptions"
-                [showFirstLastButtons]="true"
-                [hidePageSize]="false"
-                (page)="handlePageEvent($event)"
-            ></mat-paginator>
-            <section class="mr-b8"></section>
-        </div>
+        <mat-paginator
+            *ngIf="transporterListDetails?.totalItems > pageSizeOptions[0]"
+            [length]="transporterListDetails.totalPages"
+            [pageSize]="transporterFilterRequest.count"
+            [pageIndex]="transporterFilterRequest.page - 1"
+            [pageSizeOptions]="pageSizeOptions"
+            [showFirstLastButtons]="true"
+            [hidePageSize]="false"
+            (page)="handlePageEvent($event)"
+        ></mat-paginator>
+        <section class="mb-custom-80"></section>
     </div>
 </ng-template>
 <ng-template #asideMenuProductService>

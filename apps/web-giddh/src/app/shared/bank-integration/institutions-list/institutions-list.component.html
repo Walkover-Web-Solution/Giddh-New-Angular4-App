@@ -12,7 +12,7 @@
     </div>
     <giddh-page-loader *ngIf="institutionsListInProgress$ | async"></giddh-page-loader>
     <mat-dialog-content class="institutions-dialog-body dialog-body" *ngIf="!(institutionsListInProgress$ | async)">
-        <div class="w-100 container pd-t15 pd-b15">
+        <div class="w-100 container pt-3 pb-3">
             <div class="row">
                 <div class="col-12 institution-list">
                     <form [formGroup]="searchForm">

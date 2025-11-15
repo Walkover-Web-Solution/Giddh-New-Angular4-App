@@ -45,10 +45,10 @@
             align-items: center;
             display: flex;
             &:hover:after {
-                color: var(--color-blue-primary);
+                color: var(--text-primary-color);
             }
             .icon-favorite-selected {
-                color: var(--color-blue-primary);
+                color: var(--text-primary-color);
             }
         }
     }
@@ -61,12 +61,12 @@
             .action-icon {
                 display: flex;
                 align-items: center;
-                border: 1px solid var(--color-silver);
+                border: 1px solid var(--border-color);
                 a {
                     width: 34px;
                     font-size: var(--font-size-16);
                     color: var(--color-dark-gray);
-                    border-right: 1px solid var(--color-silver);
+                    border-right: 1px solid var(--border-color);
                     display: flex;
                     align-items: center;
                     justify-content: center;
@@ -81,61 +81,6 @@
                     border-right: none !important;
                 }
             }
-        }
-    }
-    &:hover {
-        td {
-            .action-icon {
-                display: flex !important;
-            }
-        }
-    }
-}
-
-@media (max-width: 768px) {
-    .giddh-table {
-        tr {
-            td {
-                &::before {
-                    left: 15px;
-                }
-            }
-        }
-    }
-}
-
-@media (max-width: 445px) {
-    .giddh-table {
-        tr {
-            td {
-                .action-icon {
-                    a {
-                        width: 100%;
-                    }
-                }
-            }
-        }
-    }
-}
-
-@media (max-width: 575px) {
-    .address-list-top {
-        display: block !important;
-        .btn-sky-blue {
-            float: right;
-            margin-top: 5px;
-        }
-    }
-}
-
-@media (min-height: 300px) and (max-height: 730px) {
-    .aside-body {
-        padding-bottom: 100px;
-    }
-    .aside-pane-form {
-        overflow: inherit;
-        &.edit-branch-mode {
-            height: calc(100vh - 90px);
         }
     }
 }

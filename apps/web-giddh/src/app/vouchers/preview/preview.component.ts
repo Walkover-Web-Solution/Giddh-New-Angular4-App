@@ -642,7 +642,7 @@ export class VouchersPreviewComponent implements OnInit, OnDestroy {
         }
         if (isLoadMore) {
             this.isLoadMore = true;
-            if (this.totalPages >= this.advanceFilters.page) {
+            if (this.totalPages > this.advanceFilters.page) {
                 if (isScrollUp) {
                     this.advanceFilters.page = this.pageNumberHistory[0] - 1;
                 } else {

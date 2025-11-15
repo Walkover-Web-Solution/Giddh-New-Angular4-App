@@ -1,29 +1,29 @@
 <div class="list-filter">
     <!-- GSTR1 -->
-    <div class="list-style d-flex justify-content-between align-items-center flex-wrap column-gap1 row-gap15" *ngIf="selectedGst === GstReport.Gstr1">
+    <div class="list-style d-flex justify-content-between align-items-center flex-wrap column-gap-1 row-gap-15" *ngIf="selectedGst === GstReport.Gstr1">
         <div class="wrap-GSTR-1-title">
             <a [routerLink]="['/gstfiling']" aria-label="back img"  class="ember-view">
-                <img src="{{ imgPath }}back.svg" class="icon icon-sm text-middle" alt="back img"  />
+                <img src="{{ imgPath }}back.svg" class="icon image-as-icon-color icon-sm text-middle" alt="back img"  />
             </a>
-            <img src="{{ imgPath }}cart.svg" class="icon gstr-icon text-middle" alt="cart img" />
+            <img src="{{ imgPath }}cart.svg" class="icon gstr-icon image-as-icon-color text-middle" alt="cart img" />
 
-            <div class="text-middle nav-top">
-                <div class="text-middle head head-font-weight d-flex align-items-center column-gap1">
+            <div class="text-vertical-align-middle nav-top">
+                <div class="text-vertical-align-middle head head-font-weight d-flex align-items-center column-gap-1">
                     {{ localeData?.gstr1_label }}
                      <div *ngIf="showDate">
                         <ng-container *ngTemplateOutlet="monthSelectionDatePicker"></ng-container>
                      </div>
                 </div>
-                <div class="font-xs text-middle normal">{{ localeData?.outward_supplies_details }}</div>
+                <div class="font-size-12 text-vertical-align-middle font-weight-regular">{{ localeData?.outward_supplies_details }}</div>
             </div>
         </div>
 
         <div class="flex-grow-1">
-            <ul class="list-inline d-flex column-gap1 align-items-center justify-content-end w-100">
+            <ul class="list-inline d-flex column-gap-1 align-items-center justify-content-end w-100">
                 <li  *ngIf="!isTabScreen">  
                     <ng-container *ngTemplateOutlet="watchVideoTemplateGSTR context: { $implicit: 'GSTR1' }"></ng-container>
                 </li>
-                <li class="d-flex column-gap1 align-items-center">
+                <li class="d-flex column-gap-1 align-items-center">
                     <button
                         mat-raised-button
                         color="primary"
@@ -40,7 +40,7 @@
                     </button>
                 </li>
 
-                <li class="d-flex column-gap1 align-items-center" *ngIf="(isCompany || isConsolidatedBranch) && showGstFiling">
+                <li class="d-flex column-gap-1 align-items-center" *ngIf="(isCompany || isConsolidatedBranch) && showGstFiling">
                     <button
                         mat-raised-button
                         color="primary"
@@ -63,7 +63,7 @@
                     </button>
                 </li>
             </ul>
-            <div *ngIf="isTabScreen" class="pull-right pd-r0">
+            <div *ngIf="isTabScreen" class="pull-right pr-0">
                 <ng-container *ngTemplateOutlet="watchVideoTemplateGSTR context: { $implicit: 'GSTR1' }"></ng-container>
             </div>
             <span class="pull-right filling-header-message" *ngIf="isCompany && showGstFiling">
@@ -78,22 +78,22 @@
     <div class="list-style d-flex justify-content-between align-items-center" *ngIf="selectedGst === GstReport.Gstr2">
         <div>
             <a href="javascript:;" aria-label="back img"  id="ember1210" class="ember-view" [routerLink]="['/gstfiling']">
-                <img src="{{ imgPath }}back.svg" class="icon icon-sm text-middle" alt="back img"  />
+                <img src="{{ imgPath }}back.svg" class="icon icon-sm image-as-icon-color text-middle" alt="back img"  />
             </a>
-            <img src="{{ imgPath }}bag.svg" class="icon gstr-icon text-middle" alt="back img"  />
-            <div class="text-middle nav-top">
-                <div class="text-middle head-font-weight d-flex align-items-center column-gap1">
+            <img src="{{ imgPath }}bag.svg" class="icon gstr-icon image-as-icon-color text-middle" alt="back img"  />
+            <div class="text-vertical-align-middle nav-top">
+                <div class="text-vertical-align-middle head-font-weight d-flex align-items-center column-gap-1">
                     {{ localeData?.gstr2_label }}
                     <div *ngIf="showDate">
                         <ng-container *ngTemplateOutlet="monthSelectionDatePicker"></ng-container>
                      </div>
                 </div>
-                <div class="font-xs text-middle normal">{{ localeData?.inward_supplies_details }}</div>
+                <div class="font-size-12 text-vertical-align-middle font-weight-regular">{{ localeData?.inward_supplies_details }}</div>
             </div>
         </div>
         <div class="d-flex flex-column">
-            <div class="d-flex column-gap1 justify-content-end align-items-center">
-                <div class="d-inline-flex align-items-center column-gap1">
+            <div class="d-flex column-gap-1 justify-content-end align-items-center">
+                <div class="d-inline-flex align-items-center column-gap-1">
                     <div *ngIf="!isTabScreen">
                         <ng-container *ngTemplateOutlet="watchVideoTemplateGSTR context: { $implicit: 'GSTR2' }"></ng-container>
                     </div>
@@ -116,7 +116,7 @@
                         </button>
                     </mat-menu>
                 </div>
-                <div *ngIf="(isCompany || isConsolidatedBranch) && showGstFiling" class="d-inline-flex column-gap1 align-items-center">
+                <div *ngIf="(isCompany || isConsolidatedBranch) && showGstFiling" class="d-inline-flex column-gap-1 align-items-center">
                     <button
                         mat-raised-button
                         color="primary"
@@ -188,7 +188,7 @@
     <giddh-datepicker
         [monthYearMode]="true"
         [startView]="'multi-year'"
-        [cssClass]="'text-center w150'"
+        [cssClass]="'text-center width-150'"
         [startAt]="startAt"
         [placeholder]="date?.value ?? '--'"
         [appearance]="'outline'"

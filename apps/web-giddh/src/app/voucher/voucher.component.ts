@@ -26,7 +26,7 @@ import { cloneDeep, find, forEach, isEqual, isUndefined, omit, orderBy, uniqBy }
 import { InvoiceSetting } from '../models/interfaces/invoice.setting.interface';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
-import { SubVoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION, SearchResultText, TCS_TDS_TAXES_TYPES, ENTRY_DESCRIPTION_LENGTH, EMAIL_REGEX_PATTERN, AdjustedVoucherType, MOBILE_NUMBER_UTIL_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_ADDRESS_JSON_URL, API_BULK_FETCH_LIMIT, BranchHierarchyType, IOption, ASIDE_PANE_CONFIG } from '../app.constant';
+import { SubVoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION, SearchResultText, TCS_TDS_TAXES_TYPES, ENTRY_DESCRIPTION_LENGTH, EMAIL_REGEX_PATTERN, AdjustedVoucherType, MOBILE_NUMBER_UTIL_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_ADDRESS_JSON_URL, API_BULK_FETCH_LIMIT, BranchHierarchyType, IOption, ASIDE_PANE_CONFIG, BREAKPOINT_SCREEN_SIZE } from '../app.constant';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { ProformaActions } from '../actions/proforma/proforma.actions';
 import { PreviousInvoicesVm, ProformaFilter, ProformaGetRequest, ProformaResponse } from '../models/api-models/proforma';
@@ -188,8 +188,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     @Output() public reloadFiles: EventEmitter<boolean> = new EventEmitter<boolean>();
     /** This will hold cancel voucher update */
     @Output() public cancelVoucherUpdate: EventEmitter<boolean> = new EventEmitter<boolean>();
-    /* This will hold if it's mobile/desktop */
-    public isMobileScreen: boolean = true;
+    /* This will hold if it's tablet */
+    public isTabletScreen: boolean = true;
     /** Stores the customer country code */
     public customerCountryCode: string = '';
     /** Invoice list array */
@@ -1647,11 +1647,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         });
 
         this.breakpointObserver
-            .observe(['(max-width: 1024px)'])
+            .observe([BREAKPOINT_SCREEN_SIZE.TABLET])
             .pipe(takeUntil(this.destroyed$))
-            .subscribe((st: BreakpointState) => {
-                this.isMobileScreen = st.matches;
-                if (!this.isMobileScreen && !this.container?.length &&
+            .subscribe((result: BreakpointState) => {
+                this.isTabletScreen = result.breakpoints[BREAKPOINT_SCREEN_SIZE.TABLET];
+                if (!this.isTabletScreen && !this.container?.length &&
                     (this.invFormData?.voucherDetails?.customerUniquename || this.invFormData?.voucherDetails?.customerName)) {
                     this.buildBulkData(this.invFormData.entries?.length, 0);
                 }
@@ -3025,10 +3025,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
         }
         if (this.accountAsideMenuState === 'in') {
-            document.querySelector('.invoice-modal-content')?.classList?.add('aside-account-create');
+            // document.querySelector('.invoice-modal-content')?.classList?.add('aside-account-create');
             document.querySelector('body').classList.add('fixed');
         } else {
-            document.querySelector('.invoice-modal-content')?.classList?.remove('aside-account-create');
+            // document.querySelector('.invoice-modal-content')?.classList?.remove('aside-account-create');
             document.querySelector('body').classList.remove('fixed');
         }
     }
@@ -8296,7 +8296,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public openProductDropdown(): void {
         if ((this.invFormData?.voucherDetails?.customerUniquename || this.invFormData?.voucherDetails?.customerName) && !this.isEinvoiceGenerated) {
             setTimeout(() => {
-                const salesSelect: any = !this.isMobileScreen ? this.selectAccount?.first : this.selectAccount?.last;
+                const salesSelect: any = !this.isTabletScreen ? this.selectAccount?.first : this.selectAccount?.last;
                 if (salesSelect) {
                     salesSelect.openDropdownPanel();
                 }
@@ -8312,7 +8312,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      */
     private focusOnDescription(): void {
         setTimeout(() => {
-            let description = !this.isMobileScreen ? this.description?.first : this.description?.last;
+            let description = !this.isTabletScreen ? this.description?.first : this.description?.last;
             if (description) {
                 description?.nativeElement?.focus();
             }
@@ -9095,7 +9095,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      */
     public closeAllDropdown(event: boolean): void {
         if (event) {
-            const salesSelect: any = !this.isMobileScreen ? this.selectAccount?.first : this.selectAccount?.last;
+            const salesSelect: any = !this.isTabletScreen ? this.selectAccount?.first : this.selectAccount?.last;
             salesSelect?.closeDropdownPanel();
             this.openAccountSelectionDropdown?.closeDropdownPanel();
             this.selectWarehouse?.closeDropdownPanel();

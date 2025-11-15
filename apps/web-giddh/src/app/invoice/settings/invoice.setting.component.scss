@@ -1,5 +1,4 @@
 .webook-list li {
-    list-style: none;
     margin-bottom: 7px;
     position: relative;
 }
@@ -85,7 +84,7 @@ input.form-control.send-alert {
 
 .send-alert a {
     padding-left: 5px;
-    color: var(--color-blue-primary);
+    color: var(--text-primary-color);
 }
 
 .p-0 {
@@ -94,10 +93,6 @@ input.form-control.send-alert {
 
 .next-step-estimate {
     margin-bottom: 10px;
-}
-
-.d-inline-flex {
-    display: inline-flex;
 }
 
 .custom-estimation,
@@ -187,8 +182,8 @@ span.viasocket a {
 }
 .delete-verified-icon {
     padding: 6px 10px;
-    border: 1px solid var(--color-silver);
-    border-radius: 5px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--mat-border-radius-4);
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -201,14 +196,13 @@ span.viasocket a {
 
 .btn-group {
     .btn {
-        border-radius: 5px !important;
+        border-radius: var(--mat-border-radius-4) !important;
     }
 }
 .input-group-addon{
     border-radius: 0 5px 5px 0 !important;
 }
 @media (max-width: 991px) {
-    /*--- custom ---*/
     .left-gap {
         margin-left: 25px;
     }
@@ -248,7 +242,7 @@ span.viasocket a {
         }
     }
 
-    .form-group.clearfix.max-width-150 {
+    .form-group.clear-both.max-width-150 {
         margin-top: 5px;
     }
     .btn-wrapper {

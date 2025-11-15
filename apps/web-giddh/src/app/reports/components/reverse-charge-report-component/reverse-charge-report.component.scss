@@ -2,12 +2,10 @@
     padding-left: 45px !important;
     width: 210px;
     &:focus {
-        border-color: var(--color-silver) !important;
+        border-color: var(--border-color) !important;
     }
 }
-.entity-dropdown {
-    width: 200px;
-}
+
 .invoice-column {
     min-width: 200px;
 }

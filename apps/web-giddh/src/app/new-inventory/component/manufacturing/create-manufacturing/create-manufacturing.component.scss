@@ -8,9 +8,6 @@
         }
         .max-width-stock {
             max-width: 1400px;
-            .section-head {
-                color: var(--color-blue-primary);
-            }
         }
         .less-than-text {
             font-size: 32px;
@@ -20,7 +17,7 @@
         }
 
         .branch-msg {
-            color: var(--color-blue-primary);
+            color: var(--text-primary-color);
             background-color: var(--color-light-gray);
             display: flex;
             justify-content: center;
@@ -30,10 +27,7 @@
         }
 
         .form-fields {
-            .max-width-230 {
-                display: block;
-                width: auto;
-            }
+
             .gap-between {
                 gap: 1rem;
             }
@@ -70,10 +64,9 @@
                 }
 
                 thead {
-                    border-bottom: 1px solid var(--color-silver);
+                    border-bottom: 1px solid var(--border-color);
                     tr {
                         th {
-                            color: var(--color-blue-primary);
                             font-weight: 500;
                         }
                     }
@@ -81,21 +74,6 @@
                 tbody {
                     tr {
                         td {
-                            &.before-line {
-                                &::before {
-                                    content: "";
-                                    position: absolute;
-                                    left: -1px;
-                                    top: 20px;
-                                    width: 14px;
-                                    height: 50px;
-                                    border: 2px solid
-                                        var(--color-silver);
-                                    border-right: 0px;
-                                    border-top: 0px;
-                                    border-radius: 3px 0 0 3px;
-                                }
-                            }
 
                             .mat-stroked-button {
                                 padding: 4px 6px !important;
@@ -120,10 +98,9 @@
                     }
                 }
                 tfoot {
-                    border-top: 1px solid var(--color-silver);
+                    border-top: 1px solid var(--border-color);
                     tr {
                         td {
-                            color: var(--color-black);
                             font-weight: 100;
                             &:nth-child(2) {
                                 text-align: right;
@@ -162,9 +139,7 @@
                     width: 10%;
                 }
             }
-            .icon-cross {
-                color: var(--color-red);
-            }
+
         }
         .total-cost-card {
             padding: 15px 0;
@@ -181,23 +156,14 @@
 
                 .col-5 {
                     flex: unset !important;
-                    & ~ .col-5 {
-                        text-align: right;
-                    }
+
                 }
             }
-        }
-        .arrow {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-weight: 600;
-            font-size: 44px;
         }
 
         .custom-card {
             padding: 12px 15px;
-            border-radius: 5px;
+            border-radius: var(--mat-border-radius-4);
             min-width: 280px;
 
             &.bg-green {
@@ -210,7 +176,7 @@
             }
             &.bg-expense {
                 background-color: var(--color-border-light);
-                color: var(--color-blue-primary);
+                color: var(--text-primary-color);
             }
             .card-head-text {
                 font-size: var(--font-size-12);
@@ -220,6 +186,16 @@
                 font-size: var(--font-size-16);
                 font-weight: 500;
             }
+        }
+    }
+}
+::ng-deep .disable-bg {
+    border: 0;
+    background-color: transparent !important;
+
+    &.mat-datepicker-input {
+        &:disabled {
+            background-color: transparent !important;
         }
     }
 }

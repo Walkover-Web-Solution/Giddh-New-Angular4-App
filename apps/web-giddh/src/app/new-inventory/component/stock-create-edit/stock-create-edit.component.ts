@@ -1175,12 +1175,14 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                     if (this.addStock) {
                         this.closeAsideEvent.emit(false);
                     } else {
+                        this.getVariantCustomFields();
                         if (this.groupList?.length) {
                             this.stockForm.stockUnitGroup.uniqueName = this.groupList[0]?.value;
                             this.stockForm.stockUnitGroup.name = this.groupList[0].label;
                         }
                     }
                 } else {
+                    this.getVariantCustomFields();
                     if (this.addStock) {
                         this.clearPageLeaveConfirmation();
                         this.queryParams = { stockUniqueName: response.body?.uniqueName };
@@ -1881,7 +1883,6 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         this.fixedAssetsAccountName = "";
         this.salesAccountName = "";
         this.customFieldsData = [];
-        this.companyCustomFields = [];
         this.inlineEditCustomField = 0;
         this.selectedTaxes = [];
         this.taxTempArray = [];
@@ -1889,7 +1890,6 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         this.processedTaxes = [];
         this.activeTabIndex = 0;
         this.resetTaxes();
-        this.getVariantCustomFields();
         this.updateCustomFieldObjectInVariant();
         setTimeout(() => {
             this.stockForm.name = "";

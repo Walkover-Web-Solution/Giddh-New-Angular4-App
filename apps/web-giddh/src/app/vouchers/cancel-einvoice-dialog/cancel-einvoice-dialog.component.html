@@ -1,10 +1,10 @@
 <div class="dialog-header">
-    <span class="font-16">{{ localeData?.cancel_e_invoice }}</span>
-    <i mat-dialog-close class="icon-cross icon-font-16"></i>
+    <span class="font-size-16">{{ localeData?.cancel_e_invoice }}</span>
+    <i mat-dialog-close class="icon-cross icon-font-size-16"></i>
 </div>
 
 <div mat-dialog-content class="dialog-body" [formGroup]="eInvoiceCancelForm">
-    <div class="d-flex row-gap15 flex-column">
+    <div class="d-flex row-gap-15 flex-column">
         <input-field
             [type]="'text'"
             [label]="commonLocaleData?.app_invoice_number"
@@ -33,8 +33,8 @@
             [required]="true"
         >
         </reactive-dropdown-field>
-        <div class="mr-b15">
-            <mat-form-field appearance="outline" class="w-100">
+        <div class="mb-3">
+            <mat-form-field appearance="outline" class="initial-height w-100">
                 <mat-label>{{ localeData?.cancel_remarks }}</mat-label>
                 <textarea
                     required
@@ -52,7 +52,7 @@
             </ng-container>
         </div>
     </div>
-    <div class="d-flex column-gap1 mr-t15">
+    <div class="d-flex column-gap-1 mt-3">
         <button
             mat-raised-button
             color="primary"

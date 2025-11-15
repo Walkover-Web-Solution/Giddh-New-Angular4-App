@@ -10,20 +10,20 @@
     </div>
 
     <ng-container *ngIf="!isLoading && vatReport?.length">
-        <div *ngFor="let report of vatReport; let i = index" class="pd-15">
+        <div *ngFor="let report of vatReport; let i = index" class=" p-3 ">
             <div class="white-box" *ngIf="i < 2">
                 <div class="d-flex justify-content-between align-items-center">
                     <p>
                         <strong class="table-heading">{{ report.section }}</strong>
                     </p>
-                    <p class="inner-table-heading">
+                    <p>
                         {{ commonLocaleData?.app_amount }}
                         ({{ activeCompany?.baseCurrency }})
                     </p>
                 </div>
                 <div class="table-responsive">
                     <table mat-table [dataSource]="report.sections"
-                        class="table basic mr-t2 on-mobile-view vat-report-table">
+                        class="table basic mt-4 on-mobile-view vat-report-table">
                         <ng-container matColumnDef="number">
                             <td mat-cell *matCellDef="let element" width="5%">
                                 {{ localeData?.box }} {{ element.order }}
@@ -49,7 +49,7 @@
                     <p>
                         <strong class="table-heading">{{ report.section }}</strong>
                     </p>
-                    <p class="inner-table-heading">
+                    <p>
                         {{ commonLocaleData?.app_amount }}
                         ({{ activeCompany?.baseCurrency }})
                     </p>
@@ -59,7 +59,7 @@
                             table-hide-title table
                             basic
                             table-border-bottom
-                            mr-t2
+                            mt-4
                             on-mobile-view
                             table-border-top
                         ">
@@ -88,10 +88,10 @@
             </div>
         </div>
         <div *ngIf="!vatReport?.length" class="no-data no-report">
-            <h1>{{ localeData?.no_vrn_available }}</h1>
+            <h2>{{ localeData?.no_vrn_available }}</h2>
         </div>
     </ng-container>
-    <div class="d-flex justify-content-end column-gap1 mt-3">
+    <div class="d-flex justify-content-end column-gap-1 mt-3">
         <button mat-raised-button color="primary" [disabled]="isLoading" (click)="submitVatReturn()">{{
             localeData?.submit_file_return }}</button>
         <button mat-stroked-button mat-dialog-close>{{ commonLocaleData?.app_cancel }}</button>
