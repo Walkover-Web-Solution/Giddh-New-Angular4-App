@@ -896,6 +896,7 @@
                                                                     (moreDetailOpen)="handleOpenMoreDetail($event)"
                                                                     [baseCurrencyDetails]="baseCurrencyDetails"
                                                                     [foreignCurrencyDetails]="foreignCurrencyDetails"
+                                                                    (closeOtherDialogMenu)="handleCloseOtherDialogMenu($event)"
                                                                     (changeTransactionType)="
                                                                         toggleTransactionType($event)
                                                                     "
@@ -1165,6 +1166,7 @@
                                                                     (changeTransactionType)="
                                                                         toggleTransactionType($event)
                                                                     "
+                                                                    (closeOtherDialogMenu)="handleCloseOtherDialogMenu($event)"
                                                                     [showTaxationDiscountBox]="
                                                                         lc.currentBlankTxn?.showTaxationDiscountBox
                                                                     "
@@ -1852,6 +1854,7 @@
                                                         isLedgerAccountAllowsMultiCurrency || particularMultiCurrency
                                                     "
                                                     [inputMaskFormat]="inputMaskFormat"
+                                                    (closeOtherDialogMenu)="handleCloseOtherDialogMenu($event)"
                                                     (moreDetailOpen)="handleOpenMoreDetail($event)"
                                                     (changeTransactionType)="toggleTransactionType($event)"
                                                     [showTaxationDiscountBox]="lc.currentBlankTxn?.showTaxationDiscountBox"
@@ -2251,6 +2254,7 @@
                                                     [isLedgerAccountAllowsMultiCurrency]="
                                                         isLedgerAccountAllowsMultiCurrency || particularMultiCurrency
                                                     "
+                                                    (closeOtherDialogMenu)="handleCloseOtherDialogMenu($event)"
                                                     (moreDetailOpen)="handleOpenMoreDetail($event)"
                                                     (changeTransactionType)="toggleTransactionType($event)"
                                                     [showTaxationDiscountBox]="lc.currentBlankTxn?.showTaxationDiscountBox"
@@ -2907,6 +2911,7 @@
                     [labelValue]="(txn?.selectedAccount?.label ?? txn?.selectedAccount?.name) | titlecase"
                     [options]="searchResults"
                     [showCreateNew]="true"
+                    (click)="hideAllDropdown(ledgerDropdownTypeEnum.ACCOUNT)"
                     [enableDynamicSearch]="true"
                     [isPaginationEnabled]="true"
                     (scrollEnd)="handleScrollEnd()"
