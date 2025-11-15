@@ -4,19 +4,20 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-<div class="no-data" *ngIf="getAccountStatementInProgress$ | async">
-    <giddh-page-loader></giddh-page-loader>
-</div>
+    <div class="no-data" *ngIf="getAccountStatementInProgress$ | async">
+        <giddh-page-loader></giddh-page-loader>
+    </div>
     <div class="common-wrapper">
         <div class="account-statement p-20 mt-4">
             <table class="w-100">
                 <tr>
                     <td width="65%" class="vertical-align-top">
-                        <address class="address-block font-18" *ngIf="responseAccountList.accountName">
+                        <address class="address-block font-size-18" *ngIf="responseAccountList.accountName">
                             <p class="font-size-20">{{ responseAccountList.accountName }}</p>
                             <ng-container *ngIf="responseAccountList.accountAddress">
                                 <p *ngIf="responseAccountList.accountAddress.address">
-                                    {{ commonLocaleData?.app_address }} : {{ responseAccountList.accountAddress.address }}
+                                    {{ commonLocaleData?.app_address }} :
+                                    {{ responseAccountList.accountAddress.address }}
                                 </p>
                                 <p *ngIf="responseAccountList.accountAddress.stateName">
                                     {{ responseAccountList.accountAddress.stateName }}
@@ -35,17 +36,19 @@
                                     {{ commonLocaleData?.app_email }} : {{ responseAccountList.accountAddress.email }}
                                 </p>
                                 <p *ngIf="responseAccountList.accountAddress.mobileNo">
-                                    {{ commonLocaleData?.app_mobile_no }} : {{ responseAccountList.accountAddress.mobileNo }}
+                                    {{ commonLocaleData?.app_mobile_no }} :
+                                    {{ responseAccountList.accountAddress.mobileNo }}
                                 </p>
                             </ng-container>
                         </address>
                     </td>
                     <td width="35%" class="vertical-align-top">
-                        <address class="address-block font-18 text-right" *ngIf="responseAccountList.companyName">
+                        <address class="address-block font-size-18 text-right" *ngIf="responseAccountList.companyName">
                             <p class="font-size-20">{{ responseAccountList.companyName }}</p>
                             <ng-container *ngIf="responseAccountList.companyGstAddress">
                                 <p *ngIf="responseAccountList.companyGstAddress.address">
-                                    {{ commonLocaleData?.app_address }} : {{ responseAccountList.companyGstAddress.address }}
+                                    {{ commonLocaleData?.app_address }} :
+                                    {{ responseAccountList.companyGstAddress.address }}
                                 </p>
                                 <p *ngIf="responseAccountList.companyGstAddress.stateName">
                                     {{ responseAccountList.companyGstAddress.stateName }}
@@ -61,10 +64,12 @@
                                     {{ responseAccountList.companyGstAddress.taxNumber }}
                                 </p>
                                 <p *ngIf="responseAccountList.companyGstAddress.email">
-                                    {{ commonLocaleData?.app_email }} : {{ responseAccountList.companyGstAddress.email }}
+                                    {{ commonLocaleData?.app_email }} :
+                                    {{ responseAccountList.companyGstAddress.email }}
                                 </p>
                                 <p *ngIf="responseAccountList.companyGstAddress.mobileNo">
-                                    {{ commonLocaleData?.app_mobile_no }} : {{ responseAccountList.companyGstAddress.mobileNo }}
+                                    {{ commonLocaleData?.app_mobile_no }} :
+                                    {{ responseAccountList.companyGstAddress.mobileNo }}
                                 </p>
                             </ng-container>
                         </address>
@@ -81,7 +86,7 @@
                             <div>
                                 <p class="font-30 text-right">{{ localeData?.statement_of_accounts }}</p>
                                 <hr class="bordered m-0" />
-                                <p class="text-right text-light font-18 line-height-22">
+                                <p class="text-right text-light font-size-18 line-height-22">
                                     {{ responseAccountList.fromDate }} <span> - </span> {{ responseAccountList.toDate }}
                                 </p>
                                 <hr class="bordered m-0" />
@@ -152,9 +157,7 @@
                                 <tr>
                                     <td class="font-size-16 text-light">{{ localeData?.balance_due }}</td>
                                     <td class="p-0 text-right">
-                                        {{
-                                            balanceDue
-                                        }}
+                                        {{ balanceDue }}
                                     </td>
                                 </tr>
                             </tfoot>
@@ -165,12 +168,14 @@
             <div class="inner-content">
                 <div class="w-100 d-flex align-items-center justify-content-between">
                     <div class="custom-datepicker-wrapper">
-                        <div class="custom-datepicker" 
-                             [matMenuTriggerFor]="universalDatepicker"
-                             #universalDatepickerTrigger="matMenuTrigger"
-                             role="button"
-                             aria-haspopup="true"
-                             aria-controls="universal-datepicker-menu">
+                        <div
+                            class="custom-datepicker"
+                            [matMenuTriggerFor]="universalDatepicker"
+                            #universalDatepickerTrigger="matMenuTrigger"
+                            role="button"
+                            aria-haspopup="true"
+                            aria-controls="universal-datepicker-menu"
+                        >
                             <input
                                 matInput
                                 type="text"
@@ -197,10 +202,10 @@
                             mat-stroked-button
                             class="mr-2"
                             [matTooltip]="commonLocaleData?.app_export"
-                            [matTooltipPosition]="'above'"  
+                            [matTooltipPosition]="'above'"
                             (click)="exportAccountStatement()"
                         >
-                            <i aria-label="export-account"class="icon-export-icon lh-0"></i>
+                            <i aria-label="export-account" class="icon-export-icon lh-0"></i>
                         </button>
                         <button
                             aria-label="filter"
@@ -208,14 +213,14 @@
                             (click)="onOpenAdvanceSearch()"
                             class="d-flex advance-search-filter icon-button-width pointer mx-0 ml-auto"
                             [matTooltip]="commonLocaleData?.app_advance_search"
-                            [matTooltipPosition]="'above'"            
+                            [matTooltipPosition]="'above'"
                         >
                             <i class="icon-advance-filter"></i>
                         </button>
                     </div>
                 </div>
                 <div class="invoice-table mt-3">
-                    <div class="table-responsive position-relative ">
+                    <div class="table-responsive position-relative">
                         <table
                             mat-table
                             [dataSource]="accountListData"
@@ -355,14 +360,12 @@
                             <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                         </table>
                         <hr class="border-grey" />
-                            <div class="d-flex justify-content-end">
-                                <span class="font-size-16 font-weight-bold p-2">{{ localeData?.balance_due }}</span>
-                                <span class="p-2">
-                                        {{
-                                            balanceDue
-                                        }}
-                                    </span>
-                            </div>
+                        <div class="d-flex justify-content-end">
+                            <span class="font-size-16 font-weight-bold p-2">{{ localeData?.balance_due }}</span>
+                            <span class="p-2">
+                                {{ balanceDue }}
+                            </span>
+                        </div>
                         <div
                             class="text-center pt-2 pb-2"
                             *ngIf="isLoading || (!isLoading && !accountListData?.length)"

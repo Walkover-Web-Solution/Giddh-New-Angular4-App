@@ -80,7 +80,7 @@
                                             [(ngModel)]="customFieldRequest.dataRange.max"
                                             [placeholder]="localeData?.max_limit"
                                             [label]="localeData?.field_max_limit"
-                                            [required]="true" 
+                                            [required]="true"
                                         ></input-field>
                                     </div>
                                 </div>
@@ -105,7 +105,7 @@
                             </div>
                             <div class="row mb-3">
                                 <div class="col-8">
-                                    <mat-form-field appearance="outline" class="w-100 no-bottom-space initial-height">
+                                    <mat-form-field appearance="outline" class="w-100 no-bottom-space">
                                         <mat-label>{{ localeData?.modules_label }}</mat-label>
                                         <mat-select
                                             name="modules"
@@ -114,9 +114,7 @@
                                             [required]="true"
                                             [multiple]="true"
                                         >
-                                            <mat-option
-                                                *ngFor="let module of fieldModules"
-                                                [value]="module?.uniqueName"
+                                            <mat-option *ngFor="let module of fieldModules" [value]="module?.uniqueName"
                                                 >{{ module.name }}
                                             </mat-option>
                                         </mat-select>
@@ -136,7 +134,10 @@
                             </div>
                             <div class="row mt-4">
                                 <div class="col-8">
-                                    <div class="d-flex align-items-center justify-content-between" *ngIf="voucherApiVersion === 2">
+                                    <div
+                                        class="d-flex align-items-center justify-content-between"
+                                        *ngIf="voucherApiVersion === 2"
+                                    >
                                         <ng-container *ngIf="customFieldUniqueName">
                                             <div class="d-flex column-gap-15">
                                                 <button

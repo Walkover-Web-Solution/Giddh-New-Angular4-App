@@ -29,9 +29,17 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+44',
         flag: '🇬🇧',
         flagImage: 'assets/images/flags/gb.png',
-        nativeName: '+44'
+        nativeName: 'United Kingdom'
     },
     // A
+    {
+        name: 'Åland Islands',
+        code: 'AX',
+        dialCode: '+358',
+        flag: '🇦🇽',
+        flagImage: 'assets/images/flags/ax.png',
+        nativeName: 'Åland'
+    },
     {
         name: 'Afghanistan',
         code: 'AF',
@@ -46,7 +54,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+355',
         flag: '🇦🇱',
         flagImage: 'assets/images/flags/al.png',
-        nativeName: '+355'
+        nativeName: 'Shqipëria'
     },
     {
         name: 'Algeria',
@@ -54,7 +62,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+213',
         flag: '🇩🇿',
         flagImage: 'assets/images/flags/dz.png',
-        nativeName: '+213'
+        nativeName: 'الجزائر'
     },
     {
         name: 'American Samoa',
@@ -62,7 +70,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+1684',
         flag: '🇦🇸',
         flagImage: 'assets/images/flags/as.png',
-        nativeName: '+1684'
+        nativeName: 'Amerika Sāmoa'
     },
     {
         name: 'Andorra',
@@ -70,7 +78,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+376',
         flag: '🇦🇩',
         flagImage: 'assets/images/flags/ad.png',
-        nativeName: '+376'
+        nativeName: 'Andorra'
     },
     {
         name: 'Angola',
@@ -78,7 +86,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+244',
         flag: '🇦🇴',
         flagImage: 'assets/images/flags/ao.png',
-        nativeName: '+244'
+        nativeName: 'Angola'
     },
     {
         name: 'Anguilla',
@@ -86,7 +94,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+1264',
         flag: '🇦🇮',
         flagImage: 'assets/images/flags/ai.png',
-        nativeName: '+1264'
+        nativeName: 'Anguilla'
     },
     {
         name: 'Antigua and Barbuda',
@@ -94,7 +102,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+1268',
         flag: '🇦🇬',
         flagImage: 'assets/images/flags/ag.png',
-        nativeName: '+1268'
+        nativeName: 'Antigua and Barbuda'
     },
     {
         name: 'Argentina',
@@ -102,7 +110,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+54',
         flag: '🇦🇷',
         flagImage: 'assets/images/flags/ar.png',
-        nativeName: '+54'
+        nativeName: 'Argentina'
     },
     {
         name: 'Armenia',
@@ -110,7 +118,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+374',
         flag: '🇦🇲',
         flagImage: 'assets/images/flags/am.png',
-        nativeName: '+374'
+        nativeName: 'Հայաստան'
     },
     {
         name: 'Aruba',
@@ -118,7 +126,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+297',
         flag: '🇦🇼',
         flagImage: 'assets/images/flags/aw.png',
-        nativeName: '+297'
+        nativeName: 'Aruba'
     },
     {
         name: 'Australia',
@@ -126,7 +134,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+61',
         flag: '🇦🇺',
         flagImage: 'assets/images/flags/au.png',
-        nativeName: '+61'
+        nativeName: 'Australia'
     },
     {
         name: 'Austria',
@@ -134,7 +142,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+43',
         flag: '🇦🇹',
         flagImage: 'assets/images/flags/at.png',
-        nativeName: '+43'
+        nativeName: 'Österreich'
     },
     {
         name: 'Azerbaijan',
@@ -142,7 +150,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+994',
         flag: '🇦🇿',
         flagImage: 'assets/images/flags/az.png',
-        nativeName: '+994'
+        nativeName: 'Azərbaycan'
     },
     // B
     {
@@ -151,7 +159,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+1242',
         flag: '🇧🇸',
         flagImage: 'assets/images/flags/bs.png',
-        nativeName: '+1242'
+        nativeName: 'The Bahamas'
     },
     {
         name: 'Bahrain',
@@ -159,7 +167,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+973',
         flag: '🇧🇭',
         flagImage: 'assets/images/flags/bh.png',
-        nativeName: '+973'
+        nativeName: 'البحرين'
     },
     {
         name: 'Bangladesh',
@@ -167,7 +175,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+880',
         flag: '🇧🇩',
         flagImage: 'assets/images/flags/bd.png',
-        nativeName: '+880'
+        nativeName: 'বাংলাদেশ'
     },
     {
         name: 'Barbados',
@@ -175,7 +183,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+1246',
         flag: '🇧🇧',
         flagImage: 'assets/images/flags/bb.png',
-        nativeName: '+1246'
+        nativeName: 'Barbados'
     },
     {
         name: 'Belarus',
@@ -183,7 +191,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+375',
         flag: '🇧🇾',
         flagImage: 'assets/images/flags/by.png',
-        nativeName: '+375'
+        nativeName: 'Беларусь'
     },
     {
         name: 'Belgium',
@@ -191,7 +199,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+32',
         flag: '🇧🇪',
         flagImage: 'assets/images/flags/be.png',
-        nativeName: '+32'
+        nativeName: 'België / Belgique'
     },
     {
         name: 'Belize',
@@ -199,7 +207,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+501',
         flag: '🇧🇿',
         flagImage: 'assets/images/flags/bz.png',
-        nativeName: '+501'
+        nativeName: 'Belize'
     },
     {
         name: 'Benin',
@@ -207,7 +215,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+229',
         flag: '🇧🇯',
         flagImage: 'assets/images/flags/bj.png',
-        nativeName: '+229'
+        nativeName: 'Bénin'
     },
     {
         name: 'Bermuda',
@@ -215,7 +223,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+1441',
         flag: '🇧🇲',
         flagImage: 'assets/images/flags/bm.png',
-        nativeName: '+1441'
+        nativeName: 'Bermuda'
     },
     {
         name: 'Bhutan',
@@ -223,7 +231,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+975',
         flag: '🇧🇹',
         flagImage: 'assets/images/flags/bt.png',
-        nativeName: '+975'
+        nativeName: 'འབྲུག'
     },
     {
         name: 'Bolivia',
@@ -231,7 +239,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+591',
         flag: '🇧🇴',
         flagImage: 'assets/images/flags/bo.png',
-        nativeName: '+591'
+        nativeName: 'Bolivia'
     },
     {
         name: 'Bosnia and Herzegovina',
@@ -239,7 +247,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+387',
         flag: '🇧🇦',
         flagImage: 'assets/images/flags/ba.png',
-        nativeName: '+387'
+        nativeName: 'Bosna i Hercegovina'
     },
     {
         name: 'Botswana',
@@ -247,7 +255,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+267',
         flag: '🇧🇼',
         flagImage: 'assets/images/flags/bw.png',
-        nativeName: '+267'
+        nativeName: 'Botswana'
     },
     {
         name: 'Brazil',
@@ -255,7 +263,15 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+55',
         flag: '🇧🇷',
         flagImage: 'assets/images/flags/br.png',
-        nativeName: '+55'
+        nativeName: 'Brasil'
+    },
+    {
+        name: 'British Indian Ocean Territory',
+        code: 'IO',
+        dialCode: '+246',
+        flag: '🇮🇴',
+        flagImage: 'assets/images/flags/io.png',
+        nativeName: 'British Indian Ocean Territory'
     },
     {
         name: 'British Virgin Islands',
@@ -271,7 +287,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+673',
         flag: '🇧🇳',
         flagImage: 'assets/images/flags/bn.png',
-        nativeName: '+673'
+        nativeName: 'Brunei Darussalam'
     },
     {
         name: 'Bulgaria',
@@ -279,7 +295,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+359',
         flag: '🇧🇬',
         flagImage: 'assets/images/flags/bg.png',
-        nativeName: '+359'
+        nativeName: 'България'
     },
     {
         name: 'Burkina Faso',
@@ -287,7 +303,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+226',
         flag: '🇧🇫',
         flagImage: 'assets/images/flags/bf.png',
-        nativeName: '+226'
+        nativeName: 'Burkina Faso'
     },
     {
         name: 'Burundi',
@@ -295,7 +311,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+257',
         flag: '🇧🇮',
         flagImage: 'assets/images/flags/bi.png',
-        nativeName: '+257'
+        nativeName: 'Burundi'
     },
     // C
     {
@@ -304,7 +320,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+855',
         flag: '🇰🇭',
         flagImage: 'assets/images/flags/kh.png',
-        nativeName: '+855'
+        nativeName: 'កម្ពុជា'
     },
     {
         name: 'Cameroon',
@@ -312,7 +328,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+237',
         flag: '🇨🇲',
         flagImage: 'assets/images/flags/cm.png',
-        nativeName: '+237'
+        nativeName: 'Cameroun'
     },
     {
         name: 'Canada',
@@ -328,7 +344,15 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+238',
         flag: '🇨🇻',
         flagImage: 'assets/images/flags/cv.png',
-        nativeName: '+238'
+        nativeName: 'Cabo Verde'
+    },
+    {
+        name: 'Caribbean Netherlands',
+        code: 'BQ',
+        dialCode: '+599',
+        flag: '🇧🇶',
+        flagImage: 'assets/images/flags/bq.png',
+        nativeName: 'Caribbean Netherlands'
     },
     {
         name: 'Cayman Islands',
@@ -336,7 +360,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+1345',
         flag: '🇰🇾',
         flagImage: 'assets/images/flags/ky.png',
-        nativeName: '+1345'
+        nativeName: 'Cayman Islands'
     },
     {
         name: 'Central African Republic',
@@ -344,7 +368,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+236',
         flag: '🇨🇫',
         flagImage: 'assets/images/flags/cf.png',
-        nativeName: '+236'
+        nativeName: 'République Centrafricaine'
     },
     {
         name: 'Chad',
@@ -352,7 +376,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+235',
         flag: '🇹🇩',
         flagImage: 'assets/images/flags/td.png',
-        nativeName: '+235'
+        nativeName: 'تشاد'
     },
     {
         name: 'Chile',
@@ -360,7 +384,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+56',
         flag: '🇨🇱',
         flagImage: 'assets/images/flags/cl.png',
-        nativeName: '+56'
+        nativeName: 'Chile'
     },
     {
         name: 'China',
@@ -368,7 +392,23 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+86',
         flag: '🇨🇳',
         flagImage: 'assets/images/flags/cn.png',
-        nativeName: '+86'
+        nativeName: '中国'
+    },
+    {
+        name: 'Christmas Island',
+        code: 'CX',
+        dialCode: '+61',
+        flag: '🇨🇽',
+        flagImage: 'assets/images/flags/cx.png',
+        nativeName: 'Christmas Island'
+    },
+    {
+        name: 'Cocos (Keeling) Islands',
+        code: 'CC',
+        dialCode: '+61',
+        flag: '🇨🇨',
+        flagImage: 'assets/images/flags/cc.png',
+        nativeName: 'Cocos (Keeling) Islands'
     },
     {
         name: 'Colombia',
@@ -376,7 +416,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+57',
         flag: '🇨🇴',
         flagImage: 'assets/images/flags/co.png',
-        nativeName: '+57'
+        nativeName: 'Colombia'
     },
     {
         name: 'Comoros',
@@ -384,7 +424,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+269',
         flag: '🇰🇲',
         flagImage: 'assets/images/flags/km.png',
-        nativeName: '+269'
+        nativeName: 'Komori'
     },
     {
         name: 'Congo',
@@ -392,7 +432,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+242',
         flag: '🇨🇬',
         flagImage: 'assets/images/flags/cg.png',
-        nativeName: '+242'
+        nativeName: 'Congo'
     },
     {
         name: 'Democratic Republic of the Congo',
@@ -400,7 +440,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+243',
         flag: '🇨🇩',
         flagImage: 'assets/images/flags/cd.png',
-        nativeName: '+243'
+        nativeName: 'République Démocratique du Congo'
     },
     {
         name: 'Cook Islands',
@@ -408,7 +448,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+682',
         flag: '🇨🇰',
         flagImage: 'assets/images/flags/ck.png',
-        nativeName: '+682'
+        nativeName: 'Cook Islands'
     },
     {
         name: 'Costa Rica',
@@ -416,7 +456,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+506',
         flag: '🇨🇷',
         flagImage: 'assets/images/flags/cr.png',
-        nativeName: '+506'
+        nativeName: 'Costa Rica'
     },
     {
         name: 'Croatia',
@@ -424,7 +464,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+385',
         flag: '🇭🇷',
         flagImage: 'assets/images/flags/hr.png',
-        nativeName: '+385'
+        nativeName: 'Hrvatska'
     },
     {
         name: 'Cuba',
@@ -432,7 +472,15 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+53',
         flag: '🇨🇺',
         flagImage: 'assets/images/flags/cu.png',
-        nativeName: '+53'
+        nativeName: 'Cuba'
+    },
+    {
+        name: 'Curaçao',
+        code: 'CW',
+        dialCode: '+599',
+        flag: '🇨🇼',
+        flagImage: 'assets/images/flags/cw.png',
+        nativeName: 'Curaçao'
     },
     {
         name: 'Cyprus',
@@ -440,7 +488,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+357',
         flag: '🇨🇾',
         flagImage: 'assets/images/flags/cy.png',
-        nativeName: '+357'
+        nativeName: 'Κύπρος'
     },
     {
         name: 'Czech Republic',
@@ -448,7 +496,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+420',
         flag: '🇨🇿',
         flagImage: 'assets/images/flags/cz.png',
-        nativeName: '+420'
+        nativeName: 'Česká republika'
     },
     // D
     {
@@ -457,7 +505,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+45',
         flag: '🇩🇰',
         flagImage: 'assets/images/flags/dk.png',
-        nativeName: '+45'
+        nativeName: 'Danmark'
     },
     {
         name: 'Djibouti',
@@ -465,7 +513,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+253',
         flag: '🇩🇯',
         flagImage: 'assets/images/flags/dj.png',
-        nativeName: '+253'
+        nativeName: 'Djibouti'
     },
     {
         name: 'Dominica',
@@ -473,7 +521,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+1767',
         flag: '🇩🇲',
         flagImage: 'assets/images/flags/dm.png',
-        nativeName: '+1767'
+        nativeName: 'Dominica'
     },
     {
         name: 'Dominican Republic',
@@ -481,7 +529,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+1809',
         flag: '🇩🇴',
         flagImage: 'assets/images/flags/do.png',
-        nativeName: '+1'
+        nativeName: 'República Dominicana'
     },
     // E
     {
@@ -490,7 +538,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+593',
         flag: '🇪🇨',
         flagImage: 'assets/images/flags/ec.png',
-        nativeName: '+593'
+        nativeName: 'Ecuador'
     },
     {
         name: 'Egypt',
@@ -498,7 +546,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+20',
         flag: '🇪🇬',
         flagImage: 'assets/images/flags/eg.png',
-        nativeName: '+20'
+        nativeName: 'مصر'
     },
     {
         name: 'El Salvador',
@@ -506,7 +554,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+503',
         flag: '🇸🇻',
         flagImage: 'assets/images/flags/sv.png',
-        nativeName: '+503'
+        nativeName: 'El Salvador'
     },
     {
         name: 'Equatorial Guinea',
@@ -514,7 +562,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+240',
         flag: '🇬🇶',
         flagImage: 'assets/images/flags/gq.png',
-        nativeName: '+240'
+        nativeName: 'Guinea Ecuatorial'
     },
     {
         name: 'Eritrea',
@@ -522,7 +570,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+291',
         flag: '🇪🇷',
         flagImage: 'assets/images/flags/er.png',
-        nativeName: '+291'
+        nativeName: 'ኤርትራ'
     },
     {
         name: 'Estonia',
@@ -530,7 +578,15 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+372',
         flag: '🇪🇪',
         flagImage: 'assets/images/flags/ee.png',
-        nativeName: '+372'
+        nativeName: 'Eesti'
+    },
+    {
+        name: 'Eswatini',
+        code: 'SZ',
+        dialCode: '+268',
+        flag: '🇸🇿',
+        flagImage: 'assets/images/flags/sz.png',
+        nativeName: 'Eswatini'
     },
     {
         name: 'Ethiopia',
@@ -538,7 +594,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+251',
         flag: '🇪🇹',
         flagImage: 'assets/images/flags/et.png',
-        nativeName: '+251'
+        nativeName: 'ኢትዮጵያ'
     },
     // F
     {
@@ -555,7 +611,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+298',
         flag: '🇫🇴',
         flagImage: 'assets/images/flags/fo.png',
-        nativeName: '+298'
+        nativeName: 'Føroyar'
     },
     {
         name: 'Fiji',
@@ -563,7 +619,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+679',
         flag: '🇫🇯',
         flagImage: 'assets/images/flags/fj.png',
-        nativeName: '+679'
+        nativeName: 'Fiji'
     },
     {
         name: 'Finland',
@@ -571,7 +627,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+358',
         flag: '🇫🇮',
         flagImage: 'assets/images/flags/fi.png',
-        nativeName: '+358'
+        nativeName: 'Suomi'
     },
     {
         name: 'France',
@@ -579,7 +635,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+33',
         flag: '🇫🇷',
         flagImage: 'assets/images/flags/fr.png',
-        nativeName: '+33'
+        nativeName: 'France'
     },
     {
         name: 'French Guiana',
@@ -587,7 +643,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+594',
         flag: '🇬🇫',
         flagImage: 'assets/images/flags/gf.png',
-        nativeName: '+594'
+        nativeName: 'Guyane française'
     },
     {
         name: 'French Polynesia',
@@ -595,7 +651,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+689',
         flag: '🇵🇫',
         flagImage: 'assets/images/flags/pf.png',
-        nativeName: '+689'
+        nativeName: 'Polynésie française'
     },
     // G
     {
@@ -604,7 +660,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+241',
         flag: '🇬🇦',
         flagImage: 'assets/images/flags/ga.png',
-        nativeName: '+241'
+        nativeName: 'Gabon'
     },
     {
         name: 'Gambia',
@@ -612,7 +668,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+220',
         flag: '🇬🇲',
         flagImage: 'assets/images/flags/gm.png',
-        nativeName: '+220'
+        nativeName: 'Gambia'
     },
     {
         name: 'Georgia',
@@ -620,7 +676,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+995',
         flag: '🇬🇪',
         flagImage: 'assets/images/flags/ge.png',
-        nativeName: '+995'
+        nativeName: 'საქართველო'
     },
     {
         name: 'Germany',
@@ -628,7 +684,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+49',
         flag: '🇩🇪',
         flagImage: 'assets/images/flags/de.png',
-        nativeName: '+49'
+        nativeName: 'Deutschland'
     },
     {
         name: 'Ghana',
@@ -636,7 +692,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+233',
         flag: '🇬🇭',
         flagImage: 'assets/images/flags/gh.png',
-        nativeName: '+233'
+        nativeName: 'Ghana'
     },
     {
         name: 'Gibraltar',
@@ -644,7 +700,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+350',
         flag: '🇬🇮',
         flagImage: 'assets/images/flags/gi.png',
-        nativeName: '+350'
+        nativeName: 'Gibraltar'
     },
     {
         name: 'Greece',
@@ -652,7 +708,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+30',
         flag: '🇬🇷',
         flagImage: 'assets/images/flags/gr.png',
-        nativeName: '+30'
+        nativeName: 'Ελλάδα'
     },
     {
         name: 'Greenland',
@@ -660,7 +716,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+299',
         flag: '🇬🇱',
         flagImage: 'assets/images/flags/gl.png',
-        nativeName: '+299'
+        nativeName: 'Kalaallit Nunaat'
     },
     {
         name: 'Grenada',
@@ -668,7 +724,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+1473',
         flag: '🇬🇩',
         flagImage: 'assets/images/flags/gd.png',
-        nativeName: '+1473'
+        nativeName: 'Grenada'
     },
     {
         name: 'Guadeloupe',
@@ -676,7 +732,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+590',
         flag: '🇬🇵',
         flagImage: 'assets/images/flags/gp.png',
-        nativeName: '+590'
+        nativeName: 'Guadeloupe'
     },
     {
         name: 'Guam',
@@ -684,7 +740,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+1671',
         flag: '🇬🇺',
         flagImage: 'assets/images/flags/gu.png',
-        nativeName: 'Guam'
+        nativeName: 'Guåhan'
     },
     {
         name: 'Guatemala',
@@ -692,7 +748,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+502',
         flag: '🇬🇹',
         flagImage: 'assets/images/flags/gt.png',
-        nativeName: '+502'
+        nativeName: 'Guatemala'
     },
     {
         name: 'Guernsey',
@@ -700,7 +756,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+44',
         flag: '🇬🇬',
         flagImage: 'assets/images/flags/gg.png',
-        nativeName: '+44'
+        nativeName: 'Guernsey'
     },
     {
         name: 'Guinea',
@@ -708,7 +764,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+224',
         flag: '🇬🇳',
         flagImage: 'assets/images/flags/gn.png',
-        nativeName: '+224'
+        nativeName: 'Guinée'
     },
     {
         name: 'Guinea-Bissau',
@@ -716,7 +772,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+245',
         flag: '🇬🇼',
         flagImage: 'assets/images/flags/gw.png',
-        nativeName: '+245'
+        nativeName: 'Guiné-Bissau'
     },
     {
         name: 'Guyana',
@@ -724,7 +780,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+592',
         flag: '🇬🇾',
         flagImage: 'assets/images/flags/gy.png',
-        nativeName: '+592'
+        nativeName: 'Guyana'
     },
     // H
     {
@@ -733,7 +789,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+509',
         flag: '🇭🇹',
         flagImage: 'assets/images/flags/ht.png',
-        nativeName: '+509'
+        nativeName: 'Haïti'
     },
     {
         name: 'Honduras',
@@ -741,7 +797,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+504',
         flag: '🇭🇳',
         flagImage: 'assets/images/flags/hn.png',
-        nativeName: '+504'
+        nativeName: 'Honduras'
     },
     {
         name: 'Hong Kong',
@@ -749,7 +805,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+852',
         flag: '🇭🇰',
         flagImage: 'assets/images/flags/hk.png',
-        nativeName: '+852'
+        nativeName: '香港'
     },
     {
         name: 'Hungary',
@@ -757,7 +813,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+36',
         flag: '🇭🇺',
         flagImage: 'assets/images/flags/hu.png',
-        nativeName: '+36'
+        nativeName: 'Magyarország'
     },
     // I
     {
@@ -766,7 +822,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+354',
         flag: '🇮🇸',
         flagImage: 'assets/images/flags/is.png',
-        nativeName: '+354'
+        nativeName: 'Ísland'
     },
     {
         name: 'India',
@@ -782,7 +838,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+62',
         flag: '🇮🇩',
         flagImage: 'assets/images/flags/id.png',
-        nativeName: '+62'
+        nativeName: 'Indonesia'
     },
     {
         name: 'Iran',
@@ -790,7 +846,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+98',
         flag: '🇮🇷',
         flagImage: 'assets/images/flags/ir.png',
-        nativeName: '+98'
+        nativeName: 'ایران'
     },
     {
         name: 'Iraq',
@@ -798,7 +854,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+964',
         flag: '🇮🇶',
         flagImage: 'assets/images/flags/iq.png',
-        nativeName: '+964'
+        nativeName: 'العراق'
     },
     {
         name: 'Ireland',
@@ -806,7 +862,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+353',
         flag: '🇮🇪',
         flagImage: 'assets/images/flags/ie.png',
-        nativeName: '+353'
+        nativeName: 'Éire'
     },
     {
         name: 'Isle of Man',
@@ -814,7 +870,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+44',
         flag: '🇮🇲',
         flagImage: 'assets/images/flags/im.png',
-        nativeName: '+44'
+        nativeName: 'Isle of Man'
     },
     {
         name: 'Israel',
@@ -822,7 +878,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+972',
         flag: '🇮🇱',
         flagImage: 'assets/images/flags/il.png',
-        nativeName: '+972'
+        nativeName: 'ישראל'
     },
     {
         name: 'Italy',
@@ -830,7 +886,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+39',
         flag: '🇮🇹',
         flagImage: 'assets/images/flags/it.png',
-        nativeName: '+39'
+        nativeName: 'Italia'
     },
     {
         name: 'Ivory Coast',
@@ -847,7 +903,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+1876',
         flag: '🇯🇲',
         flagImage: 'assets/images/flags/jm.png',
-        nativeName: '+1876'
+        nativeName: 'Jamaica'
     },
     {
         name: 'Japan',
@@ -855,7 +911,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+81',
         flag: '🇯🇵',
         flagImage: 'assets/images/flags/jp.png',
-        nativeName: '+81'
+        nativeName: '日本'
     },
     {
         name: 'Jersey',
@@ -863,7 +919,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+44',
         flag: '🇯🇪',
         flagImage: 'assets/images/flags/je.png',
-        nativeName: '+44'
+        nativeName: 'Jersey'
     },
     {
         name: 'Jordan',
@@ -871,7 +927,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+962',
         flag: '🇯🇴',
         flagImage: 'assets/images/flags/jo.png',
-        nativeName: '+962'
+        nativeName: 'الأردن'
     },
     // K
     {
@@ -880,7 +936,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+7',
         flag: '🇰🇿',
         flagImage: 'assets/images/flags/kz.png',
-        nativeName: '+7'
+        nativeName: 'Қазақстан'
     },
     {
         name: 'Kenya',
@@ -888,7 +944,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+254',
         flag: '🇰🇪',
         flagImage: 'assets/images/flags/ke.png',
-        nativeName: '+254'
+        nativeName: 'Kenya'
     },
     {
         name: 'Kiribati',
@@ -896,7 +952,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+686',
         flag: '🇰🇮',
         flagImage: 'assets/images/flags/ki.png',
-        nativeName: '+686'
+        nativeName: 'Kiribati'
     },
     {
         name: 'Kosovo',
@@ -904,7 +960,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+383',
         flag: '🇽🇰',
         flagImage: '', // No flag image available for Kosovo (XK)
-        nativeName: '+383'
+        nativeName: 'Kosovë'
     },
     {
         name: 'Kuwait',
@@ -912,7 +968,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+965',
         flag: '🇰🇼',
         flagImage: 'assets/images/flags/kw.png',
-        nativeName: '+965'
+        nativeName: 'الكويت'
     },
     {
         name: 'Kyrgyzstan',
@@ -920,7 +976,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+996',
         flag: '🇰🇬',
         flagImage: 'assets/images/flags/kg.png',
-        nativeName: '+996'
+        nativeName: 'Кыргызстан'
     },
     // L
     {
@@ -929,7 +985,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+856',
         flag: '🇱🇦',
         flagImage: 'assets/images/flags/la.png',
-        nativeName: '+856'
+        nativeName: 'ລາວ'
     },
     {
         name: 'Latvia',
@@ -937,7 +993,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+371',
         flag: '🇱🇻',
         flagImage: 'assets/images/flags/lv.png',
-        nativeName: '+371'
+        nativeName: 'Latvija'
     },
     {
         name: 'Lebanon',
@@ -945,7 +1001,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+961',
         flag: '🇱🇧',
         flagImage: 'assets/images/flags/lb.png',
-        nativeName: '+961'
+        nativeName: 'لبنان'
     },
     {
         name: 'Lesotho',
@@ -953,7 +1009,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+266',
         flag: '🇱🇸',
         flagImage: 'assets/images/flags/ls.png',
-        nativeName: '+266'
+        nativeName: 'Lesotho'
     },
     {
         name: 'Liberia',
@@ -961,7 +1017,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+231',
         flag: '🇱🇷',
         flagImage: 'assets/images/flags/lr.png',
-        nativeName: '+231'
+        nativeName: 'Liberia'
     },
     {
         name: 'Libya',
@@ -969,7 +1025,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+218',
         flag: '🇱🇾',
         flagImage: 'assets/images/flags/ly.png',
-        nativeName: '+218'
+        nativeName: 'ليبيا'
     },
     {
         name: 'Liechtenstein',
@@ -977,7 +1033,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+423',
         flag: '🇱🇮',
         flagImage: 'assets/images/flags/li.png',
-        nativeName: '+423'
+        nativeName: 'Liechtenstein'
     },
     {
         name: 'Lithuania',
@@ -985,7 +1041,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+370',
         flag: '🇱🇹',
         flagImage: 'assets/images/flags/lt.png',
-        nativeName: '+370'
+        nativeName: 'Lietuva'
     },
     {
         name: 'Luxembourg',
@@ -993,7 +1049,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+352',
         flag: '🇱🇺',
         flagImage: 'assets/images/flags/lu.png',
-        nativeName: '+352'
+        nativeName: 'Lëtzebuerg'
     },
     // M
     {
@@ -1002,7 +1058,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+853',
         flag: '🇲🇴',
         flagImage: 'assets/images/flags/mo.png',
-        nativeName: '+853'
+        nativeName: '澳門'
     },
     {
         name: 'Madagascar',
@@ -1010,7 +1066,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+261',
         flag: '🇲🇬',
         flagImage: 'assets/images/flags/mg.png',
-        nativeName: '+261'
+        nativeName: 'Madagasikara'
     },
     {
         name: 'Malawi',
@@ -1018,7 +1074,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+265',
         flag: '🇲🇼',
         flagImage: 'assets/images/flags/mw.png',
-        nativeName: '+265'
+        nativeName: 'Malawi'
     },
     {
         name: 'Malaysia',
@@ -1026,7 +1082,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+60',
         flag: '🇲🇾',
         flagImage: 'assets/images/flags/my.png',
-        nativeName: '+60'
+        nativeName: 'Malaysia'
     },
     {
         name: 'Maldives',
@@ -1034,7 +1090,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+960',
         flag: '🇲🇻',
         flagImage: 'assets/images/flags/mv.png',
-        nativeName: '+960'
+        nativeName: 'ދިވެހިބަސް'
     },
     {
         name: 'Mali',
@@ -1042,7 +1098,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+223',
         flag: '🇲🇱',
         flagImage: 'assets/images/flags/ml.png',
-        nativeName: '+223'
+        nativeName: 'Mali'
     },
     {
         name: 'Malta',
@@ -1050,7 +1106,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+356',
         flag: '🇲🇹',
         flagImage: 'assets/images/flags/mt.png',
-        nativeName: '+356'
+        nativeName: 'Malta'
     },
     {
         name: 'Marshall Islands',
@@ -1058,7 +1114,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+692',
         flag: '🇲🇭',
         flagImage: 'assets/images/flags/mh.png',
-        nativeName: '+692'
+        nativeName: 'Marshall Islands'
     },
     {
         name: 'Martinique',
@@ -1066,7 +1122,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+596',
         flag: '🇲🇶',
         flagImage: 'assets/images/flags/mq.png',
-        nativeName: '+596'
+        nativeName: 'Martinique'
     },
     {
         name: 'Mauritania',
@@ -1074,7 +1130,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+222',
         flag: '🇲🇷',
         flagImage: 'assets/images/flags/mr.png',
-        nativeName: '+222'
+        nativeName: 'موريتانيا'
     },
     {
         name: 'Mauritius',
@@ -1082,15 +1138,15 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+230',
         flag: '🇲🇺',
         flagImage: 'assets/images/flags/mu.png',
-        nativeName: '+230'
+        nativeName: 'Maurice'
     },
     {
         name: 'Mayotte',
         code: 'YT',
         dialCode: '+262',
-        flag: '🇾🇹',
-        flagImage: 'assets/images/flags/yt.png',
-        nativeName: '+262'
+        flag: '🇫🇷',
+        flagImage: 'assets/images/flags/fr.png',
+        nativeName: 'Mayotte'
     },
     {
         name: 'Mexico',
@@ -1098,7 +1154,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+52',
         flag: '🇲🇽',
         flagImage: 'assets/images/flags/mx.png',
-        nativeName: '+52'
+        nativeName: 'México'
     },
     {
         name: 'Micronesia',
@@ -1106,7 +1162,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+691',
         flag: '🇫🇲',
         flagImage: 'assets/images/flags/fm.png',
-        nativeName: '+691'
+        nativeName: 'Micronesia'
     },
     {
         name: 'Moldova',
@@ -1114,7 +1170,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+373',
         flag: '🇲🇩',
         flagImage: 'assets/images/flags/md.png',
-        nativeName: '+373'
+        nativeName: 'Republica Moldova'
     },
     {
         name: 'Monaco',
@@ -1122,7 +1178,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+377',
         flag: '🇲🇨',
         flagImage: 'assets/images/flags/mc.png',
-        nativeName: '+377'
+        nativeName: 'Monaco'
     },
     {
         name: 'Mongolia',
@@ -1130,7 +1186,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+976',
         flag: '🇲🇳',
         flagImage: 'assets/images/flags/mn.png',
-        nativeName: '+976'
+        nativeName: 'Монгол'
     },
     {
         name: 'Montenegro',
@@ -1138,7 +1194,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+382',
         flag: '🇲🇪',
         flagImage: 'assets/images/flags/me.png',
-        nativeName: '+382'
+        nativeName: 'Crna Gora'
     },
     {
         name: 'Montserrat',
@@ -1146,7 +1202,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+1664',
         flag: '🇲🇸',
         flagImage: 'assets/images/flags/ms.png',
-        nativeName: '+1664'
+        nativeName: 'Montserrat'
     },
     {
         name: 'Morocco',
@@ -1154,7 +1210,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+212',
         flag: '🇲🇦',
         flagImage: 'assets/images/flags/ma.png',
-        nativeName: '+212'
+        nativeName: 'المغرب'
     },
     {
         name: 'Mozambique',
@@ -1162,7 +1218,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+258',
         flag: '🇲🇿',
         flagImage: 'assets/images/flags/mz.png',
-        nativeName: '+258'
+        nativeName: 'Moçambique'
     },
     {
         name: 'Myanmar',
@@ -1170,7 +1226,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+95',
         flag: '🇲🇲',
         flagImage: 'assets/images/flags/mm.png',
-        nativeName: '+95'
+        nativeName: 'မြန်မာ'
     },
     // N
     {
@@ -1179,7 +1235,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+264',
         flag: '🇳🇦',
         flagImage: 'assets/images/flags/na.png',
-        nativeName: '+264'
+        nativeName: 'Namibië'
     },
     {
         name: 'Nauru',
@@ -1187,7 +1243,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+674',
         flag: '🇳🇷',
         flagImage: 'assets/images/flags/nr.png',
-        nativeName: '+674'
+        nativeName: 'Nauru'
     },
     {
         name: 'Nepal',
@@ -1195,7 +1251,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+977',
         flag: '🇳🇵',
         flagImage: 'assets/images/flags/np.png',
-        nativeName: '+977'
+        nativeName: 'नेपाल'
     },
     {
         name: 'Netherlands',
@@ -1203,7 +1259,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+31',
         flag: '🇳🇱',
         flagImage: 'assets/images/flags/nl.png',
-        nativeName: '+31'
+        nativeName: 'Nederland'
     },
     {
         name: 'New Caledonia',
@@ -1211,7 +1267,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+687',
         flag: '🇳🇨',
         flagImage: 'assets/images/flags/nc.png',
-        nativeName: '+687'
+        nativeName: 'Nouvelle-Calédonie'
     },
     {
         name: 'New Zealand',
@@ -1219,7 +1275,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+64',
         flag: '🇳🇿',
         flagImage: 'assets/images/flags/nz.png',
-        nativeName: '+64'
+        nativeName: 'New Zealand'
     },
     {
         name: 'Nicaragua',
@@ -1227,7 +1283,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+505',
         flag: '🇳🇮',
         flagImage: 'assets/images/flags/ni.png',
-        nativeName: '+505'
+        nativeName: 'Nicaragua'
     },
     {
         name: 'Niger',
@@ -1235,7 +1291,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+227',
         flag: '🇳🇪',
         flagImage: 'assets/images/flags/ne.png',
-        nativeName: '+227'
+        nativeName: 'Nijar'
     },
     {
         name: 'Nigeria',
@@ -1243,7 +1299,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+234',
         flag: '🇳🇬',
         flagImage: 'assets/images/flags/ng.png',
-        nativeName: '+234'
+        nativeName: 'Nigeria'
     },
     {
         name: 'Niue',
@@ -1251,7 +1307,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+683',
         flag: '🇳🇺',
         flagImage: 'assets/images/flags/nu.png',
-        nativeName: '+683'
+        nativeName: 'Niue'
     },
     {
         name: 'Norfolk Island',
@@ -1259,7 +1315,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+672',
         flag: '🇳🇫',
         flagImage: 'assets/images/flags/nf.png',
-        nativeName: '+672'
+        nativeName: 'Norfolk Island'
     },
     {
         name: 'North Korea',
@@ -1267,7 +1323,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+850',
         flag: '🇰🇵',
         flagImage: 'assets/images/flags/kp.png',
-        nativeName: '+850'
+        nativeName: '조선 민주주의 인민 공화국'
     },
     {
         name: 'North Macedonia',
@@ -1283,7 +1339,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+1670',
         flag: '🇲🇵',
         flagImage: 'assets/images/flags/mp.png',
-        nativeName: '+1670'
+        nativeName: 'Northern Mariana Islands'
     },
     {
         name: 'Norway',
@@ -1291,7 +1347,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+47',
         flag: '🇳🇴',
         flagImage: 'assets/images/flags/no.png',
-        nativeName: '+47'
+        nativeName: 'Norge'
     },
     // O
     {
@@ -1300,7 +1356,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+968',
         flag: '🇴🇲',
         flagImage: 'assets/images/flags/om.png',
-        nativeName: '+968'
+        nativeName: 'عُمان'
     },
     // P
     {
@@ -1309,7 +1365,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+92',
         flag: '🇵🇰',
         flagImage: 'assets/images/flags/pk.png',
-        nativeName: '+92'
+        nativeName: 'پاکستان'
     },
     {
         name: 'Palau',
@@ -1317,7 +1373,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+680',
         flag: '🇵🇼',
         flagImage: 'assets/images/flags/pw.png',
-        nativeName: '+680'
+        nativeName: 'Palau'
     },
     {
         name: 'Palestine',
@@ -1325,7 +1381,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+970',
         flag: '🇵🇸',
         flagImage: 'assets/images/flags/ps.png',
-        nativeName: '+970'
+        nativeName: 'فلسطين'
     },
     {
         name: 'Panama',
@@ -1333,7 +1389,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+507',
         flag: '🇵🇦',
         flagImage: 'assets/images/flags/pa.png',
-        nativeName: '+507'
+        nativeName: 'Panamá'
     },
     {
         name: 'Papua New Guinea',
@@ -1341,7 +1397,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+675',
         flag: '🇵🇬',
         flagImage: 'assets/images/flags/pg.png',
-        nativeName: '+675'
+        nativeName: 'Papua New Guinea'
     },
     {
         name: 'Paraguay',
@@ -1349,7 +1405,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+595',
         flag: '🇵🇾',
         flagImage: 'assets/images/flags/py.png',
-        nativeName: '+595'
+        nativeName: 'Paraguay'
     },
     {
         name: 'Peru',
@@ -1357,7 +1413,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+51',
         flag: '🇵🇪',
         flagImage: 'assets/images/flags/pe.png',
-        nativeName: '+51'
+        nativeName: 'Perú'
     },
     {
         name: 'Philippines',
@@ -1365,7 +1421,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+63',
         flag: '🇵🇭',
         flagImage: 'assets/images/flags/ph.png',
-        nativeName: '+63'
+        nativeName: 'Philippines'
     },
     {
         name: 'Pitcairn',
@@ -1373,7 +1429,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+64',
         flag: '🇵🇳',
         flagImage: 'assets/images/flags/pn.png',
-        nativeName: '+64'
+        nativeName: 'Pitcairn Islands'
     },
     {
         name: 'Poland',
@@ -1381,7 +1437,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+48',
         flag: '🇵🇱',
         flagImage: 'assets/images/flags/pl.png',
-        nativeName: '+48'
+        nativeName: 'Polska'
     },
     {
         name: 'Portugal',
@@ -1389,7 +1445,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+351',
         flag: '🇵🇹',
         flagImage: 'assets/images/flags/pt.png',
-        nativeName: '+351'
+        nativeName: 'Portugal'
     },
     {
         name: 'Puerto Rico',
@@ -1397,7 +1453,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+1',
         flag: '🇵🇷',
         flagImage: 'assets/images/flags/pr.png',
-        nativeName: '+1'
+        nativeName: 'Puerto Rico'
     },
     // Q
     {
@@ -1406,16 +1462,16 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+974',
         flag: '🇶🇦',
         flagImage: 'assets/images/flags/qa.png',
-        nativeName: '+974'
+        nativeName: 'قطر'
     },
     // R
     {
         name: 'Réunion',
         code: 'RE',
         dialCode: '+262',
-        flag: '🇷🇪',
-        flagImage: 'assets/images/flags/re.png',
-        nativeName: '+262'
+        flag: '🇫🇷',
+        flagImage: 'assets/images/flags/mf.png',
+        nativeName: 'La Réunion'
     },
     {
         name: 'Romania',
@@ -1423,7 +1479,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+40',
         flag: '🇷🇴',
         flagImage: 'assets/images/flags/ro.png',
-        nativeName: '+40'
+        nativeName: 'România'
     },
     {
         name: 'Russia',
@@ -1431,7 +1487,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+7',
         flag: '🇷🇺',
         flagImage: 'assets/images/flags/ru.png',
-        nativeName: '+7'
+        nativeName: 'Россия'
     },
     {
         name: 'Rwanda',
@@ -1439,16 +1495,24 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+250',
         flag: '🇷🇼',
         flagImage: 'assets/images/flags/rw.png',
-        nativeName: '+250'
+        nativeName: 'Rwanda'
     },
     // S
+    {
+        name: 'Saint Barthélemy',
+        code: 'BL',
+        dialCode: '+590',
+        flag: '🇫🇷',
+        flagImage: 'assets/images/flags/fr.png',
+        nativeName: 'Saint-Barthélemy'
+    },
     {
         name: 'Saint Helena',
         code: 'SH',
         dialCode: '+290',
         flag: '🇸🇭',
         flagImage: 'assets/images/flags/sh.png',
-        nativeName: '+290'
+        nativeName: 'Saint Helena'
     },
     {
         name: 'Saint Kitts and Nevis',
@@ -1456,7 +1520,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+1869',
         flag: '🇰🇳',
         flagImage: 'assets/images/flags/kn.png',
-        nativeName: '+1869'
+        nativeName: 'Saint Kitts and Nevis'
     },
     {
         name: 'Saint Lucia',
@@ -1464,15 +1528,23 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+1758',
         flag: '🇱🇨',
         flagImage: 'assets/images/flags/lc.png',
-        nativeName: '+1758'
+        nativeName: 'Saint Lucia'
+    },
+    {
+        name: 'Saint Martin (France)',
+        code: 'MF',
+        dialCode: '+590',
+        flag: '🇲🇫',
+        flagImage: 'assets/images/flags/mf.png',
+        nativeName: 'Saint-Martin'
     },
     {
         name: 'Saint Pierre and Miquelon',
         code: 'PM',
         dialCode: '+508',
-        flag: '🇵🇲',
-        flagImage: 'assets/images/flags/pm.png',
-        nativeName: '+508'
+        flag: '🇫🇷',
+        flagImage: 'assets/images/flags/fr.png',
+        nativeName: 'Saint-Pierre-et-Miquelon'
     },
     {
         name: 'Saint Vincent and the Grenadines',
@@ -1480,7 +1552,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+1784',
         flag: '🇻🇨',
         flagImage: 'assets/images/flags/vc.png',
-        nativeName: '+1784'
+        nativeName: 'Saint Vincent and the Grenadines'
     },
     {
         name: 'Samoa',
@@ -1488,7 +1560,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+685',
         flag: '🇼🇸',
         flagImage: 'assets/images/flags/ws.png',
-        nativeName: '+685'
+        nativeName: 'Samoa'
     },
     {
         name: 'San Marino',
@@ -1496,7 +1568,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+378',
         flag: '🇸🇲',
         flagImage: 'assets/images/flags/sm.png',
-        nativeName: '+378'
+        nativeName: 'San Marino'
     },
     {
         name: 'São Tomé and Príncipe',
@@ -1504,7 +1576,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+239',
         flag: '🇸🇹',
         flagImage: 'assets/images/flags/st.png',
-        nativeName: '+239'
+        nativeName: 'São Tomé e Príncipe'
     },
     {
         name: 'Saudi Arabia',
@@ -1512,7 +1584,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+966',
         flag: '🇸🇦',
         flagImage: 'assets/images/flags/sa.png',
-        nativeName: '+966'
+        nativeName: 'المملكة العربية السعودية'
     },
     {
         name: 'Senegal',
@@ -1520,7 +1592,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+221',
         flag: '🇸🇳',
         flagImage: 'assets/images/flags/sn.png',
-        nativeName: '+221'
+        nativeName: 'Sénégal'
     },
     {
         name: 'Serbia',
@@ -1528,7 +1600,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+381',
         flag: '🇷🇸',
         flagImage: 'assets/images/flags/rs.png',
-        nativeName: '+381'
+        nativeName: 'Србија'
     },
     {
         name: 'Seychelles',
@@ -1536,7 +1608,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+248',
         flag: '🇸🇨',
         flagImage: 'assets/images/flags/sc.png',
-        nativeName: '+248'
+        nativeName: 'Seychelles'
     },
     {
         name: 'Sierra Leone',
@@ -1544,7 +1616,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+232',
         flag: '🇸🇱',
         flagImage: 'assets/images/flags/sl.png',
-        nativeName: '+232'
+        nativeName: 'Sierra Leone'
     },
     {
         name: 'Singapore',
@@ -1552,7 +1624,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+65',
         flag: '🇸🇬',
         flagImage: 'assets/images/flags/sg.png',
-        nativeName: '+65'
+        nativeName: 'Singapore'
     },
     {
         name: 'Sint Maarten',
@@ -1560,7 +1632,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+1721',
         flag: '🇸🇽',
         flagImage: 'assets/images/flags/sx.png',
-        nativeName: '+1721'
+        nativeName: 'Sint Maarten'
     },
     {
         name: 'Slovakia',
@@ -1568,7 +1640,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+421',
         flag: '🇸🇰',
         flagImage: 'assets/images/flags/sk.png',
-        nativeName: '+421'
+        nativeName: 'Slovensko'
     },
     {
         name: 'Slovenia',
@@ -1576,7 +1648,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+386',
         flag: '🇸🇮',
         flagImage: 'assets/images/flags/si.png',
-        nativeName: '+386'
+        nativeName: 'Slovenija'
     },
     {
         name: 'Solomon Islands',
@@ -1584,7 +1656,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+677',
         flag: '🇸🇧',
         flagImage: 'assets/images/flags/sb.png',
-        nativeName: '+677'
+        nativeName: 'Solomon Islands'
     },
     {
         name: 'Somalia',
@@ -1592,7 +1664,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+252',
         flag: '🇸🇴',
         flagImage: 'assets/images/flags/so.png',
-        nativeName: '+252'
+        nativeName: 'Soomaaliya'
     },
     {
         name: 'South Africa',
@@ -1600,7 +1672,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+27',
         flag: '🇿🇦',
         flagImage: 'assets/images/flags/za.png',
-        nativeName: '+27'
+        nativeName: 'South Africa'
     },
     {
         name: 'South Korea',
@@ -1608,7 +1680,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+82',
         flag: '🇰🇷',
         flagImage: 'assets/images/flags/kr.png',
-        nativeName: '+82'
+        nativeName: '대한민국'
     },
     {
         name: 'South Sudan',
@@ -1616,7 +1688,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+211',
         flag: '🇸🇸',
         flagImage: 'assets/images/flags/ss.png',
-        nativeName: '+211'
+        nativeName: 'جنوب السودان'
     },
     {
         name: 'Spain',
@@ -1624,7 +1696,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+34',
         flag: '🇪🇸',
         flagImage: 'assets/images/flags/es.png',
-        nativeName: '+34'
+        nativeName: 'España'
     },
     {
         name: 'Sri Lanka',
@@ -1632,7 +1704,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+94',
         flag: '🇱🇰',
         flagImage: 'assets/images/flags/lk.png',
-        nativeName: '+94'
+        nativeName: 'ශ්‍රී ලංකාව'
     },
     {
         name: 'Sudan',
@@ -1640,7 +1712,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+249',
         flag: '🇸🇩',
         flagImage: 'assets/images/flags/sd.png',
-        nativeName: '+249'
+        nativeName: 'السودان'
     },
     {
         name: 'Suriname',
@@ -1648,7 +1720,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+597',
         flag: '🇸🇷',
         flagImage: 'assets/images/flags/sr.png',
-        nativeName: '+597'
+        nativeName: 'Suriname'
     },
     {
         name: 'Svalbard and Jan Mayen',
@@ -1656,15 +1728,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+47',
         flag: '🇸🇯',
         flagImage: 'assets/images/flags/sj.png',
-        nativeName: '+47'
-    },
-    {
-        name: 'Swaziland',
-        code: 'SZ',
-        dialCode: '+268',
-        flag: '🇸🇿',
-        flagImage: 'assets/images/flags/sz.png',
-        nativeName: '+268'
+        nativeName: 'Svalbard og Jan Mayen'
     },
     {
         name: 'Sweden',
@@ -1672,7 +1736,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+46',
         flag: '🇸🇪',
         flagImage: 'assets/images/flags/se.png',
-        nativeName: '+46'
+        nativeName: 'Sverige'
     },
     {
         name: 'Switzerland',
@@ -1680,7 +1744,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+41',
         flag: '🇨🇭',
         flagImage: 'assets/images/flags/ch.png',
-        nativeName: '+41'
+        nativeName: 'Schweiz'
     },
     {
         name: 'Syria',
@@ -1688,7 +1752,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+963',
         flag: '🇸🇾',
         flagImage: 'assets/images/flags/sy.png',
-        nativeName: '+963'
+        nativeName: 'سوريا'
     },
     // T
     {
@@ -1697,7 +1761,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+886',
         flag: '🇹🇼',
         flagImage: 'assets/images/flags/tw.png',
-        nativeName: '+886'
+        nativeName: '台灣'
     },
     {
         name: 'Tajikistan',
@@ -1705,7 +1769,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+992',
         flag: '🇹🇯',
         flagImage: 'assets/images/flags/tj.png',
-        nativeName: '+992'
+        nativeName: 'Tajikistan'
     },
     {
         name: 'Tanzania',
@@ -1713,7 +1777,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+255',
         flag: '🇹🇿',
         flagImage: 'assets/images/flags/tz.png',
-        nativeName: '+255'
+        nativeName: 'Tanzania'
     },
     {
         name: 'Thailand',
@@ -1721,7 +1785,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+66',
         flag: '🇹🇭',
         flagImage: 'assets/images/flags/th.png',
-        nativeName: '+66'
+        nativeName: 'ไทย'
     },
     {
         name: 'Timor-Leste',
@@ -1729,7 +1793,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+670',
         flag: '🇹🇱',
         flagImage: 'assets/images/flags/tl.png',
-        nativeName: '+670'
+        nativeName: 'Timor-Leste'
     },
     {
         name: 'Togo',
@@ -1737,7 +1801,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+228',
         flag: '🇹🇬',
         flagImage: 'assets/images/flags/tg.png',
-        nativeName: '+228'
+        nativeName: 'Togo'
     },
     {
         name: 'Tokelau',
@@ -1745,7 +1809,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+690',
         flag: '🇹🇰',
         flagImage: 'assets/images/flags/tk.png',
-        nativeName: '+690'
+        nativeName: 'Tokelau'
     },
     {
         name: 'Tonga',
@@ -1753,7 +1817,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+676',
         flag: '🇹🇴',
         flagImage: 'assets/images/flags/to.png',
-        nativeName: '+676'
+        nativeName: 'Tonga'
     },
     {
         name: 'Trinidad and Tobago',
@@ -1761,7 +1825,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+1868',
         flag: '🇹🇹',
         flagImage: 'assets/images/flags/tt.png',
-        nativeName: '+1868'
+        nativeName: 'Trinidad and Tobago'
     },
     {
         name: 'Tunisia',
@@ -1769,7 +1833,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+216',
         flag: '🇹🇳',
         flagImage: 'assets/images/flags/tn.png',
-        nativeName: '+216'
+        nativeName: 'تونس'
     },
     {
         name: 'Turkey',
@@ -1777,7 +1841,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+90',
         flag: '🇹🇷',
         flagImage: 'assets/images/flags/tr.png',
-        nativeName: '+90'
+        nativeName: 'Türkiye'
     },
     {
         name: 'Turkmenistan',
@@ -1785,7 +1849,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+993',
         flag: '🇹🇲',
         flagImage: 'assets/images/flags/tm.png',
-        nativeName: '+993'
+        nativeName: 'Turkmenistan'
     },
     {
         name: 'Turks and Caicos Islands',
@@ -1793,7 +1857,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+1649',
         flag: '🇹🇨',
         flagImage: 'assets/images/flags/tc.png',
-        nativeName: '+1649'
+        nativeName: 'Turks and Caicos Islands'
     },
     {
         name: 'Tuvalu',
@@ -1801,7 +1865,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+688',
         flag: '🇹🇻',
         flagImage: 'assets/images/flags/tv.png',
-        nativeName: '+688'
+        nativeName: 'Tuvalu'
     },
     // U
     {
@@ -1810,7 +1874,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+256',
         flag: '🇺🇬',
         flagImage: 'assets/images/flags/ug.png',
-        nativeName: '+256'
+        nativeName: 'Uganda'
     },
     {
         name: 'Ukraine',
@@ -1818,7 +1882,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+380',
         flag: '🇺🇦',
         flagImage: 'assets/images/flags/ua.png',
-        nativeName: '+380'
+        nativeName: 'Україна'
     },
     {
         name: 'United Arab Emirates',
@@ -1826,7 +1890,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+971',
         flag: '🇦🇪',
         flagImage: 'assets/images/flags/ae.png',
-        nativeName: '+971'
+        nativeName: 'الإمارات العربية المتحدة'
     },
     // { // Move this in top
     //     name: 'United Kingdom'
@@ -1858,7 +1922,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+598',
         flag: '🇺🇾',
         flagImage: 'assets/images/flags/uy.png',
-        nativeName: '+598'
+        nativeName: 'Uruguay'
     },
     {
         name: 'US Virgin Islands',
@@ -1866,7 +1930,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+1340',
         flag: '🇻🇮',
         flagImage: 'assets/images/flags/vi.png',
-        nativeName: '+1340'
+        nativeName: 'U.S. Virgin Islands'
     },
     {
         name: 'Uzbekistan',
@@ -1874,7 +1938,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+998',
         flag: '🇺🇿',
         flagImage: 'assets/images/flags/uz.png',
-        nativeName: '+998'
+        nativeName: 'Oʻzbekiston'
     },
     // V
     {
@@ -1883,15 +1947,15 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+678',
         flag: '🇻🇺',
         flagImage: 'assets/images/flags/vu.png',
-        nativeName: '+678'
+        nativeName: 'Vanuatu'
     },
     {
         name: 'Vatican City',
         code: 'VA',
-        dialCode: '+39',
+        dialCode: '+379', // Old +39
         flag: '🇻🇦',
         flagImage: 'assets/images/flags/va.png',
-        nativeName: '+39'
+        nativeName: 'Città del Vaticano'
     },
     {
         name: 'Venezuela',
@@ -1899,7 +1963,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+58',
         flag: '🇻🇪',
         flagImage: 'assets/images/flags/ve.png',
-        nativeName: '+58'
+        nativeName: 'Venezuela'
     },
     {
         name: 'Vietnam',
@@ -1907,16 +1971,16 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+84',
         flag: '🇻🇳',
         flagImage: 'assets/images/flags/vn.png',
-        nativeName: '+84'
+        nativeName: 'Việt Nam'
     },
     // W
     {
         name: 'Wallis and Futuna',
         code: 'WF',
         dialCode: '+681',
-        flag: '🇼🇫',
-        flagImage: 'assets/images/flags/wf.png',
-        nativeName: '+681'
+        flag: '🇫🇷',
+        flagImage: 'assets/images/flags/fr.png',
+        nativeName: 'Wallis-et-Futuna'
     },
     {
         name: 'Western Sahara',
@@ -1924,7 +1988,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+212',
         flag: '🇪🇭',
         flagImage: 'assets/images/flags/eh.png',
-        nativeName: '+212'
+        nativeName: 'الصحراء الغربية'
     },
     // Y
     {
@@ -1933,7 +1997,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+967',
         flag: '🇾🇪',
         flagImage: 'assets/images/flags/ye.png',
-        nativeName: '+967'
+        nativeName: 'اليمن'
     },
     // Z
     {
@@ -1942,7 +2006,7 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+260',
         flag: '🇿🇲',
         flagImage: 'assets/images/flags/zm.png',
-        nativeName: '+260'
+        nativeName: 'Zambia'
     },
     {
         name: 'Zimbabwe',
@@ -1950,6 +2014,6 @@ export const COUNTRIES_DATA: Country[] = [
         dialCode: '+263',
         flag: '🇿🇼',
         flagImage: 'assets/images/flags/zw.png',
-        nativeName: '+263'
+        nativeName: 'Zimbabwe'
     }
 ];

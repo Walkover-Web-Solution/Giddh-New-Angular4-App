@@ -16,59 +16,5 @@
 
     .input-group {
         width: 36px;
-
-        /*& UNUSED COMPONENT CLASS: full-width-input-group - Auto-commented by script
-.full-width-input-group {
-            border: none;
-            width: 228px;
-
-        /*& UNUSED COMPONENT CLASS: full-width-search-group - Auto-commented by script
-.full-width-search-group {
-            width: 228px;
-
-            .icon-search
-    }
-
-    .button-group {
-        button {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 38px;
-            height: 36px;
-            padding: 0;
-            margin: 0;
-            border: none;
-
-            i {
-                vertical-align: top;
-                font-size: var(--font-size-16);
-                color: var(--color-medium-gray);
-            }
-        }
-    }
-}
-
-input,
-sh-select::ng-deep input {
-    border-radius: 50px !important;
-}
-
-.inventory-card {
-    border-radius: var(--mat-border-radius-4);
-}
-button#more-btn-inventory {
-    min-width: 90px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-radius: 50px !important;
-}
-
-@media (max-width: 1270px) and (min-width: 768px) {
-    .inventory-header {
-        position: relative;
-        flex-direction: column;
-
     }
 }
