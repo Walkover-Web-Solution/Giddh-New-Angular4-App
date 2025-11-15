@@ -2,13 +2,13 @@
     display: flex;
     justify-content: space-between;
     background-color: var(--color-white);
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
     font-size: var(--font-size-16);
     font-weight: var(--font-weight-bold);
     padding-top: 10px;
     padding-bottom: 10px;
     align-items: center;
-    color: var(--color-blue-primary);
+    color: var(--text-primary-color);
 }
 section.receipt-note {
     background-color: var(--color-white);
@@ -17,7 +17,7 @@ section.receipt-note {
     padding-top: 15px;
     padding-bottom: 15px;
     color: var(--color-black);
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
 }
 .receipt-note-content {
     font-size: var(--font-size-15);
@@ -33,7 +33,7 @@ section.receipt-note {
 }
 #table-receipt th,
 #table-receipt td {
-    border-left: 1px solid var(--color-silver) !important;
+    border-left: 1px solid var(--border-color) !important;
 }
 #table-receipt td {
     vertical-align: top !important;
@@ -49,7 +49,7 @@ button.btn.btn-filter {
     background: var(--color-border-light);
     border: 1px solid var(--color-border-light);
     font-size: var(--font-size-15);
-    color: var(--color-blue-primary);
+    color: var(--text-primary-color);
     display: -webkit-inline-box;
     display: inline-flex;
     -webkit-box-pack: justify;
@@ -82,14 +82,14 @@ tfoot td .table-sec.form-group {
     right: -60%;
     top: 9px;
     font-size: var(--font-size-12);
-    color: var(--color-blue-primary);
+    color: var(--text-primary-color);
     z-index: 9;
 }
 .sender-details,
 .sender-receivers,
 .multiple-receivers {
     font-size: var(--font-size-12);
-    color: var(--color-blue-primary);
+    color: var(--text-primary-color);
     margin-top: 7px;
     cursor: pointer;
 }
@@ -106,10 +106,10 @@ tfoot td .table-sec.form-group {
     padding-bottom: 60px;
 }
 .multiple-products-wrapper table thead {
-    border-top: 1px solid var(--color-silver);
+    border-top: 1px solid var(--border-color);
 }
 .multiple-products-wrapper table tbody {
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
 }
 #actionPane {
     background-color: var(--color-silver);
@@ -126,8 +126,8 @@ tfoot td .table-sec.form-group {
 .hsn-code-dropdown {
     position: absolute;
     background-color: var(--color-white);
-    border: 1px solid var(--color-silver);
-    border-radius: 3px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--mat-border-radius-4);
     width: 100%;
     max-width: 250px;
     left: auto;
@@ -148,7 +148,7 @@ tfoot td .table-sec.form-group {
 .hsn-code-dropdown input {
     width: 100%;
     padding: 5px;
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     background-color: var(--color-white);
 }
 
@@ -178,7 +178,6 @@ tfoot td .table-sec.form-group {
 .hsn-code {
     padding: 5px 0;
 }
-/* new branch transfer list css  */
 .branch-transfer-report {
     padding-top: 55px;
     .input-group {
@@ -204,14 +203,14 @@ tfoot td .table-sec.form-group {
 }
 .branch-transfer-report .input-group input.form-control {
     padding-left: 35px !important;
-    border-color: var(--color-silver);
+    border-color: var(--border-color);
     padding-left: 45px !important;
     position: relative;
     z-index: 99;
     cursor: default;
 }
 .branch-transfer-report .input-group input.form-control:focus {
-    border-color: var(--color-silver) !important;
+    border-color: var(--border-color) !important;
 }
 .branch-transfer-report .btn-group.show {
     display: inline !important;
@@ -270,7 +269,7 @@ tfoot td .table-sec.form-group {
     justify-content: center;
     align-items: center;
     font-size: var(--font-size-15);
-    border-radius: 5px;
+    border-radius: var(--mat-border-radius-4);
 }
 #table-receipt {
     width: 100%;
@@ -284,7 +283,7 @@ tfoot td .table-sec.form-group {
 }
 .trash-icon-delete a {
     color: var(--color-medium-gray);
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     border-radius: 50%;
     text-align: center;
     width: 20px;
@@ -296,25 +295,20 @@ tfoot td .table-sec.form-group {
         font-size: var(--font-size-12);
     }
 }
-.add-new-line.mr-t1 {
-    position: absolute;
-    width: 100%;
-}
-.pd-t3 {
-    padding-top: 30px;
-}
+.add-new-line
+
 .recept-modal .modal-title {
     color: var(--color-white);
 }
 .transfer-type-checked:before {
-    border: 1px solid var(--color-blue-primary);
+    border: 1px solid var(--theme-primary-color);
 }
 .transfer-type-checked:after {
     content: " ";
     position: absolute;
     width: 8px;
     height: 8px;
-    background: var(--color-blue-primary);
+    background: var(--bg-primary-color);
     left: 5px;
     bottom: 5px;
     border-radius: 50%;
@@ -355,30 +349,15 @@ tfoot td .table-sec.form-group {
 
 .aside-right .list-icon-group input:checked + label {
     border: 1px solid var(--color-orange);
-    border-radius: 0px;
+    border-radius: var(--mat-border-radius-0);
 }
 
 .aside-pane.aside-right.in {
     right: 0;
     z-index: 9999;
 }
-.aside-overlay.out {
-    visibility: hidden;
-    opacity: 0;
-}
-
-.aside-overlay.in {
-    visibility: visible;
-    opacity: 0.6;
-    z-index: 991;
-}
-
-.aside-overlay {
-    transition: 0.5s all ease;
-    z-index: 9991;
-}
 .icon-pointer.active-text-color {
-    color: var(--color-blue-primary);
+    color: var(--text-primary-color);
 }
 .close-receipt {
     color: var(--color-dark-gray);
@@ -427,105 +406,4 @@ tfoot td .table-sec.form-group {
 }
 .icon-plus {
     font-size: 10px;
-}
-/* responsive starts here*/
-@media (max-width: 768px) {
-    .select-action-button {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        span.icon-dots-three-vertical {
-            height: 13px;
-            margin-left: 10px;
-        }
-    }
-    .branch-transfer-report {
-        ul#dropdown-basic {
-            right: auto !important;
-            left: auto !important;
-            top: 20px !important;
-        }
-    }
-    .mobile-none {
-        display: none;
-    }
-    .table-delivery {
-        table {
-            width: 100% !important;
-            tr,
-            td {
-                white-space: nowrap !important;
-            }
-            .min-wid-product {
-                min-width: 80px;
-            }
-            .min-wid-rate {
-                min-width: 40px;
-            }
-            .min-wid-amt {
-                min-width: 40px;
-            }
-            .min-wid-qty {
-                min-width: 20px;
-            }
-        }
-
-        .basic > tbody > tr td:last-child,
-        .basic > thead > tr th:last-child {
-            border-right: 1px solid var(--color-silver) !important;
-        }
-    }
-}
-.fields-gap{
-    display: flex;
-    flex-direction: column;
-    row-gap: 8px;
-}
-@media (max-width: 767px) {
-    .date-advance-search {
-        margin-top: 5px;
-    }
-    .branch-transfer-report {
-        padding-top: 10px;
-    }
-}
-@media (max-width: 575px) {
-    .branch-transfer-flex {
-        width: 100%;
-        .input-group.linked-entities {
-            width: 100%;
-            sh-select {
-                margin-right: 0;
-            }
-        }
-    }
-    .custom-datepicker {
-        margin-top: 10px;
-    }
-    .table-delivery {
-        width: 100%;
-        overflow-x: auto;
-    }
-}
-@media (max-width: 767px) {
-    .date-advance-search {
-        margin-top: 5px;
-    }
-    .branch-transfer-report {
-        padding-top: 10px;
-    }
-}
-@media (max-width: 575px) {
-    .branch-transfer-flex {
-        width: 100%;
-        .input-group.linked-entities {
-            width: 100%;
-            sh-select {
-                margin-right: 0;
-            }
-        }
-    }
-    .custom-datepicker {
-        margin-top: 10px;
-    }
 }

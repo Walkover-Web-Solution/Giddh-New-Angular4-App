@@ -1,7 +1,7 @@
-<div class="bd-rr row view-forms m-0" id="middleBody" *ngIf="!(showNewForm$ | async)">
+<div class="border-right row view-forms m-0" id="middleBody" *ngIf="!(showNewForm$ | async)">
     <ng-container *ngIf="breadcrumbPath?.length > 0">
         <!--breadcrumbs-->
-        <div class="breadcrumbs container-fluid top-bar bd-rb row mr-0 ml-0 h-100 d-flex justify-content-space-between">
+        <div class="breadcrumbs container-fluid top-bar border-bottom row mr-0 ml-0 h-100 d-flex justify-content-between">
             <div class="col-lg-8 full-width">
                 <ol class="breadcrumb row">
                     <li *ngFor="let value of breadcrumbPath; let last = last" [ngClass]="{ 'active': last }">
@@ -12,31 +12,29 @@
             <!--share group/account-->
             <div class="col-lg-4 pr-0 pl-0 full-width" *ngIf="showEditGroup$ | async">
                 <!--group-->
-                <div class="pull-right text-right">
+                <div class="d-flex align-items-center justify-content-end column-gap-1">
+                     <p
+                        class="theme-accent-color"
+                        *ngIf="isUserSuperAdmin && (showEditGroup$ | async) && (activeGroupSharedWith$ | async)?.length"
+                    >
+                        {{ groupSharedWith }}
+                    </p>
                     <button 
                         mat-raised-button
                         color="primary"
                         (click)="exportGroupLedger()"
                         aria-label="export" 
-                        class="mr-r1"
                     >
                         {{ commonLocaleData?.app_export }}
                     </button>
                     <button 
                         mat-raised-button
                         aria-label="share" 
-                        class="pull-right" 
                         (click)="openShareGroupDialog()"
                         color="primary"
                     >
                         {{ commonLocaleData?.app_share }}
                     </button>
-                    <div
-                        class="primary-color text-right mr-r1 clearfix"
-                        *ngIf="isUserSuperAdmin && (showEditGroup$ | async) && (activeGroupSharedWith$ | async)?.length"
-                    >
-                        {{ groupSharedWith }}
-                    </div>
                 </div>
             </div>
             <!--account-->
@@ -51,7 +49,7 @@
                     {{ commonLocaleData?.app_share }}
                 </button>
                 <div
-                    class="primary-color text-right mr-r1 clearfix"
+                    class="text-primary text-right mr-2 clear-both"
                     *ngIf="isUserSuperAdmin && (showEditAccount$ | async) && (activeAccountSharedWith$ | async)?.length"
                 >
                     {{ accountSharedWith }}
@@ -82,7 +80,7 @@
     <!--account operation  -->
     <div
         *ngIf="(showEditAccount$ | async) || (showAddNewAccount$ | async)"
-        class="pd-2 horizontal-form manage-group-account-form"
+        class="p-2 horizontal-form manage-group-account-form"
     >
         <!--account add component-->
 
@@ -153,10 +151,10 @@
 <!--add new buttons-->
 <div class="inline-table new-form ng-scope" *ngIf="showNewForm$ | async">
     <div class="vertical-center groups-buttons">
-        <button mat-raised-button color="primary" aria-label="create group" class="w125 mr-b2" (click)="showAddGroupForm()">
+        <button mat-raised-button color="primary" aria-label="create group" class="w125 mb-4" (click)="showAddGroupForm()">
             {{ commonLocaleData?.app_create_group }}
         </button>
-        <span class="clearfix"></span>
+        <span class="clear-both"></span>
         <button
             mat-raised-button
             color="primary"

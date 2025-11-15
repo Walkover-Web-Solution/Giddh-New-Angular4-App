@@ -167,7 +167,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     // tslint:disable-next-line:no-empty
     public ngOnInit() {
         this.store.dispatch(this.commonAction.setActiveTheme(null));
-        this.document.body.classList.remove("unresponsive");
         this.generateRandomBanner();
         this.mobileVerifyForm = this._fb.group({
             country: ["India", [Validators.required]],
@@ -429,7 +428,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy() {
-        this.document.body.classList.add("unresponsive");
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

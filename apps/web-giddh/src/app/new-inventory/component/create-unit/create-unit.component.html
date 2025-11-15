@@ -6,8 +6,8 @@
 >
     <giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
     <ng-container *ngIf="!isLoading">
-        <form autocomplete="off" novalidate name="unitForm" [formGroup]="unitForm" class="container">
-            <div class="row mr-b15">
+        <form autocomplete="off" novalidate name="unitForm" [formGroup]="unitForm" class="container p-0">
+            <div class="row mb-3">
                 <div class="col-xl-5 col-lg-5 col-sm-5">
                     <reactive-dropdown-field
                         [label]="localeData?.unit_group + '*'"
@@ -22,7 +22,7 @@
                     </reactive-dropdown-field>
                 </div>
             </div>
-            <div class="row mr-b15">
+            <div class="row mb-3">
                 <div class="col-xl-5 col-lg-5 col-sm-5">
                     <reactive-dropdown-field
                         [label]="commonLocaleData?.app_name + '*'"
@@ -53,7 +53,7 @@
             </div>
             <div class="unit-quantity" formArrayName="mappings">
                 <div
-                    class="row mr-b15 align-items-center"
+                    class="row mb-3 align-items-center"
                     *ngFor="let mapping of unitForm?.get('mappings')['controls']; let i = index"
                     [formGroupName]="i"
                 >
@@ -71,7 +71,7 @@
                             <ng-template #optionTemplate let-option="option">
                                 <div aria-label="label" class="my-2">
                                     <span class="text-primary">{{ option?.label | titlecase }}</span>
-                                    <div class="text-gray">
+                                    <div class="text-light">
                                         <div class="option-value" *ngIf="option.additional?.stockUnitXGroup?.name">
                                             {{ option.additional?.stockUnitXGroup?.name }}
                                         </div>
@@ -117,7 +117,7 @@
                             <ng-template #optionTemplate let-option="option">
                                 <div aria-label="label" class="my-2">
                                     <span class="text-primary">{{ option?.label | titlecase }}</span>
-                                    <div class="text-gray">
+                                    <div class="text-light">
                                         <div class="option-value" *ngIf="option.additional?.stockUnitXGroup?.name">
                                             {{ option.additional?.stockUnitXGroup?.name }}
                                         </div>
@@ -139,7 +139,7 @@
                         <div class="inc-dec">
                             <div class="plus-minus">
                                 <button mat-stroked-button class="mr-0" aria-label="delete icon" (click)="removeMappedUnit(i)">
-                                    <i class="icon-trash delete"></i>
+                                    <i class="icon-trash text-red"></i>
                                 </button>
                             </div>
                         </div>
@@ -155,7 +155,7 @@
             </div>
             <div class="row mt-4">
                 <div class="col-sm-4 pr-0">
-                    <div class="d-flex column-gap15">
+                    <div class="d-flex column-gap-15">
                         <button
                             aria-label="save"
                             mat-raised-button
@@ -179,7 +179,7 @@
                     </div>
                 </div>
                 <div class="col-lg-8">
-                    <div class="pull-right d-flex column-gap15">
+                    <div class="pull-right d-flex column-gap-15">
                         <button
                             aria-label="clear"
                             mat-stroked-button

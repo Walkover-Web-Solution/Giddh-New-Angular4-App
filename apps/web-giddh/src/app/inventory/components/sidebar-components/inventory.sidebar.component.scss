@@ -5,9 +5,7 @@
 .parent-group > ul > li ul li div {
     color: var(--color-dark-gray);
 }
-.btn-group.show {
-    display: inline-block !important;
-}
+.btn-grou
 .btn-group > .btn:first-child {
     margin-left: 8px;
     margin-top: -3px;
@@ -25,27 +23,17 @@
     cursor: pointer;
 }
 .dropdown-menu > li > a {
-    color: var(--color-blue-primary);
+    color: var(--text-primary-color);
 }
-span.caret {
-    display: none;
-}
+
 #inventory-sidebar {
     background: var(--color-white);
     width: 260px !important;
-    div.clearfix {
+    div.clear-both {
         height: 100vh;
     }
 }
-ul#dropdown-nested li .dropdown-menu {
-    display: block !important;
-    right: auto;
-    top: 0;
-    left: 184px;
-    visibility: hidden;
-    opacity: 0;
-    transition: 0.5s all ease;
-}
+
 ul#dropdown-nested li:hover .dropdown-menu {
     visibility: visible;
     opacity: 1;

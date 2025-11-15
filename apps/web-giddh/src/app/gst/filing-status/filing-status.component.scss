@@ -7,17 +7,9 @@
             background-color: var(--color-transparent);
             tr {
                 &:hover {
-                    background-color: var(--color-blue-light);
+                    background-color: var(--theme-primary-light);
                 }
             }
         }
-    }
-}
-.month-selection {
-    color: var(--color-black) !important;
-    background: var(--color-light-gray) !important;
-
-    &::placeholder {
-        color: var(--color-black) !important;
     }
 }

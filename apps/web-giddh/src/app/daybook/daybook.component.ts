@@ -23,7 +23,6 @@ import { UpdateLedgerEntryPanelComponent } from '../ledger/components/update-led
 import { DaybookService } from '../services/daybook.service';
 import { ToasterService } from '../services/toaster.service';
 import { MatDialog } from '@angular/material/dialog';
-import { BreakpointObserver } from '@angular/cdk/layout';
 import { LedgerService } from '../services/ledger.service';
 import { Router } from '@angular/router';
 import { saveAs } from 'file-saver';
@@ -115,8 +114,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public modalDialogRef: any;
     /** Last touched transaction (for ipad and tablet) */
     public touchedTransaction: any;
-    /** true if mobile device */
-    public isMobile: boolean;
     /** Holds side of entry (dr/cr) */
     public entrySide: string = "";
     /** Holds Aside Menu State For Other Taxes DialogRef */
@@ -145,7 +142,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
         private daybookService: DaybookService,
         private toasterService: ToasterService,
         private dialog: MatDialog,
-        private breakpointObserver: BreakpointObserver,
         private ledgerService: LedgerService,
         private router: Router,
         private pageLeaveUtilityService: PageLeaveUtilityService
@@ -214,11 +210,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
                     this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
                 }
             }
-        });
-        this.breakpointObserver.observe([
-            '(max-width: 767px)'
-        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isMobile = result?.breakpoints['(max-width: 767px)'];
         });
 
         // get company taxes
@@ -661,17 +652,15 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * @memberof DaybookComponent
      */
     public showUpdateLedgerModalIpad(txn: any): void {
-        if (!this.isMobile) {
-            if (this.touchedTransaction?.uniqueName === txn?.uniqueName) {
-                this.showUpdateLedgerModal(txn);
-            } else {
-                this.touchedTransaction = txn;
-            }
-
-            setTimeout(() => {
-                this.touchedTransaction = {};
-            }, 200);
+        if (this.touchedTransaction?.uniqueName === txn?.uniqueName) {
+            this.showUpdateLedgerModal(txn);
+        } else {
+            this.touchedTransaction = txn;
         }
+
+        setTimeout(() => {
+            this.touchedTransaction = {};
+        }, 200);
     }
 
     /**

@@ -210,8 +210,8 @@ export class GeneralService {
         }];
         const headerText: string = (commonLocaleData) ? commonLocaleData?.app_rc_heading : 'Reverse Charge Confirmation';
         const headerCssClass: string = 'd-inline-block mr-1';
-        const messageCssClass: string = 'mr-b1 text-light';
-        const footerCssClass: string = 'mr-b1';
+        const messageCssClass: string = 'mb-2 text-light';
+        const footerCssClass: string = 'mb-2';
         return (isRcmSelected) ? {
             headerText,
             headerCssClass,
@@ -665,8 +665,8 @@ export class GeneralService {
         }];
         const headerText: string = localeData?.date_change_confirmation_heading;
         const headerCssClass: string = 'd-inline-block mr-1';
-        const messageCssClass: string = 'mr-b1';
-        const footerCssClass: string = 'mr-b1';
+        const messageCssClass: string = 'mb-2';
+        const footerCssClass: string = 'mb-2';
         return (isVoucherDateSelected) ? {
             headerText,
             headerCssClass,
@@ -697,8 +697,8 @@ export class GeneralService {
         }];
         const headerText: string = 'Delete' + selectedBranchTransferType;
         const headerCssClass: string = 'd-inline-block mr-1';
-        const messageCssClass: string = 'mr-b1 text-light';
-        const footerCssClass: string = 'mr-b1';
+        const messageCssClass: string = 'mb-2 text-light';
+        const footerCssClass: string = 'mb-2';
         return {
             headerText,
             headerCssClass,
@@ -729,8 +729,8 @@ export class GeneralService {
         }];
         const headerText: string = commonLocaleData?.app_confirmation;
         const headerCssClass: string = 'd-inline-block mr-1';
-        const messageCssClass: string = 'mr-b1';
-        const footerCssClass: string = 'mr-b1';
+        const messageCssClass: string = 'mb-2';
+        const footerCssClass: string = 'mb-2';
         return {
             headerText,
             headerCssClass,
@@ -761,8 +761,8 @@ export class GeneralService {
         }];
         const headerText: string = commonLocaleData?.app_confirmation;
         const headerCssClass: string = 'd-inline-block mr-1';
-        const messageCssClass: string = 'mr-b1 text-light';
-        const footerCssClass: string = 'mr-b1';
+        const messageCssClass: string = 'mb-2 text-light';
+        const footerCssClass: string = 'mb-2';
         return {
             headerText,
             headerCssClass,
@@ -1714,8 +1714,8 @@ export class GeneralService {
 
         const headerText: string = commonLocaleData?.app_select_printer;
         const headerCssClass: string = 'd-inline-block mr-1';
-        const messageCssClass: string = 'mr-b1 text-light';
-        const footerCssClass: string = 'mr-b1';
+        const messageCssClass: string = 'mb-2 text-light';
+        const footerCssClass: string = 'mb-2';
         const disableRipple: boolean = true;
         return {
             headerText,
@@ -2119,8 +2119,8 @@ export class GeneralService {
         }];
         const headerText: string = commonLocaleData?.app_confirmation;
         const headerCssClass: string = 'd-inline-block mr-1';
-        const messageCssClass: string = 'mr-b1 text-light';
-        const footerCssClass: string = 'mr-b1';
+        const messageCssClass: string = 'mb-2 text-light';
+        const footerCssClass: string = 'mb-2';
         return {
             headerText,
             headerCssClass,
@@ -2149,7 +2149,7 @@ export class GeneralService {
         }];
         const headerText: string = commonLocaleData?.app_confirmation;
         const headerCssClass: string = 'd-inline-block mr-1';
-        const messageCssClass: string = 'mr-b1';
+        const messageCssClass: string = 'mb-2';
         const messageText: string = confirmationMessage;
         return {
             buttons,
@@ -2179,8 +2179,8 @@ export class GeneralService {
             text: commonLocaleData?.app_no
         }];
         const headerCssClass: string = 'd-inline-block mr-1';
-        const messageCssClass: string = 'mr-b1';
-        const footerCssClass: string = 'mr-b1 text-light';
+        const messageCssClass: string = 'mb-2';
+        const footerCssClass: string = 'mb-2 text-light';
         return {
             headerText,
             headerCssClass,

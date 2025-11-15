@@ -1,9 +1,8 @@
 .ledger-panel {
-    background-color: var(--color-white);
+    background-color: var(--theme-background-color);
     overflow: visible;
     .more-details {
-        background-color: var(--color-white);
-        padding: 0 15px 15px;
+        padding-bottom: 15px;
         .cheque {
             table {
                 td.remove-invoice {
@@ -110,21 +109,10 @@
     color: var(--color-black);
 }
 
-.dropdown-menu-2 {
-    max-height: 190px;
-    overflow-y: scroll;
-}
-
 .amount-total {
     font-size: var(--font-size-12);
     color: var(--color-medium-gray);
     padding-left: 5px;
-}
-
-.width-70 {
-    width: 70px;
-    min-width: 70px;
-    max-width: 70px;
 }
 
 .table-minus label {
@@ -135,9 +123,7 @@
     display: flex;
     align-items: center;
 }
-.checkbox-custom-label strong {
-    display: contents;
-}
+
 .rcm-entry {
     padding-left: 4px;
 }
@@ -145,16 +131,13 @@
     display: inline-block;
     margin-bottom: 12px;
 }
-.in-words.words-inline {
-    float: right;
-}
 .passport-no-width {
     width: 150px;
     font-size: var(--font-size-12);
 }
 .advance-receipt-edit {
     i {
-        color: var(--color-blue-primary);
+        color: var(--text-primary-color);
     }
 }
 .ledger-price {
@@ -162,13 +145,6 @@
 }
 .disabled-item {
     pointer-events: none;
-}
-.custom-component[disabled] {
-    pointer-events: none;
-}
-
-.mat-expansion-panel-header.mat-expanded {
-    background-color: var(--color-white) !important;
 }
 
 .icon-box {
@@ -203,42 +179,19 @@
     .ledger-panel .btn {
         margin-bottom: 13px;
     }
-    .xs-d-block {
-        display: block;
-        float: none;
-        width: 100%;
-    }
-    .qty-unit {
-        width: 90%;
-    }
-    .table-plus {
-        width: 10%;
-        text-align: center;
-    }
+
     .price {
         width: 40%;
     }
-    .equal-2,
-    .table-minus {
-        width: 10%;
-        text-align: center;
-    }
+
     .amount {
         width: 40%;
     }
-    .total-amount-ledger {
-        width: 100%;
-    }
-    .total-detail-table > tbody > tr {
-        display: flex;
-        flex-wrap: wrap;
-    }
+
     .qty-unit table tr td.text-right {
         padding-right: 10px;
     }
-    .xs-mb-1 {
-        margin-bottom: 1px;
-    }
+
     .warehouse-field {
         display: flex;
         flex-direction: column-reverse;
@@ -248,7 +201,7 @@
     }
 }
 .sh-template {
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
 }
 .min-width-auto {
     min-width: auto !important;
@@ -259,8 +212,6 @@ span {
         line-height: 40px;
     }
 }
-
-/* Rotate animation for spinner in uploading file */
 
 .rotate {
     -webkit-animation: spin 4s linear infinite;
@@ -284,18 +235,18 @@ span {
     }
 }
 @media (max-width: 1075px) {
-    .icon-box {
-        padding: 10px 0px 0 0px;
-    }
 
     .more-details {
         .cheque-no-clear {
-            .default-color {
-                white-space: nowrap;
-            }
+
             giddh-datepicker {
                 min-width: auto !important;
             }
         }
+    }
+}
+.map-txn-container {
+    table tr td {
+        width: 25%;
     }
 }

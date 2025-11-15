@@ -1,0 +1,111 @@
+// FONTS
+// --------------------------------------------------------------------------
+// Import font files before any other styles
+@import "../fonts/Inter/_inter_fonts.css";
+
+// 1. ABSTRACTS
+// --------------------------------------------------------------------------
+// Variables, functions, mixins - no actual CSS output
+@import "abstracts/variables";
+@import "abstracts/functions";
+@import "abstracts/mixins";
+
+// 2. VENDORS
+// --------------------------------------------------------------------------
+// Third-party CSS libraries and frameworks
+@import "vendors/_boostrap.css";
+@import "vendors/json-tree.scss";
+@import "vendors/json-diff.scss";
+@import "vendors/intl.scss";
+
+// 3. BASE
+// --------------------------------------------------------------------------
+// Basic styles, resets, typography
+@import "base/reset";
+@import "base/typography";
+@import "base/global";
+
+// 4. THEMES
+// --------------------------------------------------------------------------
+// Theme-specific styles and configurations
+@import "themes/custom-theme";
+@import "themes/theme-base-classes";
+
+// 5. MATERIAL DESIGN
+// --------------------------------------------------------------------------
+// Angular Material customizations
+@import "material/material-variables";
+@import "material/material-overrides";
+@import "material/material_customise";
+@import "material/material-mixins";
+
+// 6. LAYOUT
+// --------------------------------------------------------------------------
+// Layout-specific styles (header, sidebar, grid, etc.)
+@import "layout/header";
+@import "layout/sidebar";
+@import "layout/grid";
+
+// 7. COMPONENTS
+// --------------------------------------------------------------------------
+// Component-specific styles
+// @import 'components/buttons';
+
+// 8. PAGES
+// --------------------------------------------------------------------------
+// Page-specific styles
+@import "pages/utility.scss";
+@import "pages/ngx-bs-datepicker.scss";
+@import "pages/add-company.scss";
+@import "pages/aside-modal.scss";
+@import "pages/onboarding.scss";
+@import "pages/setting.profile.scss";
+@import "pages/user-details.scss";
+@import "pages/permission-list.scss";
+@import "pages/aside-menu-account.scss";
+@import "pages/subscription.component.scss";
+@import "pages/custom-fields.scss";
+@import "pages/inventory.scss";
+@import "pages/all-items.scss";
+@import "pages/header.scss";
+@import "pages/search.scss";
+@import "pages/mat-button.scss";
+@import "pages/vat-report.scss";
+@import "pages/help-support.scss";
+@import "pages/sales-register-expand.scss";
+@import "pages/setting-integration.scss";
+@import "pages/input-dropdown-field.scss";
+@import "pages/voucher.scss";
+@import "pages/tabs.scss";
+@import "pages/table.scss";
+@import "pages/custom-price.scss";
+@import "pages/inventory-adjustment.scss";
+@import "pages/global-variable.scss";
+@import "pages/vouchers.scss";
+@import "pages/tax-dropdown.scss";
+@import "pages/discount-dropdown.scss";
+@import "pages/dialog.scss";
+@import "pages/add-bulk-entry.scss";
+@import "pages/settings-sidebar.scss";
+@import "pages/mat-menu.scss";
+@import "pages/tax-authority.scss";
+@import "pages/adjustment-inventory.scss";
+@import "pages/d3-tree-chart.scss";
+@import "pages/vouchers-preview.scss";
+@import "pages/custom-paginator.scss";
+@import "pages/mat-chip.scss";
+@import "pages/select-multiple-fields.scss";
+@import "pages/override-material-theme-variables";
+@import "pages/tribute-js.scss";
+@import "pages/ledger.scss";
+
+// 9. UTILITIES
+// --------------------------------------------------------------------------
+// Utility classes and helper styles (if needed)
+@import "utilities/spacing";
+@import "utilities/text";
+@import "utilities/responsive";
+@import "utilities/other.scss";
+
+// Other Temp
+@import "./old-material-overide.scss";

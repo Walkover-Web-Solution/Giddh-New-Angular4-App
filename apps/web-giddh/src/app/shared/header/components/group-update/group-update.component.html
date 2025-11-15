@@ -6,8 +6,8 @@
     [formGroup]="groupDetailForm"
     (submit)="updateGroup()"
 >
-    <div class="container-fluid mr-t1">
-        <div class="row pd-b2">
+    <div class="container-fluid mt-2">
+        <div class="row pb-4">
             <div class="col-xs-12 col-sm-6">
                 <input-field
                     [type]="'text'"
@@ -34,7 +34,7 @@
             </div>
         </div>
 
-        <div class="row pd-b2">
+        <div class="row pb-4">
             <div class="col-sm-6 closing-balance-width" *ngIf="!(activeGroup$ | async)?.fixed">
                 <div
                     [ngClass]="{ 'input-group': groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0 }"
@@ -54,24 +54,24 @@
                     </input-field>
                     <div class="d-flex">
                         <div
-                            class="input-group-addon d-flex align-item-center"
+                            class="input-group-addon d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1"
                             (click)="closingBalanceTypeChanged('DEBIT')"
                             [ngClass]="{
                                 'active-toggle-btn':
                                     groupDetailForm.get('closingBalanceTriggerAmountType')?.value === 'DEBIT',
-                                'cp': groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0
+                                'cursor-pointer': groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0
                             }"
                             *ngIf="groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0"
                         >
                             {{ commonLocaleData?.app_dr?.toUpperCase() }}
                         </div>
                         <div
-                            class="input-group-addon only-right-radius d-flex align-item-center"
+                            class="input-group-addon only-right-radius d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1"
                             (click)="closingBalanceTypeChanged('CREDIT')"
                             [ngClass]="{
                                 'active-toggle-btn':
                                     groupDetailForm.get('closingBalanceTriggerAmountType')?.value === 'CREDIT',
-                                'cp': groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0
+                                'cursor-pointer': groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0
                             }"
                             *ngIf="groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0"
                         >
@@ -82,7 +82,7 @@
             </div>
         </div>
 
-        <div class="form-group clearfix">
+        <div class="form-group clear-both">
             <label>{{ localeData?.description_label }}</label>
             <textarea
                 maxlength="200"
@@ -109,7 +109,7 @@
                 *ngIf="showEditGroup$ | async"
                 mat-raised-button
                 color="primary"
-                class="mr-l1"
+                class="ml-2"
                 type="submit"
                 aria-label="update"
                 [disabled]="(activeGroup$ | async)?.fixed || groupDetailForm.invalid || (isUpdateGroupInProcess$ | async)"
@@ -122,7 +122,7 @@
 
 <!--move group-->
 <div
-    class="horizontal-form manage-group-account-form form-group mr-b1 clearfix"
+    class="horizontal-form manage-group-account-form form-group mb-2 clear-both"
     *ngIf="(activeGroup$ | async) && !(activeGroup$ | async)?.fixed"
 >
     <form
@@ -168,9 +168,9 @@
 <!--taxes  -->
 
 <!-- Taxes collapse -->
-<div class="clearfix tax-operation horizontal-form manage-group-account-form" *ngIf="isTaxableGroup$ | async">
+<div class="clear-both tax-operation horizontal-form manage-group-account-form" *ngIf="isTaxableGroup$ | async">
     <div class="col-xs-12 col-sm-12">
-        <mat-expansion-panel class="mr-t1" (opened)="showTaxes && taxHierarchy()">
+        <mat-expansion-panel class="mt-2" (opened)="showTaxes && taxHierarchy()">
             <mat-expansion-panel-header>
                 <mat-panel-title>{{ commonLocaleData?.app_taxes }}</mat-panel-title>
             </mat-expansion-panel-header>
@@ -189,7 +189,7 @@
                             [chipListUniqueName]="taxGroupForm.get('taxes')?.value"
                             (selectedOptionUniqueName)="taxesSelected($event)"
                             (selectedOption)="defaultTaxLabel = $event"
-                            class="adjusted-content-width select-multiple-chiplist mobile-margin border-bottom"
+                            class="adjusted-content-width select-multiple-chiplist mobile-margin border-bottom mat-form-field-clean"
                         ></select-multiple-fields>
                         <button
                             [disabled]="isTaxesSaveDisable$ | async"
@@ -234,7 +234,7 @@
                                             offsetX: 8
                                         }
                                     ]">
-                                    <div class="tax-tooltip font-14 custom-cdk-overlay-wrapper">
+                                    <div class="tax-tooltip font-size-14 custom-cdk-overlay-wrapper">
                                         <div>
                                             <p>{{ localeData?.tax_inherited }}:</p>
                                             <p>{{ inTax?.name }}</p>
@@ -254,10 +254,10 @@
 </div>
 <!-- commented for later use isDebtorCreditorGroups -->
 <div class="horizontal-form" *ngIf="isDebtorCreditorGroups">
-    <div class="mb-2 select-box container-fluid mr-t2">
+    <div class="mb-2 select-box container-fluid mt-4">
         <div class="form-group">
-            <label>{{ localeData?.default_discounts }} <span class="primary-color"></span></label>
-            <div class="d-flex justify-content-between align-items-center pd-t1">
+            <label>{{ localeData?.default_discounts }} <span class="text-primary"></span></label>
+            <div class="d-flex justify-content-between align-items-center pt-2">
                 <select-multiple-fields
                     [label]="localeData?.select_discounts"
                     [commonLocaleData]="commonLocaleData"
@@ -267,7 +267,7 @@
                     [chipListUniqueName]="discountGroupForm.get('discounts')?.value"
                     (selectedOptionUniqueName)="discountSelected($event)"
                     (selectedOption)="defaultDiscountLabel = $event"
-                    class="adjusted-content-width select-multiple-chiplist mobile-margin border-bottom"
+                    class="adjusted-content-width select-multiple-chiplist mobile-margin border-bottom mat-form-field-clean"
                 ></select-multiple-fields>
                 <button
                     mat-raised-button
@@ -312,7 +312,7 @@
                                 offsetX: 8
                             }
                         ]">
-                        <div class="tax-tooltip bg-gray font-14 custom-cdk-overlay-wrapper">
+                        <div class="tax-tooltip bg-gray font-size-14 custom-cdk-overlay-wrapper">
                             <div>
                                 <p>{{ localeData?.discounts_inherited_from }}:</p>
                                 <p>{{ item?.name }}</p>

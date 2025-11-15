@@ -2,7 +2,7 @@
 <div class="review-data">
     <div class="text-right">
         <div class="action-btn">
-            <button mat-stroked-button [matTooltip]="commonLocaleData?.app_back" matTooltipPosition="above"  class="mr-r1" (click)="onBack.emit()">{{ commonLocaleData?.app_back }}</button>
+            <button mat-stroked-button [matTooltip]="commonLocaleData?.app_back" matTooltipPosition="above"  class="mr-2" (click)="onBack.emit()">{{ commonLocaleData?.app_back }}</button>
             <button mat-raised-button [matTooltip]="commonLocaleData?.app_import" matTooltipPosition="above" [disabled]="!importDisable" color="primary" [ladda]="isLoading" (click)="save()">
                 {{ commonLocaleData?.app_import }}
             </button>
@@ -10,10 +10,10 @@
     </div>
     <cdk-virtual-scroll-viewport [itemSize]="100">
         <div class="table-responsive">
-            <table class="table basic table-bordered mr-t1">
+            <table class="table basic border mt-2">
                 <thead>
                     <tr>
-                        <th *ngFor="let col of sheetHeaders; let i = index" class="import-column">
+                        <th *ngFor="let col of sheetHeaders; let i = index" class="import-column border-left-none border-right-none">
                             <reactive-dropdown-field
                                 [name]="'giddhHeaders_' + i"
                                 [label]="commonLocaleData?.app_select_column"
@@ -28,7 +28,7 @@
                         </th>
                     </tr>
                     <tr>
-                        <th *ngFor="let col of sheetHeaders; let i = index">
+                        <th *ngFor="let col of sheetHeaders; let i = index" class="border-left-none border-right-none">
                             {{ col }}
                         </th>
                     </tr>

@@ -7,11 +7,11 @@
 >
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="container-fluid" *ngIf="monthOptions?.length > 0">
-        <div class="top-bar clearfix">
+        <div class="top-bar clear-both">
             <div class="form-inline">
                 <form #carried="ngForm" (ngSubmit)="getSalesBifurcation()">
-                    <div class="pull-left d-flex align-center select-fields pd-b2">
-                        <div class="form-group mr-r1 max-width-500 d-initial">
+                    <div class="d-flex align-items-center column-gap-1 select-fields pb-4">
+                        <div class="max-width-500">
                             <reactive-dropdown-field
                                 [placeholder]="localeData?.select_year_placeholder"
                                 [label]="localeData?.select_year_label"
@@ -23,7 +23,7 @@
                                 [required]="true">
                             </reactive-dropdown-field>
                         </div>
-                        <div class="form-group mr-r1 max-width-500 d-initial">
+                        <div class="max-width-500">
                             <reactive-dropdown-field
                                 [placeholder]="localeData?.select_type_placeholder"
                                 [label]="localeData?.select_type_label"
@@ -39,7 +39,7 @@
                             </div>
                         </div>
                         <div
-                            class="form-group mr-r1 max-width-500 d-initial flex-column"
+                            class="max-width-500 flex-column"
                             *ngIf="selectedType === selectedTypeEnum.MONTH"
                         >
                             <reactive-dropdown-field
@@ -57,7 +57,7 @@
                         </div>
 
                         <div
-                            class="form-group mr-r1 max-width-500 d-initial flex-column"
+                            class="max-width-500 flex-column"
                             *ngIf="selectedType === selectedTypeEnum.QUATER"
                         >
                             <reactive-dropdown-field
@@ -85,10 +85,10 @@
         <ng-container *ngIf="!isLoading">
             <div class="d-flex month-wrapper" *ngIf="selectedType === selectedTypeEnum.MONTH">
                 <div class="div-table">
-                    <div class="head-row">
+                    <div class="d-flex">
                         <div class="div-cell">{{ localeData?.sales_from }}</div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-old-sales-quater'
@@ -98,7 +98,7 @@
                             {{ localeData?.clients }}
                         </div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-old-sales-quater'
@@ -108,7 +108,7 @@
                             {{ commonLocaleData?.app_amount }}
                         </div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-old-sales-quater'
@@ -121,7 +121,7 @@
                     <div class="div-row">
                         <div class="div-cell">{{ columnName }} {{ reportYear }}</div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-total-sales-quater'
@@ -149,7 +149,7 @@
                             </a>
                         </div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-total-sales-quater'
@@ -166,7 +166,7 @@
                             </span>
                         </div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-total-sales-quater'
@@ -197,14 +197,14 @@
                 </div>
             </div>
             <div class="d-flex month-wrapper" *ngIf="selectedType === selectedTypeEnum.MONTH">
-                <div class="div-table bg-gray-color">
+                <div class="div-table bg-grey">
                     <div>
-                        <h3 class="h3-heading">{{ bifurcationClients }}</h3>
+                        <p class="my-3 font-size-16 font-weight-semibold text-center">{{ bifurcationClients }}</p>
                     </div>
-                    <div class="div-row mr-t3 mr-b3">
-                        <div class="div-cell font-15 strong">{{ localeData?.from_new_clients }}</div>
+                    <div class="div-row mt-5 mb-5">
+                        <div class="div-cell font-size-15 strong">{{ localeData?.from_new_clients }}</div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-new-sales-quater'
@@ -232,7 +232,7 @@
                             </a>
                         </div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-new-sales-quater'
@@ -249,7 +249,7 @@
                             </span>
                         </div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-new-sales-quater'
@@ -277,10 +277,10 @@
                             </a>
                         </div>
                     </div>
-                    <div class="div-row mr-t3 mr-b3">
-                        <div class="div-cell font-15 strong">{{ localeData?.from_old_clients }}</div>
+                    <div class="div-row mt-5 mb-5">
+                        <div class="div-cell font-size-15 strong">{{ localeData?.from_old_clients }}</div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-old-sales-quater'
@@ -308,7 +308,7 @@
                             </a>
                         </div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-old-sales-quater'
@@ -325,7 +325,7 @@
                             </span>
                         </div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-old-sales-quater'
@@ -356,7 +356,7 @@
                     <div class="div-row">
                         <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[0]?.month }}</div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-carried-sales-0-quater'
@@ -384,7 +384,7 @@
                             </a>
                         </div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-carried-sales-0-quater'
@@ -401,7 +401,7 @@
                             </span>
                         </div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-carried-sales-0-quater'
@@ -432,7 +432,7 @@
                     <div class="div-row">
                         <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[1]?.month }}</div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-carried-sales-1-quater'
@@ -460,7 +460,7 @@
                             </a>
                         </div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-carried-sales-1-quater'
@@ -477,7 +477,7 @@
                             </span>
                         </div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-carried-sales-1-quater'
@@ -508,7 +508,7 @@
                     <div class="div-row">
                         <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[2]?.month }}</div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-carried-sales-2-quater'
@@ -536,7 +536,7 @@
                             </a>
                         </div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-carried-sales-2-quater'
@@ -553,7 +553,7 @@
                             </span>
                         </div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-carried-sales-2-quater'
@@ -584,7 +584,7 @@
                     <div class="div-row">
                         <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[3]?.month }}</div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-carried-sales-3-quater'
@@ -612,7 +612,7 @@
                             </a>
                         </div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-carried-sales-3-quater'
@@ -629,7 +629,7 @@
                             </span>
                         </div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-carried-sales-3-quater'
@@ -662,7 +662,7 @@
                             {{ newVsOldInvoicesData?.carriedSales[4]?.month }}
                         </div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-carried-sales-4-quater'
@@ -690,7 +690,7 @@
                             </a>
                         </div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-carried-sales-4-quater'
@@ -707,7 +707,7 @@
                             </span>
                         </div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-carried-sales-4-quater'
@@ -739,10 +739,10 @@
             </div>
             <div class="d-flex quarter-wrapper" *ngIf="selectedType === selectedTypeEnum.QUATER">
                 <div class="div-table">
-                    <div class="head-row">
+                    <div class="d-flex">
                         <div class="div-cell">{{ localeData?.sales_from }}</div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-old-sales-quater'
@@ -752,7 +752,7 @@
                             {{ localeData?.clients }}
                         </div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-old-sales-quater'
@@ -762,7 +762,7 @@
                             {{ commonLocaleData?.app_amount }}
                         </div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-old-sales-quater'
@@ -782,7 +782,7 @@
                     >
                         <div class="div-cell">{{ columnName }} {{ reportYear }}</div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-total-sales-quater'
@@ -810,7 +810,7 @@
                             </a>
                         </div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-total-sales-quater'
@@ -827,7 +827,7 @@
                             </span>
                         </div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-total-sales-quater'
@@ -858,21 +858,21 @@
                 </div>
             </div>
             <div class="d-flex quarter-wrapper" *ngIf="selectedType === selectedTypeEnum.QUATER">
-                <div class="div-table bg-gray-color">
+                <div class="div-table bg-grey">
                     <div>
-                        <h3 class="h3-heading">{{ bifurcationClients }}</h3>
+                        <p class="p-heading">{{ bifurcationClients }}</p>
                     </div>
                     <div
-                        class="div-row mr-t3 mr-b3"
+                        class="div-row mt-5 mb-5"
                         [attr.data-reference]="
                             selectedType === selectedTypeEnum.QUATER
                                 ? 'new-vs-old-invoices-data-new-sales-quater'
                                 : 'new-vs-old-invoices-data-new-sales-month'
                         "
                     >
-                        <div class="div-cell font-15 strong">{{ localeData?.from_new_clients }}</div>
+                        <div class="div-cell font-size-15 strong">{{ localeData?.from_new_clients }}</div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-new-sales-quater'
@@ -900,7 +900,7 @@
                             </a>
                         </div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-new-sales-quater'
@@ -917,7 +917,7 @@
                             </span>
                         </div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-new-sales-quater'
@@ -945,10 +945,10 @@
                             </a>
                         </div>
                     </div>
-                    <div class="div-row mr-t3 mr-b3" data-reference="quarter-old-clients">
-                        <div class="div-cell font-15 strong">{{ localeData?.from_old_clients }}</div>
+                    <div class="div-row mt-5 mb-5" data-reference="quarter-old-clients">
+                        <div class="div-cell font-size-15 strong">{{ localeData?.from_old_clients }}</div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-old-sales-quater'
@@ -976,7 +976,7 @@
                             </a>
                         </div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-old-sales-quater'
@@ -993,7 +993,7 @@
                             </span>
                         </div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-old-sales-quater'
@@ -1024,7 +1024,7 @@
                     <div class="div-row" data-reference="quarter-carriedSales-0-month">
                         <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[0]?.month }}</div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-carried-sales-0-quater'
@@ -1052,7 +1052,7 @@
                             </a>
                         </div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-carried-sales-0-quater'
@@ -1069,7 +1069,7 @@
                             </span>
                         </div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-carried-sales-0-quater'
@@ -1100,7 +1100,7 @@
                     <div class="div-row" data-reference="quarter-carriedSales-1-month">
                         <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[1]?.month }}</div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-carried-sales-1-quater'
@@ -1128,7 +1128,7 @@
                             </a>
                         </div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-carried-sales-1-quater'
@@ -1145,7 +1145,7 @@
                             </span>
                         </div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-carried-sales-1-quater'
@@ -1176,7 +1176,7 @@
                     <div class="div-row" data-reference="quarter-carriedSales-2-month">
                         <div class="div-cell">{{ newVsOldInvoicesData?.carriedSales[2]?.month }}</div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-carried-sales-2-quater'
@@ -1204,7 +1204,7 @@
                             </a>
                         </div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-carried-sales-2-quater'
@@ -1221,7 +1221,7 @@
                             </span>
                         </div>
                         <div
-                            class="div-cell align-end"
+                            class="div-cell align-items-end"
                             [attr.data-reference]="
                                 selectedType === selectedTypeEnum.QUATER
                                     ? 'new-vs-old-invoices-data-carried-sales-2-quater'

@@ -208,6 +208,10 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             this.writeValue("", false);
             this.controlLabelValue = "";
             this.clearDropdownValue();
+            this.fieldFilteredOptions$ = of([]);
+            setTimeout(() => {
+                this.fieldFilteredOptions$ = of(this.options);
+            }, 100);
         }
         if (changes?.openDropdown?.currentValue && !changes?.openDropdown?.previousValue) {
             this.openDropdownPanel();

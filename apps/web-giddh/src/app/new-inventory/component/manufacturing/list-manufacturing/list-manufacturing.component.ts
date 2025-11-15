@@ -161,7 +161,6 @@ export class ListManufacturingComponent implements OnInit {
         }
 
         // Refresh the manufactured stock list
-        this.store.dispatch(this.inventoryAction.GetManufacturingStock());
 
         this.store.pipe(select(state => state.inventory.manufacturingStockList), takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response) {
@@ -352,7 +351,6 @@ export class ListManufacturingComponent implements OnInit {
         this.manufacturingSearchRequest.to = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
 
         this.handleBranchChange({ label: this.currentBranch.name, value: this.currentBranch.uniqueName });
-        this.getReport();
     }
 
     /**

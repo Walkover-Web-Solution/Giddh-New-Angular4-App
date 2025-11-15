@@ -5,16 +5,6 @@
             box-shadow: none !important;
         }
     }
-    .custom-datepicker {
-        input {
-            height: var(--mat-form-field-height);
-        }
-    }
-    .clear-filter {
-        .btn {
-            color: var(--color-black);
-        }
-    }
 }
 .no-box-shadow {
     &:focus {

@@ -4,12 +4,7 @@
     padding: 4px 0;
     display: inline-block;
 }
-.select-plan-block {
-    padding-bottom: 40px;
-    background-color: var(--color-white);
-    border: 1px solid var(--color-silver);
-    height: 97%;
-}
+
 .welcome-msg {
     position: relative;
     .scroll-right {
@@ -28,13 +23,7 @@
         margin-left: 16px;
     }
 }
-.note-wrap {
-    position: fixed;
-    bottom: 30px;
-    width: 100%;
-    color: var(--color-dark-gray);
-    padding: 10px;
-}
+
 .plan-table-content {
     overflow-x: hidden !important;
     overflow-y: hidden !important;
@@ -73,18 +62,16 @@
         height: 110px !important;
     }
     .grid-title-left {
-        width: 370px;
+        position: sticky;
         left: 0px;
         z-index: 9;
-        border-bottom: 1px solid var(--color-silver);
-        position: sticky;
-        background-color: var(--color-white);
         padding-top: 0px;
+        width: 370px;
         line-height: 3;
+        border-bottom: 1px solid var(--border-color);
+        background-color: var(--theme-background-color);
     }
-    .top-plan-div {
-        height: 142px;
-    }
+
     .grid-list-div {
         display: inline-flex;
         float: left;
@@ -95,7 +82,7 @@
         height: 64px !important;
         .sub-plan-feature {
             text-decoration: underline;
-            color: var(--color-blue-primary) !important;
+            color: var(--text-primary-color) !important;
         }
     }
     .sub-plan-name {
@@ -123,12 +110,7 @@
         margin-top: 5px;
         margin-left: 5px;
     }
-    .grid-title-list-left {
-        float: left;
-        width: 200px;
-        height: 70px;
-        margin-top: 5px;
-    }
+
     .grid-title-list-changes:nth-child(odd) {
         background-color: var(--color-border-light) !important;
         height: 70px;
@@ -137,11 +119,7 @@
         margin-top: 5px;
         margin-left: 5px;
     }
-    .whole-plan-span {
-        float: left;
-        width: 195px;
-        height: 39px;
-    }
+
     .list-grid-title {
         line-height: 3.5 !important;
     }
@@ -149,11 +127,10 @@
         line-height: 4.8 !important;
     }
     .grid-title-list:nth-child(even) {
-        background-color: var(--color-blue-light);
-        color: var(--color-black) !important;
+        background-color: var(--theme-primary-light);
         text-align: center;
         line-height: 26px;
-        border-bottom: 1px solid var(--color-silver);
+        border-bottom: 1px solid var(--border-color);
         width: 205px;
         font-weight: 500;
         font-size: var(--font-size-15);
@@ -162,14 +139,13 @@
         margin-right: 0 !important;
     }
     .grid-list {
-        border-bottom: 1px solid var(--color-silver);
+        border-bottom: 1px solid var(--border-color);
     }
     .grid-title-list:nth-child(odd) {
-        background-color: var(--color-white);
-        color: var(--color-black) !important;
+        background-color: var(--theme-background-color);
         text-align: center;
         line-height: 26px;
-        border-bottom: 1px solid var(--color-silver);
+        border-bottom: 1px solid var(--border-color);
         width: 205px;
         font-weight: 500;
         font-size: var(--font-size-15);
@@ -180,17 +156,11 @@
         }
     }
 }
-.height-auto {
-    height: auto !important;
-}
+
 .payment-log-list > li {
     padding: 7px 0;
 }
-.payment-log-list {
-    list-style-type: none;
-    font-size: var(--font-size-15);
-    color: var(--color-dark-gray);
-}
+
 .payment-log-list {
     list-style-type: none;
     font-size: var(--font-size-15);
@@ -218,21 +188,9 @@
     border-radius: 90px;
     border: 1px solid var(--color-dark-gray);
 }
-.account-aside-menu-state {
-    position: fixed;
-    left: auto;
-    top: var(--top-distance);
-    right: 0;
-    bottom: 0;
-    max-width: 480px;
-    width: 100%;
-    z-index: 1045;
-}
-.aside-overlay {
-    z-index: 991;
-}
+
 .selected {
-    background-color: var(--color-blue-light);
+    background-color: var(--theme-primary-light);
 }
 .select-plan-head {
     text-align: center;
@@ -240,7 +198,7 @@
     font-size: var(--font-size-16);
     padding: 20px 15px;
     h2 {
-        color: var(--color-blue-primary);
+        color: var(--text-primary-color);
         font-weight: bold;
     }
 }
@@ -249,39 +207,20 @@
     height: 97%;
     justify-content: space-around;
     background-color: var(--color-white);
-    p.total-price {
-        margin: 0 -8px;
-    }
-    .btn-green.btn-round {
-        padding: 6px 30px;
-        display: block;
-        margin-right: 0px;
-    }
+
 }
-.your-account {
-    margin: 30px 0px 10px 15px;
-    position: relative;
-}
-.inner-your-account {
-    position: relative;
-    z-index: 2;
-    background: var(--color-white);
-    padding: 30px 15px 15px 30px;
-    box-shadow: 0px 3px 6px var(--color-shadow-light);
-    border: 1px solid var(--color-silver);
-    transition: 0.5s all ease;
-}
+
 .inner-your-account:hover,
 .inner-your-account.active {
     background: var(--color-border-light);
-    border-color: var(--color-blue-primary);
+    border-color: var(--theme-primary-color);
 }
 .your-account:after,
 .your-account:before {
     content: "";
     display: block;
     width: 100%;
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     height: 100%;
     position: absolute;
     z-index: 1;
@@ -310,7 +249,7 @@
 }
 .inner-your-account > h3 {
     font-size: var(--font-size-15);
-    color: var(--color-blue-primary);
+    color: var(--text-primary-color);
     font-weight: bold;
     margin-bottom: 5px;
     .plans-head-top {
@@ -320,12 +259,7 @@
         }
     }
 }
-.plan-footer {
-    .success-btn {
-        padding: 6px 60px;
-        margin: 10px 0;
-    }
-}
+
 .transactions-popup {
     width: 360px;
     background: var(--color-white);
@@ -340,95 +274,14 @@
     opacity: 0;
     visibility: hidden;
     transition: 0.5s all ease-in;
-    .close {
-        color: var(--color-black);
-        opacity: 1;
-        font-size: 16px;
-        position: absolute;
-        right: 10px;
-        top: 12px;
-    }
+
 }
-.transactions-limit-box {
-    &:hover {
-        .transactions-popup {
-            display: block;
-            opacity: 1;
-            visibility: visible;
-        }
-    }
-}
-.guarantee-img {
-    width: 50px;
-    filter: grayscale(100%);
-}
-.price-cross {
-    font-size: 24px !important;
-    position: relative;
-    &:after {
-        content: "";
-        position: absolute;
-        left: -5px;
-        top: 15px;
-        width: 60px;
-        height: 1px;
-        background: var(--color-red);
-        transform: rotate(10deg);
-    }
-}
-.popular-icon {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-}
-.close.close-2 {
-    opacity: 1;
-    z-index: 1;
-    top: 10px;
-    position: absolute;
-    right: 10px;
-}
-.plan-disabled {
-    opacity: 0.5;
-    position: relative;
-    &::before {
-        position: absolute;
-        content: "";
-        width: 100%;
-        height: 100%;
-        background-color: transparent;
-        z-index: 11;
-    }
-}
-.see-all-features {
-    display: flex;
-    flex-wrap: wrap;
-    padding-top: 0px;
-    width: 98%;
-    margin-top: 10px;
-}
+
 .see-all-features .inner-your-account {
-    border-color: var(--color-blue-primary);
+    border-color: var(--theme-primary-color);
     margin-bottom: 20px;
 }
-.btn-group .close {
-    font-size: 16px;
-    color: var(--color-dark-gray);
-    opacity: 1;
-}
-.inner-close {
-    position: absolute;
-    right: 10px;
-    top: 10px;
-    font-size: var(--font-size-15);
-    color: var(--color-black);
-}
-.btn-green:focus {
-    color: var(--color-white);
-}
-.plans-head-top {
-    min-height: 50px;
-}
+
 .activation-key-wrapper {
     margin-top: 1%;
     float: left;
@@ -437,10 +290,7 @@
     .box {
         padding-top: 0 !important;
     }
-    .text-gray {
-        font-size: var(--font-size-16);
-        font-weight: 500;
-    }
+
     .footer-plan {
         padding-top: 11px;
     }
@@ -451,12 +301,7 @@
     .redeem-plan {
         width: 50%;
     }
-    .input-plan-div {
-        float: left;
-        width: 100%;
-        height: 50px;
-        margin-top: 10px;
-    }
+
     .redeem-content {
         float: left;
         width: 100%;
@@ -479,9 +324,7 @@
         height: 56px;
     }
 }
-.all-plans {
-    border: 1px solid var(--color-silver);
-}
+
 .btn-cancel {
     background: var(--color-medium-gray);
     border-color: var(--color-medium-gray);
@@ -504,9 +347,7 @@
         &:after {
             display: none;
         }
-        .plan-list {
-            min-height: 245px;
-        }
+
     }
     .plans-box {
         p {
@@ -514,89 +355,13 @@
         }
     }
 }
-.explore-other {
-    text-decoration: underline;
-    font-size: var(--font-size-16);
-    font-weight: bolder;
-    margin-top: 15px;
-    float: left;
-    width: 100%;
-    cursor: pointer;
-}
-.renewal-data {
-    padding-left: 4px;
-    padding-right: 4px;
-}
-.button-loading {
-    float: left;
-    width: 100%;
-    margin-top: 9px;
-}
-.renewal-card-title {
-    margin-bottom: -3px;
-    padding-top: 10px;
-    font-weight: bold;
-}
-.features-loading {
-    float: left;
-    width: 100%;
-    margin-top: 5px;
-}
-.renewal-card-subtitle {
-    color: var(--color-medium-gray);
-    font-size: var(--font-size-15);
-    font-weight: bold;
-    margin-bottom: 0 !important;
-}
-.renewal-card-subtitle-loading {
-    width: 56%;
-}
-.renewal-card-title-loading {
-    float: left;
-    width: 100%;
-    margin-top: 8px !important;
-}
-.year {
-    font-size: var(--font-size-15);
-    margin-left: -3px;
-}
-.renewal-list {
-    padding-left: 14px;
-    padding-top: 10px;
-    margin-bottom: 10px;
-}
-.renewal-card {
-    float: left;
-    width: 100%;
-    box-shadow: none !important;
-}
-.renewal-off {
-    color: var(--color-medium-gray);
-    font-size: var(--font-size-12);
-    font-weight: 600;
-    padding-left: 4px;
-}
-.discount-off {
-    color: var(--color-green);
-    font-weight: bold;
-}
+
 .features {
     line-height: 1.7;
     color: var(--color-medium-gray);
     font-size: var(--font-size-16);
 }
-.renewal-card-content a {
-    text-decoration: underline;
-    font-size: var(--font-size-16);
-    margin-bottom: 33px;
-    float: left;
-    width: 100%;
-}
-.pay-now {
-    font-size: var(--font-size-16);
-    height: 44px;
-    width: 44%;
-}
+
 .success-btn {
     width: 100% !important;
 }
@@ -606,19 +371,7 @@
     float: left;
     width: 24%;
     .extra-addons-value {
-        color: var(--color-blue-primary);
-    }
-}
-.plan-table-layout {
-    table-layout: fixed;
-    overflow: auto !important;
-    max-width: 100%;
-    float: left;
-}
-
-::ng-deep {
-    .color-primary {
-        color: var(--color-blue-primary) !important;
+        color: var(--text-primary-color);
     }
 }
 
@@ -647,11 +400,6 @@
         }
     }
 }
-@media (min-width: 1367px) {
-    .plans-box {
-        padding: 10px 30px 30px;
-    }
-}
 @media only screen and (max-width: 1366px) {
     .your-account:after {
         top: -10px;
@@ -667,17 +415,13 @@
     .plan-list {
         list-style-type: none;
     }
-    .select-plan-head {
-        padding: 10px 15px;
-    }
+
     .plan-list {
         li {
             padding: 5px 0;
         }
     }
-    .plan-msg {
-        margin-bottom: 10px;
-    }
+
     .single-plan-for-company {
         .plans-box {
             display: flex;
@@ -706,15 +450,7 @@
     }
 }
 @media only screen and (max-width: 1199px) {
-    .main-row-plans {
-        width: 100%;
-        margin-bottom: 15px;
-        display: block;
-    }
-    .main-row-plans .col-sm-4 {
-        width: 50%;
-        display: inline-block;
-    }
+
     .main-row-plans::-webkit-scrollbar {
         height: 5px;
         width: 100%;
@@ -722,7 +458,7 @@
     .main-row-plans::-webkit-scrollbar-thumb {
         background-color: var(--color-silver);
         outline: 1px solid var(--color-dark-gray);
-        border-radius: 20px;
+        border-radius: var(--mat-border-radius-16);
     }
     .single-plan-for-company {
         .plans-box {
@@ -740,9 +476,7 @@
         height: 97%;
         margin-bottom: 15px;
         padding-bottom: 10px;
-        .overall-plans {
-            margin-bottom: 20px;
-        }
+
     }
     .plan-footer {
         .success-btn {
@@ -761,31 +495,8 @@
         padding: 25px 20px !important;
     }
 }
-@media (max-width: 768px) {
-    .plan-footer .success-btn {
-        padding: 8px 15px;
-    }
-    .welcome-msg {
-        float: left;
-        width: 100%;
-        .btn-cancel {
-            height: 37px;
-            width: 80px;
-
-            .back-left {
-                margin-top: 0% !important;
-            }
-        }
-    }
-    .renewal-data {
-        float: left;
-    }
-}
 @media screen and (min-width: 768px) and (orientation: portrait) {
-    .plan-td.mat-cell:nth-child(even) {
-        padding-left: 104px !important;
-        padding-right: 106px !important;
-    }
+    .plan-
     .plan-td.mat-cell:nth-child(odd) {
         padding-left: 110px !important;
         padding-right: 119px !important;
@@ -798,9 +509,7 @@
         padding-left: 78px !important;
         padding-right: 68px !important;
     }
-    .plan-table .mat-column--b-Benefits--b- {
-        padding-left: 0 !important;
-    }
+
     .extra-addons-content {
         width: 69% !important;
     }
@@ -877,9 +586,7 @@
     .renewal-data {
         float: left;
     }
-    .plan-td-changes {
-        max-width: 365px !important;
-    }
+
     .footer-plan-loading {
         flex: 0 0 100% !important;
         max-width: 100% !important;
@@ -931,229 +638,9 @@
         width: 55% !important;
     }
 }
-@media (max-width: 480px) and (orientation: portrait) {
-    .grid-title-left {
-        width: 244px !important;
-    }
-    .mat-column--b-Benefits--b- {
-        display: none !important;
-    }
-    .plan-table-content {
-        margin-top: 13% !important;
-    }
-    .left-icon {
-        float: left;
-        display: block !important;
-        height: 41px;
-        width: 57px;
-    }
-    .right-icon {
-        float: right;
-        display: block !important;
-        height: 41px;
-        width: 57px;
-    }
-    .plan-td {
-        padding-left: 151px !important;
-        padding-right: 172px !important;
-    }
-    .plan-td-changes {
-        padding-left: 118px !important;
-        padding-right: 130px !important;
-    }
-    .plan-table {
-        height: 423px;
-        padding-left: 0px !important;
-        padding-right: 0px !important;
-    }
-    .redeem-plan {
-        width: 76%;
-    }
-    .redeem-input {
-        width: 100% !important;
-        height: 30px;
-        margin-bottom: 13px;
-    }
-    .redeem-back {
-        width: 19% !important;
-    }
-    .redeem-button {
-        width: 100% !important;
-        height: 45px;
-    }
-    .extra-addons-content {
-        margin-top: 13px !important;
-        float: left;
-        width: 100% !important;
-    }
-    .activation-key {
-        margin-top: 8px;
-    }
-    .scroll-left {
-        margin-bottom: 10px;
-        margin-top: 10px;
-        display: block !important;
-    }
-    .scroll-right {
-        margin-bottom: 10px;
-        margin-top: 10px;
-        display: block !important;
-        .mat-raised-button {
-            margin-right: 0 !important;
-        }
-    }
-}
-@media (max-width: 767px) and (orientation: landscape) {
-    .left-icon {
-        float: left;
-        display: block !important;
-        height: 41px;
-        width: 57px;
-    }
-    .grid-title-left {
-        width: 326px !important;
-    }
-    .plan-table-content {
-        margin-top: 8% !important;
-    }
-    .right-icon {
-        float: right;
-        display: block !important;
-        height: 41px;
-        width: 57px;
-    }
-    .plan-td {
-        padding-left: 120px !important;
-        padding-right: 138px !important;
-    }
-    .plan-td-changes {
-        padding-left: 120px !important;
-        padding-right: 138px !important;
-    }
-    .plan-td-changes.mat-cell:nth-child(2n + 1) {
-        padding-left: 117px !important;
-        padding-right: 114px !important;
-    }
-    .plan-td-changes {
-        max-width: none !important;
-    }
-    .plan-table {
-        height: 458px !important;
-        padding-left: 0px !important;
-        padding-right: 0px !important;
-    }
-    .mat-column--b-Benefits--b- {
-        display: none !important;
-    }
-    .scroll-left {
-        margin-bottom: 10px;
-        margin-top: 10px;
-        display: block !important;
-    }
-    .scroll-right {
-        margin-bottom: 10px;
-        margin-top: 10px;
-        display: block !important;
-        .mat-raised-button {
-            margin-right: 0 !important;
-        }
-    }
-    .main-row-plans .col-sm-4:last-child {
-        margin-left: auto;
-    }
-    .plan-list {
-        margin-bottom: 10px;
-    }
-    .main-row-plans {
-        display: block;
-    }
-    .note-wrap {
-        position: relative;
-        bottom: 0px;
-    }
-    .xs-pr-0 {
-        padding-right: 0px !important;
-    }
-    .xs-pd-l15 {
-        padding-left: 15px !important;
-    }
-    .inner-your-account {
-        margin-bottom: 20px;
-    }
-    .see-all-features .col-sm-6.col-md-3 {
-        width: 100%;
-    }
-    .transactions-popup {
-        width: 220px;
-    }
-    .main-row-plans {
-        white-space: normal;
-        overflow-x: hidden;
-    }
-    .main-row-plans .col-sm-4 {
-        width: 100%;
-        display: block;
-        white-space: normal;
-        max-width: 400px;
-        margin: 0 auto;
-    }
-    .your-account {
-        margin: 90px 0px 30px 40px;
-    }
-    .plan-footer {
-        .success-btn {
-            padding: 8px 15px;
-            display: block;
-        }
-    }
-    .select-plan-head {
-        font-size: var(--font-size-16);
-        padding: 12px 15px;
-    }
-    .select-plan-block {
-        margin-bottom: 15px;
-        max-width: 400px;
-        margin: 0 auto 30px;
-        height: auto;
-        .overall-plans {
-            margin-bottom: 0;
-        }
-    }
-    .welcome-msg {
-        .plan-msg {
-            margin-bottom: 15px;
-        }
-        .btn-cancel {
-            float: left;
-        }
-    }
-    .plans-box {
-        padding: 10px 15px;
-        p.total-price {
-            margin: 0 0 15px;
-        }
-    }
-    .your-account {
-        margin: 0px;
-    }
-    .inner-your-account {
-        margin-bottom: 20px;
-        padding: 15px;
-    }
-    .your-account:before,
-    .your-account:after {
-        display: none;
-    }
-    .activation-key-wrapper {
-        padding-left: 0px;
-    }
-}
+
 @media (min-width: 1281px) {
-    .plan-td {
-        padding-left: 50px !important;
-        padding-right: 50px !important;
-        padding-bottom: 5px !important;
-    }
+
     .plan-td-changes {
         padding-left: 65px !important;
         padding-right: 65px !important;
@@ -1169,30 +656,9 @@
         }
     }
 }
-@media only screen and (max-width: 640px) {
-    .see-all-features .col-sm-6.col-md-3 {
-        width: 100%;
-    }
-}
-@media (max-width: 575px) {
-    .activation-key-wrapper {
-        .d-flex {
-            flex-direction: column;
-            input {
-                width: 100%;
-                display: block;
-            }
-            .activation-btn {
-                margin-left: 0 !important;
-                width: 100%;
-            }
-        }
-    }
-}
+
 @media screen and (min-width: 1280px) and (orientation: landscape) {
-    .btn-cancel {
-        width: 82px !important;
-    }
+
     .extra-addons-content {
         width: 31% !important;
     }

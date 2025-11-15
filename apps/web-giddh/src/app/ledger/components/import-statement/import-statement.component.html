@@ -1,21 +1,23 @@
 <div class="dialog-header">
-    <h3 class="font-16">
+    <p class="font-size-16">
         {{
             importStep === importStepEnum.Second
-                ? selectStatement === importStatementType.BankStatement ? inputData?.localeData?.import_page_heading : inputData?.localeData?.import_voucher_heading
+                ? selectStatement === importStatementType.BankStatement
+                    ? inputData?.localeData?.import_page_heading
+                    : inputData?.localeData?.import_voucher_heading
                 : inputData?.localeData?.select_statement
         }}
-    </h3>
+    </p>
     <div class="d-inline-block">
         <button
             *ngIf="importStep === importStepEnum.Second"
-            mat-stroked-button
+            mat-raised-button
             [matTooltip]="inputData?.commonLocaleData?.app_back"
             matTooltipPosition="above"
             (click)="importStep = importStepEnum.First"
-            class="header-btn mr-r2"
+            class="header-btn mr-4"
         >
-             {{ inputData?.commonLocaleData?.app_back }}
+            {{ inputData?.commonLocaleData?.app_back }}
         </button>
         <i mat-dialog-close aria-label="close icon" class="icon-cross"></i>
     </div>
@@ -24,10 +26,15 @@
     <!-- Step first -->
     <div *ngIf="importStep === importStepEnum.First" class="row m-0">
         <div class="col-md-6 p-0">
-            <div class="statement-card" (click)="selectStatementAccount(importStepEnum.Second, importStatementType.Voucher)">
-                <div class="cursor-pointer d-flex justify-content-center flex-column align-item-center">
-                    <i class="icon-import mr-r1 icon-font-48 opacity-5"></i>
-                    <p class="mr-t2 font-15 text-center">{{ inputData?.localeData?.import_voucher }}</p>
+            <div
+                class="statement-card"
+                (click)="selectStatementAccount(importStepEnum.Second, importStatementType.Voucher)"
+            >
+                <div
+                    class="cursor-pointer d-flex justify-content-center flex-column d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1"
+                >
+                    <i class="icon-import mr-2 icon-font-size-48 opacity-5"></i>
+                    <p class="mt-4 font-size-15 text-center">{{ inputData?.localeData?.import_voucher }}</p>
                 </div>
             </div>
         </div>
@@ -36,17 +43,19 @@
                 class="statement-card"
                 (click)="selectStatementAccount(importStepEnum.Second, importStatementType.BankStatement)"
             >
-                <div class="cursor-pointer d-flex justify-content-center flex-column align-item-center">
-                    <i class="icon-balance-sheet-new mr-r1 icon-font-48 opacity-5"></i>
-                    <p class="mr-t2 font-15 text-center">{{ inputData?.localeData?.import_bank_statement }}</p>
+                <div
+                    class="cursor-pointer d-flex justify-content-center flex-column d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1"
+                >
+                    <i class="icon-balance-sheet-new mr-2 icon-font-size-48 opacity-5"></i>
+                    <p class="mt-4 font-size-15 text-center">{{ inputData?.localeData?.import_bank_statement }}</p>
                 </div>
             </div>
         </div>
     </div>
     <!-- Step second -->
-    <div *ngIf="importStep === importStepEnum.Second" class="pd-2">
+    <div *ngIf="importStep === importStepEnum.Second" class="p-2">
         <form name="importStatementForm" novalidate autocomplete="off">
-            <div class="pd-b2 clearfix browse-file-btn">
+            <div class="pb-4 clear-both browse-file-btn">
                 <mat-label class="import-field-label align-bottom file-upload-label"
                     >{{ inputData?.commonLocaleData?.app_file }} <sup>*</sup></mat-label
                 >
@@ -60,27 +69,30 @@
                         required
                     />
                 </label>
-                <span  class="path-name align-self-center">{{ selectedFile }}</span>
+                <span class="path-name align-self-center">{{ selectedFile }}</span>
             </div>
-            <div class="pd-b2 clearfix password-label d-flex" *ngIf="getRequest.entity === fileType.PDF && selectStatement === importStatementType.BankStatement">
-                <mat-label class="import-field-label align-bottom">{{ inputData?.commonLocaleData?.app_password }}</mat-label>
+            <div
+                class="pb-4 clear-both password-label d-flex mat-form-field-clean"
+                *ngIf="getRequest.entity === fileType.PDF && selectStatement === importStatementType.BankStatement"
+            >
+                <mat-label class="import-field-label align-bottom">{{
+                    inputData?.commonLocaleData?.app_password
+                }}</mat-label>
                 <mat-form-field appearance="fill" class="w-100 custom-input-field">
                     <input
                         matInput
                         type="password"
                         name="password"
-                        class="form-control mat-field-border"
+                        class="form-control border border-radius-0"
                         [(ngModel)]="postRequest.password"
                     />
                 </mat-form-field>
             </div>
             <div
-                class="pd-b2 clearfix"
+                class="pb-4 clear-both"
                 *ngIf="[fileType.CSV, fileType.XLS, fileType.XLSX].includes(getRequest.entity)"
             >
-                <label class="import-field-label align-bottom">{{
-                    inputData?.localeData?.header_provided
-                }}</label>
+                <label class="import-field-label align-bottom">{{ inputData?.localeData?.header_provided }}</label>
                 <mat-slide-toggle color="primary" name="isHeaderProvided" [(ngModel)]="postRequest.isHeaderProvided">
                     <span class="pull-left" *ngIf="postRequest.isHeaderProvided">{{
                         inputData?.commonLocaleData?.app_yes
@@ -90,9 +102,13 @@
                     }}</span>
                 </mat-slide-toggle>
             </div>
-            <div class="pd-b2 clearfix"
-                *ngIf="selectStatement === importStatementType.BankStatement && [fileType.CSV, fileType.XLS, fileType.XLSX].includes(getRequest.entity)"
-                >
+            <div
+                class="pb-4 clear-both"
+                *ngIf="
+                    selectStatement === importStatementType.BankStatement &&
+                    [fileType.CSV, fileType.XLS, fileType.XLSX].includes(getRequest.entity)
+                "
+            >
                 <label class="import-field-label align-bottom">{{
                     inputData?.localeData?.same_debit_credit_column
                 }}</label>
@@ -113,14 +129,14 @@
                 <div>
                     <a
                         href="javascript:;"
-                        class="m-0 pd-t05 pd-b05 pd-r1 font-14 text-underline"
+                        class="m-0 pt-1 pb-1 pr-2 font-size-14 text-underline"
                         (click)="downloadSampleFile(selectStatement)"
                     >
                         {{ inputData?.localeData?.download_sample_xls }}
                     </a>
                     <a
                         href="javascript:;"
-                        class="pd-t05 pd-b05 pd-r1 pd-l1 font-14 text-underline"
+                        class="pt-1 pb-1 pr-2 pl-2 font-size-14 text-underline"
                         (click)="downloadSampleFile(selectStatement, true)"
                     >
                         {{ inputData?.localeData?.download_sample_csv }}
@@ -132,7 +148,9 @@
                     [matTooltip]="inputData?.commonLocaleData?.app_upload"
                     matTooltipPosition="above"
                     [disabled]="!postRequest.file"
-                    (click)="selectStatement === importStatementType.Voucher ? uploadFile() : importStatement()"
+                    (click)="
+                        selectStatement === importStatementType.Voucher ? uploadFile('voucher') : importStatement()
+                    "
                 >
                     {{ inputData?.commonLocaleData?.app_upload }}
                 </button>
