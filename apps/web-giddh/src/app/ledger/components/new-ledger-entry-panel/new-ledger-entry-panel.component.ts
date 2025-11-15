@@ -46,7 +46,7 @@ import { SalesPersonComponentStore } from '../../../shared/sales-person/utility/
 import { SalesPersonComponent } from '../../../shared/sales-person/sales-person.component';
 import { ReactiveDropdownFieldComponent } from '../../../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component';
 import { ActionTypeEnum } from '../../../shared/sales-person/utility/sales-person.constant';
-import { LedgerDropdownTypeEnum } from '../../../shared/Enums/common.enum';
+import { LedgerDropdownTypeEnum } from '../../../models/api-models/Ledger';
 
 /** New ledger entries */
 const NEW_LEDGER_ENTRIES = [
