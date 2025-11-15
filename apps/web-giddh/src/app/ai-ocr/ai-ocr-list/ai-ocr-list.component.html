@@ -147,14 +147,24 @@
                     <ng-container matColumnDef="action">
                         <th mat-header-cell *matHeaderCellDef></th>
                         <td mat-cell *matCellDef="let element" class="position-relative">
-                              <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="vertical dots" class="action-icon" *ngIf="element?.convertedStatus?.toLowerCase() !== 'completed'">
-                                        <span class="icon-dots-three-vertical mr-0 font-14 d-block "></span>
-                                    </button>
-                                    <mat-menu #menu="matMenu">
-                                        <button mat-menu-item *ngFor="let option of transactionOptions" (click)="selectVoucher(option, element)">
-                                            {{ option.label }}
-                                        </button>
-                                    </mat-menu>
+                            <button
+                                mat-icon-button
+                                [matMenuTriggerFor]="menu"
+                                aria-label="vertical dots"
+                                class="action-icon"
+                                *ngIf="element?.convertedStatus?.toLowerCase() !== 'completed'"
+                            >
+                                <span class="icon-dots-three-vertical mr-0 font-size-15 d-block"></span>
+                            </button>
+                            <mat-menu #menu="matMenu">
+                                <button
+                                    mat-menu-item
+                                    *ngFor="let option of transactionOptions"
+                                    (click)="selectVoucher(option, element)"
+                                >
+                                    {{ option.label }}
+                                </button>
+                            </mat-menu>
                         </td>
                     </ng-container>
                     <tr
@@ -215,7 +225,6 @@
         >
         </mat-paginator>
         <section class="mb-custom-80"></section>
-
     </div>
 </ng-container>
 <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">

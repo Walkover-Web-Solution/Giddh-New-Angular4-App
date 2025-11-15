@@ -141,7 +141,7 @@
             </div>
         </div>
         <div class="mr-t1 d-flex align-items-center" *ngIf="isCompany">
-            <span class="font-16 mr-r1">{{ localeData?.create_voucher_messgae }} </span>
+            <span class="font-size-16 mr-r1">{{ localeData?.create_voucher_messgae }} </span>
         </div>
         <main class="flex-grow-1 overflow-auto main-ocr">
             <ng-container [ngSwitch]="selectedToggle">
@@ -189,7 +189,7 @@
                                 class="m-t1 d-flex justify-content-center align-items-center"
                                 *ngIf="!ocrMainList?.items?.length && (isCompany || isConsolidatedBranch)"
                             >
-                                <span class="font-24 mr-r1">{{ localeData?.go_to_branch_information }} </span>
+                                <span class="font-size-24 mr-r1">{{ localeData?.go_to_branch_information }} </span>
                                 <button mat-raised-button color="primary" (click)="gotToBranchTab()">
                                     {{ localeData?.go_to_branch }}
                                 </button>

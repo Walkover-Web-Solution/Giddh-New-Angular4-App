@@ -42,7 +42,7 @@
                 &.selected-unit {
                     background-color: var(--bg-primary-color);
                     mat-list-item {
-                        a {
+                        span {
                             color: var(--color-white);
                         }
                     }
