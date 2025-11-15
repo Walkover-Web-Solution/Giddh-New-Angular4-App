@@ -62,6 +62,7 @@ import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
 import { OtherTaxTypeEnum } from '../vouchers/utility/vouchers.const';
+import { LedgerDropdownTypeEnum } from '../shared/Enums/common.enum';
 import { IOption } from '../app.constant';
 
 @Component({
@@ -264,6 +265,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public voucherApiVersion: number;
     /** Selected entry details */
     public selectedItem: any;
+    /** Enum for dropdown types - exposed to template */
+    public ledgerDropdownTypeEnum = LedgerDropdownTypeEnum;
     /** Pagination Object */
     public paginationObject: any = {
         totalItems: 0,
@@ -4180,5 +4183,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.selectedTxnAccUniqueName = txn?.selectedAccount?.uniqueName;
         this.needToReCalculate.next(true);
         this.getTransactionCountConvertToEntries();
+    }
+
+    /**
+     * Hide all dropdown tax panels in the new ledger entry panel
+     * 
+     * @param exceptDropdown Optional parameter to exclude a specific dropdown from closing
+     * @memberof LedgerComponent
+     */
+    public hideAllDropdown(exceptDropdown?: LedgerDropdownTypeEnum): void {
+        if (this.newLedgerComponent && this.newLedgerComponent.hideAllDropdown) {
+            this.newLedgerComponent.hideAllDropdown(exceptDropdown);
+        }
     }
 }

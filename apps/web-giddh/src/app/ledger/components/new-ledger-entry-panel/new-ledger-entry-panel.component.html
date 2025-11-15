@@ -1,6 +1,6 @@
 <div
     class="ledger-panel giddh-overlap-block new-ledger-panel"
-    (click)="hideAllDropdownTax()"
+    (click)="hideAllDropdown()"
     #entryContent
     (keyup)="saveCtrlEnter($event)"
     (clickOutside)="clickedOutside($event)"
@@ -89,7 +89,7 @@
                     </div>
                     <!-- Unit -->
                     <div *ngIf="currentTxn?.unitRate">
-                        <mat-form-field [appearance]="'outline'" class="initial-height w-100">
+                        <mat-form-field [appearance]="'outline'" class="w-100">
                             <mat-label class="font-size-12">{{ commonLocaleData?.app_unit }}</mat-label>
                             <mat-select
                                 class="w-100"
@@ -223,7 +223,7 @@
                     (click)="$event.stopPropagation()"
                 >
                     <ledger-discount
-                        (click)="closeTaxDropdown(); closeAddTagDropdown()"
+                        (click)="hideAllDropdown(ledgerDropdownTypeEnum.DISCOUNT)"
                         #discount
                         id="ledger-discount"
                         [discountAccountsDetails]="currentTxn?.discounts"
@@ -262,7 +262,7 @@
                     (click)="$event.stopPropagation()"
                 >
                     <tax-control
-                        (click)="closeDiscountDropdown(); closeAddTagDropdown();"
+                        (click)="hideAllDropdown(ledgerDropdownTypeEnum.TAX)"
                         id="ledger-tax"
                         #tax
                         [taxes]="companyTaxesList$ | async"
@@ -360,7 +360,7 @@
             <div class="col-5 pr-0">
                 <reactive-dropdown-field 
                     #salesPersonDropdownRef
-                    (click)="$event.stopPropagation(); closeDiscountDropdown(); closeTaxDropdown()"
+                    (click)="$event.stopPropagation(); hideAllDropdown(ledgerDropdownTypeEnum.SALES_PERSON)"
                     [(ngModel)]="blankLedger.salesPersonUniqueName"
                     [labelValue]="blankLedger.salesPersonName || ''"
                     [name]="'sales-person'"
@@ -443,8 +443,10 @@
             <div class="taxable-amount-section">
                 <reactive-dropdown-field
                     id="ledger-itc-type"
+                    #itcDropdownRef
                     [name]="'variantDropdown'"
                     [label]="localeData?.itc_type"
+                    (click)="$event.stopPropagation(); hideAllDropdown(ledgerDropdownTypeEnum.ITC)"
                     [placeholder]="localeData?.itc_type"
                     [options]="availableItcList"
                     [(ngModel)]="currentTxn.itcAvailable"
@@ -468,7 +470,7 @@
                                         <div class="form-group">
                                             <reactive-dropdown-field
                                                 #voucherDropdownRef
-                                                (click)="$event.stopPropagation(); closeDiscountDropdown(); closeTaxDropdown()"
+                                                (click)="$event.stopPropagation(); hideAllDropdown(ledgerDropdownTypeEnum.VOUCHER)"
                                                 id="ledger-voucher-type"
                                                 [name]="'variantDropdown'"
                                                 [label]="commonLocaleData?.app_voucher_type"
@@ -516,6 +518,7 @@
                                                 class="w-100"
                                                 #invoice
                                                 id="ledger-voucher-type-debit-note"
+                                                (click)="$event.stopPropagation(); hideAllDropdown(ledgerDropdownTypeEnum.INVOICE)"
                                                 [disabled]="isReadOnly"
                                                 [label]="commonLocaleData?.app_reference_invoice"
                                                 [placeholder]="localeData?.select_invoice"
@@ -717,7 +720,7 @@
                                         <td>
                                             <select-multiple-fields
                                                 class="d-block w-100"
-                                                (click)="$event.stopPropagation(); closeDiscountDropdown(); closeTaxDropdown()"
+                                                (click)="$event.stopPropagation(); hideAllDropdown(ledgerDropdownTypeEnum.TAG)"
                                                 #selectMultipleFieldsRef
                                                 [name]="'tagNames'"
                                                 [allowAddChip]="false"
@@ -1114,7 +1117,9 @@
         <ng-container *ngIf="currentTxn?.isStock && stockVariants | async as variants">
             <div *ngIf="variants?.length > 1" class="col-md-3 mb-2 p-0 pr-2">
                 <reactive-dropdown-field
+                    #variantDropdownRef
                     id="ledger-variant-dropdown"
+                    (click)="stopPropagation($event); hideAllDropdown(ledgerDropdownTypeEnum.VARIANT)"
                     [name]="'variantDropdown'"
                     [label]="localeData?.select_variant"
                     [placeholder]="localeData?.select_variant"
@@ -1131,7 +1136,9 @@
         </ng-container>
         <div class="col-md-3 mb-2 p-0 pr-2" *ngIf="currentTxn?.selectedAccount?.stock && warehouses?.length > 1">
             <reactive-dropdown-field
+                #warehouseDropdownRef
                 id="ledger-warehouse-dropdown"
+                (click)="$event.stopPropagation(); hideAllDropdown(ledgerDropdownTypeEnum.WAREHOUSE)"
                 [name]="'warehouseDropdown'"
                 [label]="localeData?.select_warehouse"
                 [placeholder]="localeData?.select_warehouse"

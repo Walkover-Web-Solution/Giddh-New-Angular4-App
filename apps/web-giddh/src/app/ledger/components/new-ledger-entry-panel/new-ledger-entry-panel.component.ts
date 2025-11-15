@@ -46,6 +46,7 @@ import { SalesPersonComponentStore } from '../../../shared/sales-person/utility/
 import { SalesPersonComponent } from '../../../shared/sales-person/sales-person.component';
 import { ReactiveDropdownFieldComponent } from '../../../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component';
 import { ActionTypeEnum } from '../../../shared/sales-person/utility/sales-person.constant';
+import { LedgerDropdownTypeEnum } from '../../../shared/Enums/common.enum';
 
 /** New ledger entries */
 const NEW_LEDGER_ENTRIES = [
@@ -256,6 +257,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public discountsList: any[] = [];
     /** Is advance receipt with tds/tcs */
     public isAdvanceReceiptWithTds: boolean = false;
+    /** Enum for dropdown types - exposed to template */
+    public ledgerDropdownTypeEnum = LedgerDropdownTypeEnum;
     /** True if adjustment popup is open */
     public isAdjustmentPopupOpen = false;
     /** True if rcm popup is open */
@@ -290,6 +293,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     public salesPersonDialogRef: MatDialogRef<any>;
     /** Template Reference for Create Tax aside menu */
     @ViewChild("createTax") public createTax: TemplateRef<any>;
+    /** Reference variant dropdown */
+    @ViewChild("variantDropdownRef") public variantDropdownRef: ReactiveDropdownFieldComponent;
+    /** Reference warehouse dropdown */
+    @ViewChild("warehouseDropdownRef") public warehouseDropdownRef: ReactiveDropdownFieldComponent;
+    /** Reference itc dropdown */
+    @ViewChild("itcDropdownRef") public itcDropdownRef: ReactiveDropdownFieldComponent;
+    /** Reference invoice dropdown */
+    @ViewChild("invoice") public invoiceDropdownRef: ReactiveDropdownFieldComponent;
 
     constructor(private store: Store<AppState>,
         private cdRef: ChangeDetectorRef,
@@ -1088,13 +1099,79 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      *
      * @memberof NewLedgerEntryPanelComponent
      */
-    public hideAllDropdownTax(): void {
-        this.closeAddTagDropdown();
-        this.closeTaxDropdown();
-        this.closeDiscountDropdown();
-        this.closeSalesPersonDropdown();
-        this.closeVoucherPanel();
-        this.closeOtherDialogMenu.emit(true);
+    public hideAllDropdown(exceptDropdown?: LedgerDropdownTypeEnum): void {
+        if (exceptDropdown !== LedgerDropdownTypeEnum.TAG) {
+            this.closeAddTagDropdown();
+        }
+        if (exceptDropdown !== LedgerDropdownTypeEnum.TAX) {
+            this.closeTaxDropdown();
+        }
+        if (exceptDropdown !== LedgerDropdownTypeEnum.DISCOUNT) {
+            this.closeDiscountDropdown();
+        }
+        if (exceptDropdown !== LedgerDropdownTypeEnum.SALES_PERSON) {
+            this.closeSalesPersonDropdown();
+        }
+        if (exceptDropdown !== LedgerDropdownTypeEnum.VOUCHER) {
+            this.closeVoucherPanel();
+        }
+        if (exceptDropdown !== LedgerDropdownTypeEnum.VARIANT) {
+            this.closeVariantPanel();
+        }
+        if (exceptDropdown !== LedgerDropdownTypeEnum.WAREHOUSE) {
+            this.closeWarehousePanel();
+        }
+        if (exceptDropdown !== LedgerDropdownTypeEnum.ITC) {
+            this.closeItcPanel();
+        }
+        if (exceptDropdown !== LedgerDropdownTypeEnum.INVOICE) {
+            this.closeInvoicePanel();
+        }
+        this.closeOtherDialogMenu.emit(exceptDropdown === LedgerDropdownTypeEnum.ACCOUNT ? false : true);
+    }
+
+    /**
+     * Close invoice dropdown
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public closeInvoicePanel(): void {
+        if (this.invoiceDropdownRef) {
+            this.invoiceDropdownRef.closeDropdownPanel();
+        }
+    }
+
+    /**
+     * Close variant dropdown
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public closeVariantPanel(): void {
+        if (this.variantDropdownRef) {
+            this.variantDropdownRef.closeDropdownPanel();
+        }
+    }
+
+    /**
+     * Close warehouse dropdown
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public closeWarehousePanel(): void {
+        if (this.warehouseDropdownRef) {
+            this.warehouseDropdownRef.closeDropdownPanel();
+        }
+    }
+
+    /**
+     * Close itc dropdown
+     *
+     * @memberof NewLedgerEntryPanelComponent
+     */
+    public closeItcPanel(): void {
+        if (this.itcDropdownRef) {
+            this.itcDropdownRef.closeDropdownPanel();
+        }
     }
 
     /**
