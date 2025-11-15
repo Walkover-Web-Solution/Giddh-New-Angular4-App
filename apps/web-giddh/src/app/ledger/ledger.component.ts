@@ -691,10 +691,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     this.ledgerGridColumnsValue = [2, 3, 3]
                     this.getLedgerStatementViewGridColumnsValue();
                 } else if (result.breakpoints[BREAKPOINT_SCREEN_SIZE.TABLET]) {
-                    // this.breakpointScreenSize.tabScreen = true;
-                    // this.ledgerGridTotalColumns = 8;
-                    // this.ledgerGridColumnsValue = [2, 3, 3];
-                    // this.getLedgerStatementViewGridColumnsValue();
                     this.arrangeLedgerTransactionsForMobile();
                 } else {
                     this.ledgerGridTotalColumns = 4
