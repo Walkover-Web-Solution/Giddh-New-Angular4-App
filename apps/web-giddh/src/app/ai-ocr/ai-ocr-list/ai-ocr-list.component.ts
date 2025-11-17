@@ -142,8 +142,6 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
                 this.aiOcrService.mainPageOcrData$.pipe(
                     takeUntil(this.destroyed$),
                     takeUntil(this.routeScope$),
-                    filter(data => data !== null),
-                    distinctUntilChanged()
                 ).subscribe((data) => {
                     this.updateDataSource(data);
                 });
@@ -153,17 +151,6 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
                     if (res) {
                         this.aiOcrService.mainPageOcrData$.next(null);
                         this.getAllOcrDocuments(false);
-                        this.ocrDataUpdate();
-                    }
-                });
-
-                this.ocrDocumentListForm.valueChanges.pipe(
-                    takeUntil(this.destroyed$),
-                    takeUntil(this.routeScope$),
-                    debounceTime(700),
-                    distinctUntilChanged()
-                ).subscribe((value) => {
-                    if (value) {
                         this.ocrDataUpdate();
                     }
                 });
@@ -240,13 +227,14 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
                     if (!response) {
                         this.aiOcrService.dateRangeEmit$.pipe(takeUntil(this.destroyed$), takeUntil(this.routeScope$)).subscribe((res) => {
                             if (res) {
-                                this.dateSelectedCallback(res);
+                               this.ocrDocumentsRequestParams.from = res.from;
+                               this.ocrDocumentsRequestParams.to = res.to;
                             }
                         });
                     }
                 });
 
-                this.aiOcrService.resetData$.pipe(takeUntil(this.destroyed$), takeUntil(this.routeScope$)).subscribe((res) => {
+                this.aiOcrService.resetData$.pipe(takeUntil(this.routeScope$), takeUntil(this.routeScope$)).subscribe((res) => {
                     if (res) {
                         this.resetFilter(res);
                     }
@@ -259,6 +247,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
                         this.ocrDocumentsRequestParams.to = res.to;
                         this.showClearFilter = false;
                         this.getAllOcrDocuments(false);
+                        this.ocrDataUpdate();
                     }
                 });
             }
@@ -429,6 +418,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
         }
         this.ocrDocumentsRequestParams.count = event.pageSize;
         this.getAllOcrDocuments(false);
+        this.ocrDataUpdate();
     }
 
     /**
@@ -451,6 +441,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
         this.ocrDocumentsRequestParams.from = res.from;
         this.ocrDocumentsRequestParams.to = res.to;
         this.getAllOcrDocuments(true);
+        this.ocrDataUpdate();
     }
 
     /**
@@ -492,6 +483,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
     public getAllOcrDocuments(resetPage: boolean): void {
         if (resetPage) {
             this.ocrDocumentsRequestParams.page = 1;
+            this.ocrDocumentsRequestParams.from
         }
         let request = {
             pagination: this.ocrDocumentsRequestParams,
@@ -499,6 +491,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
             ocrType: this.ocrType,
         };
         this.componentStore.getAllOcrList(request);
+        this.changeDetection.detectChanges();
     }
 
     /**
@@ -513,6 +506,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
             this.ocrDocumentsRequestParams.sortBy = event.active?.toUpperCase();
             this.ocrDocumentsRequestParams.page = 1;
             this.getAllOcrDocuments(false);
+            this.ocrDataUpdate();
         }
     }
 
@@ -546,6 +540,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
                 this.updateDataSource(data);
             });
         }, 100);
+        this.changeDetection.detectChanges();
     }
 
     /**
@@ -557,6 +552,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
         this.ocrDocumentsRequestParams.from = "";
         this.ocrDocumentsRequestParams.to = "";
         this.getAllOcrDocuments(true);
+        this.ocrDataUpdate();
     }
 
     /**
