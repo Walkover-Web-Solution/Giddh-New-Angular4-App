@@ -37,32 +37,10 @@
     max-height: 200px;
 }
 
-.img-zoom {
-    max-height: 300px;
-    min-width: 300px;
-    max-width: 300px;
-    position: relative;
-}
-
 .img-zoom img {
     max-height: 300px;
     min-width: 300px;
     max-width: 300px;
-}
-
-.img-zoom .img-close {
-    position: absolute;
-    top: 0;
-    right: -29px;
-    z-index: 99;
-    background: var(--color-silver);
-    width: 30px;
-    height: 30px;
-    text-align: center;
-    line-height: 30px;
-    color: var(--color-dark-gray);
-    border-radius: 3px;
-    cursor: pointer;
 }
 
 .textarea.form-control {
@@ -82,8 +60,8 @@ span {
         width: 36px;
         padding: 10px;
         background-color: var(--color-silver);
-        border: 1px solid var(--color-silver);
-        border-radius: 5px;
+        border: 1px solid var(--border-color);
+        border-radius: var(--mat-border-radius-4);
         position: static;
         transform: inherit;
     }
@@ -113,20 +91,12 @@ span {
     visibility: hidden;
 }
 .petty-cash {
-    background: var(--color-white);
+    background: var(--theme-background-color);
     .bg-color{
-        background-color: var(--color-white) !important;
+        background-color: var(--theme-background-color) !important;
     }
 }
 
-.list-item {
-    border-bottom: 1px solid var(--color-silver);
-}
-.entry-against {
-    &.error-box {
-        border-radius: 7px;
-    }
-}
 @media only screen and (max-width: 1440px) {
     .petty-cash {
         height: initial;

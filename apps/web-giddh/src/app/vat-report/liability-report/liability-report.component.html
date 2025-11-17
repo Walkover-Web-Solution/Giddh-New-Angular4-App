@@ -1,7 +1,7 @@
 <ng-container appTranslate [file]="'vat-report'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event">
     <hamburger-menu></hamburger-menu>
-    <div class="relative w-100">
+    <div class="position-relative w-100">
         <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
             *ngIf="asideGstSidebarMenuState">
             <tax-sidebar 
@@ -11,9 +11,9 @@
             ></tax-sidebar>
         </div>
     </div>
-    <div class="liability-report mx-auto pd-15">
+    <div class="liability-report mx-auto p-3">
         <div class="container-fluid ml-0">
-            <div class="row align-items-center row-gap">
+            <div class="row align-items-center row-gap-15">
                 <div class="w-100">
                     <vat-report-filters 
                         [localeData]="localeData" 
@@ -39,7 +39,7 @@
             </div>
             <div class="row mt-5">
                 <div class="table-responsive" *ngIf="vatLiabilityOverviewReport && !isLoading">
-                    <table class="table table-bordered">
+                    <table class="table border">
                         <tr *ngFor="let vatReport of vatLiabilityOverviewReport">
                             <td width="80%">
                                 <span *ngIf="vatReport?.order === 3; else clickableItem">
@@ -64,7 +64,7 @@
                     </table>
                 </div>
                 <div *ngIf="!isTaxApiInProgress && !vatLiabilityOverviewReport?.length" class="no-data no-report">
-                    <h1>{{ localeData?.no_vat_available }}</h1>
+                    <h2>{{ localeData?.no_vat_available }}</h2>
                 </div>
             </div>
         </div>

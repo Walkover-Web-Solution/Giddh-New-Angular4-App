@@ -1,5 +1,5 @@
-<h1 class="page-title ml-0 mr-b15">{{ localeData?.filter_heading }}</h1>
-<div class="clearfix mr-t15">
+<p class="page-title ml-0 mb-3">{{ localeData?.filter_heading }}</p>
+<div class="clear-both mt-3">
     <label>{{ localeData?.filter_by_label }}</label>
     <reactive-dropdown-field
         [options]="vm.dateOptions"
@@ -9,7 +9,7 @@
         (onClear)="resetFilterBy()">
     </reactive-dropdown-field>
 </div>
-<div class="clearfix mr-t15" *ngIf="vm.selectedDateOption == '1'">
+<div class="clear-both mt-3" *ngIf="vm.selectedDateOption == '1'">
     <label>{{ localeData?.from_date }}</label>
     <giddh-datepicker
         name="from"
@@ -19,7 +19,7 @@
         class="w-100"
     ></giddh-datepicker>
 </div>
-<div class="clearfix mr-t15" *ngIf="vm.selectedDateOption == '1'">
+<div class="clear-both mt-3" *ngIf="vm.selectedDateOption == '1'">
     <label>{{ localeData?.to_date }}</label>
     <giddh-datepicker
         name="to"
@@ -29,7 +29,7 @@
         class="w-100"
     ></giddh-datepicker>
 </div>
-<div class="clearfix mr-t15" *ngIf="vm.selectedDateOption == '0'">
+<div class="clear-both mt-3" *ngIf="vm.selectedDateOption == '0'">
     <div class="mb-4 select-log">
         <mat-radio-group name="entryDate" [(ngModel)]="vm.logOrEntry" class="d-flex">
             <mat-radio-button color="primary" value="entryDate" class="mr-3">
@@ -52,7 +52,7 @@
     </div>
 </div>
 
-<div class="clearfix mr-t15">
+<div class="clear-both mt-3">
     <label>{{ localeData?.select_operation_label }}</label>
     <reactive-dropdown-field
         [options]="vm.filters"
@@ -63,7 +63,7 @@
     </reactive-dropdown-field>
 </div>
 
-<div class="clearfix mr-t15">
+<div class="clear-both mt-3">
     <label>{{ commonLocaleData?.app_select_entity }}</label>
     <reactive-dropdown-field
         [options]="vm.entities"
@@ -74,7 +74,7 @@
     </reactive-dropdown-field>
 </div>
 
-<div class="clearfix mr-t15">
+<div class="clear-both mt-3">
     <label>{{ commonLocaleData?.app_select_account }}</label>
     <reactive-dropdown-field
         [options]="vm.accounts$ | async"
@@ -89,7 +89,7 @@
     </reactive-dropdown-field>
 </div>
 
-<div class="clearfix mr-t15">
+<div class="clear-both mt-3">
     <label>{{ localeData?.select_group_label }}</label>
     <reactive-dropdown-field
         [options]="vm.groups$ | async"
@@ -103,7 +103,7 @@
         (onClear)="resetGroup()">
     </reactive-dropdown-field>
 </div>
-<div class="clearfix mr-t15">
+<div class="clear-both mt-3">
     <label>{{ localeData?.select_user_label }}</label>
     <reactive-dropdown-field
         [options]="vm.users$ | async"
@@ -113,10 +113,10 @@
         (onClear)="resetUser()">
     </reactive-dropdown-field>
 </div>
-<button mat-raised-button color="primary" class="pull-left mr-t15" [ladda]="vm.getLogsInprocess$ | async" (click)="getLogfilters()">
+<button mat-raised-button color="primary" class="pull-left mt-3" [ladda]="vm.getLogsInprocess$ | async" (click)="getLogfilters()">
     {{ localeData?.get_logs }}
 </button>
-<button mat-stroked-button class="pull-left mr-t15 mr-l05" (click)="resetFilters()">
+<button mat-stroked-button class="pull-left mt-3 ml-1" (click)="resetFilters()">
     {{ commonLocaleData?.app_reset }}
 </button>
 <br />

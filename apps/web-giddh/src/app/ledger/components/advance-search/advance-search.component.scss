@@ -1,33 +1,5 @@
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    padding: 16px !important;
-}
-.modal-header .close {
-    color: var(--color-white);
-    opacity: 1;
-    font-weight: 100;
-    text-shadow: none;
-    font-size: 30px;
-    cursor: pointer;
-}
 .mat-switch {
     margin-left: 16px;
-}
-
-::ng-deep {
-    .advance-search {
-        .clearfix {
-            background-color: var(--color-white) !important;
-        }
-    }
-}
-
-@media (min-width: 1200px) {
-    .container {
-        width: 100%;
-        max-width: 1280px;
-    }
 }
 @media only screen and (max-width: 1024px) {
     .container {
@@ -35,32 +7,7 @@
     }
 }
 @media only screen and (max-width: 767px) {
-    .ledger-state-box {
-        margin-bottom: 20px;
-    }
-    .amount-total {
-        background: var(--color-border-light);
-    }
-    .page-count {
-        width: 100%;
-        left: 0;
-        bottom: 0;
-        position: relative;
-    }
-    .ledger-stat {
-        margin: 0px 0 0;
-    }
-    .ledger-book {
-        margin-bottom: 100px;
-    }
-    .ledger-head thead tr th.active {
-        display: block !important;
-        width: 100%;
-    }
-    .ledger-book .h-table tbody .ledger-row td {
-        position: relative;
-        padding-left: 80px !important;
-    }
+
     .advance-search {
         p {
             line-height: 18px;
@@ -72,8 +19,6 @@
         .mt-2 {
             margin-top: 10px;
         }
-        .mr-b1 {
-            margin-bottom: 0;
-        }
+        
     }
 }

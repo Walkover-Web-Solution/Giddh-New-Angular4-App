@@ -29,13 +29,13 @@
                             </div>
                             <div
                                 *ngIf="activeTab === 'integration'"
-                                class="position-relative"
+                                class="position-relative "
                             >
                                 <hamburger-menu [pageHeading]="localeData?.setting_integration"></hamburger-menu>
                                 <ng-container *ngIf="integrationtab === 'e-comm'">
                                     <span class="video-link position-absolute">
                                         <watch-video
-                                            [cssClass]="'text-primary pd-r15'"
+                                            [cssClass]="'text-primary pr-3'"
                                             [moduleName]="'ECOMM_INTEGRATION'"
                                         ></watch-video>
                                     </span>
@@ -62,14 +62,14 @@
                                         *ngIf="isCompanyProfileUpdated && (isUpdateCompanyInProgress$ | async)"
                                         class="auto-save float-right"
                                     >
-                                        <i class="icon-refresh mr-r05 font-15 rotate"></i
+                                        <i class="icon-refresh mr-1 font-size-15 rotate"></i
                                         >{{ commonLocaleData?.app_saving }}
                                     </span>
                                     <span
                                         *ngIf="isCompanyProfileUpdated && !(isUpdateCompanyInProgress$ | async)"
                                         class="auto-save float-right"
                                     >
-                                        <i class="glyphicon glyphicon-check mr-r05 font-15"></i
+                                        <i class="glyphicon glyphicon-check mr-1 font-size-15"></i
                                         >{{ commonLocaleData?.app_saved }}
                                     </span>
                                 </div>
@@ -119,9 +119,9 @@
                                     [pageHeading]="localeData?.setting_shopify_integration"
                                 ></hamburger-menu>
                                 <div class="setting-container">
-                                    <span class="video-link float-right mb-2 mr-t1">
+                                    <span class="video-link float-right mb-2 mt-2">
                                         <watch-video
-                                            [cssClass]="'text-primary pd-r15'"
+                                            [cssClass]="'text-primary pr-3'"
                                             [moduleName]="'ECOMM_INTEGRATION'"
                                         ></watch-video>
                                     </span>

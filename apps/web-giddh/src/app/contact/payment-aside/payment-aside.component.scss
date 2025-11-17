@@ -1,145 +1,101 @@
-.container-fluid {
-    padding-left: 0;
-    padding-right: 0;
-}
-.all-payment-side {
-    margin: 0 !important;
-    padding: 1rem !important;
-}
-:host .aside-pane {
-    max-width: 760px;
-    width: 100%;
-}
-.aside-header {
-    background-color: var(--color-white);
-    padding: 20px 10px;
-}
 .aside-pane {
     padding: 0;
     background-color: var(--color-white);
 }
-.aside-title {
-    padding-bottom: 0;
-    border-bottom: none;
-}
+
 .creditors-detail {
-    padding: 10px;
-    background-color: var(--color-light-gray);
-    line-height: 1.6;
+    > p {
+        font-size: var(--font-size-15);
+        color: var(--color-black);
+    }
+
+    span.text-red {
+        color: var(--color-red);
+    }
 }
-.creditors-detail > p {
-    font-size: var(--font-size-15);
-    color: var(--color-black);
-}
-.creditors-detail span.red-text {
-    color: var(--color-red);
-}
-.contact-details p {
-    font-size: var(--font-size-12);
-    color: var(--color-black);
-}
-.account-details {
-    padding: 10px 0;
-}
+
 form label {
     font-size: var(--font-size-15);
     margin-bottom: 0;
 }
-.account-details .btn-default {
-    width: 100%;
-    text-align: left;
-    background-color: transparent;
-    border: 1px solid var(--color-silver);
-}
-.account-details .btn-group {
-    width: 230px;
-    display: block;
-    text-align: left;
-}
+
 .account-details {
     padding: 10px;
 }
-.account-details span.caret {
-    position: absolute;
-    right: 20px;
-    top: 14px;
-}
-.aside-pane-form {
-    background-color: var(--color-white);
-    box-shadow: 0px 3px 6px var(--color-shadow-light);
-    padding: 15px 15px;
-    height: calc(100vh - 90px);
-    overflow: auto;
-    scroll-behavior: smooth;
-    position: relative;
-    margin-top: 15px;
-}
-/*new css of new payemtndesign*/
-.modal-title {
-    color: var(--color-white);
-}
-.payment-top-form .d-flex .form-group {
-    min-width: 190px;
-}
-.payment-top-form .d-flex .form-group:last-child {
-    min-width: 220px;
-}
-.pt-25 {
-    padding-top: 25px;
-}
+
 .payment-top-form {
+    .d-flex .form-group {
+        min-width: 190px;
+
+        &:last-child {
+            min-width: 220px;
+        }
+    }
+
     .form-group {
         margin-bottom: 0;
+
         .resend-btn {
             position: absolute;
             right: 0;
         }
     }
+
     .otp-success-msg {
         color: var(--color-green);
         font-size: var(--font-size-15);
     }
 }
+
 .selected-bank-details {
-    border-top: 1px solid var(--color-silver);
+    border-top: 1px solid var(--border-color);
     padding-top: 25px;
     margin-top: 5px;
+
     .account-holder-name {
         display: flex;
         font-size: var(--font-size-15);
+
         .due-amount {
             max-width: 100%;
             width: 100%;
         }
+
         p {
             &:first-child {
                 max-width: 450px;
                 width: 100%;
             }
+
             span {
                 float: right;
             }
         }
     }
+
     .bank-details-wrapper {
-        border: 1px solid var(--color-silver);
-        border-radius: 2px;
+        border: 1px solid var(--border-color);
+        border-radius: var(--mat-border-radius-0);
         margin-top: 3px;
         display: flex;
+
         .readonly-bank-details {
             width: 100%;
             max-width: 450px;
             font-size: var(--font-size-15);
             background-color: var(--color-border-light);
             padding: 10px;
-            border-right: 1px solid var(--color-silver);
+            border-right: 1px solid var(--border-color);
+
             .label-value-data {
                 display: flex;
                 align-items: center;
                 margin: 5px 0;
+
                 label {
                     margin-right: 5px;
                 }
+
                 .form-control[disabled],
                 .form-control[readonly],
                 fieldset[disabled] .form-control {
@@ -152,15 +108,19 @@ form label {
                 }
             }
         }
+
         .amount-remark-section {
             padding: 15px;
             width: 100%;
-            padding-top: 0px;
+            padding-top: 0;
+
             .form-group {
                 margin-bottom: 0;
             }
+
             .remark-block {
                 width: 100%;
+
                 textarea {
                     min-height: 80px;
                 }
@@ -168,6 +128,7 @@ form label {
         }
     }
 }
+
 .dropdown-loader {
     position: absolute;
     width: 18px;
@@ -175,62 +136,30 @@ form label {
     right: 8px;
     top: 9px;
 }
+
 .align-items-center {
     align-items: center;
 }
-.modal-header {
-    height: 63px !important;
-}
+
 .confirm-btn {
     height: auto !important;
-    .pay-btn{
+
+    .pay-btn {
         margin-top: 34px;
     }
 }
-.pay-btn{
+
+.pay-btn {
     margin-top: 8px;
 }
+
 @media (max-width: 1100px) {
     .payment-top-form {
+        display: block;
+
         .otp-success-msg {
             text-align: left;
             margin: 10px 0;
-        }
-    }
-    .payment-top-form {
-        display: block;
-    }
-}
-@media (max-width: 767px) {
-    .selected-bank-details .bank-details-wrapper .readonly-bank-details {
-        max-width: 100% !important;
-    }
-
-    .bank-details-wrapper {
-        display: block !important;
-        .readonly-bank-details {
-            max-width: 100%;
-        }
-    }
-    .selected-bank-details {
-        .account-holder-name {
-            p {
-                &:first-child {
-                    max-width: 100%;
-                }
-            }
-        }
-    }
-}
-@media (max-width: 480px) {
-    .payment-top-form .d-flex .form-group,
-    .payment-top-form .d-flex .form-group:last-child {
-        min-width: 100%;
-    }
-    .amount-remark-section .d-flex {
-        display: block;
-        .form-group.pd-r15 {
-            padding-right: 0px;
         }
     }
 }

@@ -16,8 +16,8 @@
         > label {
             width: 30px;
             height: 30px;
-            border: 2px solid var(--color-silver);
-            border-radius: 100%;
+            border: 2px solid var(--border-color);
+            border-radius: var(--mat-border-radius-circle);
             transition: background-color 1s;
             background-color: var(--color-white);
             position: relative;
@@ -30,56 +30,11 @@
     }
 }
 
-.upload-excel {
-    display: flex;
-    height: 320px;
-    position: relative;
-    align-items: center;
-    justify-content: center;
-    margin: 20px auto 0 !important;
-}
-.center-block {
-    margin: 0 auto;
-}
-.max-width-500 {
-    max-width: 500px;
-}
-
-.uploader-label {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    cursor: pointer;
-}
-
 #csvUploadInput {
     visibility: hidden;
 }
 
-.upload-icon {
-    font-size: 62px;
-    float: none;
-    color: var(--color-border-light);
-}
-
-.sample-file-btn {
-    z-index: 9;
-    position: relative;
-}
-
-.dashed-border {
-    border: 2px dashed var(--color-silver);
-}
-
-.import-type {
-    display: flex;
-    justify-content: center;
-}
-
 .import-type li {
-    list-style: none;
     width: 320px;
     height: 150px;
     text-align: center;
@@ -88,8 +43,7 @@
     align-items: center;
     justify-content: flex-end;
     margin: 0 15px;
-    border: 1px solid var(--color-silver);
-    background: var(--color-light-gray);
+    border: 1px solid var(--border-color);
     padding: 15px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -103,14 +57,6 @@
     transform: scale(1.01);
 }
 
-.lead {
-    font-size: var(--font-size-32);
-    margin-bottom: 10px;
-}
-
-.has-error .form-control {
-    border-color: var(--color-red) !important;
-}
 @media (max-width: 991px) {
     .import-type {
         flex-wrap: wrap;

@@ -1,0 +1,7 @@
+.mat-expansion-panel {
+    &.mat-expanded {
+        .mat-expansion-panel-header {
+            background-color: unset !important;
+        }
+    }
+}

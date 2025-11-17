@@ -12,18 +12,18 @@
     </div>
 
     <mat-dialog-content class="dialog-body">
-        <div class="row mr-b1">
+        <div class="row mb-2">
             <div class="col-sm-12">
                 <text-field
-                    [cssClass]="'form-control mat-field-border'"
+                    [cssClass]="'form-control border'"
                     [placeholder]="localeData?.enter_email_address"
                     [(ngModel)]="emailAddresses"
                 ></text-field>
             </div>
         </div>
 
-        <div class="clearfix" *ngIf="![receiptVoucherType, paymentVoucherType].includes(voucherType)">
-            <h3 class="font-15 mr-b05">{{ localeData?.invoice_copy }}</h3>
+        <div class="clear-both" *ngIf="![receiptVoucherType, paymentVoucherType].includes(voucherType)">
+            <p class="font-size-15 mb-1">{{ localeData?.invoice_copy }}</p>
             <hr />
             <div class="checkbox">
                 <mat-checkbox
@@ -58,7 +58,7 @@
         </div>
 
         <!-- region buttons -->
-        <div class="row mr-t2 mr-b1">
+        <div class="row mt-4 mb-2">
             <div class="col-sm-12">
                 <div class="btn-group" role="group">
                     <button

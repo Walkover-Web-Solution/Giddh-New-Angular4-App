@@ -4,7 +4,7 @@
         display: flex;
         flex-direction: row;
         align-items: center;
-        background-color: var(--color-white);
+        background-color: var(--theme-background-color);
         flex-wrap: wrap !important;
         width: 100% !important;
         max-width: 580px;
@@ -15,7 +15,7 @@
             font-weight: normal;
             line-height: initial;
             width: 95%;
-            background-color: var(--color-white);
+            background-color: var(--theme-background-color);
         }
         .icon-search-icon {
             position: absolute;
@@ -29,7 +29,7 @@
 }
 
 .universal-data-list-wrapper {
-    background-color: var(--color-white);
+    background-color: var(--theme-background-color);
     overflow: auto;
     display: none;
     box-sizing: border-box;
@@ -38,39 +38,7 @@
     &.isVisible {
         display: block;
     }
-    &.isFlying {
-        position: absolute;
-        z-index: 10;
-        box-shadow: 0 2px 3px 0 var(--color-shadow-light);
-        border: 1px solid var(--color-silver);
-        border-radius: 2px;
-    }
-    &:not(.isFlying),
-    &.wider {
-        .universal-members-list {
-            .item {
-                .member-details {
-                    max-width: inherit;
-                }
-            }
-        }
-    }
-    &.isOpenFromBottom {
-        bottom: 0;
-    }
-    .inner {
-        position: relative;
-        overflow: auto;
-    }
-    ul {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-    }
-    a,
-    a:hover {
-        text-decoration: none;
-    }
+
     .universal-list-items {
         position: relative;
         overflow: auto;
@@ -98,33 +66,26 @@
                     font-size: 16px;
                 }
                 .icon-stock {
-                    filter: var(--color-image-filter-quaternary);                  
+                    filter: var(--color-image-filter-quaternary);
                 }
             }
             .item-details {
                 position: relative;
                 font-size: var(--font-size-15);
-                color: var(--color-black);
+                color: var(--theme-foreground-color);
                 text-transform: capitalize;
                 width: 100%;
                 padding: 2px 0 2px 25px;
                 .width-65 {
                     width: 65%;
                 }
-                .small-para-details {
-                    margin: 0;
-                    width: 320px;
-                    white-space: nowrap;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                }
+
                 small {
                     font-size: var(--font-size-12);
                     color: var(--color-dark-gray);
                     display: block;
                 }
                 .command-hover-text {
-                    color: var(--color-black);
                     right: 0;
                     text-transform: initial;
                     width: 40%;
@@ -138,9 +99,8 @@
                     white-space: initial;
                 }
             }
-            // hover effect
             &.selected {
-                background-color: var(--color-blue-primary);
+                background-color: var(--bg-primary-color);
                 cursor: pointer;
                 .item-details {
                     color: var(--color-white);
@@ -159,11 +119,7 @@
                 }
             }
         }
-        .list-viewport {
-            min-height: 520px;
-            height: 520px;
-            width: 580px;
-        }
+
     }
     .jumper-results {
         overflow: hidden;
@@ -175,15 +131,6 @@
     right: 10px;
     top: 10px;
     padding: 10px;
-    font-size: 20px;
+    font-size: 16px;
     cursor: pointer;
-    color: var(--color-black);
-}
-
-::ng-deep {
-    .jumper-results {
-        .block {
-            color: var(--color-black);
-        }
-    }
 }

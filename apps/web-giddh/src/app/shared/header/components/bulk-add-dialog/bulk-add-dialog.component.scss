@@ -7,7 +7,7 @@
 
     .input-group {
         input {
-            border-radius: 5px !important;
+            border-radius: var(--mat-border-radius-4) !important;
         }
     }
 

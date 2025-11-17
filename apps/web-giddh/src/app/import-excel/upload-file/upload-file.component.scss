@@ -18,28 +18,11 @@
     max-width: 500px;
 }
 
-.upload-icon {
-    font-size: 62px;
-    float: none;
-    color: var(--color-border-light);
-}
-
-.sample-file-btn {
-    z-index: 9;
-    position: relative;
-}
-
 .dashed-border {
     border: 2px dashed var(--color-silver);
 }
 
-.import-type {
-    display: flex;
-    justify-content: center;
-}
-
 .import-type li {
-    list-style: none;
     width: 320px;
     height: 150px;
     text-align: center;
@@ -48,8 +31,7 @@
     align-items: center;
     justify-content: flex-end;
     margin: 0 15px;
-    border: 1px solid var(--color-silver);
-    background: var(--color-light-gray);
+    border: 1px solid var(--border-color);
     padding: 15px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -63,15 +45,6 @@
     transform: scale(1.01);
 }
 
-.lead {
-    font-size: var(--font-size-32);
-    margin-bottom: 10px;
-}
-
-.has-error .form-control {
-    border-color: var(--color-red) !important;
-}
-
 #csvUploadInput {
     opacity: 0;
     position: absolute;
@@ -83,55 +56,15 @@
     z-index: 2;
 }
 
-.custom-file-label {
-    left: 0px;
-    top: 0;
-    bottom: 0;
-    z-index: 9;
-    background: var(--color-white);
-    text-align: left;
-    position: absolute;
-    border: 1px solid var(--color-silver);
-    border-radius: 2px !important;
-    padding: 6px 12px !important;
-    outline: 0;
-    color: var(--color-black);
-    font-size: var(--font-size-15);
-    width: calc(100% - 95px);
-}
 .select-file {
     color: var(--color-green);
 }
 .file-upload-panel {
     width: 100%;
     text-align: left;
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     padding: 8px;
-    border-radius: 4px;
-}
-.linked-entities {
-    .list-item {
-        .entity-icon {
-            padding: 4px;
-        }
-        .entity-details {
-            margin-left: 6px;
-            flex: 1;
-            .item {
-                font-weight: var(--font-weight-semibold);
-            }
-        }
-        .default-entity {
-            align-items: center;
-            display: flex;
-            &:hover:after {
-                color: var(--color-blue-primary);
-            }
-            .icon-favorite-selected {
-                color: var(--color-blue-primary);
-            }
-        }
-    }
+    border-radius: var(--mat-border-radius-4);
 }
 #is-header-provided {
     margin-right: 0px;
@@ -144,15 +77,5 @@
             width: 27%;
             margin: 0 15px 30px;
         }
-    }
-}
-@media (max-width: 767px) {
-    .center-block .btn-sm {
-        float: none !important;
-        text-align: center !important;
-        display: block;
-        margin: 0 !important;
-        width: 100%;
-        padding: 4px 0;
     }
 }

@@ -1,6 +1,6 @@
-<div class="aside-pane">
+<div class="aside-pane mat-app-background mat-app-background">
     <div class="form-header" *ngIf="selectedAsideView == 'mainview'">
-        <h3>Create</h3>
+        <p>Create</p>
     </div>
     <button mat-stroked-button (click)="closeAsidePane($event)" *ngIf="selectedAsideView == 'mainview'">
         <i class="icon-cross"></i>
@@ -41,7 +41,7 @@
             </transfer-notes>
         </ng-container>
         <ng-container *ngSwitchCase="'createStock'">
-            <div class="pd-t1">
+            <div class="pt-2">
                 <inventory-add-stock [addStock]="true" (closeAsideEvent)="onCancel()"></inventory-add-stock>
             </div>
         </ng-container>
@@ -50,22 +50,22 @@
         </ng-container>
         <ng-container *ngSwitchDefault>
             <div class="aside-body flexy-child vertical-align-middle aside-panel-ledger" vr-item>
-                <div class="pd-1 text-center">
+                <div class="p-2 text-center">
                     <button mat-raised-button color="primary" type="button" (click)="selectView('inward')">
                         Inward Note
                     </button>
                 </div>
-                <div class="pd-1 text-center">
+                <div class="p-2 text-center">
                     <button mat-raised-button color="primary" type="button" (click)="selectView('outward')">
                         Outward Note
                     </button>
                 </div>
-                <div class="pd-1 text-center">
+                <div class="p-2 text-center">
                     <button mat-raised-button color="primary" type="button" (click)="selectView('createStock')">
                         Create Stock
                     </button>
                 </div>
-                <div class="pd-1 text-center">
+                <div class="p-2 text-center">
                     <button mat-raised-button color="primary" type="button" (click)="selectView('createAccount')">
                         Create Account
                     </button>

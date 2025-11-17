@@ -34,14 +34,12 @@
                             </ng-container>
                             <ng-container *ngTemplateOutlet="loaderTmpl"></ng-container>
                             <div
-                                class="filings-empty-state mb-5"
                                 *ngIf="
                                     !(gstReconcileInvoiceRequestInProcess$ | async) &&
                                     (gstNotFoundOnPortalData$ | async)?.data?.totalItems > pageSizeOptions[0]
                                 "
                             >
                                 <mat-paginator
-                                    class="mt-3"
                                     [showFirstLastButtons]="true"
                                     [pageSizeOptions]="pageSizeOptions"
                                     [pageIndex]="pageIndex"
@@ -51,7 +49,7 @@
                                     [showFirstLastButtons]="true"
                                     [hidePageSize]="false"
                                 ></mat-paginator>
-                                <section class="mr-b8"></section>
+                                <section class="mb-custom-80"></section>
                             </div>
                         </mat-tab>
                         <!-- Missing in Giddh -->
@@ -80,14 +78,12 @@
                             </ng-container>
                             <ng-container *ngTemplateOutlet="loaderTmpl"></ng-container>
                             <div
-                                class="filings-empty-state mb-5"
                                 *ngIf="
                                     !(gstReconcileInvoiceRequestInProcess$ | async) &&
                                     (gstNotFoundOnGiddhData$ | async)?.data?.totalItems > pageSizeOptions[0]
                                 "
                             >
                                 <mat-paginator
-                                    class="mt-3"
                                     [showFirstLastButtons]="true"
                                     [pageSizeOptions]="pageSizeOptions"
                                     [pageIndex]="pageIndex"
@@ -97,7 +93,7 @@
                                     [showFirstLastButtons]="true"
                                     [hidePageSize]="false"
                                 ></mat-paginator>
-                                <section class="mr-b8"></section>
+                                <section class="mb-custom-80"></section>
                             </div>
                         </mat-tab>
                         <!-- Partially Matched -->
@@ -127,14 +123,12 @@
                             </ng-container>
                             <ng-container *ngTemplateOutlet="loaderTmpl"></ng-container>
                             <div
-                                class="filings-empty-state mb-5"
                                 *ngIf="
                                     !(gstReconcileInvoiceRequestInProcess$ | async) &&
                                     (gstPartiallyMatchedData$ | async)?.data?.totalItems > pageSizeOptions[0]
                                 "
                             >
                                 <mat-paginator
-                                    class="mt-3"
                                     [showFirstLastButtons]="true"
                                     [pageSizeOptions]="pageSizeOptions"
                                     [pageIndex]="pageIndex"
@@ -144,7 +138,7 @@
                                     [showFirstLastButtons]="true"
                                     [hidePageSize]="false"
                                 ></mat-paginator>
-                                <section class="mr-b8"></section>
+                                <section class="mb-custom-80"></section>
                             </div>
                         </mat-tab>
                         <!-- Matched -->
@@ -177,14 +171,12 @@
                             <ng-container *ngTemplateOutlet="loaderTmpl"></ng-container>
 
                             <div
-                                class="filings-empty-state mb-5"
                                 *ngIf="
                                     !(gstReconcileInvoiceRequestInProcess$ | async) &&
                                     (gstMatchedData$ | async)?.data?.totalItems > pageSizeOptions[0]
                                 "
                             >
                             <mat-paginator
-                                    class="mt-3"
                                     [showFirstLastButtons]="true"
                                     [pageSizeOptions]="pageSizeOptions"
                                     [pageIndex]="pageIndex"
@@ -194,7 +186,7 @@
                                     [showFirstLastButtons]="true"
                                     [hidePageSize]="false"
                                 ></mat-paginator>
-                                <section class="mr-b8"></section>
+                                <section class="mb-custom-80"></section>
                             </div>
                         </mat-tab>
                     </mat-tab-group>
@@ -208,7 +200,7 @@
 <ng-template #commonTableTemplate let-list let-type="type">
     <ng-container *ngIf="list?.count">
         <table
-            class="table table-fixed reconciliations-table table-hover table-responsive"
+            class="table table-fixed reconciliations-table table-hover table-responsive mb-0"
             *ngIf="list?.count"
         >
             <thead>
@@ -246,7 +238,7 @@
 <ng-template #commonHeaderTemplateForReconciliationTable>
     <tr>
         <th class="text-left width-vendor" *ngIf="selectedGst === 'gstr1'">
-            <div class="position-relative">
+            <div class="position-relative ">
                 <div
                     [attr.data-test-title]="localeData?.section"
                     [attr.title]="localeData?.section"
@@ -257,7 +249,7 @@
             </div>
         </th>
         <th id="4" class="text-left width-vendor">
-            <div class="position-relative">
+            <div class="position-relative ">
                 <div
                     [attr.data-test-title]="commonLocaleData?.app_gstin"
                     [attr.title]="commonLocaleData?.app_gstin"
@@ -269,7 +261,7 @@
         </th>
 
         <th class="text-left width-vendor">
-            <div class="position-relative">
+            <div class="position-relative ">
                 <div
                     [attr.data-test-title]="commonLocaleData?.app_voucher_no"
                     [attr.title]="commonLocaleData?.app_voucher_no"
@@ -281,7 +273,7 @@
         </th>
 
         <th class="text-left width-date">
-            <div class="position-relative">
+            <div class="position-relative ">
                 <div
                     [attr.data-test-title]="localeData?.filing?.transaction_date"
                     [attr.title]="localeData?.filing?.transaction_date"
@@ -293,7 +285,7 @@
         </th>
 
         <th class="text-left width-supply">
-            <div class="position-relative">
+            <div class="position-relative ">
                 <div
                     [attr.data-test-title]="localeData?.filing?.place_supply"
                     [attr.title]="localeData?.filing?.place_supply"
@@ -305,7 +297,7 @@
         </th>
 
         <th class="text-left width-date" *ngIf="selectedGst === GstReport.Gstr1">
-            <div class="position-relative">
+            <div class="position-relative ">
                 <div
                     [attr.data-test-title]="localeData?.filing?.rate"
                     [attr.title]="localeData?.filing?.rate"
@@ -317,7 +309,7 @@
         </th>
 
         <th class="text-right width-amount">
-            <div class="position-relative">
+            <div class="position-relative ">
                 <div
                     [attr.data-test-title]="localeData?.filing?.taxable_amount"
                     [attr.title]="localeData?.filing?.taxable_amount"
@@ -329,7 +321,7 @@
         </th>
 
         <th class="text-right">
-            <div class="position-relative">
+            <div class="position-relative ">
                 <div
                     [attr.data-test-title]="localeData?.filing?.igst"
                     [attr.title]="localeData?.filing?.igst"
@@ -341,7 +333,7 @@
         </th>
 
         <th class="text-right">
-            <div class="position-relative">
+            <div class="position-relative ">
                 <div
                     [attr.data-test-title]="localeData?.filing?.cgst"
                     [attr.title]="localeData?.filing?.cgst"
@@ -353,7 +345,7 @@
         </th>
 
         <th class="text-right">
-            <div class="position-relative">
+            <div class="position-relative ">
                 <div
                     [attr.data-test-title]="localeData?.filing?.sgst"
                     [attr.title]="localeData?.filing?.sgst"
@@ -365,7 +357,7 @@
         </th>
 
         <th class="text-right">
-            <div class="position-relative">
+            <div class="position-relative ">
                 <div
                     [attr.data-test-title]="localeData?.filing?.cess"
                     [attr.title]="localeData?.filing?.cess"
@@ -377,7 +369,7 @@
         </th>
 
         <th class="text-right">
-            <div class="position-relative">
+            <div class="position-relative ">
                 <div
                     [attr.data-test-title]="commonLocaleData?.app_total_amount"
                     [attr.title]="commonLocaleData?.app_total_amount"

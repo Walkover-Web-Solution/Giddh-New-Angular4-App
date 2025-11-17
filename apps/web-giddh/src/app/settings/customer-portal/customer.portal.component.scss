@@ -3,10 +3,6 @@
     width: 100% !important;
 }
 
-.form-control {
-    width: 100% !important;
-}
-
 .linked-account {
     width: calc(100% - 42px);
 }
@@ -18,7 +14,7 @@
 
 .input-group-btn {
     font-size: var(--font-size-24);
-    color: var(--color-blue-primary) !important;
+    color: var(--text-primary-color) !important;
 }
 
 .copy-text-position {
@@ -27,4 +23,3 @@
     right: 0;
     transform: translateX(90%);
 }
-
