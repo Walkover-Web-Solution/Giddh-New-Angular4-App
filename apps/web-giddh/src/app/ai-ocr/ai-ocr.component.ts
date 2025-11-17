@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import { delay, Observable, ReplaySubject, takeUntil, Subject } from "rxjs";
+import { delay, Observable, ReplaySubject, takeUntil, Subject, take } from "rxjs";
 import { MatMenuTrigger } from "@angular/material/menu";
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from "../app.constant";
 import * as dayjs from "dayjs";
@@ -68,8 +68,8 @@ export class AiOcrComponent implements OnInit, OnDestroy {
         count: PAGINATION_LIMIT,
         from: "",
         to: "",
-        sort: "",
-        sortBy: "",
+        sort: "desc",
+        sortBy: "DATE",
         branchUniqueName: ""
     };
     /** Observable for the OCR documents list from the store */
@@ -157,6 +157,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.route.params.pipe(delay(100), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
+                this.showClearFilter = false;
                 this.aiOcrService.getOcrData$.next(null);
                 this.aiOcrService.ocrList$.next(null);
                 this.aiOcrService.aiOcrDetails$.next(null);
@@ -187,7 +188,6 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                 this.listCount = 0;
                 this.countVariable = 0;
                 this.ocrType = response.type;
-                
                 // Redirect to default 'income' type if no type is provided or invalid
                 if (!this.ocrType || (this.ocrType !== 'income' && this.ocrType !== 'expense')) {
                     this.router.navigate(['/pages/ai-ocr/income']);
@@ -312,6 +312,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                                 dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                             this.ocrDocumentsRequestParams.from = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
                             this.ocrDocumentsRequestParams.to = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+                            this.aiOcrService.mainPage$.next(false);
                             this.aiOcrService.dateRangeEmit$.next(this.ocrDocumentsRequestParams);
                             this.getAllOcrDocuments(false);
                             this.changeDetection.detectChanges();
@@ -394,22 +395,23 @@ export class AiOcrComponent implements OnInit, OnDestroy {
      * @param resetPage - Indicates whether to reset the pagination page.
      * @memberof AiOcrComponent
      */
-    public getAllOcrDocuments(resetPage: boolean): void {
+    public getAllOcrDocuments(resetPage: boolean, data?: any): void {
         if (resetPage) {
             this.ocrDocumentsRequestParams.page = 1;
         }
+
         let reqObj = {
-            convertedStatus: null,
-            fileName: null,
-            status: null,
-            uploadedBy: null,
+            convertedStatus: data?.convertedStatus ?? this.ocrDocumentsRequestParams.convertedStatus ?? null,
+            fileName: data?.fileName ?? this.ocrDocumentsRequestParams.fileName ?? null,
+            status: data?.status ?? this.ocrDocumentsRequestParams.status ?? null,
+            uploadedBy: data?.uploadedBy ?? this.ocrDocumentsRequestParams.uploadedBy ?? null,
         };
         let request = {
             pagination: this.ocrDocumentsRequestParams,
             model: reqObj,
             ocrType: this.ocrType
         };
-        this.aiOcrService.mainPage$.next(true);
+        // this.aiOcrService.mainPage$.next(true);
         this.aiOcrStore.getAllMainPageOcrData(request);
     }
 
@@ -535,7 +537,9 @@ export class AiOcrComponent implements OnInit, OnDestroy {
         }
         this.toggleGiddhDatepicker(false);
         if (value && value.startDate && value.endDate) {
-            this.showClearFilter = true;
+            // Cancel any ongoing operations first
+            this.aiOcrStore.reset();
+
             this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
             this.selectedDateRangeUi =
                 dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) +
@@ -543,8 +547,16 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                 dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.ocrDocumentsRequestParams.from = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
             this.ocrDocumentsRequestParams.to = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
+
+            // Reset service subjects to prevent multiple subscriptions
+            this.aiOcrService.resetData$.next(null);
             this.aiOcrService.dateRangeEmit$.next(this.ocrDocumentsRequestParams);
             this.aiOcrService.mainPage$.next(false);
+
+            // Trigger fresh data load with debouncing
+            this.showClearFilter = true;
+            this.getAllOcrDocuments(false);
+            this.changeDetection.detectChanges();
         }
     }
 
@@ -569,8 +581,50 @@ export class AiOcrComponent implements OnInit, OnDestroy {
      */
     public resetData(): void {
         this.showClearFilter = false;
-        /** Universal date observer */
-        this.aiOcrStore.universalDate$.pipe(takeUntil(this.routeScope$)).subscribe((dateObj) => {
+
+        // Cancel any ongoing operations by resetting store state
+        this.aiOcrStore.reset();
+
+        // Reset loading states to prevent UI inconsistencies
+        this.isLoading = false;
+        this.innerLoading = false;
+        this.buttonDisabled = true;
+
+        // Clear current data
+        this.ocrList = null;
+        this.ocrMainList = null;
+        this.countVariable = 0;
+        this.ocrCurrentToken = "";
+
+        // Reset service subjects to cancel any pending operations
+        this.aiOcrService.getOcrData$.next(null);
+        this.aiOcrService.ocrList$.next(null);
+        this.aiOcrService.aiOcrDetails$.next(null);
+        this.aiOcrService.uploadDataSuccess$.next(null);
+        this.aiOcrService.saveAndNext$.next(null);
+        this.aiOcrService.skipAndNext$.next(null);
+        this.aiOcrService.saveAndNextSuccess$.next(null);
+        this.aiOcrService.ocrListToCreate$.next(null);
+        this.aiOcrService.mainPageOcrData$.next(null);
+        this.ocrDocumentsRequestParams = {
+            from: dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT),
+            to: dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT),
+            count: PAGINATION_LIMIT,
+            page: 1,
+            sort: "desc",
+            sortBy: "DATE",
+            convertedStatus: null,
+            fileName: null,
+            status: null,
+            uploadedBy: null,
+            branchUniqueName: this.isCompany ? "" : (this.generalService.currentBranchUniqueName ?? "")
+        };
+
+        // Reset to universal date range - use take(1) to prevent multiple subscriptions
+        this.aiOcrStore.universalDate$.pipe(
+            takeUntil(this.routeScope$),
+            take(1)
+        ).subscribe((dateObj) => {
             if (dateObj) {
                 this.universalDate = _.cloneDeep(dateObj);
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
@@ -580,7 +634,14 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                     dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.ocrDocumentsRequestParams.from = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.ocrDocumentsRequestParams.to = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
-                this.aiOcrService.resetData$.next(this.ocrDocumentsRequestParams);
+
+                // Clear branch filter
+                this.ocrDocumentsRequestParams.branchUniqueName = this.isCompany ? "" : (this.generalService.currentBranchUniqueName ?? "");
+                this.aiOcrService.dateRangeEmit$.next(this.ocrDocumentsRequestParams);
+                this.aiOcrService.mainPage$.next(false);
+                // Trigger fresh data load with reset parameters
+                this.getAllOcrDocuments(true);
+                this.changeDetection.detectChanges();
             }
         });
     }
@@ -593,6 +654,15 @@ export class AiOcrComponent implements OnInit, OnDestroy {
      */
     public getListData(data: any): void {
         if (data.user || data.fileName || data.status || data.convertedStatus || data.uploadedBy) {
+            this.ocrDocumentsRequestParams.fileName = data.fileName;
+            this.ocrDocumentsRequestParams.status = data.status;
+            this.ocrDocumentsRequestParams.convertedStatus = data.convertedStatus;
+            this.ocrDocumentsRequestParams.uploadedBy = data.uploadedBy;
+            if(!data.from || !data.to){
+                this.ocrDocumentsRequestParams.from = dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT);
+                this.ocrDocumentsRequestParams.to = dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT);
+            }
+            this.getAllOcrDocuments(false, data);
             this.showClearFilter = true;
         } else {
             this.showClearFilter = false;
@@ -606,7 +676,9 @@ export class AiOcrComponent implements OnInit, OnDestroy {
      * @memberof AiOcrComponent
      */
     public selectBranch(): void {
-        this.aiOcrService.selectBranch$.next(this.ocrDocumentsRequestParams);
+        this.showClearFilter = true;
+        this.aiOcrService.resetData$.next(null);
+        this.getAllOcrDocuments(false);
     }
 
     /**
