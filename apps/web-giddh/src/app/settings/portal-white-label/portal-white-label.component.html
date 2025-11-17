@@ -2,27 +2,29 @@
     <div class="portal-header">
         <div class="d-flex align-items-center">
             <div class="dropdown-wrapper mr-4" *ngIf="domainList?.length">
-                <mat-form-field class="w-100 select-domain" appearance="outline">
-                    <mat-label>{{ localeData?.select_domain }}</mat-label>
-                    <mat-select [(value)]="domain.uniqueName" [placeholder]="localeData?.select_domain">
-                        <mat-option *ngFor="let domain of domainList" [value]="domain?.value" class="domain-options">
-                            <span class="w-100 float-left" (click)="selectDomain(domain)">
-                                <i
-                                    (click)="
-                                        setPrimaryAndDeleteDomain('set-primary', domain?.value);
-                                        $event.stopPropagation()
-                                    "
-                                    class="fa fa-star mr-4 default-status"
-                                    [ngClass]="{ 'fill-status': domain.status }"
-                                ></i>
-                                {{ domain?.label }}</span
-                            >
-                        </mat-option>
-                        <mat-option class="create-update-no-data" [disabled]="true" *ngIf="!domainList?.length"
-                            >{{ commonLocaleData?.app_no_result_found }}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
+                <reactive-dropdown-field
+                    [options]="domainList"
+                    [label]="localeData?.select_domain"
+                    [placeholder]="localeData?.select_domain"
+                    [(ngModel)]="domain.uniqueName"
+                    [appearance]="'outline'"
+                    [cssClass]="'w-100 select-domain'"
+                    (selectedOption)="selectDomain($event)"
+                >
+                    <ng-template #optionTemplate let-option="option">
+                        <span class="w-100 float-left">
+                            <i
+                                class="fa fa-circle mr-1"
+                                [ngClass]="{
+                                    'color-success': option.additional?.status === 'VERIFIED',
+                                    'color-orange': option.additional?.status === 'PENDING',
+                                    'color-danger': option.additional?.status === 'FAILED'
+                                }"
+                            ></i>
+                            {{ option?.label }}
+                        </span>
+                    </ng-template>
+                </reactive-dropdown-field>
             </div>
 
             <button
@@ -187,7 +189,9 @@
                 <button mat-stroked-button mat-dialog-close (click)="portalWhilteLabelForm.reset()">
                     {{ commonLocaleData?.app_cancel }}
                 </button>
-                <button mat-raised-button color="primary" (click)="submitForm()">{{ commonLocaleData?.app_add }}</button>
+                <button mat-raised-button color="primary" (click)="submitForm()">
+                    {{ commonLocaleData?.app_add }}
+                </button>
             </div>
         </mat-dialog-content>
     </div>
