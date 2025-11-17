@@ -3,7 +3,7 @@ import { Store } from "@ngrx/store";
 import { ComponentStore, tapResponse } from "@ngrx/component-store";
 import { AppState } from "../../store";
 import { InventoryService } from "../../services/inventory.service";
-import { catchError, EMPTY, Observable, of, switchMap } from "rxjs";
+import { catchError, EMPTY, mergeMap, Observable, of, switchMap } from "rxjs";
 import { BaseResponse } from "../../models/api-models/BaseResponse";
 import { ToasterService } from "../../services/toaster.service";
 import { Router } from "@angular/router";
@@ -21,6 +21,7 @@ export interface InventoryState {
     downloadAttachmentInProgress: boolean;
     previewAttachmentIsSuccess: any;
     customFieldsSuccess: any;
+    updateInventoryVariantSuccess: any;
 }
 
 const DEFAULT_STATE: InventoryState = {
@@ -30,7 +31,8 @@ const DEFAULT_STATE: InventoryState = {
     uploadAttachmentIsSuccess: null,
     downloadAttachmentInProgress: false,
     previewAttachmentIsSuccess: null,
-    customFieldsSuccess:null
+    customFieldsSuccess:null,
+    updateInventoryVariantSuccess:null
 };
 
 @Injectable()
@@ -55,6 +57,7 @@ export class InventoryComponentStore extends ComponentStore<any> {
     public previewAttachmentIsSuccess$ = this.select((state) => state.previewAttachmentIsSuccess);
     public downloadAttachmentInProgress$ = this.select((state) => state.downloadAttachmentInProgress);
     public customFieldsSuccess$: Observable<any> = this.select((state) => state.customFieldsSuccess);
+    public updateInventoryVariantSuccess$: Observable<any> = this.select((state) => state.updateInventoryVariantSuccess);
 
     /**
      * This will use for Export Item Wise Report Data
@@ -348,4 +351,38 @@ export class InventoryComponentStore extends ComponentStore<any> {
             })
         );
     });
+
+    /**
+     * This will use for update inventory variant
+     *
+     * @memberof InventoryComponentStore
+     */
+    readonly updateInventoryVariant = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            mergeMap((req) => {
+                this.patchState({ updateInventoryVariantSuccess: null });
+                return this.inventoryService.updateInventoryVariant(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res && res.status === "success") {
+                                this.toaster.showSnackBar("success", res.body);
+                                return this.patchState({ updateInventoryVariantSuccess: req });
+                            } else {
+                                res?.message &&  this.toaster.showSnackBar("error", res.message);
+                                return this.patchState({ updateInventoryVariantSuccess: null });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({
+                                updateInventoryVariantSuccess: null
+                            });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
+            })
+        );
+    });
+
 }

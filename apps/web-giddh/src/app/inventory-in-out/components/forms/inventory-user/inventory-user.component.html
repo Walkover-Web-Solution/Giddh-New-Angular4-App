@@ -1,8 +1,8 @@
 <div class="form-header">
-    <h2 >Create Account</h2>
+    <p >Create Account</p>
 </div>
-<div class="form-body white-bg clearfix margin-child-label">
-    <div class="clearfix">
+<div class="form-body clear-both margin-child-label">
+    <div class="clear-both">
         <form [formGroup]="form" autocomplete="off" class="form-group">
             <div class="row">
                 <div class="col-6">
@@ -12,7 +12,7 @@
             </div>
 
             <div class="row">
-                <div class="col-12 text-left mr-t1">
+                <div class="col-12 text-left mt-2">
                     <button mat-stroked-button (click)="onCancel.emit($event)">Cancel</button>
                     <button mat-raised-button color="primary" [ladda]="isLoading" (click)="save()">Save</button>
                 </div>

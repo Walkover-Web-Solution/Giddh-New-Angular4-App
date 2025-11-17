@@ -1,6 +1,6 @@
 p.bank-name {
     font-size: var(--font-size-15);
-    color: var(--color-blue-primary);
+    color: var(--theme-foreground-color);
     margin-bottom: 5px;
 }
 
@@ -12,24 +12,12 @@ p.bank-balance {
 }
 
 .single-bank-detail {
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
     padding-bottom: 10px;
     margin-bottom: 10px;
 }
 
-a.connect-bank {
-    color: var(--color-black);
-    font-size: var(--font-size-15);
-    text-decoration: underline;
-    padding-top: 5px;
-    display: block;
-}
-
-.bank-details-block {
-    cdk-virtual-scroll-viewport {
-        height: 334px;
-    }
-}
+a
 
 .add-bank-details {
     display: flex;
@@ -54,12 +42,4 @@ p {
 
 .width-86 {
     width: 86% !important;
-}
-
-.dashboard-filter {
-    color: var(--color-dark-gray);
-    .icon-collapse-icon {
-        margin-left: 8px;
-        font-size: var(--font-size-15);
-    }
 }

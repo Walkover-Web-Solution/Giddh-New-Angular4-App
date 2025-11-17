@@ -4,8 +4,8 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
 import { select, Store } from '@ngrx/store';
-import { Observable, ReplaySubject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Observable, ReplaySubject, Subject, combineLatest } from 'rxjs';
+import { takeUntil, debounceTime } from 'rxjs/operators';
 import { BalanceStockTransactionReportRequest, InventoryReportRequest, InventoryReportBalanceResponse, StockReportRequest, InventoryReportRequestExport } from '../../../models/api-models/Inventory';
 import { InventoryService } from '../../../services/inventory.service';
 import { ToasterService } from '../../../services/toaster.service';
@@ -129,6 +129,10 @@ export class ReportsComponent implements OnInit {
     };
     /** Custom Fields list Observable */
     public customFieldsSuccess$: Observable<any> = this.inventoryStore.customFieldsSuccess$;
+    /** Subject for filters changes */
+    private filtersSubject$ = new Subject<any>();
+    /** Subject for dynamic columns changes */
+    private dynamicColumnsSubject$ = new Subject<any>();
     constructor(
         public route: ActivatedRoute,
         public router: Router,
@@ -323,6 +327,69 @@ export class ReportsComponent implements OnInit {
                 this.translationComplete(true);
             }
         });
+
+        // Use combineLatest to ensure both data are processed when they emit at the same time
+        combineLatest([this.filtersSubject$, this.dynamicColumnsSubject$]).pipe(
+            debounceTime(300),
+            takeUntil(this.destroyed$)
+        ).subscribe(([filtersData, dynamicColumnsData]) => {
+            // Only proceed if at least one event has actual data (not the initial null)
+            if (!filtersData && !dynamicColumnsData) {
+                return;
+            }
+
+            // Handle both events with their latest data
+            if (filtersData) {
+                this.handleFiltersChange(filtersData);
+            }
+            if (dynamicColumnsData) {
+                this.handleDynamicColumnsChange(dynamicColumnsData);
+            }
+            setTimeout(() => {
+                this.getReport(true);
+            }, 100);
+        });
+    }
+
+    /**
+     * Handle filters change event
+     * 
+     * @private
+     * @param {*} event
+     * @memberof ReportsComponent
+     */
+    private handleFiltersChange(event: any): void {
+        if (!this.initialLoad) {
+            if (!this.storeFilters) {
+                this.storeFilters = [];
+            }
+
+            this.storeFilters[this.currentUrl] = event;
+            this.store.dispatch(this.commonAction.setFilters(this.storeFilters));
+            this.stockReportRequest = event?.stockReportRequest;
+            this.stockReportRequestExport = event?.stockReportRequestExport;
+            this.balanceStockReportRequest = event?.balanceStockReportRequest;
+            this.todaySelected = event?.todaySelected;
+            this.showClearFilter = event?.showClearFilter;
+        } else {
+            this.initialLoad = false;
+        }
+        this.pullUniversalDate = true;
+    }
+
+    /**
+     * Handle dynamic columns change event
+     * 
+     * @private
+     * @param {*} event
+     * @memberof ReportsComponent
+     */
+    private handleDynamicColumnsChange(event: any): void {
+        if (this.moduleName === InventoryModuleName.stock || this.moduleName === InventoryModuleName.variant) {
+            this.displayedColumns = event
+                .filter(item => item?.checked)
+                .map(item => item?.value);
+        }
     }
 
     /**
@@ -596,32 +663,6 @@ export class ReportsComponent implements OnInit {
     }
 
     /**
-     * Gets the data output by report filters
-     *
-     * @param {*} event
-     * @memberof ReportsComponent
-     */
-    public getSelectedFilters(event: any): void {
-        if (!this.initialLoad) {
-            if (!this.storeFilters) {
-                this.storeFilters = [];
-            }
-
-            this.storeFilters[this.currentUrl] = event;
-            this.store.dispatch(this.commonAction.setFilters(this.storeFilters));
-            this.stockReportRequest = event?.stockReportRequest;
-            this.stockReportRequestExport = event?.stockReportRequestExport;
-            this.balanceStockReportRequest = event?.balanceStockReportRequest;
-            this.todaySelected = event?.todaySelected;
-            this.showClearFilter = event?.showClearFilter;
-        } else {
-            this.initialLoad = false;
-        }
-        this.pullUniversalDate = true;
-        this.getReport(true);
-    }
-
-    /**
      * This will use for show hide main table headers from customise columns
      *
      * @param {*} event
@@ -629,21 +670,6 @@ export class ReportsComponent implements OnInit {
      */
     public getCustomiseHeaderColumns(event: any): void {
         this.displayedColumns = event;
-    }
-
-    /**
-     * This will use for show hide main table headers from dynamic columns with new columns
-     *
-     * @param {*} event
-     * @memberof ReportsComponent
-     */
-    public getCustomiseDynamicHeaderColumns(event: any): void {
-        if (this.moduleName === InventoryModuleName.stock || this.moduleName === InventoryModuleName.variant) {
-            this.displayedColumns = event
-                .filter(item => item?.checked)
-                .map(item => item?.value);
-            this.getReport(true);
-        }
     }
 
     /**
@@ -773,5 +799,7 @@ export class ReportsComponent implements OnInit {
         this.destroyed$.complete();
         this.cancelApi$.next(true);
         this.cancelApi$.complete();
+        this.filtersSubject$.complete();
+        this.dynamicColumnsSubject$.complete();
     }
 }

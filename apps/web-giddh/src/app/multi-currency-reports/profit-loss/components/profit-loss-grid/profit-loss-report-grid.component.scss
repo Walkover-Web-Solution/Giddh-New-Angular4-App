@@ -46,15 +46,10 @@
     }
 }
 
-.max-980 {
-    max-width: 980px;
-    margin: 0 auto;
-}
-
 .pl-table-grid {
     th {
         border: none !important;
-        border-bottom: 1px solid var(--color-silver) !important;
+        border-bottom: 1px solid var(--border-color) !important;
         padding: 13px 8px 14px 0 !important;
 
         &:first-child {
@@ -81,5 +76,5 @@
     }
 }
 .row-height {
-    min-height: 38px;
+    min-height: 37px;
 }

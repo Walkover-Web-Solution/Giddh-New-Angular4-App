@@ -17,7 +17,7 @@
             ></tax-sidebar>
         </div>
         <div class="container-fluid">
-            <div class="pd-t15 d-flex justify-content-end align-items-center">
+            <div class="pt-3 d-flex justify-content-end align-items-center">
                 <div class="mr-auto" *ngIf="vatReportTransactions.results?.length">
                     <ol class="breadcrumb">
                         <li>
@@ -29,7 +29,7 @@
                     </ol>
                 </div>
                 <button mat-stroked-button (click)="navigateToPreviousPage()">
-                    <i class="fa fa-angle-left font-16 mr-1"></i>
+                    <i class="fa fa-angle-left font-size-16 mr-1"></i>
                     <span>{{ commonLocaleData?.app_back }}</span>
                 </button>
             </div>
@@ -38,7 +38,7 @@
                 <table
                     mat-table
                     [dataSource]="vatReportTransactions.results"
-                    class="table basic table-bordered mt-2 invoice-table desktop-table"
+                    class="table basic border mt-2 invoice-table desktop-table"
                     *ngIf="vatReportTransactions?.results?.length && !isLoading"
                 >
                     <ng-container matColumnDef="date">
@@ -97,11 +97,11 @@
                 </table>
                 <section class="no-logs" *ngIf="!vatReportTransactions.results?.length && !isLoading">
                     <div class="no-data">
-                        <h1>{{ localeData?.no_records_found }}</h1>
+                        <h2>{{ localeData?.no_records_found }}</h2>
                     </div>
                 </section>
             </div>
-            <div class="mt-3" *ngIf="vatReportTransactions.totalPages > 1">
+            <div *ngIf="vatReportTransactions.totalPages > 1">
                 <mat-paginator
                     (page)="pageChanged($event)"
                     [length]="vatReportTransactions?.totalPages"
@@ -111,6 +111,7 @@
                     [hidePageSize]="false"
                     [pageIndex]="vatReportTransactionsRequest.page - 1"
                 ></mat-paginator>
+                <section class="mb-custom-80"></section>
             </div>
         </div>
         <ng-template #downloadOrSendMailModel>

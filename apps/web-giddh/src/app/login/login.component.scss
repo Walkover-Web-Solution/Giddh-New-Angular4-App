@@ -1,37 +1,9 @@
-/************ login page start *****************/
-
-/*typography styles*/
-
-body.unresponsive {
-    padding: 0;
-    background: var(--color-black);
-}
-
-.intro.login {
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    background-size: cover;
-    width: 100%;
-    display: table;
-}
-
-.btn-lg {
-    padding: 10px 16px;
-    font-size: var(--font-size-15);
-    line-height: 1.3333333;
-}
-
 .btn {
     cursor: pointer;
 }
 
 .btn:focus {
     outline: 0;
-}
-
-.modal-header h3 {
-    color: var(--color-white);
-    font-size: var(--font-size-16);
 }
 
 .login {
@@ -50,10 +22,6 @@ body.unresponsive {
     text-transform: uppercase;
 }
 
-.login-btn {
-    position: relative;
-}
-
 #box img {
     max-height: 30px;
     position: absolute;
@@ -61,55 +29,17 @@ body.unresponsive {
     top: 4px;
 }
 
-#box .glyphicon {
-    max-height: 30px;
-    position: absolute;
-    left: 15px;
-    top: 13px;
-}
-
 #box .btn:hover,
 #box .btn:hover {
     color: var(--color-white);
-}
-
-.mr-b1 {
-    margin-bottom: 10px;
-}
-
-.twitter {
-    background: var(--color-blue-primary);
 }
 
 .google {
     background: var(--color-red);
 }
 
-.linkedin {
-    background: var(--color-blue-primary);
-}
-
 .mobile {
     background: var(--color-black);
-}
-
-.btn-login {
-    text-transform: uppercase;
-    color: var(--color-white);
-    margin-bottom: 10px;
-    display: inline-block;
-    vertical-align: middle;
-    -webkit-transform: translateZ(0);
-    transform: translateZ(0);
-    box-shadow: 0 0 1px var(--color-shadow-light);
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-    -moz-osx-font-smoothing: grayscale;
-    -webkit-transition-duration: 0.3s;
-    transition-duration: 0.3s;
-    -webkit-transition-property: transform;
-    transition-property: transform;
-    padding: 10px 16px !important;
 }
 
 .btn-login:hover,
@@ -117,20 +47,6 @@ body.unresponsive {
 .btn-login:active {
     -webkit-transform: scale(1.1);
     transform: scale(1.1);
-}
-
-/*giddh loader*/
-
-.giddh-spinner {
-    animation: rotate 1.5s infinite linear;
-    background: var(--color-black) none repeat scroll 0 0;
-    border: 7px solid var(--color-red);
-    border-radius: 50%;
-    box-shadow: 0 -10px 0 14px var(--color-shadow-light) inset;
-    box-sizing: border-box;
-    height: 60px;
-    width: 60px;
-    margin: 0 auto 20px;
 }
 
 @keyframes rotate {
@@ -142,34 +58,11 @@ body.unresponsive {
     }
 }
 
-.intro .lead {
-    text-align: center;
-    font-size: var(--font-size-16);
-}
-
-.btn-login.btn-default {
-    color: var(--color-black);
-    background-color: var(--color-white);
-    border-color: var(--color-silver);
-}
-
 .btn-login.btn-default:hover {
     color: var(--color-black) !important;
     background-color: var(--color-white);
-    border-color: var(--color-silver);
+    border-color: var(--border-color);
     box-shadow: none;
-}
-
-.intro .intro-body {
-    display: table-cell;
-    vertical-align: middle;
-    text-align: center;
-    padding: 100px 0;
-    width: 100%;
-    height: 100%;
-    position: relative;
-    top: 0;
-    left: 0;
 }
 
 button.close {
@@ -183,12 +76,8 @@ button.close {
 }
 
 .email {
-    background: var(--color-blue-primary);
+    background: var(--bg-primary-color);
 }
-
-/************* end login page *************/
-
-/***********************SIGN IN REDESIGN ***********************/
 
 .form-control,
 :host ::ng-deep .form-control {
@@ -197,22 +86,10 @@ button.close {
     color: var(--color-black) !important;
 }
 
-:host ::ng-deep .clear {
-    top: 50% !important;
-    font-size: var(--font-size-24) !important;
-    right: 6px !important;
-}
-
-.btn-blue {
+.btn-text-primary:hover {
     color: var(--color-white) !important;
-    border-color: var(--color-blue-primary);
-    background: var(--color-blue-primary);
-}
-
-.btn-blue:hover {
-    color: var(--color-white) !important;
-    border-color: var(--color-blue-primary);
-    background: var(--color-blue-primary);
+    border-color: var(--theme-primary-color);
+    background: var(--bg-primary-color);
 }
 
 strong {
@@ -231,29 +108,9 @@ h1 {
     font-size: var(--font-size-24);
 }
 
-.slide-content {
-    padding: 80px 100px;
-    color: var(--color-white);
-    background: #2c2c43;
-    text-align: center;
-    flex-direction: column;
-    justify-content: center;
-}
-
-.login_box {
-    background: var(--color-light-gray) url("/assets/images/banner-grid-design.png") repeat;
-    padding: 20px 70px;
-}
-
 .login_box h1 {
     color: var(--color-black);
     font-weight: 500;
-}
-
-.form-wrapper {
-    display: flex;
-    margin-bottom: 40px;
-    flex-direction: column;
 }
 
 small {
@@ -264,8 +121,6 @@ small {
     width: 300px;
 }
 
-/* social-login */
-
 .social-login {
     overflow: hidden;
     display: flex;
@@ -273,7 +128,6 @@ small {
 }
 
 .social-login li {
-    list-style: none;
     display: inline-block;
     margin-right: 15px;
 }
@@ -293,16 +147,9 @@ small {
     padding: 0 15px;
 }
 
-/* social icon */
-
-.linkedin-ico a {
-    color: var(--color-blue-primary);
-    border-color: var(--color-blue-primary);
-}
-
 .google-ico a {
-    background: var(--color-blue-primary);
-    border-color: var(--color-blue-primary) !important;
+    background: var(--bg-primary-color);
+    border-color: var(--theme-primary-color) !important;
     color: var(--color-white);
     padding-left: 40px !important;
 }
@@ -322,21 +169,8 @@ small {
     height: 18px;
 }
 
-.ico-apple img {
-    width: 21px !important;
-    height: 21px !important;
-    margin-bottom: 3px;
-}
-
-.login-option,
 .login-option a {
-    color: var(--color-blue-primary);
-    margin-top: 55px;
-    font-weight: 500;
-}
-
-.login-option a {
-    border-bottom: 2px dotted var(--color-blue-primary);
+    border-bottom: 2px dotted var(--theme-primary-color);
 }
 
 .slide-content h1 {
@@ -346,21 +180,12 @@ small {
     line-height: 34px;
 }
 
-.hash-tag {
-    color: var(--color-red);
-}
-
 .slide-content .btn {
     font-size: var(--font-size-16);
     font-weight: 500;
     margin-top: 55px;
     transition: all 0.5s ease;
     padding: 4px 18px;
-}
-
-.slide-content .btn-white {
-    color: var(--color-orange-light);
-    border: 1px solid var(--color-white);
 }
 
 .slide-content .btn-white:hover {
@@ -373,13 +198,6 @@ small {
     margin-bottom: 40px;
 }
 
-.app-ico,
-.download-app {
-    display: flex;
-    width: 100%;
-    justify-content: space-evenly;
-}
-
 .app-ico ul h1 {
     margin-top: 10px;
 }
@@ -387,8 +205,7 @@ small {
 .app-ico ul li,
 .download-app ul li {
     display: inline-block;
-    list-style: none;
-    border-radius: 2px;
+    border-radius: var(--mat-border-radius-0);
 }
 
 .app-ico ul li {
@@ -422,19 +239,14 @@ small {
     border-color: var(--color-black);
 }
 
-.img-hover:hover img:last-child {
-    display: block !important;
-}
-
 .img-hover:hover img:first-child {
     display: none;
 }
-/* new theme login page css start */
 .login-box {
     position: relative;
 }
 .login-left {
-    background-color: var(--color-blue-primary);
+    background-color: var(--bg-primary-color);
     position: absolute;
     left: 0;
     height: 100vh;
@@ -461,11 +273,11 @@ small {
     max-width: 476px;
     width: 90%;
     margin: 0 auto;
-    border-radius: 8px;
+    border-radius: var(--mat-border-radius-8);
     overflow: hidden;
 }
 .logo-login {
-    background-color: var(--color-blue-primary);
+    background-color: var(--bg-primary-color);
     height: 98px;
     display: flex;
     align-items: center;
@@ -474,64 +286,38 @@ small {
 }
 .accounting-space {
     padding: 30px;
-    border-radius: 0;
+    border-radius: var(--mat-border-radius-0);
     background-color: var(--color-white) !important;
     border: 2px solid var(--color-white);
     border-bottom-right-radius: 7px;
     border-bottom-left-radius: 7px;
 }
 .accounting-space h4 {
-    color: var(--color-blue-primary);
+    color: var(--text-primary-color);
     font-size: var(--font-size-16);
 }
-.btn-outline-primary {
-    background-color: var(--color-blue-primary);
-    border-radius: 3px;
-    min-width: 160px;
-    border-radius: 5px;
-    color: var(--color-white);
-    margin-bottom: 10px;
-    font-size: var(--font-size-15);
-}
+
 .btn-outline-primary:hover,
 .btn-outline-primary:focus {
-    background-color: var(--color-blue-primary);
+    background-color: var(--bg-primary-color);
     box-shadow: none;
     outline: none;
 }
 .login-with {
     a {
-        color: var(--color-blue-primary);
+        color: var(--text-primary-color);
         text-decoration: none;
     }
-    color: var(--color-blue-primary);
+    color: var(--text-primary-color);
     font-size: var(--font-size-15);
 }
-.btn-secondary {
-    border-radius: 5px;
-    color: var(--color-white);
-    border: 1px solid var(--color-blue-primary);
-    background-color: var(--color-blue-primary);
-}
+
 .btn-secondary:hover {
     color: var(--color-white) !important;
-    border-color: var(--color-blue-primary);
-    background-color: var(--color-blue-primary);
+    border-color: var(--theme-primary-color);
+    background-color: var(--bg-primary-color);
 }
 
-.loader-main {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    z-index: 9999999;
-    background: var(--color-white);
-    top: var(--top-distance);
-    right: 0;
-    left: 0;
-    margin: 0px;
-    align-items: center;
-    display: flex;
-}
 .form-inline {
     width: 80px;
 }

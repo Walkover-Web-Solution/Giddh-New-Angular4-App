@@ -1,4 +1,4 @@
-<div class="aside-pane">
+<div class="aside-pane mat-app-background mat-app-background">
     <button mat-icon-button aria-label="close" (click)="closeAsidePane($event)">
         <i class="icon-cross"></i>
     </button>
@@ -34,7 +34,7 @@
             ></transfer-note>
         </ng-container>
         <ng-container *ngSwitchCase="'createStock'">
-            <div class="pd-t1">
+            <div class="pt-2">
                 <inventory-add-stock [addStock]="true" (closeAsideEvent)="onCancel()"></inventory-add-stock>
             </div>
         </ng-container>

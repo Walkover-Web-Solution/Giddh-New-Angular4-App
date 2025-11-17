@@ -1,4 +1,4 @@
-<div class="advance-search-by-date date-advance-search d-flex align-items-center justify-content-center row-gap column-gap15">
+<div class="advance-search-by-date date-advance-search d-flex align-items-center justify-content-center row-gap-15 column-gap-15">
     <div class="input-width">
         <reactive-dropdown-field [options]="financialYears" (selectedOption)="getYearStartAndEndDate($event)"
             [placeholder]="commonLocaleData?.app_select_year" [labelValue]="selectedYear"></reactive-dropdown-field>
@@ -42,7 +42,7 @@
         </reactive-dropdown-field>
     </div>
 
-    <div class="ml-auto d-flex justify-content-center column-gap1 align-items-center">
+    <div class="ml-auto d-flex justify-content-center column-gap-1 align-items-center">
         <div *ngIf="isZimbabweCompany && taxNumber" class="input-width">
             <reactive-dropdown-field [label]="commonLocaleData?.app_currency" [options]="vatReportCurrencyList"
                 (selectedOption)="onCurrencyChange($event)" [placeholder]="commonLocaleData?.app_select"

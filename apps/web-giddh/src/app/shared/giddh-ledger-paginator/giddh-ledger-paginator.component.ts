@@ -15,7 +15,7 @@ export class GiddhLedgerPaginatorComponent {
     /** Holds previous page token used in emit token */
     @Input() public previousPageToken: string = '';
     /** Holds CSS class which apply on main parent */
-    @Input() public cssClass: string = 'mr-t15';
+    @Input() public cssClass: string = 'mt-3';
     /** Emits the page change event */
     @Output() public pageChange: EventEmitter<string> = new EventEmitter();
 

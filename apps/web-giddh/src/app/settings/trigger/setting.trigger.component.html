@@ -5,8 +5,8 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="box clearfix">
-        <h1 class="section-head pt-0">{{ localeData?.tab_heading }}</h1>
+    <div class=" p-3 clear-both">
+        <p class="section-head pt-0">{{ localeData?.tab_heading }}</p>
         <div class="row">
             <form
                 #createTriggerForm="ngForm"
@@ -111,11 +111,11 @@
                 </div>
             </form>
         </div>
-        <div class="col-sm-12 pd-t2">
+        <div class="col-sm-12 pt-4">
             <div class="row">
-                <h1 class="section-head pd-t1">{{ localeData?.added_triggers }}</h1>
+                <p class="section-head pt-2">{{ localeData?.added_triggers }}</p>
                 <div class="table-responsive">
-                    <table class="table table-bordered trigger-table basic mr-b05 on-mobile-view">
+                    <table class="table border trigger-table basic mb-1 on-mobile-view">
                         <thead [hidden]="!availableTriggers?.length">
                             <tr>
                                 <th>#</th>

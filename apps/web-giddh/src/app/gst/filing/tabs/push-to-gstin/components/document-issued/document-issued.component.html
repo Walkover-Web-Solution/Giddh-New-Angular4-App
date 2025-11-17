@@ -1,6 +1,6 @@
 <div class="gstr-transactions-summary">
-    <h4 class="clearfix gstr-summary-title">{{ localeData?.filing?.document_issued }}</h4>
-    <p class="text-muted half pd-t05">{{ localeData?.filing?.document_issued_description }}</p>
+    <p class="clear-both gstr-summary-title">{{ localeData?.filing?.document_issued }}</p>
+    <p class="text-muted half pt-1">{{ localeData?.filing?.document_issued_description }}</p>
 
     <div>
         <div *ngIf="doc_issuesVM && doc_issuesVM.length">
@@ -8,7 +8,7 @@
                 <thead>
                     <tr class="text-uppercase">
                         <th width="20px"></th>
-                        <th width="80px">#</th>
+                        <th class="serial-no-column">#</th>
                         <th width="35%">{{ localeData?.filing?.document_nature }}</th>
                         <th>{{ localeData?.filing?.s_no_from }}</th>
                         <th>{{ localeData?.filing?.s_no_to }}</th>

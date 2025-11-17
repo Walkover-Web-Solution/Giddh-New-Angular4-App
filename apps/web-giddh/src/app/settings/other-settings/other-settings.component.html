@@ -1,19 +1,19 @@
 <div *ngIf="organizationType === 'BRANCH'" class="row">
     <div class="col-md-12">
-        <div class="border-bottom font-15 pd-t4">
-            <p class="pd-b15" [innerHTML]="getInformationSaveText(profileData?.companyName)"></p>
+        <div class="border-bottom font-size-15 pt-5">
+            <p class="pb-3" [innerHTML]="getInformationSaveText(profileData?.companyName)"></p>
             <!-- branch profile element start -->
             <div class="other-detail-section">
-                <div class="mr-b15">
+                <div class="mb-3">
                     <label>{{ localeData?.number_system_label }}</label> <span>{{ numberSystem }}</span>
                 </div>
-                <div class="mr-b15">
+                <div class="mb-3">
                     <label>{{ localeData?.inventory_type }}</label>
                     <span>{{
                         profileData?.manageInventory ? commonLocaleData?.app_product : commonLocaleData?.app_service
                     }}</span>
                 </div>
-                <div class="mr-b15">
+                <div class="mb-3">
                     <label>{{ localeData?.ledger_default_view }}</label>
                     <span>{{
                         profileData?.ledgerView === ledgerViewEnum.TView ? commonLocaleData?.app_ledger_view?.t_view : commonLocaleData?.app_ledger_view?.statement_view
@@ -26,7 +26,7 @@
 </div>
 <div *ngIf="organizationType === 'COMPANY'" class="mr-0 mt-3">
     <div class="row">
-        <div class="col-md-4 col-lg-4 col-xl-3 pd-r05">
+        <div class="col-md-4 col-lg-4 col-xl-3 pr-1">
             <div class="form-group">
                 <reactive-dropdown-field
                     [label]="localeData?.digits_after_decimal"
@@ -42,7 +42,7 @@
                 ></reactive-dropdown-field>
             </div>
         </div>
-        <div class="col-md-4 col-lg-4 col-xl-3 pd-l05">
+        <div class="col-md-4 col-lg-4 col-xl-3 pl-1">
             <div class="form-group">
                 <reactive-dropdown-field
                     [label]="localeData?.number_system_label"
@@ -60,7 +60,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-4 col-lg-4 col-xl-3 pd-r05">
+        <div class="col-md-4 col-lg-4 col-xl-3 pr-1">
             <div class="form-group">
                 <reactive-dropdown-field
                     [label]="localeData?.language"
@@ -74,7 +74,7 @@
                 ></reactive-dropdown-field>
             </div>
         </div>
-        <div class="col-md-4 col-lg-4 col-xl-3 pd-l05">
+        <div class="col-md-4 col-lg-4 col-xl-3 pl-1">
             <div class="form-group">
                 <reactive-dropdown-field
                     [label]="localeData?.theme"
@@ -90,7 +90,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-4 col-lg-4 col-xl-3 pd-r05">
+        <div class="col-md-4 col-lg-4 col-xl-3 pr-1">
             <div class="form-group">
                 <reactive-dropdown-field
                     [label]="localeData?.ledger_default_view"
@@ -103,7 +103,7 @@
                 ></reactive-dropdown-field>
             </div>
         </div>
-        <div class="col-md-4 col-lg-4 col-xl-3 pd-l05" *ngIf="voucherApiVersion === 1">
+        <div class="col-md-4 col-lg-4 col-xl-3 pl-1" *ngIf="voucherApiVersion === 1">
             <div class="form-group">
                 <label>{{ localeData?.inventory_type }}</label>
                 <div>

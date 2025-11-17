@@ -25,7 +25,7 @@ export class ManufacturingLinkedStock {
     constructor() {
         this.variant = new ManufacturingVariant();
         this.variants = [new ManufacturingVariant()];
-        this.cssClass = "form-control mat-field-border";
+        this.cssClass = "form-control border";
         this.stocksPageNumber = 1;
         this.stocksTotalPages = 1;
         this.stocksQ = "";
@@ -55,7 +55,7 @@ export class ManufacturingExpense {
     constructor() {
         this.baseAccount = new ManufacturingBaseAccount();
         this.transactions = [new ManufacturingTransaction()];
-        this.cssClass = "form-control mat-field-border";
+        this.cssClass = "form-control border";
     }
 }
 

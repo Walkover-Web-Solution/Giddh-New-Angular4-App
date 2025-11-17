@@ -406,6 +406,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.accountListRequest.from = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
             this.accountListRequest.to = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.clearFilter = true;
             this.getAccountStatementList();
         }
     }

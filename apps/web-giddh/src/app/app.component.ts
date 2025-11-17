@@ -9,7 +9,7 @@ import { ReplaySubject } from 'rxjs';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { DbService } from './services/db.service';
 import { reassignNavigationalArray } from './models/default-menus'
-import { Configuration, COUNTRY_REGION_MAP } from "./app.constant";
+import { BREAKPOINT_SCREEN_SIZE, Configuration, COUNTRY_REGION_MAP } from "./app.constant";
 import { filter, take, takeUntil } from 'rxjs/operators';
 import { LoaderService } from './loader/loader.service';
 import { CompanyActions } from './actions/company.actions';
@@ -176,7 +176,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             if (!localStorage.getItem('isMobileSiteGiddh') || !JSON.parse(localStorage.getItem('isMobileSiteGiddh'))) {
                 localStorage.setItem('isMobileSiteGiddh', 'true');
             }
-            this.dbServices.clearAllData();
         } else {
             localStorage.setItem('isMobileSiteGiddh', 'false');
         }
@@ -196,14 +195,14 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             this._cdr.detectChanges();
         });
         this.breakpointObserver.observe([
-            '(max-width: 1023px)'
+            BREAKPOINT_SCREEN_SIZE.TABLET
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.changeOnMobileView(result.matches);
+                this.changeOnMobileView(result?.breakpoints[BREAKPOINT_SCREEN_SIZE.TABLET]);
         });
         this.breakpointObserver.observe([
-            '(max-width: 767px)'
+            BREAKPOINT_SCREEN_SIZE.UNSUPPORTED
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            if (result.matches) {
+            if (result?.breakpoints[BREAKPOINT_SCREEN_SIZE.UNSUPPORTED]) {
                 this.router.navigate(['/mobile-restricted']);
             }
         });
@@ -234,11 +233,11 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         });
 
         setTimeout(() => {
-            this._generalService.addLinkTag("./assets/style/font-awesome.css");
+            this._generalService.addLinkTag("./assets/styles/vendors/font-awesome.css");
             this._generalService.addLinkTag("./assets/fonts/icomoon/icomoon.css");
-            this._generalService.addLinkTag("./assets/style/toastr.css");
-            this._generalService.addLinkTag("./assets/style/ladda-themeless.min.css");
-            this._generalService.addLinkTag("./assets/style/lightbox.css");
+            this._generalService.addLinkTag("./assets/styles/vendors/toastr.css");
+            this._generalService.addLinkTag("./assets/styles/vendors/ladda-themeless.min.css");
+            this._generalService.addLinkTag("./assets/styles/vendors/lightbox.css");
 
             /* RAZORPAY */
             if (window['Razorpay'] === undefined) {
@@ -262,7 +261,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             /* Xml */
         }, 1000);
 
-        this._generalService.addLinkTag("./assets/style/code-mirror.css");
+        this._generalService.addLinkTag("./assets/styles/vendors/code-mirror.css");
 
 
         // if (this._generalService.getUrlParameter("region") === "uk") {

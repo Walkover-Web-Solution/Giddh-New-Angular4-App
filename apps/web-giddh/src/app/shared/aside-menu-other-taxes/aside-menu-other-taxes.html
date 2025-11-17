@@ -1,4 +1,4 @@
-<div class="aside-pane aside-pane-other-tax text-left" (clickOutside)="closeTaxesModal($event)"
+<div class="aside-pane mat-app-background aside-pane-other-tax text-left" (clickOutside)="closeTaxesModal($event)"
     [keyboardShortcut]="'esc'" (onShortcutPress)="closeTaxesModal($event)">
     <button mat-stroked-button aria-label="close" type="button" (click)="closeTaxesModal($event)">
         <i class="icon-cross"></i>
@@ -13,8 +13,8 @@
             <div class="row">
                 <div class="col-sm-6">
                     <div class="select-tax-dropdown d-flex flex-column">
-                        <div class="mr-b2">
-                            <reactive-dropdown-field [name]="'selectTax'" [cssClass]="'form-control mat-field-border'"
+                        <div class="mb-4">
+                            <reactive-dropdown-field [name]="'selectTax'" [cssClass]="'form-control border'"
                                 [label]="commonLocaleData?.app_select_tax"
                                 [placeholder]="commonLocaleData?.app_select_tax" [options]="taxesOptions"
                                 (selectedOption)="applyTax($event);" [required]="true"
@@ -26,7 +26,7 @@
                 <div class="col-sm-6">
                     <div class="mb-2">
                         <reactive-dropdown-field [label]="commonLocaleData?.app_calculation_method"
-                            [cssClass]="'form-control mat-field-border'"
+                            [cssClass]="'form-control border'"
                             [placeholder]="commonLocaleData?.app_select_method" [options]="calculationMethodOptions"
                             [labelValue]="selectedCalculationMethod ? selectedCalculationMethod[0]?.label : calculationMethodOptions[0]?.label"
                             [name]="'tcsCalculationMethod'" (selectedOption)="onCalculateTax($event);">
