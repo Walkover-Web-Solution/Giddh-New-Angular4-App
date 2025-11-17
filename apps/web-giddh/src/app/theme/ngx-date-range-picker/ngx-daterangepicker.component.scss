@@ -2,7 +2,7 @@
 @use "../../../assets/styles/themes/_custom-palette" as palette;
 @use "../../../assets/styles/themes/custom_typography" as typography;
 
- @mixin mat-button-theme($theme) {
+@mixin mat-button-theme($theme) {
     @include mat.button-color($theme);
     @include mat.button-typography($theme);
     @include mat.button-density($theme);
@@ -335,7 +335,7 @@ $dark-theme: mat.define-dark-theme(
         }
         &.in-range-start.activatedDate.in-range,
         &.in-range-end.activatedDate.in-range {
-            color: var(--color-white) !important;
+            color: var(--color-black) !important;
         }
         &.in-range-start,
         &.in-range-end {
@@ -347,8 +347,8 @@ $dark-theme: mat.define-dark-theme(
             }
             &:hover {
                 span {
-                    background-color: var(--color-light-gray) !important;
-                    color: var(--theme-foreground-color) !important;
+                    background-color: var(--color-light-gray);
+                    color: var(--theme-foreground-color);
                     border-color: var(--color-dark-gray);
                 }
             }
@@ -356,7 +356,7 @@ $dark-theme: mat.define-dark-theme(
         &.in-range {
             background-color: var(--theme-primary-light);
             border-color: transparent;
-            color: var(--theme-foreground-color);
+            color: var(--color-black);
             border-radius: var(--mat-border-radius-0);
             z-index: 9;
             position: relative;
@@ -563,7 +563,6 @@ $dark-theme: mat.define-dark-theme(
         }
     }
     &.rtl {
-
         .md-drppicker_input i,
         .md-drppicker_input svg {
             left: auto;
@@ -745,7 +744,7 @@ $dark-theme: mat.define-dark-theme(
 .md-drppicker td.in-range.in-range-start.in-range-end span {
     background-color: var(--theme-primary-light) !important;
     border-radius: 50%;
-    color: var(--theme-foreground-color) !important;
+    color: var(--color-black) !important;
     border-color: var(--color-dark-gray);
 }
 td.in-range.in-range-start.in-range-hovered.in-range-end::before {
@@ -767,7 +766,7 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before {
 .md-drppicker .td-div.in-range.in-range-start.in-range-end span {
     background-color: var(--theme-primary-light) !important;
     border-radius: 50%;
-    color: var(--theme-foreground-color) !important;
+    color: var(--color-black) !important;
     border-color: var(--color-dark-gray);
 }
 .td-div.in-range.in-range-start.in-range-hovered.in-range-end::before {
@@ -933,8 +932,9 @@ td:hover span {
     border: 1px solid transparent;
 }
 .td-div:hover span {
-    background-color: var(--color-light-gray);
+    background-color: var(--color-light-gray) !important;
     border: 1px solid var(--color-dark-gray);
+    color: var(--color-black) !important;
 }
 
 .off.in-range {
@@ -1021,7 +1021,6 @@ td span {
     flex-wrap: wrap;
     width: 95%;
     padding: 7px;
-
 }
 
 .available.prev {
@@ -1170,7 +1169,6 @@ td span {
 }
 
 .yearselect,
-
 .md-drppicker .calendar th,
 .md-drppicker .calendar td {
     height: 26px;
