@@ -3429,7 +3429,7 @@ select.form-control {
     display: block;
     font-size: var(--font-size-15);
     font-weight: 500;
-    color: var(--theme-foreground-color);
+    color: inherit;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
@@ -3544,11 +3544,13 @@ label {
 @include theme(default) {
     .col-wrapper:nth-child(1) {
         background: var(--color-light-gray);
+        color: var(--color-black);
     }
 }
 @include theme(dark) {
     .col-wrapper:nth-child(1) {
         background-color: var(--theme-primary-light);
+        color: var(--color-black);
     }
 }
 
