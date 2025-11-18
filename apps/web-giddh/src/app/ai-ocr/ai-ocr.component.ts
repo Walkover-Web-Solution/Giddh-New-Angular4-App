@@ -200,10 +200,9 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                         this.changeDetection.detectChanges();
                     }
                 });
-                this.aiOcrStore.branches$.pipe(takeUntil(this.routeScope$)).subscribe(response => {
+                this.aiOcrStore.branches$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response) {
                         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response?.length > 1;
-                        this.changeDetection.detectChanges();
                     }
                 });
                 this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
@@ -273,7 +272,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                 });
 
                 if (this.selectedToggle === OcrAction.List) {
-                    this.aiOcrStore.branches$.pipe(takeUntil(this.routeScope$)).subscribe(branchList => {
+                    this.aiOcrStore.branches$.pipe(takeUntil(this.destroyed$)).subscribe(branchList => {
                         if (branchList) {
                             this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && branchList.length > 1;
                             if (!this.isCompany) {
@@ -287,6 +286,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                                 });
                             });
                         }
+                        this.changeDetection.detectChanges();
                     });
 
                     this.aiOcrService.sendListData$.pipe(takeUntil(this.routeScope$)).subscribe((response) => {
@@ -678,7 +678,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
     public selectBranch(): void {
         this.showClearFilter = true;
         this.aiOcrService.resetData$.next(null);
-        this.getAllOcrDocuments(false);
+        this.aiOcrService.selectBranch$.next(this.ocrDocumentsRequestParams);
     }
 
     /**
