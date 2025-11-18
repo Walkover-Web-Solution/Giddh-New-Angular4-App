@@ -14,12 +14,12 @@
             <div class="discount-checkbox-wrapper d-flex flex-column">
                 <ng-container *ngFor="let discount of discountForm.get('discounts')['controls']; let i = index" formArrayName="discounts">
                     <ng-container [formGroupName]="i">
-                        <mat-checkbox formControlName="isActive" color="primary"><span class="font-15">{{ discount?.get('name')?.value }}</span></mat-checkbox>
+                        <mat-checkbox formControlName="isActive" color="primary"><span class="font-size-15">{{ discount?.get('name')?.value }}</span></mat-checkbox>
                     </ng-container>
                 </ng-container>
             </div>
             <div *ngIf="showCreateNew" class="create-new pt-2 mt-2 text-center cursor-pointer" (click)="createNew()">
-                <span class="text-blue">{{ commonLocaleData?.app_create_new }}</span>
+                <span class="text-primary">{{ commonLocaleData?.app_create_new }}</span>
             </div>
         </div>
     </mat-menu>

@@ -7,7 +7,7 @@
     </div>
     <mat-dialog-content class="dialog-body">
         <form name="updateStockGroup" class="form-body" [formGroup]="addGroupForm" novalidate="">
-            <div class="clearfix">
+            <div class="clear-both">
                 <div class="row">
                     <div class="form-group col-xs-6 col-sm-6">
                         <label>Name <sup>*</sup></label>
@@ -61,7 +61,7 @@
                         />
                     </div>
                 </div>
-                <div class="pd-b1" [hidden]="defaultGrpActive">
+                <div class="pb-2" [hidden]="defaultGrpActive">
                     <mat-slide-toggle
                         formControlName="isSubGroup"
                         id="isSelfParentUpdt"
@@ -120,7 +120,7 @@
                         </mat-menu>
                     </div>
                 </div>
-                <div class="clearfix text-left mt-2">
+                <div class="clear-both text-left mt-2">
                     <div *ngIf="addGroup">
                         <button
                             mat-raised-button

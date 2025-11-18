@@ -1,10 +1,10 @@
 .wrap-transaction-map {
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     border-bottom: none !important;
     .ledger-book {
         box-shadow: none;
         .left-col-new {
-            border-right: 1px solid var(--color-silver);
+            border-right: 1px solid var(--border-color);
         }
         .checkbox-span {
             height: 49px;
@@ -55,11 +55,11 @@
             align-items: stretch !important;
         }
         input,
-        sh-select,
         .form-control {
             min-height: 49px;
             height: 49px;
             border: 0 !important;
+            color: inherit;
         }
     }
     .ledger-row {
@@ -75,25 +75,17 @@
 }
 #ledger-transaction-left-list .mat-grid-tile,
 #ledger-transaction-right-list .mat-grid-tile {
-    border-bottom: 1px solid var(--color-silver) !important;
+    border-bottom: 1px solid var(--border-color) !important;
 }
 #ledger-transaction-right-list,
 #ledger-transaction-left-list {
-    border-bottom: 1px solid var(--color-silver) !important;
+    border-bottom: 1px solid var(--border-color) !important;
 }
 
-.form-control,
-input {
-    color: var(--color-black);
-}
-.notfound-option {
-    display: flex;
-    justify-content: space-between;
-}
 .ledg-head .mat-grid-list .mat-grid-tile {
     padding: 8px 10px;
-    border-bottom: 1px solid var(--color-silver) !important;
-    border-right: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color) !important;
+    border-right: 1px solid var(--border-color);
     font-size: var(--font-size-15);
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -114,27 +106,20 @@ input {
 }
 .transaction-mapped-table .mat-grid-tile {
     padding: 10px !important;
-    border-bottom: 1px solid var(--color-silver) !important;
+    border-bottom: 1px solid var(--border-color) !important;
 }
 table.ledger-footer-1 td[class*="col-"] {
     justify-content: flex-end;
-    background-color: var(--color-white);
-}
-.ledg-head table td.pd-r25 {
-    padding-right: 25px !important;
 }
 
 .ledg-head.entry-popup table td[class*="col-"] {
     padding: 0px !important;
     padding-bottom: 1px !important;
-    border-bottom: 1px solid var(--color-silver);
-    border-right: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
+    border-right: 1px solid var(--border-color);
     font-size: var(--font-size-15);
     text-overflow: ellipsis;
     white-space: nowrap;
-}
-.ledg-head.entry-popup table td.pd-r25 {
-    padding-right: 25px !important;
 }
 .transaction-mapped-table {
     .top-head-table {
@@ -152,7 +137,7 @@ table.ledger-footer-1 td[class*="col-"] {
         .ledger-row.row {
             td,
             th {
-                border-bottom: 1px solid var(--color-silver) !important;
+                border-bottom: 1px solid var(--border-color) !important;
                 border-top: none !important;
             }
             td[class*="col-"] {
@@ -167,7 +152,7 @@ table.ledger-footer-1 td[class*="col-"] {
         }
     }
     tr {
-        td.upper-td {
+        td .upper-td {
             padding: 0 !important;
             border: none !important;
         }
@@ -179,14 +164,10 @@ table.ledger-footer-1 td[class*="col-"] {
 .ledger-main .form-control {
     border: 0;
 }
-.thead-background1 th {
-    border-left: 0;
-}
 .ledg-head {
     .single-search-box {
         position: relative;
         i {
-            color: var(--color-dark-gray);
             left: 12px;
             top: -8px;
             z-index: 1;
@@ -200,7 +181,7 @@ table.ledger-footer-1 td[class*="col-"] {
     }
 }
 .ledger-head-top i.icon-search.position-absolute {
-    background-color: var(--color-blue-primary);
+    background-color: var(--bg-primary-color);
     color: var(--color-white);
     width: 32px;
     height: 36px;
@@ -210,12 +191,10 @@ table.ledger-footer-1 td[class*="col-"] {
     justify-content: center;
     align-items: center;
     right: 0 !important;
-    border-radius: 2px;
+    border-radius: var(--mat-border-radius-0);
 }
 .ledger-stat {
     padding: 10px 15px 0;
-    background: var(--color-white);
-    color: var(--color-dark-gray);
     font-size: var(--font-size-16);
     box-shadow: 0px 2px 6px var(--color-shadow-light);
     position: relative;
@@ -245,7 +224,7 @@ table.ledger-footer-1 td[class*="col-"] {
 }
 
 .ledger-head .mat-grid-list .mat-grid-tile {
-    color: var(--color-blue-primary);
+    color: var(--text-primary-color);
     padding-top: 5px !important;
     padding-bottom: 10px !important;
     border-right: none;
@@ -272,7 +251,6 @@ table.ledger-footer-1 td[class*="col-"] {
     left: 5% !important;
     right: 5%;
     bottom: 100px;
-    background: var(--color-white);
     padding: 5px;
     font-size: var(--font-size-12);
     z-index: 0;
@@ -283,9 +261,6 @@ table.ledger-footer-1 td[class*="col-"] {
     width: 100%;
     text-align: center;
 }
-.pagination > li > a:hover {
-    color: var(--color-red);
-}
 .ledger-panel label {
     font-weight: 400;
 }
@@ -293,38 +268,27 @@ table.ledger-footer-1 td[class*="col-"] {
     float: left;
     text-decoration: underline;
     margin: 0px 5px;
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
 }
 .upload-div label {
     padding: 6px;
 }
-.pd-r25 {
-    padding-right: 25px !important;
-}
 .thead-background1 th {
-    background: var(--color-white);
-    color: var(--color-black);
-    border-right: 1px solid var(--color-silver);
+    border-right: 1px solid var(--border-color);
     padding: 15px 11px !important;
-    font-weight: 400;
-    border-bottom: 1px solid var(--color-silver);
     font-weight: var(--font-weight-semibold);
+    border-bottom: 1px solid var(--border-color);
     font-size: var(--font-size-15);
-    border-top: 1px solid var(--color-silver);
-}
-.ledger-main .form-control,
-.ledger-main input {
-    color: var(--color-black);
+    border-top: 1px solid var(--border-color);
 }
 
 .ledger-book {
-    border: 0px solid var(--color-silver);
+    border: 0px solid var(--border-color);
     clear: both;
     position: relative;
     float: left;
     width: 100%;
     margin-bottom: 16px;
-    background: var(--color-white);
     box-shadow: 0 0 6px var(--color-shadow-light);
 }
 .Width600 {
@@ -374,24 +338,16 @@ input[type="date"]::-webkit-outer-spin-button {
 ::-webkit-calendar-picker-indicator {
     display: none;
 }
-.focus-unset.ledger-main .form-control:focus {
-    border: unset !important;
-}
-sh-select:focus {
-    outline: 1px var(--color-red) solid;
-}
-.notfound-option.active {
-    background: var(--color-border-light) !important;
-    padding: 2px 5px !important;
-}
+
 .amount-total {
     font-size: var(--font-size-12);
     color: var(--color-medium-gray);
     padding-left: 5px;
 }
 .ledger-book {
-    .left-col-new, .right-col-new, .statement-view {
-        background: var(--color-white);
+    .left-col-new,
+    .right-col-new,
+    .statement-view {
         padding: 0 0px 350px;
     }
 }
@@ -401,28 +357,23 @@ sh-select:focus {
 }
 .left-col-new .mat-grid-list .mat-grid-title:first-child,
 .left-col-new .mat-grid-list .mat-grid-title:first-child {
-    border-left: 1px solid var(--color-silver) !important;
+    border-left: 1px solid var(--border-color) !important;
 }
 .ledg-head .icomoon-ico {
-    color: var(--color-dark-gray);
     width: 36px;
     min-width: 36px;
     height: 36px;
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     padding: 3px;
     display: flex;
     justify-content: center;
     border-top-width: 1px;
-    background-color: var(--color-white);
-    border-radius: 5px;
+    border-radius: var(--mat-border-radius-4);
 }
 .advance-search-block input {
     background: var(--color-light-gray) !important;
     height: 28px;
-    border-color: var(--color-light-gray) !important;
-}
-.advance-search-block input::placeholder {
-    color: var(--color-dark-gray);
+    border-color: var(--border-color) !important;
 }
 
 .left-col-new,
@@ -441,7 +392,6 @@ sh-select:focus {
     .custom-tabs {
         .nav.nav-tabs {
             position: static !important;
-            background-color: var(--color-white) !important;
             padding: 0 5px !important;
         }
     }
@@ -449,7 +399,7 @@ sh-select:focus {
 .advance-search-block .icon-search {
     right: 0;
     top: 0;
-    background-color: var(--color-blue-primary);
+    background-color: var(--bg-primary-color);
     padding: 6px 9px;
     color: var(--color-white);
 }
@@ -458,17 +408,23 @@ sh-select:focus {
 }
 
 .ledger-book .ledger-footer-1 .total-col .border-top {
-    border-top: 1px solid var(--color-silver) !important;
+    border-top: 1px solid var(--border-color) !important;
 }
-.ledger-book .ledger-footer-1 .total-col .bd-rt {
+.ledger-book .ledger-footer-1 .total-col .border-top {
     border: none;
 }
-
+:host ::ng-deep .advance-search-by-date {
+    mat-form-field {
+        .mat-mdc-form-field-focus-overlay {
+            border-radius: 50px;
+        }
+    }
+}
 .advance-search-by-date {
     display: inline-flex;
     position: relative;
     min-width: 252px;
-    height: var(--mat-form-field-height);
+    height: var(--custom-mat-form-field-height);
 }
 .advance-search-by-date:before {
     position: absolute;
@@ -497,9 +453,6 @@ sh-select:focus {
     font-size: var(--font-size-15);
     margin-bottom: 10px;
 }
-.digit-blue {
-    color: var(--color-blue-primary);
-}
 .grey-text-color {
     color: var(--color-dark-gray) !important;
     font-size: var(--font-size-15);
@@ -509,7 +462,7 @@ sh-select:focus {
     font-size: var(--font-size-15);
 }
 .stat-block {
-    border-right: 1px solid var(--color-silver);
+    border-right: 1px solid var(--border-color);
     padding-left: 30px;
     padding-top: 20px;
     padding-bottom: 20px;
@@ -518,14 +471,14 @@ sh-select:focus {
     border-bottom: 8px solid var(--color-black);
 }
 .stat-block:nth-child(2) {
-    border-bottom: 8px solid var(--color-blue-primary);
+    border-bottom: 8px solid var(--theme-primary-color);
 }
 .stat-block:nth-child(3) {
-    border-bottom: 8px solid var(--color-blue-primary);
+    border-bottom: 8px solid var(--theme-primary-color);
 }
 .stat-block:last-child {
     border-right: none;
-    border-bottom: 8px solid var(--color-blue-light);
+    border-bottom: 8px solid var(--theme-primary-light);
 }
 .advance-search-filter {
     justify-content: center;
@@ -547,24 +500,18 @@ sh-select:focus {
     align-items: center;
     margin-right: 10px;
 }
-.modal-ledger {
-    width: 100%;
-    max-width: 1350px;
-}
 .justify-content-between {
     justify-content: space-between;
 }
 .d-flex.search-ledger-field {
     align-items: center;
     margin-right: 0;
-    min-height: var(--mat-form-field-height);
+    min-height: var(--custom-mat-form-field-height);
 }
 .clear-filter-btn {
-    border-radius: 5px;
-    border: 1px solid var(--color-silver);
-    color: var(--color-dark-gray);
+    border-radius: var(--mat-border-radius-4);
+    border: 1px solid var(--border-color);
     font-size: var(--font-size-15);
-    background-color: var(--color-white);
     width: 36px;
     height: 36px;
     display: flex;
@@ -574,19 +521,6 @@ sh-select:focus {
 }
 .clear-filter-btn i {
     font-size: var(--font-size-16);
-}
-.search-ledger-field {
-    .btn-danger,
-    .btn-success,
-    .btn-warning {
-        font-size: var(--font-size-15);
-        width: 36px !important;
-        padding: 0px !important;
-        height: 36px !important;
-        border-radius: 50%;
-        min-width: 36px !important;
-        margin-right: 8px !important;
-    }
 }
 .transaction-in-short {
     margin-bottom: 80px;
@@ -602,8 +536,8 @@ sh-select:focus {
     background-color: transparent;
 }
 .date-range-picker {
-    text-decoration-line: none;
-    text-decoration-style: none;
+    max-width: 230px;
+    text-decoration: none;
     padding: 8px 10px !important;
     position: relative;
     z-index: 99;
@@ -615,17 +549,16 @@ sh-select:focus {
     min-width: 180px !important;
     border-radius: 30px;
     box-sizing: content-box !important;
-    color: var(--color-black) !important;
     text-align: center;
-    border: 1px solid var(--color-silver)!important;
+    border: 1px solid var(--border-color) !important;
     &:focus {
-        border-color: var(--color-blue-primary);
+        border-color: var(--theme-primary-color);
     }
 }
 .ipad-view-datepicker {
     .date-range-picker {
-        border: 1px solid var(--color-silver);
-        border-radius: 20px;
+        border: 1px solid var(--border-color);
+        border-radius: var(--mat-border-radius-16);
         width: 203px !important;
     }
 }
@@ -649,13 +582,11 @@ sh-select:focus {
     min-width: 36px;
 }
 
-/*mobile ledger view css*/
 .mobile-ledger-view {
     margin: 0 -15px;
     table {
         width: 100%;
         tbody {
-            background-color: var(--color-white);
             .transaction-date {
                 font-size: var(--font-size-15);
                 font-weight: var(--font-weight-semibold);
@@ -663,13 +594,13 @@ sh-select:focus {
             td {
                 padding-top: 8px;
                 padding-bottom: 8px;
-                border-bottom: 1px solid var(--color-silver);
+                border-bottom: 1px solid var(--border-color);
                 font-size: var(--font-size-15);
             }
             .second-row {
                 td {
                     &:first-child {
-                        border-right: 1px solid var(--color-silver);
+                        border-right: 1px solid var(--border-color);
                         width: 60%;
                     }
                     span.account-holder-checkbox {
@@ -691,7 +622,7 @@ sh-select:focus {
         justify-content: center;
     }
     .mat-grid-list {
-        border-top: 1px solid var(--color-silver);
+        border-top: 1px solid var(--border-color);
     }
 }
 
@@ -701,14 +632,6 @@ sh-select:focus {
 }
 .input-wrapper.ipad-view-datepicker {
     display: none !important;
-}
-.no-btn,
-.no-btn:active,
-.no-btn:focus {
-    background-color: transparent !important;
-    border: none !important;
-    outline: none !important;
-    padding-left: 0;
 }
 .transaction-mapped-table {
     font-size: var(--font-size-15);
@@ -720,10 +643,10 @@ sh-select:focus {
             padding-top: 10px;
             &:first-child {
                 padding-right: 15px;
-                border-left: 1px solid var(--color-silver);
+                border-left: 1px solid var(--border-color);
             }
             &:last-child {
-                border-right: 1px solid var(--color-silver);
+                border-right: 1px solid var(--border-color);
             }
         }
     }
@@ -749,9 +672,6 @@ sh-select:focus {
             }
         }
     }
-    .transaction-table-row table td {
-        border-bottom: 1px solid var(--color-silver);
-    }
     .transaction-table-row table:last-child td {
         border-bottom: none;
     }
@@ -772,10 +692,6 @@ sh-select:focus {
     padding-right: 0 !important;
 }
 
-.list-item {
-    border-bottom: 1px solid var(--color-silver);
-}
-
 .ledger-row {
     .text-ellipsis {
         max-width: 400px;
@@ -785,11 +701,9 @@ sh-select:focus {
 .icon-upload {
     font-size: 14px;
 }
-.icon-refresh, .icon-plus {
+.icon-refresh,
+.icon-plus {
     font-size: var(--font-size-15);
-}
-.icon-link {
-    font-weight: 800;
 }
 .account-placeholder {
     font-size: var(--font-size-15);
@@ -805,12 +719,9 @@ a#reload-bank-transaction i.icon-refresh {
 input#ledger-search {
     padding-left: 27px !important;
     background-color: transparent !important;
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     &:focus {
-        border: 1px solid var(--color-silver) !important;
-    }
-    &::placeholder {
-        color: var(--color-dark-gray);
+        border: 1px solid var(--border-color) !important;
     }
 }
 
@@ -823,15 +734,10 @@ input#ledger-search {
 .mat-checkbox {
     margin-right: 8px;
 }
-.blue-heading {
-    color: var(--color-blue-primary);
+.text-primary-heading {
+    color: var(--text-primary-color);
 }
 
-/*responsive*/
-.modal-ledger {
-    width: 70%;
-    max-width: 100% !important;
-}
 .ledger-head {
     position: relative;
 }
@@ -861,26 +767,16 @@ input#ledger-search {
             align-items: center;
             display: flex;
             &:hover:after {
-                color: var(--color-blue-primary);
+                color: var(--text-primary-color);
             }
             .icon-favorite-selected {
-                color: var(--color-blue-primary);
+                color: var(--text-primary-color);
             }
         }
     }
     i {
         font-size: unset;
         line-height: normal;
-    }
-}
-
-::ng-deep {
-    .ledg-head .mat-grid-tile-content {
-        color: var(--color-black);
-    }
-
-    .ledg-head .ledger-row .mat-input-element {
-        color: var(--color-black) !important;
     }
 }
 
@@ -891,29 +787,9 @@ input#ledger-search {
     padding: 3px !important;
 }
 
-@media only screen and (max-width: 1540px) {
-    .modal-ledger {
-        width: 85%;
-    }
-}
-
-@media only screen and (max-width: 1366px) {
-    .modal-ledger {
-        width: 100%;
-        margin: 0 auto;
-        padding: 15px;
-    }
-    .show-if-update-ledger-open {
-        height: 230px;
-    }
-    .linked-entities{
-        max-width: 155px;
-    }
-}
-
 @media screen and (max-width: 1280px) {
-    .ledger-row{
-        .column-gap5{
+    .ledger-row {
+        .column-gap-05 {
             column-gap: 0 !important;
         }
     }
@@ -946,7 +822,7 @@ input#ledger-search {
         max-width: 100%;
     }
 }
-@media (max-width: 991px) {
+@media (max-width: 1024px) {
     .linked-entities {
         margin-top: 10px;
         margin-bottom: 0;
@@ -986,7 +862,7 @@ input#ledger-search {
         position: absolute !important;
     }
 }
-@media only screen and (max-width: 991px) {
+@media only screen and (max-width: 1024px) {
     .stat-block {
         padding-left: 20px;
     }
@@ -1060,7 +936,7 @@ input#ledger-search {
     }
     .left-col-new .width-100.h-table .mat-grid-list .mat-grid-title:first-child,
     .left-col-new .width-100.h-table .mat-grid-list .mat-grid-title:first-child {
-        border-left: 0px solid var(--color-silver) !important;
+        border-left: 0px solid var(--border-color) !important;
     }
     .ledg-head.some.transactions-page {
         margin-top: 50px;
@@ -1080,7 +956,7 @@ input#ledger-search {
             position: relative;
             input[type="search"] {
                 min-width: 150px;
-                border-radius: 20px !important;
+                border-radius: var(--mat-border-radius-16) !important;
             }
             .clear-filter-btn {
                 text-align: center;
@@ -1093,7 +969,7 @@ input#ledger-search {
                 i {
                     left: -3px;
                     top: 0;
-                    color: var(--color-blue-primary);
+                    color: var(--text-primary-color);
                 }
             }
         }
@@ -1106,13 +982,11 @@ input#ledger-search {
         .ledger-datepicker {
             width: 36px;
             height: 36px;
-            background-color: var(--color-white);
-            border: 1px solid var(--color-silver);
+            border: 1px solid var(--border-color);
             text-align: center;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
-            //display: none;
         }
     }
     .ledger-ellipse {
@@ -1129,7 +1003,7 @@ input#ledger-search {
             left: auto !important;
             right: 15px !important;
             top: 30px !important;
-            border-radius: 10px;
+            border-radius: var(--mat-border-radius-8);
             border: none;
             padding: 15px 0;
             li {
@@ -1167,7 +1041,6 @@ input#ledger-search {
         padding: 0;
         i {
             top: 0;
-            color: var(--color-dark-gray);
         }
     }
     .ledger-head .mat-grid-list .mat-grid-tile.active {
@@ -1185,88 +1058,8 @@ input#ledger-search {
 .ledger-row .mat-grid-tile:nth-child(3) {
     justify-content: center !important;
 }
-@media (max-width: 767px) {
-    .linked-entities {
-        width: 100%;
-    }
-    .ledger-head {
-        .mat-grid-tile {
-            padding: 0 0 10px !important;
-        }
-    }
-    .ledger-ellipse {
-        top: calc(var(--top-distance) + 50px);
-        right: 10px;
-        position: fixed;
-        .btn {
-            background-color: transparent;
-            color: var(--color-white);
-            font-size: var(--font-size-16);
-        }
-    }
-    .search-ledger-field {
-        margin-top: 40px;
-        .ledger-datepicker {
-            display: flex;
-            margin-right: 8px;
-        }
-    }
-    .ledg-head {
-        .single-search-box {
-            position: relative;
-            width: calc(100% - 100px);
-            .default-width-input {
-                width: calc(100% - 100px);
-            }
-        }
-        .ipad-view-datepicker {
-            display: none;
-        }
-    }
-    .ledger-section {
-        padding-top: 0;
-        .transactions-page {
-            margin-top: 5px !important;
-        }
-    }
-}
-@media (max-width: 575px) {
-    .stat-block {
-        padding-left: 15px;
-    }
-    .ledger-btn .col-xs-6 {
-        width: 100% !important;
-        margin-bottom: 5px;
-    }
-    .balance-detail {
-        .text-right {
-            text-align: left !important;
-            margin-bottom: 8px;
-        }
-    }
-}
-@media (max-width: 360px) {
-    .search-ledger-field {
-        min-width: 200px;
-    }
-    .icomoon-ico {
-        margin-top: 7px;
-    }
-    .ledg-head {
-        .single-search-box {
-            .clear-filter-btn {
-                font-size: var(--font-size-12);
-            }
-        }
-    }
-    .ledg-head {
-        .single-search-box {
-            margin-right: 5px;
-        }
-    }
-}
 
-@media (min-width: 768px) and (max-width: 991px) {
+@media (min-width: 768px) and (max-width: 1024px) {
     .ledger-datepicker {
         img {
             padding-top: 5px;
@@ -1274,15 +1067,15 @@ input#ledger-search {
     }
 }
 
-.ledger-checkbox{
-    .entry-date{
+.ledger-checkbox {
+    .entry-date {
         margin-left: 8px;
     }
 }
 .bank-menu {
     padding: 3px !important;
-    border: 1px solid var(--color-silver);
-    border-radius: 5px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--mat-border-radius-4);
     width: 36px;
     height: 36px;
 
@@ -1298,4 +1091,7 @@ input#ledger-search {
             display: none;
         }
     }
+}
+.h32 {
+    height: 32px;
 }

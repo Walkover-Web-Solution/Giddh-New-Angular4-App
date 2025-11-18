@@ -1,5 +1,5 @@
 .active {
-    color: var(--color-blue-primary) !important;
+    color: var(--text-primary-color) !important;
 }
 
 .stock-grp-list li > i:focus {
@@ -21,12 +21,6 @@
     }
 }
 
-.stock-grp-list .active a,
-.stock-grp-list .active i,
-.stock-grp-list .active .btn-link i {
-    color: var(--color-blue-primary) !important;
-}
-
 .stock-grp-list .active {
     background-color: var(--color-border-light);
 }
@@ -46,15 +40,10 @@
     padding: 8px 0 8px 35px !important;
 }
 
-.main-group div > stock-list ::ng-deep.in-list {
-    padding: 8px 0 8px 15px;
-}
+.main-group div > stock-list ::ng-dee
 
 stock-list ::ng-deep.in-list a div {
     color: var(--color-black) !important;
-}
-.text-black {
-    color: var(--color-black);
 }
 
 .item-group {
@@ -63,15 +52,13 @@ stock-list ::ng-deep.in-list a div {
 .no-data-box {
     border-top: 1px solid var(--color-border-light) !important;
 }
-.stock-grp-list li .btn {
-    line-height: 14px;
-}
+
 .stock-grp-list {
     li {
         .item-group {
             &:hover {
                 a {
-                    color: var(--color-blue-primary) !important;
+                    color: var(--text-primary-color) !important;
                 }
                 background-color: var(--color-border-light);
             }
@@ -108,11 +95,6 @@ stock-list ::ng-deep.in-list a div {
                 }
             }
         }
-    }
-}
-@media (max-width: 768px) {
-    .stock-grp-list {
-        max-height: calc(100vh - 245px) !important;
     }
 }
 .inventory-group-name {

@@ -1,16 +1,7 @@
-.invoice-list {
-    height: calc(100vh - (var(--header-height) + 30px));
-    overflow-y: auto;
-}
-
 .vouchers-wrapper {
     .total-wrapper {
         .total-sale {
-            border-radius: 5px;
-
-            p {
-                color: var(--color-dark-gray);
-            }
+            border-radius: var(--mat-border-radius-4);
 
             &.opening-box {
                 span {
@@ -24,12 +15,6 @@
                 }
             }
 
-            &.payment-receipt,
-            &.closing-box {
-                span {
-                    color: var(--color-dark-gray);
-                }
-            }
         }
     }
 
@@ -55,14 +40,10 @@
         }
     }
 
-    // template field
     .template-design {
         max-width: 258px;
     }
 
-    .invoice-video {
-        display: none;
-    }
 }
 
 table {
@@ -71,7 +52,6 @@ table {
         th,
         td {
             max-width: 240px;
-            word-break: break-all;
         }
     }
 
@@ -96,30 +76,29 @@ table {
     }
 }
 
-// account-detail
 .account-detail-wrapper {
     max-width: 250px;
+    margin-block: 6px;
 
     .account-header {
         background-color: var(--color-border-light);
+        border-top-right-radius: var(--mat-border-radius-4);
+        border-top-left-radius: var(--mat-border-radius-4);
     }
 }
 
-// video link
 .video-link {
     top: 15px;
     right: 15px;
     z-index: 10;
 }
 
-// setting-tabs
 .tabs-box-content {
     .settings-field {
         width: 290px;
     }
 }
 
-// template 
 .template-wrapper {
     display: grid;
     grid-gap: 16px;
@@ -131,7 +110,7 @@ table {
         color: var(--color-black);
 
         &.active {
-            background-color: var(--color-blue-primary) !important;
+            background-color: var(--bg-primary-color) !important;
             color: var(--color-white);
         }
     }
@@ -147,11 +126,6 @@ table {
 
 .ontime-delivery {
     color: var(--color-green);
-}
-
-:host ::ng-deep select-table-column > button {
-    height: 42px !important;
-    padding: 0 !important;
 }
 
 @media screen and (max-width: 1199px) {

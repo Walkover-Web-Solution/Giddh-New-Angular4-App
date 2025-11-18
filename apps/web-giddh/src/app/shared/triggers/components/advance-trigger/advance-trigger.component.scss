@@ -14,11 +14,6 @@
     }
 }
 
-.action-btn {
-    min-width: 42px;
-}
-
-// Communication Page Styling
 .msg91-container:hover {
     background-color: var(--color-light-gray);
 }
@@ -52,20 +47,11 @@
     }
 }
 
-.auth-label {
-    float: left;
-    width: 100%;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    color: var(--color-black);
-    font-size: var(--font-size-15) !important;
-}
-
 .msg91-container {
     position: relative;
     border: 1px solid var(--color-border-light);
-    background-color: var(--color-blue-light) !important;
-    border-radius: 7px;
+    background-color: var(--theme-primary-light) !important;
+    border-radius: var(--mat-border-radius-8);
     cursor: pointer;
     width: 241px;
     height: 96px;
@@ -150,10 +136,6 @@
             visibility: hidden;
         }
 
-        .active-trigger-search {
-            position: relative;
-            bottom: 2px;
-        }
     }
 }
 
@@ -161,11 +143,7 @@
     border: 1px solid var(--color-red) !important;
     float: left;
     width: 100%;
-    border-radius: 5px;
-}
-
-.mandatory-label {
-    color: var(--color-red);
+    border-radius: var(--mat-border-radius-4);
 }
 
 .dropdown-heading {
@@ -200,20 +178,6 @@
             }
         }
 
-        .trigger-input {
-            .trigger-input-label {
-                font-size: var(--font-size-15);
-                float: left;
-                width: 100%;
-                margin-top: 5px;
-                margin-bottom: 5px;
-
-                span {
-                    color: var(--color-red);
-                }
-            }
-        }
-
         button {
             margin-top: 15px;
         }
@@ -244,17 +208,6 @@
             margin-top: 53px;
             width: 35%;
 
-            .right-label {
-                margin-left: 25px;
-            }
-
-            .bottom-label {
-                margin-top: 12px;
-            }
-
-            .preview-button {
-                margin-top: 25px;
-            }
         }
 
         .dropdown-box-2 {
@@ -311,27 +264,5 @@
                 }
             }
         }
-    }
-}
-
-@media (max-width: 1024px) and (min-width: 768px) {
-
-    .discount-form-setting-tab label,
-    .discount-form-setting-tab br {
-        display: none !important;
-    }
-}
-
-@media (max-width: 767px) {
-
-    .discount-form-setting-tab label,
-    .discount-form-setting-tab br {
-        display: none !important;
-    }
-}
-
-@media (min-width: 1360px) {
-    .table-bordered {
-        width: 33.33%;
     }
 }

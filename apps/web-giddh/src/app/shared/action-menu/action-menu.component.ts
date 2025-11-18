@@ -41,8 +41,8 @@ export class ActionMenuComponent {
     @Input() activeRowIndex?: number;
     /** The row index of this menu instance */
     @Input() rowIndex?: number;
-    /** Whether the current screen is mobile */
-    @Input() isMobileScreen: boolean = false;
+    /** Whether the current screen is tablet */
+    @Input() isTabletScreen: boolean = false;
     /** Event emitted when the 'Go to Ledger' action is triggered */
     @Output() gotoLedger: EventEmitter<void> = new EventEmitter<void>();
     /** Event emitted when the 'Generate Invoice' action is triggered */

@@ -7,9 +7,9 @@
 >
     <div class="primary-sidebar py-3 position-relative" (clickOutside)="hidePrimarySidebarCompanyList()">
         <div
-            class="company-branch-block pd-l2 pd-r2 position-relative"
+            class="company-branch-block pl-4 pr-4 position-relative"
             [ngClass]="{ 'padding-14': !currentBranch && (currentCompanyBranches$ | async)?.length > 1 }"
-            >
+        >
             <ul
                 class="list-style-none branch-connection dropdown-toggle"
                 id="button-company-branch"
@@ -18,18 +18,18 @@
                 <span class="outer-span" *ngIf="(currentCompanyBranches$ | async)?.length > 1">
                     <span class="inner-span"></span>
                 </span>
-                <li
-                    class="company-name position-relative"
-                    >
-                    <h3
-                    class="font-15 d-flex flex-column cursor-pointer"
-                    [checkPermission]="['MENU', 'MANAGE']"
-                    >
+                <li class="company-name position-relative">
+                    <h3 class="font-size-15 d-flex flex-column cursor-pointer" [checkPermission]="['MENU', 'MANAGE']">
                         <div class="d-flex flex-column">
                             <div class="d-flex align-items-center">
-                                <span class="company-alice mr-r05 text-uppercase">{{ companyInitials }}</span>
+                                <span class="company-alice mr-1 text-uppercase">{{ companyInitials }}</span>
                                 <span class="d-flex justify-content-between w-100 company-full-name flex-column">
-                                    <span class="company-ellipsis">{{ selectedCompanyDetails?.name }}</span>
+                                    <span
+                                        class="company-ellipsis"
+                                        [matTooltip]="selectedCompanyDetails?.name"
+                                        matTooltipPosition="above"
+                                        >{{ selectedCompanyDetails?.name }}</span
+                                    >
                                     <span
                                         class="branch-ellipsis"
                                         *ngIf="currentBranch && (currentCompanyBranches$ | async)?.length > 1"
@@ -40,20 +40,20 @@
                                         *ngIf="currentBranch && (currentCompanyBranches$ | async)?.length > 1"
                                     ></i>
                                 </span>
-                                <span class="d-flex">
+                                <button mat-icon-button class="ml-1 toggle-btn">
                                     <i
                                         [ngClass]="{
-                                            'icon-cross': showCompanyBranchSwitch,
+                                            'icon-cross font-size-15': showCompanyBranchSwitch,
                                             'icon-down-new': !showCompanyBranchSwitch
                                         }"
                                     ></i>
-                                </span>
+                                </button>
                             </div>
                         </div>
                     </h3>
                 </li>
             </ul>
-            <div class="dropdown-menu company-branch-nav" *ngIf="showCompanyBranchSwitch">
+            <div class="dropdown-menu company-branch-nav left-0" *ngIf="showCompanyBranchSwitch">
                 <company-branch
                     [localeData]="localeData"
                     [commonLocaleData]="commonLocaleData"
@@ -62,24 +62,21 @@
             </div>
         </div>
         <div>
-            <div class="wrap-menus mr-t15">
-                <div class="account-block mr-b2 pd-l2 pd-r2" *ngIf="accountItemsFromIndexDB?.length > 0">
+            <div class="wrap-menus mt-3">
+                <div class="account-block mb-4 pl-4 pr-4" *ngIf="accountItemsFromIndexDB?.length > 0">
                     <div class="account-collapse">
-                        <p class="font-12 d-flex justify-content-between">
+                        <p class="font-size-12 d-flex justify-content-between">
                             {{ localeData?.accounts }}
                             <i class="icon-add-new cursor-pointer" (click)="showManageGroupsModal()"></i>
                         </p>
-                        <ul class="left-fixed-header list-style-none font-15 lh33 mr-t05">
+                        <ul class="left-fixed-header list-style-none font-size-15 lh33 mt-1">
                             <li *ngFor="let acc of accountItemsFromIndexDB">
                                 <a
                                     aria-label="account"
                                     [routerLinkActive]="['active']"
                                     class="cursor-pointer"
                                     [class.active]="isLedgerAccSelected && selectedLedgerName === acc?.uniqueName"
-                                    (click)="
-                                        analyzeAccounts($event, acc);
-                                        $event.stopPropagation()
-                                    "
+                                    (click)="analyzeAccounts($event, acc); $event.stopPropagation()"
                                     >{{ acc.name }} {{ commonLocaleData?.app_ac }}</a
                                 >
                             </li>
@@ -94,10 +91,7 @@
                             </li>
                         </ul>
                     </div>
-                    <div
-                        class="account-dropdown btn-group"
-                        [attr.container]="!isOpen ? 'body' : ''"
-                    >
+                    <div class="account-dropdown btn-group" [attr.container]="!isOpen ? 'body' : ''">
                         <a
                             href="javascript:void(0);"
                             aria-label="account-icon"
@@ -106,7 +100,7 @@
                             class="dropdown-toggle"
                         >
                             <span [matTooltip]="localeData?.accounts"><i class="icon-accounts-new"></i> </span>
-                            <i class="icon-right mr-l1 font-15"></i>
+                            <i class="icon-right ml-2 font-size-15"></i>
                         </a>
                         <ul
                             class="dropdown-menu account-dropdown-collapse list-style-none sub-menu"
@@ -135,59 +129,60 @@
                     </div>
                 </div>
                 <div class="menu-block">
-                    <div class="menu-item-wrapper font-15">
-                        <div class="menu-item pd-l2 pd-r2">
-                            <p class="font-12">
+                    <div class="menu-item-wrapper font-size-15">
+                        <div class="menu-item pl-4 pr-4">
+                            <p class="d-flex align-items-center justify-content-between font-size-12">
                                 <span
                                     [routerLink]="['/pages/giddh-all-items']"
                                     class="d-inline-flex align-items-center cursor-pointer"
                                 >
                                     {{ localeData?.menu }}
-                                    <i class="icon-down-new mr-l05"></i>
+                                    <i class="icon-down-new ml-1"></i>
                                 </span>
-                                <span class="text-gray cursor-pointer" [routerLink]="['/pages/giddh-all-items']">
-                                    <i class="icon-go font-16"></i>
+                                <span class="text-light cursor-pointer" [routerLink]="['/pages/giddh-all-items']">
+                                    <i class="icon-go font-size-16"></i>
                                 </span>
                             </p>
                         </div>
                         <cdk-tree [dataSource]="dataSource" [treeControl]="treeControl">
-                            <cdk-tree-node 
-                                *cdkTreeNodeDef="let node; when: hasChild" 
+                            <cdk-tree-node
+                                *cdkTreeNodeDef="let node; when: hasChild"
                                 role="menuitem"
                                 [style.display]="shouldRender(node) ? 'block' : 'none !important'"
                                 [style.padding-left.px]="node.level * 20"
                             >
                                 <div class="main-item-wrapper">
-                                    <a 
-                                        href="javascript:;" 
-                                        aria-label="menu" 
-                                        (click)="toggleNode(node)" 
-                                        class="main-item"
-                                    >
+                                    <span aria-label="menu" (click)="toggleNode(node)" class="main-item">
                                         <span class="item-label">
                                             <i [ngClass]="node?.icon"></i>
                                             <span class="item-name">{{ node.label }}</span>
                                         </span>
-                                        <i class="mr-l1 font-15 icon-right" [ngClass]="{'rotate-270': isExpanded(node)}"></i>
-                                    </a>
+                                        <i
+                                            class="ml-2 font-size-15 icon-right"
+                                            [ngClass]="{ 'rotate-270': isExpanded(node) }"
+                                        ></i>
+                                    </span>
                                 </div>
                             </cdk-tree-node>
-                            
+
                             <!-- Child nodes (leaf nodes) -->
-                            <cdk-tree-node 
+                            <cdk-tree-node
                                 *cdkTreeNodeDef="let node"
                                 [style.display]="shouldRender(node) ? 'flex' : 'none !important'"
                                 [style.padding-left.px]="node.level * 20"
                                 role="menu"
                                 class="has-no-child"
-                                [ngClass]="{'active': isActiveRoute === node?.link && node?.additional?.queryParams?.tabIndex == queryParams}"
+                                [ngClass]="{
+                                    'active':
+                                        isActiveRoute === node?.link &&
+                                        node?.additional?.queryParams?.tabIndex == queryParams
+                                }"
                             >
                                 <!-- Parent menu without children -->
                                 <div class="main-item-wrapper" *ngIf="node?.link && node?.level === 0">
-                                    <a
-                                        href="javascript:;"
+                                    <span
                                         aria-label="menu"
-                                        (click)="toggleNode(node)" 
+                                        (click)="toggleNode(node)"
                                         [routerLink]="[node?.link]"
                                         [queryParams]="node?.additional?.queryParams"
                                         class="main-item"
@@ -196,21 +191,16 @@
                                             <i [ngClass]="node?.icon"></i>
                                             <span class="item-name">{{ node?.label }}</span>
                                         </span>
-                                    </a>
+                                    </span>
                                 </div>
                                 <!-- Child menu without link -->
                                 <div class="main-item-wrapper sub-menu pr-0" *ngIf="node?.level === 1 && !node?.link">
-                                    <a
-                                        href="javascript:;"
-                                        class="main-item"
-                                        aria-label="menu"
-                                        (click)="handleItemClick(node)"
-                                    >
+                                    <span class="main-item" aria-label="menu" (click)="handleItemClick(node)">
                                         <span class="item-label">
                                             <i [ngClass]="node?.icon"></i>
                                             {{ node?.label }}
                                         </span>
-                                    </a>
+                                    </span>
                                 </div>
                                 <!-- Child menu with link -->
                                 <div class="main-item-wrapper sub-menu pr-0" *ngIf="node?.level === 1 && node?.link">
@@ -227,53 +217,46 @@
                                         <ng-container
                                             *ngIf="
                                                 !isConsolidatedBranch &&
-                                                (currentOrganizationType === 'BRANCH' ||
-                                                    isCompanyWithoutBranch)
+                                                (currentOrganizationType === 'BRANCH' || isCompanyWithoutBranch)
                                             "
                                         >
                                             <ng-container
                                                 *ngIf="
                                                     !(
-                                                        node?.additional?.createNew?.queryParams
-                                                            ?.addVendor ||
-                                                        node?.additional?.createNew?.queryParams
-                                                            ?.addCustomer
+                                                        node?.additional?.createNew?.queryParams?.addVendor ||
+                                                        node?.additional?.createNew?.queryParams?.addCustomer
                                                     )
                                                 "
                                             >
-                                                <strong
+                                                <span
                                                     class="ml-auto create-new"
                                                     *ngIf="node?.additional?.createNew"
                                                     (click)="$event.stopPropagation()"
                                                     [routerLink]="[node?.additional?.createNew?.link]"
-                                                    [queryParams]="
-                                                        node?.additional?.createNew?.queryParams
-                                                    "
+                                                    [queryParams]="node?.additional?.createNew?.queryParams"
                                                 >
                                                     {{ node?.additional?.createNew?.label }}
-                                                </strong>
+                                                </span>
                                             </ng-container>
                                             <ng-container
                                                 *ngIf="
-                                                    node?.additional?.createNew?.queryParams
-                                                        ?.addVendor ||
-                                                    node?.additional?.createNew?.queryParams
-                                                        ?.addCustomer
+                                                    node?.additional?.createNew?.queryParams?.addVendor ||
+                                                    node?.additional?.createNew?.queryParams?.addCustomer
                                                 "
                                             >
-                                                <strong
+                                                <span
                                                     class="ml-auto create-new"
                                                     (click)="
                                                         $event.stopPropagation();
-                                                        selectedGroupForCreateAccount = node?.additional
-                                                            ?.createNew?.queryParams?.addCustomer
+                                                        selectedGroupForCreateAccount = node?.additional?.createNew
+                                                            ?.queryParams?.addCustomer
                                                             ? 'sundrydebtors'
                                                             : 'sundrycreditors';
                                                         openAccountAsidePane()
                                                     "
                                                 >
                                                     {{ node?.additional?.createNew?.label }}
-                                                </strong>
+                                                </span>
                                             </ng-container>
                                         </ng-container>
                                     </div>
@@ -298,9 +281,9 @@
         ></command-k>
         <div class="shortcuts">
             <strong>↑</strong> <strong>↓</strong>&nbsp; {{ localeData?.to_navigate }}
-            <strong class="mr-l1" [attr.aria-label]="commonLocaleData?.app_return">↵</strong>&nbsp;
+            <strong class="ml-2" [attr.aria-label]="commonLocaleData?.app_return">↵</strong>&nbsp;
             {{ localeData?.to_select }}
-            <strong class="mr-l1" [attr.aria-label]="commonLocaleData?.app_escape">{{
+            <strong class="ml-2" [attr.aria-label]="commonLocaleData?.app_escape">{{
                 commonLocaleData?.app_esc
             }}</strong
             >&nbsp;

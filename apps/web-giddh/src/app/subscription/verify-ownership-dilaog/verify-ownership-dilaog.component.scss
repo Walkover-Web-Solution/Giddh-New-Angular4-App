@@ -5,19 +5,6 @@
     .view-box {
         width: 65%;
 
-        .view-subscription {
-            .view-right {
-                width: 150px;
-                flex-direction: column;
-            }
-        }
     }
 
-    .billing-account {
-        width: 35%;
-    }
-
-        .mat-mdc-card.outline-card {
-            min-height: 215px !important;
-        }
 }

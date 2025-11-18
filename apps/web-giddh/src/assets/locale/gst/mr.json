@@ -192,7 +192,7 @@
 		"gstn_username": "जीएसटीएन वापरकर्तानाव",
 		"filing_period": "दाखल करण्याचा कालावधी",
 		"gst_return_type": "जीएसटी रिटर्नचा प्रकार",
-		"type_submit": "मजकूर बॉक्समध्ये <span class='text-danger'> * </span> मध्ये <strong> सबमिट </strong> टाइप करा",
+		"type_submit": "मजकूर बॉक्समध्ये <span class='text-red'> * </span> मध्ये <strong> सबमिट </strong> टाइप करा",
 		"otp_required_error": "कृपया ओटपी जोडा ..",
 		"submit_gst_error": "कृपया मजकूर बॉक्समध्ये सबमिट करा .."
 	},

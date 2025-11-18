@@ -2,10 +2,7 @@
     position: relative;
     position: relative;
     width: 45px;
-    .checkbox-custom-label {
-        position: absolute;
-        left: 14px;
-    }
+
 }
 .input-group-addon {
     .checkbox-custom-label {
@@ -15,16 +12,10 @@
     }
 }
 
-.custom-select {
-    padding: 0 !important;
-}
-
 .profile-form {
     .form-group {
         .input-group {
-            .input-group-addon {
-                border-left: 1px solid var(--color-silver) !important;
-            }
+
             input {
                 border-left: none !important;
                 border-right: none !important;
@@ -37,57 +28,6 @@
     position: absolute;
     bottom: -70px;
     right: 90px;
-}
-@media (max-width: 768px) {
-    .multicurrency-checkbox {
-        display: block !important;
-        font-size: var(--font-size-12);
-    }
-}
-@media (max-width: 767px) {
-    .branch-vector {
-        img {
-            width: 150px;
-        }
-    }
-}
-@media (min-width: 992px) and (max-width: 1359px) {
-    .profile-form {
-        flex: 0 0 100% !important;
-        max-width: 100% !important;
-    }
-    .decimal-system {
-        flex: 0 0 100% !important;
-        max-width: 100% !important;
-    }
-}
-
-@media (min-width: 1360px) and (max-width: 1386px) {
-    .number-system {
-        flex-flow: column;
-        display: flex;
-    }
-}
-
-::ng-deep .dropdown-divider {
-    height: 1px;
-    margin: 0.5rem 0;
-    overflow: hidden;
-    background-color: var(--color-border-light);
-}
-
-::ng-deep .dropdown-item {
-    display: block;
-    width: 100%;
-    padding: 3px 7px;
-    clear: both;
-    font-weight: normal;
-    color: var(--color-black);
-    text-align: inherit;
-    white-space: nowrap;
-    background: none;
-    border: 0;
-    text-transform: capitalize;
 }
 
 ::ng-deep .dropdown-item:focus,
@@ -112,53 +52,4 @@
 ::ng-deep .dropdown-item.active,
 .dropdown-item:active {
     background: var(--color-light-gray);
-}
-
-.has-error {
-    border: 1px solid var(--color-red);
-}
-
-#createCompForm p {
-    font-size: var(--font-size-15);
-    color: var(--color-medium-gray);
-    text-align: center;
-    margin-left: -28px;
-    margin-right: -28px;
-}
-
-#createCompForm .text-danger {
-    display: block;
-    /* clear: both; */
-    /* float: none; */
-}
-
-.giddh-logo-welcome img {
-    max-width: 140px;
-    margin: 50px auto;
-    display: block;
-}
-
-.add-company-detail p {
-    max-width: 300px;
-    margin: 0 auto !important;
-    display: block;
-    text-align: center;
-    width: 100%;
-}
-
-#share-modal .btn.btn-sky-blue {
-    width: 100%;
-}
-.add-company-detail {
-    background-color: var(--color-light-gray);
-}
-
-.phone-code-caret {
-    width: 85px;
-    margin-right: 28px;
-}
-
-.save-export-file-name {
-    top: 5px;
-    right: 15px;
 }

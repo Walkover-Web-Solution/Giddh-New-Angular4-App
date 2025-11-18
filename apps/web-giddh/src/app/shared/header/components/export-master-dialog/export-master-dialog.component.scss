@@ -1,16 +1,3 @@
-.modal-body {
-    p {
-        color: var(--color-black);
-    }
-}
-.label-width {
-    min-width: 220px;
-}
-
-.toggle-width {
-    min-width: 65px;
-}
-
 .export-border {
     &::after {
         content: "";

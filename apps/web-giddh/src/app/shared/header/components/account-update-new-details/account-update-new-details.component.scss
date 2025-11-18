@@ -1,13 +1,3 @@
-.form-header {
-    padding: 20px 15px;
-    background: var(--color-blue-primary);
-    color: var(--color-white);
-}
-
-.portal-height {
-    height: 85px !important;
-}
-
 .inc-dec {
     position: relative;
     width: 100%;
@@ -15,39 +5,11 @@
     display: flex;
     align-items: center;
 
-    .plus-minus {
-        display: flex;
-        justify-content: center;
-
-        button {
-            min-width: 14px;
-            padding: 0 5px;
-        }
-    }
-}
-
-.aside-pane-form {
-    background-color: var(--color-white);
-    box-shadow: 0px 3px 6px var(--color-shadow-light);
-    padding: 15px 15px;
-    overflow: auto;
-    scroll-behavior: smooth;
-    position: relative;
-}
-
-.aside-pane-container {
-    padding: 15px;
-    font-size: var(--font-size-15);
-    color: var(--color-black);
 }
 
 .aside-pane-form label {
     margin-bottom: 5px;
     display: block;
-}
-
-.cr-dr-account {
-    position: relative;
 }
 
 .cr-dr-account span {
@@ -63,22 +25,9 @@
     right: 0;
 }
 
-span.dr-label {
-    right: 36px !important;
-}
-
 .cr-dr-account span.active {
-    background-color: var(--color-blue-primary);
+    background-color: var(--bg-primary-color);
     color: var(--color-white);
-}
-
-.aside-pane-form .col-sm-4,
-.aside-pane-form .col-sm-8,
-.aside-pane-form .col-sm-10,
-.aside-pane-form .col-sm-2,
-.aside-pane-form .col-sm-6,
-.aside-pane-form .col-sm-12 {
-    padding: 0 10px;
 }
 
 .upper-form {
@@ -86,22 +35,18 @@ span.dr-label {
 
     .input-group {
         .input-group-addon {
-            border-left: 1px solid var(--color-silver) !important;
+            border-left: 1px solid var(--border-color) !important;
         }
 
         input {
-            border-left: 1px solid var(--color-silver) !important;
-            border-radius: 5px;
+            border-left: 1px solid var(--border-color) !important;
+            border-radius: var(--mat-border-radius-4);
 
             &:focus {
-                border-left: 1px solid var(--color-blue-primary) !important;
+                border-left: 1px solid var(--theme-primary-color) !important;
             }
         }
     }
-}
-
-form.gstin-form {
-    padding-top: 15px;
 }
 
 .add-address-default {
@@ -111,23 +56,6 @@ form.gstin-form {
     padding: 6px 10px;
     align-items: center;
     margin: 20px 0;
-}
-
-.add-address-btn {
-    width: 130px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    .icon-plus {
-        margin-right: 10px;
-    }
-}
-
-/*--- custom ---*/
-.add-new-btn {
-    width: 100%;
-    max-width: 185px;
 }
 
 .add-address-default h3 {
@@ -141,34 +69,8 @@ form.gstin-form {
     padding-top: 15px;
 }
 
-.other-form .btn-sky-blue {
-    display: block;
-}
-
-.update-btn-zindex {
-    z-index: 0;
-    color: var(--color-white) !important;
-    border-color: var(--color-blue-primary) !important;
-    background-color: var(--color-blue-primary) !important;
-
-    &:hover {
-        border-color: var(--color-blue-primary) !important;
-        background-color: var(--color-blue-primary) !important;
-    }
-}
-
-.wd100 {
-    width: 100% !important;
-}
-
 .width-select {
     width: calc(100% - 112px);
-}
-
-.move-to-group {
-    .list-item {
-        border-bottom: 1px solid var(--color-silver);
-    }
 }
 
 .name-of-field {
@@ -187,16 +89,6 @@ form.gstin-form {
     }
 }
 
-.contact-number-select {
-    width: 60px;
-    margin-right: 10px;
-}
-
-.merge-btn,
-.save-btn {
-    min-width: 100px;
-}
-
 .is-default-address {
     margin-top: 5px !important;
     height: 29px;
@@ -204,11 +96,6 @@ form.gstin-form {
 
 .w-30 {
     width: 30% !important;
-}
-
-.only-right-radius {
-  border-top-right-radius: 4px;
-  border-bottom-right-radius: 4px;
 }
 
 .expiry-days-input-width {

@@ -1,4 +1,3 @@
-import { BreakpointObserver } from '@angular/cdk/layout';
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
@@ -30,8 +29,6 @@ export class FinancialReportsComponent implements OnInit, OnDestroy {
      * same route which cancels the previous route with route ID and doesn't highlight the menu item
      */
     public preventTabChangeWithRoute: boolean;
-    /** This will store screen size */
-    public isMobileScreen: boolean = false;
     @ViewChild('staticTabsTBPL', { static: true }) public staticTabs: MatTabGroup;
     /** Selected tab index for Material tabs */
     public selectedTabIndex: number = 0;
@@ -44,8 +41,7 @@ export class FinancialReportsComponent implements OnInit, OnDestroy {
     constructor(
         private store: Store<AppState>,
         private route: ActivatedRoute,
-        private router: Router,
-        private breakPointObservar: BreakpointObserver) {
+        private router: Router) {
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.selectedCompany = activeCompany;
@@ -53,36 +49,7 @@ export class FinancialReportsComponent implements OnInit, OnDestroy {
         });
     }
 
-    /**
-     * This will return page heading based on active tab
-     *
-     * @param {boolean} event
-     * @memberof InvoiceComponent
-     */
-     public getPageHeading(): string {
-        if(this.isMobileScreen){
-            if(this.CanTBLoad) {
-                return this.localeData?.tabs?.trial_balance;
-            }
-            else if(this.CanPLLoad) {
-                return this.localeData?.tabs?.profit_loss;
-            }
-            else if(this.CanBSLoad) {
-                return this.localeData?.tabs?.balance_sheet;
-            }
-        }
-        else {
-            return " ";
-        }
-    }
-
     public ngOnInit() {
-        this.breakPointObservar.observe([
-            '(max-width: 767px)'
-        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isMobileScreen = result.matches;
-        });
-
         if (TEST_ENV) {
             this.CanNewTBLoadOnThisEnv = true;
         } else {

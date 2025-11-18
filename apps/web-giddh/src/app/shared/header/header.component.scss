@@ -1,40 +1,7 @@
-.giddh-logo {
-    width: 100px;
-}
-
-.company-button {
-    background-color: var(--color-white);
-}
-
-.custom-header {
-    background-color: var(--color-blue-primary);
-    padding: 15px;
-    min-height: 60px;
-}
-
-.nav-left-bar {
-    position: fixed;
-    top: var(--top-sidebar);
-    bottom: 0;
-    min-height: calc(100vh - 60px);
-    background-color: var(--color-white);
-    width: 60px;
-    left: 0;
-    z-index: 991;
-    box-shadow: 1px 0px 4px var(--color-shadow-light) !important;
-}
-
-.nav-tabs {
-    padding-top: 0;
-}
-
 .nav-left-bar.open {
     left: 0;
     width: 240px;
 
-    &.width-60 {
-        width: 60px;
-    }
 }
 
 .menu-wrapper {
@@ -44,15 +11,6 @@
 
 .modal-open {
     overflow: hidden !important;
-}
-
-.inner-tooltip {
-    white-space: nowrap !important;
-    max-width: none !important;
-}
-
-.d-inline-block {
-    display: inline-block !important;
 }
 
 .notification {
@@ -67,28 +25,14 @@
 .universal-date {
     li {
         display: inline-block;
-        position: relative;
         border: 1px solid var(--color-white);
-        border-radius: 20px;
+        border-radius: var(--mat-border-radius-16);
         i {
             vertical-align: bottom;
             display: inline-block;
-            position: relative;
-            left: 16px;
             padding: 0 20px;
-            color: var(--color-white);
             font-size: 18px;
         }
-    }
-}
-
-.mega-menu {
-    display: flex;
-    justify-content: space-between;
-    margin-left: 15px;
-
-    button {
-        color: var(--color-blue-primary) !important;
     }
 }
 
@@ -99,8 +43,12 @@
         font-size: var(--font-size-16);
 
         i {
-            color: var(--color-blue-primary);
+            color: var(--text-primary-color);
             font-size: var(--font-size-16);
+
+            &.icon-info {
+                color: var(--theme-foreground-color);
+            }
         }
     }
 
@@ -114,15 +62,13 @@
             column-gap: 8px;
 
             a {
-                color: var(--color-blue-primary);
                 text-decoration: underline;
-                position: relative;
             }
 
             .dot {
                 width: 4px;
                 height: 4px;
-                background-color: var(--color-blue-primary);
+                background-color: var(--bg-primary-color);
                 border-radius: 50%;
             }
         }
@@ -134,7 +80,7 @@
 }
 
 .create-txt {
-    border-bottom: 1px solid var(--color-silver);
+    border-bottom: 1px solid var(--border-color);
     padding: 15px 30px 12px 30px;
     color: var(--color-medium-gray);
 
@@ -154,6 +100,7 @@ ul{
     &.universal-date{
         li{
             .icon-circle {
+                color: var(--color-white);
                 background-color: var(--color-transparent);
                 width: 35px;
                 height: 35px;
@@ -166,10 +113,6 @@ ul{
                     &:hover {
                         .icon-circle{
                             background-color: var(--color-white);
-                            i[class^='icon-'],
-                            i[class*=' icon-'] {
-                              color: var(--color-blue-primary) !important;
-                            }
                         }
                       }
                 }
@@ -177,11 +120,12 @@ ul{
             &.select-today {
                 button {
                     color: var(--color-light-gray);
+                    height: 32px;
                 }
                 &:hover{
                     button {
                         background-color: var(--color-white) !important;
-                        color: var(--color-blue-primary) !important;
+                        color: var(--color-black) !important;
                     }
                 }
             }
@@ -224,14 +168,9 @@ ul{
 
     .input-date {
         border: 1px solid var(--color-white);
-        border-radius: 20px !important;
+        border-radius: var(--mat-border-radius-16) !important;
         height: 34px;
         width: 240px;
-
-        input {
-            margin-right: 44px;
-            text-align: center !important;
-        }
     }
 }
 
@@ -250,37 +189,8 @@ ul{
     text-transform: uppercase;
 }
 
-// top header css
-.company-text {
-    padding: 6px 8px 6px 0 !important;
-    overflow: hidden;
-}
-
-ul.sub-list {
-    min-height: 50px;
-    max-height: 290px;
-}
-
 .upgrade-plan.list-inline > li {
     padding-left: 0 !important;
-}
-
-.nav-left-bar .company-name .company-text span {
-    color: var(--color-black);
-    word-break: break-all;
-}
-
-.nav-left-bar .company-name-finance-year {
-    display: inline;
-    padding-left: 0;
-    position: relative;
-    top: -3px;
-}
-
-.nav-left-bar .company-name .branch-unique-name {
-    font-size: var(--font-size-12);
-    color: var(--color-blue-primary) !important;
-    padding: 0 0 3px 0;
 }
 
 .overlay-cal {
@@ -299,8 +209,8 @@ ul.sub-list {
 
 .close-2 {
     position: absolute;
-    top: 15px;
-    right: 30px;
+    top: 30px;
+    right: 20px;
     background: none;
     border: 0px;
     color: var(--color-black);
@@ -316,17 +226,17 @@ ul.sub-list {
     top: 60px;
 }
 
-/*notification css*/
-.white-row {
-    background-color: var(--color-white);
+.warning-msg-row {
+    background-color: var(--theme-warn-light);
     padding: 10px 15px;
     font-size: var(--font-size-15);
     box-shadow: 1px 1px 3px var(--color-shadow-light);
-    color: var(--color-black);
+    color: var(--theme-foreground-color);
 
     p {
         font-weight: var(--font-weight-semibold);
         font-size: var(--font-size-15);
+        color: var(--theme-foreground-color);
     }
 
     span.icon-traingle-info {
@@ -335,19 +245,9 @@ ul.sub-list {
         margin-right: 10px;
     }
 
-    span.icon-info-icon {
-        color: var(--color-medium-gray);
-        font-size: var(--font-size-16);
-        margin-right: 10px;
-    }
-
     i.icon-traingle-info {
         color: var(--color-red);
     }
-}
-
-.white-row.menu_open {
-    margin-left: 240px;
 }
 
 .setting-sidebar {
@@ -360,17 +260,11 @@ ul.sub-list {
         padding-left: 5px !important;
 
         input {
-            text-align: left !important;
             padding-left: 28px !important;
         }
     }
 }
 
-.branch-icon-tooltip {
-    padding: 0 5px;
-}
-
-/*new header css starts*/
 .fixed-padding {
     padding-top: 60px;
 }
@@ -378,16 +272,15 @@ ul.sub-list {
 #primary-new-header.primary-main-header {
     padding-left: 15px;
     padding-right: 15px;
-    border-bottom: 1px solid var(--color-white);
     position: fixed;
     width: 100%;
     top: var(--top-distance);
-    background-color: var(--color-blue-primary);
+    background-color: var(--bg-primary-color);
     z-index: 990 !important;
     height: 60px;
 
     .universal-date {
-        color: var(--color-blue-primary) !important;
+        color: var(--text-primary-color) !important;
         display: flex;
         align-items: center;
         column-gap: 20px;
@@ -399,7 +292,7 @@ ul.sub-list {
         }
 
         li {
-            border: none;
+            border: none !important;
 
             a {
                 display: flex;
@@ -416,14 +309,10 @@ ul.sub-list {
         .icon-calender,
         .icon-plus,
         i,
-        .btn-link {
-            color: var(--color-light-gray);
-            position: static !important;
-        }
 
         .not-today {
             .calendar-addon {
-                color: var(--color-blue-primary);
+                color: var(--color-black);
             }
 
             .input-date {
@@ -433,27 +322,29 @@ ul.sub-list {
 
         .input-date {
             background-color: var(--color-white);
-            border-radius: 5px !important;
+            border-radius: var(--mat-border-radius-4) !important;
             border: none;
 
             input {
-                color: var(--color-blue-primary) !important;
+                color: var(--color-black) !important;
+                font-size: inherit !important;
             }
         }
 
         #add-manage {
-            color: var(--color-blue-primary) !important;
+            color: var(--color-black) !important;
             padding: 4.8px 8px;
+            height: 32px;
             background-color: var(--color-white);
             display: flex;
             justify-content: center;
             align-items: center;
             font-size: var(--font-size-15);
-            border-radius: 5px;
+            border-radius: var(--mat-border-radius-4);
 
             i {
                 padding: 0px 5px 1px 0px!important;
-                color: var(--color-blue-primary) !important;
+                color: var(--color-black) !important;
                 font-size: var(--font-size-16);
             }
         }
@@ -469,12 +360,6 @@ ul.sub-list {
                 }
             }
 
-            &.disable-icon {
-                i {
-                    color: var(--color-silver) !important;
-                    cursor: no-drop;
-                }
-            }
         }
     }
     .logo-wrapper {
@@ -484,7 +369,6 @@ ul.sub-list {
     }
 }
 
-/*new header css end*/
 aside-setting {
     -moz-transition: all 400ms linear;
     -webkit-transition: all 400ms linear;
@@ -508,17 +392,13 @@ aside-setting {
         -ms-transform: translate(0, 0px);
         transform: translate3d(0, 0px, 0px);
         right: 0;
-        // z-index: 9991;
 
-        &.z-index-990 {
-            z-index: 990 !important;
-        }
     }
 }
 
 .menu-link {
     a {
-        color: var(--color-blue-primary);
+        color: var(--text-primary-color);
         text-decoration: underline;
         position: relative;
     }
@@ -550,53 +430,12 @@ aside-setting {
     }
 }
 
-/* responsive */
-
-@media (max-width: 1023px) {
-    .modal-liq-90 {
-        width: 100% !important;
-    }
-
-    .logo-hide-ipad {
-        display: none;
-    }
-}
-
-@media (max-width: 768px) {
-    span.icon-support.dropdown-toggle {
-        top: 7px;
-    }
-
-    .hamburger-menu {
-        display: flex;
-        align-items: center;
-
-        button {
-            width: 32px;
-            padding: 4px 4px 3px 0;
-
-            i {
-                font-size: 22px !important;
-            }
-        }
-    }
-}
-
 @media (max-width: 840px) {
     ul.sub-list {
         min-height: 30px;
         max-height: 190px;
     }
 
-    .sub-menu-nav {
-        top: -60px;
-    }
-}
-
-@media (min-width: 992px) {
-    .modal-lg {
-        max-width: 100% !important;
-    }
 }
 @media screen and (max-width: 1024px) {
     ul{
@@ -609,10 +448,7 @@ aside-setting {
         }
     }
 }
-.schedule-now-link {
-    width: 1px;
-    height: 1px;
-}
+
 .hide-sidebar {
     display: none;
 }

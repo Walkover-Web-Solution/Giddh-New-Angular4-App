@@ -1,19 +1,9 @@
-.single-item .dropdown-menu {
-    height: 50px !important;
-}
-
 :host .dropdown-menu {
     width: 100%;
     height: inherit;
     padding: 0;
     overflow: auto;
     z-index: 9;
-}
-
-.fake-label {
-    cursor: pointer;
-    padding: 5px 10px;
-    line-height: 24px;
 }
 
 .disabled-label {
@@ -25,9 +15,6 @@
     background-image: unset !important;
 }
 
-.multi-select .caret {
-    display: block !important;
-}
 sup.mandatory-asterisk {
     font-size: var(--font-size-15);
     top: 0;
@@ -44,19 +31,6 @@ sup.mandatory-asterisk {
             background-color: var(--color-border-light) !important;
         }
     }
-}
-
-
-.tax-dropdown {
-    max-height: 102px;
-    min-height: 134px
-}
-.show-caret-icon {
-    background-image: var(--url-caret-image) !important;
-    background-color: var(--color-white) !important;
-    background-position: 97% !important;
-    background-size: 10px !important;
-    background-repeat: no-repeat;
 }
 
 .tax-wrapper {

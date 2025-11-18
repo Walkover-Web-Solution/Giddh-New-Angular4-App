@@ -3,7 +3,6 @@
     max-width: 600px;
     margin: 0 auto;
 
-    // Ensure stepper icons are visible
     ::ng-deep .mat-step-icon {
         .mat-step-icon-content {
             font-size: 14px !important;
@@ -40,8 +39,8 @@
             input {
                 height: 46px;
                 width: 100%;
-                border-radius: 8px !important;
-                border: 1px solid var(--color-silver);
+                border-radius: var(--mat-border-radius-8) !important;
+                border: 1px solid var(--border-color);
             }
         }
 
@@ -70,10 +69,6 @@
         .send-otp-btn {
             min-width: 112px;
         }
-    }
-
-    .portal-height {
-        height: 85px !important;
     }
 
     .inc-dec {

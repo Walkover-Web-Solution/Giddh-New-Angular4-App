@@ -1,6 +1,6 @@
 table {
     &.financial-year {
-        border-block: 1px solid var(--color-silver) !important;
+        border-block: 1px solid var(--border-color) !important;
 
         tr {
             th,
@@ -26,9 +26,6 @@ table {
     .financial-year-header {
         .border-left {
             border-left: unset !important;
-        }
-        .pd-l4 {
-            padding-left: unset !important;
         }
 
         > div {

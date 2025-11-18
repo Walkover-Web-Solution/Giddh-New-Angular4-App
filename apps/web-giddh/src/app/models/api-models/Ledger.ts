@@ -466,3 +466,17 @@ export enum TransactionType  {
     Credit = 'CREDIT',
     Debit = 'DEBIT'
 }
+
+/** Enum representing dropdown types in ledger entry panel */
+export enum LedgerDropdownTypeEnum {
+    TAG = 'tag',
+    TAX = 'tax',
+    DISCOUNT = 'discount',
+    SALES_PERSON = 'salesPerson',
+    VOUCHER = 'voucher',
+    VARIANT = 'variant',
+    WAREHOUSE = 'warehouse',
+    ITC = 'itc',
+    INVOICE = 'invoice',
+    ACCOUNT = 'account'
+}

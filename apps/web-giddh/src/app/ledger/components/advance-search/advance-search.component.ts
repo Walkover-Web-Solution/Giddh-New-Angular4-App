@@ -46,8 +46,6 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     public stockListDropDown$: Observable<IOption[]>;
     public comparisonFilterDropDown$: Observable<IOption[]>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /* This will store if device is mobile or not */
-    public isMobileScreen: boolean = false;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */

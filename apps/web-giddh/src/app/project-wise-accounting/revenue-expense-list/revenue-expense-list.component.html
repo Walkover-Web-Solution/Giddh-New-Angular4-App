@@ -21,7 +21,7 @@
                 <ng-container *ngTemplateOutlet="commonTemplateForIncomeAndExpense"></ng-container>
             </mat-tab>
             <mat-tab [label]="localeData?.profit_and_loss">
-                <div class="pd-15" *ngIf="defaultParamsValue?.projectUniqueName && selectedTabIndex === 2">
+                <div class=" p-3 " *ngIf="defaultParamsValue?.projectUniqueName && selectedTabIndex === 2">
                     <profit-loss [projectUniqueName]="defaultParamsValue.projectUniqueName" [selectedCompany]="activeCompany"></profit-loss>
                 </div>
             </mat-tab>
@@ -30,8 +30,8 @@
 </ng-container>
 
 <ng-template #commonTemplateForIncomeAndExpense>
-    <div class="section-center pd-15">
-       <header class="d-flex align-items-center justify-content-space-between">
+    <div class="section-center p-3">
+       <header class="d-flex align-items-center justify-content-between">
             <div class="custom-datepicker" 
                  [matMenuTriggerFor]="universalDatepicker" 
                  #universalDatepickerTrigger="matMenuTrigger"
@@ -110,7 +110,7 @@
                                 <ng-template #optionTemplate let-option="option">
                                     <div aria-label="label" class="my-2">
                                         <span class="text-primary">{{ option?.label | titlecase }}</span>
-                                        <div class="text-gray font-12">
+                                        <div class="text-light font-size-12">
                                             <table class="w-100">
                                                 <tr>
                                                     <td class="option-extra-content" width="75px">{{ commonLocaleData?.app_dated }}</td>
@@ -224,7 +224,7 @@
                                             <ng-template #optionTemplate let-option="option">
                                                 <div aria-label="label" class="my-2">
                                                     <span class="text-primary">{{ option?.label | titlecase }}</span>
-                                                    <div class="text-gray font-12">
+                                                    <div class="text-light font-size-12">
                                                         <table class="w-100">
                                                             <tr>
                                                                 <td class="option-extra-content" width="75px">{{ commonLocaleData?.app_dated }}</td>
@@ -285,10 +285,10 @@
                                         >
                                         </input-field>
                                     </td>
-                                    <td *ngIf="!isCompany" class="position-relative">
+                                    <td *ngIf="!isCompany" class="position-relative ">
                                         <span class="editable-table-hide-element">
                                             <button mat-raised-button color="primary" (click)="entry?.valid && entry.get('value')?.value !== '0' && updateSingleEntry(i)">{{ commonLocaleData?.app_update }}</button>
-                                            <i (click)="openDeleteEntryDialog(i)" color="primary" class="cursor-pointer icon-trash font-16 position-absolute"></i>
+                                            <i (click)="openDeleteEntryDialog(i)" color="primary" class="cursor-pointer icon-trash font-size-16 position-absolute"></i>
                                         </span>
                                     </td>
                                 </tr>
@@ -307,7 +307,6 @@
 
             <mat-paginator
                 *ngIf="totalResults > pageSizeOptions[0] && !(isFetchingProjects$ | async)"
-                class="mt-3"
                 (page)="handlePageChange($event)"
                 [length]="totalResults"
                 [pageSize]="getProjectEntryListRequest.count"
@@ -316,7 +315,7 @@
                 [hidePageSize]="false"
                 [pageIndex]="getProjectEntryListRequest.page - 1"
             ></mat-paginator>
-            <section class="mr-b8"></section>
+            <section class="mb-custom-80"></section>
         </div>
     </div>
 </ng-template>

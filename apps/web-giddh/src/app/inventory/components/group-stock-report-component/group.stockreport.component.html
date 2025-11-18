@@ -1,10 +1,10 @@
-<section class="h100">
-    <div class="fb-1-container mr-b1 mt-3">
+<section class="h-100">
+    <div class="d-flex justify-content-center align-items-center mb-2 mt-3">
         <div class="d-flex justify-content-between w-100">
             <div class="d-flex wrap-head-report">
-                <h2 class="mr-2 head-report" *ngIf="groupStockReport">
+                <p class="mr-2 head-report" *ngIf="groupStockReport">
                     <span>{{ groupStockReport.stockGroupName }}</span> (Group)
-                </h2>
+                </p>
                 <div class="advance-icon cursor-pointer" matTooltip="Advance Search" (click)="onOpenAdvanceSearch()">
                     <i class="icon-advance-filter"></i>
                 </div>
@@ -14,14 +14,14 @@
                     <span class="icon-cross"></span> Clear Filter
                 </button>
             </div>
-            <div class="clearfix right-inventory d-flex">
+            <div class="clear-both right-inventory d-flex">
                 <div class="btn-group align-items-center">
-                    <!-- <button class="btn-link icon-btn mr-r15" (click)="editGroup()" matTooltip="Edit group">
+                    <!-- <button class="btn-link icon-btn mr-3" (click)="editGroup()" matTooltip="Edit group">
                         <i class="icon-edit-pencil"></i>
                     </button> -->
                     <button
                         type="button"
-                        class="btn-link cp mr-r15 icon-btn"
+                        class="btn-link cursor-pointer mr-3 icon-btn"
                         [matMenuTriggerFor]="downloadMenu"
                         matTooltip="Download"
                     >
@@ -37,7 +37,7 @@
                     </mat-menu>
                 </div>
                 <!-- <button
-                    mat-raised-button color="primary" class="transfer-btn mr-r15"
+                    mat-raised-button color="primary" class="transfer-btn mr-3"
                     *ngIf="!(currentOrganizationType !== 'BRANCH' && branches?.length > 1)"
                     matTooltip="Alt+N"
                     (click)="openBranchTransferDialog()"
@@ -56,7 +56,7 @@
             <table
                 class="table basic table-border inventory-stock-table on-mobile-view table-responsive"
                 [ngClass]="{
-                    'mr-b100':
+                    'mb-custom-100':
                         groupStockReport && groupStockReport.stockReport && groupStockReport.stockReport.length > 6
                 }"
             >
@@ -65,7 +65,7 @@
                         <!-- in case of all entity with group -->
                         <th
                             colspan="4"
-                            class="bd-rr p-0"
+                            class="border-right p-0"
                             width="30%"
                             *ngIf="GroupStockReportRequest.branchDetails === 'allEntity'"
                         >
@@ -74,7 +74,7 @@
 
                         <th
                             colspan="2"
-                            class="bd-rr"
+                            class="border-right"
                             width="17%"
                             *ngIf="GroupStockReportRequest.branchDetails != 'allEntity'"
                         >
@@ -98,16 +98,16 @@
                             </div>
                         </th>
                         <ng-container *ngIf="groupStockReport?.count">
-                            <th class="text-center bd-rr bd-rb" width="20%" colspan="2">Opening stock</th>
-                            <th class="text-center bd-rr bd-rb" width="20%" colspan="2">Inwards</th>
-                            <th class="text-center bd-rr bd-rb" width="20%" colspan="2">Outwards</th>
-                            <th class="text-center bd-rb" width="20%" colspan="2">Closing Stock</th>
+                            <th class="text-center border-right border-bottom" width="20%" colspan="2">Opening stock</th>
+                            <th class="text-center border-right border-bottom" width="20%" colspan="2">Inwards</th>
+                            <th class="text-center border-right border-bottom" width="20%" colspan="2">Outwards</th>
+                            <th class="text-center border-bottom" width="20%" colspan="2">Closing Stock</th>
                         </ng-container>
                     </tr>
-                    <tr class="bd-rt" [hidden]="!groupStockReport?.count">
+                    <tr class="border-top" [hidden]="!groupStockReport?.count">
                         <th
                             colspan="2"
-                            class="bd-rr td-search-box max-width-140"
+                            class="border-right td-search-box max-width-140"
                             (clickOutside)="clickedOutside($event, null, 'product')"
                         >
                             <div [hidden]="showProductSearch">
@@ -128,7 +128,7 @@
                         <!-- in case of all entity with group -->
                         <th
                             colspan="2"
-                            class="bd-rr td-search-box max-width-140"
+                            class="border-right td-search-box max-width-140"
                             *ngIf="GroupStockReportRequest.branchDetails === 'allEntity'"
                             (clickOutside)="clickedOutside($event, null, 'source')"
                         >
@@ -517,7 +517,7 @@
                 <tbody *ngIf="!groupStockReportInProcess && groupStockReport && groupStockReport.count > 0">
                     <tr *ngFor="let txn of groupStockReport.stockReport">
                         <ng-container *ngIf="txn.openingBalance || txn.inwards || txn.outwards || txn.closingBalance">
-                            <td class="bd-rb bd-rr" colspan="2" data-title="Product Name">
+                            <td class="border-bottom border-right" colspan="2" data-title="Product Name">
                                 <span class="justify-content-between d-flex align-items-start">
                                     <span>{{ txn.stockName }}</span>
                                     <span class="unit-badge pull-right text-light nowrap">{{
@@ -528,7 +528,7 @@
                             <!-- in case of all entity with group -->
                             <td
                                 colspan="2"
-                                class="bd-rb bd-rr max-width-140"
+                                class="border-bottom border-right max-width-140"
                                 data-title="Product Name"
                                 *ngIf="GroupStockReportRequest.branchDetails === 'allEntity'"
                             >
@@ -537,34 +537,31 @@
                             <!-- in case of all entity with group end -->
                             <td data-title="Opening stock -" class="td-mobile-head"></td>
 
-                            <td class="bd-rb bd-rr text-right border-right-none mb-0" data-title="Qty">
+                            <td class="border-bottom border-right text-right border-right-none mb-0" data-title="Qty">
                                 <span [ngClass]="{ 'text-danger': txn.openingBalance?.quantity < 0 }">{{
                                     txn.openingBalance?.quantity | giddhCurrency
                                 }}</span>
                             </td>
-                            <td class="bd-rb bd-rr text-right mb-0" data-title="Value">
+                            <td class="border-bottom border-right text-right mb-0" data-title="Value">
                                 {{ txn.openingBalance?.amount | giddhCurrency }}
                             </td>
 
                             <td
                                 data-title="inwards -"
                                 class="td-mobile-head"
-                                *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)"
                             ></td>
 
                             <td
-                                class="bd-rb bd-rr text-right border-right-none mb-0"
+                                class="border-bottom border-right text-right border-right-none mb-0"
                                 data-title="Qty"
-                                *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)"
                             >
                                 <span [ngClass]="{ 'text-danger': txn.inwards?.quantity < 0 }">{{
                                     txn.inwards?.quantity | giddhCurrency
                                 }}</span>
                             </td>
                             <td
-                                class="bd-rb bd-rr text-right mb-0"
+                                class="border-bottom border-right text-right mb-0"
                                 data-title="Value"
-                                *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)"
                             >
                                 {{ txn.inwards?.amount | giddhCurrency }}
                             </td>
@@ -572,41 +569,30 @@
                             <td
                                 data-title="Outwards -"
                                 class="td-mobile-head"
-                                *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)"
                             ></td>
 
                             <td
-                                class="bd-rb bd-rr text-right border-right-none mb-0"
+                                class="border-bottom border-right text-right border-right-none mb-0"
                                 data-title="Qty"
-                                *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)"
                             >
                                 {{ txn.outwards?.quantity | giddhCurrency }}
                             </td>
                             <td
-                                class="bd-rb bd-rr text-right mb-0"
+                                class="border-bottom border-right text-right mb-0"
                                 data-title="Value"
-                                *ngIf="!isMobileScreen || (isMobileScreen && txn.showAllColumns)"
                             >
                                 {{ txn.outwards?.amount | giddhCurrency }}
                             </td>
 
                             <td data-title="Closing stock -" class="td-mobile-head"></td>
 
-                            <td class="bd-rb bd-rr text-right border-right-none mb-0" data-title="Qty">
+                            <td class="border-bottom border-right text-right border-right-none mb-0" data-title="Qty">
                                 <span [ngClass]="{ 'text-danger': txn.closingBalance?.quantity < 0 }">{{
                                     txn.closingBalance?.quantity | giddhCurrency
                                 }}</span>
                             </td>
-                            <td class="bd-rb bd-rr text-right" data-title="Value">
+                            <td class="border-bottom border-right text-right" data-title="Value">
                                 {{ txn.closingBalance?.amount | giddhCurrency }}
-                            </td>
-                        </ng-container>
-
-                        <ng-container *ngIf="isMobileScreen">
-                            <td [attr.colspan]="txn.showAllColumns ? 16 : 10" class="more-table">
-                                <a href="javascript:;" (click)="txn.showAllColumns = !txn.showAllColumns">{{
-                                    txn.showAllColumns ? "Less" : "More"
-                                }}</a>
                             </td>
                         </ng-container>
                     </tr>
@@ -633,7 +619,7 @@
                                 [hidePageSize]="false"
                                 (page)="handlePageEvent($event)"
                             ></mat-paginator>
-                            <section class="mr-b8"></section>
+                            <section class="mb-custom-80"></section>
                         </td>
                     </tr>
                 </tfoot>
@@ -645,12 +631,12 @@
                     groupNotFoundMessage
                 "
             >
-                <h1 [class.group-not-found]="groupNotFoundMessage">
+                <h2 [class.group-not-found]="groupNotFoundMessage">
                     {{ groupNotFoundMessage ? groupNotFoundMessage : "No entries found within given criteria." }}
-                </h1>
-                <h1 class="p-0" [class.group-not-found]="groupNotFoundMessage">
+                </h2>
+                <h2 class="p-0" [class.group-not-found]="groupNotFoundMessage">
                     {{ groupNotFoundMessage ? groupNotFoundMessage : "Do search with some other dates" }}
-                </h1>
+                </h2>
             </div>
         </div>
 
@@ -676,19 +662,19 @@
                                     </h4>
                                 </div>
                                 <div class="col-8 p-0">
-                                    <h4 class="text-purple text-left">
+                                    <h4 class="text-primary text-left">
                                         <div *ngIf="GroupStockReportRequest.branchDetails === 'allEntity'">
-                                            <span class="text-purple" *ngIf="groupStockReport.totalItems"
+                                            <span class="text-primary" *ngIf="groupStockReport.totalItems"
                                                 >&nbsp;{{ groupStockReport.totalItems | giddhCurrency }}</span
                                             >
                                         </div>
                                         <div *ngIf="GroupStockReportRequest.branchDetails !== 'allEntity'">
-                                            <span class="text-purple" *ngIf="groupStockReport.totalItems"
+                                            <span class="text-primary" *ngIf="groupStockReport.totalItems"
                                                 >&nbsp;{{ groupStockReport.totalItems | giddhCurrency }}</span
                                             >
                                         </div>
                                         <div class="mt-1">
-                                            <span class="text-purple d-block"
+                                            <span class="text-primary d-block"
                                                 >{{ groupStockReport.profit | giddhCurrency }} ({{
                                                     dateRangePickerCmp?.nativeElement?.value | replaceHyphens
                                                 }})</span
@@ -726,7 +712,7 @@
                             <div class="flex-col">
                                 <div class="cont">
                                     <h4 class="text-light">Opening Value</h4>
-                                    <h2>{{ groupStockReport.openingBalance.amount | giddhCurrency }}</h2>
+                                    <p>{{ groupStockReport.openingBalance.amount | giddhCurrency }}</p>
                                     <h4 *ngIf="groupStockReport.openingBalance.quantity">
                                         ({{ groupStockReport.openingBalance.quantity | giddhCurrency }}
                                         {{ groupStockReport.openingBalance.stockUnit }})
@@ -737,7 +723,7 @@
                             <div class="flex-col">
                                 <div class="cont">
                                     <h4 class="text-light">Inward Value</h4>
-                                    <h2>{{ groupStockReport.inwardBalance.amount | giddhCurrency }}</h2>
+                                    <p>{{ groupStockReport.inwardBalance.amount | giddhCurrency }}</p>
                                     <h4 *ngIf="groupStockReport.inwardBalance.quantity">
                                         ({{ groupStockReport.inwardBalance.quantity | giddhCurrency }}
                                         {{ groupStockReport.inwardBalance.stockUnit }})
@@ -748,7 +734,7 @@
                             <div class="flex-col">
                                 <div class="cont">
                                     <h4 class="text-light">Outward Value</h4>
-                                    <h2>{{ groupStockReport.outwardBalance.amount | giddhCurrency }}</h2>
+                                    <p>{{ groupStockReport.outwardBalance.amount | giddhCurrency }}</p>
                                     <h4 *ngIf="groupStockReport.outwardBalance.quantity">
                                         ({{ groupStockReport.outwardBalance.quantity | giddhCurrency }}
                                         {{ groupStockReport.outwardBalance.stockUnit }})
@@ -759,10 +745,10 @@
                             <div class="flex-col">
                                 <div class="cont">
                                     <h4 class="text-light">Closing Value</h4>
-                                    <h2 class="text-purple">
+                                    <p class="text-primary">
                                         {{ groupStockReport.closingBalance.amount | giddhCurrency }}
-                                    </h2>
-                                    <h4 class="text-purple" *ngIf="groupStockReport.closingBalance.quantity">
+                                    </p>
+                                    <h4 class="text-primary" *ngIf="groupStockReport.closingBalance.quantity">
                                         ({{ groupStockReport.closingBalance.quantity | giddhCurrency }}
                                         {{ groupStockReport.closingBalance.stockUnit }})
                                     </h4>
@@ -799,7 +785,7 @@
         </button>
     </div>
     <mat-dialog-content class="dialog-body">
-        <div class="clearfix" [hidden]="!showAdvanceSearchModal">
+        <div class="clear-both" [hidden]="!showAdvanceSearchModal">
             <form action="" [formGroup]="advanceSearchForm">
                 <div class="row">
                     <div class="col-sm-4">Date Range</div>
@@ -822,10 +808,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="row mr-t2">
+                <div class="row mt-4">
                     <div class="col-sm-4">Select Category</div>
                     <div class="col-sm-4">
-                        <div class="select-style middle">
+                        <div class="select-style vertical-align-middle ">
                             <reactive-dropdown-field
                                 [options]="CategoryOptions"
                                 (onClear)="clearShSelect('filterCategory')"
@@ -836,7 +822,7 @@
                         </div>
                     </div>
                     <div class="col-sm-4">
-                        <div class="select-style middle">
+                        <div class="select-style vertical-align-middle ">
                             <reactive-dropdown-field
                                 [options]="CategoryTypeOptions"
                                 (onClear)="clearShSelect('filterCategoryType')"
@@ -847,10 +833,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="row mr-t2">
+                <div class="row mt-4">
                     <div class="col-sm-4">Value</div>
                     <div class="col-sm-4">
-                        <div class="select-style middle">
+                        <div class="select-style vertical-align-middle ">
                             <reactive-dropdown-field
                                 [options]="FilterValueCondition"
                                 (onClear)="clearShSelect('filterValueCondition')"
@@ -875,7 +861,7 @@
                     </div>
                 </div>
 
-                <div class="row mr-t4 mr-b3">
+                <div class="row mt-5 mb-5">
                     <div class="col-xs-12 col-sm-12 text-right">
                         <button
                             mat-raised-button

@@ -1,5 +1,5 @@
 <div class="fill scroll-y noscroll-x scrollbox">
-    <div class="filter-band">
+    <div class="filter-band px-0">
         <button
             mat-stroked-button
             (click)="redirectToGstFilingReturn()"
@@ -21,12 +21,11 @@
             </svg>
             {{ commonLocaleData?.app_back }}
         </button>
-        <div class="filter-row mr-l1" *ngIf="selectedGst === GstReport.Gstr1 && (filterParam.type === 'nil' || filterParam.type === 'b2cs')">
+        <div class="filter-row ml-2" *ngIf="selectedGst === GstReport.Gstr1 && (filterParam.type === 'nil' || filterParam.type === 'b2cs')">
             <div class="name">{{ localeData?.filing?.transaction_type }}:</div>
             <div class="btn-group filter d-inline-block">
                 <button
-                    mat-raised-button
-                    color="primary"
+                    mat-stroked-button
                     type="button"
                     [matMenuTriggerFor]="entityTypeMenu"
                 >
@@ -45,8 +44,7 @@
                 <div class="name">{{ localeData?.filing?.transaction_type }}:</div>
             <div class="btn-group filter d-inline-block">
                 <button
-                    mat-raised-button
-                    color="primary"
+                    mat-stroked-button
                     type="button"
                     [matMenuTriggerFor]="entityTypeMenu"
                 >
@@ -234,21 +232,19 @@
                 <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
             </table>
         </div>
-        <!-- pagination -->
-        <div *ngIf="(viewTransaction$ | async)?.totalItems > pageSizeOptions[0]">
-            <mat-paginator
-                (page)="pageChanged($event)"
-                [length]="(viewTransaction$ | async)?.totalItems"
-                [pageSize]="filterParam?.count"
-                [showFirstLastButtons]="true"
-                [pageSizeOptions]="pageSizeOptions"
-                [hidePageSize]="false"
-                [pageIndex]="pageIndex"
-                class="mt-15"
-            >
-            </mat-paginator>
-            <section class="mr-b8"></section>
-        </div>
+        <mat-paginator
+            *ngIf="(viewTransaction$ | async)?.totalItems > pageSizeOptions[0]"
+            (page)="pageChanged($event)"
+            [length]="(viewTransaction$ | async)?.totalItems"
+            [pageSize]="filterParam?.count"
+            [showFirstLastButtons]="true"
+            [pageSizeOptions]="pageSizeOptions"
+            [hidePageSize]="false"
+            [pageIndex]="pageIndex"
+            class="mt-15"
+        >
+        </mat-paginator>
+        <section class="mb-custom-80"></section>
         <!-- no records -->
         <div
             class="filings-empty-state"

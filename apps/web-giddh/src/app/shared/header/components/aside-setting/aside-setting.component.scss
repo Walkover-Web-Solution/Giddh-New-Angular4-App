@@ -13,7 +13,7 @@
         content: "";
         width: 12px;
         height: 12px;
-        background-color: var(--color-light-gray);
+        background-color: var(--theme-background-color);
         top: -6px;
         right: 178px;
         @media screen and (max-width: 1024px) {
@@ -26,20 +26,7 @@
         transform: rotate(45deg);
     }
 }
-:host.setting-sidebar {
-    position: fixed;
-    top: var(--top-distance);
-    bottom: 0;
-    min-height: 100vh;
-    background: var(--color-white);
-    width: 240px;
-    left: auto;
-    right: 0;
-    z-index: 999;
-    .aside-help-header {
-        display: none;
-    }
-}
+
 :host.in #close {
     display: block;
     position: fixed;
@@ -47,26 +34,17 @@
     top: var(--top-distance);
     z-index: 5;
     border: 0;
-    border-radius: 0;
+    border-radius: var(--mat-border-radius-0);
     cursor: pointer;
-}
-
-:host .container-fluid {
-    padding-left: 0;
-    padding-right: 0;
 }
 
 :host .aside-pane {
     max-width: 240px;
     width: 100%;
 }
-.aside-header {
-    background-color: var(--color-white);
-    padding: 20px 10px;
-}
+
 .aside-pane {
     padding: 0;
-    background-color: var(--color-white);
     .aside-help-header {
         display: flex;
         justify-content: space-between;
@@ -80,16 +58,6 @@
             padding-top: 5px;
         }
     }
-}
-.aside-pane-form {
-    background-color: var(--color-white);
-    box-shadow: 0px 3px 6px var(--color-shadow-light);
-    padding: 15px 15px;
-    height: calc(100vh - 90px);
-    overflow: auto;
-    scroll-behavior: smooth;
-    position: relative;
-    margin-top: 15px;
 }
 
 :host.setting-sidebar {
@@ -107,7 +75,6 @@
         display: none;
     }
     .aside-pane {
-        background: var(--color-white);
         overflow: initial;
         z-index: unset;
         .aside-help-header {
@@ -117,14 +84,12 @@
             display: block;
             padding: 15px 15px 3px;
             margin-bottom: 0;
-            &.setting-close-icon {
-                padding: 15px 15px 15px;
-            }
+
             img {
                 width: 15px;
             }
             a {
-                color: var(--color-blue-primary);
+                color: var(--text-primary-color);
                 span {
                     display: flex;
                     align-items: center;
@@ -147,14 +112,6 @@
                     }
                 }
             }
-        }
-    }
-}
-
-::ng-deep {
-    .back-to-main-slider {
-        .ng-star-inserted {
-            color: var(--color-blue-primary);
         }
     }
 }

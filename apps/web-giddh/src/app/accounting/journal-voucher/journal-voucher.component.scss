@@ -1,46 +1,3 @@
-.bg-wrap {
-    background: var(--color-light-gray);
-}
-
-.entry-table thead th {
-    font-weight: normal;
-    padding: 8px 6px;
-}
-
-.entry-table tbody tr td {
-    padding: 0;
-    border: 0;
-}
-
-.entry-table tbody tr td .form-control {
-    background: transparent !important;
-    border: 0;
-    border-radius: 0 !important;
-    height: 28px;
-    line-height: 28px;
-    padding: 0 6px !important;
-}
-
-.entry-table tbody tr td .form-control.focus:focus {
-    background: var(--color-silver) !important;
-}
-
-.active-row {
-    background: var(--color-border-light);
-}
-
-.confirmation-box {
-    background: var(--color-white);
-    display: inline-block;
-    padding: 20px;
-    width: 230px;
-    position: absolute;
-    right: 280px;
-    z-index: 9;
-    min-height: 135px;
-    margin: 20px 0;
-}
-
 .total-box {
     padding: 15px 0;
     border-top: 1px solid;
@@ -50,90 +7,16 @@
     font-size: var(--font-size-15);
 }
 
-.total-box>span {
+.total-box > span {
     margin: 0 8px;
     display: inline-block;
     min-width: 120px;
 }
-
-.appearance-none {
-    background: var(--color-border-light) !important;
-    border: 0 !important;
-    font-size: var(--font-size-15);
-    color: var(--color-black);
-}
-
 .sidebar-menu {
     background: var(--color-border-light);
     color: var(--color-white);
     float: right;
     position: relative;
-}
-
-.menu-list {
-    padding: 15px 0;
-}
-
-.menu-list li {
-    list-style: none;
-}
-
-.menu-list li a {
-    color: var(--color-white);
-    padding: 4px 12px;
-    display: block;
-}
-
-.menu-list li a.isHidden {
-    color: var(--color-dark-gray);
-}
-
-.sidebar-list {
-    width: 300px;
-    position: absolute;
-    right: 0;
-    top: 0;
-    height: 100vh;
-    padding: 0 !important;
-    border: 0;
-    z-index: 0;
-    border-left: 1px solid var(--color-silver);
-}
-
-.sidebar-list h3 {
-    background: var(--color-white);
-}
-
-input[name="entryDate"] {
-    background: transparent !important;
-    border: 0;
-    padding: 0 !important;
-    color: var(--color-black);
-    height: auto;
-    width: 100px;
-    font-size: var(--font-size-15);
-}
-
-textarea[name="narration"] {
-    background: transparent !important;
-    border: 0;
-}
-
-input[name="entryDate"]:focus,
-textarea[name="narration"]:focus {
-    background: var(--color-border-light) !important;
-}
-
-:host ::ng-deep .menu {
-    box-shadow: none !important;
-}
-
-:host ::ng-deep .item .list-item {
-    border: 0 !important;
-}
-
-:host ::ng-deep .menu {
-    border-left: 0 !important;
 }
 
 @media (max-width: 991px) {

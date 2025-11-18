@@ -1,27 +1,7 @@
-.parent-group > ul > li ul li div {
-    color: var(--color-dark-gray);
-}
-.btn-group.show {
-    display: inline-block !important;
-}
-.btn-group > .btn:first-child {
-    margin-left: 8px;
-    margin-top: -3px;
-    background: none;
-    color: var(--color-dark-gray);
-    padding: 6px;
-    margin-right: 0px !important;
-}
-.dropdown-menu > li > a:hover {
-    background: var(--color-border-light);
-    cursor: pointer;
-}
 .dropdown-menu > li > a {
-    color: var(--color-blue-primary);
+    color: var(--text-primary-color);
 }
-span.caret {
-    display: none;
-}
+
 #inventory-sidebar {
     background: var(--color-white);
     min-height: 100vh;
@@ -36,11 +16,7 @@ span.caret {
 .stock-grp-list > li > a:hover {
     color: var(--color-black);
 }
-:host ::ng-deep .nav-tabs > li {
-    width: 50%;
-    text-align: center;
-    background: var(--color-light-gray);
-}
+
 .width-sidebar-form-control {
     width: 205px;
 }
@@ -49,14 +25,12 @@ span.caret {
     width: 205px;
     display: inline-block;
 }
-.btn-link-2 {
-    color: var(--color-blue-primary);
-}
+
 .no-data-box {
     border-top: 1px solid var(--color-border-light) !important;
 }
 
-.text-light-2 {
+.text-light {
     position: absolute;
     top: 10px;
     left: 11px;
