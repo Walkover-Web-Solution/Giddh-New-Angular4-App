@@ -1552,6 +1552,7 @@
                                                         [type]="'number'"
                                                         [placeholder]="localeData?.enter_hsn_code"
                                                         [(ngModel)]="stockForm.hsnNumber"
+                                                        [allowDigitsOnly]="true"
                                                     >
                                                     </input-field>
                                                     <input-field
@@ -1560,6 +1561,7 @@
                                                         [type]="'number'"
                                                         [placeholder]="localeData?.enter_sac_code"
                                                         [(ngModel)]="stockForm.sacNumber"
+                                                        [allowDigitsOnly]="true"
                                                     >
                                                     </input-field>
                                                 </div>
