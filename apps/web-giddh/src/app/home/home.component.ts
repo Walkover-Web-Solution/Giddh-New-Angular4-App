@@ -61,6 +61,13 @@ export class HomeComponent implements OnInit, OnDestroy {
                 this.hideallcharts = false;
             }
         });
+        // Scroll to top when dashboard loads
+        setTimeout(() => {
+            const dashboardElement = document.getElementById('dashboard');
+            if (dashboardElement) {
+                dashboardElement.scrollIntoView({ behavior: 'instant', block: 'start' });
+            }
+        }, 100);
     }
 
     public ngOnDestroy() {
