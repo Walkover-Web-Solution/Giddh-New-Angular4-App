@@ -1341,7 +1341,7 @@
                                                     <input-field
                                                         *ngIf="hsnSac === 'HSN'"
                                                         [name]="'hsnNumber'"
-                                                        [type]="'text'"
+                                                        [type]="'number'"
                                                         [placeholder]="localeData?.enter_hsn_code"
                                                         [(ngModel)]="stockForm.hsnNumber"
                                                     >
@@ -1349,7 +1349,7 @@
                                                     <input-field
                                                         *ngIf="hsnSac === 'SAC'"
                                                         [name]="'sacNumber'"
-                                                        [type]="'text'"
+                                                        [type]="'number'"
                                                         [placeholder]="localeData?.enter_sac_code"
                                                         [(ngModel)]="stockForm.sacNumber"
                                                     >
