@@ -108,14 +108,14 @@
                             </ng-template>
                         </mat-menu>
                     </div>
-                    <div *ngIf="isCompany && activeCompany?.name" class="ml-2">
+                    <div *ngIf="isCompany" class="ml-2">
                         <reactive-dropdown-field
                             [label]="commonLocaleData?.app_branch"
                             [options]="branches"
                             (selectedOption)="
                                 ocrDocumentsRequestParams.branchUniqueName = $event?.value; selectBranch()
                             "
-                            (onClear)="ocrDocumentsRequestParams.branchUniqueName = ''; selectBranch()"
+                            (onClear)="ocrDocumentsRequestParams.branchUniqueName = ''; getAllOcrDocuments(false)"
                             [labelValue]="activeCompany?.name"
                             [placeholder]="commonLocaleData?.app_select_branch"
                         ></reactive-dropdown-field>
