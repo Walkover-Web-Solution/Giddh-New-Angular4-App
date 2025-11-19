@@ -19,6 +19,7 @@ import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/gr
 import { ManufacturingService } from '../../../services/manufacturing.service';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { FieldTypes } from '../../../custom-fields/custom-fields.constant';
+import { IDiscountList } from '../../../models/api-models/SettingsDiscount';
 
 @Component({
     selector: 'bulk-stock',
@@ -153,7 +154,8 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
         skuCode: false,
         archive: true,
         taxes: false,
-        customFields: false
+        customFields: false,
+        discountName: false,
     };
     /** This will use for report custom fields column check values */
     public newCustomFieldsColumns: any[] = [];
@@ -210,6 +212,10 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
     }
     /** All custom fields */
     public allCustomField: any = {};
+    /** Discounts list Observable */
+    public discountsList$: Observable<any> = this.inventoryStore.discountsList$;
+    /** Discounts list */
+    public discountsList: IDiscountList[] = [];
 
     constructor(
         private route: ActivatedRoute,
@@ -336,12 +342,28 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
 
         this.getTaxes();
         this.getStockGroups();
+        this.getAllDiscounts();
 
         this.bulkStockEditForm.valueChanges.pipe(debounceTime(500), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((searchedText: any) => {
             if (searchedText && this.selectTableRowIndex !== -1) {
                 this.valueChangesOnUpdate(this.selectTableRowIndex);
             }
         });
+    }
+
+    /**
+     * Get all discounts
+     *
+     * @private
+     * @memberof StockCreateEditComponent
+     */
+    private getAllDiscounts(): void {
+        this.discountsList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.discountsList = response;
+            }
+        });
+        this.inventoryStore.getDiscountList();
     }
 
     /**
@@ -706,7 +728,9 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
             skuCode: [controlValue.skuCode, Validators.required],
             archive: [controlValue.archive, Validators.required],
             taxes: [controlValue.taxes, Validators.required],
-            customFields: this.createCustomFieldsFormArray(controlValue.customFields)
+            customFields: this.createCustomFieldsFormArray(controlValue.customFields),
+            discountUniqueName: [controlValue.discountUniqueName, Validators.required],
+            discountName: [controlValue.discountName, Validators.required],
         })
     }
 
@@ -1183,7 +1207,8 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
                 skuCode: "sku",
                 archive: "archive",
                 taxes: "tax",
-                customFields: "customFields"
+                customFields: "customFields",
+                discountName: "discount_name"
             };
 
             Object.keys(fieldMapping).forEach(key => {
