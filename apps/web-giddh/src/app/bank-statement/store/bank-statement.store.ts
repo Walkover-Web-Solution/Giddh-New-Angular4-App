@@ -7,6 +7,8 @@ import {
     EmailForwardingRequest, 
     EmailForwardingResponse, 
 } from "../models/email-forwarding.model";
+import { SearchService } from "../../services/search.service";
+import { BaseResponse } from "../../models/api-models/BaseResponse";
 
 export interface BankStatementState {
     emailForwardingList: EmailForwardingResponse[] | null;
@@ -17,6 +19,7 @@ export interface BankStatementState {
     isGeneratingEmail: boolean;
     createUpdateEmailForwardingIsSuccess: EmailForwardingResponse | null | boolean;
     deleteEmailForwardingIsSuccess: boolean;
+    accountSearch: any;
 }
 
 const DEFAULT_STATE: BankStatementState = {
@@ -27,7 +30,8 @@ const DEFAULT_STATE: BankStatementState = {
     isEmailForwardingDetailsLoading: false,
     isGeneratingEmail: false,
     createUpdateEmailForwardingIsSuccess: null,
-    deleteEmailForwardingIsSuccess: false
+    deleteEmailForwardingIsSuccess: false,
+    accountSearch: null
 };
 
 @Injectable()
@@ -35,7 +39,8 @@ export class BankStatementComponentStore extends ComponentStore<BankStatementSta
 
     constructor(
         private toaster: ToasterService,
-        private emailForwardingService: EmailForwardingService
+        private emailForwardingService: EmailForwardingService,
+        private searchService: SearchService
     ) {
         super(DEFAULT_STATE);
     }
@@ -49,6 +54,7 @@ export class BankStatementComponentStore extends ComponentStore<BankStatementSta
     public isGeneratingEmail$ = this.select((state) => state.isGeneratingEmail);
     public createUpdateEmailForwardingIsSuccess$ = this.select((state) => state.createUpdateEmailForwardingIsSuccess);
     public deleteEmailForwardingIsSuccess$ = this.select((state) => state.deleteEmailForwardingIsSuccess);
+    public accountSearch$ = this.select((state) => state.accountSearch);
 
     /**
      * Generate email communication
@@ -317,6 +323,36 @@ export class BankStatementComponentStore extends ComponentStore<BankStatementSta
             switchMap(() => {
                 this.patchState({ generatedEmail: null });
                 return EMPTY;
+            })
+        );
+    });
+
+    /**
+     * Search for accounts using the search service
+     *
+     * @memberof BankStatementComponentStore
+     */
+    readonly searchAccount = this.effect((data: Observable<any>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({ accountSearch: null });
+                return this.searchService.searchAccountV3(req).pipe(
+                    tapResponse(
+                        (res: BaseResponse<any, any>) => {
+                            if (res?.status === 'success') {
+                                this.patchState({ accountSearch: res.body });
+                            } else {
+                                res?.message && this.toaster.showSnackBar('error', res.message);
+                                this.patchState({ accountSearch: null });
+                            }
+                        },
+                        (error: any) => {
+                            this.toaster.showSnackBar("error", error);
+                            return this.patchState({ accountSearch: null });
+                        }
+                    ),
+                    catchError((err) => EMPTY)
+                );
             })
         );
     });
