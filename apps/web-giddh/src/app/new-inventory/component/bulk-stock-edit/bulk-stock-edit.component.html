@@ -507,6 +507,10 @@
                                             >
                                                 <p>{{ localeData?.fixed_asset_tax_inclusive }}</p>
                                             </th>
+                                            <!-- Discount Field -->
+                                            <th *ngIf="tableHeaderShowHide.discountName">
+                                                <p>{{ localeData?.discount_name }}</p>
+                                            </th>
                                             <ng-container *ngFor="let column of tableHeaderDynamicColumns">
                                                 <th>
                                                     <p>{{ column?.label }}</p>
@@ -1335,6 +1339,30 @@
                                                                 </button>
                                                             </mat-menu>
                                                         </div>
+                                                    </div>
+                                                </td>
+
+                                                <!-- Discount Field -->
+                                                <td
+                                                    *ngIf="tableHeaderShowHide.discountName"
+                                                    (click)="getInputIndex(i, 'discountName')"
+                                                >
+                                                    <div class="border-line">
+                                                        <text-field
+                                                            *ngIf="selectTableRowIndex !== i"
+                                                            [type]="'text'"
+                                                            formControlName="discountName"
+                                                            [readonly]="true"
+                                                        >
+                                                        </text-field>
+                                                        <reactive-dropdown-field
+                                                            *ngIf="selectTableRowIndex === i"
+                                                            formControlName="discountUniqueName"
+                                                            [showLabel]="false"
+                                                            [options]="discountsList"
+                                                            [openDropdown]="selectTableRowName === 'discountName'"
+                                                            (selectedOption)="row.get('discountName').patchValue($event.label)"
+                                                        ></reactive-dropdown-field>
                                                     </div>
                                                 </td>
                                                 <!-- Custom Fileds (Menu)-->
