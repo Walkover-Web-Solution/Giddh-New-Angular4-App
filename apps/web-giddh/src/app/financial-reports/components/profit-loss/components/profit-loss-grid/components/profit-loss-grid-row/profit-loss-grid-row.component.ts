@@ -75,7 +75,9 @@ export class ProfitLossGridRowComponent implements OnInit, OnChanges, OnDestroy 
         if (!acc?.uniqueName) return;
 
         // Construct direct ledger URL with redirectUrl parameter
-        let url = `${location.origin}/pages/ledger/${acc.uniqueName}/${this.from}/${this.to}?redirectUrl=${encodeURIComponent(this.currentUrl)}`;
+        let url = `${location.origin}/pages/ledger/${acc.uniqueName}/${this.from}/${this.to}`;
+        const separator = url.includes('?') ? '&' : '?';
+        url = url + `${separator}redirectUrl=${encodeURIComponent(this.currentUrl)}`;
 
         if (isElectron) {
             const ipcRenderer = (window as any).require('electron').ipcRenderer;
@@ -115,7 +117,7 @@ export class ProfitLossGridRowComponent implements OnInit, OnChanges, OnDestroy 
 
     /**
      * Call tailed report api with given account/group unique name
-     * 
+     *
      * @param event MatCheckboxChange event
      * @param accountGroupUniqueName Unique name of account/group
      * @param entityType Type of the entity, either 'account' or 'group'
