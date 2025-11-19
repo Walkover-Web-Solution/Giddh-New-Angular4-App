@@ -23,6 +23,7 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { DatePickerDefaultRangeEnum } from '../../app.constant';
 import { SettingsFinancialYearActions } from '../../actions/settings/financial-year/financial-year.action';
+import { CompanyActions } from '../../actions/company.actions';
 import { ServiceConfig } from '../../services/service.config';
 import { MatDialog } from '@angular/material/dialog';
 import { NewConfirmationModalComponent } from '../new-confirmation-modal/confirmation-modal.component';
@@ -264,11 +265,12 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         @Inject(ServiceConfig) private serviceConfig,
         private _ref: ChangeDetectorRef,
         private _localeService: NgxDaterangepickerLocaleService,
-        public settingsFinancialYearService: SettingsFinancialYearService, 
-        private router: Router, 
-        private store: Store<AppState>, 
-        private settingsFinancialYearActions: SettingsFinancialYearActions, 
-        private dialog: MatDialog, 
+        public settingsFinancialYearService: SettingsFinancialYearService,
+        private router: Router,
+        private store: Store<AppState>,
+        private settingsFinancialYearActions: SettingsFinancialYearActions,
+        private companyActions: CompanyActions,
+        private dialog: MatDialog,
         private generalService: GeneralService
     ) {
         this.choosedDate = new EventEmitter();
@@ -929,7 +931,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         if (this.chosenLabel) {
             this.choosedDate.emit({ name: this.chosenLabel, startDate: this.startDate, endDate: this.endDate, event: 'save' });
         }
-        
+
         this.emitSelectedDates(false, true);
         this.hide();
     }
@@ -1754,12 +1756,19 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                                 dayjs()
                             ];
                             loop++;
-                        } else if (key.name === DatePickerDefaultRangeEnum.ThisFinancialYearToDate && currentFinancialYear) {
+                        } else if (key.name === DatePickerDefaultRangeEnum.ThisFinancialYearToDate) {
                             ranges[loop] = key;
-                            ranges[loop].value = [
-                                currentFinancialYear,
-                                dayjs()
-                            ];
+                            if (currentFinancialYear) {
+                                ranges[loop].value = [
+                                    currentFinancialYear,
+                                    dayjs()
+                                ];
+                            } else {
+                                ranges[loop].value = [
+                                    dayjs(),
+                                    dayjs()
+                                ];
+                            }
                             loop++;
                         } else if (key.name === DatePickerDefaultRangeEnum.LastFinancialYear) {
                             if (lastFinancialYear && lastFinancialYear.start && lastFinancialYear.end && allFinancialYears?.indexOf(lastFinancialYear.start.format("YYYY")) > -1) {
@@ -1783,6 +1792,13 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
 
                     this.ranges = ranges;
                 }
+            } else {
+                // No financial year data available at all - dispatch SetApplicationDate with Today
+                const todayDates = {
+                    fromDate: dayjs().format(GIDDH_DATE_FORMAT),
+                    toDate: dayjs().format(GIDDH_DATE_FORMAT)
+                };
+                this.store.dispatch(this.companyActions.SetApplicationDate(todayDates));
             }
         });
     }
