@@ -174,15 +174,32 @@
                         <mat-step [stepControl]="emailForwardingForm" label="Processing Options">
                             <form [formGroup]="emailForwardingForm" class="step-form">
                                 <div class="row min-h-150">
-                                    <div class="col-12 mb-4"></div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">A</div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-12 mb-3">B</div>
+                                    <div class="col-12 mb-4">
+                                       <reactive-dropdown-field
+                                            [label]="commonLocaleData?.app_select_account"
+                                            [placeholder]="commonLocaleData?.app_select"
+                                            [options]="accountSearchResponse"
+                                            formControlName="accountUniqueName"
+                                            [enableDynamicSearch]="true"
+                                            [isPaginationEnabled]="true"
+                                            (scrollEnd)="handleSearchAccountScrollEnd()"
+                                            (dynamicSearchedQuery)="searchAccount($event)"
+                                            (selectedOption)="null"
+                                            (onClear)="null"
+                                            [required]="true"
+                                        >
+                                        </reactive-dropdown-field>
+                                        <input-field
+                                            label="Original Email"
+                                            formControlName="originalEmail"
+                                            [required]="true"
+                                        ></input-field>
+                                        <input-field
+                                            label="Password"
+                                            [type]="'password'"
+                                            formControlName="password"
+                                        ></input-field>
+                                    </div>
                                 </div>
 
                                 <div class="step-actions mt-4">

@@ -50,6 +50,9 @@ export class OnboardingComponent implements OnInit, OnDestroy {
      * @memberof OnboardingComponent
      */
     public ngOnInit(): void {
+        // Check if any data exists, if yes redirect to list page
+        this.checkExistingDataAndRedirect();
+        
         // Subscribe to generated email changes
         this.generatedEmail$.pipe(
             takeUntil(this.destroyed$)
@@ -63,6 +66,27 @@ export class OnboardingComponent implements OnInit, OnDestroy {
     public hero(): void {
         this.isGeneratingEmail$.pipe(take(1)).subscribe((isGenerating: boolean) => {
             console.log(isGenerating);
+        });
+    }
+
+    /**
+     * Check if existing data is present and redirect to list page if found
+     * 
+     * @private
+     * @memberof OnboardingComponent
+     */
+    private checkExistingDataAndRedirect(): void {
+        // Call get all API to check if any data exists
+        this.bankStatementStore.getAllEmailForwarding({ page: 1, count: 1 });
+        
+        // Subscribe to the result
+        this.bankStatementStore.emailForwardingList$.pipe(
+            takeUntil(this.destroyed$)
+        ).subscribe((emailForwardingList) => {
+            if (emailForwardingList && emailForwardingList.length > 0) {
+                // Data exists, redirect to list page
+                this.router.navigate(['pages', 'bank-statement', 'list']);
+            }
         });
     }
 

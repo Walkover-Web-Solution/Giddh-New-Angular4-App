@@ -4,10 +4,12 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { MatStepper } from '@angular/material/stepper';
 import { ReplaySubject, interval, Subject } from 'rxjs';
-import { filter, takeUntil, switchMap, startWith, takeWhile } from 'rxjs/operators';
+import { filter, takeUntil, switchMap, startWith, takeWhile, debounceTime } from 'rxjs/operators';
 import { BankStatementComponentStore } from '../../store/bank-statement.store';
 import { ToasterService } from '../../../services/toaster.service';
 import { EmailForwardingResponse } from '../../models/email-forwarding.model';
+import { EMAIL_VALIDATION_REGEX, API_BULK_FETCH_LIMIT } from '../../../app.constant';
+import { cloneDeep } from '../../../lodash-optimized';
 
 /**
  * Interface for bank statement form data
@@ -76,6 +78,18 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('stepper', { static: false }) stepper!: MatStepper;
     /** Target step to navigate to after view init */
     private targetStepIndex: number | null = null;
+    /** Stores the search results for accounts */
+    public accountSearchResponse: any[] = [];
+    /** Default result count for account searches */
+    public defaultCount = API_BULK_FETCH_LIMIT;
+    /** Request parameters for account searches */
+    public accountSearchRequest: any = {
+        count: this.defaultCount,
+        withStocks: false,
+        isLoading: false,
+        q: '',
+        page: 1
+    };
     
     /**
      * Creates an instance of StepperFormComponent
@@ -105,7 +119,11 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof StepperFormComponent
      */
     public ngOnInit(): void {
+        // Check if any data exists, if yes redirect to list page
+        this.checkExistingDataAndRedirect();
+        
         this.getEmailFromQueryParams();
+        this.setupAccountSearchSubscription();
     }
 
     /**
@@ -147,7 +165,7 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
     private initializeForms(): void {
         this.emailForwardingForm = this.formBuilder.group({
             forwardedMail: ['', [Validators.required]],
-            originalEmail: [''],
+            originalEmail: ['', [Validators.pattern(EMAIL_VALIDATION_REGEX)]],
             password: [''],
             accountUniqueName: [''],
             uniqueName: ['']
@@ -340,7 +358,7 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
             setTimeout(() => {
                 // console.log('Form submitted:', formData);
                 this.isLoading = false;
-                this.router.navigate(['/bank-statement/list']);
+                this.router.navigate(['pages/bank-statement/list']);
             }, 2000);
         } else {
             // Mark all forms as touched to show validation errors
@@ -354,7 +372,7 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof StepperFormComponent
      */
     public cancelForm(): void {
-        this.router.navigate(['/bank-statement/list']);
+        this.router.navigate(['pages/bank-statement/list']);
     }
 
     /**
@@ -476,6 +494,54 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     /**
+     * Check if existing data is present and redirect to list page if found
+     * 
+     * @private
+     * @memberof StepperFormComponent
+     */
+    private checkExistingDataAndRedirect(): void {
+        // Call get all API to check if any data exists
+        this.bankStatementStore.getAllEmailForwarding({ page: 1, count: 1 });
+        
+        // Subscribe to the result
+        this.bankStatementStore.emailForwardingList$.pipe(
+            takeUntil(this.destroyed$)
+        ).subscribe((emailForwardingList) => {
+            if (emailForwardingList && emailForwardingList.length > 0) {
+                // Data exists, redirect to list page
+                this.router.navigate(['pages', 'bank-statement', 'list']);
+            }
+        });
+    }
+
+    /**
+     * Sets up subscription for account search results
+     * 
+     * @private
+     * @memberof StepperFormComponent
+     */
+    private setupAccountSearchSubscription(): void {
+        this.bankStatementStore.accountSearch$.pipe(
+            debounceTime(200), 
+            takeUntil(this.destroyed$)
+        ).subscribe(accountSearchResponse => {
+            if (accountSearchResponse) {
+                this.accountSearchRequest.count = accountSearchResponse.count;
+                accountSearchResponse.results?.forEach(result => {
+                    if (result?.uniqueName) {
+                        this.accountSearchResponse.push({
+                            value: result.uniqueName,
+                            label: result.name,
+                            additional: result
+                        });
+                    }
+                });
+                this.accountSearchRequest.isLoading = false;
+            }
+        });
+    }
+
+    /**
      * Gets error message for form control
      * 
      * @param {FormGroup} form - Form group
@@ -507,5 +573,41 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
         }
         
         return '';
+    }
+
+    /**
+     * Handles infinite scroll for account search by fetching the next page of results.
+     *
+     * @memberof StepperFormComponent
+     */
+    public handleSearchAccountScrollEnd(): void {
+        if (this.accountSearchRequest.isLoading) {
+            return;
+        }
+        if (this.defaultCount === this.accountSearchRequest.count) {
+            this.searchAccount(this.accountSearchRequest.q, this.accountSearchRequest.page + 1);
+        }
+    }
+
+    /**
+     * Searches for accounts based on the query and updates the account search results.
+     *
+     * @param {string} [query=''] The search query.
+     * @param {number} [page=1] The page number for paginated results.
+     * @memberof StepperFormComponent
+     */
+    public searchAccount(query: string = '', page: number = 1): void {
+        if (page === 1) {
+            this.accountSearchResponse = [];
+        }
+        this.accountSearchRequest.q = query;
+        this.accountSearchRequest.page = page;
+        this.accountSearchRequest.isLoading = true;
+
+        let requestObject = cloneDeep(this.accountSearchRequest);
+        delete requestObject.isLoading;
+        
+        // Call the account search API through the store
+        this.bankStatementStore.searchAccount(requestObject);
     }
 }

@@ -6,26 +6,15 @@ import { MatSort } from '@angular/material/sort';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
+import { BankStatementComponentStore } from '../../store/bank-statement.store';
+import { EmailForwardingResponse } from '../../models/email-forwarding.model';
+import { ToasterService } from '../../../services/toaster.service';
+
+// Using EmailForwardingResponse interface from models
 
 /**
- * Interface for bank statement data
- */
-export interface BankStatementData {
-    id: string;
-    bankName: string;
-    accountNumber: string;
-    statementDate: Date;
-    fromDate: Date;
-    toDate: Date;
-    totalTransactions: number;
-    reconciledTransactions: number;
-    status: 'pending' | 'processing' | 'completed' | 'failed';
-    createdDate: Date;
-}
-
-/**
- * Data list component for bank statements
- * Displays a table of all bank statements with filtering and pagination
+ * Data list component for email forwarding configurations
+ * Displays a table of all email forwarding setups with filtering and pagination
  * 
  * @export
  * @class DataListComponent
@@ -35,7 +24,8 @@ export interface BankStatementData {
 @Component({
     selector: 'app-data-list',
     templateUrl: './data-list.component.html',
-    styleUrls: ['./data-list.component.scss']
+    styleUrls: ['./data-list.component.scss'],
+    providers: [BankStatementComponentStore]
 })
 export class DataListComponent implements OnInit, OnDestroy {
     /** Subject to handle component destruction */
@@ -48,15 +38,14 @@ export class DataListComponent implements OnInit, OnDestroy {
     @ViewChild(MatSort, { static: true }) public sort: MatSort;
 
     /** Data source for the material table */
-    public dataSource: MatTableDataSource<BankStatementData> = new MatTableDataSource();
+    public dataSource: MatTableDataSource<EmailForwardingResponse> = new MatTableDataSource();
 
     /** Columns to display in the table */
     public displayedColumns: string[] = [
-        'bankName',
-        'accountNumber',
-        'statementDate',
-        'dateRange',
-        'transactions',
+        'forwardedMail',
+        'bankAccountName',
+        'uniqueName',
+        'originalEmail',
         'status',
         'actions'
     ];
@@ -77,10 +66,14 @@ export class DataListComponent implements OnInit, OnDestroy {
      * Creates an instance of DataListComponent
      * 
      * @param {Router} router - Angular router service
+     * @param {BankStatementComponentStore} bankStatementStore - Bank statement store
+     * @param {ToasterService} toaster - Toaster service
      * @memberof DataListComponent
      */
     constructor(
-        private router: Router
+        private router: Router,
+        private bankStatementStore: BankStatementComponentStore,
+        private toaster: ToasterService
     ) { }
 
     /**
@@ -90,7 +83,8 @@ export class DataListComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.initializeTable();
-        this.loadBankStatements();
+        this.loadEmailForwardingData();
+        this.setupSubscriptions();
     }
 
     /**
@@ -114,68 +108,51 @@ export class DataListComponent implements OnInit, OnDestroy {
         this.dataSource.sort = this.sort;
         
         // Custom filter predicate for searching
-        this.dataSource.filterPredicate = (data: BankStatementData, filter: string) => {
+        this.dataSource.filterPredicate = (data: EmailForwardingResponse, filter: string) => {
             const searchStr = filter.toLowerCase();
-            return data.bankName.toLowerCase().includes(searchStr) ||
-                   data.accountNumber.toLowerCase().includes(searchStr) ||
-                   data.status.toLowerCase().includes(searchStr);
+            return data.forwardedMail.toLowerCase().includes(searchStr) ||
+                   (data.account?.name || '').toLowerCase().includes(searchStr) ||
+                   data.uniqueName.toLowerCase().includes(searchStr) ||
+                   (data.confirmationData?.[0]?.originalEmail || '').toLowerCase().includes(searchStr);
         };
     }
 
     /**
-     * Loads bank statements data
+     * Sets up subscriptions for store observables
      * 
      * @private
      * @memberof DataListComponent
      */
-    private loadBankStatements(): void {
-        this.isLoading = true;
-        
-        // Mock data - replace with actual service call
-        const mockData: BankStatementData[] = [
-            {
-                id: '1',
-                bankName: 'HDFC Bank',
-                accountNumber: '****1234',
-                statementDate: new Date('2024-11-15'),
-                fromDate: new Date('2024-11-01'),
-                toDate: new Date('2024-11-15'),
-                totalTransactions: 45,
-                reconciledTransactions: 42,
-                status: 'completed',
-                createdDate: new Date('2024-11-16')
-            },
-            {
-                id: '2',
-                bankName: 'ICICI Bank',
-                accountNumber: '****5678',
-                statementDate: new Date('2024-11-10'),
-                fromDate: new Date('2024-10-01'),
-                toDate: new Date('2024-10-31'),
-                totalTransactions: 38,
-                reconciledTransactions: 35,
-                status: 'processing',
-                createdDate: new Date('2024-11-11')
-            },
-            {
-                id: '3',
-                bankName: 'SBI',
-                accountNumber: '****9012',
-                statementDate: new Date('2024-11-05'),
-                fromDate: new Date('2024-09-01'),
-                toDate: new Date('2024-09-30'),
-                totalTransactions: 52,
-                reconciledTransactions: 50,
-                status: 'completed',
-                createdDate: new Date('2024-11-06')
+    private setupSubscriptions(): void {
+        this.bankStatementStore.emailForwardingList$.pipe(
+            takeUntil(this.destroyed$)
+        ).subscribe((emailForwardingList) => {
+            console.log('Email forwarding list received:', emailForwardingList);
+            if (emailForwardingList) {
+                this.dataSource.data = emailForwardingList;
+                this.isLoading = false;
+                console.log('Data source updated with:', this.dataSource.data);
             }
-        ];
+        });
 
-        // Simulate API delay
-        setTimeout(() => {
-            this.dataSource.data = mockData;
-            this.isLoading = false;
-        }, 1000);
+        this.bankStatementStore.isLoading$.pipe(
+            takeUntil(this.destroyed$)
+        ).subscribe((isLoading) => {
+            console.log('Loading state changed:', isLoading);
+            this.isLoading = isLoading;
+        });
+    }
+
+    /**
+     * Loads email forwarding data
+     * 
+     * @private
+     * @memberof DataListComponent
+     */
+    private loadEmailForwardingData(): void {
+        console.log('Loading email forwarding data...');
+        this.isLoading = true;
+        this.bankStatementStore.getAllEmailForwarding({ page: 1, count: 50 });
     }
 
     /**
@@ -206,76 +183,83 @@ export class DataListComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Navigates to create new bank statement
+     * Navigates to create new email forwarding configuration
      * 
      * @memberof DataListComponent
      */
     public createNew(): void {
-        this.router.navigate(['/bank-statement/create']);
+        this.router.navigate(['pages/bank-statement/onboarding']);
     }
 
     /**
-     * Navigates to edit bank statement
+     * Navigates to edit email forwarding configuration
      * 
-     * @param {string} id - Bank statement ID
+     * @param {string} uniqueName - Email forwarding unique name
      * @memberof DataListComponent
      */
-    public editStatement(id: string): void {
-        this.router.navigate(['/bank-statement/edit', id]);
+    public editStatement(uniqueName: string): void {
+        this.router.navigate(['pages/bank-statement/create'], { queryParams: { uniqueName } });
     }
 
     /**
-     * Views bank statement details
+     * Views email forwarding configuration details
      * 
-     * @param {BankStatementData} statement - Bank statement data
+     * @param {EmailForwardingResponse} statement - Email forwarding data
      * @memberof DataListComponent
      */
-    public viewStatement(statement: BankStatementData): void {
+    public viewStatement(statement: EmailForwardingResponse): void {
         // Implement view logic
-        console.log('Viewing statement:', statement);
+        console.log('Viewing email forwarding:', statement);
     }
 
     /**
-     * Downloads bank statement
+     * Copies email to clipboard
      * 
-     * @param {BankStatementData} statement - Bank statement data
+     * @param {string} email - Email to copy
      * @memberof DataListComponent
      */
-    public downloadStatement(statement: BankStatementData): void {
-        // Implement download logic
-        console.log('Downloading statement:', statement);
+    public copyEmail(email: string): void {
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(email).then(() => {
+                this.toaster.showSnackBar('success', 'Email copied to clipboard');
+            }).catch(err => {
+                console.error('Failed to copy email:', err);
+                this.toaster.showSnackBar('error', 'Failed to copy email');
+            });
+        }
     }
 
     /**
-     * Deletes bank statement
+     * Deletes email forwarding configuration
      * 
-     * @param {BankStatementData} statement - Bank statement data
+     * @param {EmailForwardingResponse} statement - Email forwarding data
      * @memberof DataListComponent
      */
-    public deleteStatement(statement: BankStatementData): void {
-        // Implement delete logic with confirmation
-        console.log('Deleting statement:', statement);
+    public deleteStatement(statement: EmailForwardingResponse): void {
+        if (confirm('Are you sure you want to delete this email forwarding configuration?')) {
+            this.bankStatementStore.deleteEmailForwarding(statement.uniqueName);
+        }
     }
 
     /**
      * Gets status badge class for styling
      * 
-     * @param {string} status - Statement status
+     * @param {string} status - Email forwarding status
      * @returns {string} CSS class name
      * @memberof DataListComponent
      */
     public getStatusClass(status: string): string {
-        switch (status) {
-            case 'completed':
+        switch (status?.toLowerCase()) {
+            case 'active':
                 return 'status-completed';
-            case 'processing':
-                return 'status-processing';
-            case 'pending':
+            case 'inactive':
                 return 'status-pending';
+            case 'pending':
+                return 'status-processing';
             case 'failed':
                 return 'status-failed';
             default:
-                return 'status-default';
+                return 'status-completed'; // Default to active
         }
     }
 }
