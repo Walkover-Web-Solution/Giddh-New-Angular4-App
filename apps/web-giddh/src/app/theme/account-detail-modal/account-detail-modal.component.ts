@@ -158,7 +158,8 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
             ipcRenderer.send('open-url', url);
         } else {
             if (part?.includes('ledger')) {
-                url = url + `?redirectUrl=${this.currentUrl}`;
+                const separator = url.includes('?') ? '&' : '?';
+                url = url + `${separator}redirectUrl=${encodeURIComponent(this.currentUrl)}`;
             }
             (window as any).open(url);
         }
