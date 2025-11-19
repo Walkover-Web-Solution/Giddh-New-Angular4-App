@@ -1,0 +1,185 @@
+<div class="container-fluid">
+    <!-- Header Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h2 class="page-title mb-1">Bank Statements</h2>
+                    <p class="text-muted mb-0">Manage and track your bank statement reconciliations</p>
+                </div>
+                <button mat-raised-button color="primary" (click)="createNew()" [disabled]="isLoading">
+                    <i class="icon-plus mr-2"></i>
+                    New Statement
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search and Filters Section -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Search statements</mat-label>
+                <input
+                    matInput
+                    placeholder="Search by bank name, account number, or status"
+                    (keyup)="applyFilter($event)"
+                    [value]="searchFilter"
+                />
+                <i class="icon-search" matSuffix></i>
+            </mat-form-field>
+        </div>
+        <div class="col-md-6">
+            <!-- Additional filters can be added here -->
+        </div>
+    </div>
+
+    <!-- Data Table Section -->
+    <div class="row">
+        <div class="col-12">
+            <mat-card class="table-card">
+                <mat-card-content class="p-0">
+                    <!-- Loading Spinner -->
+                    <div *ngIf="isLoading" class="loading-container d-flex justify-content-center align-items-center">
+                        <mat-spinner diameter="40"></mat-spinner>
+                        <span class="ml-3">Loading bank statements...</span>
+                    </div>
+
+                    <!-- Data Table -->
+                    <div *ngIf="!isLoading" class="table-container">
+                        <table mat-table [dataSource]="dataSource" matSort class="w-100">
+                            <!-- Bank Name Column -->
+                            <ng-container matColumnDef="bankName">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Bank Name</th>
+                                <td mat-cell *matCellDef="let statement">
+                                    <div class="d-flex align-items-center">
+                                        <i class="icon-bank mr-2 text-primary"></i>
+                                        <span class="font-weight-medium">{{ statement.bankName }}</span>
+                                    </div>
+                                </td>
+                            </ng-container>
+
+                            <!-- Account Number Column -->
+                            <ng-container matColumnDef="accountNumber">
+                                <th mat-header-cell *matHeaderCellDef>Account Number</th>
+                                <td mat-cell *matCellDef="let statement">
+                                    <span class="account-number">{{ statement.accountNumber }}</span>
+                                </td>
+                            </ng-container>
+
+                            <!-- Statement Date Column -->
+                            <ng-container matColumnDef="statementDate">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Statement Date</th>
+                                <td mat-cell *matCellDef="let statement">
+                                    {{ statement.statementDate | date : "MMM dd, yyyy" }}
+                                </td>
+                            </ng-container>
+
+                            <!-- Date Range Column -->
+                            <ng-container matColumnDef="dateRange">
+                                <th mat-header-cell *matHeaderCellDef>Period</th>
+                                <td mat-cell *matCellDef="let statement">
+                                    <div class="date-range">
+                                        <small class="text-muted">
+                                            {{ statement.fromDate | date : "MMM dd" }} -
+                                            {{ statement.toDate | date : "MMM dd, yyyy" }}
+                                        </small>
+                                    </div>
+                                </td>
+                            </ng-container>
+
+                            <!-- Transactions Column -->
+                            <ng-container matColumnDef="transactions">
+                                <th mat-header-cell *matHeaderCellDef>Transactions</th>
+                                <td mat-cell *matCellDef="let statement">
+                                    <div class="transaction-info">
+                                        <span class="total-count">{{ statement.totalTransactions }}</span>
+                                        <div class="reconciled-info">
+                                            <small class="text-success">
+                                                {{ statement.reconciledTransactions }} reconciled
+                                            </small>
+                                        </div>
+                                    </div>
+                                </td>
+                            </ng-container>
+
+                            <!-- Status Column -->
+                            <ng-container matColumnDef="status">
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+                                <td mat-cell *matCellDef="let statement">
+                                    <span class="status-badge" [ngClass]="getStatusClass(statement.status)">
+                                        {{ statement.status | titlecase }}
+                                    </span>
+                                </td>
+                            </ng-container>
+
+                            <!-- Actions Column -->
+                            <ng-container matColumnDef="actions">
+                                <th mat-header-cell *matHeaderCellDef>Actions</th>
+                                <td mat-cell *matCellDef="let statement">
+                                    <div class="action-buttons">
+                                        <button
+                                            mat-icon-button
+                                            [matTooltip]="'View Details'"
+                                            (click)="viewStatement(statement)"
+                                        >
+                                            <i class="icon-eye"></i>
+                                        </button>
+                                        <button
+                                            mat-icon-button
+                                            [matTooltip]="'Edit Statement'"
+                                            (click)="editStatement(statement.id)"
+                                        >
+                                            <i class="icon-edit"></i>
+                                        </button>
+                                        <button
+                                            mat-icon-button
+                                            [matTooltip]="'Download'"
+                                            (click)="downloadStatement(statement)"
+                                        >
+                                            <i class="icon-download"></i>
+                                        </button>
+                                        <button
+                                            mat-icon-button
+                                            [matTooltip]="'Delete'"
+                                            color="warn"
+                                            (click)="deleteStatement(statement)"
+                                        >
+                                            <i class="icon-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                        </table>
+
+                        <!-- No Data Message -->
+                        <div *ngIf="dataSource.data.length === 0" class="no-data-container">
+                            <i class="icon-inbox no-data-icon"></i>
+                            <h4>No bank statements found</h4>
+                            <p class="text-muted">Create your first bank statement to get started</p>
+                            <button mat-raised-button color="primary" (click)="createNew()">
+                                <i class="icon-plus mr-2"></i>
+                                Create Statement
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Pagination -->
+                    <mat-paginator
+                        *ngIf="!isLoading && dataSource.data.length > 0"
+                        [length]="dataSource.data.length"
+                        [pageSize]="pageSizeOptions[1]"
+                        [pageIndex]="pageIndex"
+                        [pageSizeOptions]="pageSizeOptions"
+                        [showFirstLastButtons]="true"
+                        (page)="handlePageEvent($event)"
+                    >
+                    </mat-paginator>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,209 @@
+<div class="container-fluid">
+    <!-- Header Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h2 class="page-title mb-1 text-center">
+                        {{ isEditMode ? "Edit Email Forwarding" : "Create Email Forwarding" }}
+                    </h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div *ngIf="isLoading && isEditMode" class="loading-container d-flex justify-content-center align-items-center">
+        <mat-spinner diameter="40"></mat-spinner>
+        <span class="ml-3">Loading statement data...</span>
+    </div>
+
+    <!-- Stepper Form -->
+    <div *ngIf="!isLoading || !isEditMode" class="row">
+        <div class="col-12">
+            <mat-card class="stepper-card">
+                <mat-card-content class="p-4">
+                    <mat-stepper #stepper orientation="horizontal" linear>
+                        <!-- Step 1: Bank Details -->
+                        <mat-step [stepControl]="emailForwardingForm" label="Bank Details">
+                            <form [formGroup]="emailForwardingForm" class="step-form">
+                                <div class="row min-h-150">
+                                    <div class="col-4"></div>
+                                    <div class="col-4">
+                                        <!-- Display Mode -->
+                                        <div *ngIf="!isEditingEmail" class="text-center">
+                                            <div class="email-display p-3 border rounded mb-3 w-75 mx-auto">
+                                                <p class="mb-0 font-size-16 font-weight-medium">
+                                                    {{ getCompleteEmail() }}
+                                                </p>
+                                            </div>
+                                            <div class="d-flex justify-content-center gap-2">
+                                                <button mat-stroked-button (click)="copyEmail()" class="mr-2">
+                                                    <i class="icon-copy mr-1"></i>
+                                                    Copy
+                                                </button>
+                                                <button mat-stroked-button (click)="toggleEmailEdit()">
+                                                    <i class="icon-edit mr-1"></i>
+                                                    Edit
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <!-- Edit Mode -->
+                                        <div *ngIf="isEditingEmail" class="text-center">
+                                            <input-field
+                                                class="d-block w-75 mx-auto mb-3"
+                                                label="Forwarded Mail"
+                                                [cssClass]="'text-right'"
+                                                formControlName="forwardedMail"
+                                                [matSuffix]="forwardedMailDomain"
+                                                [required]="true"
+                                            ></input-field>
+                                            <div class="d-flex justify-content-center gap-2">
+                                                <button
+                                                    mat-raised-button
+                                                    color="primary"
+                                                    (click)="toggleEmailEdit(); replaceUrlEmail()"
+                                                    class="mr-2"
+                                                >
+                                                    Save
+                                                </button>
+                                                <button mat-stroked-button (click)="toggleEmailEdit(true)">
+                                                    Cancel
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4"></div>
+                                </div>
+
+                                <div class="step-actions mt-4">
+                                    <button
+                                        mat-raised-button
+                                        color="primary"
+                                        (click)="nextStep(stepper, emailForwardingForm, 1)"
+                                    >
+                                        Next
+                                        <i class="icon-arrow-right ml-2"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </mat-step>
+
+                        <!-- Step 2: Statement Details -->
+                        <mat-step [stepControl]="emailForwardingForm" label="Statement Details">
+                            <form [formGroup]="emailForwardingForm" class="step-form">
+                                <div class="row min-h-150">
+                                    <div class="col-4"></div>
+                                    <div class="col-4 text-center">
+                                        <!-- Waiting State -->
+                                        <div class="w-75 mx-auto" *ngIf="!emailForwardingResponse">
+                                            <p class="mb-3 text-light d-inline-flex align-items-center column-gap-05">
+                                                Forwarded to <span class="text-green">{{ getCompleteEmail() }}</span>
+                                                <i
+                                                    class="icon-copy cursor-pointer"
+                                                    [matTooltip]="'Copy'"
+                                                    matTooltipPosition="after"
+                                                    (click)="copyEmail()"
+                                                ></i>
+                                            </p>
+
+                                            <h2
+                                                class="waiting-box d-flex align-items-center font-size-18 justify-content-center border-radius-12 p-4 min-h-150"
+                                            >
+                                                <span>Waiting for verification...</span>
+                                                <mat-spinner diameter="20"></mat-spinner>
+                                            </h2>
+                                        </div>
+
+                                        <!-- Verification State -->
+                                        <div class="w-75 mx-auto" *ngIf="emailForwardingResponse">
+                                            <p class="mb-3 text-light d-inline-flex align-items-center column-gap-05">
+                                                Forwarded to <span class="text-green">{{ getCompleteEmail() }}</span>
+                                                <i
+                                                    class="icon-copy cursor-pointer"
+                                                    [matTooltip]="'Copy'"
+                                                    matTooltipPosition="after"
+                                                    (click)="copyEmail()"
+                                                ></i>
+                                            </p>
+
+                                            <div class="d-flex flex-column align-items-center gap-3 p-4">
+                                                <h3 class="text-success mb-3">
+                                                    <i class="icon-check-circle mr-2"></i>
+                                                    Verification email sent!
+                                                </h3>
+                                                <p class="text-muted mb-4 text-center">
+                                                    Please check your email and click the verification link to proceed.
+                                                </p>
+
+                                                <div class="d-flex gap-3">
+                                                    <button
+                                                        mat-raised-button
+                                                        color="primary"
+                                                        (click)="handleVerifyAndNext()"
+                                                    >
+                                                        <i class="icon-check mr-2"></i>
+                                                        Verify and Next
+                                                    </button>
+                                                    <button mat-stroked-button color="warn" (click)="handleCancel()">
+                                                        <i class="icon-close mr-2"></i>
+                                                        Cancel
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4"></div>
+                                </div>
+
+                                <!-- <div class="step-actions mt-4">
+                                    <button
+                                        mat-raised-button
+                                        color="primary"
+                                        disabled="true"
+                                        (click)="nextStep(stepper, emailForwardingForm, 2)"
+                                    >
+                                        Verify and Next
+                                    </button>
+                                </div> -->
+                            </form>
+                        </mat-step>
+
+                        <!-- Step 3: Processing Options -->
+                        <mat-step [stepControl]="emailForwardingForm" label="Processing Options">
+                            <form [formGroup]="emailForwardingForm" class="step-form">
+                                <div class="row min-h-150">
+                                    <div class="col-12 mb-4"></div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">A</div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-12 mb-3">B</div>
+                                </div>
+
+                                <div class="step-actions mt-4">
+                                    <button mat-stroked-button class="mr-3" (click)="previousStep(stepper)">
+                                        Previous
+                                    </button>
+                                    <button
+                                        mat-raised-button
+                                        color="primary"
+                                        (click)="submitForm()"
+                                        [disabled]="isLoading"
+                                    >
+                                        <mat-spinner *ngIf="isLoading" diameter="20" class="mr-2"></mat-spinner>
+                                        Done
+                                    </button>
+                                </div>
+                            </form>
+                        </mat-step>
+                    </mat-stepper>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+</div>

@@ -7,6 +7,16 @@ body {
     --theme-accent-light: color-mix(in oklch, var(--theme-accent-color) 10%, white);
     --theme-warn-light: color-mix(in oklch, var(--theme-warn-color) 10%, white);
 
+    .theme-primary-light {
+        background-color: var(--theme-primary-light) !important;
+    }
+    .theme-accent-light {
+        background-color: var(--theme-accent-light) !important;
+    }
+    .theme-warn-light {
+        background-color: var(--theme-warn-light) !important;
+    }
+
     &.default-theme,
     &.dark-theme {
         --color-black: #0d0d0d;
