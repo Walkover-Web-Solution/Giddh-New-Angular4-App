@@ -581,7 +581,8 @@ export class ContactComponent implements OnInit, OnDestroy {
             ipcRenderer.send('open-url', url);
         } else {
             if (part === 'ledger') {
-                url = url + `?redirectUrl=${this.currentUrl}`;
+                const separator = url.includes('?') ? '&' : '?';
+                url = url + `${separator}redirectUrl=${encodeURIComponent(this.currentUrl)}`;
             }
             (window as any).open(url);
         }
@@ -718,7 +719,7 @@ export class ContactComponent implements OnInit, OnDestroy {
 
     /**
      * Handles pagination events and updates API parameters
-     * 
+     *
      * @param {PageEvent} event - Contains pagination details
      * @memberof ContactComponent
      */
