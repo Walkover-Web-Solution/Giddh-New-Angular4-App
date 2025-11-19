@@ -174,6 +174,8 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
                             this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
                             this.showStatus = false;
                         }
+                        this.getAllOcrDocuments(false);
+                        this.ocrDataUpdate();
                     });
 
                 this.ocrDocumentListForm?.controls["convertedStatus"].valueChanges
@@ -187,6 +189,8 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
                             this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
                             this.showconvertedStatus = false;
                         }
+                        this.getAllOcrDocuments(false);
+                        this.ocrDataUpdate();
                     });
 
                 this.ocrDocumentListForm?.controls["uploadedBy"].valueChanges
@@ -200,6 +204,8 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
                             this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
                             this.showUploadedBy = false;
                         }
+                        this.getAllOcrDocuments(false);
+                        this.ocrDataUpdate();
                     });
 
                 this.ocrDocumentListForm?.controls["fileName"].valueChanges
@@ -213,6 +219,8 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
                             this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
                             this.showFileName = false;
                         }
+                        this.getAllOcrDocuments(false);
+                        this.ocrDataUpdate();
                     });
 
                 this.aiOcrService.mainPage$.pipe(takeUntil(this.destroyed$), takeUntil(this.routeScope$)).subscribe((response) => {
