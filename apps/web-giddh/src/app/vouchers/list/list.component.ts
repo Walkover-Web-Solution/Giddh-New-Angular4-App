@@ -506,7 +506,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                         this.purchaseTemplatesList = [
                             { label: this.commonLocaleData?.app_purchase_bill, value: this.voucherTypeEnum.purchase_bill },
                             { label: this.commonLocaleData?.app_voucher_types?.purchase_order, value: this.voucherTypeEnum.purchase_order }
-                        ]; 
+                        ];
                         this.selectedTemplate = this.purchaseTemplatesList[0];
                     }  else {
                         this.selectedTemplate = null;
@@ -2176,7 +2176,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
         if (accountUniqueName && fromDate && toDate) {
             let url = `/pages/ledger/${accountUniqueName}/${fromDate}/${toDate}`;
-            url = url + `?redirectUrl=${this.currentUrl}`;
+            const separator = url.includes('?') ? '&' : '?';
+            url = url + `${separator}redirectUrl=${encodeURIComponent(this.currentUrl)}`;
             this.openUrl(url);
         }
     }
@@ -3296,7 +3297,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
     /**
      * This will set module type for voucher report filter
-     * 
+     *
      * @private
      * @memberof VoucherListComponent
      */
