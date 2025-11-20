@@ -24,7 +24,8 @@ export interface ConfirmationData {
  */
 export interface EmailForwardingResponse {
     confirmationData: ConfirmationData[];
+    originalEmail: string;
     uniqueName: string;
-    account: any;
+    account: {name: string, uniqueName: string};
     forwardedMail: string;
 }

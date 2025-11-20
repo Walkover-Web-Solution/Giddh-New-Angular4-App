@@ -103,15 +103,11 @@ export class BankStatementComponentStore extends ComponentStore<BankStatementSta
      *
      * @memberof BankStatementComponentStore
      */
-    readonly getAllEmailForwarding = this.effect((data: Observable<{page: number, count: number, query?: string}>) => {
+    readonly getAllEmailForwarding = this.effect((data: Observable<void>) => {
         return data.pipe(
-            switchMap((request) => {
+            switchMap(() => {
                 this.patchState({ emailForwardingList: null, isLoading: true });
-                return this.emailForwardingService.getAllEmailForwarding(
-                    request.page, 
-                    request.count, 
-                    request.query || ''
-                ).pipe(
+                return this.emailForwardingService.getAllEmailForwarding().pipe(
                     tapResponse(
                         (res: any) => {
                             if (res?.status === "success" && res?.body) {
@@ -334,28 +330,18 @@ export class BankStatementComponentStore extends ComponentStore<BankStatementSta
      *
      * @memberof BankStatementComponentStore
      */
-    readonly searchAccount = this.effect((data: Observable<any>) => {
+    readonly searchAccount = this.effect((data: Observable<string>) => {
         return data.pipe(
             switchMap((req) => {
                 this.patchState({ accountSearch: null });
-                return this.salesService.getAccountsWithCurrency('bankaccounts').pipe(
+                return this.salesService.getAccountsWithCurrency(req).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
-                                // Filter results based on search query if provided
-                                let filteredResults = res.body?.results || [];
-                                if (req?.q) {
-                                    filteredResults = filteredResults.filter(account => 
-                                        account?.name?.toLowerCase().includes(req.q.toLowerCase()) ||
-                                        account?.uniqueName?.toLowerCase().includes(req.q.toLowerCase())
-                                    );
-                                }
-                                
-                                // Return all filtered results without pagination
                                 this.patchState({ 
                                     accountSearch: {
-                                        results: filteredResults,
-                                        count: filteredResults.length
+                                        results: res.body?.results,
+                                        count: res.body?.count
                                     }
                                 });
                             } else {

@@ -2,11 +2,6 @@
     border: 1px dashed var(--border-color);
 }
 
-.page-title {
-    font-size: 1.75rem;
-    font-weight: var(--font-weight-semibold);
-    color: var(--text-primary);
-}
 
 .loading-container {
     padding: var(--spacing-6);
@@ -51,101 +46,10 @@
     }
 }
 
-.section-title {
-    font-size: 1.125rem;
-    font-weight: var(--font-weight-semibold);
-    color: var(--text-primary);
-    margin-bottom: var(--spacing-3);
-    padding-bottom: var(--spacing-2);
-    border-bottom: 2px solid var(--primary-color);
-}
 
-.file-upload-container {
-    .file-upload-label {
-        display: block;
-        font-size: 0.875rem;
-        font-weight: var(--font-weight-medium);
-        color: var(--text-primary);
-        margin-bottom: var(--spacing-2);
 
-        &::after {
-            content: " *";
-            color: var(--error-color);
-        }
-    }
 
-    .file-input {
-        width: 100%;
-        padding: var(--spacing-3);
-        border: 2px dashed var(--border-color);
-        border-radius: 8px;
-        background-color: var(--background-light);
-        cursor: pointer;
-        transition: all 0.2s ease;
 
-        &:hover {
-            border-color: var(--primary-color);
-            background-color: var(--primary-light);
-        }
-
-        &:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1);
-        }
-    }
-
-    .file-upload-hint {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: var(--spacing-4);
-        color: var(--text-muted);
-        font-size: 0.875rem;
-        pointer-events: none;
-
-        mat-icon {
-            margin-right: var(--spacing-2);
-            font-size: 1.5rem;
-            width: 1.5rem;
-            height: 1.5rem;
-        }
-    }
-}
-
-.checkbox-hint {
-    font-size: 0.75rem;
-    color: var(--text-muted);
-    margin-top: 4px;
-    margin-left: 32px;
-}
-
-.rules-container {
-    display: flex;
-    flex-direction: column;
-    gap: var(--spacing-2);
-    padding: var(--spacing-3);
-    background-color: var(--background-light);
-    border-radius: 8px;
-    border: 1px solid var(--border-light);
-
-    .rule-checkbox {
-        margin: 0;
-
-        .mat-checkbox-label {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-        }
-    }
-}
-
-.form-label {
-    display: block;
-    font-size: 0.875rem;
-    font-weight: var(--font-weight-medium);
-    color: var(--text-primary);
-    margin-bottom: var(--spacing-2);
-}
 
 // Material form field customization
 mat-form-field {
@@ -205,9 +109,6 @@ mat-checkbox {
         flex-direction: column;
         gap: var(--spacing-3);
 
-        .page-title {
-            font-size: 1.5rem;
-        }
 
         button {
             align-self: flex-start;
@@ -233,13 +134,6 @@ mat-checkbox {
         }
     }
 
-    .rules-container {
-        .rule-checkbox {
-            .mat-checkbox-label {
-                font-size: 0.8rem;
-            }
-        }
-    }
 
     mat-stepper {
         .mat-stepper-header {

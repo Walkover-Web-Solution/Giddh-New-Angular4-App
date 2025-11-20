@@ -45,7 +45,7 @@ export class EmailForwardingService {
     /**
      * Generates email communication for the company
      * 
-     * @returns {Observable<BaseResponse<GenerateEmailResponse, string>>} Observable with generated email data
+     * @returns {Observable<BaseResponse<string, string>>} Observable with generated email datas
      * @memberof EmailForwardingService
      */
     public generateEmail(): Observable<BaseResponse<string, string>> {
@@ -97,25 +97,11 @@ export class EmailForwardingService {
      * @returns {Observable<BaseResponse<EmailForwardingResponse[], string>>} Observable with list of email forwarding configurations
      * @memberof EmailForwardingService
      */
-    public getAllEmailForwarding(
-        page: number = 1,
-        count: number = 20,
-        query: string = ''
-    ): Observable<BaseResponse<EmailForwardingResponse[], string>> {
+    public getAllEmailForwarding(): Observable<BaseResponse<EmailForwardingResponse[], string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         
         let url = this.config.apiUrl + EMAIL_FORWARDING_API.GET_ALL_EMAIL_FORWARDING
             .replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName));
-
-        // Add query parameters
-        const params = new URLSearchParams();
-        params.append('page', page.toString());
-        params.append('count', count.toString());
-        if (query) {
-            params.append('q', query);
-        }
-
-        url += `?${params.toString()}`;
 
         return this.http.get(url).pipe(
             map((res) => {
@@ -202,37 +188,6 @@ export class EmailForwardingService {
             }),
             catchError((e) => this.errorHandler.HandleCatch<EmailForwardingResponse, EmailForwardingRequest>(e, requestData, ''))
         );
-    }
-
-    /**
-     * Validates email forwarding request data
-     * 
-     * @param {EmailForwardingRequest} requestData - Request data to validate
-     * @returns {boolean} True if valid, false otherwise
-     * @memberof EmailForwardingService
-     */
-    public validateEmailForwardingRequest(requestData: EmailForwardingRequest): boolean {
-        if (!requestData) {
-            return false;
-        }
-
-        // Check mandatory fields
-        if (!requestData.forwardedMail || !requestData.accountUniqueName) {
-            return false;
-        }
-
-        // Validate email format
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        
-        if (requestData.originalEmail && !emailRegex.test(requestData.originalEmail)) {
-            return false;
-        }
-
-        if (!emailRegex.test(requestData.forwardedMail)) {
-            return false;
-        }
-
-        return true;
     }
 
     /**

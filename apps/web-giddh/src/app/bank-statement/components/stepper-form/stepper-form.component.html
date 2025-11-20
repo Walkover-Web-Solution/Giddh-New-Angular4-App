@@ -1,250 +1,212 @@
-<div class="container-fluid">
-    <!-- Header Section -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <h2 class="page-title mb-1 text-center">
-                        {{
-                            isEditMode
-                                ? localeData?.bank_statement_edit_email_forwarding || "Edit Email Forwarding"
-                                : localeData?.bank_statement_create_email_forwarding || "Create Email Forwarding"
-                        }}
-                    </h2>
-                </div>
-            </div>
+<ng-container
+    appTranslate
+    [file]="'bank-statement'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <hamburger-menu></hamburger-menu>
+    <div class="container-fluid p-3">
+            <!-- Loading Spinner -->
+        <div *ngIf="isLoading && isEditMode" class="loading-container d-flex justify-content-center align-items-center">
+            <mat-spinner diameter="40"></mat-spinner>
         </div>
-    </div>
 
-    <!-- Loading Spinner -->
-    <div *ngIf="isLoading && isEditMode" class="loading-container d-flex justify-content-center align-items-center">
-        <mat-spinner diameter="40"></mat-spinner>
-    </div>
-
-    <!-- Stepper Form -->
-    <div [hidden]="isLoading && isEditMode" class="row">
-        <div class="col-12">
-            <mat-card class="stepper-card">
-                <mat-card-content class="p-4">
-                    <mat-stepper #stepper orientation="horizontal" linear>
-                        <!-- Step 1: Bank Details -->
-                        <mat-step
-                            [stepControl]="emailForwardingForm"
-                            [label]="localeData?.bank_statement_bank_details || 'Bank Details'"
-                        >
-                            <form [formGroup]="emailForwardingForm" class="step-form">
-                                <div class="row min-h-150">
-                                    <div class="col-4"></div>
-                                    <div class="col-4">
-                                        <!-- Display Mode -->
-                                        <div *ngIf="!isEditingEmail" class="text-center">
-                                            <div class="email-display p-3 border rounded mb-3 w-75 mx-auto">
-                                                <p class="mb-0 font-size-16 font-weight-medium">
-                                                    {{ getCompleteEmail() }}
+        <!-- Stepper Form -->
+        <div [hidden]="isLoading && isEditMode" class="row">
+            <div class="col-12">
+                <mat-card class="stepper-card">
+                    <mat-card-content class="p-4">
+                        <mat-stepper #stepper orientation="horizontal" linear>
+                            <!-- Step 1: Create Email -->
+                            <mat-step
+                                [stepControl]="emailForwardingForm"
+                                [label]="localeData?.create_email"
+                            >
+                                <form [formGroup]="emailForwardingForm" class="step-form">
+                                    <div class="row min-h-150">
+                                        <div class="col-12">
+                                            <!-- Display Mode -->
+                                            <div *ngIf="!isEditingEmail" class="text-center w-fit-content mx-auto">
+                                                <div class="email-display p-3 border rounded mb-3">
+                                                    <p class="mb-0 font-size-16 font-weight-medium">
+                                                        {{ getCompleteEmail() }}
+                                                    </p>
+                                                </div>
+                                                <p class="mb-3">
+                                                    <a
+                                                        href="https://giddh.com/help/integration/how-to-integrate-email-for-sending-an-invoice"
+                                                        class="text-underline"
+                                                        target="_blank"
+                                                        >{{
+                                                            localeData?.how_to_setup
+                                                        }}</a
+                                                    >
                                                 </p>
+                                                <div class="d-flex justify-content-center gap-2">
+                                                    <button mat-stroked-button (click)="copyEmail()" class="mr-2">
+                                                        <i class="icon-copy mr-1"></i>
+                                                        {{ commonLocaleData?.app_copy }}
+                                                    </button>
+                                                    <button mat-stroked-button (click)="toggleEmailEdit()">
+                                                        <i class="icon-edit mr-1"></i>
+                                                        {{ commonLocaleData?.app_edit }}
+                                                    </button>
+                                                </div>
                                             </div>
-                                            <p class="mb-3">
-                                                <a
-                                                    href="https://giddh.com/help/integration/how-to-integrate-email-for-sending-an-invoice"
-                                                    class="text-underline"
-                                                    target="_blank"
-                                                    >{{
-                                                        localeData?.bank_statement_how_to_setup ||
-                                                            "How to setup email forwarding?"
-                                                    }}</a
-                                                >
-                                            </p>
-                                            <div class="d-flex justify-content-center gap-2">
-                                                <button mat-stroked-button (click)="copyEmail()" class="mr-2">
-                                                    <i class="icon-copy mr-1"></i>
-                                                    {{ commonLocaleData?.app_copy || "Copy" }}
-                                                </button>
-                                                <button mat-stroked-button (click)="toggleEmailEdit()">
-                                                    <i class="icon-edit mr-1"></i>
-                                                    {{ commonLocaleData?.app_edit || "Edit" }}
-                                                </button>
-                                            </div>
-                                        </div>
 
-                                        <!-- Edit Mode -->
-                                        <div *ngIf="isEditingEmail" class="text-center">
-                                            <input-field
-                                                class="d-block w-75 mx-auto mb-3"
-                                                [label]="localeData?.bank_statement_forwarded_mail || 'Forwarded Mail'"
-                                                [cssClass]="'text-right'"
-                                                formControlName="forwardedMail"
-                                                [matSuffix]="forwardedMailDomain"
-                                                [required]="true"
-                                            ></input-field>
-                                            <div class="d-flex justify-content-center gap-2">
-                                                <button
-                                                    mat-raised-button
-                                                    color="primary"
-                                                    (click)="toggleEmailEdit(); replaceUrlEmail()"
-                                                    class="mr-2"
-                                                >
-                                                    {{ commonLocaleData?.app_save || "Save" }}
-                                                </button>
-                                                <button mat-stroked-button (click)="toggleEmailEdit(true)">
-                                                    {{ commonLocaleData?.app_cancel || "Cancel" }}
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-4"></div>
-                                </div>
-
-                                <div class="step-actions mt-4">
-                                    <button
-                                        mat-raised-button
-                                        color="primary"
-                                        (click)="nextStep(stepper, emailForwardingForm, 1)"
-                                    >
-                                        {{ localeData?.bank_statement_next || "Next" }}
-                                        <i class="icon-arrow-right ml-2"></i>
-                                    </button>
-                                </div>
-                            </form>
-                        </mat-step>
-
-                        <!-- Step 2: Statement Details -->
-                        <mat-step
-                            [stepControl]="emailForwardingForm"
-                            [label]="localeData?.bank_statement_statement_details || 'Statement Details'"
-                        >
-                            <form [formGroup]="emailForwardingForm" class="step-form">
-                                <div class="row min-h-150">
-                                    <div class="col-12 text-center">
-                                        <!-- Waiting State -->
-                                        <div class="max-w-500 mx-auto" *ngIf="!emailForwardingResponse">
-                                            <p class="mb-3 text-light d-inline-flex align-items-center column-gap-05">
-                                                {{ localeData?.bank_statement_forwarded_to || "Forwarded to" }}
-                                                <span class="text-green">{{ getCompleteEmail() }}</span>
-                                                <i
-                                                    class="icon-copy cursor-pointer"
-                                                    [matTooltip]="commonLocaleData?.app_copy || 'Copy'"
-                                                    matTooltipPosition="after"
-                                                    (click)="copyEmail()"
-                                                ></i>
-                                            </p>
-
-                                            <h2
-                                                class="waiting-box d-flex flex-column align-items-center font-size-18 justify-content-center border-radius-12 p-4 min-h-150"
-                                            >
-                                                <span>{{
-                                                    localeData?.bank_statement_waiting_verification ||
-                                                        "Waiting for verification..."
-                                                }}</span>
-                                                <mat-spinner diameter="20"></mat-spinner>
-                                            </h2>
-                                        </div>
-
-                                        <!-- Verification State -->
-                                        <div class="w-75 mx-auto" *ngIf="emailForwardingResponse">
-                                            <p class="mb-3 text-light d-inline-flex align-items-center column-gap-05">
-                                                {{ localeData?.bank_statement_forwarded_to || "Forwarded to" }}
-                                                <span class="text-green">{{ getCompleteEmail() }}</span>
-                                                <i
-                                                    class="icon-copy cursor-pointer"
-                                                    [matTooltip]="commonLocaleData?.app_copy || 'Copy'"
-                                                    matTooltipPosition="after"
-                                                    (click)="copyEmail()"
-                                                ></i>
-                                            </p>
-
-                                            <div class="d-flex flex-column align-items-center gap-3 p-4">
-                                                <!-- <h3 class="text-success mb-3">
-                                                    <i class="icon-check-circle mr-2"></i>
-                                                    Verification email sent!
-                                                </h3>
-                                                <p class="text-muted mb-4 text-center">
-                                                    Please check your email and click the verification link to proceed.
-                                                </p> -->
-
-                                                <div class="d-flex column-gap-1">
+                                            <!-- Edit Mode -->
+                                            <div *ngIf="isEditingEmail" class="text-center w-fit-content mx-auto">
+                                                <input-field
+                                                    class="d-block mb-3"
+                                                    [label]="localeData?.forwarded_mail"
+                                                    [cssClass]="'text-right'"
+                                                    formControlName="forwardedMail"
+                                                    [matSuffix]="forwardedMailDomain"
+                                                    [required]="true"
+                                                ></input-field>
+                                                <div class="d-flex justify-content-center gap-2">
                                                     <button
                                                         mat-raised-button
                                                         color="primary"
-                                                        (click)="handleVerifyAndNext()"
+                                                        (click)="toggleEmailEdit(); replaceUrlEmail()"
+                                                        class="mr-2"
                                                     >
-                                                        <i class="icon-check mr-2"></i>
-                                                        Verify and Next
+                                                        {{ commonLocaleData?.app_save }}
                                                     </button>
-                                                    <button mat-stroked-button color="warn" (click)="handleCancel()">
-                                                        <i class="icon-close mr-2"></i>
-                                                        Cancel
+                                                    <button mat-stroked-button (click)="toggleEmailEdit(true)">
+                                                        {{ commonLocaleData?.app_cancel }}
                                                     </button>
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="col-4"></div>
                                     </div>
-                                </div>
 
-                                <!-- <div class="step-actions mt-4">
-                                    <button
-                                        mat-raised-button
-                                        color="primary"
-                                        disabled="true"
-                                        (click)="nextStep(stepper, emailForwardingForm, 2)"
-                                    >
-                                        Verify and Next
-                                    </button>
-                                </div> -->
-                            </form>
-                        </mat-step>
+                                    <div class="step-actions mt-4">
+                                        <button
+                                            mat-raised-button
+                                            color="primary"
+                                            (click)="nextStep(stepper, emailForwardingForm, 1)"
+                                        >
+                                            {{ commonLocaleData?.app_next }}
+                                            <i class="icon-arrow-right ml-2"></i>
+                                        </button>
+                                    </div>
+                                </form>
+                            </mat-step>
 
-                        <!-- Step 3: Account Details -->
-                        <mat-step
-                            [stepControl]="emailForwardingForm"
-                            [label]="localeData?.bank_statement_account_details || 'Account Details'"
-                        >
-                            <form [formGroup]="emailForwardingForm" class="step-form">
-                                <div class="row min-h-150">
-                                    <div class="col-12 mb-4">
-                                        <div class="max-w-500 mx-auto d-flex flex-column row-gap-1 align-items-center">
-                                            <reactive-dropdown-field
-                                                class="d-block w-75"
-                                                [label]="commonLocaleData?.app_account"
-                                                [placeholder]="commonLocaleData?.app_select_account"
-                                                [options]="accountSearchResponse$ | async"
-                                                formControlName="accountUniqueName"
-                                                [required]="true"
-                                            >
-                                            </reactive-dropdown-field>
-                                            <input-field
-                                                class="d-block w-75"
-                                                [label]="localeData?.bank_statement_original_email || 'Original Email'"
-                                                formControlName="originalEmail"
-                                            ></input-field>
-                                            <input-field
-                                                class="d-block w-75"
-                                                [label]="localeData?.bank_statement_password || 'Password'"
-                                                [type]="'password'"
-                                                formControlName="password"
-                                            ></input-field>
+                            <!-- Step 2: Email Verification -->
+                            <mat-step
+                                [stepControl]="emailForwardingForm"
+                                [label]="localeData?.email_verification"
+                            >
+                                <form [formGroup]="emailForwardingForm" class="step-form">
+                                    <div class="row min-h-150">
+                                        <div class="col-12 text-center">
+                                            <!-- Waiting State -->
+                                            <div class="w-fit-content mx-auto" *ngIf="!emailForwardingResponse">
+                                                <p class="mb-3 text-light d-inline-flex align-items-center column-gap-05">
+                                                    {{ localeData?.forwarded_to }}
+                                                    <span class="text-green">{{ getCompleteEmail() }}</span>
+                                                    <i
+                                                        class="icon-copy cursor-pointer"
+                                                        [matTooltip]="commonLocaleData?.app_copy"
+                                                        matTooltipPosition="after"
+                                                        (click)="copyEmail()"
+                                                    ></i>
+                                                </p>
+
+                                                <h2
+                                                    class="waiting-box d-flex flex-column align-items-center font-size-18 justify-content-center border-radius-12 p-4 min-h-150"
+                                                >
+                                                    <span>{{ localeData?.waiting_verification }}</span>
+                                                    <mat-spinner diameter="20"></mat-spinner>
+                                                </h2>
+                                            </div>
+
+                                            <!-- Verification State -->
+                                            <div class="w-fit-content mx-auto" *ngIf="emailForwardingResponse">
+                                                <p class="mb-3 text-light d-inline-flex align-items-center column-gap-05">
+                                                    {{ localeData?.forwarded_to }}
+                                                    <span class="text-green">{{ getCompleteEmail() }}</span>
+                                                    <i
+                                                        class="icon-copy cursor-pointer"
+                                                        [matTooltip]="commonLocaleData?.app_copy"
+                                                        matTooltipPosition="after"
+                                                        (click)="copyEmail()"
+                                                    ></i>
+                                                </p>
+
+                                                <div class="d-flex flex-column align-items-center gap-3 p-4">
+                                                    <div class="d-flex column-gap-1">
+                                                        <button
+                                                            mat-raised-button
+                                                            color="primary"
+                                                            (click)="handleVerifyAndNext()"
+                                                        >
+                                                            {{ localeData?.verify_and_next }}
+                                                        </button>
+                                                        <button mat-stroked-button color="warn" (click)="handleCancel()">
+                                                            {{ commonLocaleData?.app_cancel }}
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
+                                </form>
+                            </mat-step>
 
-                                <div class="step-actions mt-4">
-                                    <button mat-stroked-button class="mr-3" (click)="previousStep(stepper)">
-                                        {{ commonLocaleData?.app_previous }}
-                                    </button>
-                                    <button
-                                        mat-raised-button
-                                        color="primary"
-                                        (click)="submitForm()"
-                                        [disabled]="isLoading"
-                                    >
-                                        <mat-spinner *ngIf="isLoading" diameter="20" class="mr-2"></mat-spinner>
-                                        {{ commonLocaleData?.app_done }}
-                                    </button>
-                                </div>
-                            </form>
-                        </mat-step>
-                    </mat-stepper>
-                </mat-card-content>
-            </mat-card>
+                            <!-- Step 3: Bank Account Details -->
+                            <mat-step
+                                [stepControl]="emailForwardingForm"
+                                [label]="localeData?.account_details"
+                            >
+                                <form [formGroup]="emailForwardingForm" class="step-form">
+                                    <div class="row min-h-150">
+                                        <div class="col-12 mb-4">
+                                            <div class="max-w-500 mx-auto d-flex flex-column row-gap-1 align-items-center">
+                                                <reactive-dropdown-field
+                                                    class="d-block w-75"
+                                                    [label]="commonLocaleData?.app_account"
+                                                    [placeholder]="commonLocaleData?.app_select_account"
+                                                    [options]="accountSearchResponse$ | async"
+                                                    formControlName="accountUniqueName"
+                                                    [required]="true"
+                                                >
+                                                </reactive-dropdown-field>
+                                                <input-field
+                                                    class="d-block w-75"
+                                                    [label]="localeData?.original_email"
+                                                    formControlName="originalEmail"
+                                                ></input-field>
+                                                <input-field
+                                                    class="d-block w-75"
+                                                    [label]="commonLocaleData?.app_password"
+                                                    [type]="'password'"
+                                                    formControlName="password"
+                                                ></input-field>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="step-actions mt-4">
+                                        <button
+                                            mat-raised-button
+                                            color="primary"
+                                            (click)="submitForm()"
+                                            [disabled]="isLoading"
+                                        >
+                                            <mat-spinner *ngIf="isLoading" diameter="20" class="mr-2"></mat-spinner>
+                                            {{ commonLocaleData?.app_done }}
+                                        </button>
+                                    </div>
+                                </form>
+                            </mat-step>
+                        </mat-stepper>
+                    </mat-card-content>
+                </mat-card>
+            </div>
         </div>
     </div>
-</div>
+</ng-container>

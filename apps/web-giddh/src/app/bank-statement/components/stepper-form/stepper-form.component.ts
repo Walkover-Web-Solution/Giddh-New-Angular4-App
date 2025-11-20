@@ -1,55 +1,14 @@
 import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Location } from '@angular/common';
 import { MatStepper } from '@angular/material/stepper';
 import { ReplaySubject, interval, Subject, BehaviorSubject, Observable } from 'rxjs';
-import { filter, takeUntil, switchMap, startWith, takeWhile, debounceTime, delay } from 'rxjs/operators';
+import { filter, takeUntil, switchMap, debounceTime } from 'rxjs/operators';
 import { BankStatementComponentStore } from '../../store/bank-statement.store';
 import { ToasterService } from '../../../services/toaster.service';
 import { EmailForwardingResponse } from '../../models/email-forwarding.model';
-import { EMAIL_VALIDATION_REGEX, API_BULK_FETCH_LIMIT } from '../../../app.constant';
-import { cloneDeep } from '../../../lodash-optimized';
-import { LocaleService } from '../../../services/locale.service';
-import { CommonActions } from '../../../actions/common.actions';
-import { Store, select } from '@ngrx/store';
-import { AppState } from '../../../store';
+import { API_BULK_FETCH_LIMIT } from '../../../app.constant';
 
-/**
- * Interface for bank statement form data
- */
-export interface BankStatementFormData {
-    // Step 1: Bank Details
-    bankName: string;
-    accountNumber: string;
-    accountType: string;
-    branchName: string;
-    ifscCode: string;
-    
-    // Step 2: Statement Details
-    statementFile: File | null;
-    statementFormat: string;
-    fromDate: Date | null;
-    toDate: Date | null;
-    openingBalance: number | null;
-    closingBalance: number | null;
-    
-    // Step 3: Processing Options
-    autoReconcile: boolean;
-    reconcileRules: string[];
-    notificationEmail: string;
-    generateReport: boolean;
-}
-
-/**
- * Stepper form component for creating/editing bank statements
- * Provides a multi-step form for bank statement data entry
- * 
- * @export
- * @class StepperFormComponent
- * @implements {OnInit}
- * @implements {OnDestroy}
- */
 @Component({
     selector: 'app-stepper-form',
     templateUrl: './stepper-form.component.html',
@@ -63,27 +22,19 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Form groups for each step */
     public emailForwardingForm: FormGroup;
-    /** Loading state for checking existing data */
-    public isCheckingExistingData: boolean = true;
-    
     /** This will hold local JSON data */
     public localeData: any = {};
-    
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
-    
     /** Loading state for the component */
     public isLoading: boolean = false;
-    
     /** Edit mode flag */
     public isEditMode: boolean = false;
-    
-    // /** Generated email content */
-    // public generatedEmail$: Observable<string | null>;
     /** Forwarded mail domain */
     public forwardedMailDomain: string = '';
     /** Flag to show/hide email input field */
     public isEditingEmail: boolean = false;
+    /** Last email value */
     public lastEmail: string = '';
     /** Email forwarding response data for template usage */
     public emailForwardingResponse: EmailForwardingResponse | null = null;
@@ -97,36 +48,24 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
     private targetStepIndex: number | null = null;
     /** Stores the search results for accounts */
     private accountSearchResponseSubject = new BehaviorSubject<any[]>([]);
+    /** Observable for account search results */
     public accountSearchResponse$: Observable<any[]> = this.accountSearchResponseSubject.asObservable();
     /** Default result count for account searches */
     public defaultCount = API_BULK_FETCH_LIMIT;
     /** Request parameters for account searches */
-    public accountSearchRequest: any = {
+    public accountSearchRequest: {isLoading: boolean, group: string} = {
         isLoading: false,
-        q: ''
+        group: 'bankaccounts'
     };
-    
-    /**
-     * Creates an instance of StepperFormComponent
-     * 
-     * @param {FormBuilder} formBuilder - Angular form builder service
-     * @param {Router} router - Angular router service
-     * @param {ActivatedRoute} route - Angular activated route service
-     * @param {ToasterService} toaster - Toaster service for notifications
-     * @param {BankStatementComponentStore} bankStatementStore - Bank statement store
-     * @param {LocaleService} localeService - Locale service for translations
-     * @param {CommonActions} commonActions - Common actions for store
-     * @param {Store<AppState>} store - Store for app state
-     * @memberof StepperFormComponent
-     */
+    /** Flag to prevent multiple account search calls */
+    private accountSearchCalled: boolean = false;
+
     constructor(
         private formBuilder: FormBuilder,
         private router: Router,
         private route: ActivatedRoute,
         private toaster: ToasterService,
-        private bankStatementStore: BankStatementComponentStore,
-        private localeService: LocaleService,
-        private store: Store<AppState>
+        private bankStatementStore: BankStatementComponentStore
     ) {
         this.initializeForms();
     }
@@ -136,63 +75,27 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
      * 
      * @memberof StepperFormComponent
      */
-    public ngOnInit(): void {
-        // Load translations
-        this.loadTranslations();
-        
-        // Check if any data exists, if yes redirect to list page
-        // this.checkExistingDataAndRedirect();
-        
-        this.getEmailFromQueryParams();
+    public ngOnInit(): void {        
         this.setupAccountSearchSubscription();
-        
-        // Load initial accounts for dropdown
-        this.searchAccount();
-
+        this.getEmailFromQueryParams();
         this.bankStatementStore.createUpdateEmailForwardingIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response: unknown) => {
-                if (response && response['uniqueName']) {
-                    this.isLoading = false;
-                    if (this.isEditMode) {
-                      this.router.navigate(['pages/bank-statement/list']);
-                    } else {
-                        this.router.navigate(['pages/bank-statement/create'], { 
-                            queryParams: { 
-                                forwardedMail: this.emailForwardingForm.value.forwardedMail + this.forwardedMailDomain,
-                                uniqueName: response['uniqueName'],
-                                step: 2
-                            }
-                        });
-                    }
-                } else if (response === null || response === false) {
-                    // Handle error case - keep user on current step
-                    this.isLoading = false;
+            if (response && response['uniqueName']) {
+                this.isLoading = false;
+                if (this.isEditMode) {
+                    this.router.navigate(['pages/bank-statement/list']);
+                } else {
+                    this.router.navigate(['pages/bank-statement/create'], { 
+                        queryParams: { 
+                            forwardedMail: this.emailForwardingForm.value.forwardedMail + this.forwardedMailDomain,
+                            uniqueName: response['uniqueName'],
+                            step: 2
+                        }
+                    });
                 }
-            });
-    }
-
-
-    /**
-     * Load translations for the component
-     * 
-     * @private
-     * @memberof StepperFormComponent
-     */
-    private loadTranslations(): void {
-        // Load common locale data
-        this.store.pipe(select(state => state.session.commonLocaleData), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.commonLocaleData = response;
+            } else if (response === null || response === false) {
+                this.isLoading = false;
             }
         });
-
-        // Load component-specific locale data
-        if (this.localeService.language) {
-            this.localeService.getLocale('bank-statement', this.localeService.language).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                if (response) {
-                    this.localeData = response;
-                }
-            });
-        }
     }
 
     /**
@@ -210,22 +113,6 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     /**
-     * Component cleanup
-     * 
-     * @memberof StepperFormComponent
-     */
-    public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
-        
-        // Clean up polling subject
-        if (!this.stopPolling$.closed) {
-            this.stopPolling$.next();
-            this.stopPolling$.complete();
-        }
-    }
-
-    /**
      * Initializes all form groups
      * 
      * @private
@@ -238,10 +125,6 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
             password: [''],
             accountUniqueName: [''],
             uniqueName: ['']
-        });
-
-        this.emailForwardingForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(() => {
-            console.log('Form value changed:', this.emailForwardingForm.value);
         });
     }
 
@@ -256,6 +139,19 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
             if (params['uniqueName']) {
                 this.isEditMode = true;
                 this.handleUniqueName(params['uniqueName']);
+                this.bankStatementStore.getEmailForwardingDetails(params['uniqueName']);
+
+                // Load account search results first before setting up form patching
+                this.searchAccount();
+
+                this.bankStatementStore.emailForwardingDetails$.pipe(filter(Boolean), takeUntil(this.destroyed$)).subscribe((emailDetails) => {
+                    this.emailForwardingForm.patchValue({
+                        forwardedMail: emailDetails.forwardedMail,
+                        originalEmail: emailDetails.originalEmail,
+                        accountUniqueName: emailDetails.account.uniqueName,
+                        uniqueName: emailDetails.uniqueName
+                    });
+                });
                 
                 // In edit mode, ensure we stay on the correct step
                 if (this.currentStep > 0) {
@@ -286,8 +182,11 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
                     
                     // Convert 1-based to 0-based index
                     const targetStepIndex = stepNumber - 1;
-                    
-                    console.log(`Will navigate to step ${stepNumber} (index ${targetStepIndex}), minimum allowed step index: ${this.minAllowedStep}`);
+                    this.checkEditMode();
+
+                    if (this.currentStep === 3) {
+                        this.searchAccount();
+                    }
                     
                     // Navigate immediately if stepper is available, otherwise store for later
                     if (this.stepper) {
@@ -298,7 +197,6 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
                         this.targetStepIndex = targetStepIndex;
                     }
                 }
-                this.checkEditMode();
             }
             
             if (queryParams['forwardedMail']) {
@@ -325,8 +223,6 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
         // Start polling after 20 seconds delay
         if (this.currentStep === 2) {
             interval(5000).pipe(
-                startWith(0), // Start immediately
-                delay(20000), // Wait 20 seconds before first call
                 switchMap(() => {
                     this.bankStatementStore.getEmailForwardingDetails(uniqueName);
                     return this.bankStatementStore.emailForwardingDetails$;
@@ -367,33 +263,12 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     /**
-     * Goes to previous step (only if allowed)
-     * 
-     * @param {MatStepper} stepper - Material stepper reference
-     * @memberof StepperFormComponent
-     */
-    public previousStep(stepper: MatStepper): void {
-        const targetStep = stepper.selectedIndex - 1;
-        if (targetStep >= this.minAllowedStep) {
-            stepper.previous();
-        } else {
-            console.log(`Cannot go back to step ${targetStep}. Minimum allowed step is ${this.minAllowedStep}`);
-            this.toaster.showSnackBar("error", "Cannot go back to previous step");
-        }
-    }
-
-    /**
      * Navigates to a specific step
      * 
      * @param {number} stepIndex - Step index to navigate to (0-based)
      * @memberof StepperFormComponent
      */
     public navigateToStep(stepIndex: number): void {
-        console.log(`Attempting to navigate to step index ${stepIndex}`);
-        console.log(`Stepper available:`, !!this.stepper);
-        console.log(`Stepper steps length:`, this.stepper?.steps?.length);
-        console.log(`Current stepper selectedIndex:`, this.stepper?.selectedIndex);
-        
         if (this.stepper && stepIndex >= 0 && stepIndex < this.stepper.steps.length) {
             // For linear steppers, mark all previous steps as completed
             for (let i = 0; i < stepIndex; i++) {
@@ -406,10 +281,6 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
             
             // Navigate to the target step
             this.stepper.selectedIndex = stepIndex;
-            console.log(`✅ Successfully navigated to step index ${stepIndex} (step ${stepIndex + 1})`);
-            console.log(`New stepper selectedIndex:`, this.stepper.selectedIndex);
-        } else {
-            console.warn(`❌ Cannot navigate to step index ${stepIndex}. Stepper available: ${!!this.stepper}, Steps length: ${this.stepper?.steps?.length}`);
         }
     }
 
@@ -436,27 +307,17 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
         if (this.emailForwardingForm.valid) {
             this.isLoading = true;
             const formData = this.emailForwardingForm.value;
-            formData['forwardedMail'] = formData['forwardedMail'] + this.forwardedMailDomain;
+            if (!this.isEditMode) {
+                formData['forwardedMail'] = formData['forwardedMail'] + this.forwardedMailDomain;
+            }
             const { uniqueName, ...model } = formData;
             this.bankStatementStore.updateEmailForwarding({model, uniqueName});
-            // setTimeout(() => {
-            //     this.isLoading = false;
-            //     this.router.navigate(['pages/bank-statement/list']);
-            // }, 2000);
         } else {
             // Mark all forms as touched to show validation errors
             this.markFormGroupTouched(this.emailForwardingForm);
         }
     }
 
-    /**
-     * Cancels form and navigates back to list
-     * 
-     * @memberof StepperFormComponent
-     */
-    public cancelForm(): void {
-        this.router.navigate(['pages/bank-statement/list']);
-    }
 
     /**
      * Toggles email editing mode
@@ -466,12 +327,10 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
     public toggleEmailEdit(isCancel: boolean): void {
         if (!this.isEditingEmail) {
             this.lastEmail = this.emailForwardingForm.get('forwardedMail')?.value;
-            console.log("Save Last Email: ", this.lastEmail);
         }
         if (isCancel) {
             this.emailForwardingForm.get('forwardedMail')?.patchValue(this.lastEmail);
             this.lastEmail = "";
-            console.log("Reset Last Email: ", this.lastEmail);
         }
         this.isEditingEmail = !this.isEditingEmail;
     }
@@ -503,10 +362,8 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
         const completeEmail = this.emailForwardingForm.get('forwardedMail')?.value + this.forwardedMailDomain;
         if (navigator.clipboard) {
             navigator.clipboard.writeText(completeEmail).then(() => {
-                console.log('Email copied to clipboard:', completeEmail);
                 this.toaster.showSnackBar("success", "Email copied to clipboard ");
             }).catch(err => {
-                console.error('Failed to copy email:', err);
                 this.toaster.showSnackBar("error", "Failed to copy email");
             });
         }
@@ -537,7 +394,6 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.navigateToStep(2);
             }, 500);
             
-            console.log('Opened verification link and navigating to step 3');
         } else {
             this.toaster.showSnackBar("error", "Verification link not available");
         }
@@ -557,8 +413,6 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
             setTimeout(() => {
                 this.router.navigate(['/pages/bank-statement/onboarding']);
             }, 500);
-            
-            console.log('Opened cancel link and redirecting to onboarding');
         } else {
             // If no cancel link, just redirect to onboarding
             this.router.navigate(['/pages/bank-statement/onboarding']);
@@ -574,27 +428,6 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
     public getCompleteEmail(): string {
         const emailPrefix = this.emailForwardingForm.get('forwardedMail')?.value || '';
         return emailPrefix + this.forwardedMailDomain;
-    }
-
-    /**
-     * Check if existing data is present and redirect to list page if found
-     * 
-     * @private
-     * @memberof StepperFormComponent
-     */
-    private checkExistingDataAndRedirect(): void {
-        // Call get all API to check if any data exists
-        this.bankStatementStore.getAllEmailForwarding({ page: 1, count: 1 });
-        
-        // Subscribe to the result
-        this.bankStatementStore.emailForwardingList$.pipe(
-            takeUntil(this.destroyed$)
-        ).subscribe((emailForwardingList) => {
-            if (emailForwardingList && emailForwardingList.length > 0) {
-                // Data exists, redirect to list page
-                this.router.navigate(['pages', 'bank-statement', 'list']);
-            }
-        });
     }
 
     /**
@@ -627,54 +460,35 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
         });
     }
 
-    /**
-     * Gets error message for form control
-     * 
-     * @param {FormGroup} form - Form group
-     * @param {string} controlName - Control name
-     * @returns {string} Error message
-     * @memberof StepperFormComponent
-     */
-    public getErrorMessage(form: FormGroup, controlName: string): string {
-        const control = form.get(controlName);
-        
-        if (control?.hasError('required')) {
-            return `${controlName} is required`;
-        }
-        
-        if (control?.hasError('email')) {
-            return 'Please enter a valid email address';
-        }
-        
-        if (control?.hasError('pattern')) {
-            return 'Please enter a valid format';
-        }
-        
-        if (control?.hasError('minlength')) {
-            return `Minimum length is ${control.errors?.['minlength']?.requiredLength}`;
-        }
-        
-        if (control?.hasError('min')) {
-            return `Minimum value is ${control.errors?.['min']?.min}`;
-        }
-        
-        return '';
-    }
 
 
     /**
-     * Searches for accounts based on the query and updates the account search results.
+     * Searches for accounts
      *
      * @memberof StepperFormComponent
      */
     private searchAccount(): void {
-        this.accountSearchRequest.q = "";
-        this.accountSearchRequest.isLoading = true;
-
-        let requestObject = cloneDeep(this.accountSearchRequest);
-        delete requestObject.isLoading;
+        if (this.accountSearchCalled) {
+            return; // Prevent multiple calls
+        }
+        this.accountSearchCalled = true;
+        this.accountSearchRequest.isLoading = true;        
+        this.bankStatementStore.searchAccount(this.accountSearchRequest.group);
+    }
+    
+    /**
+     * Component cleanup
+     * 
+     * @memberof StepperFormComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
         
-        // Call the account search API through the store
-        this.bankStatementStore.searchAccount(requestObject);
+        // Clean up polling subject
+        if (!this.stopPolling$.closed) {
+            this.stopPolling$.next();
+            this.stopPolling$.complete();
+        }
     }
 }

@@ -1,18 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { ReplaySubject, Observable } from 'rxjs';
-import { filter, take, takeUntil } from 'rxjs/operators';
+import { filter, takeUntil } from 'rxjs/operators';
 import { BankStatementComponentStore } from '../../store/bank-statement.store';
 
-/**
- * Onboarding component for bank statement module
- * Provides initial setup and introduction to bank statement features
- * 
- * @export
- * @class OnboardingComponent
- * @implements {OnInit}
- * @implements {OnDestroy}
- */
 @Component({
     selector: 'app-onboarding',
     templateUrl: './onboarding.component.html',
@@ -22,29 +13,20 @@ import { BankStatementComponentStore } from '../../store/bank-statement.store';
 export class OnboardingComponent implements OnInit, OnDestroy {
     /** Subject to handle component destruction */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-
     /** Loading state for email generation */
     public isGeneratingEmail$: Observable<boolean>;
-    
     /** Loading state for checking existing data */
     public isCheckingExistingData: boolean = true;
+    /** This will hold local JSON data */
+    public localeData: any = {};
+    /** This will hold common JSON data */
+    public commonLocaleData: any = {};
     
-    // /** Generated email content */
-    // public generatedEmail$: Observable<string | null>;
-
-    /**
-     * Creates an instance of OnboardingComponent
-     * 
-     * @param {Router} router - Angular router service
-     * @param {BankStatementComponentStore} bankStatementStore - Bank statement store
-     * @memberof OnboardingComponent
-     */
     constructor(
         private router: Router,
         private bankStatementStore: BankStatementComponentStore
     ) {
         this.isGeneratingEmail$ = this.bankStatementStore.isGeneratingEmail$;
-        // this.generatedEmail$ = this.bankStatementStore.generatedEmail$;
     }
 
     /**
@@ -61,17 +43,11 @@ export class OnboardingComponent implements OnInit, OnDestroy {
             takeUntil(this.destroyed$)
         ).subscribe((forwardedMail: string | null) => {
             if (forwardedMail) {
-                this.router.navigate(['pages', 'bank-statement', 'create'], { queryParams: { forwardedMail } });
+                this.router.navigate(['/pages/bank-statement/create'], { queryParams: { forwardedMail } });
             }
         });
     }
-
-    public hero(): void {
-        this.isGeneratingEmail$.pipe(take(1)).subscribe((isGenerating: boolean) => {
-            console.log(isGenerating);
-        });
-    }
-
+    
     /**
      * Check if existing data is present and redirect to list page if found
      * 
@@ -83,7 +59,7 @@ export class OnboardingComponent implements OnInit, OnDestroy {
         this.isCheckingExistingData = true;
         
         // Call get all API to check if any data exists
-        this.bankStatementStore.getAllEmailForwarding({ page: 1, count: 1 });
+        this.bankStatementStore.getAllEmailForwarding();
         
         // Subscribe to the result
         this.bankStatementStore.emailForwardingList$.pipe(
@@ -92,7 +68,7 @@ export class OnboardingComponent implements OnInit, OnDestroy {
         ).subscribe((emailForwardingList) => {
             if (emailForwardingList && emailForwardingList.length > 0) {
                 // Data exists, redirect to list page (keep loader visible during redirect)
-                this.router.navigate(['pages', 'bank-statement', 'list']);
+                this.router.navigate(['/pages/bank-statement/list']);
             } else {
                 // No data exists, show onboarding content
                setTimeout(() => {
