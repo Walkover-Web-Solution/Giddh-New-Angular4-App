@@ -157,6 +157,8 @@ export class AiOcrComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.route.params.pipe(delay(100), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
+                this.aiOcrStore.reset();
+                this.ledgerComponentStore.reset();
                 setTimeout(() => {
                     this.resetData();
                 }, 100);
@@ -510,7 +512,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
      * @return {*} {void}
      * @memberof AiOcrComponent
      */
-    public dateSelectedCallback(value?: any, from?: any): void {
+    public dateSelectedCallback(value?: any): void {
         if (value && value.event === "cancel") {
             this.toggleGiddhDatepicker(false);
             return;
@@ -535,8 +537,8 @@ export class AiOcrComponent implements OnInit, OnDestroy {
 
             // Reset service subjects to prevent multiple subscriptions
             this.aiOcrService.resetData$.next(null);
-            this.aiOcrService.dateRangeEmit$.next(this.ocrDocumentsRequestParams);
             this.aiOcrService.mainPage$.next(false);
+            this.aiOcrService.dateRangeEmit$.next(this.ocrDocumentsRequestParams);
 
             // Trigger fresh data load with debouncing
             this.showClearFilter = true;
@@ -652,10 +654,6 @@ export class AiOcrComponent implements OnInit, OnDestroy {
             this.ocrDocumentsRequestParams.status = data.status;
             this.ocrDocumentsRequestParams.convertedStatus = data.convertedStatus;
             this.ocrDocumentsRequestParams.uploadedBy = data.uploadedBy;
-            if(!data.from || !data.to){
-                this.ocrDocumentsRequestParams.from = this.universalDate && this.universalDate[0] ? dayjs(this.universalDate[0]).format(GIDDH_DATE_FORMAT) : "";
-                this.ocrDocumentsRequestParams.to = this.universalDate && this.universalDate[1] ? dayjs(this.universalDate[1]).format(GIDDH_DATE_FORMAT) : "";
-            }
             this.showClearFilter = true;
         } else {
             this.showClearFilter = false;
