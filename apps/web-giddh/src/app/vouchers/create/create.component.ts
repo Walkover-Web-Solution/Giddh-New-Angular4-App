@@ -87,7 +87,6 @@ import {
     IOption,
     API_BULK_FETCH_LIMIT
 } from "../../app.constant";
-import { IntlPhoneLib } from "../../theme/mobile-number-field/intl-phone-lib.class";
 import { SalesOtherTaxesCalculationMethodEnum } from "../../models/api-models/Sales";
 import { giddhRoundOff } from "../../shared/helpers/helperFunctions";
 import { VoucherService } from "../../services/voucher.service";
@@ -329,8 +328,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public ratePrecision = RATE_FIELD_PRECISION;
     /** Rate precision value that will be sent to API */
     public highPrecisionRate = HIGH_RATE_FIELD_PRECISION;
-    /** Mobile number library instance */
-    public intlClass: any;
     /** Holds voucher totals */
     public voucherTotals: any = {
         totalAmount: 0,
@@ -1075,9 +1072,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             ?.get("mobileNumber")
                             .patchValue(voucherDetails.account?.mobileNumber ?? "");
                         this.account.mobileNumber = voucherDetails.account?.mobileNumber ?? "";
-                        // Disabled old mobile input initialization as we're using mobile-number-input component
-                        // this.initIntl(this.invoiceForm.controls["account"]?.get("mobileNumber")?.value);
-                        // this.checkMobileNumber();
                     }
 
                     if (voucherDetails?.purchaseOrderDetails?.length && !this.isCopyMode) {
@@ -1709,8 +1703,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public ngAfterViewInit(): void {
-        // Removed initIntl() call as we're now using mobile-number-input component
-        // this.initIntl();
     }
 
     /**
@@ -2646,10 +2638,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.invoiceForm.controls["account"]?.get("email").setValue(accountData?.email);
             this.invoiceForm.controls["account"]?.get("mobileNumber").setValue(accountData?.mobileNo ?? "");
             this.account.mobileNumber = accountData?.mobileNo ?? "";
-            // Disabled old mobile input initialization as we're using mobile-number-input component
-            // this.initIntl(this.invoiceForm.controls["account"]?.get("mobileNumber")?.value);
             this.updateDueDate();
-            // this.checkMobileNumber();
         } else {
             if (
                 !this.invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled &&
@@ -4004,47 +3993,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     * Initializes the int-tel input
-     *
-     * @memberof VoucherCreateComponent
-     */
-    public initIntl(inputValue?: string): void {
-        return;
-        let times = 0;
-        const parentDom = document.querySelector("create");
-        const input = document.getElementById("init-contact");
-        const interval = setInterval(() => {
-            times += 1;
-            if (input) {
-                clearInterval(interval);
-                this.intlClass = new IntlPhoneLib(input, parentDom, false);
-                if (inputValue) {
-                    input.setAttribute("value", `+${inputValue}`);
-                    this.changeDetection.detectChanges();
-                }
-            }
-            if (times > 25) {
-                clearInterval(interval);
-            }
-        }, 50);
-    }
-
-    /**
-     * Validate the mobile number
-     *
-     * @memberof VoucherCreateComponent
-     */
-    public validateMobileField(): void {
-        setTimeout(() => {
-            if (!this.intlClass?.isRequiredValidNumber) {
-                this.invoiceForm.controls["account"]?.get("mobileNumber")?.setErrors({ invalidNumber: true });
-            } else {
-                this.invoiceForm.controls["account"]?.get("mobileNumber")?.setErrors(null);
-            }
-        }, 100);
-    }
-
-    /**
      * Selected discount callback
      *
      * @param {number} entryIndex
@@ -4749,13 +4697,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         invoiceForm = this.vouchersUtilityService.formatVoucherObject(invoiceForm);
 
-        // This is not used in New Mobile 
-        // if (invoiceForm.account.mobileNumber != this.account.mobileNumber) {
-        //     invoiceForm.account.mobileNumber = invoiceForm.account.mobileNumber
-        //         ? this.intlClass.selectedCountryData.dialCode + invoiceForm.account.mobileNumber?.replace(/\s+/g, "")
-        //         : "";
-        // }
-
         if (!this.currentVoucherFormDetails?.depositAllowed) {
             delete invoiceForm.deposits;
         }
@@ -5417,23 +5358,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     },
                 });
             }
-        }
-    }
-
-    /**
-     * This will be used to check mobile number in input
-     *
-     * @memberof VoucherCreateComponent
-     */
-    public checkMobileNumber(): void {
-        const input = document.getElementById("init-contact");
-        if (input) {
-            if (this.invoiceForm.controls["account"]?.get("mobileNumber")?.value) {
-                input.setAttribute("value", `+${this.invoiceForm.controls["account"]?.get("mobileNumber")?.value}`);
-            } else {
-                input.setAttribute("value", "");
-            }
-            this.changeDetection.detectChanges();
         }
     }
 

@@ -984,25 +984,6 @@
                                             [(ngModel)]="invFormData.accountDetails.email"
                                         ></input-field>
                                     </div>
-                                    <!-- Mobile Number -->
-                                    <div class="col-6 mt-3 mobile-number-wrapper">
-                                        <div id="init-contact-wrapper" class="position-relative w-100">
-                                            <input-field
-                                                [name]="'accountDetails.mobileNumber'"
-                                                [type]="'tel'"
-                                                #initContactProforma
-                                                class="flag-input bg-transparent"
-                                                [id]="'init-contact-proforma'"
-                                                (keydown.enter)="$event.preventDefault()"
-                                                [label]="commonLocaleData?.app_mobile_number"
-                                                [placeholder]="'98XXXXXXXX'"
-                                                [floatLabel]="'always'"
-                                            >
-                                            </input-field>
-                                            <span id="init-contact-proforma-valid-msg" class="d-none"></span>
-                                            <span id="init-contact-proforma-error-msg" class="d-none"></span>
-                                        </div>
-                                    </div>
                                     <!-- Warehouse -->
                                     <div
                                         class="col-6 mt-3"
