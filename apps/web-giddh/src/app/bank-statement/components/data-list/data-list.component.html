@@ -1,8 +1,8 @@
-<div class="container-fluid">
+<div class="container-fluid p-3">
     <!-- Header Section -->
-    <div class="row mb-4">
+    <div class="row mb-3">
         <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center">
+            <div class="d-flex justify-content-end">
                 <button mat-raised-button color="primary" (click)="createNew()" [disabled]="isLoading">
                     <i class="icon-plus mr-2"></i>
                     New Statement
@@ -14,135 +14,83 @@
     <!-- Data Table Section -->
     <div class="row">
         <div class="col-12">
-            <mat-card class="table-card">
-                <mat-card-content class="p-0">
-                    <!-- Loading Spinner -->
-                    <div *ngIf="isLoading" class="loading-container d-flex justify-content-center align-items-center">
-                        <mat-spinner diameter="40"></mat-spinner>
-                        <span class="ml-3">Loading email forwarding configurations...</span>
-                    </div>
+            <!-- Loading Spinner -->
+            <div *ngIf="isLoading" class="loading-container d-flex justify-content-center align-items-center">
+                <mat-spinner diameter="40"></mat-spinner>
+                <span class="ml-3">Loading email forwarding configurations...</span>
+            </div>
 
-                    <!-- Data Table -->
-                    <div *ngIf="!isLoading" class="table-responsive">
-                        <table mat-table [dataSource]="dataSource" matSort class="w-100">
-                            <!-- Forwarded Mail Column -->
-                            <ng-container matColumnDef="forwardedMail">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Forwarded Mail</th>
-                                <td mat-cell *matCellDef="let statement">
-                                    <div class="d-flex align-items-center">
-                                        <i class="icon-mail mr-2 text-primary"></i>
-                                        <span class="font-weight-medium">{{ statement.forwardedMail }}</span>
-                                    </div>
-                                </td>
-                            </ng-container>
+            <!-- Data Table -->
+            <div *ngIf="!isLoading" class="table-responsive">
+                <table mat-table [dataSource]="dataSource" class="w-100">
+                    <!-- Forwarded Mail Column -->
+                    <ng-container matColumnDef="forwardedMail">
+                        <th mat-header-cell *matHeaderCellDef>Forwarded Mail</th>
+                        <td mat-cell *matCellDef="let statement">
+                            <span class="font-weight-medium">{{ statement.forwardedMail }}</span>
+                        </td>
+                    </ng-container>
 
-                            <!-- Bank Account Name Column -->
-                            <ng-container matColumnDef="bankAccountName">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Bank Account Name</th>
-                                <td mat-cell *matCellDef="let statement">
-                                    <div class="d-flex align-items-center">
-                                        <i class="icon-bank mr-2 text-secondary"></i>
-                                        <span>{{ statement.account?.name || 'N/A' }}</span>
-                                    </div>
-                                </td>
-                            </ng-container>
+                    <!-- Bank Account Name Column -->
+                    <ng-container matColumnDef="bankAccountName">
+                        <th mat-header-cell *matHeaderCellDef>Bank Account Name</th>
+                        <td mat-cell *matCellDef="let statement">
+                            {{ statement.account?.name }}
+                        </td>
+                    </ng-container>
 
-                            <!-- Unique Name Column -->
-                            <ng-container matColumnDef="uniqueName">
-                                <th mat-header-cell *matHeaderCellDef>Unique Name</th>
-                                <td mat-cell *matCellDef="let statement">
-                                    <span class="unique-name text-muted">{{ statement.uniqueName }}</span>
-                                </td>
-                            </ng-container>
+                    <!-- Unique Name Column -->
+                    <ng-container matColumnDef="uniqueName">
+                        <th mat-header-cell *matHeaderCellDef>Unique Name</th>
+                        <td mat-cell *matCellDef="let statement">
+                            <span class="unique-name text-muted">{{ statement.uniqueName }}</span>
+                        </td>
+                    </ng-container>
 
-                            <!-- Original Email Column -->
-                            <ng-container matColumnDef="originalEmail">
-                                <th mat-header-cell *matHeaderCellDef>Original Email</th>
-                                <td mat-cell *matCellDef="let statement">
-                                    <div class="original-email">
-                                        <i class="icon-user mr-2 text-info"></i>
-                                        <span>{{ statement.confirmationData?.[0]?.originalEmail || 'Not set' }}</span>
-                                    </div>
-                                </td>
-                            </ng-container>
+                    <!-- Original Email Column -->
+                    <ng-container matColumnDef="originalEmail">
+                        <th mat-header-cell *matHeaderCellDef>Original Email</th>
+                        <td mat-cell *matCellDef="let statement">
+                            <span>{{ statement.confirmationData?.[0]?.originalEmail || 'Not set' }}</span>
+                        </td>
+                    </ng-container>
 
-                            <!-- Status Column -->
-                            <ng-container matColumnDef="status">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
-                                <td mat-cell *matCellDef="let statement">
-                                    <span class="status-badge" [ngClass]="getStatusClass(statement.status || 'active')">
-                                        {{ (statement.status || 'Active') | titlecase }}
-                                    </span>
-                                </td>
-                            </ng-container>
+                    <!-- Status Column -->
+                    <ng-container matColumnDef="status">
+                        <th mat-header-cell *matHeaderCellDef>Status</th>
+                        <td mat-cell *matCellDef="let statement">
+                            <span class="status-badge" [ngClass]="getStatusClass(statement.status || 'active')">
+                                {{ statement.status || "Active" | titlecase }}
+                            </span>
+                        </td>
+                    </ng-container>
 
-                            <!-- Actions Column -->
-                            <ng-container matColumnDef="actions">
-                                <th mat-header-cell *matHeaderCellDef>Actions</th>
-                                <td mat-cell *matCellDef="let statement">
-                                    <div class="action-buttons">
-                                        <button
-                                            mat-icon-button
-                                            [matTooltip]="'View Details'"
-                                            (click)="viewStatement(statement)"
-                                        >
-                                            <i class="icon-eye"></i>
-                                        </button>
-                                        <button
-                                            mat-icon-button
-                                            [matTooltip]="'Edit Configuration'"
-                                            (click)="editStatement(statement.uniqueName)"
-                                        >
-                                            <i class="icon-edit"></i>
-                                        </button>
-                                        <button
-                                            mat-icon-button
-                                            [matTooltip]="'Copy Email'"
-                                            (click)="copyEmail(statement.forwardedMail)"
-                                        >
-                                            <i class="icon-copy"></i>
-                                        </button>
-                                        <button
-                                            mat-icon-button
-                                            [matTooltip]="'Delete'"
-                                            color="warn"
-                                            (click)="deleteStatement(statement)"
-                                        >
-                                            <i class="icon-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </ng-container>
-
-                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-                        </table>
-
-                        <!-- No Data Message -->
-                        <div *ngIf="!isLoading && dataSource.data.length === 0" class="no-data-container">
-                            <i class="icon-inbox no-data-icon"></i>
-                            <h4>No email forwarding configurations found</h4>
-                            <p class="text-muted">Create your first email forwarding configuration to get started</p>
-                            <button mat-raised-button color="primary" (click)="createNew()">
-                                <i class="icon-plus mr-2"></i>
-                                Create Configuration
+                    <!-- Actions Column -->
+                    <ng-container matColumnDef="actions">
+                        <th mat-header-cell *matHeaderCellDef>Actions</th>
+                        <td mat-cell *matCellDef="let statement">
+                            <button
+                                mat-icon-button
+                                [matTooltip]="'Delete'"
+                                color="warn"
+                                class="d-inline-flex justify-content-center align-items-center"
+                                (click)="deleteStatement(statement.uniqueName)"
+                            >
+                                <i class="icon-trash font-size-16"></i>
                             </button>
-                        </div>
-                    </div>
+                            <!-- </div> -->
+                        </td>
+                    </ng-container>
 
-                    <!-- Pagination -->
-                    <mat-paginator
-                        *ngIf="!isLoading && dataSource.data.length > 0"
-                        [length]="dataSource.data.length"
-                        [pageSize]="pageSizeOptions[1]"
-                        [pageIndex]="pageIndex"
-                        [pageSizeOptions]="pageSizeOptions"
-                        [showFirstLastButtons]="true"
-                        (page)="handlePageEvent($event)"
-                    >
-                    </mat-paginator>
-                </mat-card-content>
-            </mat-card>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr
+                        mat-row
+                        *matRowDef="let row; columns: displayedColumns"
+                        class="cursor-pointer"
+                        (click)="editStatement(row)"
+                    ></tr>
+                </table>
+            </div>
         </div>
     </div>
 </div>

@@ -8,6 +8,7 @@ import {
     EmailForwardingResponse, 
 } from "../models/email-forwarding.model";
 import { SearchService } from "../../services/search.service";
+import { SalesService } from "../../services/sales.service";
 import { BaseResponse } from "../../models/api-models/BaseResponse";
 
 export interface BankStatementState {
@@ -17,7 +18,7 @@ export interface BankStatementState {
     isLoading: boolean;
     isEmailForwardingDetailsLoading: boolean;
     isGeneratingEmail: boolean;
-    createUpdateEmailForwardingIsSuccess: EmailForwardingResponse | null | boolean;
+    createUpdateEmailForwardingIsSuccess: any;
     deleteEmailForwardingIsSuccess: boolean;
     accountSearch: any;
 }
@@ -40,7 +41,8 @@ export class BankStatementComponentStore extends ComponentStore<BankStatementSta
     constructor(
         private toaster: ToasterService,
         private emailForwardingService: EmailForwardingService,
-        private searchService: SearchService
+        private searchService: SearchService,
+        private salesService: SalesService
     ) {
         super(DEFAULT_STATE);
     }
@@ -120,7 +122,7 @@ export class BankStatementComponentStore extends ComponentStore<BankStatementSta
                             } else {
                                 res?.message && this.toaster.showSnackBar("error", res.message);
                                 return this.patchState({ 
-                                    emailForwardingList: null, 
+                                    emailForwardingList: undefined, 
                                     isLoading: false 
                                 });
                             }
@@ -128,7 +130,7 @@ export class BankStatementComponentStore extends ComponentStore<BankStatementSta
                         (error: any) => {
                             this.toaster.showSnackBar("error", error);
                             return this.patchState({ 
-                                emailForwardingList: null, 
+                                emailForwardingList: [], 
                                 isLoading: false 
                             });
                         }
@@ -159,7 +161,7 @@ export class BankStatementComponentStore extends ComponentStore<BankStatementSta
                             } else {
                                 res?.message && this.toaster.showSnackBar("error", res.message);
                                 return this.patchState({ 
-                                    emailForwardingDetails: null, 
+                                    emailForwardingDetails: undefined, 
                                     isEmailForwardingDetailsLoading: false 
                                 });
                             }
@@ -217,13 +219,13 @@ export class BankStatementComponentStore extends ComponentStore<BankStatementSta
     readonly updateEmailForwarding = this.effect((data: Observable<{model: EmailForwardingRequest, uniqueName: string}>) => {
         return data.pipe(
             switchMap((req) => {
-                this.patchState({ createUpdateEmailForwardingIsSuccess: false });
+                this.patchState({ createUpdateEmailForwardingIsSuccess: null });
                 return this.emailForwardingService.updateEmailForwarding(req.uniqueName, req.model).pipe(
                     tapResponse(
                         (res: any) => {
                             if (res?.status === "success") {
                                 this.toaster.showSnackBar("success", "Email forwarding configuration updated successfully");
-                                return this.patchState({ createUpdateEmailForwardingIsSuccess: true });
+                                return this.patchState({ createUpdateEmailForwardingIsSuccess:  { uniqueName: req.uniqueName } });
                             } else {
                                 res?.message && this.toaster.showSnackBar("error", res.message);
                                 return this.patchState({ createUpdateEmailForwardingIsSuccess: false });
@@ -248,7 +250,7 @@ export class BankStatementComponentStore extends ComponentStore<BankStatementSta
     readonly deleteEmailForwarding = this.effect((data: Observable<string>) => {
         return data.pipe(
             switchMap((uniqueName) => {
-                this.patchState({ deleteEmailForwardingIsSuccess: false });
+                this.patchState({ deleteEmailForwardingIsSuccess: null });
                 return this.emailForwardingService.deleteEmailForwarding(uniqueName).pipe(
                     tapResponse(
                         (res: any) => {
@@ -328,7 +330,7 @@ export class BankStatementComponentStore extends ComponentStore<BankStatementSta
     });
 
     /**
-     * Search for accounts using the search service
+     * Search for bank accounts using the sales service
      *
      * @memberof BankStatementComponentStore
      */
@@ -336,11 +338,26 @@ export class BankStatementComponentStore extends ComponentStore<BankStatementSta
         return data.pipe(
             switchMap((req) => {
                 this.patchState({ accountSearch: null });
-                return this.searchService.searchAccountV3(req).pipe(
+                return this.salesService.getAccountsWithCurrency('bankaccounts').pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
-                                this.patchState({ accountSearch: res.body });
+                                // Filter results based on search query if provided
+                                let filteredResults = res.body?.results || [];
+                                if (req?.q) {
+                                    filteredResults = filteredResults.filter(account => 
+                                        account?.name?.toLowerCase().includes(req.q.toLowerCase()) ||
+                                        account?.uniqueName?.toLowerCase().includes(req.q.toLowerCase())
+                                    );
+                                }
+                                
+                                // Return all filtered results without pagination
+                                this.patchState({ 
+                                    accountSearch: {
+                                        results: filteredResults,
+                                        count: filteredResults.length
+                                    }
+                                });
                             } else {
                                 res?.message && this.toaster.showSnackBar('error', res.message);
                                 this.patchState({ accountSearch: null });

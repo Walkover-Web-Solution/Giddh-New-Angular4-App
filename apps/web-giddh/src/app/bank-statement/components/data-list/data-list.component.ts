@@ -4,7 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { ReplaySubject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { filter, takeUntil } from 'rxjs/operators';
 import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
 import { BankStatementComponentStore } from '../../store/bank-statement.store';
 import { EmailForwardingResponse } from '../../models/email-forwarding.model';
@@ -85,6 +85,19 @@ export class DataListComponent implements OnInit, OnDestroy {
         this.initializeTable();
         this.loadEmailForwardingData();
         this.setupSubscriptions();
+        this.bankStatementStore.deleteEmailForwardingIsSuccess$.pipe(filter(Boolean),
+            takeUntil(this.destroyed$)
+        ).subscribe(() => {
+            this.loadEmailForwardingData();
+        });
+
+        this.bankStatementStore.generatedEmail$.pipe(
+            takeUntil(this.destroyed$)
+        ).subscribe((forwardedMail: string | null) => {
+            if (forwardedMail) {
+                this.router.navigate(['pages', 'bank-statement', 'create'], { queryParams: { forwardedMail } });
+            }
+        });
     }
 
     /**
@@ -129,6 +142,9 @@ export class DataListComponent implements OnInit, OnDestroy {
         ).subscribe((emailForwardingList) => {
             console.log('Email forwarding list received:', emailForwardingList);
             if (emailForwardingList) {
+                if (emailForwardingList?.length  === 0) {
+                    this.router.navigate(['pages/bank-statement/onboarding']);
+                }
                 this.dataSource.data = emailForwardingList;
                 this.isLoading = false;
                 console.log('Data source updated with:', this.dataSource.data);
@@ -188,7 +204,7 @@ export class DataListComponent implements OnInit, OnDestroy {
      * @memberof DataListComponent
      */
     public createNew(): void {
-        this.router.navigate(['pages/bank-statement/onboarding']);
+        this.bankStatementStore.generateEmail();
     }
 
     /**
@@ -197,9 +213,9 @@ export class DataListComponent implements OnInit, OnDestroy {
      * @param {string} uniqueName - Email forwarding unique name
      * @memberof DataListComponent
      */
-    public editStatement(uniqueName: string): void {
-        this.router.navigate(['pages/bank-statement/create'], { queryParams: { uniqueName } });
-    }
+    // public editStatement(uniqueName: string): void {
+    //     this.router.navigate(['pages/bank-statement/create'], { queryParams: { uniqueName } });
+    // }
 
     /**
      * Views email forwarding configuration details
@@ -232,13 +248,13 @@ export class DataListComponent implements OnInit, OnDestroy {
     /**
      * Deletes email forwarding configuration
      * 
-     * @param {EmailForwardingResponse} statement - Email forwarding data
+     * @param {string} uniqueName - Email forwarding unique name
      * @memberof DataListComponent
      */
-    public deleteStatement(statement: EmailForwardingResponse): void {
-        if (confirm('Are you sure you want to delete this email forwarding configuration?')) {
-            this.bankStatementStore.deleteEmailForwarding(statement.uniqueName);
-        }
+    public deleteStatement(uniqueName: string): void {
+        // if (confirm('Are you sure you want to delete this email forwarding configuration?')) {
+            this.bankStatementStore.deleteEmailForwarding(uniqueName);
+        // }
     }
 
     /**
@@ -261,5 +277,22 @@ export class DataListComponent implements OnInit, OnDestroy {
             default:
                 return 'status-completed'; // Default to active
         }
+    }
+
+    /**
+     * Navigates to edit email forwarding configuration
+     * 
+     * @param {EmailForwardingResponse} element - Email forwarding data
+     * @memberof DataListComponent
+     */
+    public editStatement(element: EmailForwardingResponse): void {
+        console.log("Edit", element);
+        const queryParams = { forwardedMail: element.forwardedMail};
+        if (element && element.confirmationData?.length > 0) {
+            queryParams['step'] = 2;
+        } else {
+            queryParams['step'] = 3;
+        }
+        this.router.navigate([`/pages/bank-statement/edit/${element.uniqueName}`], { queryParams });
     }
 }

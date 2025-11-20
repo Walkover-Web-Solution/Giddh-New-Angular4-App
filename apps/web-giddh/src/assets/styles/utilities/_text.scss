@@ -56,3 +56,12 @@
 
 // Generate min-height utility classes
 @include min-height-utilities();
+
+// Generate max-height utility classes
+@include max-height-utilities();
+
+// Generate min-width utility classes
+@include min-width-utilities();
+
+// Generate max-width utility classes
+@include max-width-utilities();
