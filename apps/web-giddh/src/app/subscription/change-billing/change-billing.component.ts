@@ -1,7 +1,6 @@
 import { ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ChangeBillingComponentStore } from './utility/change-billing.store';
-import { IntlPhoneLib } from '../../theme/mobile-number-field/intl-phone-lib.class';
 import { Observable, takeUntil, of as observableOf, ReplaySubject, delay } from 'rxjs';
 import { CountryRequest, OnboardingFormRequest } from '../../models/api-models/Common';
 import { CommonActions } from '../../actions/common.actions';
@@ -31,8 +30,6 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
     public changeBillingForm: FormGroup;
     /** True if form is submitted to show error if available */
     public isFormSubmitted: boolean = false;
-    /** Mobile number library instance */
-    public intlClass: any;
     /** True if gstin number valid */
     public isGstinValid: boolean = false;
     /** Hold selected country */
@@ -206,38 +203,8 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
         this.changeBillingForm.controls['country'].setValue(data.country);
         this.changeBillingForm.controls['state'].setValue(data.state);
         this.changeBillingForm.controls['address'].setValue(data?.address);
-        this.initIntl(this.changeBillingForm.get('mobileNumber')?.value);
         this.changeBillingForm.markAsPristine();
         this.changeDetection.detectChanges();
-    }
-
-    /**
-     * Initializes the int-tel input
-     *
-     * @memberof ChangeBillingComponent
-     */
-    public initIntl(inputValue?: string): void {
-        let times = 0;
-        const parentDom = this.elementRef?.nativeElement;
-        const input = document.getElementById('init-contact');
-        const interval = setInterval(() => {
-            times += 1;
-            if (input) {
-                clearInterval(interval);
-                this.intlClass = new IntlPhoneLib(
-                    input,
-                    parentDom,
-                    false
-                );
-                if (inputValue) {
-                    input.setAttribute('value', `+${inputValue}`);
-                    this.changeDetection.detectChanges();
-                }
-            }
-            if (times > 25) {
-                clearInterval(interval);
-            }
-        }, 50);
     }
 
     /**
@@ -248,21 +215,6 @@ export class ChangeBillingComponent implements OnInit, OnDestroy {
      */
     public getBillingDetails(subscriptionId: any): void {
         this.componentStore.getBillingDetails(subscriptionId);
-    }
-
-    /**
-     * Validate the mobile number
-     *
-     * @memberof ChangeBillingComponent
-     */
-    public validateMobileField(): void {
-        setTimeout(() => {
-            if (!this.intlClass?.isRequiredValidNumber) {
-                this.changeBillingForm.get("mobileNumber")?.setErrors({ invalidNumber: true });
-            } else {
-                this.changeBillingForm.get("mobileNumber")?.setErrors(null);
-            }
-        }, 100);
     }
 
     /**

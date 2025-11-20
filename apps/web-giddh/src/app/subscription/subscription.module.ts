@@ -55,6 +55,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 import { PaymentMethodDialogComponent } from './payment-method-dialog/payment-method-dialog.component';
 import { CallBackPageComponent } from '../shared/call-back-page/call-back-page.component';
+import { MobileNumberInputComponent } from '../shared/mobile-number-input';
 
 @NgModule({
     imports: [
@@ -104,6 +105,7 @@ import { CallBackPageComponent } from '../shared/call-back-page/call-back-page.c
             style: 'slide-left',
             spinnerSize: 30
         }),
+        MobileNumberInputComponent
 
     ],
     exports: [SubscriptionListComponent,

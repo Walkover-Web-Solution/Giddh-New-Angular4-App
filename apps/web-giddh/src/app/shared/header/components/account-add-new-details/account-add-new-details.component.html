@@ -469,26 +469,6 @@
                                 (change)="openConfirmLeaveDialog()"
                             >
                             </mobile-number-input>
-                            <!-- <div class="form-group">
-                                <div class="d-flex">
-                                    <input-field
-                                        [name]="'accountDetails.mobileNumber'"
-                                        [type]="'tel'"
-                                        #initContactAdd
-                                        class="flag-input"
-                                        [id]="'init-contact-add'"
-                                        [label]="commonLocaleData?.app_mobile_number"
-                                        [placeholder]="localeData?.mobile_no_placeholder"
-                                        [floatLabel]="intl?.['init-contact-update']?.getNumber() ? 'always' : 'auto'"
-                                        formControlName="mobileNo"
-                                        (change)="openConfirmLeaveDialog()"
-                                        (focus)="reInitializeMobileField('init-contact-add')"
-                                    >
-                                    </input-field>
-                                </div>
-                                <span id="init-contact-add-valid-msg" class="d-none"></span>
-                                <span id="init-contact-add-error-msg" class="d-none"></span>
-                            </div> -->
                         </div>
                     </div>
                     <div class="row">
@@ -586,21 +566,6 @@
                                 id="contactValidationError_{{ i }}"
                                 >{{ localeData?.duplicate_mobile_number }}
                             </span>
-                            <!-- <input-field
-                                [name]="'contactNo_' + i"
-                                [type]="'tel'"
-                                #initContactAdd2
-                                class="flag-input"
-                                [id]="'init-contact-portal_' + i"
-                                formControlName="contactNo"
-                                [placeholder]="localeData?.mobile_no_placeholder"
-                                [label]="commonLocaleData?.app_mobile_number"
-                                (input)="portalIndex = i"
-                                (focus)="reInitializeMobileField('init-contact-portal_' + i)"
-                                [floatLabel]="intl?.['init-contact-portal_' + i]?.getNumber() ? 'always' : 'auto'"
-                            ></input-field>
-                            <span [id]="'init-contact-portal_' + i + '-valid-msg'" class="d-none"></span>
-                            <span [id]="'init-contact-portal_' + i + '-error-msg'" class="d-none"></span> -->
                         </div>
                         <div class="pl-2 mt-1">
                             <button
