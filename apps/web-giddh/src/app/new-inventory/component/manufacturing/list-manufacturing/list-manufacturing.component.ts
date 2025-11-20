@@ -569,4 +569,14 @@ export class ListManufacturingComponent implements OnInit {
         this.manufacturingSearchRequest.count = event.pageSize;
         this.getReport();
     }
+
+    /**
+     * Lifecycle hook for destroy
+     *
+     * @memberof ListManufacturingComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
 }
