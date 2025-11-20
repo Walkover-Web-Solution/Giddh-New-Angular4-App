@@ -72,26 +72,13 @@
                                 </reactive-dropdown-field>
                             </div>
                             <div class="col-6 mobile-number mobile-number-wrapper" *ngIf="showMobileField">
-                                <input-field
-                                    [name]="'mobile'"
-                                    [type]="'tel'"
-                                    #mobileNoField
-                                    class="flag-input"
-                                    [id]="'init-contact-proforma'"
-                                    (keydown.enter)="$event.preventDefault()"
-                                    [label]="commonLocaleData?.app_mobile_number + '*'"
-                                    [placeholder]="localeData?.enter_mobile_number"
-                                    [floatLabel]="'always'"
-                                    (onChange)="firstStepForm.controls['mobile'].setValue(intl?.getNumber())"
-                                    [showError]="
-                                        (isFormSubmitted && !firstStepForm.get('mobile')?.value) ||
-                                        isMobileNumberInvalid
-                                    "
-                                    [readonly]="isMobileNumberVerified || showOtpField"
+                                <mobile-number-input
+                                    formControlName="mobile"
+                                    [label]="commonLocaleData?.app_mobile_number"
+                                    [required]="true"
+                                    [useImageFlags]="true"
                                 >
-                                </input-field>
-                                <span id="init-contact-proforma-valid-msg" class="d-none"></span>
-                                <span id="init-contact-proforma-error-msg" class="d-none"></span>
+                                </mobile-number-input>
                             </div>
                             <div class="col-6 mobile-no-action-buttons" *ngIf="showMobileField">
                                 <button
@@ -232,26 +219,12 @@
                                 </reactive-dropdown-field>
                             </div>
                             <div class="col-lg-12 mobile-number fill-form" *ngIf="showMobileField">
-                                <span class="country-flag">
-                                    <img
-                                        *ngIf="currentFlag"
-                                        src="https://cdn.jsdelivr.net/gh/hjnilsson/country-flags@master/svg/{{
-                                            currentFlag
-                                        }}.svg"
-                                        width="27"
-                                    />
-                                </span>
-                                <input-field
-                                    [name]="'mobile'"
-                                    [type]="'tel'"
-                                    [label]="commonLocaleData?.app_mobile_number + '*'"
-                                    [placeholder]="firstStepForm.controls['mobile'].value"
-                                    [floatLabel]="'always'"
-                                    [readonly]="true"
-                                    [ngClass]="{ 'readonly-field': firstStepForm.get('mobile')?.value }"
-                                    class="readflag"
-                                >
-                                </input-field>
+                                <mobile-number-input
+                                    [label]="commonLocaleData?.app_mobile_number"
+                                    [formControl]="firstStepForm.get('mobile')"
+                                    [required]="false"
+                                    [useImageFlags]="true"
+                                ></mobile-number-input>
                             </div>
                             <div class="col-lg-12">
                                 <reactive-dropdown-field
