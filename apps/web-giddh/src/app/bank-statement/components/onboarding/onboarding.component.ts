@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { ReplaySubject, Observable } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { filter, take, takeUntil } from 'rxjs/operators';
 import { BankStatementComponentStore } from '../../store/bank-statement.store';
 
 /**
@@ -26,8 +26,11 @@ export class OnboardingComponent implements OnInit, OnDestroy {
     /** Loading state for email generation */
     public isGeneratingEmail$: Observable<boolean>;
     
-    /** Generated email content */
-    public generatedEmail$: Observable<string | null>;
+    /** Loading state for checking existing data */
+    public isCheckingExistingData: boolean = true;
+    
+    // /** Generated email content */
+    // public generatedEmail$: Observable<string | null>;
 
     /**
      * Creates an instance of OnboardingComponent
@@ -41,7 +44,7 @@ export class OnboardingComponent implements OnInit, OnDestroy {
         private bankStatementStore: BankStatementComponentStore
     ) {
         this.isGeneratingEmail$ = this.bankStatementStore.isGeneratingEmail$;
-        this.generatedEmail$ = this.bankStatementStore.generatedEmail$;
+        // this.generatedEmail$ = this.bankStatementStore.generatedEmail$;
     }
 
     /**
@@ -54,7 +57,7 @@ export class OnboardingComponent implements OnInit, OnDestroy {
         this.checkExistingDataAndRedirect();
         
         // Subscribe to generated email changes
-        this.generatedEmail$.pipe(
+        this.bankStatementStore.generatedEmail$.pipe(
             takeUntil(this.destroyed$)
         ).subscribe((forwardedMail: string | null) => {
             if (forwardedMail) {
@@ -76,16 +79,25 @@ export class OnboardingComponent implements OnInit, OnDestroy {
      * @memberof OnboardingComponent
      */
     private checkExistingDataAndRedirect(): void {
+        // Set loading state to true
+        this.isCheckingExistingData = true;
+        
         // Call get all API to check if any data exists
         this.bankStatementStore.getAllEmailForwarding({ page: 1, count: 1 });
         
         // Subscribe to the result
         this.bankStatementStore.emailForwardingList$.pipe(
+            filter(Boolean),
             takeUntil(this.destroyed$)
         ).subscribe((emailForwardingList) => {
             if (emailForwardingList && emailForwardingList.length > 0) {
-                // Data exists, redirect to list page
+                // Data exists, redirect to list page (keep loader visible during redirect)
                 this.router.navigate(['pages', 'bank-statement', 'list']);
+            } else {
+                // No data exists, show onboarding content
+               setTimeout(() => {
+                   this.isCheckingExistingData = false;
+               }, 200);
             }
         });
     }

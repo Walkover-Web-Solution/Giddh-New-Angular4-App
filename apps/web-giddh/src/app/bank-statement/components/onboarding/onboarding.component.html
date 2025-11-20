@@ -1,5 +1,13 @@
 <div class="container-fluid h-100 onboarding">
-    <div class="row justify-content-center align-items-center h-100">
+    <!-- Loading State -->
+    <div *ngIf="isCheckingExistingData" class="row justify-content-center align-items-center h-100">
+        <div class="col-12 text-center">
+            <giddh-page-loader></giddh-page-loader>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div *ngIf="!isCheckingExistingData" class="row justify-content-center align-items-center h-100">
         <div class="col-md-8 col-lg-6">
             <mat-card>
                 <mat-card-content>

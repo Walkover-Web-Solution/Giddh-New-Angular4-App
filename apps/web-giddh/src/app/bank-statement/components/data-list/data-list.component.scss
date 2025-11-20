@@ -4,12 +4,6 @@
     color: var(--text-primary);
 }
 
-.table-card {
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
-    border-radius: 8px;
-    overflow: hidden;
-}
-
 .loading-container {
     padding: var(--spacing-6);
     min-height: 200px;
@@ -17,30 +11,6 @@
     span {
         font-size: 1rem;
         color: var(--text-muted);
-    }
-}
-
-.table-container {
-    overflow-x: auto;
-
-    table {
-        min-width: 800px;
-
-        th {
-            background-color: var(--background-secondary);
-            font-weight: var(--font-weight-semibold);
-            color: var(--text-primary);
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        td {
-            border-bottom: 1px solid var(--border-light);
-            padding: var(--spacing-3) var(--spacing-2);
-        }
-
-        tr:hover {
-            background-color: var(--background-hover);
-        }
     }
 }
 
@@ -142,52 +112,39 @@
 }
 
 // Responsive design
-@media (max-width: 768px) {
-    .d-flex.justify-content-between {
-        flex-direction: column;
-        gap: var(--spacing-3);
+// @media (max-width: 768px) {
+// .d-flex.justify-content-between {
+//     flex-direction: column;
+//     gap: var(--spacing-3);
 
-        .page-title {
-            font-size: 1.5rem;
-        }
+//     .page-title {
+//         font-size: 1.5rem;
+//     }
 
-        button {
-            align-self: flex-start;
-        }
-    }
+//     button {
+//         align-self: flex-start;
+//     }
+// }
 
-    .table-container {
-        table {
-            font-size: 0.875rem;
+// .table-container {
+//     table {
+//         font-size: 0.875rem;
 
-            td,
-            th {
-                padding: var(--spacing-2) var(--spacing-1);
-            }
-        }
-    }
+//         td,
+//         th {
+//             padding: var(--spacing-2) var(--spacing-1);
+//         }
+//     }
+// }
 
-    .action-buttons {
-        flex-direction: column;
-        gap: 2px;
+// .action-buttons {
+//     flex-direction: column;
+//     gap: 2px;
 
-        button {
-            width: 28px;
-            height: 28px;
-            line-height: 28px;
-        }
-    }
-}
-
-// Material form field customization
-mat-form-field {
-    .mat-form-field-wrapper {
-        padding-bottom: 0;
-    }
-}
-
-// Pagination styling
-mat-paginator {
-    border-top: 1px solid var(--border-color);
-    background-color: var(--background-secondary);
-}
+//     button {
+//         width: 28px;
+//         height: 28px;
+//         line-height: 28px;
+//     }
+// }
+// }

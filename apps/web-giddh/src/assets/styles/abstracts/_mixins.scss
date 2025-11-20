@@ -1471,6 +1471,161 @@
 }
 
 /**
+ * Max-height mixin with cross-browser support
+ * 
+ * @param {String|Number} $max-height - The max-height value
+ */
+@mixin max-height($max-height) {
+    @if $max-height == unset {
+        // Cross-browser support for unset
+        max-height: -webkit-initial !important;
+        max-height: -moz-initial !important;
+        max-height: initial !important;
+        max-height: unset !important;
+    } @else {
+        max-height: #{$max-height} !important;
+    }
+}
+
+/**
+ * Generate max-height utility classes
+ * Creates classes like .max-h-50, .max-h-100, .max-h-150, etc.
+ */
+@mixin max-height-utilities() {
+    $max-height-values: (
+        "0": 0,
+        "50": 50px,
+        "100": 100px,
+        "150": 150px,
+        "200": 200px,
+        "250": 250px,
+        "300": 300px,
+        "350": 350px,
+        "400": 400px,
+        "450": 450px,
+        "500": 500px,
+        "600": 600px,
+        "700": 700px,
+        "800": 800px,
+        "900": 900px,
+        "1000": 1000px,
+        "auto": auto,
+        "none": none,
+        "unset": unset,
+        "inherit": inherit,
+    );
+
+    @each $name, $value in $max-height-values {
+        .max-h-#{$name} {
+            @include max-height($value);
+        }
+    }
+}
+
+/**
+ * Min-width mixin with cross-browser support
+ * 
+ * @param {String|Number} $min-width - The min-width value
+ */
+@mixin min-width($min-width) {
+    @if $min-width == unset {
+        // Cross-browser support for unset
+        min-width: -webkit-initial !important;
+        min-width: -moz-initial !important;
+        min-width: initial !important;
+        min-width: unset !important;
+    } @else {
+        min-width: #{$min-width} !important;
+    }
+}
+
+/**
+ * Generate min-width utility classes
+ * Creates classes like .min-w-50, .min-w-100, .min-w-150, etc.
+ */
+@mixin min-width-utilities() {
+    $min-width-values: (
+        "0": 0,
+        "50": 50px,
+        "100": 100px,
+        "150": 150px,
+        "200": 200px,
+        "250": 250px,
+        "300": 300px,
+        "350": 350px,
+        "400": 400px,
+        "450": 450px,
+        "500": 500px,
+        "600": 600px,
+        "700": 700px,
+        "800": 800px,
+        "900": 900px,
+        "1000": 1000px,
+        "auto": auto,
+        "unset": unset,
+        "inherit": inherit,
+    );
+
+    @each $name, $value in $min-width-values {
+        .min-w-#{$name} {
+            @include min-width($value);
+        }
+    }
+}
+
+/**
+ * Max-width mixin with cross-browser support
+ * 
+ * @param {String|Number} $max-width - The max-width value
+ */
+@mixin max-width($max-width) {
+    @if $max-width == unset {
+        // Cross-browser support for unset
+        max-width: -webkit-initial !important;
+        max-width: -moz-initial !important;
+        max-width: initial !important;
+        max-width: unset !important;
+    } @else {
+        max-width: #{$max-width} !important;
+    }
+}
+
+/**
+ * Generate max-width utility classes
+ * Creates classes like .max-w-50, .max-w-100, .max-w-150, etc.
+ */
+@mixin max-width-utilities() {
+    $max-width-values: (
+        "0": 0,
+        "50": 50px,
+        "100": 100px,
+        "150": 150px,
+        "200": 200px,
+        "250": 250px,
+        "300": 300px,
+        "350": 350px,
+        "400": 400px,
+        "450": 450px,
+        "500": 500px,
+        "600": 600px,
+        "700": 700px,
+        "800": 800px,
+        "900": 900px,
+        "1000": 1000px,
+        "auto": auto,
+        "none": none,
+        "unset": unset,
+        "inherit": inherit,
+    );
+
+    @each $name, $value in $max-width-values {
+        .max-w-#{$name} {
+            @include max-width($value);
+        }
+    }
+}
+
+/**
  * THEME-BASED MIXIN
  * ==================
  * Apply content based on theme (default or dark)
