@@ -1,43 +1,51 @@
-<div class="container-fluid h-100 onboarding">
-    <!-- Loading State -->
-    <div *ngIf="isCheckingExistingData" class="row justify-content-center align-items-center h-100">
-        <div class="col-12 text-center">
-            <giddh-page-loader></giddh-page-loader>
+<ng-container
+    appTranslate
+    [file]="'bank-statement'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <hamburger-menu></hamburger-menu>
+    <div class="container-fluid h-100 onboarding p-3">
+        <!-- Loading State -->
+        <div *ngIf="isCheckingExistingData" class="row justify-content-center align-items-center h-100">
+            <div class="col-12 text-center">
+                <giddh-page-loader></giddh-page-loader>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div *ngIf="!isCheckingExistingData" class="row justify-content-center align-items-center h-100">
+            <div class="col-md-8 col-lg-6">
+                <mat-card>
+                    <mat-card-content>
+                        <div class="d-flex align-items-center justify-content-between my-5">
+                            <div
+                                class="onboarding-steps text-center theme-primary-light border-radius-circle d-flex align-items-center justify-content-center"
+                            >
+                                <p class="font-size-18 font-weight-semibold"> {{ localeData?.create_email }}</p>
+                            </div>
+                            <mat-divider class="width-100"></mat-divider>
+                            <div
+                                class="onboarding-steps text-center theme-primary-light border-radius-circle d-flex align-items-center justify-content-center"
+                            >
+                                <p class="font-size-18 font-weight-semibold"> {{ localeData?.setup_email_forwarding }}</p>
+                            </div>
+                            <mat-divider class="width-100"></mat-divider>
+                            <div
+                                class="onboarding-steps text-center theme-primary-light border-radius-circle d-flex align-items-center justify-content-center"
+                            >
+                                <p class="font-size-18 font-weight-semibold">{{ localeData?.verify_start }}</p>
+                            </div>
+                        </div>
+                    </mat-card-content>
+
+                    <mat-card-actions class="d-flex justify-content-center align-items-center">
+                        <button mat-raised-button color="primary" (click)="getEmail()" class="min-width-160 mb-5">
+                            {{ commonLocaleData?.app_start}}
+                        </button>
+                    </mat-card-actions>
+                </mat-card>
+            </div>
         </div>
     </div>
-
-    <!-- Main Content -->
-    <div *ngIf="!isCheckingExistingData" class="row justify-content-center align-items-center h-100">
-        <div class="col-md-8 col-lg-6">
-            <mat-card>
-                <mat-card-content>
-                    <div class="d-flex align-items-center justify-content-between my-5" (click)="hero()">
-                        <div
-                            class="onboarding-steps text-center theme-primary-light border-radius-circle d-flex align-items-center justify-content-center"
-                        >
-                            <p class="font-size-18 font-weight-semibold">Create Email</p>
-                        </div>
-                        <mat-divider class="width-100"></mat-divider>
-                        <div
-                            class="onboarding-steps text-center theme-primary-light border-radius-circle d-flex align-items-center justify-content-center"
-                        >
-                            <p class="font-size-18 font-weight-semibold">Setup Email <wbr /> Forwarding</p>
-                        </div>
-                        <mat-divider class="width-100"></mat-divider>
-                        <div
-                            class="onboarding-steps text-center theme-primary-light border-radius-circle d-flex align-items-center justify-content-center"
-                        >
-                            <p class="font-size-18 font-weight-semibold">Verify/Start</p>
-                        </div>
-                    </div>
-                </mat-card-content>
-
-                <mat-card-actions class="d-flex justify-content-center align-items-center">
-                    <button mat-raised-button color="primary" (click)="getEmail()" class="min-width-160 mb-5">
-                        Start
-                    </button>
-                </mat-card-actions>
-            </mat-card>
-        </div>
-    </div>
-</div>
+</ng-container>

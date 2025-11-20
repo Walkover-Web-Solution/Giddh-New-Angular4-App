@@ -663,7 +663,30 @@
                     "icon": "icon-balance-sheet-new"
                 }
             ]
-        }, 
+        },
+        {
+            "label": "Automation",
+            "icon": "icon-automation",
+            "items": [
+                {
+                    "label": "OCR for Income",
+                    "link": "/pages/ai-ocr/income",
+                    "icon": "icon-audit-log",
+                    "description": "Upload images, pdf, jpeg, zip"
+                },
+                {
+                    "label": "OCR for Expense",
+                    "link": "/pages/ai-ocr/expense",
+                    "icon": "icon-audit-log",
+                    "description": "Upload images, pdf, jpeg, zip"
+                },
+                {
+                    "label": "Bank Statement",
+                    "link": "/pages/bank-statement",
+                    "icon": "icon-bank-statement"
+                }
+            ]
+        },
         {
             "label": "AI OCR for Income",
             "link": "/pages/ai-ocr/income",
