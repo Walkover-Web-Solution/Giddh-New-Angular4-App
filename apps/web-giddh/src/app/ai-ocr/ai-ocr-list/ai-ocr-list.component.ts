@@ -15,7 +15,6 @@ import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../app.constant";
 import { MatSort, Sort } from "@angular/material/sort";
 import { AiOcrStore } from "../utility/ai-ocr.store";
 import { AiOcrService } from "../../services/ai-ocr.service";
-import { OrganizationType } from "../../models/user-login-state";
 import { AppState } from "../../store";
 import { Store } from "@ngrx/store";
 import { GeneralActions } from "../../actions/general/general.actions";
@@ -228,7 +227,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
                         this.aiOcrService.dateRangeEmit$.pipe(takeUntil(this.destroyed$), takeUntil(this.routeScope$)).subscribe((res) => {
                             if (res) {
                                this.ocrDocumentsRequestParams.from = res.from;
-                               this.ocrDocumentsRequestParams.to = res.to;
+                                this.ocrDocumentsRequestParams.to = res.to;
                             }
                         });
                     }
@@ -482,7 +481,6 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
     public getAllOcrDocuments(resetPage: boolean): void {
         if (resetPage) {
             this.ocrDocumentsRequestParams.page = 1;
-            this.ocrDocumentsRequestParams.from
         }
         let request = {
             pagination: this.ocrDocumentsRequestParams,
