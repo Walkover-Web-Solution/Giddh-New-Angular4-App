@@ -1,0 +1,41 @@
+
+.mat-select-btn {
+    background: var(--color-white) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: var(--mat-border-radius-4) !important;
+    padding: 6px !important;
+    outline: 0;
+    color: var(--color-black) !important;
+    box-shadow: none;
+    font-size: var(--font-size-15) !important;
+    height: 48px;
+    justify-content: space-between;
+
+    &.range-wrapper {
+        width: 238px;
+    }
+}
+
+.date-range-wrapper {
+    width: 206px;
+}
+
+.custom-date-range-menu {
+    width: 237px;
+}
+
+.ip-addresses-dropdown {
+    width: 239px;
+}
+
+.lh-34 {
+    line-height: 34px;
+}
+
+.ip-range {
+    i {
+        position: relative;
+        right: 2px;
+        color: var(--color-dark-black);
+    }
+}

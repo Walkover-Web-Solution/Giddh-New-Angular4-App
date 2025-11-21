@@ -16,6 +16,11 @@
           ]
         },
         {
+          "label": "Company Auth Key",
+          "link": "/pages/settings/company-auth-key",
+          "icon": "<i class='icon-company'></i>"
+        },
+        {
           "label": "User Profile",
           "link": "/pages/user-details/mobile-number",
           "icon": "<i class='icon-user-new'></i>",
