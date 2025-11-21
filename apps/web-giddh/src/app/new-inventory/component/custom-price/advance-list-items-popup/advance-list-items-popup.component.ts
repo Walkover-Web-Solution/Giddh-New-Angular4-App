@@ -1,14 +1,13 @@
-import { ALT, CAPS_LOCK, CONTROL, DOWN_ARROW, ENTER, LEFT_ARROW, MAC_META, MAC_WK_CMD_LEFT, MAC_WK_CMD_RIGHT, RIGHT_ARROW, SHIFT, TAB, UP_ARROW } from "@angular/cdk/keycodes";
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Input, NgZone, OnDestroy, OnInit, Output, Renderer2, ViewChild } from "@angular/core";
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, Output, ViewChild, Input, EventEmitter } from '@angular/core';
+import { ReplaySubject, Subject } from 'rxjs';
+import { debounceTime, takeUntil, distinctUntilChanged } from 'rxjs/operators';
+import { DOWN_ARROW, ENTER, ESCAPE, UP_ARROW, BACKSPACE, TAB } from '@angular/cdk/keycodes';
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { PAGINATION_LIMIT } from "apps/web-giddh/src/app/app.constant";
 import { InventoryService } from "apps/web-giddh/src/app/services/inventory.service";
-import { ReplaySubject, Subject, debounceTime, takeUntil } from "rxjs";
-import { ScrollComponent } from "./virtual-scroll/vscroll";
 
-const DIRECTIONAL_KEYS = [
-    LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW
-];
-const SPECIAL_KEYS = [...DIRECTIONAL_KEYS, CAPS_LOCK, TAB, SHIFT, CONTROL, ALT, MAC_WK_CMD_LEFT, MAC_WK_CMD_RIGHT, MAC_META];
+const DIRECTIONAL_KEYS = [UP_ARROW, DOWN_ARROW];
+const SPECIAL_KEYS = [UP_ARROW, DOWN_ARROW, TAB, ENTER, ESCAPE, BACKSPACE];
 
 @Component({
     selector: "items-list-popup",
@@ -16,30 +15,29 @@ const SPECIAL_KEYS = [...DIRECTIONAL_KEYS, CAPS_LOCK, TAB, SHIFT, CONTROL, ALT, 
     styleUrls: ["./advance-list-items-popup.component.scss"],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
+
+export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterViewInit {
+
     @ViewChild('mainEle', { static: true }) public mainEle: ElementRef;
     @ViewChild('searchEle', { static: false }) public searchEle: ElementRef;
     @ViewChild('searchWrapEle', { static: true }) public searchWrapEle: ElementRef;
     @ViewChild('wrapper', { static: true }) public wrapper: ElementRef;
-    @ViewChild(ScrollComponent, { static: false }) public virtualScrollElem: ScrollComponent;
+    @ViewChild('virtualScrollViewport', { static: false }) public virtualScrollViewport: CdkVirtualScrollViewport;
 
     @Input() public preventOutSideClose: boolean = false;
     @Input() public dontShowNoResultMsg: boolean = false;
     @Input() public showChannelCreateBtn: boolean = true;
     @Input() public apiData: any = {};
     @Input() public isOpen: boolean = true;
-    @Input() public defaultExcludedTags: string = 'input, button, .searchEle, .modal-content, .modal-backdrop';
-    @Input() public placement: string;
     @Input() public setParentWidth: boolean = false;
     @Input() public parentEle: any;
-    @Input() public ItemHeight: number = 38;
+    @Input() public ItemHeight: number = 52;
     @Input() public ItemWidth: number = 300;
-    @Input() public visibleItems: number = 14;
-
+    @Input() public visibleItems: number = 10;
+    
     @Output() public selectedItemEmitter: EventEmitter<any | any[]> = new EventEmitter<any | any[]>();
     @Output() public closeDailogEmitter: EventEmitter<any | any[]> = new EventEmitter<any | any[]>();
     @Output() public groupEmitter: EventEmitter<any> = new EventEmitter<any>();
-    @Output() public noResultFoundEmitter: EventEmitter<any> = new EventEmitter<null>();
     @Output() public newTeamCreationEmitter: EventEmitter<any> = new EventEmitter<null>();
 
     private searchSubject: Subject<string> = new Subject();
@@ -50,13 +48,16 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
     public highlightedItem: number = 0;
     public allowLoadMore: boolean = false;
     public isLoading: boolean = false;
+    private isInitialized: boolean = false;
+    private lastScrollTop: number = 0;
     public activeCompanyUniqueName: any = '';
     public apiRequestParams: any = {
         page: 1,
         query: '',
         group: '',
         type: '',
-        count: PAGINATION_LIMIT
+        count: PAGINATION_LIMIT,
+        totalPages: 1
     };
     /* This will hold local JSON data */
     public localeData: any = {};
@@ -64,10 +65,8 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
 
     constructor(
-        private renderer: Renderer2,
-        private zone: NgZone,
         private inventoryService: InventoryService,
-        private cdref: ChangeDetectorRef
+        private _cdref: ChangeDetectorRef
     ) {
 
     }
@@ -82,17 +81,26 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
             type: this.apiData?.type,
             group: this.apiData?.group,
             page: this.apiData?.page,
-            count: this.apiData?.count
+            count: this.apiData?.count,
+            totalPages: 1
         };
         // listen on input for search
-        this.searchSubject.pipe(debounceTime(300), takeUntil(this.destroyed$)).subscribe(term => {
+        this.searchSubject.pipe(
+            debounceTime(300), 
+            distinctUntilChanged(),
+            takeUntil(this.destroyed$)
+        ).subscribe((term: string) => {
             this.apiRequestParams.page = 1;
             this.apiRequestParams.query = term;
             this.searchItems(true);
-            this.cdref.markForCheck();
+            this._cdref.markForCheck();
         });
-
-        this.searchSubject.next("");
+        
+        // Initialize search only once
+        if (!this.isInitialized) {
+            this.isInitialized = true;
+            this.searchSubject.next("");
+        }
     }
 
     /**
@@ -113,11 +121,9 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
      * @memberof AdvanceListItemsPopupComponent
      */
     public doingUIErrands(): void {
-        this.zone.runOutsideAngular(() => {
-            if (this.wrapper && this.parentEle) {
-                this.initSetParentWidth();
-            }
-        });
+        if (this.wrapper && this.parentEle) {
+            this.initSetParentWidth();
+        }
     }
 
     /**
@@ -136,15 +142,18 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
      * @memberof AdvanceListItemsPopupComponent
      */
     public initSetParentWidth(): void {
-        if (this.setParentWidth && this.mainEle) {
-            let box: any = this.parentEle.getBoundingClientRect();
-            this.ItemWidth = (box.width > this.ItemWidth) ? box.width : this.ItemWidth;
-            this.renderer.setStyle(this.mainEle?.nativeElement, 'width', `${box.width}px`);
-            if (this.searchWrapEle) {
-                this.renderer.setStyle(this.searchWrapEle?.nativeElement, 'width', `${box.width}px`);
+        if (this.setParentWidth && this.mainEle && this.parentEle) {
+            const box = this.parentEle.getBoundingClientRect();
+            this.ItemWidth = Math.max(box.width, this.ItemWidth);
+            
+            if (this.mainEle?.nativeElement) {
+                this.mainEle.nativeElement.style.width = `${box.width}px`;
             }
-            if (box.width > 300) {
-                this.renderer.setStyle(this.wrapper?.nativeElement, 'wider', true);
+            if (this.searchWrapEle?.nativeElement) {
+                this.searchWrapEle.nativeElement.style.width = `${box.width}px`;
+            }
+            if (this.wrapper?.nativeElement && box.width > 300) {
+                this.wrapper.nativeElement.classList.add('wider');
             }
         }
     }
@@ -155,9 +164,18 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
      * @param {*} item
      * @memberof AdvanceListItemsPopupComponent
      */
-    public itemSelected(item: any, event?: any): void {
+    public itemSelected(item: any, event?: any): void {              
+        if (event && (event.ctrlKey || event.metaKey)){
+            this.closeDailogEmitter.emit();
+            return ;
+        } else if(event && event.type === "click"){
+            event.preventDefault();
+        }
+        
         this.selectedItemEmitter.emit({ item: item, type: this.apiData?.type });
-        this.searchEle.nativeElement.value = null;
+        if (this.searchEle?.nativeElement) {
+            this.searchEle.nativeElement.value = null;
+        }
     }
 
     /**
@@ -172,6 +190,7 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
 
         if (resetItems) {
             this.searchedItems = [];
+            this.lastScrollTop = 0; // Reset scroll position for new search
         }
 
         this.isLoading = true;
@@ -181,64 +200,72 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
                 this.isLoading = false;
 
                 if (res && res.body && res.body.results && res.body.results.length > 0) {
-                    let length = (this.searchedItems) ? this.searchedItems.length : 0;
-                    res.body.results.forEach((key, index) => {
-                        key.loop = length + index;
-                        this.searchedItems.push(key);
-                    });
-                    this.highlightedItem = 0;
+                    // Create new array reference for proper change detection
+                    this.searchedItems = [...(this.searchedItems || []), ...res.body.results];
+                    
+                    if (this.apiRequestParams.page === 1) {
+                        this.highlightedItem = 0;
+                    }
                     this.noResultsFound = false;
-                    this.allowLoadMore = true;
                     this.apiRequestParams.totalPages = res.body.totalPages;
-                    this.cdref.detectChanges();
+                    // Only allow load more if there are more pages available
+                    this.allowLoadMore = this.apiRequestParams.page < this.apiRequestParams.totalPages;
+
+                    // Force change detection and viewport refresh
+                    this._cdref.detectChanges();
+                    
+                    // Refresh virtual scroll viewport if available
+                    setTimeout(() => {
+                        // Preserve scroll position when loading more data (not initial search)
+                        const preservePosition = this.apiRequestParams.page > 1;
+                        this.refreshVirtualScrollViewport(preservePosition);
+                        this._cdref.detectChanges();
+                    }, 0);
                 } else {
                     if (this.searchedItems?.length === 0) {
                         this.noResultsFound = true;
                         this.allowLoadMore = false;
                     }
-                    this.cdref.detectChanges();
+                    this._cdref.detectChanges();
                 }
 
                 this.initSetParentWidth();
-
-                if (this.virtualScrollElem) {
-                    let item = this.virtualScrollElem.directionToll(40);
-                    if (item) {
-                        this.refreshToll(item, 40);
-                    }
-                }
             });
         } else if (this.apiRequestParams?.type === 'stocks') {
             this.inventoryService.getStockList(this.apiRequestParams).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 this.isLoading = false;
 
                 if (res && res.body && res.body.results && res.body.results.length > 0) {
-                    let length = (this.searchedItems) ? this.searchedItems.length : 0;
-                    res.body.results.forEach((key, index) => {
-                        key.loop = length + index;
-                        this.searchedItems.push(key);
-                    });
-                    this.highlightedItem = 0;
+                    // Create new array reference for proper change detection
+                    this.searchedItems = [...(this.searchedItems || []), ...res.body.results];
+                    
+                    if (this.apiRequestParams.page === 1) {
+                        this.highlightedItem = 0;
+                    }
                     this.noResultsFound = false;
-                    this.allowLoadMore = true;
                     this.apiRequestParams.totalPages = res.body.totalPages;
-                    this.cdref.detectChanges();
+                    // Only allow load more if there are more pages available
+                    this.allowLoadMore = this.apiRequestParams.page < this.apiRequestParams.totalPages;
+
+                    // Force change detection and viewport refresh
+                    this._cdref.detectChanges();
+                    
+                    // Refresh virtual scroll viewport if available
+                    setTimeout(() => {
+                        // Preserve scroll position when loading more data (not initial search)
+                        const preservePosition = this.apiRequestParams.page > 1;
+                        this.refreshVirtualScrollViewport(preservePosition);
+                        this._cdref.detectChanges();
+                    }, 0);
                 } else {
                     if (this.searchedItems?.length === 0) {
                         this.noResultsFound = true;
                         this.allowLoadMore = false;
                     }
-                    this.cdref.detectChanges();
+                    this._cdref.detectChanges();
                 }
 
                 this.initSetParentWidth();
-
-                if (this.virtualScrollElem) {
-                    let item = this.virtualScrollElem.directionToll(40);
-                    if (item) {
-                        this.refreshToll(item, 40);
-                    }
-                }
             });
         }
     }
@@ -250,8 +277,8 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
      * @memberof AdvanceListItemsPopupComponent
      */
     private captureValueFromList(): void {
-        if (this.virtualScrollElem) {
-            let item = this.virtualScrollElem.activeItem();
+        if (this.searchedItems && this.searchedItems.length > 0) {
+            let item = this.searchedItems[this.highlightedItem] || this.searchedItems[0];
             if (item) {
                 this.itemSelected(item);
             }
@@ -281,13 +308,10 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
             e.stopImmediatePropagation();
         }
 
-        // prevent caret movement and animate selected element
-        if (this.isOpen && [UP_ARROW, DOWN_ARROW]?.indexOf(key) !== -1 && this.virtualScrollElem) {
+        // prevent caret movement and handle keyboard navigation
+        if (this.isOpen && [UP_ARROW, DOWN_ARROW]?.indexOf(key) !== -1) {
             e.preventDefault();
-            let item = this.virtualScrollElem.directionToll(key);
-            if (item) {
-                this.refreshToll(item, key);
-            }
+            this.handleKeyboardNavigation(key);
         }
 
         if (this.isOpen && (key === ENTER)) {
@@ -295,36 +319,66 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
             e.stopPropagation();
             this.captureValueFromList();
         }
-    }
 
-    /**
-     * This function calls the function to refresh the scroll view
-     *
-     * @param {*} item
-     * @param {number} [key]
-     * @memberof AdvanceListItemsPopupComponent
-     */
-    public refreshToll(item: any, key?: number): void {
-        if (key === UP_ARROW) {
-            this.refreshScrollView(item, 'UP');
-        } else {
-            this.refreshScrollView(item);
+        // closing list on esc press
+        if (key === ESCAPE) {
+            if (this.listOfSelectedGroups && this.listOfSelectedGroups.length > 0) {
+                e.preventDefault();
+                e.stopPropagation();
+                // first escape
+                if (this.searchEle?.nativeElement?.value) {
+                    this.searchEle.nativeElement.value = null;
+                } else {
+                    // second time pressing escape
+                    this.removeItemFromSelectedGroups();
+                }
+            }
+        }
+
+        if (this.isOpen && key === BACKSPACE) {
+            if (!this.searchEle?.nativeElement?.value && this.listOfSelectedGroups && this.listOfSelectedGroups.length > 0) {
+                this.removeItemFromSelectedGroups();
+            }
         }
     }
 
     /**
-     * This function refreshes the scroll view
-     *
-     * @param {*} item
-     * @param {string} [direction]
+     * This function will remove the selected groups in decending order
+     * if we press backspace in search box
+     * @param {*} [item]
      * @memberof AdvanceListItemsPopupComponent
      */
-    public refreshScrollView(item: any, direction?: string): void {
+    public removeItemFromSelectedGroups(item?: any): void {
         if (item) {
-            this.virtualScrollElem.scrollInto(item, direction);
-            this.virtualScrollElem.startupLoop = true;
-            this.virtualScrollElem.refresh();
+            this.listOfSelectedGroups = this.listOfSelectedGroups.filter(o => item.uniqueName !== o?.uniqueName);
+        } else {
+            this.listOfSelectedGroups.pop();
         }
+    }
+
+    /**
+     * Handles keyboard navigation for up/down arrows
+     *
+     * @param {number} key - The key code (UP_ARROW or DOWN_ARROW)
+     * @memberof AdvanceListItemsPopupComponent
+     */
+    public handleKeyboardNavigation(key: number): void {
+        if (!this.searchedItems || this.searchedItems.length === 0) {
+            return;
+        }
+
+        if (key === UP_ARROW) {
+            this.highlightedItem = this.highlightedItem > 0 ? this.highlightedItem - 1 : this.searchedItems.length - 1;
+        } else if (key === DOWN_ARROW) {
+            this.highlightedItem = this.highlightedItem < this.searchedItems.length - 1 ? this.highlightedItem + 1 : 0;
+        }
+
+        // Scroll to the highlighted item
+        if (this.virtualScrollViewport) {
+            this.virtualScrollViewport.scrollToIndex(this.highlightedItem, 'smooth');
+        }
+
+        this.handleHighLightedItemEvent(this.searchedItems[this.highlightedItem]);
     }
 
     /**
@@ -341,8 +395,13 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
         if (this.isOpen && SPECIAL_KEYS?.indexOf(key) !== -1) {
             return;
         }
-        term = term.trim();
-        this.searchSubject.next(term);
+        
+        term = term ? term.trim() : "";
+        
+        // Only emit if term is different from current query to prevent duplicates
+        if (this.apiRequestParams.query !== term) {
+            this.searchSubject.next(term);
+        }
     }
 
     /**
@@ -364,8 +423,13 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
      * @memberof AdvanceListItemsPopupComponent
      */
     public handleHighLightedItemEvent(item: any): void {
-        // no need to do anything in the function
-        this.highlightedItem = item?.loop;
+        // Update highlighted item index based on the item
+        if (item && this.searchedItems) {
+            const index = this.searchedItems.findIndex(searchItem => searchItem === item);
+            if (index !== -1) {
+                this.highlightedItem = index;
+            }
+        }
     }
 
     /**
@@ -376,47 +440,77 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
      * @returns uniqueName
      * @memberof AdvanceListItemsPopupComponent
      */
-    public trackByFn(index, item: any) {
-        return item?.uniqueName; // unique id corresponding to the item
+    public trackByFn(index: number, item: any) {
+        // Use a combination of uniqueName and index for better tracking
+        const trackId = item?.uniqueName || `item-${index}`;
+        return trackId;
     }
 
     /**
-     * This function is used to highlight the hovered item
+     * Handles item hover
+     */
+    public onItemHover(index: number): void {
+        this.highlightedItem = index;
+    }
+
+    /**
+     * Handles item leave
+     */
+    public onItemLeave(): void {
+        // Keep the highlighted item for keyboard navigation
+    }
+
+    /**
+     * Handles item click
+     */
+    public onItemClick(item: any, event: Event): void {
+        this.itemSelected(item, event);
+    }
+
+    /**
+     * Handles scroll index change for CDK virtual scroll
      *
      * @param {number} index
      * @memberof AdvanceListItemsPopupComponent
      */
-    public highlightItem(index: number) {
-        this.highlightedItem = index;
-        this.searchedItems.forEach(searchItem => searchItem.isHilighted = false);
-        this.searchedItems[index].isHilighted = true;
+    public onScrolledIndexChange(index: number): void {
+        // Load more data when approaching the end
+        const threshold = 3; // Load more when 3 items from the end
+        if (this.searchedItems && index >= this.searchedItems.length - threshold && this.allowLoadMore && !this.isLoading) {
+            this.loadMoreData();
+        }
     }
 
     /**
-     * This function is used to unhighlight the selected item
+     * Handles viewport scroll event for infinite loading
      *
-     *
+     * @param {Event} event
      * @memberof AdvanceListItemsPopupComponent
      */
-    public unhighlightItem() {
-        this.highlightedItem = -1;
+    public onViewportScroll(event: Event): void {
+        const element = event.target as HTMLElement;
+        const threshold = 200; // Load more when 200px from bottom
+        
+        // Track current scroll position
+        this.lastScrollTop = element.scrollTop;
+        
+        if (element.scrollTop + element.clientHeight >= element.scrollHeight - threshold && this.allowLoadMore && !this.isLoading) {
+            this.loadMoreData();
+        }
     }
 
     /**
-     * This function will load more records on scroll
+     * Loads more data if conditions are met
      *
-     * @param {*} event
+     * @private
      * @memberof AdvanceListItemsPopupComponent
      */
-    @HostListener('scroll', ['$event'])
-    onScroll(event: any) {
-        // visible height + pixel scrolled >= total height - 200 (deducted 200 to load list little earlier before user reaches to end)
-        if (event.target.offsetHeight + event.target.scrollTop >= (event.target.scrollHeight - 800)) {
-            if (this.allowLoadMore && !this.isLoading) {
-                if (this.apiRequestParams.page + 1 <= this.apiRequestParams.totalPages) {
-                    this.apiRequestParams.page++;
-                    this.searchItems(false);
-                }
+    private loadMoreData(): void {
+
+        if (this.allowLoadMore && !this.isLoading) {
+            if (this.apiRequestParams.page < this.apiRequestParams.totalPages) {
+                this.apiRequestParams.page++;
+                this.searchItems(false);
             }
         }
     }
@@ -448,5 +542,83 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy {
                 this.searchSubject.next(term);
             }
         }, 100);
+    }
+
+    // ===== NEW CDK VIRTUAL SCROLL METHODS =====
+
+    /**
+     * Gets the viewport height for virtual scroll
+     */
+    public getViewportHeight(): number {
+        if (!this.searchedItems || this.searchedItems.length === 0) {
+            return this.ItemHeight;
+        }
+        const itemCount = Math.min(this.searchedItems.length, this.visibleItems);
+        const height = itemCount * this.ItemHeight;
+        
+        
+        return height;
+    }
+
+    /**
+     * Gets the href for an item
+     */
+    public getItemHref(item: any): string | null {
+        return (item.type === 'MENU' || item.type === 'ACCOUNT') ? item.route : null;
+    }
+
+    /**
+     * Gets the icon class for an item type
+     */
+    public getItemIconClass(type: string): string {
+        switch (type) {
+            case 'MENU':
+                return 'icon-bar';
+            case 'GROUP':
+                return 'icon-group-folder';
+            default:
+                return 'icon-account';
+        }
+    }
+
+    /**
+     * Gets the ID for an item
+     */
+    public getItemId(item: any): string {
+        const type = item.type?.toLowerCase() || 'item';
+        const identifier = item.type === 'MENU' ? this.getPageUniqueName(item.route) : item?.uniqueName;
+        return `${type}-${identifier}`;
+    }
+
+    /**
+     * Refreshes the virtual scroll viewport while preserving scroll position
+     */
+    private refreshVirtualScrollViewport(preserveScrollPosition: boolean = false): void {
+        if (this.virtualScrollViewport) {
+            // Use tracked scroll position or get current position
+            const currentScrollTop = preserveScrollPosition ? 
+                (this.lastScrollTop || this.virtualScrollViewport.getElementRef().nativeElement.scrollTop) : 0;
+            
+            this.virtualScrollViewport.checkViewportSize();
+            
+            // Don't reset the rendered range when loading more data
+            if (!preserveScrollPosition) {
+                const itemCount = Math.min(this.searchedItems?.length || 0, this.visibleItems);
+                this.virtualScrollViewport.setRenderedRange({ start: 0, end: itemCount });
+            }
+            
+            this._cdref.detectChanges();
+            
+            // Restore scroll position if needed (with slight delay for DOM updates)
+            if (preserveScrollPosition && currentScrollTop > 0) {
+                setTimeout(() => {
+                    if (this.virtualScrollViewport) {
+                        this.virtualScrollViewport.getElementRef().nativeElement.scrollTop = currentScrollTop;
+                        // Update tracked position
+                        this.lastScrollTop = currentScrollTop;
+                    }
+                }, 50);
+            }
+        }
     }
 }
