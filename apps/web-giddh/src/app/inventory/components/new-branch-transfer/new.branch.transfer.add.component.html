@@ -89,18 +89,18 @@
                             </div>
                             <div class="col-xl-6 col-lg-8">
                                 <input
-                                    name="productHsnCode"
+                                    type="number" name="productHsnCode"
                                     class="form-control"
                                     maxlength="10"
-                                    decimalDigitsDirective
+                                    digitsOnlyDirective
                                     *ngIf="branchTransfer.products[0].showCodeType === 'hsn'"
                                     [(ngModel)]="branchTransfer.products[0].hsnNumber"
                                 />
                                 <input
-                                    name="productHsnCode"
+                                    type="number" name="productHsnCode"
                                     class="form-control"
                                     maxlength="10"
-                                    decimalDigitsDirective
+                                    digitsOnlyDirective
                                     *ngIf="branchTransfer.products[0].showCodeType === 'sac'"
                                     [(ngModel)]="branchTransfer.products[0].sacNumber"
                                 />
@@ -318,18 +318,18 @@
                             </div>
                             <div class="col-xl-6 col-lg-8">
                                 <input
-                                    name="productHsnCode"
+                                    type="number" name="productHsnCode"
                                     class="form-control"
                                     maxlength="10"
-                                    decimalDigitsDirective
+                                    digitsOnlyDirective
                                     *ngIf="branchTransfer.products[0].showCodeType === 'hsn'"
                                     [(ngModel)]="branchTransfer.products[0].hsnNumber"
                                 />
                                 <input
-                                    name="productHsnCode"
+                                    type="number" name="productHsnCode"
                                     class="form-control"
                                     maxlength="10"
-                                    decimalDigitsDirective
+                                    digitsOnlyDirective
                                     *ngIf="branchTransfer.products[0].showCodeType === 'sac'"
                                     [(ngModel)]="branchTransfer.products[0].sacNumber"
                                 />
@@ -667,9 +667,9 @@
                                                     </div>
                                                 </label>
                                                 <input
-                                                    type="text"
+                                                    type="number"
                                                     maxlength="10"
-                                                    decimalDigitsDirective
+                                                    digitsOnlyDirective
                                                     placeholder="{{
                                                         product.showCodeType === 'hsn' ? 'HSN' : 'SAC'
                                                     }} Code"
@@ -1395,3 +1395,6 @@
     <aside-menu-product-service (closeAsideEvent)="closeAsideMenuProductServiceModal()" [selectedVoucherType]="'sales'">
     </aside-menu-product-service>
 </ng-template>
+
+
+

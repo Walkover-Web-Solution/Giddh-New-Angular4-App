@@ -2367,10 +2367,10 @@
                                                                             </mat-radio-group>
                                                                             <text-field
                                                                                 [id]="'transaction'"
-                                                                                [type]="'text'"
+                                                                                [type]="'number'"
                                                                                 [cssClass]="'form-control hsn-sac-code'"
                                                                                 maxLength="10"
-                                                                                [allowDecimalDigitsOnly]="true"
+                                                                                [allowDigitsOnly]="true"
                                                                                 [placeholder]="localeData?.hsn_number"
                                                                                 [name]="
                                                                                     'transaction.hsnNumber_' + entryIdx
@@ -2381,10 +2381,10 @@
                                                                                 [readonly]="isEinvoiceGenerated"></text-field>
                                                                             <text-field
                                                                                 [id]="'transaction'"
-                                                                                [type]="'text'"
+                                                                                [type]="'number'"
                                                                                 [cssClass]="'form-control hsn-sac-code'"
                                                                                 maxLength="10"
-                                                                                [allowDecimalDigitsOnly]="true"
+                                                                                [allowDigitsOnly]="true"
                                                                                 [placeholder]="localeData?.sac_number"
                                                                                 [name]="
                                                                                     'transaction.hsnNumber_' + entryIdx
