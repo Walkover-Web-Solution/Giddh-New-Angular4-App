@@ -228,7 +228,7 @@ export class LoginActions {
                     return { type: 'EmptyAction' };
                 } else {
                     if (stateDetail.body && stateDetail?.status === 'success') {
-                        this._generalService.companyUniqueName = stateDetail.body.companyUniqueName;
+                        this._generalService.companyUniqueName = this.getCompanyUniqueNameFromUrl(stateDetail.body.companyUniqueName);
                         this._generalService.currentBranchUniqueName = stateDetail.body.branchUniqueName || '';
                         if (stateDetail.body.branchUniqueName) {
                             const details = {
@@ -305,7 +305,7 @@ export class LoginActions {
                     return { type: 'EmptyAction' };
                 } else {
                     if (stateDetail.body && stateDetail?.status === 'success') {
-                        this._generalService.companyUniqueName = stateDetail.body.companyUniqueName;
+                        this._generalService.companyUniqueName = this.getCompanyUniqueNameFromUrl(stateDetail.body.companyUniqueName);
                         this._generalService.currentBranchUniqueName = stateDetail.body.branchUniqueName || '';
                         this._generalService.voucherApiVersion = stateDetail.body.voucherVersion || 2;
                         if (stateDetail.body.branchUniqueName) {
@@ -655,6 +655,18 @@ export class LoginActions {
         private localeService: LocaleService,
         @Inject(ServiceConfig) private serviceConfig
     ) {
+    }
+
+    /**
+     * Gets company unique name from URL query parameters with fallback to provided value
+     *
+     * @param {string} fallbackCompanyUniqueName - Company unique name to use as fallback
+     * @returns {string} Company unique name from URL or fallback value
+     * @memberof LoginActions
+     */
+    private getCompanyUniqueNameFromUrl(fallbackCompanyUniqueName: string): string {
+        const urlCompanyUniqueName = this._generalService.getUrlParameter("companyUniqueName");
+        return urlCompanyUniqueName || fallbackCompanyUniqueName;
     }
 
     public SetRedirectToledger(): CustomActions {

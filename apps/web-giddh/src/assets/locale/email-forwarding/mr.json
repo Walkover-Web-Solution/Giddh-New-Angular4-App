@@ -1,0 +1,16 @@
+{
+    "account_details": "खाते तपशील",
+    "forwarded_mail": "फॉरवर्ड केलेला मेल",
+    "forwarded_to": "ला फॉरवर्ड केले",
+    "how_to_setup": "ईमेल फॉरवर्डिंग कसे सेटअप करावे?",
+    "original_email": "मूळ ईमेल",
+    "waiting_verification": "पडताळणीची प्रतीक्षा...",
+    "create_email": "ईमेल तयार करा",
+    "email_verification": "ईमेल पडताळणी",
+    "setup_email_forwarding": "ईमेल फॉरवर्डिंग सेटअप करा",
+    "verify_start": "पडताळा/सुरू करा",
+    "verify_and_next": "पडताळा आणि पुढे जा",
+    "new_bank_statement": "नवीन बँक स्टेटमेंट",
+    "bank_account_name": "बँक खाते नाव",
+    "copied": "कॉपी केले..."
+}

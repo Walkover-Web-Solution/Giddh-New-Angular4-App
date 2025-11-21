@@ -965,8 +965,8 @@
             ]
         },
         {
-            "label": "AI",
-            "icon": "icon-audit-log",
+            "label": "ऑटोमेशन",
+            "icon": "icon-manage-group-acc",
             "items": [
                 {
                     "label": "OCR for Income",
@@ -979,6 +979,11 @@
                     "link": "/pages/ai-ocr/expense",
                     "icon": "icon-audit-log",
                     "description": "प्रतिमा अपलोड करा, पीडीएफ, जेपीईजी, झिप"
+                },
+                {
+                    "label": "बँक स्टेटमेंट",
+                    "link": "/pages/email-forwarding",
+                    "icon": "icon-bank-statement"
                 }
             ]
         },

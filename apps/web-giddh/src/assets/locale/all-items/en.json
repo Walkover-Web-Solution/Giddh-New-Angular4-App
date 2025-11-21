@@ -969,8 +969,8 @@
             ]
         },
         {
-            "label": "AI",
-            "icon": "icon-audit-log",
+            "label": "Automation",
+            "icon": "icon-manage-group-acc",
             "items": [
                 {
                     "label": "OCR for Income",
@@ -983,6 +983,11 @@
                     "link": "/pages/ai-ocr/expense",
                     "icon": "icon-audit-log",
                     "description": "Upload images, pdf, jpeg, zip"
+                },
+                {
+                    "label": "Bank Statement",
+                    "link": "/pages/email-forwarding",
+                    "icon": "icon-bank-statement"
                 }
             ]
         },

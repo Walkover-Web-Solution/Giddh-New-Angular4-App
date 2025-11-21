@@ -82,6 +82,18 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     /**
+     * Gets company unique name from URL query parameters with fallback to provided value
+     *
+     * @param {string} fallbackCompanyUniqueName - Company unique name to use as fallback
+     * @returns {string} Company unique name from URL or fallback value
+     * @memberof CompanyBranchComponent
+     */
+    private getCompanyUniqueNameFromUrl(fallbackCompanyUniqueName: string): string {
+        const urlCompanyUniqueName = this.generalService.getUrlParameter("companyUniqueName");
+        return urlCompanyUniqueName || fallbackCompanyUniqueName;
+    }
+
+    /**
      * Initializes the component
      *
      * @memberof CompanyBranchComponent
@@ -217,7 +229,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
     private switchCompany(company: any, selectBranchUniqueName: string, fetchLastState?: boolean): void {
         this.store.dispatch(this.companyActions.resetActiveCompanyData());
         this.store.dispatch(this.warehouseAction.resetWarehouseResponse());
-        this.generalService.companyUniqueName = company?.uniqueName;
+        this.generalService.companyUniqueName = this.getCompanyUniqueNameFromUrl(company?.uniqueName);
         this.generalService.voucherApiVersion = company?.voucherVersion || 2;
         this.store.dispatch(this.commonAction.setBranchConsolidated(false));
         const details = {
