@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { ReplaySubject, Observable } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { EmailForwardingComponentStore } from '../../store/email-forwarding.store';
@@ -30,7 +30,6 @@ export class OnboardingComponent implements OnInit, OnDestroy {
     constructor(
         private router: Router,
         private bankStatementStore: EmailForwardingComponentStore,
-        private route: ActivatedRoute,
         private generalService: GeneralService
     ) {
         this.isGeneratingEmail$ = this.bankStatementStore.isGeneratingEmail$;

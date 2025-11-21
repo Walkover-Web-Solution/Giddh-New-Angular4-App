@@ -4,7 +4,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MatStepper } from '@angular/material/stepper';
 import { ReplaySubject, interval, Subject, BehaviorSubject, Observable } from 'rxjs';
 import { filter, takeUntil, switchMap, debounceTime } from 'rxjs/operators';
-import { ToasterService } from '../../../services/toaster.service';
 import { EmailForwardingResponse } from '../../models/email-forwarding.model';
 import { API_BULK_FETCH_LIMIT, BANK_STATEMENT_HELP_DOC_URL, EMAIL_VALIDATION_REGEX } from '../../../app.constant';
 import { EmailForwardingComponentStore } from '../../store/email-forwarding.store';
@@ -42,7 +41,7 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
     /** Subject to stop polling when data is received */
     private stopPolling$ = new Subject<void>();
     /** Current step from query params */
-    public currentStep: number = 0;
+    public currentStep: number = 1;
     /** Minimum allowed step (prevents going back) */
     public minAllowedStep: number = 0;
     /** Target step to navigate to after view init */
@@ -119,9 +118,9 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.bankStatementStore.createUpdateEmailForwardingIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response: unknown) => {
             if (response && response['uniqueName']) {
                 this.isLoading = false;
-                if (this.isEditMode) {
+                if (this.currentStep === 3) {
                     this.router.navigate(['pages/email-forwarding/list'], { queryParams: { companyUniqueName: this.companyUniqueName, branchUniqueName: this.branchUniqueName } });
-                } else {
+                } else if (this.currentStep === 1) {
                     this.router.navigate(['pages/email-forwarding/create'], { 
                         queryParams: { 
                             companyUniqueName: this.companyUniqueName,
