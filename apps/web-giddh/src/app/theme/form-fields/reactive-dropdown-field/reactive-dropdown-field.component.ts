@@ -143,7 +143,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
                 skip(1), 
                 takeUntil(this.destroyed$)
             ).subscribe((search: string) => {
-                if (!search && !this.value) {
+                if (!search) {
                     this.clearDropdownValue();
                     this.writeValue("", false);
                 }
@@ -181,6 +181,9 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
                 filteredOptions.push({ label: option.label, value: option.value, additional: option.additional ?? option });
             }
         });
+        if (filteredOptions.length === 0) {
+            this.writeValue(this.value || "", false);
+        }
         return of(filteredOptions);
     }
 

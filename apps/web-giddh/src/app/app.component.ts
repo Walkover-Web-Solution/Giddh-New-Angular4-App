@@ -44,6 +44,18 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
 
+    /**
+     * Gets company unique name from URL query parameters with fallback to session state
+     *
+     * @param {string} sessionCompanyUniqueName - Company unique name from session state
+     * @returns {string} Company unique name from URL or session fallback
+     * @memberof AppComponent
+     */
+    private getCompanyUniqueNameFromUrl(sessionCompanyUniqueName: string): string {
+        const urlCompanyUniqueName = this._generalService.getUrlParameter("companyUniqueName");
+        return urlCompanyUniqueName || sessionCompanyUniqueName;
+    }
+
     constructor(private store: Store<AppState>,
         private router: Router,
         private _generalService: GeneralService,
@@ -73,7 +85,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 this._generalService.user = null;
                 this._generalService.sessionId = null;
             }
-            this._generalService.companyUniqueName = ss.companyUniqueName;
+            this._generalService.companyUniqueName = this.getCompanyUniqueNameFromUrl(ss.companyUniqueName);
         });
 
         if (this._generalService.getUrlParameter("companyUniqueName")) {

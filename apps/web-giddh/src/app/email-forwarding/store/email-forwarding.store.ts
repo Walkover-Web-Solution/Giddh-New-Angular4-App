@@ -7,7 +7,6 @@ import {
     EmailForwardingRequest, 
     EmailForwardingResponse, 
 } from "../models/email-forwarding.model";
-import { SearchService } from "../../services/search.service";
 import { SalesService } from "../../services/sales.service";
 import { BaseResponse } from "../../models/api-models/BaseResponse";
 
@@ -36,12 +35,11 @@ const DEFAULT_STATE: BankStatementState = {
 };
 
 @Injectable()
-export class BankStatementComponentStore extends ComponentStore<BankStatementState> {
+export class EmailForwardingComponentStore extends ComponentStore<BankStatementState> {
 
     constructor(
         private toaster: ToasterService,
         private emailForwardingService: EmailForwardingService,
-        private searchService: SearchService,
         private salesService: SalesService
     ) {
         super(DEFAULT_STATE);
@@ -61,7 +59,7 @@ export class BankStatementComponentStore extends ComponentStore<BankStatementSta
     /**
      * Generate email communication
      *
-     * @memberof BankStatementComponentStore
+     * @memberof EmailForwardingComponentStore
      */
     readonly generateEmail = this.effect((data: Observable<void>) => {
         return data.pipe(
@@ -101,7 +99,7 @@ export class BankStatementComponentStore extends ComponentStore<BankStatementSta
     /**
      * Get all email forwarding configurations
      *
-     * @memberof BankStatementComponentStore
+     * @memberof EmailForwardingComponentStore
      */
     readonly getAllEmailForwarding = this.effect((data: Observable<void>) => {
         return data.pipe(
@@ -140,7 +138,7 @@ export class BankStatementComponentStore extends ComponentStore<BankStatementSta
     /**
      * Get email forwarding details by unique name
      *
-     * @memberof BankStatementComponentStore
+     * @memberof EmailForwardingComponentStore
      */
     readonly getEmailForwardingDetails = this.effect((data: Observable<string>) => {
         return data.pipe(
@@ -179,7 +177,7 @@ export class BankStatementComponentStore extends ComponentStore<BankStatementSta
     /**
      * Create email forwarding configuration
      *
-     * @memberof BankStatementComponentStore
+     * @memberof EmailForwardingComponentStore
      */
     readonly createEmailForwarding = this.effect((data: Observable<EmailForwardingRequest>) => {
         return data.pipe(
@@ -210,7 +208,7 @@ export class BankStatementComponentStore extends ComponentStore<BankStatementSta
     /**
      * Update email forwarding configuration
      *
-     * @memberof BankStatementComponentStore
+     * @memberof EmailForwardingComponentStore
      */
     readonly updateEmailForwarding = this.effect((data: Observable<{model: EmailForwardingRequest, uniqueName: string}>) => {
         return data.pipe(
@@ -241,7 +239,7 @@ export class BankStatementComponentStore extends ComponentStore<BankStatementSta
     /**
      * Delete email forwarding configuration
      *
-     * @memberof BankStatementComponentStore
+     * @memberof EmailForwardingComponentStore
      */
     readonly deleteEmailForwarding = this.effect((data: Observable<string>) => {
         return data.pipe(
@@ -268,53 +266,11 @@ export class BankStatementComponentStore extends ComponentStore<BankStatementSta
             })
         );
     });
-
-    /**
-     * Reset create/update success state
-     *
-     * @memberof BankStatementComponentStore
-     */
-    readonly resetCreateUpdateState = this.effect((data: Observable<void>) => {
-        return data.pipe(
-            switchMap(() => {
-                this.patchState({ createUpdateEmailForwardingIsSuccess: false });
-                return EMPTY;
-            })
-        );
-    });
-
-    /**
-     * Reset delete success state
-     *
-     * @memberof BankStatementComponentStore
-     */
-    readonly resetDeleteState = this.effect((data: Observable<void>) => {
-        return data.pipe(
-            switchMap(() => {
-                this.patchState({ deleteEmailForwardingIsSuccess: false });
-                return EMPTY;
-            })
-        );
-    });
-
-    /**
-     * Clear email forwarding details
-     *
-     * @memberof BankStatementComponentStore
-     */
-    readonly clearEmailForwardingDetails = this.effect((data: Observable<void>) => {
-        return data.pipe(
-            switchMap(() => {
-                this.patchState({ emailForwardingDetails: null });
-                return EMPTY;
-            })
-        );
-    });
-
+    
     /**
      * Clear generated email
      *
-     * @memberof BankStatementComponentStore
+     * @memberof EmailForwardingComponentStore
      */
     readonly clearGeneratedEmail = this.effect((data: Observable<void>) => {
         return data.pipe(
@@ -328,7 +284,7 @@ export class BankStatementComponentStore extends ComponentStore<BankStatementSta
     /**
      * Search for bank accounts using the sales service
      *
-     * @memberof BankStatementComponentStore
+     * @memberof EmailForwardingComponentStore
      */
     readonly searchAccount = this.effect((data: Observable<string>) => {
         return data.pipe(

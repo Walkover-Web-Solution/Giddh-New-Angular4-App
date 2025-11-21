@@ -4,18 +4,19 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MatStepper } from '@angular/material/stepper';
 import { ReplaySubject, interval, Subject, BehaviorSubject, Observable } from 'rxjs';
 import { filter, takeUntil, switchMap, debounceTime } from 'rxjs/operators';
-import { BankStatementComponentStore } from '../../store/bank-statement.store';
 import { ToasterService } from '../../../services/toaster.service';
 import { EmailForwardingResponse } from '../../models/email-forwarding.model';
-import { API_BULK_FETCH_LIMIT } from '../../../app.constant';
+import { API_BULK_FETCH_LIMIT, BANK_STATEMENT_HELP_DOC_URL, EMAIL_VALIDATION_REGEX } from '../../../app.constant';
+import { EmailForwardingComponentStore } from '../../store/email-forwarding.store';
+import { GeneralService } from '../../../services/general.service';
 
 @Component({
-    selector: 'app-stepper-form',
-    templateUrl: './stepper-form.component.html',
-    styleUrls: ['./stepper-form.component.scss'],
-    providers: [BankStatementComponentStore]
+    selector: 'create',
+    templateUrl: './create.component.html',
+    styles: [``],
+    providers: [EmailForwardingComponentStore]
 })
-export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
+export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
     /** ViewChild reference to the stepper */
     @ViewChild('stepper', { static: false }) stepper!: MatStepper;
     /** Subject to handle component destruction */
@@ -59,13 +60,22 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
     };
     /** Flag to prevent multiple account search calls */
     private accountSearchCalled: boolean = false;
+    /** Flag to show/hide copy text */
+    public isCopied: boolean = false;
+    /** Bank statement help doc url */
+    public bankStatementHelpDocUrl = BANK_STATEMENT_HELP_DOC_URL;
+    /** Form submitted flag */
+    public isFormSubmitted: boolean = false;
+    /** Company unique name */  
+    private companyUniqueName: string = '';
 
     constructor(
         private formBuilder: FormBuilder,
         private router: Router,
         private route: ActivatedRoute,
         private toaster: ToasterService,
-        private bankStatementStore: BankStatementComponentStore
+        private bankStatementStore: EmailForwardingComponentStore,
+        private generalService: GeneralService
     ) {
         this.initializeForms();
     }
@@ -73,19 +83,22 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
     /**
      * Component initialization
      * 
-     * @memberof StepperFormComponent
+     * @memberof CreateComponent
      */
-    public ngOnInit(): void {        
+    public ngOnInit(): void {       
+        this.companyUniqueName = this.generalService.companyUniqueName; 
         this.setupAccountSearchSubscription();
         this.getEmailFromQueryParams();
         this.bankStatementStore.createUpdateEmailForwardingIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response: unknown) => {
             if (response && response['uniqueName']) {
                 this.isLoading = false;
                 if (this.isEditMode) {
-                    this.router.navigate(['pages/bank-statement/list']);
+                    this.router.navigate(['pages/email-forwarding/list'], { queryParams: { companyUniqueName: this.companyUniqueName, ...this.route.snapshot.queryParams } });
                 } else {
-                    this.router.navigate(['pages/bank-statement/create'], { 
+                    this.router.navigate(['pages/email-forwarding/create'], { 
                         queryParams: { 
+                            companyUniqueName: this.companyUniqueName,
+                            ...this.route.snapshot.queryParams,
                             forwardedMail: this.emailForwardingForm.value.forwardedMail + this.forwardedMailDomain,
                             uniqueName: response['uniqueName'],
                             step: 2
@@ -101,7 +114,7 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
     /**
      * After view initialization - navigate to target step if set
      * 
-     * @memberof StepperFormComponent
+     * @memberof CreateComponent
      */
     public ngAfterViewInit(): void {
         if (this.targetStepIndex !== null) {
@@ -116,12 +129,12 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
      * Initializes all form groups
      * 
      * @private
-     * @memberof StepperFormComponent
+     * @memberof CreateComponent
      */
     private initializeForms(): void {
         this.emailForwardingForm = this.formBuilder.group({
             forwardedMail: ['', [Validators.required]],
-            originalEmail: [''],
+            originalEmail: ['', Validators.pattern(EMAIL_VALIDATION_REGEX)],
             password: [''],
             accountUniqueName: [''],
             uniqueName: ['']
@@ -132,7 +145,7 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
      * Checks if component is in edit mode and loads data
      * 
      * @private
-     * @memberof StepperFormComponent
+     * @memberof CreateComponent
      */
     private checkEditMode(): void {
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
@@ -169,7 +182,7 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
      * Gets email from query parameters
      * 
      * @private
-     * @memberof StepperFormComponent
+     * @memberof CreateComponent
      */
     private getEmailFromQueryParams(): void {
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(queryParams => {
@@ -207,7 +220,7 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
                 });
             } else {
                 // Redirect to list page
-                this.router.navigate(['/pages/bank-statement/list']);
+                this.router.navigate(['/pages/email-forwarding/list'], { queryParams: { companyUniqueName: this.companyUniqueName, ...this.route.snapshot.queryParams } });
             }
             if (queryParams['uniqueName']) {
                 this.handleUniqueName(queryParams['uniqueName']);
@@ -248,7 +261,7 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
      * @param {MatStepper} stepper - Material stepper reference
      * @param {FormGroup} currentForm - Current step form
      * @param {number} stepNumber - Current step number
-     * @memberof StepperFormComponent
+     * @memberof CreateComponent
      */
     public nextStep(stepper: MatStepper, currentForm: FormGroup, stepNumber: number): void {
         if (stepNumber === 1 && currentForm.get('forwardedMail').valid) {
@@ -266,7 +279,7 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
      * Navigates to a specific step
      * 
      * @param {number} stepIndex - Step index to navigate to (0-based)
-     * @memberof StepperFormComponent
+     * @memberof CreateComponent
      */
     public navigateToStep(stepIndex: number): void {
         if (this.stepper && stepIndex >= 0 && stepIndex < this.stepper.steps.length) {
@@ -289,7 +302,7 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
      * 
      * @private
      * @param {FormGroup} formGroup - Form group to mark as touched
-     * @memberof StepperFormComponent
+     * @memberof CreateComponent
      */
     private markFormGroupTouched(formGroup: FormGroup): void {
         Object.keys(formGroup.controls).forEach(key => {
@@ -301,9 +314,10 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
     /**
      * Submits the complete form
      * 
-     * @memberof StepperFormComponent
+     * @memberof CreateComponent
      */
     public submitForm(): void {
+        this.isFormSubmitted = true;
         if (this.emailForwardingForm.valid) {
             this.isLoading = true;
             const formData = this.emailForwardingForm.value;
@@ -322,7 +336,7 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
     /**
      * Toggles email editing mode
      * 
-     * @memberof StepperFormComponent
+     * @memberof CreateComponent
      */
     public toggleEmailEdit(isCancel: boolean): void {
         if (!this.isEditingEmail) {
@@ -338,16 +352,15 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
     /**
      * Updates the forwardedMail query parameter while preserving all other query params and URL
      * 
-     * @memberof StepperFormComponent
+     * @memberof CreateComponent
      */
     public replaceUrlEmail(): void {
         const completeEmail = this.getCompleteEmail();
-        const currentParams = this.route.snapshot.queryParams;
         
         // Use Angular Router for proper URL handling
         this.router.navigate([], {
             relativeTo: this.route,
-            queryParams: { ...currentParams, forwardedMail: completeEmail },
+            queryParams: { companyUniqueName: this.companyUniqueName, ...this.route.snapshot.queryParams, forwardedMail: completeEmail },
             replaceUrl: true,
             queryParamsHandling: ''
         });
@@ -356,23 +369,19 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
     /**
      * Copies the complete email to clipboard
      * 
-     * @memberof StepperFormComponent
+     * @memberof CreateComponent
      */
     public copyEmail(): void {
-        const completeEmail = this.emailForwardingForm.get('forwardedMail')?.value + this.forwardedMailDomain;
-        if (navigator.clipboard) {
-            navigator.clipboard.writeText(completeEmail).then(() => {
-                this.toaster.showSnackBar("success", "Email copied to clipboard ");
-            }).catch(err => {
-                this.toaster.showSnackBar("error", "Failed to copy email");
-            });
-        }
+        this.isCopied = true;
+        setTimeout(() => {
+            this.isCopied = false;
+        }, 3000);
     }
 
     /**
      * Handles verify and next action - opens confirm link in new tab and navigates to step 3
      * 
-     * @memberof StepperFormComponent
+     * @memberof CreateComponent
      */
     public handleVerifyAndNext(): void {
         if (this.emailForwardingResponse?.confirmationData?.[0]?.confirmLink) {
@@ -384,6 +393,7 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.router.navigate([], {
                     relativeTo: this.route,
                     queryParams: { 
+                        companyUniqueName: this.companyUniqueName,
                         ...this.route.snapshot.queryParams, 
                         step: 3 
                     },
@@ -402,7 +412,7 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
     /**
      * Handles cancel action - opens cancel link in new tab and redirects to onboarding
      * 
-     * @memberof StepperFormComponent
+     * @memberof CreateComponent
      */
     public handleCancel(): void {
         if (this.emailForwardingResponse?.confirmationData?.[0]?.cancelLink) {
@@ -411,11 +421,11 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
             
             // Redirect to onboarding page
             setTimeout(() => {
-                this.router.navigate(['/pages/bank-statement/onboarding']);
+                this.router.navigate(['/pages/email-forwarding/onboarding'], { queryParams: { companyUniqueName: this.companyUniqueName, ...this.route.snapshot.queryParams } });
             }, 500);
         } else {
             // If no cancel link, just redirect to onboarding
-            this.router.navigate(['/pages/bank-statement/onboarding']);
+            this.router.navigate(['/pages/email-forwarding/onboarding'], { queryParams: { companyUniqueName: this.companyUniqueName, ...this.route.snapshot.queryParams } });
         }
     }
 
@@ -423,18 +433,18 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
      * Gets the complete email (prefix + domain)
      * 
      * @returns {string} Complete email address
-     * @memberof StepperFormComponent
+     * @memberof CreateComponent
      */
     public getCompleteEmail(): string {
         const emailPrefix = this.emailForwardingForm.get('forwardedMail')?.value || '';
-        return emailPrefix + this.forwardedMailDomain;
+        return this.isEditMode ? emailPrefix : emailPrefix + this.forwardedMailDomain;
     }
 
     /**
      * Sets up subscription for account search results
      * 
      * @private
-     * @memberof StepperFormComponent
+     * @memberof CreateComponent
      */
     private setupAccountSearchSubscription(): void {
         this.bankStatementStore.accountSearch$.pipe(
@@ -465,7 +475,7 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
     /**
      * Searches for accounts
      *
-     * @memberof StepperFormComponent
+     * @memberof CreateComponent
      */
     private searchAccount(): void {
         if (this.accountSearchCalled) {
@@ -479,7 +489,7 @@ export class StepperFormComponent implements OnInit, OnDestroy, AfterViewInit {
     /**
      * Component cleanup
      * 
-     * @memberof StepperFormComponent
+     * @memberof CreateComponent
      */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);

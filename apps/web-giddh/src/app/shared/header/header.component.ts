@@ -707,6 +707,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     /**
+     * Gets company unique name from URL query parameters with fallback to provided value
+     *
+     * @param {string} fallbackCompanyUniqueName - Company unique name to use as fallback
+     * @returns {string} Company unique name from URL or fallback value
+     * @memberof HeaderComponent
+     */
+    private getCompanyUniqueNameFromUrl(fallbackCompanyUniqueName: string): string {
+        const urlCompanyUniqueName = this.generalService.getUrlParameter("companyUniqueName");
+        return urlCompanyUniqueName || fallbackCompanyUniqueName;
+    }
+
+    /**
      * This will get the current company data
      *
      * @memberof HeaderComponent
@@ -826,9 +838,10 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     ).subscribe();
                 });
             } else if (s === userLoginStateEnum.userLoggedIn) {
+                debugger;
                 if (this.generalService.getUtmParameter("companyUniqueName")) {
                     this.store.dispatch(this.companyActions.resetActiveCompanyData());
-                    this.generalService.companyUniqueName = this.generalService.getUtmParameter("companyUniqueName");
+                    this.generalService.companyUniqueName = this.getCompanyUniqueNameFromUrl(this.generalService.getUtmParameter("companyUniqueName"));
                     this.generalService.voucherApiVersion = Number(this.generalService.getUtmParameter("voucherApiVersion")) === 1 ? 1 : 2;
                     const branchDetails = {
                         branchDetails: {

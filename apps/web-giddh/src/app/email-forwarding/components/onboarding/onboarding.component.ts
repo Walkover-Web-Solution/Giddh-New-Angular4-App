@@ -1,14 +1,15 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ReplaySubject, Observable } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
-import { BankStatementComponentStore } from '../../store/bank-statement.store';
+import { EmailForwardingComponentStore } from '../../store/email-forwarding.store';
+import { GeneralService } from '../../../services/general.service';
 
 @Component({
-    selector: 'app-onboarding',
+    selector: 'onboarding',
     templateUrl: './onboarding.component.html',
     styleUrls: ['./onboarding.component.scss'],
-    providers: [BankStatementComponentStore]
+    providers: [EmailForwardingComponentStore]
 })
 export class OnboardingComponent implements OnInit, OnDestroy {
     /** Subject to handle component destruction */
@@ -21,10 +22,14 @@ export class OnboardingComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Company unique name */  
+    private companyUniqueName: string = '';
     
     constructor(
         private router: Router,
-        private bankStatementStore: BankStatementComponentStore
+        private bankStatementStore: EmailForwardingComponentStore,
+        private route: ActivatedRoute,
+        private generalService: GeneralService
     ) {
         this.isGeneratingEmail$ = this.bankStatementStore.isGeneratingEmail$;
     }
@@ -35,6 +40,7 @@ export class OnboardingComponent implements OnInit, OnDestroy {
      * @memberof OnboardingComponent
      */
     public ngOnInit(): void {
+        this.companyUniqueName = this.generalService.companyUniqueName;
         // Check if any data exists, if yes redirect to list page
         this.checkExistingDataAndRedirect();
         
@@ -43,7 +49,7 @@ export class OnboardingComponent implements OnInit, OnDestroy {
             takeUntil(this.destroyed$)
         ).subscribe((forwardedMail: string | null) => {
             if (forwardedMail) {
-                this.router.navigate(['/pages/bank-statement/create'], { queryParams: { forwardedMail } });
+                this.router.navigate(['/pages/email-forwarding/create'], { queryParams: { companyUniqueName: this.companyUniqueName, ...this.route.snapshot.queryParams,  forwardedMail } });
             }
         });
     }
@@ -68,7 +74,7 @@ export class OnboardingComponent implements OnInit, OnDestroy {
         ).subscribe((emailForwardingList) => {
             if (emailForwardingList && emailForwardingList.length > 0) {
                 // Data exists, redirect to list page (keep loader visible during redirect)
-                this.router.navigate(['/pages/bank-statement/list']);
+                this.router.navigate(['/pages/email-forwarding/list'], { queryParams: { companyUniqueName: this.companyUniqueName, ...this.route.snapshot.queryParams } });
             } else {
                 // No data exists, show onboarding content
                setTimeout(() => {

@@ -11,5 +11,6 @@
     "verify_start": "Verify/Start",
     "verify_and_next": "Verify and Next",
     "new_bank_statement": "New Bank Statement",
-    "bank_account_name": "Bank Account Name"
+    "bank_account_name": "Bank Account Name",
+    "copied": "Copied..."
 }
