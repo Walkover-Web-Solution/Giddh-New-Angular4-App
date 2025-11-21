@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatStepper } from '@angular/material/stepper';
@@ -68,16 +68,42 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
     public isFormSubmitted: boolean = false;
     /** Company unique name */  
     private companyUniqueName: string = '';
+    /** Branch unique name */  
+    private branchUniqueName: string = '';
 
     constructor(
         private formBuilder: FormBuilder,
         private router: Router,
         private route: ActivatedRoute,
-        private toaster: ToasterService,
+        private changeDetection: ChangeDetectorRef,
         private bankStatementStore: EmailForwardingComponentStore,
         private generalService: GeneralService
     ) {
         this.initializeForms();
+    }
+
+    /**
+     * Gets company unique name from URL query parameters with fallback to provided value
+     *
+     * @param {string} fallbackCompanyUniqueName - Company unique name to use as fallback
+     * @returns {string} Company unique name from URL or fallback value
+     * @memberof CreateComponent
+     */
+    private getCompanyUniqueNameFromUrl(fallbackCompanyUniqueName: string): string {
+        const urlCompanyUniqueName = this.generalService.getUrlParameter("companyUniqueName");
+        return urlCompanyUniqueName || fallbackCompanyUniqueName;
+    }
+
+    /**
+     * Gets branch unique name from URL query parameters with fallback to provided value
+     *
+     * @param {string} fallbackBranchUniqueName - Branch unique name to use as fallback
+     * @returns {string} Branch unique name from URL or fallback value
+     * @memberof CreateComponent
+     */
+    private getBranchUniqueNameFromUrl(fallbackBranchUniqueName: string): string {
+        const urlBranchUniqueName = this.generalService.getUrlParameter("branchUniqueName");
+        return urlBranchUniqueName || fallbackBranchUniqueName;
     }
 
     /**
@@ -86,19 +112,20 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
      * @memberof CreateComponent
      */
     public ngOnInit(): void {       
-        this.companyUniqueName = this.generalService.companyUniqueName; 
+        this.companyUniqueName = this.getCompanyUniqueNameFromUrl(this.generalService.companyUniqueName);
+        this.branchUniqueName = this.getBranchUniqueNameFromUrl(this.generalService.currentBranchUniqueName); 
         this.setupAccountSearchSubscription();
         this.getEmailFromQueryParams();
         this.bankStatementStore.createUpdateEmailForwardingIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response: unknown) => {
             if (response && response['uniqueName']) {
                 this.isLoading = false;
                 if (this.isEditMode) {
-                    this.router.navigate(['pages/email-forwarding/list'], { queryParams: { companyUniqueName: this.companyUniqueName, ...this.route.snapshot.queryParams } });
+                    this.router.navigate(['pages/email-forwarding/list'], { queryParams: { companyUniqueName: this.companyUniqueName, branchUniqueName: this.branchUniqueName } });
                 } else {
                     this.router.navigate(['pages/email-forwarding/create'], { 
                         queryParams: { 
                             companyUniqueName: this.companyUniqueName,
-                            ...this.route.snapshot.queryParams,
+                            branchUniqueName: this.branchUniqueName,
                             forwardedMail: this.emailForwardingForm.value.forwardedMail + this.forwardedMailDomain,
                             uniqueName: response['uniqueName'],
                             step: 2
@@ -123,6 +150,22 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.targetStepIndex = null;
             }, 100);
         }
+        this.getStepperIcon();
+    }
+
+       /**
+     * This will use for get stepper icon
+     *
+     * @memberof CreateComponent
+     */
+    public getStepperIcon(): void {
+         setTimeout(() => {
+            if (this.stepper) {
+                this.stepper._getIndicatorType = () => 'number';
+                // Force change detection to update the stepper
+                this.changeDetection.detectChanges();
+            }
+        }, 0);
     }
 
     /**
@@ -220,7 +263,7 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
                 });
             } else {
                 // Redirect to list page
-                this.router.navigate(['/pages/email-forwarding/list'], { queryParams: { companyUniqueName: this.companyUniqueName, ...this.route.snapshot.queryParams } });
+                this.router.navigate(['/pages/email-forwarding/list'], { queryParams: { companyUniqueName: this.companyUniqueName, branchUniqueName: this.branchUniqueName } });
             }
             if (queryParams['uniqueName']) {
                 this.handleUniqueName(queryParams['uniqueName']);
@@ -366,7 +409,7 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
         // Use Angular Router for proper URL handling
         this.router.navigate([], {
             relativeTo: this.route,
-            queryParams: { companyUniqueName: this.companyUniqueName, ...this.route.snapshot.queryParams, forwardedMail: completeEmail },
+            queryParams: { companyUniqueName: this.companyUniqueName, branchUniqueName: this.branchUniqueName, ...this.route.snapshot.queryParams, forwardedMail: completeEmail },
             replaceUrl: true,
             queryParamsHandling: ''
         });
@@ -400,6 +443,7 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
                     relativeTo: this.route,
                     queryParams: { 
                         companyUniqueName: this.companyUniqueName,
+                        branchUniqueName: this.branchUniqueName,
                         ...this.route.snapshot.queryParams, 
                         step: 3 
                     },
@@ -425,11 +469,11 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
             
             // Redirect to onboarding page
             setTimeout(() => {
-                this.router.navigate(['/pages/email-forwarding/onboarding'], { queryParams: { companyUniqueName: this.companyUniqueName, ...this.route.snapshot.queryParams } });
+                this.router.navigate(['/pages/email-forwarding/onboarding'], { queryParams: { companyUniqueName: this.companyUniqueName, branchUniqueName: this.branchUniqueName } });
             }, 500);
         } else {
             // If no cancel link, just redirect to onboarding
-            this.router.navigate(['/pages/email-forwarding/onboarding'], { queryParams: { companyUniqueName: this.companyUniqueName, ...this.route.snapshot.queryParams } });
+            this.router.navigate(['/pages/email-forwarding/onboarding'], { queryParams: { companyUniqueName: this.companyUniqueName, branchUniqueName: this.branchUniqueName } });
         }
     }
 
