@@ -19,12 +19,14 @@
             >
                 <mat-step [stepControl]="firstStepForm">
                     <form name="firstStepForm" [formGroup]="firstStepForm" autocomplete="off" class="mt-5" novalidate>
-                        <div class="plan-summary w-fit-content m-auto column-gap-2 row-gap-2 d-flex justify-content-center">
+                        <div
+                            class="plan-summary w-fit-content m-auto column-gap-2 row-gap-2 d-flex justify-content-center"
+                        >
                             <div class="plan-width">
                                 <ng-template matStepLabel>{{ localeData?.all_plans }}</ng-template>
                                 <div class="plan-header d-flex justify-content-between align-items-center mb-3">
                                     <div
-                                        class="width-100 dropdown-wrapper"
+                                        class="w-100 dropdown-wrapper"
                                         *ngIf="
                                             (!(planListInProgress$ | async) && !isLoading && !isChangePlan) ||
                                             isSubscriptionRegion
@@ -346,7 +348,10 @@
                                                             </p>
                                                         </ng-container>
                                                         <button
-                                                            *ngIf="firstStepForm.get('planUniqueName').value === plan?.uniqueName"
+                                                            *ngIf="
+                                                                firstStepForm.get('planUniqueName').value ===
+                                                                plan?.uniqueName
+                                                            "
                                                             mat-raised-button
                                                             color="primary"
                                                             class="selected-plan-button mt-auto"
@@ -367,7 +372,10 @@
                                                             </span>
                                                         </button>
                                                         <button
-                                                            *ngIf="firstStepForm.get('planUniqueName').value !== plan?.uniqueName"
+                                                            *ngIf="
+                                                                firstStepForm.get('planUniqueName').value !==
+                                                                plan?.uniqueName
+                                                            "
                                                             mat-stroked-button
                                                             class="selected-plan-button mt-auto"
                                                             aria-label="monthly"
@@ -664,7 +672,9 @@
                 </mat-step>
                 <mat-step [stepControl]="secondStepForm" name="secondStepForm">
                     <form autocomplete="off" class="mt-5" novalidate [formGroup]="secondStepForm" name="secondStepForm">
-                        <div class="plan-summary w-fit-content m-auto column-gap-2 row-gap-2 d-flex justify-content-center">
+                        <div
+                            class="plan-summary w-fit-content m-auto column-gap-2 row-gap-2 d-flex justify-content-center"
+                        >
                             <div class="plan-width">
                                 <ng-template matStepLabel>{{ localeData?.select_billing }}</ng-template>
                                 <p class="font-size-16 strong d-flex align-items-center mb-3 plan-summary-heading">
@@ -767,7 +777,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <div class="width-100">
+                                                <div class="w-100">
                                                     <reactive-dropdown-field
                                                         [name]="'subscriptionCountry' + currentTimeStamp"
                                                         [label]="commonLocaleData?.app_country + '*'"
@@ -866,7 +876,9 @@
                         [formGroup]="thirdStepForm"
                         name="thirdStepForm"
                     >
-                        <div class="plan-summary w-fit-content m-auto column-gap-2 row-gap-2 d-flex justify-content-center">
+                        <div
+                            class="plan-summary w-fit-content m-auto column-gap-2 row-gap-2 d-flex justify-content-center"
+                        >
                             <div class="plan-width">
                                 <ng-template matStepLabel>{{ localeData?.review_pay }}</ng-template>
                                 <p class="font-size-16 mb-3 strong d-flex align-items-center plan-summary-heading">
@@ -897,7 +909,10 @@
                                     class="new-plan mt-4"
                                     *ngIf="
                                         filteredPaymentProviders?.length > 1 ||
-                                        (['DAILY', 'MONTHLY', 'YEARLY'].includes(firstStepForm.get('duration')?.value) && selectedPlan?.entityCode === 'IND')
+                                        (['DAILY', 'MONTHLY', 'YEARLY'].includes(
+                                            firstStepForm.get('duration')?.value
+                                        ) &&
+                                            selectedPlan?.entityCode === 'IND')
                                     "
                                 >
                                     <mat-card class="outline-card">
@@ -927,7 +942,10 @@
                                                 "
                                             >
                                                 <mat-radio-group
-                                                    *ngIf="thirdStepForm.get('paymentProvider')?.value === paymentProvider.RAZORPAY"
+                                                    *ngIf="
+                                                        thirdStepForm.get('paymentProvider')?.value ===
+                                                        paymentProvider.RAZORPAY
+                                                    "
                                                     class="d-flex flex-column"
                                                     formControlName="razorpayAuthType"
                                                 >

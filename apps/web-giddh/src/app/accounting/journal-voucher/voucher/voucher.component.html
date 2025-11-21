@@ -148,8 +148,14 @@
                                                     transaction?.get('isTaxApplied')?.value
                                                 "
                                                 [id]="'transactionAmount_' + i"
-                                                (keydown.Tab)="updateTransactionActualAmount(transaction); changeTab('tab', 'amount');"
-                                                (keydown.Shift.Tab)="updateTransactionActualAmount(transaction); changeTab('shift', 'amount');"
+                                                (keydown.Tab)="
+                                                    updateTransactionActualAmount(transaction);
+                                                    changeTab('tab', 'amount')
+                                                "
+                                                (keydown.Shift.Tab)="
+                                                    updateTransactionActualAmount(transaction);
+                                                    changeTab('shift', 'amount')
+                                                "
                                                 *ngIf="transaction.get('type')?.value?.toLowerCase() === 'by'"
                                                 [autoFocus]="activeRowIndex === i && activeRowType === 'amount'"
                                                 [autocomplete]="'off'"
@@ -163,7 +169,7 @@
                                                 (keydown.Enter)="
                                                     updateTransactionActualAmount(transaction);
                                                     addNewEntry(transaction.get('amount')?.value, transaction, i);
-                                                    changeTab('enter', 'amount');
+                                                    changeTab('enter', 'amount')
                                                 "
                                                 (blur)="addNewEntry(transaction.get('amount')?.value, transaction, i)"
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
@@ -196,10 +202,16 @@
                                                 (keydown.Enter)="
                                                     updateTransactionActualAmount(transaction);
                                                     addNewEntry(transaction.get('amount')?.value, transaction, i);
-                                                    changeTab('enter', 'amount');
+                                                    changeTab('enter', 'amount')
                                                 "
-                                                (keydown.Tab)="updateTransactionActualAmount(transaction); changeTab('tab', 'amount');"
-                                                (keydown.Shift.Tab)="updateTransactionActualAmount(transaction); changeTab('shift', 'amount');"
+                                                (keydown.Tab)="
+                                                    updateTransactionActualAmount(transaction);
+                                                    changeTab('tab', 'amount')
+                                                "
+                                                (keydown.Shift.Tab)="
+                                                    updateTransactionActualAmount(transaction);
+                                                    changeTab('shift', 'amount')
+                                                "
                                                 (blur)="addNewEntry(transaction.get('amount')?.value, transaction, i)"
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
                                             ></text-field>
@@ -243,9 +255,7 @@
                 <div class="col-xs-9 col-sm-9">
                     <div class="form-group">
                         <mat-form-field appearance="outline" class="initial-height w-50" floatLabel="always">
-                            <mat-label>{{
-                                localeData?.narration
-                            }}</mat-label>
+                            <mat-label>{{ localeData?.narration }}</mat-label>
                             <textarea
                                 #narrationBox
                                 id="narration"
@@ -268,7 +278,7 @@
                                     <button
                                         mat-raised-button
                                         color="primary"
-                                        [hidden]="(isCompany || isConsolidatedBranch)"
+                                        [hidden]="isCompany || isConsolidatedBranch"
                                         #submitButton
                                         (keyup)="keyUpOnSubmitButton($event)"
                                         (click)="saveEntry()"
@@ -290,12 +300,7 @@
                                     </button>
                                 </div>
                                 <br />
-                                <button
-                                    type="button"
-                                    mat-stroked-button
-                                    class="mt-1"
-                                    (click)="refreshEntry()"
-                                >
+                                <button type="button" mat-stroked-button class="mt-1" (click)="refreshEntry()">
                                     {{ commonLocaleData?.app_reset }}
                                 </button>
                             </div>
