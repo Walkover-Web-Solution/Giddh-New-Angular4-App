@@ -395,7 +395,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.store.pipe(select(appStore => appStore.session.currentOrganizationDetails), takeUntil(this.destroyed$)).subscribe((organization: Organization) => {
             if (organization && organization.details && organization.details.branchDetails) {
-                this.generalService.currentBranchUniqueName = organization.details.branchDetails.uniqueName;
+                this.generalService.currentBranchUniqueName = this.getBranchUniqueNameFromUrl(organization.details.branchDetails.uniqueName);
                 this.generalService.currentOrganizationType = organization.type;
                 this.currentOrganizationType = organization.type;
                 if (this.generalService.currentBranchUniqueName) {
@@ -716,6 +716,18 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     private getCompanyUniqueNameFromUrl(fallbackCompanyUniqueName: string): string {
         const urlCompanyUniqueName = this.generalService.getUrlParameter("companyUniqueName");
         return urlCompanyUniqueName || fallbackCompanyUniqueName;
+    }
+
+    /**
+     * Gets branch unique name from URL query parameters with fallback to provided value
+     *
+     * @param {string} fallbackBranchUniqueName - Branch unique name to use as fallback
+     * @returns {string} Branch unique name from URL or fallback value
+     * @memberof HeaderComponent
+     */
+    private getBranchUniqueNameFromUrl(fallbackBranchUniqueName: string): string {
+        const urlBranchUniqueName = this.generalService.getUrlParameter("branchUniqueName");
+        return urlBranchUniqueName || fallbackBranchUniqueName;
     }
 
     /**

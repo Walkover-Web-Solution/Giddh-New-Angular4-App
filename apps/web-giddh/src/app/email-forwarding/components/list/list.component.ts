@@ -49,6 +49,8 @@ export class ListComponent implements OnInit, OnDestroy {
     public searchFilter: string = '';
     /** Company unique name */  
     private companyUniqueName: string = '';
+    /** Branch unique name */  
+    private branchUniqueName: string = '';
 
     constructor(
         private router: Router,
@@ -60,12 +62,37 @@ export class ListComponent implements OnInit, OnDestroy {
      }
 
     /**
+     * Gets company unique name from URL query parameters with fallback to provided value
+     *
+     * @param {string} fallbackCompanyUniqueName - Company unique name to use as fallback
+     * @returns {string} Company unique name from URL or fallback value
+     * @memberof ListComponent
+     */
+    private getCompanyUniqueNameFromUrl(fallbackCompanyUniqueName: string): string {
+        const urlCompanyUniqueName = this.generalService.getUrlParameter("companyUniqueName");
+        return urlCompanyUniqueName || fallbackCompanyUniqueName;
+    }
+
+    /**
+     * Gets branch unique name from URL query parameters with fallback to provided value
+     *
+     * @param {string} fallbackBranchUniqueName - Branch unique name to use as fallback
+     * @returns {string} Branch unique name from URL or fallback value
+     * @memberof ListComponent
+     */
+    private getBranchUniqueNameFromUrl(fallbackBranchUniqueName: string): string {
+        const urlBranchUniqueName = this.generalService.getUrlParameter("branchUniqueName");
+        return urlBranchUniqueName || fallbackBranchUniqueName;
+    }
+
+    /**
      * Component initialization
      * 
      * @memberof ListComponent
      */
     public ngOnInit(): void {
-        this.companyUniqueName = this.generalService.companyUniqueName;
+        this.companyUniqueName = this.getCompanyUniqueNameFromUrl(this.generalService.companyUniqueName);
+        this.branchUniqueName = this.getBranchUniqueNameFromUrl(this.generalService.currentBranchUniqueName);
         this.loadEmailForwardingData();
         this.setupSubscriptions();
         this.bankStatementStore.deleteEmailForwardingIsSuccess$.pipe(filter(Boolean),
@@ -78,7 +105,7 @@ export class ListComponent implements OnInit, OnDestroy {
             takeUntil(this.destroyed$)
         ).subscribe((forwardedMail: string | null) => {
             if (forwardedMail) {
-                this.router.navigate(['pages/email-forwarding/create'], { queryParams: { companyUniqueName: this.companyUniqueName, ...this.route.snapshot.queryParams, forwardedMail } });
+                this.router.navigate(['pages/email-forwarding/create'], { queryParams: { companyUniqueName: this.companyUniqueName, branchUniqueName: this.branchUniqueName, forwardedMail } });
             }
         });
     }
@@ -95,7 +122,7 @@ export class ListComponent implements OnInit, OnDestroy {
         ).subscribe((emailForwardingList) => {
             if (emailForwardingList) {
                 if (emailForwardingList.length === 0) {
-                    this.router.navigate(['pages/email-forwarding/onboarding'], { queryParams: { companyUniqueName: this.companyUniqueName, ...this.route.snapshot.queryParams } });
+                    this.router.navigate(['pages/email-forwarding/onboarding'], { queryParams: { companyUniqueName: this.companyUniqueName, branchUniqueName: this.branchUniqueName } });
                 }
                 this.dataSource = emailForwardingList;
                 this.isLoading = false;
@@ -163,12 +190,13 @@ export class ListComponent implements OnInit, OnDestroy {
      * @memberof ListComponent
      */
     public editStatement(element: EmailForwardingResponse): void {
-        const queryParams = { companyUniqueName: this.companyUniqueName, ...this.route.snapshot.queryParams, forwardedMail: element.forwardedMail};
+        const queryParams = { companyUniqueName: this.companyUniqueName, forwardedMail: element.forwardedMail};
         if (element && element.confirmationData?.length > 0) {
             queryParams['step'] = 2;
         } else {
             queryParams['step'] = 3;
         }
+        queryParams['branchUniqueName'] = this.branchUniqueName;
         this.router.navigate([`/pages/email-forwarding/edit/${element.uniqueName}`], { queryParams });
     }
 

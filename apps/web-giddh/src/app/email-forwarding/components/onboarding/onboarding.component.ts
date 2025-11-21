@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { ReplaySubject, Observable } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { EmailForwardingComponentStore } from '../../store/email-forwarding.store';
@@ -24,14 +24,39 @@ export class OnboardingComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** Company unique name */  
     private companyUniqueName: string = '';
+    /** Branch unique name */  
+    private branchUniqueName: string = '';
     
     constructor(
         private router: Router,
         private bankStatementStore: EmailForwardingComponentStore,
-        private route: ActivatedRoute,
         private generalService: GeneralService
     ) {
         this.isGeneratingEmail$ = this.bankStatementStore.isGeneratingEmail$;
+    }
+
+    /**
+     * Gets company unique name from URL query parameters with fallback to provided value
+     *
+     * @param {string} fallbackCompanyUniqueName - Company unique name to use as fallback
+     * @returns {string} Company unique name from URL or fallback value
+     * @memberof OnboardingComponent
+     */
+    private getCompanyUniqueNameFromUrl(fallbackCompanyUniqueName: string): string {
+        const urlCompanyUniqueName = this.generalService.getUrlParameter("companyUniqueName");
+        return urlCompanyUniqueName || fallbackCompanyUniqueName;
+    }
+
+    /**
+     * Gets branch unique name from URL query parameters with fallback to provided value
+     *
+     * @param {string} fallbackBranchUniqueName - Branch unique name to use as fallback
+     * @returns {string} Branch unique name from URL or fallback value
+     * @memberof OnboardingComponent
+     */
+    private getBranchUniqueNameFromUrl(fallbackBranchUniqueName: string): string {
+        const urlBranchUniqueName = this.generalService.getUrlParameter("branchUniqueName");
+        return urlBranchUniqueName || fallbackBranchUniqueName;
     }
 
     /**
@@ -40,7 +65,8 @@ export class OnboardingComponent implements OnInit, OnDestroy {
      * @memberof OnboardingComponent
      */
     public ngOnInit(): void {
-        this.companyUniqueName = this.generalService.companyUniqueName;
+        this.companyUniqueName = this.getCompanyUniqueNameFromUrl(this.generalService.companyUniqueName);
+        this.branchUniqueName = this.getBranchUniqueNameFromUrl(this.generalService.currentBranchUniqueName);
         // Check if any data exists, if yes redirect to list page
         this.checkExistingDataAndRedirect();
         
@@ -49,7 +75,7 @@ export class OnboardingComponent implements OnInit, OnDestroy {
             takeUntil(this.destroyed$)
         ).subscribe((forwardedMail: string | null) => {
             if (forwardedMail) {
-                this.router.navigate(['/pages/email-forwarding/create'], { queryParams: { companyUniqueName: this.companyUniqueName, ...this.route.snapshot.queryParams,  forwardedMail } });
+                this.router.navigate(['/pages/email-forwarding/create'], { queryParams: { companyUniqueName: this.companyUniqueName, branchUniqueName: this.branchUniqueName, forwardedMail } });
             }
         });
     }
@@ -74,7 +100,7 @@ export class OnboardingComponent implements OnInit, OnDestroy {
         ).subscribe((emailForwardingList) => {
             if (emailForwardingList && emailForwardingList.length > 0) {
                 // Data exists, redirect to list page (keep loader visible during redirect)
-                this.router.navigate(['/pages/email-forwarding/list'], { queryParams: { companyUniqueName: this.companyUniqueName, ...this.route.snapshot.queryParams } });
+                this.router.navigate(['/pages/email-forwarding/list'], { queryParams: { companyUniqueName: this.companyUniqueName, branchUniqueName: this.branchUniqueName } });
             } else {
                 // No data exists, show onboarding content
                setTimeout(() => {
