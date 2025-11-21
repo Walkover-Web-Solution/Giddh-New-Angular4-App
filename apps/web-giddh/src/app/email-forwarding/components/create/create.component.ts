@@ -228,6 +228,12 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
         });
     }
 
+    /**
+     * Handles unique name for email forwarding
+     * 
+     * @param {string} uniqueName - Unique name of the email forwarding
+     * @memberof CreateComponent
+     */
     private handleUniqueName(uniqueName: string): void {
         this.emailForwardingForm.patchValue({
             uniqueName: uniqueName
@@ -404,8 +410,6 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.navigateToStep(2);
             }, 500);
             
-        } else {
-            this.toaster.showSnackBar("error", "Verification link not available");
         }
     }
 
