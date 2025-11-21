@@ -54,6 +54,7 @@ export const INTL_INPUT_OPTION = {
 
 export const APP_DEFAULT_TITLE = '';
 export const SYNC_TALLY_HELP_DOC_URL = 'https://giddh.com/help/sync-with-tally-1591360375828781';
+export const BANK_STATEMENT_HELP_DOC_URL = 'https://giddh.com/help/how-to-integrate-icici-bank-account-with-giddh';
 
 /** Restricted modules */
 export enum RestrictedModules {

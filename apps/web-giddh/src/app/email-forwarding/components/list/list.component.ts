@@ -1,24 +1,23 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
 import { ReplaySubject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
-import { BankStatementComponentStore } from '../../store/bank-statement.store';
 import { EmailForwardingResponse } from '../../models/email-forwarding.model';
-import { ToasterService } from '../../../services/toaster.service';
 import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-modal/confirmation-modal.component';
 import { GeneralService } from '../../../services/general.service';
+import { EmailForwardingComponentStore } from '../../store/email-forwarding.store';
 
 @Component({
-    selector: 'app-data-list',
-    templateUrl: './data-list.component.html',
-    styleUrls: ['./data-list.component.scss'],
-    providers: [BankStatementComponentStore]
+    selector: 'email-forwarding-list',
+    templateUrl: './list.component.html',
+    styles: [``],
+    providers: [EmailForwardingComponentStore]
 })
-export class DataListComponent implements OnInit, OnDestroy {
+export class ListComponent implements OnInit, OnDestroy {
     /** Subject to handle component destruction */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Reference to material paginator */
@@ -48,11 +47,13 @@ export class DataListComponent implements OnInit, OnDestroy {
     public pageIndex: number = 0;
     /** Search filter value */
     public searchFilter: string = '';
+    /** Company unique name */  
+    private companyUniqueName: string = '';
 
     constructor(
         private router: Router,
-        private bankStatementStore: BankStatementComponentStore,
-        private toaster: ToasterService,
+        private bankStatementStore: EmailForwardingComponentStore,
+        private route: ActivatedRoute,
         private dialog: MatDialog,
         private generalService: GeneralService
     ) {
@@ -61,9 +62,10 @@ export class DataListComponent implements OnInit, OnDestroy {
     /**
      * Component initialization
      * 
-     * @memberof DataListComponent
+     * @memberof ListComponent
      */
     public ngOnInit(): void {
+        this.companyUniqueName = this.generalService.companyUniqueName;
         this.loadEmailForwardingData();
         this.setupSubscriptions();
         this.bankStatementStore.deleteEmailForwardingIsSuccess$.pipe(filter(Boolean),
@@ -76,7 +78,7 @@ export class DataListComponent implements OnInit, OnDestroy {
             takeUntil(this.destroyed$)
         ).subscribe((forwardedMail: string | null) => {
             if (forwardedMail) {
-                this.router.navigate(['pages', 'bank-statement', 'create'], { queryParams: { forwardedMail } });
+                this.router.navigate(['pages/email-forwarding/create'], { queryParams: { companyUniqueName: this.companyUniqueName, ...this.route.snapshot.queryParams, forwardedMail } });
             }
         });
     }
@@ -85,15 +87,15 @@ export class DataListComponent implements OnInit, OnDestroy {
      * Sets up subscriptions for store observables
      * 
      * @private
-     * @memberof DataListComponent
+     * @memberof ListComponent
      */
     private setupSubscriptions(): void {
         this.bankStatementStore.emailForwardingList$.pipe(
             takeUntil(this.destroyed$)
         ).subscribe((emailForwardingList) => {
             if (emailForwardingList) {
-                if (emailForwardingList?.length  === 0) {
-                    this.router.navigate(['pages/bank-statement/onboarding']);
+                if (emailForwardingList.length === 0) {
+                    this.router.navigate(['pages/email-forwarding/onboarding'], { queryParams: { companyUniqueName: this.companyUniqueName, ...this.route.snapshot.queryParams } });
                 }
                 this.dataSource = emailForwardingList;
                 this.isLoading = false;
@@ -111,7 +113,7 @@ export class DataListComponent implements OnInit, OnDestroy {
      * Loads email forwarding data
      * 
      * @private
-     * @memberof DataListComponent
+     * @memberof ListComponent
      */
     private loadEmailForwardingData(): void {
         this.isLoading = true;
@@ -121,7 +123,7 @@ export class DataListComponent implements OnInit, OnDestroy {
     /**
      * Navigates to create new email forwarding configuration
      * 
-     * @memberof DataListComponent
+     * @memberof ListComponent
      */
     public createNew(): void {
         if (this.isLoading) {
@@ -131,27 +133,10 @@ export class DataListComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Copies email to clipboard
-     * 
-     * @param {string} email - Email to copy
-     * @memberof DataListComponent
-     */
-    public copyEmail(email: string): void {
-        if (navigator.clipboard) {
-            navigator.clipboard.writeText(email).then(() => {
-                this.toaster.showSnackBar('success', 'Email copied to clipboard');
-            }).catch(err => {
-                console.error('Failed to copy email:', err);
-                this.toaster.showSnackBar('error', 'Failed to copy email');
-            });
-        }
-    }
-
-    /**
      * Deletes email forwarding configuration
      * 
      * @param {string} uniqueName - Email forwarding unique name
-     * @memberof DataListComponent
+     * @memberof ListComponent
      */
     public deleteStatement(uniqueName: string): void {
         const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
@@ -175,23 +160,22 @@ export class DataListComponent implements OnInit, OnDestroy {
      * Navigates to edit email forwarding configuration
      * 
      * @param {EmailForwardingResponse} element - Email forwarding data
-     * @memberof DataListComponent
+     * @memberof ListComponent
      */
     public editStatement(element: EmailForwardingResponse): void {
-        const queryParams = { forwardedMail: element.forwardedMail};
+        const queryParams = { companyUniqueName: this.companyUniqueName, ...this.route.snapshot.queryParams, forwardedMail: element.forwardedMail};
         if (element && element.confirmationData?.length > 0) {
             queryParams['step'] = 2;
         } else {
             queryParams['step'] = 3;
         }
-        this.router.navigate([`/pages/bank-statement/edit/${element.uniqueName}`], { queryParams });
+        this.router.navigate([`/pages/email-forwarding/edit/${element.uniqueName}`], { queryParams });
     }
 
-    
     /**
      * Component cleanup
      * 
-     * @memberof DataListComponent
+     * @memberof ListComponent
      */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);

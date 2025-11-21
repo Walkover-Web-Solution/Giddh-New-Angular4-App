@@ -3,6 +3,9 @@
 .border {
     border: 1px solid var(--border-color) !important;
 }
+.border-dashed {
+    border-style: dashed !important;
+}
 .border-color-transparent {
     border-color: var(--color-transparent) !important;
 }
