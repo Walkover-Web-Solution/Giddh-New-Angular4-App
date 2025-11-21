@@ -838,7 +838,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                     ).subscribe();
                 });
             } else if (s === userLoginStateEnum.userLoggedIn) {
-                debugger;
                 if (this.generalService.getUtmParameter("companyUniqueName")) {
                     this.store.dispatch(this.companyActions.resetActiveCompanyData());
                     this.generalService.companyUniqueName = this.getCompanyUniqueNameFromUrl(this.generalService.getUtmParameter("companyUniqueName"));
