@@ -136,6 +136,8 @@ export class AiOcrComponent implements OnInit, OnDestroy {
     public voucherType: string = "";
     /** This will use for ai ocr details */
     public aiOcrDetails: any;
+    /** This will use for branch name */
+    public branchName: string = "";
 
     constructor(
         private aiOcrStore: AiOcrStore,
@@ -287,6 +289,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                         if (response && this.activeCompany?.uniqueName !== response?.uniqueName) {
                             this.activeCompany = response;
                         }
+                        this.changeDetection.detectChanges();
                     });
 
                     /** Universal date observer */
@@ -632,7 +635,6 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                     uploadedBy: null,
                     branchUniqueName: this.isCompany ? "" : (this.generalService.currentBranchUniqueName ?? "")
                 };
-
                 // Reset existing object
                 this.ocrDocumentsRequestParams = { ...newOcrDocumentsRequestParams };
 
@@ -663,13 +665,14 @@ export class AiOcrComponent implements OnInit, OnDestroy {
 
     /**
      * This will use to send data.
-     *
+     * @param event
      * @memberof AiOcrComponent
      */
-    public selectBranch(): void {
+    public selectBranch(event: any): void {
         this.showClearFilter = true;
         this.aiOcrService.resetData$.next(null);
         this.aiOcrService.selectBranch$.next(this.ocrDocumentsRequestParams);
+        this.branchName = event?.label;
     }
 
     /**

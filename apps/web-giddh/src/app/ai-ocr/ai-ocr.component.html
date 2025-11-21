@@ -113,10 +113,10 @@
                             [label]="commonLocaleData?.app_branch"
                             [options]="branches"
                             (selectedOption)="
-                                ocrDocumentsRequestParams.branchUniqueName = $event?.value; selectBranch()
+                                ocrDocumentsRequestParams.branchUniqueName = $event?.value; selectBranch($event)
                             "
                             (onClear)="ocrDocumentsRequestParams.branchUniqueName = ''; getAllOcrDocuments(false)"
-                            [labelValue]="activeCompany?.name"
+                            [labelValue]="ocrDocumentsRequestParams.branchUniqueName ? branchName : activeCompany?.name"
                             [placeholder]="commonLocaleData?.app_select_branch"
                         ></reactive-dropdown-field>
                     </div>
