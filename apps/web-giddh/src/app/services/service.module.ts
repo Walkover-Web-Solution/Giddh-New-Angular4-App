@@ -72,6 +72,7 @@ import { VoucherService } from "./voucher.service";
 import { VouchersUtilityService } from "../vouchers/utility/vouchers.utility.service";
 import { CountryCodeService } from './country-code.service';
 import { AiOcrService } from "./ai-ocr.service";
+import { CompanyAuthKeyService } from "./settings.company-auth-key.service";
 
 @NgModule({
     imports: [CommonModule, RouterModule],
@@ -121,6 +122,7 @@ export class ServiceModule {
                 RecurringVoucherService,
                 ImportExcelService,
                 SettingsDiscountService,
+                CompanyAuthKeyService,
                 NewVsOldInvoicesService,
                 AgingreportingService,
                 CompanyImportExportService,

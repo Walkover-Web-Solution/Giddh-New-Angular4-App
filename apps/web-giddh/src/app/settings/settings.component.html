@@ -51,6 +51,12 @@
                                     <setting-linked-accounts #eBankComp></setting-linked-accounts>
                                 </div>
                             </div>
+                            <div *ngIf="activeTab === 'company-auth-key'">
+                                <hamburger-menu [pageHeading]="localeData?.setting_company_auth_key"></hamburger-menu>
+                                <div class="setting-container">
+                                    <setting-company-auth-key #companyAuthKeyComp></setting-company-auth-key>
+                                </div>
+                            </div>
                             <div *ngIf="activeTab === 'profile'">
                                 <hamburger-menu [pageHeading]="profileTabHeading"></hamburger-menu>
                                 <div class="setting-container">
