@@ -244,6 +244,13 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
         this.generalService.companyUniqueName = this.getCompanyUniqueNameFromUrl(company?.uniqueName);
         this.generalService.voucherApiVersion = company?.voucherVersion || 2;
         this.store.dispatch(this.commonAction.setBranchConsolidated(false));
+        
+        // Update store with company and branch details
+        this.store.dispatch(this.companyActions.setStateDetailsRequest({
+            lastState: '',
+            companyUniqueName: this.generalService.companyUniqueName,
+            currentBranchUniqueName: selectBranchUniqueName || ''
+        }));
         const details = {
             branchDetails: {
                 uniqueName: selectBranchUniqueName
@@ -449,6 +456,14 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
                 }
             };
             this.generalService.currentBranchUniqueName = branchUniqueName;
+            
+            // Update store with branch details
+            this.store.dispatch(this.companyActions.setStateDetailsRequest({
+                lastState: '',
+                companyUniqueName: this.generalService.companyUniqueName,
+                currentBranchUniqueName: branchUniqueName
+            }));
+            
             this.setOrganizationDetails(OrganizationType.Branch, details);
             this.store.dispatch(this.invoiceAction.getInvoiceSetting());
             this.companyService.getStateDetails(this.generalService.companyUniqueName).pipe(take(1)).subscribe(response => {
