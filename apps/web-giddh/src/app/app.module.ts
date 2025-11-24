@@ -116,15 +116,50 @@ const createHybridStorage = () => {
                         );
                         
                         if (targetCompany) {
-                            // Create tab-specific data with query params
+                            // Debug: Log the company structure to understand how branches are stored
+                            console.log('Target company structure:', {
+                                name: targetCompany.name,
+                                uniqueName: targetCompany.uniqueName,
+                                branches: targetCompany.branches,
+                                branchCount: targetCompany.branchCount,
+                                allKeys: Object.keys(targetCompany)
+                            });
+                            
+                            // Validate that the branch belongs to the specified company
+                            let validatedBranchUniqueName = '';
+                            if (queryBranchUniqueName) {
+                                // Check if the branch exists in the target company's branches
+                                const targetBranch = targetCompany.branches?.find((branch: any) => 
+                                    branch.uniqueName === queryBranchUniqueName
+                                );
+                                
+                                if (targetBranch) {
+                                    validatedBranchUniqueName = queryBranchUniqueName;
+                                    console.log('✅ Branch validation successful:', queryBranchUniqueName, 'belongs to company:', queryCompanyUniqueName);
+                                } else {
+                                    console.warn(`❌ Branch '${queryBranchUniqueName}' does not belong to company '${queryCompanyUniqueName}'.`);
+                                    console.log('Available branches:', targetCompany.branches);
+                                    console.log('Branch count:', targetCompany.branchCount);
+                                }
+                            }
+                            
+                            // Create tab-specific data with validated query params
                             const queryTabData = {
                                 applicationDate: null,
                                 companyUniqueName: queryCompanyUniqueName,
                                 todaySelected: false,
                                 activeCompany: targetCompany,
                                 companyUser: null, // Will be set by the app when company is selected
-                                currentBranchUniqueName: queryBranchUniqueName || ''
+                                currentBranchUniqueName: validatedBranchUniqueName
                             };
+                            
+                            // Debug logging to check query params
+                            console.log('Query params detected:', {
+                                companyUniqueName: queryCompanyUniqueName,
+                                branchUniqueName: queryBranchUniqueName,
+                                targetCompany: targetCompany,
+                                queryTabData: queryTabData
+                            });
                             
                             // Store query-based data in sessionStorage
                             sessionStorage.setItem('session', JSON.stringify(queryTabData));
@@ -137,9 +172,9 @@ const createHybridStorage = () => {
                                 activeCompany: targetCompany,
                                 lastAccessedAt: Date.now() // Mark as recently selected
                             };
-                            // Store last active branch as fallback for future new tabs
-                            if (queryBranchUniqueName) {
-                                updatedLocalData.lastActiveBranchUniqueName = queryBranchUniqueName;
+                            // Store last active branch as fallback for future new tabs (only if validated)
+                            if (validatedBranchUniqueName) {
+                                updatedLocalData.lastActiveBranchUniqueName = validatedBranchUniqueName;
                             }
                             // Ensure currentBranchUniqueName is not stored in localStorage (stays tab-specific)
                             delete updatedLocalData.currentBranchUniqueName;
@@ -148,15 +183,22 @@ const createHybridStorage = () => {
                             // Trigger company/branch switch APIs similar to switchCompany/switchBranch
                             setTimeout(() => {
                                 try {
+                                    console.log('Dispatching giddh-query-params-company-switch event with:', {
+                                        companyUniqueName: queryCompanyUniqueName,
+                                        branchUniqueName: validatedBranchUniqueName,
+                                        company: targetCompany
+                                    });
+                                    
                                     // Dispatch actions to trigger API calls (similar to switchCompany/switchBranch)
                                     const event = new CustomEvent('giddh-query-params-company-switch', {
                                         detail: {
                                             companyUniqueName: queryCompanyUniqueName,
-                                            branchUniqueName: queryBranchUniqueName,
+                                            branchUniqueName: validatedBranchUniqueName,
                                             company: targetCompany
                                         }
                                     });
                                     window.dispatchEvent(event);
+                                    console.log('Event dispatched successfully');
                                 } catch (error) {
                                     console.warn('Error dispatching query params company switch event:', error);
                                 }
