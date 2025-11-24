@@ -1,17 +1,20 @@
-
 .mat-select-btn {
     border: 1px solid var(--border-color) !important;
     border-radius: var(--mat-border-radius-4) !important;
     padding: 6px !important;
-    outline: 0;
     color: var(--color-black) !important;
-    box-shadow: none;
     font-size: var(--font-size-15) !important;
     height: 48px;
     justify-content: space-between;
 
     &.range-wrapper {
         width: 238px;
+    }
+}
+
+:host ::ng-deep .mat-select-btn {
+    .mdc-button__label {
+        width: 100%;
     }
 }
 

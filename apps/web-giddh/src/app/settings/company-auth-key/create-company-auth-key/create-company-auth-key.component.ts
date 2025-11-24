@@ -1,5 +1,5 @@
 import { Component, Inject, Input, OnDestroy, OnInit } from "@angular/core";
-import { Observable, ReplaySubject, of as observableOf } from "rxjs";
+import { ReplaySubject } from "rxjs";
 import { FormBuilder, FormGroup, FormArray, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { GeneralService } from "../../../services/general.service";
@@ -12,8 +12,11 @@ import { cloneDeep, forEach, isEmpty, isNull } from '../../../lodash-optimized';
 import { PermissionActions } from "../../../actions/permission/permission.action";
 import * as dayjs from 'dayjs';
 import * as customParseFormat from 'dayjs/plugin/customParseFormat';
-import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_YYYY_MM_DD } from "../../../shared/helpers/defaultDateFormat";
+import { GIDDH_DATE_FORMAT } from "../../../shared/helpers/defaultDateFormat";
 import { ToasterService } from "../../../services/toaster.service";
+import { IPV4_REGEX } from "../../../app.constant";
+import { PageLeaveUtilityService } from "../../../services/page-leave-utility.service";
+import { SettingsProfileActions } from "../../../actions/settings/profile/settings.profile.action";
 dayjs.extend(customParseFormat);
 // some local const
 const DATE_RANGE = 'daterange';
@@ -27,9 +30,9 @@ const CIDR_RANGE = 'cidr_range';
     styleUrls: ["./create-company-auth-key.component.scss"]
 })
 export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
-    /* This will hold local JSON data */
+    /* This will hold local JSON data for company auth key module */
     @Input() public localeData: any = {};
-    /* This will hold common JSON data */
+    /* This will hold common JSON data shared across modules */
     @Input() public commonLocaleData: any = {};
     /** Form Group for company auth key form */
     public createCompanyAuthKeyForm: FormGroup;
@@ -42,10 +45,10 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
     /** Holds true if api is in progress */
     public isLoading: boolean = true;
     /** Voucher API Version */
-    public voucherApiVersion: number = 1|2;
+    public voucherApiVersion: number = 1 | 2;
     /** All roles list */
     public allRoles: any[] = [];
-    /** Holds all role list used to reset all all roles after filtered allRoles Varible */
+    /** Holds all role list used to reset roles after filtering */
     public allRolesConstantList: any[] = [];
     /** To check form is invalid */
     public isFormInvalid: boolean = false;
@@ -59,7 +62,10 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
     public selectedIPRange: string = '';
     /** Date range picker value */
     public dateRangePickerValue: Date[] = [];
-
+    /** Returns true if form is dirty else false */
+    public get showPageLeaveConfirmation(): boolean {
+        return this.createCompanyAuthKeyForm?.dirty;
+    }
     constructor(
         @Inject(MAT_DIALOG_DATA) public companyAuthKeyInfo: any,
         private formBuilder: FormBuilder,
@@ -68,11 +74,13 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
         private companyAuthKeyService: CompanyAuthKeyService,
         private store: Store<AppState>,
         private permissionActions: PermissionActions,
-        private toasterService: ToasterService
+        private toasterService: ToasterService,
+        private pageLeaveUtilityService: PageLeaveUtilityService,
+        private settingsProfileActions: SettingsProfileActions
     ) { }
 
     /**
-     * This will be use for component initialization
+     * Used for component initialization
      *
      * @memberof CreateCompanyAuthKeyComponent
      */
@@ -80,10 +88,9 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
         this.selectedTimeSpan = this.commonLocaleData?.app_date_range;
         this.selectedIPRange = this.localeData?.cidr_range;
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        console.log(this.companyAuthKeyInfo, this.selectedTimeSpan);
 
         // get roles
-        this.store.pipe(select(state=> state.permission), takeUntil(this.destroyed$)).subscribe(response => {
+        this.store.pipe(select(state => state.permission), takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.roles) {
                 let roles = cloneDeep(response.roles);
                 let allRoleArray = [];
@@ -122,9 +129,10 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
         });
 
         this.createCompanyAuthKeyForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            // this.hasUnsavedChanges.emit(this.createCompanyAuthKeyForm?.dirty);
+            if (this.showPageLeaveConfirmation) {
+                this.pageLeaveUtilityService.addBrowserConfirmationDialog();
+            }
         });
-
     }
 
     /**
@@ -175,10 +183,10 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
             } else {
                 allowedCidrs.push(this.initRangeForm());
             }
-        }else{
+        } else {
             this.createCompanyAuthKeyForm = this.formBuilder.group({
                 roleName: ['', Validators.required],
-                roleUniqueName: ['', [Validators.required]],
+                roleUniqueName: ['admin', [Validators.required]],
                 periodOptions: DATE_RANGE,
                 from: [null],
                 to: [null],
@@ -190,7 +198,6 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
             });
             let allowedIps = this.createCompanyAuthKeyForm.get('allowedIps') as FormArray;
             let allowedCidrs = this.createCompanyAuthKeyForm.get('allowedCidrs') as FormArray;
-            console.log(allowedIps, allowedCidrs);
             allowedCidrs.push(this.initRangeForm());
             allowedIps.push(this.initRangeForm());
             this.selectedTimeSpan = this.commonLocaleData?.app_date_range;
@@ -199,20 +206,40 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
         this.isLoading = false;
     }
 
+    /**
+     * Initializes a range form group for IP/CIDR values
+     *
+     * @param val Existing value for the range, if any
+     * @returns {FormGroup} Form group with range control
+     * @memberof CreateCompanyAuthKeyComponent
+     */
     public initRangeForm(val?: any): FormGroup {
         return this.formBuilder.group({
             range: (val) ? [val] : [null]
         });
     }
 
-    public validateIPaddress(ipaddress: string) {
-        if (/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/.test(ipaddress)) {
+    /**
+     * Validates IPv4 address
+     *
+     * @param ipaddress IP address string
+     * @returns {boolean} True if valid IPv4 address, else false
+     * @memberof CreateCompanyAuthKeyComponent
+     */
+    public validateIPaddress(ipaddress: string): boolean {
+        if (IPV4_REGEX.test(ipaddress)) {
             return true;
         }
         return false;
     }
 
-    public toggleIpOptVal(val: string) {
+    /**
+     * Toggles IP option label between CIDR and IP address
+     *
+     * @param val Selected IP option
+     * @memberof CreateCompanyAuthKeyComponent
+     */
+    public toggleIpOptVal(val: string): void {
         if (val === IP_ADDR) {
             this.selectedIPRange = this.localeData?.ip_address;
         } else if (val === CIDR_RANGE) {
@@ -221,7 +248,13 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
     }
 
 
-    public togglePeriodOptionsVal(val: string) {
+    /**
+     * Toggles period option label and resets dates when needed
+     *
+     * @param val Selected period option
+     * @memberof CreateCompanyAuthKeyComponent
+     */
+    public togglePeriodOptionsVal(val: string): void {
         if (val === DATE_RANGE) {
             this.selectedTimeSpan = this.commonLocaleData?.app_date_range;
         } else if (val === PAST_PERIOD) {
@@ -233,7 +266,14 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
         }
     }
 
-    public getPeriodFromData(data: CreateCompanyAuthKeyRequest) {
+    /**
+     * Derives period option from existing auth key data
+     *
+     * @param data Existing auth key data
+     * @returns Period option string
+     * @memberof CreateCompanyAuthKeyComponent
+     */
+    public getPeriodFromData(data: CreateCompanyAuthKeyRequest): string {
         if (data) {
             if (data.from && data.to) {
                 this.togglePeriodOptionsVal(DATE_RANGE);
@@ -247,7 +287,14 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
         return DATE_RANGE;
     }
 
-    public getIPOptsFromData(data: CreateCompanyAuthKeyRequest) {
+    /**
+     * Derives IP option from existing auth key data
+     *
+     * @param data Existing auth key data
+     * @returns IP option string
+     * @memberof CreateCompanyAuthKeyComponent
+     */
+    public getIPOptsFromData(data: CreateCompanyAuthKeyRequest): string {
         if (data?.allowedIps?.length > 0) {
             this.toggleIpOptVal(IP_ADDR);
             return IP_ADDR;
@@ -264,13 +311,19 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
  *
  * @param {*} event
  * @returns {boolean}
- * @memberof SettingPermissionFormComponent
+ * @memberof CreateCompanyAuthKeyComponent
  */
     public allowOnlyNumbersAndDot(event: any): boolean {
         return this.generalService.allowOnlyNumbersAndDot(event);
     }
 
-    public methodForToggleSection(id: string) {
+    /**
+     * Hides expanded sections for time span and IP range when clicked outside
+     *
+     * @param id Section identifier
+     * @memberof CreateCompanyAuthKeyComponent
+     */
+    public methodForToggleSection(id: string): void {
         if (id === 'timeSpanSection') {
             if (this.showTimeSpan) {
                 this.showTimeSpan = false;
@@ -310,9 +363,9 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
             }
         });
 
-        forEach(form.allowedIps, (n) => {
-            if (n.range) {
-                IpArr.push(n.range);
+        forEach(form.allowedIps, (res) => {
+            if (res.range) {
+                IpArr.push(res.range);
             }
         });
         if (CidrArr?.length > 0) {
@@ -340,10 +393,11 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
         obj.action = (this.isUpdateMode) ? 'update' : 'create';
         this.dateRangePickerValue = [];
         obj.data = form;
-        console.log(obj, form);
         if (obj.action === 'create') {
-            this.companyAuthKeyService.CreateAuthKey(form.roleUniqueName, form).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.companyAuthKeyService.createAuthKey(form.roleUniqueName, form).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status === "success") {
+                    this.createCompanyAuthKeyForm.markAsPristine();
+                    this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
                     this.dialogRef.close(true);
                 }
             });
@@ -353,9 +407,10 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
                 delete obj.data.to;
                 obj.data.periodOptions = null;
             }
-            this.companyAuthKeyService.UpdateAuthKey(this.companyAuthKeyInfo?.uniqueName, obj.data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            this.companyAuthKeyService.updateAuthKey(this.companyAuthKeyInfo?.uniqueName, obj.data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res?.status === 'success') {
-                    // this.hasUnsavedChanges.emit(false);
+                    this.createCompanyAuthKeyForm.markAsPristine();
+                    this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
                     this.dialogRef.close(true);
                     this.toasterService.successToast(this.localeData?.permission_updated_success);
                 } else {
@@ -367,8 +422,16 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
 
     }
 
-    public addNewRow(type: string, item: any, e: any) {
-        e.stopPropagation();
+    /**
+     * Adds new row for IP/CIDR ranges with validations
+     *
+     * @param type Control name (allowedIps/allowedCidrs)
+     * @param item Current form group
+     * @param e Event
+     * @memberof CreateCompanyAuthKeyComponent
+     */
+    public addNewRow(type: string, item: any, event: any): void {
+        event.stopPropagation();
         let errFound: boolean = false;
         let msg: string;
         let arow = this.createCompanyAuthKeyForm.get(type) as FormArray;
@@ -400,32 +463,18 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
         }
     }
 
-    public delRow(type: string, i: number, e: any) {
-        e.stopPropagation();
-        const arow = this.createCompanyAuthKeyForm.get(type) as FormArray;
-        arow.removeAt(i);
-    }
-
     /**
-     * Updates company auth key
+     * Deletes row for IP/CIDR ranges
      *
+     * @param type Control name (allowedIps/allowedCidrs)
+     * @param i Index to remove
+     * @param e Event
      * @memberof CreateCompanyAuthKeyComponent
      */
-    public updateAuthKey(): void {
-        this.isFormSubmitted = false;
-        if (this.createCompanyAuthKeyForm.invalid) {
-            this.isFormSubmitted = true;
-            return;
-        }
-
-        let model: UpdateCompanyAuthKeyRequest = this.createCompanyAuthKeyForm.value;
-        const userRoleUniqueName = this.companyAuthKeyInfo.uniqueName || this.companyAuthKeyInfo.userRoleUniqueName;
-
-        this.companyAuthKeyService.UpdateAuthKey(userRoleUniqueName, model).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.status === "success") {
-                this.dialogRef.close(true);
-            }
-        });
+    public delRow(type: string, i: number, event: any): void {
+        event.stopPropagation();
+        const arow = this.createCompanyAuthKeyForm.get(type) as FormArray;
+        arow.removeAt(i);
     }
 
     /**
@@ -437,24 +486,13 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
         this.dialogRef?.close();
     }
 
-
-    /**
-     * Lifecycle hook for component destroy
-     *
-     * @memberof CreateDiscountComponent
-     */
-    public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
-    }
-
     /**
      * Handler for IP address change, required for manually changing
      * the radio button value in modal as radio button doesn't work in
      * ngx-bootstrap modal
      *
      * @param {string} value Current selected value of radio button
-     * @memberof SettingPermissionFormComponent
+     * @memberof CreateCompanyAuthKeyComponent
      */
     public handleIpAddressChange(value: string): void {
         this.createCompanyAuthKeyForm.get('ipOptions')?.patchValue(value, { onlySelf: true });
@@ -470,5 +508,50 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
      */
     public handleTimeSpanChange(value: string): void {
         this.createCompanyAuthKeyForm.get('periodOptions')?.patchValue(value, { onlySelf: true });
+    }
+
+    /**
+     * Lifecycle hook for component destroy
+     *
+     * @memberof CreateCompanyAuthKeyComponent
+     */
+    public ngOnDestroy(): void {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+        this.createCompanyAuthKeyForm.markAsPristine();
+        this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
+    }
+
+    /**
+     * Cancels auth key dialog
+     *
+     * @memberof CreateCompanyAuthKeyComponent
+     */
+    public cancel(): void {
+        console.log(this.showPageLeaveConfirmation);
+        if (this.showPageLeaveConfirmation) {
+            this.pageLeaveUtilityService.confirmPageLeave((action: boolean) => {
+                if (action) {
+                    this.dialogRef?.close();
+                }
+            });
+        } else {
+            this.dialogRef?.close();
+        }
+    }
+
+    /**
+     * Updates unsaved changes returned from inline form
+     *
+     * @param {*} event
+     * @memberof SettingPermissionComponent
+     */
+    public updateUnsavedChanges(event: any): void {
+        if (event) {
+            this.pageLeaveUtilityService.addBrowserConfirmationDialog();
+        } else {
+            this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
+        }
+        this.store.dispatch(this.settingsProfileActions.hasUnsavedChanges(event));
     }
 }
