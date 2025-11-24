@@ -2,7 +2,6 @@
     <div class="aside-dialog-wrapper">
         <div class="dialog-header">
             <span class="font-size-16">{{ localeData?.tab_heading }}</span>
-            <i mat-dialog-close class="icon-cross icon-font-size-16"></i>
         </div>
         <div mat-dialog-content class="create-discount-aside dialog-body">
             <div *ngIf="isLoading">
@@ -89,7 +88,6 @@
                                                 </mat-radio-button>
                                             </mat-radio-group>
                                         </div>
-
                                         <section
                                             class="periods container-fluid mb-2 mt-3"
                                             *ngIf="createCompanyAuthKeyForm.get('periodOptions')?.value === 'daterange'"
@@ -290,12 +288,11 @@
                             *ngIf="isUpdateMode"
                             mat-raised-button
                             color="primary"
-                            (click)="updateCompanyAuthKey()"
-                            [ladda]="updateCompanyAuthKeyInProgress$ | async"
+                            (click)="saveCompanyAuthKey()"
                         >
                             {{ commonLocaleData?.app_update }}
                         </button>
-                        <button mat-stroked-button (click)="cancelCompanyAuthKey()">
+                        <button mat-stroked-button mat-dialog-close>
                             {{ commonLocaleData?.app_cancel }}
                         </button>
                     </div>
