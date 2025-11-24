@@ -148,6 +148,7 @@
                             [label]="localeData?.day_action"
                             [placeholder]="localeData?.select_time_action"
                             [options]="timeOtherOptions"
+                            [(ngModel)]="selectedTimeAction"
                             (selectedOption)="onTimeActionChange($event)"
                             (onClear)="onTimeActionChange(); showDayOfWeek = null; setTimeActionValidator()"
                         >

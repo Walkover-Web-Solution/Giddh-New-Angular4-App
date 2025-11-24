@@ -362,6 +362,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public showInvoiceDate: boolean = true;
     /** Show purchase lock date */
     public showPurchaseDate: boolean = true;
+    public templateFor: string = '';
 
     constructor(
         private activatedRoute: ActivatedRoute,
@@ -510,6 +511,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                         this.selectedTemplate = this.purchaseTemplatesList[0];
                     } else {
                         this.selectedTemplate = null;
+                        this.templateFor = null;
                     }
                 }, 100);
                 if ([VoucherTypeEnum.sales, VoucherTypeEnum.debitNote, VoucherTypeEnum.creditNote, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.generateProforma, VoucherTypeEnum.purchase, VoucherTypeEnum.purchaseOrder, VoucherTypeEnum.receipt, VoucherTypeEnum.payment].includes(this.voucherType)) {
