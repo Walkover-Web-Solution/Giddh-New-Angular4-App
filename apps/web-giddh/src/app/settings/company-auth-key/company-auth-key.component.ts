@@ -1,19 +1,15 @@
-import { take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { IOption } from '../../app.constant';
-import { CreateDiscountRequest, IDiscountList } from '../../models/api-models/SettingsDiscount';
 import { Observable, of, ReplaySubject } from 'rxjs';
-import { AppState } from '../../store';
-import { Store, select } from '@ngrx/store';
-import { SalesService } from '../../services/sales.service';
-import { SettingsDiscountService } from '../../services/settings.discount.service';
 import { ToasterService } from '../../services/toaster.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { CreateDiscountComponent } from '../../theme/create-discount/create-discount.component';
 import { ASIDE_PANE_CONFIG } from '../../app.constant';
 import { GeneralService } from '../../services/general.service';
 import { CreateCompanyAuthKeyRequest, ICompanyAuthKey } from '../../models/api-models/SettingsCompanyAuthKey';
 import { CompanyAuthKeyService } from '../../services/settings.company-auth-key.service';
+import { ClipboardService } from 'ngx-clipboard';
+import { NewConfirmationModalComponent } from '../../theme/new-confirmation-modal/confirmation-modal.component';
 
 @Component({
     selector: 'setting-company-auth-key',
@@ -22,14 +18,8 @@ import { CompanyAuthKeyService } from '../../services/settings.company-auth-key.
 })
 
 export class CompanyAuthKeyComponent implements OnInit, OnDestroy {
-    /** Holds Delete Discount Confirmation Dialog Template Ref */
-    @ViewChild('companyAuthKeyConfirmationDialog', { static: true }) public companyAuthKeyConfirmationDialog: TemplateRef<any>;
-    /** Holds Create New Account Dialog Template Ref */
+ /** Holds Create New Account Dialog Template Ref */
     @ViewChild('createNew', { static: true }) public createNew: TemplateRef<any>;
-    /** Holds Translated Discount Type List */
-    public discountTypeList: IOption[] = []
-    /** Holds Linked Account List */
-    public accounts: IOption[];
     /** Holds Create Request */
     public createRequest: CreateCompanyAuthKeyRequest = new CreateCompanyAuthKeyRequest();
     /** Holds Delete Request */
@@ -47,21 +37,18 @@ export class CompanyAuthKeyComponent implements OnInit, OnDestroy {
     /** True if get all discounts api call in progress */
     public isLoading: boolean = false;
     /** Holds Mat Table Display columns */
-    public displayedColumns: string[] = ['number', 'authKey', 'userName','roleName','emailId','from','to','action'];
-    /** Holds Discount Confirmation Dialog Ref */
-    public companyAuthKeyConfirmationDialogRef: MatDialogRef<any>;
-    /** Holds Create New Account Dialog Ref */
+    public displayedColumns: string[] = ['number', 'entity','authKey', 'userName', 'roleName', 'action'];
+    /** Holds create new company auth key dialog ref */
     public createNewCompanyAuthKeyDialogRef: MatDialogRef<any>;
-    /** Holds Create/Update discount Dialog Ref */
-    public createUpdateDiscountRef: MatDialogRef<any>;
     /** Voucher API Version */
-    public voucherApiVersion: number;
+    public voucherApiVersion: number = 1 | 2
 
     constructor(
         private companyAuthKeyService: CompanyAuthKeyService,
         private toaster: ToasterService,
         public dialog: MatDialog,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private clipboardService: ClipboardService
     ) {
     }
 
@@ -72,27 +59,15 @@ export class CompanyAuthKeyComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        this.getCompanyAuthKeyRoles();
         this.getCompanyAuthKeys();
 
     }
 
     /**
-     * Open Create Account Aside Pane
-     *
-     * @memberof DiscountComponent
-     */
-    public openAccountAsidePane(event: any): void {
-        if (event) {
-            this.createNewCompanyAuthKeyDialogRef = this.dialog.open(this.createNew, ASIDE_PANE_CONFIG);
-        }
-    }
-
-     /**
-     * Open Create/Update Discount Aside Pane
-     *
-     * @memberof DiscountComponent
-     */
+    * Open Create/Update Discount Aside Pane
+    *
+    * @memberof DiscountComponent
+    */
     public openCreateEditCompanyAuthKeyAsidePane(authKeyInfo?: CreateCompanyAuthKeyRequest): void {
         this.createNewCompanyAuthKeyDialogRef = this.dialog.open(this.createNew, {
             data: authKeyInfo ?? null,
@@ -106,23 +81,34 @@ export class CompanyAuthKeyComponent implements OnInit, OnDestroy {
         });
     }
 
-
-     /**
-     * Open Create/Update Discount Aside Pane
+    /**
+     * Copy Auth Key
      *
      * @memberof DiscountComponent
      */
-     public closeCreateEditDiscountAsidePane(): void {
-        this.createUpdateDiscountRef?.close();
-        this.createRequest.roleName = null;
-        this.createRequest.allowedCidrs = null;
-        this.createRequest.allowedIps = null;
-        this.createRequest.from = null;
-        this.createRequest.to = null;
-        this.createRequest.duration = null;
-        this.createRequest.reGenerateAuthKey = null;
+    public copyAuthKey(row: any): void {
+        this.getAuthKey(row.uniqueName);
     }
 
+    /**
+   * Gets auth key by role unique name
+   *
+   * @private
+   * @param {string} roleUser
+   * @memberof CreateCompanyAuthKeyComponent
+   */
+    private getAuthKey(roleUser: string): void {
+        this.companyAuthKeyService.GetAuthKey(roleUser).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                this.clipboardService.copyFromContent(response.body);
+                this.toaster.showSnackBar("success", 'Auth key copied successfully');
+            } else {
+                if (response?.message) {
+                    this.toaster.showSnackBar("error", response?.message);
+                }
+            }
+        });
+    }
 
     /**
      * Open delete discount confirmation dialog
@@ -132,50 +118,28 @@ export class CompanyAuthKeyComponent implements OnInit, OnDestroy {
      */
     public showDeleteAuthKeyDialog(uniqueName: string): void {
         this.deleteRequest = uniqueName;
-        this.companyAuthKeyConfirmationDialogRef = this.dialog.open(this.companyAuthKeyConfirmationDialog, {
-            panelClass: 'modal-dialog'
+        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            panelClass: ['mat-dialog-sm'],
+            disableClose: true,
+            data: {
+                configuration: this.generalService.deleteConfiguration(
+                    'Are you sure you want to delete this company auth key?',
+                    this.commonLocaleData
+                )
+            }
         });
-    }
-
-    /**
-     * Close delete discount confirmation dialog
-     *
-     * @memberof DiscountComponent
-     */
-    public hideDeleteDiscountModal() {
-        this.deleteRequest = null;
-        this.companyAuthKeyConfirmationDialogRef?.close();
-    }
-
-    /**
-     * Delete Discount API Call
-     *
-     * @memberof DiscountComponent
-     */
-    public deleteDiscount() {
-        this.isLoading$ = of(true);
-        this.companyAuthKeyService.DeleteAuthKey(this.deleteRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            this.companyAuthKeyConfirmationDialogRef?.close();
-            this.showToaster(this.commonLocaleData?.app_messages?.discount_deleted, response);
-            this.isLoading$ = of(false);
+        dialogRef.afterClosed().subscribe(response => {
+            if (response === this.commonLocaleData?.app_yes) {
+                this.companyAuthKeyService.DeleteAuthKey(this.deleteRequest).pipe(takeUntil(this.destroyed$)).subscribe(res => {
+                    if(res?.status === "success"){
+                        this.showToaster('success', res?.body);
+                    }else{
+                        this.showToaster('error', res?.body ?? res?.message);
+                    }
+                    this.isLoading$ = of(false);
+                });
+            }
         });
-    }
-
-    /**
-     * Fetches the discount accounts
-     *
-     * @memberof DiscountComponent
-     */
-    public getCompanyAuthKeyRoles(): void {
-        // this.salesService.getAccountsWithCurrency('discount').pipe(takeUntil(this.destroyed$)).subscribe(response => {
-        //     if (response?.body?.results) {
-        //         this.accounts = response.body.results.map(discount => {
-        //             return { label: discount.name, value: discount?.uniqueName };
-        //         });
-        //     } else {
-        //         this.accounts = [];
-        //     }
-        // });
     }
 
     /**
@@ -189,6 +153,10 @@ export class CompanyAuthKeyComponent implements OnInit, OnDestroy {
         this.companyAuthKeyService.GetAllAuthKeys().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 this.companyAuthKeyList = response?.body;
+            } else {
+                if(response?.message){
+                    this.toaster.showSnackBar("error", response?.message);
+                }
             }
             this.isLoading = false;
         });

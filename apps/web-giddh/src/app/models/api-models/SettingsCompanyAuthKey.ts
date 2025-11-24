@@ -25,12 +25,17 @@ export interface ICompanyAuthKey {
 
 export class CreateCompanyAuthKeyRequest {
     public roleName: string;
-    public allowedCidrs: string[];
-    public allowedIps: string[];
-    public from: string;
-    public to: string;
-    public duration: string;
+    public from: string; // dd-MM-yyyy format
+    public to: string; // dd-MM-yyyy format
+    public duration: number; // numeric
+    public period: string; // DAY
+    public allowedIps: any[]; // array of strings
+    public allowedCidrs: any[]; // array of strings
+    public ipsStr?: string; // converted from array for UI
+    public cidrsStr?: string; // converted from array for UI
     public reGenerateAuthKey?: boolean;
+    public roleUniqueName?: string;
+    public dateRange?: any;
 }
 
 export class UpdateCompanyAuthKeyRequest {
