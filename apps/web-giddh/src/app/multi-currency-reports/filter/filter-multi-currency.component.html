@@ -14,10 +14,15 @@
                     novalidate
                 >
                     <div class="d-flex">
-                        <div
-                            class="form-group relative mr-3 datepicker-field"
-                        >
-                            <div class="custom-datepicker" [matMenuTriggerFor]="universalDatepicker" #universalDatepickerTrigger="matMenuTrigger" role="button" aria-haspopup="true" aria-controls="universalDatepicker">
+                        <div class="form-group relative mr-3 datepicker-field">
+                            <div
+                                class="custom-datepicker"
+                                [matMenuTriggerFor]="universalDatepicker"
+                                #universalDatepickerTrigger="matMenuTrigger"
+                                role="button"
+                                aria-haspopup="true"
+                                aria-controls="universalDatepicker"
+                            >
                                 <input
                                     matInput
                                     type="text"
@@ -28,13 +33,14 @@
                                 />
                             </div>
                         </div>
-                        <div
-                            class="form-group mr-3"
-                        >
-                            <mat-form-field 
+                        <div class="form-group mr-3">
+                            <mat-form-field
                                 appearance="outline"
-                                class="initial-height w-100"
-                                [ngClass]="{'mat-form-field-invalid': getForm('shareCompanyList').value?.length === 0 && !isValidForm}"
+                                class="w-100"
+                                [ngClass]="{
+                                    'mat-form-field-invalid':
+                                        getForm('shareCompanyList').value?.length === 0 && !isValidForm
+                                }"
                             >
                                 <mat-label>{{ localeData?.company_list }}</mat-label>
                                 <mat-select
@@ -44,16 +50,13 @@
                                     placeholder="{{ commonLocaleData?.app_select }}"
                                     (closed)="sortSelectedCompaniesFirst()"
                                 >
-                                    <mat-option
-                                        *ngFor="let company of companyList"
-                                        [value]="company?.uniqueName"
-                                    >
+                                    <mat-option *ngFor="let company of companyList" [value]="company?.uniqueName">
                                         {{ company?.name }}
                                     </mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </div>
-                        <div class="form-group mr-3" >
+                        <div class="form-group mr-3">
                             <reactive-dropdown-field
                                 [label]="localeData?.currency_list"
                                 [placeholder]="commonLocaleData?.app_select"
@@ -62,7 +65,9 @@
                                 formControlName="selectCurrency"
                                 (onClear)="getForm('selectCurrency')?.patchValue(null)"
                                 [required]="true"
-                                [showError]="!getForm('selectCurrency')?.value && !getForm('shareCompanyList').value?.length"
+                                [showError]="
+                                    !getForm('selectCurrency')?.value && !getForm('shareCompanyList').value?.length
+                                "
                             >
                             </reactive-dropdown-field>
                         </div>
@@ -74,8 +79,7 @@
                                 matTooltipPosition="above"
                                 *ngIf="!expandAll"
                             >
-                                <span class="icon-expandIcon d-flex justify-content-center align-items-center">
-                                </span>
+                                <span class="icon-expandIcon d-flex justify-content-center align-items-center"> </span>
                             </a>
                             <a
                                 class="expand-icon cursor-pointer d-flex font-size-16 bgWhiteMo border"
@@ -84,11 +88,10 @@
                                 matTooltipPosition="above"
                                 *ngIf="expandAll"
                             >
-                                <span class="icon-collapse d-flex justify-content-center align-items-center">
-                                </span>
+                                <span class="icon-collapse d-flex justify-content-center align-items-center"> </span>
                             </a>
-                          </div>                          
-                        <div class="form-group mr-3" >
+                        </div>
+                        <div class="form-group mr-3">
                             <button mat-raised-button color="primary" (click)="onSubmit()">
                                 {{ commonLocaleData?.app_view }}
                             </button>

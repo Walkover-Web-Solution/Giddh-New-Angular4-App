@@ -1,4 +1,4 @@
-    <ng-container
+<ng-container
     appTranslate
     [file]="'inventory/unit'"
     (commonLocaleData)="commonLocaleData = $event"
@@ -83,14 +83,30 @@
                                                 'selected-unit': selectedUnitIndex === i
                                             }"
                                         >
-                                            <mat-list-item role="listitem" class="items mat-left" matTooltipPosition="left" [matTooltip]="mapping?.stockUnitX?.name + '('+ mapping?.stockUnitX?.code +')'">
+                                            <mat-list-item
+                                                role="listitem"
+                                                class="items mat-left"
+                                                matTooltipPosition="left"
+                                                [matTooltip]="
+                                                    mapping?.stockUnitX?.name + '(' + mapping?.stockUnitX?.code + ')'
+                                                "
+                                            >
                                                 <span
                                                     >{{ mapping?.stockUnitX?.name }} ({{
                                                         mapping?.stockUnitX?.code
                                                     }})</span
                                                 >
                                             </mat-list-item>
-                                            <mat-list-item role="listitem" class="items map-item mat-gap" matTooltipPosition="right" [matTooltip]="mapping?.stockUnitY?.code ? mapping?.quantity + ' ' + mapping?.stockUnitY?.name : null ">
+                                            <mat-list-item
+                                                role="listitem"
+                                                class="items map-item mat-gap"
+                                                matTooltipPosition="right"
+                                                [matTooltip]="
+                                                    mapping?.stockUnitY?.code
+                                                        ? mapping?.quantity + ' ' + mapping?.stockUnitY?.name
+                                                        : null
+                                                "
+                                            >
                                                 <span
                                                     >{{ mapping?.quantity }} {{ mapping?.stockUnitY?.name }}
                                                     <span *ngIf="mapping?.stockUnitY?.code"
@@ -108,13 +124,17 @@
                 <mat-grid-tile [colspan]="5" class="form-btn">
                     <div class="custom-form">
                         <giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
-                        <create-unit
+                        <div
+                            class="px-3"
                             [style.visibility]="hasEditFormLoaded ? 'visible' : 'hidden'"
                             *ngIf="!isLoading && unitDetails?.uniqueName"
-                            [unitDetails]="unitDetails"
-                            (closeAsideEvent)="closeUpdateUnit($event)"
-                            (formHasLoaded)="formHasLoaded()"
-                        ></create-unit>
+                        >
+                            <create-unit
+                                [unitDetails]="unitDetails"
+                                (closeAsideEvent)="closeUpdateUnit($event)"
+                                (formHasLoaded)="formHasLoaded()"
+                            ></create-unit>
+                        </div>
                         <create-unit-group
                             *ngIf="selectedUnitIndex === null && selectedGroup?.uniqueName"
                             [unitGroupDetails]="selectedGroup"

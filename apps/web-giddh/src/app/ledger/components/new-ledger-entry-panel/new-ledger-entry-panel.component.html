@@ -599,24 +599,26 @@
                                             (voucherApiVersion === 2 || selectedInvoiceForCreditNote)
                                         "
                                         [style.width.px]="selectedInvoiceForCreditNote ? 250 : 180"
-                                        class="cursor-pointer remove-invoice hidden-xs d-flex align-items-center"
+                                        class="cursor-pointer remove-invoice hidden-xs vertical-align-top"
                                     >
-                                        <div *ngIf="selectedInvoiceForCreditNote" (click)="removeSelectedInvoice()">
-                                            <span class="remove-invoice-icon"><i class="icon-trash"></i></span>
-                                        </div>
-                                        <div
-                                            [ngClass]="{ 'ml-2': selectedInvoiceForCreditNote }"
-                                            *ngIf="voucherApiVersion === 2"
-                                        >
-                                            <input-field
-                                                [id]="'ledger-invoice-number'"
-                                                [type]="'text'"
-                                                [disabled]="isReadOnly"
-                                                [label]="commonLocaleData?.app_number"
-                                                [placeholder]="commonLocaleData?.app_number"
-                                                [(ngModel)]="blankLedger.invoiceNumberAgainstVoucher"
+                                        <div class="d-flex align-items-center">
+                                            <div *ngIf="selectedInvoiceForCreditNote" (click)="removeSelectedInvoice()">
+                                                <span class="remove-invoice-icon"><i class="icon-trash"></i></span>
+                                            </div>
+                                            <div
+                                                [ngClass]="{ 'ml-2': selectedInvoiceForCreditNote }"
+                                                *ngIf="voucherApiVersion === 2"
                                             >
-                                            </input-field>
+                                                <input-field
+                                                    [id]="'ledger-invoice-number'"
+                                                    [type]="'text'"
+                                                    [disabled]="isReadOnly"
+                                                    [label]="commonLocaleData?.app_number"
+                                                    [placeholder]="commonLocaleData?.app_number"
+                                                    [(ngModel)]="blankLedger.invoiceNumberAgainstVoucher"
+                                                >
+                                                </input-field>
+                                            </div>
                                         </div>
                                     </td>
                                     <td
