@@ -52,6 +52,13 @@ export function mobileNumberValidator(country: Country | null) {
             if (!phoneUtil.isValidNumber(phoneNumber)) {
                 return { invalidNumber: true };
             }
+
+            // Check if it's a mobile number
+            // const numberType = phoneUtil.getNumberType(phoneNumber);
+            // if (numberType !== libphonenumber.PhoneNumberType.MOBILE && 
+            //     numberType !== libphonenumber.PhoneNumberType.FIXED_LINE_OR_MOBILE) {
+            //     return { notMobile: true };
+            // }
             
             // Additional validation for specific edge cases
             const nationalNumber = phoneNumber.getNationalNumber().toString();
@@ -306,6 +313,13 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
             if (!phoneUtil.isValidNumber(phoneNumber)) {
                 return { invalidNumber: true };
             }
+
+            // Check if it's a mobile number
+            // const numberType = phoneUtil.getNumberType(phoneNumber);
+            // if (numberType !== libphonenumber.PhoneNumberType.MOBILE && 
+            //     numberType !== libphonenumber.PhoneNumberType.FIXED_LINE_OR_MOBILE) {
+            //     return { notMobile: true };
+            // }
             
             // Check if number belongs to the selected country
             const numberRegion = phoneUtil.getRegionCodeForNumber(phoneNumber);
