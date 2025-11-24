@@ -157,32 +157,6 @@
                                                 [readonly]="queryParams?.stockUniqueName"
                                             >
                                             </reactive-dropdown-field>
-                                            <!-- <mat-form-field class="w-100" appearance="outline">
-                                                <mat-select
-                                                    [placeholder]="commonLocaleData?.app_select_group"
-                                                    (selectionChange)="
-                                                        stockGroupUniqueName = $event?.value;
-                                                        stockGroupName = $event.label
-                                                    "
-                                                    [value]="stockGroupUniqueName"
-                                                    [(ngModel)]="stockGroupUniqueName"
-                                                    [name]="'stockGroupName'"
-                                                >
-                                                    <div class="select-quantity-option">
-                                                        <ng-container *ngIf="stockGroups?.length">
-                                                            <mat-option
-                                                                *ngFor="let group of stockGroups"
-                                                                [value]="group?.value"
-                                                            >
-                                                                {{ group.label }}
-                                                            </mat-option>
-                                                        </ng-container>
-                                                        <mat-option *ngIf="!stockGroups?.length">
-                                                            {{ commonLocaleData?.app_no_result_found }}
-                                                        </mat-option>
-                                                    </div>
-                                                </mat-select>
-                                            </mat-form-field> -->
                                             <button
                                                 aria-label="move btn"
                                                 *ngIf="queryParams?.stockUniqueName && stockGroups?.length > 1"
@@ -203,9 +177,9 @@
                                                 [placeholder]="localeData?.select_discounts"
                                                 [label]="commonLocaleData?.app_discount"
                                                 [options]="discountsList"
-                                                [(ngModel)]="stockForm.discounts"
-                                                (selectedOption)="stockForm.discounts = [$event?.value]"
-                                                (onClear)="stockForm.discounts = []"
+                                                [(ngModel)]="discountValue"
+                                                (selectedOption)="stockForm.discounts = [$event?.value]; discountValue = $event?.value"
+                                                (onClear)="stockForm.discounts = []; discountValue = ''"
                                                 [labelValue]="stockForm.discountLabel ?? ''"
                                             >
                                             </reactive-dropdown-field>
