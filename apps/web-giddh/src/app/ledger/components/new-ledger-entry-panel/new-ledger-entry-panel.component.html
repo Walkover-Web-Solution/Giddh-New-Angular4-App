@@ -1188,7 +1188,7 @@
                 <reactive-dropdown-field
                     #variantDropdownRef
                     id="ledger-variant-dropdown"
-                    (click)="stopPropagation($event); hideAllDropdown(ledgerDropdownTypeEnum.VARIANT)"
+                    (click)="$event.stopPropagation(); hideAllDropdown(ledgerDropdownTypeEnum.VARIANT)"
                     [name]="'variantDropdown'"
                     [label]="localeData?.select_variant"
                     [placeholder]="localeData?.select_variant"
