@@ -17,7 +17,7 @@
                     (change)="onFileSelected($event)"
                 />
                 <button
-                    *ngIf="listCount > 0"
+                    *ngIf="listCount > 0 || showClearFilter"
                     aria-label="show"
                     mat-stroked-button
                     [disabled]="isCompany || isConsolidatedBranch"
