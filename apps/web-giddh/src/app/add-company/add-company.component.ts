@@ -261,18 +261,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     /**
-     * Gets company unique name from URL query parameters with fallback to provided value
-     *
-     * @param {string} fallbackCompanyUniqueName - Company unique name to use as fallback
-     * @returns {string} Company unique name from URL or fallback value
-     * @memberof AddCompanyComponent
-     */
-    private getCompanyUniqueNameFromUrl(fallbackCompanyUniqueName: string): string {
-        const urlCompanyUniqueName = this.generalService.getUrlParameter("companyUniqueName");
-        return urlCompanyUniqueName || fallbackCompanyUniqueName;
-    }
-
-    /**
      * On init component hook
      *
      * @memberof AddCompanyComponent
@@ -1202,7 +1190,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         this.companyService.CreateNewCompany(this.company).pipe(takeUntil(this.destroyed$)).subscribe((response: any) => {
             if (response?.status === "success") {
                 this.store.dispatch(this.companyActions.CreateNewCompanyResponse(response));
-                this.generalService.companyUniqueName = this.getCompanyUniqueNameFromUrl(response?.body?.uniqueName);
+                this.generalService.companyUniqueName = response?.body?.uniqueName;
 
                 this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
                 this.isCompanyCreated = true;

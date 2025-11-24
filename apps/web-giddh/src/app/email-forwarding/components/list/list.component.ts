@@ -55,35 +55,10 @@ export class ListComponent implements OnInit, OnDestroy {
     constructor(
         private router: Router,
         private bankStatementStore: EmailForwardingComponentStore,
-        private route: ActivatedRoute,
         private dialog: MatDialog,
         private generalService: GeneralService
     ) {
      }
-
-    /**
-     * Gets company unique name from URL query parameters with fallback to provided value
-     *
-     * @param {string} fallbackCompanyUniqueName - Company unique name to use as fallback
-     * @returns {string} Company unique name from URL or fallback value
-     * @memberof ListComponent
-     */
-    private getCompanyUniqueNameFromUrl(fallbackCompanyUniqueName: string): string {
-        const urlCompanyUniqueName = this.generalService.getUrlParameter("companyUniqueName");
-        return urlCompanyUniqueName || fallbackCompanyUniqueName;
-    }
-
-    /**
-     * Gets branch unique name from URL query parameters with fallback to provided value
-     *
-     * @param {string} fallbackBranchUniqueName - Branch unique name to use as fallback
-     * @returns {string} Branch unique name from URL or fallback value
-     * @memberof ListComponent
-     */
-    private getBranchUniqueNameFromUrl(fallbackBranchUniqueName: string): string {
-        const urlBranchUniqueName = this.generalService.getUrlParameter("branchUniqueName");
-        return urlBranchUniqueName || fallbackBranchUniqueName;
-    }
 
     /**
      * Component initialization
@@ -91,8 +66,8 @@ export class ListComponent implements OnInit, OnDestroy {
      * @memberof ListComponent
      */
     public ngOnInit(): void {
-        this.companyUniqueName = this.getCompanyUniqueNameFromUrl(this.generalService.companyUniqueName);
-        this.branchUniqueName = this.getBranchUniqueNameFromUrl(this.generalService.currentBranchUniqueName);
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        this.branchUniqueName = this.generalService.currentBranchUniqueName;
         this.loadEmailForwardingData();
         this.setupSubscriptions();
         this.bankStatementStore.deleteEmailForwardingIsSuccess$.pipe(filter(Boolean),

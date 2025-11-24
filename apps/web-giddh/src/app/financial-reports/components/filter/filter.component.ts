@@ -142,18 +142,6 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), distinctUntilChanged(), takeUntil(this.destroyed$));
     }
 
-    /**
-     * Gets branch unique name from URL query parameters with fallback to provided value
-     *
-     * @param {string} fallbackBranchUniqueName - Branch unique name to use as fallback
-     * @returns {string} Branch unique name from URL or fallback value
-     * @memberof FinancialReportsFilterComponent
-     */
-    private getBranchUniqueNameFromUrl(fallbackBranchUniqueName: string): string {
-        const urlBranchUniqueName = this.generalService.getUrlParameter("branchUniqueName");
-        return urlBranchUniqueName || fallbackBranchUniqueName;
-    }
-
     public get selectedCompany() {
         return this._selectedCompany;
     }
@@ -302,7 +290,7 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                         };
                     }
                 }
-                this.generalService.currentBranchUniqueName = this.getBranchUniqueNameFromUrl(this.currentBranch?.uniqueName);
+                this.generalService.currentBranchUniqueName = this.generalService.currentBranchUniqueName;
                 this.filterForm.get('branchUniqueName').setValue(this.generalService.currentBranchUniqueName);
                 this.filterForm.updateValueAndValidity();
                 this.cd.detectChanges();
