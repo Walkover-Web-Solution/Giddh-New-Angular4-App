@@ -1401,36 +1401,6 @@ form {
         border: 1px solid var(--color-red);
     }
 
-    #init-contact-proforma-valid-msg {
-        color: var(--color-green) !important;
-        font-size: var(--font-size-15);
-    }
-
-    #init-contact-proforma-error-msg {
-        color: var(--color-red);
-        font-size: var(--font-size-15);
-    }
-
-    #init-contact-update-valid-msg {
-        color: var(--color-green) !important;
-        font-size: var(--font-size-15);
-    }
-
-    #init-contact-update-error-msg {
-        color: var(--color-red);
-        font-size: var(--font-size-15);
-    }
-
-    #init-contact-add-valid-msg {
-        color: var(--color-green) !important;
-        font-size: var(--font-size-15);
-    }
-
-    #init-contact-add-error-msg {
-        color: var(--color-red);
-        font-size: var(--font-size-15);
-    }
-
     .mobile-number {
         float: left;
     }
@@ -3726,12 +3696,14 @@ label {
     margin-bottom: 0;
     background: none;
     border-radius: var(--mat-border-radius-0);
+    display: flex;
 }
 
 .breadcrumb > li + li:before {
-    padding-left: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
     content: ">";
-    font-size: 13px;
+    font-size: var(--font-size-14);
     color: var(--color-dark-gray);
 }
 
