@@ -102,6 +102,72 @@ const createHybridStorage = () => {
                 const localData = localStorage.getItem(key);
 
                 if (key === 'session') {
+                    // Check for query parameters first - this takes precedence over stored data
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const queryCompanyUniqueName = urlParams.get('companyUniqueName');
+                    const queryBranchUniqueName = urlParams.get('branchUniqueName');
+                    
+                    if (queryCompanyUniqueName && localData) {
+                        const localObj = JSON.parse(localData);
+                        
+                        // Find the company from available companies
+                        const targetCompany = localObj.companies?.find((company: any) => 
+                            company.uniqueName === queryCompanyUniqueName
+                        );
+                        
+                        if (targetCompany) {
+                            // Create tab-specific data with query params
+                            const queryTabData = {
+                                applicationDate: null,
+                                companyUniqueName: queryCompanyUniqueName,
+                                todaySelected: false,
+                                activeCompany: targetCompany,
+                                companyUser: null, // Will be set by the app when company is selected
+                                currentBranchUniqueName: queryBranchUniqueName || ''
+                            };
+                            
+                            // Store query-based data in sessionStorage
+                            sessionStorage.setItem('session', JSON.stringify(queryTabData));
+                            
+                            // Update localStorage with the query company info and mark as latest selection
+                            // Note: currentBranchUniqueName stays tab-specific (sessionStorage only)
+                            const updatedLocalData = { 
+                                ...localObj, 
+                                companyUniqueName: queryCompanyUniqueName,
+                                activeCompany: targetCompany,
+                                lastAccessedAt: Date.now() // Mark as recently selected
+                            };
+                            // Store last active branch as fallback for future new tabs
+                            if (queryBranchUniqueName) {
+                                updatedLocalData.lastActiveBranchUniqueName = queryBranchUniqueName;
+                            }
+                            // Ensure currentBranchUniqueName is not stored in localStorage (stays tab-specific)
+                            delete updatedLocalData.currentBranchUniqueName;
+                            localStorage.setItem('session', JSON.stringify(updatedLocalData));
+                            
+                            // Trigger company/branch switch APIs similar to switchCompany/switchBranch
+                            setTimeout(() => {
+                                try {
+                                    // Dispatch actions to trigger API calls (similar to switchCompany/switchBranch)
+                                    const event = new CustomEvent('giddh-query-params-company-switch', {
+                                        detail: {
+                                            companyUniqueName: queryCompanyUniqueName,
+                                            branchUniqueName: queryBranchUniqueName,
+                                            company: targetCompany
+                                        }
+                                    });
+                                    window.dispatchEvent(event);
+                                } catch (error) {
+                                    console.warn('Error dispatching query params company switch event:', error);
+                                }
+                            }, 100);
+                            
+                            return JSON.stringify(updatedLocalData);
+                        } else {
+                            console.warn(`Company with uniqueName '${queryCompanyUniqueName}' not found in available companies`);
+                        }
+                    }
+                    
                     // Handle new tab scenario: only localStorage data exists
                     if (!sessionData && localData) {
                         // New tab - initialize with localStorage data
@@ -114,12 +180,19 @@ const createHybridStorage = () => {
                         
                         if (hasValidCompanyData) {
                             // Extract tab-specific data and store in sessionStorage for this tab
+                            // Note: currentBranchUniqueName should NOT be inherited directly, but use lastActiveBranchUniqueName as fallback
                             const tabSpecificData: any = {};
                             config.tabSpecific.session.forEach(tabKey => {
                                 if (localObj.hasOwnProperty(tabKey)) {
-                                    tabSpecificData[tabKey] = localObj[tabKey];
+                                    // Skip currentBranchUniqueName - will be set from fallback below
+                                    if (tabKey !== 'currentBranchUniqueName') {
+                                        tabSpecificData[tabKey] = localObj[tabKey];
+                                    }
                                 }
                             });
+                            
+                            // Use lastActiveBranchUniqueName as fallback for new tabs (when no query params)
+                            tabSpecificData.currentBranchUniqueName = localObj.lastActiveBranchUniqueName || '';
                             
                             // Store tab-specific data in sessionStorage for future use
                             if (Object.keys(tabSpecificData).length > 0) {
@@ -128,7 +201,10 @@ const createHybridStorage = () => {
                             
                             // Update localStorage timestamp to mark this company as recently accessed
                             // This helps maintain the "latest company selection" behavior
+                            // Note: currentBranchUniqueName stays tab-specific (sessionStorage only)
                             const updatedLocalData = { ...localObj, lastAccessedAt: Date.now() };
+                            // Ensure currentBranchUniqueName is not stored in localStorage (stays tab-specific)
+                            delete updatedLocalData.currentBranchUniqueName;
                             localStorage.setItem('session', JSON.stringify(updatedLocalData));
                             
                             return JSON.stringify(updatedLocalData); // Return updated localStorage data
@@ -139,7 +215,6 @@ const createHybridStorage = () => {
                             // If user has companies available, try to use the first one as fallback
                             if (localObj.companies && localObj.companies.length > 0) {
                                 const firstCompany = localObj.companies[0];
-                                console.log('Using first available company as fallback:', firstCompany.name);
                                 
                                 const fallbackTabData = {
                                     applicationDate: null,
@@ -147,21 +222,26 @@ const createHybridStorage = () => {
                                     todaySelected: false,
                                     activeCompany: firstCompany,
                                     companyUser: null, // Will be set by the app when company is selected
-                                    currentBranchUniqueName: '' // Reset branch when company changes
+                                    // Use lastActiveBranchUniqueName as fallback if available for this company
+                                    currentBranchUniqueName: (localObj.companyUniqueName === firstCompany.uniqueName) 
+                                        ? (localObj.lastActiveBranchUniqueName || '') 
+                                        : '' // Reset branch when company changes
                                 };
                                 
                                 // Store fallback data in sessionStorage
                                 sessionStorage.setItem('session', JSON.stringify(fallbackTabData));
                                 
                                 // Update localStorage with the fallback company info and mark as latest selection
+                                // Note: currentBranchUniqueName stays tab-specific (sessionStorage only)
                                 const updatedLocalData = { 
                                     ...localObj, 
                                     companyUniqueName: firstCompany.uniqueName,
                                     activeCompany: firstCompany,
                                     lastAccessedAt: Date.now() // Mark as recently selected
                                 };
+                                // Ensure currentBranchUniqueName is not stored in localStorage (stays tab-specific)
+                                delete updatedLocalData.currentBranchUniqueName;
                                 localStorage.setItem('session', JSON.stringify(updatedLocalData));
-                                console.log('Updated localStorage with fallback company as latest selection:', firstCompany.uniqueName);
                                 
                                 return JSON.stringify(updatedLocalData);
                             } else {
@@ -268,7 +348,7 @@ const createHybridStorage = () => {
                                 }
                             })();
                             
-                            // Update localStorage with latest company info (but not branch - that stays tab-specific)
+                            // Update localStorage with latest company info and last active branch as fallback
                             const updatedLocalData = { ...existingLocalData };
                             if (tabSpecificData.companyUniqueName) {
                                 updatedLocalData.companyUniqueName = tabSpecificData.companyUniqueName;
@@ -279,12 +359,17 @@ const createHybridStorage = () => {
                             if (tabSpecificData.companyUser) {
                                 updatedLocalData.companyUser = tabSpecificData.companyUser;
                             }
+                            // Store last active branch as fallback for new tabs (different from currentBranchUniqueName)
+                            if (tabSpecificData.currentBranchUniqueName) {
+                                updatedLocalData.lastActiveBranchUniqueName = tabSpecificData.currentBranchUniqueName;
+                            }
                             // Mark this as the latest company selection with timestamp
                             updatedLocalData.lastAccessedAt = Date.now();
-                            // Note: We don't update currentBranchUniqueName in localStorage - that stays tab-specific
+                            // Note: currentBranchUniqueName stays tab-specific, but lastActiveBranchUniqueName is stored as fallback
+                            // Ensure currentBranchUniqueName is not stored in localStorage (stays tab-specific)
+                            delete updatedLocalData.currentBranchUniqueName;
                             
                             localStorage.setItem('session', JSON.stringify(updatedLocalData));
-                            console.log('Updated localStorage with latest company selection:', updatedLocalData.companyUniqueName);
                         }
                     }
 
@@ -298,7 +383,10 @@ const createHybridStorage = () => {
                                 return {};
                             }
                         })();
-                        localStorage.setItem('session', JSON.stringify({ ...existingLocalData, ...persistentData }));
+                        const updatedPersistentData = { ...existingLocalData, ...persistentData };
+                        // Ensure currentBranchUniqueName is not stored in localStorage (stays tab-specific)
+                        delete updatedPersistentData.currentBranchUniqueName;
+                        localStorage.setItem('session', JSON.stringify(updatedPersistentData));
                     }
                 } else if (key === 'permission') {
                     // Permissions are always persistent
@@ -344,8 +432,6 @@ function migrateExistingData(): void {
             return;
         }
 
-        console.log('Starting data migration to hybrid storage...');
-
         // Migrate session data
         const existingSession = localStorage.getItem('session');
         if (existingSession) {
@@ -373,7 +459,6 @@ function migrateExistingData(): void {
 
         // Mark migration as completed
         localStorage.setItem(migrationKey, 'true');
-        console.log('Data migration completed successfully');
     } catch (error) {
         console.warn('Error during data migration:', error);
     }

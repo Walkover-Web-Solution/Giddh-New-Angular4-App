@@ -141,7 +141,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         this.currentCompanyBranches$ = this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$));
         this.store.pipe(select(appStore => appStore.session.currentOrganizationDetails), takeUntil(this.destroyed$)).subscribe((organization: Organization) => {
             if (organization && organization.details && organization.details.branchDetails) {
-                this.generalService.currentBranchUniqueName = this.getBranchUniqueNameFromUrl(organization.details.branchDetails.uniqueName);
+                this.generalService.currentBranchUniqueName = organization.details.branchDetails.uniqueName;
                 this.generalService.currentOrganizationType = organization.type;
                 this.currentOrganizationType = organization.type;
                 if (this.generalService.currentBranchUniqueName) {
@@ -224,18 +224,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         const urlTree = this.router.parseUrl(this.router.url);
         delete urlTree.queryParams['redirectUrl']; // remove redirectUrl param
         return this.router.serializeUrl(urlTree);
-    }
-
-    /**
-     * Gets branch unique name from URL query parameters with fallback to provided value
-     *
-     * @param {string} fallbackBranchUniqueName - Branch unique name to use as fallback
-     * @returns {string} Branch unique name from URL or fallback value
-     * @memberof PrimarySidebarComponent
-     */
-    private getBranchUniqueNameFromUrl(fallbackBranchUniqueName: string): string {
-        const urlBranchUniqueName = this.generalService.getUrlParameter("branchUniqueName");
-        return urlBranchUniqueName || fallbackBranchUniqueName;
     }
 
     /**

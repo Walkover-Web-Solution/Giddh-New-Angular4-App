@@ -82,30 +82,6 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     /**
-     * Gets company unique name from URL query parameters with fallback to provided value
-     *
-     * @param {string} fallbackCompanyUniqueName - Company unique name to use as fallback
-     * @returns {string} Company unique name from URL or fallback value
-     * @memberof CompanyBranchComponent
-     */
-    private getCompanyUniqueNameFromUrl(fallbackCompanyUniqueName: string): string {
-        const urlCompanyUniqueName = this.generalService.getUrlParameter("companyUniqueName");
-        return urlCompanyUniqueName || fallbackCompanyUniqueName;
-    }
-
-    /**
-     * Gets branch unique name from URL query parameters with fallback to provided value
-     *
-     * @param {string} fallbackBranchUniqueName - Branch unique name to use as fallback
-     * @returns {string} Branch unique name from URL or fallback value
-     * @memberof CompanyBranchComponent
-     */
-    private getBranchUniqueNameFromUrl(fallbackBranchUniqueName: string): string {
-        const urlBranchUniqueName = this.generalService.getUrlParameter("branchUniqueName");
-        return urlBranchUniqueName || fallbackBranchUniqueName;
-    }
-
-    /**
      * Initializes the component
      *
      * @memberof CompanyBranchComponent
@@ -241,7 +217,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
     private switchCompany(company: any, selectBranchUniqueName: string, fetchLastState?: boolean): void {
         this.store.dispatch(this.companyActions.resetActiveCompanyData());
         this.store.dispatch(this.warehouseAction.resetWarehouseResponse());
-        this.generalService.companyUniqueName = this.getCompanyUniqueNameFromUrl(company?.uniqueName);
+        this.generalService.companyUniqueName = company?.uniqueName;
         this.generalService.voucherApiVersion = company?.voucherVersion || 2;
         this.store.dispatch(this.commonAction.setBranchConsolidated(false));
         
@@ -262,6 +238,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
             this.setOrganizationDetails(OrganizationType.Company, details);
         }
         this.store.dispatch(this.loginAction.ChangeCompany(company?.uniqueName, fetchLastState));
+        this.updateCompanyBranchQueryParams(company?.uniqueName, selectBranchUniqueName || this.generalService.currentBranchUniqueName);
         this.changeDetectorRef.detectChanges();
     }
 
@@ -444,7 +421,6 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
      * @memberof CompanyBranchComponent
      */
     private switchBranch(company: any, branchUniqueName: string, event: any, branch: any): void {
-        branchUniqueName = this.getBranchUniqueNameFromUrl(branchUniqueName)
         this.store.dispatch(this.commonAction.setBranchConsolidated(branch?.consolidatedBranch ?? false));
         this.store.dispatch(this.warehouseAction.resetWarehouseResponse());
         if (this.activeCompany?.uniqueName !== company?.uniqueName) {
@@ -466,6 +442,7 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
             
             this.setOrganizationDetails(OrganizationType.Branch, details);
             this.store.dispatch(this.invoiceAction.getInvoiceSetting());
+            this.updateCompanyBranchQueryParams(this.generalService.companyUniqueName, branchUniqueName);
             this.companyService.getStateDetails(this.generalService.companyUniqueName).pipe(take(1)).subscribe(response => {
                 if (response && response.body) {
                     this.router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
@@ -487,6 +464,39 @@ export class CompanyBranchComponent implements OnInit, OnDestroy, OnChanges {
             this.searchBranch = "";
             this.changeDetectorRef.detectChanges();
         }, 50);
+    }
+
+    /**
+     * Updates query params when company or branch changes, if they are already present in current URL
+     *
+     * @private
+     * @param {string} companyUniqueName - Updated company unique name
+     * @param {string} [branchUniqueName] - Updated branch unique name
+     * @returns {void}
+     * @memberof CompanyBranchComponent
+     */
+    private updateCompanyBranchQueryParams(companyUniqueName: string, branchUniqueName?: string): void {
+        const currentUrlTree = this.router.parseUrl(this.router.url);
+        const currentParams = currentUrlTree.queryParams || {};
+
+        if (!currentParams.companyUniqueName && !currentParams.branchUniqueName) {
+            return;
+        }
+
+        const updatedParams: any = { ...currentParams };
+
+        if (currentParams.companyUniqueName && companyUniqueName) {
+            updatedParams.companyUniqueName = companyUniqueName;
+        }
+
+        if (currentParams.branchUniqueName && branchUniqueName) {
+            updatedParams.branchUniqueName = branchUniqueName;
+        }
+
+        this.router.navigate([], {
+            queryParams: updatedParams,
+            queryParamsHandling: 'merge'
+        });
     }
 
     /**
