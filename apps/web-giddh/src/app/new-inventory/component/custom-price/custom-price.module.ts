@@ -19,7 +19,6 @@ import { AdvanceListItemsPopupComponent } from './advance-list-items-popup/advan
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { NewConfirmModalModule } from '../../../theme/new-confirm-modal';
 import { DiscountControlModule } from '../../../theme/discount-control/discount-control.module';
-import { ScrollComponent } from './advance-list-items-popup/virtual-scroll';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatRadioModule } from '@angular/material/radio';
 import { WatchVideoModule } from '../../../theme/watch-video/watch-video.module';
@@ -53,6 +52,6 @@ import { MatPaginatorModule } from '@angular/material/paginator';
         CustomerWiseComponent,
         AdvanceListItemsPopupComponent
     ],
-    declarations: [MainComponent, CustomerWiseComponent, AdvanceListItemsPopupComponent, ScrollComponent]
+    declarations: [MainComponent, CustomerWiseComponent, AdvanceListItemsPopupComponent]
 })
 export class CustomPriceModule { }
