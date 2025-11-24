@@ -36,37 +36,13 @@ export class OnboardingComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Gets company unique name from URL query parameters with fallback to provided value
-     *
-     * @param {string} fallbackCompanyUniqueName - Company unique name to use as fallback
-     * @returns {string} Company unique name from URL or fallback value
-     * @memberof OnboardingComponent
-     */
-    private getCompanyUniqueNameFromUrl(fallbackCompanyUniqueName: string): string {
-        const urlCompanyUniqueName = this.generalService.getUrlParameter("companyUniqueName");
-        return urlCompanyUniqueName || fallbackCompanyUniqueName;
-    }
-
-    /**
-     * Gets branch unique name from URL query parameters with fallback to provided value
-     *
-     * @param {string} fallbackBranchUniqueName - Branch unique name to use as fallback
-     * @returns {string} Branch unique name from URL or fallback value
-     * @memberof OnboardingComponent
-     */
-    private getBranchUniqueNameFromUrl(fallbackBranchUniqueName: string): string {
-        const urlBranchUniqueName = this.generalService.getUrlParameter("branchUniqueName");
-        return urlBranchUniqueName || fallbackBranchUniqueName;
-    }
-
-    /**
      * Component initialization
      * 
      * @memberof OnboardingComponent
      */
     public ngOnInit(): void {
-        this.companyUniqueName = this.getCompanyUniqueNameFromUrl(this.generalService.companyUniqueName);
-        this.branchUniqueName = this.getBranchUniqueNameFromUrl(this.generalService.currentBranchUniqueName);
+        this.companyUniqueName = this.generalService.companyUniqueName;
+        this.branchUniqueName = this.generalService.currentBranchUniqueName;
         // Check if any data exists, if yes redirect to list page
         this.checkExistingDataAndRedirect();
         
