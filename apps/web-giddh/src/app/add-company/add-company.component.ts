@@ -999,6 +999,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public nextStepForm(): void {
         this.isFormSubmitted = false;
+        this.firstStepForm.get('mobile')?.patchValue(this.firstStepForm.get('mobile')?.value.replace(/\+/g, ''));
         if ((this.selectedStep === 0 && this.firstStepForm.invalid) || (this.showMobileField && !this.isMobileNumberVerified)) {
             this.isFormSubmitted = true;
             if (!this.firstStepForm.invalid && this.showMobileField && !this.isMobileNumberVerified) {
