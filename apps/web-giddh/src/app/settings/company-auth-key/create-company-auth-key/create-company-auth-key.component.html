@@ -3,7 +3,7 @@
         <div class="dialog-header">
             <span class="font-size-16">{{ localeData?.tab_heading }}</span>
         </div>
-        <div mat-dialog-content class="create-discount-aside dialog-body">
+        <div mat-dialog-content class="dialog-body">
             <div *ngIf="isLoading">
                 <giddh-page-loader></giddh-page-loader>
             </div>
@@ -24,8 +24,8 @@
                                         [showError]="isFormSubmitted && !createCompanyAuthKeyForm.get('roleName')?.value"
                                         [name]="'role-name'"
                                         formControlName="roleName"
-                                        [placeholder]="'Enter User Role Name'"
-                                        [label]="'User Role Name'"
+                                        [placeholder]="localeData?.user_role_name_placeholder"
+                                        [label]="localeData?.user_role_name_label"
                                     ></input-field>
                                 </span>
                             </div>
@@ -292,7 +292,7 @@
                         >
                             {{ commonLocaleData?.app_update }}
                         </button>
-                        <button mat-stroked-button mat-dialog-close>
+                        <button mat-stroked-button (click)="cancel()">
                             {{ commonLocaleData?.app_cancel }}
                         </button>
                     </div>

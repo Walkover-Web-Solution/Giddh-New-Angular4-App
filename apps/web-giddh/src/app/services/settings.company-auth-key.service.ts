@@ -18,9 +18,12 @@ export class CompanyAuthKeyService {
     }
 
     /**
-     * Get All Auth Keys
+     * Gets all company auth keys for the current company
+     *
+     * @returns {Observable<BaseResponse<ICompanyAuthKey[], string>>} Observable with list of auth keys
+     * @memberof CompanyAuthKeyService
      */
-    public GetAllAuthKeys(): Observable<BaseResponse<ICompanyAuthKey[], string>> {
+    public getAllAuthKeys(): Observable<BaseResponse<ICompanyAuthKey[], string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + SETTINGS_COMPANY_AUTH_KEY_API.GET_ALL_AUTH_KEYS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
             let data: BaseResponse<ICompanyAuthKey[], string> = res;
@@ -29,9 +32,13 @@ export class CompanyAuthKeyService {
     }
 
     /**
-     * Get Auth Key by Role User
+     * Gets auth key by role/user identifier
+     *
+     * @param {string} roleUser Role or user identifier
+     * @returns {Observable<BaseResponse<ICompanyAuthKey, string>>} Observable with auth key
+     * @memberof CompanyAuthKeyService
      */
-    public GetAuthKey(roleUser: string): Observable<BaseResponse<ICompanyAuthKey, string>> {
+    public getAuthKey(roleUser: string): Observable<BaseResponse<ICompanyAuthKey, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + SETTINGS_COMPANY_AUTH_KEY_API.GET_AUTH_KEY
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
@@ -42,9 +49,14 @@ export class CompanyAuthKeyService {
     }
 
     /**
-     * Create Auth Key
+     * Creates a new auth key for the given role
+     *
+     * @param {string} roleUniqueName Role unique name
+     * @param {CreateCompanyAuthKeyRequest} model Payload for auth key creation
+     * @returns {Observable<BaseResponse<ICompanyAuthKey, CreateCompanyAuthKeyRequest>>} Observable with created auth key
+     * @memberof CompanyAuthKeyService
      */
-    public CreateAuthKey(roleUniqueName: string, model: CreateCompanyAuthKeyRequest): Observable<BaseResponse<ICompanyAuthKey, CreateCompanyAuthKeyRequest>> {
+    public createAuthKey(roleUniqueName: string, model: CreateCompanyAuthKeyRequest): Observable<BaseResponse<ICompanyAuthKey, CreateCompanyAuthKeyRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.post(this.config.apiUrl + SETTINGS_COMPANY_AUTH_KEY_API.CREATE_AUTH_KEY
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
@@ -57,9 +69,14 @@ export class CompanyAuthKeyService {
     }
 
     /**
-     * Update Auth Key
+     * Updates an existing auth key for the given user role
+     *
+     * @param {string} userRoleUniqueName User role unique name
+     * @param {UpdateCompanyAuthKeyRequest} model Payload for auth key update
+     * @returns {Observable<BaseResponse<ICompanyAuthKey, UpdateCompanyAuthKeyRequest>>} Observable with updated auth key
+     * @memberof CompanyAuthKeyService
      */
-    public UpdateAuthKey(userRoleUniqueName: string, model: UpdateCompanyAuthKeyRequest): Observable<BaseResponse<ICompanyAuthKey, UpdateCompanyAuthKeyRequest>> {
+    public updateAuthKey(userRoleUniqueName: string, model: UpdateCompanyAuthKeyRequest): Observable<BaseResponse<ICompanyAuthKey, UpdateCompanyAuthKeyRequest>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.put(this.config.apiUrl + SETTINGS_COMPANY_AUTH_KEY_API.UPDATE_AUTH_KEY
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
@@ -72,9 +89,13 @@ export class CompanyAuthKeyService {
     }
 
     /**
-     * Delete Auth Key
+     * Deletes auth key for the given user role
+     *
+     * @param {string} userRoleUniqueName User role unique name
+     * @returns {Observable<BaseResponse<string, string>>} Observable with delete response
+     * @memberof CompanyAuthKeyService
      */
-    public DeleteAuthKey(userRoleUniqueName: string): Observable<BaseResponse<string, string>> {
+    public deleteAuthKey(userRoleUniqueName: string): Observable<BaseResponse<string, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.delete(this.config.apiUrl + SETTINGS_COMPANY_AUTH_KEY_API.DELETE_AUTH_KEY
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))

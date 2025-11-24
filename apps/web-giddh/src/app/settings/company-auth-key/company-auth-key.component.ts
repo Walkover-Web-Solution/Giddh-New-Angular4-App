@@ -1,6 +1,5 @@
 import { takeUntil } from 'rxjs/operators';
 import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { IOption } from '../../app.constant';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { ToasterService } from '../../services/toaster.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -18,13 +17,13 @@ import { NewConfirmationModalComponent } from '../../theme/new-confirmation-moda
 })
 
 export class CompanyAuthKeyComponent implements OnInit, OnDestroy {
- /** Holds Create New Account Dialog Template Ref */
+    /** Holds Create New Account Dialog Template Ref */
     @ViewChild('createNew', { static: true }) public createNew: TemplateRef<any>;
     /** Holds Create Request */
     public createRequest: CreateCompanyAuthKeyRequest = new CreateCompanyAuthKeyRequest();
     /** Holds Delete Request */
     public deleteRequest: string = null;
-    /** Holds Discount list */
+    /** Holds company auth key list */
     public companyAuthKeyList: ICompanyAuthKey[] = [];
     /** Observable for create/update/delete api call in progress */
     public isLoading$: Observable<boolean>;
@@ -34,14 +33,14 @@ export class CompanyAuthKeyComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** True if get all discounts api call in progress */
+    /** True if get all company auth keys api call in progress */
     public isLoading: boolean = false;
     /** Holds Mat Table Display columns */
-    public displayedColumns: string[] = ['number', 'entity','authKey', 'userName', 'roleName', 'action'];
+    public displayedColumns: string[] = ['number', 'entity', 'authKey', 'userName', 'roleName', 'action'];
     /** Holds create new company auth key dialog ref */
     public createNewCompanyAuthKeyDialogRef: MatDialogRef<any>;
     /** Voucher API Version */
-    public voucherApiVersion: number = 1 | 2
+    public voucherApiVersion: number = 1 | 2;
 
     constructor(
         private companyAuthKeyService: CompanyAuthKeyService,
@@ -55,18 +54,17 @@ export class CompanyAuthKeyComponent implements OnInit, OnDestroy {
     /**
      * Lifecycle hook for initialization
      *
-     * @memberof DiscountComponent
+     * @memberof CompanyAuthKeyComponent
      */
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.getCompanyAuthKeys();
-
     }
 
     /**
-    * Open Create/Update Discount Aside Pane
+    * Open Create/Update company auth key aside pane
     *
-    * @memberof DiscountComponent
+    * @memberof CompanyAuthKeyComponent
     */
     public openCreateEditCompanyAuthKeyAsidePane(authKeyInfo?: CreateCompanyAuthKeyRequest): void {
         this.createNewCompanyAuthKeyDialogRef = this.dialog.open(this.createNew, {
@@ -82,12 +80,12 @@ export class CompanyAuthKeyComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Copy Auth Key
+     * Copies auth key to clipboard
      *
-     * @memberof DiscountComponent
+     * @memberof CompanyAuthKeyComponent
      */
     public copyAuthKey(row: any): void {
-        this.getAuthKey(row.uniqueName);
+        this.getAuthKey(row?.uniqueName);
     }
 
     /**
@@ -95,13 +93,13 @@ export class CompanyAuthKeyComponent implements OnInit, OnDestroy {
    *
    * @private
    * @param {string} roleUser
-   * @memberof CreateCompanyAuthKeyComponent
+   * @memberof CompanyAuthKeyComponent
    */
     private getAuthKey(roleUser: string): void {
-        this.companyAuthKeyService.GetAuthKey(roleUser).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.companyAuthKeyService.getAuthKey(roleUser).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 this.clipboardService.copyFromContent(response.body);
-                this.toaster.showSnackBar("success", 'Auth key copied successfully');
+                this.toaster.showSnackBar("success", this.localeData?.copy_auth_key_success || 'Auth key copied successfully');
             } else {
                 if (response?.message) {
                     this.toaster.showSnackBar("error", response?.message);
@@ -111,29 +109,29 @@ export class CompanyAuthKeyComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Open delete discount confirmation dialog
+     * Open delete company auth key confirmation dialog
      *
      * @param {string} uniqueName
-     * @memberof DiscountComponent
+     * @memberof CompanyAuthKeyComponent
      */
-    public showDeleteAuthKeyDialog(uniqueName: string): void {
+    public showdeleteAuthKeyDialog(uniqueName: string): void {
         this.deleteRequest = uniqueName;
         const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
             panelClass: ['mat-dialog-sm'],
             disableClose: true,
             data: {
                 configuration: this.generalService.deleteConfiguration(
-                    'Are you sure you want to delete this company auth key?',
+                    this.localeData?.delete_company_auth_key_confirmation || 'Are you sure you want to delete this company auth key?',
                     this.commonLocaleData
                 )
             }
         });
         dialogRef.afterClosed().subscribe(response => {
             if (response === this.commonLocaleData?.app_yes) {
-                this.companyAuthKeyService.DeleteAuthKey(this.deleteRequest).pipe(takeUntil(this.destroyed$)).subscribe(res => {
-                    if(res?.status === "success"){
+                this.companyAuthKeyService.deleteAuthKey(this.deleteRequest).pipe(takeUntil(this.destroyed$)).subscribe(res => {
+                    if (res?.status === "success") {
                         this.showToaster('success', res?.body);
-                    }else{
+                    } else {
                         this.showToaster('error', res?.body ?? res?.message);
                     }
                     this.isLoading$ = of(false);
@@ -143,18 +141,18 @@ export class CompanyAuthKeyComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Fetching list of discounts
+     * Fetching list of company auth keys
      *
      * @private
-     * @memberof DiscountComponent
+     * @memberof CompanyAuthKeyComponent
      */
     private getCompanyAuthKeys(): void {
         this.isLoading = true;
-        this.companyAuthKeyService.GetAllAuthKeys().pipe(takeUntil(this.destroyed$)).subscribe(response => {
+        this.companyAuthKeyService.getAllAuthKeys().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 this.companyAuthKeyList = response?.body;
             } else {
-                if(response?.message){
+                if (response?.message) {
                     this.toaster.showSnackBar("error", response?.message);
                 }
             }
@@ -163,12 +161,12 @@ export class CompanyAuthKeyComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will show toaster for success/error message and will get all discounts if success response received
+     * This will show toaster for success/error message and will get all company auth keys if success response received
      *
      * @private
      * @param {string} successMessage
      * @param {*} response
-     * @memberof DiscountComponent
+     * @memberof CompanyAuthKeyComponent
      */
     private showToaster(successMessage: string, response: any): void {
         this.toaster.clearAllToaster();
@@ -185,7 +183,7 @@ export class CompanyAuthKeyComponent implements OnInit, OnDestroy {
     /**
      * Unsubscribes from all the listeners
      *
-     * @memberof DiscountComponent
+     * @memberof CompanyAuthKeyComponent
      */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);

@@ -14,6 +14,8 @@
     "unique_name_email_placeholder": "Unique Name/Email ID",
     "role_name_label": "Role Name",
     "role_name_placeholder": "Select role",
+    "user_role_name_label": "User Role Name",
+    "user_role_name_placeholder": "Enter User Role Name",
     "time_span": "Time Span",
     "from_to_label": "From - To",
     "from_to_placeholder": "Select Date Range",
@@ -25,5 +27,11 @@
     "delete_user_permission": "Are you sure you want to delete this user's permission?",
     "past_period_duration": "Past [DURATION] [PERIOD]S",
     "invalid_date": "Invalid date",
-    "add_custom_role": "Custom Role"
+    "add_custom_role": "Custom Role",
+    "copy_auth_key_success": "Auth key copied successfully",
+    "delete_company_auth_key_confirmation": "Are you sure you want to delete this company auth key?",
+    "entity_column_label": "Entity",
+    "auth_key_column_label": "Auth Key",
+    "user_name_column_label": "User Name",
+    "role_name_column_label": "Role Name"
 }
