@@ -44,19 +44,19 @@
                             </mat-radio-button>
                         </mat-radio-group>
                         <input
-                            type="text"
+                            type="number"
                             class="form-control"
                             maxlength="10"
-                            decimalDigitsDirective
+                            digitsOnlyDirective
                             formControlName="hsnNumber"
                             *ngIf="addGroupForm.get('showCodeType')?.value === 'hsn'"
                         />
                         <input
-                            type="text"
+                            type="number"
                             class="form-control"
                             maxlength="10"
                             formControlName="sacNumber"
-                            decimalDigitsDirective
+                            digitsOnlyDirective
                             *ngIf="addGroupForm.get('showCodeType')?.value === 'sac'"
                         />
                     </div>
