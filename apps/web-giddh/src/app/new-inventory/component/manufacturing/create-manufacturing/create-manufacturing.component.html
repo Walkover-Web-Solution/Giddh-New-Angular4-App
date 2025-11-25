@@ -74,7 +74,7 @@
                         ></watch-video>
                     </div>
                 </div>
-                <div class="row max-width-stock position-relative ">
+                <div class="row max-width-stock position-relative">
                     <div class="col-3">
                         <div class="row">
                             <div class="form-fields w-100">
@@ -88,6 +88,7 @@
                                             [label]="commonLocaleData?.app_stock"
                                             [placeholder]="commonLocaleData?.app_select_stock"
                                             [options]="manufacturingObject.manufacturingDetails[0].stocks"
+                                            [(ngModel)]="manufacturingObject.manufacturingDetails[0].stockUniqueName"
                                             (selectedOption)="
                                                 manufacturingObject.manufacturingDetails[0].manufacturingUnitCode =
                                                     $event?.additional?.stockUnitCode;
@@ -250,8 +251,8 @@
                                             <tbody (mouseleave)="activeLinkedStockIndex = null">
                                                 <ng-container
                                                     *ngFor="
-                                                        let linkedStock of manufacturingObject
-                                                            .manufacturingDetails[0].linkedStocks;
+                                                        let linkedStock of manufacturingObject.manufacturingDetails[0]
+                                                            .linkedStocks;
                                                         let i = index
                                                     "
                                                 >
@@ -276,23 +277,14 @@
                                                                     "
                                                                     [name]="'stock' + i"
                                                                     [scrollableElementId]="'stock' + i"
-                                                                    [placeholder]="
-                                                                        commonLocaleData?.app_select_stock
-                                                                    "
+                                                                    [placeholder]="commonLocaleData?.app_select_stock"
                                                                     [options]="linkedStock.stocks"
                                                                     (selectedOption)="
                                                                         linkedStock.selectedStock = $event;
                                                                         validateSelectedStock(i);
-                                                                        getStockVariants(
-                                                                            linkedStock,
-                                                                            $event,
-                                                                            false,
-                                                                            i
-                                                                        )
+                                                                        getStockVariants(linkedStock, $event, false, i)
                                                                     "
-                                                                    [defaultValue]="
-                                                                        linkedStock.selectedStock?.label
-                                                                    "
+                                                                    [defaultValue]="linkedStock.selectedStock?.label"
                                                                     [enableDynamicSearch]="true"
                                                                     [isPaginationEnabled]="true"
                                                                     (dynamicSearchedQuery)="
@@ -329,14 +321,11 @@
                                                                     "
                                                                     [name]="'variantUniqueName' + i"
                                                                     [scrollableElementId]="'variant' + i"
-                                                                    [placeholder]="
-                                                                        commonLocaleData?.app_select_variant
-                                                                    "
+                                                                    [placeholder]="commonLocaleData?.app_select_variant"
                                                                     [options]="linkedStock.variants"
                                                                     (selectedOption)="
                                                                         linkedStock.variant.name = $event.label;
-                                                                        linkedStock.variant.uniqueName =
-                                                                            $event.value;
+                                                                        linkedStock.variant.uniqueName = $event.value;
                                                                         validateSelectedVariant(i);
                                                                         getRateForStock(linkedStock, i)
                                                                     "
@@ -374,8 +363,7 @@
                                                                 <div class="field-m-width">
                                                                     <select-field
                                                                         [cssClass]="
-                                                                            'disable-bg w-100 ' +
-                                                                            linkedStock.cssClass
+                                                                            'disable-bg w-100 ' + linkedStock.cssClass
                                                                         "
                                                                         [name]="'variantUnit' + i"
                                                                         [scrollableElementId]="'variantUnit' + i"
@@ -387,14 +375,11 @@
                                                                         (selectedOption)="
                                                                             linkedStock.stockUnitUniqueName =
                                                                                 $event.value;
-                                                                            linkedStock.stockUnitCode =
-                                                                                $event.label;
+                                                                            linkedStock.stockUnitCode = $event.label;
                                                                             getRateForStock(linkedStock, i)
                                                                         "
                                                                         [defaultValue]="linkedStock.stockUnitCode"
-                                                                        [readonly]="
-                                                                            isCompany || isConsolidatedBranch
-                                                                        "
+                                                                        [readonly]="isCompany || isConsolidatedBranch"
                                                                     >
                                                                     </select-field>
                                                                 </div>
@@ -608,7 +593,8 @@
                                                             <td class="table-delete">
                                                                 <i
                                                                     [ngClass]="{
-                                                                        'visibility-hidden': activeOtherExpenseIndex !== i
+                                                                        'visibility-hidden':
+                                                                            activeOtherExpenseIndex !== i
                                                                     }"
                                                                     class="icon-trash cursor-pointer"
                                                                     aria-hidden="true"

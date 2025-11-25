@@ -262,6 +262,15 @@ export class SelectFieldComponent implements OnInit, OnChanges, OnDestroy, After
     }
 
     /**
+     * Reset search query
+     *
+     * @memberof SelectFieldComponent
+     */
+    public resetSearchQuery(): void {
+        this.dynamicSearchedQuery.emit('');
+    }
+
+    /**
      * Displays the label on selection
      *
      * @param {*} option
