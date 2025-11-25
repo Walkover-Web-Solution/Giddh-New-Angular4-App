@@ -1,9 +1,6 @@
 <div class="fill scroll-y noscroll-x scrollbox">
     <div class="filter-band px-0">
-        <button
-            mat-stroked-button
-            (click)="redirectToGstFilingReturn()"
-        >
+        <button mat-stroked-button (click)="redirectToGstFilingReturn()">
             <svg
                 style="top: 3px; position: relative"
                 version="1.1"
@@ -21,38 +18,41 @@
             </svg>
             {{ commonLocaleData?.app_back }}
         </button>
-        <div class="filter-row ml-2" *ngIf="selectedGst === GstReport.Gstr1 && (filterParam.type === 'nil' || filterParam.type === 'b2cs')">
+        <div
+            class="filter-row ml-2"
+            *ngIf="selectedGst === GstReport.Gstr1 && (filterParam.type === 'nil' || filterParam.type === 'b2cs')"
+        >
             <div class="name">{{ localeData?.filing?.transaction_type }}:</div>
             <div class="btn-group filter d-inline-block">
-                <button
-                    mat-stroked-button
-                    type="button"
-                    [matMenuTriggerFor]="entityTypeMenu"
-                >
+                <button mat-stroked-button type="button" [matMenuTriggerFor]="entityTypeMenu">
                     {{ selectedFilter?.entityType }} <span class="caret"></span>
                 </button>
                 <mat-menu #entityTypeMenu="matMenu">
                     <ng-container *ngFor="let entity of gstr1entityType">
-                        <button mat-menu-item aria-label="download" (click)="viewFilteredTxn('entityType', entity?.value)">
+                        <button
+                            mat-menu-item
+                            aria-label="download"
+                            (click)="viewFilteredTxn('entityType', entity?.value)"
+                        >
                             {{ entity.label }}
                         </button>
                     </ng-container>
                 </mat-menu>
             </div>
-            </div>
-            <div class="filter-row" *ngIf="selectedGst === GstReport.Gstr2 && filterParam.type === 'b2bur'">
-                <div class="name">{{ localeData?.filing?.transaction_type }}:</div>
+        </div>
+        <div class="filter-row" *ngIf="selectedGst === GstReport.Gstr2 && filterParam.type === 'b2bur'">
+            <div class="name">{{ localeData?.filing?.transaction_type }}:</div>
             <div class="btn-group filter d-inline-block">
-                <button
-                    mat-stroked-button
-                    type="button"
-                    [matMenuTriggerFor]="entityTypeMenu"
-                >
+                <button mat-stroked-button type="button" [matMenuTriggerFor]="entityTypeMenu">
                     {{ selectedFilter?.entityType }} <span class="caret"></span>
                 </button>
                 <mat-menu #entityTypeMenu="matMenu">
                     <ng-container *ngFor="let entity of gstr2entityType">
-                        <button mat-menu-item aria-label="download" (click)="viewFilteredTxn('entityType', entity?.value)">
+                        <button
+                            mat-menu-item
+                            aria-label="download"
+                            (click)="viewFilteredTxn('entityType', entity?.value)"
+                        >
                             {{ entity.label }}
                         </button>
                     </ng-container>
@@ -62,80 +62,91 @@
     </div>
     <div>
         <div class="table-responsive">
-
-            <table  
-                mat-table [dataSource]="(viewTransaction$ | async)?.results" 
+            <table
+                mat-table
+                [dataSource]="(viewTransaction$ | async)?.results"
                 class="table transactions-table w-100 table-hover"
-                *ngIf="!(viewTransactionInProgress$ | async) && (viewTransaction$ | async) && (viewTransaction$ | async)?.totalItems"
+                *ngIf="
+                    !(viewTransactionInProgress$ | async) &&
+                    (viewTransaction$ | async) &&
+                    (viewTransaction$ | async)?.totalItems
+                "
             >
                 <!-- Invoice Date Column -->
                 <ng-container matColumnDef="invoiceDate">
-                    <th mat-header-cell *matHeaderCellDef class="date-width"> {{ localeData?.filing?.invoice_date }} </th>
-                    <td mat-cell *matCellDef="let item" class="date-width"> {{ item.voucherDate ?? "-" }} </td>
+                    <th mat-header-cell *matHeaderCellDef class="date-width">{{ localeData?.filing?.invoice_date }}</th>
+                    <td mat-cell *matCellDef="let item" class="date-width">{{ item.voucherDate ?? "-" }}</td>
                 </ng-container>
 
-                <!-- Invoice # Column --> 
+                <!-- Invoice # Column -->
                 <ng-container matColumnDef="invoiceNumber">
-                    <th mat-header-cell *matHeaderCellDef> {{ localeData?.filing?.invoice_no }} </th>
-                    <td mat-cell *matCellDef="let item" class="no-wrap"> 
-                        <span [ngClass]="{'btn-link': item.voucherType !== voucherTypeEnum.purchase }" (click)="voucherApiVersion === 2 && onSelectInvoice(item)">
-                            {{ item.voucherNumber ??  "-" }}
-                        </span> 
+                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.filing?.invoice_no }}</th>
+                    <td mat-cell *matCellDef="let item" class="no-wrap">
+                        <span
+                            [ngClass]="{ 'btn-link': item.voucherType !== voucherTypeEnum.purchase }"
+                            (click)="voucherApiVersion === 2 && onSelectInvoice(item)"
+                        >
+                            {{ item.voucherNumber ?? "-" }}
+                        </span>
                     </td>
                 </ng-container>
 
                 <!-- Customer GSTIN Column -->
                 <ng-container matColumnDef="customerGSTIN">
-                    <th mat-header-cell *matHeaderCellDef> {{ commonLocaleData?.app_customer_gstin }} </th>
-                    <td mat-cell *matCellDef="let item"> {{ item.accountGstin ?? "-" }} </td>
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_customer_gstin }}</th>
+                    <td mat-cell *matCellDef="let item">{{ item.accountGstin ?? "-" }}</td>
                 </ng-container>
 
                 <!-- Customer Name Column -->
                 <ng-container matColumnDef="customerName">
-                    <th mat-header-cell *matHeaderCellDef> {{ commonLocaleData?.app_customer_name }} </th>
-                    <td mat-cell *matCellDef="let item"> {{ item.accountName ?? "-" }} </td>
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_customer_name }}</th>
+                    <td mat-cell *matCellDef="let item">{{ item.accountName ?? "-" }}</td>
                 </ng-container>
 
                 <!-- Voucher Type Column -->
                 <ng-container matColumnDef="voucherType">
-                    <th mat-header-cell *matHeaderCellDef> {{ true ?  commonLocaleData?.app_voucher_type : commonLocaleData?.app_type }} </th>
-                    <td mat-cell *matCellDef="let item"> 
-                        {{ 
-                            filterParam.entityType === 'unregistered-notes' 
-                            ? item?.typ ?? "-" 
-                            : (item?.voucherType | titlecase) ?? "-"
-                         }} 
+                    <th mat-header-cell *matHeaderCellDef>
+                        {{ true ? commonLocaleData?.app_voucher_type : commonLocaleData?.app_type }}
+                    </th>
+                    <td mat-cell *matCellDef="let item">
+                        {{
+                            filterParam.entityType === "unregistered-notes"
+                                ? item?.typ ?? "-"
+                                : (item?.voucherType | titlecase) ?? "-"
+                        }}
                     </td>
                 </ng-container>
 
                 <!-- Status Column -->
                 <ng-container matColumnDef="status">
-                    <th mat-header-cell *matHeaderCellDef> {{ commonLocaleData?.app_status }} </th>
-                    <td mat-cell *matCellDef="let item"> {{ item?.status ?? "-" }} </td>
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_status }}</th>
+                    <td mat-cell *matCellDef="let item">{{ item?.status ?? "-" }}</td>
                 </ng-container>
 
                 <!-- Action on GSTN Column -->
                 <ng-container matColumnDef="actionOnGSTN">
-                    <th mat-header-cell *matHeaderCellDef> {{ localeData?.filing?.gstn_action }} </th>
-                    <td mat-cell *matCellDef="let item"> {{ item.actionOnGstin ?? "-" }} </td>
+                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.filing?.gstn_action }}</th>
+                    <td mat-cell *matCellDef="let item">{{ item.actionOnGstin ?? "-" }}</td>
                 </ng-container>
 
                 <!-- Place of Supply Column -->
                 <ng-container matColumnDef="placeOfSupply">
-                    <th mat-header-cell *matHeaderCellDef> {{ localeData?.filing?.place_supply }} </th>
-                    <td mat-cell *matCellDef="let item"> {{ item.pos ?? "-" }} </td>
+                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.filing?.place_supply }}</th>
+                    <td mat-cell *matCellDef="let item">{{ item.pos ?? "-" }}</td>
                 </ng-container>
 
                 <!-- Reverse Charge Column -->
                 <ng-container matColumnDef="reverseCharge">
-                    <th mat-header-cell *matHeaderCellDef> {{ commonLocaleData?.app_reverse_charge }} </th>
-                    <td mat-cell *matCellDef="let item"> {{ item.reverseCharge ?? "-" }} </td>
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_reverse_charge }}</th>
+                    <td mat-cell *matCellDef="let item">{{ item.reverseCharge ?? "-" }}</td>
                 </ng-container>
 
                 <!-- Taxable Amount Column -->
                 <ng-container matColumnDef="taxableAmount">
-                    <th mat-header-cell *matHeaderCellDef class="text-right"> {{ localeData?.filing?.taxable_amount }} </th>
-                    <td mat-cell *matCellDef="let item" class="text-right"> 
+                    <th mat-header-cell *matHeaderCellDef class="text-right">
+                        {{ localeData?.filing?.taxable_amount }}
+                    </th>
+                    <td mat-cell *matCellDef="let item" class="text-right">
                         <span class="d-inline-flex align-items-center">
                             <i class="icon-rupees icon-font-11"></i>
                             <amount-field
@@ -150,15 +161,11 @@
 
                 <!-- IGST Column -->
                 <ng-container matColumnDef="igst">
-                    <th mat-header-cell *matHeaderCellDef class="text-right"> {{ localeData?.filing?.igst }} </th>
-                    <td mat-cell *matCellDef="let item" class="text-right"> 
+                    <th mat-header-cell *matHeaderCellDef class="text-right">{{ localeData?.filing?.igst }}</th>
+                    <td mat-cell *matCellDef="let item" class="text-right">
                         <span class="d-inline-flex align-items-center">
                             <i class="icon-rupees icon-font-11"></i>
-                            <amount-field
-                                [amount]="item?.igstAmount"
-                                [currencySymbol]="false"
-                                [currencyCode]="false"
-                            >
+                            <amount-field [amount]="item?.igstAmount" [currencySymbol]="false" [currencyCode]="false">
                             </amount-field>
                         </span>
                     </td>
@@ -166,15 +173,11 @@
 
                 <!-- CGST Column -->
                 <ng-container matColumnDef="cgst">
-                    <th mat-header-cell *matHeaderCellDef class="text-right"> {{ localeData?.filing?.cgst }} </th>
-                    <td mat-cell *matCellDef="let item" class="text-right"> 
+                    <th mat-header-cell *matHeaderCellDef class="text-right">{{ localeData?.filing?.cgst }}</th>
+                    <td mat-cell *matCellDef="let item" class="text-right">
                         <span class="d-inline-flex align-items-center">
                             <i class="icon-rupees icon-font-11"></i>
-                            <amount-field
-                                [amount]="item?.cgstAmount"
-                                [currencySymbol]="false"
-                                [currencyCode]="false"
-                            >
+                            <amount-field [amount]="item?.cgstAmount" [currencySymbol]="false" [currencyCode]="false">
                             </amount-field>
                         </span>
                     </td>
@@ -182,15 +185,11 @@
 
                 <!-- SGST Column -->
                 <ng-container matColumnDef="sgst">
-                    <th mat-header-cell *matHeaderCellDef class="text-right"> {{ localeData?.filing?.sgst }} </th>
-                    <td mat-cell *matCellDef="let item" class="text-right"> 
+                    <th mat-header-cell *matHeaderCellDef class="text-right">{{ localeData?.filing?.sgst }}</th>
+                    <td mat-cell *matCellDef="let item" class="text-right">
                         <span class="d-inline-flex align-items-center">
                             <i class="icon-rupees icon-font-11"></i>
-                            <amount-field
-                                [amount]="item?.sgstAmount"
-                                [currencySymbol]="false"
-                                [currencyCode]="false"
-                            >
+                            <amount-field [amount]="item?.sgstAmount" [currencySymbol]="false" [currencyCode]="false">
                             </amount-field>
                         </span>
                     </td>
@@ -198,15 +197,11 @@
 
                 <!-- CESS Column -->
                 <ng-container matColumnDef="cess">
-                    <th mat-header-cell *matHeaderCellDef class="text-right"> {{ commonLocaleData?.app_cess }} </th>
-                    <td mat-cell *matCellDef="let item" class="text-right"> 
+                    <th mat-header-cell *matHeaderCellDef class="text-right">{{ commonLocaleData?.app_cess }}</th>
+                    <td mat-cell *matCellDef="let item" class="text-right">
                         <span class="d-inline-flex align-items-center">
                             <i class="icon-rupees icon-font-11"></i>
-                            <amount-field
-                                [amount]="item?.cessAmount"
-                                [currencySymbol]="false"
-                                [currencyCode]="false"
-                            >
+                            <amount-field [amount]="item?.cessAmount" [currencySymbol]="false" [currencyCode]="false">
                             </amount-field>
                         </span>
                     </td>
@@ -214,21 +209,19 @@
 
                 <!-- Total Invoice Value Column -->
                 <ng-container matColumnDef="totalInvoiceValue">
-                    <th mat-header-cell *matHeaderCellDef class="text-right"> {{ localeData?.filing?.total_invoice_value }} </th>
-                    <td mat-cell *matCellDef="let item" class="text-right"> 
+                    <th mat-header-cell *matHeaderCellDef class="text-right">
+                        {{ localeData?.filing?.total_invoice_value }}
+                    </th>
+                    <td mat-cell *matCellDef="let item" class="text-right">
                         <span class="d-inline-flex align-items-center">
                             <i class="icon-rupees icon-font-11"></i>
-                            <amount-field
-                                [amount]="item?.totalAmount"
-                                [currencySymbol]="false"
-                                [currencyCode]="false"
-                            >
+                            <amount-field [amount]="item?.totalAmount" [currencySymbol]="false" [currencyCode]="false">
                             </amount-field>
                         </span>
                     </td>
                 </ng-container>
 
-                <tr mat-header-row *matHeaderRowDef="displayedColumns;"></tr>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
             </table>
         </div>
@@ -241,7 +234,7 @@
             [pageSizeOptions]="pageSizeOptions"
             [hidePageSize]="false"
             [pageIndex]="pageIndex"
-            class="mt-15"
+            class="mt-3"
         >
         </mat-paginator>
         <section class="mb-custom-80"></section>
