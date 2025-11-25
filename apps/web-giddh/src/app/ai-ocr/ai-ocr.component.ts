@@ -288,7 +288,6 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                     });
 
                     this.aiOcrService.sendListData$.pipe(takeUntil(this.routeScope$)).subscribe((response) => {
-                        console.log("response", response);
                         if (response) {
                             this.getListData(response);
                         }
