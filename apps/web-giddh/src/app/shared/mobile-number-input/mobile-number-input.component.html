@@ -93,9 +93,9 @@
     <span class="text-danger" *ngIf="mobileControl.hasError('invalidNumber') || mobileControl.hasError('parseError')">
         {{ getTranslatedMessage("invalid_number") }}
     </span>
-    <!-- <span class="text-danger" *ngIf="mobileControl.hasError('notMobile')">
+    <span class="text-danger" *ngIf="mobileControl.hasError('notMobile')">
         {{ getTranslatedMessage('not_mobile') }}
-    </span> -->
+    </span>
     <span class="text-danger" *ngIf="mobileControl.hasError('obviouslyInvalid')">
         {{ getTranslatedMessage("obviously_invalid") }}
     </span>
