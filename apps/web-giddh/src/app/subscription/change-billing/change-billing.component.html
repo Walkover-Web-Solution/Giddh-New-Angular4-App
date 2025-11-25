@@ -71,40 +71,13 @@
                         </div>
                         <div class="form-group">
                             <!-- Mobile Number -->
-                            <div id="init-contact-wrapper" class="position-relative w-100">
-                                <input
-                                    type="tel"
-                                    #initContact
-                                    (keypress)="
-                                        intlClass?.onlyPhoneNumber($event);
-                                        changeBillingForm.controls['mobileNumber']?.markAsDirty()
-                                    "
-                                    [id]="'init-contact'"
-                                    [placeholder]="commonLocaleData?.app_mobile_number"
-                                    [attr.name]="'billingMobileNumber' + currentTimeStamp"
-                                    [autocomplete]="'billingMobileNumber' + currentTimeStamp"
-                                    class="mat-form-field-border mat-form-field-height mobile-height bg-transparent border bg-transparent"
-                                    [ngClass]="{
-                                        'invalid-input':
-                                            isFormSubmitted ||
-                                            (changeBillingForm.get('mobileNumber')?.touched &&
-                                                !intlClass?.isRequiredValidNumber)
-                                    }"
-                                    (blur)="
-                                        changeBillingForm.controls['mobileNumber']?.markAsTouched();
-                                        changeBillingForm
-                                            .get('mobileNumber')
-                                            ?.setValue(intlClass?.phoneNumber?.replace('+', ''))
-                                    "
-                                />
-                                <mat-error
-                                    *ngIf="
-                                        changeBillingForm.get('mobileNumber')?.touched &&
-                                        !intlClass?.isRequiredValidNumber
-                                    "
-                                    >{{ localeData?.enter_valid_number }}</mat-error
-                                >
-                            </div>
+                            <mobile-number-input
+                                formControlName="mobileNumber"
+                                [label]="commonLocaleData?.app_mobile_number"
+                                [required]="true"
+                                [useImageFlags]="true"
+                            >
+                            </mobile-number-input>
                         </div>
                         <div class="form-group">
                             <div class="width-100">

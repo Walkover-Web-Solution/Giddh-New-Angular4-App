@@ -52,7 +52,7 @@ export function mobileNumberValidator(country: Country | null) {
             if (!phoneUtil.isValidNumber(phoneNumber)) {
                 return { invalidNumber: true };
             }
-            
+
             // Check if it's a mobile number
             const numberType = phoneUtil.getNumberType(phoneNumber);
             if (numberType !== libphonenumber.PhoneNumberType.MOBILE && 
@@ -313,7 +313,7 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
             if (!phoneUtil.isValidNumber(phoneNumber)) {
                 return { invalidNumber: true };
             }
-            
+
             // Check if it's a mobile number
             const numberType = phoneUtil.getNumberType(phoneNumber);
             if (numberType !== libphonenumber.PhoneNumberType.MOBILE && 
