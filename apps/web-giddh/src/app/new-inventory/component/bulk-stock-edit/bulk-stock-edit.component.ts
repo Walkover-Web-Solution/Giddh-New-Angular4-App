@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild, ViewChildren, QueryList, AfterViewInit, Renderer2 } from '@angular/core';
 import { FormArray, FormControl, FormGroup, UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, ReplaySubject, debounceTime, distinctUntilChanged, filter, of, take, takeUntil } from 'rxjs';
@@ -222,7 +222,8 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
         private salesService: SalesService,
         private inventoryService: InventoryService,
         private manufacturingService: ManufacturingService,
-        private companyAction: CompanyActions
+        private companyAction: CompanyActions,
+        private renderer: Renderer2
     ) {
         this.initBulkStockForm();
         this.getCustomFields();
@@ -249,8 +250,10 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof BulkStockEditComponent
      */
     public ngOnInit(): void {
+        // Add CSS class to body element
+        this.renderer.addClass(document.body, 'bulk-stock-edit');
         this.searchInputObservableInitialize();
-
+        
         this.store.pipe(
             select(select => select.inventory.bulkStock),
             takeUntil(this.destroyed$)
@@ -1250,6 +1253,8 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof BulkStockEditComponent
      */
     public ngOnDestroy(): void {
+        // Remove CSS class from body element
+        this.renderer.removeClass(document.body, 'bulk-stock-edit');
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

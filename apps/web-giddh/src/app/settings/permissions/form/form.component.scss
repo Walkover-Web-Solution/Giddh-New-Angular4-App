@@ -1,5 +1,5 @@
 .field-wrapper {
-    &>div {
+    & > div {
         flex: 1 0 240px;
         max-width: 240px;
 
@@ -28,6 +28,14 @@
 
         &.range-wrapper {
             width: 238px;
+        }
+    }
+}
+
+:host ::ng-deep .field-wrapper {
+    .mat-mdc-menu-trigger {
+        .mdc-button__label {
+            width: 100% !important;
         }
     }
 }
