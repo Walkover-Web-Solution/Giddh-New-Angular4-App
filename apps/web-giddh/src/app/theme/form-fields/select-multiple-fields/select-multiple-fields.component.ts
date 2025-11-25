@@ -175,7 +175,7 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
             }
             // Refresh filtered options when selected values change
             if (!this.enableDynamicSearch && this.options) {
-                this.filterOptions(this.lastSearchString || "");
+                this.filterOptions("");
             } else if (this.enableDynamicSearch && this.options) {
                 // For dynamic search, refresh filtered options to hide selected items
                 this.fieldFilteredOptions$ = of(this.getFilteredOptionsForDynamicSearch(this.options));
@@ -432,7 +432,7 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
                 this.fieldFilteredOptions$ = of(this.getFilteredOptionsForDynamicSearch(this.options));
             }
         } else {
-            this.filterOptions(this.lastSearchString || "");
+            this.filterOptions("");
         }
     }
 }

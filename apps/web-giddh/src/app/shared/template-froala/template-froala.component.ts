@@ -112,6 +112,8 @@ export class TemplateFroalaComponent implements OnInit {
     public filteredActionList: IOption[] = [];
     /** Holds true if show day of week dropdown */
     public showDayOfWeek: boolean = null;
+    /** Holds selected time action value for day action dropdown */
+    public selectedTimeAction: string = '';
     /** Hold if user click outside of email section */
     public clickedInsideEmailSection: boolean = false;
     /** Holds all static emails (To, Cc, Bcc) combined in a single string */
@@ -1003,6 +1005,7 @@ export class TemplateFroalaComponent implements OnInit {
 
         if (event?.value) {
             this.showDayOfWeek = event.value === OtherTimeOptionsEnum.DayOfWeek;
+            this.selectedTimeAction = event.value;
             this.setTimeActionValidator();
         }
     }
@@ -1088,8 +1091,10 @@ export class TemplateFroalaComponent implements OnInit {
         const dayOfWeek = executionTime.get('dayOfWeek');
 
         if (dayOfWeek?.value) {
+            this.selectedTimeAction = OtherTimeOptionsEnum.DayOfWeek;
             return this.getLabelValue(this.timeOtherOptions, OtherTimeOptionsEnum.DayOfWeek);
         } else if (dayOfMonth?.value) {
+            this.selectedTimeAction = OtherTimeOptionsEnum.DayOfMonth;
             return this.getLabelValue(this.timeOtherOptions, OtherTimeOptionsEnum.DayOfMonth);
         }
         return '';

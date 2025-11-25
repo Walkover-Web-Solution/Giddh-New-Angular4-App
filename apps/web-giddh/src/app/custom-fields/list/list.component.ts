@@ -3,7 +3,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { PageEvent } from '@angular/material/paginator';
 import { ReplaySubject } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
-import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../app.constant";
+import { IOption, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../app.constant";
 import { CustomFieldsService } from "../../services/custom-fields.service";
 import { ToasterService } from "../../services/toaster.service";
 import { ConfirmModalComponent } from "../../theme/new-confirm-modal/confirm-modal.component";
@@ -45,7 +45,7 @@ export class CustomFieldsListComponent implements OnInit, OnDestroy {
     /** Holds get all custom fields api response */
     public customFieldsList: any = {};
     /** Available field modules list */
-    public fieldModules: any[] = [];
+    public fieldModules: IOption[] = [];
     /** True if translations are loaded */
     public translationsLoaded: boolean = false;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
@@ -161,12 +161,12 @@ export class CustomFieldsListComponent implements OnInit, OnDestroy {
         if (event) {
             if (this.voucherApiVersion === 2) {
                 this.fieldModules = [
-                    { name: this.localeData?.modules?.account, uniqueName: FieldModules.Account },
-                    { name: this.commonLocaleData.app_variant, uniqueName: FieldModules.Variant }
+                    { label: this.localeData?.modules?.account, value: FieldModules.Account },
+                    { label: this.commonLocaleData.app_variant, value: FieldModules.Variant }
                 ];
             } else {
                 this.fieldModules = [
-                    { name: this.localeData?.modules?.account, uniqueName: FieldModules.Account }
+                    { label: this.localeData?.modules?.account, value: FieldModules.Account }
                 ];
             }
             this.translationsLoaded = true;
