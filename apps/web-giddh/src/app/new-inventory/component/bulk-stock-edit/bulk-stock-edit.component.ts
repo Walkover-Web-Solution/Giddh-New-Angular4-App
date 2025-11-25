@@ -208,7 +208,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
     /** Number of menus per row */
     public get menusPerRow(): number {
         const firstRowMenus = document.querySelectorAll('tr:first-child mat-menu').length;
-        return firstRowMenus || 1;
+        return firstRowMenus || 0;
     }
     /** All custom fields */
     public allCustomField: any = {};
@@ -271,6 +271,8 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.totalInventoryCount = res?.totalItems;
                 res.results.forEach((row: any, index: number) => {
                     this.dropdownValues[index] = row;
+                    this.dropdownValues[index].hsnNo = row?.hsnNo || "";
+                    this.dropdownValues[index].sacNo = row?.sacNo || "";
                     this.dropdownValues[index].purchaseUnits = [{code: row?.purchaseUnits?.[0]?.code ?? null, uniqueName: row?.purchaseUnits?.[0]?.uniqueName ?? null}];
                     this.dropdownValues[index].salesUnits = [{code: row?.salesUnits?.[0]?.code ?? null, uniqueName: row?.salesUnits?.[0]?.uniqueName ?? null}];
                     this.dropdownValues[index].fixedAssetUnits = [{code: row?.fixedAssetUnits?.[0]?.code ?? null, uniqueName: row?.fixedAssetUnits?.[0]?.uniqueName ?? null}];
@@ -328,7 +330,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
         });
 
         this.salesService.getAccountsWithCurrency('fixedassets').pipe(takeUntil(this.destroyed$)).subscribe(data => {
-            if(data.body?.results?.length > 0) {
+            if (data.body?.results?.length > 0) {
                 this.fixedAssetAccountList = data.body.results.map((item: any) => {
                     return {
                         label: item.name,
@@ -422,9 +424,9 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
         Object.keys(currentFieldsData).forEach(key => {
             if (unitFields.includes(key)) {
                 if (!isEqual(currentFieldsData[key], this.dropdownValues[selectTableRowIndex][key][0]?.uniqueName)) {
-                    requestBody[key] = currentFieldsData[key] ? [{uniqueName: currentFieldsData[key]}] : [];
+                    requestBody[key] = currentFieldsData[key] ? [{ uniqueName: currentFieldsData[key] }] : [];
                 }
-            } else if(customFields.includes(key)) {
+            } else if (customFields.includes(key)) {
                 requestBody[key] = [];
                 currentFieldsData[key].forEach((item: any, index: number) => {
                     if (!isEqual(item, this.dropdownValues[selectTableRowIndex][key][index])) {
@@ -452,7 +454,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
         if (this.selectTableRowIndex !== -1) {
             // Close mat-menus for current row
             for (let i = 0; i < this.menusPerRow; i++) {
-                this.menuTriggers.get((this.selectTableRowIndex)*this.menusPerRow + i).closeMenu();
+                this.menuTriggers.get((this.selectTableRowIndex * this.menusPerRow) + i).closeMenu();
             }
         }
         this.selectTableRowIndex = -1;
@@ -470,7 +472,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
         if (this.selectTableRowIndex !== -1 && this.selectTableRowIndex !== index) {
             // Close mat-menus for previous row
             for (let i = 0; i < this.menusPerRow; i++) {
-                this.menuTriggers.get((this.selectTableRowIndex)*this.menusPerRow + i).closeMenu();
+                this.menuTriggers.get((this.selectTableRowIndex * this.menusPerRow) + i).closeMenu();
             }
         }
         this.selectTableRowIndex = index;
@@ -542,7 +544,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
                         tax.isChecked = false;
                         tax.isDisabled = true;
                     }
-                    if ((taxSelected.taxType === 'tcsrc' || taxSelected.taxType === 'tdsrc' || taxSelected.taxType === 'tcspay' || taxSelected.taxType === 'tdspay') && 
+                    if ((taxSelected.taxType === 'tcsrc' || taxSelected.taxType === 'tdsrc' || taxSelected.taxType === 'tcspay' || taxSelected.taxType === 'tdspay') &&
                         (tax.taxType === 'tcsrc' || tax.taxType === 'tdsrc' || tax.taxType === 'tcspay' || tax.taxType === 'tdspay')) {
                         tax.isChecked = false;
                         tax.isDisabled = true;
@@ -557,7 +559,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
                         tax.isDisabled = true;
                     }
 
-                    if ((taxSelected.taxType === 'tcsrc' || taxSelected.taxType === 'tdsrc' || taxSelected.taxType === 'tcspay' || taxSelected.taxType === 'tdspay') && 
+                    if ((taxSelected.taxType === 'tcsrc' || taxSelected.taxType === 'tdsrc' || taxSelected.taxType === 'tcspay' || taxSelected.taxType === 'tdspay') &&
                         (tax.taxType === 'tcsrc' || tax.taxType === 'tdsrc' || tax.taxType === 'tcspay' || tax.taxType === 'tdspay')) {
                         tax.isChecked = false;
                         tax.isDisabled = true;
@@ -591,7 +593,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
                     if (tax.taxType === taxSelected.taxType) {
                         tax.isDisabled = false;
                     }
-                    if ((taxSelected.taxType === 'tcsrc' || taxSelected.taxType === 'tdsrc' || taxSelected.taxType === 'tcspay' || taxSelected.taxType === 'tdspay') && 
+                    if ((taxSelected.taxType === 'tcsrc' || taxSelected.taxType === 'tdsrc' || taxSelected.taxType === 'tcspay' || taxSelected.taxType === 'tdspay') &&
                         (tax.taxType === 'tcsrc' || tax.taxType === 'tdsrc' || tax.taxType === 'tcspay' || tax.taxType === 'tdspay')) {
                         tax.isDisabled = false;
                     }
@@ -613,7 +615,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
                 }
             }
         }
-        
+
         // Update selected taxes for current row
         this.selectedTaxes[currentRowIndex] = this.taxTempArray[currentRowIndex].map(tax => tax?.uniqueName);
         this.cdr.detectChanges();
@@ -627,7 +629,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public openedSelectTax(isOpen: boolean): void {
         this.isTaxSelectionOpen = isOpen;
-        
+
         if (!isOpen) {
             // When dropdown closes, clear processed taxes for this session
             this.processedTaxes = [];
@@ -659,7 +661,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
         if (!this.bulkStockData.value[index].stockUnitUniqueName) {
             return;
         }
-        
+
         this.manufacturingService.loadStockUnits(this.bulkStockData.value[index].stockUnitUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(units => {
             if (units?.length) {
                 units?.forEach(unit => {
@@ -723,8 +725,8 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
             fixedAssetAccountName: [controlValue.fixedAssetAccountName, Validators.required],
             fixedAssetAccountUniqueName: [controlValue.fixedAssetAccountUniqueName, Validators.required],
 
-            hsnNo: [controlValue.hsnNo, Validators.required],
-            sacNo: [controlValue.sacNo, Validators.required],
+            hsnNo: [controlValue.hsnNo || "", Validators.required],
+            sacNo: [controlValue.sacNo || "", Validators.required],
             skuCode: [controlValue.skuCode, Validators.required],
             archive: [controlValue.archive, Validators.required],
             taxes: [controlValue.taxes, Validators.required],
@@ -743,7 +745,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     private createCustomFieldsFormArray(customFields: any[]): FormArray {
         const formArray = this.formBuilder.array([]);
-        
+
         if (customFields && customFields.length > 0) {
             customFields.forEach(field => {
                 formArray.push(this.formBuilder.group({
@@ -754,7 +756,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
                 }));
             });
         }
-        
+
         return formArray;
     }
 
@@ -770,7 +772,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
         this.selectedTaxes[currentIndex] = data.taxes ? data.taxes.map((tax: any) => tax.uniqueName) : [];
         this.taxTempArray[currentIndex] = data.taxes ? cloneDeep(data.taxes) : [];
         this.taxesList[currentIndex] = cloneDeep(this.taxes);
-        
+
         this.bulkStockData.push(this.addNewRow(data));
     }
 
@@ -813,7 +815,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public updateForm(requestBody: any, selectTableRowIndex: number): void {
         Object.keys(requestBody).forEach(field => {
-            if (requestBody[field] === null || requestBody[field] === undefined ) {
+            if (requestBody[field] === null || requestBody[field] === undefined) {
                 delete requestBody[field];
             }
         });
@@ -871,9 +873,9 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
         this.pageCount = event.pageSize;
         this.isLoading = true;
         this.store.dispatch(this.inventoryAction.getBulkStockList({
-            inventoryType: this.inventoryType, 
-            page: this.pagination.currentPage, 
-            count: this.pageCount, 
+            inventoryType: this.inventoryType,
+            page: this.pagination.currentPage,
+            count: this.pageCount,
             body: {
                 "search": this.searchString !== null ? this.searchString : "",
                 "searchBy": this.searchStringKey !== null ? this.searchStringKey : "",
@@ -926,14 +928,14 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
         // Trigger dropdown opening if it's the taxes field
         if (key === 'archive' || key === 'salesTaxInclusive' || key === 'purchaseTaxInclusive' || key === 'fixedAssetTaxInclusive') {
             for (let i = 0; i < this.menusPerRow; i++) {
-                if(key === 'archive' && i === 0 || key === 'salesTaxInclusive' && i === 1 || key === 'purchaseTaxInclusive' && i === 2 || key === 'fixedAssetTaxInclusive' && i === 3) {
+                if (key === 'archive' && i === 0 || key === 'salesTaxInclusive' && i === 1 || key === 'purchaseTaxInclusive' && i === 2 || key === 'fixedAssetTaxInclusive' && i === 3) {
                     continue;
                 }
-                this.menuTriggers.get((this.selectTableRowIndex)*this.menusPerRow + i)?.closeMenu();
+                this.menuTriggers.get((this.selectTableRowIndex * this.menusPerRow) + i)?.closeMenu();
             }
-        }else {
+        } else {
             for (let i = 0; i < this.menusPerRow; i++) {
-                this.menuTriggers.get((this.selectTableRowIndex)*this.menusPerRow + i)?.closeMenu();
+                this.menuTriggers.get((this.selectTableRowIndex * this.menusPerRow) + i)?.closeMenu();
             }
         }
         if (key === 'taxes') {
@@ -1128,7 +1130,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
         this.advanceSearchData = null;
         this.hideTableHeadInput();
         this.isLoading = false;
-        
+
         if (this.isApiCalled) {
             this.store.dispatch(this.inventoryAction.getBulkStockList({
                 inventoryType: this.inventoryType, page: 1, count: this.pageCount, body: {
@@ -1248,7 +1250,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
         this.taxSelects.changes.pipe(takeUntil(this.destroyed$)).subscribe(() => {
             this.openTaxDropdownIfNeeded();
         });
-        
+
         // Check initial state
         setTimeout(() => {
             this.openTaxDropdownIfNeeded();
