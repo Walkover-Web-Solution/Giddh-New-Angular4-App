@@ -100,10 +100,8 @@ export class CompanyAuthKeyComponent implements OnInit, OnDestroy {
             if (response?.status === "success") {
                 this.clipboardService.copyFromContent(response.body);
                 this.toaster.showSnackBar("success", this.localeData?.copy_auth_key_success || 'Auth key copied successfully');
-            } else {
-                if (response?.message) {
-                    this.toaster.showSnackBar("error", response?.message);
-                }
+            } else if (response?.message) {
+                this.toaster.showSnackBar("error", response?.message);
             }
         });
     }
@@ -114,7 +112,7 @@ export class CompanyAuthKeyComponent implements OnInit, OnDestroy {
      * @param {string} uniqueName
      * @memberof CompanyAuthKeyComponent
      */
-    public showdeleteAuthKeyDialog(uniqueName: string): void {
+    public showDeleteAuthKeyDialog(uniqueName: string): void {
         this.deleteRequest = uniqueName;
         const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
             panelClass: ['mat-dialog-sm'],
@@ -130,9 +128,10 @@ export class CompanyAuthKeyComponent implements OnInit, OnDestroy {
             if (response === this.commonLocaleData?.app_yes) {
                 this.companyAuthKeyService.deleteAuthKey(this.deleteRequest).pipe(takeUntil(this.destroyed$)).subscribe(res => {
                     if (res?.status === "success") {
-                        this.showToaster('success', res?.body);
-                    } else {
-                        this.showToaster('error', res?.body ?? res?.message);
+                        this.toaster.showSnackBar("success", res?.body);
+                        this.getCompanyAuthKeys();
+                    } else if (res?.message) {
+                        this.toaster.showSnackBar("error", res?.message);
                     }
                     this.isLoading$ = of(false);
                 });
@@ -151,10 +150,8 @@ export class CompanyAuthKeyComponent implements OnInit, OnDestroy {
         this.companyAuthKeyService.getAllAuthKeys().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 this.companyAuthKeyList = response?.body;
-            } else {
-                if (response?.message) {
-                    this.toaster.showSnackBar("error", response?.message);
-                }
+            } else if (response?.message) {
+                this.toaster.showSnackBar("error", response?.message);
             }
             this.isLoading = false;
         });
