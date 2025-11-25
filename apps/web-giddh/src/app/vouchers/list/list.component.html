@@ -31,8 +31,8 @@
                                 <span>{{ localeData?.new_estimate }}</span>
                             </button>
                             <div class="custom-datepicker-wrapper">
-                                <div 
-                                    class="custom-datepicker" 
+                                <div
+                                    class="custom-datepicker"
                                     [matMenuTriggerFor]="universalDatepicker"
                                     #universalDatepickerTrigger="matMenuTrigger"
                                     role="button"
@@ -49,7 +49,7 @@
                                     />
                                 </div>
                             </div>
-                    </div>
+                        </div>
                         <button
                             mat-stroked-button
                             (click)="setInitialAdvanceFilter()"
@@ -241,7 +241,9 @@
                                                     >
                                                         <p>{{ element?.customerName | titlecase }}</p>
                                                         <a (click)="editAccount(element)" class="edit-icon pl-1 pt-1">
-                                                            <i class="icon-edit-pencil font-size-16 pr-1 cursor-pointer"></i>
+                                                            <i
+                                                                class="icon-edit-pencil font-size-16 pr-1 cursor-pointer"
+                                                            ></i>
                                                         </a>
                                                     </div>
                                                     <mat-card-content class="pt-3">
@@ -443,7 +445,11 @@
                                             <button mat-menu-item (click)="actionEstimateProforma(element, 'expired')">
                                                 {{ localeData?.expired }}
                                             </button>
-                                            <button mat-menu-item (click)="deleteVoucherDialog(element)" *ngIf="voucherApiVersion === 2">
+                                            <button
+                                                mat-menu-item
+                                                (click)="deleteVoucherDialog(element)"
+                                                *ngIf="voucherApiVersion === 2"
+                                            >
                                                 {{ commonLocaleData?.app_delete }}
                                             </button>
                                         </mat-menu>
@@ -490,8 +496,8 @@
                                 <span>{{ localeData?.new_proforma }}</span>
                             </button>
                             <div class="custom-datepicker-wrapper">
-                                <div 
-                                    class="custom-datepicker" 
+                                <div
+                                    class="custom-datepicker"
                                     [matMenuTriggerFor]="universalDatepicker"
                                     #universalDatepickerTrigger="matMenuTrigger"
                                     role="button"
@@ -695,7 +701,9 @@
                                                             }}
                                                         </p>
                                                         <a (click)="editAccount(element)" class="edit-icon pl-1 pt-1">
-                                                            <i class="icon-edit-pencil font-size-16 pr-1 cursor-pointer"></i>
+                                                            <i
+                                                                class="icon-edit-pencil font-size-16 pr-1 cursor-pointer"
+                                                            ></i>
                                                         </a>
                                                     </div>
                                                     <mat-card-content class="pt-3">
@@ -900,7 +908,11 @@
                                             <button mat-menu-item (click)="actionEstimateProforma(element, 'expired')">
                                                 {{ localeData?.expired }}
                                             </button>
-                                            <button mat-menu-item (click)="deleteVoucherDialog(element)" *ngIf="voucherApiVersion === 2">
+                                            <button
+                                                mat-menu-item
+                                                (click)="deleteVoucherDialog(element)"
+                                                *ngIf="voucherApiVersion === 2"
+                                            >
                                                 {{ commonLocaleData?.app_delete }}
                                             </button>
                                         </mat-menu>
@@ -959,8 +971,8 @@
                                 </button>
                             </mat-menu>
                             <div class="custom-datepicker-wrapper">
-                                <div 
-                                    class="custom-datepicker" 
+                                <div
+                                    class="custom-datepicker"
                                     [matMenuTriggerFor]="universalDatepicker"
                                     #universalDatepickerTrigger="matMenuTrigger"
                                     role="button"
@@ -1005,7 +1017,12 @@
                                 mat-raised-button
                                 color="primary"
                                 [matMenuTriggerFor]="moreInvoice"
-                                *ngIf="selectedVouchers?.length && !isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
+                                *ngIf="
+                                    selectedVouchers?.length &&
+                                    !isCompany &&
+                                    !isConsolidatedBranch &&
+                                    voucherApiVersion === 2
+                                "
                             >
                                 <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
@@ -1220,7 +1237,9 @@
                                                             }}
                                                         </p>
                                                         <a (click)="editAccount(element)" class="edit-icon pl-1 pt-1">
-                                                            <i class="icon-edit-pencil font-size-16 pr-1 cursor-pointer"></i>
+                                                            <i
+                                                                class="icon-edit-pencil font-size-16 pr-1 cursor-pointer"
+                                                            ></i>
                                                         </a>
                                                     </div>
                                                     <mat-card-content class="pt-3">
@@ -1458,10 +1477,18 @@
                                         <button mat-menu-item (click)="openCancelVoucherDialog(element)">
                                             {{ commonLocaleData?.app_payment_status?.cancel }}
                                         </button>
-                                        <button mat-menu-item (click)="showEwayBillDialog(element)" *ngIf="voucherApiVersion === 2">
+                                        <button
+                                            mat-menu-item
+                                            (click)="showEwayBillDialog(element)"
+                                            *ngIf="voucherApiVersion === 2"
+                                        >
                                             {{ localeData?.generate_eway_bill }}
                                         </button>
-                                        <button mat-menu-item (click)="deleteVoucherDialog(element)" *ngIf="voucherApiVersion === 2">
+                                        <button
+                                            mat-menu-item
+                                            (click)="deleteVoucherDialog(element)"
+                                            *ngIf="voucherApiVersion === 2"
+                                        >
                                             {{ commonLocaleData?.app_delete }}
                                         </button>
                                     </mat-menu>
@@ -1511,8 +1538,8 @@
                                 <span>{{ localeData?.new_dr_note }}</span>
                             </button>
                             <div class="custom-datepicker-wrapper">
-                                <div 
-                                    class="custom-datepicker" 
+                                <div
+                                    class="custom-datepicker"
                                     [matMenuTriggerFor]="universalDatepicker"
                                     #universalDatepickerTrigger="matMenuTrigger"
                                     role="button"
@@ -1557,7 +1584,12 @@
                                 mat-raised-button
                                 color="primary"
                                 [matMenuTriggerFor]="morepurchase"
-                                *ngIf="selectedVouchers?.length && !isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
+                                *ngIf="
+                                    selectedVouchers?.length &&
+                                    !isCompany &&
+                                    !isConsolidatedBranch &&
+                                    voucherApiVersion === 2
+                                "
                             >
                                 <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
@@ -1938,7 +1970,11 @@
                                         <button mat-menu-item (click)="openCancelVoucherDialog(element)">
                                             {{ commonLocaleData?.app_payment_status?.cancel }}
                                         </button>
-                                        <button mat-menu-item (click)="deleteVoucherDialog(element)" *ngIf="voucherApiVersion === 2">
+                                        <button
+                                            mat-menu-item
+                                            (click)="deleteVoucherDialog(element)"
+                                            *ngIf="voucherApiVersion === 2"
+                                        >
                                             {{ commonLocaleData?.app_delete }}
                                         </button>
                                     </mat-menu>
@@ -1985,8 +2021,8 @@
                                 <span>{{ localeData?.new_cr_note }}</span>
                             </button>
                             <div class="custom-datepicker-wrapper">
-                                <div 
-                                    class="custom-datepicker" 
+                                <div
+                                    class="custom-datepicker"
                                     [matMenuTriggerFor]="universalDatepicker"
                                     #universalDatepickerTrigger="matMenuTrigger"
                                     role="button"
@@ -2031,7 +2067,12 @@
                                 mat-raised-button
                                 color="primary"
                                 [matMenuTriggerFor]="morepurchase"
-                                *ngIf="selectedVouchers?.length && !isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
+                                *ngIf="
+                                    selectedVouchers?.length &&
+                                    !isCompany &&
+                                    !isConsolidatedBranch &&
+                                    voucherApiVersion === 2
+                                "
                             >
                                 <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
@@ -2211,9 +2252,16 @@
                                                     <div
                                                         class="d-flex align-items-center justify-content-between column-gap-15 p-3 border-bottom account-header only-top-radius"
                                                     >
-                                                        <h3>{{ element.account?.customerName || element?.account?.name | titlecase }}</h3>
+                                                        <h3>
+                                                            {{
+                                                                element.account?.customerName || element?.account?.name
+                                                                    | titlecase
+                                                            }}
+                                                        </h3>
                                                         <a (click)="editAccount(element)" class="edit-icon pl-1 pt-1">
-                                                            <i class="icon-edit-pencil font-size-16 pr-1 cursor-pointer"></i>
+                                                            <i
+                                                                class="icon-edit-pencil font-size-16 pr-1 cursor-pointer"
+                                                            ></i>
                                                         </a>
                                                     </div>
                                                     <mat-card-content class="pt-3">
@@ -2405,7 +2453,11 @@
                                         <button mat-menu-item (click)="openCancelVoucherDialog(element)">
                                             {{ commonLocaleData?.app_payment_status?.cancel }}
                                         </button>
-                                        <button mat-menu-item (click)="deleteVoucherDialog(element)" *ngIf="voucherApiVersion === 2">
+                                        <button
+                                            mat-menu-item
+                                            (click)="deleteVoucherDialog(element)"
+                                            *ngIf="voucherApiVersion === 2"
+                                        >
                                             {{ commonLocaleData?.app_delete }}
                                         </button>
                                     </mat-menu>
@@ -2453,8 +2505,8 @@
                                 >
                                 </reactive-dropdown-field>
                                 <div class="custom-datepicker-wrapper">
-                                    <div 
-                                        class="custom-datepicker" 
+                                    <div
+                                        class="custom-datepicker"
                                         [matMenuTriggerFor]="universalDatepicker"
                                         #universalDatepickerTrigger="matMenuTrigger"
                                         role="button"
@@ -2697,8 +2749,8 @@
                                 <span>{{ localeData?.new_order }}</span>
                             </button>
                             <div class="custom-datepicker-wrapper">
-                                <div 
-                                    class="custom-datepicker" 
+                                <div
+                                    class="custom-datepicker"
                                     [matMenuTriggerFor]="universalDatepicker"
                                     #universalDatepickerTrigger="matMenuTrigger"
                                     role="button"
@@ -3133,8 +3185,8 @@
                                 <span>{{ localeData?.new_bill }}</span>
                             </button>
                             <div class="custom-datepicker-wrapper">
-                                <div 
-                                    class="custom-datepicker" 
+                                <div
+                                    class="custom-datepicker"
                                     [matMenuTriggerFor]="universalDatepicker"
                                     #universalDatepickerTrigger="matMenuTrigger"
                                     role="button"
@@ -3525,7 +3577,11 @@
                                         >
                                             {{ commonLocaleData?.app_copy }}
                                         </button>
-                                        <button mat-menu-item (click)="deleteVoucherDialog(element)" *ngIf="voucherApiVersion === 2">
+                                        <button
+                                            mat-menu-item
+                                            (click)="deleteVoucherDialog(element)"
+                                            *ngIf="voucherApiVersion === 2"
+                                        >
                                             {{ commonLocaleData?.app_delete }}
                                         </button>
                                     </mat-menu>
@@ -3571,8 +3627,8 @@
                                 <span>{{ localeData?.new_receipt }}</span>
                             </button>
                             <div class="custom-datepicker-wrapper">
-                                <div 
-                                    class="custom-datepicker" 
+                                <div
+                                    class="custom-datepicker"
                                     [matMenuTriggerFor]="universalDatepicker"
                                     #universalDatepickerTrigger="matMenuTrigger"
                                     role="button"
@@ -3606,7 +3662,12 @@
                                 mat-raised-button
                                 color="primary"
                                 [matMenuTriggerFor]="moreProforma"
-                                *ngIf="selectedVouchers?.length && !isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
+                                *ngIf="
+                                    selectedVouchers?.length &&
+                                    !isCompany &&
+                                    !isConsolidatedBranch &&
+                                    voucherApiVersion === 2
+                                "
                             >
                                 <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
@@ -3991,8 +4052,8 @@
                                 <span>{{ localeData?.new_payment }}</span>
                             </button>
                             <div class="custom-datepicker-wrapper">
-                                <div 
-                                    class="custom-datepicker" 
+                                <div
+                                    class="custom-datepicker"
                                     [matMenuTriggerFor]="universalDatepicker"
                                     #universalDatepickerTrigger="matMenuTrigger"
                                     role="button"
@@ -4026,7 +4087,12 @@
                                 mat-raised-button
                                 color="primary"
                                 [matMenuTriggerFor]="moreProforma"
-                                *ngIf="selectedVouchers?.length && !isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
+                                *ngIf="
+                                    selectedVouchers?.length &&
+                                    !isCompany &&
+                                    !isConsolidatedBranch &&
+                                    voucherApiVersion === 2
+                                "
                             >
                                 <span>{{ commonLocaleData?.app_more }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
@@ -4340,8 +4406,8 @@
                         <div class="invoice-header d-flex align-items-center justify-content-between mb-3">
                             <div class="d-flex align-items-center column-gap-1">
                                 <div class="custom-datepicker-wrapper">
-                                    <div 
-                                        class="custom-datepicker" 
+                                    <div
+                                        class="custom-datepicker"
                                         [matMenuTriggerFor]="universalDatepicker"
                                         #universalDatepickerTrigger="matMenuTrigger"
                                         role="button"
@@ -5475,7 +5541,9 @@
                                         <div class="tabs-box-content py-3">
                                             <p class="font-size-16 border-bottom pb-2 mb-3">
                                                 {{ localeData?.integration }}
-                                                <span class="text-light font-size-12"> {{ localeData?.settings_note }}</span>
+                                                <span class="text-light font-size-12">
+                                                    {{ localeData?.settings_note }}</span
+                                                >
                                             </p>
                                             <div class="d-flex column-gap-1 align-items-center mb-3">
                                                 <input-field
@@ -5871,6 +5939,7 @@
                         [label]="localeData?.select_design_for"
                         [placeholder]="commonLocaleData?.app_select"
                         [options]="purchaseTemplatesList"
+                        [(ngModel)]="templateFor"
                         class="w-50 template-design d-block"
                         (selectedOption)="templateSelect($event)"
                         [labelValue]="selectedTemplate?.label"
@@ -5897,7 +5966,11 @@
                             <mat-card
                                 class="outline-card add-template-wrapper text-center"
                                 *ngIf="
-                                    [voucherTypeEnum.invoice, voucherTypeEnum.purchase_bill, voucherTypeEnum.purchase_order].includes(template.type) &&
+                                    [
+                                        voucherTypeEnum.invoice,
+                                        voucherTypeEnum.purchase_bill,
+                                        voucherTypeEnum.purchase_order
+                                    ].includes(template.type) &&
                                     [voucherTypeEnum.sales, voucherTypeEnum.purchase].includes(voucherType)
                                 "
                             >
@@ -5984,7 +6057,8 @@
                                 class="outline-card add-template-wrapper text-center"
                                 *ngIf="
                                     template.type === voucherTypeEnum.voucher &&
-                                    (voucherType === voucherTypeEnum.creditNote || voucherType === voucherTypeEnum.debitNote)
+                                    (voucherType === voucherTypeEnum.creditNote ||
+                                        voucherType === voucherTypeEnum.debitNote)
                                 "
                             >
                                 <mat-card-content class="pt-3 d-flex flex-column align-items-center template-box-gap">

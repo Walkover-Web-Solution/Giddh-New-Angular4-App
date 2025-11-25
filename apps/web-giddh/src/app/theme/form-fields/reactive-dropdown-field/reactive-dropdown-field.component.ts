@@ -178,11 +178,14 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      */
     private filterOptions(search: string): any {
         let filteredOptions = [];
+        const isSingleOption = this.options?.length === 1;
+        
         this.options?.forEach(option => {
             const matchesSearch = typeof search !== "string" || (typeof option?.label === "string" && option.label.toLowerCase().indexOf(search.toLowerCase()) > -1);
             const isNotSelected = !this.hideSelectedOptions || !isEqual(option?.value, this.value);
             
-            if (matchesSearch && isNotSelected) {
+            // Always show single option regardless of selection status to prevent "no data found"
+            if (matchesSearch && (isNotSelected || isSingleOption)) {
                 filteredOptions.push({ label: option.label, value: option.value, additional: option.additional ?? option });
             }
         });
@@ -459,6 +462,8 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     public panelOpened(): void {
         if (!this.enableDynamicSearch) {
             this.refreshFilteredOptions();
+        } else {
+            this.dynamicSearchedQuery.emit('');
         }
     }
 

@@ -21,7 +21,7 @@
         </div>
         <hamburger-menu class="gst-menu-item" [pageHeading]="localeData?.page_heading"></hamburger-menu>
         <div class=" p-3 ">
-            <form name="paymentIntegrateForm" [formGroup]="paymentIntegrateForm" autocomplete="off">
+            <form name="paymentIntegrateForm" autocomplete="off">
                 <div class="w-100">
                     <div class="mt-4 payment-dropdown">
                         <div class="form-group">
@@ -29,8 +29,9 @@
                                 [label]="localeData?.export_type"
                                 [cssClass]="'theme-selection'"
                                 [options]="exportTypes"
-                                [labelValue]="exportType"
+                                [labelValue]="exportTypeLabel"
                                 [placeholder]="localeData?.select_export_type"
+                                [(ngModel)]="exportTypeValue"
                                 [name]="'exportType'"
                                 (selectedOption)="setExportType($event)"
                             ></reactive-dropdown-field>

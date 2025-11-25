@@ -8,6 +8,7 @@ import { CustomFieldsService } from "../../services/custom-fields.service";
 import { ToasterService } from "../../services/toaster.service";
 import { FieldModules, FieldTypes } from "../custom-fields.constant";
 import { GeneralService } from "../../services/general.service";
+import { IOption } from "../../app.constant";
 
 @Component({
     selector: "create-edit",
@@ -42,7 +43,7 @@ export class CustomFieldsCreateEditComponent implements OnInit, OnDestroy {
     /** List custom row data type  */
     public fieldTypes: any[] = [];
     /** Available field modules list */
-    public fieldModules: any[] = [];
+    public fieldModules: IOption[] = [];
     /** Conditionally visible fields in form */
     public visibleFields: any = {
         fieldInfo: true,
@@ -89,7 +90,7 @@ export class CustomFieldsCreateEditComponent implements OnInit, OnDestroy {
             if (selectedModules) {
                 let modules: any[] = [];
                 this.selectedModules.value.forEach(uniqueName => {
-                    modules.push(this.fieldModules?.find(module => module.uniqueName === uniqueName));
+                    modules.push(this.fieldModules?.find(module => module.value === uniqueName));
                 });
                 this.customFieldRequest.modules = modules;
             }
@@ -150,12 +151,12 @@ export class CustomFieldsCreateEditComponent implements OnInit, OnDestroy {
             ];
             if (this.voucherApiVersion === 2) {
                 this.fieldModules = [
-                    { name: this.localeData?.modules?.account, uniqueName: FieldModules.Account },
-                    { name: this.commonLocaleData?.app_variant, uniqueName: FieldModules.Variant }
+                    { label: this.localeData?.modules?.account, value: FieldModules.Account },
+                    { label: this.commonLocaleData?.app_variant, value: FieldModules.Variant }
                 ];
             } else {
                 this.fieldModules = [
-                    { name: this.localeData?.modules?.account, uniqueName: FieldModules.Account }
+                    { label: this.localeData?.modules?.account, value: FieldModules.Account }
                 ];
             }
         }
