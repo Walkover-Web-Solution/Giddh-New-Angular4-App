@@ -122,6 +122,7 @@
                                 <input
                                     matInput
                                     [name]="field.variable"
+                                    autocomplete="off"
                                     [formControl]="
                                         customTriggerForm?.controls?.conditions?.get(field.variable)?.get('value')
                                     "

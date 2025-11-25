@@ -166,11 +166,13 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
                     .subscribe((searchedText) => {
                         if (this.isNotNullOrUndefined(searchedText) && searchedText.trim() !== "") {
                             this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
+                            this.aiOcrService.dateRangeEmit$.next(this.ocrDocumentsRequestParams);
                             // Switch to list mode when filtering
                             this.aiOcrService.mainPage$.next(false);
                         }
                         if (this.isNullOrEmpty(searchedText)) {
                             this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
+                            this.aiOcrService.dateRangeEmit$.next(this.ocrDocumentsRequestParams);
                             this.showStatus = false;
                         }
                         this.getAllOcrDocuments(false);
@@ -182,10 +184,13 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
                     .subscribe((searchedText) => {
                         if (this.isNotNullOrUndefined(searchedText) && searchedText.trim() !== "") {
                             this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
+                            this.aiOcrService.dateRangeEmit$.next(this.ocrDocumentsRequestParams);
+                            // Switch to list mode when filtering
                             this.aiOcrService.mainPage$.next(false);
                         }
                         if (this.isNullOrEmpty(searchedText)) {
                             this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
+                            this.aiOcrService.dateRangeEmit$.next(this.ocrDocumentsRequestParams);
                             this.showconvertedStatus = false;
                         }
                         this.getAllOcrDocuments(false);
@@ -197,10 +202,13 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
                     .subscribe((searchedText) => {
                         if (this.isNotNullOrUndefined(searchedText) && searchedText.trim() !== "") {
                             this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
+                            this.aiOcrService.dateRangeEmit$.next(this.ocrDocumentsRequestParams);
+
                             this.aiOcrService.mainPage$.next(false);
                         }
                         if (this.isNullOrEmpty(searchedText)) {
                             this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
+                            this.aiOcrService.dateRangeEmit$.next(this.ocrDocumentsRequestParams);
                             this.showUploadedBy = false;
                         }
                         this.getAllOcrDocuments(false);
@@ -212,10 +220,13 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
                     .subscribe((searchedText) => {
                         if (this.isNotNullOrUndefined(searchedText) && searchedText.trim() !== "") {
                             this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
+                            this.aiOcrService.dateRangeEmit$.next(this.ocrDocumentsRequestParams);
+
                             this.aiOcrService.mainPage$.next(false);
                         }
                         if (this.isNullOrEmpty(searchedText)) {
                             this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
+                            this.aiOcrService.dateRangeEmit$.next(this.ocrDocumentsRequestParams);
                             this.showFileName = false;
                         }
                         this.getAllOcrDocuments(false);
