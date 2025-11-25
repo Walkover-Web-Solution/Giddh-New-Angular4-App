@@ -27,7 +27,7 @@ export class CreateCompanyAuthKeyRequest {
     public roleName: string;
     public from: string; // dd-MM-yyyy format
     public to: string; // dd-MM-yyyy format
-    public duration: number; // numeric
+    public duration: string; // numeric
     public period: string; // DAY
     public allowedIps: any[]; // array of strings
     public allowedCidrs: any[]; // array of strings

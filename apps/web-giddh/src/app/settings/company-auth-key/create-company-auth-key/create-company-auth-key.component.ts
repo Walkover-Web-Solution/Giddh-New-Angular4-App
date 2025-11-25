@@ -5,10 +5,10 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { GeneralService } from "../../../services/general.service";
 import { CompanyAuthKeyService } from "../../../services/settings.company-auth-key.service";
 import { debounceTime, takeUntil } from "rxjs/operators";
-import { CreateCompanyAuthKeyRequest, UpdateCompanyAuthKeyRequest } from "../../../models/api-models/SettingsCompanyAuthKey";
+import { CreateCompanyAuthKeyRequest } from "../../../models/api-models/SettingsCompanyAuthKey";
 import { AppState } from "../../../store";
 import { Store, select } from "@ngrx/store";
-import { cloneDeep, forEach, isEmpty, isNull } from '../../../lodash-optimized';
+import { cloneDeep, isEmpty, isNull } from '../../../lodash-optimized';
 import { PermissionActions } from "../../../actions/permission/permission.action";
 import * as dayjs from 'dayjs';
 import * as customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -48,8 +48,6 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
     public voucherApiVersion: number = 1 | 2;
     /** All roles list */
     public allRoles: any[] = [];
-    /** Holds all role list used to reset roles after filtering */
-    public allRolesConstantList: any[] = [];
     /** To check form is invalid */
     public isFormInvalid: boolean = false;
     /** True if show time span */
@@ -66,6 +64,12 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
     public get showPageLeaveConfirmation(): boolean {
         return this.createCompanyAuthKeyForm?.dirty;
     }
+    /** Constants */
+    public readonly CIDR_RANGE = CIDR_RANGE;
+    public readonly IP_ADDRESS = IP_ADDR;
+    public readonly DATE_RANGE = DATE_RANGE;
+    public readonly PAST_PERIOD = PAST_PERIOD;
+
     constructor(
         @Inject(MAT_DIALOG_DATA) public companyAuthKeyInfo: any,
         private formBuilder: FormBuilder,
@@ -101,7 +105,6 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
                     });
                 });
                 this.allRoles = cloneDeep(allRoleArray);
-                this.allRolesConstantList = this.allRoles;
             } else {
                 this.store.dispatch(this.permissionActions.GetRoles());
             }
@@ -169,7 +172,7 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
             let allowedCidrs = this.createCompanyAuthKeyForm.get('allowedCidrs') as FormArray;
 
             if (authKey?.allowedIps?.length > 0) {
-                forEach(authKey?.allowedIps, (val) => {
+                authKey.allowedIps.forEach((val: any) => {
                     allowedIps.push(this.initRangeForm(val));
                 });
             } else {
@@ -177,7 +180,7 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
             }
 
             if (authKey?.allowedCidrs?.length > 0) {
-                forEach(authKey?.allowedCidrs, (val) => {
+                authKey.allowedCidrs.forEach((val: any) => {
                     allowedCidrs.push(this.initRangeForm(val));
                 });
             } else {
@@ -357,13 +360,13 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
             form.from = dayjs(this.createCompanyAuthKeyForm.get('from').value).format(GIDDH_DATE_FORMAT);
             form.to = dayjs(this.createCompanyAuthKeyForm.get('to').value).format(GIDDH_DATE_FORMAT);
         }
-        forEach(form.allowedCidrs, (n) => {
+        form.allowedCidrs.forEach((n: any) => {
             if (n.range) {
                 CidrArr.push(n.range);
             }
         });
 
-        forEach(form.allowedIps, (res) => {
+        form.allowedIps.forEach((res: any) => {
             if (res.range) {
                 IpArr.push(res.range);
             }
@@ -398,7 +401,10 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
                 if (response?.status === "success") {
                     this.createCompanyAuthKeyForm.markAsPristine();
                     this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
+                    this.toasterService.successToast(this.localeData?.auth_key_created_success);
                     this.dialogRef.close(true);
+                } else if (response?.message) {
+                    this.toasterService.showSnackBar("error", response?.message);
                 }
             });
         } else if (obj.action === 'update') {
@@ -412,9 +418,9 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
                     this.createCompanyAuthKeyForm.markAsPristine();
                     this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
                     this.dialogRef.close(true);
-                    this.toasterService.successToast(this.localeData?.permission_updated_success);
-                } else {
-                    this.toasterService.warningToast(res?.message, res?.code);
+                    this.toasterService.successToast(this.localeData?.auth_key_updated_success);
+                } else if (res?.message) {
+                    this.toasterService.showSnackBar("error", res?.message);
                 }
             });
         }
@@ -528,7 +534,6 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
      * @memberof CreateCompanyAuthKeyComponent
      */
     public cancel(): void {
-        console.log(this.showPageLeaveConfirmation);
         if (this.showPageLeaveConfirmation) {
             this.pageLeaveUtilityService.confirmPageLeave((action: boolean) => {
                 if (action) {

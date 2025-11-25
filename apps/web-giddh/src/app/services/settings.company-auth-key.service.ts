@@ -26,7 +26,7 @@ export class CompanyAuthKeyService {
     public getAllAuthKeys(): Observable<BaseResponse<ICompanyAuthKey[], string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
         return this.http.get(this.config.apiUrl + SETTINGS_COMPANY_AUTH_KEY_API.GET_ALL_AUTH_KEYS?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))).pipe(map((res) => {
-            let data: BaseResponse<ICompanyAuthKey[], string> = res;
+            const data: BaseResponse<ICompanyAuthKey[], string> = res;
             return data;
         }), catchError((e) => this.errorHandler.HandleCatch<ICompanyAuthKey[], string>(e, '')));
     }
@@ -100,9 +100,9 @@ export class CompanyAuthKeyService {
         return this.http.delete(this.config.apiUrl + SETTINGS_COMPANY_AUTH_KEY_API.DELETE_AUTH_KEY
             ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
             ?.replace(':userRoleUniqueName', encodeURIComponent(userRoleUniqueName))).pipe(map((res) => {
-                let data: BaseResponse<any, any> = res;
+                const data: BaseResponse<string, string> = res;
                 data.request = userRoleUniqueName;
                 return data;
-            }), catchError((e) => this.errorHandler.HandleCatch<any, any>(e, userRoleUniqueName)));
+            }), catchError((e) => this.errorHandler.HandleCatch<string, string>(e, userRoleUniqueName)));
     }
 }
