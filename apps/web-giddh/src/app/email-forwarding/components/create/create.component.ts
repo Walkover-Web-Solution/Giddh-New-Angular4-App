@@ -4,7 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MatStepper } from '@angular/material/stepper';
 import { ReplaySubject, interval, Subject, BehaviorSubject, Observable } from 'rxjs';
 import { filter, takeUntil, switchMap, debounceTime } from 'rxjs/operators';
-import { EmailForwardingResponse } from '../../models/email-forwarding.model';
+import { EmailForwardingResponse, YOU_ARE_NOT_ALLOWED } from '../../models/email-forwarding.model';
 import { API_BULK_FETCH_LIMIT, BANK_STATEMENT_HELP_DOC_URL, EMAIL_VALIDATION_REGEX } from '../../../app.constant';
 import { EmailForwardingComponentStore } from '../../store/email-forwarding.store';
 import { GeneralService } from '../../../services/general.service';
@@ -184,7 +184,8 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
                         forwardedMail: emailDetails.forwardedMail,
                         originalEmail: emailDetails.originalEmail,
                         accountUniqueName: emailDetails.account.uniqueName,
-                        uniqueName: emailDetails.uniqueName
+                        uniqueName: emailDetails.uniqueName,
+                        password: YOU_ARE_NOT_ALLOWED
                     });
                 });
                 
@@ -348,7 +349,13 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.isFormSubmitted = true;
         if (this.emailForwardingForm.valid) {
             this.isLoading = true;
-            const formData = this.emailForwardingForm.value;
+            const formData = { ...this.emailForwardingForm.value };
+            if (this.isEditMode) {
+                const passwordControl = this.emailForwardingForm.get('password');
+                if (!passwordControl?.dirty || formData.password === YOU_ARE_NOT_ALLOWED || !formData.password) {
+                    delete formData.password;
+                }
+            }
             if (!this.isEditMode) {
                 formData['forwardedMail'] = formData['forwardedMail'] + this.forwardedMailDomain;
             }
