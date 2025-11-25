@@ -489,16 +489,16 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 this.voucherType = this.vouchersUtilityService.parseVoucherType(params.voucherType);
                 this.invoiceType = this.vouchersUtilityService.getVoucherType(this.voucherType);
                 this.activeModule = params.module;
-                const templateType =
-                    this.voucherType === VoucherTypeEnum.creditNote || this.voucherType === VoucherTypeEnum.debitNote ? VoucherTypeEnum.voucher
-                        : this.voucherType === VoucherTypeEnum.purchase ? VoucherTypeEnum.purchase : this.voucherType === VoucherTypeEnum.sales ? VoucherTypeEnum.invoice : this.voucherType;
                 if (this.activeModule === 'templates') {
                     if (this.urlVoucherType === VoucherTypeEnum.purchase) {
                         this.fetchTemplates(VoucherTypeEnum.purchase_bill);
                         this.fetchAllCreatedTemplates(VoucherTypeEnum.purchase_bill);
-                    } else {
-                        this.fetchTemplates(templateType);
-                        this.fetchAllCreatedTemplates(templateType);
+                    } else if (this.urlVoucherType === 'debit-note' || this.urlVoucherType === 'credit-note') {
+                        this.fetchTemplates(VoucherTypeEnum.voucher);
+                        this.fetchAllCreatedTemplates(VoucherTypeEnum.voucher);
+                    } else if (this.urlVoucherType === VoucherTypeEnum.sales) {
+                        this.fetchTemplates(VoucherTypeEnum.invoice);
+                        this.fetchAllCreatedTemplates(VoucherTypeEnum.invoice);
                     }
                 }
                 setTimeout(() => {
@@ -508,7 +508,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                             { label: this.commonLocaleData?.app_voucher_types?.purchase_order, value: this.voucherTypeEnum.purchase_order }
                         ];
                         this.selectedTemplate = this.purchaseTemplatesList[0];
-                    }  else {
+                    } else {
                         this.selectedTemplate = null;
                     }
                 }, 100);
@@ -3138,7 +3138,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                         if (lockDateValue === null || lockDateValue === '') {
                             this.showPurchaseDate = false;
                             setTimeout(() => {
-                               this.showPurchaseDate = true;
+                                this.showPurchaseDate = true;
                             }, 0);
                         }
 
@@ -3158,7 +3158,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                         if (invoiceLockDateValue === null || invoiceLockDateValue === '') {
                             this.showInvoiceDate = false;
                             setTimeout(() => {
-                               this.showInvoiceDate = true;
+                                this.showInvoiceDate = true;
                             }, 0);
                         }
 
@@ -3439,7 +3439,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             commonLocaleData: this.commonLocaleData
         };
         this.dialog.open(TemplatePreviewDialogComponent, {
-           panelClass: ['mat-dialog-lg'],
+            panelClass: ['mat-dialog-lg'],
             height: '90vh',
             maxHeight: '90vh',
             data: reqObj
