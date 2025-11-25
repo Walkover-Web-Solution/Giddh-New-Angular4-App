@@ -213,6 +213,8 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                     this.changeDetection.detectChanges();
                 });
 
+
+
                 this.ocrExtractDocuments$.pipe(takeUntil(this.routeScope$)).subscribe((res) => {
                     this.ocrCurrentToken = res?.token ? res.token : "";
                     this.aiOcrService.saveAndNext$.next(null);
@@ -252,6 +254,12 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                         this.countVariable = count;
                         this.buttonDisabled = this.countVariable === 0 ? true : false;
                         this.changeDetection.detectChanges();
+                    }
+                });
+
+                this.aiOcrService.dateRangeEmit$.pipe(takeUntil(this.destroyed$), takeUntil(this.routeScope$)).subscribe((res) => {
+                    if (res) {
+                        this.ocrDocumentsRequestParams = res;
                     }
                 });
 
@@ -386,16 +394,16 @@ export class AiOcrComponent implements OnInit, OnDestroy {
      * @param resetPage - Indicates whether to reset the pagination page.
      * @memberof AiOcrComponent
      */
-    public getAllOcrDocuments(resetPage: boolean, data?: any): void {
+    public getAllOcrDocuments(resetPage: boolean): void {
         if (resetPage) {
             this.ocrDocumentsRequestParams.page = 1;
         }
 
         let reqObj = {
-            convertedStatus: data?.convertedStatus ?? this.ocrDocumentsRequestParams.convertedStatus ?? null,
-            fileName: data?.fileName ?? this.ocrDocumentsRequestParams.fileName ?? null,
-            status: data?.status ?? this.ocrDocumentsRequestParams.status ?? null,
-            uploadedBy: data?.uploadedBy ?? this.ocrDocumentsRequestParams.uploadedBy ?? null,
+            convertedStatus: this.ocrDocumentsRequestParams.convertedStatus ?? null,
+            fileName: this.ocrDocumentsRequestParams.fileName ?? null,
+            status: this.ocrDocumentsRequestParams.status ?? null,
+            uploadedBy: this.ocrDocumentsRequestParams.uploadedBy ?? null,
         };
         let request = {
             pagination: this.ocrDocumentsRequestParams,
@@ -637,7 +645,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                 };
                 // Reset existing object
                 this.ocrDocumentsRequestParams = { ...newOcrDocumentsRequestParams };
-
+                this.showClearFilter = false;
                 this.getAllOcrDocuments(true);
                 this.changeDetection.detectChanges();
             }
@@ -652,10 +660,10 @@ export class AiOcrComponent implements OnInit, OnDestroy {
      */
     public getListData(data: any): void {
         if (data.user || data.fileName || data.status || data.convertedStatus || data.uploadedBy) {
-            this.ocrDocumentsRequestParams.fileName = data.fileName;
-            this.ocrDocumentsRequestParams.status = data.status;
-            this.ocrDocumentsRequestParams.convertedStatus = data.convertedStatus;
-            this.ocrDocumentsRequestParams.uploadedBy = data.uploadedBy;
+            this.ocrDocumentsRequestParams['fileName'] = data.fileName;
+            this.ocrDocumentsRequestParams['status'] = data.status;
+            this.ocrDocumentsRequestParams['convertedStatus'] = data.convertedStatus;
+            this.ocrDocumentsRequestParams['uploadedBy'] = data.uploadedBy;
             this.showClearFilter = true;
         } else {
             this.showClearFilter = false;
