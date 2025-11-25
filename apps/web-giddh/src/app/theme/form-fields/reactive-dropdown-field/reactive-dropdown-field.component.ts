@@ -462,6 +462,8 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     public panelOpened(): void {
         if (!this.enableDynamicSearch) {
             this.refreshFilteredOptions();
+        } else {
+            this.dynamicSearchedQuery.emit('');
         }
     }
 

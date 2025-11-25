@@ -24,7 +24,7 @@
         autoActiveFirstOption
         [displayWith]="displayLabel"
         (optionSelected)="optionSelected($event)"
-        (opened)="addClassForDropdown()"
+        (opened)="addClassForDropdown(); resetSearchQuery()"
         #auto="matAutocomplete"
         [ngClass]="customPanelClass"
     >
@@ -53,15 +53,13 @@
                 [matTooltip]="option?.label"
                 matTooltipPosition="right"
             >
-                <div *ngIf="createNewText"
-                    class="position-sticky d-flex justify-content-between">
+                <div *ngIf="createNewText" class="position-sticky d-flex justify-content-between">
                     <div class="item create-new">{{ createNewText }}</div>
                     <div class="item create-new-command" *ngIf="showKeyboardCommand">
                         {{ showKeyboardCommand }}
                     </div>
                 </div>
-                </mat-option
-            >
+            </mat-option>
         </ng-container>
 
         <ng-template #scrollData>
@@ -120,7 +118,11 @@
             </app-cdk-scroll>
         </ng-template>
     </mat-autocomplete>
-    <div *ngIf="showDropdownIcon" class="dropdown-bg position-absolute" (click)="!readonly ? openDropdownPanel() : $event.stopPropagation()">
+    <div
+        *ngIf="showDropdownIcon"
+        class="dropdown-bg position-absolute"
+        (click)="!readonly ? openDropdownPanel() : $event.stopPropagation()"
+    >
         <span class="arrow-dropdown position-absolute"></span>
     </div>
 </ng-container>
