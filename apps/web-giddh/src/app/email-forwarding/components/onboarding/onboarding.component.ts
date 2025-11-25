@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ReplaySubject, Observable } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { EmailForwardingComponentStore } from '../../store/email-forwarding.store';
@@ -29,6 +29,7 @@ export class OnboardingComponent implements OnInit, OnDestroy {
     
     constructor(
         private router: Router,
+        private route: ActivatedRoute,
         private bankStatementStore: EmailForwardingComponentStore,
         private generalService: GeneralService
     ) {
@@ -80,6 +81,12 @@ export class OnboardingComponent implements OnInit, OnDestroy {
             } else {
                 // No data exists, show onboarding content
                setTimeout(() => {
+                   this.router.navigate([], {
+                    relativeTo: this.route,
+                    queryParams: { ...this.route.snapshot.queryParams, companyUniqueName: this.companyUniqueName, branchUniqueName: this.branchUniqueName },
+                    replaceUrl: true,
+                    queryParamsHandling: ''
+                });
                    this.isCheckingExistingData = false;
                }, 200);
             }
