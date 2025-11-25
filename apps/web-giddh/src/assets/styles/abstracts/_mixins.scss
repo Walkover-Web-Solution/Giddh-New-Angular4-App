@@ -737,25 +737,28 @@
 @mixin position-inset-utilities() {
     $inset-values: (
         "0": 0,
+        "4": 4,
+        "8": 8,
+        "16": 16,
         "unset": unset,
         "inherit": inherit,
     );
 
     @each $name, $value in $inset-values {
         .top-#{$name} {
-            top: #{$value} !important;
+            top: #{$value}px !important;
         }
 
         .right-#{$name} {
-            right: #{$value} !important;
+            right: #{$value}px !important;
         }
 
         .bottom-#{$name} {
-            bottom: #{$value} !important;
+            bottom: #{$value}px !important;
         }
 
         .left-#{$name} {
-            left: #{$value} !important;
+            left: #{$value}px !important;
         }
     }
 

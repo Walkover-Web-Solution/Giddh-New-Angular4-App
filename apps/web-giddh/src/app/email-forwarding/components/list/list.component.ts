@@ -176,6 +176,18 @@ export class ListComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Shows delete button on row hover
+     * 
+     * @param {Event} event - Mouse enter event
+     * @memberof ListComponent
+     */
+    public onRowMouseEnter(event: Event): void {
+        const target = event.currentTarget as HTMLElement;
+        const deleteButton = target.querySelector('.visibility-hidden');
+        deleteButton?.classList.add('visibility-visible');
+    }
+
+    /**
      * Component cleanup
      * 
      * @memberof ListComponent

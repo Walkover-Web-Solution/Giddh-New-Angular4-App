@@ -69,6 +69,8 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
     private companyUniqueName: string = '';
     /** Branch unique name */  
     private branchUniqueName: string = '';
+    /** Holds images folder path */
+    public imgPath: string = "";
 
     constructor(
         private formBuilder: FormBuilder,
@@ -91,6 +93,8 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.branchUniqueName = this.generalService.currentBranchUniqueName;
         this.setupAccountSearchSubscription();
         this.getEmailFromQueryParams();
+        this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
+
         this.bankStatementStore.createUpdateEmailForwardingIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response: unknown) => {
             if (response && response['uniqueName']) {
                 this.isLoading = false;
@@ -507,6 +511,15 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.accountSearchCalled = true;
         this.accountSearchRequest.isLoading = true;        
         this.bankStatementStore.searchAccount(this.accountSearchRequest.group);
+    }
+
+    /**
+     * Navigates back to the list page
+     * 
+     * @memberof CreateComponent
+     */
+    public navigateBack(): void {
+        this.router.navigate(['/pages/email-forwarding/list'], { queryParams: { companyUniqueName: this.companyUniqueName, branchUniqueName: this.branchUniqueName } });
     }
     
     /**
