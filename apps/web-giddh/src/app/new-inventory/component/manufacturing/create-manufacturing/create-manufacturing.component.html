@@ -285,6 +285,7 @@
                                                                         getStockVariants(linkedStock, $event, false, i)
                                                                     "
                                                                     [defaultValue]="linkedStock.selectedStock?.label"
+                                                                    [allowValueReset]="true"
                                                                     [enableDynamicSearch]="true"
                                                                     [isPaginationEnabled]="true"
                                                                     (dynamicSearchedQuery)="
@@ -296,7 +297,6 @@
                                                                         )
                                                                     "
                                                                     (scrollEnd)="stockScrollEnd(linkedStock)"
-                                                                    [allowValueReset]="true"
                                                                     (onClear)="
                                                                         resetStocks(
                                                                             linkedStock,
@@ -323,6 +323,7 @@
                                                                     [scrollableElementId]="'variant' + i"
                                                                     [placeholder]="commonLocaleData?.app_select_variant"
                                                                     [options]="linkedStock.variants"
+                                                                    [allowValueReset]="true"
                                                                     (selectedOption)="
                                                                         linkedStock.variant.name = $event.label;
                                                                         linkedStock.variant.uniqueName = $event.value;
@@ -372,6 +373,7 @@
                                                                             linkedStock.selectedStock?.additional
                                                                                 ?.unitsList
                                                                         "
+                                                                        [allowValueReset]="true"
                                                                         (selectedOption)="
                                                                             linkedStock.stockUnitUniqueName =
                                                                                 $event.value;
@@ -517,6 +519,7 @@
                                                                                 $event
                                                                             )
                                                                         "
+                                                                        [allowValueReset]="true"
                                                                         [enableDynamicSearch]="true"
                                                                         [isPaginationEnabled]="true"
                                                                         (scrollEnd)="
@@ -555,6 +558,7 @@
                                                                         (dynamicSearchedQuery)="
                                                                             onExpenseAccountSearchQueryChanged($event)
                                                                         "
+                                                                        [allowValueReset]="true"
                                                                         [enableDynamicSearch]="true"
                                                                         [isPaginationEnabled]="true"
                                                                         (scrollEnd)="handleExpenseAccountScrollEnd()"
@@ -686,6 +690,7 @@
                                                                         [defaultValue]="
                                                                             byProductLinkedStock.selectedStock?.label
                                                                         "
+                                                                        [allowValueReset]="true"
                                                                         [enableDynamicSearch]="true"
                                                                         [isPaginationEnabled]="true"
                                                                         (dynamicSearchedQuery)="
@@ -700,7 +705,6 @@
                                                                                 byProductLinkedStock
                                                                             )
                                                                         "
-                                                                        [allowValueReset]="true"
                                                                         (onClear)="
                                                                             resetStocks(
                                                                                 byProductLinkedStock,
@@ -728,6 +732,7 @@
                                                                         [placeholder]="
                                                                             commonLocaleData?.app_select_variant
                                                                         "
+                                                                        [allowValueReset]="true"
                                                                         [options]="byProductLinkedStock.variants"
                                                                         (selectedOption)="
                                                                             byProductLinkedStock.variant.name =
@@ -776,6 +781,7 @@
                                                                             [name]="'variantUnit' + i"
                                                                             [scrollableElementId]="'variantUnit' + i"
                                                                             [placeholder]="commonLocaleData?.app_unit"
+                                                                            [allowValueReset]="true"
                                                                             [options]="
                                                                                 byProductLinkedStock.selectedStock
                                                                                     ?.additional?.unitsList
