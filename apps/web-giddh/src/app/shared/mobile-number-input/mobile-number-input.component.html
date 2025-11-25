@@ -90,21 +90,21 @@
     <span class="text-danger" *ngIf="mobileControl.hasError('wrongCountry')">
         {{ getTranslatedMessage("wrong_country") }}
     </span>
-    <span class="text-danger" *ngIf="mobileControl.hasError('invalidNumber')">
+    <span class="text-danger" *ngIf="mobileControl.hasError('invalidNumber') || mobileControl.hasError('parseError')">
         {{ getTranslatedMessage("invalid_number") }}
     </span>
-    <!-- <span class="text-danger" *ngIf="mobileControl.hasError('notMobile')">
+    <span class="text-danger" *ngIf="mobileControl.hasError('notMobile')">
         {{ getTranslatedMessage('not_mobile') }}
-    </span> -->
+    </span>
     <span class="text-danger" *ngIf="mobileControl.hasError('obviouslyInvalid')">
         {{ getTranslatedMessage("obviously_invalid") }}
     </span>
     <span class="text-danger" *ngIf="mobileControl.hasError('impossibleNumber')">
         {{ getTranslatedMessage("impossible_number", { country: selectedCountry?.name }) }}
     </span>
-    <span class="text-danger" *ngIf="mobileControl.hasError('parseError')">
+    <!-- <span class="text-danger" *ngIf="mobileControl.hasError('parseError')">
         {{ getTranslatedMessage("parse_error") }}
-    </span>
+    </span> -->
     <span class="text-danger" *ngIf="mobileControl.hasError('invalidFormat')">
         {{ getTranslatedMessage("invalid_format") }}
     </span>

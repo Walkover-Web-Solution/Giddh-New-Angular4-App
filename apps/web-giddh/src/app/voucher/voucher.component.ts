@@ -26,7 +26,7 @@ import { cloneDeep, find, forEach, isEqual, isUndefined, omit, orderBy, uniqBy }
 import { InvoiceSetting } from '../models/interfaces/invoice.setting.interface';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
-import { SubVoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION, SearchResultText, TCS_TDS_TAXES_TYPES, ENTRY_DESCRIPTION_LENGTH, EMAIL_REGEX_PATTERN, AdjustedVoucherType, MOBILE_NUMBER_UTIL_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_IP_ADDRESS_URL, MOBILE_NUMBER_ADDRESS_JSON_URL, API_BULK_FETCH_LIMIT, BranchHierarchyType, IOption, ASIDE_PANE_CONFIG, BREAKPOINT_SCREEN_SIZE } from '../app.constant';
+import { SubVoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION, SearchResultText, TCS_TDS_TAXES_TYPES, ENTRY_DESCRIPTION_LENGTH, EMAIL_REGEX_PATTERN, AdjustedVoucherType, API_BULK_FETCH_LIMIT, BranchHierarchyType, IOption, ASIDE_PANE_CONFIG, BREAKPOINT_SCREEN_SIZE } from '../app.constant';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { ProformaActions } from '../actions/proforma/proforma.actions';
 import { PreviousInvoicesVm, ProformaFilter, ProformaGetRequest, ProformaResponse } from '../models/api-models/proforma';
@@ -659,8 +659,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     private searchReferenceVoucher: any = "";
     /** List of discounts */
     public discountsList: any[] = [];
-    /** This will hold mobile number field input  */
-    public intl: any;
     /** This will hold updatedNumber */
     public selectedCustomerNumber: any = '';
     /** This will hold isMobileNumberInvalid */
@@ -879,9 +877,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.getOnboardingFormInProcess$ = this.store.pipe(select(s => s.common.getOnboardingFormInProcess), takeUntil(this.destroyed$));
         this.exceptTaxTypes = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        if (this.voucherApiVersion === 1) {
-            this.router.navigate(['pages', 'home']);
-        }
+        this.router.navigate(['pages', 'home']);
     }
 
     public ngOnInit() {
@@ -1557,7 +1553,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         this.customerAcList$ = observableOf([{ label: tempSelectedAcc.name, value: tempSelectedAcc.uniqueName, additional: tempSelectedAcc }]);
                         this.invFormData.voucherDetails.customerName = tempSelectedAcc.name;
                         let selectedCustomerNumber = tempSelectedAcc.mobileNo ? "+" + tempSelectedAcc.mobileNo : '';
-                        this.intl?.setNumber(selectedCustomerNumber);
                         this.invFormData.voucherDetails.customerUniquename = tempSelectedAcc.uniqueName;
                         this.isCustomerSelected = true;
                         this.isMulticurrencyAccount = tempSelectedAcc.currencySymbol !== this.baseCurrencySymbol;
@@ -1608,8 +1603,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                             tempSelectedAcc.addresses = [find(tempSelectedAcc.addresses, (tax) => tax.isDefault)];
                         }
                         let selectedCustomerNumber = tempSelectedAcc.mobileNo ? "+" + tempSelectedAcc.mobileNo : '';
-                        this.intl?.setNumber(selectedCustomerNumber);
-                        this.invFormData.voucherDetails.customerUniquename = null;
                         this.invFormData.voucherDetails.customerName = tempSelectedAcc.name;
                         this.invFormData.accountDetails = new AccountDetailsClass(tempSelectedAcc);
                         this.isCustomerSelected = true;
@@ -1806,12 +1799,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     public ngAfterViewInit() {
-        let interval = setInterval(() => {
-            if (this.initContactProforma) {
-                this.onlyPhoneNumber();
-                clearInterval(interval);
-            }
-        }, 500);
         if (!this.isUpdateMode) {
             this.toggleBodyClass();
         }
@@ -2235,7 +2222,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public assignAccountDetailsValuesInForm(data: AccountResponseV2) {
         if (data?.mobileNo) {
             let newSelectedMobileNumber = "+" + data?.mobileNo;
-            this.intl?.setNumber(newSelectedMobileNumber);
         }
         this.isCashBankAccount = false;
 
@@ -2407,7 +2393,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public resetInvoiceForm(f: NgForm) {
         this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
         if (f) {
-            this.intl?.setNumber("");
             f.form.reset();
         }
         if (this.container) {
@@ -2736,7 +2721,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         let requestObject: any;
         let voucherDate: any;
         const deposit = this.getDeposit();
-        data.accountDetails.mobileNumber = this.intl?.getNumber();
         if (!this.isPurchaseInvoice) {
             voucherDate = data.voucherDetails.voucherDate;
             requestObject = {
@@ -3962,8 +3946,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     }
 
     public onSelectCustomer(item: any): void {
-        this.resetMobileNumberValidation();
-        this.intl?.setNumber("");
         this.typeaheadNoResultsOfCustomer = false;
         this.referenceVouchersCurrentPage = 1;
         this.referenceVouchersTotalPages = 1;
@@ -3976,7 +3958,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             }
 
             this.isCustomerSelected = true;
-            this.invFormData.accountDetails.mobileNumber = this.intl?.getNumber();
             this.invFormData.accountDetails.name = '';
             if (item.additional) {
                 this.customerAccount.email = item.additional.email;
@@ -4221,28 +4202,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
     }
 
-    /**
-     * This will use for reset mobile number validations
-     *
-     * @memberof VoucherComponent
-     */
-    public resetMobileNumberValidation(): void {
-        let input = document.getElementById('init-contact-proforma');
-        const errorMsg = document.querySelector("#init-contact-proforma-error-msg");
-        const validMsg = document.querySelector("#init-contact-proforma-valid-msg");
-        input?.classList?.remove("error");
-        if (errorMsg && validMsg) {
-            errorMsg.innerHTML = "";
-            errorMsg.classList.add("d-none");
-            validMsg.classList.add("d-none");
-        }
-    }
-
     public resetCustomerName(event) {
         if (event) {
             if (!event?.value) {
-                this.resetMobileNumberValidation();
-                this.intl?.setNumber("");
                 this.invFormData.voucherDetails.customerName = null;
                 this.invFormData.voucherDetails.customerUniquename = null;
                 this.isCustomerSelected = false;
@@ -4255,8 +4217,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 }
             }
         } else {
-            this.resetMobileNumberValidation();
-            this.intl?.setNumber("");
             this.invFormData.voucherDetails.customerName = null;
             this.invFormData.voucherDetails.customerUniquename = null;
             this.invFormData.voucherDetails.tempCustomerName = null;
@@ -4627,7 +4587,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     this.startLoader(false);
                     return;
                 }
-                data.accountDetails.mobileNumber = this.intl?.getNumber();
                 const deposit = this.getDeposit();
                 requestObject = {
                     account: data.accountDetails,
@@ -5802,7 +5761,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         voucherClassConversion.accountDetails.billingDetails.county.name = result?.account?.billingDetails?.county?.name;
         voucherClassConversion.accountDetails.billingDetails.county.code = result?.account?.billingDetails?.county?.code;
         let selectedCustomerNumber = result?.account?.mobileNumber ? "+" + result?.account?.mobileNumber : '';
-        this.intl?.setNumber(selectedCustomerNumber);
         voucherClassConversion.accountDetails.mobileNumber = result.account.mobileNumber;
 
         voucherClassConversion.accountDetails.shippingDetails = new GstDetailsClass();
@@ -8817,102 +8775,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.discountsList = response?.body;
             }
         });
-    }
-
-    /**
-    *This will use for  fetch mobile number
-    *
-    * @memberof VoucherComponent
-    */
-    public onlyPhoneNumber(): void {
-        let input = document.getElementById('init-contact-proforma');
-        const errorMsg = document.querySelector("#init-contact-proforma-error-msg");
-        const validMsg = document.querySelector("#init-contact-proforma-valid-msg");
-        let errorMap = [this.localeData?.invalid_contact_number, this.commonLocaleData?.app_invalid_country_code, this.commonLocaleData?.app_invalid_contact_too_short, this.commonLocaleData?.app_invalid_contact_too_long, this.localeData?.invalid_contact_number];
-        const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']['electron'];
-        if (intlTelInput && input) {
-            this.intl = intlTelInput(input, {
-                nationalMode: true,
-                utilsScript: MOBILE_NUMBER_UTIL_URL,
-                autoHideDialCode: false,
-                separateDialCode: false,
-                initialCountry: 'auto',
-                geoIpLookup: (success, failure) => {
-                    let countryCode = 'in';
-                    const fetchIPApi = this.http.get<any>(MOBILE_NUMBER_SELF_URL);
-                    fetchIPApi.subscribe(
-                        (res) => {
-                            if (res?.ipAddress) {
-                                const fetchCountryByIpApi = this.http.get<any>(MOBILE_NUMBER_IP_ADDRESS_URL + `${res.ipAddress}`);
-                                fetchCountryByIpApi.subscribe(
-                                    (fetchCountryByIpApiRes) => {
-                                        if (fetchCountryByIpApiRes?.countryCode) {
-                                            return success(fetchCountryByIpApiRes.countryCode);
-                                        } else {
-                                            return success(countryCode);
-                                        }
-                                    },
-                                    (fetchCountryByIpApiErr) => {
-                                        const fetchCountryByIpInfoApi = this.http.get<any>(MOBILE_NUMBER_ADDRESS_JSON_URL + `${res?.ipAddress}`);
-
-                                        fetchCountryByIpInfoApi.subscribe(
-                                            (fetchCountryByIpInfoApiRes) => {
-                                                if (fetchCountryByIpInfoApiRes?.country) {
-                                                    return success(fetchCountryByIpInfoApiRes.country);
-                                                } else {
-                                                    return success(countryCode);
-                                                }
-                                            },
-                                            (fetchCountryByIpInfoApiErr) => {
-                                                return success(countryCode);
-                                            }
-                                        );
-                                    }
-                                );
-                            } else {
-                                return success(countryCode);
-                            }
-                        },
-                        (err) => {
-                            return success(countryCode);
-                        }
-                    );
-                },
-            });
-
-            let reset = () => {
-                input?.classList?.remove("error");
-                if (errorMsg && validMsg) {
-                    errorMsg.innerHTML = "";
-                    errorMsg.classList.add("d-none");
-                    validMsg.classList.add("d-none");
-                }
-            };
-            input.addEventListener('blur', () => {
-                let phoneNumber = this.intl?.getNumber();
-                reset();
-                if (input) {
-                    if (phoneNumber?.length) {
-                        if (this.intl?.isValidNumber()) {
-
-                            validMsg?.classList?.remove("d-none");
-                            this.isMobileNumberInvalid = false;
-                        } else {
-                            input?.classList?.add("error");
-                            this.isMobileNumberInvalid = true;
-                            let errorCode = this.intl?.getValidationError();
-                            if (errorMsg && errorMap[errorCode]) {
-                                this.toaster.showSnackBar("error", this.localeData?.invalid_contact_number);
-                                errorMsg.innerHTML = errorMap[errorCode];
-                                errorMsg.classList.remove("d-none");
-                            }
-                        }
-                    } else {
-                        this.isMobileNumberInvalid = false;
-                    }
-                }
-            });
-        }
     }
 
     /**

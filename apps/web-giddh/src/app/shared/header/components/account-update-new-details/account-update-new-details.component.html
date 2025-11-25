@@ -461,22 +461,6 @@
                                 (change)="openConfirmLeaveDialog()"
                             >
                             </mobile-number-input>
-                            <!-- <input-field
-                                [name]="'mobile'"
-                                [type]="'tel'"
-                                #initContactUpdate
-                                class="flag-input"
-                                [id]="'init-contact-update'"
-                                [label]="commonLocaleData?.app_mobile_number"
-                                [placeholder]="localeData?.mobile_no_placeholder"
-                                [floatLabel]="intl?.['init-contact-update']?.getNumber() ? 'always' : 'auto'"
-                                formControlName="mobileNo"
-                                (change)="openConfirmLeaveDialog()"
-                                (focus)="reInitializeMobileField('init-contact-update')"
-                            >
-                            </input-field>
-                            <span id="init-contact-update-valid-msg" class="d-none"></span>
-                            <span id="init-contact-update-error-msg" class="d-none"></span> -->
                         </div>
                     </div>
 
@@ -574,21 +558,6 @@
                                 id="contactValidationError_{{ i }}"
                                 >{{ localeData?.duplicate_mobile_number }}
                             </span>
-                            
-                            <!-- <input-field
-                                [name]="'contactNo_' + i"
-                                [type]="'tel'"
-                                class="flag-input"
-                                [id]="'init-contact-portal_' + i"
-                                formControlName="contactNo"
-                                [placeholder]="localeData?.mobile_no_placeholder"
-                                [label]="commonLocaleData?.app_mobile_number"
-                                (input)="portalIndex = i"
-                                (focus)="reInitializeMobileField('init-contact-portal_' + i)"
-                                [floatLabel]="intl?.['init-contact-portal_' + i]?.getNumber() ? 'always' : 'auto'"
-                            ></input-field>
-                            <span [id]="'init-contact-portal_' + i + '-valid-msg'" class="d-none"></span>
-                            <span [id]="'init-contact-portal_' + i + '-error-msg'" class="d-none"></span> -->
                         </div>
                         <div class="pl-2 mt-1">
                             <button
