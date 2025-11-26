@@ -706,7 +706,8 @@
                 {
                     "label": "Email-to-Bank Sync",
                     "link": "/pages/email-forwarding",
-                    "icon": "icon-mail"
+                    "icon": "icon-mail",
+                    "description": "Auto-create vouchers from bank statement emails."
                 }
             ]
         }

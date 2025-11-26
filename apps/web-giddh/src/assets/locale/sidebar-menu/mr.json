@@ -706,7 +706,8 @@
                 {
                     "label": "ईमेल-टू-बँके सिंक",
                     "link": "/pages/email-forwarding",
-                    "icon": "icon-mail"
+                    "icon": "icon-mail",
+                    "description": "बँक स्टेटमेंट ईमेलपासून ऑटो-वाउचर तयार करा।"
                 }
             ]
         }
