@@ -28,6 +28,7 @@ export interface EmailForwardingResponse {
     uniqueName: string;
     account: {name: string, uniqueName: string};
     forwardedMail: string;
+    isPasswordSet: boolean;
 }
 
 /** Constant for "You are not allowed" message */

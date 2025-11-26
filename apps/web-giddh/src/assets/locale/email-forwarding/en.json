@@ -4,7 +4,7 @@
     "forwarded_to": "Forwarded to",
     "how_to_setup": "How to setup email forwarding?",
     "original_email": "Original Email",
-    "waiting_verification": "Waiting for verification...",
+    "waiting_verification": "Waiting for verification",
     "create_email": "Create Email",
     "email_verification": "Email Verification",
     "email_forwarding": "Email Forwarding",
@@ -12,5 +12,7 @@
     "verify_and_next": "Verify and Next",
     "new_bank_statement": "New Bank Statement",
     "bank_account_name": "Bank Account Name",
-    "copied": "Copied..."
+    "copied": "Copied...",
+    "import_vouchers_title": "Import New Vouchers via Email",
+    "import_vouchers_description": "Set up a forwarding email for your bank statements so GIDDH can auto-create vouchers from incoming emails."
 }

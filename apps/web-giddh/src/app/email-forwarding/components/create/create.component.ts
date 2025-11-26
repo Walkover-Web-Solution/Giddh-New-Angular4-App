@@ -185,7 +185,7 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
                         originalEmail: emailDetails.originalEmail,
                         accountUniqueName: emailDetails.account.uniqueName,
                         uniqueName: emailDetails.uniqueName,
-                        password: YOU_ARE_NOT_ALLOWED
+                        password: emailDetails.isPasswordSet ? YOU_ARE_NOT_ALLOWED : ""
                     });
                 });
                 
