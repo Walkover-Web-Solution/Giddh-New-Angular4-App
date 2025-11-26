@@ -4,13 +4,15 @@
     "forwarded_to": "को फॉरवर्ड किया गया",
     "how_to_setup": "ईमेल फॉरवर्डिंग कैसे सेटअप करें?",
     "original_email": "मूल ईमेल",
-    "waiting_verification": "सत्यापन की प्रतीक्षा में...",
+    "waiting_verification": "सत्यापन की प्रतीक्षा में",
     "create_email": "ईमेल बनाएं",
     "email_verification": "ईमेल सत्यापन",
-    "setup_email_forwarding": "ईमेल फॉरवर्डिंग सेटअप करें",
+    "email_forwarding": "ईमेल फॉरवर्डिंग",
     "verify_start": "सत्यापित करें/शुरू करें",
     "verify_and_next": "सत्यापित करें और आगे बढ़ें",
     "new_bank_statement": "नया बैंक स्टेटमेंट",
     "bank_account_name": "बैंक खाता नाम",
-    "copied": "नकल की गई..."
+    "copied": "कॉपी किया गया...",
+    "import_vouchers_title": "ईमेल के माध्यम से नए वाउचर आयात करें",
+    "import_vouchers_description": "अपने बैंक स्टेटमेंट के लिए एक फॉरवर्डिंग ईमेल सेट करें ताकि GIDDH आने वाले ईमेल से स्वचालित रूप से वाउचर बना सके।"
 }

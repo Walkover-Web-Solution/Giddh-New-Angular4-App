@@ -969,19 +969,19 @@
             "icon": "icon-manage-group-acc",
             "items": [
                 {
-                    "label": "OCR for Income",
+                    "label": "Scan2Invoice",
                     "link": "/pages/ai-ocr/income",
                     "icon": "icon-audit-log",
                     "description": "चित्र अपलोड करें, पीडीएफ, जेपीईजी, ज़िप"
                 },
                 {
-                    "label": "OCR for Expense",
+                    "label": "Scan2Bill",
                     "link": "/pages/ai-ocr/expense",
                     "icon": "icon-audit-log",
                     "description": "चित्र अपलोड करें, पीडीएफ, जेपीईजी, ज़िप"
                 },
                 {
-                    "label": "बैंक स्टेटमेंट",
+                    "label": "ईमेल-टू-बैंक सिंक",
                     "link": "/pages/email-forwarding",
                     "icon": "icon-bank-statement"
                 }

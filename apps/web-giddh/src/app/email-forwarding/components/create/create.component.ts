@@ -4,7 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { MatStepper } from '@angular/material/stepper';
 import { ReplaySubject, interval, Subject, BehaviorSubject, Observable } from 'rxjs';
 import { filter, takeUntil, switchMap, debounceTime } from 'rxjs/operators';
-import { EmailForwardingResponse } from '../../models/email-forwarding.model';
+import { EmailForwardingResponse, YOU_ARE_NOT_ALLOWED } from '../../models/email-forwarding.model';
 import { API_BULK_FETCH_LIMIT, BANK_STATEMENT_HELP_DOC_URL, EMAIL_VALIDATION_REGEX } from '../../../app.constant';
 import { EmailForwardingComponentStore } from '../../store/email-forwarding.store';
 import { GeneralService } from '../../../services/general.service';
@@ -69,6 +69,8 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
     private companyUniqueName: string = '';
     /** Branch unique name */  
     private branchUniqueName: string = '';
+    /** Holds images folder path */
+    public imgPath: string = "";
 
     constructor(
         private formBuilder: FormBuilder,
@@ -91,6 +93,8 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.branchUniqueName = this.generalService.currentBranchUniqueName;
         this.setupAccountSearchSubscription();
         this.getEmailFromQueryParams();
+        this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
+
         this.bankStatementStore.createUpdateEmailForwardingIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response: unknown) => {
             if (response && response['uniqueName']) {
                 this.isLoading = false;
@@ -180,7 +184,8 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
                         forwardedMail: emailDetails.forwardedMail,
                         originalEmail: emailDetails.originalEmail,
                         accountUniqueName: emailDetails.account.uniqueName,
-                        uniqueName: emailDetails.uniqueName
+                        uniqueName: emailDetails.uniqueName,
+                        password: emailDetails.isPasswordSet ? YOU_ARE_NOT_ALLOWED : ""
                     });
                 });
                 
@@ -344,7 +349,13 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.isFormSubmitted = true;
         if (this.emailForwardingForm.valid) {
             this.isLoading = true;
-            const formData = this.emailForwardingForm.value;
+            const formData = { ...this.emailForwardingForm.value };
+            if (this.isEditMode) {
+                const passwordControl = this.emailForwardingForm.get('password');
+                if (!passwordControl?.dirty || formData.password === YOU_ARE_NOT_ALLOWED || !formData.password) {
+                    delete formData.password;
+                }
+            }
             if (!this.isEditMode) {
                 formData['forwardedMail'] = formData['forwardedMail'] + this.forwardedMailDomain;
             }
@@ -507,6 +518,15 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.accountSearchCalled = true;
         this.accountSearchRequest.isLoading = true;        
         this.bankStatementStore.searchAccount(this.accountSearchRequest.group);
+    }
+
+    /**
+     * Navigates back to the list page
+     * 
+     * @memberof CreateComponent
+     */
+    public navigateBack(): void {
+        this.router.navigate(['/pages/email-forwarding/list'], { queryParams: { companyUniqueName: this.companyUniqueName, branchUniqueName: this.branchUniqueName } });
     }
     
     /**

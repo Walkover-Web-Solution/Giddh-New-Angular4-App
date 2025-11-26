@@ -315,6 +315,10 @@
     height: calc(100vh - var(--header-height));
 }
 
+.custom-mat-form-field-height {
+    height: var(--custom-mat-form-field-height) !important;
+}
+
 .d-inline-grid {
     display: inline-grid !important;
 }

@@ -737,25 +737,44 @@
 @mixin position-inset-utilities() {
     $inset-values: (
         "0": 0,
+        "4": 4,
+        "8": 8,
+        "16": 16,
         "unset": unset,
         "inherit": inherit,
     );
 
     @each $name, $value in $inset-values {
         .top-#{$name} {
-            top: #{$value} !important;
+            @if $value == unset or $value == inherit {
+                top: #{$value} !important;
+            } @else {
+                top: #{$value}px !important;
+            }
         }
 
         .right-#{$name} {
-            right: #{$value} !important;
+            @if $value == unset or $value == inherit {
+                right: #{$value} !important;
+            } @else {
+                right: #{$value}px !important;
+            }
         }
 
         .bottom-#{$name} {
-            bottom: #{$value} !important;
+            @if $value == unset or $value == inherit {
+                bottom: #{$value} !important;
+            } @else {
+                bottom: #{$value}px !important;
+            }
         }
 
         .left-#{$name} {
-            left: #{$value} !important;
+            @if $value == unset or $value == inherit {
+                left: #{$value} !important;
+            } @else {
+                left: #{$value}px !important;
+            }
         }
     }
 

@@ -9,12 +9,10 @@
         <!-- Header Section -->
         <div class="row mb-3">
             <div class="col-12">
-                <div class="d-flex justify-content-end">
-                    <button mat-raised-button color="primary" (click)="createNew()">
-                        <i class="icon-plus mr-2"></i>
-                        {{ localeData?.new_bank_statement }}
-                    </button>
-                </div>
+                <button mat-raised-button color="primary" (click)="createNew()">
+                    <i class="icon-plus mr-2"></i>
+                    {{ localeData?.new_bank_statement }}
+                </button>
             </div>
         </div>
 
@@ -74,20 +72,19 @@
                                     [matTooltip]="commonLocaleData?.app_delete"
                                     matTooltipPosition="after"
                                     color="warn"
-                                    class="d-inline-flex justify-content-center align-items-center"
+                                    class="d-inline-flex justify-content-center align-items-center hover-target"
                                     (click)="$event.stopPropagation(); deleteStatement(statement.uniqueName)"
                                 >
                                     <i class="icon-trash font-size-16"></i>
                                 </button>
-                                <!-- </div> -->
                             </td>
                         </ng-container>
 
                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                         <tr
                             mat-row
-                            *matRowDef="let row; columns: displayedColumns"
-                            class="cursor-pointer"
+                            *matRowDef="let row; columns: displayedColumns; let rowIndex = rowIndex"
+                            class="cursor-pointer hover-trigger"
                             (click)="editStatement(row)"
                         ></tr>
                     </table>
