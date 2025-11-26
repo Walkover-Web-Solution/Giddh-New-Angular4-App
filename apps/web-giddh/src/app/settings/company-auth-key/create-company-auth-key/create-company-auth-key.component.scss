@@ -1,4 +1,5 @@
 .mat-select-btn {
+    background: var(--color-white) !important;
     border: 1px solid var(--border-color) !important;
     border-radius: var(--mat-border-radius-4) !important;
     padding: 6px !important;
@@ -18,12 +19,9 @@
     }
 }
 
-.date-range-wrapper {
-    width: 206px;
-}
 
 .custom-date-range-menu {
-    width: 237px;
+    width: 300px;
 }
 
 .ip-addresses-dropdown {

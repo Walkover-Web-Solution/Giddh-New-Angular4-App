@@ -16,7 +16,7 @@
           ]
         },
         {
-          "label": "कंपनी Auth Key",
+          "label": "ऑथ की",
           "link": "/pages/settings/company-auth-key",
           "icon": "<i class='icon-company'></i>"
         },

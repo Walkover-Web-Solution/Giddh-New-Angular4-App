@@ -16,7 +16,7 @@
           ]
         },
         {
-          "label": "Company Auth Key",
+          "label": "Auth Key",
           "link": "/pages/settings/company-auth-key",
           "icon": "<i class='icon-company'></i>"
         },
