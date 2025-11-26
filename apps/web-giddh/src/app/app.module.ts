@@ -529,9 +529,6 @@ let giddhRegion = document.cookie
     .find(cookie => cookie.startsWith('giddh_region='))
     ?.split('=')[1];
 giddhRegion = giddhRegion?.toUpperCase();
-if (whiteLabelConfig) {
-    localStorage.setItem("Country-Region", "IN");
-} else {
     if (giddhRegion === "UK") {
         localStorage.setItem("Country-Region", "GB");
     } else if (giddhRegion === "AE") {
@@ -541,7 +538,6 @@ if (whiteLabelConfig) {
     } else {
         localStorage.setItem("Country-Region", "GL");
     }
-}
 
 // GetServiceConfig returns a configuration object with API URLs, app URLs, and various authentication tokens, using whiteLabelConfig or default Configuration values.
 export function getServiceConfig(): any {
@@ -550,7 +546,7 @@ export function getServiceConfig(): any {
         const dynamicThemeService = new DynamicThemeService();
         dynamicThemeService.applyThemeFromWhiteLabel(whiteLabelConfig);
     }
-    
+
     return {
         apiUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain ? `${whiteLabelConfig.body.giddhWhiteLabel.apiDomain}/` :
         (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
