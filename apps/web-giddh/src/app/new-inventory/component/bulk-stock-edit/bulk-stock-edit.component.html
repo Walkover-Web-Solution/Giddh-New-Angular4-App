@@ -683,6 +683,7 @@
                                                             [readonly]="selectTableRowIndex !== i"
                                                             [matTooltip]="row.get('hsnNo').value"
                                                             matTooltipPosition="above"
+                                                            [allowDigitsOnly]="true"
                                                         >
                                                         </text-field>
                                                     </div>
@@ -699,6 +700,7 @@
                                                             formControlName="sacNo"
                                                             [readonly]="selectTableRowIndex !== i"
                                                             [matTooltip]="row.get('sacNo').value"
+                                                            [allowDigitsOnly]="true"
                                                             matTooltipPosition="above"
                                                         >
                                                         </text-field>
