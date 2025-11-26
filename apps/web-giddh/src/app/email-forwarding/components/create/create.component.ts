@@ -393,12 +393,12 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
         const completeEmail = this.getCompleteEmail();
         
         // Use Angular Router for proper URL handling
-        this.router.navigate([], {
-            relativeTo: this.route,
-            queryParams: { companyUniqueName: this.companyUniqueName, branchUniqueName: this.branchUniqueName, ...this.route.snapshot.queryParams, forwardedMail: completeEmail },
-            replaceUrl: true,
-            queryParamsHandling: ''
-        });
+        this.generalService.updateActivatedRouteQueryParams({
+            companyUniqueName: this.companyUniqueName,
+            branchUniqueName: this.branchUniqueName,
+            ...this.route.snapshot.queryParams,
+            forwardedMail: completeEmail
+        }, '');
     }
 
     /**
@@ -425,15 +425,11 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
             
             // Navigate to step 3
             setTimeout(() => {
-                this.router.navigate([], {
-                    relativeTo: this.route,
-                    queryParams: { 
-                        companyUniqueName: this.companyUniqueName,
-                        branchUniqueName: this.branchUniqueName,
-                        ...this.route.snapshot.queryParams, 
-                        step: 3 
-                    },
-                    replaceUrl: true
+                this.generalService.updateActivatedRouteQueryParams({
+                    companyUniqueName: this.companyUniqueName,
+                    branchUniqueName: this.branchUniqueName,
+                    ...this.route.snapshot.queryParams,
+                    step: 3
                 });
                 
                 // Navigate stepper to step 3 (index 2)

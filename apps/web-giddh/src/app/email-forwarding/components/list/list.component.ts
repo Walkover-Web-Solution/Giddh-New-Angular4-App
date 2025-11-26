@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
@@ -10,6 +9,7 @@ import { EmailForwardingResponse } from '../../models/email-forwarding.model';
 import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-modal/confirmation-modal.component';
 import { GeneralService } from '../../../services/general.service';
 import { EmailForwardingComponentStore } from '../../store/email-forwarding.store';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'email-forwarding-list',
@@ -173,18 +173,6 @@ export class ListComponent implements OnInit, OnDestroy {
         }
         queryParams['branchUniqueName'] = this.branchUniqueName;
         this.router.navigate([`/pages/email-forwarding/edit/${element.uniqueName}`], { queryParams });
-    }
-
-    /**
-     * Shows delete button on row hover
-     * 
-     * @param {Event} event - Mouse enter event
-     * @memberof ListComponent
-     */
-    public onRowMouseEnter(event: Event): void {
-        const target = event.currentTarget as HTMLElement;
-        const deleteButton = target.querySelector('.visibility-hidden');
-        deleteButton?.classList.add('visibility-visible');
     }
 
     /**
