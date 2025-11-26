@@ -1,13 +1,16 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, Output, ViewChild, Input, EventEmitter } from '@angular/core';
 import { ReplaySubject, Subject } from 'rxjs';
 import { debounceTime, takeUntil, distinctUntilChanged } from 'rxjs/operators';
-import { DOWN_ARROW, ENTER, ESCAPE, UP_ARROW, BACKSPACE, TAB } from '@angular/cdk/keycodes';
+import { DOWN_ARROW, ENTER, ESCAPE, UP_ARROW, BACKSPACE, TAB, RIGHT_ARROW, LEFT_ARROW, CAPS_LOCK, SHIFT, CONTROL, ALT, MAC_WK_CMD_LEFT, MAC_META, MAC_WK_CMD_RIGHT } from '@angular/cdk/keycodes';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { PAGINATION_LIMIT } from "apps/web-giddh/src/app/app.constant";
 import { InventoryService } from "apps/web-giddh/src/app/services/inventory.service";
 
-const DIRECTIONAL_KEYS = [UP_ARROW, DOWN_ARROW];
-const SPECIAL_KEYS = [UP_ARROW, DOWN_ARROW, TAB, ENTER, ESCAPE, BACKSPACE];
+const DIRECTIONAL_KEYS = [
+    LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW
+];
+
+const SPECIAL_KEYS = [...DIRECTIONAL_KEYS, CAPS_LOCK, TAB, SHIFT, CONTROL, ALT, MAC_WK_CMD_LEFT, MAC_WK_CMD_RIGHT, MAC_META];
 
 @Component({
     selector: "items-list-popup",
@@ -63,6 +66,8 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterV
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
+    /** Indicates mouse interaction with the list to slightly adjust keyboard scroll offset for smoother combined mouse + keyboard navigation. */
+    public isMouseInteractingWithList: boolean = false;
 
     constructor(
         private inventoryService: InventoryService,
@@ -311,7 +316,7 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterV
         // prevent caret movement and handle keyboard navigation
         if (this.isOpen && [UP_ARROW, DOWN_ARROW]?.indexOf(key) !== -1) {
             e.preventDefault();
-            this.handleKeyboardNavigation(key);
+           this.handleKeyboardNavigation(key);
         }
 
         if (this.isOpen && (key === ENTER)) {
@@ -328,6 +333,8 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterV
                 // first escape
                 if (this.searchEle?.nativeElement?.value) {
                     this.searchEle.nativeElement.value = null;
+                    // reset search/query and refresh results when clearing via ESC
+                    this.searchSubject.next("");
                 } else {
                     // second time pressing escape
                     this.removeItemFromSelectedGroups();
@@ -354,31 +361,55 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterV
         } else {
             this.listOfSelectedGroups.pop();
         }
+        this.searchSubject.next("");
     }
 
     /**
      * Handles keyboard navigation for up/down arrows
      *
      * @param {number} key - The key code (UP_ARROW or DOWN_ARROW)
-     * @memberof AdvanceListItemsPopupComponent
+     * @memberof CommandKComponent
      */
     public handleKeyboardNavigation(key: number): void {
-        if (!this.searchedItems || this.searchedItems.length === 0) {
+
+        if (!this.virtualScrollViewport || !this.searchedItems || this.searchedItems.length === 0) {
             return;
         }
 
-        if (key === UP_ARROW) {
-            this.highlightedItem = this.highlightedItem > 0 ? this.highlightedItem - 1 : this.searchedItems.length - 1;
-        } else if (key === DOWN_ARROW) {
-            this.highlightedItem = this.highlightedItem < this.searchedItems.length - 1 ? this.highlightedItem + 1 : 0;
+        const viewport = this.virtualScrollViewport.getElementRef().nativeElement;
+        const scrollTop = viewport.scrollTop; // current scroll position
+        const itemHeight = 52.222;
+
+        // Number of items currently hidden above the viewport
+        const itemsAbove = Math.ceil(scrollTop / itemHeight);
+        const visibleItems = Math.ceil(viewport.clientHeight / itemHeight); // number of items visible in viewport
+
+        // Update highlighted item
+        if (key === DOWN_ARROW) {
+            this.highlightedItem = Math.min(this.highlightedItem + 1, this.searchedItems.length - 1);
+        } else if (key === UP_ARROW) {
+            this.highlightedItem = Math.max(this.highlightedItem - 1, 0);
         }
 
-        // Scroll to the highlighted item
-        if (this.virtualScrollViewport) {
-            this.virtualScrollViewport.scrollToIndex(this.highlightedItem, 'smooth');
-        }
+        let targetIndex = itemsAbove;
 
-        this.handleHighLightedItemEvent(this.searchedItems[this.highlightedItem]);
+        // If highlighted item is above viewport, scroll up
+        if (this.highlightedItem < itemsAbove) {
+            targetIndex = this.highlightedItem;
+        }
+        // If highlighted item is below viewport, scroll down
+        else if (this.highlightedItem >= itemsAbove + visibleItems) {
+            targetIndex = this.highlightedItem - visibleItems + 1;
+        }
+        // when mouse and keyboard are used to navigate
+        else if (this.isMouseInteractingWithList) {
+            if (key === DOWN_ARROW) {
+                targetIndex = itemsAbove + 1;
+            } else if (key === UP_ARROW) {
+                targetIndex = itemsAbove - 1;
+            }
+        }
+        this.virtualScrollViewport.scrollToIndex(targetIndex, 'instant');
     }
 
     /**
