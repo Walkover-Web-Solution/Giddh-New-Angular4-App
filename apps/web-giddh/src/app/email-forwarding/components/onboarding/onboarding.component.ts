@@ -81,12 +81,11 @@ export class OnboardingComponent implements OnInit, OnDestroy {
             } else {
                 // No data exists, show onboarding content
                setTimeout(() => {
-                   this.router.navigate([], {
-                    relativeTo: this.route,
-                    queryParams: { ...this.route.snapshot.queryParams, companyUniqueName: this.companyUniqueName, branchUniqueName: this.branchUniqueName },
-                    replaceUrl: true,
-                    queryParamsHandling: ''
-                });
+                   this.generalService.updateActivatedRouteQueryParams({
+                        ...this.route.snapshot.queryParams,
+                        companyUniqueName: this.companyUniqueName,
+                        branchUniqueName: this.branchUniqueName
+                    }, '');
                    this.isCheckingExistingData = false;
                }, 200);
             }
