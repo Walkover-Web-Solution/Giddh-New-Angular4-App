@@ -95,10 +95,10 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
 
         // get roles
         this.store.pipe(select(state => state.permission), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && response.roles) {
+            if (response && response.roles?.length > 0) {
                 let roles = cloneDeep(response.roles);
                 let allRoleArray = [];
-                roles.forEach((role) => {
+                roles.forEach((role: any) => {
                     allRoleArray.push({
                         label: role?.name,
                         value: role?.uniqueName
