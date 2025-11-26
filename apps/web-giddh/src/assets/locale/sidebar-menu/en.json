@@ -706,7 +706,7 @@
                 {
                     "label": "Email-to-Bank Sync",
                     "link": "/pages/email-forwarding",
-                    "icon": "icon-bank-statement"
+                    "icon": "icon-mail"
                 }
             ]
         }
