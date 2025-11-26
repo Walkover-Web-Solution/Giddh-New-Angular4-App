@@ -983,7 +983,8 @@
                 {
                     "label": "ईमेल-टू-बैंक सिंक",
                     "link": "/pages/email-forwarding",
-                    "icon": "icon-mail"
+                    "icon": "icon-mail",
+                    "description": "बैंक स्टेटमेंट ईमेल से ऑटो-वाउचर बनाएं।"
                 }
             ]
         },
