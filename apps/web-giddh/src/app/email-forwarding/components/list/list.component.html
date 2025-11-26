@@ -83,7 +83,7 @@
                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                         <tr
                             mat-row
-                            *matRowDef="let row; columns: displayedColumns; let rowIndex = rowIndex"
+                            *matRowDef="let row; columns: displayedColumns"
                             class="cursor-pointer hover-trigger"
                             (click)="editStatement(row)"
                         ></tr>
