@@ -49,6 +49,8 @@ export default class AppUpdaterV1 {
             const dialogOpts: MessageBoxOptions = {
                 type: 'info',
                 buttons: ['Restart', 'Later'],
+                defaultId: 1,
+                cancelId: 1,
                 title: 'Application Update',
                 message: process.platform === 'win32' ? (typeof event.releaseNotes === 'object' ? event.releaseNotes.join(",") : event.releaseNotes) : event.releaseName,
                 detail: 'A new version has been downloaded. Restart the application to apply the updates.'
@@ -57,9 +59,9 @@ export default class AppUpdaterV1 {
                 if (returnValue.response === 0) {
                     // User clicked "Restart"
                     autoUpdater.quitAndInstall();
-                } else if (returnValue.response === 1) {
-                    // User clicked "Later" - do nothing, keep the update downloaded
-                    console.log('User chose to install update later');
+                } else {
+                    // User clicked "Later" or closed the dialog - do nothing, keep the update downloaded
+                    console.log('User chose to install update later', returnValue);
                 }
                 // Note: If dialog is closed without clicking any button, returnValue.response will be undefined
                 // In that case, we also do nothing and keep the update downloaded
