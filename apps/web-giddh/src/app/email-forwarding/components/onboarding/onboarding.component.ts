@@ -52,7 +52,7 @@ export class OnboardingComponent implements OnInit, OnDestroy {
             takeUntil(this.destroyed$)
         ).subscribe((forwardedMail: string | null) => {
             if (forwardedMail) {
-                this.router.navigate(['/pages/email-forwarding/create'], { queryParams: { companyUniqueName: this.companyUniqueName, branchUniqueName: this.branchUniqueName, forwardedMail } });
+                this.router.navigate(['/pages/email-forwarding/create'], { queryParams: { initial: true, companyUniqueName: this.companyUniqueName, branchUniqueName: this.branchUniqueName, forwardedMail } });
             }
         });
     }

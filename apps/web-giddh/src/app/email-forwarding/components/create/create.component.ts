@@ -71,6 +71,8 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
     private branchUniqueName: string = '';
     /** Holds images folder path */
     public imgPath: string = "";
+    /** Holds true if setup email first time */
+    public firstTimeCreate: boolean = false;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -247,6 +249,10 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
             }
             if (queryParams['uniqueName']) {
                 this.handleUniqueName(queryParams['uniqueName']);
+            }
+
+            if (queryParams['initial']) {
+                this.firstTimeCreate = true;
             }
         });
     }
