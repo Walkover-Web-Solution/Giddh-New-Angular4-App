@@ -48,8 +48,6 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
     public voucherApiVersion: number = 1 | 2;
     /** All roles list */
     public allRoles: any[] = [];
-    /** To check form is invalid */
-    public isFormInvalid: boolean = false;
     /** True if show time span */
     public showTimeSpan: boolean = false;
     /** True if show IP wrap */
@@ -188,8 +186,8 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
             }
         } else {
             this.createCompanyAuthKeyForm = this.formBuilder.group({
-                roleName: ['', Validators.required],
-                roleUniqueName: ['admin', [Validators.required]],
+                roleName: [null, Validators.required],
+                roleUniqueName: [null, [Validators.required]],
                 periodOptions: DATE_RANGE,
                 from: [null],
                 to: [null],
