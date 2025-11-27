@@ -2281,7 +2281,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.voucherStockResults$.subscribe((res) => (voucherStockResults = res));
                     }
                     const newResults = response?.body?.results?.map((res) => {
-                        return { label: res.name, value: res.uniqueName, additional: res };
+                        const combinedUniqueName: string = res?.stock?.uniqueName
+                            ? `${res.uniqueName}#${res.stock.uniqueName}`
+                            : res.uniqueName;
+                        return { label: res.name, value: res.uniqueName, additional: { ...res, combinedUniqueName } };
                     });
                     this.voucherStockResults$ = observableOf(voucherStockResults.concat(...newResults));
                 } else {
