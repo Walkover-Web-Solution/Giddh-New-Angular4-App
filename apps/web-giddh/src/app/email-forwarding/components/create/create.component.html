@@ -30,6 +30,7 @@
                         #stepper
                         orientation="horizontal"
                         linear
+                        (selectionChange)="onStepSelectionChange($event)"
                         class="w-100 max-w-800 mx-auto theme-background-bg-color overflow-hidden"
                     >
                         <!-- Step 1: Create Email -->
@@ -242,7 +243,7 @@
     <ng-template #emailDisplayTemplate>
         <p class="text-light d-inline-flex align-items-center column-gap-05">
             {{ localeData?.forwarded_to }}
-            <span class="text-primary">{{ getCompleteEmail() }}</span>
+            <span class="text-blue">{{ getCompleteEmail() }}</span>
             <i
                 class="icon-copy cursor-pointer"
                 [matTooltip]="commonLocaleData?.app_copy"
