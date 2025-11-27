@@ -56,7 +56,7 @@ export class ImportsComponent implements OnInit, OnDestroy {
     public selectedRangeLabel: any = "";
     /** Angular Material menu trigger for datepicker */
     @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
-/** This will store universalDate */
+    /** This will store universalDate */
     public universalDate: any;
     /** To show clear filter */
     public showClearFilter: boolean = false;

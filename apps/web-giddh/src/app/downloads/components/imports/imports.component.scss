@@ -19,6 +19,12 @@
         max-width: 160px;
         text-align: center;
     }
+    
+    @media (max-width: 1500px) {
+        .import-button-status {
+            min-width: 100%;
+        }
+    }
     .import-text {
         width: 160px;
         min-width: 160px;
