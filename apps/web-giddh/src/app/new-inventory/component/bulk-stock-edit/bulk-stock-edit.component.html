@@ -754,6 +754,10 @@
                                                                     .get('purchaseAccountUniqueName')
                                                                     .setValue($event.value)
                                                             "
+                                                            (onClear)="
+                                                                row.get('purchaseAccountName').setValue('');
+                                                                row.get('purchaseAccountUniqueName').setValue('')
+                                                            "
                                                         >
                                                         </reactive-dropdown-field>
                                                     </div>
@@ -856,6 +860,10 @@
                                                             (selectedOption)="
                                                                 row.get('salesAccountName').setValue($event.label);
                                                                 row.get('salesAccountUniqueName').setValue($event.value)
+                                                            "
+                                                            (onClear)="
+                                                                row.get('salesAccountName').setValue('');
+                                                                row.get('salesAccountUniqueName').setValue('')
                                                             "
                                                         >
                                                         </reactive-dropdown-field>
@@ -1004,7 +1012,7 @@
                                                         </text-field>
                                                         <reactive-dropdown-field
                                                             *ngIf="selectTableRowIndex == i"
-                                                            formControlName="fixedAssetAccountName"
+                                                            formControlName="fixedAssetAccountUniqueName"
                                                             [options]="fixedAssetAccountList"
                                                             [openDropdown]="
                                                                 selectTableRowName === 'fixedAssetAccountName'
@@ -1015,6 +1023,10 @@
                                                                 row
                                                                     .get('fixedAssetAccountUniqueName')
                                                                     .setValue($event.value)
+                                                            "
+                                                            (onClear)="
+                                                                row.get('fixedAssetAccountName').setValue('');
+                                                                row.get('fixedAssetAccountUniqueName').setValue('')
                                                             "
                                                         >
                                                         </reactive-dropdown-field>
