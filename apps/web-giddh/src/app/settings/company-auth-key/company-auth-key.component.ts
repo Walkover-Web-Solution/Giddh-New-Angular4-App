@@ -36,7 +36,7 @@ export class CompanyAuthKeyComponent implements OnInit, OnDestroy {
     /** True if get all company auth keys api call in progress */
     public isLoading: boolean = false;
     /** Holds Mat Table Display columns */
-    public displayedColumns: string[] = ['number', 'entity', 'authKey', 'userName', 'roleName', 'action'];
+    public displayedColumns: string[] = ['number', 'userName', 'authKey',  'roleName', 'action'];
     /** Holds create new company auth key dialog ref */
     public createNewCompanyAuthKeyDialogRef: MatDialogRef<any>;
     /** Voucher API Version */
