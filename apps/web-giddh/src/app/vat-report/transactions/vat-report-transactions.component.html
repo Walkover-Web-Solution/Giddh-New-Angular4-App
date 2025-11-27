@@ -67,13 +67,13 @@
                     <ng-container matColumnDef="taxamt">
                         <th mat-header-cell *matHeaderCellDef>{{ localeData?.taxable_amount }}</th>
                         <td mat-cell *matCellDef="let element">
-                            {{ activeCompany.baseCurrencySymbol }} {{ element.taxableAmount | giddhCurrency }}
+                            {{ activeCompany.baseCurrencySymbol }} {{ formatAmount(element.taxableAmount) }}
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="vat_amt">
                         <th mat-header-cell *matHeaderCellDef>{{ localeData?.vat_amount }}</th>
                         <td mat-cell *matCellDef="let element">
-                            {{ activeCompany.baseCurrencySymbol }} {{ element.vatAmount | giddhCurrency }}
+                            {{ activeCompany.baseCurrencySymbol }} {{ formatAmount(element.vatAmount) }}
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="reverse_charge">
