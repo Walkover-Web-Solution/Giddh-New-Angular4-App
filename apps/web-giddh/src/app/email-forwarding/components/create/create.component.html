@@ -122,7 +122,7 @@
                                         <mat-card class="border-radius-12">
                                             <mat-card-content class="p-5 text-center">
                                                 <!-- Waiting State -->
-                                                <div class="w-100 max-w-400 mx-auto" *ngIf="!emailForwardingResponse">
+                                                <div class="w-100 mx-auto" *ngIf="!emailForwardingResponse">
                                                     <ng-container
                                                         *ngTemplateOutlet="emailDisplayTemplate"
                                                     ></ng-container>
@@ -140,7 +140,7 @@
                                                 </div>
 
                                                 <!-- Verification State -->
-                                                <div class="w-100 max-w-400 mx-auto" *ngIf="emailForwardingResponse">
+                                                <div class="w-100 mx-auto" *ngIf="emailForwardingResponse">
                                                     <ng-container
                                                         *ngTemplateOutlet="emailDisplayTemplate"
                                                     ></ng-container>
