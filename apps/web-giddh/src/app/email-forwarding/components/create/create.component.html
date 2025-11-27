@@ -16,7 +16,7 @@
             <div class="col-12">
                 <div class="p-3 d-flex justify-content-start align-items-center flex-column h-100">
                     <button
-                        *ngIf="isEditMode && !isLoading"
+                        *ngIf="!firstTimeCreate && !isLoading"
                         mat-stroked-button
                         (click)="navigateBack()"
                         class="position-absolute top-0 left-16"
@@ -70,6 +70,15 @@
                                                             {{ commonLocaleData?.app_edit }}
                                                         </span>
                                                     </div>
+                                                    <button
+                                                        mat-raised-button
+                                                        color="primary"
+                                                        class="mt-5"
+                                                        (click)="nextStep(stepper, emailForwardingForm, 1)"
+                                                    >
+                                                        {{ commonLocaleData?.app_next }}
+                                                        <i class="icon-arrow-right ml-2"></i>
+                                                    </button>
                                                 </div>
 
                                                 <!-- Edit Mode -->
@@ -101,17 +110,6 @@
                                             </mat-card-content>
                                         </mat-card>
                                     </div>
-                                </div>
-
-                                <div class="d-flex justify-content-center mt-4">
-                                    <button
-                                        mat-raised-button
-                                        color="primary"
-                                        (click)="nextStep(stepper, emailForwardingForm, 1)"
-                                    >
-                                        {{ commonLocaleData?.app_next }}
-                                        <i class="icon-arrow-right ml-2"></i>
-                                    </button>
                                 </div>
                             </form>
                         </mat-step>
@@ -258,7 +256,7 @@
     </ng-template>
 
     <ng-template #helpDocTemplate>
-        <div class="text-center mt-5">
+        <!-- <div class="text-center mt-5">
             <p class="text-center">
                 <a href="{{ bankStatementHelpDocUrl }}" class="font-size-14" target="_blank">
                     {{ localeData?.how_to_setup }}
@@ -269,6 +267,6 @@
                 <img src="{{ imgPath }}gmail.svg" alt="gmail" width="auto" height="30" />
                 <img src="{{ imgPath }}microsoft-outlook.svg" alt="outlook" width="auto" height="30" />
             </div>
-        </div>
+        </div> -->
     </ng-template>
 </ng-container>
