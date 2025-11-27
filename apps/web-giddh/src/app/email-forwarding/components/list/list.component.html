@@ -31,7 +31,18 @@
                         <ng-container matColumnDef="forwardedMail">
                             <th mat-header-cell *matHeaderCellDef class="w-25">{{ localeData?.forwarded_mail }}</th>
                             <td mat-cell *matCellDef="let statement" class="w-25">
-                                <span class="font-weight-medium">{{ statement.forwardedMail }}</span>
+                                <span class="font-weight-medium mr-1">{{ statement.forwardedMail }}</span>
+                                <button
+                                    mat-icon-button
+                                    (click)="onCopyForwardedMail($event)"
+                                    [matTooltip]="commonLocaleData?.app_copy"
+                                    matTooltipPosition="after"
+                                    ngxClipboard
+                                    [cbContent]="statement.forwardedMail"
+                                    class="p-0"
+                                >
+                                    <i class="icon-copy cursor-pointer font-size-14 mb-2 d-inline-block"></i>
+                                </button>
                             </td>
                         </ng-container>
 
@@ -43,22 +54,10 @@
                             </td>
                         </ng-container>
 
-                        <!-- Unique Name Column -->
-                        <ng-container matColumnDef="uniqueName">
-                            <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_unique_name }}</th>
-                            <td mat-cell *matCellDef="let statement">{{ statement.uniqueName }}</td>
-                        </ng-container>
-
                         <!-- Original Email Column -->
                         <ng-container matColumnDef="originalEmail">
                             <th mat-header-cell *matHeaderCellDef>{{ localeData?.original_email }}</th>
                             <td mat-cell *matCellDef="let statement">{{ statement.originalEmail || "-" }}</td>
-                        </ng-container>
-
-                        <!-- Status Column -->
-                        <ng-container matColumnDef="status">
-                            <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_status }}</th>
-                            <td mat-cell *matCellDef="let statement">-</td>
                         </ng-container>
 
                         <!-- Actions Column -->

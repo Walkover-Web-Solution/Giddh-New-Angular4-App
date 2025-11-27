@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit, ChangeDetectorR
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatStepper } from '@angular/material/stepper';
+import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { ReplaySubject, interval, Subject, BehaviorSubject, Observable } from 'rxjs';
 import { filter, takeUntil, switchMap, debounceTime } from 'rxjs/operators';
 import { EmailForwardingResponse, YOU_ARE_NOT_ALLOWED } from '../../models/email-forwarding.model';
@@ -73,6 +74,8 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
     public imgPath: string = "";
     /** Holds true if setup email first time */
     public firstTimeCreate: boolean = false;
+    /** Tracks whether confirmation polling has been started */
+    private confirmationPollingStarted: boolean = false;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -216,7 +219,7 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
                 const stepNumber = parseInt(queryParams['step'], 10);
                 if (!isNaN(stepNumber) && stepNumber >= 1) {
                     this.currentStep = stepNumber;
-                    this.minAllowedStep = stepNumber - 1; // Convert to 0-based index for minimum allowed step
+                    this.minAllowedStep = stepNumber === 3 ? 1 : stepNumber - 1; // Allow navigation between steps 2 and 3 when on step 3
                     
                     // Convert 1-based to 0-based index
                     const targetStepIndex = stepNumber - 1;
@@ -268,25 +271,8 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
             uniqueName: uniqueName
         });
                 
-        // Start polling after 20 seconds delay
         if (this.currentStep === 2) {
-            interval(5000).pipe(
-                switchMap(() => {
-                    this.bankStatementStore.getEmailForwardingDetails(uniqueName);
-                    return this.bankStatementStore.emailForwardingDetails$;
-                }),
-                filter(Boolean),
-                takeUntil(this.destroyed$),
-                takeUntil(this.stopPolling$) // Stop polling when stopPolling$ emits
-            ).subscribe((response: EmailForwardingResponse) => {
-                if (Array.isArray(response?.confirmationData) && response.confirmationData.length > 0) {
-                    // Save response for template usage
-                    this.emailForwardingResponse = response;
-                    // Stop the polling interval
-                    this.stopPolling$.next();
-                    this.stopPolling$.complete();
-                }
-            });
+            this.startConfirmationPolling(uniqueName);
         }
     }
 
@@ -323,12 +309,73 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
                 const step = this.stepper.steps.get(i);
                 if (step) {
                     step.completed = true;
-                    step.editable = false;
+                    step.editable = i >= this.minAllowedStep;
                 }
             }
             
             // Navigate to the target step
             this.stepper.selectedIndex = stepIndex;
+        }
+    }
+
+    /**
+     * Starts polling for email forwarding confirmation data on step 2
+     *
+     * @private
+     * @param {string} uniqueName - Unique name of the email forwarding
+     * @returns {void}
+     * @memberof CreateComponent
+     */
+    private startConfirmationPolling(uniqueName: string): void {
+        if (!uniqueName || this.confirmationPollingStarted || this.emailForwardingResponse || this.stopPolling$.closed) {
+            return;
+        }
+
+        this.confirmationPollingStarted = true;
+
+        interval(5000).pipe(
+            switchMap(() => {
+                this.bankStatementStore.getEmailForwardingDetails(uniqueName);
+                return this.bankStatementStore.emailForwardingDetails$;
+            }),
+            filter(Boolean),
+            takeUntil(this.destroyed$),
+            takeUntil(this.stopPolling$)
+        ).subscribe((response: EmailForwardingResponse) => {
+            if (Array.isArray(response?.confirmationData) && response.confirmationData.length > 0) {
+                this.emailForwardingResponse = response;
+                this.stopPolling$.next();
+                this.stopPolling$.complete();
+            }
+        });
+    }
+
+    /**
+     * Handles manual step selection changes from the stepper header
+     *
+     * @public
+     * @param {StepperSelectionEvent} event - Stepper selection change event
+     * @returns {void}
+     * @memberof CreateComponent
+     */
+    public onStepSelectionChange(event: StepperSelectionEvent): void {
+        if (!this.stepper) {
+            return;
+        }
+
+        if (event.selectedIndex < this.minAllowedStep) {
+            this.stepper.selectedIndex = Math.max(this.minAllowedStep, event.previouslySelectedIndex);
+            return;
+        }
+
+        this.currentStep = event.selectedIndex + 1;
+
+        if (this.currentStep === 2) {
+            this.replaceUrlEmail();
+            const uniqueName = this.emailForwardingForm.get('uniqueName')?.value;
+            if (uniqueName) {
+                this.startConfirmationPolling(uniqueName);
+            }
         }
     }
 
@@ -403,6 +450,7 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
             companyUniqueName: this.companyUniqueName,
             branchUniqueName: this.branchUniqueName,
             ...this.route.snapshot.queryParams,
+            step: this.currentStep,
             forwardedMail: completeEmail
         }, '');
     }

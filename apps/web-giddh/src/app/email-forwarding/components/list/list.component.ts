@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ReplaySubject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
 import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
@@ -10,6 +11,7 @@ import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-m
 import { GeneralService } from '../../../services/general.service';
 import { EmailForwardingComponentStore } from '../../store/email-forwarding.store';
 import { Router } from '@angular/router';
+import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
     selector: 'email-forwarding-list',
@@ -34,9 +36,7 @@ export class ListComponent implements OnInit, OnDestroy {
     public displayedColumns: string[] = [
         'forwardedMail',
         'bankAccountName',
-        'uniqueName',
         'originalEmail',
-        'status',
         'actions'
     ];
     /** Loading state for async operations */
@@ -56,7 +56,8 @@ export class ListComponent implements OnInit, OnDestroy {
         private router: Router,
         private bankStatementStore: EmailForwardingComponentStore,
         private dialog: MatDialog,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private toaster: ToasterService
     ) {
      }
 
@@ -173,6 +174,22 @@ export class ListComponent implements OnInit, OnDestroy {
         }
         queryParams['branchUniqueName'] = this.branchUniqueName;
         this.router.navigate([`/pages/email-forwarding/edit/${element.uniqueName}`], { queryParams });
+    }
+
+    /**
+     * Handles forwarded mail copy action and shows snackbar notification
+     *
+     * @public
+     * @param {string} forwardedMail - Forwarded email address to be copied
+     * @param {MouseEvent} event - Click event from the copy button
+     * @returns {void}
+     * @memberof ListComponent
+     */
+    public onCopyForwardedMail(event: MouseEvent): void {
+        if (event) {
+            event.stopPropagation();
+        }
+        this.toaster.showSnackBar("info", this.commonLocaleData?.app_copied);
     }
 
     /**
