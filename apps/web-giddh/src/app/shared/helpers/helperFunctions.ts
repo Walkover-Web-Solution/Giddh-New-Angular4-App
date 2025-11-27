@@ -23,15 +23,22 @@ export const validateEmail = (emailStr: string) => {
     return EMAIL_VALIDATION_REGEX.test(emailStr);
 };
 
-export const giddhRoundOff = (number, decimals = 0) => {
+export const giddhRoundOff = (number, decimals = 0, returnAsString: boolean = true) => {
+    let roundedNumber;
     if (!("" + number).includes("e")) {
-        return +(Math.round(Number(number + "e+" + decimals)) + "e-" + decimals);
+        roundedNumber = +(Math.round(Number(number + "e+" + decimals)) + "e-" + decimals);
     } else {
-        var arr = ("" + number).split("e");
-        var sig = ""
+        const arr = ("" + number).split("e");
+        let sig = "";
         if (+arr[1] + decimals > 0) {
             sig = "+";
         }
-        return +(Math.round(Number(+arr[0] + "e" + sig + (+arr[1] + decimals))) + "e-" + decimals);
+        roundedNumber = +(Math.round(Number(+arr[0] + "e" + sig + (+arr[1] + decimals))) + "e-" + decimals);
     }
+
+    if (returnAsString) {
+        return roundedNumber.toFixed(decimals);
+    }
+
+    return roundedNumber;
 };
