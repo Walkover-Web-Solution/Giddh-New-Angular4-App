@@ -182,7 +182,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         
         this.options?.forEach(option => {
             const matchesSearch = typeof search !== "string" || (typeof option?.label === "string" && option.label.toLowerCase().indexOf(search.toLowerCase()) > -1);
-            const isNotSelected = !this.hideSelectedOptions || !isEqual(option?.value, this.value);
+            const isNotSelected = !this.hideSelectedOptions || !isEqual((option?.additional?.combinedUniqueName || option?.value), this.value);
             
             // Always show single option regardless of selection status to prevent "no data found"
             if (matchesSearch && (isNotSelected || isSingleOption)) {
@@ -206,7 +206,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             this.fieldFilteredOptions$ = this.filterOptions("");
         } else {
             this.fieldFilteredOptions$ = of(this.options?.filter(option => 
-                !this.hideSelectedOptions || !isEqual(option?.value, this.value)
+                !this.hideSelectedOptions || !isEqual(((option?.additional?.combinedUniqueName || option?.value), this.value))
             ) || []);
         }
     }
@@ -444,7 +444,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
                     this.controlLabelValue = "";
                 }
             } else if (this.value) {
-                this.controlLabelValue = (this.optionTemplate || this.useCustomLabelValue || this.labelValue) ? this.labelValue : (this.options?.find(option => isEqual(option?.value, this.value))?.label || (this.value instanceof String ? this.value : ""));
+                this.controlLabelValue = (this.optionTemplate || this.useCustomLabelValue || this.labelValue) ? this.labelValue : (this.options?.find(option => isEqual(option?.additional?.combinedUniqueName || option?.value, this.value))?.label || (this.value instanceof String ? this.value : ""));
                 this.changeDetection.detectChanges();
             } else {
                 this.controlLabelValue = this.labelValue || "";
