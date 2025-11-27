@@ -34,7 +34,7 @@
                                     formControlName="roleUniqueName"
                                     [required]="true"
                                     [showError]="
-                                        isFormInvalid && createCompanyAuthKeyForm?.get('roleUniqueName').invalid
+                                        isFormSubmitted && !createCompanyAuthKeyForm?.get('roleUniqueName')?.value
                                     "
                                 ></reactive-dropdown-field>
                             </div>
