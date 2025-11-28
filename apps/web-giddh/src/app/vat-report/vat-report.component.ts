@@ -70,8 +70,6 @@ export class VatReportComponent implements OnInit, OnDestroy {
     public vatReportCurrencyMap: string[];
     /** Enum for restricted modules */
     public restrictedModules: any = RestrictedModules;
-    /** Decimal places from company settings */
-    public giddhBalanceDecimalPlaces: number = 2;
 
     constructor(
         private store: Store<AppState>,
@@ -95,12 +93,6 @@ export class VatReportComponent implements OnInit, OnDestroy {
                 }
             }
         });
-
-        this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
-            if (profile) {
-                this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces || 2;
-            }
-        });
         document.querySelector('body').classList.add('gst-sidebar-open');
     }
 
@@ -109,17 +101,6 @@ export class VatReportComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('gst-sidebar-open');
         this.asideGstSidebarMenuState = false;
-    }
-
-    /**
-     * Formats amount with proper decimal places as fallback
-     *
-     * @param {number} amount Amount to format
-     * @returns {string} Formatted amount
-     * @memberof VatReportComponent
-     */
-    public formatAmount(amount: number): string {
-        return this.generalService.formatAmount(amount, this.giddhBalanceDecimalPlaces);
     }
 
     /**
@@ -217,7 +198,7 @@ export class VatReportComponent implements OnInit, OnDestroy {
     * @memberof VatReportComponent
     */
     public viewVatReportTransactions(section: string) {
-       this.route.navigate(['pages', 'vat-report', 'transactions', 'section', section], { queryParams: { from: this.fromDate, to: this.toDate, taxNumber: this.taxNumber } });
+        this.route.navigate(['pages', 'vat-report', 'transactions', 'section', section], { queryParams: { from: this.fromDate, to: this.toDate, taxNumber: this.taxNumber } });
     }
 
     /**

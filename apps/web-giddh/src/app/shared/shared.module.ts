@@ -57,6 +57,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { OverlayModule } from '@angular/cdk/overlay';
+import { GiddhNumberFormatModule } from './helpers/pipes/number-format/number-format.module';
 
 const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
     {
@@ -109,6 +110,7 @@ export function provideConfig() {
         NgxDaterangepickerMd.forRoot(),
         ScrollingModule,
         CurrencyModule,
+        GiddhNumberFormatModule,
         TranslateDirectiveModule,
         AmountFieldComponentModule,
         AccountAddNewDetailsModule,
