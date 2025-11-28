@@ -1,3 +1,4 @@
+@use "../../../../assets/styles/abstracts/_mixins.scss" as *;
 .import-table-container {
     .import-table {
         width: 100%;
@@ -19,7 +20,7 @@
         max-width: 160px;
         text-align: center;
         
-        @include media-breakpoint-down("small-desktop") {
+        @include media-breakpoint-down("large-desktop") {
             min-width: 100%;
         }
     }
