@@ -746,6 +746,7 @@
                                                     [placeholder]="localeData?.enter_mobile_number"
                                                     [required]="true"
                                                     [useImageFlags]="true"
+                                                    [showError]="secondStepForm.get('mobileNumber')?.invalid"
                                                 >
                                                 </mobile-number-input>
                                             </div>
