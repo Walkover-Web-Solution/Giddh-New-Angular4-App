@@ -79,11 +79,11 @@
                             *ngIf="GroupStockReportRequest.branchDetails != 'allEntity'"
                         >
                             <div class="custom-datepicker-wrapper-group">
-                                <div class="custom-datepicker" 
-                                [matMenuTriggerFor]="universalDatepicker" 
-                                #universalDatepickerTrigger="matMenuTrigger" 
-                                role="button" 
-                                aria-haspopup="true" 
+                                <div class="custom-datepicker"
+                                [matMenuTriggerFor]="universalDatepicker"
+                                #universalDatepickerTrigger="matMenuTrigger"
+                                role="button"
+                                aria-haspopup="true"
                                 aria-controls="universalDatepicker"
                             >
                                     <input
@@ -539,11 +539,11 @@
 
                             <td class="border-bottom border-right text-right border-right-none mb-0" data-title="Qty">
                                 <span [ngClass]="{ 'text-danger': txn.openingBalance?.quantity < 0 }">{{
-                                    txn.openingBalance?.quantity | giddhCurrency
+                                    txn.openingBalance?.quantity | giddhNumberFormat
                                 }}</span>
                             </td>
                             <td class="border-bottom border-right text-right mb-0" data-title="Value">
-                                {{ txn.openingBalance?.amount | giddhCurrency }}
+                                {{ txn.openingBalance?.amount | giddhNumberFormat }}
                             </td>
 
                             <td
@@ -556,14 +556,14 @@
                                 data-title="Qty"
                             >
                                 <span [ngClass]="{ 'text-danger': txn.inwards?.quantity < 0 }">{{
-                                    txn.inwards?.quantity | giddhCurrency
+                                    txn.inwards?.quantity | giddhNumberFormat
                                 }}</span>
                             </td>
                             <td
                                 class="border-bottom border-right text-right mb-0"
                                 data-title="Value"
                             >
-                                {{ txn.inwards?.amount | giddhCurrency }}
+                                {{ txn.inwards?.amount | giddhNumberFormat }}
                             </td>
 
                             <td
@@ -575,24 +575,24 @@
                                 class="border-bottom border-right text-right border-right-none mb-0"
                                 data-title="Qty"
                             >
-                                {{ txn.outwards?.quantity | giddhCurrency }}
+                                {{ txn.outwards?.quantity | giddhNumberFormat }}
                             </td>
                             <td
                                 class="border-bottom border-right text-right mb-0"
                                 data-title="Value"
                             >
-                                {{ txn.outwards?.amount | giddhCurrency }}
+                                {{ txn.outwards?.amount | giddhNumberFormat }}
                             </td>
 
                             <td data-title="Closing stock -" class="td-mobile-head"></td>
 
                             <td class="border-bottom border-right text-right border-right-none mb-0" data-title="Qty">
                                 <span [ngClass]="{ 'text-danger': txn.closingBalance?.quantity < 0 }">{{
-                                    txn.closingBalance?.quantity | giddhCurrency
+                                    txn.closingBalance?.quantity | giddhNumberFormat
                                 }}</span>
                             </td>
                             <td class="border-bottom border-right text-right" data-title="Value">
-                                {{ txn.closingBalance?.amount | giddhCurrency }}
+                                {{ txn.closingBalance?.amount | giddhNumberFormat }}
                             </td>
                         </ng-container>
                     </tr>
@@ -665,17 +665,17 @@
                                     <h4 class="text-primary text-left">
                                         <div *ngIf="GroupStockReportRequest.branchDetails === 'allEntity'">
                                             <span class="text-primary" *ngIf="groupStockReport.totalItems"
-                                                >&nbsp;{{ groupStockReport.totalItems | giddhCurrency }}</span
+                                                >&nbsp;{{ groupStockReport.totalItems | giddhNumberFormat }}</span
                                             >
                                         </div>
                                         <div *ngIf="GroupStockReportRequest.branchDetails !== 'allEntity'">
                                             <span class="text-primary" *ngIf="groupStockReport.totalItems"
-                                                >&nbsp;{{ groupStockReport.totalItems | giddhCurrency }}</span
+                                                >&nbsp;{{ groupStockReport.totalItems | giddhNumberFormat }}</span
                                             >
                                         </div>
                                         <div class="mt-1">
                                             <span class="text-primary d-block"
-                                                >{{ groupStockReport.profit | giddhCurrency }} ({{
+                                                >{{ groupStockReport.profit | giddhNumberFormat }} ({{
                                                     dateRangePickerCmp?.nativeElement?.value | replaceHyphens
                                                 }})</span
                                             >
@@ -690,7 +690,7 @@
                                 <div class="col-2 p-0">
                                     <h4>
                                         &nbsp;<span>{{
-                                            groupStockReport.InwardBalance.transactionCount | giddhCurrency
+                                            groupStockReport.InwardBalance.transactionCount | giddhNumberFormat
                                         }}</span>
                                     </h4>
                                 </div>
@@ -702,7 +702,7 @@
                                 <div class="col-2 p-0">
                                     <h4>
                                         &nbsp;<span>{{
-                                            groupStockReport.outwardBalance.transactionCount | giddhCurrency
+                                            groupStockReport.outwardBalance.transactionCount | giddhNumberFormat
                                         }}</span>
                                     </h4>
                                 </div>
@@ -712,9 +712,9 @@
                             <div class="flex-col">
                                 <div class="cont">
                                     <h4 class="text-light">Opening Value</h4>
-                                    <p>{{ groupStockReport.openingBalance.amount | giddhCurrency }}</p>
+                                    <p>{{ groupStockReport.openingBalance.amount | giddhNumberFormat }}</p>
                                     <h4 *ngIf="groupStockReport.openingBalance.quantity">
-                                        ({{ groupStockReport.openingBalance.quantity | giddhCurrency }}
+                                        ({{ groupStockReport.openingBalance.quantity | giddhNumberFormat }}
                                         {{ groupStockReport.openingBalance.stockUnit }})
                                     </h4>
                                 </div>
@@ -723,9 +723,9 @@
                             <div class="flex-col">
                                 <div class="cont">
                                     <h4 class="text-light">Inward Value</h4>
-                                    <p>{{ groupStockReport.inwardBalance.amount | giddhCurrency }}</p>
+                                    <p>{{ groupStockReport.inwardBalance.amount | giddhNumberFormat }}</p>
                                     <h4 *ngIf="groupStockReport.inwardBalance.quantity">
-                                        ({{ groupStockReport.inwardBalance.quantity | giddhCurrency }}
+                                        ({{ groupStockReport.inwardBalance.quantity | giddhNumberFormat }}
                                         {{ groupStockReport.inwardBalance.stockUnit }})
                                     </h4>
                                 </div>
@@ -734,9 +734,9 @@
                             <div class="flex-col">
                                 <div class="cont">
                                     <h4 class="text-light">Outward Value</h4>
-                                    <p>{{ groupStockReport.outwardBalance.amount | giddhCurrency }}</p>
+                                    <p>{{ groupStockReport.outwardBalance.amount | giddhNumberFormat }}</p>
                                     <h4 *ngIf="groupStockReport.outwardBalance.quantity">
-                                        ({{ groupStockReport.outwardBalance.quantity | giddhCurrency }}
+                                        ({{ groupStockReport.outwardBalance.quantity | giddhNumberFormat }}
                                         {{ groupStockReport.outwardBalance.stockUnit }})
                                     </h4>
                                 </div>
@@ -746,10 +746,10 @@
                                 <div class="cont">
                                     <h4 class="text-light">Closing Value</h4>
                                     <p class="text-primary">
-                                        {{ groupStockReport.closingBalance.amount | giddhCurrency }}
+                                        {{ groupStockReport.closingBalance.amount | giddhNumberFormat }}
                                     </p>
                                     <h4 class="text-primary" *ngIf="groupStockReport.closingBalance.quantity">
-                                        ({{ groupStockReport.closingBalance.quantity | giddhCurrency }}
+                                        ({{ groupStockReport.closingBalance.quantity | giddhNumberFormat }}
                                         {{ groupStockReport.closingBalance.stockUnit }})
                                     </h4>
                                 </div>
@@ -790,11 +790,11 @@
                 <div class="row">
                     <div class="col-sm-4">Date Range</div>
                     <div class="col-sm-8">
-                        <div class="custom-datepicker" 
-                            [matMenuTriggerFor]="universalDatepicker" 
-                            #universalDatepickerTrigger="matMenuTrigger" 
-                            role="button" 
-                            aria-haspopup="true" 
+                        <div class="custom-datepicker"
+                            [matMenuTriggerFor]="universalDatepicker"
+                            #universalDatepickerTrigger="matMenuTrigger"
+                            role="button"
+                            aria-haspopup="true"
                             aria-controls="universalDatepicker"
                         >
                             <input

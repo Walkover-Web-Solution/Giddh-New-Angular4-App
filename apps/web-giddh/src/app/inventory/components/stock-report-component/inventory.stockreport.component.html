@@ -68,8 +68,8 @@
                     <tr>
                         <th colspan="3" width="40%">
                             <div class="d-flex">
-                                <div class="custom-datepicker" 
-                                     [matMenuTriggerFor]="universalDatepicker" 
+                                <div class="custom-datepicker"
+                                     [matMenuTriggerFor]="universalDatepicker"
                                      #universalDatepickerTrigger="matMenuTrigger"
                                      role="button"
                                      aria-haspopup="true"
@@ -463,7 +463,7 @@
                         <td data-title="Transactions -" class="td-mobile-head"></td>
                         <td class="text-right border-right" data-title="Inwards">
                             <span *ngIf="txn.type == 'dr'">
-                                {{ txn.quantity | giddhCurrency }}
+                                {{ txn.quantity | giddhNumberFormat }}
                             </span>
                             <span *ngIf="txn.type == 'dr'" class="unit-badge">
                                 {{ txn.stockUnit?.code }}
@@ -473,7 +473,7 @@
 
                         <td class="text-right border-right" data-title="Outwards">
                             <span *ngIf="txn.type == 'cr'">
-                                {{ txn.quantity | giddhCurrency }}
+                                {{ txn.quantity | giddhNumberFormat }}
                             </span>
                             <span *ngIf="txn.type == 'cr'" class="unit-badge">
                                 {{ txn.stockUnit?.code }}
@@ -482,16 +482,16 @@
                         </td>
 
                         <td class="text-right border-right" data-title="Rate" [ngClass]="txn.type === 'cr' ? 'cr' : 'dr'">
-                            {{ txn.rate | giddhCurrency }}
+                            {{ txn.rate | giddhNumberFormat }}
                         </td>
 
                         <td data-title="Closing Stock -" class="td-mobile-head"></td>
 
                         <td class="text-right border-right" data-title="Value" [ngClass]="txn.type === 'cr' ? 'cr' : 'dr'">
-                            {{ txn.amount | giddhCurrency }}
+                            {{ txn.amount | giddhNumberFormat }}
                         </td>
                         <td class="text-right border-right" data-title="Quantity">
-                            {{ txn.closingQuantity | giddhCurrency
+                            {{ txn.closingQuantity | giddhNumberFormat
                             }}<span class="unit-badge">{{ stockReport.stockUnit }}</span>
                         </td>
                     </tr>
@@ -547,7 +547,7 @@
                             </div>
                             <div class="col-12">
                                 <p class="text-primary text-left">
-                                    &nbsp;{{ stockReport.profit | giddhCurrency }} ({{
+                                    &nbsp;{{ stockReport.profit | giddhNumberFormat }} ({{
                                         selectedDateRangeUi | replaceHyphens
                                     }})
                                 </p>
@@ -563,7 +563,7 @@
                                 <p class="text-primary text-left">
                                     {{
                                         stockReport.inwardBalance.transactionCount +
-                                            stockReport.outwardBalance.transactionCount | giddhCurrency
+                                            stockReport.outwardBalance.transactionCount | giddhNumberFormat
                                     }}
                                 </p>
                             </div>
@@ -575,7 +575,7 @@
                             <div class="col-2 p-0">
                                 <p class="text-left">
                                     &nbsp;<span *ngIf="stockReport.inwardBalance.transactionCount">{{
-                                        stockReport.inwardBalance.transactionCount | giddhCurrency
+                                        stockReport.inwardBalance.transactionCount | giddhNumberFormat
                                     }}</span
                                     ><span *ngIf="!stockReport.inwardBalance.transactionCount">0</span>
                                 </p>
@@ -588,7 +588,7 @@
                             <div class="col-2 p-0">
                                 <p class="text-left">
                                     &nbsp;<span *ngIf="stockReport.outwardBalance.transactionCount">{{
-                                        stockReport.outwardBalance.transactionCount | giddhCurrency
+                                        stockReport.outwardBalance.transactionCount | giddhNumberFormat
                                     }}</span
                                     ><span *ngIf="!stockReport.outwardBalance.transactionCount">0</span>
                                 </p>
@@ -600,9 +600,9 @@
                         <div class="flex-col">
                             <div class="cont">
                                 <p class="text-light">Opening</p>
-                                <p>{{ stockReport.openingBalance.amount | giddhCurrency }}</p>
+                                <p>{{ stockReport.openingBalance.amount | giddhNumberFormat }}</p>
                                 <p>
-                                    ({{ stockReport.openingBalance.quantity | giddhCurrency }}
+                                    ({{ stockReport.openingBalance.quantity | giddhNumberFormat }}
                                     {{ stockReport.openingBalance.stockUnit }})
                                 </p>
                             </div>
@@ -610,9 +610,9 @@
                         <div class="flex-col">
                             <div class="cont">
                                 <p class="text-light">Inward</p>
-                                <p>{{ stockReport.inwardBalance.amount | giddhCurrency }}</p>
+                                <p>{{ stockReport.inwardBalance.amount | giddhNumberFormat }}</p>
                                 <p>
-                                    ({{ stockReport.inwardBalance.quantity | giddhCurrency }}
+                                    ({{ stockReport.inwardBalance.quantity | giddhNumberFormat }}
                                     {{ stockReport.inwardBalance.stockUnit }})
                                 </p>
                             </div>
@@ -620,9 +620,9 @@
                         <div class="flex-col">
                             <div class="cont">
                                 <p class="text-light">Outward</p>
-                                <p>{{ stockReport.outwardBalance.amount | giddhCurrency }}</p>
+                                <p>{{ stockReport.outwardBalance.amount | giddhNumberFormat }}</p>
                                 <p>
-                                    ({{ stockReport.outwardBalance.quantity | giddhCurrency }}
+                                    ({{ stockReport.outwardBalance.quantity | giddhNumberFormat }}
                                     {{ stockReport.outwardBalance.stockUnit }})
                                 </p>
                             </div>
@@ -630,9 +630,9 @@
                         <div class="flex-col">
                             <div class="cont">
                                 <p class="text-light">Closing Stock</p>
-                                <p class="text-primary">{{ stockReport.closingBalance.amount | giddhCurrency }}</p>
+                                <p class="text-primary">{{ stockReport.closingBalance.amount | giddhNumberFormat }}</p>
                                 <p>
-                                    ({{ stockReport.closingBalance.quantity | giddhCurrency }}
+                                    ({{ stockReport.closingBalance.quantity | giddhNumberFormat }}
                                     {{ stockReport.closingBalance.stockUnit }})
                                 </p>
                             </div>
@@ -662,9 +662,9 @@
             <div class="row">
                 <div class="col-sm-4">Date Range</div>
                 <div class="col-sm-8">
-                    <div 
-                        class="custom-datepicker" 
-                        [matMenuTriggerFor]="universalDatepicker" 
+                    <div
+                        class="custom-datepicker"
+                        [matMenuTriggerFor]="universalDatepicker"
                         #universalDatepickerTrigger="matMenuTrigger"
                         role="button"
                         aria-haspopup="true"

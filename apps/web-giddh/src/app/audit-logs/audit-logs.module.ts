@@ -5,7 +5,6 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatTableModule } from '@angular/material/table';
 import { LaddaModule } from 'angular2-ladda';
-import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { SharedModule } from '../shared/shared.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
@@ -18,6 +17,7 @@ import { AuditLogsGridComponent } from './components/audit-logs-grid/audit-logs-
 import { AuditLogsTableComponent } from './components/audit-logs-table/audit-logs-table.component';
 import { AuditLogsSidebarComponent } from './components/sidebar-components/audit-logs.sidebar.component';
 import { AuditLogsServiceModule } from './services/audit-logs.service.module';
+import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
 
 @NgModule({
     declarations: [
@@ -45,7 +45,7 @@ import { AuditLogsServiceModule } from './services/audit-logs.service.module';
             spinnerSize: 30
         }),
         AuditLogsServiceModule,
-        CurrencyModule,
+        GiddhNumberFormatModule,
         SharedModule,
         TranslateDirectiveModule,
         GiddhDatepickerModule,

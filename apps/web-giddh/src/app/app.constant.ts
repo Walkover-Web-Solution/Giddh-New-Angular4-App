@@ -741,3 +741,196 @@ export interface IOption {
     additional?: any;
     subVoucher?: string;
 }
+
+/** Number Format Locale Mapping for GiddhNumberFormatPipe */
+export const NUMBER_FORMAT_LOCALE_MAP: { [key: string]: string } = {
+    'IND_COMMA_SEPARATED': 'en-IN',        // Indian format: 12,34,567.89 (India, Bangladesh, Pakistan, Sri Lanka, Nepal)
+    'INT_COMMA_SEPARATED': 'en-US',        // International comma: 1,234,567.89 (US, UK, Canada, Australia, etc.)
+    'EUR_SPACE_SEPARATED': 'fr-FR',        // European space: 1 234 567,89 (France, Germany, Nordic countries, Russia)
+    'CHE_APOSTROPHE_SEPARATED': 'de-CH',   // Swiss apostrophe: 1'234'567.89 (Switzerland, Liechtenstein)
+    'INT_SPACE_SEPARATED': 'fr-FR',        // Alternative space format
+    'INT_APOSTROPHE_SEPARATED': 'de-CH',   // Alternative apostrophe format
+    'GER_DOT_SEPARATED': 'de-DE',          // German dot: 1.234.567,89 (Germany, Austria)
+    'FRA_SPACE_SEPARATED': 'fr-FR',        // French space: 1 234 567,89 (France, Belgium)
+    'RUS_SPACE_SEPARATED': 'ru-RU',        // Russian space: 1 234 567,89 (Russia, Belarus, Ukraine)
+    'NOR_SPACE_SEPARATED': 'nb-NO',        // Nordic space: 1 234 567,89 (Norway, Sweden, Denmark, Finland)
+    'BRA_DOT_SEPARATED': 'pt-BR',          // Brazilian dot: 1.234.567,89 (Brazil)
+    'ARG_DOT_SEPARATED': 'es-AR',          // Argentine dot: 1.234.567,89 (Argentina)
+    'ESP_DOT_SEPARATED': 'es-ES',          // Spanish dot: 1.234.567,89 (Spain)
+    'ITA_DOT_SEPARATED': 'it-IT',          // Italian dot: 1.234.567,89 (Italy)
+    'POR_SPACE_SEPARATED': 'pt-PT',        // Portuguese space: 1 234 567,89 (Portugal)
+    'POL_SPACE_SEPARATED': 'pl-PL',        // Polish space: 1 234 567,89 (Poland)
+    'CZE_SPACE_SEPARATED': 'cs-CZ',        // Czech space: 1 234 567,89 (Czech Republic)
+    'HUN_SPACE_SEPARATED': 'hu-HU',        // Hungarian space: 1 234 567,89 (Hungary)
+    'ROM_DOT_SEPARATED': 'ro-RO',          // Romanian dot: 1.234.567,89 (Romania)
+    'BUL_SPACE_SEPARATED': 'bg-BG',        // Bulgarian space: 1 234 567,89 (Bulgaria)
+    'CRO_DOT_SEPARATED': 'hr-HR',          // Croatian dot: 1.234.567,89 (Croatia)
+    'SLO_DOT_SEPARATED': 'sl-SI',          // Slovenian dot: 1.234.567,89 (Slovenia)
+    'EST_SPACE_SEPARATED': 'et-EE',        // Estonian space: 1 234 567,89 (Estonia)
+    'LAT_SPACE_SEPARATED': 'lv-LV',        // Latvian space: 1 234 567,89 (Latvia)
+    'LIT_SPACE_SEPARATED': 'lt-LT',        // Lithuanian space: 1 234 567,89 (Lithuania)
+    'UKR_SPACE_SEPARATED': 'uk-UA',        // Ukrainian space: 1 234 567,89 (Ukraine)
+    'BEL_SPACE_SEPARATED': 'be-BY',        // Belarusian space: 1 234 567,89 (Belarus)
+    'GRE_DOT_SEPARATED': 'el-GR',          // Greek dot: 1.234.567,89 (Greece)
+    'NLD_DOT_SEPARATED': 'nl-NL',          // Dutch dot: 1.234.567,89 (Netherlands)
+    'BEL_SPACE_SEPARATED_FR': 'fr-BE',     // Belgian French space: 1 234 567,89 (Belgium French)
+    'AUT_DOT_SEPARATED': 'de-AT',          // Austrian dot: 1.234.567,89 (Austria)
+    'JPN_COMMA_SEPARATED': 'ja-JP',        // Japanese comma: 1,234,567.89 (Japan)
+    'KOR_COMMA_SEPARATED': 'ko-KR',        // Korean comma: 1,234,567.89 (South Korea)
+    'CHN_COMMA_SEPARATED': 'zh-CN',        // Chinese comma: 1,234,567.89 (China)
+    'TWN_COMMA_SEPARATED': 'zh-TW',        // Taiwanese comma: 1,234,567.89 (Taiwan)
+    'THA_COMMA_SEPARATED': 'th-TH',        // Thai comma: 1,234,567.89 (Thailand)
+    'VIE_COMMA_SEPARATED': 'vi-VN',        // Vietnamese comma: 1,234,567.89 (Vietnam)
+    'IDN_COMMA_SEPARATED': 'id-ID',        // Indonesian comma: 1,234,567.89 (Indonesia)
+    'MYS_COMMA_SEPARATED': 'ms-MY',        // Malaysian comma: 1,234,567.89 (Malaysia)
+    'ARE_COMMA_SEPARATED': 'ar-AE',        // UAE comma: 1,234,567.89 (UAE)
+    'SAU_COMMA_SEPARATED': 'ar-SA',        // Saudi comma: 1,234,567.89 (Saudi Arabia)
+    'QAT_COMMA_SEPARATED': 'ar-QA',        // Qatari comma: 1,234,567.89 (Qatar)
+    'KWT_COMMA_SEPARATED': 'ar-KW',        // Kuwaiti comma: 1,234,567.89 (Kuwait)
+    'BHR_COMMA_SEPARATED': 'ar-BH',        // Bahraini comma: 1,234,567.89 (Bahrain)
+    'OMN_COMMA_SEPARATED': 'ar-OM',        // Omani comma: 1,234,567.89 (Oman)
+    'JOR_COMMA_SEPARATED': 'ar-JO',        // Jordanian comma: 1,234,567.89 (Jordan)
+    'LBN_COMMA_SEPARATED': 'ar-LB',        // Lebanese comma: 1,234,567.89 (Lebanon)
+    'EGY_COMMA_SEPARATED': 'ar-EG',        // Egyptian comma: 1,234,567.89 (Egypt)
+    'MAR_COMMA_SEPARATED': 'ar-MA',        // Moroccan comma: 1,234,567.89 (Morocco)
+    'TUN_COMMA_SEPARATED': 'ar-TN',        // Tunisian comma: 1,234,567.89 (Tunisia)
+    'DZA_COMMA_SEPARATED': 'ar-DZ',        // Algerian comma: 1,234,567.89 (Algeria)
+    'TUR_COMMA_SEPARATED': 'tr-TR',        // Turkish comma: 1,234,567.89 (Turkey)
+    'ISR_COMMA_SEPARATED': 'he-IL',        // Israeli comma: 1,234,567.89 (Israel)
+    'MEX_COMMA_SEPARATED': 'es-MX',        // Mexican comma: 1,234,567.89 (Mexico)
+    'COL_COMMA_SEPARATED': 'es-CO',        // Colombian comma: 1,234,567.89 (Colombia)
+    'PER_COMMA_SEPARATED': 'es-PE',        // Peruvian comma: 1,234,567.89 (Peru)
+    'VEN_COMMA_SEPARATED': 'es-VE',        // Venezuelan comma: 1,234,567.89 (Venezuela)
+    'ECU_COMMA_SEPARATED': 'es-EC',        // Ecuadorian comma: 1,234,567.89 (Ecuador)
+    'URY_COMMA_SEPARATED': 'es-UY',        // Uruguayan comma: 1,234,567.89 (Uruguay)
+    'PRY_COMMA_SEPARATED': 'es-PY',        // Paraguayan comma: 1,234,567.89 (Paraguay)
+    'BOL_COMMA_SEPARATED': 'es-BO',        // Bolivian comma: 1,234,567.89 (Bolivia)
+    'CHL_COMMA_SEPARATED': 'es-CL',        // Chilean comma: 1,234,567.89 (Chile)
+    'CRI_COMMA_SEPARATED': 'es-CR',        // Costa Rican comma: 1,234,567.89 (Costa Rica)
+    'PAN_COMMA_SEPARATED': 'es-PA',        // Panamanian comma: 1,234,567.89 (Panama)
+    'GTM_COMMA_SEPARATED': 'es-GT',        // Guatemalan comma: 1,234,567.89 (Guatemala)
+    'HND_COMMA_SEPARATED': 'es-HN',        // Honduran comma: 1,234,567.89 (Honduras)
+    'SLV_COMMA_SEPARATED': 'es-SV',        // Salvadoran comma: 1,234,567.89 (El Salvador)
+    'NIC_COMMA_SEPARATED': 'es-NI',        // Nicaraguan comma: 1,234,567.89 (Nicaragua)
+    'DOM_COMMA_SEPARATED': 'es-DO',        // Dominican comma: 1,234,567.89 (Dominican Republic)
+    'CUB_COMMA_SEPARATED': 'es-CU',        // Cuban comma: 1,234,567.89 (Cuba)
+    'PRI_COMMA_SEPARATED': 'es-PR',        // Puerto Rican comma: 1,234,567.89 (Puerto Rico)
+    'BGD_COMMA_SEPARATED': 'bn-BD',        // Bangladeshi comma: 12,34,567.89 (Bangladesh - Indian style)
+    'PAK_COMMA_SEPARATED': 'ur-PK',        // Pakistani comma: 12,34,567.89 (Pakistan - Indian style)
+    'LKA_COMMA_SEPARATED': 'si-LK',        // Sri Lankan comma: 12,34,567.89 (Sri Lanka - Indian style)
+    'NPL_COMMA_SEPARATED': 'ne-NP',        // Nepalese comma: 12,34,567.89 (Nepal - Indian style)
+    'USA_COMMA_SEPARATED': 'en-US',        // US comma: 1,234,567.89 (United States)
+    'GBR_COMMA_SEPARATED': 'en-GB',        // UK comma: 1,234,567.89 (United Kingdom)
+    'AUS_COMMA_SEPARATED': 'en-AU',        // Australian comma: 1,234,567.89 (Australia)
+    'CAN_COMMA_SEPARATED': 'en-CA',        // Canadian comma: 1,234,567.89 (Canada)
+    'NZL_COMMA_SEPARATED': 'en-NZ',        // New Zealand comma: 1,234,567.89 (New Zealand)
+    'IRL_COMMA_SEPARATED': 'en-IE',        // Irish comma: 1,234,567.89 (Ireland)
+    'ZAF_COMMA_SEPARATED': 'en-ZA',        // South African comma: 1,234,567.89 (South Africa)
+    'SGP_COMMA_SEPARATED': 'en-SG',        // Singaporean comma: 1,234,567.89 (Singapore)
+    'PHL_COMMA_SEPARATED': 'en-PH',        // Philippine comma: 1,234,567.89 (Philippines)
+    'HKG_COMMA_SEPARATED': 'en-HK',        // Hong Kong comma: 1,234,567.89 (Hong Kong)
+    'LIE_APOSTROPHE_SEPARATED': 'de-LI'    // Liechtenstein apostrophe: 1'234'567.89 (Liechtenstein)
+};
+
+/** Country to Locale Mapping for GiddhNumberFormatPipe */
+export const COUNTRY_LOCALE_MAP: { [key: string]: string } = {
+    // Indian subcontinent - uses Indian comma format
+    'IN': 'en-IN',    // India
+    'BD': 'bn-BD',    // Bangladesh
+    'PK': 'ur-PK',    // Pakistan
+    'LK': 'si-LK',    // Sri Lanka
+    'NP': 'ne-NP',    // Nepal
+
+    // English-speaking countries - uses international comma format
+    'US': 'en-US',    // United States
+    'GB': 'en-GB',    // United Kingdom
+    'AU': 'en-AU',    // Australia
+    'CA': 'en-CA',    // Canada
+    'NZ': 'en-NZ',    // New Zealand
+    'IE': 'en-IE',    // Ireland
+    'ZA': 'en-ZA',    // South Africa
+    'SG': 'en-SG',    // Singapore
+    'PH': 'en-PH',    // Philippines
+    'HK': 'en-HK',    // Hong Kong
+
+    // European countries - uses space format
+    'FR': 'fr-FR',    // France
+    'DE': 'de-DE',    // Germany
+    'ES': 'es-ES',    // Spain
+    'IT': 'it-IT',    // Italy
+    'SE': 'sv-SE',    // Sweden
+    'NO': 'nb-NO',    // Norway
+    'DK': 'da-DK',    // Denmark
+    'FI': 'fi-FI',    // Finland
+    'NL': 'nl-NL',    // Netherlands
+    'BE': 'fr-BE',    // Belgium
+    'AT': 'de-AT',    // Austria
+    'PL': 'pl-PL',    // Poland
+    'CZ': 'cs-CZ',    // Czech Republic
+    'SK': 'sk-SK',    // Slovakia
+    'HU': 'hu-HU',    // Hungary
+    'RO': 'ro-RO',    // Romania
+    'BG': 'bg-BG',    // Bulgaria
+    'HR': 'hr-HR',    // Croatia
+    'SI': 'sl-SI',    // Slovenia
+    'EE': 'et-EE',    // Estonia
+    'LV': 'lv-LV',    // Latvia
+    'LT': 'lt-LT',    // Lithuania
+    'RU': 'ru-RU',    // Russia
+    'UA': 'uk-UA',    // Ukraine
+    'BY': 'be-BY',    // Belarus
+    'PT': 'pt-PT',    // Portugal
+    'GR': 'el-GR',    // Greece
+
+    // Swiss - uses apostrophe format
+    'CH': 'de-CH',    // Switzerland
+    'LI': 'de-LI',    // Liechtenstein
+
+    // Asian countries - mixed formats
+    'JP': 'ja-JP',    // Japan - comma format
+    'KR': 'ko-KR',    // South Korea - comma format
+    'CN': 'zh-CN',    // China - comma format
+    'TW': 'zh-TW',    // Taiwan - comma format
+    'TH': 'th-TH',    // Thailand - comma format
+    'VN': 'vi-VN',    // Vietnam - comma format
+    'ID': 'id-ID',    // Indonesia - comma format
+    'MY': 'ms-MY',    // Malaysia - comma format
+
+    // Middle East & Africa
+    'AE': 'ar-AE',    // UAE - comma format
+    'SA': 'ar-SA',    // Saudi Arabia - comma format
+    'QA': 'ar-QA',    // Qatar - comma format
+    'KW': 'ar-KW',    // Kuwait - comma format
+    'BH': 'ar-BH',    // Bahrain - comma format
+    'OM': 'ar-OM',    // Oman - comma format
+    'JO': 'ar-JO',    // Jordan - comma format
+    'LB': 'ar-LB',    // Lebanon - comma format
+    'EG': 'ar-EG',    // Egypt - comma format
+    'MA': 'ar-MA',    // Morocco - comma format
+    'TN': 'ar-TN',    // Tunisia - comma format
+    'DZ': 'ar-DZ',    // Algeria - comma format
+    'TR': 'tr-TR',    // Turkey - comma format
+    'IL': 'he-IL',    // Israel - comma format
+
+    // Latin America
+    'BR': 'pt-BR',    // Brazil - comma format
+    'MX': 'es-MX',    // Mexico - comma format
+    'AR': 'es-AR',    // Argentina - comma format
+    'CL': 'es-CL',    // Chile - comma format
+    'CO': 'es-CO',    // Colombia - comma format
+    'PE': 'es-PE',    // Peru - comma format
+    'VE': 'es-VE',    // Venezuela - comma format
+    'EC': 'es-EC',    // Ecuador - comma format
+    'UY': 'es-UY',    // Uruguay - comma format
+    'PY': 'es-PY',    // Paraguay - comma format
+    'BO': 'es-BO',    // Bolivia - comma format
+    'CR': 'es-CR',    // Costa Rica - comma format
+    'PA': 'es-PA',    // Panama - comma format
+    'GT': 'es-GT',    // Guatemala - comma format
+    'HN': 'es-HN',    // Honduras - comma format
+    'SV': 'es-SV',    // El Salvador - comma format
+    'NI': 'es-NI',    // Nicaragua - comma format
+    'DO': 'es-DO',    // Dominican Republic - comma format
+    'CU': 'es-CU',    // Cuba - comma format
+    'PR': 'es-PR',    // Puerto Rico - comma format
+};

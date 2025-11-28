@@ -63,7 +63,7 @@ import { EntryAmountModule } from "./utility/directives/entry-amount/entry-amoun
 import { EntryTotalModule } from "./utility/directives/entry-total/entry-total.module";
 import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-loader.module";
 import { ReplacePipeModule } from "../shared/helpers/pipes/replace/replace.module";
-import { CurrencyModule } from "../shared/helpers/pipes/currencyPipe/currencyType.module";
+
 import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
 import { EntryOtherTaxModule } from "./utility/directives/entry-other-tax/entry-other-tax.module";
 import { PurchaseOrderPreviewModule } from "../shared/purchase-order-preview/purchase-order-preview.module";
@@ -92,6 +92,7 @@ import { TributeMentionModule } from "../shared/helpers/directives/tributeMentio
 import { AllTemplatesComponent } from "./template/all-templates/all-templates.component";
 import { TemplateEditFilterComponent } from "./template/template-edit-filter/template-edit-filter.component";
 import { MobileNumberInputComponent } from "../shared/mobile-number-input/mobile-number-input.component";
+import { GiddhNumberFormatModule } from "../shared/helpers/pipes/number-format/number-format.module";
 
 @NgModule({
     declarations: [
@@ -168,7 +169,7 @@ import { MobileNumberInputComponent } from "../shared/mobile-number-input/mobile
         EntryOtherTaxModule,
         GiddhPageLoaderModule,
         ReplacePipeModule,
-        CurrencyModule,
+        GiddhNumberFormatModule,
         NgxMatSelectSearchModule,
         PurchaseOrderPreviewModule,
         DecimalDigitsModule,

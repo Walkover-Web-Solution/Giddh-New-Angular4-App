@@ -4,8 +4,9 @@ import { ReplaySubject } from 'rxjs';
 import { OnDestroy, Pipe, PipeTransform } from '@angular/core';
 import { distinctUntilKeyChanged, takeUntil } from 'rxjs/operators';
 import { giddhRoundOff } from '../../helperFunctions';
+import { NUMBER_FORMAT_LOCALE_MAP, COUNTRY_LOCALE_MAP } from '../../../../app.constant';
 
-@Pipe({ name: 'giddhNumberFormat', pure: false })
+@Pipe({ name: 'giddhNumberFormat', pure: true })
 
 export class GiddhNumberFormatPipe implements OnDestroy, PipeTransform {
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -34,14 +35,6 @@ export class GiddhNumberFormatPipe implements OnDestroy, PipeTransform {
         this.destroyed$.complete();
     }
 
-    // Static map for better performance - created once
-    private static readonly FORMAT_LOCALE_MAP: { [key: string]: string } = {
-        'IND_COMMA_SEPARATED': 'en-IN',        // Indian format: 12,34,567.89
-        'INT_COMMA_SEPARATED': 'en-US',        // International comma: 1,234,567.89
-        'INT_SPACE_SEPARATED': 'fr-FR',        // Space separated: 1 234 567,89
-        'INT_APOSTROPHE_SEPARATED': 'de-CH'    // Apostrophe separated: 1'234'567.89
-    };
-
     /**
      * Maps display format to appropriate locale
      *
@@ -51,7 +44,19 @@ export class GiddhNumberFormatPipe implements OnDestroy, PipeTransform {
      * @memberof GiddhNumberFormatPipe
      */
     private getLocaleFromDisplayFormat(displayFormat: string): string {
-        return GiddhNumberFormatPipe.FORMAT_LOCALE_MAP[displayFormat] || 'en-IN';
+        return NUMBER_FORMAT_LOCALE_MAP[displayFormat] || 'en-IN';
+    }
+
+    /**
+     * Maps country code to appropriate locale
+     *
+     * @private
+     * @param {string} countryCode Two-letter country code (e.g., 'IN', 'US', 'FR')
+     * @returns {string} Locale string (e.g., 'en-IN', 'en-US', 'fr-FR')
+     * @memberof GiddhNumberFormatPipe
+     */
+    private getLocaleFromCountryCode(countryCode: string): string {
+        return COUNTRY_LOCALE_MAP[countryCode?.toUpperCase()] || 'en-IN';
     }
 
     /**
