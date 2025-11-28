@@ -1052,6 +1052,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             height: '100%',
             maxWidth: '100vw',
             maxHeight: '100vh',
+            disableClose: true
         });
 
         this.manageGroupsAccountsDialogRef.afterOpened().subscribe(() => {
