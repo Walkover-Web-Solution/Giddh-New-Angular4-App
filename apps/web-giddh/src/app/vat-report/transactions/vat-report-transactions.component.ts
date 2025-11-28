@@ -53,8 +53,6 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
     public asideGstSidebarMenuState: boolean = true;
     /** Stores the voucher API version of current company */
     public voucherApiVersion: number;
-    /** Decimal places from company settings */
-    public giddhBalanceDecimalPlaces: number = 2;
     /*-- mat-table --*/
     displayedColumns: string[] = ['date', 'number', 'name', 'taxamt', 'vat_amt', 'reverse_charge', 'trn_number', 'place_supply'];
 
@@ -104,12 +102,6 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
                 this.activeCompany = activeCompany;
             }
         });
-
-        this.store.pipe(select(s => s.settings.profile), takeUntil(this.destroyed$)).subscribe(profile => {
-            if (profile) {
-                this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces || 2;
-            }
-        });
     }
 
     /**
@@ -122,17 +114,6 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('gst-sidebar-open');
         this.asideGstSidebarMenuState = false;
-    }
-
-    /**
-     * Formats amount with proper decimal places
-     *
-     * @param {number} amount Amount to format
-     * @returns {string} Formatted amount
-     * @memberof VatReportTransactionsComponent
-     */
-    public formatAmount(amount: number): string {
-        return this.generalService.formatAmount(amount, this.giddhBalanceDecimalPlaces);
     }
 
     /**
