@@ -66,8 +66,6 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterV
     public localeData: any = {};
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    /** Indicates mouse interaction with the list to slightly adjust keyboard scroll offset for smoother combined mouse + keyboard navigation. */
-    public isMouseInteractingWithList: boolean = false;
 
     constructor(
         private inventoryService: InventoryService,
@@ -400,14 +398,6 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterV
         else if (this.highlightedItem >= itemsAbove + visibleItems) {
             targetIndex = this.highlightedItem - visibleItems + 1;
         }
-        // when mouse and keyboard are used to navigate
-        else if (this.isMouseInteractingWithList) {
-            if (key === DOWN_ARROW) {
-                targetIndex = itemsAbove + 1;
-            } else if (key === UP_ARROW) {
-                targetIndex = itemsAbove - 1;
-            }
-        }
         this.virtualScrollViewport.scrollToIndex(targetIndex, 'instant');
     }
 
@@ -477,17 +467,10 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterV
     }
 
     /**
-     * Handles item hover
+     * Handles item mouse move
      */
-    public onItemHover(index: number): void {
+    public onItemMouseMove(index: number): void {
         this.highlightedItem = index;
-    }
-
-    /**
-     * Handles item leave
-     */
-    public onItemLeave(): void {
-        // Keep the highlighted item for keyboard navigation
     }
 
     /**
