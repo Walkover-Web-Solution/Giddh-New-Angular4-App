@@ -1679,6 +1679,7 @@
                                                                                 : transaction.get('account.name')?.value
                                                                         "
                                                                         [options]="voucherStockResults$ | async"
+                                                                        [hideSelectedOptions]="false"
                                                                         [showCreateNew]="true"
                                                                         [enableDynamicSearch]="true"
                                                                         [isPaginationEnabled]="true"
@@ -3801,5 +3802,3 @@
         (closeModelEvent)="cancelEmailModal()"
     ></purchase-order-preview-modal>
 </ng-template>
-
-
