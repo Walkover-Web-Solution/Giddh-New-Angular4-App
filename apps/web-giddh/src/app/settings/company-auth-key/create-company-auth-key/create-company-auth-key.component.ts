@@ -14,7 +14,7 @@ import * as dayjs from 'dayjs';
 import * as customParseFormat from 'dayjs/plugin/customParseFormat';
 import { GIDDH_DATE_FORMAT } from "../../../shared/helpers/defaultDateFormat";
 import { ToasterService } from "../../../services/toaster.service";
-import { IPV4_REGEX } from "../../../app.constant";
+import { IOption, IPV4_REGEX } from "../../../app.constant";
 import { PageLeaveUtilityService } from "../../../services/page-leave-utility.service";
 import { SettingsProfileActions } from "../../../actions/settings/profile/settings.profile.action";
 dayjs.extend(customParseFormat);
@@ -58,6 +58,8 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
     public selectedIPRange: string = '';
     /** Date range picker value */
     public dateRangePickerValue: Date[] = [];
+    /** Flag to prevent multiple GetRoles() dispatches */
+    private rolesRequested: boolean = false;
     /** Returns true if form is dirty else false */
     public get showPageLeaveConfirmation(): boolean {
         return this.createCompanyAuthKeyForm?.dirty;
@@ -67,6 +69,12 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
     public readonly IP_ADDRESS = IP_ADDR;
     public readonly DATE_RANGE = DATE_RANGE;
     public readonly PAST_PERIOD = PAST_PERIOD;
+    /** Holds Current Theme Label */
+    public currentThemeLabel: string;
+    /** List of available themes */
+    public availableThemes: IOption[] = [];
+    /** This holds the active theme */
+    public activeTheme: string = "";
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public companyAuthKeyInfo: any,
@@ -79,7 +87,9 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
         private toasterService: ToasterService,
         private pageLeaveUtilityService: PageLeaveUtilityService,
         private settingsProfileActions: SettingsProfileActions
-    ) { }
+    ) {
+        this.availableThemes = this.generalService.getAvailableThemes();
+    }
 
     /**
      * Used for component initialization
@@ -93,7 +103,7 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
 
         // get roles
         this.store.pipe(select(state => state.permission), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && response.roles?.length > 0) {
+            if (response && response.roles && response.roles.length > 0) {
                 let roles = cloneDeep(response.roles);
                 let allRoleArray = [];
                 roles.forEach((role: any) => {
@@ -103,8 +113,17 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
                     });
                 });
                 this.allRoles = cloneDeep(allRoleArray);
-            } else {
+                this.rolesRequested = false; // Reset flag when roles are received
+            } else if (!this.rolesRequested) {
+                this.rolesRequested = true; // Set flag to prevent multiple requests
                 this.store.dispatch(this.permissionActions.GetRoles());
+            }
+        });
+
+        this.store.pipe(select(state => state.session.activeTheme), takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.activeTheme = response?.value;
+                this.currentThemeLabel = this.availableThemes.find(theme => theme.value === this.activeTheme)?.label;
             }
         });
 
