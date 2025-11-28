@@ -400,7 +400,7 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
         this.dateRangePickerValue = [];
         obj.data = form;
         if (obj.action === 'create') {
-            this.companyAuthKeyService.createAuthKey(form.roleUniqueName, form).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.companyAuthKeyService.createAuthKey(form).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response?.status === "success") {
                     this.createCompanyAuthKeyForm.markAsPristine();
                     this.pageLeaveUtilityService.removeBrowserConfirmationDialog();

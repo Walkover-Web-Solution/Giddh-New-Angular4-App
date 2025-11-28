@@ -1,10 +1,10 @@
-const COMMON = 'company/:companyUniqueName/role';
+const COMMON = 'company/:companyUniqueName';
 
 export const SETTINGS_COMPANY_AUTH_KEY_API = {
     COMMON,
-    UPDATE_AUTH_KEY: COMMON + '/:userRoleUniqueName/update-auth',
-    GET_ALL_AUTH_KEYS: COMMON + '/auth-key/all',
-    GET_AUTH_KEY: COMMON + '/auth-key/:roleUser',
-    CREATE_AUTH_KEY: COMMON + '/:roleUniqueName/generate-auth-key',
-    DELETE_AUTH_KEY: COMMON + '/:userRoleUniqueName/remove-auth-key'
+    UPDATE_AUTH_KEY: COMMON + '/auth/:authKeyUniqueName/update',
+    GET_ALL_AUTH_KEYS: COMMON + '/auth/all',
+    GET_AUTH_KEY: COMMON + '/auth/:authKeyUniqueName',
+    CREATE_AUTH_KEY: COMMON + '/auth/generate',
+    DELETE_AUTH_KEY: COMMON + '/auth/:authKeyUniqueName/remove'
 };
