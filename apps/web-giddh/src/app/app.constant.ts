@@ -988,3 +988,9 @@ export const COUNTRY_LOCALE_MAP: { [key: string]: string } = {
     'CU': 'es-CU',    // Cuba - comma format
     'PR': 'es-PR',    // Puerto Rico - comma format
 };
+
+/** Default locale for number formatting */
+export const DEFAULT_NUMBER_FORMAT_LOCALE = 'en-IN';
+
+/** Default display format for number formatting */
+export const DEFAULT_NUMBER_DISPLAY_FORMAT = 'IND_COMMA_SEPARATED';
