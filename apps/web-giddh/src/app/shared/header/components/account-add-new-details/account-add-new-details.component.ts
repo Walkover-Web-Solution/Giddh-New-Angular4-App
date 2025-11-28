@@ -423,6 +423,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
         this.addAccountForm.valueChanges.pipe(
             debounceTime(700),
+            distinctUntilChanged((prev, curr) => (prev?.attentionTo === curr?.attentionTo) && (prev?.mobileNo === curr?.mobileNo) && (prev?.email === curr?.email)),
             takeUntil(this.destroyed$))
             .subscribe((response) => {
                 const users = this.addAccountForm.get('portalDomain') as FormArray;
@@ -447,7 +448,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                             this.addNewPortalUser(data);
                         }
                     }
-                    this.addAccountForm.get('mobileNo').updateValueAndValidity();
                     this.changeDetectorRef.detectChanges();
                 }
             });
