@@ -54,9 +54,9 @@
                                 type="button"
                                 class="mat-select-btn range-wrapper text-left w-100"
                             >
-                                <span class="d-flex w-100" [ngClass]="{ 'theme-dark': currentThemeLabel === 'Dark' }">
+                                <span class="d-flex w-100 font-weight-regular">
                                     {{ selectedTimeSpan }}
-                                    <span class="ml-auto"><span class="fa fa-caret-down"></span></span>
+                                    <span class="ml-auto"><span class="fa fa-caret-down font-size-15 mr-2"></span></span>
                                 </span>
                             </button>
                             <mat-menu #menu="matMenu">
@@ -154,13 +154,11 @@
                                 [matMenuTriggerFor]="menurange"
                                 (click)="showIPWrap = !showIPWrap"
                                 type="button"
-                                class="mat-select-btn range-wrapper text-left w-100"
+                                class="mat-select-btn range-wrapper text-left w-100 padding-14"
                                 [disabled]="isUserRestricted"
                             >
-                                <span [ngClass]="{ 'theme-dark': currentThemeLabel === 'Dark' }">{{
-                                    selectedIPRange
-                                }}</span>
-                                <span class="pull-right"><span class="fa fa-caret-down"></span></span>
+                                <span class="font-weight-regular">{{ selectedIPRange }}</span>
+                                <span class="pull-right"><span class="fa fa-caret-down font-size-15 mr-2"></span></span>
                             </button>
                             <mat-menu #menurange="matMenu">
                                 <section class="ip-addresses-dropdown" role="menu" (click)="$event.stopPropagation()">
