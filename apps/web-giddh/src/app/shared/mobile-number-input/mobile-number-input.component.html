@@ -3,7 +3,7 @@
         appearance="outline"
         floatLabel="always"
         class="pointer-event-none mobile-input"
-        [ngClass]="{ 'mat-form-field-invalid': mobileControl.invalid && (mobileControl.dirty || mobileControl.touched) }"
+        [ngClass]="{ 'mat-form-field-invalid': (mobileControl.invalid && (mobileControl.dirty || mobileControl.touched)) || showError }"
     >
         <mat-label>{{ label }}</mat-label>
         <div class="input-wrapper d-flex column-gap-1">
@@ -72,6 +72,7 @@
                 autocomplete="tel"
             />
         </div>
+        
         <!-- <mat-error *ngIf="mobileControl.hasError('required')">
             Mobile number is required
         </mat-error>
@@ -82,6 +83,12 @@
             Please enter valid mobile number for {{ selectedCountry?.name }}
         </mat-error> -->
     </mat-form-field>
+    1{{ mobileControl.value | json }}
+    2{{ mobileControl.invalid | json }}
+    3{{ mobileControl.errors | json }}
+    4{{ mobileControl.status | json }}
+    5{{ mobileControl.touched | json }}
+    6{{ mobileControl.dirty | json }}
     <!-- <p class="font-size-12 text-gray">{{ getFullPhoneNumber() }}</p> -->
     <span class="text-danger" *ngIf="mobileControl.hasError('required')">{{
         localeData?.mobile_number_required || "Mobile number is required"

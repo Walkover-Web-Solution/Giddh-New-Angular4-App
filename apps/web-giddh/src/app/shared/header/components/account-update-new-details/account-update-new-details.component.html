@@ -450,6 +450,7 @@
                                 [placeholder]="localeData?.mobile_no_placeholder"
                                 [required]="false"
                                 [useImageFlags]="true"
+                                [showError]="addAccountForm.get('mobileNo')?.invalid"
                                 (change)="openConfirmLeaveDialog()"
                             >
                             </mobile-number-input>
@@ -552,6 +553,7 @@
                                 [required]="false"
                                 [useImageFlags]="true"
                                 (input)="portalIndex = i"
+                                [showError]="domain.get('contactNo')?.invalid"
                                 (change)="openConfirmLeaveDialog()"
                             >
                             </mobile-number-input>

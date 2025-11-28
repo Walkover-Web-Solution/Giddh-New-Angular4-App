@@ -466,6 +466,7 @@
                                 [placeholder]="localeData?.mobile_no_placeholder"
                                 [required]="false"
                                 [useImageFlags]="true"
+                                [showError]="addAccountForm.get('mobileNo')?.invalid"
                                 (change)="openConfirmLeaveDialog()"
                             >
                             </mobile-number-input>
@@ -558,6 +559,7 @@
                                 [useImageFlags]="true"
                                 (input)="portalIndex = i"
                                 (change)="openConfirmLeaveDialog()"
+                                [showError]="domain.get('contactNo')?.invalid"
                             >
                             </mobile-number-input>
                             <span
@@ -895,6 +897,10 @@
     </form>
 </ng-container>
 <ng-template #templateForSaveButton>
+    1{{ addAccountForm.invalid | json }}
+    2{{ addAccountForm.get('mobileNo')?.value | json }}
+    3{{ addAccountForm.get('mobileNo')?.errors | json }}
+    4{{ addAccountForm.get('mobileNo')?.status | json }}
     <div class="row pt-4" *ngIf="voucherApiVersion === 2">
         <div class="col-sm-12">
             <button
