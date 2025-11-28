@@ -19,6 +19,9 @@ import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/conf
 import { MatDividerModule } from '@angular/material/divider';
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 import { ClipboardModule } from 'ngx-clipboard';
+import { MatDialogModule } from '@angular/material/dialog';
+import { GenericAsideMenuAccountModule } from '../shared/generic-aside-menu-account/generic.aside.menu.account.module';
+import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
 
 @NgModule({
     declarations: [
@@ -42,7 +45,10 @@ import { ClipboardModule } from 'ngx-clipboard';
         TranslateDirectiveModule,
         MatDividerModule,
         HamburgerMenuModule,
-        ClipboardModule
+        ClipboardModule,
+        MatDialogModule,
+        GenericAsideMenuAccountModule,
+        KeyboardShortutModule
     ],
     providers: [
         EmailForwardingService

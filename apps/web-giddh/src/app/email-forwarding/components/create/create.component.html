@@ -34,13 +34,15 @@
                         class="w-100 max-w-800 mx-auto theme-background-bg-color overflow-hidden"
                     >
                         <!-- Step 1: Create Email -->
-                        <mat-step [stepControl]="emailForwardingForm" [label]="localeData?.create_email">
+                        <mat-step [stepControl]="emailForwardingForm" [label]="localeData?.create_custom_email">
                             <form [formGroup]="emailForwardingForm">
                                 <div class="row min-h-200 mx-0">
                                     <div class="col-12">
                                         <mat-card class="border-radius-12">
                                             <mat-card-content class="p-5 text-center">
-                                                <h2 class="font-size-16 font-weight-medium mb-3">Forwarding Email</h2>
+                                                <h2 class="font-size-16 font-weight-medium mb-3">
+                                                    {{ localeData?.email_customization_text }}
+                                                </h2>
                                                 <!-- Display Mode -->
                                                 <div *ngIf="!isEditingEmail" class="w-100 max-w-400 mx-auto">
                                                     <div
@@ -187,6 +189,9 @@
                                                         [options]="accountSearchResponse$ | async"
                                                         formControlName="accountUniqueName"
                                                         [required]="true"
+                                                        [showCreateNew]="true"
+                                                        (createOption)="toggleAccountAsidePane()"
+                                                        [createNewText]="commonLocaleData?.app_create_new"
                                                         [showError]="
                                                             isFormSubmitted &&
                                                             emailForwardingForm.get('accountUniqueName')?.invalid
@@ -271,3 +276,15 @@
         </div> -->
     </ng-template>
 </ng-container>
+
+<ng-template #accountAsideMenu>
+    <generic-aside-menu-account
+        (closeAsideEvent)="accountAsideMenuRef?.close()"
+        [selectedGrpUniqueName]="'bankaccounts'"
+        [allGroups]="false"
+        [keyboardShortcut]="'esc'"
+        (onShortcutPress)="accountAsideMenuRef?.close()"
+        (addEvent)="addNewAccount($event)"
+    >
+    </generic-aside-menu-account>
+</ng-template>
