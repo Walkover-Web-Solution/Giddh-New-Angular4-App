@@ -180,7 +180,6 @@ export class ListComponent implements OnInit, OnDestroy {
      * Handles forwarded mail copy action and shows snackbar notification
      *
      * @public
-     * @param {string} forwardedMail - Forwarded email address to be copied
      * @param {MouseEvent} event - Click event from the copy button
      * @returns {void}
      * @memberof ListComponent
