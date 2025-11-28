@@ -58,6 +58,8 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
     public selectedIPRange: string = '';
     /** Date range picker value */
     public dateRangePickerValue: Date[] = [];
+    /** Flag to prevent multiple GetRoles() dispatches */
+    private rolesRequested: boolean = false;
     /** Returns true if form is dirty else false */
     public get showPageLeaveConfirmation(): boolean {
         return this.createCompanyAuthKeyForm?.dirty;
@@ -79,7 +81,8 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
         private toasterService: ToasterService,
         private pageLeaveUtilityService: PageLeaveUtilityService,
         private settingsProfileActions: SettingsProfileActions
-    ) { }
+    ) {
+    }
 
     /**
      * Used for component initialization
@@ -93,7 +96,7 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
 
         // get roles
         this.store.pipe(select(state => state.permission), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && response.roles?.length > 0) {
+            if (response && response.roles && response.roles.length > 0) {
                 let roles = cloneDeep(response.roles);
                 let allRoleArray = [];
                 roles.forEach((role: any) => {
@@ -103,7 +106,9 @@ export class CreateCompanyAuthKeyComponent implements OnInit, OnDestroy {
                     });
                 });
                 this.allRoles = cloneDeep(allRoleArray);
-            } else {
+                this.rolesRequested = false; // Reset flag when roles are received
+            } else if (!this.rolesRequested) {
+                this.rolesRequested = true; // Set flag to prevent multiple requests
                 this.store.dispatch(this.permissionActions.GetRoles());
             }
         });
