@@ -12,7 +12,7 @@
 
             <!-- Virtual Scroll List -->
             <ng-container *ngIf="searchedItems && searchedItems.length > 0 && isOpen">
-                <div #mainEle tabindex="0" class="universal-list-items" (mouseenter)="isMouseInteractingWithList = true" (mouseleave)="isMouseInteractingWithList = false">
+                <div #mainEle tabindex="0" class="universal-list-items">
                     <cdk-virtual-scroll-viewport
                         #virtualScrollViewport
                         [itemSize]="ItemHeight"
@@ -27,9 +27,7 @@
                             *cdkVirtualFor="let item of searchedItems; let i = index; trackBy: trackByFn"
                             class="command-k-item"
                             [class.selected]="i === highlightedItem"
-                            [class.active]="item.isSelected"
-                            (mouseenter)="onItemHover(i)"
-                            (mouseleave)="onItemLeave()"
+                            (mousemove)="onItemMouseMove(i)"
                             (click)="onItemClick(item, $event)"
                         >
                             <a 
