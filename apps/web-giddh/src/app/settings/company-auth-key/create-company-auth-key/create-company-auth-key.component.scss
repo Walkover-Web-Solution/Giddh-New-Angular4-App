@@ -1,27 +1,8 @@
-.mat-select-btn {
-    border: 1px solid var(--border-color) !important;
-    border-radius: var(--mat-border-radius-4) !important;
-    padding: 15px !important;
-    height: 48px;
-    justify-content: space-between;
-
-    &.range-wrapper {
-        width: 238px;
-    }
-}
 
 :host ::ng-deep .mat-select-btn {
     .mdc-button__label {
         width: 100%;
     }
-}
-
-.custom-date-range-menu {
-    width: 300px;
-}
-
-.ip-addresses-dropdown {
-    width: 239px;
 }
 
 .lh-34 {

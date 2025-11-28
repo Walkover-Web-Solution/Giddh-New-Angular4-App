@@ -52,7 +52,7 @@
                                 [matMenuTriggerFor]="menu"
                                 (click)="showTimeSpan = !showTimeSpan"
                                 type="button"
-                                class="mat-select-btn range-wrapper text-left w-100"
+                                class="mat-select-btn border border-radius-4 custom-mat-form-field-height justify-content-between p-3 text-left w-100"
                             >
                                 <span class="d-flex w-100 font-weight-regular">
                                     {{ selectedTimeSpan }}
@@ -61,7 +61,7 @@
                             </button>
                             <mat-menu #menu="matMenu">
                                 <section
-                                    class="mb-2 time-span-dropdown custom-date-range-menu"
+                                    class="mb-2 time-span-dropdown max-w-300"
                                     (click)="$event.stopPropagation()"
                                 >
                                     <div class="p-3">
@@ -154,14 +154,14 @@
                                 [matMenuTriggerFor]="menurange"
                                 (click)="showIPWrap = !showIPWrap"
                                 type="button"
-                                class="mat-select-btn range-wrapper text-left w-100 padding-14"
+                                class="mat-select-btn border border-radius-4 custom-mat-form-field-height justify-content-between p-3 text-left w-100"
                                 [disabled]="isUserRestricted"
                             >
                                 <span class="font-weight-regular">{{ selectedIPRange }}</span>
                                 <span class="pull-right"><span class="fa fa-caret-down font-size-15 mr-2"></span></span>
                             </button>
                             <mat-menu #menurange="matMenu">
-                                <section class="ip-addresses-dropdown" role="menu" (click)="$event.stopPropagation()">
+                                <section class="max-w-300" role="menu" (click)="$event.stopPropagation()">
                                     <div class="p-3">
                                         <mat-radio-group formControlName="ipOptions" class="d-flex flex-column">
                                             <mat-radio-button
@@ -199,7 +199,7 @@
                                             "
                                             [formGroupName]="i"
                                         >
-                                            <div>
+                                            <div class="w-100">
                                                 <input
                                                     class="form-control"
                                                     name="item_{{ i }}"
@@ -237,7 +237,7 @@
                                             "
                                             [formGroupName]="i"
                                         >
-                                            <div>
+                                            <div class="w-100">
                                                 <input
                                                     class="form-control"
                                                     (keypress)="allowOnlyNumbersAndDot($event)"
