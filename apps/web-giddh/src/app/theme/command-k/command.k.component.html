@@ -47,8 +47,8 @@
 
                                 <!-- Item Content -->
                                 <div class="item-content">
-                                    <div class="item-main">
-                                        <div class="item-info">
+                                    <div class="item-main column-gap-1">
+                                        <div class="item-info word-wrap-anywhere">
                                             <p class="item-name" [id]="getItemId(item)">
                                                 {{ item.name }}
                                             </p>
@@ -67,7 +67,7 @@
                                         </div>
                                         
                                         <div *ngIf="item.type === 'ACCOUNT'" class="item-unique-name">
-                                            <span>{{ item?.uniqueName }}</span>
+                                            <span class="font-size-14">{{ item?.uniqueName }}</span>
                                         </div>
                                     </div>
                                 </div>

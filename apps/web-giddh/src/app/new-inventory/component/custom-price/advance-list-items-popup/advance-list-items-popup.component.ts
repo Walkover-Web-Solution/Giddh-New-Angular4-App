@@ -92,7 +92,6 @@ export class AdvanceListItemsPopupComponent implements OnInit, OnDestroy, AfterV
         // listen on input for search
         this.searchSubject.pipe(
             debounceTime(300), 
-            distinctUntilChanged(),
             takeUntil(this.destroyed$)
         ).subscribe((term: string) => {
             this.apiRequestParams.page = 1;
