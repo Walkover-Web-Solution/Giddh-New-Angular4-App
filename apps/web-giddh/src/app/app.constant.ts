@@ -833,7 +833,49 @@ export const NUMBER_FORMAT_LOCALE_MAP: { [key: string]: string } = {
     'SGP_COMMA_SEPARATED': 'en-SG',        // Singaporean comma: 1,234,567.89 (Singapore)
     'PHL_COMMA_SEPARATED': 'en-PH',        // Philippine comma: 1,234,567.89 (Philippines)
     'HKG_COMMA_SEPARATED': 'en-HK',        // Hong Kong comma: 1,234,567.89 (Hong Kong)
-    'LIE_APOSTROPHE_SEPARATED': 'de-LI'    // Liechtenstein apostrophe: 1'234'567.89 (Liechtenstein)
+    'LIE_APOSTROPHE_SEPARATED': 'de-LI',   // Liechtenstein apostrophe: 1'234'567.89 (Liechtenstein)
+
+    // Additional African Countries
+    'ZAR_SPACE_SEPARATED': 'en-ZA',        // South African space: 1 234 567,89 (South Africa)
+    'NGN_COMMA_SEPARATED': 'en-NG',        // Nigerian comma: 1,234,567.89 (Nigeria)
+    'KES_COMMA_SEPARATED': 'en-KE',        // Kenyan comma: 1,234,567.89 (Kenya)
+    'GHS_COMMA_SEPARATED': 'en-GH',        // Ghanaian comma: 1,234,567.89 (Ghana)
+    'ETB_COMMA_SEPARATED': 'am-ET',        // Ethiopian comma: 1,234,567.89 (Ethiopia)
+
+    // Additional Asian Countries
+    'INR_LAKH_SEPARATED': 'hi-IN',         // Hindi lakh format: 12,34,567.89 (India - Hindi)
+    'MMK_COMMA_SEPARATED': 'my-MM',        // Myanmar comma: 1,234,567.89 (Myanmar)
+    'KHR_COMMA_SEPARATED': 'km-KH',        // Cambodian comma: 1,234,567.89 (Cambodia)
+    'LAK_COMMA_SEPARATED': 'lo-LA',        // Laotian comma: 1,234,567.89 (Laos)
+
+    // Currency-Specific European Formats
+    'CHF_APOSTROPHE_SEPARATED': 'de-CH',   // Swiss Franc apostrophe: 1'234'567.89 (Switzerland)
+    'EUR_DOT_SEPARATED': 'de-DE',          // Euro dot format: 1.234.567,89 (Germany, Austria)
+    'GBP_COMMA_SEPARATED': 'en-GB',        // British Pound comma: 1,234,567.89 (UK)
+    'SEK_SPACE_SEPARATED': 'sv-SE',        // Swedish Krona space: 1 234 567,89 (Sweden)
+    'NOK_SPACE_SEPARATED': 'nb-NO',        // Norwegian Krone space: 1 234 567,89 (Norway)
+    'DKK_DOT_SEPARATED': 'da-DK',          // Danish Krone dot: 1.234.567,89 (Denmark)
+
+    // Major Currency Formats
+    'USD_COMMA_SEPARATED': 'en-US',        // US Dollar comma: 1,234,567.89 (United States)
+    'EUR_SPACE_SEPARATED_FR': 'fr-FR',     // Euro space format: 1 234 567,89 (France)
+    'JPY_COMMA_SEPARATED': 'ja-JP',        // Japanese Yen comma: 1,234,567 (Japan - no decimals)
+    'CNY_COMMA_SEPARATED': 'zh-CN',        // Chinese Yuan comma: 1,234,567.89 (China)
+    'KRW_COMMA_SEPARATED': 'ko-KR',        // Korean Won comma: 1,234,567 (South Korea - no decimals)
+    'RUB_SPACE_SEPARATED': 'ru-RU',        // Russian Ruble space: 1 234 567,89 (Russia)
+
+    // Regional Script Formats
+    'ARAB_RTL_SEPARATED': 'ar-SA',         // Arabic RTL format: ٨٩.٥٦٧,٢٣٤,١ (Arabic numerals)
+    'PERSIAN_SEPARATED': 'fa-IR',          // Persian format: ۱,۲۳۴,۵۶۷.۸۹ (Persian numerals)
+    'HINDI_DEVANAGARI': 'hi-IN',           // Hindi Devanagari: १,२३,४५,६७८.८९ (Devanagari numerals)
+    'BENGALI_SEPARATED': 'bn-BD',          // Bengali format: ১,২৩,৪৫,৬৭৮.৮৯ (Bengali numerals)
+
+    // Special Business Formats
+    'ACCOUNTING_PARENTHESES': 'en-US',     // Accounting format: (1,234,567.89) for negatives
+    'SCIENTIFIC_NOTATION': 'en-US',        // Scientific: 1.23E+06
+    'PERCENTAGE_FORMAT': 'en-US',          // Percentage: 123,456.78%
+    'CURRENCY_SYMBOL_PREFIX': 'en-US',     // With symbol: $1,234,567.89
+    'CURRENCY_SYMBOL_SUFFIX': 'en-IN'      // With symbol: 12,34,567.89₹
 };
 
 /** Country to Locale Mapping for GiddhNumberFormatPipe */
@@ -899,6 +941,9 @@ export const COUNTRY_LOCALE_MAP: { [key: string]: string } = {
     'VN': 'vi-VN',    // Vietnam - comma format
     'ID': 'id-ID',    // Indonesia - comma format
     'MY': 'ms-MY',    // Malaysia - comma format
+    'MM': 'my-MM',    // Myanmar - comma format
+    'KH': 'km-KH',    // Cambodia - comma format
+    'LA': 'lo-LA',    // Laos - comma format
 
     // Middle East & Africa
     'AE': 'ar-AE',    // UAE - comma format
@@ -915,6 +960,11 @@ export const COUNTRY_LOCALE_MAP: { [key: string]: string } = {
     'DZ': 'ar-DZ',    // Algeria - comma format
     'TR': 'tr-TR',    // Turkey - comma format
     'IL': 'he-IL',    // Israel - comma format
+    'IR': 'fa-IR',    // Iran - comma format
+    'NG': 'en-NG',    // Nigeria - comma format
+    'KE': 'en-KE',    // Kenya - comma format
+    'GH': 'en-GH',    // Ghana - comma format
+    'ET': 'am-ET',    // Ethiopia - comma format
 
     // Latin America
     'BR': 'pt-BR',    // Brazil - comma format
