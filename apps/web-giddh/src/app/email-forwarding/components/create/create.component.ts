@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit, ChangeDetectorRef, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MatStepper } from '@angular/material/stepper';
@@ -6,9 +6,14 @@ import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { ReplaySubject, interval, Subject, BehaviorSubject, Observable } from 'rxjs';
 import { filter, takeUntil, switchMap, debounceTime } from 'rxjs/operators';
 import { EmailForwardingResponse, YOU_ARE_NOT_ALLOWED } from '../../models/email-forwarding.model';
-import { API_BULK_FETCH_LIMIT, BANK_STATEMENT_HELP_DOC_URL, EMAIL_VALIDATION_REGEX } from '../../../app.constant';
+import { API_BULK_FETCH_LIMIT, ASIDE_PANE_CONFIG, BANK_STATEMENT_HELP_DOC_URL, EMAIL_VALIDATION_REGEX } from '../../../app.constant';
 import { EmailForwardingComponentStore } from '../../store/email-forwarding.store';
 import { GeneralService } from '../../../services/general.service';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { AddAccountRequest } from '../../../models/api-models/Account';
+import { AppState } from '../../../store';
+import { Store } from '@ngrx/store';
+import { SalesActions } from '../../../actions/sales/sales.action';
 
 @Component({
     selector: 'create',
@@ -17,6 +22,8 @@ import { GeneralService } from '../../../services/general.service';
     providers: [EmailForwardingComponentStore]
 })
 export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
+    /** Template Reference for Generic aside menu account */
+    @ViewChild("accountAsideMenu") public accountAsideMenu: TemplateRef<any>;
     /** ViewChild reference to the stepper */
     @ViewChild('stepper', { static: false }) stepper!: MatStepper;
     /** Subject to handle component destruction */
@@ -76,6 +83,8 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
     public firstTimeCreate: boolean = false;
     /** Tracks whether confirmation polling has been started */
     private confirmationPollingStarted: boolean = false;
+    /** Hold account aside menu reference  */
+    public accountAsideMenuRef: MatDialogRef<any>;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -83,7 +92,10 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
         private route: ActivatedRoute,
         private changeDetection: ChangeDetectorRef,
         private bankStatementStore: EmailForwardingComponentStore,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private dialog: MatDialog,
+        private store: Store<AppState>,
+        private salesAction: SalesActions
     ) {
         this.initializeForms();
     }
@@ -118,6 +130,12 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
                 }
             } else if (response === null || response === false) {
                 this.isLoading = false;
+            }
+        });
+
+        this.store.select(state => state.sales.createdAccountDetails).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response) {
+                this.createUpdateAccountCallback(response);
             }
         });
     }
@@ -593,5 +611,38 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
             this.stopPolling$.next();
             this.stopPolling$.complete();
         }
+    }
+
+     /**
+     * Toggle's account create/update dialog
+     *
+     * @memberof CreateComponent
+     */
+    public toggleAccountAsidePane(): void {
+        this.accountAsideMenuRef = this.dialog.open(this.accountAsideMenu, ASIDE_PANE_CONFIG);
+    }
+
+    /**
+     * Callback for add new account
+     *
+     * @param {AddAccountRequest} item
+     * @memberof CreateComponent
+     */
+    public addNewAccount(item: AddAccountRequest): void {
+        this.store.dispatch(this.salesAction.addAccountDetailsForSales(item));
+    }
+
+     /**
+     * Callback after create/update account
+     *
+     * @private
+     * @param {*} response
+     * @memberof CreateComponent
+     */
+    private createUpdateAccountCallback(response: any): void {
+        this.accountAsideMenuRef?.close();
+        this.accountSearchCalled = false;
+        this.searchAccount();
+        this.emailForwardingForm.get('accountUniqueName')?.patchValue(response?.uniqueName);
     }
 }

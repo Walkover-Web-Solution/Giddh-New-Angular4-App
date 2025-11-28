@@ -5,14 +5,15 @@
     "how_to_setup": "ईमेल फॉरवर्डिंग कैसे सेटअप करें?",
     "original_email": "मूल ईमेल",
     "waiting_verification": "सत्यापन की प्रतीक्षा में",
-    "create_email": "ईमेल बनाएं",
+    "create_custom_email": "कस्टम ईमेल बनाएं",
     "email_verification": "ईमेल सत्यापन",
-    "email_forwarding": "ईमेल फॉरवर्डिंग",
-    "verify_start": "सत्यापित करें/शुरू करें",
+    "email forwarding": "अपने ईमेल के लिए ऑटो-फ़ॉरवर्डिंग सेट अप करें",
+    "verify_start": "सत्यापित करें और शुरू करें",
     "verify_and_next": "सत्यापित करें और आगे बढ़ें",
-    "new_bank_statement": "नया बैंक स्टेटमेंट",
+    "new_email_address": "नया ईमेल पता",
     "bank_account_name": "बैंक खाता नाम",
     "copied": "कॉपी किया गया...",
-    "import_vouchers_title": "ईमेल के माध्यम से नए वाउचर आयात करें",
-    "import_vouchers_description": "अपने बैंक स्टेटमेंट के लिए एक फॉरवर्डिंग ईमेल सेट करें ताकि GIDDH आने वाले ईमेल से स्वचालित रूप से वाउचर बना सके।"
+    "import_vouchers_title": "ईमेल से अपने बैंक स्टेटमेंट ऑटो-अपलोड करें",
+    "import_vouchers_description": "अपने बैंक स्टेटमेंट के लिए एक फॉरवर्डिंग ईमेल सेट करें ताकि GIDDH आने वाले ईमेल से स्वचालित रूप से वाउचर बना सके।",
+    "email_customization_text": "ईमेल पता/नीचे दिए गए ईमेल पते को अपनी पसंद के अनुसार कस्टमाइज़ करें।"
 }
