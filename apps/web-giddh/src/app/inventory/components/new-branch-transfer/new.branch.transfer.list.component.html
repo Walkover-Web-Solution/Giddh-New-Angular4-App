@@ -28,12 +28,12 @@
                             >
                             </reactive-dropdown-field>
                         </div>
-                        <div 
-                            class="custom-datepicker" 
-                            [matMenuTriggerFor]="universalDatepicker" 
-                            #universalDatepickerTrigger="matMenuTrigger" 
-                            role="button" 
-                            aria-haspopup="true" 
+                        <div
+                            class="custom-datepicker"
+                            [matMenuTriggerFor]="universalDatepicker"
+                            #universalDatepickerTrigger="matMenuTrigger"
+                            role="button"
+                            aria-haspopup="true"
                             aria-controls="universalDatepicker"
                         >
                             <input
@@ -240,7 +240,7 @@
                         <td data-title="From Warehouse">{{ item.fromWarehouse }}</td>
                         <td data-title="To Warehouse">{{ item.toWarehouse }}</td>
                         <td data-title="Total Amount" class="text-right">
-                            {{ activeCompany?.baseCurrencySymbol }} {{ item.totalAmount | giddhCurrency }}
+                            {{ activeCompany?.baseCurrencySymbol }} {{ item.totalAmount | giddhNumberFormat }}
                         </td>
                         <td data-title="Action">
                             <div class="btn-group">

@@ -14,7 +14,7 @@ import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker
 import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 import { FinancialSearchPipe } from '../shared/header/pipe/financial-search.pipe';
-import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
+import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
 import { HighlightModule } from '../shared/helpers/pipes/highlightPipe/highlight.module';
 import { RecTypeModule } from '../shared/helpers/pipes/recType/recType.module';
 import { AccountDetailModalModule } from '../theme/account-detail-modal/account-detail-modal.module';
@@ -75,10 +75,10 @@ import { ProjectAccountingService } from '../project-wise-accounting/project-wis
     ],
     providers: [ProjectAccountingService],
     exports: [
-        FinancialReportsComponent, 
-        CurrencyModule,
-        FinancialReportsComponent, 
-        CurrencyModule,
+        FinancialReportsComponent,
+        GiddhNumberFormatModule,
+        FinancialReportsComponent,
+        GiddhNumberFormatModule,
         ProfitLossComponent,
         ProfitLossGridComponent,
         ProfitLossGridRowComponent,
@@ -101,7 +101,7 @@ import { ProjectAccountingService } from '../project-wise-accounting/project-wis
         RecTypeModule,
         FormFieldsModule,
         ClickOutsideModule,
-        CurrencyModule,
+        GiddhNumberFormatModule,
         AccountDetailModalModule,
         ScrollingModule,
         TranslateDirectiveModule,

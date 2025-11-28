@@ -6,7 +6,7 @@ import { SharedModule } from '../shared/shared.module';
 import { NewVsOldInvoicesComponent } from './new-vs-old-Invoices.component';
 import { NewVsOldInvoicesRoutingModule } from './new-vs-old-Invoices.routing.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
-import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
+import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
 import { SalesBifurcationDetailsComponent } from './sales-bifurcation-details/sales-bifurcation-details.component';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatButtonModule } from '@angular/material/button';
@@ -42,7 +42,7 @@ import { FroalaTemplateEditorModule } from '../shared/template-froala/template-f
             spinnerSize: 30
         }),
         SharedModule,
-        CurrencyModule,
+        GiddhNumberFormatModule,
         FormFieldsModule,
         MatButtonModule,
         MatDialogModule,

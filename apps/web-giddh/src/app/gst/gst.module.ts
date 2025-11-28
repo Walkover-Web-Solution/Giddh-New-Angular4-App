@@ -11,7 +11,7 @@ import { NilSummaryComponent } from './filing/tabs/push-to-gstin/components/nil-
 import { FilingHeaderComponent } from './filing/header/filing-header.component';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { HsnSummaryComponent } from './filing/tabs/push-to-gstin/components/hsn-summary/hsn-summary.component';
-import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
+import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { ViewTransactionsComponent } from './filing/tabs/overview/view-transactions/view-transactions.component';
 import { ClickOutsideModule } from 'ng-click-outside';
@@ -73,7 +73,7 @@ import { MatListModule } from '@angular/material/list';
         TranslateDirectiveModule,
         PurchaseModule,
         InvoiceModule,
-        CurrencyModule,
+        GiddhNumberFormatModule,
         ConfirmModalModule,
         SharedModule,
         TaxSidebarModule,

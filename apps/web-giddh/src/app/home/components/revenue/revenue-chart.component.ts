@@ -7,13 +7,13 @@ import { AppState } from '../../../store/roots';
 import * as dayjs from 'dayjs';
 import { RevenueGraphDataRequest } from "../../../models/api-models/Dashboard";
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
-import { GiddhCurrencyPipe } from '../../../shared/helpers/pipes/currencyPipe/currencyType.pipe';
 import { GeneralService } from "../../../services/general.service";
 import { DashboardService } from '../../../services/dashboard.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { Chart, registerables } from 'chart.js';
 import { TitleCasePipe } from '@angular/common';
+import { GiddhNumberFormatPipe } from '../../../shared/helpers/pipes/number-format/number-format.pipe';
 Chart.register(...registerables);
 
 @Component({
@@ -64,7 +64,7 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
     public chartLabelsize = [];
 
 
-    constructor(private store: Store<AppState>, private homeActions: HomeActions, public currencyPipe: GiddhCurrencyPipe, private generalService: GeneralService, private dashboardService: DashboardService, private toasterService: ToasterService, private titlecasePipe: TitleCasePipe) {
+    constructor(private store: Store<AppState>, private homeActions: HomeActions, public currencyPipe: GiddhNumberFormatPipe, private generalService: GeneralService, private dashboardService: DashboardService, private toasterService: ToasterService, private titlecasePipe: TitleCasePipe) {
         this.getCurrentWeekStartEndDate = this.getWeekStartEndDate(new Date());
         this.getPreviousWeekStartEndDate = this.getWeekStartEndDate(dayjs(this.getCurrentWeekStartEndDate[0]).subtract(1, 'day'));
 

@@ -22,7 +22,6 @@ import { DigitsOnlyModule } from "../shared/helpers/directives/digitsOnly/digits
 import { HasFocusDirectiveModule } from "../shared/helpers/directives/has-focus/has-focus.module";
 import { KeyboardShortutModule } from "../shared/helpers/directives/keyboardShortcut/keyboardShortut.module";
 import { NgxMaskModule } from "../shared/helpers/directives/ngx-mask";
-import { CurrencyModule } from "../shared/helpers/pipes/currencyPipe/currencyType.module";
 import { ReplacePipeModule } from "../shared/helpers/pipes/replace/replace.module";
 import { SendEmailInvoiceModule } from "../shared/send-email-invoice/send-email-invoice.module";
 import { SharedModule } from "../shared/shared.module";
@@ -39,6 +38,7 @@ import { MatCardModule } from "@angular/material/card";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { MatDividerModule } from "@angular/material/divider";
 import { OnloadDirectiveModule } from "./directive/onload.module";
+import { GiddhNumberFormatModule } from "../shared/helpers/pipes/number-format/number-format.module";
 
 @NgModule({
     imports: [
@@ -48,7 +48,7 @@ import { OnloadDirectiveModule } from "./directive/onload.module";
         ReactiveFormsModule,
         KeyboardShortutModule,
         DecimalDigitsModule,
-        
+
         DigitsOnlyModule,
         SharedModule,
         AsideMenuRecurringEntryModule,
@@ -60,7 +60,7 @@ import { OnloadDirectiveModule } from "./directive/onload.module";
         }),
         SendEmailInvoiceModule,
         VoucherTypeToNamePipeModule,
-        CurrencyModule,
+        GiddhNumberFormatModule,
         NgxMaskModule.forRoot(),
         AdvanceReceiptAdjustmentModule,
         HasFocusDirectiveModule,
