@@ -122,7 +122,6 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
         this.isLoading = true;
         this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.getStockUnits();
-        this.getStockGroups();
         this.getWarehouses();
         this.GroupStockReportRequest = new GroupStockReportRequest();
         document.querySelector('body').classList.add('stock-balance');
@@ -130,6 +129,15 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
         combineLatest([this.inventoryService.GetGroupsWithStocksFlatten(), this.store.pipe(select(state => state.warehouse.warehouses)), this.store.pipe(select(state => state.settings.financialYearLimits))]).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
             if (resp[0] && resp[1] && resp[2]) {
                 this.isLoading = false;
+                
+                // Handle stock groups data
+                if (resp[0]?.status === "success") {
+                    let stockGroups: IOption[] = [];
+                    this.arrangeStockGroups(resp[0].body?.results, stockGroups);
+                    this.stockGroups = stockGroups;
+                }
+                
+                // Handle warehouses data
                 this.warehouses = resp[1]?.results;
                 this.allWarehouses = resp[1]?.results;
                 let stockGroupUniqueName = resp[0]?.body?.results[0]?.uniqueName;
@@ -372,23 +380,6 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
                         additional: result
                     };
                 }) || [];
-            } else {
-                this.toaster.showSnackBar("error", response?.message);
-            }
-        });
-    }
-
-    /**
-    * Get stock groups
-    *
-    * @memberof StockBalanceComponent
-    */
-    public getStockGroups(): void {
-        this.inventoryService.GetGroupsWithStocksFlatten().pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response && response?.status === "success") {
-                let stockGroups: IOption[] = [];
-                this.arrangeStockGroups(response.body?.results, stockGroups);
-                this.stockGroups = stockGroups;
             } else {
                 this.toaster.showSnackBar("error", response?.message);
             }

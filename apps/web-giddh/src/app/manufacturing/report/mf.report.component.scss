@@ -5,10 +5,6 @@
     }
 }
 
-.mf-stock-search-request-form .col-xs-1 {
-    width: 11.33333333%;
-}
-
 #mfReportTbl .table .table td {
     border: none;
     text-align: center;
@@ -38,44 +34,10 @@
     }
 }
 
-#mfReportTbl .table td.noBdr {
-    border: none;
-}
+#mfReportTbl .table
 
-.pdBth4 {
-    padding: 0 40px;
-}
-.manufacture-table.giddh-table tbody > tr > td:first-child {
-    white-space: nowrap !important;
-}
-.custom-datepicker {
-    input {
-        text-align: center;
-        padding: 0 10px;
-    }
-}
-.no-btn.clear-filter {
-    text-decoration: underline;
-    font-weight: var(--font-weight-semibold);
-    color: var(--color-dark-gray);
-    padding: 6px 0;
-    outline: none !important;
-    &:focus {
-        outline: none !important;
-    }
-}
 .manufacture-table {
-    .bd-rl {
-        border-left: 1px solid var(--color-silver) !important;
-    }
-    .bd-rr {
-        border-right: 1px solid var(--color-silver) !important;
-    }
-    td.raw-material {
-        background-color: var(--color-light-gray);
-        line-height: 2;
-        color: var(--color-dark-gray);
-    }
+
     tr {
         &:hover {
             td.raw-material {
@@ -101,7 +63,7 @@
     th {
         border: none !important;
         padding: 0;
-        color: var(--color-blue-primary) !important;
+        color: var(--text-primary-color) !important;
         background: none !important;
     }
 }
@@ -155,10 +117,7 @@
             flex: 0 0 21.666667%;
             max-width: 21.666667%;
         }
-        .col-xl-10 {
-            flex: 0 0 78.333333%;
-            max-width: 78.333333%;
-        }
+
     }
     .linked-entities sh-select::ng-deep input {
         padding-right: 6px !important;
@@ -176,18 +135,13 @@
         }
     }
 }
-@media (max-width: 991px) {
+@media (max-width: 1024px) {
     .manufacturing-form .form-group {
         width: 100%;
     }
-    .d-none-sm {
-        display: none !important;
-    }
+
     .datepicker-flex,
-    .linked-entities {
-        flex: 0 0 50%;
-        max-width: 50%;
-    }
+
     .no-branch-head {
         .col-xl-2 {
             flex: 0 0 50%;
@@ -199,60 +153,5 @@
         display: flex;
         align-items: center;
         justify-content: flex-end;
-    }
-}
-@media (max-width: 767px) {
-    .datepicker-flex,
-    .linked-entities {
-        flex: 0 0 100%;
-        max-width: 100%;
-    }
-    .top-bar {
-        .section-title {
-            display: block !important;
-        }
-        .isActive {
-            float: left !important;
-        }
-    }
-    .no-branch-head {
-        .col-xl-2 {
-            flex: 0 0 100%;
-            max-width: 100%;
-        }
-    }
-    .mf-report-head {
-        margin-top: 15px;
-    }
-    @include custom-datepicker();
-}
-
-@media (max-width: 768px) {
-    @include custom-datepicker();
-    .material-data {
-        display: flex;
-        width: 100%;
-        padding: 10px 15px 0 !important;
-        background-color: var(--color-light-gray);
-        line-height: 1.8;
-        .data-title-td {
-            width: 50%;
-            display: flex !important;
-        }
-        .nested-div {
-            flex-direction: column !important;
-            margin-bottom: 10px;
-            div {
-                min-width: 100%;
-                max-width: 100%;
-            }
-        }
-    }
-    .mobile-none {
-        display: none;
-    }
-    #mfReportTbl .table td {
-        min-width: auto !important;
-        max-width: inherit !important;
     }
 }

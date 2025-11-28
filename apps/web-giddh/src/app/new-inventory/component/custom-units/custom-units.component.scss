@@ -6,12 +6,11 @@
     .mat-list-wrap {
         .item-list {
             width: 100%;
-            margin: 0 15px;
-            &.group-list{
+            // margin: 0 15px;
+            &.group-list {
                 margin-left: 0 !important;
             }
             strong {
-                color: var(--color-blue-primary);
                 font-size: var(--font-size-15);
                 display: inline-block;
                 &.list-font {
@@ -28,8 +27,8 @@
                     }
                 }
                 &.selected-unit-group {
-                    background-color: var(--color-blue-primary);
-                    a {
+                    background-color: var(--bg-primary-color);
+                    span {
                         color: var(--color-white);
                     }
                 }
@@ -41,9 +40,9 @@
                 column-gap: 10px;
 
                 &.selected-unit {
-                    background-color: var(--color-blue-primary);
+                    background-color: var(--bg-primary-color);
                     mat-list-item {
-                        a {
+                        span {
                             color: var(--color-white);
                         }
                     }
@@ -51,7 +50,7 @@
             }
         }
         .border-grid {
-            border-right: 1px solid var(--color-silver);
+            border-right: 1px solid var(--border-color);
         }
     }
     .form-btn {
@@ -62,6 +61,7 @@
         }
         .create-btn-grp {
             position: absolute;
+            top: 0;
             right: 0;
             display: flex;
             justify-content: flex-end;

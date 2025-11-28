@@ -25,7 +25,7 @@
     </div>
 
     <div *ngIf="step === 2">
-        <h4 class="lead grey-color">{{ selectedProvider.name }}</h4>
+        <p class="lead grey-color">{{ selectedProvider.name }}</p>
         <form
             #formDiv
             name="loginForm"
@@ -118,9 +118,9 @@
             >
                 {{ commonLocaleData?.app_update }}
             </button>
-            <small *ngIf="bankSyncInProgress" class="grey-color clearfix mr-t2 row"
+            <small *ngIf="bankSyncInProgress" class="grey-color clear-both mt-4 row"
                 >{{ commonLocaleData?.app_status }}:
-                <span class="primary-color">{{ localeData?.authenticating }}</span>
+                <span class="text-primary">{{ localeData?.authenticating }}</span>
             </small>
         </form>
     </div>

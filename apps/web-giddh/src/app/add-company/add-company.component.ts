@@ -8,7 +8,7 @@ import { CommonActions } from "../actions/common.actions";
 import { CompanyActions } from "../actions/company.actions";
 import { GeneralActions } from "../actions/general/general.actions";
 import { LoginActions } from "../actions/login.action";
-import { BusinessTypes, ELECTRON_OTP_PROVIDER_URL, MOBILE_NUMBER_SELF_URL, MOBILE_NUMBER_UTIL_URL, OTP_PROVIDER_URL, OTP_WIDGET_ID_NEW, OTP_WIDGET_TOKEN_NEW, RestrictedModules, ZIP_CODE_SUPPORTED_COUNTRIES } from '../app.constant';
+import { BusinessTypes, ELECTRON_OTP_PROVIDER_URL, OTP_PROVIDER_URL, OTP_WIDGET_ID_NEW, OTP_WIDGET_TOKEN_NEW, RestrictedModules, ZIP_CODE_SUPPORTED_COUNTRIES } from '../app.constant';
 import { CountryRequest, OnboardingFormRequest } from "../models/api-models/Common";
 import { Addresses, CompanyCreateRequest, CompanyResponse, SocketNewCompanyRequest, StatesRequest } from "../models/api-models/Company";
 import { UserDetails } from "../models/api-models/loginModels";
@@ -52,8 +52,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public commonLocaleData: any = {};
     /** True if user doesn't have mobile number and we have to provide field to input mobile number */
     public showMobileField: boolean = false;
-    /** This will hold mobile number field input  */
-    public intl: any;
     /** This will hold if mobile number is invalid */
     public isMobileNumberInvalid: boolean = false;
     /** Form Group for company form */
@@ -167,8 +165,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public isOtherCountry: boolean = false;
     /** Constant for business type */
     public businessTypes = BusinessTypes;
-    /** Hold current flag*/
-    public currentFlag: any;
     /** Hold selected tab*/
     public selectedStep: number = 0;
     /** List of counties of country */
@@ -443,15 +439,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof AddCompanyComponent
      */
     public initMobileNumberField(): void {
-        let interval = setInterval(() => {
-            if (this.mobileNoField) {
-                setTimeout(() => {
-                    this.showPhoneNumberField();
-                }, 100);
-                clearInterval(interval);
-            }
-        }, 500);
-
         let configuration = {
             widgetId: (this.serviceConfig.OTP_WIDGET_ID_NEW || OTP_WIDGET_ID_NEW) ,
             tokenAuth: (this.serviceConfig.OTP_WIDGET_TOKEN_NEW || OTP_WIDGET_TOKEN_NEW),
@@ -485,7 +472,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public sendOtp(): void {
         this.isMobileNumberVerified = false;
-        let mobileNo = this.intl.getNumber();
+        let mobileNo = this.firstStepForm.value.mobile;
         mobileNo = mobileNo?.replace("+", "");
         if (!mobileNo || this.isMobileNumberInvalid) {
             this.toaster.showSnackBar("error", this.localeData?.enter_valid_mobile_number);
@@ -714,7 +701,23 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof AddCompanyComponent
      */
     public ngAfterViewInit(): void {
-        this.stepperIcon._getIndicatorType = () => 'number';
+        // Use setTimeout to ensure stepper is fully initialized
+        this.getStepperIcon();
+    }
+
+    /**
+     * This will use for get stepper icon
+     *
+     * @memberof AddCompanyComponent
+     */
+    public getStepperIcon(): void {
+         setTimeout(() => {
+            if (this.stepperIcon) {
+                this.stepperIcon._getIndicatorType = () => 'number';
+                // Force change detection to update the stepper
+                this.changeDetection.detectChanges();
+            }
+        }, 0);
     }
 
     /**
@@ -915,13 +918,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public onSelectedTab(event: any): void {
         this.selectedStep = event?.selectedIndex;
-        if (this.showMobileField) {
-            setTimeout(() => {
-                let currencyFlag = this.intl?.getSelectedCountryData();
-                this.currentFlag = currencyFlag?.iso2;
-                this.changeDetection.detectChanges();
-            }, 500);
-        }
     }
 
     /**
@@ -954,43 +950,21 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             this.company.baseCurrency = event?.additional?.currency?.code;
             this.firstStepForm.controls['currency'].setValue({ label: event?.additional?.currency?.code, value: event?.additional?.currency?.code });
 
-            if (this.showMobileField) {
-                this.intl?.setCountry(event.value?.toLowerCase());
-
-                let phoneNumber = this.intl?.getNumber();
-
-                if (phoneNumber?.length) {
-                    let input = document.getElementById('init-contact-proforma');
-                    const errorMsg = document.querySelector("#init-contact-proforma-error-msg");
-                    const validMsg = document.querySelector("#init-contact-proforma-valid-msg");
-                    let reset = () => {
-                        input?.classList?.remove("error");
-                        if (errorMsg && validMsg) {
-                            errorMsg.innerHTML = "";
-                            errorMsg.classList.add("d-none");
-                            validMsg.classList.add("d-none");
-                        }
-                    };
-                    let errorMap = [this.localeData?.invalid_contact_number, this.commonLocaleData?.app_invalid_country_code, this.commonLocaleData?.app_invalid_contact_too_short, this.commonLocaleData?.app_invalid_contact_too_long, this.localeData?.invalid_contact_number];
-                    if (input) {
-                        reset();
-                        if (this.intl?.isValidNumber()) {
-                            validMsg?.classList?.remove("d-none");
-                            this.setMobileNumberValid(true);
-                        } else {
-                            input?.classList?.add("error");
-                            this.setMobileNumberValid(false);
-                            let errorCode = this.intl?.getValidationError();
-                            if (errorMsg && errorMap[errorCode]) {
-                                this.toaster.showSnackBar("error", this.localeData?.invalid_contact_number);
-                                errorMsg.innerHTML = errorMap[errorCode];
-                                errorMsg.classList.remove("d-none");
-                            }
-                        }
-                    } else {
-                        this.setMobileNumberValid(true);
-                    }
+            if (this.showMobileField && this.firstStepForm.value.mobile) {
+                let mobileValue = this.firstStepForm.value.mobile;
+                
+                // Parse the mobile number to extract national number (removes existing country code)
+                let parsedMobileNo = window['libphonenumber']?.parsePhoneNumber(mobileValue);
+                mobileValue = parsedMobileNo?.nationalNumber ?? mobileValue.replace(/^\+\d+/, '');
+                
+                // Get current country's dial code from selectedCountryCode
+                const currentDialCode = event?.additional?.callingCode || '';
+                
+                // Add current country code to the number
+                if (mobileValue && currentDialCode) {
+                    mobileValue = `+${currentDialCode}${mobileValue}`;
                 }
+                this.firstStepForm.controls['mobile'].setValue(mobileValue);
             }
 
             let onboardingFormRequest = new OnboardingFormRequest();
@@ -1003,76 +977,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             this.store.dispatch(this.generalActions.getAllState(statesRequest));
             this.changeDetection.detectChanges();
         }
-    }
-
-    /**
-     * This will use for mobile number
-     *
-     * @memberof AddCompanyComponent
-     */
-    public showPhoneNumberField(): void {
-        let input = document.getElementById('init-contact-proforma');
-        const errorMsg = document.querySelector("#init-contact-proforma-error-msg");
-        const validMsg = document.querySelector("#init-contact-proforma-valid-msg");
-        let errorMap = [this.localeData?.invalid_contact_number, this.commonLocaleData?.app_invalid_country_code, this.commonLocaleData?.app_invalid_contact_too_short, this.commonLocaleData?.app_invalid_contact_too_long, this.localeData?.invalid_contact_number];
-        const intlTelInput = !isElectron ? window['intlTelInput'] : window['intlTelInputGlobals']['electron'];
-        if (intlTelInput && input) {
-            this.intl = intlTelInput(input, {
-                nationalMode: true,
-                utilsScript: MOBILE_NUMBER_UTIL_URL,
-                autoHideDialCode: false,
-                separateDialCode: false,
-                initialCountry: 'auto',
-                geoIpLookup: (success, failure) => {
-                    let countryCode = 'in';
-                    const fetchIPApi = this.http.get<any>(MOBILE_NUMBER_SELF_URL);
-                    fetchIPApi.subscribe(
-                        (response) => {
-                            if (response?.ipAddress) {
-                                return success(response.countryCode);
-                            } else {
-                                return success(countryCode);
-                            }
-                        },
-                        (err) => {
-                            return success(countryCode);
-                        }
-                    );
-                },
-            });
-            let reset = () => {
-                input?.classList?.remove("error");
-                if (errorMsg && validMsg) {
-                    errorMsg.innerHTML = "";
-                    errorMsg.classList.add("d-none");
-                    validMsg.classList.add("d-none");
-                }
-            };
-            input.addEventListener('blur', () => {
-                let phoneNumber = this.intl?.getNumber();
-                reset();
-                if (input) {
-                    if (phoneNumber?.length) {
-                        if (this.intl?.isValidNumber()) {
-                            validMsg?.classList?.remove("d-none");
-                            this.setMobileNumberValid(true);
-                        } else {
-                            input?.classList?.add("error");
-                            this.setMobileNumberValid(false);
-                            let errorCode = this.intl?.getValidationError();
-                            if (errorMsg && errorMap[errorCode]) {
-                                this.toaster.showSnackBar("error", this.localeData?.invalid_contact_number);
-                                errorMsg.innerHTML = errorMap[errorCode];
-                                errorMsg.classList.remove("d-none");
-                            }
-                        }
-                    } else {
-                        this.setMobileNumberValid(true);
-                    }
-                }
-            });
-        }
-        this.changeDetection.detectChanges();
     }
 
     /**
@@ -1095,6 +999,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public nextStepForm(): void {
         this.isFormSubmitted = false;
+        this.firstStepForm.get('mobile')?.patchValue(this.firstStepForm.get('mobile')?.value.replace(/\+/g, ''));
         if ((this.selectedStep === 0 && this.firstStepForm.invalid) || (this.showMobileField && !this.isMobileNumberVerified)) {
             this.isFormSubmitted = true;
             if (!this.firstStepForm.invalid && this.showMobileField && !this.isMobileNumberVerified) {
@@ -1113,7 +1018,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             return;
         }
 
-        this.firstStepForm.controls['mobile'].setValue(this.showMobileField ? this.intl?.getNumber() : this.mobileNo);
+        this.getStepperIcon();
+
+        this.firstStepForm.controls['mobile'].setValue(this.showMobileField ? this.firstStepForm.controls['mobile'].value : this.mobileNo);
         this.selectedStep++;
         this.company.name = this.firstStepForm.controls['name'].value;
         this.company.country = this.firstStepForm.controls['country'].value.value;
@@ -1246,11 +1153,11 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                 countryCode = parsedMobileNo?.countryCallingCode;
             }
         } else {
-            const phoneNumber = this.intl.getNumber();
-            countryCode = this.intl.getSelectedCountryData().dialCode;
-            number = phoneNumber.replace(countryCode, '').trim();
-            number = number.substring(1);
+            let parsedMobileNo = window['libphonenumber']?.parsePhoneNumber("+" + this.firstStepForm.value.mobile);
+            number = parsedMobileNo?.nationalNumber ?? this.firstStepForm.value.mobile;
+            countryCode = parsedMobileNo?.countryCallingCode;
         }
+
 
         let taxDetails = this.prepareTaxDetail(this.companyForm);
         this.company.name = this.firstStepForm.value.name;
@@ -1297,17 +1204,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.isLoading = false;
                 this.toaster.showSnackBar("error", response?.message);
                 this.selectedStep = 0;
-                if (this.showMobileField) {
-                    let mobileNo = this.intl?.getNumber();
-
-                    setTimeout(() => {
-                        this.showPhoneNumberField();
-                        setTimeout(() => {
-                            this.intl?.setNumber(mobileNo);
-                        }, 500);
-                    }, 500);
-                }
-
                 this.changeDetection.detectChanges();
             }
         });

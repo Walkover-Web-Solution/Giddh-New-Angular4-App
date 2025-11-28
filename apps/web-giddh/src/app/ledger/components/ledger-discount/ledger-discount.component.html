@@ -1,4 +1,4 @@
-<div class="custom-mat-form-field">
+<div>
     <input-field
         (keydown.enter)="$event.preventDefault(); toggleDiscountMenu(true)"
         id="ledger-discount"
@@ -17,9 +17,9 @@
     ></input-field>
     
     <mat-menu #discountMenu="matMenu" [hasBackdrop]="false">
-        <div (click)="$event.stopPropagation()" class="discount-wrapper pd-1">
+        <div (click)="$event.stopPropagation()" class="discount-wrapper p-2">
             <div class="value-wrapper">
-                <div class="mr-b1">
+                <div class="mb-2">
                     <input-field
                         [type]="'number'"
                         [id]="'ledger-discount-percent'"
@@ -35,7 +35,7 @@
                         (input)="discountFromInput('PERCENTAGE', $event.target?.value)"
                     ></input-field>
                 </div>
-                <div class="mr-b1">
+                <div class="mb-2">
                     <input-field
                         [type]="'number'"
                         [id]="'ledger-discount-value'"
@@ -77,7 +77,7 @@
                 </ul>
             </div>
             <div class="create-new pt-2 mt-2 text-center cursor-pointer" (click)="createNew()">
-                <span class="text-blue">{{ commonLocaleData?.app_create_new }}</span>
+                <span class="text-primary">{{ commonLocaleData?.app_create_new }}</span>
             </div>
         </div>
     </mat-menu>

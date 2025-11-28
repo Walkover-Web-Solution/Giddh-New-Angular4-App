@@ -60,9 +60,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
         private componentStore: OnboardingComponentStore,
         private dialog: MatDialog
     ) {
-        const whiteLabel = this.generalService.getDecodedWhiteLabel();
-        const whiteLabelDomain = `${whiteLabel?.giddhWhiteLabel?.domainName}/help/sync-with-tally-1591360375828781`;
-        this.syncWithTallyHelpDocUrl = whiteLabelDomain ? whiteLabelDomain : SYNC_TALLY_HELP_DOC_URL;
+        this.syncWithTallyHelpDocUrl = SYNC_TALLY_HELP_DOC_URL;
         this.createAccountIsSuccess$ = this.store.pipe(select(state => state.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
     }
 

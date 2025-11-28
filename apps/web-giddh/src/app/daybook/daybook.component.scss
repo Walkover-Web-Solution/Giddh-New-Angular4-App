@@ -5,18 +5,14 @@
     position: relative;
     z-index: 1;
     cursor: default;
-    border: 1px solid var(--color-silver);
+    border: 1px solid var(--border-color);
     width: 230px;
 }
 
 .date-range-picker:focus {
-    border-color: var(--color-silver) !important;
+    border-color: var(--border-color) !important;
 }
-.input-wrapper {
-    position: relative;
-    display: block;
-    background-color: var(--color-white);
-}
+
 .input-wrapper:before {
     position: absolute;
     content: "";
@@ -34,53 +30,16 @@
 .table > tbody + tbody {
     border-top: none;
 }
-.expand-btn-hide-desktop {
-    display: none;
-}
+
 .warehouse-name {
     white-space: normal;
 }
-.icon-calender {
-    position: absolute;
-    z-index: 9;
-    height: 32px;
-    width: 36px;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
-    height: 36px !important;
-    cursor: pointer;
-}
+
 .linked-entities {
     width: 200px;
 }
 .mobile-view {
     display: none !important;
-}
-
-.expand-collapse-btn a {
-    width: 40px;
-    height: 40px;
-    background-color: var(--color-white);
-    border: 1px solid var(--color-silver);
-    border-radius: 5px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: var(--font-size-16);
-    color: var(--color-blue-primary);
-    &:hover {
-        background: var(--color-blue-primary);
-        color: var(--color-white);
-    }
-}
-
-button.btn.btn-filter {
-    background: var(--color-border-light);
-    border: 1px solid var(--color-border-light);
-    font-size: var(--font-size-15);
-    color: var(--color-blue-primary);
-    align-items: center;
 }
 
 .daybook-w-100 {
@@ -102,4 +61,26 @@ button.btn.btn-filter {
 .daybook-w-300 {
     width: 300px;
     min-width: 300px;
+}
+:host ::ng-deep .daybook-table {
+    tr.mat-row,
+    tr.mat-footer-row {
+        border-top: 1px solid var(--border-color);
+    }
+    td.mat-mdc-cell {
+        border-top: 1px solid var(--border-color);
+    }
+    .nested-table {
+        > tbody {
+            tr {
+                td {
+                    border: 0 !important;
+                    padding: 8px 0;
+                }
+                &:first-child {
+                    border-top: none !important;
+                }
+            }
+        }
+    }
 }

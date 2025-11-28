@@ -71,6 +71,9 @@ export class GiddhCurrencyPipe implements OnDestroy, PipeTransform {
                     if (digitAfterDecimal === 2) {
                         op += '.' + '00';
                     }
+                    if (digitAfterDecimal === 3) {
+                        op += '.' + '000';
+                    }
                     if (digitAfterDecimal === 4) {
                         op += '.' + '0000';
                     }
@@ -88,6 +91,9 @@ export class GiddhCurrencyPipe implements OnDestroy, PipeTransform {
                 } else {
                     if (digitAfterDecimal === 2) {
                         op += '.' + '00';
+                    }
+                    if (digitAfterDecimal === 3) {
+                        op += '.' + '000';
                     }
                     if (digitAfterDecimal === 4) {
                         op += '.' + '0000';
@@ -109,6 +115,9 @@ export class GiddhCurrencyPipe implements OnDestroy, PipeTransform {
             } else {
                 if (digitAfterDecimal === 2) {
                     afterdecDigit = '00';
+                }
+                if (digitAfterDecimal === 3) {
+                    afterdecDigit = '000';
                 }
                 if (digitAfterDecimal === 4) {
                     afterdecDigit = '0000';

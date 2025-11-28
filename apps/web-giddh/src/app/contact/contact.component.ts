@@ -1,5 +1,4 @@
 import { SendBulkEmailTemplateRequest } from './../models/api-models/Contact';
-import { BreakpointObserver } from "@angular/cdk/layout";
 import {
     ChangeDetectorRef,
     Component,
@@ -26,7 +25,7 @@ import { CompanyActions } from "../actions/company.actions";
 import { GeneralActions } from "../actions/general/general.actions";
 import { SettingsProfileActions } from "../actions/settings/profile/settings.profile.action";
 import { SettingsIntegrationActions } from "../actions/settings/settings.integration.action";
-import { ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, IOption, PAGINATION_LIMIT } from "../app.constant";
+import { ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, IOption, PAGINATION_LIMIT, BREAKPOINT_SCREEN_SIZE } from "../app.constant";
 import { OnboardingFormRequest } from "../models/api-models/Common";
 import {
     ContactAdvanceSearchCommonModal,
@@ -94,7 +93,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     public activeAccountDetails: any;
     public allSelectionModel: boolean = false;
     public localStorageKeysForFilters = { customer: "customerFilterStorageV2", vendor: "vendorFilterStorageV2" };
-    public isMobileScreen: boolean = false;
     public isICICIIntegrated: boolean = false;
     public selectedWhileHovering: string;
     public searchLoader$: Observable<boolean>;
@@ -199,8 +197,6 @@ export class ContactComponent implements OnInit, OnDestroy {
     public currentOrganizationType: OrganizationType;
     /** Listens for Master open/close event, required to load the data once master is closed */
     public isAddAndManageOpenedFromOutside$: Observable<boolean>;
-    /** This will store screen size */
-    public isMobileView: boolean = false;
     /** Stores the searched name value for the Name filter */
     public searchedName: FormControl = new FormControl<string>('');
     /** True, if name search field is to be shown in the filters */
@@ -264,7 +260,7 @@ export class ContactComponent implements OnInit, OnDestroy {
 
     constructor(@Inject(ServiceConfig) private serviceConfig, public dialog: MatDialog, private store: Store<AppState>, private router: Router, private companyServices: CompanyService, private commonActions: CommonActions, private toaster: ToasterService,
         private contactService: ContactService, private settingsIntegrationActions: SettingsIntegrationActions, private companyActions: CompanyActions, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private route: ActivatedRoute, private generalAction: GeneralActions,
-        private breakPointObservar: BreakpointObserver, private settingsProfileActions: SettingsProfileActions,
+        private settingsProfileActions: SettingsProfileActions,
         private settingsBranchAction: SettingsBranchActions, public currencyPipe: GiddhCurrencyPipe, private lightbox: Lightbox, private renderer: Renderer2, private componentStore: ContactComponentStore) {
         this.searchLoader$ = this.store.pipe(select(p => p.search.searchLoader), takeUntil(this.destroyed$));
         this.dueAmountReportRequest = new DueAmountReportQueryRequest();
@@ -302,14 +298,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.companyActions.getAllRegistrations());
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.isAddAndManageOpenedFromOutside$ = this.store.pipe(select(appStore => appStore.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$));
-
-        this.breakPointObservar.observe([
-            "(max-width: 1023px)",
-            "(max-width: 767px)",
-        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isMobileScreen = result?.breakpoints["(max-width: 1023px)"];
-            this.isMobileView = result?.breakpoints["(max-width: 767px)"];
-        });
 
         this.bulkEmailSuccess$.pipe(
             takeUntil(this.destroyed$)
@@ -593,7 +581,8 @@ export class ContactComponent implements OnInit, OnDestroy {
             ipcRenderer.send('open-url', url);
         } else {
             if (part === 'ledger') {
-                url = url + `?redirectUrl=${this.currentUrl}`;
+                const separator = url.includes('?') ? '&' : '?';
+                url = url + `${separator}redirectUrl=${encodeURIComponent(this.currentUrl)}`;
             }
             (window as any).open(url);
         }
@@ -730,7 +719,7 @@ export class ContactComponent implements OnInit, OnDestroy {
 
     /**
      * Handles pagination events and updates API parameters
-     * 
+     *
      * @param {PageEvent} event - Contains pagination details
      * @memberof ContactComponent
      */
@@ -1583,24 +1572,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                 width: '980px',
                 panelClass: 'contact-modal'
             });
-        }
-    }
-
-    /**
-     * This will return page heading based on active tab
-     *
-     * @param {boolean} event
-     * @memberof ContactComponent
-     */
-    public getPageHeading(): string {
-        if (this.isMobileView) {
-            if (this.activeTab === "aging-report") {
-                return this.localeData?.aging_report;
-            } else if (this.activeTab !== "aging-report") {
-                return this.localeData?.customer;
-            }
-        } else {
-            return "";
         }
     }
 

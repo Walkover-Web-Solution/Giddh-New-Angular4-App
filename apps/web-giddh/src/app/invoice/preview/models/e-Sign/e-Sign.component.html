@@ -1,5 +1,5 @@
 <div>
-    <div class="clearfix" id="export-body">
+    <div class="clear-both" id="export-body">
         <form name="esignature" id="eSignForm" #eSign autocomplete="off" action="" target="_blank" method="post">
             <input
                 id="AadhaarNumber"
@@ -10,8 +10,8 @@
                 [(ngModel)]="eSignModel.AadhaarNumber"
             />
 
-            <p class="mr-t1" [innerHTML]="localeData?.aadhar_required_note"></p>
-            <div class="pull-left mr-t1">
+            <p class="mt-2" [innerHTML]="localeData?.aadhar_required_note"></p>
+            <div class="pull-left mt-2">
                 <button type="submit" mat-raised-button color="primary" (click)="onConfirmation(eSign)">
                     {{ localeData?.go }}
                 </button>

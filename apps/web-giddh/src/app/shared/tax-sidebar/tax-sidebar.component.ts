@@ -22,8 +22,6 @@ import { ServiceConfig } from '../../services/service.config';
 })
 
 export class TaxSidebarComponent implements OnInit, OnDestroy {
-    /** this is store mobile screen boolean value */
-    public isMobileScreen: boolean = true;
     /** Returns the enum to be used in template */
     public get GstReport() {
         return GstReport;
@@ -180,18 +178,6 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
         }
         this.store.dispatch(this.gstAction.resetGstr1OverViewResponse());
         this.store.dispatch(this.gstAction.resetGstr2OverViewResponse());
-    }
-
-    /**
-    * This will close the settings popup if clicked outside and is mobile screen
-    *
-    * @param {*} [event]
-    * @memberof TaxSidebarComponent
-    */
-    public closeAsidePaneIfMobile(event?): void {
-        if (this.isMobileScreen && event && event.target.className !== "icon-bar") {
-            this.closeAsideEvent.emit(event);
-        }
     }
 
     /**

@@ -1,14 +1,9 @@
-.bd-rt {
-    border-color: var(--color-silver);
+.border-top {
+    border-color: var(--border-color);
 }
 
 :host ::ng-deep .fb-1-container {
     justify-content: flex-start;
-}
-
-:host ::ng-deep .fb-1-container .form-group {
-    margin-right: 10px;
-    margin-bottom: 0;
 }
 
 :host ::ng-deep .fb-1-container .date-range-picker {
@@ -17,13 +12,6 @@
 
 a:hover {
     text-decoration: none;
-}
-
-.flex-container {
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
-    flex-flow: row wrap;
 }
 
 table {
@@ -41,21 +29,10 @@ table {
     max-width: 600px;
 }
 
-.check-image img {
-    max-height: 20px;
-    cursor: pointer;
-}
-
 .flex-fill {
     flex: 1 1 auto;
     padding-right: 2px;
 }
-
-.sh-select-dropdown {
-    width: 230px;
-}
-
-/*td-in-searchbox_style*/
 
 .max-width-140 {
     max-width: 140px;
@@ -70,7 +47,6 @@ table {
 
 .td-search-box div i {
     margin-top: 1px;
-    color: var(--color-blue-primary);
     padding-right: 8px;
     cursor: pointer;
     display: flex;
@@ -108,81 +84,20 @@ table {
 }
 
 .basic > thead > tr > th {
-    border-right: 1px solid var(--color-silver);
-}
-
-.icon-pointer .glyphicon {
-    cursor: pointer;
-}
-
-.td-search-box div i:hover {
-    color: var(--color-medium-gray);
-}
-
-.dropdown-menu > li > a:hover {
-    color: var(--color-blue-primary);
-    background: var(--color-border-light);
-}
-
-.stock-input {
-    background-color: transparent !important;
-    border-bottom: 1px dotted var(--color-white) !important;
-    border: none;
-    width: auto;
-    padding: 0 !important;
-    height: auto;
-    text-align: center;
-    min-width: 155px;
-    color: var(--color-white);
-}
-
-.footer-tr td {
-    background-color: var(--color-border-light);
+    border-right: 1px solid var(--border-color);
 }
 
 .total-footer {
     background-color: var(--color-white);
     display: flex;
-    .foot-item {
-        padding: 41px;
-        h2 {
-            color: var(--color-medium-gray);
-            font-size: var(--font-size-16);
-            margin-bottom: 10px;
-        }
-        h1 {
-            font-size: var(--font-size-32);
-        }
-    }
-}
-
-.modal-content {
-    border-radius: 0px;
-    margin-top: 200px;
-}
-
-.btn-download {
-    font-size: var(--font-size-15);
 }
 
 .btn-group.open.show {
     display: inline-block !important;
 }
 
-.dropdown-menu.dropdown-menu-download {
-    min-width: 110px;
-    border-radius: 0px;
-}
-
 .dropdown-menu-download li {
     cursor: pointer;
-}
-
-.capitalize {
-    text-transform: capitalize;
-}
-.border-none {
-    border: none !important;
 }
 
 .unit-badge {
@@ -196,11 +111,11 @@ table {
 .icon-pointer .icon-sort-asc {
     line-height: 20px;
     width: 15px;
-    color: var(--color-blue-primary);
+    color: var(--text-primary-color);
 }
 
 .icon-pointer .active-text-color {
-    color: var(--color-blue-primary);
+    color: var(--text-primary-color);
 }
 
 .custom-datepicker-wrapper-group {
@@ -264,16 +179,8 @@ table {
     width: 100% !important;
 }
 
-.text-purple {
-    color: var(--color-blue-primary);
-}
-
-.btn-link-2 {
-    color: var(--color-blue-primary);
-}
-
-.mr-b100 {
-    margin-bottom: 100px;
+.text-primary {
+    color: var(--text-primary-color);
 }
 
 th.border-right-none,
@@ -296,9 +203,9 @@ td.border-right-none {
     justify-content: center;
     align-items: center;
     font-size: var(--font-size-16);
-    border: 1px solid var(--color-silver);
-    border-radius: 5px;
-    color: var(--color-blue-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--mat-border-radius-4);
+    color: var(--text-primary-color);
     background: var(--color-white);
 }
 
@@ -314,17 +221,6 @@ td.border-right-none {
     cursor: pointer;
 }
 
-button.btn.btn-filter {
-    background: var(--color-border-light);
-    border: 1px solid var(--color-silver);
-    font-size: var(--font-size-15);
-    color: var(--color-blue-primary);
-    display: inline-flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 4px 10px;
-}
-
 .table-border .d-flex {
     align-items: center;
 }
@@ -334,20 +230,12 @@ button.btn.btn-filter {
     text-align: left;
 }
 
-.recept-modal .modal-title {
-    color: var(--color-white);
-}
-
-.mt-0 {
-    margin-top: 0px !important;
-}
-
 .group-not-found {
     text-transform: none;
 }
 .icon-btn {
-    border: 1px solid var(--color-silver);
-    border-radius: 5px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--mat-border-radius-4);
     height: 36px;
     width: 36px;
     margin-top: 0;
@@ -377,12 +265,6 @@ button.btn.btn-filter {
             margin-left: 10px;
         }
     }
-}
-
-.input-group-addon {
-    border: 1px solid var(--color-silver);
-    border-left: 0;
-    background-color: var(--color-border-light);
 }
 
 @media (max-width: 1622px) {

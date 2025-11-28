@@ -46,13 +46,7 @@
             z-index: 2;
             top: 10px;
         }
-        .unverified-icon {
-            position: absolute;
-            color: var(--color-red) !important;
-            right: 10px;
-            z-index: 2;
-            top: 10px;
-        }
+
     }
     .default-expiry {
         input {
@@ -70,20 +64,9 @@
     .bill-lock-date {
         width: 152px;
         position: relative;
-        .icon-calender {
-            position: absolute;
-            right: 10px;
-            top: 25%;
-            color: var(--color-medium-gray);
-            font-size: 16px;
-        }
+
     }
-    .sms-textarea {
-        margin-top: 0;
-        margin-bottom: 20px !important;
-        margin-left: 10px !important;
-        width: 260px;
-    }
+
 }
 .verified-text {
     color: var(--color-green);
@@ -93,8 +76,8 @@
 }
 .delete-verified-icon {
     padding: 6px 10px;
-    border: 1px solid var(--color-silver);
-    border-radius: 5px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--mat-border-radius-4);
     display: inline-flex;
     justify-content: center;
     align-items: center;
@@ -137,9 +120,7 @@
         .integrated-email {
             margin-left: 30px;
         }
-        .single-tab-block .col-sm-3 {
-            width: 100% !important;
-        }
+
         .hide-on-mobile {
             display: none;
         }
@@ -155,14 +136,6 @@
     .sales-order-tab {
         .custom-purchase-order-input-fields {
             margin-top: 8px;
-        }
-    }
-}
-@media screen and (max-width: 767px) {
-    #invoice-setting {
-        margin-top: 15px;
-        .btn-wrapper {
-            margin-top: 15px;
         }
     }
 }

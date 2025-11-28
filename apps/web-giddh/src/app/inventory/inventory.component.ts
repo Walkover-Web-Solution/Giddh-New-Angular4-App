@@ -27,7 +27,7 @@ import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { OrganizationType } from '../models/user-login-state';
 import { GeneralService } from '../services/general.service';
 import { cloneDeep, each, find, orderBy } from '../lodash-optimized';
-import { BranchHierarchyType } from '../app.constant';
+import { BranchHierarchyType, BREAKPOINT_SCREEN_SIZE } from '../app.constant';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 export const IsyncData = [
@@ -82,10 +82,8 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     /** Stores the current organziation type */
     public currentOrganizationType: OrganizationType;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
-    /* This will hold if it's mobile screen or not */
-    public isMobileScreen: boolean = false;
-    /* This will hold if it's mobile screen or not */
-    public isMobileView: boolean = false;
+    /* This will hold if it's tablet screen or not */
+    public isTabletScreen: boolean = false;
     /** Holds the observable for universal date */
     public universalDate$: Observable<any>;
     /** Emits some value if either group or stock is active, used to show the detailed report */
@@ -121,11 +119,9 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         private dialog: MatDialog
     ) {
         this.breakPointObservar.observe([
-            '(max-width: 1023px)',
-            '(max-width: 767px)'
+            BREAKPOINT_SCREEN_SIZE.TABLET
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isMobileScreen = result?.breakpoints['(max-width: 1023px)'];
-            this.isMobileView = result?.breakpoints['(max-width: 767px)'];
+            this.isTabletScreen = result?.breakpoints[BREAKPOINT_SCREEN_SIZE.TABLET];
         });
         this.activeStock$ = this.store.pipe(select(p => p.inventory.activeStock), takeUntil(this.destroyed$));
         this.activeGroup$ = this.store.pipe(select(p => p.inventory.activeGroup), takeUntil(this.destroyed$));
@@ -260,7 +256,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     }
 
     public ngAfterViewInit() {
-        if (!this.isMobileScreen) {
+        if (!this.isTabletScreen) {
             this.setDefaultGroup();
         }
     }
@@ -519,29 +515,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
             let currentEntityUniqueName = this.generalService.currentOrganizationType === OrganizationType.Branch ? this.generalService.currentBranchUniqueName : this.generalService.companyUniqueName;
             this.branches = this.branchesWithWarehouse.map((branch: any) => ({ label: `${branch.name}`, value: branch?.uniqueName }));
             this.loadBranchWarehouse(currentEntityUniqueName);
-        }
-    }
-
-    /**
-     * This will return page heading based on active tab
-     *
-     * @param {boolean} event
-     * @memberof InventoryComponent
-     */
-    public getPageHeading(): string {
-        if (this.isMobileView) {
-            if (this.activeTabIndex === 0) {
-                return "Inventory";
-            }
-            else if (this.activeTabIndex === 1) {
-                return "Job Work";
-            }
-            else if (this.activeTabIndex === 2) {
-                return "Manufacturing";
-            }
-            else if (this.activeTabIndex === 3) {
-                return "Report";
-            }
         }
     }
 

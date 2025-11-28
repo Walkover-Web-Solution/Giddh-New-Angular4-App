@@ -13,16 +13,16 @@
         </div>
         <mat-dialog-content class="dialog-body">
             <form name="addShareEmailForm" novalidate autocomplete="off">
-                <p class="mr-b1">
+                <p class="mb-2">
                     {{ commonLocaleData?.app_note }}: {{ commonLocaleData?.app_export_file_name_change_note }}
                 </p>
-                <mat-radio-group color="primary" name="exportType" [(ngModel)]="exportType" class="mr-b15">
+                <mat-radio-group color="primary" name="exportType" [(ngModel)]="exportType" class="mb-3">
                     <mat-radio-button id="ledger-entries" [value]="'ledger'">{{ localeData?.ledger_entries }}</mat-radio-button>
                     <mat-radio-button id="account" [value]="'account'">{{ localeData?.account }}</mat-radio-button>
                 </mat-radio-group>
 
                 <ng-container *ngIf="exportType === 'ledger'">
-                    <div class="pd-b3">
+                    <div class="pb-5">
                         <div class="form-inline">
                             <div class="form-group">
                                 <label class="w100 justify-content-start">{{ commonLocaleData?.app_date_range }}: </label>
@@ -46,7 +46,7 @@
                         </div>
                     </div>
                     <div
-                        class="pd-b2 clearfix d-flex"
+                        class="pb-4 clear-both d-flex"
                         [hidden]="emailTypeSelected === 'columnar' || emailTypeSelected === 'billToBill'"
                     >
                         <label class="w100 d-sm-inline-flex d-flex">{{ commonLocaleData?.app_export_as }}: </label>
@@ -57,7 +57,7 @@
                             }}</mat-radio-button>
                         </mat-radio-group>
                     </div>
-                    <div class="pd-b2">
+                    <div class="pb-4">
                         <label class="w125">{{ commonLocaleData?.app_order }}:</label>
                         <label class="radio-inline p-0">
                             <mat-slide-toggle color="primary" name="sort" [(ngModel)]="exportRequest.sort">
@@ -67,7 +67,7 @@
                             </mat-slide-toggle>
                         </label>
                     </div>
-                    <div class="pd-b2">
+                    <div class="pb-4">
                         <label class="w125">{{ commonLocaleData?.app_voucher_type }}:</label>
                         <label class="radio-inline p-0">
                             <mat-slide-toggle
@@ -81,7 +81,7 @@
                             </mat-slide-toggle>
                         </label>
                     </div>
-                    <div class="pd-b2">
+                    <div class="pb-4">
                         <label class="w125">{{ commonLocaleData?.app_voucher_no }}:</label>
                         <label class="radio-inline p-0">
                             <mat-slide-toggle
@@ -95,7 +95,7 @@
                             </mat-slide-toggle>
                         </label>
                     </div>
-                    <div class="pd-b2">
+                    <div class="pb-4">
                         <label class="w125">{{ localeData?.voucher_total }}:</label>
                         <label class="radio-inline p-0">
                             <mat-slide-toggle
@@ -109,7 +109,7 @@
                             </mat-slide-toggle>
                         </label>
                     </div>
-                    <div class="pd-b2">
+                    <div class="pb-4">
                         <label class="w125">{{ localeData?.entry_no }}:</label>
                         <label class="radio-inline p-0">
                             <mat-slide-toggle
@@ -123,7 +123,7 @@
                             </mat-slide-toggle>
                         </label>
                     </div>
-                    <div class="pd-b2">
+                    <div class="pb-4">
                         <label class="w125">{{ localeData?.description }}:</label>
                         <label class="radio-inline p-0">
                             <mat-slide-toggle

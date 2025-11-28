@@ -13,21 +13,15 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
     selector: 'invetory-sidebar',
     templateUrl: './inventory.sidebar.component.html',
     styles: [`
-    .parent-group > ul > li ul li div {
-      color: #8a8a8a;
-    }
+        .parent-group > ul > li ul li div {
+            color: #8a8a8a;
+        }
 
-    #inventory-sidebar {
-      background: #fff;
-      min-height: 100vh;
-    }
-
-    :host ::ng-deep .nav-tabs > li {
-      width: 50%;
-      text-align: center;
-      background: #f5f5f5;
-    }
-  `]
+        #inventory-sidebar {
+            background: #fff;
+            min-height: 100vh;
+        }
+    `]
 })
 
 export class InventoryInOutSidebarComponent implements OnInit, OnDestroy {

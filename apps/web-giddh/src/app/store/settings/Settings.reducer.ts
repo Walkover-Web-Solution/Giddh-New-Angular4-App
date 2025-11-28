@@ -537,7 +537,6 @@ export function SettingsReducer(state = initialState, action: CustomActions): Se
         case SETTINGS_INTEGRATION_ACTIONS.UPDATE_AMAZON_SELLER_RESPONSE: {
             let AmazonSellerRes: BaseResponse<any, any> = action.payload;
             if (AmazonSellerRes?.status === 'success') {
-                // debugger;
                 let seller = state.integration.amazonSeller?.findIndex(p => p.sellerId === AmazonSellerRes.body?.sellerId);
                 newState.integration.amazonSeller[seller] = cloneDeep(AmazonSellerRes.body);
                 newState.amazonState.isSellerUpdated = true;

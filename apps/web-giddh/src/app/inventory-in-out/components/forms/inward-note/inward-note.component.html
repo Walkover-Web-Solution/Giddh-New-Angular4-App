@@ -1,8 +1,8 @@
 <div class="form-header">
     <div>
-        <h3>
+        <p>
             <span>Inward Note</span>
-            <span class="pull-right font-15"
+            <span class="pull-right font-size-15"
                 >Multiple
                 <a
                     href="javascript:void(0)"
@@ -18,11 +18,11 @@
                     >Products</a
                 >
             </span>
-        </h3>
+        </p>
     </div>
 </div>
-<div class="form-body white-bg clearfix margin-child-label">
-    <div class="clearfix">
+<div class="form-body clear-both margin-child-label">
+    <div class="clear-both">
         <form [formGroup]="form" class="form-group">
             <div class="row">
                 <div class="col-6 form-group">
@@ -76,18 +76,18 @@
 
             <div class="row">
                 <div class="col-4" *ngIf="mode === 'sender'">
-                    <label class="font-15">Sender <sup>*</sup></label>
+                    <label class="font-size-15">Sender <sup>*</sup></label>
                 </div>
                 <div class="col-4" *ngIf="mode === 'product'">
-                    <label class="font-15">Product Name <sup>*</sup></label>
+                    <label class="font-size-15">Product Name <sup>*</sup></label>
                 </div>
 
                 <div class="col-4">
-                    <label class="font-15">Unit<sup>*</sup></label>
+                    <label class="font-size-15">Unit<sup>*</sup></label>
                 </div>
 
                 <div class="col-4">
-                    <label class="font-15">Quantity <sup>*</sup></label>
+                    <label class="font-size-15">Quantity <sup>*</sup></label>
                 </div>
             </div>
 
@@ -135,16 +135,16 @@
                                 <input name="" type="text" formControlName="quantity" class="form-control" />
                             </div>
 
-                            <div class="pull-right mr-t05 unit-add">
+                            <div class="pull-right mt-1 unit-add">
                                 <button
                                     mat-stroked-button
                                     (click)="addTransactionItem(transactions.controls[i])"
                                     *ngIf="last"
                                 >
-                                    <i class="icon-plus add-row"></i>
+                                    <i class="icon-plus text-green"></i>
                                 </button>
                                 <button mat-stroked-button (click)="deleteTransactionItem(i)" *ngIf="!last">
-                                    <i class="icon-cross delete"></i>
+                                    <i class="icon-cross text-red"></i>
                                 </button>
                             </div>
                         </div>
@@ -154,7 +154,7 @@
 
             <ng-container *ngIf="mode === 'sender'">
                 <div class="row">
-                    <div class="mr-t1 pd-l05 pd-r05">
+                    <div class="mt-2 pl-1 pr-1">
                         <div class="col-12">
                             <div class="checkbox">
                                 <mat-checkbox
@@ -169,17 +169,17 @@
 
                     <section class="col-12" *ngIf="form.value.isManufactured">
                         <div>
-                            <h1 class="section-head bd-rb">
+                            <p class="section-head border-bottom">
                                 <strong>{{ form.controls["stock"].value }} (Made with)</strong>
-                            </h1>
+                            </p>
 
                             <div formGroupName="manufacturingDetails">
-                                <div class="row pd-t05">
+                                <div class="row pt-1">
                                     <div class="col-4">
-                                        <label class="font-15">Output Qty <sup>*</sup></label>
+                                        <label class="font-size-15">Output Qty <sup>*</sup></label>
                                     </div>
                                     <div class="col-5">
-                                        <label class="font-15">Stock Unit <sup>*</sup></label>
+                                        <label class="font-size-15">Stock Unit <sup>*</sup></label>
                                     </div>
                                 </div>
 
@@ -273,17 +273,17 @@
                                             >
                                             </reactive-dropdown-field>
                                         </div>
-                                        <div class="pull-right mr-t05 unit-add">
+                                        <div class="pull-right mt-1 unit-add">
                                             <button
                                                 mat-stroked-button
                                                 (click)="addItemInLinkedStocks(list, i, i)"
                                                 *ngIf="l"
                                                 [disabled]="disableStockButton"
                                             >
-                                                <i class="icon-plus add-row"></i>
+                                                <i class="icon-plus text-green"></i>
                                             </button>
                                             <button mat-stroked-button (click)="removeItemInLinkedStocks(i)" *ngIf="!l">
-                                                <i class="icon-cross delete"></i>
+                                                <i class="icon-cross text-red"></i>
                                             </button>
                                         </div>
                                     </div>
@@ -302,7 +302,7 @@
             </ng-container>
 
             <div class="row">
-                <div class="col-12 text-left mr-t1">
+                <div class="col-12 text-left mt-2">
                     <button mat-stroked-button (click)="onCancel.emit($event)">Cancel</button>
                     <button mat-raised-button color="primary" [ladda]="isLoading" [disabled]="form.invalid" (click)="save()">
                         Save

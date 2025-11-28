@@ -1,12 +1,12 @@
-<section id="manufacture" class="clearfix" *ngIf="!(isGetManufactureStockInProgress$ | async)">
+<section id="manufacture" class="clear-both" *ngIf="!(isGetManufactureStockInProgress$ | async)">
     <hamburger-menu *ngIf="!isInventoryPage" [pageHeading]="'Manufacture of Product'"></hamburger-menu>
-    <div class="col-sm-12 mr-t15 clearfix">
+    <div class="col-sm-12 mt-3 clear-both">
         <button mat-stroked-button class="pull-right" (click)="goBackToListPage()" type="button">Back</button>
     </div>
     <!-- form -->
     <div class="col-xl-10 col-lg-12 col-md-12">
         <div>
-            <form class="mr-b2" name="manufacturingForm" #manufacturingForm="ngForm">
+            <form class="mb-4" name="manufacturingForm" #manufacturingForm="ngForm">
                 <div class="row">
                     <div class="col-xs-3 col-sm-3">
                         <div class="form-group">
@@ -24,7 +24,7 @@
                         </div>
                     </div>
                     <div class="col-xs-3 col-sm-3">
-                        <div class="form-group position-relative">
+                        <div class="form-group position-relative ">
                             <label class="d-block">Quantity</label>
                             <input
                                 type="text"
@@ -37,7 +37,7 @@
                                 [(ngModel)]="manufacturingDetails.manufacturingMultipleOf"
                                 name="manufacturingMultipleOf"
                             />
-                            <small class="position-absolute right0"
+                            <small class="position-absolute right-0"
                                 >Multiple of
                                 <span *ngIf="manufacturingDetails.multipleOf">{{
                                     manufacturingDetails.multipleOf | json
@@ -46,7 +46,7 @@
                         </div>
                     </div>
                     <div class="col-xs-3 col-sm-3">
-                        <div class="form-group mr-r1">
+                        <div class="form-group mr-2">
                             <label class="d-block">Date</label>
                             <div class="col-xs-8 p-0">
                                 <giddh-datepicker
@@ -81,11 +81,11 @@
 
     <!--  -->
     <ng-container *ngIf="!(isStockWithRateInprogress$ | async)">
-        <div class="box clearfix" *ngIf="manufacturingDetails.stockUniqueName">
+        <div class=" p-3 clear-both" *ngIf="manufacturingDetails.stockUniqueName">
             <div class="row">
                 <!-- right column / add more resources -->
                 <div class="col-md-12 col-lg-6 source resources-table">
-                    <h1 class="section-head">Source(Consumption)</h1>
+                    <p class="section-head">Source(Consumption)</p>
                     <section class="link-stock">
                         <table class="col-xs-12 col-sm-12 link-stock-table" *ngIf="manufacturingDetails">
                             <thead>
@@ -210,7 +210,7 @@
                                     </td>
                                 </tr>
                             </tbody>
-                            <tfoot class="bd-rt pd-t2 pd-b2 bd-rb">
+                            <tfoot class="border-top pt-4 pb-4 border-bottom">
                                 <tr>
                                     <th colspan="2">Total:</th>
                                     <th class="text-right">
@@ -234,8 +234,8 @@
                     <div class="form-title">
                         <p>Total Cost</p>
                     </div>
-                    <form class="form-theme clearfix" name="expenseForm">
-                        <div class="mr-b2 clearfix row">
+                    <form class="form-theme clear-both" name="expenseForm">
+                        <div class="mb-4 clear-both row">
                             <p class="col-xs-9 col-sm-9">Total Consumption Cost:</p>
                             <p class="col-xs-3 col-sm-3 text-right">
                                 {{ getTotal("linkedStocks", "amount") | number : "1.0-2" }}
@@ -250,7 +250,7 @@
                                                 (currentCompanyBranches$ | async)?.length === 1) ||
                                             currentOrganizationType === 'BRANCH'
                                         "
-                                        mat-raised-button color="primary" class="cp"
+                                        mat-raised-button color="primary" class="cursor-pointer"
                                         (click)="onToggleAddExpensesBlock(toggleAddExpenses)"
                                         matTooltip="Add A/C where expense entries will be done."
                                         matTooltipPosition="above"
@@ -263,7 +263,7 @@
                             <tbody *ngIf="manufacturingDetails && liabilityGroupAccounts$ | async">
                                 <tr *ngFor="let expense of manufacturingDetails.otherExpenses; let i = index">
                                     <td colspan="1">
-                                        <div class="custom-select position-relative">
+                                        <div class="custom-select position-relative ">
                                             <reactive-dropdown-field
                                                 [options]="liabilityGroupAccounts$ | async"
                                                 [(ngModel)]="expense.baseAccount.uniqueName"
@@ -286,10 +286,10 @@
                                         </div>
                                     </td>
                                     <td class="text-center">
-                                        <label class="pd">to</label>
+                                        <label class="p-1">to</label>
                                     </td>
                                     <td>
-                                        <div class="custom-select position-relative">
+                                        <div class="custom-select position-relative ">
                                             <reactive-dropdown-field
                                                 [options]="expenseGroupAccounts$ | async"
                                                 [(ngModel)]="expense.transactions[0].account.uniqueName"
@@ -310,7 +310,7 @@
                                         </div>
                                     </td>
                                     <td class="text-right w100">
-                                        <div class="pd">
+                                        <div class="p-1">
                                             <input
                                                 type="text"
                                                 decimalDigitsDirective
@@ -352,10 +352,10 @@
                                         </reactive-dropdown-field>
                                     </td>
                                     <td class="text-center">
-                                        <label class="pd">to</label>
+                                        <label class="p-1">to</label>
                                     </td>
                                     <td>
-                                        <div class="position-relative">
+                                        <div class="position-relative ">
                                             <reactive-dropdown-field
                                                 (selectedOption)="addExpense(otherExpenses, $event, 'base')"
                                                 [options]="expenseGroupAccounts$ | async"
@@ -375,7 +375,7 @@
                                         </div>
                                     </td>
                                     <td class="text-right w100">
-                                        <div class="pd">
+                                        <div class="p-1">
                                             <input
                                                 type="text"
                                                 (blur)="addExpense(otherExpenses)"
@@ -404,7 +404,7 @@
                                                 currentOrganizationType === 'BRANCH'
                                             "
                                             (click)="addExpense(otherExpenses)"
-                                            class="ico-btn p-0 mr-t1"
+                                            class="ico-btn p-0 mt-2"
                                         >
                                             <i class="icon-plus text-danger" aria-hidden="true"></i>
                                         </button>
@@ -412,13 +412,13 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <div class="bd-rt clearfix pd-t1 mr-t1 mr-b1 row">
+                        <div class="border-top clear-both pt-2 mt-2 mb-2 row">
                             <span class="col-xs-7 col-sm-7"><strong>Total Manufacturing Expense:</strong></span>
                             <span class="col-xs-5 col-sm-5 text-right"
                                 ><strong>{{ getTotal("otherExpenses", "amount") | number : "1.0-2" }}</strong></span
                             >
                         </div>
-                        <div class="mr-b1 clearfix row">
+                        <div class="mb-2 clear-both row">
                             <span class="col-xs-7 col-sm-7"><strong>Grand Total:</strong></span>
                             <span class="col-xs-5 col-sm-5 text-right"
                                 ><strong>{{
@@ -427,7 +427,7 @@
                                 }}</strong></span
                             >
                         </div>
-                        <div class="mr-b1 clearfix row cost-per">
+                        <div class="mb-2 clear-both row cost-per">
                             <span class="col-xs-7 col-sm-7"
                                 ><strong>Cost per {{ selectedProductName }}:</strong></span
                             >
@@ -436,7 +436,7 @@
                             >
                         </div>
                         <div
-                            class="pull-right mr-t1 clearfix row"
+                            class="pull-right mt-2 clear-both row"
                             *ngIf="
                                 !isUpdateCase &&
                                 (((currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
@@ -450,7 +450,7 @@
                             </button>
                         </div>
                         <div
-                            class="pull-right mr-t1 clearfix row"
+                            class="pull-right mt-2 clear-both row"
                             *ngIf="
                                 isUpdateCase &&
                                 (((currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&

@@ -5,9 +5,9 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="aside-pane account-aside-menu-state">
+    <div class="aside-pane mat-app-background account-aside-menu-state">
         <div class="form-header">
-            <h3 class="aside-title">{{ localeData?.recurring_account }}</h3>
+            <p class="aside-title">{{ localeData?.recurring_account }}</p>
         </div>
         <button mat-button (click)="closeAsidePane($event)"><i class="icon-cross"></i></button>
         <div class="aside-body">
@@ -15,7 +15,7 @@
                 <form [formGroup]="form">
                     <div class="row">
                         <div class="col-xs-4 col-sm-4 form-group">
-                            <label class="mr-b1"
+                            <label class="mb-2"
                                 >{{ commonLocaleData?.app_start_date }}<span class="text-danger">*</span></label
                             >
                             <giddh-datepicker
@@ -30,7 +30,7 @@
                         </div>
 
                         <div class="col-xs-4 col-sm-4 form-group" *ngIf="!IsNotExpirable">
-                            <label class="mr-b1"
+                            <label class="mb-2"
                                 >{{ commonLocaleData?.app_end_date }}<span class="text-danger">*</span></label
                             >
                             <giddh-datepicker
@@ -51,9 +51,9 @@
                     </div>
 
                     <div class="form-group ng-select-wrap select-list select-group">
-                        <label class="mr-b1">{{ localeData?.interval }}<span class="text-danger">*</span></label>
+                        <label class="mb-2">{{ localeData?.interval }}<span class="text-danger">*</span></label>
                         <select-field
-                            [cssClass]="'form-control mat-field-border'"
+                            [cssClass]="'form-control border'"
                             [name]="'duration'"
                             [placeholder]="localeData?.select_interval"
                             [options]="intervalOptions"
@@ -69,8 +69,8 @@
                             </ng-template>
                         </select-field>
                     </div>
-                    <div class="clearfix text-right" *ngIf="mode === 'create'">
-                        <button mat-stroked-button class="mat-field-border" (click)="closeAsidePane($event)">
+                    <div class="clear-both text-right" *ngIf="mode === 'create'">
+                        <button mat-stroked-button class="border" (click)="closeAsidePane($event)">
                             {{ commonLocaleData?.app_cancel }}
                         </button>
                         <button
@@ -81,7 +81,7 @@
                             {{ commonLocaleData?.app_save }}
                         </button>
                     </div>
-                    <div class="clearfix text-right" *ngIf="mode === 'update'">
+                    <div class="clear-both text-right" *ngIf="mode === 'update'">
                         <button
                             mat-stroked-button
                             *ngIf="(!isCompany && !isConsolidatedBranch)"

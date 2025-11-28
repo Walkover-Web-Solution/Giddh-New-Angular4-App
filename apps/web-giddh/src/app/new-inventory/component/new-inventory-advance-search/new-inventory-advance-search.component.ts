@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild, Inject, ChangeDetectionStrategy } from '@angular/core';
-import { BreakpointObserver } from '@angular/cdk/layout';
 import { take, takeUntil } from 'rxjs/operators';
 import { Observable, ReplaySubject } from 'rxjs';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
@@ -21,7 +20,6 @@ import { cloneDeep } from '../../../lodash-optimized';
 export class NewInventoryAdvanceSearch implements OnInit {
     /** Reference of datepicker menu trigger */
     @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
-    public isMobileScreen: boolean = false;
     /** This will store universalDate */
     public universalDate: any;
     /** Universal date observer */
@@ -58,7 +56,6 @@ export class NewInventoryAdvanceSearch implements OnInit {
     public reportType: string = '';
 
     constructor(
-        private _breakPointObservar: BreakpointObserver,
         @Inject(MAT_DIALOG_DATA) public inputData,
         public dialogRef: MatDialogRef<any>,
         private store: Store<AppState>) {
@@ -71,11 +68,6 @@ export class NewInventoryAdvanceSearch implements OnInit {
      * @memberof NewInventoryAdvanceSearch
      */
     public ngOnInit() {
-        this._breakPointObservar.observe([
-            '(max-width: 767px)'
-        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isMobileScreen = result.matches;
-        });
         this.reportType = this.inputData?.reportType;
         if (this.inputData?.stockReportRequest) {
             if (this.inputData?.advanceSearchResponse) {

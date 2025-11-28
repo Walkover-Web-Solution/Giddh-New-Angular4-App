@@ -62,6 +62,7 @@ import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
 import { OtherTaxTypeEnum } from '../vouchers/utility/vouchers.const';
+import { LedgerDropdownTypeEnum } from '../models/api-models/Ledger';
 import { IOption } from '../app.constant';
 
 @Component({
@@ -117,8 +118,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public isBankOrCashAccount: boolean;
     public failedBulkEntries$: Observable<string[]>;
     public isFileUploading: boolean = false;
-    /** Boolean for mobile screen or not  */
-    public isMobileScreen: boolean = true;
+    /** Boolean for tablet screen or not  */
+    public isTabletScreen: boolean = true;
     public closingBalanceBeforeReconcile: { amount: number, type: string };
     public reconcileClosingBalanceForBank: { amount: number, type: string };
     public needToShowLoader: boolean = true;
@@ -264,6 +265,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public voucherApiVersion: number;
     /** Selected entry details */
     public selectedItem: any;
+    /** Enum for dropdown types - exposed to template */
+    public ledgerDropdownTypeEnum = LedgerDropdownTypeEnum;
     /** Pagination Object */
     public paginationObject: any = {
         totalItems: 0,
@@ -400,6 +403,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     };
     /** Holds Update Account Dialog Ref */
     public updateAccountDialogRef: MatDialogRef<any>;
+    /** True if particular currency differs from account currency, even when account and company currencies are same. */
+    public particularMultiCurrency: boolean = false;
 
     constructor(
         private store: Store<AppState>,
@@ -525,7 +530,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         });
     }
 
-    public selectAccount(e: IOption, txn: TransactionVM, clearAccount?: boolean, isBankTransaction?: boolean, allowChangeDetection?: boolean) {
+    public selectAccount(e: IOption, txn: TransactionVM, clearAccount?: boolean, isBankTransaction?: boolean, allowChangeDetection?: boolean, transactionType?: string) {
         this.keydownClassAdded = false;
         this.selectedTxnAccUniqueName = '';
         this.selectedAccountDetails = e;
@@ -559,7 +564,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (txn.duplicateEntry) {
             this.handeLoadDetailsForDuplicateEntry(e, txn);
         } else if (!txn.isStock) {
-            this.loadDetails(e, txn, '', allowChangeDetection);
+            this.loadDetails(e, txn, '', allowChangeDetection, isBankTransaction, transactionType);
         }
         this.cdRf.markForCheck();
     }
@@ -644,8 +649,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.enableAutopaid = false;
         }
 
-        if (!this.generalService.checkIfCssExists("./assets/style/ledgerfont/ledgerfont.css")) {
-            this.generalService.addLinkTag("./assets/style/ledgerfont/ledgerfont.css");
+        if (!this.generalService.checkIfCssExists("./assets/styles/ledgerfont/ledgerfont.css")) {
+            this.generalService.addLinkTag("./assets/styles/ledgerfont/ledgerfont.css");
         }
         document.querySelector('body').classList.add('ledger-body');
 
@@ -663,40 +668,30 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.currentOrganizationType = this.generalService.currentOrganizationType;
-        this.breakpointObserver.observe([
-            '(max-width: 991px)'
-        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isMobileScreen = result.matches;
-            if (this.isMobileScreen) {
-                this.arrangeLedgerTransactionsForMobile();
-            }
-        });
 
         this.breakpointObserver.observe([
-            BREAKPOINT_SCREEN_SIZE.SMALL_DESKTOP_SCREEN_SIZE,
-            BREAKPOINT_SCREEN_SIZE.MEDIUM_DESKTOP_SCREEN_SIZE,
-            BREAKPOINT_SCREEN_SIZE.TAB_SCREEN_SIZE
+            BREAKPOINT_SCREEN_SIZE.SMALL_DESKTOP,
+            BREAKPOINT_SCREEN_SIZE.MEDIUM_DESKTOP,
+            BREAKPOINT_SCREEN_SIZE.TABLET
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            if (result?.matches) {
+            if (result) {
                 // Reset all breakpoint screen size
                 Object.keys(this.breakpointScreenSize).forEach(key => {
                     this.breakpointScreenSize[key] = false;
                 });
-                if (result.breakpoints[BREAKPOINT_SCREEN_SIZE.SMALL_DESKTOP_SCREEN_SIZE]) {
+                this.isTabletScreen = result.breakpoints[BREAKPOINT_SCREEN_SIZE.TABLET];
+                if (result.breakpoints[BREAKPOINT_SCREEN_SIZE.SMALL_DESKTOP]) {
                     this.breakpointScreenSize.smallDesktopScreen = true;
                     this.ledgerGridTotalColumns = 3
                     this.ledgerGridColumnsValue = [1, 1, 1]
                     this.getLedgerStatementViewGridColumnsValue();
-                } else if (result.breakpoints[BREAKPOINT_SCREEN_SIZE.MEDIUM_DESKTOP_SCREEN_SIZE]) {
+                } else if (result.breakpoints[BREAKPOINT_SCREEN_SIZE.MEDIUM_DESKTOP]) {
                     this.breakpointScreenSize.mediumDesktopScreen = true;
                     this.ledgerGridTotalColumns = 8;
                     this.ledgerGridColumnsValue = [2, 3, 3]
                     this.getLedgerStatementViewGridColumnsValue();
-                } else if (result.breakpoints[BREAKPOINT_SCREEN_SIZE.TAB_SCREEN_SIZE]) {
-                    this.breakpointScreenSize.tabScreen = true;
-                    this.ledgerGridTotalColumns = 8;
-                    this.ledgerGridColumnsValue = [2, 3, 3];
-                    this.getLedgerStatementViewGridColumnsValue();
+                } else if (result.breakpoints[BREAKPOINT_SCREEN_SIZE.TABLET]) {
+                    this.arrangeLedgerTransactionsForMobile();
                 } else {
                     this.ledgerGridTotalColumns = 4
                     this.ledgerGridColumnsValue = [1, 2, 1]
@@ -764,7 +759,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
         this.shouldShowItcSection = false;
         this.shouldShowRcmTaxableAmount = false;
-        observableCombineLatest([this.universalDate$, this.route.params, this.todaySelected$]).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
+        observableCombineLatest([this.universalDate$, this.route.params, this.todaySelected$]).pipe(debounceTime(500), takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
 
             if (!Array.isArray(resp[0])) {
                 return;
@@ -902,7 +897,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
                 this.ledgerTransactions = lt;
 
-                if (this.isMobileScreen) {
+                if (this.isTabletScreen) {
                     this.arrangeLedgerTransactionsForMobile();
                 }
 
@@ -1200,7 +1195,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 } else {
                     this.getTransactionData();
                 }
-                this.getTransactionData();
                 this.store.dispatch(this.ledgerActions.GetLedgerAccount(this.lc.accountUnq));
             }
         });
@@ -1603,7 +1597,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
     }
 
-    public getCurrencyRate(mode: string = null) {
+    public getCurrencyRate(mode: string = null, isBankTransaction?: boolean, bankTransaction?: any) {
         let from: string;
         let to: string;
         if (mode === 'blankLedger') {
@@ -1618,12 +1612,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
             this.ledgerService.GetCurrencyRateNewApi(from, to, date).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 let rate = response.body;
                 if (rate) {
-                    this.lc.blankLedger = { ...this.lc.blankLedger, exchangeRate: rate };
+                    if (isBankTransaction) {
+                        bankTransaction.exchangeRate = rate;
+                    } else {
+                        this.lc.blankLedger = { ...this.lc.blankLedger, exchangeRate: rate };
+                    }
                 }
             }, (error => {
                 this.lc.blankLedger = { ...this.lc.blankLedger, exchangeRate: 1 };
             }));
         }
+        this.cdRf.detectChanges();
     }
 
     public toggleTransactionType(event: any) {
@@ -2001,7 +2000,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.selectedDateRangeUi = dayjs(date[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(date[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
             }
         });
-        this.getTransactionData();
         this.getLedgerStatementViewGridColumnsValue();
     }
 
@@ -2425,7 +2423,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             } else {
                 let itemIndx = this.checkedTrxWhileHovering?.findIndex((item) => item?.uniqueName === uniqueName);
                 this.checkedTrxWhileHovering.splice(itemIndx, 1);
-                const currentLength = this.isMobileScreen ?
+                const currentLength = this.isTabletScreen ?
                     this.checkedTrxWhileHovering?.length
                     : this.checkedTrxWhileHovering?.filter(transaction => transaction?.type === type)?.length;
                 if (this.checkedTrxWhileHovering && (currentLength === 0 || currentLength < totalLength)) {
@@ -2444,7 +2442,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             if (event?.checked) {
                 this.checkedTrxWhileHovering.push({ type, uniqueName });
                 this.store.dispatch(this.ledgerActions.SelectGivenEntries([uniqueName]));
-                const currentLength = this.isMobileScreen ?
+                const currentLength = this.isTabletScreen ?
                     this.checkedTrxWhileHovering?.length
                     : this.checkedTrxWhileHovering.filter(transaction => transaction?.type === type)?.length;
                 if (currentLength === totalLength) {
@@ -2467,7 +2465,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             } else {
                 let itemIndx = this.checkedTrxWhileHovering?.findIndex((item) => item?.uniqueName === uniqueName);
                 this.checkedTrxWhileHovering.splice(itemIndx, 1);
-                const currentLength = this.isMobileScreen ?
+                const currentLength = this.isTabletScreen ?
                     this.checkedTrxWhileHovering?.length
                     : this.checkedTrxWhileHovering?.filter(transaction => transaction?.type === type)?.length;
                 if (this.checkedTrxWhileHovering && (currentLength === 0 || currentLength < totalLength)) {
@@ -2963,9 +2961,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
      */
     private getActiveDatepickerTrigger(): MatMenuTrigger {
         // Try to get the currently visible trigger based on screen size
-        if (this.isMobileScreen && this.mobileUniversalDatepickerTrigger) {
+        if (this.isTabletScreen && this.mobileUniversalDatepickerTrigger) {
             return this.mobileUniversalDatepickerTrigger;
-        } else if (!this.isMobileScreen && this.desktopUniversalDatepickerTrigger) {
+        } else if (!this.isTabletScreen && this.desktopUniversalDatepickerTrigger) {
             return this.desktopUniversalDatepickerTrigger;
         } else if (this.ipadUniversalDatepickerTrigger) {
             return this.ipadUniversalDatepickerTrigger;
@@ -3412,8 +3410,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let dialogRef = this.dialog.open(templateRef, {
             width: '70%',
             height: '790px',
+            maxHeight: '90vh',
             role: 'alertdialog',
-            ariaLabel: 'template'
+            ariaLabel: 'template',
+            autoFocus: false
         });
 
         dialogRef.afterClosed().subscribe(response => {
@@ -3479,7 +3479,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @param {string} [variantUniqueName] Uniquename of the variant
      * @memberof LedgerComponent
      */
-    private loadDetails(event: IOption, txn: TransactionVM, variantUniqueName?: string, allowChangeDetection?: boolean): void {
+    private loadDetails(event: IOption, txn: TransactionVM, variantUniqueName?: string, allowChangeDetection?: boolean, isBankTransaction?: boolean, transactionType?: string): void {
         let requestObject;
         if (event.additional?.stock) {
             requestObject = {
@@ -3512,6 +3512,71 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         tax.isDisabled = false;
                     });
                 }
+
+                if (this.profileObj?.baseCurrency === this.lc.activeAccount?.currency) {
+                    if (this.lc.activeAccount?.currency !== data.body?.currency.code) {
+                        this.particularMultiCurrency = true;
+                        this.baseCurrencyDetails = { code: this.lc.activeAccount?.currency, symbol: this.lc.activeAccount?.currencySymbol };
+                        this.foreignCurrencyDetails = { code: data.body?.currency.code, symbol: data.body?.currency.symbol };
+                        if (isBankTransaction) {
+                            (transactionType === this.transactionType.Debit
+                                ? this.lc.bankTransactionsDebitData
+                                : this.lc.bankTransactionsCreditData)
+                                .forEach((item) => {
+                                    if (item.transactionId === txn.id) {
+                                        item.baseCurrencyToDisplay = cloneDeep(this.baseCurrencyDetails);
+                                        item.foreignCurrencyToDisplay = cloneDeep(this.foreignCurrencyDetails);
+                                        item.valuesInAccountCurrency = false;
+                                        item.selectedCurrencyToDisplay = this.selectedCurrency;
+                                        this.getCurrencyRate(null, isBankTransaction, item);
+                                        this.cdRf.detectChanges();
+                                        return item;
+                                    } else {
+                                        this.cdRf.detectChanges();
+                                        return item;
+                                    }
+                                });
+                        } else {
+                            this.lc.blankLedger.baseCurrencyToDisplay = cloneDeep(this.baseCurrencyDetails);
+                            this.lc.blankLedger.foreignCurrencyToDisplay = cloneDeep(this.foreignCurrencyDetails);
+                            this.lc.blankLedger.valuesInAccountCurrency = false;
+                            this.getCurrencyRate();
+                        }
+                    } else {
+                        this.particularMultiCurrency = false;
+                        this.baseCurrencyDetails = { code: this.profileObj?.baseCurrency, symbol: this.profileObj?.baseCurrencySymbol };
+                        this.foreignCurrencyDetails = this.baseCurrencyDetails;
+                        if (isBankTransaction) {
+                            (transactionType === this.transactionType.Debit
+                                ? this.lc.bankTransactionsDebitData
+                                : this.lc.bankTransactionsCreditData)
+                                .forEach((item) => {
+                                    if (item.transactionId === txn.id) {
+                                        item.baseCurrencyToDisplay = cloneDeep(this.baseCurrencyDetails);
+                                        item.foreignCurrencyToDisplay = cloneDeep(this.foreignCurrencyDetails);
+                                        item.valuesInAccountCurrency = true;
+                                        item.selectedCurrencyToDisplay = this.selectedCurrency;
+                                        item.exchangeRate = 1;
+                                        this.cdRf.detectChanges();
+                                        return item;
+                                    } else {
+                                        this.cdRf.detectChanges();
+                                        return item;
+                                    }
+                                });
+                        } else {
+                            this.lc.blankLedger.baseCurrencyToDisplay = cloneDeep(this.baseCurrencyDetails);
+                            this.lc.blankLedger.foreignCurrencyToDisplay = cloneDeep(this.foreignCurrencyDetails);
+                            this.lc.blankLedger.valuesInAccountCurrency = true;
+                            this.lc.blankLedger.exchangeRate = 1;
+                        }
+                    }
+                    setTimeout(() => {
+                        this.cdRf.detectChanges();
+                        this.needToReCalculate.next(true);
+                    }, 500);
+                }
+
                 txn.selectedAccount = {
                     ...event.additional,
                     label: event.label,
@@ -3627,8 +3692,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
                         this.lc.blankLedger.salesPersonUniqueName = data.body.salesPerson?.uniqueName || data.body.oppositeAccount.salesPerson?.uniqueName || null;
                         this.lc.blankLedger.salesPersonName = data.body.salesPerson?.name || data.body.oppositeAccount.salesPerson?.name || '';
                     } else {
-                        this.lc.blankLedger.salesPersonUniqueName = this.ledgerAccountResponse.salesPerson?.uniqueName || null;
-                        this.lc.blankLedger.salesPersonName = this.ledgerAccountResponse.salesPerson?.name || '';
+                        this.lc.blankLedger.salesPersonUniqueName = this.ledgerAccountResponse.salesPerson?.uniqueName || this.lc.blankLedger.salesPersonUniqueName || null;
+                        this.lc.blankLedger.salesPersonName = this.ledgerAccountResponse.salesPerson?.name || this.lc.blankLedger.salesPersonName || '';
                     }
                 }
                 // check if selected account category allows to show taxationDiscountBox in newEntry popup
@@ -4114,5 +4179,17 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.selectedTxnAccUniqueName = txn?.selectedAccount?.uniqueName;
         this.needToReCalculate.next(true);
         this.getTransactionCountConvertToEntries();
+    }
+
+    /**
+     * Hide all dropdown tax panels in the new ledger entry panel
+     * 
+     * @param exceptDropdown Optional parameter to exclude a specific dropdown from closing
+     * @memberof LedgerComponent
+     */
+    public hideAllDropdown(exceptDropdown?: LedgerDropdownTypeEnum): void {
+        if (this.newLedgerComponent && this.newLedgerComponent.hideAllDropdown) {
+            this.newLedgerComponent.hideAllDropdown(exceptDropdown);
+        }
     }
 }

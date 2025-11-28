@@ -116,6 +116,8 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
         this.getColumnarRequestModel.to = columnarReq.to;
         this.getColumnarRequestModel.sort = columnarReq.sort;
         this.getColumnarRequestModel.branchUniqueName = columnarReq.branchUniqueName;
+        this.getColumnarRequestModel.page = columnarReq.page;
+        this.getColumnarRequestModel.count = columnarReq.count;
         this.isLoading = true;
         this.ledgerService.exportLedgerColumnarReportTable(this.getColumnarRequestModel, this.companyUniqueName, this.accountUniquename, body).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             this.isLoading = false;

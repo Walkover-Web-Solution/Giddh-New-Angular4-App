@@ -7,18 +7,18 @@
 >
     <div class="giddh-all-items-wrapper">
         <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
-        <div class="container-fluid">
+        <div class="container-fluid pb-5">
             <div class="search-any-item">
                 <div class="input-group flex-nowrap">
                     <div class="input-group-prepend">
-                        <span class="input-group-text" id="addon-wrapping">
-                            <i class="icon-search"></i>
+                        <span class="input-group-text d-inline-flex align-items-center only-left-radius" id="addon-wrapping">
+                            <i class="icon-search theme-foreground-color"></i>
                         </span>
                     </div>
                     <text-field
                         class="width-inherit"
                         [type]="'text'"
-                        [cssClass]="'form-control'"
+                        [cssClass]="'form-control only-right-radius'"
                         [placeholder]="commonLocaleData?.app_search"
                         [attr.aria-label]="commonLocaleData?.app_search"
                         aria-describedby="addon-wrapping"
@@ -34,16 +34,16 @@
             <div class="all-item-block">
                 <ng-container *ngFor="let item of filteredItems$ | async; index as filteredMenuIndex">
                     <div class="main-item" *ngIf="item?.items?.length">
-                        <h3 *ngIf="!item?.link" class="mr-b2 d-flex align-items-center">
-                            <i class="{{ item?.icon }} mr-r1"></i> {{ item?.label }}
-                        </h3>
-                        <h3
+                        <p *ngIf="!item?.link" class="mb-4 d-flex align-items-center">
+                            <i class="{{ item?.icon }} mr-2"></i> {{ item?.label }}
+                        </p>
+                        <p
                             *ngIf="item?.link"
                             [routerLink]="[item?.link]"
-                            class="cursor-pointer mr-b2 d-flex align-items-center"
+                            class="cursor-pointer mb-4 d-flex align-items-center"
                         >
-                            <i class="{{ item?.icon }} mr-r1"></i> {{ item?.label }}
-                        </h3>
+                            <i class="{{ item?.icon }} mr-2"></i> {{ item?.label }}
+                        </p>
                         <div class="sub-item-block">
                             <div class="row responsive-sub-items">
                                 <ng-container *ngFor="let subItem of item?.items; index as subItemIndex">
@@ -55,10 +55,10 @@
                                         [tabindex]="subItemIndex"
                                     >
                                         <mat-card-title>
-                                            <h4><i class="{{ subItem?.icon }} mr-r1"></i> {{ subItem?.label }}</h4>
+                                            <p><i class="{{ subItem?.icon }} mr-2"></i> {{ subItem?.label }}</p>
                                         </mat-card-title>
-                                        <mat-card-content>
-                                            <p class="font-12">{{ subItem?.description }}</p>
+                                        <mat-card-content class="p-0">
+                                            <p class="font-size-12">{{ subItem?.description }}</p>
                                         </mat-card-content>
                                     </mat-card>
                                     <mat-card
@@ -68,10 +68,10 @@
                                         (click)="handleItemClick(subItem)"
                                     >
                                         <mat-card-title>
-                                            <h4><i class="{{ subItem?.icon }} mr-r1"></i> {{ subItem?.label }}</h4>
+                                            <p><i class="{{ subItem?.icon }} mr-2"></i> {{ subItem?.label }}</p>
                                         </mat-card-title>
-                                        <mat-card-content>
-                                            <p class="font-12">{{ subItem?.description }}</p>
+                                        <mat-card-content class="p-0">
+                                            <p class="font-size-12">{{ subItem?.description }}</p>
                                         </mat-card-content>
                                     </mat-card>
                                 </ng-container>
@@ -96,9 +96,9 @@
             <ng-container *ngFor="let item of subMenuItems">
                 <mat-card class="single-item" (click)="redirectSubItemLink(item)" [queryParams]="item?.additional?.queryParams">
                     <mat-card-title>
-                        <h4><i class="{{ item?.icon }} mr-r1"></i> {{ item?.label }}</h4>
+                        <h4><i class="{{ item?.icon }} mr-2"></i> {{ item?.label }}</h4>
                     </mat-card-title>
-                    <mat-card-content>
+                    <mat-card-content class="p-0">
                         <p>{{ item?.description }}</p>
                     </mat-card-content>
                 </mat-card>

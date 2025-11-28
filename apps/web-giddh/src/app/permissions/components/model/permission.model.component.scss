@@ -1,11 +1,3 @@
-.add-new-role-modal {
-    .modal-header {
-        span {
-            color: var(--color-white);
-        }
-    }
-}
-
 .dropdown-menu li {
     display: flex;
     align-content: center;
@@ -14,10 +6,4 @@
         display: block;
         cursor: pointer;
     }
-} 
-.custom-select {
-    .select-drop {
-        top: 40px;
-    }
 }
-
