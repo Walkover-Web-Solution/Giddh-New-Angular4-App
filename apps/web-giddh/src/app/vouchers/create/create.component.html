@@ -1403,7 +1403,7 @@
                                                         ({{ commonLocaleData?.app_amount }}:
                                                         {{
                                                             option.additional?.unadjustedAmount?.amountForAccount
-                                                                | giddhCurrency
+                                                                | giddhNumberFormat
                                                         }})
                                                     </div>
                                                 </a>
@@ -1515,7 +1515,7 @@
                                         (click)="switchCurrency()"
                                     />
                                     <span *ngIf="!showExchangeRateEditField"
-                                        >{{ invoiceForm.get("exchangeRate")?.value | giddhCurrency }}
+                                        >{{ invoiceForm.get("exchangeRate")?.value | giddhNumberFormat }}
                                         <ng-container *ngIf="currencySwitched">{{ account?.baseCurrency }}</ng-container
                                         ><ng-container *ngIf="!currencySwitched">{{
                                             company?.baseCurrency

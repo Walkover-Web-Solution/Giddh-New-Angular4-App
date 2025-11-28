@@ -229,7 +229,7 @@
                                                             ? commonLocaleData?.app_amount_limit?.unlimited
                                                             : activeCompany?.baseCurrencySymbol +
                                                               " " +
-                                                              (payor?.maxAmount | giddhCurrency)
+                                                              (payor?.maxAmount | giddhNumberFormat)
                                                     }}
                                                     <span
                                                         class="pull-right payor-duration font-size-12"
@@ -239,7 +239,7 @@
                                                 ><br />
                                                 <span class="limit-upto font-size-12 field-label"
                                                     >{{ localeData?.payment?.used }}
-                                                    {{ payor?.usedAmount | giddhCurrency }}</span
+                                                    {{ payor?.usedAmount | giddhNumberFormat }}</span
                                                 >
                                             </div>
                                             <div class="col-4 v-align-top d-inline-block mt-2">

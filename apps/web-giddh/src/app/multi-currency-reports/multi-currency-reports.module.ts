@@ -9,7 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { BalanceSheetReportComponent } from './balance-sheet/balance-sheet-report.component';
 import { MultiCurrencyReportsComponent } from './multi-currency-reports.component';
-import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
+import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { MultiCurrencyReportsRoutingModule } from './multi-currency-reports.routing.module';
 import { HighlightModule } from '../shared/helpers/pipes/highlightPipe/highlight.module';
@@ -56,7 +56,7 @@ import { MatMenuModule } from '@angular/material/menu';
         FinancialAccordionDirective
     ],
     exports: [
-        MultiCurrencyReportsComponent, CurrencyModule
+        MultiCurrencyReportsComponent, GiddhNumberFormatModule
     ],
     providers: [],
     imports: [
@@ -68,7 +68,7 @@ import { MatMenuModule } from '@angular/material/menu';
         HighlightModule,
         RecTypeModule,
         ClickOutsideModule,
-        CurrencyModule,
+        GiddhNumberFormatModule,
         AccountDetailModalModule,
         ScrollingModule,
         TranslateDirectiveModule,

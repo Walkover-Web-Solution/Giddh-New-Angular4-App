@@ -8,7 +8,7 @@ import { DaybookAdvanceSearchModelComponent } from 'apps/web-giddh/src/app/daybo
 import { DecimalDigitsModule } from 'apps/web-giddh/src/app/shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { ExportDaybookComponent } from './export-daybook/export-daybook.component';
-import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
+import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { SharedModule } from '../shared/shared.module';
 import { SalesModule } from '../sales/sales.module';
@@ -37,13 +37,13 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
     providers: [],
     imports: [
         CommonModule,
-        ReactiveFormsModule, 
+        ReactiveFormsModule,
         DecimalDigitsModule,
         FormsModule,
         Daterangepicker,
         DaybookRoutingModule,
         ElementViewChildModule,
-        CurrencyModule,
+        GiddhNumberFormatModule,
         SharedModule,
         NgxMaskModule.forRoot(),
         AsideMenuSalesOtherTaxesModule,

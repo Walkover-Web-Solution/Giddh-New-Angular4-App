@@ -49,7 +49,7 @@
                                 <span>{{ localeData?.in_giddh }}</span>
                                 <span
                                     >{{ activeCompany.baseCurrencySymbol }}
-                                    {{ bankaccount.closingBalance.amount | giddhCurrency }}
+                                    {{ bankaccount.closingBalance.amount | giddhNumberFormat }}
                                     <span *ngIf="bankaccount.closingBalance.type == 'CREDIT'">{{
                                         localeData?.cr_heading
                                     }}</span>
