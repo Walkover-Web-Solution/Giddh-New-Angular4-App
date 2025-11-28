@@ -1,12 +1,10 @@
 .mat-select-btn {
-    background: var(--color-white) !important;
     border: 1px solid var(--border-color) !important;
     border-radius: var(--mat-border-radius-4) !important;
     padding: 6px !important;
-    color: var(--color-black) !important;
-    font-size: var(--font-size-15) !important;
     height: 48px;
     justify-content: space-between;
+    color: var(--color-dark-gray);
 
     &.range-wrapper {
         width: 238px;
@@ -38,4 +36,8 @@
         right: 2px;
         color: var(--color-dark-black);
     }
+}
+
+.theme-dark {
+    color: var(--color-medium-gray) !important;
 }

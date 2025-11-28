@@ -54,7 +54,7 @@
                                 type="button"
                                 class="mat-select-btn range-wrapper text-left w-100"
                             >
-                                <span class="d-flex w-100">
+                                <span class="d-flex w-100" [ngClass]="{ 'theme-dark': currentThemeLabel === 'Dark' }">
                                     {{ selectedTimeSpan }}
                                     <span class="ml-auto"><span class="fa fa-caret-down"></span></span>
                                 </span>
@@ -157,7 +157,9 @@
                                 class="mat-select-btn range-wrapper text-left w-100"
                                 [disabled]="isUserRestricted"
                             >
-                                {{ selectedIPRange }}
+                                <span [ngClass]="{ 'theme-dark': currentThemeLabel === 'Dark' }">{{
+                                    selectedIPRange
+                                }}</span>
                                 <span class="pull-right"><span class="fa fa-caret-down"></span></span>
                             </button>
                             <mat-menu #menurange="matMenu">
