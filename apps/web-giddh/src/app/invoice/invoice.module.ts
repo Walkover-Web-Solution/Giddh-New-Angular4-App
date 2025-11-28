@@ -29,7 +29,7 @@ import { HasFocusDirectiveModule } from '../shared/helpers/directives/has-focus/
 import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { UniqueNameModule } from '../shared/helpers/directives/uniqueName/uniqueName.module';
-import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
+import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
 import { TrimPipeModule } from '../shared/helpers/pipes/trim/trim.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
 import { PurchaseSendEmailModule } from '../shared/purchase-send-email/purchase-send-email.module';
@@ -68,13 +68,13 @@ import { MatCardModule } from '@angular/material/card';
 
 @NgModule({
     declarations: [
-        DownloadOrSendInvoiceOnMailComponent,	
-        EsignModalComponent,	
+        DownloadOrSendInvoiceOnMailComponent,
+        EsignModalComponent,
         WebviewDirective,
-        InvoiceRendererComponent,	
-        InvoiceBulkUpdateModalComponent,	
-        EWayBillCreateComponent,	
-        EWayBillComponent,	
+        InvoiceRendererComponent,
+        InvoiceBulkUpdateModalComponent,
+        EWayBillCreateComponent,
+        EWayBillComponent,
         EWayBillCredentialsComponent
     ],
     imports: [
@@ -97,7 +97,7 @@ import { MatCardModule } from '@angular/material/card';
         AsideMenuRecurringEntryModule,
         Daterangepicker,
         AccountDetailModalModule,
-        CurrencyModule,
+        GiddhNumberFormatModule,
         ScrollingModule,
         UniqueNameModule,
         ConfirmModalModule,

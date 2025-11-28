@@ -2,8 +2,7 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
-import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
-import { GiddhCurrencyPipe } from '../shared/helpers/pipes/currencyPipe/currencyType.pipe';
+import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
 import { SharedModule } from '../shared/shared.module';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { BankAccountsComponent } from './components/bank-accounts/bank-accounts.component';
@@ -25,6 +24,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule } from '@angular/material/dialog';
 import { BankIntegrationModule } from '../shared/bank-integration/bank-integration.module';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { GiddhNumberFormatPipe } from '../shared/helpers/pipes/number-format/number-format.pipe';
 
 @NgModule({
     declarations: [
@@ -39,7 +39,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     ],
     exports: [HomeComponent],
     providers: [
-            GiddhCurrencyPipe,
+            GiddhNumberFormatPipe,
     ],
     imports: [
         CommonModule,
@@ -49,9 +49,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
             style: 'slide-left',
             spinnerSize: 30
         }),
-        
+
         Daterangepicker,
-        CurrencyModule,
+        GiddhNumberFormatModule,
         SharedModule,
         MatCardModule,
         MatMenuModule,

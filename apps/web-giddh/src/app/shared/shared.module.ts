@@ -25,7 +25,6 @@ import { KeyboardShortutModule } from './helpers/directives/keyboardShortcut/key
 import { NgxMaskModule } from './helpers/directives/ngx-mask';
 import { TextCaseChangeModule } from './helpers/directives/textCaseChange/textCaseChange.module';
 import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
-import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 import { AmountFieldComponentModule } from './amount-field/amount-field.module';
 import { AccountAddNewDetailsModule } from './header/components/account-add-new-details/account-add-new-details.module';
@@ -109,7 +108,6 @@ export function provideConfig() {
         CommandKModule,
         NgxDaterangepickerMd.forRoot(),
         ScrollingModule,
-        CurrencyModule,
         GiddhNumberFormatModule,
         TranslateDirectiveModule,
         AmountFieldComponentModule,
@@ -152,7 +150,7 @@ export function provideConfig() {
         MfReportComponent,
         ElementViewChildModule,
         NgxDaterangepickerMd,
-        CurrencyModule,
+        GiddhNumberFormatModule,
         TranslateDirectiveModule,
         AmountFieldComponentModule,
         AccountAddNewDetailsModule,

@@ -298,7 +298,7 @@
                                                             "
                                                             [labelValue]="
                                                                 isUpdateMode && branchTransferCreateEditForm.get('sources.0.warehouse.name')?.value
-                                                                ? branchTransferCreateEditForm.get('sources.0.warehouse.name').value : 
+                                                                ? branchTransferCreateEditForm.get('sources.0.warehouse.name').value :
                                                                     senderWarehouses[
                                                                         branchTransferCreateEditForm.get(
                                                                             'sources.0.uniqueName'
@@ -555,7 +555,7 @@
                             <div class="col-lg-4">
                                 <div class="total-amount text-right">
                                     <p>{{ commonLocaleData?.app_total_amount }}</p>
-                                    <p>{{ activeCompany?.baseCurrencySymbol }} {{ overallTotal | giddhCurrency }}</p>
+                                    <p>{{ activeCompany?.baseCurrencySymbol }} {{ overallTotal | giddhNumberFormat }}</p>
                                 </div>
                             </div>
                         </div>
@@ -826,7 +826,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        
+
                                         <div *ngIf="transferType === 'products'" formArrayName="sources">
                                             <div [formGroupName]="0">
                                                 <div class="mb-3 one">
@@ -841,8 +841,8 @@
                                                                     ?.value
                                                             ]
                                                         "
-                                                        [labelValue]=" isUpdateMode && branchTransferCreateEditForm.get('sources.0.warehouse.name').value 
-                                                            ? branchTransferCreateEditForm.get('sources.0.warehouse.name').value 
+                                                        [labelValue]=" isUpdateMode && branchTransferCreateEditForm.get('sources.0.warehouse.name').value
+                                                            ? branchTransferCreateEditForm.get('sources.0.warehouse.name').value
                                                             : ''
                                                         "
                                                         (onClear)="resetWarehouse('sources', 0)"
@@ -990,7 +990,7 @@
                                                         "
                                                         [labelValue]="
                                                             isUpdateMode && branchTransferCreateEditForm.get('destinations.0.warehouse.name')?.value
-                                                                ? branchTransferCreateEditForm.get('destinations.0.warehouse.name').value : 
+                                                                ? branchTransferCreateEditForm.get('destinations.0.warehouse.name').value :
                                                                 destinationWarehouses[
                                                                     branchTransferCreateEditForm.get(
                                                                         'destinations.0.uniqueName'
@@ -1227,7 +1227,7 @@
                             <div class="col-lg-4">
                                 <div class="total-amount text-right">
                                     <p>{{ commonLocaleData?.app_total_amount }}</p>
-                                    <p>{{ activeCompany?.baseCurrencySymbol }} {{ overallTotal | giddhCurrency }}</p>
+                                    <p>{{ activeCompany?.baseCurrencySymbol }} {{ overallTotal | giddhNumberFormat }}</p>
                                 </div>
                             </div>
                         </div>
@@ -1419,7 +1419,7 @@
                                                                         {{ activeCompany?.baseCurrencySymbol }}
                                                                         {{
                                                                             source.get("warehouse.stockDetails.rate")
-                                                                                .value | giddhCurrency
+                                                                                .value | giddhNumberFormat
                                                                         }}
                                                                     </div>
                                                                 </div>
@@ -1451,7 +1451,7 @@
                                                                     {{ activeCompany?.baseCurrencySymbol }}
                                                                     {{
                                                                         source.get("warehouse.stockDetails.amount")
-                                                                            .value | giddhCurrency
+                                                                            .value | giddhNumberFormat
                                                                     }}
                                                                 </div>
                                                             </div>
@@ -1886,7 +1886,7 @@
                                                                         {{ activeCompany?.baseCurrencySymbol }}
                                                                         {{
                                                                             product.get("stockDetails.rate")?.value
-                                                                                | giddhCurrency
+                                                                                | giddhNumberFormat
                                                                         }}
                                                                     </div>
                                                                 </div>
@@ -1921,7 +1921,7 @@
                                                                     {{ activeCompany?.baseCurrencySymbol }}
                                                                     {{
                                                                         product.get("stockDetails.amount")?.value
-                                                                            | giddhCurrency
+                                                                            | giddhNumberFormat
                                                                     }}
                                                                 </div>
                                                             </div>
@@ -2126,7 +2126,7 @@
                                                                         {{
                                                                             destination.get(
                                                                                 "warehouse.stockDetails.rate"
-                                                                            ).value | giddhCurrency
+                                                                            ).value | giddhNumberFormat
                                                                         }}
                                                                     </div>
                                                                 </div>
@@ -2160,7 +2160,7 @@
                                                                     {{ activeCompany?.baseCurrencySymbol }}
                                                                     {{
                                                                         destination.get("warehouse.stockDetails.amount")
-                                                                            .value | giddhCurrency
+                                                                            .value | giddhNumberFormat
                                                                     }}
                                                                 </div>
                                                             </div>
@@ -2251,7 +2251,7 @@
                                                 <div><strong>Total</strong></div>
                                                 <div>
                                                     {{ activeCompany?.baseCurrencySymbol }}
-                                                    {{ overallTotal | giddhCurrency }}
+                                                    {{ overallTotal | giddhNumberFormat }}
                                                 </div>
                                             </div>
                                         </td>
@@ -2341,7 +2341,7 @@
                                 <button aria-label="cancel" *ngIf="isUpdateMode" mat-stroked-button (click)="navigateToList()">
                                     {{ commonLocaleData?.app_cancel }}
                                 </button>
-                                <button 
+                                <button
                                     aria-label="uniqueName"
                                     mat-raised-button
                                     color="primary"

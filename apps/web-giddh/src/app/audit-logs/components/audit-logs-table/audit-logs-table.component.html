@@ -184,7 +184,7 @@
                             </div>
                             <div class="mr-1">
                                 <label> {{ commonLocaleData?.app_rate }}: </label>
-                                <p class="ml-1">{{ item?.rate | giddhCurrency }} |</p>
+                                <p class="ml-1">{{ item?.rate | giddhNumberFormat }} |</p>
                             </div>
                         </ng-container>
                         <span> {{ commonLocaleData?.app_sales }}:- </span>
@@ -199,7 +199,7 @@
                             </div>
                             <div class="mr-1">
                                 <label> {{ commonLocaleData?.app_rate }}: </label>
-                                <p class="ml-1">{{ item?.rate | giddhCurrency }} |</p>
+                                <p class="ml-1">{{ item?.rate | giddhNumberFormat }} |</p>
                             </div>
                         </ng-container>
                     </div>
@@ -282,15 +282,15 @@
                         </div>
                         <div class="mr-1" *ngIf="log?.details?.subTotal">
                             <label> {{ commonLocaleData?.app_subtotal }}: </label>
-                            <p class="ml-1">{{ log?.details?.subTotal?.amountForAccount | giddhCurrency }}</p>
+                            <p class="ml-1">{{ log?.details?.subTotal?.amountForAccount | giddhNumberFormat }}</p>
                         </div>
                         <div class="mr-1" *ngIf="log?.details?.totalTax">
                             <label> {{ commonLocaleData?.app_tax }}: </label>
-                            <p class="ml-1">{{ log?.details?.totalTax?.amountForAccount | giddhCurrency }}</p>
+                            <p class="ml-1">{{ log?.details?.totalTax?.amountForAccount | giddhNumberFormat }}</p>
                         </div>
                         <div class="mr-1" *ngIf="log?.details?.grandTotal">
                             <label> {{ commonLocaleData?.app_total }}: </label>
-                            <p class="ml-1">{{ log?.details?.grandTotal?.amountForAccount | giddhCurrency }}</p>
+                            <p class="ml-1">{{ log?.details?.grandTotal?.amountForAccount | giddhNumberFormat }}</p>
                         </div>
                     </div>
                     <!-- Vouchers block end -->
@@ -326,15 +326,15 @@
                         </ng-container>
                         <div class="mr-1" *ngIf="log?.details?.subTotal">
                             <label> {{ commonLocaleData?.app_subtotal }}: </label>
-                            <p class="ml-1">{{ log?.details?.subTotal | giddhCurrency }}</p>
+                            <p class="ml-1">{{ log?.details?.subTotal | giddhNumberFormat }}</p>
                         </div>
                         <div class="mr-1" *ngIf="log?.details?.taxTotal">
                             <label> {{ commonLocaleData?.app_tax }}: </label>
-                            <p class="ml-1">{{ log?.details?.taxTotal | giddhCurrency }}</p>
+                            <p class="ml-1">{{ log?.details?.taxTotal | giddhNumberFormat }}</p>
                         </div>
                         <div class="mr-1" *ngIf="log?.details?.total">
                             <label> {{ commonLocaleData?.app_total }}: </label>
-                            <p class="ml-1">{{ log?.details?.total | giddhCurrency }}</p>
+                            <p class="ml-1">{{ log?.details?.total | giddhNumberFormat }}</p>
                         </div>
                         <div class="mr-1" *ngIf="log?.details?.description">
                             <label> {{ commonLocaleData?.description }}: </label>
@@ -505,7 +505,7 @@
                                 </div>
                                 <div class="mr-1">
                                     <label> {{ commonLocaleData?.app_rate }}: </label>
-                                    <p class="ml-1">{{ item?.rate | giddhCurrency }} |</p>
+                                    <p class="ml-1">{{ item?.rate | giddhNumberFormat }} |</p>
                                 </div>
                             </ng-container>
                             <span> {{ commonLocaleData?.app_sales }}:- </span>
@@ -520,7 +520,7 @@
                                 </div>
                                 <div class="mr-1">
                                     <label> {{ commonLocaleData?.app_rate }}: </label>
-                                    <p class="ml-1">{{ item?.rate | giddhCurrency }} |</p>
+                                    <p class="ml-1">{{ item?.rate | giddhNumberFormat }} |</p>
                                 </div>
                             </ng-container>
                         </div>
@@ -615,19 +615,19 @@
                             <div class="mr-1" *ngIf="log?.old?.details?.subTotal">
                                 <label> {{ commonLocaleData?.app_subtotal }}: </label>
                                 <p class="ml-1">
-                                    {{ log?.old?.details?.subTotal?.amountForAccount | giddhCurrency }}
+                                    {{ log?.old?.details?.subTotal?.amountForAccount | giddhNumberFormat }}
                                 </p>
                             </div>
                             <div class="mr-1" *ngIf="log?.old?.details?.totalTax">
                                 <label> {{ commonLocaleData?.app_tax }}: </label>
                                 <p class="ml-1">
-                                    {{ log?.old?.details?.totalTax?.amountForAccount | giddhCurrency }}
+                                    {{ log?.old?.details?.totalTax?.amountForAccount | giddhNumberFormat }}
                                 </p>
                             </div>
                             <div class="mr-1" *ngIf="log?.old?.details?.grandTotal">
                                 <label> {{ commonLocaleData?.app_total }}: </label>
                                 <p class="ml-1">
-                                    {{ log?.old?.details?.grandTotal?.amountForAccount | giddhCurrency }}
+                                    {{ log?.old?.details?.grandTotal?.amountForAccount | giddhNumberFormat }}
                                 </p>
                             </div>
                         </div>
@@ -668,15 +668,15 @@
                             </ng-container>
                             <div class="mr-1" *ngIf="log?.old?.details?.subTotal">
                                 <label> {{ commonLocaleData?.app_subtotal }}: </label>
-                                <p class="ml-1">{{ log?.old?.details?.subTotal | giddhCurrency }}</p>
+                                <p class="ml-1">{{ log?.old?.details?.subTotal | giddhNumberFormat }}</p>
                             </div>
                             <div class="mr-1" *ngIf="log?.old?.details?.taxTotal">
                                 <label> {{ commonLocaleData?.app_tax }}: </label>
-                                <p class="ml-1">{{ log?.old?.details?.taxTotal | giddhCurrency }}</p>
+                                <p class="ml-1">{{ log?.old?.details?.taxTotal | giddhNumberFormat }}</p>
                             </div>
                             <div class="mr-1" *ngIf="log?.old?.details?.total">
                                 <label> {{ commonLocaleData?.app_total }}: </label>
-                                <p class="ml-1">{{ log?.old?.details?.total | giddhCurrency }}</p>
+                                <p class="ml-1">{{ log?.old?.details?.total | giddhNumberFormat }}</p>
                             </div>
                             <div class="mr-1" *ngIf="log?.old?.details?.description">
                                 <label> {{ commonLocaleData?.description }}: </label>
