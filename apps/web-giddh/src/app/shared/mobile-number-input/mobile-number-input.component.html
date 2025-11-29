@@ -3,7 +3,7 @@
         appearance="outline"
         floatLabel="always"
         class="pointer-event-none mobile-input"
-        [ngClass]="{ 'mat-form-field-invalid': (mobileControl.invalid && (mobileControl.dirty || mobileControl.touched)) || showError }"
+        [ngClass]="{ 'mat-form-field-invalid': mobileControl.invalid && (mobileControl.dirty || mobileControl.touched) }"
     >
         <mat-label>{{ label }}</mat-label>
         <div class="input-wrapper d-flex column-gap-1">
@@ -72,7 +72,6 @@
                 autocomplete="tel"
             />
         </div>
-        
         <!-- <mat-error *ngIf="mobileControl.hasError('required')">
             Mobile number is required
         </mat-error>
