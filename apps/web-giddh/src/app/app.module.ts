@@ -522,7 +522,7 @@ export function getServiceConfig(): any {
 
     return {
         apiUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain ? `${whiteLabelConfig.body.giddhWhiteLabel.apiDomain}/` :
-        (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : "https://apitest.giddh.com/"),
+        (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
         ApiUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain ? `${whiteLabelConfig.body.giddhWhiteLabel.apiDomain}/` :
         (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
         appUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.domainName ? `${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` : Configuration.AppUrl,
