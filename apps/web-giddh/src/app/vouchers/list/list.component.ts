@@ -362,6 +362,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public showInvoiceDate: boolean = true;
     /** Show purchase lock date */
     public showPurchaseDate: boolean = true;
+    /** Template for form value */
     public templateFor: string = '';
 
     constructor(
