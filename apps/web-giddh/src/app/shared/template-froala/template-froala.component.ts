@@ -359,16 +359,6 @@ export class TemplateFroalaComponent implements OnInit {
             toolbarSticky: true,
             // Add Electron-specific configurations
             requestWithCORS: this.isElectron ? false : true,
-            // Prevent backspace from deleting entire content
-            keepFormatOnDelete: true,
-            // Configure enter behavior to prevent editor collapse
-            enter: FroalaEditor.ENTER_P,
-            // Ensure minimum content is maintained
-            htmlRemoveTags: [],
-            // Prevent empty editor state
-            htmlAllowComments: false,
-            // Configure deletion behavior
-            multiLine: true,
             toolbarButtons: {
                 moreText: {
                     buttons: [
@@ -418,9 +408,6 @@ export class TemplateFroalaComponent implements OnInit {
                             const htmlValue = currentForm?.get('html')?.value;
                             if (htmlValue) {
                                 this.froalaEditor.html.set(htmlValue);
-                            } else {
-                                // Ensure minimum content to prevent empty editor
-                                this.froalaEditor.html.set('<p><br></p>');
                             }
                         }, contentDelay);
                     }, setupDelay);
@@ -432,7 +419,6 @@ export class TemplateFroalaComponent implements OnInit {
                     }
                 },
                 'contentChanged': () => {
-                    this.preventEmptyEditor();
                     this.updateFormControl();
                 },
                 // Add error handling for Electron
@@ -465,41 +451,16 @@ export class TemplateFroalaComponent implements OnInit {
      */
     private setupFroalaEventHandlers(): void {
         if (this.froalaEditor) {
-            // Enhanced backspace handling to prevent content deletion
-            this.froalaEditor.events.on('keydown', (e) => {
-                // Handle tribute suggestions first
-                if (e.which == FroalaEditor.KEYCODE.ENTER && this.froalaTribute?.isActive) {
-                    return false;
-                }
-                
-                // Enhanced backspace prevention logic
-                if (e.which === FroalaEditor.KEYCODE.BACKSPACE) {
-                    const currentContent = this.froalaEditor.html.get();
-                    const textContent = this.froalaEditor.el.textContent || this.froalaEditor.el.innerText || '';
-                    
-                    // Prevent backspace if content is minimal or would result in empty editor
-                    if (this.isContentMinimal(currentContent, textContent)) {
-                        e.preventDefault();
-                        e.stopPropagation();
+            this.froalaEditor.events.on(
+                'keydown',
+                (e) => {
+                    console.log("Triggered : ", e);         
+                    if ((e.which == FroalaEditor.KEYCODE.ENTER || e.which == FroalaEditor.KEYCODE.BACKSPACE) && this.froalaTribute?.isActive) {
+                        console.log("Run : ", e);  
                         return false;
                     }
                 }
-            });
-
-            // Additional event handlers for content protection
-            this.froalaEditor.events.on('keyup', (e) => {
-                if (e.which === FroalaEditor.KEYCODE.BACKSPACE || e.which === FroalaEditor.KEYCODE.DELETE) {
-                    this.preventEmptyEditor();
-                }
-            });
-
-            // Prevent paste that could cause issues
-            this.froalaEditor.events.on('paste.before', (e) => {
-                // Allow normal paste behavior but ensure content validation after
-                setTimeout(() => {
-                    this.preventEmptyEditor();
-                }, 100);
-            });
+            );
         }
     }
 
@@ -514,78 +475,6 @@ export class TemplateFroalaComponent implements OnInit {
         setTimeout(() => {
             this.froalaOptions = this.getFroalaOptions();
         }, this.froalaInitRetryDelay * this.froalaInitRetryCount);
-    }
-
-    /**
-     * Prevents the editor from becoming completely empty
-     *
-     * @private
-     * @memberof TemplateFroalaComponent
-     */
-    private preventEmptyEditor(): void {
-        if (this.froalaEditor) {
-            const currentContent = this.froalaEditor.html.get();
-            const textContent = this.froalaEditor.el.textContent || this.froalaEditor.el.innerText || '';
-            
-            // If content is empty or only contains whitespace/minimal HTML
-            if (this.isContentEmpty(currentContent, textContent)) {
-                // Set minimum content to prevent editor collapse
-                this.froalaEditor.html.set('<p><br></p>');
-                // Position cursor at the beginning
-                this.froalaEditor.selection.setAtStart(this.froalaEditor.el.querySelector('p'));
-            }
-        }
-    }
-
-    /**
-     * Checks if content is minimal and should prevent further deletion
-     *
-     * @private
-     * @param {string} htmlContent - HTML content from editor
-     * @param {string} textContent - Text content from editor
-     * @returns {boolean} - True if content is minimal
-     * @memberof TemplateFroalaComponent
-     */
-    private isContentMinimal(htmlContent: string, textContent: string): boolean {
-        // Remove HTML tags and check text length
-        const cleanText = textContent.trim();
-        
-        // If text content is very short (less than 2 characters), prevent deletion
-        if (cleanText.length <= 1) {
-            return true;
-        }
-        
-        // Check if HTML content indicates minimal structure
-        const minimalPatterns = [
-            /^<p><br><\/p>$/,
-            /^<p>\s*<\/p>$/,
-            /^<br>$/,
-            /^\s*$/
-        ];
-        
-        return minimalPatterns.some(pattern => pattern.test(htmlContent.trim()));
-    }
-
-    /**
-     * Checks if content is completely empty
-     *
-     * @private
-     * @param {string} htmlContent - HTML content from editor
-     * @param {string} textContent - Text content from editor
-     * @returns {boolean} - True if content is empty
-     * @memberof TemplateFroalaComponent
-     */
-    private isContentEmpty(htmlContent: string, textContent: string): boolean {
-        const cleanText = textContent.trim();
-        const cleanHtml = htmlContent.trim();
-        
-        // Check various empty states
-        return cleanText === '' || 
-               cleanHtml === '' || 
-               cleanHtml === '<p></p>' || 
-               cleanHtml === '<p><br></p>' ||
-               cleanHtml === '<br>' ||
-               /^<p>\s*<\/p>$/.test(cleanHtml);
     }
 
     /**

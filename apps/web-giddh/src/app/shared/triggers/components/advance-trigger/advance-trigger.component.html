@@ -5,7 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="pd-15">
+    <div class=" p-3 ">
         <div *ngIf="isCommunicationPlatformsLoading" class="mt-5">
             <giddh-page-loader></giddh-page-loader>
         </div>
@@ -19,7 +19,7 @@
             {{ localeData?.communication?.switch_to_basic_trigger }}
         </button>
         <div
-            class="discount box clearfix section-center position-relative overflow-visible"
+            class="discount p-3 clear-both section-center position-relative overflow-visible"
             *ngIf="!isShowIntegrated && !communicationPlatforms?.MSG91?.isConnected && !isCommunicationPlatformsLoading"
         >
             <div class="initial-screen position-absolute text-center">
@@ -50,13 +50,13 @@
                         </button>
                         <mat-menu #beforeMenu="matMenu" xPosition="before">
                             <button mat-menu-item (click)="editCommunicationPlatform = 'MSG91'">
-                                <span class="font-15 edit-buttons">{{ localeData?.communication?.edit_platform }}</span>
+                                <span class="font-size-15 edit-buttons">{{ localeData?.communication?.edit_platform }}</span>
                             </button>
                             <button
                                 mat-menu-item
                                 (click)="deleteCommunicationPlatform(communicationPlatforms?.MSG91?.uniqueName)"
                             >
-                                <span class="font-15 edit-buttons">{{ localeData?.communication?.remove_platform }}</span>
+                                <span class="font-size-15 edit-buttons">{{ localeData?.communication?.remove_platform }}</span>
                             </button>
                         </mat-menu>
                     </div>
@@ -81,22 +81,22 @@
                     </div>
                     </div>
                     <div
-                        class="verify-page mr-t15"
+                        class="verify-page mt-3"
                         *ngIf="
                             (!isCommunicationPlatformsLoading && !communicationPlatforms?.MSG91?.isConnected) ||
                             editCommunicationPlatform === 'MSG91'
                         "
                     >
                         <button
-                            class="cursor-pointer font-15 d-flex p-0 back-button mat-button msg-btn"
+                            class="cursor-pointer font-size-15 d-flex p-0 back-button mat-button msg-btn"
                             (click)="backToHomePage($event)"
                             *ngIf="communicationPlatforms?.MSG91?.isConnected"
                         >
-                            <span class="mat-button-wrapper"
+                            <span class="mat-button-wrapper d-flex"
                                 ><i class="icon-left"></i><span class="back-text">{{ localeData?.communication?.msg91 }}</span>
                             </span>
                         </button>
-                        <div class="d-flex align-items-center verify-form mr-t15">
+                        <div class="d-flex align-items-center verify-form mt-3">
                             <div class="input-field">
                                 <input-field
                                     [label]="communicationPlatforms?.MSG91?.fields?.auth_key?.label"
@@ -111,7 +111,7 @@
                             <button
                                 mat-raised-button
                                 color="primary"
-                                class="font-15"
+                                class="font-size-15"
                                 [disabled]="isCommunicationPlatformVerificationInProcess"
                                 (click)="verifyCommunicationPlatform('MSG91')"
                             >
@@ -123,7 +123,7 @@
             </div>
             <ng-container *ngIf="!editCommunicationPlatform">
                 <button
-                    class="new-trigger font-15"
+                    class="new-trigger font-size-15"
                     mat-raised-button
                     color="primary"
                     *ngIf="!showTriggerForm && communicationPlatforms?.MSG91?.isConnected"
@@ -198,13 +198,13 @@
                                     alt=""
                                 />
                                 <img
-                                    class="mr-l2 icon-visibility cursor-pointer"
+                                    class="ml-4 icon-visibility cursor-pointer"
                                     src="{{ imgPath }}edit.svg"
                                     alt=""
                                     (click)="editTrigger(element, 'update')"
                                 />
                                 <img
-                                    class="mr-l2 icon-visibility cursor-pointer"
+                                    class="ml-4 icon-visibility cursor-pointer"
                                     src="{{ imgPath }}delete.svg"
                                     (click)="deleteTrigger(element?.uniqueName)"
                                 />
@@ -216,12 +216,11 @@
                     </table>
                     <section class="no-logs" *ngIf="!activeTriggersDataSource?.length && !isActiveTriggersLoading">
                         <div class="no-data">
-                            <h1>{{ localeData?.communication?.no_triggers_found }}</h1>
+                            <h2>{{ localeData?.communication?.no_triggers_found }}</h2>
                         </div>
                     </section>
                 </div>
                 <div
-                    class="mt-3"
                     *ngIf="
                         triggerObj?.totalItems > pageSizeOptions[0] &&
                         !isActiveTriggersLoading &&
@@ -240,6 +239,7 @@
                         (page)="handlePageEvent($event)"
                         aria-label="Select page of triggers"
                     ></mat-paginator>
+                    <section class="mb-custom-80"></section>
                 </div>
             </ng-container>
             <!-- Page-6 to Page-9 -->
@@ -247,7 +247,7 @@
                 <div class="trigger-form-left-side">
                     <div class="create-trigger-head">
                         <img class="return" src="{{ imgPath }}return.svg" alt="" (click)="backToListPage($event)" />
-                        <p class="trigger-heading font-15">
+                        <p class="trigger-heading font-size-15">
                             {{
                                 triggerMode === "create" || triggerMode === "copy"
                                     ? localeData?.communication?.create_trigger
@@ -268,7 +268,7 @@
                             (onClear)="createTrigger.title = ''"
                         ></input-field>
                     </div>
-                    <div class="trigger-input mr-t15">
+                    <div class="trigger-input mt-3">
                         <reactive-dropdown-field
                             [label]="localeData?.communication?.condition"
                             [placeholder]="localeData?.communication?.select_condition"
@@ -281,7 +281,7 @@
                             (onClear)="createTrigger.condition.action[0] = ''"
                         ></reactive-dropdown-field>
                     </div>
-                    <div class="trigger-input mr-t15">
+                    <div class="trigger-input mt-3">
                         <reactive-dropdown-field
                             [label]="localeData?.communication?.entity"
                             [placeholder]="localeData?.communication?.select_entity"
@@ -293,7 +293,7 @@
                             [required]="true"
                         ></reactive-dropdown-field>
                     </div>
-                    <div class="trigger-input mr-t15">
+                    <div class="trigger-input mt-3">
                         <mat-form-field appearance="outline" class="w-100">
                             <mat-label>{{ localeData?.communication?.sub_entity }}</mat-label>
                             <mat-select
@@ -309,7 +309,7 @@
                                 (onClear)="createTrigger.condition.subConditions[0].action = ''"
                             >
                                 <mat-option
-                                    class="font-15"
+                                    class="font-size-15"
                                     *ngFor="let action of subConditionAction"
                                     [selected]="action?.isChecked"
                                     [value]="action"
@@ -318,7 +318,7 @@
                             </mat-select>
                         </mat-form-field>
                     </div>
-                    <div class="trigger-input mr-t15">
+                    <div class="trigger-input mt-3">
                         <reactive-dropdown-field
                             [label]="localeData?.communication?.campaign"
                             [placeholder]="localeData?.communication?.select_campaign"
@@ -355,8 +355,8 @@
                     <div class="dropdown-box-1">
                         <div class="compose-trigger-dropdowns">
                             <div class="chiplist-wrapper">
-                                <div class="pd-l2 pd-r2 border-bottom">
-                                    <span class="dropdown-heading pd-b15 d-block">{{
+                                <div class="pl-4 pr-4 border-bottom">
+                                    <span class="dropdown-heading pb-3 d-block">{{
                                         localeData?.communication?.receiver
                                     }}</span>
                                     <select-multiple-fields
@@ -369,7 +369,7 @@
                                         class="select-multiple-chiplist mobile-margin"
                                     ></select-multiple-fields>
                                 </div>
-                                <div class="border-left border-right chip-gap pd-l2 pd-r2 pd-t2">
+                                <div class="border-left border-right chip-gap pl-4 pr-4 pt-4">
                                     <select-multiple-fields
                                         [showError]="mandatoryFields.triggerToChiplist"
                                         [placeholder]="localeData?.communication?.select_to"
@@ -400,7 +400,7 @@
                                     ></select-multiple-fields>
                                 </div>
                                 <mat-checkbox
-                                    class="trigger-dropdown pd-l2 pd-r2"
+                                    class="font-size-15 pl-4 pr-4"
                                     #sendVoucherPdf
                                     color="primary"
                                     name="voucherpdf"

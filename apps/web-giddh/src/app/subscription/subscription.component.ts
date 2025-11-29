@@ -8,7 +8,6 @@ import { ToasterService } from '../services/toaster.service';
 import { CompanyResponse } from '../models/api-models/Company';
 import { SignupWithMobile, UserDetails, VerifyMobileModel } from '../models/api-models/loginModels';
 import { GIDDH_DATE_FORMAT_DD_MM_YYYY, GIDDH_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
-import { BreakpointObserver } from '@angular/cdk/layout';
 import { ClipboardService } from 'ngx-clipboard';
 import { LoginActions } from '../actions/login.action';
 import { SessionActions } from '../actions/session.action';
@@ -94,7 +93,6 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         private router: Router,
         private sessionAction: SessionActions,
         private route: ActivatedRoute,
-        private breakPointObservar: BreakpointObserver,
         private generalActions: GeneralActions,
         private changeDetectionRef: ChangeDetectorRef,
         private dialog: MatDialog,
@@ -117,7 +115,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         this.isVerifyAddNewMobileNoInProcess$ = this.store.pipe(select(appState => appState.login.isVerifyAddNewMobileNoInProcess), takeUntil(this.destroyed$));
         this.isVerifyAddNewMobileNoSuccess$ = this.store.pipe(select(appState => appState.login.isVerifyAddNewMobileNoSuccess), takeUntil(this.destroyed$));
         this.userSessionResponse$ = this.store.pipe(select(appState => appState.userLoggedInSessions.Usersession), takeUntil(this.destroyed$));
-        this.isUpdateCompanyInProgress$ = this.store.pipe(select(appState => appState.settings.updateProfileInProgress), takeUntil(this.destroyed$));
+        this.isUpdateCompanyInProgress$ = this.store.pipe(select(appState => appState.settings.getProfileInProgress), takeUntil(this.destroyed$));
 
         this.authenticateTwoWay$ = this.store.pipe(select(appState => {
             if (appState.session.user) {
@@ -297,6 +295,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
         document.querySelector('body').classList.remove('setting-sidebar-open');
+        document.querySelector('body').classList.remove('tabs-page');
     }
 
     /**

@@ -35,21 +35,6 @@ export const PHONE_NUMBER_REGEX = /^[0-9-+()\/\\ ]+$/;
 export const MOBILE_NUMBER_SELF_URL = 'https://api.db-ip.com/v2/free/self';
 export const MOBILE_NUMBER_IP_ADDRESS_URL = 'http://ip-api.com/json/';
 export const MOBILE_NUMBER_ADDRESS_JSON_URL = 'https://ipinfo.io/';
-export const MOBILE_NUMBER_UTIL_URL = 'https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.17/js/utils.js';
-export const INTL_INPUT_OPTION = {
-    nationalMode: true,
-    utilsScript: MOBILE_NUMBER_UTIL_URL,
-    autoHideDialCode: false,
-    separateDialCode: false,
-    initialCountry: 'auto',
-    geoIpLookup: (success: any, failure: any) => {
-        const countryCodeService = new CountryCodeService();
-        countryCodeService.getCountryCode().subscribe({
-            next: (countryCode: string) => success(countryCode),
-            error: () => success('in')
-        });
-    },
-};
 
 
 export const APP_DEFAULT_TITLE = '';
@@ -114,6 +99,8 @@ export enum OnBoardingType {
 
 /** Pagination limit for every module */
 export const PAGINATION_LIMIT = 50;
+/** Pagination limit for bulk stock */
+export const PAGINATION_LIMIT_BULK_STOCK = 100;
 /** Pagination count options */
 export const PAGE_SIZE_OPTIONS = [10, 20, 50, 100];
 /** API default count limit */
@@ -642,12 +629,38 @@ export const COUNTRY_REGION_MAP: { [key: string]: string | null } = {
 /** Gst utility download portal link */
 export const GST_UTILITY_DOWNLOAD_LINK = "https://www.gst.gov.in/download/returns";
 
-/** Break Point Screen Size*/
-export const BREAKPOINT_SCREEN_SIZE = {
-    MEDIUM_DESKTOP_SCREEN_SIZE: '(1536px > width > 1366px)',
-    SMALL_DESKTOP_SCREEN_SIZE: '(1366px > width > 1024px)',
-    TAB_SCREEN_SIZE: '(1024px > width)'
+/**
+ * Responsive breakpoints for different screen sizes and device types
+ * Used throughout the application for responsive design and layout adjustments
+ */
+export enum BREAKPOINT_SCREEN_SIZE {
+    /** Mobile devices and small screens - Not optimally supported */
+    UNSUPPORTED = '(max-width: 768px)',
+    /** iPad and tablet users (768px - 1023px) */
+    TABLET = '(min-width: 768px) and (max-width: 1023px)',
+    /** Most common business laptops (1024px - 1279px) */
+    SMALL_DESKTOP = '(min-width: 1024px) and (max-width: 1279px)',
+    /** Modern laptops and smaller monitors (1280px - 1439px) */
+    MEDIUM_DESKTOP = '(min-width: 1280px) and (max-width: 1439px)',
+    /** External monitors and premium laptops (1440px - 1919px) */
+    LARGE_DESKTOP = '(min-width: 1440px) and (max-width: 1919px)',
+    /** High-resolution displays (1920px+) */
+    XL_DESKTOP = '(min-width: 1920px)'
 }
+
+/**
+ * Specialized breakpoints for accounting-specific UI layouts
+ * These breakpoints are optimized for financial data presentation and form layouts
+ */
+export enum ACCOUNTING_BREAKPOINTS {
+    /** Minimum width where sidebar and main content display comfortably together */
+    SIDEBAR_COMFORTABLE = '(min-width: 1200px)',
+    /** Minimum width where forms can be split into multiple columns effectively */
+    MULTI_COLUMN_FORMS = '(min-width: 1100px)',
+    /** Minimum width where all data table columns can be displayed without horizontal scrolling */
+    FULL_DATA_VIEW = '(min-width: 1400px)'
+}
+
 /** HTML tag name  */
 export enum HtmlElementEnum {
     Input = 'INPUT',
@@ -664,7 +677,8 @@ export const KeyCodesEnum = {
     ARROW_DOWN: 'ArrowDown',
     ARROW_UP: 'ArrowUp',
     ARROW_RIGHT: 'ArrowRight',
-    ARROW_LEFT: 'ArrowLeft' 
+    ARROW_LEFT: 'ArrowLeft',
+    TAB: 'Tab'
 };
 
 /** List of all the HTTP methods */

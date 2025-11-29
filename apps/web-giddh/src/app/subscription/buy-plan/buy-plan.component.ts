@@ -4,11 +4,10 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { MatDialog } from '@angular/material/dialog';
 import { ActivateDialogComponent } from '../activate-dialog/activate-dialog.component';
 import { BuyPlanComponentStore } from './utility/buy-plan.store';
-import { Observable, ReplaySubject, takeUntil, of as observableOf, distinctUntilChanged, debounceTime, delay } from 'rxjs';
+import { Observable, ReplaySubject, takeUntil, of as observableOf, distinctUntilChanged, debounceTime, delay, take } from 'rxjs';
 import { ToasterService } from '../../services/toaster.service';
 import { CountryRequest, OnboardingFormRequest } from '../../models/api-models/Common';
 import { CommonActions } from '../../actions/common.actions';
-import { IntlPhoneLib } from "../../theme/mobile-number-field/intl-phone-lib.class";
 import { SubscriptionsService } from '../../services/subscriptions.service';
 import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
@@ -90,8 +89,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public createSubscriptionResponse$: Observable<any> = this.componentStore.select(state => state.createSubscriptionResponse);
     /** Holds Store Change plan API response state as observable*/
     public updatePlanSuccess$: Observable<any> = this.componentStore.select(state => state.updatePlanSuccess);
-    /** Mobile number library instance */
-    public intlClass: any;
     /** This will hold onboarding api form request */
     public onboardingFormRequest: OnboardingFormRequest = { formName: '', country: '' };
     /** Holds company specific data */
@@ -178,6 +175,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     public subscriptionRazorpayOrderDetails$: Observable<any> = this.componentStore.select(state => state.subscriptionRazorpayOrderDetails);
     /** Holds Store Plan Calculation Plan Data API success state as observable*/
     public calculateData$: Observable<any> = this.componentStore.select(state => state.calculateData);
+    /** Holds Store Plan Calculation Plan Data API in progress state as observable*/
+    public calculateDataInProgress$: Observable<any> = this.componentStore.select(state => state.calculateDataInProgress);
     /** True if it is subscription region */
     public isSubscriptionRegion: boolean = false;
     /** Hold current time stamp  */
@@ -554,19 +553,17 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                         const reqObj = {
                             subscriptionId: this.upgradeSubscriptionId,
                             billingRequestId: this.goCardLessBillingRequestId
-                        };
+                        }
                         this.componentStore.activatePlan(reqObj);
-                        setTimeout(() => {
-                            this.activatePlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                                if (response) {
-                                    if (this.subscriptionId && this.isChangePlan) {
-                                        this.router.navigate(['/pages/user-details/subscription']);
-                                    } else {
-                                        this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
-                                    };
-                                }
-                            });
-                        }, 100);
+                        this.activatePlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                            if (response) {
+                                if (this.subscriptionId && this.isChangePlan) {
+                                    this.router.navigate(['/pages/user-details/subscription']);
+                                } else {
+                                    this.router.navigate(['/pages/new-company/' + this.subscriptionId]);
+                                };
+                            }
+                        });
                     } else {
                         setTimeout(() => {
                             if (this.subscriptionId && this.isChangePlan) {
@@ -740,8 +737,8 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         if (this.upgradePlan && this.upgradeRegion === 'GBR') {
             const reqObj = {
                 subscriptionId: this.upgradeSubscriptionId,
-                goCardLessBillingRequestId: this.goCardLessBillingRequestId
-            };
+                goCardLessBillingRequestId : this.goCardLessBillingRequestId
+            }
             this.componentStore.activatePlan(reqObj);
             this.activatePlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response) {
@@ -1085,49 +1082,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Initializes the int-tel input
-     *
-     * @memberof BuyPlanComponent
-     */
-    public initIntl(inputValue?: string): void {
-        let times = 0;
-        const parentDom = this.elementRef?.nativeElement;
-        const input = document.getElementById('init-contact');
-        const interval = setInterval(() => {
-            times += 1;
-            if (input) {
-                clearInterval(interval);
-                this.intlClass = new IntlPhoneLib(
-                    input,
-                    parentDom,
-                    false
-                );
-                if (inputValue) {
-                    input.setAttribute('value', `+${inputValue}`);
-                    this.changeDetection.detectChanges();
-                }
-            }
-            if (times > 25) {
-                clearInterval(interval);
-            }
-        }, 50);
-    }
-
-
-    /**
-     * Validate the mobile number
-     *
-     * @memberof BuyPlanComponent
-     */
-    public validateMobileField(): void {
-        if (!this.intlClass?.isRequiredValidNumber) {
-            this.secondStepForm.get("mobileNumber")?.setErrors({ invalidNumber: true });
-        } else {
-            this.secondStepForm.get("mobileNumber")?.setErrors(null);
-        }
-    }
-
-    /**
      * This will be use for get countries
      *
      * @memberof BuyPlanComponent
@@ -1307,9 +1261,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      */
     public onSelectedTab(event: any): void {
         this.selectedStep = event?.selectedIndex;
-        if (!this.intlClass) {
-            this.initIntl();
-        }
         this.setFinalAmount();
         this.changeDetection.detectChanges();
     }
@@ -1395,6 +1346,14 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
      * @memberof BuyPlanComponent
      */
     public setFinalAmount(): void {
+        let isCalculating = false;
+        this.calculateDataInProgress$.pipe(take(1)).subscribe(inProgress => {
+            isCalculating = inProgress;
+        });
+        
+        if (isCalculating) {
+            return;
+        }
         const reqObj = {
             planUniqueName: this.selectedPlan?.uniqueName,
             promoCode: this.firstStepForm?.get('promoCode')?.value,
@@ -1785,8 +1744,6 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         } else {
             this.secondStepForm.controls['state'].setValue({ abel: data.county.name, value: data.county.code, additional: data.county });
         }
-
-        this.initIntl(this.secondStepForm.get('mobileNumber')?.value);
 
         this.subscriptionForm.markAsPristine();
         this.changeDetection.detectChanges();

@@ -14,7 +14,7 @@
         <giddh-page-loader *ngIf="createReasonInProgress$ | async"></giddh-page-loader>
         <ng-container *ngIf="!(createReasonInProgress$ | async)">
             <form autocomplete="off" novalidate name="reasonForm" [formGroup]="reasonForm">
-                <div class="row mr-b15">
+                <div class="row mb-3">
                     <div class="col-xl-5 col-lg-5 col-sm-5">
                         <input-field
                             [name]="'code'"
@@ -29,7 +29,7 @@
                 </div>
                 <div class="row mt-4">
                     <div class="col-sm-4 pr-0">
-                        <div class="d-flex column-gap15">
+                        <div class="d-flex column-gap-15">
                             <button
                                 aria-label="save"
                                 mat-raised-button
@@ -42,7 +42,7 @@
                         </div>
                     </div>
                     <div class="col-lg-8">
-                        <div class="pull-right d-flex column-gap15">
+                        <div class="pull-right d-flex column-gap-15">
                             <button
                                 aria-label="clear"
                                 mat-stroked-button

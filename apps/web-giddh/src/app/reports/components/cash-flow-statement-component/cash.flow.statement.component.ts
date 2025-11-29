@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
-import { BreakpointObserver } from '@angular/cdk/layout';
 import { AppState } from '../../../store';
 import { Store, select } from '@ngrx/store';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
@@ -22,8 +21,6 @@ import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 export class CashFlowStatementComponent implements OnInit, OnDestroy {
     /** Instance of universal datepicker menu trigger */
     @ViewChild('universalDatepickerTrigger', { static: false }) public universalDatepickerTrigger: MatMenuTrigger;
-    /* This will store if device is mobile or not */
-    public isMobileScreen: boolean = false;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
@@ -57,7 +54,7 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
 
-    constructor(private breakPointObservar: BreakpointObserver, private store: Store<AppState>, private cashFlowStatementService: CashFlowStatementService, private generalService: GeneralService, private toaster: ToasterService) {
+    constructor(private store: Store<AppState>, private cashFlowStatementService: CashFlowStatementService, private generalService: GeneralService, private toaster: ToasterService) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
 
@@ -67,13 +64,6 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
      * @memberof CashFlowStatementComponent
      */
     public ngOnInit(): void {
-        /* Observer to detect device based on screen width */
-        this.breakPointObservar.observe([
-            '(max-width: 1023px)'
-        ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-            this.isMobileScreen = result.matches;
-        });
-
         /* Observer to store universal from/to date */
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {

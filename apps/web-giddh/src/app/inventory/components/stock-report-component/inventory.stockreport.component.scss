@@ -1,5 +1,5 @@
-.bd-rt {
-    border-color: var(--color-silver);
+.border-top {
+    border-color: var(--border-color);
 }
 
 .flex-fill {
@@ -9,7 +9,6 @@
 .sh-select-dropdown {
     width: 230px;
 }
-/*td-in-searchbox_style*/
 
 .td-search-box div {
     display: flex;
@@ -21,7 +20,6 @@
 
 .td-search-box div i {
     margin-top: 1px;
-    color: var(--color-blue-primary);
     padding-right: 8px;
     cursor: pointer;
     display: flex;
@@ -53,57 +51,22 @@
 }
 
 .basic > thead > tr > th {
-    border-right: 1px solid var(--color-silver);
-}
-
-.icon-pointer .glyphicon {
-    cursor: pointer;
-}
-
-.td-search-box div i:hover {
-    color: var(--color-medium-gray);
+    border-right: 1px solid var(--border-color);
 }
 
 .dropdown-menu > li > a:hover {
-    color: var(--color-blue-primary);
+    color: var(--text-primary-color);
     background: var(--color-border-light);
 }
-.stock-input {
-    background-color: transparent !important;
-    border-bottom: 1px dotted var(--color-white) !important;
-    border: none;
-    width: auto;
-    padding: 0 !important;
-    height: auto;
-    text-align: center;
-    min-width: 155px;
-    color: var(--color-white);
-}
-.inventory-stock-table input.form-control.stock-input {
-    color: var(--color-black);
-    text-align: left;
-}
+
 .table-border input.form-control.stock-input {
     color: var(--color-black);
     text-align: left;
 }
-.footer-tr td {
-    background-color: var(--color-border-light);
-}
+
 .total-footer {
     background-color: var(--color-white);
     display: flex;
-    .foot-item {
-        padding: 41px;
-        h2 {
-            color: var(--color-medium-gray);
-            font-size: var(--font-size-16);
-            margin-bottom: 10px;
-        }
-        h1 {
-            font-size: var(--font-size-32);
-        }
-    }
 }
 
 .journal-voucher {
@@ -111,42 +74,33 @@
 }
 
 .purchase {
-    color: var(--color-blue-primary);
+    color: var(--text-primary-color);
 }
 .sales {
     color: var(--color-green);
 }
 
-/* class name same as what we are getting data */
-
 .journal {
     color: var(--color-green);
 }
 .credit {
-    color: var(--color-blue-primary);
+    color: var(--text-primary-color);
 }
 .debit {
     color: var(--color-orange);
 }
-.modal-content {
-    border-radius: 0px;
-    margin-top: 200px;
-}
-.btn-download {
-    font-size: var(--font-size-15);
-}
+
 .btn-group.open.show {
     display: inline-flex !important;
 }
 .dropdown-menu.dropdown-menu-download {
     min-width: 110px;
-    border-radius: 0px;
+    border-radius: var(--mat-border-radius-0);
 }
 .dropdown-menu-download li {
     cursor: pointer;
 }
 
-/* voucher type DDL */
 .c-3 {
     color: var(--color-white);
 }
@@ -177,10 +131,10 @@
     width: 115%;
     right: -7.5% !important;
     top: 118% !important;
-    border-radius: 0px;
+    border-radius: var(--mat-border-radius-0);
     padding: 0px;
     input[type="checkbox"]:after {
-        border: 1px solid var(--color-silver);
+        border: 1px solid var(--border-color);
         width: 15px;
         height: 15px;
         top: 2px;
@@ -206,17 +160,7 @@
 button[aria-expanded="true"] i {
     color: var(--color-medium-gray);
 }
-/* voucher type DDL */
 
-.capitalize {
-    text-transform: capitalize;
-}
-.table-border {
-    border: 1px solid var(--color-silver);
-}
-.border-none {
-    border: none !important;
-}
 .unit-badge {
     display: inline-block;
     min-width: 30px;
@@ -227,10 +171,10 @@ button[aria-expanded="true"] i {
 .icon-pointer .icon-sort-asc {
     line-height: 20px;
     width: 15px;
-    color: var(--color-blue-primary);
+    color: var(--text-primary-color);
 }
 .icon-pointer .active-text-color {
-    color: var(--color-blue-primary);
+    color: var(--text-primary-color);
 }
 .sticky-footer-sale-amount {
     .inner-content-footer {
@@ -265,17 +209,8 @@ button[aria-expanded="true"] i {
 .select-style select {
     width: 100% !important;
 }
-.text-purple {
-    color: var(--color-blue-primary);
-}
-.bg-white {
-    background: var(--color-white);
-}
-.btn-link-2 {
-    color: var(--color-blue-primary);
-}
-.mr-b100 {
-    margin-bottom: 100px;
+.text-primary {
+    color: var(--text-primary-color);
 }
 
 .advance-icon {
@@ -286,9 +221,9 @@ button[aria-expanded="true"] i {
     align-items: center;
     font-size: var(--font-size-16);
     margin-left: 10px;
-    border: 1px solid var(--color-silver);
-    border-radius: 5px;
-    color: var(--color-blue-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--mat-border-radius-4);
+    color: var(--text-primary-color);
     background: var(--color-white);
     .icon-advance-filter {
         padding: 10px;
@@ -301,16 +236,7 @@ button[aria-expanded="true"] i {
     padding-left: 5px;
     cursor: pointer;
 }
-button.btn.btn-filter {
-    background: var(--color-border-light);
-    border: 1px solid var(--color-silver);
-    font-size: var(--font-size-15);
-    color: var(--color-blue-primary);
-    display: inline-flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 4px 10px;
-}
+
 .stock-not-found {
     text-transform: none;
 }
@@ -327,8 +253,8 @@ button.btn.btn-filter {
     display: table;
 }
 .icon-btn {
-    border: 1px solid var(--color-silver);
-    border-radius: 5px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--mat-border-radius-4);
     height: 36px;
     width: 36px;
     margin-top: 0;
@@ -342,7 +268,7 @@ button.btn.btn-filter {
         tr {
             &:last-child {
                 td {
-                    border-bottom: 1px solid var(--color-silver);
+                    border-bottom: 1px solid var(--border-color);
                 }
             }
         }
@@ -368,10 +294,6 @@ button.btn.btn-filter {
         align-items: flex-start;
         flex-direction: row !important;
         text-align: right;
-        .transfer-btn {
-            margin-top: 0;
-            margin-right: 15px;
-        }
     }
 }
 @media (max-width: 1024px) {
@@ -387,43 +309,6 @@ button.btn.btn-filter {
         padding-left: 0 !important;
     }
 }
-@media (max-width: 767px) {
-    .btn-sky-blue {
-        display: none;
-    }
-    .advance-icon {
-        display: none;
-    }
-    .head-report {
-        font-size: var(--font-size-15);
-    }
-    .btn-link {
-        font-size: var(--font-size-12);
-        margin-right: 0 !important;
-        margin-top: 0 !important;
-    }
-    .inventory-stock-table {
-        table-layout: auto;
-    }
-    .basic > tbody > tr > td,
-    .basic > thead > tr > th {
-        min-width: 100px !important;
-    }
-
-    .download-icon {
-        span {
-            display: none;
-        }
-    }
-    .td-mobile-head {
-        display: block;
-    }
-
-    .table-border {
-        border: 0px solid var(--color-white) !important;
-    }
-}
-
 @media (max-width: 1622px) {
     .table-responsive {
         display: block;

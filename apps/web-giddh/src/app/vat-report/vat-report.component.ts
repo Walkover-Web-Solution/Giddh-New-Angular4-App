@@ -197,8 +197,8 @@ export class VatReportComponent implements OnInit, OnDestroy {
     * @param {*} section
     * @memberof VatReportComponent
     */
-    public viewVatReportTransactions(section) {
-        this.route.navigate(['pages', 'vat-report', 'transactions', 'section', section], { queryParams: { from: this.fromDate, to: this.toDate, taxNumber: this.taxNumber } });
+    public viewVatReportTransactions(section: string) {
+       this.route.navigate(['pages', 'vat-report', 'transactions', 'section', section], { queryParams: { from: this.fromDate, to: this.toDate, taxNumber: this.taxNumber } });
     }
 
     /**

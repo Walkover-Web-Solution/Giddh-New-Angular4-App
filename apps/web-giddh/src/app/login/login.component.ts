@@ -167,7 +167,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     // tslint:disable-next-line:no-empty
     public ngOnInit() {
         this.store.dispatch(this.commonAction.setActiveTheme(null));
-        this.document.body.classList.remove("unresponsive");
         this.generateRandomBanner();
         this.mobileVerifyForm = this._fb.group({
             country: ["India", [Validators.required]],
@@ -429,7 +428,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy() {
-        this.document.body.classList.add("unresponsive");
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -493,8 +491,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     public signInWithOtp(): void {
         this.loaderService.show();
         let configuration = {
-            widgetId: this.serviceConfig.OTP_WIDGET_ID || OTP_WIDGET_ID ,
-            tokenAuth: this.serviceConfig.OTP_TOKEN_AUTH || OTP_TOKEN_AUTH,
+            widgetId: this.serviceConfig.OTP_WIDGET_ID || '33686b716134333831313239' ,
+            tokenAuth: this.serviceConfig.OTP_TOKEN_AUTH || '205968TmXguUAwoD633af103P1',
             success: (data: any) => {
                 this.ngZone.run(() => {
 

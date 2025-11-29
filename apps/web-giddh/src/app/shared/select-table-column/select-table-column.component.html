@@ -1,12 +1,14 @@
 <button
-    mat-icon-button
+    mat-stroked-button
     [matMenuTriggerFor]="menu"
     [matTooltipPosition]="matTooltipPosition"
     [matTooltip]="matTooltip"
     [ngClass]="cssClass"
+    class="btn-stroked-icon"
     aria-label="filter"
 >
-    <i [ngClass]="iconClass"> </i> <span class="pl-3">{{ buttonText }}</span>
+    <i [ngClass]="iconClass"></i>
+    <span *ngIf="buttonText" class="pl-3">{{ buttonText }}</span>
 </button>
 <mat-menu #menu="matMenu" [class]="'columns-wrapper ' + additionalMenuCssClass">
     <ng-container *ngFor="let item of (isDynamicMode ? dynamicCustomColumns : customiseColumns)">

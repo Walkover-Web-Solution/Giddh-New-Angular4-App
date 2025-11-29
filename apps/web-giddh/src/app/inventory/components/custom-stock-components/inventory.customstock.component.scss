@@ -1,23 +1,16 @@
-.square-switch input[type="checkbox"]:checked ~ label {
-    background: initial;
-    color: initial;
-}
 .square-switch img {
     top: -1px;
     position: relative;
     filter: invert(0);
 }
-.division {
-    display: flex;
-    align-items: center;
-}
+
 .select-unit {
     min-width: 185px !important;
-    border-radius: 5px;
+    border-radius: var(--mat-border-radius-4);
 }
 .select-unit-x {
     min-width: 215px !important;
-    border-radius: 5px;
+    border-radius: var(--mat-border-radius-4);
 }
 .unit-add {
     position: absolute;
@@ -25,11 +18,9 @@
 }
 .equal-sign {
     font-size: 22px;
-    color: var(--color-blue-primary);
+    color: var(--text-primary-color);
 }
-.custom-css {
-    margin: auto;
-}
+
 .inventory-section,
 .inventory-wrapper {
     float: left;
@@ -42,7 +33,7 @@
     padding: 0 7px;
 }
 .hr {
-    border-bottom: 2px solid var(--color-silver);
+    border-bottom: 2px solid var(--border-color);
     margin: 3px 0;
 }
 #close {

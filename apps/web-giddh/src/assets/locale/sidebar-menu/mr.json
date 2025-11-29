@@ -665,8 +665,14 @@
             ]
         },
         {
-            "label": "AI OCR",
-            "link": "/pages/ai-ocr",
+            "label": "AI OCR for Income",
+            "link": "/pages/ai-ocr/income",
+            "icon": "icon-audit-log",
+            "description": "प्रतिमा अपलोड करा, पीडीएफ, जेपीईजी, झिप"
+        },
+        {
+            "label": "AI OCR for Expense",
+            "link": "/pages/ai-ocr/expense",
             "icon": "icon-audit-log",
             "description": "प्रतिमा अपलोड करा, पीडीएफ, जेपीईजी, झिप"
         }

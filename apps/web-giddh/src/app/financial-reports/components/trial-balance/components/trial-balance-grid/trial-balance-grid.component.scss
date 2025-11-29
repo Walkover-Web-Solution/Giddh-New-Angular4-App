@@ -1,20 +1,4 @@
-.liabilities-assets {
-    max-width: 760px;
-    width: 100%;
-}
 .trial-balance {
-    span {
-        i.glyphicon-search {
-            position: relative;
-            z-index: 1;
-            font-size: 13px;
-            color: var(--color-dark-gray);
-            padding-right: 8px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-        }
-    }
     input {
         height: 47px;
     }
@@ -25,7 +9,6 @@
 }
 .list-inline {
     padding-left: 0;
-    list-style: none;
     > li {
         display: inline-block;
         padding-right: 5px;
@@ -36,7 +19,6 @@
 }
 .tb-section {
     padding-left: 7px;
-    background-color: var(--color-white);
     .search-container {
         padding: 0;
         display: flex;
@@ -62,13 +44,6 @@
         margin: auto;
         .table-container {
             overflow-x: auto;
-        }
-    }
-}
-@media screen and (max-width: 767px) {
-    .list-inline {
-        > li {
-            font-size: var(--font-size-12);
         }
     }
 }

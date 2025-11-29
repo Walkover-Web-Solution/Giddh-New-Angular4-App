@@ -969,10 +969,16 @@
             "icon": "icon-audit-log",
             "items": [
                 {
-                    "label": "OCR",
-                    "link": "/pages/ai-ocr",
+                    "label": "OCR for Income",
+                    "link": "/pages/ai-ocr/income",
                     "icon": "icon-audit-log",
                     "description": "चित्र अपलोड करें, पीडीएफ, जेपीईजी, ज़िप"
+                },
+                {
+                    "label": "OCR for Expense",
+                    "link": "/pages/ai-ocr/expense",
+                    "icon": "icon-audit-log",
+                "description": "चित्र अपलोड करें, पीडीएफ, जेपीईजी, ज़िप"
                 }
             ]
         },

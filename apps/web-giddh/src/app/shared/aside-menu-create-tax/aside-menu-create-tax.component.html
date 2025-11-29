@@ -6,9 +6,9 @@
     (translationComplete)="translationComplete($event)"
 >
     <div class="dialog-header">
-        <h3 class="modal-title bg" id="modal-title">
+        <p class="modal-title bg" id="modal-title">
             {{ tax && tax?.uniqueName ? localeData?.update_tax : localeData?.create_new_tax }}
-        </h3>
+        </p>
         <i mat-dialog-close (click)="closeEvent?.emit()" aria-label="close icon" class="icon-cross"></i>
     </div>
     <mat-dialog-content class="dialog-body">
@@ -180,7 +180,7 @@
                 </div>
             </div>
 
-            <div class="d-flex column-gap1 align-items-center">
+            <div class="d-flex column-gap-1 align-items-center">
                 <button
                     mat-raised-button
                     color="primary"

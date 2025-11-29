@@ -1,13 +1,22 @@
 .ocr-container {
     max-width: var(--center-content-max-width);
 
-    .giddh-table {
-        border: 1px solid var(--color-silver) !important;
-    }
 }
 
 .td-search-box {
     padding: 0 0 0 10px !important;
 }
 
+.action-icon {
+    visibility: hidden;
+    transition: 0ms;
+}
 
+tr {
+    &:hover {
+        .action-icon {
+            visibility: visible;
+            z-index: 9999;
+        }
+    }
+}
