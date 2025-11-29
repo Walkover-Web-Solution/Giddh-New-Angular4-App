@@ -35,7 +35,6 @@ export class SocketNewCompanyRequest {
 export class StateDetailsRequest {
     public lastState: string;
     public companyUniqueName: string;
-    public currentBranchUniqueName?: string;
 }
 
 export class StateDetailsResponse {

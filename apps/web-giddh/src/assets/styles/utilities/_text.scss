@@ -1,4 +1,4 @@
-@use "../abstracts/mixins" as *;
+@use '../abstracts/mixins' as *;
 
 // Text transformation utilities
 @include text-transform-utilities();
@@ -53,15 +53,3 @@
 
 // Generate pointer-events utility classes
 @include pointer-events-utilities();
-
-// Generate min-height utility classes
-@include min-height-utilities();
-
-// Generate max-height utility classes
-@include max-height-utilities();
-
-// Generate min-width utility classes
-@include min-width-utilities();
-
-// Generate max-width utility classes
-@include max-width-utilities();

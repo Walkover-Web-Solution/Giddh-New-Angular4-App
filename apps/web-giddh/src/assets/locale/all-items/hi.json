@@ -965,26 +965,20 @@
             ]
         },
         {
-            "label": "स्वचालन",
-            "icon": "icon-manage-group-acc",
+            "label": "AI",
+            "icon": "icon-audit-log",
             "items": [
                 {
-                    "label": "Scan2Invoice",
+                    "label": "OCR for Income",
                     "link": "/pages/ai-ocr/income",
                     "icon": "icon-audit-log",
                     "description": "चित्र अपलोड करें, पीडीएफ, जेपीईजी, ज़िप"
                 },
                 {
-                    "label": "Scan2Bill",
+                    "label": "OCR for Expense",
                     "link": "/pages/ai-ocr/expense",
                     "icon": "icon-audit-log",
-                    "description": "चित्र अपलोड करें, पीडीएफ, जेपीईजी, ज़िप"
-                },
-                {
-                    "label": "ईमेल-टू-बैंक सिंक",
-                    "link": "/pages/email-forwarding",
-                    "icon": "icon-mail",
-                    "description": "बैंक स्टेटमेंट ईमेल से ऑटो-वाउचर बनाएं।"
+                "description": "चित्र अपलोड करें, पीडीएफ, जेपीईजी, ज़िप"
                 }
             ]
         },

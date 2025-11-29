@@ -18,10 +18,6 @@ import { CommonActions } from './actions/common.actions';
 import { MatDialog } from '@angular/material/dialog';
 import { ServiceConfig } from './services/service.config';
 import { PageLeaveUtilityService } from './services/page-leave-utility.service';
-import { LoginActions } from './actions/login.action';
-import { InvoiceActions } from './actions/invoice/invoice.actions';
-import { WarehouseActions } from './settings/warehouse/action/warehouse.action';
-import { CompanyService } from './services/company.service';
 
 /**
  * App Component
@@ -47,8 +43,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     public activeLocale: string = "";
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
-    /** Bound method reference for event listener cleanup */
-    private boundHandleQueryParamsCompanySwitch: (event: any) => void;
 
     constructor(private store: Store<AppState>,
         private router: Router,
@@ -62,17 +56,10 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         private commonActions: CommonActions,
         public dialog: MatDialog,
         @Inject(ServiceConfig) private serviceConfig,
-        private pageLeaveUtilityService: PageLeaveUtilityService,
-        private loginActions: LoginActions,
-        private invoiceActions: InvoiceActions,
-        private warehouseActions: WarehouseActions,
-        private companyService: CompanyService
+        private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
         this.isProdMode = PRODUCTION_ENV;
         this.isElectron = isElectron;
-        
-        // Bind the method for proper event listener cleanup
-        this.boundHandleQueryParamsCompanySwitch = (event: any) => this.handleQueryParamsCompanySwitch(event.detail);
         
         this.store.pipe(select(s => s.session), takeUntil(this.destroyed$)).subscribe(ss => {
             if (ss?.user && ss.user.session && ss.user.session.id) {
@@ -245,9 +232,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             }
         });
 
-        // Listen for query params company/branch switch event from hybrid storage
-        window.addEventListener('giddh-query-params-company-switch', this.boundHandleQueryParamsCompanySwitch);
-
         setTimeout(() => {
             this._generalService.addLinkTag("./assets/styles/vendors/font-awesome.css");
             this._generalService.addLinkTag("./assets/fonts/icomoon/icomoon.css");
@@ -383,8 +367,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
-        // Remove event listener to prevent memory leaks
-        window.removeEventListener('giddh-query-params-company-switch', this.boundHandleQueryParamsCompanySwitch);
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -403,85 +385,5 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 this.loadingService.hide();
             }
         })
-    }
-
-    /**
-     * Handles company/branch switching from query parameters, triggering same APIs as switchCompany/switchBranch
-     *
-     * @private
-     * @param {any} detail - Event detail containing companyUniqueName, branchUniqueName, and company object
-     * @memberof AppComponent
-     */
-    private handleQueryParamsCompanySwitch(detail: any): void {
-        if (!detail || !detail.companyUniqueName || !detail.company) {
-            console.warn('Invalid detail provided to handleQueryParamsCompanySwitch:', detail);
-            return;
-        }
-
-        const { companyUniqueName, branchUniqueName, company } = detail;
-        // Reset active company data and warehouse response (same as switchCompany)
-        this.store.dispatch(this.companyActions.resetActiveCompanyData());
-        this.store.dispatch(this.warehouseActions.resetWarehouseResponse());
-        
-        // Update general service properties
-        this._generalService.companyUniqueName = companyUniqueName;
-        this._generalService.voucherApiVersion = company?.voucherVersion || 2;
-        this.store.dispatch(this.commonActions.setBranchConsolidated(false));
-        
-        // Update store with company and branch details
-        this.store.dispatch(this.companyActions.setStateDetailsRequest({
-            lastState: '',
-            companyUniqueName: companyUniqueName,
-            currentBranchUniqueName: branchUniqueName || ''
-        }));
-
-        // Set organization details
-        const details = {
-            branchDetails: {
-                uniqueName: branchUniqueName || ''
-            }
-        };
-
-        if (branchUniqueName) {
-            this.setOrganizationDetails(OrganizationType.Branch, details);
-            this._generalService.currentBranchUniqueName = branchUniqueName;
-            // Trigger invoice settings for branch (same as switchBranch)
-            this.store.dispatch(this.invoiceActions.getInvoiceSetting());
-        } else {
-            this.setOrganizationDetails(OrganizationType.Company, details);
-        }
-
-        // Trigger company change (same as switchCompany)
-        this.store.dispatch(this.loginActions.ChangeCompany(companyUniqueName, false));
-
-        // Navigate to final state if branch is selected (same as switchBranch)
-        if (branchUniqueName) {
-            this.companyService.getStateDetails(companyUniqueName).pipe(take(1)).subscribe(response => {
-                if (response && response.body) {
-                    this.router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
-                        this._generalService.finalNavigate(response.body.lastState);
-                    });
-                }
-            });
-        }
-
-        this._cdr.detectChanges();
-    }
-
-    /**
-     * Sets the organization details for company or branch mode
-     *
-     * @private
-     * @param {OrganizationType} type - Type of the organization (Company or Branch)
-     * @param {any} branchDetails - Branch details of an organization
-     * @memberof AppComponent
-     */
-    private setOrganizationDetails(type: OrganizationType, branchDetails: any): void {
-        const organization = {
-            type, // Mode to which user is switched to
-            uniqueName: this._generalService.companyUniqueName,
-            details: branchDetails
-        };
-        this.store.dispatch(this.companyActions.setCompanyBranch(organization));
     }
 }

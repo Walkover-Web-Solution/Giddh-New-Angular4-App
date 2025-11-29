@@ -182,7 +182,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             }
         });
         if (filteredOptions.length === 0) {
-            this.writeValue(this.value || "", false);
+            this.writeValue("", false);
         }
         return of(filteredOptions);
     }

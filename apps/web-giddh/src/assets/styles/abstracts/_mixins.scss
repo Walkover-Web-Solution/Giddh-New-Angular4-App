@@ -737,44 +737,25 @@
 @mixin position-inset-utilities() {
     $inset-values: (
         "0": 0,
-        "4": 4,
-        "8": 8,
-        "16": 16,
         "unset": unset,
         "inherit": inherit,
     );
 
     @each $name, $value in $inset-values {
         .top-#{$name} {
-            @if $value == unset or $value == inherit {
-                top: #{$value} !important;
-            } @else {
-                top: #{$value}px !important;
-            }
+            top: #{$value} !important;
         }
 
         .right-#{$name} {
-            @if $value == unset or $value == inherit {
-                right: #{$value} !important;
-            } @else {
-                right: #{$value}px !important;
-            }
+            right: #{$value} !important;
         }
 
         .bottom-#{$name} {
-            @if $value == unset or $value == inherit {
-                bottom: #{$value} !important;
-            } @else {
-                bottom: #{$value}px !important;
-            }
+            bottom: #{$value} !important;
         }
 
         .left-#{$name} {
-            @if $value == unset or $value == inherit {
-                left: #{$value} !important;
-            } @else {
-                left: #{$value}px !important;
-            }
+            left: #{$value} !important;
         }
     }
 
@@ -974,8 +955,8 @@
  * @param {Boolean} $important - Whether to add !important flag (default: true)
  */
 @mixin text-decoration($value, $important: true) {
-    $importance: if($important, " !important", "");
-
+    $importance: if($important, ' !important', '');
+    
     @if $value == unset {
         -webkit-text-decoration: -webkit-initial#{$importance};
         -moz-text-decoration: -moz-initial#{$importance};
@@ -1026,7 +1007,7 @@
  * @param {Boolean} $important - Whether to add !important flag (default: false)
  */
 @mixin square($size, $important: false) {
-    $priority: if($important, " !important", "");
+    $priority: if($important, ' !important', '');
     width: #{$size}#{$priority};
     height: #{$size}#{$priority};
 }
@@ -1060,6 +1041,79 @@
         border-radius: #{$a} #{$b} #{$c} #{$d} !important;
     }
 }
+
+// /**
+//  * Optimized border-radius mixin with individual corner control
+//  * Supports 1, 2, and 4 value patterns with cross-browser support
+//  * 
+//  * Usage:
+//  * @include border-radius(10px)                    // All corners
+//  * @include border-radius(10px, 5px)              // tl & br, tr & bl  
+//  * @include border-radius(10px, 5px, 0, 15px)     // Individual corners
+//  * @include border-radius(var(--radius-1), var(--radius-2)) // CSS variables
+//  * 
+//  * @param {Length} $a - Top-left radius (or all corners if only value)
+//  * @param {Length} $b - Top-right radius (or bottom-left for 2 values)
+//  * @param {Length} $c - Bottom-right radius (optional)
+//  * @param {Length} $d - Bottom-left radius (optional)
+//  */
+// @mixin border-radius($a, $b: null, $c: null, $d: null) {
+//     // Initialize variables
+//     $tl: null;
+//     $tr: null; 
+//     $br: null;
+//     $bl: null;
+    
+//     // Determine the pattern based on null checks
+//     @if $d != null {
+//         // 4 values: $a (tl), $b (tr), $c (br), $d (bl)
+//         $tl: $a;
+//         $tr: $b;
+//         $br: $c;
+//         $bl: $d;
+//     } @else if $c != null {
+//         @error "border-radius() requires 1, 2, or 4 arguments (received: 3)";
+//     } @else if $b != null {
+//         // 2 values: $a (tl & br), $b (tr & bl)
+//         $tl: $a;
+//         $tr: $b;
+//         $br: $a;
+//         $bl: $b;
+//     } @else {
+//         // 1 value: all corners
+//         $tl: $a;
+//         $tr: $a;
+//         $br: $a;
+//         $bl: $a;
+//     }
+
+//     // Handle CSS-wide keywords for all corners
+//     @if $a == unset or $a == inherit or $a == initial {
+//         -webkit-border-radius: #{$a} !important;
+//         -moz-border-radius: #{$a} !important;
+//         border-radius: #{$a} !important;
+//     } @else {
+//         // Individual corner properties with vendor prefixes
+
+//         // Webkit (Safari, Chrome)
+//         -webkit-border-top-left-radius: #{$tl} !important;
+//         -webkit-border-top-right-radius: #{$tr} !important;
+//         -webkit-border-bottom-right-radius: #{$br} !important;
+//         -webkit-border-bottom-left-radius: #{$bl} !important;
+
+//         // Mozilla (Firefox)
+//         -moz-border-radius-topleft: #{$tl} !important;
+//         -moz-border-radius-topright: #{$tr} !important;
+//         -moz-border-radius-bottomright: #{$br} !important;
+//         -moz-border-radius-bottomleft: #{$bl} !important;
+
+//         // Standard properties
+//         border-top-left-radius: #{$tl} !important;
+//         border-top-right-radius: #{$tr} !important;
+//         border-bottom-right-radius: #{$br} !important;
+//         border-bottom-left-radius: #{$bl} !important;
+//     }
+// }
 
 /**
  * Border radius variables and utilities mixin
@@ -1148,7 +1202,7 @@
         "scroll": scroll,
         "clip": clip,
         "unset": unset,
-        "inherit": inherit,
+        "inherit": inherit
     )
 ) {
     // Generate utility classes for overflow
@@ -1188,15 +1242,15 @@
  */
 @mixin absolute-position($top: null, $left: null, $transform: null) {
     position: absolute !important;
-
+    
     @if $top {
         top: #{$top} !important;
     }
-
+    
     @if $left {
         left: #{$left} !important;
     }
-
+    
     @if $transform {
         // Cross-browser transform support with all vendor prefixes
         -webkit-transform: #{$transform} !important;
@@ -1360,213 +1414,6 @@
     @each $name, $value in $visibilities {
         .visibility-#{$name} {
             @include visibility($value);
-        }
-    }
-}
-
-/**
- * MIN-HEIGHT UTILITIES
- * ====================
- * Cross-browser min-height utilities with mixins and utility classes
- */
-
-/**
- * Min-height mixin with cross-browser support
- * 
- * @param {String|Number} $min-height - The min-height value
- */
-@mixin min-height($min-height) {
-    @if $min-height == unset {
-        // Cross-browser support for unset
-        min-height: -webkit-initial !important;
-        min-height: -moz-initial !important;
-        min-height: initial !important;
-        min-height: unset !important;
-    } @else {
-        min-height: #{$min-height} !important;
-    }
-}
-
-/**
- * Generate min-height utility classes
- * Creates classes like .min-h-50, .min-h-100, .min-h-150, etc.
- */
-@mixin min-height-utilities() {
-    $min-height-values: (
-        "0": 0,
-        "50": 50px,
-        "100": 100px,
-        "150": 150px,
-        "200": 200px,
-        "250": 250px,
-        "300": 300px,
-        "350": 350px,
-        "400": 400px,
-        "450": 450px,
-        "500": 500px,
-        "auto": auto,
-        "unset": unset,
-        "inherit": inherit,
-    );
-
-    @each $name, $value in $min-height-values {
-        .min-h-#{$name} {
-            @include min-height($value);
-        }
-    }
-}
-
-/**
- * Max-height mixin with cross-browser support
- * 
- * @param {String|Number} $max-height - The max-height value
- */
-@mixin max-height($max-height) {
-    @if $max-height == unset {
-        // Cross-browser support for unset
-        max-height: -webkit-initial !important;
-        max-height: -moz-initial !important;
-        max-height: initial !important;
-        max-height: unset !important;
-    } @else {
-        max-height: #{$max-height} !important;
-    }
-}
-
-/**
- * Generate max-height utility classes
- * Creates classes like .max-h-50, .max-h-100, .max-h-150, etc.
- */
-@mixin max-height-utilities() {
-    $max-height-values: (
-        "0": 0,
-        "50": 50px,
-        "100": 100px,
-        "150": 150px,
-        "200": 200px,
-        "250": 250px,
-        "300": 300px,
-        "350": 350px,
-        "400": 400px,
-        "450": 450px,
-        "500": 500px,
-        "600": 600px,
-        "700": 700px,
-        "800": 800px,
-        "900": 900px,
-        "1000": 1000px,
-        "auto": auto,
-        "none": none,
-        "unset": unset,
-        "inherit": inherit,
-    );
-
-    @each $name, $value in $max-height-values {
-        .max-h-#{$name} {
-            @include max-height($value);
-        }
-    }
-}
-
-/**
- * Min-width mixin with cross-browser support
- * 
- * @param {String|Number} $min-width - The min-width value
- */
-@mixin min-width($min-width) {
-    @if $min-width == unset {
-        // Cross-browser support for unset
-        min-width: -webkit-initial !important;
-        min-width: -moz-initial !important;
-        min-width: initial !important;
-        min-width: unset !important;
-    } @else {
-        min-width: #{$min-width} !important;
-    }
-}
-
-/**
- * Generate min-width utility classes
- * Creates classes like .min-w-50, .min-w-100, .min-w-150, etc.
- */
-@mixin min-width-utilities() {
-    $min-width-values: (
-        "0": 0,
-        "50": 50px,
-        "100": 100px,
-        "150": 150px,
-        "200": 200px,
-        "250": 250px,
-        "300": 300px,
-        "350": 350px,
-        "400": 400px,
-        "450": 450px,
-        "500": 500px,
-        "600": 600px,
-        "700": 700px,
-        "800": 800px,
-        "900": 900px,
-        "1000": 1000px,
-        "auto": auto,
-        "unset": unset,
-        "inherit": inherit,
-    );
-
-    @each $name, $value in $min-width-values {
-        .min-w-#{$name} {
-            @include min-width($value);
-        }
-    }
-}
-
-/**
- * Max-width mixin with cross-browser support
- * 
- * @param {String|Number} $max-width - The max-width value
- */
-@mixin max-width($max-width) {
-    @if $max-width == unset {
-        // Cross-browser support for unset
-        max-width: -webkit-initial !important;
-        max-width: -moz-initial !important;
-        max-width: initial !important;
-        max-width: unset !important;
-    } @else {
-        max-width: #{$max-width} !important;
-    }
-}
-
-/**
- * Generate max-width utility classes
- * Creates classes like .max-w-50, .max-w-100, .max-w-150, etc.
- */
-@mixin max-width-utilities() {
-    $max-width-values: (
-        "0": 0,
-        "50": 50px,
-        "100": 100px,
-        "150": 150px,
-        "200": 200px,
-        "250": 250px,
-        "300": 300px,
-        "350": 350px,
-        "400": 400px,
-        "450": 450px,
-        "500": 500px,
-        "600": 600px,
-        "700": 700px,
-        "800": 800px,
-        "900": 900px,
-        "1000": 1000px,
-        "auto": auto,
-        "none": none,
-        "unset": unset,
-        "inherit": inherit,
-    );
-
-    @each $name, $value in $max-width-values {
-        .max-w-#{$name} {
-            @include max-width($value);
         }
     }
 }
