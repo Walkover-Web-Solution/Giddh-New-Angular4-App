@@ -2619,4 +2619,30 @@ export class GeneralService {
             }
         });
     }
+
+    /**
+     * Gets the dynamic decimal format string based on company settings
+     *
+     * @param {number} decimalPlaces Number of decimal places from company settings
+     * @returns {string} Decimal format string for Angular DecimalPipe
+     * @memberof GeneralService
+     */
+    public getDecimalFormat(decimalPlaces: number): string {
+        return `1.${decimalPlaces}-${decimalPlaces}`;
+    }
+
+    /**
+     * Formats amount with proper decimal places
+     *
+     * @param {number} amount Amount to format
+     * @param {number} decimalPlaces Number of decimal places from company settings
+     * @returns {string} Formatted amount
+     * @memberof GeneralService
+     */
+    public formatAmount(amount: number, decimalPlaces: number): string {
+        if (amount == null || amount === undefined) {
+            return '0.' + '0'.repeat(decimalPlaces);
+        }
+        return amount.toFixed(decimalPlaces);
+    }
 }

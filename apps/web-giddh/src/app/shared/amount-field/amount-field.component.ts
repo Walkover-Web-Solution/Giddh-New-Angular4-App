@@ -65,7 +65,7 @@ export class AmountFieldComponent implements OnInit, OnChanges {
     }
 
     /**
-     * Format number with comma separated 
+     * Format number with comma separated
      *
      * @param {number} value
      * @returns {(string | null)}

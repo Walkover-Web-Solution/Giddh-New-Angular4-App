@@ -11,7 +11,7 @@ import { VatReportFiltersComponent } from "./vat-report-filters/vat-report-filte
 import { VatLiabilitiesPayments } from "./vat-liabilities-payments/vat-liabilities-payments.component";
 import { VatReportRoutingModule } from "./vat-report.routing.module";
 import { CommonModule } from "@angular/common";
-import { CurrencyModule } from "../shared/helpers/pipes/currencyPipe/currencyType.module";
+
 import { ClickOutsideModule } from "ng-click-outside";
 import { FormsModule } from "@angular/forms";
 import { Daterangepicker } from "../theme/ng2-daterangepicker/daterangepicker.module";
@@ -31,6 +31,7 @@ import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-lo
 import { NewConfirmationModalModule } from "../theme/new-confirmation-modal/confirmation-modal.module";
 import { MatInputModule } from "@angular/material/input";
 import { MatPaginatorModule } from "@angular/material/paginator";
+import { GiddhNumberFormatModule } from "../shared/helpers/pipes/number-format/number-format.module";
 
 @NgModule({
     declarations: [
@@ -48,7 +49,7 @@ import { MatPaginatorModule } from "@angular/material/paginator";
     imports: [
         VatReportRoutingModule,
         CommonModule,
-        CurrencyModule,
+        GiddhNumberFormatModule,
         ClickOutsideModule,
         FormsModule,
         Daterangepicker,

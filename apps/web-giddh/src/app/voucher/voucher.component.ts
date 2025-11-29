@@ -1098,7 +1098,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             if (!this.isUpdateMode) {
                 if (!this.isPendingVoucherType) {
                     this.resetInvoiceForm(this.invoiceForm);
-                    if (!this.isMultiCurrencyModule() && !this.isPurchaseInvoice) {
+                    if (!this.isMultiGiddhNumberFormatModule() && !this.isPurchaseInvoice) {
                         // Hide the warehouse section if the module is other than multi-currency supported modules
                         this.shouldShowWarehouse = false;
                     } else {
@@ -1287,7 +1287,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         obj.entries = cloneDeep(results[0].entries);
                         obj.exchangeRate = cloneDeep(this.exchangeRate);
 
-                        if (this.isMultiCurrencyModule()) {
+                        if (this.isMultiGiddhNumberFormatModule()) {
                             // parse normal response to multi currency response
                             let convertedRes1 = await this.modifyMulticurrencyRes(obj);
                             tempObj = cloneDeep(convertedRes1) as VoucherClass;
@@ -1313,7 +1313,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     } else {
                         this.isEinvoiceGenerated = results[0].einvoiceGenerated;
                         this.previousDeposit = results[0]?.deposit;
-                        if (this.isMultiCurrencyModule()) {
+                        if (this.isMultiGiddhNumberFormatModule()) {
                             // parse normal response to multi currency response
                             let convertedRes1 = await this.modifyMulticurrencyRes(results[0]);
                             this.initializeWarehouse(results[0].warehouse);
@@ -1578,7 +1578,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                     } else {
                         this.isCustomerSelected = false;
                     }
-                    if (this.isMultiCurrencyModule() || this.isPurchaseInvoice) {
+                    if (this.isMultiGiddhNumberFormatModule() || this.isPurchaseInvoice) {
                         this.initializeWarehouse();
                     }
 
@@ -1908,7 +1908,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             let date = cloneDeep(this.universalDate);
             this.invFormData.voucherDetails.voucherDate = date;
             // get exchange rate when application date is changed
-            if (this.isMultiCurrencyModule() && this.isMulticurrencyAccount && date) {
+            if (this.isMultiGiddhNumberFormatModule() && this.isMulticurrencyAccount && date) {
                 this.getCurrencyRate(this.companyCurrency, this.customerCurrencyCode, date);
             }
 
@@ -2250,7 +2250,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
         // toggle all collapse
         this.isOthrDtlCollapsed = false;
-        if (this.isMultiCurrencyModule()) {
+        if (this.isMultiGiddhNumberFormatModule()) {
             this.initializeWarehouse();
         }
 
@@ -3792,7 +3792,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 transaction.variant = o.stock.variant;
             }
             // Stock item, show the warehouse drop down if it is hidden
-            if ((this.isMultiCurrencyModule()) && !this.shouldShowWarehouse) {
+            if ((this.isMultiGiddhNumberFormatModule()) && !this.shouldShowWarehouse) {
                 this.shouldShowWarehouse = true;
                 this.selectedWarehouse = String(this.defaultWarehouse);
                 this.selectedWarehouseName = String(this.defaultWarehouseName);
@@ -5892,7 +5892,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @param modelDate: Date ( date that was already selected by user )
      */
     public onVoucherDateChanged(selectedDate, modelDate) {
-        if (this.isMultiCurrencyModule() && this.isMulticurrencyAccount && selectedDate && this.voucherDateBeforeUpdate && dayjs(selectedDate).format(GIDDH_DATE_FORMAT) !== dayjs(this.voucherDateBeforeUpdate).format(GIDDH_DATE_FORMAT)) {
+        if (this.isMultiGiddhNumberFormatModule() && this.isMulticurrencyAccount && selectedDate && this.voucherDateBeforeUpdate && dayjs(selectedDate).format(GIDDH_DATE_FORMAT) !== dayjs(this.voucherDateBeforeUpdate).format(GIDDH_DATE_FORMAT)) {
             this.getCurrencyRate(this.companyCurrency, this.customerCurrencyCode, selectedDate);
         }
         if (selectedDate && modelDate && selectedDate !== modelDate && this.invFormData &&
@@ -6410,7 +6410,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @returns {boolean} True, if module is one of the multi-currency supported module
      * @memberof VoucherComponent
      */
-    private isMultiCurrencyModule(): boolean {
+    private isMultiGiddhNumberFormatModule(): boolean {
         return [VoucherTypeEnum.sales, VoucherTypeEnum.creditNote, VoucherTypeEnum.debitNote, VoucherTypeEnum.cash, VoucherTypeEnum.generateProforma, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.purchase, VoucherTypeEnum.cashDebitNote, VoucherTypeEnum.cashBill, VoucherTypeEnum.cashCreditNote].includes(this.invoiceType);
     }
 
@@ -6422,7 +6422,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
      * @memberof VoucherComponent
      */
     private isStockItemPresent(): boolean {
-        if (this.isMultiCurrencyModule() && this.invFormData.entries) {
+        if (this.isMultiGiddhNumberFormatModule() && this.invFormData.entries) {
             const entries = this.invFormData.entries;
             for (let entry = 0; entry < entries.length; entry++) {
                 const transactions = entries[entry].transactions;

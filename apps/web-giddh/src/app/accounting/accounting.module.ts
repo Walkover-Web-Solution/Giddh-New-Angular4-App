@@ -11,7 +11,6 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
-import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { InventoryModule } from './../inventory/inventory.module';
 import { SharedModule } from './../shared/shared.module';
 import { AccountingRoutingModule } from './accounting-routing.module';
@@ -29,6 +28,7 @@ import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicke
 import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
 
 @NgModule({
     declarations: [
@@ -44,7 +44,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         AccountingRoutingModule,
         RouterModule,
         CommonModule,
-        CurrencyModule,
+        GiddhNumberFormatModule,
         FormsModule,
         ReactiveFormsModule,
         LaddaModule.forRoot({

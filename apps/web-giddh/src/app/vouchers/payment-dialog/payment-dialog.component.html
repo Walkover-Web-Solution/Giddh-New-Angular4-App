@@ -122,7 +122,7 @@
                 />
             </span>
             <span class="mr-1" *ngIf="!showExchangeRateEditField">{{
-                paymentForm.get("exchangeRate")?.value | giddhCurrency
+                paymentForm.get("exchangeRate")?.value | giddhNumberFormat
             }}</span>
             <span
                 ><ng-container *ngIf="currencySwitched">{{ voucherDetails?.account?.currency?.code }}</ng-container
