@@ -413,16 +413,12 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
      * @memberof AppComponent
      */
     private handleQueryParamsCompanySwitch(detail: any): void {
-        console.log('handleQueryParamsCompanySwitch called with:', detail);
-        
         if (!detail || !detail.companyUniqueName || !detail.company) {
             console.warn('Invalid detail provided to handleQueryParamsCompanySwitch:', detail);
             return;
         }
 
         const { companyUniqueName, branchUniqueName, company } = detail;
-        console.log('Processing company/branch switch:', { companyUniqueName, branchUniqueName, company });
-
         // Reset active company data and warehouse response (same as switchCompany)
         this.store.dispatch(this.companyActions.resetActiveCompanyData());
         this.store.dispatch(this.warehouseActions.resetWarehouseResponse());
