@@ -82,6 +82,12 @@
             Please enter valid mobile number for {{ selectedCountry?.name }}
         </mat-error> -->
     </mat-form-field>
+    1{{ mobileControl.value | json }}
+    2{{ mobileControl.invalid | json }}
+    3{{ mobileControl.errors | json }}
+    4{{ mobileControl.status | json }}
+    5{{ mobileControl.touched | json }}
+    6{{ mobileControl.dirty | json }}
     <!-- <p class="font-size-12 text-gray">{{ getFullPhoneNumber() }}</p> -->
     <span class="text-danger" *ngIf="mobileControl.hasError('required')">{{
         localeData?.mobile_number_required || "Mobile number is required"
