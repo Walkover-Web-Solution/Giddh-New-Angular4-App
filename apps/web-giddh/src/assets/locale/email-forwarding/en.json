@@ -15,5 +15,5 @@
     "copied": "Copied...",
     "import_vouchers_title": "Auto-upload your bank statements from email",
     "import_vouchers_description": "Set up a forwarding email for your bank statements so GIDDH can auto-create vouchers from incoming emails.",
-    "email_customization_text": "Email Address/Customize the email address below based on your preference."
+    "email_customization_text": "Customize the email address below based on your preference."
 }
