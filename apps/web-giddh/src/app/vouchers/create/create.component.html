@@ -2031,7 +2031,7 @@
                                                                                     [type]="'number'"
                                                                                     formControlName="hsnNumber"
                                                                                     [maxlength]="10"
-                                                                                    [allowDecimalDigitsOnly]="true"
+                                                                                    [allowDigitsOnly]="true"
                                                                                     [placeholder]="
                                                                                         localeData?.hsn_number
                                                                                     "
@@ -2053,7 +2053,7 @@
                                                                                     [type]="'number'"
                                                                                     formControlName="sacNumber"
                                                                                     [maxlength]="10"
-                                                                                    [allowDecimalDigitsOnly]="true"
+                                                                                    [allowDigitsOnly]="true"
                                                                                     [placeholder]="
                                                                                         localeData?.sac_number
                                                                                     "
@@ -3801,3 +3801,5 @@
         (closeModelEvent)="cancelEmailModal()"
     ></purchase-order-preview-modal>
 </ng-template>
+
+
