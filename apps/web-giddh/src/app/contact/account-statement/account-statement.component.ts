@@ -15,6 +15,7 @@ import { AdvanceSearchRequest } from "../../models/interfaces/advance-search-req
 import { cloneDeep } from "../../lodash-optimized";
 import { TransactionType } from "../../models/api-models/Ledger";
 import { saveAs } from 'file-saver';
+import { GiddhNumberFormatPipe } from "../../shared/helpers/pipes/number-format/number-format.pipe";
 
 @Component({
     selector: "account-statement",
@@ -107,6 +108,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
         public dialog: MatDialog,
         private contactComponentStore: ContactComponentStore,
         private generalService: GeneralService,
+        private giddhNumberFormatPipe: GiddhNumberFormatPipe
     ) {
         this.advanceSearchRequest = new AdvanceSearchRequest();
     }
@@ -130,8 +132,9 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
                         ? "-"
                         : "") +
                     (this.responseAccountList.accountAddress?.currency?.symbol ?? "") +
-                    this.responseAccountList.accountSummary.closingBalance.amount
+                    this.giddhNumberFormatPipe.transform(this.responseAccountList.accountSummary.closingBalance.amount)
                     : ""
+                console.log('this.responseAccountList', this.responseAccountList, this.balanceDue);
             }
         });
 
