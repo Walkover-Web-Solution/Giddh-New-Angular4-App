@@ -18,18 +18,27 @@
                     [disabled]="isUserRestricted" [showError]="isFormInvalid && permissionForm?.get('roleUniqueName').invalid"></reactive-dropdown-field>
             </div>
             <!-- time span -->
-            <div [exclude]="'.time-span-dropdown'" [attachOutsideOnClick]="true"
-                (clickOutside)="methodForToggleSection('timeSpanSection')">
-                <button mat-button [matMenuTriggerFor]="menu" (click)="showTimeSpan = !showTimeSpan" type="button"
-                    class="mat-select-btn range-wrapper text-left w-100" [disabled]="isUserRestricted">
-                    <span class="d-flex w-100">
+            <div
+                [exclude]="'.time-span-dropdown'"
+                [attachOutsideOnClick]="true"
+                (clickOutside)="methodForToggleSection('timeSpanSection')"
+            >
+                <button
+                    mat-button
+                    [matMenuTriggerFor]="menu"
+                    (click)="showTimeSpan = !showTimeSpan"
+                    type="button"
+                    class="mat-select-btn border border-radius-4 custom-mat-form-field-height justify-content-between p-3 text-left w-100"
+                    [disabled]="isUserRestricted"
+                >
+                    <span class="d-flex w-100 font-weight-regular">
                         {{ selectedTimeSpan }}
-                        <span class="ml-auto"><span class="fa fa-caret-down"></span></span>
+                        <span class="ml-auto"><span class="fa fa-caret-down font-size-15 mr-2"></span></span>
                     </span>
                 </button>
                 <mat-menu #menu="matMenu">
-                    <section class="mb-2 time-span-dropdown custom-date-range-menu" (click)="$event.stopPropagation()">
-                        <div class=" p-3 ">
+                    <section class="mb-2 time-span-dropdown max-w-300" (click)="$event.stopPropagation()">
+                        <div class="p-3">
                             <mat-radio-group formControlName="periodOptions" class="d-flex flex-column">
                                 <mat-radio-button value="daterange" id="dateRange" color="primary"
                                     (click)="isOpenedInModal ? handleTimeSpanChange('daterange') : ''"
@@ -82,12 +91,21 @@
             </div>
             <!-- time span end -->
             <div>
-                <div [exclude]="'.ip-addresses-dropdown'" [attachOutsideOnClick]="true"
-                    (clickOutside)="methodForToggleSection('rangeSpanSection')">
-                    <button mat-button [matMenuTriggerFor]="menurange" (click)="showIPWrap = !showIPWrap" type="button"
-                        class="mat-select-btn range-wrapper text-left w-100" [disabled]="isUserRestricted">
-                        {{ selectedIPRange }}
-                        <span class="pull-right"><span class="fa fa-caret-down"></span></span>
+                <div
+                    [exclude]="'.ip-addresses-dropdown'"
+                    [attachOutsideOnClick]="true"
+                    (clickOutside)="methodForToggleSection('rangeSpanSection')"
+                >
+                    <button
+                        mat-button
+                        [matMenuTriggerFor]="menurange"
+                        (click)="showIPWrap = !showIPWrap"
+                        type="button"
+                        class="mat-select-btn border border-radius-4 custom-mat-form-field-height justify-content-between p-3 text-left w-100"
+                        [disabled]="isUserRestricted"
+                    >
+                        <span class="font-weight-regular">{{ selectedIPRange }}</span>
+                        <span class="pull-right"><span class="fa fa-caret-down font-size-15 mr-2"></span></span>
                     </button>
                     <mat-menu #menurange="matMenu">
                         <section class="ip-addresses-dropdown" role="menu" (click)="$event.stopPropagation()">
@@ -112,10 +130,17 @@
                                         let item of permissionForm.get('allowedCidrs')['controls'];
                                         let i = index;
                                         let l = last
-                                    " [formGroupName]="i">
-                                    <div>
-                                        <input class="form-control" name="item_{{ i }}" formControlName="range"
-                                            type="text" [placeholder]="localeData?.cidr_example" />
+                                    "
+                                    [formGroupName]="i"
+                                >
+                                    <div class="w-100">
+                                        <input
+                                            class="form-control"
+                                            name="item_{{ i }}"
+                                            formControlName="range"
+                                            type="text"
+                                            [placeholder]="localeData?.cidr_example"
+                                        />
                                     </div>
                                     <div class="pull-left lh-34">
                                         <i *ngIf="!l" (click)="delRow('allowedCidrs', i, $event)"
@@ -132,11 +157,18 @@
                                         let item of permissionForm.get('allowedIps')['controls'];
                                         let i = index;
                                         let l = last
-                                    " [formGroupName]="i">
-                                    <div>
-                                        <input class="form-control" (keypress)="allowOnlyNumbersAndDot($event)"
-                                            name="item_{{ i }}" formControlName="range" type="text"
-                                            [placeholder]="localeData?.ip_example" />
+                                    "
+                                    [formGroupName]="i"
+                                >
+                                    <div class="w-100">
+                                        <input
+                                            class="form-control"
+                                            (keypress)="allowOnlyNumbersAndDot($event)"
+                                            name="item_{{ i }}"
+                                            formControlName="range"
+                                            type="text"
+                                            [placeholder]="localeData?.ip_example"
+                                        />
                                     </div>
                                     <div class="pull-left lh-34">
                                         <i *ngIf="!l" (click)="delRow('allowedIps', i, $event)"
