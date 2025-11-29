@@ -1,12 +1,12 @@
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { NgModule } from '@angular/core';
 
-import { CurrencyModule } from '../helpers/pipes/currencyPipe/currencyType.module';
+import { GiddhNumberFormatModule } from '../helpers/pipes/number-format/number-format.module';
 import { AmountFieldComponent } from './amount-field.component';
 
 @NgModule({
     declarations: [AmountFieldComponent],
-    imports: [CurrencyModule, CommonModule],
+    imports: [GiddhNumberFormatModule, CommonModule],
     exports: [AmountFieldComponent],
     providers: [DecimalPipe]
 })

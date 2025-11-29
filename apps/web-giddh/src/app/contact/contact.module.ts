@@ -1,4 +1,3 @@
-import { CurrencyModule } from '../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
@@ -16,7 +15,6 @@ import { AgingDropdownComponent } from './aging-dropdown/aging.dropdown.componen
 import { PaymentAsideComponent } from './payment-aside/payment-aside.component';
 import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
-import { GiddhCurrencyPipe } from '../shared/helpers/pipes/currencyPipe/currencyType.pipe';
 import { NoDataModule } from '../shared/no-data/no-data.module';
 import { LightboxModule } from 'ngx-lightbox';
 import { MatButtonModule } from "@angular/material/button";
@@ -46,6 +44,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { LedgerModule } from '../ledger/ledger.module';
 import { MatCardModule } from '@angular/material/card';
 import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
+import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
+import { GiddhNumberFormatPipe } from '../shared/helpers/pipes/number-format/number-format.pipe';
 @NgModule({
     declarations: [
         ContactComponent,
@@ -57,7 +57,7 @@ import { FroalaTemplateEditorModule } from '../shared/template-froala/template-f
         AccountStatementComponent
     ],
     exports: [
-        CurrencyModule
+        GiddhNumberFormatModule
     ],
     imports: [
         CommonModule,
@@ -72,7 +72,7 @@ import { FroalaTemplateEditorModule } from '../shared/template-froala/template-f
         ClickOutsideModule,
         DigitsOnlyModule,
         ElementViewChildModule,
-        CurrencyModule,
+        GiddhNumberFormatModule,
         Daterangepicker,
         NgxDaterangepickerMd.forRoot(),
         NgxMaskModule.forRoot(),
@@ -101,11 +101,11 @@ import { FroalaTemplateEditorModule } from '../shared/template-froala/template-f
         LedgerStatementModule,
         MatSortModule,
         MatPaginatorModule,
-        LedgerModule,   
+        LedgerModule,
         MatCardModule
     ],
     providers: [
-        GiddhCurrencyPipe
+        GiddhNumberFormatPipe
     ]
 })
 export class ContactModule {

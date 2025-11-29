@@ -1402,7 +1402,7 @@
                                                         ({{ commonLocaleData?.app_amount }}:
                                                         {{
                                                             option.additional?.unadjustedAmount?.amountForAccount
-                                                                | giddhCurrency
+                                                                | giddhNumberFormat
                                                         }})
                                                     </div>
                                                 </a>
@@ -1514,7 +1514,7 @@
                                         (click)="switchCurrency()"
                                     />
                                     <span *ngIf="!showExchangeRateEditField"
-                                        >{{ invoiceForm.get("exchangeRate")?.value | giddhCurrency }}
+                                        >{{ invoiceForm.get("exchangeRate")?.value | giddhNumberFormat }}
                                         <ng-container *ngIf="currencySwitched">{{ account?.baseCurrency }}</ng-container
                                         ><ng-container *ngIf="!currencySwitched">{{
                                             company?.baseCurrency
@@ -2031,7 +2031,7 @@
                                                                                     [type]="'number'"
                                                                                     formControlName="hsnNumber"
                                                                                     [maxlength]="10"
-                                                                                    [allowDecimalDigitsOnly]="true"
+                                                                                    [allowDigitsOnly]="true"
                                                                                     [placeholder]="
                                                                                         localeData?.hsn_number
                                                                                     "
@@ -2053,7 +2053,7 @@
                                                                                     [type]="'number'"
                                                                                     formControlName="sacNumber"
                                                                                     [maxlength]="10"
-                                                                                    [allowDecimalDigitsOnly]="true"
+                                                                                    [allowDigitsOnly]="true"
                                                                                     [placeholder]="
                                                                                         localeData?.sac_number
                                                                                     "
@@ -3801,3 +3801,5 @@
         (closeModelEvent)="cancelEmailModal()"
     ></purchase-order-preview-modal>
 </ng-template>
+
+
