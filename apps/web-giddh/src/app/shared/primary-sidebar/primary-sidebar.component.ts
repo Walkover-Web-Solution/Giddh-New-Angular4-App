@@ -474,9 +474,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         setTimeout(() => {
             if (item && item.type === 'MENU') {
                 if (item.additional && item.additional.tab) {
-                    if (item.uniqueName.includes('?') || item.uniqueName.includes('&')) {
-                        // Clean URL by removing query parameters (both ? and & cases)
-                        item.uniqueName = item.uniqueName?.split('?')[0]?.split('&')[0];
+                    if (item.uniqueName.includes('?')) {
+                        // Clean URL by removing query parameters
+                        item.uniqueName = item.uniqueName.split('?')[0];
                     }
                     this.router.navigate([item.uniqueName], {
                         queryParams: {
@@ -492,9 +492,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 let url = `ledger/${item.uniqueName}`;
                 // Get the redirect URL and clean it if it contains query parameters
                 let redirectUrl = this.previousUrl || this.currentUrl || '/';
-                // If redirectUrl contains query parameters, extract only the base path (handle both ? and & cases)
-                if (redirectUrl.includes('?') || redirectUrl.includes('&')) {
-                    redirectUrl = redirectUrl.split('?')[0]?.split('&')[0];
+                // If redirectUrl contains query parameters, extract only the base path
+                if (redirectUrl.includes('?')) {
+                    redirectUrl = redirectUrl.split('?')[0];
                 }
                 this.router.navigate([url], {
                     queryParams: { redirectUrl: encodeURIComponent(redirectUrl) }
