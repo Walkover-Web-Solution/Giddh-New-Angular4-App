@@ -75,11 +75,12 @@
                                     #autoFocusUpdate
                                     [placeholder]="'0.00'"
                                     [label]="localeData?.opening_balance"
-                                    [type]="'number'"
+                                    [type]="'text'"
                                     formControlName="openingBalance"
                                     [readonly]="company?.isActive"
                                     [min]="0"
                                     (change)="openConfirmLeaveDialog()"
+                                    [allowDecimalDigitsOnly]="true"
                                 >
                                 </input-field>
                                 <div class="d-flex">
@@ -153,11 +154,12 @@
                                         addAccountForm.get('foreignOpeningBalance')?.value > 0
                                 }"
                                 [placeholder]="'0.00'"
-                                [type]="'number'"
+                                [type]="'text'"
                                 formControlName="foreignOpeningBalance"
                                 [readonly]="company?.isActive"
                                 [min]="0"
                                 (change)="openConfirmLeaveDialog()"
+                                [allowDecimalDigitsOnly]="true"
                             >
                             </input-field>
                             <div class="d-flex">
@@ -714,7 +716,7 @@
                                 }"
                             >
                                 <input-field
-                                    [type]="'number'"
+                                    [type]="'text'"
                                     [min]="'0'"
                                     class="flex-grow-1"
                                     [cssClass]="'text-right'"
@@ -733,6 +735,7 @@
                                         '' +
                                         commonLocaleData?.app_numbers?.zero
                                     "
+                                    [allowDecimalDigitsOnly]="true"
                                 >
                                 </input-field>
                                 <div class="d-flex">
