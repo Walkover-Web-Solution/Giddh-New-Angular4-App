@@ -37,7 +37,7 @@
                     class="ml-0"
                 >
                     <input-field
-                        [type]="'number'"
+                        [type]="'text'"
                         [label]="localeData?.balance_for_trigger"
                         [name]="'closingBalanceTriggerAmount'"
                         formControlName="closingBalanceTriggerAmount"
@@ -46,7 +46,7 @@
                         [cssClass]="'text-right'"
                         [ngClass]="{ 'w100 remove-right-border-radius': groupDetailForm.get('closingBalanceTriggerAmount')?.value > 0 }"
                         [placeholder]="'0.00'"
-                        [allowDigitsOnly]="true"
+                        [allowDecimalDigitsOnly]="true"
                     >
                     </input-field>
                     <div class="d-flex">
