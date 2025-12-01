@@ -2231,8 +2231,9 @@
                                             <div class="col-sm-12 col-md-6 col-lg-6">
                                                 <input-field
                                                     id="combo-unique-name"
-                                                    type="text"
+                                                    [type]="'number'"
                                                     [placeholder]="localeData?.enter_hsn_code"
+                                                    [allowDigitsOnly]="true"
                                                 ></input-field>
                                             </div>
                                         </div>
@@ -3131,15 +3132,17 @@
                                                     <div class="col-sm-6 col-lg-6" *ngIf="isHSN">
                                                         <input-field
                                                             id="product-name"
-                                                            type="text"
+                                                            [type]="'number'"
                                                             placeholder="Enter HSN Code"
+                                                            [allowDigitsOnly]="true"
                                                         ></input-field>
                                                     </div>
                                                     <div class="col-sm-6 col-lg-6" *ngIf="!isHSN">
                                                         <input-field
                                                             id="product-name"
-                                                            type="text"
+                                                            [type]="'number'"
                                                             placeholder="Enter SAC Code"
+                                                            [allowDigitsOnly]="true"
                                                         ></input-field>
                                                     </div>
                                                 </div>
@@ -3711,9 +3714,10 @@
                                             </td>
                                             <td data-title="HSN/SAC Code">
                                                 <input-field
-                                                    type="text"
+                                                    [type]="'number'"
                                                     placeholder="Enter"
                                                     id="hsn-sac-code"
+                                                    [allowDigitsOnly]="true"
                                                 ></input-field>
                                             </td>
                                             <td data-title="SAC Code">
