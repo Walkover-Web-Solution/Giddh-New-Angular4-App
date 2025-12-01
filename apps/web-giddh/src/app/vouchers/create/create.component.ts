@@ -3553,7 +3553,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         let isChecked;
         if (element === "checkbox") {
             isChecked = event?.checked;
-            this.rcmCheckbox["checked"] = !isChecked;
+            if (this.rcmCheckbox) {
+                this.rcmCheckbox["checked"] = !isChecked;
+            }
         } else {
             isChecked = !event?._checked;
         }
@@ -3586,7 +3588,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (action === this.commonLocaleData?.app_yes) {
             // Toggle the state of RCM as user accepted the terms of RCM modal
             this.invoiceForm.get("isRcmEntry").patchValue(!this.invoiceForm.get("isRcmEntry")?.value);
-            this.rcmCheckbox["checked"] = this.invoiceForm.get("isRcmEntry")?.value;
+            if (this.rcmCheckbox) {
+                this.rcmCheckbox["checked"] = this.invoiceForm.get("isRcmEntry")?.value;
+            }
+            this.checkRcm();
+        } else {
+            this.invoiceForm.get("isRcmEntry").patchValue(false);
+            if (this.rcmCheckbox) {
+                this.rcmCheckbox["checked"] = false;
+            }
             this.checkRcm();
         }
     }
@@ -5200,6 +5210,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (!initialLoad) {
             this.ocrDataEnabled = false;
         }
+
         const entriesFormArray = this.invoiceForm.get("entries") as FormArray;
         entriesFormArray.clear();
         const depositFormArray = this.invoiceForm.get("deposits") as FormArray;
@@ -5295,6 +5306,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (this.invoiceType.isCashInvoice) {
             this.invoiceForm.get("account.uniqueName")?.patchValue("cash");
         }
+        this.invoiceForm.get("isRcmEntry").patchValue(false);
+        if (this.rcmCheckbox) {
+            this.rcmCheckbox["checked"] = false;
+        }
+        this.checkRcm();
         this.forceClear = true;
 
         setTimeout(() => {
