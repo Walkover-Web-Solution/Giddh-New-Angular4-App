@@ -63,7 +63,7 @@
                     </div>
                     <div class="col-sm-4">
                         <div class="form-group mb-0">
-                            <div [ngClass]="{ 'input-group': addAccountForm.get('openingBalance')?.value > 0 }">
+                            <div [ngClass]="{ 'input-group': addAccountForm.get('openingBalance')?.value > 0 }" class="ml-0">
                                 <input-field
                                     [name]="'number'"
                                     class="flex-grow-1"
@@ -142,7 +142,7 @@
                         ></reactive-dropdown-field>
                     </div>
                     <div class="col-sm-4" *ngIf="addAccountForm.get('currency')?.value !== companyCurrency">
-                        <div [ngClass]="{ 'input-group': addAccountForm.get('foreignOpeningBalance')?.value > 0 }">
+                        <div [ngClass]="{ 'input-group': addAccountForm.get('foreignOpeningBalance')?.value > 0 }" class="ml-0">
                             <input-field
                                 [name]="'number'"
                                 class="flex-grow-1"
@@ -167,7 +167,7 @@
                                     [ngClass]="{
                                         'active-toggle-btn':
                                             addAccountForm.get('openingBalanceType')?.value === 'DEBIT',
-                                        'cursor-pointer': addAccountForm.get('openingBalance')?.value > 0
+                                        'cursor-pointer': addAccountForm.get('foreignOpeningBalance')?.value > 0
                                     }"
                                     *ngIf="addAccountForm.get('foreignOpeningBalance')?.value > 0"
                                 >
@@ -179,7 +179,7 @@
                                     [ngClass]="{
                                         'active-toggle-btn':
                                             addAccountForm.get('openingBalanceType')?.value === 'CREDIT',
-                                        'cursor-pointer': addAccountForm.get('openingBalance')?.value > 0
+                                        'cursor-pointer': addAccountForm.get('foreignOpeningBalance')?.value > 0
                                     }"
                                     *ngIf="addAccountForm.get('foreignOpeningBalance')?.value > 0"
                                 >
