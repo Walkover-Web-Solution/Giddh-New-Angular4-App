@@ -2505,11 +2505,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         };
                     }
 
-                    this.componentStore.getParticularDetails({
-                        accountUniqueName: transactionFormGroup.get("account.uniqueName")?.value,
-                        payload: payload,
-                        entryIndex: entryIndex,
-                    });
+                    // Determine timeout based on multi-currency voucher and exchange rate
+                    const timeoutDuration = (this.isMultiCurrencyVoucher) ? 2000 : 1000;
+
+                    setTimeout(() => {
+                        this.componentStore.getParticularDetails({
+                            accountUniqueName: transactionFormGroup.get("account.uniqueName")?.value,
+                            payload: payload,
+                            entryIndex: entryIndex,
+                        });
+                    }, timeoutDuration);
                 } else {
                     transactionFormGroup.get("stock.variant.getParticular")?.patchValue(true);
                 }
@@ -2597,7 +2602,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 }
             });
         }
-
         if (this.useDefaultAccountDetails) {
             if (this.isMultiCurrencyVoucher) {
                 this.getExchangeRate(
@@ -2608,7 +2612,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             } else {
                 this.invoiceForm.get("exchangeRate").patchValue(1);
             }
-
             let defaultAddress = null;
             let accountDefaultAddress = this.vouchersUtilityService.getDefaultAddress(accountData);
             defaultAddress = accountDefaultAddress.defaultAddress;
