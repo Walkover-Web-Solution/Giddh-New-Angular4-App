@@ -1036,7 +1036,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     public openingBalanceTypeChanged(type: string) {
-        this.addAccountForm.get('openingBalanceType')?.patchValue(type);
+        if (Number(this.addAccountForm.get('openingBalance')?.value) > 0 || Number(this.addAccountForm.get('foreignOpeningBalance')?.value) > 0) {
+            this.addAccountForm.get('openingBalanceType')?.patchValue(type);
+        }
     }
 
     public showLessGst() {

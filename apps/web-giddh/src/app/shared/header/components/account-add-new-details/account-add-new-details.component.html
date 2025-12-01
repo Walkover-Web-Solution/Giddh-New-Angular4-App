@@ -157,7 +157,7 @@
                                 [ngClass]="{ 'w100 remove-right-border-radius': addAccountForm.get('foreignOpeningBalance')?.value > 0 }"
                                 [label]="localeData?.foreign_opening_balance"
                                 [placeholder]="'0.00'"
-                                [type]="'tel'"
+                                [type]="'number'"
                                 formControlName="foreignOpeningBalance"
                                 [readonly]="company?.isActive"
                                 [min]="0"
@@ -715,7 +715,7 @@
                                 }"
                             >
                                 <input-field
-                                    [type]="'tel'"
+                                    [type]="'number'"
                                     [min]="'0'"
                                     class="flex-grow-1"
                                     [cssClass]="'text-right'"
