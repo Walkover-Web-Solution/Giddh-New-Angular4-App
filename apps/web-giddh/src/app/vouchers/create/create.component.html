@@ -1431,9 +1431,7 @@
                                             [disabled]="isEinvoiceGenerated"
                                             color="primary"
                                             id="reverse-charge"
-                                            (click)="
-                                                !isEinvoiceGenerated ? toggleRcmCheckbox(rcmCheckbox, 'label') : ''
-                                            "
+                                            (change)="changeRcmCheckboxState($event)"
                                         >
                                         </mat-checkbox>
                                         <label

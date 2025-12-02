@@ -188,7 +188,7 @@
                             *matCellDef="let element"
                             class="position-relative "
                             [matTooltip]="element?.subscriptionId"
-                            [matTooltipPosition]="'above'"  
+                            [matTooltipPosition]="'above'"
                         >
                             {{ element.plan?.name ? element.plan?.name : "-" }}
                         </td>
@@ -235,7 +235,6 @@
                                         *ngIf="
                                             element?.status?.toLowerCase() === 'expired' &&
                                             element?.isOwner &&
-                                            element?.region?.code !== 'GBR' &&
                                             activeCompany?.planVersion === 2
                                         "
                                         mat-menu-item

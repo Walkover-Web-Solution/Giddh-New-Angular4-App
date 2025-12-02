@@ -2511,10 +2511,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             this.componentStore.exchangeRate$,
                             this.componentStore.voucherDetails$
                         ]).pipe(
-                            takeUntil(this.destroyed$),
+                            take(1),
                             filter(([inProgress, exchangeRate, voucherDetails]) => !inProgress) // Only proceed when API call is complete
                         ).subscribe(([inProgress, exchangeRate, voucherDetails]) => {
-
                             if ((exchangeRate && exchangeRate !== 1 )|| (voucherDetails?.exchangeRate && voucherDetails?.exchangeRate !== 1)) {
                                 // Exchange rate fetched successfully, proceed immediately
                                 this.componentStore.getParticularDetails({
