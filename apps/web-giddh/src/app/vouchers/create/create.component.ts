@@ -498,7 +498,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public rowData: any = null;
     /** This will use for force clear reactive dropdown */
     public forceClear: boolean = false;
-    public exchangeRateInProgress$ = new BehaviorSubject<boolean>(false);
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -864,12 +863,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.componentStore.exchangeRate$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 this.invoiceForm.get("exchangeRate")?.patchValue(response);
-            }
-        });
-
-        this.componentStore.exchangeRateInProgress$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            if (response) {
-                this.exchangeRateInProgress$.next(response);
             }
         });
 
