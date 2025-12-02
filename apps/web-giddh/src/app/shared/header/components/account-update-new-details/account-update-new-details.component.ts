@@ -784,7 +784,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 name: [''],
                 virtualAccountNumber: ['']
             }),
-            closingBalanceTriggerAmount: [Validators.compose([digitsOnly])],
+            closingBalanceTriggerAmount: ["", Validators.compose([digitsOnly])],
             closingBalanceTriggerAmountType: ['CREDIT'],
             customFields: this._fb.array([]),
             portalDomain: this._fb.array([
