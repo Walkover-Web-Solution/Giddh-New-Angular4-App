@@ -1192,7 +1192,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.invoiceForm
                             .get("isRcmEntry")
                             .patchValue(voucherDetails.subVoucher === SubVoucher.ReverseCharge ? true : false);
-
+                        this.checkRcm(1500);
                         if (voucherDetails.adjustments?.length && !this.isCopyMode) {
                             voucherDetails.adjustments = voucherDetails.adjustments?.map((adjustment) => {
                                 adjustment.adjustmentAmount = adjustment.amount;
@@ -1232,7 +1232,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.invoiceForm
                             .get("isRcmEntry")
                             .patchValue(voucherDetails.subVoucher === SubVoucher.ReverseCharge ? true : false);
-
+                        this.checkRcm(1500);
                         if (voucherDetails.adjustments?.length && !this.isCopyMode) {
                             voucherDetails.adjustments = voucherDetails.adjustments?.map((adjustment) => {
                                 adjustment.adjustmentAmount = adjustment.amount;
@@ -3553,9 +3553,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         let isChecked;
         if (element === "checkbox") {
             isChecked = event?.checked;
-            if (this.rcmCheckbox) {
-                this.rcmCheckbox["checked"] = !isChecked;
-            }
+            this.rcmCheckbox["checked"] = !isChecked;
         } else {
             isChecked = !event?._checked;
         }
@@ -3588,15 +3586,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (action === this.commonLocaleData?.app_yes) {
             // Toggle the state of RCM as user accepted the terms of RCM modal
             this.invoiceForm.get("isRcmEntry").patchValue(!this.invoiceForm.get("isRcmEntry")?.value);
-            if (this.rcmCheckbox) {
-                this.rcmCheckbox["checked"] = this.invoiceForm.get("isRcmEntry")?.value;
-            }
-            this.checkRcm();
-        } else {
-            this.invoiceForm.get("isRcmEntry").patchValue(false);
-            if (this.rcmCheckbox) {
-                this.rcmCheckbox["checked"] = false;
-            }
             this.checkRcm();
         }
     }
@@ -4659,12 +4648,17 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      *
      * @memberof VoucherCreateComponent
      */
-    public checkRcm(): void {
-        if (this.invoiceForm.get("isRcmEntry")?.value) {
-            this.invoiceForm.get("subVoucher")?.patchValue(SubVoucher.ReverseCharge);
-        } else {
-            this.invoiceForm.get("subVoucher")?.patchValue("");
-        }
+    public checkRcm(duration: number = 100): void {
+        setTimeout(() => {
+            if (this.rcmCheckbox) {
+                if (this.invoiceForm.get("isRcmEntry")?.value) {
+                    this.invoiceForm.get("subVoucher")?.patchValue(SubVoucher.ReverseCharge);
+                } else {
+                    this.invoiceForm.get("subVoucher")?.patchValue("");
+                }
+                this.rcmCheckbox["checked"] = this.invoiceForm.get("isRcmEntry")?.value;
+            }
+        }, duration);
     }
 
     /**
