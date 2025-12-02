@@ -27,39 +27,69 @@ const SPECIAL_KEYS = [...DIRECTIONAL_KEYS, CAPS_LOCK, TAB, SHIFT, CONTROL, ALT, 
 
 export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
 
+    /** Reference to the main element. */
     @ViewChild('mainEle', { static: true }) public mainEle: ElementRef;
+    /** Reference to the search input element. */
     @ViewChild('searchEle', { static: false }) public searchEle: ElementRef;
+    /** Reference to the search wrapper element. */
     @ViewChild('searchWrapEle', { static: true }) public searchWrapEle: ElementRef;
+    /** Reference to the wrapper element. */
     @ViewChild('wrapper', { static: true }) public wrapper: ElementRef;
+    /** Reference to the CDK virtual scroll viewport. */
     @ViewChild('virtualScrollViewport', { static: false }) public virtualScrollViewport: CdkVirtualScrollViewport;
 
+    /** Prevents closing the popup when clicking outside. */
     @Input() public preventOutSideClose: boolean = false;
+    /** Prevents showing the 'No Results Found' message. */
     @Input() public dontShowNoResultMsg: boolean = false;
+    /** Determines if the create channel button is shown. */
     @Input() public showChannelCreateBtn: boolean = true;
 
+    /** Controls the visibility of the popup. */
     @Input() public isOpen: boolean = true;
+    /** If true, sets the width of the popup to match the parent element. */
     @Input() public setParentWidth: boolean = false;
+    /** Reference to the parent element for width calculation. */
     @Input() public parentEle: any;
+    /** Height of each item in the list. */
     @Input() public ItemHeight: number = 52;
+    /** Width of each item in the list. */
     @Input() public ItemWidth: number = 300;
+    /** Number of items visible in the viewport. */
     @Input() public visibleItems: number = 10;
     
+    /** Emits the selected item. */
     @Output() public selectedItemEmitter: EventEmitter<any | any[]> = new EventEmitter<any | any[]>();
+    /** Emits when the dialog is closed. */
     @Output() public closeDailogEmitter: EventEmitter<any | any[]> = new EventEmitter<any | any[]>();
+    /** Emits the selected group. */
     @Output() public groupEmitter: EventEmitter<any> = new EventEmitter<any>();
+    /** Emits when a new team creation is requested. */
     @Output() public newTeamCreationEmitter: EventEmitter<any> = new EventEmitter<null>();
 
+    /** Subject for handling search input with debounce. */
     private searchSubject: Subject<string> = new Subject();
+    /** ReplaySubject to signal component destruction. */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Array of items returned from the search. */
     public searchedItems: any[] = [];
+    /** List of currently selected groups. */
     public listOfSelectedGroups: any[] = [];
+    /** True if no results are found from the search. */
     public noResultsFound: boolean = false;
+    /** Index of the currently highlighted item in the list. */
     public highlightedItem: number = 0;
+    /** True if more items can be loaded. */
     public allowLoadMore: boolean = false;
+    /** True if a data loading operation is in progress. */
     public isLoading: boolean = false;
+    /** True if the component has been initialized. */
     private isInitialized: boolean = false;
+    /** Stores the last scroll top position. */
     private lastScrollTop: number = 0;
+    /** Unique name of the active company. */
     public activeCompanyUniqueName: any = '';
+    /** Parameters for Command-K API requests. */
     public commandKRequestParams: CommandKRequest = {
         page: 1,
         q: '',
@@ -74,9 +104,9 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
 
     constructor(
         private store: Store<AppState>,
-        private _generalService: GeneralService,
-        private _commandKService: CommandKService,
-        private _cdref: ChangeDetectorRef,
+        private generalService: GeneralService,
+        private commandKService: CommandKService,
+        private changeDetection: ChangeDetectorRef,
         private groupWithAccountsAction: GroupWithAccountsAction,
         private generalAction: GeneralActions
     ) {
@@ -99,7 +129,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
             this.commandKRequestParams.page = 1;
             this.commandKRequestParams.q = term;
             this.searchCommandK(true);
-            this._cdref.markForCheck();
+            this.changeDetection.markForCheck();
         });
         
         document.querySelector("body")?.classList?.add("cmd-k");
@@ -252,13 +282,13 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         this.isLoading = true;
 
         if (this.listOfSelectedGroups && this.listOfSelectedGroups.length > 0) {
-            let lastGroup = this._generalService.getLastElement(this.listOfSelectedGroups);
+            let lastGroup = this.generalService.getLastElement(this.listOfSelectedGroups);
             this.commandKRequestParams.group = lastGroup?.uniqueName;
         } else {
             this.commandKRequestParams.group = "";
         }
 
-        this._commandKService.searchCommandK(this.commandKRequestParams, this.activeCompanyUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+        this.commandKService.searchCommandK(this.commandKRequestParams, this.activeCompanyUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
             this.isLoading = false;
 
             if (res && res.body && res.body.results && res.body.results.length > 0) {
@@ -276,21 +306,21 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
                 
 
                 // Force change detection and viewport refresh
-                this._cdref.detectChanges();
+                this.changeDetection.detectChanges();
                 
                 // Refresh virtual scroll viewport if available
                 setTimeout(() => {
                     // Preserve scroll position when loading more data (not initial search)
                     const preservePosition = this.commandKRequestParams.page > 1;
                     this.refreshVirtualScrollViewport(preservePosition);
-                    this._cdref.detectChanges();
+                    this.changeDetection.detectChanges();
                 }, 0);
             } else {
                 if (this.searchedItems?.length === 0) {
                     this.noResultsFound = true;
                     this.allowLoadMore = false;
                 }
-                this._cdref.detectChanges();
+                this.changeDetection.detectChanges();
             }
 
             this.initSetParentWidth();
@@ -402,7 +432,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
 
         const viewport = this.virtualScrollViewport.getElementRef().nativeElement;
         const scrollTop = viewport.scrollTop; // current scroll position
-        const itemHeight = 52.222;
+        const itemHeight = this.ItemHeight;
 
         // Number of items currently hidden above the viewport
         const itemsAbove = Math.ceil(scrollTop / itemHeight);
@@ -648,7 +678,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.virtualScrollViewport.setRenderedRange({ start: 0, end: itemCount });
             }
             
-            this._cdref.detectChanges();
+            this.changeDetection.detectChanges();
             
             // Restore scroll position if needed (with slight delay for DOM updates)
             if (preserveScrollPosition && currentScrollTop > 0) {
