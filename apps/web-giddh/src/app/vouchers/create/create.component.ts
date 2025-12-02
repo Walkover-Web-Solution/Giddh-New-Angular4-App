@@ -15,6 +15,7 @@ import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
 import { Store } from "@ngrx/store";
 import {
+    BehaviorSubject,
     Observable,
     ReplaySubject,
     combineLatest,
@@ -1192,7 +1193,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.invoiceForm
                             .get("isRcmEntry")
                             .patchValue(voucherDetails.subVoucher === SubVoucher.ReverseCharge ? true : false);
-
+                        this.checkRcm(1500);
                         if (voucherDetails.adjustments?.length && !this.isCopyMode) {
                             voucherDetails.adjustments = voucherDetails.adjustments?.map((adjustment) => {
                                 adjustment.adjustmentAmount = adjustment.amount;
@@ -1232,7 +1233,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.invoiceForm
                             .get("isRcmEntry")
                             .patchValue(voucherDetails.subVoucher === SubVoucher.ReverseCharge ? true : false);
-
+                        this.checkRcm(1500);
                         if (voucherDetails.adjustments?.length && !this.isCopyMode) {
                             voucherDetails.adjustments = voucherDetails.adjustments?.map((adjustment) => {
                                 adjustment.adjustmentAmount = adjustment.amount;
@@ -2504,17 +2505,41 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             customerUniqueName: this.invoiceForm.get("account.uniqueName")?.value,
                         };
                     }
+                    if (this.isMultiCurrencyVoucher) {
+                        combineLatest([
+                            this.componentStore.exchangeRateInProgress$,
+                            this.componentStore.exchangeRate$,
+                            this.componentStore.voucherDetails$
+                        ]).pipe(
+                            takeUntil(this.destroyed$),
+                            filter(([inProgress, exchangeRate, voucherDetails]) => !inProgress) // Only proceed when API call is complete
+                        ).subscribe(([inProgress, exchangeRate, voucherDetails]) => {
 
-                    // Determine timeout based on multi-currency voucher and exchange rate
-                    const timeoutDuration = (this.isMultiCurrencyVoucher) ? 2000 : 1000;
-
-                    setTimeout(() => {
+                            if ((exchangeRate && exchangeRate !== 1 )|| (voucherDetails?.exchangeRate && voucherDetails?.exchangeRate !== 1)) {
+                                // Exchange rate fetched successfully, proceed immediately
+                                this.componentStore.getParticularDetails({
+                                    accountUniqueName: transactionFormGroup.get("account.uniqueName")?.value,
+                                    payload: payload,
+                                    entryIndex: entryIndex,
+                                });
+                            } else {
+                                // Exchange rate API failed or returned default value, wait 15 seconds then proceed
+                                setTimeout(() => {
+                                    this.componentStore.getParticularDetails({
+                                        accountUniqueName: transactionFormGroup.get("account.uniqueName")?.value,
+                                        payload: payload,
+                                        entryIndex: entryIndex,
+                                    });
+                                }, 15000); // 15 second timeout
+                            }
+                        });
+                    } else {
                         this.componentStore.getParticularDetails({
                             accountUniqueName: transactionFormGroup.get("account.uniqueName")?.value,
                             payload: payload,
                             entryIndex: entryIndex,
                         });
-                    }, timeoutDuration);
+                    }
                 } else {
                     transactionFormGroup.get("stock.variant.getParticular")?.patchValue(true);
                 }
@@ -3556,9 +3581,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         let isChecked;
         if (element === "checkbox") {
             isChecked = event?.checked;
-            if (this.rcmCheckbox) {
-                this.rcmCheckbox["checked"] = !isChecked;
-            }
+            this.rcmCheckbox["checked"] = !isChecked;
         } else {
             isChecked = !event?._checked;
         }
@@ -3591,15 +3614,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (action === this.commonLocaleData?.app_yes) {
             // Toggle the state of RCM as user accepted the terms of RCM modal
             this.invoiceForm.get("isRcmEntry").patchValue(!this.invoiceForm.get("isRcmEntry")?.value);
-            if (this.rcmCheckbox) {
-                this.rcmCheckbox["checked"] = this.invoiceForm.get("isRcmEntry")?.value;
-            }
-            this.checkRcm();
-        } else {
-            this.invoiceForm.get("isRcmEntry").patchValue(false);
-            if (this.rcmCheckbox) {
-                this.rcmCheckbox["checked"] = false;
-            }
             this.checkRcm();
         }
     }
@@ -4662,12 +4676,17 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      *
      * @memberof VoucherCreateComponent
      */
-    public checkRcm(): void {
-        if (this.invoiceForm.get("isRcmEntry")?.value) {
-            this.invoiceForm.get("subVoucher")?.patchValue(SubVoucher.ReverseCharge);
-        } else {
-            this.invoiceForm.get("subVoucher")?.patchValue("");
-        }
+    public checkRcm(duration: number = 100): void {
+        setTimeout(() => {
+            if (this.rcmCheckbox) {
+                if (this.invoiceForm.get("isRcmEntry")?.value) {
+                    this.invoiceForm.get("subVoucher")?.patchValue(SubVoucher.ReverseCharge);
+                } else {
+                    this.invoiceForm.get("subVoucher")?.patchValue("");
+                }
+                this.rcmCheckbox["checked"] = this.invoiceForm.get("isRcmEntry")?.value;
+            }
+        }, duration);
     }
 
     /**
