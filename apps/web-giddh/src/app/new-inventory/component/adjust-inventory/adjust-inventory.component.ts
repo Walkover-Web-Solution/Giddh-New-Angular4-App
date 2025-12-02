@@ -430,7 +430,9 @@ export class AdjustInventoryComponent implements OnInit {
         const refNo = this.adjustInventoryCreateEditForm.get("refNo").value; // not reset
         this.adjustInventoryCreateEditForm.reset();
         this.adjustInventoryCreateEditForm.get("date").patchValue(this.stockReportRequest.to);
-        this.adjustInventoryCreateEditForm.get("refNo").patchValue(refNo);
+        if (this.referenceNumber) {
+            this.adjustInventoryCreateEditForm.get("refNo").patchValue(refNo);
+        }
         this.entity = {
             entityName: '',
             balance: ''
