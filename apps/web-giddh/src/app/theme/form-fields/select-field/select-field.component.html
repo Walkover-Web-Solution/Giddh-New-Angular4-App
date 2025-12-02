@@ -24,7 +24,7 @@
         autoActiveFirstOption
         [displayWith]="displayLabel"
         (optionSelected)="optionSelected($event)"
-        (opened)="addClassForDropdown(); resetSearchQuery()"
+        (opened)="addClassForDropdown()"
         #auto="matAutocomplete"
         [ngClass]="customPanelClass"
     >
