@@ -414,6 +414,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
 
         this.callBackBroadcast = new BroadcastChannel("call-back-subscription");
         this.callBackBroadcast.onmessage = (event) => {
+            console.log('callBackBroadcast event',event);
             if (event?.data?.success) {
                 const model = {
                     orderId: this.paypalCaptureOrderId,
@@ -1350,7 +1351,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.calculateDataInProgress$.pipe(take(1)).subscribe(inProgress => {
             isCalculating = inProgress;
         });
-        
+
         if (isCalculating) {
             return;
         }
@@ -1389,19 +1390,19 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.filteredPaymentProviders = this.allPaymentProviders.filter(provider => [PaymentProvider.GOCARDLESS, PaymentProvider.PAYPAL].includes(provider.value));
             } else if (duration === 'YEARLY') {
                 // Only Razorpay for yearly GBR
-                filterProviders([PaymentProvider.RAZORPAY]);
+                filterProviders([PaymentProvider.RAZORPAY, PaymentProvider.PAYU]);
             }
         } else if (entityCode !== 'IND') {
             if (duration === 'MONTHLY' || duration === 'DAILY') {
                 // Only PayPal for non-IND countries with monthly duration
-                filterProviders([PaymentProvider.PAYPAL]);
+                filterProviders([PaymentProvider.PAYPAL, PaymentProvider.PAYU]);
             } else if (duration === 'YEARLY') {
                 // Only Razorpay for non-IND countries with yearly duration
-                filterProviders([PaymentProvider.RAZORPAY]);
+                filterProviders([PaymentProvider.RAZORPAY, PaymentProvider.PAYU]);
             }
         } else if (entityCode === 'IND' && (duration === 'MONTHLY' || duration === 'DAILY' || duration === 'YEARLY')) {
             // Only Razorpay for IND with MONTHLY duration and PAYU and RAZORPAY for YEARLY duration
-            filterProviders((duration === 'YEARLY' || duration === 'MONTHLY' || duration === 'DAILY') ? [PaymentProvider.RAZORPAY, PaymentProvider.PAYU] : [PaymentProvider.RAZORPAY]);
+            filterProviders((duration === 'YEARLY' || duration === 'MONTHLY' || duration === 'DAILY') ? [PaymentProvider.RAZORPAY, PaymentProvider.PAYU] : [PaymentProvider.RAZORPAY, PaymentProvider.PAYU]);
         }
 
         if (this.thirdStepForm.get('paymentProvider')?.value === PaymentProvider.RAZORPAY && (duration === 'MONTHLY' || duration === 'DAILY')) {
@@ -1791,9 +1792,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Open PayU HTML in new window and listen for PayU response 
+     * Open PayU HTML in new window and listen for PayU response
      * then update subscription
-     * 
+     *
      * @param {string} html - PayU HTML
      */
     private openPayUPayment(html: string): void {
