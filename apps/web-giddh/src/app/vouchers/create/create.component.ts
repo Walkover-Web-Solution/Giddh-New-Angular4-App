@@ -15,6 +15,7 @@ import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
 import { Store } from "@ngrx/store";
 import {
+    BehaviorSubject,
     Observable,
     ReplaySubject,
     combineLatest,
@@ -497,6 +498,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public rowData: any = null;
     /** This will use for force clear reactive dropdown */
     public forceClear: boolean = false;
+    public exchangeRateInProgress$ = new BehaviorSubject<boolean>(false);
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -862,6 +864,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.componentStore.exchangeRate$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 this.invoiceForm.get("exchangeRate")?.patchValue(response);
+            }
+        });
+
+        this.componentStore.exchangeRateInProgress$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response) {
+                this.exchangeRateInProgress$.next(response);
             }
         });
 
@@ -2504,17 +2512,41 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             customerUniqueName: this.invoiceForm.get("account.uniqueName")?.value,
                         };
                     }
+                    if (this.isMultiCurrencyVoucher) {
+                        combineLatest([
+                            this.componentStore.exchangeRateInProgress$,
+                            this.componentStore.exchangeRate$,
+                            this.componentStore.voucherDetails$
+                        ]).pipe(
+                            takeUntil(this.destroyed$),
+                            filter(([inProgress, exchangeRate, voucherDetails]) => !inProgress) // Only proceed when API call is complete
+                        ).subscribe(([inProgress, exchangeRate, voucherDetails]) => {
 
-                    // Determine timeout based on multi-currency voucher and exchange rate
-                    const timeoutDuration = (this.isMultiCurrencyVoucher) ? 2000 : 1000;
-
-                    setTimeout(() => {
+                            if ((exchangeRate && exchangeRate !== 1 )|| (voucherDetails?.exchangeRate && voucherDetails?.exchangeRate !== 1)) {
+                                // Exchange rate fetched successfully, proceed immediately
+                                this.componentStore.getParticularDetails({
+                                    accountUniqueName: transactionFormGroup.get("account.uniqueName")?.value,
+                                    payload: payload,
+                                    entryIndex: entryIndex,
+                                });
+                            } else {
+                                // Exchange rate API failed or returned default value, wait 15 seconds then proceed
+                                setTimeout(() => {
+                                    this.componentStore.getParticularDetails({
+                                        accountUniqueName: transactionFormGroup.get("account.uniqueName")?.value,
+                                        payload: payload,
+                                        entryIndex: entryIndex,
+                                    });
+                                }, 15000); // 15 second timeout
+                            }
+                        });
+                    } else {
                         this.componentStore.getParticularDetails({
                             accountUniqueName: transactionFormGroup.get("account.uniqueName")?.value,
                             payload: payload,
                             entryIndex: entryIndex,
                         });
-                    }, timeoutDuration);
+                    }
                 } else {
                     transactionFormGroup.get("stock.variant.getParticular")?.patchValue(true);
                 }
