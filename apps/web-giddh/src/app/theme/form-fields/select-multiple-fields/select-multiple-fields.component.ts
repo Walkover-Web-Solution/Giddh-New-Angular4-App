@@ -163,6 +163,9 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
             if (!this.enableDynamicSearch) {
                 this.filterOptions(this.lastSearchString || "");
             } else {
+                if (!this.chipListUniqueName.length && this.selectedValues.length) {
+                    this.chipListUniqueName = this.selectedValues;
+                }
                 // For dynamic search, filter options to hide selected ones
                 this.fieldFilteredOptions$ = of(this.getFilteredOptionsForDynamicSearch(changes.options.currentValue));
             }
@@ -172,6 +175,9 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
                 this.chipList = cloneDeep(changes.selectedValues.currentValue?.split(","));
             } else {
                 this.chipList = cloneDeep(changes.selectedValues.currentValue);
+                if (!this.chipListUniqueName.length && this.selectedValues.length) {
+                    this.chipListUniqueName = this.selectedValues;
+                }
             }
             // Refresh filtered options when selected values change
             if (!this.enableDynamicSearch && this.options) {
