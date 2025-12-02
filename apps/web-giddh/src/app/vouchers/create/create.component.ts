@@ -665,6 +665,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.transactionOptions = [];
                         this.queryParams = cloneDeep(response[1]);
 
+                        // Reset exchange rate when route changes
+                        this.componentStore.resetExchangeRate();
+
                         if (this.queryParams?.redirect) {
                             this.redirectUrl = this.queryParams.redirect;
                         }
@@ -2511,10 +2514,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             this.componentStore.exchangeRate$,
                             this.componentStore.voucherDetails$
                         ]).pipe(
-                            take(1),
-                            filter(([inProgress, exchangeRate, voucherDetails]) => !inProgress) // Only proceed when API call is complete
+                            filter(([inProgress, exchangeRate, voucherDetails]) => !inProgress), // Only proceed when API call is complete
+                            take(1) // Subscribe only once and automatically unsubscribe
                         ).subscribe(([inProgress, exchangeRate, voucherDetails]) => {
-                            if ((exchangeRate && exchangeRate !== 1 )|| (voucherDetails?.exchangeRate && voucherDetails?.exchangeRate !== 1)) {
+                            if ((exchangeRate && exchangeRate !== 1) || (voucherDetails?.exchangeRate && voucherDetails?.exchangeRate !== 1)) {
                                 // Exchange rate fetched successfully, proceed immediately
                                 this.componentStore.getParticularDetails({
                                     accountUniqueName: transactionFormGroup.get("account.uniqueName")?.value,
@@ -3600,6 +3603,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 document.querySelector("body").classList.remove("fixed");
                 this.handleRcmChange(response);
             });
+        this.changeDetection.detectChanges();
     }
 
     /**
@@ -3613,6 +3617,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (action === this.commonLocaleData?.app_yes) {
             // Toggle the state of RCM as user accepted the terms of RCM modal
             this.invoiceForm.get("isRcmEntry").patchValue(!this.invoiceForm.get("isRcmEntry")?.value);
+            this.rcmCheckbox["checked"] = this.invoiceForm.get("isRcmEntry")?.value;
             this.checkRcm();
         }
     }
@@ -4675,7 +4680,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      *
      * @memberof VoucherCreateComponent
      */
-    public checkRcm(duration: number = 100): void {
+    public checkRcm(duration: number = 0): void {
         setTimeout(() => {
             if (this.rcmCheckbox) {
                 if (this.invoiceForm.get("isRcmEntry")?.value) {
@@ -4683,7 +4688,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 } else {
                     this.invoiceForm.get("subVoucher")?.patchValue("");
                 }
-                this.rcmCheckbox["checked"] = this.invoiceForm.get("isRcmEntry")?.value;
+                if (duration > 0) {
+                    this.rcmCheckbox["checked"] = this.invoiceForm.get("isRcmEntry")?.value;
+                }
             }
         }, duration);
     }
@@ -5327,6 +5334,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (this.invoiceType.isCashInvoice) {
             this.invoiceForm.get("account.uniqueName")?.patchValue("cash");
         }
+
         this.invoiceForm.get("isRcmEntry").patchValue(false);
         if (this.rcmCheckbox) {
             this.rcmCheckbox["checked"] = false;

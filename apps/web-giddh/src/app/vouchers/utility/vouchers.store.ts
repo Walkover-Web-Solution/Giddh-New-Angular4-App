@@ -1289,6 +1289,18 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         );
     });
 
+    readonly resetExchangeRate = this.effect((data: Observable<void>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({
+                    exchangeRate: null,
+                    exchangeRateInProgress: false
+                });
+                return of(null);
+            })
+        );
+    });
+
     readonly resetGenerateEInvoice = this.effect((data: Observable<void>) => {
         return data.pipe(
             switchMap((req) => {
