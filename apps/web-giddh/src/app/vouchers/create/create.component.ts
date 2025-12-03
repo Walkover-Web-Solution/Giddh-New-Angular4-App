@@ -15,7 +15,6 @@ import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
 import { Store } from "@ngrx/store";
 import {
-    BehaviorSubject,
     Observable,
     ReplaySubject,
     combineLatest,
@@ -1196,7 +1195,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.invoiceForm
                             .get("isRcmEntry")
                             .patchValue(voucherDetails.subVoucher === SubVoucher.ReverseCharge ? true : false);
-                        this.checkRcm(2000);
+                        this.checkRcm(true);
                         if (voucherDetails.adjustments?.length && !this.isCopyMode) {
                             voucherDetails.adjustments = voucherDetails.adjustments?.map((adjustment) => {
                                 adjustment.adjustmentAmount = adjustment.amount;
@@ -1236,7 +1235,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.invoiceForm
                             .get("isRcmEntry")
                             .patchValue(voucherDetails.subVoucher === SubVoucher.ReverseCharge ? true : false);
-                        this.checkRcm(2000);
+                        this.checkRcm(true);
                         if (voucherDetails.adjustments?.length && !this.isCopyMode) {
                             voucherDetails.adjustments = voucherDetails.adjustments?.map((adjustment) => {
                                 adjustment.adjustmentAmount = adjustment.amount;
@@ -4680,19 +4679,56 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      *
      * @memberof VoucherCreateComponent
      */
-    public checkRcm(duration: number = 0): void {
-        setTimeout(() => {
-            if (this.rcmCheckbox) {
-                if (this.invoiceForm.get("isRcmEntry")?.value) {
-                    this.invoiceForm.get("subVoucher")?.patchValue(SubVoucher.ReverseCharge);
-                } else {
-                    this.invoiceForm.get("subVoucher")?.patchValue("");
-                }
-                if (duration > 0) {
-                    this.rcmCheckbox["checked"] = this.invoiceForm.get("isRcmEntry")?.value;
-                }
+    public checkRcm(waitForElement: boolean = false): void {
+        const updateRcmState = () => {
+            if (this.invoiceForm.get("isRcmEntry")?.value) {
+                this.invoiceForm.get("subVoucher")?.patchValue(SubVoucher.ReverseCharge);
+            } else {
+                this.invoiceForm.get("subVoucher")?.patchValue("");
             }
-        }, duration);
+
+            if (this.rcmCheckbox) {
+                this.rcmCheckbox["checked"] = this.invoiceForm.get("isRcmEntry")?.value;
+            }
+        };
+
+        // Always update form state immediately
+        updateRcmState();
+
+        // If we need to wait for element and it's not available, retry with exponential backoff
+        if (waitForElement && !this.rcmCheckbox) {
+            this.waitForRcmElement(0);
+        }
+    }
+
+    /**
+     * Waits for RCM checkbox element to be available with exponential backoff
+     *
+     * @private
+     * @param {number} [attempt=0]
+     * @return {*}  {void}
+     * @memberof VoucherCreateComponent
+     */
+    private waitForRcmElement(attempt: number = 0): void {
+        const maxAttempts = 10;
+        const baseDelay = 50; // Start with 50ms
+
+        if (attempt >= maxAttempts) {
+            return;
+        }
+
+        if (this.rcmCheckbox) {
+            // Element found, update checkbox state
+            this.rcmCheckbox["checked"] = this.invoiceForm.get("isRcmEntry")?.value;
+            return;
+        }
+
+        // Exponential backoff: 50ms, 100ms, 200ms, 400ms, etc.
+        const delay = baseDelay * Math.pow(2, attempt);
+
+        setTimeout(() => {
+            this.waitForRcmElement(attempt + 1);
+        }, delay);
     }
 
     /**
