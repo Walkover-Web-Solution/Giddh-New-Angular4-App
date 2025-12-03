@@ -31,14 +31,13 @@
                                     />
                                 </div>
                             </div>
-                            <div class="list-header" *ngIf="isCompany || isConsolidatedBranch">
+                            <div class="list-header" *ngIf="(isCompany || isConsolidatedBranch)">
                                 <reactive-dropdown-field
                                     class="max-width-230"
                                     [name]="'branch'"
                                     [placeholder]="commonLocaleData?.app_select_branch"
                                     [options]="currentCompanyBranches"
                                     (selectedOption)="handleBranchChange($event)"
-                                    [(ngModel)]="currentBranch.uniqueName"
                                     [labelValue]="selectedBranchName"
                                 >
                                 </reactive-dropdown-field>
@@ -50,7 +49,6 @@
                                     [placeholder]="commonLocaleData?.app_select_warehouse"
                                     [options]="warehouses"
                                     [labelValue]="selectedWarehouseName"
-                                    [(ngModel)]="manufacturingSearchRequest.warehouseUniqueName"
                                     (selectedOption)="
                                         selectedWarehouseName = $event.label;
                                         manufacturingSearchRequest.warehouseUniqueName = $event.value
@@ -190,7 +188,7 @@
                 <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
             </table>
             <mat-paginator
-                *ngIf="totalItems > pageSizeOptions[0] && !isReportLoading"
+                *ngIf="(totalItems > pageSizeOptions[0]) && !isReportLoading"
                 [length]="totalItems"
                 [pageSize]="manufacturingSearchRequest.count"
                 [pageIndex]="currentPage"
@@ -362,7 +360,7 @@
                 [keepCalendarOpeningWithRange]="false"
                 [showRangeLabelOnInput]="false"
             >
-            </app-datepicker-wrapper>
+        </app-datepicker-wrapper>
         </ng-template>
     </mat-menu>
 </ng-container>
