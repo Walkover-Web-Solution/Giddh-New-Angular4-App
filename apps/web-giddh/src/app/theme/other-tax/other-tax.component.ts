@@ -36,6 +36,8 @@ export class OtherTaxComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** True if create tax dialog is open  */
     public otherTax: boolean = false;
+    /** Calculation method options for dropdown */
+    public calculationMethodOptions: any[] = [];
 
     constructor(
         private componentStore: OtherTaxComponentStore,
@@ -128,6 +130,31 @@ export class OtherTaxComponent implements OnInit, OnDestroy {
     public closeCreateTaxDialog(): void {
         this.taxAsideMenuRef.close();
         this.otherTax = false;
+    }
+
+    /**
+     * Callback for translation completion
+     *
+     * @param {*} event
+     * @memberof OtherTaxComponent
+     */
+    public translationComplete(event: any): void {
+        if (event) {
+            this.initCalculationMethodOptions();
+        }
+    }
+
+    /**
+     * Initializes calculation method options for dropdown
+     *
+     * @private
+     * @memberof OtherTaxComponent
+     */
+    private initCalculationMethodOptions(): void {
+        this.calculationMethodOptions = [
+            { label: this.commonLocaleData?.app_on_taxable_value, value: 'OnTaxableAmount' },
+            { label: this.commonLocaleData?.app_on_total_value, value: 'OnTotalAmount' }
+        ];
     }
 
     /**

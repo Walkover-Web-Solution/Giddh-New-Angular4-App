@@ -47,10 +47,10 @@ export class TemplateEditFilterComponent implements OnInit {
     ];
     /** List of preset font size options */
     public templateFontsSize = [
-        { label: '16px', value: 16 },
-        { label: '14px', value: 14 },
-        { label: '12px', value: 12 },
-        { label: '10px', value: 10 }
+        { label: '16px', value: "16" },
+        { label: '14px', value: "14" },
+        { label: '12px', value: "12" },
+        { label: '10px', value: "10" }
     ];
     /** Available image sizes for selection */
     public imageSizes = [
@@ -609,6 +609,7 @@ export class TemplateEditFilterComponent implements OnInit {
             });
         }
         if (this.customTemplate?.fontSize) {
+            this.customTemplate.fontSize = this.customTemplate.fontSize.toString();
             this.templateFontsSize.forEach(fontSize => {
                 if (fontSize?.value == this.customTemplate?.fontSize) this.selectedFontSize = fontSize?.label;
             });
