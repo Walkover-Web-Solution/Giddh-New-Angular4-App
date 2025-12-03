@@ -357,8 +357,10 @@
                                     [matTooltipPosition]="'above'"
                                     [matTooltip]="element?.stockGroup?.name ? element?.stockGroup?.name : ''"
                                 >
-                                    <div class="v-align-center">
-                                        {{ element?.stockGroup?.name ?? "-" }}
+                                    <div class="v-align-center w-100">
+                                        <span class="text-ellipsis flex-grow-1">{{
+                                            element?.stockGroup?.name ?? "-"
+                                        }}</span>
                                         <a
                                             (click)="editGroup(element)"
                                             class="edit-icon pl-1"
@@ -382,8 +384,10 @@
                                     [matTooltipPosition]="'above'"
                                     [matTooltip]="element?.stock?.name ? element?.stock?.name : ''"
                                 >
-                                    <div class="v-align-center">
-                                        {{ element?.stock?.name ?? "-" }}
+                                    <div class="v-align-center w-100">
+                                        <span class="text-ellipsis flex-grow-1">
+                                            {{ element?.stock?.name ?? "-" }}
+                                        </span>
                                         <a
                                             (click)="editStock(element)"
                                             class="edit-icon pl-1"
@@ -407,8 +411,10 @@
                                     [matTooltipPosition]="'above'"
                                     [matTooltip]="element?.variant?.name ? element?.variant?.name : ''"
                                 >
-                                    <div class="v-align-center">
-                                        {{ element?.variant?.name ?? "-" }}
+                                    <div class="v-align-center w-100">
+                                        <span class="text-ellipsis flex-grow-1">
+                                            {{ element?.variant?.name ?? "-" }}
+                                        </span>
                                         <a
                                             (click)="editVariant(element)"
                                             class="edit-icon pl-1"
