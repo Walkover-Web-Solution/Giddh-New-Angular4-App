@@ -253,7 +253,11 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
         if (selectOptionValue && !this.chipList.includes(this.chipPrefix + selectOptionValue + this.chipSuffix)) {
             this.chipListUniqueName.push(option.option.value.value);
             if (!this.isSuffixPrefixUsed) {
-                this.selectedValues.push(option.option.value.value);
+                 if (Array.isArray(this.selectedValues)) {
+                     this.selectedValues.push(option.option.value.value);
+                } else if (typeof this.selectedValues === 'string') {
+                    this.selectedValues = cloneDeep((this.selectedValues as string).split(","));
+                }
             }
             this.chipList.push(this.chipPrefix + selectOptionValue + this.chipSuffix);
             // This will refresh filtered options and hide the selected item from dropdown
