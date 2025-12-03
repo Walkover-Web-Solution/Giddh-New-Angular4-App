@@ -450,9 +450,9 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
         return this.manufacturingService.loadStockUnits(stockUnitUniqueName).pipe(
             tap(units => {
                 if (units?.length) {
-                    object.units = units.map(u => ({
-                        label: u.code,
-                        value: u.uniqueName
+                    object.units = units.map(unit => ({
+                        label: unit.code,
+                        value: unit.uniqueName
                     }));
 
                     if (!isEdit) {
