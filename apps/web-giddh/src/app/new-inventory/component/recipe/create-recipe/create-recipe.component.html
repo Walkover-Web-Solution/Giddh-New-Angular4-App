@@ -111,7 +111,7 @@
                                                                         linkedStock.stockName = $event.label;
                                                                         linkedStock.stockUniqueName = $event.value;
                                                                         getStockVariants(linkedStock, $event);
-                                                                        getStockUnits(
+                                                                        onUnitChange(
                                                                             linkedStock,
                                                                             $event.additional?.stockUnitUniqueName,
                                                                             false
@@ -247,7 +247,7 @@
                                                                         byProductLinkedStock.stockUniqueName =
                                                                             $event.value;
                                                                         getStockVariants(byProductLinkedStock, $event);
-                                                                        getStockUnits(
+                                                                        onUnitChange(
                                                                             byProductLinkedStock,
                                                                             $event.additional?.stockUnitUniqueName,
                                                                             false
