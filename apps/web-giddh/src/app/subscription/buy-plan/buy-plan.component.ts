@@ -547,7 +547,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         });
 
         window.addEventListener('message', event => {
-            if ((this.router.url !== '/pages/user-details/subscription' && (this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId || this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId + '?trial=true' || this.router.url === '/pages/user-details/subscription/buy-plan'))) {
+            if ((this.router.url !== '/pages/user-details/subscription' && (this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId || this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId + '?trial=true' || this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId + '?renew=true' || this.router.url === '/pages/user-details/subscription/buy-plan'))) {
                 if ((event?.data && typeof event?.data === "string" && event?.data === PaymentProvider.GOCARDLESS)) {
                     if (this.upgradePlan && this.upgradeRegion === 'GBR') {
                         const reqObj = {
@@ -737,7 +737,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         if (this.upgradePlan && this.upgradeRegion === 'GBR') {
             const reqObj = {
                 subscriptionId: this.upgradeSubscriptionId,
-                goCardLessBillingRequestId : this.goCardLessBillingRequestId
+                goCardLessBillingRequestId: this.goCardLessBillingRequestId
             }
             this.componentStore.activatePlan(reqObj);
             this.activatePlanSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -1350,7 +1350,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.calculateDataInProgress$.pipe(take(1)).subscribe(inProgress => {
             isCalculating = inProgress;
         });
-        
+
         if (isCalculating) {
             return;
         }
@@ -1791,9 +1791,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Open PayU HTML in new window and listen for PayU response 
+     * Open PayU HTML in new window and listen for PayU response
      * then update subscription
-     * 
+     *
      * @param {string} html - PayU HTML
      */
     private openPayUPayment(html: string): void {
