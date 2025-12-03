@@ -10,127 +10,95 @@
             <ng-container *ngTemplateOutlet="searchEleTemplate"></ng-container>
             <!-- end header -->
 
-            <ng-container *ngIf="searchedItems && searchedItems.length > 0">
+            <!-- Virtual Scroll List -->
+            <ng-container *ngIf="searchedItems && searchedItems.length > 0 && isOpen">
                 <div #mainEle tabindex="0" class="universal-list-items">
-                    <ng-container *ngIf="isOpen">
-                        <mat-list role="list">
-                            <commandk-virtual-scroll
-                                [items]="searchedItems"
-                                [childHeight]="ItemHeight"
-                                (highLightedItemEmitter)="handleHighLightedItemEvent($event)"
-                                [style.max-height.px]="
-                                    searchedItems?.length !== 0
-                                        ? ItemHeight *
-                                            (searchedItems && searchedItems.length < visibleItems
-                                                ? searchedItems.length
-                                                : visibleItems)
-                                        : ItemHeight
-                                "
-                                (scroll)="onScroll($event)"
-                                class="scroll-height"
+                    <cdk-virtual-scroll-viewport
+                        #virtualScrollViewport
+                        [itemSize]="ItemHeight"
+                        [maxBufferPx]="ItemHeight * 3"
+                        [minBufferPx]="ItemHeight * 2"
+                        [style.height.px]="getViewportHeight()"
+                        class="command-k-viewport"
+                        (scrolledIndexChange)="onScrolledIndexChange($event)"
+                        (scroll)="onViewportScroll($event)"
+                    >
+                        <div
+                            *cdkVirtualFor="let item of searchedItems; let i = index; trackBy: trackByFn"
+                            class="command-k-item"
+                            [class.selected]="i === highlightedItem"
+                            (mousemove)="onItemMouseMove(i)"
+                            (click)="onItemClick(item, $event)"
+                        >
+                            <a 
+                                [attr.href]="getItemHref(item)" 
+                                class="item-link"
+                                tabindex="-1"
                             >
-                                <mat-list-item
-                                    role="listitem"
-                                    class="item"
-                                    *ngFor="let r of searchedItems; let i = index; trackBy: trackByFn"
-                                    (mouseover)="highlightItem(i)"
-                                    (mouseout)="unhighlightItem()"                     
-                                    (click)="itemSelected(r,$event)"                     
-                                    [ngClass]="{ 'selected': r.loop === highlightedItem, 'active': r.isSelected }"
-                                >
-                                    <a [attr.href]="r.type === 'MENU' || r.type === 'ACCOUNT' ? r.route : null" class="d-flex flex-row align-items-center">
-                                        <div class="item-icon">
-                                            <ng-container [ngSwitch]="r.type">
-                                                <ng-container *ngSwitchCase="'MENU'">
-                                                    <span class="icon-bar" id="icon-bar"></span>
-                                                </ng-container>
-                                                <ng-container *ngSwitchCase="'GROUP'">
-                                                    <span class="icon-group-folder" id="icon-group-folder"></span>
-                                                </ng-container>
-                                                <ng-container *ngSwitchDefault>
-                                                    <span class="icon-account" id="icon-account"></span>
-                                                </ng-container>
-                                            </ng-container>
-                                        </div>
-                                        <div class="item-details flex-grow-1">
-                                            <div class="d-flex justify-content-between align-items-center">
-                                                <div class="width-65">
-                                                    <p
-                                                        id="{{
-                                                            r.type?.toLowerCase() +
-                                                                '-' +
-                                                                (r.type === 'MENU'
-                                                                    ? getPageUniqueName(r.route)
-                                                                    : r?.uniqueName)
-                                                        }}"
-                                                    >
-                                                        {{ r.name }}
-                                                    </p>
-                                                    <ng-container [ngSwitch]="r.type">
-                                                        <ng-container *ngSwitchCase="'MENU'">
-                                                            <small>{{ localeData?.menu }}</small>
-                                                        </ng-container>
-                                                    </ng-container>
-                                                    <ng-container *ngIf="r?.parentGroups">
-                                                        <p class="small-para-details">
-                                                            <small>
-                                                                <span
-                                                                    *ngFor="
-                                                                        let item of r?.parentGroups;
-                                                                        let idx = index
-                                                                    "
-                                                                >
-                                                                    <ng-container *ngIf="idx > 0">
-                                                                        <span>&nbsp;❯&nbsp;</span>
-                                                                    </ng-container>
-                                                                    {{ item.name }}
-                                                                </span>
-                                                            </small>
-                                                        </p>
-                                                    </ng-container>
-                                                </div>
-                                                <ng-container *ngIf="r.type === 'ACCOUNT'">
-                                                    <span class="command-hover-text">{{ r?.uniqueName }}</span>
-                                                </ng-container>
+                                <!-- Item Icon -->
+                                <div class="item-icon">
+                                    <span 
+                                        class="icon" 
+                                        [ngClass]="getItemIconClass(item.type)"
+                                    ></span>
+                                </div>
+
+                                <!-- Item Content -->
+                                <div class="item-content">
+                                    <div class="item-main column-gap-1">
+                                        <div class="item-info word-wrap-anywhere">
+                                            <p class="item-name" [id]="getItemId(item)">
+                                                {{ item.name }}
+                                            </p>
+                                            
+                                            <small *ngIf="item.type === 'MENU'" class="item-type">
+                                                {{ localeData?.menu }}
+                                            </small>
+                                            
+                                            <div *ngIf="item?.parentGroups" class="item-breadcrumb">
+                                                <small>
+                                                    <span *ngFor="let parent of item.parentGroups; let idx = index">
+                                                        <span *ngIf="idx > 0">&nbsp;❯&nbsp;</span>{{ parent.name }}
+                                                    </span>
+                                                </small>
                                             </div>
                                         </div>
-                                    </a>
-                                </mat-list-item>
-                            </commandk-virtual-scroll>
-                        </mat-list>
-                        <!-- end -->
-                    </ng-container>
+                                        
+                                        <div *ngIf="item.type === 'ACCOUNT'" class="item-unique-name">
+                                            <span class="font-size-14">{{ item?.uniqueName }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </cdk-virtual-scroll-viewport>
                 </div>
             </ng-container>
-            <!--  end main list -->
-            <ng-container *ngIf="noResultsFound">
-                <div #mainEle>
-                    <div class="p-2">
-                        <span>
-                            <div class="jumper-results" [ngClass]="{ 'text-center': showChannelCreateBtn }">
-                                <p class="block text-center mb-4">{{ localeData?.no_records_found }}</p>
-                                <ng-container *ngIf="showChannelCreateBtn">
-                                    <div class="d-flex column-gap-15 justify-content-center">
-                                        <button
-                                            mat-raised-button
-                                            mat-dialog-close
-                                            color="primary"
-                                            (click)="triggerAddManage('group')"
-                                        >
-                                            {{ commonLocaleData?.app_create_group }}
-                                        </button>
-                                        <button
-                                            mat-dialog-close
-                                            mat-raised-button
-                                            color="primary"
-                                            (click)="triggerAddManage('account')"
-                                        >
-                                            {{ commonLocaleData?.app_create_ac }}
-                                        </button>
-                                    </div>
-                                </ng-container>
-                            </div>
-                        </span>
+
+            <!-- No Results -->
+            <ng-container *ngIf="noResultsFound && !dontShowNoResultMsg">
+                <div class="no-results">
+                    <div class="no-results-content" [class.text-center]="showChannelCreateBtn">
+                        <p class="no-results-message">{{ localeData?.no_records_found }}</p>
+                        
+                        <div *ngIf="showChannelCreateBtn" class="no-results-actions">
+                            <button
+                                mat-raised-button
+                                color="primary"
+                                (click)="triggerAddManage('group')"
+                                mat-dialog-close
+                            >
+                                {{ commonLocaleData?.app_create_group }}
+                            </button>
+                            <button
+                                mat-raised-button
+                                color="accent"
+                                (click)="triggerAddManage('account')"
+                                mat-dialog-close
+                            >
+                                {{ commonLocaleData?.app_create_account }}
+                            </button>
+                        </div>
                     </div>
                 </div>
             </ng-container>

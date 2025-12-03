@@ -1000,6 +1000,83 @@
     }
 }
 
+@mixin word-wrap($value) {
+    @if $value == unset {
+        word-wrap: unset !important;
+        overflow-wrap: unset !important;
+    } @else {
+        word-wrap: #{$value} !important;
+        overflow-wrap: #{$value} !important;
+    }
+}
+
+@mixin word-wrap-utilities(
+    $wraps: (
+        "normal": normal,
+        "break-word": break-word,
+        "anywhere": anywhere,
+        "unset": unset,
+        "inherit": inherit,
+    )
+) {
+    @each $name, $value in $wraps {
+        .word-wrap-#{$name} {
+            @include word-wrap($value);
+        }
+    }
+}
+
+@mixin word-break($value) {
+    @if $value == unset {
+        word-break: unset !important;
+    } @else {
+        word-break: #{$value} !important;
+    }
+}
+
+@mixin word-break-utilities(
+    $breaks: (
+        "normal": normal,
+        "break-all": break-all,
+        "keep-all": keep-all,
+        "unset": unset,
+        "inherit": inherit,
+    )
+) {
+    @each $name, $value in $breaks {
+        .word-break-#{$name} {
+            @include word-break($value);
+        }
+    }
+}
+
+@mixin white-space($value) {
+    @if $value == unset {
+        white-space: unset !important;
+    } @else {
+        white-space: #{$value} !important;
+    }
+}
+
+@mixin white-space-utilities(
+    $spaces: (
+        "normal": normal,
+        "nowrap": nowrap,
+        "pre": pre,
+        "pre-wrap": pre-wrap,
+        "pre-line": pre-line,
+        "break-spaces": break-spaces,
+        "unset": unset,
+        "inherit": inherit,
+    )
+) {
+    @each $name, $value in $spaces {
+        .white-space-#{$name} {
+            @include white-space($value);
+        }
+    }
+}
+
 /**
  * Square dimensions mixin for elements with equal width and height
  * 
