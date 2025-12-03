@@ -64,9 +64,7 @@
                     </div>
                     <div class="col-sm-4">
                         <div class="form-group mb-0">
-                            <div
-                                [ngClass]="{ 'input-group': addAccountForm.get('openingBalance')?.value > 0 }"
-                            >
+                            <div [ngClass]="{ 'input-group': addAccountForm.get('openingBalance')?.value > 0 }" class="ml-0">
                                 <input-field
                                     [name]="'number'"
                                     class="flex-grow-1"
@@ -75,12 +73,13 @@
                                     #autoFocusUpdate
                                     [placeholder]="'0.00'"
                                     [label]="localeData?.opening_balance"
-                                    [type]="'number'"
+                                    [type]="'text'"
                                     formControlName="openingBalance"
                                     [allowDigitsOnly]="true"
                                     [readonly]="company?.isActive"
                                     [min]="0"
                                     (change)="openConfirmLeaveDialog()"
+                                    [allowDecimalDigitsOnly]="true"
                                 >
                                 </input-field>
                                 <div class="d-flex">
@@ -146,9 +145,7 @@
                         ></reactive-dropdown-field>
                     </div>
                     <div class="col-sm-4" *ngIf="addAccountForm.get('currency')?.value !== companyCurrency">
-                        <div
-                            [ngClass]="{ 'input-group': addAccountForm.get('foreignOpeningBalance')?.value > 0 }"
-                        >
+                        <div [ngClass]="{ 'input-group': addAccountForm.get('foreignOpeningBalance')?.value > 0 }" class="ml-0">
                             <input-field
                                 [name]="'number'"
                                 class="flex-grow-1"
@@ -156,12 +153,13 @@
                                 [label]="localeData?.foreign_opening_balance"
                                 [ngClass]="{ 'w100 remove-right-border-radius': addAccountForm.get('foreignOpeningBalance')?.value > 0 }"
                                 [placeholder]="'0.00'"
-                                [type]="'number'"
+                                [type]="'text'"
                                 formControlName="foreignOpeningBalance"
                                 [allowDigitsOnly]="true"
                                 [readonly]="company?.isActive"
                                 [min]="0"
                                 (change)="openConfirmLeaveDialog()"
+                                [allowDecimalDigitsOnly]="true"
                             >
                             </input-field>
                             <div class="d-flex">
@@ -169,8 +167,9 @@
                                     class="input-group-addon d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1"
                                     (click)="openingBalanceTypeChanged('DEBIT')"
                                     [ngClass]="{
-                                        'active-toggle-btn': addAccountForm.get('openingBalanceType')?.value === 'DEBIT',
-                                        'cursor-pointer': addAccountForm.get('openingBalance')?.value > 0
+                                        'active-toggle-btn':
+                                            addAccountForm.get('openingBalanceType')?.value === 'DEBIT',
+                                        'cursor-pointer': addAccountForm.get('foreignOpeningBalance')?.value > 0
                                     }"
                                     *ngIf="addAccountForm.get('foreignOpeningBalance')?.value > 0"
                                 >
@@ -180,8 +179,9 @@
                                     class="only-right-radius input-group-addon d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1"
                                     (click)="openingBalanceTypeChanged('CREDIT')"
                                     [ngClass]="{
-                                        'active-toggle-btn': addAccountForm.get('openingBalanceType')?.value === 'CREDIT',
-                                        'cursor-pointer': addAccountForm.get('openingBalance')?.value > 0
+                                        'active-toggle-btn':
+                                            addAccountForm.get('openingBalanceType')?.value === 'CREDIT',
+                                        'cursor-pointer': addAccountForm.get('foreignOpeningBalance')?.value > 0
                                     }"
                                     *ngIf="addAccountForm.get('foreignOpeningBalance')?.value > 0"
                                 >
@@ -717,7 +717,7 @@
                                 }"
                             >
                                 <input-field
-                                    [type]="'number'"
+                                    [type]="'text'"
                                     [min]="'0'"
                                     class="flex-grow-1"
                                     [cssClass]="'text-right'"
@@ -733,6 +733,7 @@
                                         '' +
                                         commonLocaleData?.app_numbers?.zero
                                     "
+                                    [allowDecimalDigitsOnly]="true"
                                 >
                                 </input-field>
                                 <div class="d-flex">
