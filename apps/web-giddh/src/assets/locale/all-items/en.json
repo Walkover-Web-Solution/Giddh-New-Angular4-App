@@ -969,20 +969,26 @@
             ]
         },
         {
-            "label": "AI",
-            "icon": "icon-audit-log",
+            "label": "Automation",
+            "icon": "icon-manage-group-acc",
             "items": [
                 {
-                    "label": "OCR for Income",
+                    "label": "Scan2Invoice",
                     "link": "/pages/ai-ocr/income",
                     "icon": "icon-audit-log",
                     "description": "Upload images, pdf, jpeg, zip"
                 },
                 {
-                    "label": "OCR for Expense",
+                    "label": "Scan2Bill",
                     "link": "/pages/ai-ocr/expense",
                     "icon": "icon-audit-log",
                     "description": "Upload images, pdf, jpeg, zip"
+                },
+                {
+                    "label": "Email-to-Bank Sync",
+                    "link": "/pages/email-forwarding",
+                    "icon": "icon-mail",
+                    "description": "Auto-create vouchers from bank statement emails."
                 }
             ]
         },

@@ -290,8 +290,8 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
                         };
                     }
                 }
-                this.generalService.currentBranchUniqueName = this.currentBranch?.uniqueName;
-                this.filterForm.get('branchUniqueName').setValue(this.currentBranch?.uniqueName);
+                this.generalService.currentBranchUniqueName = this.generalService.currentBranchUniqueName;
+                this.filterForm.get('branchUniqueName').setValue(this.generalService.currentBranchUniqueName);
                 this.filterForm.updateValueAndValidity();
                 this.cd.detectChanges();
             } else {

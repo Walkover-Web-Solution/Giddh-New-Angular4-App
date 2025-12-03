@@ -79,6 +79,7 @@
                                                 [placeholder]="localeData?.select_unit_group"
                                                 [label]="localeData?.unit_group"
                                                 [options]="groupList"
+                                                [(ngModel)]="stockForm.stockUnitGroup.uniqueName"
                                                 (selectedOption)="
                                                     stockForm.stockUnitGroup.uniqueName = $event?.value;
                                                     stockForm.stockUnitGroup.name = $event.label;
@@ -97,6 +98,7 @@
                                                 [placeholder]="localeData?.select_unit"
                                                 [label]="commonLocaleData?.app_unit"
                                                 [options]="stockMainUnits"
+                                                [(ngModel)]="stockForm.stockUnitUniqueName"
                                                 (selectedOption)="
                                                     stockForm.stockUnitUniqueName = $event?.value;
                                                     stockUnitName = $event.label;
@@ -140,32 +142,21 @@
                                         <div
                                             class="col-sm-6 col-lg-6 under-group-field-button-wrapper position-relative"
                                         >
-                                            <mat-form-field class="w-100" appearance="outline">
-                                                <mat-select
-                                                    [placeholder]="commonLocaleData?.app_select_group"
-                                                    (selectionChange)="
-                                                        stockGroupUniqueName = $event?.value;
-                                                        stockGroupName = $event.label
-                                                    "
-                                                    [value]="stockGroupUniqueName"
-                                                    [(ngModel)]="stockGroupUniqueName"
-                                                    [name]="'stockGroupName'"
-                                                >
-                                                    <div class="select-quantity-option">
-                                                        <ng-container *ngIf="stockGroups?.length">
-                                                            <mat-option
-                                                                *ngFor="let group of stockGroups"
-                                                                [value]="group?.value"
-                                                            >
-                                                                {{ group.label }}
-                                                            </mat-option>
-                                                        </ng-container>
-                                                        <mat-option *ngIf="!stockGroups?.length">
-                                                            {{ commonLocaleData?.app_no_result_found }}
-                                                        </mat-option>
-                                                    </div>
-                                                </mat-select>
-                                            </mat-form-field>
+                                            <reactive-dropdown-field
+                                                class="w-100"
+                                                [name]="'stockGroupUniqueName'"
+                                                [placeholder]="commonLocaleData?.app_select_group"
+                                                [label]="commonLocaleData?.app_group"
+                                                [options]="stockGroups"
+                                                [(ngModel)]="stockGroupUniqueName"
+                                                (selectedOption)="
+                                                    stockGroupUniqueName = $event?.value; stockGroupName = $event.label
+                                                "
+                                                [labelValue]="stockGroupName"
+                                                [showError]="isFormSubmitted && !stockGroupUniqueName"
+                                                [readonly]="queryParams?.stockUniqueName"
+                                            >
+                                            </reactive-dropdown-field>
                                             <button
                                                 aria-label="move btn"
                                                 *ngIf="queryParams?.stockUniqueName && stockGroups?.length > 1"
@@ -186,8 +177,9 @@
                                                 [placeholder]="localeData?.select_discounts"
                                                 [label]="commonLocaleData?.app_discount"
                                                 [options]="discountsList"
-                                                (selectedOption)="stockForm.discounts = [$event?.value]"
-                                                (onClear)="stockForm.discounts = []"
+                                                [(ngModel)]="discountValue"
+                                                (selectedOption)="stockForm.discounts = [$event?.value]; discountValue = $event?.value"
+                                                (onClear)="stockForm.discounts = []; discountValue = ''"
                                                 [labelValue]="stockForm.discountLabel ?? ''"
                                             >
                                             </reactive-dropdown-field>
@@ -323,6 +315,10 @@
                                                                             [name]="'fixedAssetsAccounts'"
                                                                             [placeholder]="localeData?.linked_accounts"
                                                                             [options]="fixedAssetsAccounts"
+                                                                            [(ngModel)]="
+                                                                                stockForm.fixedAssetAccountDetails
+                                                                                    .accountUniqueName
+                                                                            "
                                                                             (selectedOption)="
                                                                                 stockForm.fixedAssetAccountDetails.accountUniqueName =
                                                                                     $event?.value;
@@ -405,6 +401,9 @@
                                                                                         commonLocaleData?.app_unit
                                                                                     "
                                                                                     [options]="stockUnits"
+                                                                                    [ngModel]="
+                                                                                        variantFixedAssetsUnitRate.stockUnitUniqueName
+                                                                                    "
                                                                                     (selectedOption)="
                                                                                         selectVariantFixedAssetsUnit(
                                                                                             variantFixedAssetsUnitRate,
@@ -489,6 +488,10 @@
                                                                                     localeData?.linked_purchase_accounts
                                                                                 "
                                                                                 [options]="purchaseAccounts"
+                                                                                [(ngModel)]="
+                                                                                    stockForm.purchaseAccountDetails
+                                                                                        .accountUniqueName
+                                                                                "
                                                                                 (selectedOption)="
                                                                                     stockForm?.purchaseAccountDetails.accountUniqueName =
                                                                                         $event?.value;
@@ -563,6 +566,9 @@
                                                                                             commonLocaleData?.app_unit
                                                                                         "
                                                                                         [options]="stockUnits"
+                                                                                        [ngModel]="
+                                                                                            variantPurchaseUnitRate.stockUnitUniqueName
+                                                                                        "
                                                                                         (selectedOption)="
                                                                                             selectVariantSalesPurchaseUnit(
                                                                                                 variantPurchaseUnitRate,
@@ -656,6 +662,10 @@
                                                                                     localeData?.linked_sales_accounts
                                                                                 "
                                                                                 [options]="salesAccounts"
+                                                                                [(ngModel)]="
+                                                                                    stockForm.salesAccountDetails
+                                                                                        .accountUniqueName
+                                                                                "
                                                                                 (selectedOption)="
                                                                                     stockForm?.salesAccountDetails.accountUniqueName =
                                                                                         $event?.value;
@@ -720,6 +730,9 @@
                                                                                             commonLocaleData?.app_unit
                                                                                         "
                                                                                         [options]="stockUnits"
+                                                                                        [ngModel]="
+                                                                                            variantSalesUnitRate.stockUnitUniqueName
+                                                                                        "
                                                                                         (selectedOption)="
                                                                                             selectVariantSalesPurchaseUnit(
                                                                                                 variantSalesUnitRate,

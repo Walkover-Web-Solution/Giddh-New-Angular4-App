@@ -16,7 +16,9 @@
                 <div class="mb-3">
                     <label>{{ localeData?.ledger_default_view }}</label>
                     <span>{{
-                        profileData?.ledgerView === ledgerViewEnum.TView ? commonLocaleData?.app_ledger_view?.t_view : commonLocaleData?.app_ledger_view?.statement_view
+                        profileData?.ledgerView === ledgerViewEnum.TView
+                            ? commonLocaleData?.app_ledger_view?.t_view
+                            : commonLocaleData?.app_ledger_view?.statement_view
                     }}</span>
                 </div>
             </div>
@@ -33,9 +35,9 @@
                     [options]="decimalDigitSource"
                     [placeholder]="commonLocaleData?.app_select_type"
                     (selectedOption)="
-                        profileData.balanceDecimalPlaces = $event.value;
-                        profileUpdated('balanceDecimalPlaces')
+                        profileData.balanceDecimalPlaces = $event.value; profileUpdated('balanceDecimalPlaces')
                     "
+                    [(ngModel)]="profileData.balanceDecimalPlaces"
                     [labelValue]="getDropdownLabel(decimalDigitSource, profileData.balanceDecimalPlaces)"
                     [isFilterEnabled]="true"
                     [name]="'balanceDecimalPlaces'"
@@ -49,9 +51,9 @@
                     [options]="numberSystemSource"
                     [placeholder]="commonLocaleData?.app_select_type"
                     (selectedOption)="
-                        profileData.balanceDisplayFormat = $event.value;
-                        profileUpdated('balanceDisplayFormat')
+                        profileData.balanceDisplayFormat = $event.value; profileUpdated('balanceDisplayFormat')
                     "
+                    [(ngModel)]="profileData.balanceDisplayFormat"
                     [labelValue]="getDropdownLabel(numberSystemSource, profileData.balanceDisplayFormat)"
                     [isFilterEnabled]="true"
                     [name]="'balanceDisplayFormat'"
@@ -68,7 +70,8 @@
                     [options]="translationLocales"
                     [placeholder]="localeData?.select_language"
                     (selectedOption)="activeLocale = $event.value; selectLocale($event)"
-                    [labelValue]="getDropdownLabel(translationLocales ,activeLocale)"
+                    [(ngModel)]="activeLocale"
+                    [labelValue]="getDropdownLabel(translationLocales, activeLocale)"
                     [isFilterEnabled]="true"
                     [name]="'activeLocale'"
                 ></reactive-dropdown-field>
@@ -84,6 +87,7 @@
                     [placeholder]="localeData?.select_theme"
                     [isFilterEnabled]="true"
                     [name]="'activeTheme'"
+                    [(ngModel)]="activeTheme"
                     (selectedOption)="setActiveTheme($event)"
                 ></reactive-dropdown-field>
             </div>
@@ -98,8 +102,8 @@
                     [labelValue]="getDropdownLabel(availableLedgerView, profileData.ledgerView)"
                     [placeholder]="localeData?.select_view"
                     [name]="'activeLedgerView'"
-                    (selectedOption)="profileData.ledgerView = $event.value;
-                    profileUpdated('ledgerView')"
+                    [(ngModel)]="profileData.ledgerView"
+                    (selectedOption)="profileData.ledgerView = $event.value; profileUpdated('ledgerView')"
                 ></reactive-dropdown-field>
             </div>
         </div>
@@ -129,4 +133,3 @@
         </div>
     </div>
 </div>
-
