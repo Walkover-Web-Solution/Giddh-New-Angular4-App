@@ -77,7 +77,9 @@
                     *ngIf="entity === voucherType.AccountWise"
                     [label]="commonLocaleData?.app_account"
                     [placeholder]="commonLocaleData?.app_select_account"
-                    [options]="accountSearchResponse"
+                    [options]="accountSearchResponse$ | async"
+                    [(ngModel)]="accountUniqueName"
+                    [labelValue]="accountLabel"
                     [enableDynamicSearch]="true"
                     [isPaginationEnabled]="true"
                     (scrollEnd)="handleSearchAccountScrollEnd()"
@@ -85,14 +87,14 @@
                     (onClear)="accountUniqueName = null; accountLabel = null"
                     (selectedOption)="accountUniqueName = $event?.value; accountLabel = $event?.label"
                     [required]="true"
-                >
-                </reactive-dropdown-field>
+                ></reactive-dropdown-field>
                 <reactive-dropdown-field
                     *ngIf="entity === voucherType.VoucherWise"
                     [label]="commonLocaleData?.app_select_voucher"
                     [placeholder]="commonLocaleData?.app_select"
                     [options]="voucherListResponse"
                     (onClear)="selectVoucher = null"
+                    [(ngModel)]="selectVoucher"
                     (selectedOption)="selectVoucher = $event?.value"
                     [required]="true"
                 >
