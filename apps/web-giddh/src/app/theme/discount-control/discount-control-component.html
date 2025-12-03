@@ -1,26 +1,26 @@
-<div (clickOutside)="hideDiscountMenu()" (click)="$event.stopPropagation()" class="position-relative">
+<div (clickOutside)="hideDiscountMenu()" (click)="$event.stopPropagation()" class="position-relative ">
     <label *ngIf="showHeaderText" for="discountSum">{{commonLocaleData?.app_discount}}</label>
-    <a id="discount">
-        <div class="multi-select adjust position-relative">
-            <input
-                id="discountSum"
-                (keydown.enter)="$event.preventDefault()"
-                matInput
-                type="text"
-                decimalDigitsDirective
-                name="discountSum"
-                [ngClass]="{'field-disabled': readonly}"
-                class="form-control text-right cursor-pointer pr-4"
-                (focus)="!readonly ? showDiscountMenu() : ''"
-                [(ngModel)]="discountSum"
-                [mask]="inputMaskFormat"
-                [prefix]="prefixInput"
-                [suffix]="suffixInput"
-                readonly
-                (blur)="discountInputBlur($event)"
-            />
-        </div>
-    </a>
+        <a id="discount">
+            <div class="multi-select adjust position-relative ">
+                <input
+                    id="discountSum"
+                    (keydown.enter)="$event.preventDefault()"
+                    matInput
+                    type="text"
+                    decimalDigitsDirective
+                    name="discountSum"
+                    [ngClass]="{'field-disabled': readonly}"
+                    class="form-control text-right cursor-pointer pr-4"
+                    (focus)="!readonly ? showDiscountMenu() : ''"
+                    [(ngModel)]="discountSum"
+                    [mask]="inputMaskFormat"
+                    [prefix]="prefixInput"
+                    [suffix]="suffixInput"
+                    readonly
+                    (blur)="discountInputBlur($event)"
+                />
+            </div>
+        </a>
     <div
         class="my-dropdown-menu custom-discount-menu"
         [ngClass]="{'display-block': discountMenu, 'display-none' : !discountMenu}"
@@ -29,7 +29,7 @@
     >
         <div class="value-wrapper">
             <div class="mb-2">
-                <mat-form-field class="initial-height w-100" appearance="outline">
+                <mat-form-field  class="initial-height w-100" appearance="outline">
                     <mat-label>{{ commonLocaleData?.app_percent }}</mat-label>
                     <input
                         (keydown.enter)="$event.preventDefault()"
@@ -44,12 +44,12 @@
                         [mask]="inputMaskFormat"
                         class="text-right"
                     />
-                    <span matSuffix>%</span>
-                </mat-form-field>
+                    <span  matSuffix>%</span>
+                    </mat-form-field>
             </div>
 
             <div class="mb-2">
-                <mat-form-field class="initial-height w-100" appearance="outline">
+                <mat-form-field  class="initial-height w-100" appearance="outline">
                     <mat-label>{{ commonLocaleData?.app_value }}</mat-label>
                     <input
                         (keydown.enter)="$event.preventDefault()"
@@ -63,9 +63,9 @@
                         [mask]="inputMaskFormat"
                         class="text-right"
                     />
-                </mat-form-field>
-            </div>
+            </mat-form-field>
         </div>
+    </div>
 
         <div class="d-flex flex-col justify-content-center" *ngIf="discountAccountsDetails?.length > 1">
             <span class="or-line">{{commonLocaleData?.app_and}}</span>
@@ -74,11 +74,11 @@
         <div *ngIf="discountAccountsDetails?.length > 1">
             <ul class="discount-list">
                 <ng-container *ngFor="let discount of discountAccountsDetails;trackBy: trackByFn; let idx = index">
-                    <li
-                        *ngIf="discount && discount.discountUniqueName && discount.name"
-                        class="discount-item cursor-pointer"
-                    >
-                        <label class="checkbox overflow-hidden w-100 p-0 m-0" (click)="$event.stopPropagation()">
+                    <li *ngIf="discount && discount.discountUniqueName && discount.name" class="discount-item cursor-pointer">
+                        <label
+                            class="checkbox overflow-hidden width-100 p-0 m-0"
+                            (click)="$event.stopPropagation()"
+                        >
                             <mat-checkbox
                                 color="primary"
                                 class="pull-left"
@@ -88,7 +88,9 @@
                                 (change)="change(discount, $event)"
                                 (click)="$event.stopPropagation()"
                             >
-                                <div class="checkbox-label">{{discount.name}}</div>
+                            <div class="checkbox-label">
+                                {{discount.name}}
+                            </div>
                             </mat-checkbox>
                         </label>
                     </li>

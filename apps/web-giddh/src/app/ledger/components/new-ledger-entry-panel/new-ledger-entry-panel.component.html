@@ -471,10 +471,7 @@
                                         <div class="form-group">
                                             <reactive-dropdown-field
                                                 #voucherDropdownRef
-                                                (click)="
-                                                    $event.stopPropagation();
-                                                    hideAllDropdown(ledgerDropdownTypeEnum.VOUCHER)
-                                                "
+                                                (click)="$event.stopPropagation(); hideAllDropdown(ledgerDropdownTypeEnum.VOUCHER)"
                                                 id="ledger-voucher-type"
                                                 [name]="'variantDropdown'"
                                                 [label]="commonLocaleData?.app_voucher_type"
@@ -527,10 +524,7 @@
                                                 class="w-100"
                                                 #invoice
                                                 id="ledger-voucher-type-debit-note"
-                                                (click)="
-                                                    $event.stopPropagation();
-                                                    hideAllDropdown(ledgerDropdownTypeEnum.INVOICE)
-                                                "
+                                                (click)="$event.stopPropagation(); hideAllDropdown(ledgerDropdownTypeEnum.INVOICE)"
                                                 [disabled]="isReadOnly"
                                                 [label]="commonLocaleData?.app_reference_invoice"
                                                 [placeholder]="localeData?.select_invoice"
@@ -744,10 +738,7 @@
                                         <td>
                                             <select-multiple-fields
                                                 class="d-block w-100"
-                                                (click)="
-                                                    $event.stopPropagation();
-                                                    hideAllDropdown(ledgerDropdownTypeEnum.TAG)
-                                                "
+                                                (click)="$event.stopPropagation(); hideAllDropdown(ledgerDropdownTypeEnum.TAG)"
                                                 #selectMultipleFieldsRef
                                                 [name]="'tagNames'"
                                                 [allowAddChip]="false"
@@ -946,7 +937,7 @@
                         </div>
                     </div>
                     <div class="col-7 pl-2">
-                        <table class="w-100 font-size-14">
+                        <table class="width-100 font-size-14">
                             <tbody>
                                 <tr *ngIf="calculatedRoundOff">
                                     <td class="text-right">

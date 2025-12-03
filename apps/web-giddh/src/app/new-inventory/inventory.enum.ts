@@ -9,8 +9,7 @@ export enum InventoryModuleName {
     stock = 'ITEM_WISE_REPORT',
     variant = 'VARIANT_WISE_REPORT',
     transaction = 'INVENTORY_TRANSACTION_REPORT',
-    bulk = 'INVENTORY_TABLE_REPORT',
-    fixedAssetInventory = 'FIXED_ASSET_INVENTORY_TABLE_REPORT'
+    bulk = 'INVENTORY_TABLE_REPORT'
 }
 export const INVENTORY_COMMON_COLUMNS = [
     {

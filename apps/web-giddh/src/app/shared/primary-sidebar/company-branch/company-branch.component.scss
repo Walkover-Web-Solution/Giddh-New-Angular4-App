@@ -118,9 +118,11 @@
                     flex-direction: column;
                     margin-bottom: 0 !important;
                     padding: 0 20px;
-                    &.active, &:hover  {
+                    &.active {
                         background-color: var(--theme-primary-light) !important;
-                        color: var(--color-black) !important;
+                    }
+                    &:hover {
+                        background-color: var(--theme-primary-light) !important;
                     }
                     span {
                         white-space: normal;

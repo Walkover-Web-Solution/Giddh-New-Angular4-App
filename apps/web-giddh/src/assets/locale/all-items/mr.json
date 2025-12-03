@@ -965,26 +965,20 @@
             ]
         },
         {
-            "label": "ऑटोमेशन",
-            "icon": "icon-manage-group-acc",
+            "label": "AI",
+            "icon": "icon-audit-log",
             "items": [
                 {
-                    "label": "Scan2Invoice",
+                    "label": "OCR for Income",
                     "link": "/pages/ai-ocr/income",
                     "icon": "icon-audit-log",
                     "description": "प्रतिमा अपलोड करा, पीडीएफ, जेपीईजी, झिप"
                 },
                 {
-                    "label": "Scan2Bill",
+                    "label": "OCR for Expense",
                     "link": "/pages/ai-ocr/expense",
                     "icon": "icon-audit-log",
                     "description": "प्रतिमा अपलोड करा, पीडीएफ, जेपीईजी, झिप"
-                },
-                {
-                    "label": "ईमेल-टू-बँके सिंक",
-                    "link": "/pages/email-forwarding",
-                    "icon": "icon-mail",
-                    "description": "बँक स्टेटमेंट ईमेलपासून ऑटो-वाउचर तयार करा।"
                 }
             ]
         },
