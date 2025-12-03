@@ -148,7 +148,6 @@
                             [label]="localeData?.day_action"
                             [placeholder]="localeData?.select_time_action"
                             [options]="timeOtherOptions"
-                            [(ngModel)]="selectedTimeAction"
                             (selectedOption)="onTimeActionChange($event)"
                             (onClear)="onTimeActionChange(); showDayOfWeek = null; setTimeActionValidator()"
                         >
@@ -389,10 +388,7 @@
                     >
                         <div class="d-flex border-bottom">
                             <label class="mr-2">{{ localeData?.cc }}</label>
-                            <div
-                                class="d-flex w-100 mat-form-field-clean"
-                                [ngClass]="{ 'flex-column': selectedCcEmails.length }"
-                            >
+                            <div class="d-flex w-100" [ngClass]="{ 'flex-column': selectedCcEmails.length }">
                                 <select-multiple-fields
                                     [options]="ccEmails"
                                     (selectedOption)="selectedCcEmails = $event"
@@ -426,10 +422,7 @@
                     >
                         <div class="d-flex border-bottom">
                             <label class="mr-2">{{ localeData?.bcc }}</label>
-                            <div
-                                class="d-flex w-100 mat-form-field-clean"
-                                [ngClass]="{ 'flex-column': selectedBccEmails.length }"
-                            >
+                            <div class="d-flex w-100" [ngClass]="{ 'flex-column': selectedBccEmails.length }">
                                 <select-multiple-fields
                                     [options]="bccEmails"
                                     (selectedOption)="selectedBccEmails = $event"

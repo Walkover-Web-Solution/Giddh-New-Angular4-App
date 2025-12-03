@@ -33,9 +33,7 @@ export class GstSettingComponent implements OnInit, OnDestroy {
     /** List of export types list */
     public exportTypes: IOption[] = [];
     /** Holds request export type */
-    public exportTypeLabel: string = '';
-     /** Holds export type value */
-    public exportTypeValue: string = '';
+    public exportType: string = '';
     /** Hold active company */
     public activeCompany: any;
     /** Holds gst setting form group */
@@ -165,8 +163,7 @@ export class GstSettingComponent implements OnInit, OnDestroy {
             let value = this.activeCompany.withPay ? 'yes' : 'no';
             if (this.exportTypes?.length) {
                 const exportType = this.exportTypes.filter(item => item?.value === value);
-                this.exportTypeLabel = exportType ? exportType[0]?.label : '';
-                this.exportTypeValue = exportType ? exportType[0]?.value : '';
+                this.exportType = exportType ? exportType[0]?.label : '';
             }
         }
     }
@@ -177,7 +174,7 @@ export class GstSettingComponent implements OnInit, OnDestroy {
     * @memberof GstSettingComponent
     */
     public setExportType(event?: any): void {
-        if (event && event.value && this.exportTypeLabel !== event.value) {
+        if (event && event.value && this.exportType !== event.value) {
             this.paymentIntegrateForm.get('withPay')?.patchValue(event.value === 'yes' ? 'yes' : 'no');
             this.store.dispatch(this.settingsProfileActions.PatchProfile({ withPay: event.value === 'yes' }));
         }
