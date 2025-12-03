@@ -169,7 +169,7 @@
                 <!-- Customer Name Column -->
                 <ng-container matColumnDef="customerName">
                     <th mat-header-cell *matHeaderCellDef width="20%">{{ commonLocaleData?.app_customer_name }}</th>
-                    <td mat-cell *matCellDef="let element">{{ element.customerName }}</td>
+                    <td mat-cell *matCellDef="let element" class="white-space-normal">{{ element.customerName }}</td>
                 </ng-container>
                 <!-- Amount Column -->
                 <ng-container matColumnDef="amount">
