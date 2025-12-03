@@ -94,7 +94,6 @@ export interface SessionState {
     currentLocale: any;
     activeTheme: any;
     filters: any;
-    currentBranchUniqueName: string;             // current branch unique name for tab-specific storage
 }
 
 export interface IBranchConsolidatedState {
@@ -162,8 +161,7 @@ const sessionInitialState: SessionState = {
     commonLocaleData: null,
     currentLocale: null,
     activeTheme: null,
-    filters: null,
-    currentBranchUniqueName: ''
+    filters: null
 };
 const branchConsolidatedInitialState: IBranchConsolidatedState = {
     isBranchConsolidated: false
@@ -577,16 +575,14 @@ export function SessionReducer(state: SessionState = sessionInitialState, action
         case CompanyActions.SET_STATE_DETAILS_REQUEST:
             return Object.assign({}, state, {
                 lastState: action.payload.lastState,
-                companyUniqueName: action.payload.companyUniqueName,
-                currentBranchUniqueName: action.payload.currentBranchUniqueName || ''
+                companyUniqueName: action.payload.companyUniqueName
             });
         case CompanyActions.SET_STATE_DETAILS_RESPONSE:
             let setStateData: BaseResponse<string, StateDetailsRequest> = action.payload;
             if (setStateData?.status === 'success') {
                 return Object.assign({}, state, {
                     lastState: setStateData.request.lastState,
-                    companyUniqueName: setStateData.request.companyUniqueName,
-                    currentBranchUniqueName: setStateData.request.currentBranchUniqueName || ''
+                    companyUniqueName: setStateData.request.companyUniqueName
                 });
             }
             return state;

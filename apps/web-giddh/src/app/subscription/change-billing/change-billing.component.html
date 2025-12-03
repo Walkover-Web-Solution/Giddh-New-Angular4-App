@@ -80,7 +80,7 @@
                             </mobile-number-input>
                         </div>
                         <div class="form-group">
-                            <div class="w-100">
+                            <div class="width-100">
                                 <reactive-dropdown-field
                                     [name]="'billingCountry' + currentTimeStamp"
                                     [autocomplete]="'billingCountry' + currentTimeStamp"
@@ -104,7 +104,7 @@
                                 [type]="'text'"
                                 formControlName="taxNumber"
                                 [showError]="
-                                    isFormSubmitted && changeBillingForm.get('taxNumber')?.value && !isGstinValid
+                                    isFormSubmitted && (changeBillingForm.get('taxNumber')?.value && !isGstinValid)
                                 "
                                 [maxlength]="15"
                                 (change)="validateGstNumber()"

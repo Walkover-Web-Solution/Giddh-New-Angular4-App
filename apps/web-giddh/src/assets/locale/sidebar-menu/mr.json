@@ -26,9 +26,7 @@
                         "createNew": {
                             "label": "+",
                             "link": "/pages/contact/customer",
-                            "queryParams": {
-                                "addCustomer": true
-                            }
+                            "queryParams": { "addCustomer" : true }
                         }
                     }
                 },
@@ -145,9 +143,7 @@
                     "link": "/pages/reports/sales-register",
                     "icon": "icon-register-new",
                     "description": "निव्वळ व संचयी विक्री",
-                    "additionalRoutes": [
-                        "/pages/reports/sales-detailed-expand"
-                    ]
+                    "additionalRoutes": ["/pages/reports/sales-detailed-expand"]
                 },
                 {
                     "label": "टेम्पलेट",
@@ -320,9 +316,7 @@
                     "link": "/pages/reports/purchase-register",
                     "icon": "icon-register-new",
                     "description": "निव्वळ आणि संचयी खरेदी",
-                    "additionalRoutes": [
-                        "/pages/reports/purchase-detailed-expand"
-                    ]
+                    "additionalRoutes": ["/pages/reports/purchase-detailed-expand"]
                 },
                 {
                     "label": "विक्रेता",
@@ -336,9 +330,7 @@
                         "createNew": {
                             "label": "+",
                             "link": "/pages/contact/vendor",
-                            "queryParams": {
-                                "addVendor": true
-                            }
+                            "queryParams": { "addVendor" : true }
                         }
                     }
                 },
@@ -368,9 +360,7 @@
                     "hide": "sidebar",
                     "additional": {
                         "queryParams": {
-                            "countrySpecific": [
-                                "IN"
-                            ]
+                            "countrySpecific": ["IN"]
                         }
                     }
                 },
@@ -384,9 +374,7 @@
                         "queryParams": {
                             "isGstMenu": true,
                             "type": "gstr1",
-                            "countrySpecific": [
-                                "IN"
-                            ]
+                            "countrySpecific": ["IN"]
                         }
                     }
                 },
@@ -400,9 +388,7 @@
                         "queryParams": {
                             "isGstMenu": true,
                             "type": "gstr2",
-                            "countrySpecific": [
-                                "IN"
-                            ]
+                            "countrySpecific": ["IN"]
                         }
                     }
                 },
@@ -416,9 +402,7 @@
                         "queryParams": {
                             "isGstMenu": true,
                             "type": "gstr3b",
-                            "countrySpecific": [
-                                "IN"
-                            ]
+                            "countrySpecific": ["IN"]
                         }
                     }
                 },
@@ -438,12 +422,7 @@
                     "hide": "sidebar",
                     "additional": {
                         "queryParams": {
-                            "countrySpecific": [
-                                "AE",
-                                "GB",
-                                "ZW",
-                                "KE"
-                            ]
+                            "countrySpecific": ["AE", "GB", "ZW", "KE"]
                         }
                     }
                 },
@@ -463,9 +442,7 @@
                     "hide": "sidebar",
                     "additional": {
                         "queryParams": {
-                            "countrySpecific": [
-                                "IN"
-                            ]
+                            "countrySpecific": ["IN"]
                         }
                     }
                 }
@@ -545,7 +522,7 @@
         {
             "label": "यादी",
             "icon": "icon-inventory",
-            "additional": {
+           "additional": {
                 "queryParams": {
                     "voucherVersion": 1
                 }
@@ -688,28 +665,16 @@
             ]
         },
         {
-            "label": "ऑटोमेशन",
-            "icon": "icon-manage-group-acc",
-            "items": [
-                {
-                    "label": "Scan2Invoice",
-                    "link": "/pages/ai-ocr/income",
-                    "icon": "icon-audit-log",
-                    "description": "प्रतिमा अपलोड करा, पीडीएफ, जेपीईजी, झिप"
-                },
-                {
-                    "label": "Scan2Bill",
-                    "link": "/pages/ai-ocr/expense",
-                    "icon": "icon-audit-log",
-                    "description": "प्रतिमा अपलोड करा, पीडीएफ, जेपीईजी, झिप"
-                },
-                {
-                    "label": "ईमेल-टू-बँके सिंक",
-                    "link": "/pages/email-forwarding",
-                    "icon": "icon-mail",
-                    "description": "बँक स्टेटमेंट ईमेलपासून ऑटो-वाउचर तयार करा।"
-                }
-            ]
+            "label": "AI OCR for Income",
+            "link": "/pages/ai-ocr/income",
+            "icon": "icon-audit-log",
+            "description": "प्रतिमा अपलोड करा, पीडीएफ, जेपीईजी, झिप"
+        },
+        {
+            "label": "AI OCR for Expense",
+            "link": "/pages/ai-ocr/expense",
+            "icon": "icon-audit-log",
+            "description": "प्रतिमा अपलोड करा, पीडीएफ, जेपीईजी, झिप"
         }
     ],
     "switch_branch": "स्विच शाखा",

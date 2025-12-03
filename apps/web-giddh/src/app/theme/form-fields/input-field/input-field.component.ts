@@ -70,10 +70,8 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     @Input() public suffix: any;
     /** Holds custom decimal places */
     @Input() public customDecimalPlaces: any;
-    /** Holds mat suffix */
+    /** Holds mat suffic */
     @Input() public matSuffix: any;
-    /** Holds mat suffix css class */
-    @Input() public matSuffixCssClass: any;
     /** Holds mat prefix */
     @Input() public matPrefix: any;
     /** True if field is autocomplete */

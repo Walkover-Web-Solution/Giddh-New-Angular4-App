@@ -3,9 +3,6 @@
 .border {
     border: 1px solid var(--border-color) !important;
 }
-.border-dashed {
-    border-style: dashed !important;
-}
 .border-color-transparent {
     border-color: var(--color-transparent) !important;
 }
@@ -76,9 +73,6 @@
 }
 .text-red {
     color: var(--color-red) !important;
-}
-.text-blue {
-    color: var(--color-blue) !important;
 }
 .text-saffron {
     color: var(--color-deep-orange) !important;
@@ -259,7 +253,7 @@
 }
 
 .width-100 {
-    width: 100px !important;
+    width: 100% !important;
 }
 .width-60 {
     width: 60px !important;
@@ -322,10 +316,6 @@
 }
 .full-viewport-height {
     height: calc(100vh - var(--header-height));
-}
-
-.custom-mat-form-field-height {
-    height: var(--custom-mat-form-field-height) !important;
 }
 
 .d-inline-grid {
