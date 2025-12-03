@@ -30,5 +30,6 @@
      "tax": "Tax",
     "hsn": "HSN",
     "sac":"SAC",
-    "archive": "Archive"
+    "archive": "Archive",
+    "discount_name": "Discount Name"
 }

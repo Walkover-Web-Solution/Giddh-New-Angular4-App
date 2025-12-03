@@ -168,6 +168,12 @@
     overflow: hidden;
     white-space: nowrap;
 }
+
+.word-wrap {
+    word-wrap: break-word !important;
+    word-break: break-word !important;
+}
+
 .text-wrap {
     text-wrap: wrap;
 }

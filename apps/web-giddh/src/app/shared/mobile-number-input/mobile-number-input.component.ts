@@ -23,7 +23,7 @@ export function mobileNumberValidator(country: Country | null) {
         }
 
         const inputValue = control.value.replace(/\s+/g, '');
-        let phoneNumberString = inputValue;
+        let phoneNumberString = country.dialCode + inputValue;
         
         // Get PhoneNumberUtil instance
         const phoneUtil = libphonenumber.PhoneNumberUtil.getInstance();

@@ -35,6 +35,7 @@ export interface VoucherState {
     stockVariants: any;
     barcodeData: any;
     exchangeRate: number;
+    exchangeRateInProgress: boolean;
     briefAccounts: any[];
     accountDetails: any;
     countryData: any;
@@ -95,6 +96,7 @@ const DEFAULT_STATE: VoucherState = {
     stockVariants: null,
     barcodeData: null,
     exchangeRate: null,
+    exchangeRateInProgress: null,
     briefAccounts: null,
     accountDetails: null,
     countryData: null,
@@ -168,6 +170,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public lastVouchers$ = this.select((state) => state.lastVouchers);
     public stockVariants$ = this.select((state) => state.stockVariants);
     public exchangeRate$ = this.select((state) => state.exchangeRate);
+    public exchangeRateInProgress$ = this.select((state) => state.exchangeRateInProgress);
     public briefAccounts$ = this.select((state) => state.briefAccounts);
     public accountDetails$ = this.select((state) => state.accountDetails);
     public countryData$ = this.select((state) => state.countryData);
@@ -424,18 +427,20 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     readonly getExchangeRate = this.effect((data: Observable<{ fromCurrency: string, toCurrency: string, date: string }>) => {
         return data.pipe(
             switchMap((req) => {
-                this.patchState({ exchangeRate: null });
+                this.patchState({ exchangeRate: null, exchangeRateInProgress: true });
                 return this.ledgerService.GetCurrencyRateNewApi(req.fromCurrency, req.toCurrency, req.date).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
-                                exchangeRate: res?.body ?? 1
+                                exchangeRate: res?.body ?? 1,
+                                exchangeRateInProgress: false
                             });
                         },
                         (error: any) => {
                             this.toaster.showSnackBar("error", error);
                             return this.patchState({
-                                exchangeRate: 1
+                                exchangeRate: 1,
+                                exchangeRateInProgress: false
                             });
                         }
                     ),
@@ -1278,6 +1283,18 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
             switchMap((req) => {
                 this.patchState({
                     deleteAttachmentIsSuccess: null
+                });
+                return of(null);
+            })
+        );
+    });
+
+    readonly resetExchangeRate = this.effect((data: Observable<void>) => {
+        return data.pipe(
+            switchMap((req) => {
+                this.patchState({
+                    exchangeRate: null,
+                    exchangeRateInProgress: false
                 });
                 return of(null);
             })

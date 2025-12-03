@@ -15,6 +15,7 @@ import { ServiceConfig } from '../../../services/service.config';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { PageLeaveUtilityService } from '../../../services/page-leave-utility.service';
 import { ComponentCanDeactivate } from '../../../decorators/page-leave-confirmation-guard';
+import { CommonActions } from '../../../actions/common.actions';
 
 /**
  * Data with nested structure.
@@ -114,7 +115,8 @@ export class InventorySidebarComponent implements OnDestroy, ComponentCanDeactiv
         private settingsBranchAction: SettingsBranchActions,
         private location: Location,
         private dialog: MatDialog,
-        private pageLeaveUtilityService: PageLeaveUtilityService
+        private pageLeaveUtilityService: PageLeaveUtilityService,
+        private commonAction: CommonActions
     ) {
     }
 
@@ -429,6 +431,7 @@ export class InventorySidebarComponent implements OnDestroy, ComponentCanDeactiv
     * @memberof InventorySidebarComponent
     */
     public ngOnDestroy(): void {
+        this.store.dispatch(this.commonAction.hasUnsavedChanges(false));
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

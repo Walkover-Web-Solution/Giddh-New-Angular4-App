@@ -198,15 +198,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             this.getVisibleMenuItems();
         }
 
-         // Additional check: Try to load menu items if we have apiMenuItems but no allItems yet
-        if ('apiMenuItems' in changes && changes.apiMenuItems.currentValue.length && (!this.allItems || this.allItems.length === 0)) {
-            setTimeout(() => {
-                if (this.localeData?.page_heading && this.apiMenuItems.length > 0) {
-                    this.getVisibleMenuItems();
-                }
-            }, 100);
-        }
-
 
         if ('showCommandDialog' in changes && changes.showCommandDialog.previousValue !== changes.showCommandDialog.currentValue && changes.showCommandDialog.currentValue) {
             this.showNavigationModal();
@@ -231,7 +222,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      *
      * @memberof PrimarySidebarComponent
      */
-    public ngOnInit(): void {   
+    public ngOnInit(): void {
 
         /**Subscribe to queryParams */
         this.activateRoute.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((queryParams: any) => {
@@ -405,7 +396,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      * @param {*} e Create new group event
      * @memberof PrimarySidebarComponent
      */
-    public handleNewTeamCreationEmitter(e: any): void {        
+    public handleNewTeamCreationEmitter(e: any): void {
         if (e[0] === "group") {
             this.genericAsideMenuAccountDialogRef?.close();
             this.showManageGroupsModal(e[1]?.name);
@@ -483,9 +474,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         setTimeout(() => {
             if (item && item.type === 'MENU') {
                 if (item.additional && item.additional.tab) {
-                    if (item.uniqueName.includes('?') || item.uniqueName.includes('&')) {
-                        // Clean URL by removing query parameters (both ? and & cases)
-                        item.uniqueName = item.uniqueName?.split('?')[0]?.split('&')[0];
+                    if (item.uniqueName.includes('?')) {
+                        // Clean URL by removing query parameters
+                        item.uniqueName = item.uniqueName.split('?')[0];
                     }
                     this.router.navigate([item.uniqueName], {
                         queryParams: {
@@ -501,9 +492,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 let url = `ledger/${item.uniqueName}`;
                 // Get the redirect URL and clean it if it contains query parameters
                 let redirectUrl = this.previousUrl || this.currentUrl || '/';
-                // If redirectUrl contains query parameters, extract only the base path (handle both ? and & cases)
-                if (redirectUrl.includes('?') || redirectUrl.includes('&')) {
-                    redirectUrl = redirectUrl.split('?')[0]?.split('&')[0];
+                // If redirectUrl contains query parameters, extract only the base path
+                if (redirectUrl.includes('?')) {
+                    redirectUrl = redirectUrl.split('?')[0];
                 }
                 this.router.navigate([url], {
                     queryParams: { redirectUrl: encodeURIComponent(redirectUrl) }
@@ -651,9 +642,9 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 flattenedItems.push(childMenu);
             });
         });
-        
         this.allItems = flattenedItems;
-        this.dataSource = new ArrayDataSource(this.allItems);        
+        this.dataSource = new ArrayDataSource(this.allItems);
+        this.changeDetectorRef.detectChanges();
     }
 
     /**
@@ -721,7 +712,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
 
     /**
      * Get parent node of given node
-     * 
+     *
      * @param node Node to get parent of
      * @returns Parent node of given node
      * @memberof PrimarySidebarComponent
@@ -735,10 +726,10 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
         }
         return null;
       }
-    
+
     /**
      * Check if node should be rendered based on parent expansion state
-     * 
+     *
      * @param node Node to check
      * @returns True if node should be rendered, false otherwise
      * @memberof PrimarySidebarComponent
@@ -757,7 +748,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
      /**
       * Toggle node expansion with accordion behavior
       * Only one parent node can be expanded at a time
-      * 
+      *
       * @param node Node to toggle
       * @memberof PrimarySidebarComponent
       */
@@ -779,7 +770,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
 
       /**
       * Check if node is expanded
-      * 
+      *
       * @param node Node to check
       * @returns True if node is expanded, false otherwise
       * @memberof PrimarySidebarComponent

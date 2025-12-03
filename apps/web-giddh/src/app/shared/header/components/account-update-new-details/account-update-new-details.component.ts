@@ -784,7 +784,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 name: [''],
                 virtualAccountNumber: ['']
             }),
-            closingBalanceTriggerAmount: [Validators.compose([digitsOnly])],
+            closingBalanceTriggerAmount: ["", Validators.compose([digitsOnly])],
             closingBalanceTriggerAmountType: ['CREDIT'],
             customFields: this._fb.array([]),
             portalDomain: this._fb.array([
@@ -1036,7 +1036,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     public openingBalanceTypeChanged(type: string) {
-        if (Number(this.addAccountForm.get('openingBalance')?.value) > 0) {
+        if (Number(this.addAccountForm.get('openingBalance')?.value) > 0 || Number(this.addAccountForm.get('foreignOpeningBalance')?.value) > 0) {
             this.addAccountForm.get('openingBalanceType')?.patchValue(type);
         }
     }
