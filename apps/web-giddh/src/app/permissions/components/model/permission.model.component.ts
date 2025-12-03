@@ -9,6 +9,7 @@ import { INameUniqueName } from '../../../models/api-models/Inventory';
 import { PermissionState } from 'apps/web-giddh/src/app/store/permission/permission.reducer';
 import { IRoleCommonResponseAndRequest } from 'apps/web-giddh/src/app/models/api-models/Permission';
 import { forEach, omit } from '../../../lodash-optimized';
+import { IOption } from '../../../app.constant';
 
 @Component({
     selector: 'permission-model',
@@ -31,6 +32,8 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
     public isFreshOptions = [];
     /** Holds Selected permissions */
     public selectedValues: any;
+    /** Role options for reactive-dropdown-field */
+    public roleOptions: IOption[] = [];
 
     constructor(private store: Store<AppState>, private permissionActions: PermissionActions) {
     }
@@ -62,8 +65,13 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
         this.store.pipe(select(p => p.permission), takeUntil(this.destroyed$)).subscribe((p: PermissionState) => {
             if (p.roles && p.roles.length) {
                 this.allRoles = [];
+                this.roleOptions = [];
                 forEach(p.roles, (role: IRoleCommonResponseAndRequest) => {
                     this.allRoles.push({ name: role?.name, uniqueName: role?.uniqueName });
+                    this.roleOptions.push({ 
+                        value: role?.uniqueName, 
+                        label: role?.name 
+                    });
                 });
             }
             this.newRoleObj.isSelectedAllPages = false;
@@ -151,5 +159,37 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
      */
     public enableDisableSelectAll(): void {
         this.newRoleObj.isSelectedAllPages = this.getSelectedPagesCount() === this.newRoleObj.pageList?.length;
+    }
+
+    /**
+     * Handles role selection from reactive-dropdown-field
+     *
+     * @param {IOption} selectedRole - The selected role option
+     * @memberof PermissionModelComponent
+     */
+    public onRoleSelect(selectedRole: IOption): void {
+        if (selectedRole) {
+            this.newRoleObj.uniqueName = selectedRole.value;
+            // Find the corresponding role and update isSelected property
+            const role = this.allRoles.find(r => r.uniqueName === selectedRole.value);
+            if (role) {
+                // Reset all roles selection state
+                this.allRoles.forEach(r => (r as any).isSelected = false);
+                // Set selected role
+                (role as any).isSelected = true;
+                this.enableDisableSelectAll();
+            }
+        }
+    }
+
+    /**
+     * Gets the selected role name for display
+     *
+     * @returns {string} The selected role name
+     * @memberof PermissionModelComponent
+     */
+    public get selectedRoleName(): string {
+        const selectedRole = this.roleOptions.find(role => role.value === this.newRoleObj.uniqueName);
+        return selectedRole ? selectedRole.label : '';
     }
 }
