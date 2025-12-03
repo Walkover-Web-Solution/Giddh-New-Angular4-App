@@ -1430,6 +1430,10 @@
                                             class="mr-1"
                                             [disabled]="isEinvoiceGenerated"
                                             color="primary"
+                                            id="reverse-charge"
+                                            (change)="
+                                                !isEinvoiceGenerated ? toggleRcmCheckbox(rcmCheckbox, 'checkbox') : ''
+                                            "
                                         >
                                         </mat-checkbox>
                                         <label
@@ -3801,5 +3805,3 @@
         (closeModelEvent)="cancelEmailModal()"
     ></purchase-order-preview-modal>
 </ng-template>
-
-
