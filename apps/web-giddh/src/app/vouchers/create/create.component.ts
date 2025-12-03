@@ -5271,7 +5271,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public resetVoucherForm(openAccountDropdown: boolean = true, initialLoad: boolean = false): void {
-        console.log('openAccountDropdown', openAccountDropdown)
         if (!initialLoad) {
             this.ocrDataEnabled = false;
         }
