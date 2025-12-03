@@ -1876,6 +1876,8 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         };
         this.isFormSubmitted = false;
         this.stockGroupUniqueName = this.activeGroup?.uniqueName ? this.activeGroup?.uniqueName : this.stockGroups?.length ? this.stockGroups[0]?.value : '';
+        this.stockForm.stockUnitGroup.uniqueName = this.groupList?.length ? this.groupList[0]?.value : '';
+        this.stockForm.stockUnitGroup.name = this.groupList?.length ? this.groupList[0]?.label : '';
         this.isVariantAvailable = false;
         this.stockUnitName = "";
         this.stockGroupName = this.activeGroup?.name ? this.activeGroup?.name : "";

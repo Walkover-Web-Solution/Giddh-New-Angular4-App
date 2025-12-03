@@ -26,7 +26,9 @@
                         "createNew": {
                             "label": "+",
                             "link": "/pages/contact/customer",
-                            "queryParams": { "addCustomer" : true }
+                            "queryParams": {
+                                "addCustomer": true
+                            }
                         }
                     }
                 },
@@ -143,7 +145,9 @@
                     "link": "/pages/reports/sales-register",
                     "icon": "icon-register-new",
                     "description": "Net & cumulative sales",
-                    "additionalRoutes": ["/pages/reports/sales-detailed-expand"]
+                    "additionalRoutes": [
+                        "/pages/reports/sales-detailed-expand"
+                    ]
                 },
                 {
                     "label": "Template",
@@ -316,7 +320,9 @@
                     "link": "/pages/reports/purchase-register",
                     "icon": "icon-register-new",
                     "description": "Net & cumulative purchases",
-                    "additionalRoutes": ["/pages/reports/purchase-detailed-expand"]
+                    "additionalRoutes": [
+                        "/pages/reports/purchase-detailed-expand"
+                    ]
                 },
                 {
                     "label": "Vendor",
@@ -330,7 +336,9 @@
                         "createNew": {
                             "label": "+",
                             "link": "/pages/contact/vendor",
-                            "queryParams": { "addVendor" : true }
+                            "queryParams": {
+                                "addVendor": true
+                            }
                         }
                     }
                 },
@@ -360,7 +368,9 @@
                     "hide": "sidebar",
                     "additional": {
                         "queryParams": {
-                            "countrySpecific": ["IN"]
+                            "countrySpecific": [
+                                "IN"
+                            ]
                         }
                     }
                 },
@@ -374,7 +384,9 @@
                         "queryParams": {
                             "isGstMenu": true,
                             "type": "gstr1",
-                            "countrySpecific": ["IN"]
+                            "countrySpecific": [
+                                "IN"
+                            ]
                         }
                     }
                 },
@@ -388,7 +400,9 @@
                         "queryParams": {
                             "isGstMenu": true,
                             "type": "gstr2",
-                            "countrySpecific": ["IN"]
+                            "countrySpecific": [
+                                "IN"
+                            ]
                         }
                     }
                 },
@@ -402,7 +416,9 @@
                         "queryParams": {
                             "isGstMenu": true,
                             "type": "gstr3b",
-                            "countrySpecific": ["IN"]
+                            "countrySpecific": [
+                                "IN"
+                            ]
                         }
                     }
                 },
@@ -422,7 +438,12 @@
                     "hide": "sidebar",
                     "additional": {
                         "queryParams": {
-                            "countrySpecific": ["AE", "GB", "ZW", "KE"]
+                            "countrySpecific": [
+                                "AE",
+                                "GB",
+                                "ZW",
+                                "KE"
+                            ]
                         }
                     }
                 },
@@ -442,7 +463,9 @@
                     "hide": "sidebar",
                     "additional": {
                         "queryParams": {
-                            "countrySpecific": ["IN"]
+                            "countrySpecific": [
+                                "IN"
+                            ]
                         }
                     }
                 }
@@ -663,18 +686,30 @@
                     "icon": "icon-balance-sheet-new"
                 }
             ]
-        }, 
-        {
-            "label": "AI OCR for Income",
-            "link": "/pages/ai-ocr/income",
-            "icon": "icon-audit-log",
-            "description": "Upload images, pdf, jpeg, zip"
         },
         {
-            "label": "AI OCR for Expense",
-            "link": "/pages/ai-ocr/expense",
-            "icon": "icon-audit-log",
-            "description": "Upload images, pdf, jpeg, zip"
+            "label": "Automation",
+            "icon": "icon-manage-group-acc",
+            "items": [
+                {
+                    "label": "Scan2Invoice",
+                    "link": "/pages/ai-ocr/income",
+                    "icon": "icon-audit-log",
+                    "description": "Upload images, pdf, jpeg, zip"
+                },
+                {
+                    "label": "Scan2Bill",
+                    "link": "/pages/ai-ocr/expense",
+                    "icon": "icon-audit-log",
+                    "description": "Upload images, pdf, jpeg, zip"
+                },
+                {
+                    "label": "Email-to-Bank Sync",
+                    "link": "/pages/email-forwarding",
+                    "icon": "icon-mail",
+                    "description": "Auto-create vouchers from bank statement emails."
+                }
+            ]
         }
     ],
     "switch_branch": "Switch Branch",

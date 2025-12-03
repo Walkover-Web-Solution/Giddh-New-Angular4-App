@@ -1,0 +1,19 @@
+{
+    "account_details": "Account Details",
+    "forwarded_mail": "Forwarded Mail",
+    "forwarded_to": "Forwarded to",
+    "how_to_setup": "How to setup email forwarding?",
+    "original_email": "Original Email",
+    "waiting_verification": "Waiting for verification",
+    "create_custom_email": "Create Custom Email",
+    "email_verification": "Email Verification",
+    "email_forwarding": "Set up Auto-forwarding for your email",
+    "verify_start": "Verify and Start",
+    "verify_and_next": "Verify and Next",
+    "new_email_address": "New Email Address",
+    "bank_account_name": "Bank Account Name",
+    "copied": "Copied...",
+    "import_vouchers_title": "Auto-upload your bank statements from email",
+    "import_vouchers_description": "Set up a forwarding email for your bank statements so GIDDH can auto-create vouchers from incoming emails.",
+    "email_customization_text": "Customize the email address below based on your preference."
+}
