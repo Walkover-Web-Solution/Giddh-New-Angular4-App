@@ -88,7 +88,7 @@
             <!-- No Results -->
             <ng-container *ngIf="noResultsFound && !dontShowNoResultMsg">
                 <div class="no-results">
-                    <div class="no-results-content" [class.text-center]="showChannelCreateBtn">
+                    <div class="no-results-content text-center">
                         <p class="no-results-message">{{ localeData?.no_records_found }}</p>
                         
                         <div *ngIf="showChannelCreateBtn" class="no-results-actions">
