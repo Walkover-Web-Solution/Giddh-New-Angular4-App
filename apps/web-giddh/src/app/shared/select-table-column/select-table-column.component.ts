@@ -60,6 +60,7 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
         InventoryModuleName.stock,
         InventoryModuleName.variant,
         InventoryModuleName.bulk,
+        InventoryModuleName.fixedAssetInventory,
         ContactsTab.customer,
         ContactsTab.vendor,
         VoucherReportFilterModuleEnum.Sales,
