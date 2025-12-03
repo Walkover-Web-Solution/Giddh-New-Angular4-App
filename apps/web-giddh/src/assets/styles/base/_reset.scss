@@ -28,7 +28,6 @@ body {
 
 a {
     @include text-decoration(none, false);
-    @include cursor(pointer);
     color: var(--text-primary-color);
 }
 h1,

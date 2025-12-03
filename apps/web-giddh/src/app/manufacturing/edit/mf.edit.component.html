@@ -24,7 +24,7 @@
                         </div>
                     </div>
                     <div class="col-xs-3 col-sm-3">
-                        <div class="form-group position-relative">
+                        <div class="form-group position-relative ">
                             <label class="d-block">Quantity</label>
                             <input
                                 type="text"
@@ -81,7 +81,7 @@
 
     <!--  -->
     <ng-container *ngIf="!(isStockWithRateInprogress$ | async)">
-        <div class="p-3 clear-both" *ngIf="manufacturingDetails.stockUniqueName">
+        <div class=" p-3 clear-both" *ngIf="manufacturingDetails.stockUniqueName">
             <div class="row">
                 <!-- right column / add more resources -->
                 <div class="col-md-12 col-lg-6 source resources-table">
@@ -241,7 +241,7 @@
                                 {{ getTotal("linkedStocks", "amount") | number : "1.0-2" }}
                             </p>
                         </div>
-                        <table class="w-100">
+                        <table class="width-100">
                             <thead class="th-caption">
                                 <tr>
                                     <td
@@ -250,9 +250,7 @@
                                                 (currentCompanyBranches$ | async)?.length === 1) ||
                                             currentOrganizationType === 'BRANCH'
                                         "
-                                        mat-raised-button
-                                        color="primary"
-                                        class="cursor-pointer"
+                                        mat-raised-button color="primary" class="cursor-pointer"
                                         (click)="onToggleAddExpensesBlock(toggleAddExpenses)"
                                         matTooltip="Add A/C where expense entries will be done."
                                         matTooltipPosition="above"
@@ -265,7 +263,7 @@
                             <tbody *ngIf="manufacturingDetails && liabilityGroupAccounts$ | async">
                                 <tr *ngFor="let expense of manufacturingDetails.otherExpenses; let i = index">
                                     <td colspan="1">
-                                        <div class="custom-select position-relative">
+                                        <div class="custom-select position-relative ">
                                             <reactive-dropdown-field
                                                 [options]="liabilityGroupAccounts$ | async"
                                                 [(ngModel)]="expense.baseAccount.uniqueName"
@@ -291,7 +289,7 @@
                                         <label class="p-1">to</label>
                                     </td>
                                     <td>
-                                        <div class="custom-select position-relative">
+                                        <div class="custom-select position-relative ">
                                             <reactive-dropdown-field
                                                 [options]="expenseGroupAccounts$ | async"
                                                 [(ngModel)]="expense.transactions[0].account.uniqueName"
@@ -301,9 +299,7 @@
                                                 [isPaginationEnabled]="true"
                                                 (scrollEnd)="handleExpenseAccountScrollEnd()"
                                                 (dynamicSearchedQuery)="onExpenseAccountSearchQueryChanged($event)"
-                                                (selectedOption)="
-                                                    expense.transactions[0].account.defaultName = $event?.label
-                                                "
+                                                (selectedOption)="expense.transactions[0].account.defaultName = $event?.label"
                                                 [labelValue]="expense.transactions[0].account.defaultName"
                                                 [disabled]="
                                                     (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
@@ -359,7 +355,7 @@
                                         <label class="p-1">to</label>
                                     </td>
                                     <td>
-                                        <div class="position-relative">
+                                        <div class="position-relative ">
                                             <reactive-dropdown-field
                                                 (selectedOption)="addExpense(otherExpenses, $event, 'base')"
                                                 [options]="expenseGroupAccounts$ | async"
@@ -448,10 +444,10 @@
                                     currentOrganizationType === 'BRANCH')
                             "
                         >
-                            <button mat-raised-button color="primary" type="submit" (click)="createEntry()">
-                                Save
+                            <button mat-raised-button color="primary" type="submit" (click)="createEntry()">Save</button>
+                            <button mat-stroked-button type="button" (click)="goBackToListPage()">
+                                Cancel
                             </button>
-                            <button mat-stroked-button type="button" (click)="goBackToListPage()">Cancel</button>
                         </div>
                         <div
                             class="pull-right mt-2 clear-both row"
@@ -462,9 +458,7 @@
                                     currentOrganizationType === 'BRANCH')
                             "
                         >
-                            <button mat-raised-button color="primary" type="submit" (click)="updateEntry()">
-                                Update
-                            </button>
+                            <button mat-raised-button color="primary" type="submit" (click)="updateEntry()">Update</button>
                             <button mat-stroked-button type="button" (click)="deleteEntry()">Delete</button>
                         </div>
                     </form>

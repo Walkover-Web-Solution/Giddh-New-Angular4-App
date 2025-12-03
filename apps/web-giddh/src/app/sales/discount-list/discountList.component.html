@@ -62,7 +62,7 @@
             <ul class="discount-list">
                 <ng-container *ngFor="let discount of discountAccountsDetails; trackBy: trackByFn; let idx = index">
                     <li *ngIf="idx > 0" class="discount-item cursor-pointer">
-                        <label class="checkbox overflow-hidden w-100 m-0" (click)="$event.stopPropagation()">
+                        <label class="checkbox overflow-hidden width-100 m-0" (click)="$event.stopPropagation()">
                             <mat-checkbox
                                 class="pull-left"
                                 [(ngModel)]="discount.isActive"

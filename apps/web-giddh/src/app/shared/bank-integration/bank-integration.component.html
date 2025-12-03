@@ -45,9 +45,12 @@
                                 {{ localeData?.payment?.connect_new_account }}
                             </button>
                             <span class="button-separator">|</span> <br />
-                            <a href="{{ bankStatementHelpDocUrl }}" target="_blank" class="font-size-12">{{
-                                localeData?.payment?.learn_connect
-                            }}</a>
+                            <a
+                                href="https://giddh.com/help/how-to-integrate-icici-bank-account-with-giddh"
+                                target="_blank"
+                                class="font-size-12"
+                                >{{ localeData?.payment?.learn_connect }}</a
+                            >
                         </div>
                         <div class="form-group ml-2">
                             <p class="mb-4 ml-1 font-size-12">
@@ -92,7 +95,7 @@
                             class="account-wrapper"
                             *ngFor="let bankAccount of connectedBankAccounts; trackBy: trackByAccountUniqueName"
                         >
-                            <div class="account-info-background w-100 font-size-15 row align-items-center">
+                            <div class="account-info-background width-100 font-size-15 row align-items-center">
                                 <div class="col-4">
                                     <span class="field-label">{{ bankAccount?.bankName }}</span
                                     ><br />
@@ -109,9 +112,11 @@
                                     </span>
                                 </div>
                                 <div class="col-4">
-                                    <span *ngIf="isIciciBankSupportedCountry" class="w-100 view-only-field inline">{{
-                                        bankAccount?.account?.name
-                                    }}</span>
+                                    <span
+                                        *ngIf="isIciciBankSupportedCountry"
+                                        class="width-100 view-only-field inline"
+                                        >{{ bankAccount?.account?.name }}</span
+                                    >
                                     <reactive-dropdown-field
                                         [readonly]="!hasIntegrationScope"
                                         [label]="localeData?.payment?.linked_account"
@@ -208,13 +213,13 @@
                                             trackBy: trackByPayorUniqueName
                                         "
                                     >
-                                        <div class="w-100">
+                                        <div class="width-100">
                                             <div class="col-4 v-align-top inline">
                                                 <span class="field-label">{{
                                                     localeData?.payment?.login_id_label
                                                 }}</span
                                                 ><br />
-                                                <span class="w-100 disabled-field inline">{{ payor?.loginId }}</span
+                                                <span class="width-100 disabled-field inline">{{ payor?.loginId }}</span
                                                 ><br />
                                                 <span class="font-size-12 field-label">{{ payor?.user?.name }}</span>
                                             </div>
@@ -223,7 +228,7 @@
                                                     localeData?.payment?.limit_upto
                                                 }}</span
                                                 ><br />
-                                                <span class="w-100 disabled-field d-inline-block limit-upto"
+                                                <span class="width-100 disabled-field d-inline-block limit-upto"
                                                     >{{
                                                         payor?.duration === unlimitedLimit
                                                             ? commonLocaleData?.app_amount_limit?.unlimited
