@@ -652,7 +652,7 @@ public advanceSearchObject: DayBookRequestModel = null;
     public onStockSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
         this.stocksSearchResultsPaginationData.query = query;
         if (!this.preventDefaultStockScrollApiCall &&
-            (typeof query === "string" || (this.defaultStockSuggestions && this.defaultStockSuggestions.length === 0) || successCallback)) {
+            (query || (this.defaultStockSuggestions && this.defaultStockSuggestions.length === 0) || successCallback)) {
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
             const requestObject = {
                 q: encodeURIComponent(query),
@@ -681,7 +681,6 @@ public advanceSearchObject: DayBookRequestModel = null;
                     if (successCallback) {
                         successCallback(data.body.results);
                     }
-                    this.changeDetectionRef.detectChanges();
                 }
             });
         } else {

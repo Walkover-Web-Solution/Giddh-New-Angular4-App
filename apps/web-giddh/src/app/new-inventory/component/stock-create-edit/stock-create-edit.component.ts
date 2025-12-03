@@ -284,8 +284,6 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
     /** Unregister functions for GeneralService callbacks */
     private unregisterUnsavedChangesCallback: () => void;
     private unregisterMarkFormsAsPristineCallback: () => void;
-    /** Holds discount value */
-    public discountValue: any;
 
     constructor(
         private inventoryService: InventoryService,
@@ -1213,7 +1211,6 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         delete stockForm.discountLabel;
         stockForm.taxes = this.taxTempArray.map(tax => tax?.uniqueName);
         stockForm.discounts = stockForm.discounts?.[0]?.length ? stockForm.discounts : [];
-        this.discountValue = stockForm.discounts?.[0]?.length ? stockForm.discounts : [];
         stockForm.customFields = stockForm.customFields?.map(customField => {
             return {
                 uniqueName: customField?.uniqueName,

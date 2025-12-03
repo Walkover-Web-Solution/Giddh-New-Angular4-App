@@ -1438,7 +1438,7 @@ export class InventoryService {
             url = url.concat(`${delimiter}inventoryType=${payload.inventoryType}`);
             delimiter = '&';
         }
-        if (typeof payload.q === 'string') {
+        if (payload.q) {
             url = url.concat(`${delimiter}q=${payload.q}`);
             delimiter = '&';
         }
