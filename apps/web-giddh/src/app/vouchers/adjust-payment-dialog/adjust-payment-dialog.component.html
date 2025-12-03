@@ -35,7 +35,7 @@
                                     ? commonLocaleData?.app_voucher_types?.receipt
                                     : adjustedVoucherType === "advance-receipt"
                                     ? commonLocaleData?.app_voucher_types?.advance_receipt
-                                    : (localeData?.voucher_label | replace: "[VOUCHER_TYPE]":currentVoucherLabel)
+                                    : (localeData?.voucher_label | replace : "[VOUCHER_TYPE]" : currentVoucherLabel)
                             }}
                             Total: <i class="icon-font-10"></i>
                             <span class="d-inline-flex justify-content-end">
@@ -138,6 +138,7 @@
                                         [label]="localeData?.adjustment_voucher"
                                         [placeholder]="localeData?.select_voucher"
                                         [options]="adjustVoucherOptions$ | async"
+                                        [(ngModel)]="entry.uniqueName"
                                         (selectedOption)="selectVoucher($event, entry, entryIdx)"
                                         [labelValue]="entry.voucherNumber"
                                         [enableDynamicSearch]="true"
@@ -235,7 +236,11 @@
                         </div>
                     </ng-container>
                     <p class="mb-2">
-                        <a href="javascript:void(0)" aria-label="new line" (click)="addNewBlankAdjustVoucherRow()" class="font-size-15"
+                        <a
+                            href="javascript:void(0)"
+                            aria-label="new line"
+                            (click)="addNewBlankAdjustVoucherRow()"
+                            class="font-size-15"
                             ><span class="font-size-15">+</span> {{ commonLocaleData?.app_add_new_line }}</a
                         >
                     </p>
