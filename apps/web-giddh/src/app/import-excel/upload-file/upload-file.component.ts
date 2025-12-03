@@ -2,10 +2,10 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { saveAs } from 'file-saver';
-import { BehaviorSubject, Observable, ReplaySubject, of } from 'rxjs';
+import { Observable, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
-import { API_BULK_FETCH_LIMIT, BranchHierarchyType, SAMPLE_FILES_URL, IOption } from '../../app.constant';
+import { API_BULK_FETCH_LIMIT, BranchHierarchyType, SAMPLE_FILES_URL } from '../../app.constant';
 import { OrganizationType } from '../../models/user-login-state';
 import { GeneralService } from '../../services/general.service';
 import { ToasterService } from '../../services/toaster.service';
@@ -13,6 +13,7 @@ import { AppState } from '../../store';
 import { LedgerComponentStore } from '../../ledger/ledger.store';
 import { cloneDeep } from '../../lodash-optimized';
 import { VoucherType } from '../../ledger/components/import-statement/import-statement.const';
+import { IOption } from '../../app.constant';
 
 @Component({
     selector: 'upload-file',
@@ -57,10 +58,8 @@ export class UploadFileComponent implements OnInit, OnDestroy {
     public defaultCount: number = API_BULK_FETCH_LIMIT;
     /** Stores account unique name */
     public accountUniqueName: string;
-    /** BehaviorSubject to store the search results for accounts */
-    private accountSearchResponseSubject = new BehaviorSubject<IOption[]>([]);
-    /** Observable for account search results used in template with async pipe */
-    public accountSearchResponse$: Observable<IOption[]> = this.accountSearchResponseSubject.asObservable();
+    /** Stores the search results for accounts */
+    public accountSearchResponse: any[] = [];
     /** Stores account name */
     public accountLabel: string = "";
     /** Request parameters for account searches */
@@ -184,19 +183,14 @@ export class UploadFileComponent implements OnInit, OnDestroy {
         this.ledgerComponentStore.accountSearch$.pipe(takeUntil(this.destroyed$)).subscribe(accountSearchResponse => {
             if (accountSearchResponse) {
                 this.accountSearchRequest.count = accountSearchResponse.count;
-                const currentOptions = this.accountSearchResponseSubject.value;
-                const newOptions = [...currentOptions];
-                
                 accountSearchResponse.results?.forEach(result => {
                     if (result?.uniqueName) {
-                        newOptions.push({
+                        this.accountSearchResponse.push({
                             value: result.uniqueName,
                             label: result.name
                         });
                     }
                 });
-                
-                this.accountSearchResponseSubject.next(newOptions);
                 this.accountSearchRequest.isLoading = false;
             }
         });
@@ -229,7 +223,6 @@ export class UploadFileComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
-        this.accountSearchResponseSubject.complete();
     }
 
     /**
@@ -266,7 +259,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
     */
     public searchAccount(query: string = '', page: number = 1): void {
         if (page === 1) {
-            this.accountSearchResponseSubject.next([]);
+            this.accountSearchResponse = [];
         }
         this.accountSearchRequest.q = query;
         this.accountSearchRequest.page = page;

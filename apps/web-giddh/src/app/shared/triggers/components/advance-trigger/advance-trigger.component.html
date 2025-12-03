@@ -5,15 +5,15 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="p-3">
+    <div class=" p-3 ">
         <div *ngIf="isCommunicationPlatformsLoading" class="mt-5">
             <giddh-page-loader></giddh-page-loader>
         </div>
-        <button
+        <button 
             class="pull-right"
-            mat-raised-button
-            color="primary"
-            routerLink="/pages/settings/trigger/basic"
+            mat-raised-button 
+            color="primary" 
+            routerLink="/pages/settings/trigger/basic" 
             [disabled]="isCommunicationPlatformsLoading"
         >
             {{ localeData?.communication?.switch_to_basic_trigger }}
@@ -38,51 +38,47 @@
             <div class="d-flex justify-content-between align-items-start">
                 <div>
                     <div class="msg91-container" *ngIf="!showTriggerForm && !(editCommunicationPlatform === 'MSG91')">
-                        <div class="menu" *ngIf="communicationPlatforms?.MSG91?.isConnected">
-                            <button
-                                mat-icon-button
-                                disableRipple
-                                id="edit-model-basic"
-                                [matMenuTriggerFor]="beforeMenu"
-                                aria-label="vertical dot img"
-                            >
-                                <span class="icon-dots-three-vertical"></span>
+                    <div class="menu" *ngIf="communicationPlatforms?.MSG91?.isConnected">
+                        <button
+                            mat-icon-button
+                            disableRipple
+                            id="edit-model-basic"
+                            [matMenuTriggerFor]="beforeMenu"
+                            aria-label="vertical dot img"
+                        >
+                            <span class="icon-dots-three-vertical"></span>
+                        </button>
+                        <mat-menu #beforeMenu="matMenu" xPosition="before">
+                            <button mat-menu-item (click)="editCommunicationPlatform = 'MSG91'">
+                                <span class="font-size-15 edit-buttons">{{ localeData?.communication?.edit_platform }}</span>
                             </button>
-                            <mat-menu #beforeMenu="matMenu" xPosition="before">
-                                <button mat-menu-item (click)="editCommunicationPlatform = 'MSG91'">
-                                    <span class="font-size-15 edit-buttons">{{
-                                        localeData?.communication?.edit_platform
-                                    }}</span>
-                                </button>
-                                <button
-                                    mat-menu-item
-                                    (click)="deleteCommunicationPlatform(communicationPlatforms?.MSG91?.uniqueName)"
-                                >
-                                    <span class="font-size-15 edit-buttons">{{
-                                        localeData?.communication?.remove_platform
-                                    }}</span>
-                                </button>
-                            </mat-menu>
-                        </div>
-                        <div class="image" *ngIf="!communicationPlatforms?.MSG91?.isConnected">
-                            <img src="{{ imgPath }}msgOne.png" class="logo" alt="" />
-                            <img src="{{ imgPath }}msgTwo.png" class="msg" alt="" />
-                        </div>
-                        <div class="image" *ngIf="communicationPlatforms?.MSG91?.isConnected">
-                            <img src="{{ imgPath }}msgOne-color.png" class="logo" alt="" />
-                            <img src="{{ imgPath }}msgTwo-color.png" class="msg" alt="" />
-                        </div>
-                        <div class="integrate mini-icons" *ngIf="communicationPlatforms?.MSG91?.isConnected">
-                            <img src="{{ imgPath }}msg91.png" alt="" />
-                            <img src="{{ imgPath }}p1.png" alt="" />
-                            <img src="{{ imgPath }}whatsapp.png" alt="" />
-                            <img src="{{ imgPath }}msg1.png" alt="" />
-                            <img src="{{ imgPath }}91091.png" alt="" />
-                            <img src="{{ imgPath }}say1.png" alt="" />
-                        </div>
-                        <div class="integrate" *ngIf="!communicationPlatforms?.MSG91?.isConnected">
-                            <p>{{ localeData?.communication?.integrate_now }}</p>
-                        </div>
+                            <button
+                                mat-menu-item
+                                (click)="deleteCommunicationPlatform(communicationPlatforms?.MSG91?.uniqueName)"
+                            >
+                                <span class="font-size-15 edit-buttons">{{ localeData?.communication?.remove_platform }}</span>
+                            </button>
+                        </mat-menu>
+                    </div>
+                    <div class="image" *ngIf="!communicationPlatforms?.MSG91?.isConnected">
+                        <img src="{{ imgPath }}msgOne.png" class="logo" alt="" />
+                        <img src="{{ imgPath }}msgTwo.png" class="msg" alt="" />
+                    </div>
+                    <div class="image" *ngIf="communicationPlatforms?.MSG91?.isConnected">
+                        <img src="{{ imgPath }}msgOne-color.png" class="logo" alt="" />
+                        <img src="{{ imgPath }}msgTwo-color.png" class="msg" alt="" />
+                    </div>
+                    <div class="integrate mini-icons" *ngIf="communicationPlatforms?.MSG91?.isConnected">
+                        <img src="{{ imgPath }}msg91.png" alt="" />
+                        <img src="{{ imgPath }}p1.png" alt="" />
+                        <img src="{{ imgPath }}whatsapp.png" alt="" />
+                        <img src="{{ imgPath }}msg1.png" alt="" />
+                        <img src="{{ imgPath }}91091.png" alt="" />
+                        <img src="{{ imgPath }}say1.png" alt="" />
+                    </div>
+                    <div class="integrate" *ngIf="!communicationPlatforms?.MSG91?.isConnected">
+                        <p>{{ localeData?.communication?.integrate_now }}</p>
+                    </div>
                     </div>
                     <div
                         class="verify-page mt-3"
@@ -97,8 +93,7 @@
                             *ngIf="communicationPlatforms?.MSG91?.isConnected"
                         >
                             <span class="mat-button-wrapper d-flex"
-                                ><i class="icon-left"></i
-                                ><span class="back-text">{{ localeData?.communication?.msg91 }}</span>
+                                ><i class="icon-left"></i><span class="back-text">{{ localeData?.communication?.msg91 }}</span>
                             </span>
                         </button>
                         <div class="d-flex align-items-center verify-form mt-3">
@@ -360,12 +355,11 @@
                     <div class="dropdown-box-1">
                         <div class="compose-trigger-dropdowns">
                             <div class="chiplist-wrapper">
-                                <div class="pl-4 pr-4 border-bottom mat-form-field-clean">
+                                <div class="pl-4 pr-4 border-bottom">
                                     <span class="dropdown-heading pb-3 d-block">{{
                                         localeData?.communication?.receiver
                                     }}</span>
                                     <select-multiple-fields
-                                        [commonLocaleData]="commonLocaleData"
                                         [placeholder]="localeData?.communication?.select_mobile"
                                         [options]="triggerMobileDropdown"
                                         (selectedOption)="createTrigger.campaignDetails.mobile = $event"
@@ -375,9 +369,8 @@
                                         class="select-multiple-chiplist mobile-margin"
                                     ></select-multiple-fields>
                                 </div>
-                                <div class="border-left border-right chip-gap pl-4 pr-4 pt-4 mat-form-field-clean">
+                                <div class="border-left border-right chip-gap pl-4 pr-4 pt-4">
                                     <select-multiple-fields
-                                        [commonLocaleData]="commonLocaleData"
                                         [showError]="mandatoryFields.triggerToChiplist"
                                         [placeholder]="localeData?.communication?.select_to"
                                         [options]="triggerToDropdown"
@@ -388,7 +381,6 @@
                                         class="select-multiple-chiplist border-bottom"
                                     ></select-multiple-fields>
                                     <select-multiple-fields
-                                        [commonLocaleData]="commonLocaleData"
                                         [placeholder]="localeData?.communication?.select_bcc"
                                         [options]="triggerBccDropdown"
                                         (selectedOption)="createTrigger.campaignDetails.bcc = $event"
@@ -398,7 +390,6 @@
                                         class="select-multiple-chiplist border-bottom"
                                     ></select-multiple-fields>
                                     <select-multiple-fields
-                                        [commonLocaleData]="commonLocaleData"
                                         [placeholder]="localeData?.communication?.select_cc"
                                         [options]="triggerCcDropdown"
                                         (selectedOption)="createTrigger.campaignDetails.cc = $event"
@@ -433,9 +424,8 @@
                                 *ngFor="let variable of createTrigger.campaignDetails.argsMapping; let i = index"
                             >
                                 <div class="unit-value" [ngClass]="{ 'mt-2': i > 0 }">{{ variable.name }}</div>
-                                <div class="map-unit-value border-bottom mat-form-field-clean">
+                                <div class="map-unit-value border-bottom">
                                     <select-multiple-fields
-                                        [commonLocaleData]="commonLocaleData"
                                         [placeholder]="localeData?.communication?.select_suggestions"
                                         [options]="fieldsSuggestion"
                                         (selectedOption)="selectVariable($event, i)"
