@@ -63,7 +63,10 @@
                     </div>
                     <div class="col-sm-4">
                         <div class="form-group mb-0">
-                            <div [ngClass]="{ 'input-group': addAccountForm.get('openingBalance')?.value > 0 }" class="ml-0">
+                            <div
+                                [ngClass]="{ 'input-group': addAccountForm.get('openingBalance')?.value > 0 }"
+                                class="ml-0"
+                            >
                                 <input-field
                                     [name]="'number'"
                                     class="flex-grow-1"
@@ -77,7 +80,6 @@
                                     [label]="localeData?.opening_balance"
                                     [type]="'text'"
                                     formControlName="openingBalance"
-                                    [allowDigitsOnly]="true"
                                     [readonly]="company?.isActive"
                                     [min]="0"
                                     (change)="openConfirmLeaveDialog()"
@@ -144,7 +146,10 @@
                         ></reactive-dropdown-field>
                     </div>
                     <div class="col-sm-4" *ngIf="addAccountForm.get('currency')?.value !== companyCurrency">
-                        <div [ngClass]="{ 'input-group': addAccountForm.get('foreignOpeningBalance')?.value > 0 }" class="ml-0">
+                        <div
+                            [ngClass]="{ 'input-group': addAccountForm.get('foreignOpeningBalance')?.value > 0 }"
+                            class="ml-0"
+                        >
                             <input-field
                                 [name]="'number'"
                                 class="flex-grow-1"
@@ -157,7 +162,6 @@
                                 [placeholder]="'0.00'"
                                 [type]="'text'"
                                 formControlName="foreignOpeningBalance"
-                                [allowDigitsOnly]="true"
                                 [readonly]="company?.isActive"
                                 [min]="0"
                                 (change)="openConfirmLeaveDialog()"
