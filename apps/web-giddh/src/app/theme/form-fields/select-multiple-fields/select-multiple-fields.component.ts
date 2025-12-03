@@ -105,6 +105,10 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     public value: any[] = [];
     /** Holds last search value */
     public lastSearchString: string = null;
+    /** Returns true if suffix or prefix is not empty string */
+    private get isSuffixPrefixUsed(): boolean {
+        return Boolean(this.chipPrefix || this.chipSuffix);
+    }
 
 
     constructor(
@@ -163,9 +167,6 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
             if (!this.enableDynamicSearch) {
                 this.filterOptions(this.lastSearchString || "");
             } else {
-                if (!this.chipListUniqueName.length && this.selectedValues.length) {
-                    this.chipListUniqueName = this.selectedValues;
-                }
                 // For dynamic search, filter options to hide selected ones
                 this.fieldFilteredOptions$ = of(this.getFilteredOptionsForDynamicSearch(changes.options.currentValue));
             }
@@ -175,9 +176,6 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
                 this.chipList = cloneDeep(changes.selectedValues.currentValue?.split(","));
             } else {
                 this.chipList = cloneDeep(changes.selectedValues.currentValue);
-                if (!this.chipListUniqueName.length && this.selectedValues.length) {
-                    this.chipListUniqueName = this.selectedValues;
-                }
             }
             // Refresh filtered options when selected values change
             if (!this.enableDynamicSearch && this.options) {
@@ -223,7 +221,13 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
         let filteredOptions: IOption[] = [];
         this.options?.forEach(option => {
             const matchesSearch = typeof search !== "string" || option?.label?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1;
-            const isNotSelected = !this.hideSelectedOptions || !this.chipListUniqueName?.includes(option?.value);
+            let value = option?.value;
+            let label = option?.label;
+            if (this.isSuffixPrefixUsed) {
+                value = this.chipPrefix + option?.value + this.chipSuffix;
+                label = this.chipPrefix + option?.label + this.chipSuffix;
+            }
+            const isNotSelected = !this.hideSelectedOptions || !(this.selectedValues?.includes(value) || this.selectedValues?.includes(label));
             
             if (matchesSearch && isNotSelected) {
                 filteredOptions.push({ label: option.label, value: option?.value, additional: option });
@@ -248,6 +252,9 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
         this.writeValue([...this.value, option?.option?.value?.value]);
         if (selectOptionValue && !this.chipList.includes(this.chipPrefix + selectOptionValue + this.chipSuffix)) {
             this.chipListUniqueName.push(option.option.value.value);
+            if (!this.isSuffixPrefixUsed) {
+                this.selectedValues.push(option.option.value.value);
+            }
             this.chipList.push(this.chipPrefix + selectOptionValue + this.chipSuffix);
             // This will refresh filtered options and hide the selected item from dropdown
             this.emitList();
@@ -262,8 +269,8 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
      */
     public removeOption(index: number): void {
         if (index >= 0) {
-            this.chipList.splice(index, 1);
             this.chipListUniqueName.splice(index, 1);
+            this.chipList.splice(index, 1);
             this.value.splice(index, 1);
             this.writeValue(this.value);
             // Close the autocomplete dropdown if it's open
@@ -346,7 +353,13 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
         }
         
         return options.filter(option => {
-            return !this.chipListUniqueName?.includes(option?.value);
+            let value = option?.value;
+            let label = option?.label;
+            if (this.isSuffixPrefixUsed) {
+                value = this.chipPrefix + option?.value + this.chipSuffix;
+                label = this.chipPrefix + option?.label + this.chipSuffix;
+            }
+            return !(this.selectedValues?.includes(value) || this.selectedValues?.includes(label));
         });
     }
 
