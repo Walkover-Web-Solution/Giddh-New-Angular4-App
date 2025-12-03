@@ -34,8 +34,7 @@
         }
     }
 
-    &.warning,
-    &.info {
+    &.warning {
         .mdc-snackbar__surface {
             background-color: var(--color-deep-orange) !important;
 
@@ -44,14 +43,25 @@
                 color: var(--color-black) !important;
             }
         }
+
+        .snack-container {
+            background-image: url("../../../images/exclamation-black.svg");
+        }
     }
 
-    &.warning .snack-container {
-        background-image: url("../../../images/exclamation-black.svg");
-    }
+    &.info {
+        .mdc-snackbar__surface {
+            background-color: var(--color-blue) !important;
 
-    &.info .snack-container {
-        background-image: url("../../../images/info-black.svg");
+            .mdc-snackbar__label,
+            .snack-close-button {
+                color: var(--color-white) !important;
+            }
+        }
+
+        .snack-container {
+            background-image: url("../../../images/info-white.svg");
+        }
     }
 }
 
@@ -71,8 +81,7 @@
         background-color: var(--color-green) !important;
     }
 }
-.mat-mdc-snack-bar-container.warning,
-.mat-mdc-snack-bar-container.info {
+.mat-mdc-snack-bar-container.warning {
     .mdc-snackbar__surface {
         background-color: var(--color-deep-orange) !important;
         .mdc-snackbar__label {
@@ -80,6 +89,18 @@
         }
         .snack-close-button {
             color: var(--color-black) !important;
+        }
+    }
+}
+
+.mat-mdc-snack-bar-container.info {
+    .mdc-snackbar__surface {
+        background-color: var(--color-blue) !important;
+        .mdc-snackbar__label {
+            color: var(--color-white) !important;
+        }
+        .snack-close-button {
+            color: var(--color-white) !important;
         }
     }
 }
