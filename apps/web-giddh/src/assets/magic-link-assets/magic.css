@@ -324,11 +324,6 @@ body {
 
 /* added by sarfaraz */
 
-.d-flex {
-    display: flex;
-    display: -ms-flexbox !important;
-}
-
 .flex-row {
     flex-direction: row;
     -ms-flex-direction: row;
@@ -337,15 +332,6 @@ body {
 .flex-grow-1 {
     -ms-flex-positive: 1 !important;
     flex-grow: 1 !important;
-}
-
-.align-items-center {
-    align-items: center;
-    -ms-flex-align: center;
-}
-
-.justify-content-end {
-    justify-content: flex-end;
 }
 
 body {
