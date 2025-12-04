@@ -1,16 +1,18 @@
 /**
  * Cross-browser text-transform mixin for individual use
  * Apply text-transform with all vendor prefixes
- * 
+ *
  * @param {String} $value - The text-transform value (lowercase, uppercase, capitalize, none, unset, inherit)
  */
 @mixin text-transform($value) {
-    @if $value == unset {
+    @if $value ==unset {
         -webkit-text-transform: -webkit-initial !important;
         -moz-text-transform: -moz-initial !important;
         -ms-text-transform: initial !important;
         text-transform: unset !important;
-    } @else {
+    }
+
+    @else {
         -webkit-text-transform: #{$value} !important;
         -moz-text-transform: #{$value} !important;
         -ms-text-transform: #{$value} !important;
@@ -21,16 +23,18 @@
 /**
  * Cross-browser text-align mixin for individual use
  * Apply text-align with all vendor prefixes
- * 
+ *
  * @param {String} $value - The text-align value (left, right, center, justify, unset, inherit)
  */
 @mixin text-align($value) {
-    @if $value == unset {
+    @if $value ==unset {
         -webkit-text-align: -webkit-initial !important;
         -moz-text-align: -moz-initial !important;
         -ms-text-align: initial !important;
         text-align: unset !important;
-    } @else {
+    }
+
+    @else {
         -webkit-text-align: #{$value} !important;
         -moz-text-align: #{$value} !important;
         -ms-text-align: #{$value} !important;
@@ -41,32 +45,42 @@
 /**
  * Cross-browser cursor mixin for individual use
  * Apply cursor with vendor prefixes for specific cursors
- * 
+ *
  * @param {String} $value - The cursor value (including unset, inherit)
  */
 @mixin cursor($value) {
-    @if $value == grab {
+    @if $value ==grab {
         cursor: grab !important;
         cursor: -webkit-grab !important;
         cursor: -moz-grab !important;
-    } @else if $value == grabbing {
+    }
+
+    @else if $value ==grabbing {
         cursor: grabbing !important;
         cursor: -webkit-grabbing !important;
         cursor: -moz-grabbing !important;
-    } @else if $value == zoom-in {
+    }
+
+    @else if $value ==zoom-in {
         cursor: zoom-in !important;
         cursor: -webkit-zoom-in !important;
         cursor: -moz-zoom-in !important;
-    } @else if $value == zoom-out {
+    }
+
+    @else if $value ==zoom-out {
         cursor: zoom-out !important;
         cursor: -webkit-zoom-out !important;
         cursor: -moz-zoom-out !important;
-    } @else if $value == unset {
+    }
+
+    @else if $value ==unset {
         cursor: -webkit-initial !important;
         cursor: -moz-initial !important;
         cursor: initial !important;
         cursor: unset !important;
-    } @else {
+    }
+
+    @else {
         cursor: #{$value} !important;
     }
 }
@@ -74,23 +88,27 @@
 /**
  * Cross-browser opacity mixin for individual use
  * Apply opacity with IE8+ support and vendor prefixes
- * 
+ *
  * @param {Number|String} $value - The opacity value (0 to 1, unset, inherit)
  */
 @mixin opacity($value) {
-    @if $value == unset {
+    @if $value ==unset {
         filter: unset !important;
         -webkit-opacity: -webkit-initial !important;
         -moz-opacity: -moz-initial !important;
         -ms-opacity: initial !important;
         opacity: unset !important;
-    } @else if $value == inherit {
+    }
+
+    @else if $value ==inherit {
         filter: inherit !important;
         -webkit-opacity: inherit !important;
         -moz-opacity: inherit !important;
         -ms-opacity: inherit !important;
         opacity: inherit !important;
-    } @else {
+    }
+
+    @else {
         // IE8+ filter fallback
         filter: alpha(opacity=#{$value * 100}) !important;
         // Modern browsers
@@ -104,19 +122,16 @@
 /**
  * Text transformation utility mixin
  * Generates utility classes for text-transform property with cross-browser support
- * 
+ *
  * @param {Map} $transforms - Map of class suffixes and their corresponding text-transform values
  */
-@mixin text-transform-utilities(
-    $transforms: (
-        "lowercase": lowercase,
+@mixin text-transform-utilities($transforms: ("lowercase": lowercase,
         "uppercase": uppercase,
         "capitalize": capitalize,
         "none": none,
         "unset": unset,
         "inherit": inherit,
-    )
-) {
+    )) {
     @each $name, $value in $transforms {
         .text-#{$name} {
             @include text-transform($value);
@@ -127,19 +142,16 @@
 /**
  * Text alignment utility mixin
  * Generates utility classes for text-align property with cross-browser support
- * 
+ *
  * @param {Map} $alignments - Map of class suffixes and their corresponding text-align values
  */
-@mixin text-align-utilities(
-    $alignments: (
-        "left": left,
+@mixin text-align-utilities($alignments: ("left": left,
         "right": right,
         "center": center,
         "justify": justify,
         "unset": unset,
         "inherit": inherit,
-    )
-) {
+    )) {
     @each $name, $value in $alignments {
         .text-#{$name} {
             @include text-align($value);
@@ -150,12 +162,10 @@
 /**
  * Cursor utility mixin
  * Generates utility classes for cursor property with cross-browser support
- * 
+ *
  * @param {Map} $cursors - Map of class suffixes and their corresponding cursor values
  */
-@mixin cursor-utilities(
-    $cursors: (
-        "auto": auto,
+@mixin cursor-utilities($cursors: ("auto": auto,
         "default": default,
         "none": none,
         "pointer": pointer,
@@ -164,13 +174,11 @@
         "text": text,
         "move": move,
         "not-allowed": not-allowed,
-        "grab": (
-            grab,
+        "grab": (grab,
             -webkit-grab,
             -moz-grab,
         ),
-        "grabbing": (
-            grabbing,
+        "grabbing": (grabbing,
             -webkit-grabbing,
             -moz-grabbing,
         ),
@@ -194,25 +202,24 @@
         "ns-resize": ns-resize,
         "nesw-resize": nesw-resize,
         "nwse-resize": nwse-resize,
-        "zoom-in": (
-            zoom-in,
+        "zoom-in": (zoom-in,
             -webkit-zoom-in,
             -moz-zoom-in,
         ),
-        "zoom-out": (
-            zoom-out,
+        "zoom-out": (zoom-out,
             -webkit-zoom-out,
             -moz-zoom-out,
         ),
         "unset": unset,
         "inherit": inherit,
-    )
-) {
+    )) {
     @each $name, $value in $cursors {
         .cursor-#{$name} {
-            @if type-of($value) == list {
+            @if type-of($value)==list {
                 @include cursor(nth($value, 1));
-            } @else {
+            }
+
+            @else {
                 @include cursor($value);
             }
         }
@@ -222,12 +229,10 @@
 /**
  * Opacity utility mixin
  * Generates utility classes for opacity property with cross-browser support including IE8+
- * 
+ *
  * @param {Map} $opacities - Map of class suffixes and their corresponding opacity values
  */
-@mixin opacity-utilities(
-    $opacities: (
-        "0": 0,
+@mixin opacity-utilities($opacities: ("0": 0,
         "10": 0.1,
         "25": 0.25,
         "50": 0.5,
@@ -236,8 +241,7 @@
         "100": 1,
         "unset": unset,
         "inherit": inherit,
-    )
-) {
+    )) {
     @each $name, $value in $opacities {
         .opacity-#{$name} {
             @include opacity($value);
@@ -254,31 +258,44 @@
 
 /**
  * Media breakpoint up mixin - applies styles from specified breakpoint and up
- * 
+ *
  * @param {String} $breakpoint - The breakpoint name (tablet, small-desktop, medium-desktop, large-desktop, xl-desktop)
  */
 @mixin media-breakpoint-up($breakpoint) {
-    @if $breakpoint == "tablet" {
+    @if $breakpoint =="tablet" {
+
         // iPad and tablet users (768px+)
         @media (min-width: 768px) {
             @content;
         }
-    } @else if $breakpoint == "small-desktop" {
+    }
+
+    @else if $breakpoint =="small-desktop" {
+
         // Most common business laptops (1024px+)
         @media (min-width: 1024px) {
             @content;
         }
-    } @else if $breakpoint == "medium-desktop" {
+    }
+
+    @else if $breakpoint =="medium-desktop" {
+
         // Modern laptops and smaller monitors (1280px+)
         @media (min-width: 1280px) {
             @content;
         }
-    } @else if $breakpoint == "large-desktop" {
+    }
+
+    @else if $breakpoint =="large-desktop" {
+
         // External monitors and premium laptops (1440px+)
         @media (min-width: 1440px) {
             @content;
         }
-    } @else if $breakpoint == "xl-desktop" {
+    }
+
+    @else if $breakpoint =="xl-desktop" {
+
         // High-resolution displays (1920px+)
         @media (min-width: 1920px) {
             @content;
@@ -288,31 +305,44 @@
 
 /**
  * Media breakpoint down mixin - applies styles up to specified breakpoint
- * 
+ *
  * @param {String} $breakpoint - The breakpoint name (tablet, small-desktop, medium-desktop, large-desktop, xl-desktop)
  */
 @mixin media-breakpoint-down($breakpoint) {
-    @if $breakpoint == "tablet" {
+    @if $breakpoint =="tablet" {
+
         // Up to tablet (max 767.98px) - UNSUPPORTED screens
         @media (max-width: 767.98px) {
             @content;
         }
-    } @else if $breakpoint == "small-desktop" {
+    }
+
+    @else if $breakpoint =="small-desktop" {
+
         // Up to small desktop (max 1023.98px)
         @media (max-width: 1023.98px) {
             @content;
         }
-    } @else if $breakpoint == "medium-desktop" {
+    }
+
+    @else if $breakpoint =="medium-desktop" {
+
         // Up to medium desktop (max 1279.98px)
         @media (max-width: 1279.98px) {
             @content;
         }
-    } @else if $breakpoint == "large-desktop" {
+    }
+
+    @else if $breakpoint =="large-desktop" {
+
         // Up to large desktop (max 1439.98px)
         @media (max-width: 1439.98px) {
             @content;
         }
-    } @else if $breakpoint == "xl-desktop" {
+    }
+
+    @else if $breakpoint =="xl-desktop" {
+
         // Up to XL desktop (max 1919.98px)
         @media (max-width: 1919.98px) {
             @content;
@@ -323,21 +353,28 @@
 /**
  * Accounting-specific breakpoint mixins
  * Based on ACCOUNTING_BREAKPOINTS from app.constant.ts
- * 
+ *
  * @param {String} $breakpoint - The accounting breakpoint name (sidebar-comfortable, multi-column-forms, full-data-view)
  */
 @mixin accounting-breakpoint($breakpoint) {
-    @if $breakpoint == "sidebar-comfortable" {
+    @if $breakpoint =="sidebar-comfortable" {
+
         // Minimum width where sidebar and main content display comfortably together (1200px+)
         @media (min-width: 1200px) {
             @content;
         }
-    } @else if $breakpoint == "multi-column-forms" {
+    }
+
+    @else if $breakpoint =="multi-column-forms" {
+
         // Minimum width where forms can be split into multiple columns effectively (1100px+)
         @media (min-width: 1100px) {
             @content;
         }
-    } @else if $breakpoint == "full-data-view" {
+    }
+
+    @else if $breakpoint =="full-data-view" {
+
         // Minimum width where all data table columns can be displayed without horizontal scrolling (1400px+)
         @media (min-width: 1400px) {
             @content;
@@ -347,27 +384,37 @@
 
 /**
  * Media breakpoint between mixin - applies styles between two breakpoints
- * 
+ *
  * @param {String} $lower - The lower breakpoint name
  * @param {String} $upper - The upper breakpoint name
  */
 @mixin media-breakpoint-between($lower, $upper) {
-    @if $lower == "tablet" and $upper == "small-desktop" {
+    @if $lower =="tablet" and $upper =="small-desktop" {
+
         // iPad and tablet users (768px - 1023px)
         @media (min-width: 768px) and (max-width: 1023.98px) {
             @content;
         }
-    } @else if $lower == "small-desktop" and $upper == "medium-desktop" {
+    }
+
+    @else if $lower =="small-desktop" and $upper =="medium-desktop" {
+
         // Most common business laptops (1024px - 1279px)
         @media (min-width: 1024px) and (max-width: 1279.98px) {
             @content;
         }
-    } @else if $lower == "medium-desktop" and $upper == "large-desktop" {
+    }
+
+    @else if $lower =="medium-desktop" and $upper =="large-desktop" {
+
         // Modern laptops and smaller monitors (1280px - 1439px)
         @media (min-width: 1280px) and (max-width: 1439.98px) {
             @content;
         }
-    } @else if $lower == "large-desktop" and $upper == "xl-desktop" {
+    }
+
+    @else if $lower =="large-desktop" and $upper =="xl-desktop" {
+
         // External monitors and premium laptops (1440px - 1919px)
         @media (min-width: 1440px) and (max-width: 1919.98px) {
             @content;
@@ -378,31 +425,44 @@
 /**
  * Exact breakpoint mixin - applies styles only within the exact breakpoint range
  * Matches the exact ranges defined in BREAKPOINT_SCREEN_SIZE enum
- * 
+ *
  * @param {String} $breakpoint - The exact breakpoint name (tablet, small-desktop, medium-desktop, large-desktop, xl-desktop)
  */
 @mixin exact-breakpoint($breakpoint) {
-    @if $breakpoint == "tablet" {
+    @if $breakpoint =="tablet" {
+
         // iPad and tablet users (768px - 1023px)
         @media (min-width: 768px) and (max-width: 1023px) {
             @content;
         }
-    } @else if $breakpoint == "small-desktop" {
+    }
+
+    @else if $breakpoint =="small-desktop" {
+
         // Most common business laptops (1024px - 1279px)
         @media (min-width: 1024px) and (max-width: 1279px) {
             @content;
         }
-    } @else if $breakpoint == "medium-desktop" {
+    }
+
+    @else if $breakpoint =="medium-desktop" {
+
         // Modern laptops and smaller monitors (1280px - 1439px)
         @media (min-width: 1280px) and (max-width: 1439px) {
             @content;
         }
-    } @else if $breakpoint == "large-desktop" {
+    }
+
+    @else if $breakpoint =="large-desktop" {
+
         // External monitors and premium laptops (1440px - 1919px)
         @media (min-width: 1440px) and (max-width: 1919px) {
             @content;
         }
-    } @else if $breakpoint == "xl-desktop" {
+    }
+
+    @else if $breakpoint =="xl-desktop" {
+
         // High-resolution displays (1920px+)
         @media (min-width: 1920px) {
             @content;
@@ -476,7 +536,7 @@
 
 /**
  * Container query mixin for minimum width
- * 
+ *
  * @param {String} $width - The minimum width (e.g., '300px', '20rem')
  */
 @mixin when-container-wider-than($width) {
@@ -487,7 +547,7 @@
 
 /**
  * Container query mixin for maximum width
- * 
+ *
  * @param {String} $width - The maximum width (e.g., '300px', '20rem')
  */
 @mixin when-container-narrower-than($width) {
@@ -498,7 +558,7 @@
 
 /**
  * Container query mixin for minimum height
- * 
+ *
  * @param {String} $height - The minimum height (e.g., '200px', '15rem')
  */
 @mixin when-container-height-greater-than($height) {
@@ -509,7 +569,7 @@
 
 /**
  * Container query mixin for maximum height
- * 
+ *
  * @param {String} $height - The maximum height (e.g., '200px', '15rem')
  */
 @mixin when-container-height-less-than($height) {
@@ -520,7 +580,7 @@
 
 /**
  * Container query mixin for aspect ratio
- * 
+ *
  * @param {String} $ratio - The aspect ratio (e.g., '16/9', '4/3', '1/1')
  */
 @mixin when-container-aspect-ratio($ratio) {
@@ -531,7 +591,7 @@
 
 /**
  * Named container query mixin for specific containers
- * 
+ *
  * @param {String} $name - The container name
  * @param {String} $condition - The query condition (e.g., 'min-width: 300px')
  */
@@ -549,24 +609,27 @@
 
 /**
  * Container query mixin using breakpoint variables
- * 
+ *
  * @param {String} $size - The breakpoint size (xs, sm, md, lg, xl, xxl)
  * @param {String} $type - The query type (min-width, max-width) - defaults to min-width
  */
 @mixin container-up($size, $type: "min-width") {
     @if map-has-key($container-breakpoints, $size) {
         $width: map-get($container-breakpoints, $size);
+
         @container (#{$type}: #{$width}) {
             @content;
         }
-    } @else {
+    }
+
+    @else {
         @error "Invalid container breakpoint: #{$size}. Available: xs, sm, md, lg, xl, xxl";
     }
 }
 
 /**
  * Container query mixin for max-width using variables
- * 
+ *
  * @param {String} $size - The breakpoint size (xs, sm, md, lg, xl, xxl)
  */
 @mixin container-down($size) {
@@ -575,7 +638,7 @@
 
 /**
  * Container query mixin for exact size range
- * 
+ *
  * @param {String} $min-size - The minimum breakpoint size
  * @param {String} $max-size - The maximum breakpoint size
  */
@@ -583,10 +646,13 @@
     @if map-has-key($container-breakpoints, $min-size) and map-has-key($container-breakpoints, $max-size) {
         $min-width: map-get($container-breakpoints, $min-size);
         $max-width: map-get($container-breakpoints, $max-size);
+
         @container (min-width: #{$min-width}) and (max-width: #{$max-width}) {
             @content;
         }
-    } @else {
+    }
+
+    @else {
         @error "Invalid container breakpoints: #{$min-size} or #{$max-size}";
     }
 }
@@ -641,17 +707,19 @@
 
 /**
  * User select mixin with cross-browser support
- * 
+ *
  * @param {String} $value - The user-select value (none, auto, text, contain, all, unset)
  */
 @mixin user-select($value) {
-    @if $value == unset {
+    @if $value ==unset {
         // Cross-browser support for unset
         -webkit-user-select: -webkit-initial !important;
         -moz-user-select: -moz-initial !important;
         -ms-user-select: initial !important;
         user-select: unset !important;
-    } @else {
+    }
+
+    @else {
         -webkit-user-select: #{$value} !important;
         -moz-user-select: #{$value} !important;
         -ms-user-select: #{$value} !important;
@@ -674,11 +742,11 @@
         "inherit": inherit,
     );
 
-    @each $name, $value in $user-select-values {
-        .user-select-#{$name} {
-            @include user-select($value);
-        }
+@each $name, $value in $user-select-values {
+    .user-select-#{$name} {
+        @include user-select($value);
     }
+}
 }
 
 /**
@@ -689,21 +757,25 @@
 
 /**
  * Position mixin with cross-browser support
- * 
+ *
  * @param {String} $position - The position value (static, relative, absolute, fixed, sticky, unset)
  */
 @mixin position($position) {
-    @if $position == sticky {
+    @if $position ==sticky {
         // Cross-browser support for sticky positioning
         position: -webkit-sticky !important;
         position: sticky !important;
-    } @else if $position == unset {
+    }
+
+    @else if $position ==unset {
         // Cross-browser support for unset
         position: -webkit-initial !important;
         position: -moz-initial !important;
         position: initial !important;
         position: unset !important;
-    } @else {
+    }
+
+    @else {
         position: #{$position} !important;
     }
 }
@@ -723,11 +795,11 @@
         "inherit": inherit,
     );
 
-    @each $name, $value in $position-values {
-        .position-#{$name} {
-            @include position($value);
-        }
+@each $name, $value in $position-values {
+    .position-#{$name} {
+        @include position($value);
     }
+}
 }
 
 /**
@@ -744,48 +816,56 @@
         "inherit": inherit,
     );
 
-    @each $name, $value in $inset-values {
-        .top-#{$name} {
-            @if $value == unset or $value == inherit {
-                top: #{$value} !important;
-            } @else {
-                top: #{$value}px !important;
-            }
+@each $name, $value in $inset-values {
+    .top-#{$name} {
+        @if $value ==unset or $value ==inherit {
+            top: #{$value} !important;
         }
 
-        .right-#{$name} {
-            @if $value == unset or $value == inherit {
-                right: #{$value} !important;
-            } @else {
-                right: #{$value}px !important;
-            }
-        }
-
-        .bottom-#{$name} {
-            @if $value == unset or $value == inherit {
-                bottom: #{$value} !important;
-            } @else {
-                bottom: #{$value}px !important;
-            }
-        }
-
-        .left-#{$name} {
-            @if $value == unset or $value == inherit {
-                left: #{$value} !important;
-            } @else {
-                left: #{$value}px !important;
-            }
+        @else {
+            top: #{$value}px !important;
         }
     }
 
-    // Inset shorthand classes
-    .inset-0 {
-        inset: 0 !important;
+    .right-#{$name} {
+        @if $value ==unset or $value ==inherit {
+            right: #{$value} !important;
+        }
+
+        @else {
+            right: #{$value}px !important;
+        }
     }
 
-    .inset-unset {
-        inset: unset !important;
+    .bottom-#{$name} {
+        @if $value ==unset or $value ==inherit {
+            bottom: #{$value} !important;
+        }
+
+        @else {
+            bottom: #{$value}px !important;
+        }
     }
+
+    .left-#{$name} {
+        @if $value ==unset or $value ==inherit {
+            left: #{$value} !important;
+        }
+
+        @else {
+            left: #{$value}px !important;
+        }
+    }
+}
+
+// Inset shorthand classes
+.inset-0 {
+    inset: 0 !important;
+}
+
+.inset-unset {
+    inset: unset !important;
+}
 }
 
 /**
@@ -796,34 +876,38 @@
 
 /**
  * Width mixin with cross-browser support
- * 
+ *
  * @param {String|Number} $width - The width value
  */
 @mixin width($width) {
-    @if $width == unset {
+    @if $width ==unset {
         // Cross-browser support for unset
         width: -webkit-initial !important;
         width: -moz-initial !important;
         width: initial !important;
         width: unset !important;
-    } @else {
+    }
+
+    @else {
         width: #{$width} !important;
     }
 }
 
 /**
  * Height mixin with cross-browser support
- * 
+ *
  * @param {String|Number} $height - The height value
  */
 @mixin height($height) {
-    @if $height == unset {
+    @if $height ==unset {
         // Cross-browser support for unset
         height: -webkit-initial !important;
         height: -moz-initial !important;
         height: initial !important;
         height: unset !important;
-    } @else {
+    }
+
+    @else {
         height: #{$height} !important;
     }
 }
@@ -845,11 +929,11 @@
         "100": 100%,
     );
 
-    @each $name, $value in $width-values {
-        .w-#{$name} {
-            @include width($value);
-        }
+@each $name, $value in $width-values {
+    .w-#{$name} {
+        @include width($value);
     }
+}
 }
 
 /**
@@ -868,11 +952,11 @@
         "100": 100%,
     );
 
-    @each $name, $value in $height-values {
-        .h-#{$name} {
-            @include height($value);
-        }
+@each $name, $value in $height-values {
+    .h-#{$name} {
+        @include height($value);
     }
+}
 }
 
 /**
@@ -883,17 +967,19 @@
 
 /**
  * Transform mixin with cross-browser support
- * 
+ *
  * @param {String} $transform - The transform value (rotate, scale, translate, etc.)
  */
 @mixin transform($transform) {
-    @if $transform == unset {
+    @if $transform ==unset {
         // Cross-browser support for unset
         -webkit-transform: -webkit-initial !important;
         -moz-transform: -moz-initial !important;
         -ms-transform: initial !important;
         transform: unset !important;
-    } @else {
+    }
+
+    @else {
         -webkit-transform: #{$transform} !important;
         -moz-transform: #{$transform} !important;
         -ms-transform: #{$transform} !important;
@@ -919,25 +1005,25 @@
         "inherit": inherit,
     );
 
-    @each $name, $value in $rotation-values {
-        .rotate-#{$name} {
-            @include transform(rotate(#{$value}));
-        }
+@each $name, $value in $rotation-values {
+    .rotate-#{$name} {
+        @include transform(rotate(#{$value}));
     }
+}
 
-    // Negative rotations
-    $negative-rotation-values: (
-        "45": -45deg,
-        "90": -90deg,
-        "135": -135deg,
-        "180": -180deg,
-    );
+// Negative rotations
+$negative-rotation-values: (
+    "45": -45deg,
+    "90": -90deg,
+    "135": -135deg,
+    "180": -180deg,
+);
 
-    @each $name, $value in $negative-rotation-values {
-        .-rotate-#{$name} {
-            @include transform(rotate(#{$value}));
-        }
+@each $name, $value in $negative-rotation-values {
+    .-rotate-#{$name} {
+        @include transform(rotate(#{$value}));
     }
+}
 }
 
 /**
@@ -959,29 +1045,31 @@
         "inherit": inherit,
     );
 
-    @each $name, $value in $scale-values {
-        .scale-#{$name} {
-            @include transform(scale(#{$value}));
-        }
+@each $name, $value in $scale-values {
+    .scale-#{$name} {
+        @include transform(scale(#{$value}));
     }
+}
 }
 
 /**
  * Cross-browser text-decoration mixin with focus outline removal
  * Apply text-decoration with all vendor prefixes and Firefox focus fix
- * 
+ *
  * @param {String} $value - The text-decoration value (none, underline, overline, line-through, unset, inherit)
  * @param {Boolean} $important - Whether to add !important flag (default: true)
  */
 @mixin text-decoration($value, $important: true) {
     $importance: if($important, " !important", "");
 
-    @if $value == unset {
+    @if $value ==unset {
         -webkit-text-decoration: -webkit-initial#{$importance};
         -moz-text-decoration: -moz-initial#{$importance};
         -ms-text-decoration: initial#{$importance};
         text-decoration: unset#{$importance};
-    } @else {
+    }
+
+    @else {
         -webkit-text-decoration: #{$value}#{$importance};
         -moz-text-decoration: #{$value}#{$importance};
         -ms-text-decoration: #{$value}#{$importance};
@@ -989,7 +1077,7 @@
     }
 
     // Remove dotted outline in Firefox for interactive elements
-    @if $value == none {
+    @if $value ==none {
         &::-moz-focus-inner {
             border: 0;
         }
@@ -999,19 +1087,16 @@
 /**
  * Text decoration utility mixin
  * Generates utility classes for text-decoration property with cross-browser support
- * 
+ *
  * @param {Map} $decorations - Map of class suffixes and their corresponding text-decoration values
  */
-@mixin text-decoration-utilities(
-    $decorations: (
-        "none": none,
+@mixin text-decoration-utilities($decorations: ("none": none,
         "underline": underline,
         "overline": overline,
         "line-through": line-through,
         "unset": unset,
         "inherit": inherit,
-    )
-) {
+    )) {
     @each $name, $value in $decorations {
         .text-decoration-#{$name} {
             @include text-decoration($value);
@@ -1020,24 +1105,23 @@
 }
 
 @mixin word-wrap($value) {
-    @if $value == unset {
+    @if $value ==unset {
         word-wrap: unset !important;
         overflow-wrap: unset !important;
-    } @else {
+    }
+
+    @else {
         word-wrap: #{$value} !important;
         overflow-wrap: #{$value} !important;
     }
 }
 
-@mixin word-wrap-utilities(
-    $wraps: (
-        "normal": normal,
+@mixin word-wrap-utilities($wraps: ("normal": normal,
         "break-word": break-word,
         "anywhere": anywhere,
         "unset": unset,
         "inherit": inherit,
-    )
-) {
+    )) {
     @each $name, $value in $wraps {
         .word-wrap-#{$name} {
             @include word-wrap($value);
@@ -1046,22 +1130,21 @@
 }
 
 @mixin word-break($value) {
-    @if $value == unset {
+    @if $value ==unset {
         word-break: unset !important;
-    } @else {
+    }
+
+    @else {
         word-break: #{$value} !important;
     }
 }
 
-@mixin word-break-utilities(
-    $breaks: (
-        "normal": normal,
+@mixin word-break-utilities($breaks: ("normal": normal,
         "break-all": break-all,
         "keep-all": keep-all,
         "unset": unset,
         "inherit": inherit,
-    )
-) {
+    )) {
     @each $name, $value in $breaks {
         .word-break-#{$name} {
             @include word-break($value);
@@ -1070,16 +1153,16 @@
 }
 
 @mixin white-space($value) {
-    @if $value == unset {
+    @if $value ==unset {
         white-space: unset !important;
-    } @else {
+    }
+
+    @else {
         white-space: #{$value} !important;
     }
 }
 
-@mixin white-space-utilities(
-    $spaces: (
-        "normal": normal,
+@mixin white-space-utilities($spaces: ("normal": normal,
         "nowrap": nowrap,
         "pre": pre,
         "pre-wrap": pre-wrap,
@@ -1087,8 +1170,7 @@
         "break-spaces": break-spaces,
         "unset": unset,
         "inherit": inherit,
-    )
-) {
+    )) {
     @each $name, $value in $spaces {
         .white-space-#{$name} {
             @include white-space($value);
@@ -1098,7 +1180,7 @@
 
 /**
  * Square dimensions mixin for elements with equal width and height
- * 
+ *
  * @param {String|Number} $size - The size value for both width and height
  * @param {Boolean} $important - Whether to add !important flag (default: false)
  */
@@ -1112,12 +1194,12 @@
  * Cross-browser border-radius mixin with vendor prefixes and individual corner control
  * Applies border-radius with all vendor prefixes for maximum compatibility across browsers.
  * Supports 1-4 parameters for flexible corner radius control with special handling for 'unset' values.
- * 
+ *
  * @param {String|Number} $a - Top-left corner radius or uniform radius for all corners
  * @param {String|Number} $b - Top-right corner radius (defaults to $a if not provided)
- * @param {String|Number} $c - Bottom-right corner radius (defaults to $a if not provided)  
+ * @param {String|Number} $c - Bottom-right corner radius (defaults to $a if not provided)
  * @param {String|Number} $d - Bottom-left corner radius (defaults to $a if not provided)
- * 
+ *
  * @example
  *   @include border-radius(5px);                    // All corners: 5px
  *   @include border-radius(5px, 10px);              // Top-left/bottom-right: 5px, top-right/bottom-left: 10px
@@ -1125,12 +1207,14 @@
  *   @include border-radius(unset);                  // Reset all border-radius values
  */
 @mixin border-radius($a, $b: $a, $c: $a, $d: $a) {
-    @if $a == unset {
+    @if $a ==unset {
         -webkit-border-radius: -webkit-initial !important;
         -moz-border-radius: -moz-initial !important;
         -ms-border-radius: initial !important;
         border-radius: unset !important;
-    } @else {
+    }
+
+    @else {
         -webkit-border-radius: #{$a} #{$b} #{$c} #{$d} !important;
         -moz-border-radius: #{$a} #{$b} #{$c} #{$d} !important;
         -ms-border-radius: #{$a} #{$b} #{$c} #{$d} !important;
@@ -1141,12 +1225,10 @@
 /**
  * Border radius variables and utilities mixin
  * Generates CSS custom properties in :root and corresponding utility classes with cross-browser support
- * 
+ *
  * @param {Map} $radii - Map of class suffixes and their corresponding border-radius values
  */
-@mixin border-radius-utilities(
-    $radii: (
-        "0": 0px,
+@mixin border-radius-utilities($radii: ("0": 0px,
         "circle": 100%,
         "4": 4px,
         "8": 8px,
@@ -1154,8 +1236,8 @@
         "16": 16px,
         "unset": unset,
         "inherit": inherit,
-    )
-) {
+    )) {
+
     // Generate CSS custom properties in :root
     :root {
         @each $name, $value in $radii {
@@ -1174,12 +1256,10 @@
 /**
  * Z-index utilities mixin
  * Generates CSS custom properties in :root and corresponding utility classes for z-index values
- * 
+ *
  * @param {Map} $z-indexes - Map of class suffixes and their corresponding z-index values
  */
-@mixin z-index-utilities(
-    $z-indexes: (
-        "n1": -1,
+@mixin z-index-utilities($z-indexes: ("n1": -1,
         "0": 0,
         "1": 1,
         "2": 2,
@@ -1194,8 +1274,8 @@
         "auto": auto,
         "unset": unset,
         "inherit": inherit,
-    )
-) {
+    )) {
+
     // Generate CSS custom properties in :root
     :root {
         @each $name, $value in $z-indexes {
@@ -1214,20 +1294,18 @@
 /**
  * Overflow utilities mixin
  * Generates CSS custom properties in :root and corresponding utility classes for overflow values
- * 
+ *
  * @param {Map} $overflows - Map of class suffixes and their corresponding overflow values
  */
-@mixin overflow-utilities(
-    $overflows: (
-        "hidden": hidden,
+@mixin overflow-utilities($overflows: ("hidden": hidden,
         "visible": visible,
         "auto": auto,
         "scroll": scroll,
         "clip": clip,
         "unset": unset,
         "inherit": inherit,
-    )
-) {
+    )) {
+
     // Generate utility classes for overflow
     @each $name, $value in $overflows {
         .overflow-#{$name} {
@@ -1258,7 +1336,7 @@
 
 /**
  * Base absolute positioning mixin with transform support
- * 
+ *
  * @param {String} $top - Top position value (default: null)
  * @param {String} $left - Left position value (default: null)
  * @param {String} $transform - Transform value (default: null)
@@ -1287,7 +1365,7 @@
 /**
  * Vertical center positioning mixin
  * Centers element vertically using absolute positioning and transform
- * 
+ *
  * @param {String} $left - Optional left position (default: null)
  */
 @mixin absolute-center-vertical($left: null) {
@@ -1295,9 +1373,9 @@
 }
 
 /**
- * Horizontal center positioning mixin  
+ * Horizontal center positioning mixin
  * Centers element horizontally using absolute positioning and transform
- * 
+ *
  * @param {String} $top - Optional top position (default: null)
  */
 @mixin absolute-center-horizontal($top: null) {
@@ -1337,6 +1415,7 @@
  * @param {Map} $values - Map of class suffixes and their corresponding values
  */
 @mixin typography-utilities($property, $values) {
+
     // Generate CSS custom properties in :root
     :root {
         @each $name, $value in $values {
@@ -1355,16 +1434,18 @@
 /**
  * Cross-browser pointer-events mixin for individual use
  * Apply pointer-events with vendor prefixes for maximum compatibility
- * 
+ *
  * @param {String} $value - The pointer-events value (auto, none, visiblePainted, visibleFill, visibleStroke, visible, painted, fill, stroke, all, unset, inherit)
  */
 @mixin pointer-events($value) {
-    @if $value == unset {
+    @if $value ==unset {
         -webkit-pointer-events: -webkit-initial !important;
         -moz-pointer-events: -moz-initial !important;
         -ms-pointer-events: initial !important;
         pointer-events: unset !important;
-    } @else {
+    }
+
+    @else {
         -webkit-pointer-events: #{$value} !important;
         -moz-pointer-events: #{$value} !important;
         -ms-pointer-events: #{$value} !important;
@@ -1375,12 +1456,10 @@
 /**
  * Pointer events utility mixin
  * Generates utility classes for pointer-events property with cross-browser support
- * 
+ *
  * @param {Map} $pointer-events - Map of class suffixes and their corresponding pointer-events values
  */
-@mixin pointer-events-utilities(
-    $pointer-events: (
-        "auto": auto,
+@mixin pointer-events-utilities($pointer-events: ("auto": auto,
         "none": none,
         "visible": visible,
         "painted": painted,
@@ -1389,8 +1468,7 @@
         "all": all,
         "unset": unset,
         "inherit": inherit,
-    )
-) {
+    )) {
     @each $name, $value in $pointer-events {
         .pointer-events-#{$name} {
             @include pointer-events($value);
@@ -1401,16 +1479,18 @@
 /**
  * Cross-browser visibility mixin for individual use
  * Apply visibility with vendor prefixes for maximum compatibility
- * 
+ *
  * @param {String} $value - The visibility value (visible, hidden, collapse, unset, inherit)
  */
 @mixin visibility($value) {
-    @if $value == unset {
+    @if $value ==unset {
         -webkit-visibility: -webkit-initial !important;
         -moz-visibility: -moz-initial !important;
         -ms-visibility: initial !important;
         visibility: unset !important;
-    } @else {
+    }
+
+    @else {
         -webkit-visibility: #{$value} !important;
         -moz-visibility: #{$value} !important;
         -ms-visibility: #{$value} !important;
@@ -1422,18 +1502,15 @@
 /**
  * Visibility utility mixin
  * Generates utility classes for visibility property with cross-browser support
- * 
+ *
  * @param {Map} $visibilities - Map of class suffixes and their corresponding visibility values
  */
-@mixin visibility-utilities(
-    $visibilities: (
-        "visible": visible,
+@mixin visibility-utilities($visibilities: ("visible": visible,
         "hidden": hidden,
         "collapse": collapse,
         "unset": unset,
         "inherit": inherit,
-    )
-) {
+    )) {
     @each $name, $value in $visibilities {
         .visibility-#{$name} {
             @include visibility($value);
@@ -1449,17 +1526,19 @@
 
 /**
  * Min-height mixin with cross-browser support
- * 
+ *
  * @param {String|Number} $min-height - The min-height value
  */
 @mixin min-height($min-height) {
-    @if $min-height == unset {
+    @if $min-height ==unset {
         // Cross-browser support for unset
         min-height: -webkit-initial !important;
         min-height: -moz-initial !important;
         min-height: initial !important;
         min-height: unset !important;
-    } @else {
+    }
+
+    @else {
         min-height: #{$min-height} !important;
     }
 }
@@ -1486,26 +1565,28 @@
         "inherit": inherit,
     );
 
-    @each $name, $value in $min-height-values {
-        .min-h-#{$name} {
-            @include min-height($value);
-        }
+@each $name, $value in $min-height-values {
+    .min-h-#{$name} {
+        @include min-height($value);
     }
+}
 }
 
 /**
  * Max-height mixin with cross-browser support
- * 
+ *
  * @param {String|Number} $max-height - The max-height value
  */
 @mixin max-height($max-height) {
-    @if $max-height == unset {
+    @if $max-height ==unset {
         // Cross-browser support for unset
         max-height: -webkit-initial !important;
         max-height: -moz-initial !important;
         max-height: initial !important;
         max-height: unset !important;
-    } @else {
+    }
+
+    @else {
         max-height: #{$max-height} !important;
     }
 }
@@ -1538,26 +1619,28 @@
         "inherit": inherit,
     );
 
-    @each $name, $value in $max-height-values {
-        .max-h-#{$name} {
-            @include max-height($value);
-        }
+@each $name, $value in $max-height-values {
+    .max-h-#{$name} {
+        @include max-height($value);
     }
+}
 }
 
 /**
  * Min-width mixin with cross-browser support
- * 
+ *
  * @param {String|Number} $min-width - The min-width value
  */
 @mixin min-width($min-width) {
-    @if $min-width == unset {
+    @if $min-width ==unset {
         // Cross-browser support for unset
         min-width: -webkit-initial !important;
         min-width: -moz-initial !important;
         min-width: initial !important;
         min-width: unset !important;
-    } @else {
+    }
+
+    @else {
         min-width: #{$min-width} !important;
     }
 }
@@ -1589,26 +1672,28 @@
         "inherit": inherit,
     );
 
-    @each $name, $value in $min-width-values {
-        .min-w-#{$name} {
-            @include min-width($value);
-        }
+@each $name, $value in $min-width-values {
+    .min-w-#{$name} {
+        @include min-width($value);
     }
+}
 }
 
 /**
  * Max-width mixin with cross-browser support
- * 
+ *
  * @param {String|Number} $max-width - The max-width value
  */
 @mixin max-width($max-width) {
-    @if $max-width == unset {
+    @if $max-width ==unset {
         // Cross-browser support for unset
         max-width: -webkit-initial !important;
         max-width: -moz-initial !important;
         max-width: initial !important;
         max-width: unset !important;
-    } @else {
+    }
+
+    @else {
         max-width: #{$max-width} !important;
     }
 }
@@ -1641,18 +1726,18 @@
         "inherit": inherit,
     );
 
-    @each $name, $value in $max-width-values {
-        .max-w-#{$name} {
-            @include max-width($value);
-        }
+@each $name, $value in $max-width-values {
+    .max-w-#{$name} {
+        @include max-width($value);
     }
+}
 }
 
 /**
  * THEME-BASED MIXIN
  * ==================
  * Apply content based on theme (default or dark)
- * 
+ *
  * @param {String} $theme - Theme name (default or dark)
  */
 @mixin theme($theme) {
