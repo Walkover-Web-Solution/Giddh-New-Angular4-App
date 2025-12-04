@@ -324,11 +324,6 @@ body {
 
 /* added by sarfaraz */
 
-.d-flex {
-    display: flex;
-    display: -ms-flexbox !important;
-}
-
 .flex-row {
     flex-direction: row;
     -ms-flex-direction: row;
@@ -339,21 +334,13 @@ body {
     flex-grow: 1 !important;
 }
 
-.align-items-center {
-    align-items: center;
-    -ms-flex-align: center;
-}
-
-.justify-content-end {
-    justify-content: flex-end;
-}
-
 body {
     background: var(--white-color) !important;
 }
 
 #magicLink {
     font-size: var(--font-size-15);
+    min-height: 100vh;
 }
 
 .nav-link>.active {
