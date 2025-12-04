@@ -3,11 +3,7 @@
 
 <head>
     <title>Giddh ~ Accounting at its Rough! Bookkeeping and Accounting Software</title>
-    <link rel="stylesheet" type="text/css" href="../assets/magic-link-assets/v-toaster.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="../assets/styles/vendors/font-awesome.css">
-    <link rel="stylesheet" type="text/css" href="../assets/magic-link-assets/daterangepicker.min.css">
-    <link rel="stylesheet" type="text/css" href="../assets/styles/style-2.scss">
+    <link rel="stylesheet" type="text/css" href="../assets/styles/vendors/_for-magic-link-bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="../assets/magic-link-assets/magic.css">
 </head>
 
@@ -607,7 +603,41 @@
     <script>
         document.getElementById("app").style.display = 'none';
 
+        var folderPath = '';
+
+        var jquery = document.createElement('script');
+        jquery.src = '../' + folderPath + 'assets/js/jquery.min.js';
+        document.head.appendChild(jquery);
+
         jquery.onload = function () {
+
+            var toaster = $("<link />", {
+                rel: "stylesheet",
+                type: "text/css",
+                href: '../' + folderPath + 'assets/magic-link-assets/v-toaster.css'
+            });
+            $('head').append(toaster);
+
+            var awesome = $("<link />", {
+                rel: "stylesheet",
+                type: "text/css",
+                href: '../' + folderPath + 'assets/styles/vendors/font-awesome.css'
+            });
+            $('head').append(awesome);
+
+            var daterangepicker = $("<link />", {
+                rel: "stylesheet",
+                type: "text/css",
+                href: '../' + folderPath + 'assets/magic-link-assets/daterangepicker.min.css'
+            });
+            $('head').append(daterangepicker);
+
+            // var style1 = $("<link />", {
+            //     rel: "stylesheet",
+            //     type: "text/css",
+            //     href: '../' + folderPath + 'assets/styles/style-magic.css'
+            // });
+            // $('head').append(style1);
 
             var moment = document.createElement('script');
             moment.src = '../' + folderPath + 'assets/magic-link-assets/moment.min.js';
