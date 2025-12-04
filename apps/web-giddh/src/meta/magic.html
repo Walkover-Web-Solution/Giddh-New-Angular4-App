@@ -3,6 +3,8 @@
 
 <head>
     <title>Giddh ~ Accounting at its Rough! Bookkeeping and Accounting Software</title>
+    <link rel="stylesheet" type="text/css" href="../assets/styles/vendors/_for-magic-link-bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../assets/magic-link-assets/magic.css">
 </head>
 
 <body>
@@ -11,9 +13,9 @@
         <div class="cube2"></div>
     </div>
     <div id="app">
-        <section class="light-gray-bg" id="magicLink">
+        <section class="light-gray-bg d-flex flex-column" id="magicLink">
             <section class="bg-primary">
-                <div class="container-fluid text-white text-center head-block">
+                <div class="container-fluid d-flex text-white justify-content-center align-items-center head-block">
                     <div class="vertical-center">{{ledgerData.companyName}}</div>
                 </div>
             </section>
@@ -46,7 +48,7 @@
                     </div>
                 </div>
             </section>
-            <section class="pt-5">
+            <section class="pt-5 flex-grow-1">
                 <!-- v-if="!isResponsive" -->
                 <div id="mob-cont" class="container">
                     <div class="row bg-white pb-2 pt-2">
@@ -318,8 +320,7 @@
                                                                 legderBalanceData.forwardedBalance.type === 'CREDIT' ?
                                                                 'Cr' : 'Dr' : ''}}
                                                                 <!-- | number: '1.2-2' -->
-                                                                <span
-                                                                    class="text-primary">{{legderBalanceData.closingBalance.amount
+                                                                <span>{{legderBalanceData.closingBalance.amount
                                                                     | currency }}
                                                                 </span>
                                                             </span>
@@ -340,7 +341,7 @@
                                 </div>
                                 <!-- table footer for unresponsive -->
                                 <div class="w-100" v-if="!isResponsive">
-                                    <table class="ledger-footer-1 float-left">
+                                    <table class="ledger-footer-1 float-left h100">
                                         <tbody>
                                             <tr class="total-col row mr-0 ml-0">
                                                 <td colspan="12" class="col-12 text-right h32 pr-2">
@@ -365,7 +366,7 @@
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <table class="ledger-footer-1 float-right">
+                                    <table class="ledger-footer-1 float-right h100">
                                         <tbody>
                                             <tr class="total-col row mr-0 ml-0">
                                                 <td colspan="12" class="col-12 text-right h32 pr-2">
@@ -374,8 +375,7 @@
                                                         v-if="legderBalanceData.closingBalance && legderBalanceData.closingBalance.type === 'DEBIT'">
                                                         By Balance C/F:
                                                         <!-- | number: '1.2-2' -->
-                                                        <span
-                                                            class="text-primary">{{legderBalanceData.closingBalance.amount
+                                                        <span>{{legderBalanceData.closingBalance.amount
                                                             | currency }}
                                                         </span>
                                                     </span>
@@ -405,7 +405,7 @@
                     <div class="row">
                         <div class="col-3">
                             <h1>Total Transactions
-                                <span class="text-primary">{{ledgerData.ledgersTransactions.totalItems}}</span>
+                                <span>{{ledgerData.ledgersTransactions.totalItems}}</span>
                             </h1>
                             <span class="mt-2 mr-4">Dr
                                 {{ledgerData.ledgersTransactions.debitTransactionsCount}}</span>
@@ -420,16 +420,16 @@
                                 {{ legderBalanceData.forwardedBalance.type === 'DEBIT' ? 'Dr' : 'Cr' }}</h3>
                         </div>
                         <div class="col-3">
-                            <h1 class="text-primary">Net Total
+                            <h1>Net Total
                                 <span v-if="legderBalanceData.creditTotal > legderBalanceData.debitTotal">Credit</span>
                                 <span v-if="legderBalanceData.creditTotal < legderBalanceData.debitTotal">Debit</span>
                             </h1>
-                            <h3 class=" text-primary"
+                            <h3
                                 v-if="legderBalanceData.creditTotal > legderBalanceData.debitTotal">
                                 <!-- | number:'1.2-2' -->
                                 {{legderBalanceData.creditTotal - legderBalanceData.debitTotal | currency }}
                             </h3>
-                            <h3 class=" text-primary"
+                            <h3
                                 v-if="legderBalanceData.creditTotal < legderBalanceData.debitTotal">
                                 <!-- | number:'1.2-2' -->
                                 {{legderBalanceData.debitTotal - legderBalanceData.creditTotal | currency}}
@@ -618,13 +618,6 @@
             });
             $('head').append(toaster);
 
-            var bootstrap = $("<link />", {
-                rel: "stylesheet",
-                type: "text/css",
-                href: '../' + folderPath + 'assets/styles/vendors/_boostrap.css'
-            });
-            $('head').append(bootstrap);
-
             var awesome = $("<link />", {
                 rel: "stylesheet",
                 type: "text/css",
@@ -645,20 +638,6 @@
             //     href: '../' + folderPath + 'assets/styles/style-magic.css'
             // });
             // $('head').append(style1);
-
-            var style2 = $("<link />", {
-                rel: "stylesheet",
-                type: "text/css",
-                href: '../' + folderPath + 'assets/styles/style-2.scss'
-            });
-            $('head').append(style2);
-
-            var magic = $("<link />", {
-                rel: "stylesheet",
-                type: "text/css",
-                href: '../' + folderPath + 'assets/magic-link-assets/magic.css'
-            });
-            $('head').append(magic);
 
             var moment = document.createElement('script');
             moment.src = '../' + folderPath + 'assets/magic-link-assets/moment.min.js';
