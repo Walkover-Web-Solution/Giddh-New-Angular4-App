@@ -129,6 +129,10 @@
     }
 }
 
+.max-width-list {
+    max-width: 80%;
+}
+
 ::ng-deep .default-theme {
     .preview-header {
         background-color: var(--color-light-gray);
