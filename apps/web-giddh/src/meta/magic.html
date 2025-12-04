@@ -318,8 +318,7 @@
                                                                 legderBalanceData.forwardedBalance.type === 'CREDIT' ?
                                                                 'Cr' : 'Dr' : ''}}
                                                                 <!-- | number: '1.2-2' -->
-                                                                <span
-                                                                    class="text-primary">{{legderBalanceData.closingBalance.amount
+                                                                <span>{{legderBalanceData.closingBalance.amount
                                                                     | currency }}
                                                                 </span>
                                                             </span>
@@ -340,7 +339,7 @@
                                 </div>
                                 <!-- table footer for unresponsive -->
                                 <div class="w-100" v-if="!isResponsive">
-                                    <table class="ledger-footer-1 float-left">
+                                    <table class="ledger-footer-1 float-left h100">
                                         <tbody>
                                             <tr class="total-col row mr-0 ml-0">
                                                 <td colspan="12" class="col-12 text-right h32 pr-2">
@@ -365,7 +364,7 @@
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <table class="ledger-footer-1 float-right">
+                                    <table class="ledger-footer-1 float-right h100">
                                         <tbody>
                                             <tr class="total-col row mr-0 ml-0">
                                                 <td colspan="12" class="col-12 text-right h32 pr-2">
@@ -374,8 +373,7 @@
                                                         v-if="legderBalanceData.closingBalance && legderBalanceData.closingBalance.type === 'DEBIT'">
                                                         By Balance C/F:
                                                         <!-- | number: '1.2-2' -->
-                                                        <span
-                                                            class="text-primary">{{legderBalanceData.closingBalance.amount
+                                                        <span>{{legderBalanceData.closingBalance.amount
                                                             | currency }}
                                                         </span>
                                                     </span>
@@ -405,7 +403,7 @@
                     <div class="row">
                         <div class="col-3">
                             <h1>Total Transactions
-                                <span class="text-primary">{{ledgerData.ledgersTransactions.totalItems}}</span>
+                                <span>{{ledgerData.ledgersTransactions.totalItems}}</span>
                             </h1>
                             <span class="mt-2 mr-4">Dr
                                 {{ledgerData.ledgersTransactions.debitTransactionsCount}}</span>
@@ -420,16 +418,16 @@
                                 {{ legderBalanceData.forwardedBalance.type === 'DEBIT' ? 'Dr' : 'Cr' }}</h3>
                         </div>
                         <div class="col-3">
-                            <h1 class="text-primary">Net Total
+                            <h1>Net Total
                                 <span v-if="legderBalanceData.creditTotal > legderBalanceData.debitTotal">Credit</span>
                                 <span v-if="legderBalanceData.creditTotal < legderBalanceData.debitTotal">Debit</span>
                             </h1>
-                            <h3 class=" text-primary"
+                            <h3
                                 v-if="legderBalanceData.creditTotal > legderBalanceData.debitTotal">
                                 <!-- | number:'1.2-2' -->
                                 {{legderBalanceData.creditTotal - legderBalanceData.debitTotal | currency }}
                             </h3>
-                            <h3 class=" text-primary"
+                            <h3
                                 v-if="legderBalanceData.creditTotal < legderBalanceData.debitTotal">
                                 <!-- | number:'1.2-2' -->
                                 {{legderBalanceData.debitTotal - legderBalanceData.creditTotal | currency}}
@@ -620,8 +618,9 @@
 
             var bootstrap = $("<link />", {
                 rel: "stylesheet",
-                type: "text/css",
-                href: '../' + folderPath + 'assets/styles/vendors/_boostrap.css'
+                href: "https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css",
+                integrity: "sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N",
+                crossorigin: "anonymous"
             });
             $('head').append(bootstrap);
 
