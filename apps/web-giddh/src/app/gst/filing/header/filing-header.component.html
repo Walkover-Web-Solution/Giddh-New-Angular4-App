@@ -75,7 +75,7 @@
     </div>
 
     <!-- GSTR2 -->
-    <div class="list-style d-flex justify-content-between align-items-center" *ngIf="selectedGst === GstReport.Gstr2">
+    <div class="list-style d-flex justify-content-between align-items-center flex-wrap column-gap-1 row-gap-15" *ngIf="selectedGst === GstReport.Gstr2">
         <div>
             <a href="javascript:;" aria-label="back img"  id="ember1210" class="ember-view" [routerLink]="['/gstfiling']">
                 <img src="{{ imgPath }}back.svg" class="icon icon-sm image-as-icon-color text-middle" alt="back img"  />
@@ -91,7 +91,7 @@
                 <div class="font-size-12 text-vertical-align-middle font-weight-regular">{{ localeData?.inward_supplies_details }}</div>
             </div>
         </div>
-        <div class="d-flex flex-column">
+        <div class="flex-grow-1">
             <div class="d-flex column-gap-1 justify-content-end align-items-center">
                 <div class="d-inline-flex align-items-center column-gap-1">
                     <div *ngIf="!isTabScreen">
