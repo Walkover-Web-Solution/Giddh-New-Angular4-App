@@ -5,6 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
+    <hamburger-menu></hamburger-menu>
     <div class="position-sticky position-left">
         <div class="top-bar">
             <div class="form-inline d-flex justify-content-between top-bar-content">
@@ -44,7 +45,7 @@
                     </button>
                 </div>
                 <div class="d-flex align-items-center column-gap-1">
-                    <button 
+                    <button
                         mat-stroked-button
                         (click)="gotoPurchaseRegister()"
                         [matTooltip]="commonLocaleData?.app_back"
@@ -52,9 +53,9 @@
                     >
                         {{ commonLocaleData?.app_back }}
                     </button>
-                    <button 
-                        mat-raised-button 
-                        color="primary" 
+                    <button
+                        mat-raised-button
+                        color="primary"
                         (click)="export()"
                         [matTooltip]="commonLocaleData?.app_export"
                         [matTooltipPosition]="'above'"
@@ -402,7 +403,7 @@
                             <td mat-cell *matCellDef="let item" class="text-right">
                                 <ng-container *ngFor="let stock of item.stocks">
                                     <p>
-                                        {{ stock.quantity | giddhCurrency }}
+                                        {{ stock.quantity | giddhNumberFormat }}
                                         {{ stock.unit.code }}
                                     </p>
                                 </ng-container>
@@ -425,7 +426,7 @@
                             </th>
                             <td mat-cell *matCellDef="let item" class="text-right">
                                 <ng-container *ngFor="let stock of item.stocks">
-                                    <p *ngIf="stock.rate">{{ stock.rate | giddhCurrency }}</p>
+                                    <p *ngIf="stock.rate">{{ stock.rate | giddhNumberFormat }}</p>
                                     <p *ngIf="!stock.rate">-</p>
                                 </ng-container>
                                 <p *ngIf="!item.stocks?.length">-</p>

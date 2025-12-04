@@ -237,7 +237,7 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
-        document.querySelector('body')?.classList?.remove('master-page');
+        this.closePopup();
     }
 
     public scrollToRight(): void {

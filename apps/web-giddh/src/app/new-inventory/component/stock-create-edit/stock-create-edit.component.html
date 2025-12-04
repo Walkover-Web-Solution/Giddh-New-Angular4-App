@@ -10,8 +10,11 @@
         <div class="position-relative create-new-inventory-page static-tabs-on-page">
             <hamburger-menu *ngIf="!addStock"></hamburger-menu>
             <div class="select-physical-product input-border-wrapper">
-                <span class="pull-right position-relative z-index-1" [ngClass]="{ 'top-right-spacing': queryParams?.stockUniqueName && !addStock }">
-                    <watch-video [cssClass]="'text-primary pr-25'" [moduleName]="'INVENTORY_CREATE_STOCK'"></watch-video>
+                <span
+                    class="pull-right position-relative z-index-1"
+                    [ngClass]="{ 'top-right-spacing': queryParams?.stockUniqueName && !addStock }"
+                >
+                    <watch-video [cssClass]="'text-primary pr-4'" [moduleName]="'INVENTORY_CREATE_STOCK'"></watch-video>
                 </span>
                 <form class="form-body" #stockCreateEditForm="ngForm" novalidate autocomplete="off">
                     <span class="back-btn-align">
@@ -40,7 +43,7 @@
                         <div class="stock-width">
                             <div class="row flex-column-reverse flex-md-row">
                                 <div class="col-12 upper-common-form-label-field">
-                                    <div class="row row-gap-15">
+                                    <div class="row row-gap-1">
                                         <div class="col-sm-6 col-lg-6">
                                             <input-field
                                                 [name]="'productName'"
@@ -106,7 +109,7 @@
                                             </reactive-dropdown-field>
                                         </div>
                                     </div>
-                                    <div class="row mb-2 mt-25">
+                                    <div class="row my-2">
                                         <div class="col-sm-6 col-lg-6" *ngIf="showTaxField">
                                             <mat-form-field class="w-100" appearance="outline">
                                                 <mat-label>{{ commonLocaleData?.app_tax }}</mat-label>
@@ -135,7 +138,7 @@
                                             </mat-form-field>
                                         </div>
                                         <div
-                                            class="col-sm-6 col-lg-6 under-group-field-button-wrapper position-relative "
+                                            class="col-sm-6 col-lg-6 under-group-field-button-wrapper position-relative"
                                         >
                                             <mat-form-field class="w-100" appearance="outline">
                                                 <mat-select
@@ -163,7 +166,7 @@
                                                     </div>
                                                 </mat-select>
                                             </mat-form-field>
-                                            <button 
+                                            <button
                                                 aria-label="move btn"
                                                 *ngIf="queryParams?.stockUniqueName && stockGroups?.length > 1"
                                                 mat-stroked-button
@@ -183,9 +186,7 @@
                                                 [placeholder]="localeData?.select_discounts"
                                                 [label]="commonLocaleData?.app_discount"
                                                 [options]="discountsList"
-                                                (selectedOption)="
-                                                    stockForm.discounts = [$event?.value];
-                                                "
+                                                (selectedOption)="stockForm.discounts = [$event?.value]"
                                                 (onClear)="stockForm.discounts = []"
                                                 [labelValue]="stockForm.discountLabel ?? ''"
                                             >
@@ -194,32 +195,66 @@
                                         <div class="col-6" *ngIf="!isVariantAvailable">
                                             <div class="variant-image">
                                                 <div *ngIf="!stockForm.variants[0].attachmentUniqueName">
-                                                    <div class="variant-attachment mat-form-field-border d-flex align-items-center column-gap-1 p-2 position-relative "
-                                                        [matTooltip]="localeData?.no_file_chosen" matTooltipPosition="right">
-                                                        <input accept="image/png, image/jpeg" [ngClass]="{'cursor-disable':uploadAttachmentInProgress$ | async}"
-                                                            [disabled]="uploadAttachmentInProgress$ | async" type="file" class="position-absolute cursor-pointer opacity-0"
-                                                            name="variantImage" id="Variant Image" (change)="uploadFile($event,0)" />
+                                                    <div
+                                                        class="variant-attachment mat-form-field-border d-flex align-items-center column-gap-1 p-2 position-relative"
+                                                        [matTooltip]="localeData?.no_file_chosen"
+                                                        matTooltipPosition="right"
+                                                    >
+                                                        <input
+                                                            accept="image/png, image/jpeg"
+                                                            [ngClass]="{
+                                                                'cursor-disable': uploadAttachmentInProgress$ | async
+                                                            }"
+                                                            [disabled]="uploadAttachmentInProgress$ | async"
+                                                            type="file"
+                                                            class="position-absolute cursor-pointer opacity-0"
+                                                            name="variantImage"
+                                                            id="Variant Image"
+                                                            (change)="uploadFile($event, 0)"
+                                                        />
                                                         <ng-container *ngIf="uploadAttachmentInProgress$ | async">
                                                             <mat-spinner [diameter]="30"></mat-spinner>
                                                         </ng-container>
                                                         <ng-container *ngIf="!(uploadAttachmentInProgress$ | async)">
-                                                            <div class="attachment-add-icon font-size-12 text-center border-radius-circle">
+                                                            <div
+                                                                class="attachment-add-icon font-size-12 text-center border-radius-circle"
+                                                            >
                                                                 <i class="icon-add"></i>
                                                             </div>
-                                                            <span class="attachment-placeholder text-ellipsis">{{ localeData?.add_image }}</span>
+                                                            <span class="attachment-placeholder text-ellipsis">{{
+                                                                localeData?.add_image
+                                                            }}</span>
                                                         </ng-container>
                                                     </div>
                                                 </div>
                                                 <div *ngIf="stockForm.variants[0].attachmentUniqueName">
                                                     <div
-                                                        class="variant-attachment mat-form-field-border d-flex align-items-center column-gap-1 p-2 text-green position-relative ">
-                                                        <div class="attachment-add-icon font-size-12 text-center border-radius-circle">
+                                                        class="variant-attachment mat-form-field-border d-flex align-items-center column-gap-1 p-2 text-green position-relative"
+                                                    >
+                                                        <div
+                                                            class="attachment-add-icon font-size-12 text-center border-radius-circle"
+                                                        >
                                                             <i class="icon-tick"></i>
                                                         </div>
-                                                        <img class="cursor-pointer" [matTooltip]="localeData?.preview_image" matTooltipPosition="above"
-                                                            height="30" width="30" [src]="stockForm.variants[0].attachmentName"
-                                                            (click)="previewVariantImage(stockForm.variants[0].attachmentUniqueName)" alt="Variant Image" />
-                                                        <button mat-icon-button (click)="deleteAttachment(0)" class="ml-auto remove-attachment">
+                                                        <img
+                                                            class="cursor-pointer"
+                                                            [matTooltip]="localeData?.preview_image"
+                                                            matTooltipPosition="above"
+                                                            height="30"
+                                                            width="30"
+                                                            [src]="stockForm.variants[0].attachmentName"
+                                                            (click)="
+                                                                previewVariantImage(
+                                                                    stockForm.variants[0].attachmentUniqueName
+                                                                )
+                                                            "
+                                                            alt="Variant Image"
+                                                        />
+                                                        <button
+                                                            mat-icon-button
+                                                            (click)="deleteAttachment(0)"
+                                                            class="ml-auto remove-attachment"
+                                                        >
                                                             <i class="icon-cross font-size-16"></i>
                                                         </button>
                                                     </div>
@@ -301,11 +336,11 @@
                                                                         </reactive-dropdown-field>
                                                                     </div>
                                                                     <div
-                                                                        class="col-lg-12 col-sm-6 mb-25"
+                                                                        class="col-lg-12 col-sm-6 mb-4"
                                                                         *ngIf="!isVariantAvailable"
                                                                     >
                                                                         <div
-                                                                            class="row unit-rate-align mb-25"
+                                                                            class="row unit-rate-align mb-4"
                                                                             *ngFor="
                                                                                 let variantFixedAssetsUnitRate of (stockForm
                                                                                     ?.variants)[0]
@@ -471,7 +506,7 @@
                                                                             *ngIf="!isVariantAvailable"
                                                                         >
                                                                             <div
-                                                                                class="row unit-rate-align mb-25"
+                                                                                class="row unit-rate-align mb-4"
                                                                                 *ngFor="
                                                                                     let variantPurchaseUnitRate of (stockForm
                                                                                         ?.variants)[0]
@@ -633,12 +668,9 @@
                                                                             >
                                                                             </reactive-dropdown-field>
                                                                         </div>
-                                                                        <div
-                                                                            class="col-12"
-                                                                            *ngIf="!isVariantAvailable"
-                                                                        >
+                                                                        <div class="col-12" *ngIf="!isVariantAvailable">
                                                                             <div
-                                                                                class="row unit-rate-align mb-25"
+                                                                                class="row unit-rate-align mb-4"
                                                                                 *ngFor="
                                                                                     let variantSalesUnitRate of (stockForm
                                                                                         ?.variants)[0]
@@ -695,7 +727,8 @@
                                                                                             )
                                                                                         "
                                                                                         [labelValue]="
-                                                                                            variantSalesUnitRate?.stockUnitName ?? ''
+                                                                                            variantSalesUnitRate?.stockUnitName ??
+                                                                                            ''
                                                                                         "
                                                                                         [cssClass]="
                                                                                             !variantSalesUnitRate?.stockUnitName &&
@@ -924,7 +957,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="row px-3">
-                                                        <div class="col-lg-12 pl-0 mb-25">
+                                                        <div class="col-lg-12 pl-0 mb-4">
                                                             <a
                                                                 class="text-primary cursor-pointer another-option-btn mt-2"
                                                                 disableRipple
@@ -944,9 +977,7 @@
                                                     >
                                                         <table class="stock-table font-size-15">
                                                             <tr>
-                                                                <th class="variant-image">
-                                                                    Variant Image
-                                                                </th>
+                                                                <th class="variant-image">Variant Image</th>
                                                                 <th class="variant-name-column">
                                                                     {{ localeData?.variant_name
                                                                     }}<span class="text-red">*</span>
@@ -1015,31 +1046,84 @@
                                                                 <tr class="variant-row" *ngIf="variant.name">
                                                                     <td class="text-center variant-image">
                                                                         <div *ngIf="!variant.attachmentUniqueName">
-                                                                            <div class="variant-attachment mat-form-field-border d-flex align-items-center column-gap-1 p-2 position-relative "
-                                                                                [matTooltip]="localeData?.no_file_chosen" matTooltipPosition="right">
-                                                                                <input accept="image/png, image/jpeg" [ngClass]="{'cursor-disable':uploadAttachmentInProgress$ | async}"
-                                                                                    [disabled]="uploadAttachmentInProgress$ | async" type="file" class="position-absolute cursor-pointer opacity-0"
-                                                                                    name="variantFile{{ i }}" id="variantFile{{ i }}" (change)="uploadFile($event, i)" />
-                                                                                <mat-spinner *ngIf="variant.isUploading"  [diameter]="30"></mat-spinner>
-                                                                                <ng-container *ngIf="!variant.isUploading">
-                                                                                    <div class="attachment-add-icon text-center font-size-12 border-radius-circle">
+                                                                            <div
+                                                                                class="variant-attachment mat-form-field-border d-flex align-items-center column-gap-1 p-2 position-relative"
+                                                                                [matTooltip]="
+                                                                                    localeData?.no_file_chosen
+                                                                                "
+                                                                                matTooltipPosition="right"
+                                                                            >
+                                                                                <input
+                                                                                    accept="image/png, image/jpeg"
+                                                                                    [ngClass]="{
+                                                                                        'cursor-disable':
+                                                                                            uploadAttachmentInProgress$
+                                                                                            | async
+                                                                                    }"
+                                                                                    [disabled]="
+                                                                                        uploadAttachmentInProgress$
+                                                                                            | async
+                                                                                    "
+                                                                                    type="file"
+                                                                                    class="position-absolute cursor-pointer opacity-0"
+                                                                                    name="variantFile{{ i }}"
+                                                                                    id="variantFile{{ i }}"
+                                                                                    (change)="uploadFile($event, i)"
+                                                                                />
+                                                                                <mat-spinner
+                                                                                    *ngIf="variant.isUploading"
+                                                                                    [diameter]="30"
+                                                                                ></mat-spinner>
+                                                                                <ng-container
+                                                                                    *ngIf="!variant.isUploading"
+                                                                                >
+                                                                                    <div
+                                                                                        class="attachment-add-icon text-center font-size-12 border-radius-circle"
+                                                                                    >
                                                                                         <i class="icon-add"></i>
                                                                                     </div>
-                                                                                    <span class="attachment-placeholder text-ellipsis">{{ localeData?.add_image }}</span>
+                                                                                    <span
+                                                                                        class="attachment-placeholder text-ellipsis"
+                                                                                        >{{
+                                                                                            localeData?.add_image
+                                                                                        }}</span
+                                                                                    >
                                                                                 </ng-container>
                                                                             </div>
                                                                         </div>
                                                                         <div *ngIf="variant.attachmentUniqueName">
                                                                             <div
-                                                                                class="variant-attachment mat-form-field-border d-flex align-items-center column-gap-1 p-2 text-green position-relative ">
-                                                                                <div class="attachment-add-icon text-center font-size-12 border-radius-circle">
+                                                                                class="variant-attachment mat-form-field-border d-flex align-items-center column-gap-1 p-2 text-green position-relative"
+                                                                            >
+                                                                                <div
+                                                                                    class="attachment-add-icon text-center font-size-12 border-radius-circle"
+                                                                                >
                                                                                     <i class="icon-tick"></i>
                                                                                 </div>
-                                                                                <img class="cursor-pointer" [matTooltip]="localeData?.preview_image" matTooltipPosition="above"
-                                                                                    height="30" width="30" (click)="previewVariantImage(variant.attachmentUniqueName)"
-                                                                                    [src]="variant.attachmentName" alt="Variant Image{{index}}" />
-                                                                                <button mat-icon-button (click)="deleteAttachment(i)" class="ml-auto remove-attachment">
-                                                                                    <i class="icon-cross font-size-16"></i>
+                                                                                <img
+                                                                                    class="cursor-pointer"
+                                                                                    [matTooltip]="
+                                                                                        localeData?.preview_image
+                                                                                    "
+                                                                                    matTooltipPosition="above"
+                                                                                    height="30"
+                                                                                    width="30"
+                                                                                    (click)="
+                                                                                        previewVariantImage(
+                                                                                            variant.attachmentUniqueName
+                                                                                        )
+                                                                                    "
+                                                                                    [src]="variant.attachmentName"
+                                                                                    alt="Variant Image{{ index }}"
+                                                                                />
+                                                                                <button
+                                                                                    mat-icon-button
+                                                                                    (click)="deleteAttachment(i)"
+                                                                                    class="ml-auto remove-attachment"
+                                                                                >
+                                                                                    <i
+                                                                                        class="icon-cross font-size-16"
+                                                                                    ></i>
                                                                                 </button>
                                                                             </div>
                                                                         </div>
@@ -1048,233 +1132,344 @@
                                                                         {{ variant.name }}
                                                                     </td>
                                                                     <td class="unit-name">
-                                                                        <select-field [name]="'variantUnit' + i" [placeholder]="commonLocaleData?.app_unit" [options]="stockUnits"
+                                                                        <select-field
+                                                                            [name]="'variantUnit' + i"
+                                                                            [placeholder]="commonLocaleData?.app_unit"
+                                                                            [options]="stockUnits"
                                                                             (selectedOption)="
-                                                                                                                                                selectVariantUnit(variant, $event)
-                                                                                                                                            " [defaultValue]="
-                                                                                                                                                variant.warehouseBalance[0]?.stockUnit
-                                                                                                                                                    ?.name
-                                                                                                                                            " [cssClass]="'form-control'">
+                                                                                selectVariantUnit(variant, $event)
+                                                                            "
+                                                                            [defaultValue]="
+                                                                                variant.warehouseBalance[0]?.stockUnit
+                                                                                    ?.name
+                                                                            "
+                                                                            [cssClass]="'form-control'"
+                                                                        >
                                                                         </select-field>
                                                                     </td>
                                                                     <td class="opening-qty">
-                                                                        <text-field [cssClass]="'text-right form-control'" [placeholder]="'0.00'" [name]="'variantOpeningQuantity' + i"
+                                                                        <text-field
+                                                                            [cssClass]="'text-right form-control'"
+                                                                            [placeholder]="'0.00'"
+                                                                            [name]="'variantOpeningQuantity' + i"
                                                                             [(ngModel)]="
-                                                                                                                                                variant.warehouseBalance[0]
-                                                                                                                                                    .openingQuantity
-                                                                                                                                            " [type]="'number'">
+                                                                                variant.warehouseBalance[0]
+                                                                                    .openingQuantity
+                                                                            "
+                                                                            [type]="'number'"
+                                                                        >
                                                                         </text-field>
                                                                     </td>
                                                                     <td class="opening-amount">
-                                                                        <text-field [cssClass]="'text-right form-control'" [placeholder]="'0.00'" [name]="'variantOpeningAmount' + i"
+                                                                        <text-field
+                                                                            [cssClass]="'text-right form-control'"
+                                                                            [placeholder]="'0.00'"
+                                                                            [name]="'variantOpeningAmount' + i"
                                                                             [(ngModel)]="
-                                                                                                                                                variant.warehouseBalance[0]
-                                                                                                                                                    .openingAmount
-                                                                                                                                            " [type]="'text'"
-                                                                            [prefix]="companyCurrencySymbol" [mask]="inputMaskFormat" [useMask]="true">
+                                                                                variant.warehouseBalance[0]
+                                                                                    .openingAmount
+                                                                            "
+                                                                            [type]="'text'"
+                                                                            [prefix]="companyCurrencySymbol"
+                                                                            [mask]="inputMaskFormat"
+                                                                            [useMask]="true"
+                                                                        >
                                                                         </text-field>
                                                                     </td>
                                                                     <td class="sku-code">
-                                                                        <text-field [cssClass]="'text-right form-control'" [placeholder]="'-'" [name]="'variantSkuCode' + i"
-                                                                            [(ngModel)]="variant.skuCode" [type]="'text'">
+                                                                        <text-field
+                                                                            [cssClass]="'text-right form-control'"
+                                                                            [placeholder]="'-'"
+                                                                            [name]="'variantSkuCode' + i"
+                                                                            [(ngModel)]="variant.skuCode"
+                                                                            [type]="'text'"
+                                                                        >
                                                                         </text-field>
                                                                     </td>
-                                                                    <td class="sales-purchase-info inventory-tab purchase-information-enable" *ngIf="
-                                                                                                                                            stockForm?.purchaseAccountDetails
-                                                                                                                                                .accountUniqueName
-                                                                                                                                        ">
-                                                                        <ng-container *ngFor="
-                                                                                                                                                let variantPurchaseUnitRate of variant?.purchaseInformation;
-                                                                                                                                                let j = index
-                                                                                                                                            ">
+                                                                    <td
+                                                                        class="sales-purchase-info inventory-tab purchase-information-enable"
+                                                                        *ngIf="
+                                                                            stockForm?.purchaseAccountDetails
+                                                                                .accountUniqueName
+                                                                        "
+                                                                    >
+                                                                        <ng-container
+                                                                            *ngFor="
+                                                                                let variantPurchaseUnitRate of variant?.purchaseInformation;
+                                                                                let j = index
+                                                                            "
+                                                                        >
                                                                             <div class="sales-purchase-wrapper d-flex">
-                                                                                <text-field [cssClass]="
-                                                                                                                                                        'text-right unit-amount form-control'
-                                                                                                                                                    " [placeholder]="'0.00'" [name]="
-                                                                                                                                                        'variantPurchaseUnitRate' +
-                                                                                                                                                        i +
-                                                                                                                                                        '_' +
-                                                                                                                                                        j
-                                                                                                                                                    " [(ngModel)]="
-                                                                                                                                                        variantPurchaseUnitRate.rate
-                                                                                                                                                    " [type]="'text'"
-                                                                                    [prefix]="companyCurrencySymbol" [mask]="inputMaskFormat" [useMask]="true">
+                                                                                <text-field
+                                                                                    [cssClass]="
+                                                                                        'text-right unit-amount form-control'
+                                                                                    "
+                                                                                    [placeholder]="'0.00'"
+                                                                                    [name]="
+                                                                                        'variantPurchaseUnitRate' +
+                                                                                        i +
+                                                                                        '_' +
+                                                                                        j
+                                                                                    "
+                                                                                    [(ngModel)]="
+                                                                                        variantPurchaseUnitRate.rate
+                                                                                    "
+                                                                                    [type]="'text'"
+                                                                                    [prefix]="companyCurrencySymbol"
+                                                                                    [mask]="inputMaskFormat"
+                                                                                    [useMask]="true"
+                                                                                >
                                                                                 </text-field>
-                                                                                <select-field [name]="
-                                                                                                                                                        'variantPurchaseUnit' +
-                                                                                                                                                        i +
-                                                                                                                                                        '_' +
-                                                                                                                                                        j
-                                                                                                                                                    " [placeholder]="
-                                                                                                                                                        commonLocaleData?.app_unit
-                                                                                                                                                    " [options]="stockUnits"
+                                                                                <select-field
+                                                                                    [name]="
+                                                                                        'variantPurchaseUnit' +
+                                                                                        i +
+                                                                                        '_' +
+                                                                                        j
+                                                                                    "
+                                                                                    [placeholder]="
+                                                                                        commonLocaleData?.app_unit
+                                                                                    "
+                                                                                    [options]="stockUnits"
                                                                                     (selectedOption)="
-                                                                                                                                                        selectVariantSalesPurchaseUnit(
-                                                                                                                                                            variantPurchaseUnitRate,
-                                                                                                                                                            $event
-                                                                                                                                                        )
-                                                                                                                                                    " [defaultValue]="
-                                                                                                                                                        variantPurchaseUnitRate?.stockUnitName
-                                                                                                                                                    " [cssClass]="
-                                                                                                                                                        (!variantPurchaseUnitRate?.stockUnitName &&
-                                                                                                                                                        checkUnitRateValidation[i]
-                                                                                                                                                            ?.purchase
-                                                                                                                                                            ? 'error-box'
-                                                                                                                                                            : '') +
-                                                                                                                                                        ' unit-rates form-control'
-                                                                                                                                                    ">
+                                                                                        selectVariantSalesPurchaseUnit(
+                                                                                            variantPurchaseUnitRate,
+                                                                                            $event
+                                                                                        )
+                                                                                    "
+                                                                                    [defaultValue]="
+                                                                                        variantPurchaseUnitRate?.stockUnitName
+                                                                                    "
+                                                                                    [cssClass]="
+                                                                                        (!variantPurchaseUnitRate?.stockUnitName &&
+                                                                                        checkUnitRateValidation[i]
+                                                                                            ?.purchase
+                                                                                            ? 'error-box'
+                                                                                            : '') +
+                                                                                        ' unit-rates form-control'
+                                                                                    "
+                                                                                >
                                                                                 </select-field>
                                                                             </div>
                                                                         </ng-container>
                                                                     </td>
-                                                                    <td class="sales-purchase-info inventory-tab sales-information-enable" *ngIf="
-                                                                                                                                            stockForm?.salesAccountDetails
-                                                                                                                                                .accountUniqueName
-                                                                                                                                        ">
-                                                                        <ng-container *ngFor="
-                                                                                                                                                let variantSalesUnitRate of variant?.salesInformation;
-                                                                                                                                                let j = index
-                                                                                                                                            ">
+                                                                    <td
+                                                                        class="sales-purchase-info inventory-tab sales-information-enable"
+                                                                        *ngIf="
+                                                                            stockForm?.salesAccountDetails
+                                                                                .accountUniqueName
+                                                                        "
+                                                                    >
+                                                                        <ng-container
+                                                                            *ngFor="
+                                                                                let variantSalesUnitRate of variant?.salesInformation;
+                                                                                let j = index
+                                                                            "
+                                                                        >
                                                                             <div class="sales-purchase-wrapper d-flex">
-                                                                                <text-field [cssClass]="
-                                                                                                                                                        'text-right unit-amount form-control'
-                                                                                                                                                    " [placeholder]="'0.00'" [name]="
-                                                                                                                                                        'variantSalesUnitRate' +
-                                                                                                                                                        i +
-                                                                                                                                                        '_' +
-                                                                                                                                                        j
-                                                                                                                                                    " [(ngModel)]="
-                                                                                                                                                        variantSalesUnitRate.rate
-                                                                                                                                                    " [type]="'text'"
-                                                                                    [prefix]="companyCurrencySymbol" [mask]="inputMaskFormat" [useMask]="true">
-                                                                                </text-field>
-                                                                                <select-field [name]="
-                                                                                                                                                        'variantSalesUnit' + i + '_' + j
-                                                                                                                                                    " [placeholder]="
-                                                                                                                                                        commonLocaleData?.app_unit
-                                                                                                                                                    " [options]="stockUnits"
-                                                                                    (selectedOption)="
-                                                                                                                                                        selectVariantSalesPurchaseUnit(
-                                                                                                                                                            variantSalesUnitRate,
-                                                                                                                                                            $event
-                                                                                                                                                        )
-                                                                                                                                                    " [defaultValue]="
-                                                                                                                                                        variantSalesUnitRate?.stockUnitName
-                                                                                                                                                    " [cssClass]="
-                                                                                                                                                        (!variantSalesUnitRate?.stockUnitName &&
-                                                                                                                                                        checkUnitRateValidation[i]
-                                                                                                                                                            ?.sales
-                                                                                                                                                            ? 'error-box'
-                                                                                                                                                            : '') +
-                                                                                                                                                        'unit-rates form-control'
-                                                                                                                                                    "></select-field>
-                                                                            </div>
-                                                                        </ng-container>
-                                                                    </td>
-                                                                    <td class="sales-purchase-info fixed-assets-unit-rates inventory-tab" *ngIf="
-                                                                                                                                            stockForm?.fixedAssetAccountDetails
-                                                                                                                                                .accountUniqueName
-                                                                                                                                        ">
-                                                                        <ng-container *ngFor="
-                                                                                                                                                let variantFixedAssetsUnitRate of variant?.fixedAssetsInformation;
-                                                                                                                                                let j = index
-                                                                                                                                            ">
-                                                                            <div class="sales-purchase-wrapper d-flex">
-                                                                                <text-field [cssClass]="
-                                                                                                                                                        'text-right unit-amount form-control'
-                                                                                                                                                    " [placeholder]="'0.00'" [name]="
-                                                                                                                                                        'variantFixedAssetsUnitRate' +
-                                                                                                                                                        j +
-                                                                                                                                                        '_' +
-                                                                                                                                                        i
-                                                                                                                                                    " [(ngModel)]="
-                                                                                                                                                        variantFixedAssetsUnitRate.rate
-                                                                                                                                                    " [type]="'text'"
-                                                                                    [prefix]="companyCurrencySymbol" [mask]="inputMaskFormat" [useMask]="true">
-                                                                                </text-field>
-                                                                                <select-field [name]="
-                                                                                                                                                        'variantFixedAssetsUnit' +
-                                                                                                                                                        j +
-                                                                                                                                                        '_' +
-                                                                                                                                                        i
-                                                                                                                                                    " [placeholder]="
-                                                                                                                                                        commonLocaleData?.app_unit
-                                                                                                                                                    " [options]="stockUnits"
-                                                                                    (selectedOption)="
-                                                                                                                                                        selectVariantFixedAssetsUnit(
-                                                                                                                                                            variantFixedAssetsUnitRate,
-                                                                                                                                                            $event
-                                                                                                                                                        )
-                                                                                                                                                    " [defaultValue]="
-                                                                                                                                                        variantFixedAssetsUnitRate?.stockUnitName
-                                                                                                                                                    " [cssClass]="
-                                                                                                                                                        (!variantFixedAssetsUnitRate?.stockUnitName &&
-                                                                                                                                                        checkUnitRateValidation[i]
-                                                                                                                                                            ?.fixedAssets
-                                                                                                                                                            ? 'error-box'
-                                                                                                                                                            : '') +
-                                                                                                                                                        ' unit-rates form-control'
-                                                                                                                                                    "></select-field>
-                                                                            </div>
-                                                                        </ng-container>
-                                                                    </td>
-                                                                    <ng-container *ngFor="
-                                                                                                                                            let customField of variant?.customFields;
-                                                                                                                                            let k = index
-                                                                                                                                        ">
-                                                                        <td *ngIf="variant?.customFields?.length" class="sales-purchase-info inventory-tab purchase-information-enable">
-                                                                            <div class="sales-purchase-wrapper">
-                                                                                <text-field class="d-block w-100 text-left" *ngIf="
-                                                                                                                                                        customField.fieldType?.type ===
-                                                                                                                                                            availableFieldTypes.String ||
-                                                                                                                                                        customField.fieldType?.type ===
-                                                                                                                                                            availableFieldTypes.Barcode
-                                                                                                                                                    " [cssClass]="
-                                                                                                                                                        'custom-field form-control'
-                                                                                                                                                    " [name]="
-                                                                                                                                                        'customField-' + i + '-' + k
-                                                                                                                                                    " [type]="'text'" [placeholder]="
-                                                                                                                                                        customField?.fieldInfo
-                                                                                                                                                    " [(ngModel)]="customField.value"
-                                                                                    [maxlength]="
-                                                                                                                                                        customField.dataRange?.max
-                                                                                                                                                    " [pattern]="customField.regex"
-                                                                                    [required]="customField.isMandatory" [showError]="
-                                                                                                                                                        isFormSubmitted &&
-                                                                                                                                                        customField.isMandatory &&
-                                                                                                                                                        !customField.value
-                                                                                                                                                    ">
-                                                                                </text-field>
-                                                                                <text-field *ngIf="
-                                                                                                                                                        customField.fieldType?.type ===
-                                                                                                                                                        availableFieldTypes.Number
-                                                                                                                                                    " class="d-block w-100 text-left"
+                                                                                <text-field
                                                                                     [cssClass]="
-                                                                                                                                                        'custom-field form-control'
-                                                                                                                                                    " [name]="
-                                                                                                                                                        'customField-' + i + '-' + k
-                                                                                                                                                    " [type]="'number'" [placeholder]="
-                                                                                                                                                        customField?.fieldInfo
-                                                                                                                                                    " [(ngModel)]="customField.value"
-                                                                                    [min]="customField.dataRange?.min" [max]="customField.dataRange?.max" [pattern]="customField.regex"
-                                                                                    [required]="customField.isMandatory" [allowDecimalDigitsOnly]="true" [showError]="
-                                                                                                                                                        isFormSubmitted &&
-                                                                                                                                                        customField.isMandatory &&
-                                                                                                                                                        !customField.value
-                                                                                                                                                    "></text-field>
-                                                                                <mat-radio-group color="primary" [name]="
-                                                                                                                                                        'customField-' + i + '-' + k
-                                                                                                                                                    " [(ngModel)]="customField.value"
-                                                                                    [required]="customField.isMandatory" *ngIf="
-                                                                                                                                                        customField.fieldType?.type ===
-                                                                                                                                                        availableFieldTypes.Boolean
-                                                                                                                                                    ">
+                                                                                        'text-right unit-amount form-control'
+                                                                                    "
+                                                                                    [placeholder]="'0.00'"
+                                                                                    [name]="
+                                                                                        'variantSalesUnitRate' +
+                                                                                        i +
+                                                                                        '_' +
+                                                                                        j
+                                                                                    "
+                                                                                    [(ngModel)]="
+                                                                                        variantSalesUnitRate.rate
+                                                                                    "
+                                                                                    [type]="'text'"
+                                                                                    [prefix]="companyCurrencySymbol"
+                                                                                    [mask]="inputMaskFormat"
+                                                                                    [useMask]="true"
+                                                                                >
+                                                                                </text-field>
+                                                                                <select-field
+                                                                                    [name]="
+                                                                                        'variantSalesUnit' + i + '_' + j
+                                                                                    "
+                                                                                    [placeholder]="
+                                                                                        commonLocaleData?.app_unit
+                                                                                    "
+                                                                                    [options]="stockUnits"
+                                                                                    (selectedOption)="
+                                                                                        selectVariantSalesPurchaseUnit(
+                                                                                            variantSalesUnitRate,
+                                                                                            $event
+                                                                                        )
+                                                                                    "
+                                                                                    [defaultValue]="
+                                                                                        variantSalesUnitRate?.stockUnitName
+                                                                                    "
+                                                                                    [cssClass]="
+                                                                                        (!variantSalesUnitRate?.stockUnitName &&
+                                                                                        checkUnitRateValidation[i]
+                                                                                            ?.sales
+                                                                                            ? 'error-box'
+                                                                                            : '') +
+                                                                                        'unit-rates form-control'
+                                                                                    "
+                                                                                ></select-field>
+                                                                            </div>
+                                                                        </ng-container>
+                                                                    </td>
+                                                                    <td
+                                                                        class="sales-purchase-info fixed-assets-unit-rates inventory-tab"
+                                                                        *ngIf="
+                                                                            stockForm?.fixedAssetAccountDetails
+                                                                                .accountUniqueName
+                                                                        "
+                                                                    >
+                                                                        <ng-container
+                                                                            *ngFor="
+                                                                                let variantFixedAssetsUnitRate of variant?.fixedAssetsInformation;
+                                                                                let j = index
+                                                                            "
+                                                                        >
+                                                                            <div class="sales-purchase-wrapper d-flex">
+                                                                                <text-field
+                                                                                    [cssClass]="
+                                                                                        'text-right unit-amount form-control'
+                                                                                    "
+                                                                                    [placeholder]="'0.00'"
+                                                                                    [name]="
+                                                                                        'variantFixedAssetsUnitRate' +
+                                                                                        j +
+                                                                                        '_' +
+                                                                                        i
+                                                                                    "
+                                                                                    [(ngModel)]="
+                                                                                        variantFixedAssetsUnitRate.rate
+                                                                                    "
+                                                                                    [type]="'text'"
+                                                                                    [prefix]="companyCurrencySymbol"
+                                                                                    [mask]="inputMaskFormat"
+                                                                                    [useMask]="true"
+                                                                                >
+                                                                                </text-field>
+                                                                                <select-field
+                                                                                    [name]="
+                                                                                        'variantFixedAssetsUnit' +
+                                                                                        j +
+                                                                                        '_' +
+                                                                                        i
+                                                                                    "
+                                                                                    [placeholder]="
+                                                                                        commonLocaleData?.app_unit
+                                                                                    "
+                                                                                    [options]="stockUnits"
+                                                                                    (selectedOption)="
+                                                                                        selectVariantFixedAssetsUnit(
+                                                                                            variantFixedAssetsUnitRate,
+                                                                                            $event
+                                                                                        )
+                                                                                    "
+                                                                                    [defaultValue]="
+                                                                                        variantFixedAssetsUnitRate?.stockUnitName
+                                                                                    "
+                                                                                    [cssClass]="
+                                                                                        (!variantFixedAssetsUnitRate?.stockUnitName &&
+                                                                                        checkUnitRateValidation[i]
+                                                                                            ?.fixedAssets
+                                                                                            ? 'error-box'
+                                                                                            : '') +
+                                                                                        ' unit-rates form-control'
+                                                                                    "
+                                                                                ></select-field>
+                                                                            </div>
+                                                                        </ng-container>
+                                                                    </td>
+                                                                    <ng-container
+                                                                        *ngFor="
+                                                                            let customField of variant?.customFields;
+                                                                            let k = index
+                                                                        "
+                                                                    >
+                                                                        <td
+                                                                            *ngIf="variant?.customFields?.length"
+                                                                            class="sales-purchase-info inventory-tab purchase-information-enable"
+                                                                        >
+                                                                            <div class="sales-purchase-wrapper">
+                                                                                <text-field
+                                                                                    class="d-block w-100 text-left"
+                                                                                    *ngIf="
+                                                                                        customField.fieldType?.type ===
+                                                                                            availableFieldTypes.String ||
+                                                                                        customField.fieldType?.type ===
+                                                                                            availableFieldTypes.Barcode
+                                                                                    "
+                                                                                    [cssClass]="
+                                                                                        'custom-field form-control'
+                                                                                    "
+                                                                                    [name]="
+                                                                                        'customField-' + i + '-' + k
+                                                                                    "
+                                                                                    [type]="'text'"
+                                                                                    [placeholder]="
+                                                                                        customField?.fieldInfo
+                                                                                    "
+                                                                                    [(ngModel)]="customField.value"
+                                                                                    [maxlength]="
+                                                                                        customField.dataRange?.max
+                                                                                    "
+                                                                                    [pattern]="customField.regex"
+                                                                                    [required]="customField.isMandatory"
+                                                                                    [showError]="
+                                                                                        isFormSubmitted &&
+                                                                                        customField.isMandatory &&
+                                                                                        !customField.value
+                                                                                    "
+                                                                                >
+                                                                                </text-field>
+                                                                                <text-field
+                                                                                    *ngIf="
+                                                                                        customField.fieldType?.type ===
+                                                                                        availableFieldTypes.Number
+                                                                                    "
+                                                                                    class="d-block w-100 text-left"
+                                                                                    [cssClass]="
+                                                                                        'custom-field form-control'
+                                                                                    "
+                                                                                    [name]="
+                                                                                        'customField-' + i + '-' + k
+                                                                                    "
+                                                                                    [type]="'number'"
+                                                                                    [placeholder]="
+                                                                                        customField?.fieldInfo
+                                                                                    "
+                                                                                    [(ngModel)]="customField.value"
+                                                                                    [min]="customField.dataRange?.min"
+                                                                                    [max]="customField.dataRange?.max"
+                                                                                    [pattern]="customField.regex"
+                                                                                    [required]="customField.isMandatory"
+                                                                                    [allowDecimalDigitsOnly]="true"
+                                                                                    [showError]="
+                                                                                        isFormSubmitted &&
+                                                                                        customField.isMandatory &&
+                                                                                        !customField.value
+                                                                                    "
+                                                                                ></text-field>
+                                                                                <mat-radio-group
+                                                                                    color="primary"
+                                                                                    [name]="
+                                                                                        'customField-' + i + '-' + k
+                                                                                    "
+                                                                                    [(ngModel)]="customField.value"
+                                                                                    [required]="customField.isMandatory"
+                                                                                    *ngIf="
+                                                                                        customField.fieldType?.type ===
+                                                                                        availableFieldTypes.Boolean
+                                                                                    "
+                                                                                >
                                                                                     <mat-radio-button value="true">
                                                                                         {{ commonLocaleData?.app_true }}
                                                                                     </mat-radio-button>
                                                                                     <mat-radio-button value="false">
                                                                                         {{
-                                                                                        commonLocaleData?.app_false
+                                                                                            commonLocaleData?.app_false
                                                                                         }}
                                                                                     </mat-radio-button>
                                                                                 </mat-radio-group>
@@ -1282,8 +1477,13 @@
                                                                         </td>
                                                                     </ng-container>
                                                                     <td class="text-center archive">
-                                                                        <mat-slide-toggle class="mt-1" color="primary" name="variantArchive{{ i }}" [(ngModel)]="variant.archive"
-                                                                            aria-label="archive toggle">
+                                                                        <mat-slide-toggle
+                                                                            class="mt-1"
+                                                                            color="primary"
+                                                                            name="variantArchive{{ i }}"
+                                                                            [(ngModel)]="variant.archive"
+                                                                            aria-label="archive toggle"
+                                                                        >
                                                                         </mat-slide-toggle>
                                                                     </td>
                                                                 </tr>
@@ -1296,12 +1496,20 @@
                                     </div>
                                 </mat-tab>
                                 <mat-tab [label]="localeData?.manufacturing">
-                                    <div class="pl-25 pt-3" *ngIf="!queryParams?.stockUniqueName">
-                                        <button aria-label="recipe btn" mat-raised-button color="primary" (click)="createStock(true)">
+                                    <div class="pl-4 pt-3" *ngIf="!queryParams?.stockUniqueName">
+                                        <button
+                                            aria-label="recipe btn"
+                                            mat-raised-button
+                                            color="primary"
+                                            (click)="createStock(true)"
+                                        >
                                             {{ localeData?.save_stock_for_recipe }}
                                         </button>
                                     </div>
-                                    <div class="d-flex align-items-center column-gap-1 pl-25 mt-3" [ngClass]="queryParams?.stockUniqueName ? 'mb-2' : 'mb-5'">
+                                    <div
+                                        class="d-flex align-items-center column-gap-1 pl-4 mt-3"
+                                        [ngClass]="queryParams?.stockUniqueName ? 'mb-2' : 'mb-5'"
+                                    >
                                         <mat-slide-toggle
                                             class="mb-1"
                                             color="primary"
@@ -1341,7 +1549,7 @@
                                                     <input-field
                                                         *ngIf="hsnSac === 'HSN'"
                                                         [name]="'hsnNumber'"
-                                                        [type]="'text'"
+                                                        [type]="'number'"
                                                         [placeholder]="localeData?.enter_hsn_code"
                                                         [(ngModel)]="stockForm.hsnNumber"
                                                     >
@@ -1349,7 +1557,7 @@
                                                     <input-field
                                                         *ngIf="hsnSac === 'SAC'"
                                                         [name]="'sacNumber'"
-                                                        [type]="'text'"
+                                                        [type]="'number'"
                                                         [placeholder]="localeData?.enter_sac_code"
                                                         [(ngModel)]="stockForm.sacNumber"
                                                     >
@@ -1365,7 +1573,11 @@
                                                     </input-field>
                                                 </div>
                                                 <div class="col-sm-6 col-lg-3 custom-label">
-                                                    <label class="text-ellipsis" *ngIf="inlineEditCustomField !== 1" [matTooltip]="stockForm.customField1Heading" matTooltipPosition="above"
+                                                    <label
+                                                        class="text-ellipsis"
+                                                        *ngIf="inlineEditCustomField !== 1"
+                                                        [matTooltip]="stockForm.customField1Heading"
+                                                        matTooltipPosition="above"
                                                         >{{ stockForm.customField1Heading || localeData?.custom_field }}
                                                         :
                                                     </label>
@@ -1409,7 +1621,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="row mt-25 align-items-center">
+                                            <div class="row mt-4 align-items-center">
                                                 <ng-container *ngIf="!isVariantAvailable">
                                                     <div class="col-sm-6 col-lg-3">
                                                         <input-field
@@ -1448,7 +1660,11 @@
                                                     </input-field>
                                                 </div>
                                                 <div class="col-sm-6 col-lg-3 custom-label">
-                                                    <label class="text-ellipsis" *ngIf="inlineEditCustomField !== 2" [matTooltip]="stockForm.customField2Heading" matTooltipPosition="above"
+                                                    <label
+                                                        class="text-ellipsis"
+                                                        *ngIf="inlineEditCustomField !== 2"
+                                                        [matTooltip]="stockForm.customField2Heading"
+                                                        matTooltipPosition="above"
                                                         >{{ stockForm.customField2Heading || localeData?.custom_field }}
                                                         :
                                                     </label>
@@ -1491,14 +1707,14 @@
                                                     </input-field>
                                                 </div>
                                             </div>
-                                            <div class="row mt-25 align-items-center" *ngIf="!isVariantAvailable">
+                                            <div class="row mt-4 align-items-center" *ngIf="!isVariantAvailable">
                                                 <ng-container
                                                     *ngFor="
                                                         let customField of stockForm.variants[0]?.customFields;
                                                         let k = index
                                                     "
                                                 >
-                                                    <div class="col-sm-6 col-lg-3 mt-25">
+                                                    <div class="col-sm-6 col-lg-3 mt-4">
                                                         <label
                                                             [matTooltip]="customField?.fieldName"
                                                             matTooltipPosition="above"
@@ -1507,15 +1723,13 @@
                                                             <span class="word-wrap-dots">
                                                                 {{ customField?.fieldName }}</span
                                                             >
-                                                            <span
-                                                                *ngIf="customField?.isMandatory"
-                                                                class="text-red pr-1"
+                                                            <span *ngIf="customField?.isMandatory" class="text-red pr-1"
                                                                 >*</span
                                                             >
                                                             :
                                                         </label>
                                                     </div>
-                                                    <div class="col-sm-6 col-lg-3 mt-25">
+                                                    <div class="col-sm-6 col-lg-3 mt-4">
                                                         <text-field
                                                             *ngIf="
                                                                 customField.fieldType?.type ===
@@ -1584,7 +1798,7 @@
                                 </mat-tab>
                                 <mat-tab *ngIf="false" [label]="localeData?.variant">
                                     <div class="tab-container-new">
-                                        <div class="mb-25 variant-form">
+                                        <div class="mb-4 variant-form">
                                             <div class="row">
                                                 <div class="col-xl-12">
                                                     <div class="row">
@@ -1650,7 +1864,7 @@
                                 </mat-tab>
                                 <mat-tab *ngIf="false" label="Addon">
                                     <div class="tab-container-new">
-                                        <div class="mb-25 addon-form">
+                                        <div class="mb-4 addon-form">
                                             <div class="row">
                                                 <div class="col-xl-12">
                                                     <div class="row">
@@ -1702,7 +1916,10 @@
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> {{ localeData?.avail_on_variant }} </label>
                                                             <!-- All available variant list show with checkbox -->
-                                                            <reactive-dropdown-field placeholder="" id="addon-available"></reactive-dropdown-field>
+                                                            <reactive-dropdown-field
+                                                                placeholder=""
+                                                                id="addon-available"
+                                                            ></reactive-dropdown-field>
                                                         </div>
                                                     </div>
                                                     <div>
@@ -1721,7 +1938,7 @@
                                 </mat-tab>
                                 <mat-tab *ngIf="false" label="Bill of Material">
                                     <div class="tab-container-new">
-                                        <div class="mb-25">
+                                        <div class="mb-4">
                                             <div class="final-product-recipe">
                                                 <div class="row align-items-center">
                                                     <div class="col-xl-12">
@@ -1738,10 +1955,13 @@
                                                                     </input-field>
                                                                 </div>
                                                                 <!-- If we feel sku number variant name will auto fill if availble on list -->
-                                                                <div class="variant-name-field mb-25">
+                                                                <div class="variant-name-field mb-4">
                                                                     <label> {{ localeData?.variant_name }}</label>
                                                                     <!-- All variant list will show in dropdown -->
-                                                                    <reactive-dropdown-field placeholder="" id="variant-name">
+                                                                    <reactive-dropdown-field
+                                                                        placeholder=""
+                                                                        id="variant-name"
+                                                                    >
                                                                     </reactive-dropdown-field>
                                                                 </div>
                                                                 <div>
@@ -1860,7 +2080,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="row flex-column mt-25">
+                                                <div class="row flex-column mt-4">
                                                     <div
                                                         class="text-primary cursor-pointer px-3 d-flex justify-content-between mb-2 font-size-15"
                                                         (click)="toggleExpense()"
@@ -1911,7 +2131,12 @@
                                                         <div
                                                             class="cursor-pointer add-expense d-flex justify-content-center align-items-center"
                                                         >
-                                                            <button aria-label="add icon" mat-icon-button role="button" type="button">
+                                                            <button
+                                                                aria-label="add icon"
+                                                                mat-icon-button
+                                                                role="button"
+                                                                type="button"
+                                                            >
                                                                 <span class="icon-font-22 text-primary pl-1 pr-1"
                                                                     >+</span
                                                                 >
@@ -1937,11 +2162,11 @@
 
                     <!-- combo content start -->
                     <div class="combo-detail-content" *ngIf="stockForm.type === 'COMBO'">
-                        <div class="mb-25">
+                        <div class="mb-4">
                             <div class="col-xl-8 col-lg-12">
                                 <div class="row flex-column-reverse flex-md-row">
                                     <div class="col-md-8 col-lg-8 col-xl-6 col-12">
-                                        <div class="row mb-25">
+                                        <div class="row mb-4">
                                             <div class="col-sm-12 col-md-4 col-lg-6">
                                                 <label
                                                     >{{ localeData?.combo_name }}<span class="text-red">*</span></label
@@ -1955,7 +2180,7 @@
                                                 ></input-field>
                                             </div>
                                         </div>
-                                        <div class="row mb-25">
+                                        <div class="row mb-4">
                                             <div class="col-sm-12 col-md-4 col-lg-6">
                                                 <label
                                                     >{{ commonLocaleData?.app_unit
@@ -1969,7 +2194,7 @@
                                                 ></reactive-dropdown-field>
                                             </div>
                                         </div>
-                                        <div *ngIf="false" class="row mb-25">
+                                        <div *ngIf="false" class="row mb-4">
                                             <div class="col-sm-12 col-md-4 col-lg-6">
                                                 <label
                                                     >{{ localeData?.under_group }}
@@ -1983,7 +2208,7 @@
                                                 ></reactive-dropdown-field>
                                             </div>
                                         </div>
-                                        <div class="row mb-25">
+                                        <div class="row mb-4">
                                             <div class="col-sm-12 col-md-4 col-lg-6">
                                                 <label
                                                     >{{ commonLocaleData?.app_unique_name
@@ -1999,7 +2224,7 @@
                                                 </input-field>
                                             </div>
                                         </div>
-                                        <div class="row mb-25">
+                                        <div class="row mb-4">
                                             <div class="col-sm-12 col-md-4 col-lg-6">
                                                 <label>{{ commonLocaleData?.app_hsn }} </label>
                                             </div>
@@ -2011,7 +2236,7 @@
                                                 ></input-field>
                                             </div>
                                         </div>
-                                        <div class="row mb-25">
+                                        <div class="row mb-4">
                                             <div class="col-sm-12 col-md-4 col-lg-6">
                                                 <label>{{ commonLocaleData?.app_sku }} </label>
                                             </div>
@@ -2041,7 +2266,12 @@
                                     <tbody>
                                         <tr>
                                             <td width="3%">
-                                                <img src="{{ imgPath }}add-image.svg" width="60" height="60" alt="add img" />
+                                                <img
+                                                    src="{{ imgPath }}add-image.svg"
+                                                    width="60"
+                                                    height="60"
+                                                    alt="add img"
+                                                />
                                             </td>
                                             <td width="20%">
                                                 <input-field
@@ -2082,7 +2312,12 @@
                                         </tr>
                                         <tr>
                                             <td width="3%">
-                                                <img src="{{ imgPath }}add-image.svg" width="60" height="60" alt="add img" />
+                                                <img
+                                                    src="{{ imgPath }}add-image.svg"
+                                                    width="60"
+                                                    height="60"
+                                                    alt="add img"
+                                                />
                                             </td>
                                             <td width="20%">
                                                 <input-field
@@ -2139,7 +2374,7 @@
                                         <div class="row">
                                             <div class="col-xl-6 col-12">
                                                 <div class="purchase-information account-tab-4">
-                                                    <div class="select-puchase-info mb-25">
+                                                    <div class="select-puchase-info mb-4">
                                                         <mat-checkbox
                                                             color="primary"
                                                             id="purchase-info-check"
@@ -2151,7 +2386,7 @@
                                                         <div class="col-sm-6 col-lg-5">
                                                             <label>Linked Account/s </label>
                                                         </div>
-                                                        <div class="col-sm-6 col-lg-7 pl-0 mb-25">
+                                                        <div class="col-sm-6 col-lg-7 pl-0 mb-4">
                                                             <textarea
                                                                 type="text"
                                                                 id="linked-account"
@@ -2162,8 +2397,8 @@
                                                         <div class="col-sm-6 col-lg-5">
                                                             <label>{{ localeData?.unit_price }} </label>
                                                         </div>
-                                                        <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mb-25">
-                                                            <div class="row add-new-field mb-25">
+                                                        <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mb-4">
+                                                            <div class="row add-new-field mb-4">
                                                                 <div class="col-sm-6 col-6">
                                                                     <input-field
                                                                         type="text"
@@ -2223,11 +2458,8 @@
                                             </div>
                                             <div class="col-xl-6 col-12 pl-4">
                                                 <div class="sales-information">
-                                                    <div class="select-puchase-info mb-25">
-                                                        <mat-checkbox
-                                                            color="primary"
-                                                            id="sales-info-check"
-                                                        >
+                                                    <div class="select-puchase-info mb-4">
+                                                        <mat-checkbox color="primary" id="sales-info-check">
                                                             Sales Information
                                                         </mat-checkbox>
                                                     </div>
@@ -2236,7 +2468,7 @@
                                                         <div class="col-sm-6 col-lg-5">
                                                             <label>Linked Account/s </label>
                                                         </div>
-                                                        <div class="col-sm-6 col-lg-7 pl-0 mb-25">
+                                                        <div class="col-sm-6 col-lg-7 pl-0 mb-4">
                                                             <textarea
                                                                 type="text"
                                                                 id="sales-linked-account"
@@ -2248,8 +2480,8 @@
                                                         <div class="col-sm-6 col-lg-5">
                                                             <label>{{ localeData?.unit_price }} </label>
                                                         </div>
-                                                        <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mb-25">
-                                                            <div class="row add-new-field mb-25">
+                                                        <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mb-4">
+                                                            <div class="row add-new-field mb-4">
                                                                 <div class="col-sm-6 col-6">
                                                                     <input-field
                                                                         type="text"
@@ -2324,7 +2556,7 @@
                                                     <div class="col-md-8 col-lg-8 col-xl-6 col-12">
                                                         <div class="row">
                                                             <div class="col-12 col-xl-12">
-                                                                <div class="row mb-25">
+                                                                <div class="row mb-4">
                                                                     <div class="col-sm-6 col-lg-6">
                                                                         <label
                                                                             >Inventory Type
@@ -2343,7 +2575,7 @@
                                                                 </div>
                                                             </div>
                                                             <div class="col-12 col-xl-12">
-                                                                <div class="row mb-25">
+                                                                <div class="row mb-4">
                                                                     <div class="col-sm-6 col-lg-6">
                                                                         <label
                                                                             >{{ localeData?.opening_quantity }}
@@ -2361,7 +2593,7 @@
                                                                 </div>
                                                             </div>
                                                             <div class="col-12 col-xl-12">
-                                                                <div class="row mb-25">
+                                                                <div class="row mb-4">
                                                                     <div class="col-sm-6 col-lg-6">
                                                                         <label
                                                                             >{{ commonLocaleData?.app_rate }}
@@ -2382,7 +2614,7 @@
                                                     <div class="col-md-8 col-lg-8 col-xl-6 col-12">
                                                         <div class="row">
                                                             <div class="col-12 col-xl-12">
-                                                                <div class="row mb-25">
+                                                                <div class="row mb-4">
                                                                     <div class="col-sm-6 col-lg-6">
                                                                         <label
                                                                             >Low stock alert
@@ -2402,7 +2634,7 @@
                                                             </div>
 
                                                             <div class="col-12 col-xl-12">
-                                                                <div class="row mb-25">
+                                                                <div class="row mb-4">
                                                                     <div class="col-sm-6 col-lg-6">
                                                                         <label
                                                                             >Amount <span class="text-red"></span
@@ -2433,7 +2665,7 @@
                                                     <div class="col-md-8 col-lg-8 col-xl-6 col-12">
                                                         <div class="row">
                                                             <div class="col-12 col-xl-12">
-                                                                <div class="row mb-25">
+                                                                <div class="row mb-4">
                                                                     <div class="col-sm-6 col-lg-6">
                                                                         <label
                                                                             >Output Qty<span class="text-red">*</span>
@@ -2448,7 +2680,7 @@
                                                                         </input-field>
                                                                     </div>
                                                                 </div>
-                                                                <div class="row mb-25">
+                                                                <div class="row mb-4">
                                                                     <div class="col-sm-6 col-lg-6">
                                                                         <label
                                                                             >Combo Unit <span class="text-red">*</span>
@@ -2466,7 +2698,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-md-8 col-lg-8 col-xl-9 col-12">
-                                                        <div class="row mb-25">
+                                                        <div class="row mb-4">
                                                             <div class="col-lg-6 col-sm-6 col-xl-4">
                                                                 <label>Input Combo Details</label>
                                                             </div>
@@ -2492,7 +2724,12 @@
                                                                     [placeholder]="localeData?.select_unit"
                                                                 >
                                                                 </reactive-dropdown-field>
-                                                                <button aria-label="add icon" mat-icon-button role="button" type="button">
+                                                                <button
+                                                                    aria-label="add icon"
+                                                                    mat-icon-button
+                                                                    role="button"
+                                                                    type="button"
+                                                                >
                                                                     <i class="icon-plus p-1 cursor-pointer"></i>
                                                                 </button>
                                                             </div>
@@ -2505,7 +2742,7 @@
                                             <div class="row">
                                                 <div class="col-xl-6 col-12">
                                                     <div class="purchase-information account-tab">
-                                                        <div class="select-puchase-info mb-25">
+                                                        <div class="select-puchase-info mb-4">
                                                             <mat-checkbox
                                                                 color="primary"
                                                                 id="purchase-info-check"
@@ -2517,7 +2754,7 @@
                                                             <div class="col-sm-6 col-lg-6">
                                                                 <label>Linked Account/s </label>
                                                             </div>
-                                                            <div class="col-sm-6 col-lg-7 pl-0 mb-25">
+                                                            <div class="col-sm-6 col-lg-7 pl-0 mb-4">
                                                                 <textarea
                                                                     type="text"
                                                                     id="linked-account"
@@ -2528,7 +2765,7 @@
                                                             <div class="col-sm-6 col-lg-6">
                                                                 <label>Applicable Tax </label>
                                                             </div>
-                                                            <div class="col-sm-6 col-lg-6 pl-0 mb-25">
+                                                            <div class="col-sm-6 col-lg-6 pl-0 mb-4">
                                                                 <reactive-dropdown-field
                                                                     id="applicable-tax"
                                                                     [placeholder]="commonLocaleData?.app_select_tax"
@@ -2546,8 +2783,8 @@
                                                             <div class="col-sm-6 col-lg-6">
                                                                 <label>{{ localeData?.unit_price }} </label>
                                                             </div>
-                                                            <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mb-25">
-                                                                <div class="row add-new-field mb-25">
+                                                            <div class="col-xl-6 col-lg-5 col-sm-5 col-11 pl-0 mb-4">
+                                                                <div class="row add-new-field mb-4">
                                                                     <div class="col-sm-6 col-6">
                                                                         <input-field
                                                                             type="text"
@@ -2605,11 +2842,8 @@
                                                 </div>
                                                 <div class="col-xl-6 col-12 pl-4">
                                                     <div class="sales-information">
-                                                        <div class="select-puchase-info mb-25">
-                                                            <mat-checkbox
-                                                                color="primary"
-                                                                id="sales-info-check"
-                                                            >
+                                                        <div class="select-puchase-info mb-4">
+                                                            <mat-checkbox color="primary" id="sales-info-check">
                                                                 Sales Information
                                                             </mat-checkbox>
                                                         </div>
@@ -2618,7 +2852,7 @@
                                                             <div class="col-sm-6 col-lg-6">
                                                                 <label>Linked Account/s </label>
                                                             </div>
-                                                            <div class="col-sm-6 col-lg-7 pl-0 mb-25">
+                                                            <div class="col-sm-6 col-lg-7 pl-0 mb-4">
                                                                 <textarea
                                                                     type="text"
                                                                     id="sales-linked-account"
@@ -2630,7 +2864,7 @@
                                                             <div class="col-sm-6 col-lg-6">
                                                                 <label>Applicable Tax </label>
                                                             </div>
-                                                            <div class="col-sm-6 col-lg-6 pl-0 mb-25">
+                                                            <div class="col-sm-6 col-lg-6 pl-0 mb-4">
                                                                 <reactive-dropdown-field
                                                                     id="sales-applicable-tax"
                                                                     [placeholder]="commonLocaleData?.app_select_tax"
@@ -2638,10 +2872,7 @@
                                                                 >
                                                                 </reactive-dropdown-field>
                                                                 <p class="mt-1 font-size-15">
-                                                                    <mat-checkbox
-                                                                        color="primary"
-                                                                        id="sales-price-tax"
-                                                                    >
+                                                                    <mat-checkbox color="primary" id="sales-price-tax">
                                                                         Price Inclusive of Tax ?
                                                                     </mat-checkbox>
                                                                 </p>
@@ -2649,8 +2880,8 @@
                                                             <div class="col-sm-6 col-lg-6">
                                                                 <label>{{ localeData?.unit_price }} </label>
                                                             </div>
-                                                            <div class="col-xl-7 col-lg-5 col-sm-5 col-11 pl-0 mb-25">
-                                                                <div class="row add-new-field mb-25">
+                                                            <div class="col-xl-7 col-lg-5 col-sm-5 col-11 pl-0 mb-4">
+                                                                <div class="row add-new-field mb-4">
                                                                     <div class="col-sm-6 col-6">
                                                                         <input-field
                                                                             type="text"
@@ -2699,7 +2930,7 @@
 
                                 <mat-tab label="Inventory">
                                     <div class="tab-container-new">
-                                        <p class="mb-25 font-size-15" hidden>
+                                        <p class="mb-4 font-size-15" hidden>
                                             <span>
                                                 <mat-checkbox
                                                     color="primary"
@@ -2715,10 +2946,10 @@
                                             <div class="row">
                                                 <div class="col-sm-6">
                                                     <div class="row">
-                                                        <div class="col-sm-6 col-lg-6 mb-25">
+                                                        <div class="col-sm-6 col-lg-6 mb-4">
                                                             <label>Output Qty <span class="text-red">*</span></label>
                                                         </div>
-                                                        <div class="col-sm-6 col-lg-6 mb-25">
+                                                        <div class="col-sm-6 col-lg-6 mb-4">
                                                             <input-field
                                                                 type="text"
                                                                 id="output-qty"
@@ -2727,10 +2958,10 @@
                                                         </div>
                                                     </div>
                                                     <div class="row">
-                                                        <div class="col-sm-6 col-lg-6 mb-25">
+                                                        <div class="col-sm-6 col-lg-6 mb-4">
                                                             <label>Combo Unit<span class="text-red">*</span></label>
                                                         </div>
-                                                        <div class="col-sm-6 col-lg-6 mb-25">
+                                                        <div class="col-sm-6 col-lg-6 mb-4">
                                                             <input-field
                                                                 type="text"
                                                                 id="stock-unit"
@@ -2741,12 +2972,12 @@
                                                 </div>
                                                 <div class="col-sm-6">
                                                     <div class="row">
-                                                        <div class="col-sm-6 col-lg-6 mb-25">
+                                                        <div class="col-sm-6 col-lg-6 mb-4">
                                                             <label
                                                                 >Input Combo Name<span class="text-red">*</span></label
                                                             >
                                                         </div>
-                                                        <div class="col-sm-6 col-lg-6 mb-25">
+                                                        <div class="col-sm-6 col-lg-6 mb-4">
                                                             <input-field
                                                                 type="text"
                                                                 id="select-stock-nme"
@@ -2756,10 +2987,10 @@
                                                         </div>
                                                     </div>
                                                     <div class="row">
-                                                        <div class="col-sm-6 col-lg-6 mb-25">
+                                                        <div class="col-sm-6 col-lg-6 mb-4">
                                                             <label>Combo Qty.<span class="text-red">*</span></label>
                                                         </div>
-                                                        <div class="col-sm-6 col-lg-6 mb-25">
+                                                        <div class="col-sm-6 col-lg-6 mb-4">
                                                             <input-field
                                                                 type="text"
                                                                 id="select-stock-qty"
@@ -2768,10 +2999,10 @@
                                                         </div>
                                                     </div>
                                                     <div class="row">
-                                                        <div class="col-sm-6 col-lg-6 mb-25">
+                                                        <div class="col-sm-6 col-lg-6 mb-4">
                                                             <label>Combo Unit<span class="text-red">*</span></label>
                                                         </div>
-                                                        <div class="col-sm-6 col-lg-6 mb-25">
+                                                        <div class="col-sm-6 col-lg-6 mb-4">
                                                             <input-field
                                                                 type="text"
                                                                 id="select-stock-unit"
@@ -2782,21 +3013,21 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <p class="mb-25 font-size-15">
+                                        <p class="mb-4 font-size-15">
                                             <span>
                                                 <mat-checkbox color="primary" name="stock" id="stock">
                                                     Continue selling when out of Combo?</mat-checkbox
                                                 >>
                                             </span>
                                         </p>
-                                        <p class="mb-25 font-size-15">
+                                        <p class="mb-4 font-size-15">
                                             <span>
                                                 <mat-checkbox color="primary" name="return-policy" id="return-policy">
                                                     Is this Combo eligible for return policy?</mat-checkbox
                                                 >
                                             </span>
                                         </p>
-                                        <p class="mb-25 font-size-15">
+                                        <p class="mb-4 font-size-15">
                                             <span>
                                                 <mat-checkbox
                                                     color="primary"
@@ -2814,7 +3045,7 @@
                                             <div class="product-option-wrapper">
                                                 <div class="row">
                                                     <div class="col-sm-12 col-md-6">
-                                                        <div class="row mb-25">
+                                                        <div class="row mb-4">
                                                             <div class="col-sm-6 col-lg-4">
                                                                 <label>Option 1</label>
                                                                 <input-field
@@ -2833,7 +3064,7 @@
                                                                 ></textarea>
                                                             </div>
                                                         </div>
-                                                        <div class="row mb-25">
+                                                        <div class="row mb-4">
                                                             <div class="col-sm-6 col-lg-4">
                                                                 <input-field
                                                                     type="text"
@@ -2852,7 +3083,9 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <a href="javascript:void(0)" class="text-primary mb-25 d-block cursor-pointer"
+                                                <a
+                                                    href="javascript:void(0)"
+                                                    class="text-primary mb-4 d-block cursor-pointer"
                                                     >+ another option</a
                                                 >
                                             </div>
@@ -2864,7 +3097,7 @@
                                     <div class="tab-container-new">
                                         <div class="row">
                                             <div class="col-md-8 col-lg-8 col-xl-6 col-12">
-                                                <div class="row mb-25">
+                                                <div class="row mb-4">
                                                     <div class="col-sm-6 col-lg-6">
                                                         <label>Combo Display Name</label>
                                                     </div>
@@ -2873,7 +3106,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-8 col-lg-8 col-xl-6 mb-25">
+                                            <div class="col-md-8 col-lg-8 col-xl-6 mb-4">
                                                 <div class="row">
                                                     <div class="col-sm-6 col-lg-6">
                                                         <mat-radio-group
@@ -2912,7 +3145,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-sm-12 col-md-8 col-lg-6">
-                                                <div class="row mb-25">
+                                                <div class="row mb-4">
                                                     <div class="col-sm-6 col-lg-6">
                                                         <label>Barcode (ISBN, UPC, GTIN, etc.)</label>
                                                     </div>
@@ -2921,8 +3154,8 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-8 col-lg-8 col-xl-6 mb-25">
-                                                <div class="row mb-25">
+                                            <div class="col-md-8 col-lg-8 col-xl-6 mb-4">
+                                                <div class="row mb-4">
                                                     <div class="col-sm-6 col-lg-6">
                                                         <label>Custom Field</label>
                                                     </div>
@@ -2936,7 +3169,7 @@
                                 </mat-tab>
                                 <mat-tab label="Variant">
                                     <div class="tab-container-new">
-                                        <div class="mb-25 variant-form">
+                                        <div class="mb-4 variant-form">
                                             <div class="row">
                                                 <div class="col-xl-12">
                                                     <div class="row">
@@ -3002,7 +3235,7 @@
                                 </mat-tab>
                                 <mat-tab label="Addon">
                                     <div class="tab-container-new">
-                                        <div class="mb-25 addon-form">
+                                        <div class="mb-4 addon-form">
                                             <div class="row">
                                                 <div class="col-xl-12">
                                                     <div class="row">
@@ -3054,7 +3287,10 @@
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> Available on variant </label>
                                                             <!-- All available variant list show with checkbox -->
-                                                            <reactive-dropdown-field placeholder="" id="combo-addon-available">
+                                                            <reactive-dropdown-field
+                                                                placeholder=""
+                                                                id="combo-addon-available"
+                                                            >
                                                             </reactive-dropdown-field>
                                                         </div>
                                                     </div>
@@ -3074,7 +3310,7 @@
                                 </mat-tab>
                                 <mat-tab label="Bill of Material">
                                     <div class="tab-container-new">
-                                        <div class="mb-25">
+                                        <div class="mb-4">
                                             <div class="final-product-recipe">
                                                 <div class="row align-items-center">
                                                     <div class="col-xl-12">
@@ -3090,10 +3326,13 @@
                                                                     >
                                                                     </input-field>
                                                                 </div>
-                                                                <div class="variant-name-field mb-25">
+                                                                <div class="variant-name-field mb-4">
                                                                     <label> Variant Name </label>
                                                                     <!-- All variant list will show in dropdown -->
-                                                                    <reactive-dropdown-field placeholder="" id="combo-variant-name">
+                                                                    <reactive-dropdown-field
+                                                                        placeholder=""
+                                                                        id="combo-variant-name"
+                                                                    >
                                                                     </reactive-dropdown-field>
                                                                 </div>
                                                                 <div>
@@ -3206,7 +3445,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="row flex-column mt-25">
+                                                <div class="row flex-column mt-4">
                                                     <div
                                                         class="text-primary cursor-pointer px-3 d-flex justify-content-between mb-2 font-size-15"
                                                         (click)="toggleExpense()"
@@ -3256,7 +3495,11 @@
                                                         <div
                                                             class="cursor-pointer add-expense d-flex justify-content-center align-items-center"
                                                         >
-                                                            <button aria-label="add icon" mat-icon-button class="icon-font-22 text-primary">
+                                                            <button
+                                                                aria-label="add icon"
+                                                                mat-icon-button
+                                                                class="icon-font-22 text-primary"
+                                                            >
                                                                 +
                                                             </button>
                                                         </div>
@@ -3281,7 +3524,7 @@
                     <!-- bulk create starts -->
                     <div class="bulk-create-content" *ngIf="stockForm.type === 'BULK'">
                         <div class="container-fluid">
-                            <div class="bulk-create-head mb-25 d-flex">
+                            <div class="bulk-create-head mb-4 d-flex">
                                 <div>
                                     <button
                                         aria-label="option icon"
@@ -3391,7 +3634,10 @@
                                                 ></input-field>
                                             </td>
                                             <td data-title="Inventory Type">
-                                                <reactive-dropdown-field placeholder="Select" readonly></reactive-dropdown-field>
+                                                <reactive-dropdown-field
+                                                    placeholder="Select"
+                                                    readonly
+                                                ></reactive-dropdown-field>
                                             </td>
                                             <td data-title="Inventory Unit">
                                                 <reactive-dropdown-field placeholder="Select"></reactive-dropdown-field>
@@ -3416,28 +3662,52 @@
                                                 ></input-field>
                                             </td>
                                             <td data-title="Purchase Account Name">
-                                                <reactive-dropdown-field placeholder="Select" id="purchase-account-name"></reactive-dropdown-field>
+                                                <reactive-dropdown-field
+                                                    placeholder="Select"
+                                                    id="purchase-account-name"
+                                                ></reactive-dropdown-field>
                                             </td>
                                             <td data-title="Linked Tax">
-                                                <reactive-dropdown-field placeholder="Select" id="purchase-linked-tax"></reactive-dropdown-field>
+                                                <reactive-dropdown-field
+                                                    placeholder="Select"
+                                                    id="purchase-linked-tax"
+                                                ></reactive-dropdown-field>
                                             </td>
                                             <td data-title="Purchase Unit">
-                                                <reactive-dropdown-field placeholder="Select" id="purchase-unit"></reactive-dropdown-field>
+                                                <reactive-dropdown-field
+                                                    placeholder="Select"
+                                                    id="purchase-unit"
+                                                ></reactive-dropdown-field>
                                             </td>
                                             <td data-title="Purchase Rate">
-                                                <reactive-dropdown-field placeholder="Select" id="purchase-rate"></reactive-dropdown-field>
+                                                <reactive-dropdown-field
+                                                    placeholder="Select"
+                                                    id="purchase-rate"
+                                                ></reactive-dropdown-field>
                                             </td>
                                             <td data-title="Sales Account Name">
-                                                <reactive-dropdown-field placeholder="Select" id="sales-account-name"></reactive-dropdown-field>
+                                                <reactive-dropdown-field
+                                                    placeholder="Select"
+                                                    id="sales-account-name"
+                                                ></reactive-dropdown-field>
                                             </td>
                                             <td data-title="Linked Tax">
-                                                <reactive-dropdown-field placeholder="Select" id="sales-linked-tax"></reactive-dropdown-field>
+                                                <reactive-dropdown-field
+                                                    placeholder="Select"
+                                                    id="sales-linked-tax"
+                                                ></reactive-dropdown-field>
                                             </td>
                                             <td data-title="Sales unit">
-                                                <reactive-dropdown-field placeholder="Select" id="sales-unit"></reactive-dropdown-field>
+                                                <reactive-dropdown-field
+                                                    placeholder="Select"
+                                                    id="sales-unit"
+                                                ></reactive-dropdown-field>
                                             </td>
                                             <td data-title="Sales Rate">
-                                                <reactive-dropdown-field placeholder="Select" id="sales-rate"></reactive-dropdown-field>
+                                                <reactive-dropdown-field
+                                                    placeholder="Select"
+                                                    id="sales-rate"
+                                                ></reactive-dropdown-field>
                                             </td>
                                             <td data-title="HSN/SAC Code">
                                                 <input-field
@@ -3482,7 +3752,7 @@
                 </form>
             </div>
         </div>
-        <div class="inner-content-footer">
+        <div class="inner-content-footer px-3">
             <div class="button-group d-flex column-gap-15">
                 <button
                     aria-label="create"
@@ -3508,7 +3778,12 @@
                     color="primary"
                     class="min-width-100"
                     (click)="updateStock(stockCreateEditForm)"
-                    [disabled]="stockCreateEditForm.invalid || !stockForm.stockUnitUniqueName || hasSpacingError || (uploadAttachmentInProgress$ | async)"
+                    [disabled]="
+                        stockCreateEditForm.invalid ||
+                        !stockForm.stockUnitUniqueName ||
+                        hasSpacingError ||
+                        (uploadAttachmentInProgress$ | async)
+                    "
                 >
                     {{ commonLocaleData?.app_update }}
                 </button>

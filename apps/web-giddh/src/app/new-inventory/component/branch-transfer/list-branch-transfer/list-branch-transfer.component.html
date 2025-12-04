@@ -238,7 +238,7 @@
                             {{ commonLocaleData?.app_total_amount }}
                         </th>
                         <td mat-cell *matCellDef="let element">
-                            {{ activeCompany?.baseCurrencySymbol }} {{ element?.totalAmount | giddhCurrency }}
+                            {{ activeCompany?.baseCurrencySymbol }} {{ element?.totalAmount | giddhNumberFormat }}
                         </td>
                     </ng-container>
 

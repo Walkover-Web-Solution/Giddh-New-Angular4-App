@@ -66,6 +66,7 @@
                         <div class="form-group mb-0">
                             <div
                                 [ngClass]="{ 'input-group': addAccountForm.get('openingBalance')?.value > 0 }"
+                                class="ml-0"
                             >
                                 <input-field
                                     [name]="'number'"
@@ -75,12 +76,12 @@
                                     #autoFocusUpdate
                                     [placeholder]="'0.00'"
                                     [label]="localeData?.opening_balance"
-                                    [type]="'number'"
+                                    [type]="'text'"
                                     formControlName="openingBalance"
-                                    [allowDigitsOnly]="true"
                                     [readonly]="company?.isActive"
                                     [min]="0"
                                     (change)="openConfirmLeaveDialog()"
+                                    [allowDecimalDigitsOnly]="true"
                                 >
                                 </input-field>
                                 <div class="d-flex">
@@ -132,12 +133,12 @@
                 <div class="row pb-4">
                     <div class="col-sm-4">
                         <!-- Sales Person -->
-                        <reactive-dropdown-field 
+                        <reactive-dropdown-field
                             formControlName="salesPersonUniqueName"
                             [name]="'sales-person'"
                             [label]="commonLocaleData?.app_sales_person"
                             [labelValue]="addAccountForm.get('salesPersonName')?.value"
-                            [placeholder]="commonLocaleData?.app_sales_person_placeholder" 
+                            [placeholder]="commonLocaleData?.app_sales_person_placeholder"
                             [options]="salesPersonList$ | async"
                             [showCreateNew]="true"
                             (selectedOption)="addAccountForm.get('salesPersonName')?.patchValue($event?.label)"
@@ -148,6 +149,7 @@
                     <div class="col-sm-4" *ngIf="addAccountForm.get('currency')?.value !== companyCurrency">
                         <div
                             [ngClass]="{ 'input-group': addAccountForm.get('foreignOpeningBalance')?.value > 0 }"
+                            class="ml-0"
                         >
                             <input-field
                                 [name]="'number'"
@@ -156,12 +158,12 @@
                                 [label]="localeData?.foreign_opening_balance"
                                 [ngClass]="{ 'w100 remove-right-border-radius': addAccountForm.get('foreignOpeningBalance')?.value > 0 }"
                                 [placeholder]="'0.00'"
-                                [type]="'number'"
+                                [type]="'text'"
                                 formControlName="foreignOpeningBalance"
-                                [allowDigitsOnly]="true"
                                 [readonly]="company?.isActive"
                                 [min]="0"
                                 (change)="openConfirmLeaveDialog()"
+                                [allowDecimalDigitsOnly]="true"
                             >
                             </input-field>
                             <div class="d-flex">
@@ -169,8 +171,9 @@
                                     class="input-group-addon d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1"
                                     (click)="openingBalanceTypeChanged('DEBIT')"
                                     [ngClass]="{
-                                        'active-toggle-btn': addAccountForm.get('openingBalanceType')?.value === 'DEBIT',
-                                        'cursor-pointer': addAccountForm.get('openingBalance')?.value > 0
+                                        'active-toggle-btn':
+                                            addAccountForm.get('openingBalanceType')?.value === 'DEBIT',
+                                        'cursor-pointer': addAccountForm.get('foreignOpeningBalance')?.value > 0
                                     }"
                                     *ngIf="addAccountForm.get('foreignOpeningBalance')?.value > 0"
                                 >
@@ -180,8 +183,9 @@
                                     class="only-right-radius input-group-addon d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1"
                                     (click)="openingBalanceTypeChanged('CREDIT')"
                                     [ngClass]="{
-                                        'active-toggle-btn': addAccountForm.get('openingBalanceType')?.value === 'CREDIT',
-                                        'cursor-pointer': addAccountForm.get('openingBalance')?.value > 0
+                                        'active-toggle-btn':
+                                            addAccountForm.get('openingBalanceType')?.value === 'CREDIT',
+                                        'cursor-pointer': addAccountForm.get('foreignOpeningBalance')?.value > 0
                                     }"
                                     *ngIf="addAccountForm.get('foreignOpeningBalance')?.value > 0"
                                 >
@@ -204,7 +208,7 @@
                     </div>
                 </div>
                 <ng-container *ngIf="isHsnSacEnabledAcc">
-                    <div class="row pl-4 d-flex"> 
+                    <div class="row pl-4 d-flex">
                         <div class="d-flex align-items-center">
                             <mat-radio-group name="hsnOrSac" formControlName="hsnOrSac">
                                 <mat-radio-button
@@ -227,7 +231,7 @@
                             class="ml-4"
                             [label]="commonLocaleData?.app_hsn"
                             [placeholder]="commonLocaleData?.app_hsn"
-                            [type]="'text'"
+                            [type]="'number'"
                             formControlName="hsnNumber"
                             (change)="openConfirmLeaveDialog()"
                             [allowDigitsOnly]="true"
@@ -238,7 +242,7 @@
                             class="ml-4"
                             [label]="commonLocaleData?.app_sac"
                             [placeholder]="commonLocaleData?.app_sac"
-                            [type]="'text'"
+                            [type]="'number'"
                             formControlName="sacNumber"
                             (change)="openConfirmLeaveDialog()"
                             [allowDigitsOnly]="true"
@@ -317,7 +321,7 @@
                                     [label]="commonLocaleData?.app_state"
                                     [placeholder]="commonLocaleData?.app_select"
                                     [useCustomLabelValue]="true"
-                                    [labelValue]="gst?.value.state.code ? gst.value.state.code + ' - ' + gst.value.state.name : ''" 
+                                    [labelValue]="gst?.value.state.code ? gst.value.state.code + ' - ' + gst.value.state.name : ''"
                                     [options]="statesSource$ | async"
                                     formControlName="stateCode"
                                     [required]="isStateRequired"
@@ -329,7 +333,7 @@
                                     matTooltipPosition="above"
                                 >
                                 </reactive-dropdown-field>
-                                
+
                                 <reactive-dropdown-field
                                     *ngIf="countyList?.length"
                                     [label]="isUKCompany ? commonLocaleData?.app_county : commonLocaleData?.app_region"
@@ -461,22 +465,6 @@
                                 (change)="openConfirmLeaveDialog()"
                             >
                             </mobile-number-input>
-                            <!-- <input-field
-                                [name]="'mobile'"
-                                [type]="'tel'"
-                                #initContactUpdate
-                                class="flag-input"
-                                [id]="'init-contact-update'"
-                                [label]="commonLocaleData?.app_mobile_number"
-                                [placeholder]="localeData?.mobile_no_placeholder"
-                                [floatLabel]="intl?.['init-contact-update']?.getNumber() ? 'always' : 'auto'"
-                                formControlName="mobileNo"
-                                (change)="openConfirmLeaveDialog()"
-                                (focus)="reInitializeMobileField('init-contact-update')"
-                            >
-                            </input-field>
-                            <span id="init-contact-update-valid-msg" class="d-none"></span>
-                            <span id="init-contact-update-error-msg" class="d-none"></span> -->
                         </div>
                     </div>
 
@@ -574,21 +562,6 @@
                                 id="contactValidationError_{{ i }}"
                                 >{{ localeData?.duplicate_mobile_number }}
                             </span>
-                            
-                            <!-- <input-field
-                                [name]="'contactNo_' + i"
-                                [type]="'tel'"
-                                class="flag-input"
-                                [id]="'init-contact-portal_' + i"
-                                formControlName="contactNo"
-                                [placeholder]="localeData?.mobile_no_placeholder"
-                                [label]="commonLocaleData?.app_mobile_number"
-                                (input)="portalIndex = i"
-                                (focus)="reInitializeMobileField('init-contact-portal_' + i)"
-                                [floatLabel]="intl?.['init-contact-portal_' + i]?.getNumber() ? 'always' : 'auto'"
-                            ></input-field>
-                            <span [id]="'init-contact-portal_' + i + '-valid-msg'" class="d-none"></span>
-                            <span [id]="'init-contact-portal_' + i + '-error-msg'" class="d-none"></span> -->
                         </div>
                         <div class="pl-2 mt-1">
                             <button
@@ -608,7 +581,7 @@
                         </div>
                     </div>
                     <ng-container *ngTemplateOutlet="templateForDeleteAndUpdate"></ng-container>
-                </div>                
+                </div>
             </mat-tab>
 
             <!-- bank details visible when sundry creditors selected , right now is hide -->
@@ -641,7 +614,7 @@
                                     [type]="'text'"
                                     [id]="'beneficiaryName' + i"
                                     [placeholder]="localeData?.beneficiary_name_placeholder"
-                                    [label]="localeData?.beneficiary_name_label"                    
+                                    [label]="localeData?.beneficiary_name_label"
                                     [name]="'beneficiaryName_' + i"
                                     formControlName="beneficiaryName"
                                 >
@@ -727,7 +700,7 @@
                 </div>
             </mat-tab>
 
-            <mat-tab [label]="localeData?.tabs?.others" class="other-form-wrap"> 
+            <mat-tab [label]="localeData?.tabs?.others" class="other-form-wrap">
                 <div class="pt-3 overflow-hidden">
                     <div class="row">
                         <div class="col-sm-6">
@@ -748,7 +721,7 @@
                                 }"
                             >
                                 <input-field
-                                    [type]="'number'"
+                                    [type]="'text'"
                                     [min]="'0'"
                                     class="flex-grow-1"
                                     [cssClass]="'text-right'"
@@ -764,6 +737,7 @@
                                         '' +
                                         commonLocaleData?.app_numbers?.zero
                                     "
+                                    [allowDecimalDigitsOnly]="true"
                                 >
                                 </input-field>
                                 <div class="d-flex">
@@ -811,7 +785,7 @@
                             ></input-field>
                         </div>
                     </div>
-                    
+
                     <div class="row pb-4">
                         <div class="col-sm-12">
                             <div class="form-group">
@@ -828,7 +802,7 @@
                     </div>
                 </div>
             </mat-tab>
-            
+
             <mat-tab [label]="localeData?.tabs?.custom">
                 <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isCustomFieldLoading"></giddh-page-loader>
                 <div class="pt-3 overflow-hidden">
@@ -1109,7 +1083,7 @@
                                 [selectedValues]="defaultTaxLabel"
                                 [placeholder]="commonLocaleData?.app_select"
                                 [options]="companyTaxDropDown"
-                                [chipListUniqueName]="taxGroupForm.get('taxes').value" 
+                                [chipListUniqueName]="taxGroupForm.get('taxes').value"
                                 (selectedOptionUniqueName)="taxesSelected($event)"
                                 (selectedOption)="defaultTaxLabel = $event"
                                 class="adjusted-content-width select-multiple-chiplist mobile-margin border-bottom mat-form-field-clean"

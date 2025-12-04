@@ -107,11 +107,13 @@
 @include theme(default) {
     .bg-grey {
         background-color: var(--color-light-gray) !important;
+        color: var(--color-black);
     }
 }
 @include theme(dark) {
     .bg-grey {
         background-color: var(--theme-primary-light) !important;
+        color: var(--color-black);
     }
 }
 .bg-transparent {
@@ -160,6 +162,12 @@
     overflow: hidden;
     white-space: nowrap;
 }
+
+.word-wrap {
+    word-wrap: break-word !important;
+    word-break: break-word !important;
+}
+
 .text-wrap {
     text-wrap: wrap;
 }

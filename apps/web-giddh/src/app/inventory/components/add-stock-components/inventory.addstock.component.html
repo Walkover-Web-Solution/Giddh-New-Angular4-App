@@ -97,19 +97,19 @@
                                                 <label for="sacCodeType" class="ml-1 radio-custom-label">SAC Code</label>
                                             </span>
                                             <input
-                                                type="text"
+                                                type="number"
                                                 class="form-control"
                                                 maxlength="10"
-                                                decimalDigitsDirective
+                                                digitsOnlyDirective
                                                 formControlName="hsnNumber"
                                                 *ngIf="addStockForm.get('showCodeType')?.value === 'hsn'"
                                             />
                                             <input
-                                                type="text"
+                                                type="number"
                                                 class="form-control"
                                                 maxlength="10"
+                                                digitsOnlyDirective
                                                 formControlName="sacNumber"
-                                                decimalDigitsDirective
                                                 *ngIf="addStockForm.get('showCodeType')?.value === 'sac'"
                                             />
                                         </div>

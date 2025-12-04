@@ -295,7 +295,10 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
                 }
                 const searchString = queryParams.search;
                 if (searchString) {
-                    this.search.setValue(searchString);
+                    // Update the search input to show the search term
+                    this.search.patchValue(searchString, { emitEvent: false });
+                    // Manually trigger the search since we disabled events
+                    this.getContactsListData(this.advanceFilters.from, this.advanceFilters.to, this.advanceFilters.page, "true", PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));
                 } else {
                     if (!this.isRefreshingAfterDelete) {
                         this.getContactsListData(this.advanceFilters.from, this.advanceFilters.to, this.advanceFilters.page, this.advanceFilters.refresh, PAGINATION_LIMIT, this.advanceFilters.q ?? '', this.key, this.order, (this.currentBranch ? this.currentBranch.uniqueName : ""));

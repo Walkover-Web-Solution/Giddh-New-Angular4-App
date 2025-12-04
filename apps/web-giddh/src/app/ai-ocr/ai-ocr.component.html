@@ -17,7 +17,7 @@
                     (change)="onFileSelected($event)"
                 />
                 <button
-                    *ngIf="listCount > 0"
+                    *ngIf="listCount > 0 || showClearFilter"
                     aria-label="show"
                     mat-stroked-button
                     [disabled]="isCompany || isConsolidatedBranch"
@@ -108,15 +108,15 @@
                             </ng-template>
                         </mat-menu>
                     </div>
-                    <div *ngIf="isCompany && activeCompany?.name" class="ml-2">
+                    <div *ngIf="isCompany" class="ml-2">
                         <reactive-dropdown-field
                             [label]="commonLocaleData?.app_branch"
                             [options]="branches"
                             (selectedOption)="
-                                ocrDocumentsRequestParams.branchUniqueName = $event?.value; selectBranch()
+                                ocrDocumentsRequestParams.branchUniqueName = $event?.value; selectBranch($event)
                             "
-                            (onClear)="ocrDocumentsRequestParams.branchUniqueName = ''; selectBranch()"
-                            [labelValue]="activeCompany?.name"
+                            (onClear)="ocrDocumentsRequestParams.branchUniqueName = ''; getAllOcrDocuments(false)"
+                            [labelValue]="ocrDocumentsRequestParams.branchUniqueName ? branchName : activeCompany?.name"
                             [placeholder]="commonLocaleData?.app_select_branch"
                         ></reactive-dropdown-field>
                     </div>
@@ -132,7 +132,7 @@
                 </div>
             </div>
             <div *ngIf="selectedToggle === ocrAction.Create">
-                <button mat-raised-button color="primary" (click)="onChangeVoucher('skip')" class="mr-r15">
+                <button mat-raised-button color="primary" (click)="onChangeVoucher('skip')" class="mr-3">
                     {{ commonLocaleData?.app_skip_and_next }}
                 </button>
                 <button mat-raised-button color="primary" (click)="onChangeVoucher('save')">
@@ -141,7 +141,7 @@
             </div>
         </div>
         <div class="mr-t1 d-flex align-items-center" *ngIf="isCompany">
-            <span class="font-size-16 mr-r1">{{ localeData?.create_voucher_messgae }} </span>
+            <span class="font-size-16 mr-2">{{ localeData?.create_voucher_messgae }} </span>
         </div>
         <main class="flex-grow-1 overflow-auto main-ocr">
             <ng-container [ngSwitch]="selectedToggle">
@@ -189,7 +189,7 @@
                                 class="m-t1 d-flex justify-content-center align-items-center"
                                 *ngIf="!ocrMainList?.items?.length && (isCompany || isConsolidatedBranch)"
                             >
-                                <span class="font-size-24 mr-r1">{{ localeData?.go_to_branch_information }} </span>
+                                <span class="font-size-24 mr-2">{{ localeData?.go_to_branch_information }} </span>
                                 <button mat-raised-button color="primary" (click)="gotToBranchTab()">
                                     {{ localeData?.go_to_branch }}
                                 </button>

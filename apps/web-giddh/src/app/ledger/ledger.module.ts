@@ -65,6 +65,7 @@ import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { TributeMentionModule } from '../shared/helpers/directives/tributeMention/tributeMention.module';
 import { MatDividerModule } from '@angular/material/divider';
+import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
 
 @NgModule({
     declarations: [
@@ -148,7 +149,7 @@ import { MatDividerModule } from '@angular/material/divider';
         NgxMatSelectSearchModule,
         TributeMentionModule,
         MatDividerModule,
-        NgxMatSelectSearchModule
+        GiddhNumberFormatModule
     ]
 })
 export class LedgerModule {

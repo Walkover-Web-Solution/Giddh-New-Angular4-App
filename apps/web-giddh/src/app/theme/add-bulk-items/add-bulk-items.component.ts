@@ -10,7 +10,7 @@ import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
 import { SalesAddBulkStockItems } from "../../models/api-models/Sales";
 import { ToasterService } from "../../services/toaster.service";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { GiddhCurrencyPipe } from "../../shared/helpers/pipes/currencyPipe/currencyType.pipe";
+import { GiddhNumberFormatPipe } from "../../shared/helpers/pipes/number-format/number-format.pipe";
 
 @Component({
     selector: "add-bulk-items",
@@ -44,7 +44,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
         private componentStore: AddBulkItemsComponentStore,
         @Inject(MAT_DIALOG_DATA) public inputData,
         public dialogRef: MatDialogRef<any>,
-        private giddhCurrencyPipe: GiddhCurrencyPipe
+        private giddhCurrencyPipe: GiddhNumberFormatPipe
     ) { }
 
     /**
@@ -183,7 +183,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will be use for load stock/variant details 
+     * This will be use for load stock/variant details
      *
      * @param {SalesAddBulkStockItems} item
      * @param {*} requestObject
@@ -242,7 +242,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
     public variantChanged(item: SalesAddBulkStockItems, variant: any, index: number): void {
         const dataArray = this.addBulkForm.get('data') as FormArray;
         const isAlreadySelected = dataArray?.value?.filter(data => data?.variantUniqueName === variant.value);
- 
+
         if (isAlreadySelected?.length || this.itemsInProcess[item.uniqueName]) {
             this.toaster.showSnackBar('warning', this.localeData?.item_selected);
             return;

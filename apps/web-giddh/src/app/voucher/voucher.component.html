@@ -984,25 +984,6 @@
                                             [(ngModel)]="invFormData.accountDetails.email"
                                         ></input-field>
                                     </div>
-                                    <!-- Mobile Number -->
-                                    <div class="col-6 mt-3 mobile-number-wrapper">
-                                        <div id="init-contact-wrapper" class="position-relative w-100">
-                                            <input-field
-                                                [name]="'accountDetails.mobileNumber'"
-                                                [type]="'tel'"
-                                                #initContactProforma
-                                                class="flag-input bg-transparent"
-                                                [id]="'init-contact-proforma'"
-                                                (keydown.enter)="$event.preventDefault()"
-                                                [label]="commonLocaleData?.app_mobile_number"
-                                                [placeholder]="'98XXXXXXXX'"
-                                                [floatLabel]="'always'"
-                                            >
-                                            </input-field>
-                                            <span id="init-contact-proforma-valid-msg" class="d-none"></span>
-                                            <span id="init-contact-proforma-error-msg" class="d-none"></span>
-                                        </div>
-                                    </div>
                                     <!-- Warehouse -->
                                     <div
                                         class="col-6 mt-3"
@@ -1529,9 +1510,9 @@
                                                                 {{
                                                                     voucherApiVersion === 2
                                                                         ? (option.additional?.unadjustedAmount
-                                                                              ?.amountForAccount | giddhCurrency)
+                                                                              ?.amountForAccount | giddhNumberFormat)
                                                                         : (option.additional?.balanceDue
-                                                                              ?.amountForAccount | giddhCurrency)
+                                                                              ?.amountForAccount | giddhNumberFormat)
                                                                 }})
                                                             </div>
                                                         </a>
@@ -1564,7 +1545,7 @@
                                                                 ({{ commonLocaleData?.app_amount }}:
                                                                 {{
                                                                     option.additional?.balanceDue?.amountForAccount
-                                                                        | giddhCurrency
+                                                                        | giddhNumberFormat
                                                                 }})
                                                             </div>
                                                         </a>
@@ -1670,7 +1651,7 @@
                                         src="/assets/images/switch-icon.svg"
                                     />
                                     <span class="currency-digits" *ngIf="!showCurrencyValue">{{
-                                        originalExchangeRate | giddhCurrency
+                                        originalExchangeRate | giddhNumberFormat
                                     }}</span>
                                     <div class="currency-input-wrapper">
                                         <text-field
@@ -1723,7 +1704,7 @@
                                         src="/assets/images/switch-icon.svg"
                                     />
                                     <span class="currency-digits" *ngIf="!showCurrencyValue">{{
-                                        originalReverseExchangeRate | giddhCurrency
+                                        originalReverseExchangeRate | giddhNumberFormat
                                     }}</span>
                                     <div class="currency-input-wrapper">
                                         <text-field
@@ -1861,7 +1842,7 @@
                                                         currentVoucherFormDetails?.quantityAllowed
                                                     " [ngClass]="{ 'd-none' : !hasStock}">
                                                     <div class="wrap-td-data">
-                                                        {{ transaction.quantity | giddhCurrency }}
+                                                        {{ transaction.quantity | giddhNumberFormat }}
                                                         {{ transaction.stockUnitCode }}
                                                     </div>
                                                 </td>
@@ -2386,10 +2367,10 @@
                                                                             </mat-radio-group>
                                                                             <text-field
                                                                                 [id]="'transaction'"
-                                                                                [type]="'text'"
+                                                                                [type]="'number'"
                                                                                 [cssClass]="'form-control hsn-sac-code'"
                                                                                 maxLength="10"
-                                                                                [allowDecimalDigitsOnly]="true"
+                                                                                [allowDigitsOnly]="true"
                                                                                 [placeholder]="localeData?.hsn_number"
                                                                                 [name]="
                                                                                     'transaction.hsnNumber_' + entryIdx
@@ -2400,10 +2381,10 @@
                                                                                 [readonly]="isEinvoiceGenerated"></text-field>
                                                                             <text-field
                                                                                 [id]="'transaction'"
-                                                                                [type]="'text'"
+                                                                                [type]="'number'"
                                                                                 [cssClass]="'form-control hsn-sac-code'"
                                                                                 maxLength="10"
-                                                                                [allowDecimalDigitsOnly]="true"
+                                                                                [allowDigitsOnly]="true"
                                                                                 [placeholder]="localeData?.sac_number"
                                                                                 [name]="
                                                                                     'transaction.hsnNumber_' + entryIdx
@@ -3530,14 +3511,14 @@
                                                             <ng-container
                                                                 *ngIf="adjustPaymentData?.totalAdjustedAmount"
                                                             >
-                                                                {{ adjustPaymentBalanceDueData | giddhCurrency }}
+                                                                {{ adjustPaymentBalanceDueData | giddhNumberFormat }}
                                                             </ng-container>
                                                             <ng-container
                                                                 *ngIf="!adjustPaymentData?.totalAdjustedAmount"
                                                             >
                                                                 {{
                                                                     invFormData.voucherDetails.balanceDue
-                                                                        | giddhCurrency
+                                                                        | giddhNumberFormat
                                                                 }}
                                                             </ng-container>
                                                         </strong>
@@ -3620,7 +3601,7 @@
                                                         }}</span>
                                                     </div>
                                                     <div class="col-5">
-                                                        {{ invFormData.voucherDetails.balanceDue | giddhCurrency }}
+                                                        {{ invFormData.voucherDetails.balanceDue | giddhNumberFormat }}
                                                     </div>
                                                 </ng-container>
                                             </div>

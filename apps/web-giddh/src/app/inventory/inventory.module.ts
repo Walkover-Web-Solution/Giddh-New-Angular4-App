@@ -19,7 +19,6 @@ import { GiddhRoundOffPipeModule } from '../shared/helpers/pipes/round-off/round
 import { SharedModule } from '../shared/shared.module';
 import { ConfirmModalModule } from '../theme';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
-import { CurrencyModule } from './../shared/helpers/pipes/currencyPipe/currencyType.module';
 import { InventoryAddGroupComponent } from './components/add-group-components/inventory.addgroup.component';
 import { InventoryAddStockModule } from './components/add-stock-components/inventory.addstock.module';
 import { InventoryCustomStockComponent } from './components/custom-stock-components/inventory.customstock.component';
@@ -54,6 +53,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
+import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
 
 @NgModule({
     declarations: [
@@ -122,8 +122,7 @@ import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicke
         SharedModule,
         Daterangepicker,
         TextCaseChangeModule,
-        
-        CurrencyModule,
+        GiddhNumberFormatModule,
         MatTabsModule,
         ReactiveFormsModule,
         DigitsOnlyModule,

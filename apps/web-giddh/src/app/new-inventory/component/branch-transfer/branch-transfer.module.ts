@@ -19,7 +19,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
 import { GiddhPageLoaderModule } from '../../../shared/giddh-page-loader/giddh-page-loader.module';
-import { CurrencyModule } from '../../../shared/helpers/pipes/currencyPipe/currencyType.module';
+
 import { MatSortModule } from '@angular/material/sort';
 import { TranslateDirectiveModule } from '../../../theme/translate/translate.directive.module';
 import { AsideManageTransportComponent } from './aside-manage-transport/aside-manage-transport.component';
@@ -27,6 +27,7 @@ import { AsideMenuProductServiceModule } from '../../../shared/aside-menu-produc
 import { CreateBranchTransferComponent } from './create-branch-transfer/create-branch-transfer.component';
 import { ListBranchTransferComponent } from './list-branch-transfer/list-branch-transfer.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { GiddhNumberFormatModule } from '../../../shared/helpers/pipes/number-format/number-format.module';
 @NgModule({
     imports: [
         CommonModule,
@@ -47,7 +48,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
         MatFormFieldModule,
         MatInputModule,
         GiddhPageLoaderModule,
-        CurrencyModule,
+        GiddhNumberFormatModule,
         MatSortModule,
         ReactiveFormsModule,
         TranslateDirectiveModule,

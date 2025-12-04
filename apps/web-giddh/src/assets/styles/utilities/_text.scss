@@ -1,55 +1,51 @@
-@use '../abstracts/mixins' as *;
-
+@use "../abstracts/mixins" as *;
 // Text transformation utilities
 @include text-transform-utilities();
-
 // Text alignment utilities
 @include text-align-utilities();
-
+// Word-wrap utilities
+@include word-wrap-utilities();
+// Word-break utilities
+@include word-break-utilities();
+// White-space utilities
+@include white-space-utilities();
 // Cursor utilities
 @include cursor-utilities();
-
 // Opacity utilities
 @include opacity-utilities();
-
 // User select utilities
 @include user-select-utilities();
-
 // Position utilities
 @include position-utilities();
-
 // Position inset utilities
 @include position-inset-utilities();
-
 // Width utilities
 @include width-utilities();
-
 // Height utilities
 @include height-utilities();
-
 // Transform rotation utilities
 @include transform-rotation-utilities();
-
 // Transform scale utilities
 @include transform-scale-utilities();
-
 // Generate text-decoration utility classes
 @include text-decoration-utilities();
-
 // Generate border-radius utility classes
 @include border-radius-utilities();
-
 // Generate z-index utility classes
 @include z-index-utilities();
-
 // Generate overflow utility classes
 @include overflow-utilities();
-
 // Generate absolute positioning utility classes
 @include absolute-positioning-utilities();
-
 // Generate visibility utility classes
 @include visibility-utilities();
-
 // Generate pointer-events utility classes
 @include pointer-events-utilities();
+// Generate min-height utility classes
+@include min-height-utilities();
+// Generate max-height utility classes
+@include max-height-utilities();
+// Generate min-width utility classes
+@include min-width-utilities();
+// Generate max-width utility classes
+@include max-width-utilities();

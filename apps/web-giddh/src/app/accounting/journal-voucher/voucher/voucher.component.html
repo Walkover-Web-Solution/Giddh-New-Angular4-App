@@ -223,7 +223,7 @@
                                                 class="current-balance d-block mb-1"
                                             >
                                                 Current Balance:
-                                                {{ transaction.get("currentBalance")?.value | giddhCurrency }}
+                                                {{ transaction.get("currentBalance")?.value | giddhNumberFormat }}
                                                 {{
                                                     transaction.get("selectedAccount.type")?.value === "DEBIT"
                                                         ? localeData?.dr
@@ -305,10 +305,10 @@
                         <div class="d-flex flex-column">
                             <div class="total-box text-right pull-right d-flex justify-content-end">
                                 <span
-                                    ><strong>{{ totalDebitAmount | giddhCurrency }}</strong></span
+                                    ><strong>{{ totalDebitAmount | giddhNumberFormat }}</strong></span
                                 >
                                 <span
-                                    ><strong>{{ totalCreditAmount | giddhCurrency }}</strong></span
+                                    ><strong>{{ totalCreditAmount | giddhNumberFormat }}</strong></span
                                 >
                             </div>
                             <span class="border-bottom custom-border float-right"></span>

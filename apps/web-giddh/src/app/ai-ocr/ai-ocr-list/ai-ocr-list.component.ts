@@ -15,7 +15,6 @@ import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from "../../app.constant";
 import { MatSort, Sort } from "@angular/material/sort";
 import { AiOcrStore } from "../utility/ai-ocr.store";
 import { AiOcrService } from "../../services/ai-ocr.service";
-import { OrganizationType } from "../../models/user-login-state";
 import { AppState } from "../../store";
 import { Store } from "@ngrx/store";
 import { GeneralActions } from "../../actions/general/general.actions";
@@ -142,8 +141,6 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
                 this.aiOcrService.mainPageOcrData$.pipe(
                     takeUntil(this.destroyed$),
                     takeUntil(this.routeScope$),
-                    filter(data => data !== null),
-                    distinctUntilChanged()
                 ).subscribe((data) => {
                     this.updateDataSource(data);
                 });
@@ -157,44 +154,29 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
                     }
                 });
 
-                this.ocrDocumentListForm.valueChanges.pipe(
-                    takeUntil(this.destroyed$),
-                    takeUntil(this.routeScope$),
-                    debounceTime(700),
-                    distinctUntilChanged()
-                ).subscribe((value) => {
-                    if (value) {
-                        this.ocrDataUpdate();
-                    }
-                });
-
                 this.componentStore.activeCompany$.pipe(takeUntil(this.destroyed$), takeUntil(this.routeScope$)).subscribe((response) => {
                     if (response && this.activeCompany?.uniqueName !== response?.uniqueName) {
                         this.activeCompany = response;
                     }
                 });
 
-                this.componentStore.branches$.pipe(takeUntil(this.destroyed$), takeUntil(this.routeScope$)).subscribe(branchList => {
-                    if (branchList) {
-                        this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && branchList.length > 1;
-                        if (!this.isCompany) {
-                            this.ocrDocumentsRequestParams.branchUniqueName = this.generalService.currentBranchUniqueName ?? '';
-                        }
-                    }
-                });
 
                 this.ocrDocumentListForm?.controls["status"].valueChanges
                     .pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$), takeUntil(this.routeScope$))
                     .subscribe((searchedText) => {
                         if (this.isNotNullOrUndefined(searchedText) && searchedText.trim() !== "") {
                             this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
+                            this.aiOcrService.dateRangeEmit$.next(this.ocrDocumentsRequestParams);
                             // Switch to list mode when filtering
                             this.aiOcrService.mainPage$.next(false);
                         }
                         if (this.isNullOrEmpty(searchedText)) {
                             this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
+                            this.aiOcrService.dateRangeEmit$.next(this.ocrDocumentsRequestParams);
                             this.showStatus = false;
                         }
+                        this.getAllOcrDocuments(false);
+                        this.ocrDataUpdate();
                     });
 
                 this.ocrDocumentListForm?.controls["convertedStatus"].valueChanges
@@ -202,12 +184,17 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
                     .subscribe((searchedText) => {
                         if (this.isNotNullOrUndefined(searchedText) && searchedText.trim() !== "") {
                             this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
+                            this.aiOcrService.dateRangeEmit$.next(this.ocrDocumentsRequestParams);
+                            // Switch to list mode when filtering
                             this.aiOcrService.mainPage$.next(false);
                         }
                         if (this.isNullOrEmpty(searchedText)) {
                             this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
+                            this.aiOcrService.dateRangeEmit$.next(this.ocrDocumentsRequestParams);
                             this.showconvertedStatus = false;
                         }
+                        this.getAllOcrDocuments(false);
+                        this.ocrDataUpdate();
                     });
 
                 this.ocrDocumentListForm?.controls["uploadedBy"].valueChanges
@@ -215,12 +202,17 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
                     .subscribe((searchedText) => {
                         if (this.isNotNullOrUndefined(searchedText) && searchedText.trim() !== "") {
                             this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
+                            this.aiOcrService.dateRangeEmit$.next(this.ocrDocumentsRequestParams);
+
                             this.aiOcrService.mainPage$.next(false);
                         }
                         if (this.isNullOrEmpty(searchedText)) {
                             this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
+                            this.aiOcrService.dateRangeEmit$.next(this.ocrDocumentsRequestParams);
                             this.showUploadedBy = false;
                         }
+                        this.getAllOcrDocuments(false);
+                        this.ocrDataUpdate();
                     });
 
                 this.ocrDocumentListForm?.controls["fileName"].valueChanges
@@ -228,25 +220,31 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
                     .subscribe((searchedText) => {
                         if (this.isNotNullOrUndefined(searchedText) && searchedText.trim() !== "") {
                             this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
+                            this.aiOcrService.dateRangeEmit$.next(this.ocrDocumentsRequestParams);
+
                             this.aiOcrService.mainPage$.next(false);
                         }
                         if (this.isNullOrEmpty(searchedText)) {
                             this.aiOcrService.sendListData$.next(this.ocrDocumentListForm.value);
+                            this.aiOcrService.dateRangeEmit$.next(this.ocrDocumentsRequestParams);
                             this.showFileName = false;
                         }
+                        this.getAllOcrDocuments(false);
+                        this.ocrDataUpdate();
                     });
 
                 this.aiOcrService.mainPage$.pipe(takeUntil(this.destroyed$), takeUntil(this.routeScope$)).subscribe((response) => {
                     if (!response) {
                         this.aiOcrService.dateRangeEmit$.pipe(takeUntil(this.destroyed$), takeUntil(this.routeScope$)).subscribe((res) => {
                             if (res) {
-                                this.dateSelectedCallback(res);
+                                this.ocrDocumentsRequestParams.from = res.from;
+                                this.ocrDocumentsRequestParams.to = res.to;
                             }
                         });
                     }
                 });
 
-                this.aiOcrService.resetData$.pipe(takeUntil(this.destroyed$), takeUntil(this.routeScope$)).subscribe((res) => {
+                this.aiOcrService.resetData$.pipe(takeUntil(this.routeScope$), takeUntil(this.routeScope$)).subscribe((res) => {
                     if (res) {
                         this.resetFilter(res);
                     }
@@ -257,8 +255,8 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
                         this.ocrDocumentsRequestParams.branchUniqueName = res.branchUniqueName;
                         this.ocrDocumentsRequestParams.from = res.from;
                         this.ocrDocumentsRequestParams.to = res.to;
-                        this.showClearFilter = false;
                         this.getAllOcrDocuments(false);
+                        this.ocrDataUpdate();
                     }
                 });
             }
@@ -429,6 +427,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
         }
         this.ocrDocumentsRequestParams.count = event.pageSize;
         this.getAllOcrDocuments(false);
+        this.ocrDataUpdate();
     }
 
     /**
@@ -451,6 +450,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
         this.ocrDocumentsRequestParams.from = res.from;
         this.ocrDocumentsRequestParams.to = res.to;
         this.getAllOcrDocuments(true);
+        this.ocrDataUpdate();
     }
 
     /**
@@ -499,6 +499,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
             ocrType: this.ocrType,
         };
         this.componentStore.getAllOcrList(request);
+        this.changeDetection.detectChanges();
     }
 
     /**
@@ -513,6 +514,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
             this.ocrDocumentsRequestParams.sortBy = event.active?.toUpperCase();
             this.ocrDocumentsRequestParams.page = 1;
             this.getAllOcrDocuments(false);
+            this.ocrDataUpdate();
         }
     }
 
@@ -546,6 +548,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
                 this.updateDataSource(data);
             });
         }, 100);
+        this.changeDetection.detectChanges();
     }
 
     /**
@@ -557,6 +560,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
         this.ocrDocumentsRequestParams.from = "";
         this.ocrDocumentsRequestParams.to = "";
         this.getAllOcrDocuments(true);
+        this.ocrDataUpdate();
     }
 
     /**

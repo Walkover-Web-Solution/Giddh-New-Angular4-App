@@ -10,7 +10,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { TranslateDirectiveModule } from "../translate/translate.directive.module";
-import { GiddhCurrencyPipe } from "../../shared/helpers/pipes/currencyPipe/currencyType.pipe";
+import { GiddhNumberFormatPipe } from "../../shared/helpers/pipes/number-format/number-format.pipe";
 
 @NgModule({
     declarations: [
@@ -33,9 +33,9 @@ import { GiddhCurrencyPipe } from "../../shared/helpers/pipes/currencyPipe/curre
         AddBulkItemsComponent
     ],
     providers: [
-        GiddhCurrencyPipe
+        GiddhNumberFormatPipe
     ]
 })
 export class AddBulkItemsModule {
-    
+
 }

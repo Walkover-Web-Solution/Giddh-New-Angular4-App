@@ -879,13 +879,16 @@ export class GeneralService {
      * @returns {Array<AllItems>}
      * @memberof GeneralService
      */
-    public getVisibleMenuItems(module: string, apiItems: Array<any>, itemList: Array<AllItems>, countryCode: string = ""): Array<AllItems> {
+    public getVisibleMenuItems(module: string, apiItems: Array<any>, itemList: Array<AllItems>, countryCode: string = "", voucherApiVersion?: number): Array<AllItems> {
         const visibleMenuItems = cloneDeep(itemList);
+        const localData = localStorage.getItem('session');
+        // New tab - initialize with localStorage data
+        const localObj = JSON.parse(localData);
+        const voucherVersion = localObj.activeCompany.voucherVersion;
         let index = 0;
         itemList?.forEach((menuItem, menuIndex) => {
             visibleMenuItems[menuIndex].items = [];
-
-            if (visibleMenuItems[menuIndex]?.additional?.queryParams?.voucherVersion && visibleMenuItems[menuIndex]?.additional?.queryParams?.voucherVersion !== this.voucherApiVersion) {
+            if (visibleMenuItems[menuIndex]?.additional?.queryParams?.voucherVersion && visibleMenuItems[menuIndex]?.additional?.queryParams?.voucherVersion !== voucherVersion) {
                 visibleMenuItems[menuIndex].hide = true;
             } else {
                 visibleMenuItems[menuIndex].itemIndex = index;
@@ -894,7 +897,7 @@ export class GeneralService {
 
             menuItem.items?.forEach(item => {
                 const isValidItem = apiItems.find(apiItem => apiItem?.uniqueName === item.link);
-                if (((isValidItem && item.hide !== module) || (item.alwaysPresent && item.hide !== module)) && (!item.additional?.queryParams?.countrySpecific?.length || item.additional?.queryParams?.countrySpecific?.indexOf(countryCode) > -1) && (!item.additional?.queryParams?.voucherVersion || item.additional?.queryParams?.voucherVersion === this.voucherApiVersion)) {
+                if (((isValidItem && item.hide !== module) || (item.alwaysPresent && item.hide !== module)) && (!item.additional?.queryParams?.countrySpecific?.length || item.additional?.queryParams?.countrySpecific?.indexOf(countryCode) > -1) && (!item.additional?.queryParams?.voucherVersion || item.additional?.queryParams?.voucherVersion === voucherVersion)) {
                     // If items returned from API have the current item which can be shown in branch/company mode, add it
                     visibleMenuItems[menuIndex].items.push(item);
                 }
@@ -2221,7 +2224,10 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public roundOffValueByCompanyDecimalPlace(value: number, companyDecimalPlaces: number = 2): number {
-        const decimalPlaces = companyDecimalPlaces === 4 ? 10000 : 100;
+        const decimalPlaces =
+            companyDecimalPlaces === 4 ? 10000 :
+                companyDecimalPlaces === 3 ? 1000 :
+                    100;
         return Math.round(Number(value) * decimalPlaces) / decimalPlaces;
     }
 
@@ -2277,7 +2283,7 @@ export class GeneralService {
     /**
      * Retrieves a list of available voucher types with localized labels.
      *
-     * @param commonLocaleData 
+     * @param commonLocaleData
      * @param onlyVouchers Optional array of voucher types to filter by. Defaults to all voucher types.
      * @returns {Array<{ label: string, value: string }>} An array of voucher type objects, each containing
      * @memberof GeneralService
@@ -2458,7 +2464,7 @@ export class GeneralService {
         isNavigatingRef: { value: boolean }
     ): void {
         let pendingNavigationUrl: string = '';
-        
+
         // Listen for navigation attempts
         router.events.pipe(
             filter(event => event instanceof NavigationStart),
@@ -2468,41 +2474,41 @@ export class GeneralService {
             if (hasUnsavedChangesCallback() && event.url !== router.url) {
                 // Always update the pending navigation URL to the most recent attempt
                 pendingNavigationUrl = event.url;
-                
+
                 if (!isNavigatingRef.value) {
                     // Set flag to prevent multiple dialogs
                     isNavigatingRef.value = true;
-                    
+
                     // Cancel the current navigation
                     router.navigateByUrl(router.url, { skipLocationChange: true });
-                    
+
                     // Show confirmation dialog
                     let dialogRef = pageLeaveUtilityService.openDialogWithoutAutoCleanup();
-                    
+
                     dialogRef.afterClosed().subscribe((action) => {
-                        
+
                         // Remove body CSS class that was added when dialog opened
                         document.querySelector("body")?.classList?.remove("page-leave-confirmation-modal-wrapper");
-                        
+
                         if (action === true) {
                         // User confirmed to leave - clean up and navigate
-                            
+
                             pageLeaveUtilityService.removeBrowserConfirmationDialog();
                             cleanupCallback();
-                            
+
                             // Use setTimeout to ensure navigation happens after all cleanup
                             setTimeout(() => {
                                 // Reset navigation flag after cleanup but before navigation
                                 isNavigatingRef.value = false;
-                                
+
                                 // Try Angular navigation first (smooth SPA navigation)
                                 router.navigateByUrl(pendingNavigationUrl, { replaceUrl: false }).then(
                                     (success) => {
                                         if (!success) {
                                             // Try with different navigation options
-                                            return router.navigateByUrl(pendingNavigationUrl, { 
+                                            return router.navigateByUrl(pendingNavigationUrl, {
                                                 skipLocationChange: false,
-                                                replaceUrl: false 
+                                                replaceUrl: false
                                             });
                                         }
                                         return success;
@@ -2556,7 +2562,7 @@ export class GeneralService {
      */
     public registerUnsavedChangesCallback(callback: () => boolean): () => void {
         this.unsavedChangesCallbacks.push(callback);
-        
+
         // Return unregister function
         return () => {
             const index = this.unsavedChangesCallbacks.indexOf(callback);
@@ -2575,7 +2581,7 @@ export class GeneralService {
      */
     public registerMarkFormsAsPristineCallback(callback: () => void): () => void {
         this.markFormsAsPristineCallbacks.push(callback);
-        
+
         // Return unregister function
         return () => {
             const index = this.markFormsAsPristineCallbacks.indexOf(callback);
@@ -2615,5 +2621,31 @@ export class GeneralService {
                 console.warn('Error marking forms as pristine:', error);
             }
         });
+    }
+
+    /**
+     * Gets the dynamic decimal format string based on company settings
+     *
+     * @param {number} decimalPlaces Number of decimal places from company settings
+     * @returns {string} Decimal format string for Angular DecimalPipe
+     * @memberof GeneralService
+     */
+    public getDecimalFormat(decimalPlaces: number): string {
+        return `1.${decimalPlaces}-${decimalPlaces}`;
+    }
+
+    /**
+     * Formats amount with proper decimal places
+     *
+     * @param {number} amount Amount to format
+     * @param {number} decimalPlaces Number of decimal places from company settings
+     * @returns {string} Formatted amount
+     * @memberof GeneralService
+     */
+    public formatAmount(amount: number, decimalPlaces: number): string {
+        if (amount == null || amount === undefined) {
+            return '0.' + '0'.repeat(decimalPlaces);
+        }
+        return amount.toFixed(decimalPlaces);
     }
 }
