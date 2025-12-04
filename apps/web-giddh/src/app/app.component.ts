@@ -60,7 +60,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     ) {
         this.isProdMode = PRODUCTION_ENV;
         this.isElectron = isElectron;
-        
+
         this.store.pipe(select(s => s.session), takeUntil(this.destroyed$)).subscribe(ss => {
             if (ss?.user && ss.user.session && ss.user.session.id) {
                 let a = pick(ss.user, ['isNewUser']);
@@ -282,15 +282,15 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
         this._generalService.IAmLoaded.next(true);
         this._cdr.detectChanges();
-        this.router.events.pipe(takeUntil(this.destroyed$)).subscribe((evt) => {
-            if ((evt instanceof NavigationStart) && this.newVersionAvailableForWebApp && !isElectron) {
+        this.router.events.pipe(takeUntil(this.destroyed$)).subscribe((event) => {
+            if ((event instanceof NavigationStart) && this.newVersionAvailableForWebApp && !isElectron) {
                 // need to save last state
-                const redirectState = this.getLastStateFromUrl(evt.url);
+                const redirectState = this.getLastStateFromUrl(event.url);
                 localStorage.setItem('lastState', redirectState);
                 window.location.reload();
                 return;
             }
-            if (!(evt instanceof NavigationEnd)) {
+            if (!(event instanceof NavigationEnd)) {
                 return;
             }
             window.scrollTo(0, 0);
