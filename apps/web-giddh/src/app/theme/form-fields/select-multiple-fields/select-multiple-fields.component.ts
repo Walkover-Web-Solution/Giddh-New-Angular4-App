@@ -77,8 +77,6 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     @Output() public dynamicSearchedQuery: EventEmitter<string> = new EventEmitter();
     /** Callback for create new option selected */
     @Output() public createOption: EventEmitter<boolean> = new EventEmitter<boolean>();
-    /** Callback for clear selected value */
-    @Output() public onClear: EventEmitter<any> = new EventEmitter<any>();
     /** Callback for option selected */
     @Output() public selectedOption: EventEmitter<any> = new EventEmitter<any>();
     /** Emits the updated list of selected option unique names whenever the selection changes. */
@@ -126,13 +124,7 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
                 this.lastSearchString = search;
                 if (this.enableDynamicSearch) {
                     this.dynamicSearchedQuery.emit(search);
-                    if (!search) {
-                        this.onClear.emit({ label: "", value: "" });
-                    }
                 } else {
-                    if (search === "") {
-                        this.onClear.emit({ label: "", value: "" });
-                    }
                     this.filterOptions(search);
                 }
                 this.changeDetection.detectChanges();
