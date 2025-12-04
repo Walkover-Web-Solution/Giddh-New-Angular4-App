@@ -354,6 +354,7 @@ body {
 
 #magicLink {
     font-size: var(--font-size-15);
+    min-height: 100vh;
 }
 
 .nav-link>.active {
