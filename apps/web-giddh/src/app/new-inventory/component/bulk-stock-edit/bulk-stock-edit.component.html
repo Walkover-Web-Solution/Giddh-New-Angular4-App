@@ -1235,6 +1235,7 @@
                                                             [options]="discountsList"
                                                             [openDropdown]="selectTableRowName === 'discountName'"
                                                             (selectedOption)="row.get('discountName').patchValue($event.label)"
+                                                            (onClear)="row.get('discountName').patchValue('')"
                                                         ></reactive-dropdown-field>
                                                     </div>
                                                 </td>
