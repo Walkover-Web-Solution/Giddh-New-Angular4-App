@@ -920,7 +920,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (this.company.isActive) {
             accountRequest.accountOpeningBalance = this.isBulkDataUpdated ? this.tempSaveBulkData : [];
             accountRequest.accountOpeningBalance = accountRequest.accountOpeningBalance?.filter((res: any) => res?.branch?.uniqueName);
-        } else if(accountRequest.accountOpeningBalance.length > 0){
+        } else if (accountRequest.accountOpeningBalance.length > 0) {
             accountRequest.accountOpeningBalance[0].openingBalanceType = this.addAccountForm.get('openingBalanceType')?.value;
         }
         if (this.stateList && accountRequest.addresses && accountRequest.addresses.length > 0 && !this.isHsnSacEnabledAcc) {
