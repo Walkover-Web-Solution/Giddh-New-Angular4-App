@@ -71,7 +71,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
     /** Chart object */
     public chart: any;
 
-    constructor(@Inject(ServiceConfig) private serviceConfig,  private store: Store<AppState>, public tlPlActions: TBPlBsActions, public currencyPipe: GiddhNumberFormatPipe, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private tlPlService: TlPlService) {
+    constructor(@Inject(ServiceConfig) private serviceConfig, private store: Store<AppState>, public tlPlActions: TBPlBsActions, public currencyPipe: GiddhNumberFormatPipe, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private tlPlService: TlPlService) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
 
         this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {

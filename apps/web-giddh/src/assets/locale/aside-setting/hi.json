@@ -16,6 +16,11 @@
           ]
         },
         {
+          "label": "ऑथ की",
+          "link": "/pages/settings/company-auth-key",
+          "icon": "<i class='icon-company'></i>"
+        },
+        {
           "label": "उपयोगकर्ता प्रोफ़ाइल",
           "link": "/pages/user-details/mobile-number",
           "icon": "<i class='icon-user-new'></i>",

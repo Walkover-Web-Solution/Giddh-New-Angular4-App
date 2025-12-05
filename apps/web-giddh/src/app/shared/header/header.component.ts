@@ -785,7 +785,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         /* TO SHOW NOTIFICATIONS */
         if (window['Headway'] === undefined) {
             let scriptTag = document.createElement('script');
-            scriptTag.src = 'https://cdn.headwayapp.co/widget.js';
+            scriptTag.src = './assets/js/headway-widget.js';
             scriptTag.type = 'text/javascript';
             scriptTag.defer = true;
             scriptTag.async = true;
@@ -1599,6 +1599,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             this.store.dispatch(this.settingsBranchAction.GetALLBranches({ from: '', to: '', hierarchyType: BranchHierarchyType.Flatten }));
         }
     }
+
 
     /**
      * This will init the notification on window orientation change

@@ -6,10 +6,7 @@
 >
     <div class="branch-transfer-report mt-2">
         <hamburger-menu [pageHeading]="localeData?.tab_heading"></hamburger-menu>
-        <div
-            class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
-            *ngIf="asideGstSidebarMenuState"
-        >
+        <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper" *ngIf="asideGstSidebarMenuState">
             <tax-sidebar
                 (navigateEvent)="handleNavigation()"
                 [exclude]="'#primary-new-header'"
@@ -21,10 +18,12 @@
                 <div class="mr-auto" *ngIf="vatReportTransactions.results?.length">
                     <ol class="breadcrumb">
                         <li>
-                            <a href="javascript:;" class="text-underline" (click)="navigateToPreviousPage()">VAT-Report</a>
+                            <a href="javascript:;" class="text-underline" (click)="navigateToPreviousPage()"
+                                >VAT-Report</a
+                            >
                         </li>
                         <li>
-                            <span>{{vatReportTransactions.results[0].description}}</span>
+                            <span>{{ vatReportTransactions.results[0].description }}</span>
                         </li>
                     </ol>
                 </div>
@@ -52,7 +51,11 @@
                         <td mat-cell *matCellDef="let element">
                             <a
                                 href="javascript:;"
-                                [ngClass]="!element.voucherNumber && element.voucherType !== 'purchase' ? 'noclick' : 'btn-link'"
+                                [ngClass]="
+                                    !element.voucherNumber && element.voucherType !== 'purchase'
+                                        ? 'noclick'
+                                        : 'btn-link'
+                                "
                                 (click)="voucherApiVersion === 2 && onSelectInvoice(element)"
                                 >{{ element.voucherNumber ? element.voucherNumber : "-" }}
                             </a>
@@ -70,7 +73,7 @@
                             <amount-field
                                 [amount]="element.taxableAmount"
                                 [currencySymbol]="activeCompany.baseCurrencySymbol"
-                                [currencyCode]="false"
+                                [currencyCode]="activeCompany?.baseCurrency"
                             ></amount-field>
                         </td>
                     </ng-container>
@@ -80,7 +83,7 @@
                             <amount-field
                                 [amount]="element.vatAmount"
                                 [currencySymbol]="activeCompany.baseCurrencySymbol"
-                                [currencyCode]="false"
+                                [currencyCode]="activeCompany?.baseCurrency"
                             ></amount-field>
                         </td>
                     </ng-container>
@@ -91,7 +94,13 @@
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="trn_number">
-                        <th mat-header-cell *matHeaderCellDef>{{ vatReportTransactionsRequest.country === 'GB' ? localeData?.vat_number : localeData?.trn_number }}</th>
+                        <th mat-header-cell *matHeaderCellDef>
+                            {{
+                                vatReportTransactionsRequest.country === "GB"
+                                    ? localeData?.vat_number
+                                    : localeData?.trn_number
+                            }}
+                        </th>
                         <td mat-cell *matCellDef="let element">{{ element.trnNumber ? element.trnNumber : "-" }}</td>
                     </ng-container>
                     <ng-container matColumnDef="place_supply">

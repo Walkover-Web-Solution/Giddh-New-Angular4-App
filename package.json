@@ -100,7 +100,6 @@
         "ngx-plaid-link": "^14.0.0",
         "ngx-quicklink": "^0.4.2",
         "ngx-toastr": "17.0.2",
-        "node": "^16.20.1",
         "path-browserify": "^1.0.1",
         "print-js": "^1.6.0",
         "qz-tray": "^2.2.3",
@@ -140,12 +139,9 @@
         "js-yaml": "^4.1.0",
         "ngx-build-plus": "16.0.0",
         "npm-run-all": "4.1.5",
-        "npx": "10.2.2",
         "ts-node": "10.9.1",
-        "tslint": "6.1.3",
-        "typescript": "^5.1.6",
-        "webpack": "5.78",
-        "zlib": "^1.0.5"
+        "typescript": "~5.1.6",
+        "webpack": "5.78"
     },
     "xplat": {
         "prefix": "foo"

@@ -884,7 +884,7 @@ export class GeneralService {
         const localData = localStorage.getItem('session');
         // New tab - initialize with localStorage data
         const localObj = JSON.parse(localData);
-        const voucherVersion = localObj.activeCompany.voucherVersion;
+        const voucherVersion = localObj?.activeCompany?.voucherVersion;
         let index = 0;
         itemList?.forEach((menuItem, menuIndex) => {
             visibleMenuItems[menuIndex].items = [];

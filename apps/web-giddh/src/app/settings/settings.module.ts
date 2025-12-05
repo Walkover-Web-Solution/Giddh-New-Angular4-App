@@ -77,6 +77,8 @@ import { ExportFileNameComponent } from './export-file-name/export-file-name.com
 import { TributeMentionModule } from '../shared/helpers/directives/tributeMention/tributeMention.module';
 import { ReplaceAllPipeModule } from '../shared/helpers/pipes/replaceAll/replaceAll.module';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { CompanyAuthKeyComponent } from './company-auth-key/company-auth-key.component';
+import { CreateCompanyAuthKeyComponent } from './company-auth-key/create-company-auth-key/create-company-auth-key.component';
 
 @NgModule({
     declarations: [
@@ -93,6 +95,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
         SettingPermissionFormComponent,
         BranchComponent,
         DiscountComponent,
+        CompanyAuthKeyComponent,
+        CreateCompanyAuthKeyComponent,
         ShopifyIntegrationComponent,
         CustomerPortalComponent,
         TallyIntegrationComponent,
