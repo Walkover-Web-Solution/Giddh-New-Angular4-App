@@ -1,4 +1,4 @@
-import { app, BrowserWindow, Menu, MenuItemConstructorOptions } from 'electron';
+import { app, BrowserWindow, dialog, Menu, MenuItemConstructorOptions } from 'electron';
 import { checkForUpdates } from './AppUpdater';
 import WindowManager from './WindowManager';
 
@@ -104,6 +104,67 @@ export default function setMenu() {
                         if (focusedWindow != null) {
                             focusedWindow.webContents.openDevTools();
                         }
+                    }
+                }
+            ]
+        },
+        {
+            label: app.getName(),
+            submenu: [
+                {
+                    label: `About ${app.getName()}`,
+                    click: async () => {
+                        const packageJson = require('../../../package.json');
+                        const appVersion = packageJson.version;
+
+                        await dialog.showMessageBox({
+                            type: 'info',
+                            title: `About ${app.getName()}`,
+                            message: `${app.getName()} v${appVersion}`,
+                            detail: `Accounting at its Rough!\n\nVersion: ${appVersion}\nElectron: ${process.versions.electron}\nNode.js: ${process.versions.node}\nChrome: ${process.versions.chrome}\n\n© 2024 Walkover Technologies Pvt Ltd`,
+                            buttons: ['OK'],
+                            defaultId: 0
+                        });
+                    }
+                },
+                { type: 'separator' },
+                {
+                    label: 'Check for Updates...',
+                    click: async () => {
+                        const packageJson = require('../../../package.json');
+                        const appVersion = packageJson.version;
+
+                        await dialog.showMessageBox({
+                            type: 'info',
+                            title: 'Software Update',
+                            message: 'Check for Updates',
+                            detail: `Current Version: ${appVersion}\n\nYou are running the latest version of Giddh.`,
+                            buttons: ['OK'],
+                            defaultId: 0
+                        });
+                    }
+                },
+                { type: 'separator' },
+                {
+                    label: `Hide ${app.getName()}`,
+                    accelerator: 'Command+H',
+                    role: 'hide'
+                },
+                {
+                    label: 'Hide Others',
+                    accelerator: 'Command+Shift+H',
+                    role: 'hideOthers'
+                },
+                {
+                    label: 'Show All',
+                    role: 'unhide'
+                },
+                { type: 'separator' },
+                {
+                    label: `Quit ${app.getName()}`,
+                    accelerator: 'Command+Q',
+                    click: () => {
+                        app.quit();
                     }
                 }
             ]
