@@ -478,9 +478,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
         // get openingblance value changes
         this.addAccountForm.get('openingBalance').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => { // as disccused with back end team bydefault openingBalanceType will be CREDIT
-            if (a && (a === 0 || a <= 0) && this.addAccountForm.get('openingBalanceType')?.value) {
-                this.addAccountForm.get('openingBalanceType')?.patchValue('CREDIT');
-            } else if (a && (a === 0 || a > 0) && this.addAccountForm.get('openingBalanceType')?.value === '') {
+            if (this.addAccountForm.get('openingBalanceType')?.value === '') {
                 this.addAccountForm.get('openingBalanceType')?.patchValue('CREDIT');
             }
         });
@@ -922,6 +920,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         if (this.company.isActive) {
             accountRequest.accountOpeningBalance = this.isBulkDataUpdated ? this.tempSaveBulkData : [];
             accountRequest.accountOpeningBalance = accountRequest.accountOpeningBalance?.filter((res: any) => res?.branch?.uniqueName);
+        } else if(accountRequest.accountOpeningBalance.length > 0){
+            accountRequest.accountOpeningBalance[0].openingBalanceType = this.addAccountForm.get('openingBalanceType')?.value;
         }
         if (this.stateList && accountRequest.addresses && accountRequest.addresses.length > 0 && !this.isHsnSacEnabledAcc) {
             let selectedStateObj = this.getStateGSTCode(this.stateList, accountRequest.addresses[0].stateCode);

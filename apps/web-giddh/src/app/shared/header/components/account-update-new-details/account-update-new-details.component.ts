@@ -383,9 +383,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
         // get openingblance value changes
         this.addAccountForm.get('openingBalance').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => { // as disccused with back end team bydefault openingBalanceType will be CREDIT
-            if (a && (a === 0 || a <= 0) && this.addAccountForm.get('openingBalanceType')?.value) {
-                this.addAccountForm.get('openingBalanceType')?.patchValue('CREDIT');
-            } else if (a && (a === 0 || a > 0) && this.addAccountForm.get('openingBalanceType')?.value === '') {
+            if (this.addAccountForm.get('openingBalanceType')?.value === '') {
                 this.addAccountForm.get('openingBalanceType')?.patchValue('CREDIT');
             }
         });
@@ -545,19 +543,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             }
         });
 
-        this.componentStore.branchList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
-                this.branches = response;
-                this.company.isActive = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches?.length > 1;
-                if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
-                    // Find the current checked out branch
-                    this.company.branch = response.find(branch => branch?.uniqueName === this.generalService.currentBranchUniqueName);
-                } else {
-                    // Find the HO branch
-                    this.company.branch = response.find(branch => !branch.parentBranch);
-                }
-            }
-        });
         this.onViewReady(true);
         this.loadAccountData();
 
@@ -2218,8 +2203,17 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      */
     private initAccountCustomFields(): void {
         // fill form with active account
-        combineLatest([this.activeAccount$, this.customFieldsService.list(this.customFieldsRequest)]).pipe(takeUntil(this.destroyed$)).subscribe(results => {
-            if (results && results[0] && results[1]) {
+        combineLatest([this.activeAccount$, this.customFieldsService.list(this.customFieldsRequest), this.componentStore.branchList$]).pipe(takeUntil(this.destroyed$)).subscribe(results => {
+            if (results && results[0] && results[1] && results[2]) {
+                this.branches = results[2];
+                this.company.isActive = this.generalService.currentOrganizationType !== OrganizationType.Branch && this.branches?.length > 1;
+                if (this.generalService.currentOrganizationType === OrganizationType.Branch) {
+                    // Find the current checked out branch
+                    this.company.branch = this.branches.find(branch => branch?.uniqueName === this.generalService.currentBranchUniqueName);
+                } else {
+                    // Find the HO branch
+                    this.company.branch = this.branches.find(branch => !branch.parentBranch);
+                }
                 this.companyCustomFields = [];
                 this.addAccountForm.setControl('customFields', this._fb.array([]));
                 let acc = results[0];
@@ -2371,7 +2365,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 } else if (acc.sacNumber) {
                     this.addAccountForm.get('hsnOrSac')?.patchValue('sac');
                 }
-                this.openingBalanceTypeChanged(accountDetails.openingBalanceType);
+                const accountData = acc.accountOpeningBalance?.[0].openingBalanceType ;
+                this.openingBalanceTypeChanged(this.company.isActive ? accountDetails.openingBalanceType : (accountData || accountDetails.openingBalanceType));
                 if (accountDetails.mobileNo) {
 
                     if (accountDetails.mobileNo.indexOf('-') > -1) {
