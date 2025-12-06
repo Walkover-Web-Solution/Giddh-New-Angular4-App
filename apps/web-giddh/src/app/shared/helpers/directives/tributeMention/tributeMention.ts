@@ -73,7 +73,9 @@ export class TributeMentionDirective implements OnInit, OnDestroy, OnChanges {
       this.mentionSelected.emit(event?.detail?.item?.original ?? "");
     });
     this.hostElement.nativeElement.addEventListener('keyup', (event: any) => {
-      this.open(false);
+      if (this.hostElement.nativeElement.value.endsWith(this.tributeConfig.trigger)) {
+        this.open(false);
+      }
     });
   }
 
