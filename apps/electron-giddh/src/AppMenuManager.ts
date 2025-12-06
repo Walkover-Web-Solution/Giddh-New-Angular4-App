@@ -1,6 +1,20 @@
 import { app, BrowserWindow, dialog, Menu, MenuItemConstructorOptions } from 'electron';
 import { checkForUpdates } from './AppUpdater';
 import WindowManager from './WindowManager';
+import * as fs from 'fs';
+import * as path from 'path';
+
+function getAppVersion(): string {
+    try {
+        const packagePath = path.join(__dirname, '../../../package.json');
+        const packageContent = fs.readFileSync(packagePath, 'utf8');
+        const packageJson = JSON.parse(packageContent);
+        return packageJson.version;
+    } catch (error) {
+        console.error('Failed to read version from package.json:', error);
+        return '0.0.0'; // fallback version
+    }
+}
 
 export default function setMenu() {
     const windowsMenu: MenuItemConstructorOptions = {
@@ -34,7 +48,7 @@ export default function setMenu() {
                 }
             },
             {
-                label: 'About Giddh v9.0.9',
+                label: `About Giddh v${getAppVersion()}`,
                 click: async () => {
                     console.log('About menu clicked'); // Debug log
                     try {
@@ -43,7 +57,7 @@ export default function setMenu() {
                             type: 'info',
                             title: 'About Giddh',
                             message: 'Giddh - Accounting Software',
-                            detail: `Version: 9.0.9\nElectron: ${process.versions.electron}\n\nBuilt with ❤️ by Walkover Technologies`,
+                            detail: `Version: ${getAppVersion()}\nElectron: ${process.versions.electron}\n\nBuilt with ❤️ by Walkover Technologies`,
                             buttons: ['OK']
                         });
                         console.log('Dialog result:', result);
