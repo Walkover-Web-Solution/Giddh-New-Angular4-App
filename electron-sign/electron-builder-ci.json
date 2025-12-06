@@ -51,7 +51,6 @@
             "zip"
         ],
         "icon": "./resources/icon.ico",
-        "publisherName": "Walkover Web Solutions Private Limited",
         "legalTrademarks": "Giddh is a trademark of Walkover Web Solutions Private Limited",
         "signAndEditExecutable": false
     },
@@ -63,7 +62,9 @@
         "shortcutName": "Giddh",
         "perMachine": false,
         "installerIcon": "./resources/icon.ico",
-        "uninstallerIcon": "./resources/icon.ico"
+        "uninstallerIcon": "./resources/icon.ico",
+        "displayLanguageSelector": false,
+        "installerHeaderIcon": "./resources/icon.ico"
     },
     "asar": true
 }
