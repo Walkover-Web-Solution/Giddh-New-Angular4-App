@@ -50,10 +50,10 @@
             "nsis-web",
             "zip"
         ],
-        "icon": "./resources/icon.ico",
-        "publisherName": "",
-        "legalTrademarks": "",
-       "signAndEditExecutable": false
+        "icon": "./resources/favicon.ico",
+        "publisherName": "Walkover Web Solutions Private Limited",
+        "legalTrademarks": "Giddh is a trademark of Walkover Web Solutions Private Limited",
+        "signAndEditExecutable": false
     },
     "nsis": {
         "oneClick": true,

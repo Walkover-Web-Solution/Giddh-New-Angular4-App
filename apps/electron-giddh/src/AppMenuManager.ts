@@ -33,6 +33,25 @@ export default function setMenu() {
                     checkForUpdates(item, focusedWindow, event);
                 }
             },
+            {
+                label: 'About Giddh v9.0.9',
+                click: async () => {
+                    console.log('About menu clicked'); // Debug log
+                    try {
+                        console.log('Attempting to show dialog...');
+                        const result = await dialog.showMessageBox({
+                            type: 'info',
+                            title: 'About Giddh',
+                            message: 'Giddh - Accounting Software',
+                            detail: `Version: 9.0.9\nElectron: ${process.versions.electron}\n\nBuilt with ❤️ by Walkover Technologies`,
+                            buttons: ['OK']
+                        });
+                        console.log('Dialog result:', result);
+                    } catch (error) {
+                        console.error('Dialog failed:', error);
+                    }
+                }
+            }
         ]
     };
 
@@ -104,67 +123,6 @@ export default function setMenu() {
                         if (focusedWindow != null) {
                             focusedWindow.webContents.openDevTools();
                         }
-                    }
-                }
-            ]
-        },
-        {
-            label: app.getName(),
-            submenu: [
-                {
-                    label: `About ${app.getName()}`,
-                    click: async () => {
-                        const packageJson = require('../../../package.json');
-                        const appVersion = packageJson.version;
-
-                        await dialog.showMessageBox({
-                            type: 'info',
-                            title: `About ${app.getName()}`,
-                            message: `${app.getName()} v${appVersion}`,
-                            detail: `Accounting at its Rough!\n\nVersion: ${appVersion}\nElectron: ${process.versions.electron}\nNode.js: ${process.versions.node}\nChrome: ${process.versions.chrome}\n\n© 2024 Walkover Technologies Pvt Ltd`,
-                            buttons: ['OK'],
-                            defaultId: 0
-                        });
-                    }
-                },
-                { type: 'separator' },
-                {
-                    label: 'Check for Updates...',
-                    click: async () => {
-                        const packageJson = require('../../../package.json');
-                        const appVersion = packageJson.version;
-
-                        await dialog.showMessageBox({
-                            type: 'info',
-                            title: 'Software Update',
-                            message: 'Check for Updates',
-                            detail: `Current Version: ${appVersion}\n\nYou are running the latest version of Giddh.`,
-                            buttons: ['OK'],
-                            defaultId: 0
-                        });
-                    }
-                },
-                { type: 'separator' },
-                {
-                    label: `Hide ${app.getName()}`,
-                    accelerator: 'Command+H',
-                    role: 'hide'
-                },
-                {
-                    label: 'Hide Others',
-                    accelerator: 'Command+Shift+H',
-                    role: 'hideOthers'
-                },
-                {
-                    label: 'Show All',
-                    role: 'unhide'
-                },
-                { type: 'separator' },
-                {
-                    label: `Quit ${app.getName()}`,
-                    accelerator: 'Command+Q',
-                    click: () => {
-                        app.quit();
                     }
                 }
             ]
