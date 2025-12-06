@@ -50,7 +50,7 @@
             "nsis-web",
             "zip"
         ],
-        "icon": "./resources/icon.ico",
+        "icon": "./resources/favicon.ico",
         "legalTrademarks": "Giddh is a trademark of Walkover Web Solutions Private Limited",
         "signAndEditExecutable": false
     },
@@ -61,10 +61,10 @@
         "menuCategory": "Accounting",
         "shortcutName": "Giddh",
         "perMachine": false,
-        "installerIcon": "./resources/icon.ico",
-        "uninstallerIcon": "./resources/icon.ico",
+        "installerIcon": "./resources/favicon.ico",
+        "uninstallerIcon": "./resources/favicon.ico",
         "displayLanguageSelector": false,
-        "installerHeaderIcon": "./resources/icon.ico"
+        "installerHeaderIcon": "./resources/favicon.ico"
     },
     "asar": true
 }

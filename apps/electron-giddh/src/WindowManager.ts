@@ -3,10 +3,37 @@ import AppUpdaterV1 from './AppUpdater';
 import { autoUpdater } from 'electron-updater';
 import { WebContentsSignal, WindowEvent } from './electronEventSignals';
 import { DEFAULT_URL, StateManager, WindowItem } from './StateManager';
+import * as path from 'path';
+import * as fs from 'fs';
 import BrowserWindow = Electron.BrowserWindow;
 import BrowserWindowConstructorOptions = Electron.BrowserWindowConstructorOptions;
 
 export const WINDOW_NAVIGATED = 'windowNavigated';
+
+function getIconPath(): string {
+    // Try multiple possible icon locations
+    const possiblePaths = [
+        path.join(__dirname, '../../../resources/favicon.ico'),
+        path.join(__dirname, '../../../resources/icon.ico'),
+        path.join(process.resourcesPath, 'favicon.ico'),
+        path.join(process.resourcesPath, 'icon.ico'),
+        path.join(__dirname, 'assets/icon/favicon.ico')
+    ];
+
+    for (const iconPath of possiblePaths) {
+        try {
+            if (fs.existsSync(iconPath)) {
+                console.log('Using icon from:', iconPath);
+                return iconPath;
+            }
+        } catch (error) {
+            // Continue to next path
+        }
+    }
+
+    console.warn('No icon file found, using default');
+    return undefined; // Let Electron use default icon
+}
 
 export default class WindowManager {
 
@@ -71,9 +98,10 @@ export default class WindowManager {
                 descriptor.url = url;
             }
 
+            const iconPath = getIconPath();
             const options: BrowserWindowConstructorOptions = {
                 // to avoid visible maximizing
-                icon: __dirname + '/assets/icon/favicon.ico',
+                icon: iconPath,
                 show: false,
                 webPreferences: {
                     nodeIntegration: true,

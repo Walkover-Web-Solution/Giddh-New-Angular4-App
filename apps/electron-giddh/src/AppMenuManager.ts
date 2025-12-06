@@ -1,18 +1,14 @@
 import { app, BrowserWindow, dialog, Menu, MenuItemConstructorOptions } from 'electron';
 import { checkForUpdates } from './AppUpdater';
 import WindowManager from './WindowManager';
-import * as fs from 'fs';
-import * as path from 'path';
 
 function getAppVersion(): string {
     try {
-        const packagePath = path.join(__dirname, '../../../package.json');
-        const packageContent = fs.readFileSync(packagePath, 'utf8');
-        const packageJson = JSON.parse(packageContent);
-        return packageJson.version;
+        // Use Electron's app.getVersion() which reads from package.json automatically
+        return app.getVersion();
     } catch (error) {
-        console.error('Failed to read version from package.json:', error);
-        return '0.0.0'; // fallback version
+        console.error('Failed to get app version:', error);
+        return '9.0.11'; // fallback to current version
     }
 }
 

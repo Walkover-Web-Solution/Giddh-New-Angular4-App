@@ -160,6 +160,8 @@ xplat/**/*.ngsummary.json
 package-lock.json
 /apps/electron-giddh/src/
 !/apps/electron-giddh/src/AppMenuManager.ts
+!/apps/electron-giddh/src/index.ts
+!/apps/electron-giddh/src/WindowManager.ts
 
 #
 .env
