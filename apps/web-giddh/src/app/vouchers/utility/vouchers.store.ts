@@ -596,9 +596,16 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                 return this.searchService.loadDetails(req.accountUniqueName, req.payload).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
-                            return this.patchState({
-                                particularDetails: { body: res?.body ?? {}, entryIndex: req.entryIndex }
-                            });
+                            if (res?.status === "success") {
+                                return this.patchState({
+                                    particularDetails: { body: res?.body ?? {}, entryIndex: req.entryIndex }
+                                });
+                            } else {
+                                this.toaster.showSnackBar("error", res?.message);
+                                return this.patchState({
+                                    particularDetails: { body: {}, entryIndex: req.entryIndex }
+                                });
+                            }
                         },
                         (error: any) => {
                             this.toaster.showSnackBar("error", error);
