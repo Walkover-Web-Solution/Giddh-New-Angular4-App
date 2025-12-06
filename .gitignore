@@ -162,6 +162,7 @@ package-lock.json
 !/apps/electron-giddh/src/AppMenuManager.ts
 !/apps/electron-giddh/src/index.ts
 !/apps/electron-giddh/src/WindowManager.ts
+!/apps/electron-giddh/src/main-auth.config.ts
 
 #
 .env

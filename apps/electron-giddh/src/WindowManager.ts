@@ -13,10 +13,10 @@ export const WINDOW_NAVIGATED = 'windowNavigated';
 function getIconPath(): string {
     // Try multiple possible icon locations
     const possiblePaths = [
-        path.join(__dirname, '../../../resources/favicon.ico'),
         path.join(__dirname, '../../../resources/icon.ico'),
-        path.join(process.resourcesPath, 'favicon.ico'),
+        path.join(__dirname, '../../../resources/favicon.ico'),
         path.join(process.resourcesPath, 'icon.ico'),
+        path.join(process.resourcesPath, 'favicon.ico'),
         path.join(__dirname, 'assets/icon/favicon.ico')
     ];
 

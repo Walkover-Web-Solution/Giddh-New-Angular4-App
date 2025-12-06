@@ -251,7 +251,7 @@ readDir(path.join(__dirname, rootDirectiory))
         return mkdir(path.join(__dirname, rootDirectiory, '.platform', 'nginx', 'conf.d'), { recursive: true });
     })
     .then(() => {
-        console.log('Copying favicon.ico to resources directory...');
+        console.log('Copying icon files to resources directory...');
         const sourceFavicon = path.join(__dirname, '../../apps/web-giddh/src/assets/icon/favicon.ico');
         const destFavicon = path.join(__dirname, rootDirectiory, 'resources/favicon.ico');
 
