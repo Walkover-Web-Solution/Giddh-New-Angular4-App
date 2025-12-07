@@ -60,6 +60,7 @@ import {
 } from "../utility/vouchers.const";
 import { SearchService } from "../../services/search.service";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { MatMenuTrigger } from "@angular/material/menu";
 import { OtherTaxComponent } from "../../theme/other-tax/other-tax.component";
 import { LastInvoices, OptionInterface, VoucherForm } from "../../models/api-models/Voucher";
 import { PageLeaveUtilityService } from "../../services/page-leave-utility.service";
@@ -110,6 +111,7 @@ import { EWayBillCreateComponent } from "../../shared/eWayBill/create/e-way-bill
 import { ReactiveDropdownFieldComponent } from "../../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component";
 import { ActionTypeEnum } from "../../shared/sales-person/utility/sales-person.constant";
 import { Country } from "../../shared/mobile-number-input/countries-data";
+import { GiddhDatepickerComponent } from "../../theme/giddh-datepicker/giddh-datepicker.component";
 
 @Component({
     selector: "create",
@@ -118,6 +120,8 @@ import { Country } from "../../shared/mobile-number-input/countries-data";
     providers: [VoucherComponentStore, SalesPersonComponentStore, AiOcrStore]
 })
 export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit {
+    /** Instance of voucher date picker */
+    @ViewChild("voucherDatePicker") public voucherDatePicker: GiddhDatepickerComponent
     /** Instance of RCM checkbox */
     @ViewChild("rcmCheckbox") public rcmCheckbox: ElementRef;
     /** Template Reference for Generic aside menu account */
@@ -134,6 +138,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     @ViewChild("adjustmentModal", { static: true }) public adjustmentModal: any;
     /** Selector for account dropdown */
     @ViewChild("accountDropdown") accountDropdown: ReactiveDropdownFieldComponent;
+    /** Instance of fileInput */
+    @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+    /** Billing details menu trigger */
+    @ViewChild('billingDetailsTrigger') billingDetailsTrigger!: MatMenuTrigger;
+    /** Shipping details menu trigger */
+    @ViewChild('shippingDetailsTrigger') shippingDetailsTrigger!: MatMenuTrigger;
     /**  This will use for dayjs */
     public dayjs: any = dayjs;
     /** Holds current voucher type */
@@ -310,7 +320,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /** List of stock units */
     public stockUnits: any[] = [];
     /** True if we need to show entry datepicker */
-    public openEntryDatepicker: boolean = false;
+    // public openEntryDatepicker: boolean = false;
     /** Entry index */
     private updatedEntryIndex: number;
     /** Date change type (voucher/entry) */
@@ -323,7 +333,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         sacNumber: "",
     };
     /** Entry index which is open in edit mode */
-    public activeEntryIndex: number = null;
+    public activeEntryIndex: number | null = null;
     /** Rate precision value that will be visible on UI */
     public ratePrecision = RATE_FIELD_PRECISION;
     /** Rate precision value that will be sent to API */
@@ -349,6 +359,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public voucherDetails: any = {};
     /** Send email dialog ref */
     public emailDialogRef: MatDialogRef<any>;
+    /** Stores the last focused element before dialog opens for focus restoration */
+    private lastFocusedElement: HTMLElement | null = null;
     /** List of vouchers available for adjustment */
     public vouchersForAdjustment: any[] = [];
     /** Stores the adjustment data */
@@ -497,6 +509,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public rowData: any = null;
     /** This will use for force clear reactive dropdown */
     public forceClear: boolean = false;
+    /** Holds active deposit index */
+    public activeDepositIndex: number | null = null;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -1315,6 +1329,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
                     this.checkIfEntriesHasStock();
 
+                    this.openAccountDropdown = true;
                     this.startLoader(false);
                     this.changeDetection.detectChanges();
                 }
@@ -2441,7 +2456,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         } else {
             this.invoiceForm.controls["account"]?.get("customerName")?.patchValue(event?.label);
             this.getAccountDetails(event?.value);
-            this.activeEntryIndex = 0;
+            // this.activeEntryIndex = 0;
         }
         this.openAccountDropdown = false;
 
@@ -3068,19 +3083,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public openBulkEntryDialog(): void {
-        this.bulkStockAsideMenuRef = this.dialog.open(AddBulkItemsComponent, {
-            data: {
-                voucherType: this.voucherType,
-                exchangeRate: this.invoiceForm.get("exchangeRate")?.value ?? 1,
-                highPrecisionRate: this.highPrecisionRate,
-                customerUniqueName: this.invoiceForm.get("account.uniqueName")?.value,
-            },
-        });
+        this.bulkStockAsideMenuRef = this.openDialogWithFocusManagement(() =>
+            this.dialog.open(AddBulkItemsComponent, {
+                data: {
+                    voucherType: this.voucherType,
+                    exchangeRate: this.invoiceForm.get("exchangeRate")?.value ?? 1,
+                    highPrecisionRate: this.highPrecisionRate,
+                    customerUniqueName: this.invoiceForm.get("account.uniqueName")?.value,
+                },
+            })
+        );
 
-        this.bulkStockAsideMenuRef
-            .afterClosed()
-            .pipe(take(1))
-            .subscribe((response) => {
+        this.bulkStockAsideMenuRef.afterClosed().pipe(take(1)).subscribe((response) => {
                 if (response) {
                     const entries = this.invoiceForm.get("entries") as FormArray;
                     this.invoiceForm.get("entries")["controls"]?.forEach((control: any, entryIndex: number) => {
@@ -3265,6 +3279,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             entryFormGroup.get("otherTax").reset();
             return;
         }
+        this.storeFocus();
 
         this.otherTaxAsideMenuRef = this.dialog.open(OtherTaxComponent, {
             ...ASIDE_PANE_CONFIG,
@@ -3300,6 +3315,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.calculateReceiptPaymentAmount(entryFormGroup);
                     }
                 }
+                this.restoreFocus();
             });
     }
 
@@ -3389,12 +3405,33 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @param {boolean} [createNewAccount=true]
      * @memberof VoucherCreateComponent
      */
-    public toggleAccountAsidePane(accountType: AccountType, createNewAccount: boolean = true): void {
+    public toggleAccountAsidePane(accountType: AccountType, createNewAccount: boolean = true, customFocusElement?: any): void {
         this.createNewAccount = createNewAccount;
         if (accountType === this.accountType.customer) {
             this.getParentGroupForCreateAccount();
         } else {
             this.accountParentGroup = "bankaccounts";
+        }
+        
+        // Store focus - if customFocusElement is provided, use its native element
+        if (customFocusElement) {
+            // Handle MatMenuTrigger reference - use _element property (confirmed working)
+            if (customFocusElement._element && customFocusElement._element.nativeElement) {
+                this.storeFocus(customFocusElement._element.nativeElement);
+            }
+            // Handle direct ElementRef
+            else if (customFocusElement.nativeElement) {
+                this.storeFocus(customFocusElement.nativeElement);
+            }
+            // Handle if it's already an HTMLElement
+            else if (customFocusElement instanceof HTMLElement) {
+                this.storeFocus(customFocusElement);
+            }
+            else {
+                this.storeFocus();
+            }
+        } else {
+            this.storeFocus();
         }
 
         this.accountAsideMenuRef = this.dialog.open(this.accountAsideMenu, ASIDE_PANE_CONFIG);
@@ -3413,6 +3450,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         group: BriedAccountsGroup,
                     });
                 }
+                this.restoreFocus();
             });
     }
 
@@ -3426,6 +3464,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (event) {
             event.preventDefault();
         }
+        this.storeFocus();
 
         this.productServiceAsideMenuRef = this.dialog.open(this.asideMenuProductService, {
             position: {
@@ -3446,6 +3485,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.pageLeaveUtilityService.addBrowserConfirmationDialog();
                     }
                 }, 100);
+                this.restoreFocus();
             });
     }
 
@@ -3506,6 +3546,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public showCreateTaxDialog(): void {
+        this.storeFocus();
         this.store.dispatch(this.settingsTaxesAction.CreateTaxResponse(null));
         this.taxAsideMenuRef = this.dialog.open(this.createTax, {
             position: {
@@ -3521,16 +3562,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public showCreateDiscountDialog(): void {
-        this.discountDialogRef = this.dialog.open(CreateDiscountComponent, ASIDE_PANE_CONFIG);
+        this.discountDialogRef = this.openDialogWithFocusManagement(() => 
+            this.dialog.open(CreateDiscountComponent, ASIDE_PANE_CONFIG)
+        );
 
-        this.discountDialogRef
-            .afterClosed()
-            .pipe(take(1))
-            .subscribe((response) => {
-                if (response) {
-                    this.componentStore.getDiscountsList();
-                }
-            });
+        this.discountDialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
+            if (response) {
+                this.componentStore.getDiscountsList();
+            }
+        });
     }
 
     /**
@@ -3588,20 +3628,20 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
 
         this.rcmConfiguration = this.generalService.getRcmConfiguration(isChecked, this.commonLocaleData);
-        let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
-            width: "630px",
-            data: {
-                configuration: this.rcmConfiguration,
-            },
-        });
+        
+        const dialogRef = this.openDialogWithFocusManagement(() =>
+            this.dialog.open(NewConfirmationModalComponent, {
+                width: "630px",
+                data: {
+                    configuration: this.rcmConfiguration,
+                },
+            })
+        );
 
-        dialogRef
-            .afterClosed()
-            .pipe(take(1))
-            .subscribe((response) => {
-                document.querySelector("body").classList.remove("fixed");
-                this.handleRcmChange(response);
-            });
+        dialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
+            document.querySelector("body").classList.remove("fixed");
+            this.handleRcmChange(response);
+        });
         this.changeDetection.detectChanges();
     }
 
@@ -3778,6 +3818,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public createSendVoucher(): void {
+        this.storeFocus();
         this.saveVoucher((voucher) => {
             this.voucherDetails = voucher?.body;
             this.emailDialogRef = this.dialog.open(this.sendEmailModal, {
@@ -3792,6 +3833,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public createPrintVoucher(): void {
+        this.storeFocus();
         this.saveVoucher((voucher) => {
             this.voucherDetails = voucher?.body;
             this.dialog.open(this.printVoucherModal, {
@@ -3808,6 +3850,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public cancelEmailModal(): void {
         this.dialog.closeAll();
+        this.restoreFocus();
     }
 
     /**
@@ -3825,12 +3868,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (entries?.length > 1) {
             this.dateChangeType = "entry";
             this.updatedEntryIndex = updatedEntryIndex;
-            const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
-                panelClass: "mat-dialog-sm",
-                data: {
-                    configuration: this.generalService.deleteConfiguration(this.localeData?.change_all_entry_dates, this.commonLocaleData),
-                },
-            });
+            const dialogRef = this.openDialogWithFocusManagement(() =>
+                this.dialog.open(NewConfirmationModalComponent, {
+                    panelClass: "mat-dialog-sm",
+                    data: {
+                        configuration: this.generalService.deleteConfiguration(this.localeData?.change_all_entry_dates, this.commonLocaleData),
+                    },
+                })
+            );
 
             dialogRef.afterClosed().subscribe((response) => {
                 this.handleDateChangeConfirmation(response);
@@ -3878,6 +3923,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             });
             dialogRef.afterClosed().subscribe((response) => {
                 this.handleDateChangeConfirmation(response);
+                setTimeout(() => {
+                    if (this.voucherDatePicker) {
+                        this.voucherDatePicker.focus();
+                    }
+                });
             });
         }
 
@@ -3945,10 +3995,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /**
      * Add new deposit row
      *
+     * @param {boolean} activeDropdown = false
      * @memberof VoucherCreateComponent
      */
-    public addNewDepositRow(): void {
+    public addNewDepositRow(activeDropdown: boolean = false): void {
         this.invoiceForm.get("deposits")["controls"].push(this.getDepositFormGroup());
+        if (activeDropdown) {
+            this.activeDepositIndex = this.invoiceForm.get("deposits")["controls"].length - 1;
+        }
     }
 
     /**
@@ -4467,6 +4521,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         const dialogRef = this.dialog.open(EWayBillCreateComponent, {
             panelClass: ['mat-dialog-md'],
             disableClose: true,
+            autoFocus: false,
             data: {
                 pincode: this.invoiceForm.controls["account"]?.get("billingDetails").get("pincode")?.value,
                 gstNumber: this.invoiceForm.controls["account"]?.get("billingDetails").get("taxNumber")?.value
@@ -6433,16 +6488,24 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     * Prevents the default action when the Enter key is pressed and no input field is focused
+     * Handles Enter key press events for voucher navigation and generation
      *
-     * @param {KeyboardEvent} event
-     * @memberof VoucherCreateComponent
+     * @private
+     * @param {KeyboardEvent} event - The keyboard event
+     * @memberof CreateComponent
      */
     private handleEnterPress(event: KeyboardEvent): void {
         const activeElement = document.activeElement;
         const isInputFocused = activeElement && (activeElement.tagName === HtmlElementEnum.Button || activeElement.tagName === HtmlElementEnum.Textarea);
-        if (!isInputFocused && event.key === KeyCodesEnum.ENTER) { // Only navigate if no input field is focused
-            event.preventDefault();
+        
+        if (!isInputFocused && event.key === KeyCodesEnum.ENTER) {
+            if (event.shiftKey) {
+                // Shift+Enter: Generate voucher without preventing default
+                this.generateVoucher();
+            } else {
+                // Regular Enter: Prevent default navigation
+                event.preventDefault();
+            }
         }
     }
 
@@ -6937,13 +7000,18 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public openSalesPersonDialog(): void {
-        const dialogRef = this.dialog.open(
-            SalesPersonComponent, {
-            ...ASIDE_PANE_CONFIG,
-            data: { activeSalePersonUniqueName: this.invoiceForm.get('salesPersonUniqueName').value || "" }
-        }
+        const dialogRef = this.openDialogWithFocusManagement(() =>
+            this.dialog.open(SalesPersonComponent, {
+                ...ASIDE_PANE_CONFIG,
+                autoFocus: false,
+                data: { activeSalePersonUniqueName: this.invoiceForm.get('salesPersonUniqueName').value || "" }
+            })
         );
-        dialogRef.afterClosed().pipe(filter(Boolean), take(1), tap((res) => { this.getSalesPersonList(); this.activeSalePersonIsTransfer = res.isTransfer })).subscribe();
+        
+        dialogRef.afterClosed().pipe(filter(Boolean), take(1), tap((res) => { 
+            this.getSalesPersonList(); 
+            this.activeSalePersonIsTransfer = res.isTransfer;
+        })).subscribe();
     }
 
     /**
@@ -6994,5 +7062,82 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.getVoucherType();
         this.invoiceForm.get("type").patchValue(this.voucherType);
         this.aiOcrService.ocrListToCreate$.next(req);
+    }
+
+    /**
+     * Set active entry index
+     *
+     * @param {number | null} index - The index to set as active
+     * @memberof VoucherCreateComponent
+     */
+    public setActiveEntryIndex(index: number | null): void {
+        this.activeEntryIndex = null;
+        setTimeout(() => {
+            this.activeEntryIndex = index;
+        }, 1);
+    }
+
+     /**
+     * Programmatically click to file input
+     *
+     * @memberof VoucherCreateComponent
+     */
+    public triggerFileInput(): void {
+        this.fileInput.nativeElement.click();
+    }
+
+    /**
+     * Enhanced dialog opener with automatic focus management
+     * 
+     * @private
+     * @param dialogOpener Function that opens the dialog and returns MatDialogRef
+     * @returns MatDialogRef with focus management attached
+     * @memberof VoucherCreateComponent
+     */
+    private openDialogWithFocusManagement<T>(dialogOpener: () => MatDialogRef<T>): MatDialogRef<T> {
+        // Store current focus
+        this.lastFocusedElement = document.activeElement as HTMLElement;
+        
+        // Open dialog
+        const dialogRef = dialogOpener();
+        
+        // Auto-restore focus when dialog closes
+        dialogRef.afterClosed().pipe(take(1)).subscribe(() => this.restoreFocus());
+        
+        return dialogRef;
+    }
+
+    /**
+     * Restores focus to the previously focused element
+     * 
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private restoreFocus(): void {
+        if (!this.lastFocusedElement?.focus) return;
+        
+        setTimeout(() => {
+            try {
+                this.lastFocusedElement?.focus();
+            } catch {
+                // Fallback to first focusable element
+                document.querySelector<HTMLElement>('input, button, select, textarea, [tabindex]:not([tabindex="-1"])')?.focus();
+            }
+            this.lastFocusedElement = null;
+        }, 100);
+    }
+
+    /**
+     * Simple focus storage for dialogs without afterClosed subscriptions
+     * 
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private storeFocus(customFocusElement?: HTMLElement): void {
+        if (customFocusElement) {
+            this.lastFocusedElement = customFocusElement as HTMLElement;
+        } else {
+            this.lastFocusedElement = document.activeElement as HTMLElement;
+        }
     }
 }

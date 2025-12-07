@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild, forwardRef } from "@angular/core";
+import { AfterViewInit, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild, forwardRef } from "@angular/core";
 import { BehaviorSubject, Observable, Subject, debounceTime, of, skip, Subscription, ReplaySubject, takeUntil } from "rxjs";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
@@ -369,6 +369,32 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     }
 
     /**
+     * Handles Alt+C keyboard shortcut for create new functionality
+     *
+     * @param {KeyboardEvent} event - The keyboard event
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    @HostListener('window:keydown', ['$event'])
+    public onKeyDown(event: KeyboardEvent): void {
+        if (!this.showCreateNew) {
+            return;
+        }
+
+        // Check for Alt+C combination
+        const isAltCPressed = event.altKey && event.key.toLowerCase() === 'c';
+
+        // Check if dropdown is open and focused
+        const isDropdownFocused = this.selectField?.nativeElement === document.activeElement || 
+                                 this.trigger?.panelOpen;
+
+        if (isAltCPressed && isDropdownFocused) {
+            event.preventDefault();
+            event.stopPropagation();
+            this.createNewRecord();
+        }
+    }
+
+    /**
      * This will use for open dropdown panel
      *
      * @memberof ReactiveDropdownFieldComponent
@@ -461,6 +487,9 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         if (event) {
             if (this.showCreateNew && this.createNewText === '') {
                 this.createNewText = this.commonLocaleData?.app_create_new;
+            }
+            if (this.showCreateNew && this.showKeyboardCommand === '') {
+                this.showKeyboardCommand = this.commonLocaleData?.app_alt_c;
             }
         }
     }

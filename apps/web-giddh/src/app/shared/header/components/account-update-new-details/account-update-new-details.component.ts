@@ -298,6 +298,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public currentTax: any;
     /** Stores the current discount to display in the UI. */
     public currentDiscount: any;
+    /** Holds active portal index */
+    public activePortalIndex: number | null = null;
 
     constructor(
         private _fb: FormBuilder,
@@ -878,9 +880,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * This will be use for add new portal user
      *
      * @param {*} [user]
+     * @param {boolean} [highLightInput]
      * @memberof AccountUpdateNewDetailsComponent
      */
-    public addNewPortalUser(user?: any): void {
+    public addNewPortalUser(user?: any, highLightInput?: boolean): void {
         const mobileStartWithPlus = user?.contactNo?.startsWith('+');
         let mobileNo = '';
         if (user?.contactNo && mobileStartWithPlus) {
@@ -908,8 +911,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 }
             });
         }
-        const lastIndex = mappings.controls.length - 1;
-        // Removed interval and fallback timeout
+        if (highLightInput) {
+            const lastIndex = mappings.controls.length - 1;
+            this.activePortalIndex = lastIndex;
+        }
     }
 
     /**

@@ -5154,19 +5154,6 @@ textarea {
     }
 }
 
-.mat-form-field-border {
-    border-radius: var(--mat-border-radius-4) !important;
-    border: 1px solid var(--border-color) !important;
-
-    &.mat-form-field-height {
-        height: var(--custom-mat-form-field-height) !important;
-    }
-
-    &:hover {
-        border-color: var(--border-color) !important;
-    }
-}
-
 .readonly-field {
     .dropdown-bg {
         display: none !important;
@@ -8880,18 +8867,21 @@ import-wizard {
         }
     }
 }
+
 .mat-form-field-border {
+    border-radius: var(--mat-border-radius-4) !important;
+    border: 1px solid var(--border-color) !important;
+
     &.mat-form-field-height {
         height: var(--custom-mat-form-field-height) !important;
     }
 
-    border-radius: var(--mat-border-radius-4) !important;
-    border: 1px solid var(--border-color) !important;
-
-    &:hover {
-        border-color: var(--border-color) !important;
+    &:hover,
+    &:focus {
+        border-color: var(--theme-primary-color) !important;
     }
 }
+
 .preview-list {
     .form-control {
         padding-left: 30px !important;

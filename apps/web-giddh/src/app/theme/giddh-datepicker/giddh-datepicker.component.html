@@ -8,6 +8,7 @@
         >
             <mat-label *ngIf="!monthYearMode && appearance === 'outline'">{{ label ? label : placeholder }}</mat-label>
             <input
+                #dateInput
                 matInput
                 [matDatepicker]="picker"
                 [placeholder]="placeholder"
@@ -48,13 +49,14 @@
 
 <ng-container *ngIf="hideLabel">
     <input
+        #dateInput
         matInput
         [matDatepicker]="picker"
         [placeholder]="placeholder"
         [value]="calendarDate"
         [min]="minDate"
+        (focus)="closeDatepickerOnFocus ? picker?.close() : toggleDatepicker()"
         autocomplete="off"
-        (focus)="toggleDatepicker()"
         (click)="toggleDatepicker()"
         (dateChange)="monthYearMode ? null : dateChange($event)"
         [class]="cssClass"

@@ -1,16 +1,16 @@
 .mdc-checkbox {
-    margin-left: -8px !important;
-    padding-right: 4px !important;
+    // margin-left: -8px !important;
+    // padding-right: 4px !important;
 
     // Hide ripple effect
-    .mat-mdc-checkbox-ripple {
-        display: none;
-    }
+    // .mat-mdc-checkbox-ripple {
+    //     display: none;
+    // }
 
     // Native control styling
-    .mdc-checkbox__native-control {
-        margin: 0 !important;
-    }
+    // .mdc-checkbox__native-control {
+    //     margin: 0 !important;
+    // }
 
     // Disabled checkbox styling
     input[type="checkbox"][disabled] {
@@ -18,26 +18,26 @@
     }
 
     // Hide pseudo-elements
-    input[type="checkbox"]::before,
-    input[type="checkbox"]::after {
-        display: none;
-    }
+    // input[type="checkbox"]::before,
+    // input[type="checkbox"]::after {
+    //     display: none;
+    // }
 }
 
 // Touch target sizing
-.mat-mdc-checkbox-touch-target {
-    height: 18px !important;
-    width: 18px !important;
-    left: 60% !important;
-}
+// .mat-mdc-checkbox-touch-target {
+//     height: 18px !important;
+//     width: 18px !important;
+//     left: 60% !important;
+// }
 
-// Native control dimensions
-.mdc-checkbox .mdc-checkbox__native-control {
-    width: 18px !important;
-    height: 18px !important;
-}
+// // Native control dimensions
+// .mdc-checkbox .mdc-checkbox__native-control {
+//     width: 18px !important;
+//     height: 18px !important;
+// }
 
 // Hide ripple effect globally
-.mdc-checkbox__ripple {
-    display: none !important;
-}
+// .mdc-checkbox__ripple {
+//     display: none !important;
+// }

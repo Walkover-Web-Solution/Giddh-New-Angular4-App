@@ -183,6 +183,9 @@ export class SalesPersonComponent implements OnInit, OnDestroy {
             }
             this.salesPersonAction(SalesPersonActionEnum.GET_ALL);
         })).subscribe();
+        setTimeout(() => {
+            this.focusInputField();
+        }, 0);
     }
 
     /**
