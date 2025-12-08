@@ -54,57 +54,214 @@ export const GIDDH_DATEPICKER_FORMAT = {
   // You should typically choose only ONE preferred display format.
   display: {
     // Format for the input field after selection (the most readable option is recommended)
-    dateInput: 'MMM DD, YYYY', // Example: Dec 12, 2025
+    dateInput: 'MMM dd, yyyy', // Example: Dec 12, 2025
     
     // Format for the month/year view in the calendar header
-    monthYearLabel: 'MMM YYYY', // Example: Dec 2025
+    monthYearLabel: 'MMM yyyy', // Example: Dec 2025
     
     // Accessibility label for the selected date
     dateA11yLabel: 'LL', 
     
     // Accessibility label for the month/year view
-    monthYearA11yLabel: 'MMMM YYYY', // Example: December 2025
+    monthYearA11yLabel: 'MMMM yyyy', // Example: December 2025
   },
 };
 export class PickDateAdapter extends NativeDateAdapter {
+    /** Month name to index mapping for efficient parsing */
+    private readonly monthMap = new Map([
+        ['jan', 0], ['january', 0], ['feb', 1], ['february', 1],
+        ['mar', 2], ['march', 2], ['apr', 3], ['april', 3],
+        ['may', 4], ['jun', 5], ['june', 5], ['jul', 6], ['july', 6],
+        ['aug', 7], ['august', 7], ['sep', 8], ['september', 8],
+        ['oct', 9], ['october', 9], ['nov', 10], ['november', 10],
+        ['dec', 11], ['december', 11]
+    ]);
+
+    /** Date format patterns with their corresponding regex */
+    private readonly formatPatterns = [
+        { format: 'MM/DD/YYYY', regex: /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/, parser: (m: RegExpMatchArray) => [parseInt(m[3]), parseInt(m[1]) - 1, parseInt(m[2])] },
+        { format: 'M/D/YY', regex: /^(\d{1,2})\/(\d{1,2})\/(\d{2})$/, parser: (m: RegExpMatchArray) => [this.expandYear(parseInt(m[3])), parseInt(m[1]) - 1, parseInt(m[2])] },
+        { format: 'DD/MM/YYYY', regex: /^(\d{1,2})\/(\d{1,2})\/(\d{4})$/, parser: (m: RegExpMatchArray) => [parseInt(m[3]), parseInt(m[2]) - 1, parseInt(m[1])] },
+        { format: 'YYYY-MM-DD', regex: /^(\d{4})-(\d{1,2})-(\d{1,2})$/, parser: (m: RegExpMatchArray) => [parseInt(m[1]), parseInt(m[2]) - 1, parseInt(m[3])] },
+        { format: 'YYYY/MM/DD', regex: /^(\d{4})\/(\d{1,2})\/(\d{1,2})$/, parser: (m: RegExpMatchArray) => [parseInt(m[1]), parseInt(m[2]) - 1, parseInt(m[3])] },
+        { format: 'MM-DD-YYYY', regex: /^(\d{1,2})-(\d{1,2})-(\d{4})$/, parser: (m: RegExpMatchArray) => [parseInt(m[3]), parseInt(m[1]) - 1, parseInt(m[2])] }
+    ];
+
     /**
      * Parses user input into a Date object with support for multiple formats
      *
      * @param {any} value - The input value to parse
-     * @param {string | any} parseFormat - The format to use for parsing
+     * @param {string | any} parseFormat - The format configuration or format string
      * @returns {Date | null} Parsed date or null if invalid
      * @memberof PickDateAdapter
      */
     parse(value: any, parseFormat: string | any): Date | null {
-        if (typeof value === 'string') {
-            const parts = value.split('-');
-            if (parts.length === 3) {
-                const day = parseInt(parts[0], 10);
-                const month = parseInt(parts[1], 10) - 1; // Months are 0-indexed
-                const year = parseInt(parts[2], 10);
-                const date = new Date(year, month, day);
-                if (!isNaN(date.getTime())) {
-                    return date;
-                }
+        if (!value || typeof value !== 'string') return null;
+
+        const trimmed = value.trim();
+        if (!trimmed) return null;
+
+        // Try numeric patterns first (most common)
+        const numericResult = this.parseNumericFormats(trimmed);
+        if (numericResult) return numericResult;
+
+        // Try text-based patterns
+        const textResult = this.parseTextFormats(trimmed);
+        if (textResult) return textResult;
+
+        // Fallback to native parsing
+        return super.parse(value, parseFormat);
+    }
+
+    /**
+     * Parses numeric date formats efficiently
+     *
+     * @private
+     * @param {string} value - The date string to parse
+     * @returns {Date | null} Parsed date or null if invalid
+     * @memberof PickDateAdapter
+     */
+    private parseNumericFormats(value: string): Date | null {
+        for (const pattern of this.formatPatterns) {
+            const match = value.match(pattern.regex);
+            if (match) {
+                const [year, month, day] = pattern.parser(match);
+                return this.createValidDate(year, month, day);
             }
         }
-        return super.parse(value, parseFormat); // Fallback to default parsing
+        return null;
+    }
+
+    /**
+     * Parses text-based date formats
+     *
+     * @private
+     * @param {string} value - The date string to parse
+     * @returns {Date | null} Parsed date or null if invalid
+     * @memberof PickDateAdapter
+     */
+    private parseTextFormats(value: string): Date | null {
+        // MMM DD YYYY (Dec 12 2025)
+        let match = value.match(/^(\w{3})\s+(\d{1,2})\s+(\d{4})$/);
+        if (match) {
+            const month = this.getMonthIndex(match[1]);
+            if (month !== null) {
+                return this.createValidDate(parseInt(match[3]), month, parseInt(match[2]));
+            }
+        }
+
+        // MMM DD YY (Dec 12 25)
+        match = value.match(/^(\w{3})\s+(\d{1,2})\s+(\d{2})$/);
+        if (match) {
+            const month = this.getMonthIndex(match[1]);
+            if (month !== null) {
+                return this.createValidDate(this.expandYear(parseInt(match[3])), month, parseInt(match[2]));
+            }
+        }
+
+        // DD MMM YYYY (12 Dec 2025)
+        match = value.match(/^(\d{1,2})\s+(\w{3})\s+(\d{4})$/);
+        if (match) {
+            const month = this.getMonthIndex(match[2]);
+            if (month !== null) {
+                return this.createValidDate(parseInt(match[3]), month, parseInt(match[1]));
+            }
+        }
+
+        // DD MMM YY (12 Dec 25)
+        match = value.match(/^(\d{1,2})\s+(\w{3})\s+(\d{2})$/);
+        if (match) {
+            const month = this.getMonthIndex(match[2]);
+            if (month !== null) {
+                return this.createValidDate(this.expandYear(parseInt(match[3])), month, parseInt(match[1]));
+            }
+        }
+
+        // MMMM D, YYYY (December 12, 2025)
+        match = value.match(/^(\w+)\s+(\d{1,2}),\s+(\d{4})$/);
+        if (match) {
+            const month = this.getMonthIndex(match[1]);
+            if (month !== null) {
+                return this.createValidDate(parseInt(match[3]), month, parseInt(match[2]));
+            }
+        }
+
+        // DD MMMM YYYY (12 December 2025)
+        match = value.match(/^(\d{1,2})\s+(\w+)\s+(\d{4})$/);
+        if (match) {
+            const month = this.getMonthIndex(match[2]);
+            if (month !== null) {
+                return this.createValidDate(parseInt(match[3]), month, parseInt(match[1]));
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Expands 2-digit year to 4-digit year
+     *
+     * @private
+     * @param {number} year - 2-digit year
+     * @returns {number} 4-digit year
+     * @memberof PickDateAdapter
+     */
+    private expandYear(year: number): number {
+        return year < 50 ? 2000 + year : 1900 + year;
+    }
+
+    /**
+     * Gets month index from month name or abbreviation
+     *
+     * @private
+     * @param {string} monthStr - Month name or abbreviation
+     * @returns {number | null} Month index (0-11) or null if invalid
+     * @memberof PickDateAdapter
+     */
+    private getMonthIndex(monthStr: string): number | null {
+        return this.monthMap.get(monthStr.toLowerCase()) ?? null;
+    }
+
+    /**
+     * Creates a valid Date object with validation
+     *
+     * @private
+     * @param {number} year - Year
+     * @param {number} month - Month (0-11)
+     * @param {number} day - Day
+     * @returns {Date | null} Valid date or null if invalid
+     * @memberof PickDateAdapter
+     */
+    private createValidDate(year: number, month: number, day: number): Date | null {
+        // Quick validation
+        if (year < 1900 || year > 2100 || month < 0 || month > 11 || day < 1 || day > 31) return null;
+
+        const date = new Date(year, month, day);
+        
+        // Verify date integrity (handles invalid dates like Feb 30)
+        return (date.getFullYear() === year && date.getMonth() === month && date.getDate() === day) ? date : null;
     }
 
     /**
      * Formats a Date object into a string based on the display format
      *
      * @param {Date} date - The date to format
-     * @param {Object} displayFormat - The format configuration
+     * @param {string} displayFormat - The format key from display configuration
      * @returns {string} Formatted date string
      * @memberof PickDateAdapter
      */
-    format(date: Date, displayFormat: Object): string {
-        if (displayFormat === 'input') {
-            return formatDate(date, 'dd-MM-yyyy', this.locale);
-        } else {
-            return formatDate(date, 'MMM dd, yyyy', this.locale);
-        }
+    format(date: Date, displayFormat: string): string {
+        if (!date || isNaN(date.getTime())) return '';
+
+        const config = GIDDH_DATEPICKER_FORMAT.display;
+        const formatMap: { [key: string]: string } = {
+            'input': config.dateInput,
+            'monthYearLabel': config.monthYearLabel,
+            'dateA11yLabel': config.dateA11yLabel,
+            'monthYearA11yLabel': config.monthYearA11yLabel
+        };
+        
+        return formatDate(date, formatMap[displayFormat] || config.dateInput, this.locale);
     }
 }
 

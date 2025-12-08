@@ -2054,10 +2054,6 @@
                                                                                 $event.preventDefault();
                                                                                 hsnSacTrigger.openMenu()
                                                                             "
-                                                                            (keydown.space)="
-                                                                                $event.preventDefault();
-                                                                                hsnSacTrigger.openMenu()
-                                                                            "
                                                                             (focus)="
                                                                                 $event.preventDefault();
                                                                                 updateCurrentHsnSac(entry);
@@ -2138,7 +2134,6 @@
                                                                                         [name]="
                                                                                             'hsnNumber' + entryIndex
                                                                                         "
-                                                                                        cdkFocusRegion
                                                                                     >
                                                                                     </text-field>
                                                                                     <text-field
@@ -2160,7 +2155,6 @@
                                                                                         [name]="
                                                                                             'sacNumber' + entryIndex
                                                                                         "
-                                                                                        cdkFocusRegion
                                                                                     >
                                                                                     </text-field>
                                                                                 </div>
@@ -3387,7 +3381,8 @@
                                                                                     id="invoiceFile"
                                                                                     (change)="uploadFile(false)"
                                                                                     droppable="true"
-                                                                                    tabindex="0"
+                                                                                    tabindex="-1"
+                                                                                    aria-hidden="true"
                                                                                 />
                                                                                 <ng-container *ngIf="isFileUploading">
                                                                                     <mat-spinner

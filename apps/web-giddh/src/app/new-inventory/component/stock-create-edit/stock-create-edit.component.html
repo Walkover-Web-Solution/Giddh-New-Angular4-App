@@ -810,10 +810,12 @@
                                             tabindex="0"
                                             cdkMonitorElementFocus
                                             (keydown.enter)="
+                                                $event.preventDefault();
                                                 isVariantAvailable = !isVariantAvailable;
                                                 !stockForm.options?.length ? addVariantOption() : ''
                                             "
                                             (keydown.space)="
+                                                $event.preventDefault();
                                                 isVariantAvailable = !isVariantAvailable;
                                                 !stockForm.options?.length ? addVariantOption() : ''
                                             "

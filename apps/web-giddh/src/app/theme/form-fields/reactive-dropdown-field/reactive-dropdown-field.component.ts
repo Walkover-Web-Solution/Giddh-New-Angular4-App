@@ -376,18 +376,16 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      */
     @HostListener('keydown', ['$event'])
     public onKeyDown(event: KeyboardEvent): void {
-        if (!this.showCreateNew) {
-            return;
-        }
+        // Early exit if create new is not enabled
+        if (!this.showCreateNew) return;
 
-        // Check for Alt+C combination
-        const isAltCPressed = event.altKey && event.key.toLowerCase() === 'c';
+        // Check for Alt+C combination (cross-platform)
+        const isAltC = event.altKey && event.code === 'KeyC';
+        
+        // Check if dropdown is focused or open
+        const isFocused = this.selectField?.nativeElement === document.activeElement || this.trigger?.panelOpen;
 
-        // Check if dropdown is open and focused
-        const isDropdownFocused = this.selectField?.nativeElement === document.activeElement || 
-                                 this.trigger?.panelOpen;
-
-        if (isAltCPressed && isDropdownFocused) {
+        if (isAltC && isFocused) {
             event.preventDefault();
             event.stopPropagation();
             this.createNewRecord();

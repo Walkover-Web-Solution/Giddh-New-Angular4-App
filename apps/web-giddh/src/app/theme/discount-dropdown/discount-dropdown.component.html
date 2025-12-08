@@ -35,7 +35,6 @@
                         [cssClass]="'text-right'"
                         formControlName="percentage"
                         [readonly]="discountForm.get('fixedValue')?.value > 0"
-                        cdkFocusRegion
                     ></input-field>
                     <input-field
                         [type]="'number'"
@@ -46,7 +45,6 @@
                         [cssClass]="'text-right'"
                         formControlName="fixedValue"
                         [readonly]="discountForm.get('percentage')?.value > 0"
-                        cdkFocusRegion
                     ></input-field>
                 </div>
                 <div class="discount-separator position-relative text-center my-2" *ngIf="discountsList?.length">
@@ -69,7 +67,6 @@
                     *ngIf="showCreateNew"
                     class="create-new pt-2 my-2 text-center cursor-pointer"
                     (click)="createNew()"
-                    cdkFocusRegion
                 >
                     <span
                         class="text-primary"
