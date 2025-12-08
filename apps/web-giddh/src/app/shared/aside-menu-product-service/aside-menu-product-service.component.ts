@@ -15,6 +15,7 @@ import { ASIDE_PANE_CONFIG } from '../../app.constant';
 
 @Component({
     selector: 'aside-menu-product-service',
+    standalone: false,
     styleUrls: ['./aside-menu-product-service.component.scss'],
     templateUrl: './aside-menu-product-service.component.html'
 })

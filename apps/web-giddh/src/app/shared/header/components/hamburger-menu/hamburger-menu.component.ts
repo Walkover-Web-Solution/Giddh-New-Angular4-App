@@ -7,6 +7,7 @@ import { takeUntil, take } from 'rxjs/operators';
 
 @Component({
     selector: 'hamburger-menu',
+    standalone: false,
     templateUrl: './hamburger-menu.component.html',
     styleUrls: ['hamburger-menu.component.scss']
 })

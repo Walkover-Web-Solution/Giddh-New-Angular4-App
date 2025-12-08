@@ -7,6 +7,7 @@ import { MatMenuTrigger } from "@angular/material/menu";
 
 @Component({
     selector: "discount-dropdown",
+    standalone: false,
     templateUrl: "./discount-dropdown.component.html",
     styleUrls: ["./discount-dropdown.component.scss"]
 })

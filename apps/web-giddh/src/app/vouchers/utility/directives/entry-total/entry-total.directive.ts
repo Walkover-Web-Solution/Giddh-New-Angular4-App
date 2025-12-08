@@ -6,7 +6,8 @@ import { giddhRoundOff } from "../../../../shared/helpers/helperFunctions";
 import { isEqual } from "apps/web-giddh/src/app/lodash-optimized";
 
 @Directive({
-    selector: '[entryTotal]'
+    selector: '[entryTotal]',
+    standalone: false
 })
 export class EntryTotalDirective implements OnChanges, OnDestroy {
     /** Entry */
@@ -40,7 +41,7 @@ export class EntryTotalDirective implements OnChanges, OnDestroy {
     public ngOnChanges(changes: SimpleChanges): void {
         if ((!isEqual(changes?.entry?.currentValue, changes?.entry?.previousValue) || !isEqual(changes?.excludeTax?.currentValue, changes?.excludeTax?.previousValue)) && this.entry?.calculateTotal) {
             let amount = 0;
-            
+
             if (this.excludeTax) {
                 amount = giddhRoundOff((Number(this.entry.transactions[0].amount?.amountForAccount) - Number(this.entry.totalDiscount)), this.balanceDecimalPlaces);
             } else {

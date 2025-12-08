@@ -8,6 +8,7 @@ import { IOption } from "../../../app.constant";
 
 @Component({
     selector: "select-field",
+    standalone: false,
     styleUrls: ["./select-field.component.scss"],
     templateUrl: "./select-field.component.html",
     changeDetection: ChangeDetectionStrategy.OnPush

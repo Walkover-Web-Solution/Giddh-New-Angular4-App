@@ -13,6 +13,7 @@ const noop = () => { };
 
 @Component({
     selector: 'giddh-datepicker',
+    standalone: false,
     styleUrls: ['./giddh-datepicker.component.scss'],
     templateUrl: './giddh-datepicker.component.html',
     providers: [

@@ -55,6 +55,7 @@ interface SubscriptionErrorFlags {
 
 @Component({
     selector: 'app-header',
+    standalone: false,
     templateUrl: './header.component.html',
     styleUrls: ['./header.component.scss']
 })
@@ -1042,7 +1043,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     /**
     * This function is used to open manage groups accounts dialog
-    * 
+    *
     * @returns {void}
     * @memberof HeaderComponent
     */
@@ -1522,7 +1523,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public toggleGiddhDatepicker(isOpen: boolean = true): void {
-        if (isOpen) {            
+        if (isOpen) {
             this.universalDatepickerTrigger?.openMenu();
         } else {
             this.universalDatepickerTrigger?.closeMenu();

@@ -7,6 +7,7 @@ import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
     selector: 'page',
+    standalone: false,
     template: `
     <div id="main" [ngClass]="{'subscription-page': isSubscriptionPage}">
       <giddh-loader></giddh-loader>

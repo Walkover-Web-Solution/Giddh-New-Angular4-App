@@ -12,6 +12,7 @@ import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
     selector: 'all-templates',
+    standalone: false,
     templateUrl: './all-templates.component.html',
     styleUrls: ['./all-templates.component.scss']
 })

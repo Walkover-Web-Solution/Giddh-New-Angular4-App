@@ -2,6 +2,7 @@ import { Component, Input } from "@angular/core";
 
 @Component({
     selector: 'giddh-page-loader',
+    standalone: false,
     templateUrl: './giddh-page-loader.component.html',
     styleUrls: ['./giddh-page-loader.component.scss']
 })

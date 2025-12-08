@@ -14,6 +14,7 @@ import { GiddhNumberFormatPipe } from "../../shared/helpers/pipes/number-format/
 
 @Component({
     selector: "add-bulk-items",
+    standalone: false,
     templateUrl: "./add-bulk-items.component.html",
     styleUrls: ["./add-bulk-items.component.scss"],
     providers: [AddBulkItemsComponentStore]

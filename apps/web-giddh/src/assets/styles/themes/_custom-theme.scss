@@ -15,7 +15,7 @@ $accent-palette-dark: palette.$giddh-accent-dark;
 $warn-palette-dark: palette.$giddh-warn-dark;
 
 // Light Theme Configuration
-$light-theme: mat.define-light-theme(
+$light-theme: mat.m2-define-light-theme(
     (
         color: (
             primary: $primary-palette,
@@ -27,7 +27,7 @@ $light-theme: mat.define-light-theme(
 );
 
 // Dark Theme Configuration - using lighter color variants for proper dark theme contrast
-$dark-theme: mat.define-dark-theme(
+$dark-theme: mat.m2-define-dark-theme(
     (
         color: (
             primary: $primary-palette-dark,

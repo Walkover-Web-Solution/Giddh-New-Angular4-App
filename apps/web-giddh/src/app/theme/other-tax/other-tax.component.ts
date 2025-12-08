@@ -11,6 +11,7 @@ import { ASIDE_PANE_CONFIG } from "../../app.constant";
 
 @Component({
     selector: "other-tax",
+    standalone: false,
     templateUrl: "./other-tax.component.html",
     styleUrls: ["./other-tax.component.scss"],
     providers: [OtherTaxComponentStore],
@@ -113,7 +114,7 @@ export class OtherTaxComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will be use for open create tax dialog 
+     * This will be use for open create tax dialog
      *
      * @memberof OtherTaxComponent
      */
@@ -123,7 +124,7 @@ export class OtherTaxComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will be use for close create tax dialog 
+     * This will be use for close create tax dialog
      *
      * @memberof OtherTaxComponent
      */

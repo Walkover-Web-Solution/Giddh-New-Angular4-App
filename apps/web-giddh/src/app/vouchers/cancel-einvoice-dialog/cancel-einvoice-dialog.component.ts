@@ -7,6 +7,7 @@ import { IOption } from '../../app.constant';
 
 
 @Component({
+    standalone: false,
     selector: 'cancel-einvoice-dialog',
     templateUrl: './cancel-einvoice-dialog.component.html',
     styleUrls: ['./cancel-einvoice-dialog.component.scss'],

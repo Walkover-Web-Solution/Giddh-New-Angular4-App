@@ -3,6 +3,7 @@ import { LocaleService } from "../../services/locale.service";
 
 @Component({
     selector: 'no-data',
+    standalone: false,
     templateUrl: './no-data.component.html',
     styleUrls: ['./no-data.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -6,44 +6,44 @@
 // 1. ABSTRACTS
 // --------------------------------------------------------------------------
 // Variables, functions, mixins - no actual CSS output
-@import "abstracts/variables";
-@import "abstracts/functions";
-@import "abstracts/mixins";
+@use "abstracts/variables";
+@use "abstracts/functions";
+@use "abstracts/mixins";
 
 // 2. VENDORS
 // --------------------------------------------------------------------------
 // Third-party CSS libraries and frameworks
-@import "vendors/_boostrap.css";
-@import "vendors/json-tree.scss";
-@import "vendors/json-diff.scss";
+@use "vendors/_boostrap.css";
+@use "vendors/json-tree.scss";
+@use "vendors/json-diff.scss";
 
 // 3. BASE
 // --------------------------------------------------------------------------
 // Basic styles, resets, typography
-@import "base/reset";
-@import "base/typography";
-@import "base/global";
+@use "base/reset";
+@use "base/typography";
+@use "base/global";
 
 // 4. THEMES
 // --------------------------------------------------------------------------
 // Theme-specific styles and configurations
-@import "themes/custom-theme";
-@import "themes/theme-base-classes";
+@use "themes/custom-theme";
+@use "themes/theme-base-classes";
 
 // 5. MATERIAL DESIGN
 // --------------------------------------------------------------------------
 // Angular Material customizations
-@import "material/material-variables";
-@import "material/material-overrides";
-@import "material/material_customise";
-@import "material/material-mixins";
+@use "material/material-variables";
+@use "material/material-overrides";
+@use "material/material_customise";
+@use "material/material-mixins";
 
 // 6. LAYOUT
 // --------------------------------------------------------------------------
 // Layout-specific styles (header, sidebar, grid, etc.)
-@import "layout/header";
-@import "layout/sidebar";
-@import "layout/grid";
+@use "layout/header";
+@use "layout/sidebar";
+@use "layout/grid";
 
 // 7. COMPONENTS
 // --------------------------------------------------------------------------
@@ -101,10 +101,10 @@
 // 9. UTILITIES
 // --------------------------------------------------------------------------
 // Utility classes and helper styles (if needed)
-@import "utilities/spacing";
-@import "utilities/text";
-@import "utilities/responsive";
-@import "utilities/other.scss";
+@use "utilities/spacing";
+@use "utilities/text";
+@use "utilities/responsive";
+@use "utilities/other.scss";
 
 // Other Temp
-@import "./old-material-overide.scss";
+@use "./old-material-overide.scss";

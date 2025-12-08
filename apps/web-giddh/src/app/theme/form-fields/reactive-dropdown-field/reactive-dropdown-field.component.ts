@@ -7,6 +7,7 @@ import { isEqual } from "../../../lodash-optimized";
 
 @Component({
     selector: "reactive-dropdown-field",
+    standalone: false,
     templateUrl: "./reactive-dropdown-field.component.html",
     styleUrls: ["./reactive-dropdown-field.component.scss"],
     providers: [
@@ -127,8 +128,8 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     public ngOnInit(): void {
         if (this.enableDynamicSearch) {
             this.searchFormControl.pipe(
-                debounceTime(700), 
-                skip(1), 
+                debounceTime(700),
+                skip(1),
                 takeUntil(this.destroyed$)
             ).subscribe((search: string) => {
                 this.dynamicSearchedQuery.emit(search);
@@ -139,8 +140,8 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             });
         } else {
             this.searchFormControl.pipe(
-                debounceTime(700), 
-                skip(1), 
+                debounceTime(700),
+                skip(1),
                 takeUntil(this.destroyed$)
             ).subscribe((search: string) => {
                 if (!search) {
@@ -266,7 +267,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     public ngOnDestroy(): void {
         // Set destroyed flag first
         this.isDestroyed = true;
-        
+
         // Only complete the subject if it hasn't been completed already
         if (!this.destroyed$.closed) {
             this.destroyed$.next(true);
@@ -377,7 +378,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         if (this.isDestroyed) {
             return;
         }
-        
+
         this.selectField?.nativeElement?.focus();
         setTimeout(() => {
             this.handleDropdownPanelOperation('open');

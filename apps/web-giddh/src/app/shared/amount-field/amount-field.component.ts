@@ -4,6 +4,7 @@ import { DecimalPipe } from '@angular/common';
 
 @Component({
     selector: 'amount-field',
+    standalone: false,
     templateUrl: './amount-field.component.html',
     styleUrls: ['./amount-field.component.scss']
 })

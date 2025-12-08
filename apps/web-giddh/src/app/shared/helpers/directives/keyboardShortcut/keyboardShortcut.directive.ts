@@ -53,7 +53,8 @@ const controlKeyMaps = {
 };
 
 @Directive({
-    selector: '[keyboardShortcut]'
+    selector: '[keyboardShortcut]',
+    standalone: false
 })
 export class KeyboardShortcutDirective {
     @Input() public keyboardShortcut: string | string[] | { [key: string]: boolean };

@@ -91,6 +91,7 @@ const unSupportedPrefixAndSuffix = [
 
 @Directive({
     selector: '[mask]',
+    standalone: false,
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,

@@ -5,6 +5,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
     selector: 'watch-video',
+    standalone: false,
     templateUrl: './watch-video.component.html',
     styleUrls: ['./watch-video.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

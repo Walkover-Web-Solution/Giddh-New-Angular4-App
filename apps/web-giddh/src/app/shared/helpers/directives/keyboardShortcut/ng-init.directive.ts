@@ -1,7 +1,8 @@
 import { Directive, ElementRef, EventEmitter, OnInit, Output } from '@angular/core';
 
 @Directive({
-    selector: '[ngInit]'
+    selector: '[ngInit]',
+    standalone: false
 })
 export class NgInitDirective implements OnInit {
     @Output('ngInit') public initEvent: EventEmitter<any> = new EventEmitter();

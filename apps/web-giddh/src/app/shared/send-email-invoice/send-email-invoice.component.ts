@@ -4,6 +4,7 @@ import { GeneralService } from '../../services/general.service';
 
 @Component({
     selector: 'app-send-email-invoice-component',
+    standalone: false,
     templateUrl: './send-email-invoice.component.html',
     styleUrls: ['./send-email-invoice.component.scss']
 })

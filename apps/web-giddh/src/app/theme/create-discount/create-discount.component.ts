@@ -7,6 +7,7 @@ import { GeneralService } from "../../services/general.service";
 
 @Component({
     selector: "create-discount",
+    standalone: false,
     templateUrl: "./create-discount.component.html",
     styleUrls: ["./create-discount.component.scss"],
     providers: [CreateDiscountComponentStore]
@@ -122,7 +123,7 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will be use for save discount 
+     * This will be use for save discount
      *
      * @return {*}  {void}
      * @memberof CreateDiscountComponent
@@ -144,7 +145,7 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will be use for update discount 
+     * This will be use for update discount
      *
      * @return {*}  {void}
      * @memberof CreateDiscountComponent

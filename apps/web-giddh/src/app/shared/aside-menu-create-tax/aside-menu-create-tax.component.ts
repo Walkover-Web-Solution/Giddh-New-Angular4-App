@@ -17,6 +17,7 @@ import { IOption } from '../../app.constant';
 
 @Component({
     selector: 'aside-menu-create-tax-component',
+    standalone: false,
     templateUrl: './aside-menu-create-tax.component.html',
     styleUrls: [`./aside-menu-create-tax.component.scss`],
     providers: [TaxAuthorityComponentStore]
@@ -244,7 +245,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
 
     /**
      * Handle form submit
-     * 
+     *
      * @memberof AsideMenuCreateTaxComponent
      */
     public onSubmit(): void {
@@ -321,7 +322,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
     }
 
     /**
-     * Handle Tax select 
+     * Handle Tax select
      *
      * @memberof AsideMenuCreateTaxComponent
      */

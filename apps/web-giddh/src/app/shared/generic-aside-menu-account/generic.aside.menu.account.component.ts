@@ -11,6 +11,7 @@ import { IOption } from '../../app.constant';
 
 @Component({
     selector: 'generic-aside-menu-account',
+    standalone: false,
     styleUrls: [`./generic.aside.menu.account.component.scss`],
     templateUrl: './generic.aside.menu.account.component.html'
 })
@@ -129,7 +130,7 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
 
     /**
      * Updates the account details.
-     * 
+     *
      * @param accRequestObject - The account request object containing the updated details.
      * @param usePatchApi - Optional parameter to indicate whether to use the patch API for updating the account.
      * @memberof GenericAsideMenuAccountComponent
@@ -158,7 +159,7 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
 
     /**
      * This will use for back button pressed
-     * 
+     *
      * @memberof GenericAsideMenuAccountComponent
      * @returns {void}
      */
@@ -173,7 +174,7 @@ export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnCh
     }
 
     public ngOnChanges(s: SimpleChanges) {
-        
+
         if ('selectedGrpUniqueName' in s && s.selectedGrpUniqueName.currentValue !== s.selectedGrpUniqueName.previousValue) {
             this.isCustomerCreation = true;
             this.activeGroupUniqueName = s.selectedGrpUniqueName.currentValue;

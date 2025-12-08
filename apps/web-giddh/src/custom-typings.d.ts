@@ -24,27 +24,24 @@ declare module 'jwt-decode' {
   export = jwtDecode;
 }
 
- *
+/*
  * If you're prototying and you will fix the types later you can also declare it as type any
- *
+ */
 
 declare var assert: any;
 declare var _: any;
 declare var $: any;
 
- *
+/*
  * If you're importing a module that uses Node.js modules which are CommonJS you need to import as
  * in the files such as main.browser.ts or any file within app/
  *
-
-import * as _ from 'lodash'
-
  * You can include your type definitions in this file until you create one for the @types
  *
  */
 // support NodeJS modules without type definitions
 
-declare module '*';
+// declare module '*';
 
 /*
 // for legacy tslint etc to understand rename 'modern-lru' with your package
