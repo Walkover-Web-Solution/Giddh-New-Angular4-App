@@ -380,42 +380,6 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     }
 
     /**
-     * onDDElementSelect
-     */
-    public onDDElementSelect(type: string, data: any[]) {
-        let values = [];
-        if (data && data.length > 0) {
-            data.forEach(element => {
-                values.push(element?.value);
-            });
-        }
-        switch (type) {
-            case 'particulars':
-                this.advanceSearchForm.get('particulars')?.patchValue(values);
-                break;
-            case 'accountUniqueNames':
-                this.advanceSearchForm.get('accountUniqueNames')?.patchValue(values);
-                break;
-            case 'vouchers':
-                this.advanceSearchForm.get('vouchers')?.patchValue(values);
-                break;
-            case 'inventory':
-                this.advanceSearchForm.get('inventory.inventories')?.patchValue(values);
-                break;
-            case 'groupUniqueNames':
-                this.advanceSearchForm.get('groupUniqueNames')?.patchValue(values);
-                break;
-        }
-    }
-
-    /**
-     * onDDClear
-     */
-    public onDDClear(type: string) {
-        this.onDDElementSelect(type, []);
-    }
-
-    /**
      * onRangeSelect
      */
     public onRangeSelect(type: string, data: IOption) {
@@ -713,13 +677,13 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
      * @memberof AdvanceSearchModelComponent
      */
     public onStockSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
-        if (this.stocksSearchResultsPaginationData.query === query && this.stocksSearchResultsPaginationData.page === page) {
+        if (query !== "" && this.stocksSearchResultsPaginationData.query === query && this.stocksSearchResultsPaginationData.page === page) {
             return;
         }
         this.stocksSearchResultsPaginationData.query = query;
         this.stocksSearchResultsPaginationData.page = page;
         if (!this.preventDefaultStockScrollApiCall &&
-            (query || (this.defaultStockSuggestions && this.defaultStockSuggestions.length === 0) || successCallback)) {
+            (typeof query === 'string' || (this.defaultStockSuggestions && this.defaultStockSuggestions.length === 0) || successCallback)) {
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
             const requestObject: any = {
                 q: encodeURIComponent(query),
@@ -751,6 +715,7 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
                     if (successCallback) {
                         successCallback(data.body.results);
                     }
+                    this.changeDetectionRef.detectChanges();
                 } else {
                     this.isDefaultStocksLoading = false;
                 }

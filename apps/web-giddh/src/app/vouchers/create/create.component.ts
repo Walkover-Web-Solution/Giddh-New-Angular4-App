@@ -664,6 +664,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.transactionOptions = [];
                         this.queryParams = cloneDeep(response[1]);
 
+                        // Reset exchange rate when route changes
+                        this.componentStore.resetExchangeRate();
+
                         if (this.queryParams?.redirect) {
                             this.redirectUrl = this.queryParams.redirect;
                         }
@@ -1192,7 +1195,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.invoiceForm
                             .get("isRcmEntry")
                             .patchValue(voucherDetails.subVoucher === SubVoucher.ReverseCharge ? true : false);
-
+                        this.checkRcm(true);
                         if (voucherDetails.adjustments?.length && !this.isCopyMode) {
                             voucherDetails.adjustments = voucherDetails.adjustments?.map((adjustment) => {
                                 adjustment.adjustmentAmount = adjustment.amount;
@@ -1232,7 +1235,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.invoiceForm
                             .get("isRcmEntry")
                             .patchValue(voucherDetails.subVoucher === SubVoucher.ReverseCharge ? true : false);
-
+                        this.checkRcm(true);
                         if (voucherDetails.adjustments?.length && !this.isCopyMode) {
                             voucherDetails.adjustments = voucherDetails.adjustments?.map((adjustment) => {
                                 adjustment.adjustmentAmount = adjustment.amount;
@@ -2504,12 +2507,40 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             customerUniqueName: this.invoiceForm.get("account.uniqueName")?.value,
                         };
                     }
-
-                    this.componentStore.getParticularDetails({
-                        accountUniqueName: transactionFormGroup.get("account.uniqueName")?.value,
-                        payload: payload,
-                        entryIndex: entryIndex,
-                    });
+                    if (this.isMultiCurrencyVoucher) {
+                        combineLatest([
+                            this.componentStore.exchangeRateInProgress$,
+                            this.componentStore.exchangeRate$,
+                            this.componentStore.voucherDetails$
+                        ]).pipe(
+                            filter(([inProgress, exchangeRate, voucherDetails]) => !inProgress), // Only proceed when API call is complete
+                            take(1) // Subscribe only once and automatically unsubscribe
+                        ).subscribe(([inProgress, exchangeRate, voucherDetails]) => {
+                            if ((exchangeRate && exchangeRate !== 1) || (voucherDetails?.exchangeRate && voucherDetails?.exchangeRate !== 1)) {
+                                // Exchange rate fetched successfully, proceed immediately
+                                this.componentStore.getParticularDetails({
+                                    accountUniqueName: transactionFormGroup.get("account.uniqueName")?.value,
+                                    payload: payload,
+                                    entryIndex: entryIndex,
+                                });
+                            } else {
+                                // Exchange rate API failed or returned default value, wait 15 seconds then proceed
+                                setTimeout(() => {
+                                    this.componentStore.getParticularDetails({
+                                        accountUniqueName: transactionFormGroup.get("account.uniqueName")?.value,
+                                        payload: payload,
+                                        entryIndex: entryIndex,
+                                    });
+                                }, 15000); // 15 second timeout
+                            }
+                        });
+                    } else {
+                        this.componentStore.getParticularDetails({
+                            accountUniqueName: transactionFormGroup.get("account.uniqueName")?.value,
+                            payload: payload,
+                            entryIndex: entryIndex,
+                        });
+                    }
                 } else {
                     transactionFormGroup.get("stock.variant.getParticular")?.patchValue(true);
                 }
@@ -2597,7 +2628,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 }
             });
         }
-
         if (this.useDefaultAccountDetails) {
             if (this.isMultiCurrencyVoucher) {
                 this.getExchangeRate(
@@ -2608,7 +2638,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             } else {
                 this.invoiceForm.get("exchangeRate").patchValue(1);
             }
-
             let defaultAddress = null;
             let accountDefaultAddress = this.vouchersUtilityService.getDefaultAddress(accountData);
             defaultAddress = accountDefaultAddress.defaultAddress;
@@ -3573,6 +3602,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 document.querySelector("body").classList.remove("fixed");
                 this.handleRcmChange(response);
             });
+        this.changeDetection.detectChanges();
     }
 
     /**
@@ -4649,12 +4679,56 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      *
      * @memberof VoucherCreateComponent
      */
-    public checkRcm(): void {
-        if (this.invoiceForm.get("isRcmEntry")?.value) {
-            this.invoiceForm.get("subVoucher")?.patchValue(SubVoucher.ReverseCharge);
-        } else {
-            this.invoiceForm.get("subVoucher")?.patchValue("");
+    public checkRcm(waitForElement: boolean = false): void {
+        const updateRcmState = () => {
+            if (this.invoiceForm.get("isRcmEntry")?.value) {
+                this.invoiceForm.get("subVoucher")?.patchValue(SubVoucher.ReverseCharge);
+            } else {
+                this.invoiceForm.get("subVoucher")?.patchValue("");
+            }
+
+            if (this.rcmCheckbox) {
+                this.rcmCheckbox["checked"] = this.invoiceForm.get("isRcmEntry")?.value;
+            }
+        };
+
+        // Always update form state immediately
+        updateRcmState();
+
+        // If we need to wait for element and it's not available, retry with exponential backoff
+        if (waitForElement && !this.rcmCheckbox) {
+            this.waitForRcmElement(0);
         }
+    }
+
+    /**
+     * Waits for RCM checkbox element to be available with exponential backoff
+     *
+     * @private
+     * @param {number} [attempt=0]
+     * @return {*}  {void}
+     * @memberof VoucherCreateComponent
+     */
+    private waitForRcmElement(attempt: number = 0): void {
+        const maxAttempts = 10;
+        const baseDelay = 50; // Start with 50ms
+
+        if (attempt >= maxAttempts) {
+            return;
+        }
+
+        if (this.rcmCheckbox) {
+            // Element found, update checkbox state
+            this.rcmCheckbox["checked"] = this.invoiceForm.get("isRcmEntry")?.value;
+            return;
+        }
+
+        // Exponential backoff: 50ms, 100ms, 200ms, 400ms, etc.
+        const delay = baseDelay * Math.pow(2, attempt);
+
+        setTimeout(() => {
+            this.waitForRcmElement(attempt + 1);
+        }, delay);
     }
 
     /**
@@ -4722,7 +4796,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.advanceReceiptAdjustmentData &&
             this.advanceReceiptAdjustmentData.adjustments
         ) {
-            if (this.advanceReceiptAdjustmentData.adjustments.length) {
+            if (this.advanceReceiptAdjustmentData.adjustments.length && !this.invoiceForm.get('voucherUniqueName')?.value) {
                 const adjustments = cloneDeep(this.advanceReceiptAdjustmentData.adjustments);
                 if (adjustments) {
                     adjustments.forEach((adjustment) => {
@@ -5200,6 +5274,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (!initialLoad) {
             this.ocrDataEnabled = false;
         }
+
         const entriesFormArray = this.invoiceForm.get("entries") as FormArray;
         entriesFormArray.clear();
         const depositFormArray = this.invoiceForm.get("deposits") as FormArray;
@@ -5237,6 +5312,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
             this.invoiceForm.get("account.uniqueName")?.patchValue("cash");
             this.componentStore.getBriefAccounts({ currency: this.company.baseCurrency, group: BriedAccountsGroup });
+            this.company.countryName = '';
+            this.getCompanyProfile();
         }
 
         this.addNewLineEntry(false);
@@ -5295,6 +5372,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (this.invoiceType.isCashInvoice) {
             this.invoiceForm.get("account.uniqueName")?.patchValue("cash");
         }
+
+        this.invoiceForm.get("isRcmEntry").patchValue(false);
+        if (this.rcmCheckbox) {
+            this.rcmCheckbox["checked"] = false;
+        }
+        this.checkRcm();
         this.forceClear = true;
 
         setTimeout(() => {
@@ -6904,8 +6987,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             row: this.rowData,
             type: mappedType,
             list: this.transactionOptions,
-            aiOcrDetails : this.aiOcrDetails,
-            ocrType : this.ocrType
+            aiOcrDetails: this.aiOcrDetails,
+            ocrType: this.ocrType
         }
         this.voucherType = this.vouchersUtilityService.parseVoucherType(req.type);
         this.getVoucherType();

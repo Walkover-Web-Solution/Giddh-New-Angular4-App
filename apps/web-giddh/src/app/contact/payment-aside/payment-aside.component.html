@@ -1,9 +1,9 @@
 <div class="dialog-header">
     <span>{{ commonLocaleData?.app_payment }}</span>
-    <button 
-        mat-icon-button 
-        mat-dialog-close 
-        aria-label="close" 
+    <button
+        mat-icon-button
+        mat-dialog-close
+        aria-label="close"
         (click)="closePaymentModel(false)"
     >
         <i class="icon-cross"></i>
@@ -51,7 +51,7 @@
                                         <div class="item-unique">
                                             <p class="font-size-12 text-light mb-0">
                                                 Clo Bal:
-                                                {{ option?.additional?.effectiveBal | giddhCurrency }} dr.
+                                                {{ option?.additional?.effectiveBal | giddhNumberFormat }} dr.
                                             </p>
                                         </div>
                                     </a>
@@ -76,7 +76,7 @@
                             </p>
                                 <p *ngIf="totalAvailableBalance && showBankBalance" class="mt-1">
                                 <small class="text-light"
-                                    >{{ localeData?.bal }} {{ totalAvailableBalance | giddhCurrency }}
+                                    >{{ localeData?.bal }} {{ totalAvailableBalance | giddhNumberFormat }}
                                     {{ commonLocaleData?.app_dr }}</small
                                 >
                             </p>
@@ -121,7 +121,7 @@
                             </p>
                             <p *ngIf="selectIntegratedBankList?.length === 1 && totalAvailableBalance && showBankBalance" class="mt-1">
                                 <small class="text-light"
-                                    >{{ localeData?.bal }} {{ totalAvailableBalance | giddhCurrency }}
+                                    >{{ localeData?.bal }} {{ totalAvailableBalance | giddhNumberFormat }}
                                     {{ commonLocaleData?.app_dr }}</small
                                 >
                             </p>
@@ -237,7 +237,7 @@
                     <div class="account-holder-name">
                         <p>{{ item.name }}</p>
                         <p class="due-amount hidden-xs">
-                            {{ localeData?.due }}:{{ item.totalDueAmount | giddhCurrency }}
+                            {{ localeData?.due }}:{{ item.totalDueAmount | giddhNumberFormat }}
                             <span
                                 class="text-red cursor-pointer"
                                 *ngIf="selectedAccForBulkPayment?.length > 1"

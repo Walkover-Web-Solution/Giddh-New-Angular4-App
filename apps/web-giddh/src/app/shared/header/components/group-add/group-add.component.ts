@@ -66,7 +66,13 @@ export class GroupAddComponent implements OnInit, OnDestroy {
         this.isCreateGroupSuccess$.subscribe(a => {
             if (a) {
                 this.groupDetailForm?.markAsPristine();
-                this.groupDetailForm.reset();
+                this.groupDetailForm.reset({
+                    name: '',
+                    uniqueName: '',
+                    description: '',
+                    closingBalanceTriggerAmount: 0,
+                    closingBalanceTriggerAmountType: 'CREDIT'
+                });
                 setTimeout(() => {
                     this.store.dispatch(this.accountsAction.hasUnsavedChanges(false));
                 }, 500);

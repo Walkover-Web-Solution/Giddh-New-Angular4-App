@@ -1,5 +1,5 @@
 import { take } from 'rxjs/operators';
-import { Component, OnInit, TemplateRef, ViewChild, inject } from '@angular/core';
+import { Component, ElementRef, OnInit, TemplateRef, ViewChild, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { cloneDeep, map, orderBy } from '../../lodash-optimized';
 import { SettingsTagService } from '../../services/settings.tag.service';
@@ -24,6 +24,8 @@ export interface TagInterface {
 export class SettingsTagsComponent implements OnInit {
     /** Create Confirmation Dialog template reference */
     @ViewChild('confirmationModal', { static: true }) public confirmationModal: TemplateRef<any>;
+    /** Tag Input reference */
+    @ViewChild('tagInput') public tagInput: ElementRef<HTMLInputElement>;
     /** Holds tag form group */
     public tagForm: FormGroup;
     /** Holds tags list */
@@ -80,6 +82,9 @@ export class SettingsTagsComponent implements OnInit {
                 });
                 let tagsData = orderBy(response?.body, 'name');
                 this.tags = cloneDeep(tagsData);
+                setTimeout(() => {
+                    this.tagInput.nativeElement.focus();
+                }, 100);
             }
             this.isLoading = false;
         });

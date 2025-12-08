@@ -97,7 +97,7 @@
                                         </label>
                                     </span>
                                     <span
-                                        class="start-upload-btn float-right ml-4 position-relative "
+                                        class="start-upload-btn float-right ml-4 position-relative"
                                         *ngIf="isFileUploadInProgress"
                                         ><b>{{ localeData?.uploading }}</b></span
                                     >
@@ -182,6 +182,7 @@
                                     [label]="localeData?.choose_font"
                                     [options]="presetFonts"
                                     (selectedOption)="onFontSelect($event)"
+                                    [(ngModel)]="customTemplate.font"
                                     (onClear)="selectedFont = ''"
                                     [labelValue]="selectedFont"
                                     [placeholder]="localeData?.choose_font"
@@ -204,6 +205,7 @@
                                     [label]="localeData?.select_different_fonts_size"
                                     [options]="presetFontsSize"
                                     (selectedOption)="onFontSizeSelect($event)"
+                                    [(ngModel)]="customTemplate.fontSize"
                                     (onClear)="selectedFontSize = ''"
                                     [labelValue]="selectedFontSize"
                                     [placeholder]="localeData?.select_different_fonts_size"
@@ -381,9 +383,7 @@
                                                                         'companyName'
                                                                     ].label
                                                                 "
-                                                                (ngModelChange)="
-                                                                    onChangeFieldVisibility()
-                                                                "
+                                                                (ngModelChange)="onChangeFieldVisibility()"
                                                                 [readonly]="
                                                                     !customTemplate?.sections?.['header']?.data?.[
                                                                         'companyName'
@@ -670,9 +670,7 @@
                                                                         'gstComposition'
                                                                     ].label
                                                                 "
-                                                                (ngModelChange)="
-                                                                    onChangeFieldVisibility()
-                                                                "
+                                                                (ngModelChange)="onChangeFieldVisibility()"
                                                                 [readonly]="
                                                                     !customTemplate.sections['header'].data[
                                                                         'gstComposition'
@@ -1655,7 +1653,7 @@
                                                                                 15,
                                                                                 customTemplate.sections["header"].data[
                                                                                     "trackingNumber"
-                                                                                ]?.label || ''
+                                                                                ]?.label || ""
                                                                             )
                                                                         }}
                                                                     </p>
@@ -1725,7 +1723,7 @@
                                                                                 15,
                                                                                 customTemplate.sections["header"].data[
                                                                                     "customField1"
-                                                                                ]?.label || ''
+                                                                                ]?.label || ""
                                                                             )
                                                                         }}
                                                                     </p>
@@ -1776,7 +1774,7 @@
                                                                                 15,
                                                                                 customTemplate.sections["header"].data[
                                                                                     "customField2"
-                                                                                ]?.label || ''
+                                                                                ]?.label || ""
                                                                             )
                                                                         }}
                                                                     </p>
@@ -1827,7 +1825,7 @@
                                                                                 15,
                                                                                 customTemplate.sections["header"].data[
                                                                                     "customField3"
-                                                                                ]?.label || ''
+                                                                                ]?.label || ""
                                                                             )
                                                                         }}
                                                                     </p>
@@ -1895,7 +1893,8 @@
                                                             {{
                                                                 getRemainingCharacters(
                                                                     10,
-                                                                    customTemplate.sections["table"].data["sNo"]?.label || ''
+                                                                    customTemplate.sections["table"].data["sNo"]
+                                                                        ?.label || ""
                                                                 )
                                                             }}
                                                         </p>
@@ -1982,7 +1981,8 @@
                                                             {{
                                                                 getRemainingCharacters(
                                                                     10,
-                                                                    customTemplate.sections["table"].data["date"]?.label || ''
+                                                                    customTemplate.sections["table"].data["date"]
+                                                                        ?.label || ""
                                                                 )
                                                             }}
                                                         </p>
@@ -2083,7 +2083,8 @@
                                                                     customTemplate.templateType === "tally_template"
                                                                         ? 20
                                                                         : 12,
-                                                                    customTemplate.sections["table"].data["item"]?.label || ''
+                                                                    customTemplate.sections["table"].data["item"]
+                                                                        ?.label || ""
                                                                 )
                                                             }}
                                                         </p>
@@ -2141,7 +2142,8 @@
                                                             "
                                                             (ngModelChange)="onChangeFieldVisibility()"
                                                             [readonly]="
-                                                                !customTemplate.sections['table'].data['hsnSac']?.display
+                                                                !customTemplate.sections['table'].data['hsnSac']
+                                                                    ?.display
                                                             "
                                                         ></input-field>
                                                     </div>
@@ -2216,7 +2218,7 @@
                                                                             : 6,
                                                                         customTemplate.sections["table"].data[
                                                                             "quantity"
-                                                                        ]?.label || ''
+                                                                        ]?.label || ""
                                                                     )
                                                                 }}
                                                             </p>
@@ -2392,7 +2394,8 @@
                                                             {{
                                                                 getRemainingCharacters(
                                                                     10,
-                                                                    customTemplate.sections["table"].data["rate"]?.label || ''
+                                                                    customTemplate.sections["table"].data["rate"]
+                                                                        ?.label || ""
                                                                 )
                                                             }}
                                                         </p>
@@ -2517,7 +2520,7 @@
                                                                     14,
                                                                     customTemplate.sections["table"].data[
                                                                         "taxableValue"
-                                                                    ]?.label || ''
+                                                                    ]?.label || ""
                                                                 )
                                                             }}
                                                         </p>
@@ -2558,7 +2561,8 @@
                                                             {{
                                                                 getRemainingCharacters(
                                                                     10,
-                                                                    customTemplate.sections["table"].data["tax"]?.label || ''
+                                                                    customTemplate.sections["table"].data["tax"]
+                                                                        ?.label || ""
                                                                 )
                                                             }}
                                                         </p>
@@ -2706,7 +2710,8 @@
                                         <div
                                             *ngIf="
                                                 (customTemplate?.templateType === templateTypeEnum.GstTemplateA &&
-                                                    (voucherType === voucherTypeEnum.sales || voucherType === voucherTypeEnum.voucher) &&
+                                                    (voucherType === voucherTypeEnum.sales ||
+                                                        voucherType === voucherTypeEnum.voucher) &&
                                                     customTemplate.sections['table'].data['totalQuantity']) ||
                                                 customTemplate?.templateType === templateTypeEnum.TallyTemplate
                                             "
@@ -2859,7 +2864,7 @@
                                                                             10,
                                                                             customTemplate.sections["footer"].data[
                                                                                 "tcs"
-                                                                            ]?.label || ''
+                                                                            ]?.label || ""
                                                                         )
                                                                     }}
                                                                 </p>
@@ -2912,7 +2917,7 @@
                                                                             10,
                                                                             customTemplate.sections["footer"].data[
                                                                                 "tds"
-                                                                            ]?.label || ''
+                                                                            ]?.label || ""
                                                                         )
                                                                     }}
                                                                 </p>
@@ -2969,7 +2974,7 @@
                                                                             40,
                                                                             customTemplate.sections["footer"].data[
                                                                                 "totalDue"
-                                                                            ]?.label || ''
+                                                                            ]?.label || ""
                                                                         )
                                                                     }}
                                                                 </p>
@@ -3041,7 +3046,7 @@
                                                                         50,
                                                                         customTemplate.sections["footer"].data[
                                                                             "companyName"
-                                                                        ]?.label || ''
+                                                                        ]?.label || ""
                                                                     )
                                                                 }}
                                                             </p>
@@ -3122,7 +3127,7 @@
                                                                         124,
                                                                         customTemplate.sections["footer"].data[
                                                                             "companyAddress"
-                                                                        ]?.label || ''
+                                                                        ]?.label || ""
                                                                     )
                                                                 }}
                                                             </p>
@@ -3203,7 +3208,7 @@
                                                                         13,
                                                                         customTemplate.sections["table"].data[
                                                                             "totalQuantity"
-                                                                        ]?.label || ''
+                                                                        ]?.label || ""
                                                                     )
                                                                 }}
                                                             </p>
@@ -3256,7 +3261,7 @@
                                                                         10,
                                                                         customTemplate.sections["table"].data[
                                                                             "discount"
-                                                                        ]?.label || ''
+                                                                        ]?.label || ""
                                                                     )
                                                                 }}
                                                             </p>
@@ -3285,9 +3290,11 @@
                                                     <div class="w-100 ml-2">
                                                         <div>
                                                             <input-field
-                                                                [label]="customTemplate.sections['footer'].data[
-                                                                'taxableAmount'
-                                                            ]?.label || ''"
+                                                                [label]="
+                                                                    customTemplate.sections['footer'].data[
+                                                                        'taxableAmount'
+                                                                    ]?.label || ''
+                                                                "
                                                                 [type]="'text'"
                                                                 maxlength="14"
                                                                 name="tv1"
@@ -3314,7 +3321,7 @@
                                                                         14,
                                                                         customTemplate.sections["footer"].data[
                                                                             "taxableAmount"
-                                                                        ]?.label || ''
+                                                                        ]?.label || ""
                                                                     )
                                                                 }}
                                                             </p>
@@ -3360,7 +3367,8 @@
                                             <div
                                                 *ngIf="
                                                     customTemplate?.templateType === templateTypeEnum.GstTemplateA &&
-                                                    (voucherType === voucherTypeEnum.sales || voucherType === voucherTypeEnum.voucher) &&
+                                                    (voucherType === voucherTypeEnum.sales ||
+                                                        voucherType === voucherTypeEnum.voucher) &&
                                                     customTemplate.sections['footer'].data['taxBifurcation']
                                                 "
                                             >
@@ -3380,7 +3388,8 @@
                                                 <div
                                                     class="ml-4"
                                                     *ngIf="
-                                                        customTemplate.sections['footer'].data['taxBifurcation']?.display
+                                                        customTemplate.sections['footer'].data['taxBifurcation']
+                                                            ?.display
                                                     "
                                                 >
                                                     <mat-radio-group>
@@ -3454,7 +3463,8 @@
                                             </ng-container>
                                             <div
                                                 *ngIf="
-                                                    (customTemplate?.type === 'invoice' || customTemplate?.type === 'voucher') &&
+                                                    (customTemplate?.type === 'invoice' ||
+                                                        customTemplate?.type === 'voucher') &&
                                                     customTemplate?.templateType !== templateTypeEnum.ThermalTemplate &&
                                                     customTemplate?.templateType !== templateTypeEnum.TallyTemplate &&
                                                     customTemplate.sections['footer'].data['showNotesAtLastPage']
@@ -3524,7 +3534,8 @@
                                                 <div
                                                     class="ml-4"
                                                     *ngIf="
-                                                        customTemplate.sections['footer'].data['taxBifurcation']?.display
+                                                        customTemplate.sections['footer'].data['taxBifurcation']
+                                                            ?.display
                                                     "
                                                 >
                                                     <mat-radio-group>
@@ -3625,7 +3636,7 @@
                                                                         200,
                                                                         customTemplate.sections["footer"].data[
                                                                             "message1"
-                                                                        ]?.label || ''
+                                                                        ]?.label || ""
                                                                     )
                                                                 }}
                                                             </p>
@@ -3768,7 +3779,7 @@
                                                                         50,
                                                                         customTemplate.sections["footer"].data[
                                                                             "textUnderSlogan"
-                                                                        ]?.label || ''
+                                                                        ]?.label || ""
                                                                     )
                                                                 }}
                                                             </p>
@@ -3811,7 +3822,9 @@
                                                             >
                                                                 {{ localeData?.image_signature }}
                                                             </div>
-                                                            <div class="form-group ml-5 clear-both d-flex column-gap-15">
+                                                            <div
+                                                                class="form-group ml-5 clear-both d-flex column-gap-15"
+                                                            >
                                                                 <span class="clear-both">
                                                                     <label
                                                                         class="upload-button text-center cursor-pointer"
@@ -3825,7 +3838,9 @@
                                                                                     .slogan.display
                                                                             "
                                                                             [ngClass]="{
-                                                                                'cursor-disable': !customTemplate.sections.footer.data.slogan.display
+                                                                                'cursor-disable':
+                                                                                    !customTemplate.sections.footer.data
+                                                                                        .slogan.display
                                                                             }"
                                                                             accept="image/png, image/jpeg"
                                                                             id="signatureImg-edit"
@@ -3907,7 +3922,8 @@
                                                                                 "
                                                                             >
                                                                         {{ localeData?.slogan_note }}
-                                                                    </textarea>
+                                                                    </textarea
+                                                                            >
                                                                             <span class="max-character-label"
                                                                                 >{{
                                                                                     localeData?.characters_left
@@ -3915,9 +3931,8 @@
                                                                             ><span class="max-character-value">{{
                                                                                 getRemainingCharacters(
                                                                                     30,
-                                                                                    customTemplate.sections[
-                                                                                        "footer"
-                                                                                    ].data["slogan"]?.label || ''
+                                                                                    customTemplate.sections["footer"]
+                                                                                        .data["slogan"]?.label || ""
                                                                                 )
                                                                             }}</span>
                                                                         </div>

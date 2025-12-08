@@ -265,7 +265,7 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
             this.permissionForm = this._fb.group({
                 emailId: [null, Validators.compose([Validators.required, Validators.maxLength(150), Validators.pattern(this.giddhEmailRegex)])],
                 entity: ['company'],
-                roleUniqueName: ['admin', [Validators.required]],
+                roleUniqueName: [null, [Validators.required]],
                 periodOptions: [DATE_RANGE],
                 from: [null],
                 to: [null],

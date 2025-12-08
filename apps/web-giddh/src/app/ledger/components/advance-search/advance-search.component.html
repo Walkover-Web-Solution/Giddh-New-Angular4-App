@@ -98,7 +98,6 @@
                                         (scrollEnd)="handleScrollEnd()"
                                         [enableDynamicSearch]="true"
                                         (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
-                                        (onClear)="onDDClear('accountUniqueNames')"
                                     ></select-multiple-fields>
                                 </div>
                             </div>
@@ -126,7 +125,6 @@
                                         (scrollEnd)="handleGroupScrollEnd()"
                                         [enableDynamicSearch]="true"
                                         (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)"
-                                        (onClear)="onDDClear('groupUniqueNames')"
                                     ></select-multiple-fields>
                                 </div>
                             </div>
@@ -178,7 +176,6 @@
                                                 (scrollEnd)="handleScrollEnd()"
                                                 [enableDynamicSearch]="true"
                                                 (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
-                                                (onClear)="onDDClear('particulars')"
                                             ></select-multiple-fields>
                                         </div>
                                     </div>
@@ -228,7 +225,6 @@
                                                 [label]="commonLocaleData?.app_voucher_type"
                                                 [placeholder]="commonLocaleData?.app_select_accounts"
                                                 [options]="voucherTypeList | async"
-                                                (onClear)="onDDClear('vouchers')"
                                             ></select-multiple-fields>
                                         </div>
                                     </div>
@@ -414,7 +410,6 @@
                                                             (scrollEnd)="handleStockScrollEnd()"
                                                             [enableDynamicSearch]="true"
                                                             (dynamicSearchedQuery)="onStockSearchQueryChanged($event)"
-                                                            (onClear)="onDDClear('inventory')"
                                                         ></select-multiple-fields>
                                                     </div>
                                                 </div>

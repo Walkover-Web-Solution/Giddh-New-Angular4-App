@@ -2,7 +2,8 @@
     appTranslate
     [file]="'settings/taxes'"
     (localeData)="localeData = $event" 
-    (commonLocaleData)="commonLocaleData = $event">
+    (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)">
     <div class="other-tax aside-dialog-wrapper">
         <div class="dialog-header">
             <span class="font-size-16">{{ commonLocaleData?.app_tax_applicable }}</span>
@@ -20,13 +21,13 @@
                     </div>
                     <div class="col-6">
                         <span class="custom-mat-form-field">
-                            <mat-form-field appearance="outline">
-                                <mat-label>{{ commonLocaleData?.app_calculation_method }}</mat-label>
-                                <mat-select required="true" formControlName="calculationMethod">
-                                    <mat-option [value]="'OnTaxableAmount'">{{ commonLocaleData?.app_on_taxable_value }}</mat-option>
-                                    <mat-option [value]="'OnTotalAmount'">{{ commonLocaleData?.app_on_total_value }}</mat-option>
-                                </mat-select>
-                            </mat-form-field>
+                            <reactive-dropdown-field
+                                [options]="calculationMethodOptions"
+                                [label]="commonLocaleData?.app_calculation_method"
+                                [appearance]="'outline'"
+                                [required]="true"
+                                formControlName="calculationMethod">
+                            </reactive-dropdown-field>
                         </span>
                     </div>
                 </div>

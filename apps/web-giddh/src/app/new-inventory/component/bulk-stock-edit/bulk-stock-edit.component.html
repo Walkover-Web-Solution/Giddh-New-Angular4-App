@@ -9,10 +9,7 @@
     (translationComplete)="translationComplete($event)"
 >
     <div class="bulk-stock p-3 pb-0">
-        <div
-            class="menu-btn-control ml-2 pull-right"
-            [matTooltip]="localeData?.customize_column"
-        >
+        <div class="menu-btn-control ml-2 pull-right" [matTooltip]="localeData?.customize_column">
             <select-table-column
                 [moduleName]="inventoryType"
                 [moduleType]="moduleName"
@@ -45,7 +42,7 @@
                             (click)="isApiCalled = true; resetSearch()"
                             aria-label="cross icon"
                         >
-                            <span class="icon-cross position-relative "></span> {{ commonLocaleData?.app_clear_filter }}
+                            <span class="icon-cross position-relative"></span> {{ commonLocaleData?.app_clear_filter }}
                         </button>
                     </div>
                     <div>
@@ -71,7 +68,7 @@
                     <ng-container *ngIf="(!noDataFound || searchString) && !isLoading">
                         <div class="table-responsive">
                             <form [formGroup]="bulkStockEditForm" (ngSubmit)="onFormSubmit()">
-                                <table class="table-bordered">
+                                <table class="table-bordered w-100">
                                     <thead>
                                         <tr (clickOutside)="hideTableHeadInput()">
                                             <!-- Variant Name -->
@@ -510,6 +507,10 @@
                                             >
                                                 <p>{{ localeData?.fixed_asset_tax_inclusive }}</p>
                                             </th>
+                                            <!-- Discount Field -->
+                                            <th *ngIf="tableHeaderShowHide.discountName">
+                                                <p>{{ localeData?.discount_name }}</p>
+                                            </th>
                                             <ng-container *ngFor="let column of tableHeaderDynamicColumns">
                                                 <th>
                                                     <p>{{ column?.label }}</p>
@@ -524,7 +525,14 @@
                                                 let i = index
                                             "
                                         >
-                                            <tr [formGroupName]="i" (clickOutside)="selectTableRowIndex == i && hideTableInput()" (click)="selectTableRowIndex != i && showTableInput($event, i); hideTableHeadInput()">    
+                                            <tr
+                                                [formGroupName]="i"
+                                                (clickOutside)="selectTableRowIndex == i && hideTableInput()"
+                                                (click)="
+                                                    selectTableRowIndex != i && showTableInput($event, i);
+                                                    hideTableHeadInput()
+                                                "
+                                            >
                                                 <!-- Variant Name -->
                                                 <td
                                                     *ngIf="tableHeaderShowHide.variantName"
@@ -610,7 +618,10 @@
                                                             formControlName="stockGroupUniqueName"
                                                             [openDropdown]="selectTableRowName === 'stockGroupName'"
                                                             [options]="stockUnitGroupList"
-                                                            (selectedOption)="row.get('stockGroupName').setValue($event.label); row.get('stockGroupUniqueName').setValue($event.value)"
+                                                            (selectedOption)="
+                                                                row.get('stockGroupName').setValue($event.label);
+                                                                row.get('stockGroupUniqueName').setValue($event.value)
+                                                            "
                                                             [required]="true"
                                                             [showLabel]="false"
                                                         >
@@ -667,11 +678,12 @@
                                                 >
                                                     <div class="border-line">
                                                         <text-field
-                                                            [type]="'text'"
+                                                            [type]="'number'"
                                                             formControlName="hsnNo"
                                                             [readonly]="selectTableRowIndex !== i"
                                                             [matTooltip]="row.get('hsnNo').value"
                                                             matTooltipPosition="above"
+                                                            [allowDigitsOnly]="true"
                                                         >
                                                         </text-field>
                                                     </div>
@@ -684,10 +696,11 @@
                                                 >
                                                     <div class="border-line">
                                                         <text-field
-                                                            [type]="'text'"
+                                                            [type]="'number'"
                                                             formControlName="sacNo"
                                                             [readonly]="selectTableRowIndex !== i"
                                                             [matTooltip]="row.get('sacNo').value"
+                                                            [allowDigitsOnly]="true"
                                                             matTooltipPosition="above"
                                                         >
                                                         </text-field>
@@ -731,9 +744,20 @@
                                                             *ngIf="selectTableRowIndex == i"
                                                             formControlName="purchaseAccountUniqueName"
                                                             [options]="purchaseAccountList"
-                                                            [openDropdown]="selectTableRowName === 'purchaseAccountName'"
+                                                            [openDropdown]="
+                                                                selectTableRowName === 'purchaseAccountName'
+                                                            "
                                                             [showLabel]="false"
-                                                            (selectedOption)="row.get('purchaseAccountName').setValue($event.label); row.get('purchaseAccountUniqueName').setValue($event.value)"
+                                                            (selectedOption)="
+                                                                row.get('purchaseAccountName').setValue($event.label);
+                                                                row
+                                                                    .get('purchaseAccountUniqueName')
+                                                                    .setValue($event.value)
+                                                            "
+                                                            (onClear)="
+                                                                row.get('purchaseAccountName').setValue('');
+                                                                row.get('purchaseAccountUniqueName').setValue('')
+                                                            "
                                                         >
                                                         </reactive-dropdown-field>
                                                     </div>
@@ -800,7 +824,9 @@
                                                             [openDropdown]="selectTableRowName === 'purchaseUnits'"
                                                             [options]="stockMainUnits"
                                                             [labelValue]="row.get('purchaseUnitsCode').value"
-                                                            (selectedOption)="row.get('purchaseUnitsCode').setValue($event.label)"
+                                                            (selectedOption)="
+                                                                row.get('purchaseUnitsCode').setValue($event.label)
+                                                            "
                                                             (onClear)="row.get('purchaseUnitsCode').setValue('')"
                                                             [showLabel]="false"
                                                         >
@@ -831,7 +857,14 @@
                                                             [options]="salesAccountList"
                                                             [openDropdown]="selectTableRowName === 'salesAccountName'"
                                                             [showLabel]="false"
-                                                            (selectedOption)="row.get('salesAccountName').setValue($event.label); row.get('salesAccountUniqueName').setValue($event.value)"
+                                                            (selectedOption)="
+                                                                row.get('salesAccountName').setValue($event.label);
+                                                                row.get('salesAccountUniqueName').setValue($event.value)
+                                                            "
+                                                            (onClear)="
+                                                                row.get('salesAccountName').setValue('');
+                                                                row.get('salesAccountUniqueName').setValue('')
+                                                            "
                                                         >
                                                         </reactive-dropdown-field>
                                                     </div>
@@ -898,7 +931,9 @@
                                                             [options]="stockMainUnits"
                                                             [openDropdown]="selectTableRowName === 'salesUnits'"
                                                             [labelValue]="row.get('salesUnitsCode').value"
-                                                            (selectedOption)="row.get('salesUnitsCode').setValue($event.label)"
+                                                            (selectedOption)="
+                                                                row.get('salesUnitsCode').setValue($event.label)
+                                                            "
                                                             (onClear)="row.get('salesUnitsCode').setValue('')"
                                                             [showLabel]="false"
                                                         >
@@ -928,7 +963,9 @@
                                                             formControlName="fixedAssetUnits"
                                                             [options]="stockMainUnits"
                                                             [labelValue]="row.get('fixedAssetUnitsCode').value"
-                                                            (selectedOption)="row.get('fixedAssetUnitsCode').setValue($event.label)"
+                                                            (selectedOption)="
+                                                                row.get('fixedAssetUnitsCode').setValue($event.label)
+                                                            "
                                                             (onClear)="row.get('fixedAssetUnitsCode').setValue('')"
                                                             [openDropdown]="selectTableRowName === 'fixedAssetUnits'"
                                                             [showLabel]="false"
@@ -975,11 +1012,22 @@
                                                         </text-field>
                                                         <reactive-dropdown-field
                                                             *ngIf="selectTableRowIndex == i"
-                                                            formControlName="fixedAssetAccountName"
+                                                            formControlName="fixedAssetAccountUniqueName"
                                                             [options]="fixedAssetAccountList"
-                                                            [openDropdown]="selectTableRowName === 'fixedAssetAccountName'"
+                                                            [openDropdown]="
+                                                                selectTableRowName === 'fixedAssetAccountName'
+                                                            "
                                                             [showLabel]="false"
-                                                            (selectedOption)="row.get('fixedAssetAccountName').setValue($event.label); row.get('fixedAssetAccountUniqueName').setValue($event.value)"
+                                                            (selectedOption)="
+                                                                row.get('fixedAssetAccountName').setValue($event.label);
+                                                                row
+                                                                    .get('fixedAssetAccountUniqueName')
+                                                                    .setValue($event.value)
+                                                            "
+                                                            (onClear)="
+                                                                row.get('fixedAssetAccountName').setValue('');
+                                                                row.get('fixedAssetAccountUniqueName').setValue('')
+                                                            "
                                                         >
                                                         </reactive-dropdown-field>
                                                     </div>
@@ -1019,17 +1067,33 @@
                                                             "
                                                             matTooltipPosition="above"
                                                         >
-                                                            <div [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger">{{
-                                                                row.get("archive").value
-                                                                    ? commonLocaleData?.app_yes
-                                                                    : commonLocaleData?.app_no
-                                                            }}</div>
-                                                            <mat-menu #menu="matMenu" [hasBackdrop]="false">
-                                                                <button mat-menu-item (click)="$event.stopPropagation(); row.get('archive').patchValue(!row.get('archive').value); menuTrigger.closeMenu()">{{
+                                                            <div
+                                                                [matMenuTriggerFor]="menu"
+                                                                #menuTrigger="matMenuTrigger"
+                                                            >
+                                                                {{
                                                                     row.get("archive").value
-                                                                        ? commonLocaleData?.app_no
-                                                                        : commonLocaleData?.app_yes
-                                                                }}</button>
+                                                                        ? commonLocaleData?.app_yes
+                                                                        : commonLocaleData?.app_no
+                                                                }}
+                                                            </div>
+                                                            <mat-menu #menu="matMenu" [hasBackdrop]="false">
+                                                                <button
+                                                                    mat-menu-item
+                                                                    (click)="
+                                                                        $event.stopPropagation();
+                                                                        row
+                                                                            .get('archive')
+                                                                            .patchValue(!row.get('archive').value);
+                                                                        menuTrigger.closeMenu()
+                                                                    "
+                                                                >
+                                                                    {{
+                                                                        row.get("archive").value
+                                                                            ? commonLocaleData?.app_no
+                                                                            : commonLocaleData?.app_yes
+                                                                    }}
+                                                                </button>
                                                             </mat-menu>
                                                         </div>
                                                     </div>
@@ -1063,8 +1127,12 @@
                                                         >
                                                             <mat-option class="mt-0">
                                                                 <ngx-mat-select-search
-                                                                    [placeholderLabel]="commonLocaleData?.app_sales_person_placeholder"
-                                                                    [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
+                                                                    [placeholderLabel]="
+                                                                        commonLocaleData?.app_sales_person_placeholder
+                                                                    "
+                                                                    [noEntriesFoundLabel]="
+                                                                        commonLocaleData?.app_no_result_found
+                                                                    "
                                                                     [formControl]="taxDropdown"
                                                                 >
                                                                     <i class="icon-cross" ngxMatSelectSearchClear></i>
@@ -1075,7 +1143,9 @@
                                                                 [value]="tax?.uniqueName"
                                                                 [disabled]="tax.isDisabled"
                                                                 (click)="$event.stopPropagation()"
-                                                                (onSelectionChange)="!tax.isDisabled ? selectTax(tax, i) : ''"
+                                                                (onSelectionChange)="
+                                                                    !tax.isDisabled ? selectTax(tax, i) : ''
+                                                                "
                                                                 >{{ tax.name }}</mat-option
                                                             >
                                                             <mat-option
@@ -1127,17 +1197,38 @@
                                                             "
                                                             matTooltipPosition="above"
                                                         >
-                                                            <div [matMenuTriggerFor]="salesTaxInclusiveMenu" #salesTaxInclusiveMenuTrigger="matMenuTrigger">{{
-                                                                row.get("salesTaxInclusive").value
-                                                                    ? localeData?.inclusive
-                                                                    : localeData?.exclusive
-                                                            }}</div>
-                                                            <mat-menu #salesTaxInclusiveMenu="matMenu" [hasBackdrop]="false">
-                                                                <button mat-menu-item (click)="$event.stopPropagation(); row.get('salesTaxInclusive').patchValue(!row.get('salesTaxInclusive').value); salesTaxInclusiveMenuTrigger.closeMenu()">{{
+                                                            <div
+                                                                [matMenuTriggerFor]="salesTaxInclusiveMenu"
+                                                                #salesTaxInclusiveMenuTrigger="matMenuTrigger"
+                                                            >
+                                                                {{
                                                                     row.get("salesTaxInclusive").value
-                                                                        ? localeData?.exclusive
-                                                                        : localeData?.inclusive
-                                                                }}</button>
+                                                                        ? localeData?.inclusive
+                                                                        : localeData?.exclusive
+                                                                }}
+                                                            </div>
+                                                            <mat-menu
+                                                                #salesTaxInclusiveMenu="matMenu"
+                                                                [hasBackdrop]="false"
+                                                            >
+                                                                <button
+                                                                    mat-menu-item
+                                                                    (click)="
+                                                                        $event.stopPropagation();
+                                                                        row
+                                                                            .get('salesTaxInclusive')
+                                                                            .patchValue(
+                                                                                !row.get('salesTaxInclusive').value
+                                                                            );
+                                                                        salesTaxInclusiveMenuTrigger.closeMenu()
+                                                                    "
+                                                                >
+                                                                    {{
+                                                                        row.get("salesTaxInclusive").value
+                                                                            ? localeData?.exclusive
+                                                                            : localeData?.inclusive
+                                                                    }}
+                                                                </button>
                                                             </mat-menu>
                                                         </div>
                                                     </div>
@@ -1160,17 +1251,38 @@
                                                             "
                                                             matTooltipPosition="above"
                                                         >
-                                                            <div [matMenuTriggerFor]="purchaseTaxInclusiveMenu" #purchaseTaxInclusiveMenuTrigger="matMenuTrigger">{{
-                                                                row.get("purchaseTaxInclusive").value
-                                                                    ? localeData?.inclusive
-                                                                    : localeData?.exclusive
-                                                            }}</div>
-                                                            <mat-menu #purchaseTaxInclusiveMenu="matMenu" [hasBackdrop]="false">
-                                                                <button mat-menu-item (click)="$event.stopPropagation(); row.get('purchaseTaxInclusive').patchValue(!row.get('purchaseTaxInclusive').value); purchaseTaxInclusiveMenuTrigger.closeMenu()">{{
+                                                            <div
+                                                                [matMenuTriggerFor]="purchaseTaxInclusiveMenu"
+                                                                #purchaseTaxInclusiveMenuTrigger="matMenuTrigger"
+                                                            >
+                                                                {{
                                                                     row.get("purchaseTaxInclusive").value
-                                                                        ? localeData?.exclusive
-                                                                        : localeData?.inclusive
-                                                                }}</button>
+                                                                        ? localeData?.inclusive
+                                                                        : localeData?.exclusive
+                                                                }}
+                                                            </div>
+                                                            <mat-menu
+                                                                #purchaseTaxInclusiveMenu="matMenu"
+                                                                [hasBackdrop]="false"
+                                                            >
+                                                                <button
+                                                                    mat-menu-item
+                                                                    (click)="
+                                                                        $event.stopPropagation();
+                                                                        row
+                                                                            .get('purchaseTaxInclusive')
+                                                                            .patchValue(
+                                                                                !row.get('purchaseTaxInclusive').value
+                                                                            );
+                                                                        purchaseTaxInclusiveMenuTrigger.closeMenu()
+                                                                    "
+                                                                >
+                                                                    {{
+                                                                        row.get("purchaseTaxInclusive").value
+                                                                            ? localeData?.exclusive
+                                                                            : localeData?.inclusive
+                                                                    }}
+                                                                </button>
                                                             </mat-menu>
                                                         </div>
                                                     </div>
@@ -1193,19 +1305,65 @@
                                                             "
                                                             matTooltipPosition="above"
                                                         >
-                                                            <div [matMenuTriggerFor]="fixedAssetTaxInclusiveMenu" #fixedAssetTaxInclusiveMenuTrigger="matMenuTrigger">{{
-                                                                row.get("fixedAssetTaxInclusive").value
-                                                                    ? localeData?.inclusive
-                                                                    : localeData?.exclusive
-                                                            }}</div>
-                                                            <mat-menu #fixedAssetTaxInclusiveMenu="matMenu" [hasBackdrop]="false">
-                                                                <button mat-menu-item (click)="$event.stopPropagation(); row.get('fixedAssetTaxInclusive').patchValue(!row.get('fixedAssetTaxInclusive').value); fixedAssetTaxInclusiveMenuTrigger.closeMenu()">{{
+                                                            <div
+                                                                [matMenuTriggerFor]="fixedAssetTaxInclusiveMenu"
+                                                                #fixedAssetTaxInclusiveMenuTrigger="matMenuTrigger"
+                                                            >
+                                                                {{
                                                                     row.get("fixedAssetTaxInclusive").value
-                                                                        ? localeData?.exclusive
-                                                                        : localeData?.inclusive
-                                                                }}</button>
+                                                                        ? localeData?.inclusive
+                                                                        : localeData?.exclusive
+                                                                }}
+                                                            </div>
+                                                            <mat-menu
+                                                                #fixedAssetTaxInclusiveMenu="matMenu"
+                                                                [hasBackdrop]="false"
+                                                            >
+                                                                <button
+                                                                    mat-menu-item
+                                                                    (click)="
+                                                                        $event.stopPropagation();
+                                                                        row
+                                                                            .get('fixedAssetTaxInclusive')
+                                                                            .patchValue(
+                                                                                !row.get('fixedAssetTaxInclusive').value
+                                                                            );
+                                                                        fixedAssetTaxInclusiveMenuTrigger.closeMenu()
+                                                                    "
+                                                                >
+                                                                    {{
+                                                                        row.get("fixedAssetTaxInclusive").value
+                                                                            ? localeData?.exclusive
+                                                                            : localeData?.inclusive
+                                                                    }}
+                                                                </button>
                                                             </mat-menu>
                                                         </div>
+                                                    </div>
+                                                </td>
+
+                                                <!-- Discount Field -->
+                                                <td
+                                                    *ngIf="tableHeaderShowHide.discountName"
+                                                    (click)="getInputIndex(i, 'discountName')"
+                                                >
+                                                    <div class="border-line">
+                                                        <text-field
+                                                            *ngIf="selectTableRowIndex !== i"
+                                                            [type]="'text'"
+                                                            formControlName="discountName"
+                                                            [readonly]="true"
+                                                        >
+                                                        </text-field>
+                                                        <reactive-dropdown-field
+                                                            *ngIf="selectTableRowIndex === i"
+                                                            formControlName="discountUniqueName"
+                                                            [showLabel]="false"
+                                                            [options]="discountsList"
+                                                            [openDropdown]="selectTableRowName === 'discountName'"
+                                                            (selectedOption)="row.get('discountName').patchValue($event.label)"
+                                                            (onClear)="row.get('discountName').patchValue('')"
+                                                        ></reactive-dropdown-field>
                                                     </div>
                                                 </td>
                                                 <!-- Custom Fileds (Menu)-->
@@ -1216,28 +1374,67 @@
                                                     "
                                                 >
                                                     <td
-                                                        *ngFor="let customField of row.get('customFields').controls; let j = index" 
+                                                        *ngFor="
+                                                            let customField of row.get('customFields').controls;
+                                                            let j = index
+                                                        "
                                                         (click)="getInputIndex(i, customField.get('key')?.value)"
                                                         class="min-width-140"
                                                     >
                                                         <div class="border-line">
                                                             <ng-container formArrayName="customFields">
                                                                 <ng-container [formGroupName]="j">
-                                                                    <text-field 
-                                                                        *ngIf="customField.get('dataType')?.value === availableFieldTypes.String || customField.get('dataType')?.value === availableFieldTypes.Barcode || customField.get('dataType')?.value === availableFieldTypes.Number"
-                                                                        [type]="customField.get('dataType')?.value === availableFieldTypes.String || customField.get('dataType')?.value === availableFieldTypes.Barcode ? 'text' : 'number'"
+                                                                    <text-field
+                                                                        *ngIf="
+                                                                            customField.get('dataType')?.value ===
+                                                                                availableFieldTypes.String ||
+                                                                            customField.get('dataType')?.value ===
+                                                                                availableFieldTypes.Barcode ||
+                                                                            customField.get('dataType')?.value ===
+                                                                                availableFieldTypes.Number
+                                                                        "
+                                                                        [type]="
+                                                                            customField.get('dataType')?.value ===
+                                                                                availableFieldTypes.String ||
+                                                                            customField.get('dataType')?.value ===
+                                                                                availableFieldTypes.Barcode
+                                                                                ? 'text'
+                                                                                : 'number'
+                                                                        "
                                                                         formControlName="value"
-                                                                        [minlength]="allCustomField[customField.get('uniqueName')?.value]?.dataRange?.min"
-                                                                        [maxlength]="allCustomField[customField.get('uniqueName')?.value]?.dataRange?.max"
-                                                                        [pattern]="allCustomField[customField.get('uniqueName')?.value]?.regex"
+                                                                        [minlength]="
+                                                                            allCustomField[
+                                                                                customField.get('uniqueName')?.value
+                                                                            ]?.dataRange?.min
+                                                                        "
+                                                                        [maxlength]="
+                                                                            allCustomField[
+                                                                                customField.get('uniqueName')?.value
+                                                                            ]?.dataRange?.max
+                                                                        "
+                                                                        [pattern]="
+                                                                            allCustomField[
+                                                                                customField.get('uniqueName')?.value
+                                                                            ]?.regex
+                                                                        "
                                                                     >
                                                                     </text-field>
-                                                                    <div *ngIf="customField.get('dataType')?.value === availableFieldTypes.Boolean" class="text-center">
+                                                                    <div
+                                                                        *ngIf="
+                                                                            customField.get('dataType')?.value ===
+                                                                            availableFieldTypes.Boolean
+                                                                        "
+                                                                        class="text-center"
+                                                                    >
                                                                         <mat-slide-toggle
                                                                             color="primary"
                                                                             formControlName="value"
                                                                         >
-                                                                            <span>{{ customField.get('value')?.value ? commonLocaleData?.app_true : commonLocaleData?.app_false }}</span>
+                                                                            <span>{{
+                                                                                customField.get("value")?.value
+                                                                                    ? commonLocaleData?.app_true
+                                                                                    : commonLocaleData?.app_false
+                                                                            }}</span>
                                                                         </mat-slide-toggle>
                                                                     </div>
                                                                 </ng-container>

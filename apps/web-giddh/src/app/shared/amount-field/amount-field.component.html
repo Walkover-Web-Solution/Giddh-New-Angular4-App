@@ -6,7 +6,7 @@
             &nbsp;
             </ng-container>
         </ng-container>
-        <span class="numeric-value" dir="ltr" *ngIf="useGiddhCurrencyPipe">{{ amount | giddhCurrency }} </span>
+        <span class="numeric-value" dir="ltr" *ngIf="useGiddhCurrencyPipe">{{ amount | giddhNumberFormat }} </span>
         <span class="numeric-value" dir="ltr" *ngIf="!useGiddhCurrencyPipe">{{ formatNumber(amount) }} </span>
     </p>
 </bdo>

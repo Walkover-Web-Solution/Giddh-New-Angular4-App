@@ -89,18 +89,18 @@
                             </div>
                             <div class="col-xl-6 col-lg-8">
                                 <input
-                                    name="productHsnCode"
+                                    type="number" name="productHsnCode"
                                     class="form-control"
                                     maxlength="10"
-                                    decimalDigitsDirective
+                                    digitsOnlyDirective
                                     *ngIf="branchTransfer.products[0].showCodeType === 'hsn'"
                                     [(ngModel)]="branchTransfer.products[0].hsnNumber"
                                 />
                                 <input
-                                    name="productHsnCode"
+                                    type="number" name="productHsnCode"
                                     class="form-control"
                                     maxlength="10"
-                                    decimalDigitsDirective
+                                    digitsOnlyDirective
                                     *ngIf="branchTransfer.products[0].showCodeType === 'sac'"
                                     [(ngModel)]="branchTransfer.products[0].sacNumber"
                                 />
@@ -318,18 +318,18 @@
                             </div>
                             <div class="col-xl-6 col-lg-8">
                                 <input
-                                    name="productHsnCode"
+                                    type="number" name="productHsnCode"
                                     class="form-control"
                                     maxlength="10"
-                                    decimalDigitsDirective
+                                    digitsOnlyDirective
                                     *ngIf="branchTransfer.products[0].showCodeType === 'hsn'"
                                     [(ngModel)]="branchTransfer.products[0].hsnNumber"
                                 />
                                 <input
-                                    name="productHsnCode"
+                                    type="number" name="productHsnCode"
                                     class="form-control"
                                     maxlength="10"
-                                    decimalDigitsDirective
+                                    digitsOnlyDirective
                                     *ngIf="branchTransfer.products[0].showCodeType === 'sac'"
                                     [(ngModel)]="branchTransfer.products[0].sacNumber"
                                 />
@@ -506,7 +506,7 @@
                     <div class="col-lg-6 col-md-4">
                         <div class="right-total-amount">
                             <p>Total Amount</p>
-                            <p>{{ activeCompany?.baseCurrencySymbol }} {{ overallTotal | giddhCurrency }}</p>
+                            <p>{{ activeCompany?.baseCurrencySymbol }} {{ overallTotal | giddhNumberFormat }}</p>
                         </div>
                     </div>
                 </div>
@@ -667,9 +667,9 @@
                                                     </div>
                                                 </label>
                                                 <input
-                                                    type="text"
+                                                    type="number"
                                                     maxlength="10"
-                                                    decimalDigitsDirective
+                                                    digitsOnlyDirective
                                                     placeholder="{{
                                                         product.showCodeType === 'hsn' ? 'HSN' : 'SAC'
                                                     }} Code"
@@ -732,7 +732,7 @@
                                         <div *ngIf="activeRow !== i">
                                             <div class="text-right">
                                                 {{ activeCompany?.baseCurrencySymbol }}
-                                                {{ product.stockDetails.rate | giddhCurrency }}
+                                                {{ product.stockDetails.rate | giddhNumberFormat }}
                                             </div>
                                         </div>
                                     </td>
@@ -754,7 +754,7 @@
                                         <div *ngIf="activeRow !== i">
                                             <div class="text-right">
                                                 {{ activeCompany?.baseCurrencySymbol }}
-                                                {{ product.stockDetails.amount | giddhCurrency }}
+                                                {{ product.stockDetails.amount | giddhNumberFormat }}
                                             </div>
                                         </div>
                                         <div class="trash-icon-delete cursor-pointer">
@@ -876,7 +876,7 @@
                                         <div *ngIf="activeRow !== i">
                                             <div class="text-right">
                                                 {{ activeCompany?.baseCurrencySymbol }}
-                                                {{ destination.warehouse.stockDetails.rate | giddhCurrency }}
+                                                {{ destination.warehouse.stockDetails.rate | giddhNumberFormat }}
                                             </div>
                                         </div>
                                     </td>
@@ -898,7 +898,7 @@
                                         <div *ngIf="activeRow !== i">
                                             <div class="text-right">
                                                 {{ activeCompany?.baseCurrencySymbol }}
-                                                {{ destination.warehouse.stockDetails.amount | giddhCurrency }}
+                                                {{ destination.warehouse.stockDetails.amount | giddhNumberFormat }}
                                             </div>
                                         </div>
                                         <div class="trash-icon-delete cursor-pointer">
@@ -1028,7 +1028,7 @@
                                         <div *ngIf="activeRow !== i">
                                             <div class="text-right">
                                                 {{ activeCompany?.baseCurrencySymbol }}
-                                                {{ source.warehouse.stockDetails.rate | giddhCurrency }}
+                                                {{ source.warehouse.stockDetails.rate | giddhNumberFormat }}
                                             </div>
                                         </div>
                                     </td>
@@ -1050,7 +1050,7 @@
                                         <div *ngIf="activeRow !== i">
                                             <div class="text-right">
                                                 {{ activeCompany?.baseCurrencySymbol }}
-                                                {{ source.warehouse.stockDetails.amount | giddhCurrency }}
+                                                {{ source.warehouse.stockDetails.amount | giddhNumberFormat }}
                                             </div>
                                         </div>
                                         <div class="trash-icon-delete cursor-pointer">
@@ -1111,7 +1111,7 @@
                                                 </div>
                                                 <div class="d-table-cell figure-cell">
                                                     {{ activeCompany?.baseCurrencySymbol }}
-                                                    {{ overallTotal | giddhCurrency }}
+                                                    {{ overallTotal | giddhNumberFormat }}
                                                 </div>
                                             </div>
                                         </section>
@@ -1395,3 +1395,6 @@
     <aside-menu-product-service (closeAsideEvent)="closeAsideMenuProductServiceModal()" [selectedVoucherType]="'sales'">
     </aside-menu-product-service>
 </ng-template>
+
+
+

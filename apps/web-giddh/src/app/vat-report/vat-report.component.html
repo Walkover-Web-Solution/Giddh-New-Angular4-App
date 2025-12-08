@@ -142,7 +142,7 @@
                                                             class="d-inline-block"
                                                             [amount]="element?.amount"
                                                             [currencySymbol]="activeCompany?.baseCurrencySymbol"
-                                                            [currencyCode]="false"
+                                                            [currencyCode]="activeCompany?.baseCurrency"
                                                         ></amount-field>
                                                     </ng-container>
                                                     <ng-container
@@ -152,7 +152,7 @@
                                                             class="d-inline-block"
                                                             [amount]="element?.totalAmount"
                                                             [currencySymbol]="activeCompany?.baseCurrencySymbol"
-                                                            [currencyCode]="false"
+                                                            [currencyCode]="activeCompany?.baseCurrency"
                                                         ></amount-field>
                                                     </ng-container>
                                                 </td>
@@ -166,7 +166,7 @@
                                                             class="d-inline-block"
                                                             [amount]="report.totalAmount"
                                                             [currencySymbol]="activeCompany?.baseCurrencySymbol"
-                                                            [currencyCode]="false"
+                                                            [currencyCode]="activeCompany?.baseCurrency"
                                                         ></amount-field>
                                                     </ng-conatiner>
                                                     <ng-conatiner
@@ -184,7 +184,7 @@
                                                                 ]?.totalAmount
                                                             "
                                                             [currencySymbol]="activeCompany?.baseCurrencySymbol"
-                                                            [currencyCode]="false"
+                                                            [currencyCode]="activeCompany?.baseCurrency"
                                                         ></amount-field>
                                                     </ng-conatiner>
                                                 </td>
@@ -216,7 +216,7 @@
                                                             class="d-inline-block"
                                                             [amount]="element?.vatAmount"
                                                             [currencySymbol]="activeCompany?.baseCurrencySymbol"
-                                                            [currencyCode]="false"
+                                                            [currencyCode]="activeCompany?.baseCurrency"
                                                         ></amount-field>
                                                     </ng-conatiner>
                                                     <ng-conatiner
@@ -241,7 +241,7 @@
                                                             class="d-inline-block"
                                                             [amount]="report.totalVatAmount"
                                                             [currencySymbol]="activeCompany?.baseCurrencySymbol"
-                                                            [currencyCode]="false"
+                                                            [currencyCode]="activeCompany?.baseCurrency"
                                                         ></amount-field>
                                                     </ng-container>
                                                 </td>
@@ -278,7 +278,7 @@
                                                             class="d-inline-block"
                                                             [amount]="element?.adjustmentAmount"
                                                             [currencySymbol]="activeCompany?.baseCurrencySymbol"
-                                                            [currencyCode]="false"
+                                                            [currencyCode]="activeCompany?.baseCurrency"
                                                         ></amount-field>
                                                     </ng-container>
                                                     <ng-container
@@ -292,7 +292,7 @@
                                                             class="d-inline-block"
                                                             [amount]="element?.totalAmountOfOutputTax"
                                                             [currencySymbol]="activeCompany?.baseCurrencySymbol"
-                                                            [currencyCode]="false"
+                                                            [currencyCode]="activeCompany?.baseCurrency"
                                                         ></amount-field>
                                                     </ng-container>
                                                 </td>
@@ -308,7 +308,7 @@
                                                             class="d-inline-block"
                                                             [amount]="report.totalAdjustmentAmount"
                                                             [currencySymbol]="activeCompany?.baseCurrencySymbol"
-                                                            [currencyCode]="false"
+                                                            [currencyCode]="activeCompany?.baseCurrency"
                                                         ></amount-field>
                                                     </ng-container>
                                                     <ng-container *ngIf="isKenyaCompany">
@@ -320,7 +320,7 @@
                                                                 ]?.totalAmountOfOutputTax
                                                             "
                                                             [currencySymbol]="activeCompany?.baseCurrencySymbol"
-                                                            [currencyCode]="false"
+                                                            [currencyCode]="activeCompany?.baseCurrency"
                                                         ></amount-field>
                                                     </ng-container>
                                                 </td>
@@ -415,7 +415,7 @@
                                                             class="d-inline-block"
                                                             [amount]="element?.amount"
                                                             [currencySymbol]="activeCompany?.baseCurrencySymbol"
-                                                            [currencyCode]="false"
+                                                            [currencyCode]="activeCompany?.baseCurrency"
                                                         ></amount-field>
                                                     </ng-container>
                                                     <ng-container *ngIf="isKenyaCompany">
@@ -423,7 +423,7 @@
                                                             class="d-inline-block"
                                                             [amount]="element?.totalAmountOfOutputTax"
                                                             [currencySymbol]="activeCompany?.baseCurrencySymbol"
-                                                            [currencyCode]="false"
+                                                            [currencyCode]="activeCompany?.baseCurrency"
                                                         ></amount-field>
                                                     </ng-container>
                                                 </td>
@@ -439,7 +439,7 @@
                                                                 ?.totalAmountOfOutputTax ?? 0
                                                         "
                                                         [currencySymbol]="activeCompany?.baseCurrencySymbol"
-                                                        [currencyCode]="false"
+                                                        [currencyCode]="activeCompany?.baseCurrency"
                                                     ></amount-field>
                                                 </td>
                                             </ng-container>
@@ -505,18 +505,25 @@
                                             </ng-container>
                                             <ng-container matColumnDef="name">
                                                 <td mat-cell *matCellDef="let element" width="45%">
-                                                    <a  *ngIf="element.sectionClickable"
+                                                    <a
+                                                        *ngIf="element.sectionClickable"
                                                         href="javascript:;"
                                                         (click)="viewVatReportTransactions(element.order)"
                                                         >{{ element.description }}
                                                     </a>
-                                                    <span *ngIf="!element.sectionClickable">{{ element.description }}</span>
+                                                    <span *ngIf="!element.sectionClickable">{{
+                                                        element.description
+                                                    }}</span>
                                                 </td>
                                             </ng-container>
                                             <ng-container matColumnDef="aed_amt">
                                                 <td mat-cell *matCellDef="let element" class="text-right" width="20%">
-                                                    {{ activeCompany?.baseCurrencySymbol }}
-                                                    {{ element?.amount | giddhCurrency }}
+                                                    <amount-field
+                                                        class="d-inline-block"
+                                                        [amount]="element?.amount"
+                                                        [currencySymbol]="activeCompany?.baseCurrencySymbol"
+                                                        [currencyCode]="activeCompany?.baseCurrency"
+                                                    ></amount-field>
                                                 </td>
                                             </ng-container>
                                             <tr mat-row *matRowDef="let row; columns: ukDisplayedColumns"></tr>
@@ -548,22 +555,27 @@
                                             <ng-container matColumnDef="name">
                                                 <th mat-header-cell *matHeaderCellDef></th>
                                                 <td mat-cell *matCellDef="let element">
-                                                    <a  *ngIf="element.sectionClickable"
+                                                    <a
+                                                        *ngIf="element.sectionClickable"
                                                         href="javascript:;"
                                                         (click)="viewVatReportTransactions(element.order)"
                                                         >{{ element.description }}
                                                     </a>
-                                                    <span *ngIf="!element.sectionClickable">{{ element.description }}</span>
+                                                    <span *ngIf="!element.sectionClickable">{{
+                                                        element.description
+                                                    }}</span>
                                                 </td>
                                             </ng-container>
                                             <ng-container matColumnDef="aed_amt">
                                                 <th mat-header-cell *matHeaderCellDef></th>
                                                 <td mat-cell *matCellDef="let element" class="text-right">
                                                     <span class="pr-1">{{ element.toolTip }}</span>
-                                                    <strong
-                                                        >{{ activeCompany?.baseCurrencySymbol }}
-                                                        {{ element?.amount | giddhCurrency }}</strong
-                                                    >
+                                                    <amount-field
+                                                        class="d-inline-block"
+                                                        [amount]="element?.amount"
+                                                        [currencySymbol]="activeCompany?.baseCurrencySymbol"
+                                                        [currencyCode]="activeCompany?.baseCurrency"
+                                                    ></amount-field>
                                                 </td>
                                             </ng-container>
                                             <tr mat-header-row *matHeaderRowDef="ukDisplayedColumns"></tr>

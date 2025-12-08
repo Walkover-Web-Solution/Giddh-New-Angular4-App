@@ -1402,7 +1402,7 @@
                                                         ({{ commonLocaleData?.app_amount }}:
                                                         {{
                                                             option.additional?.unadjustedAmount?.amountForAccount
-                                                                | giddhCurrency
+                                                                | giddhNumberFormat
                                                         }})
                                                     </div>
                                                 </a>
@@ -1430,6 +1430,10 @@
                                             class="mr-1"
                                             [disabled]="isEinvoiceGenerated"
                                             color="primary"
+                                            id="reverse-charge"
+                                            (change)="
+                                                !isEinvoiceGenerated ? toggleRcmCheckbox(rcmCheckbox, 'checkbox') : ''
+                                            "
                                         >
                                         </mat-checkbox>
                                         <label
@@ -1514,7 +1518,7 @@
                                         (click)="switchCurrency()"
                                     />
                                     <span *ngIf="!showExchangeRateEditField"
-                                        >{{ invoiceForm.get("exchangeRate")?.value | giddhCurrency }}
+                                        >{{ invoiceForm.get("exchangeRate")?.value | giddhNumberFormat }}
                                         <ng-container *ngIf="currencySwitched">{{ account?.baseCurrency }}</ng-container
                                         ><ng-container *ngIf="!currencySwitched">{{
                                             company?.baseCurrency
@@ -2031,7 +2035,7 @@
                                                                                     [type]="'number'"
                                                                                     formControlName="hsnNumber"
                                                                                     [maxlength]="10"
-                                                                                    [allowDecimalDigitsOnly]="true"
+                                                                                    [allowDigitsOnly]="true"
                                                                                     [placeholder]="
                                                                                         localeData?.hsn_number
                                                                                     "
@@ -2053,7 +2057,7 @@
                                                                                     [type]="'number'"
                                                                                     formControlName="sacNumber"
                                                                                     [maxlength]="10"
-                                                                                    [allowDecimalDigitsOnly]="true"
+                                                                                    [allowDigitsOnly]="true"
                                                                                     [placeholder]="
                                                                                         localeData?.sac_number
                                                                                     "
