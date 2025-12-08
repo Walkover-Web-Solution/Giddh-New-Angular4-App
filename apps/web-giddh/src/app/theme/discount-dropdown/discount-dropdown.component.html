@@ -75,8 +75,8 @@
                         class="text-primary"
                         tabindex="0"
                         cdkMonitorElementFocus
-                        (keydown.enter)="createNew()"
-                        (keydown.space)="createNew()"
+                        (keydown.enter)="$event.preventDefault(); createNew()"
+                        (keydown.space)="$event.preventDefault(); createNew()"
                     >
                         {{ commonLocaleData?.app_create_new }}
                     </span>

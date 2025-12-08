@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit, ElementRef, ViewChild } from "@angular/core";
+import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { AddBulkItemsComponentStore } from "./utility/add-bulk-items.store";
 import { VouchersUtilityService } from "../../vouchers/utility/vouchers.utility.service";
 import { cloneDeep } from "../../lodash-optimized";
@@ -65,7 +65,6 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
                 this.stockVariants[response.entryIndex] = of(response.results);
             }
         });
-
     }
 
     /**
@@ -323,6 +322,4 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
      private getRateByUnit(stockUnitUniqueName: string, unitRates: any[]): number {
         return unitRates.find((unitRate) => unitRate.stockUnitUniqueName === stockUnitUniqueName || unitRate.stockUnitCode === stockUnitUniqueName)?.rate;
     }
-
-
 }

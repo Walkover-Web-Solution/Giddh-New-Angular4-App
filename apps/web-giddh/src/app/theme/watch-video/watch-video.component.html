@@ -11,8 +11,8 @@
                 tabindex="0"
                 cdkMonitorElementFocus
                 (click)="openVideoTutorialDialog()"
-                (keydown.enter)="openVideoTutorialDialog()"
-                (keydown.space)="openVideoTutorialDialog()"
+                (keydown.enter)="$event.preventDefault(); openVideoTutorialDialog()"
+                (keydown.space)="$event.preventDefault(); openVideoTutorialDialog()"
                 [ngClass]="iconCssClass"
                 [matTooltip]="translatedText"
                 matTooltipPosition="above"
@@ -23,8 +23,8 @@
             tabindex="0"
             cdkMonitorElementFocus
             (click)="openVideoTutorialDialog()"
-            (keydown.enter)="openVideoTutorialDialog()"
-            (keydown.space)="openVideoTutorialDialog()"
+            (keydown.enter)="$event.preventDefault(); openVideoTutorialDialog()"
+            (keydown.space)="$event.preventDefault(); openVideoTutorialDialog()"
             [ngClass]="iconCssClass"
         >
             {{ translatedText }}

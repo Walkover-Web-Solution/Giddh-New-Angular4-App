@@ -44,7 +44,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
     /** Instance of recipe create/update component */
     @ViewChild('createRecipe', { static: false }) public createRecipe: CreateRecipeComponent;
     /** Instance of fileInput */
-    @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+    @ViewChild('fileInput', { static: false }) fileInput?: ElementRef<HTMLInputElement>;
     /* This will hold add stock value from aside menu */
     @Input() public addStock: boolean = false;
     /* This will hold stock type from aside menu */
@@ -2557,6 +2557,6 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      * @memberof StockCreateEditComponent
      */
     public triggerFileInput(): void {
-        this.fileInput.nativeElement.click();
+        this.fileInput?.nativeElement.click();
     }
 }

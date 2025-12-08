@@ -13,12 +13,6 @@ registerLocaleData(localeEn);
 registerLocaleData(localeHi);
 registerLocaleData(localeMr);
 
-// export const GIDDH_DATEPICKER_FORMAT = {
-//     parse: { dateInput: 'dd-MM-yyyy' },
-//     display: {
-//         dateInput: 'input'
-//     }
-// };
 export const GIDDH_DATEPICKER_FORMAT = {
   // 1. PARSING CONFIGURATION (Keyboard Input)
   // This is an array of strings. The datepicker will try to parse the user's
@@ -36,7 +30,7 @@ export const GIDDH_DATEPICKER_FORMAT = {
       'DD MMM YY',    // Handles: 12 Dec 25 (Day, Abbreviated Month, Two-digit Year)
 
       // Note on 'd 12 25' and '12 d 25': Single letters like 'd' for month 
-      // names are not standard Moment.js tokens and will likely fail. 
+      // names are not standard Angular Material date format tokens and will likely fail.
       // The `MMM` tokens above cover the most flexible abbreviations.
 
       // ------------------------------------
@@ -74,15 +68,43 @@ export const GIDDH_DATEPICKER_FORMAT = {
 };
 
 export class PickDateAdapter extends NativeDateAdapter {
+    /**
+     * Parses user input into a Date object with support for multiple formats
+     *
+     * @param {any} value - The input value to parse
+     * @param {string | any} parseFormat - The format to use for parsing
+     * @returns {Date | null} Parsed date or null if invalid
+     * @memberof PickDateAdapter
+     */
+    parse(value: any, parseFormat: string | any): Date | null {
+        if (typeof value === 'string') {
+            const parts = value.split('-');
+            if (parts.length === 3) {
+                const day = parseInt(parts[0], 10);
+                const month = parseInt(parts[1], 10) - 1; // Months are 0-indexed
+                const year = parseInt(parts[2], 10);
+                const date = new Date(year, month, day);
+                if (!isNaN(date.getTime())) {
+                    return date;
+                }
+            }
+        }
+        return super.parse(value, parseFormat); // Fallback to default parsing
+    }
+
+    /**
+     * Formats a Date object into a string based on the display format
+     *
+     * @param {Date} date - The date to format
+     * @param {Object} displayFormat - The format configuration
+     * @returns {string} Formatted date string
+     * @memberof PickDateAdapter
+     */
     format(date: Date, displayFormat: Object): string {
         if (displayFormat === 'input') {
-            if (displayFormat === 'input') {
-                return formatDate(date, 'dd-MM-yyyy', this.locale) || formatDate(date, 'MM/dd/yyyy', this.locale);
-            } else {
-                return formatDate(date, 'MMM yyyy', this.locale);
-            }
+            return formatDate(date, 'dd-MM-yyyy', this.locale);
         } else {
-            return formatDate(date, 'MMM yyyy', this.locale);
+            return formatDate(date, 'MMM dd, yyyy', this.locale);
         }
     }
 }

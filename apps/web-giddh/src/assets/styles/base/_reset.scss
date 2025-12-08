@@ -32,29 +32,14 @@ body {
         background-color: var(--theme-primary-light, lightgray);
     }
 
-    // :focus-visible {
-    //     outline-color: var(--color-blue);
-    //     outline-width: 2px;
-    //     outline-style: auto;
-    // }
-    // input[type="text"],
-    // select,
-    // input[type="checkbox"],
-    // input[type="radio"],
-    // textarea,
-    // a,
-    // button {
     .cdk-keyboard-focused,
     .cdk-program-focused {
         &:not(.mat-calendar-content, .mat-mdc-radio-button, .mat-mdc-list-item) {
-            // box-shadow: 0 0 10px rgb(32, 32, 32);
             border-radius: 2px;
-            // border-radius: var(--mat-border-radius-4);
             outline-offset: 1px;
             outline: 2px solid var(--theme-primary-color) !important;
         }
     }
-    // }
 }
 
 a {

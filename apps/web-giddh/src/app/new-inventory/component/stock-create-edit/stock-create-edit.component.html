@@ -195,6 +195,8 @@
                                                         [matTooltip]="localeData?.no_file_chosen"
                                                         matTooltipPosition="right"
                                                         tabindex="0"
+                                                        role="button"
+                                                        [attr.aria-label]="localeData?.add_image"
                                                         cdkMonitorElementFocus
                                                         (keydown.enter)="triggerFileInput()"
                                                         (keydown.space)="triggerFileInput()"
@@ -1085,6 +1087,10 @@
                                                                                 "
                                                                                 matTooltipPosition="right"
                                                                                 tabindex="0"
+                                                                                role="button"
+                                                                                [attr.aria-label]="
+                                                                                    localeData?.add_image
+                                                                                "
                                                                                 cdkMonitorElementFocus
                                                                                 (keydown.enter)="triggerFileInput()"
                                                                                 (keydown.space)="triggerFileInput()"
@@ -1151,7 +1157,7 @@
                                                                                         )
                                                                                     "
                                                                                     [src]="variant.attachmentName"
-                                                                                    alt="Variant Image{{ index }}"
+                                                                                    alt="Variant Image{{ i }}"
                                                                                 />
                                                                                 <button
                                                                                     mat-icon-button

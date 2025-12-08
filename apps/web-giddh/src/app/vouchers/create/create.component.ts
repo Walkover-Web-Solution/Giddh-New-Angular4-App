@@ -139,7 +139,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /** Selector for account dropdown */
     @ViewChild("accountDropdown") accountDropdown: ReactiveDropdownFieldComponent;
     /** Instance of fileInput */
-    @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
+    @ViewChild('fileInput', { static: false }) fileInput?: ElementRef<HTMLInputElement>;
     /** Billing details menu trigger */
     @ViewChild('billingDetailsTrigger') billingDetailsTrigger!: MatMenuTrigger;
     /** Shipping details menu trigger */
@@ -2456,7 +2456,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         } else {
             this.invoiceForm.controls["account"]?.get("customerName")?.patchValue(event?.label);
             this.getAccountDetails(event?.value);
-            // this.activeEntryIndex = 0;
         }
         this.openAccountDropdown = false;
 
@@ -7083,7 +7082,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public triggerFileInput(): void {
-        this.fileInput.nativeElement.click();
+        this.fileInput?.nativeElement.click();
     }
 
     /**

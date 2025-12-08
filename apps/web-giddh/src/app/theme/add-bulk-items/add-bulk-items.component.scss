@@ -17,7 +17,6 @@
 
                 .list-item {
                     min-height: 40px;
-                    // max-width: 80%;
                     cursor: pointer;
                     transition: background-color 0.2s ease;
                     outline: none;
@@ -25,40 +24,6 @@
                     .stock-icon {
                         margin-bottom: 2px;
                     }
-
-                    // // Hover state
-                    // &:hover {
-                    //     background-color: rgba(var(--primary-rgb), 0.08);
-                    // }
-
-                    // // Active state
-                    // &:active {
-                    //     background-color: rgba(var(--primary-rgb), 0.16);
-                    // }
-
-                    // // CDK Focus Monitor states
-                    // &.cdk-keyboard-focused {
-                    //     background-color: rgba(var(--primary-rgb), 0.12);
-                    //     outline: 2px solid var(--primary);
-                    //     outline-offset: 2px;
-                    // }
-
-                    // &.cdk-mouse-focused {
-                    //     background-color: rgba(var(--primary-rgb), 0.08);
-                    // }
-
-                    // // Standard focus states
-                    // &:focus {
-                    //     background-color: rgba(var(--primary-rgb), 0.12);
-                    //     outline: 2px solid var(--primary);
-                    //     outline-offset: 2px;
-                    // }
-
-                    // &:focus-visible {
-                    //     background-color: rgba(var(--primary-rgb), 0.12);
-                    //     outline: 2px solid var(--primary);
-                    //     outline-offset: 2px;
-                    // }
                 }
 
                 .variants-wrapper {

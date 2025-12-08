@@ -374,7 +374,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      * @param {KeyboardEvent} event - The keyboard event
      * @memberof ReactiveDropdownFieldComponent
      */
-    @HostListener('window:keydown', ['$event'])
+    @HostListener('keydown', ['$event'])
     public onKeyDown(event: KeyboardEvent): void {
         if (!this.showCreateNew) {
             return;

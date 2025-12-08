@@ -334,8 +334,12 @@
                                         role="button"
                                         cdkMonitorElementFocus
                                         class="vouchers-form-fields-detail cursor-pointer"
-                                        (keydown.enter)="toggleAccountAsidePane(accountType.customer, false)"
-                                        (keydown.space)="toggleAccountAsidePane(accountType.customer, false)"
+                                        (keydown.enter)="
+                                            $event.preventDefault(); toggleAccountAsidePane(accountType.customer, false)
+                                        "
+                                        (keydown.space)="
+                                            $event.preventDefault(); toggleAccountAsidePane(accountType.customer, false)
+                                        "
                                         (click)="toggleAccountAsidePane(accountType.customer, false)"
                                     >
                                         {{
@@ -532,7 +536,13 @@
                                                     <button
                                                         mat-menu-item
                                                         class="vouchers-add-new text-primary-onfocus"
-                                                        (click)="toggleAccountAsidePane(accountType.customer, false, billingDetailsTrigger)"
+                                                        (click)="
+                                                            toggleAccountAsidePane(
+                                                                accountType.customer,
+                                                                false,
+                                                                billingDetailsTrigger
+                                                            )
+                                                        "
                                                     >
                                                         {{ localeData?.add_new_address }}
                                                     </button>
@@ -728,7 +738,13 @@
                                                     <button
                                                         mat-menu-item
                                                         class="vouchers-add-new text-primary-onfocus"
-                                                        (click)="toggleAccountAsidePane(accountType.customer, false, shippingDetailsTrigger)"
+                                                        (click)="
+                                                            toggleAccountAsidePane(
+                                                                accountType.customer,
+                                                                false,
+                                                                shippingDetailsTrigger
+                                                            )
+                                                        "
                                                     >
                                                         {{ localeData?.add_new_address }}
                                                     </button>
@@ -1557,8 +1573,8 @@
                                         class="cursor-pointer"
                                         tabindex="0"
                                         cdkMonitorElementFocus
-                                        (keydown.enter)="switchCurrency()"
-                                        (keydown.space)="switchCurrency()"
+                                        (keydown.enter)="$event.preventDefault(); switchCurrency()"
+                                        (keydown.space)="$event.preventDefault(); switchCurrency()"
                                         (click)="switchCurrency()"
                                     />
                                     <span *ngIf="!showExchangeRateEditField"
@@ -1580,8 +1596,8 @@
                                         class="icon-edit text-primary"
                                         tabindex="0"
                                         cdkMonitorElementFocus
-                                        (keydown.enter)="showExchangeRateEditField = true"
-                                        (keydown.space)="showExchangeRateEditField = true"
+                                        (keydown.enter)="$event.preventDefault(); showExchangeRateEditField = true"
+                                        (keydown.space)="$event.preventDefault(); showExchangeRateEditField = true"
                                         (click)="showExchangeRateEditField = true"
                                         *ngIf="!showExchangeRateEditField"
                                     ></i>
@@ -1589,8 +1605,8 @@
                                         class="icon-save text-primary cursor-pointer"
                                         tabindex="0"
                                         cdkMonitorElementFocus
-                                        (keydown.enter)="showExchangeRateEditField = false"
-                                        (keydown.space)="showExchangeRateEditField = false"
+                                        (keydown.enter)="$event.preventDefault(); showExchangeRateEditField = false"
+                                        (keydown.space)="$event.preventDefault(); showExchangeRateEditField = false"
                                         (click)="showExchangeRateEditField = false"
                                         *ngIf="showExchangeRateEditField"
                                     ></i>
@@ -2108,9 +2124,6 @@
                                                                                             entry.get('showCodeType')
                                                                                                 ?.value === 'hsn'
                                                                                         "
-                                                                                        [placeholder]="
-                                                                                            commonLocaleData?.app_hsn_code
-                                                                                        "
                                                                                         [cssClass]="
                                                                                             'form-control text-right'
                                                                                         "
@@ -2132,9 +2145,6 @@
                                                                                         *ngIf="
                                                                                             entry.get('showCodeType')
                                                                                                 ?.value === 'sac'
-                                                                                        "
-                                                                                        [placeholder]="
-                                                                                            commonLocaleData?.app_sac_code
                                                                                         "
                                                                                         [cssClass]="
                                                                                             'form-control text-right'
@@ -2889,8 +2899,12 @@
                                                         <i
                                                             tabindex="0"
                                                             cdkMonitorElementFocus
-                                                            (keydown.enter)="deleteLineEntry(entryIndex)"
-                                                            (keydown.space)="deleteLineEntry(entryIndex)"
+                                                            (keydown.enter)="
+                                                                $event.preventDefault(); deleteLineEntry(entryIndex)
+                                                            "
+                                                            (keydown.space)="
+                                                                $event.preventDefault(); deleteLineEntry(entryIndex)
+                                                            "
                                                             class="icon-trash font-size-16 cursor-pointer delete-btn position-absolute"
                                                             (click)="deleteLineEntry(entryIndex)"
                                                         ></i>
@@ -2907,8 +2921,8 @@
                                         tabindex="0"
                                         role="button"
                                         cdkMonitorElementFocus
-                                        (keydown.enter)="addNewLineEntry()"
-                                        (keydown.space)="addNewLineEntry()"
+                                        (keydown.enter)="$event.preventDefault(); addNewLineEntry()"
+                                        (keydown.space)="$event.preventDefault(); addNewLineEntry()"
                                         (click)="addNewLineEntry()"
                                         >{{ localeData?.add_new_line }}</span
                                     >
@@ -2918,8 +2932,8 @@
                                         tabindex="0"
                                         role="button"
                                         cdkMonitorElementFocus
-                                        (keydown.enter)="openBulkEntryDialog()"
-                                        (keydown.space)="openBulkEntryDialog()"
+                                        (keydown.enter)="$event.preventDefault(); openBulkEntryDialog()"
+                                        (keydown.space)="$event.preventDefault(); openBulkEntryDialog()"
                                         (click)="openBulkEntryDialog()"
                                         >{{ localeData?.add_bulk_entries }}</span
                                     >
@@ -3126,11 +3140,13 @@
                                                                                             role="button"
                                                                                             cdkMonitorElementFocus
                                                                                             (keydown.enter)="
+                                                                                                $event.preventDefault();
                                                                                                 openAdjustmentDialog(
                                                                                                     true
                                                                                                 )
                                                                                             "
                                                                                             (keydown.space)="
+                                                                                                $event.preventDefault();
                                                                                                 openAdjustmentDialog(
                                                                                                     true
                                                                                                 )
@@ -3349,9 +3365,19 @@
                                                                                 [matTooltip]="'No file chosen'"
                                                                                 matTooltipPosition="right"
                                                                                 tabindex="0"
+                                                                                role="button"
+                                                                                [attr.aria-label]="
+                                                                                    localeData?.attach_file
+                                                                                "
                                                                                 cdkMonitorElementFocus
-                                                                                (keydown.enter)="triggerFileInput()"
-                                                                                (keydown.space)="triggerFileInput()"
+                                                                                (keydown.enter)="
+                                                                                    $event.preventDefault();
+                                                                                    triggerFileInput()
+                                                                                "
+                                                                                (keydown.space)="
+                                                                                    $event.preventDefault();
+                                                                                    triggerFileInput()
+                                                                                "
                                                                             >
                                                                                 <input
                                                                                     type="file"

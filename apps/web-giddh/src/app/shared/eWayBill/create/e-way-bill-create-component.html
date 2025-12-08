@@ -269,7 +269,7 @@
                             >
                                 {{ commonLocaleData?.app_save }}
                             </button>
-                            <button mat-raised-button color="primary" (click)="clearTransportForm()" type="submit">
+                            <button mat-raised-button color="primary" (click)="clearTransportForm()" type="button">
                                 {{ commonLocaleData?.app_clear }}
                             </button>
                         </div>
@@ -344,28 +344,30 @@
                             <th width="20%" class="nowrap">{{ commonLocaleData?.app_actions }}</th>
                         </tr>
                     </thead>
-                    <tr *ngFor="let item of transporterList$ | async">
-                        <td>{{ item?.transporterName }}</td>
-                        <td>{{ item?.transporterId }}</td>
-                        <td class="nowrap d-flex column-gap-15 border-top-none">
-                            <button
-                                mat-raised-button
-                                color="primary"
-                                class="min-width-unset"
-                                (click)="editTransporter(item)"
-                            >
-                                <i class="icon-edit"></i>
-                            </button>
-                            <button
-                                mat-raised-button
-                                color="primary"
-                                class="min-width-unset"
-                                (click)="deleteTransporter(item)"
-                            >
-                                <i class="fa fa-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
+                    <tbody>
+                        <tr *ngFor="let item of transporterList$ | async">
+                            <td>{{ item?.transporterName }}</td>
+                            <td>{{ item?.transporterId }}</td>
+                            <td class="nowrap d-flex column-gap-15 border-top-none">
+                                <button
+                                    mat-raised-button
+                                    color="primary"
+                                    class="min-width-unset"
+                                    (click)="editTransporter(item)"
+                                >
+                                    <i class="icon-edit"></i>
+                                </button>
+                                <button
+                                    mat-raised-button
+                                    color="primary"
+                                    class="min-width-unset"
+                                    (click)="deleteTransporter(item)"
+                                >
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
             <div class="mb-5" *ngIf="transporterListDetails?.totalItems > pageSizeOptions[0]">

@@ -28,7 +28,6 @@
                         <div class="d-grid grid-column-3 column-gap-15 row-gap-15 mb-3">
                             <div>
                                 <input-field
-                                    tabindex="1"
                                     #nameField
                                     [type]="'text'"
                                     [name]="'name'"
@@ -70,7 +69,7 @@
                                 </button>
                                 <button
                                     mat-stroked-button
-                                    tabindex="2"
+                                    type="button"
                                     (click)="
                                         salesPersonForm?.reset();
                                         salesPersonUniqueName = null;
