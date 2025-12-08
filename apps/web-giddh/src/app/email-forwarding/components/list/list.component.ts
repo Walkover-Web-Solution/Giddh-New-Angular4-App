@@ -16,6 +16,7 @@ import { ToasterService } from '../../../services/toaster.service';
 @Component({
     selector: 'email-forwarding-list',
     templateUrl: './list.component.html',
+    styles: [``],
     providers: [EmailForwardingComponentStore]
 })
 export class ListComponent implements OnInit, OnDestroy {

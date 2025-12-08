@@ -362,7 +362,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public showInvoiceDate: boolean = true;
     /** Show purchase lock date */
     public showPurchaseDate: boolean = true;
-    /** Template for form value */
     public templateFor: string = '';
 
     constructor(
@@ -510,7 +509,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                             { label: this.commonLocaleData?.app_voucher_types?.purchase_order, value: this.voucherTypeEnum.purchase_order }
                         ];
                         this.selectedTemplate = this.purchaseTemplatesList[0];
-                    } else {
+                        this.templateFor = this.purchaseTemplatesList[0]?.value || null;
+                    }  else {
                         this.selectedTemplate = null;
                         this.templateFor = null;
                     }

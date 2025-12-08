@@ -115,7 +115,16 @@ const createHybridStorage = () => {
                             company.uniqueName === queryCompanyUniqueName
                         );
                         
-                        if (targetCompany) {                            
+                        if (targetCompany) {
+                            // Debug: Log the company structure to understand how branches are stored
+                            console.log('Target company structure:', {
+                                name: targetCompany.name,
+                                uniqueName: targetCompany.uniqueName,
+                                branches: targetCompany.branches,
+                                branchCount: targetCompany.branchCount,
+                                allKeys: Object.keys(targetCompany)
+                            });
+                            
                             // Validate that the branch belongs to the specified company
                             let validatedBranchUniqueName = '';
                             if (queryBranchUniqueName) {
@@ -126,8 +135,11 @@ const createHybridStorage = () => {
                                 
                                 if (targetBranch) {
                                     validatedBranchUniqueName = queryBranchUniqueName;
+                                    console.log('✅ Branch validation successful:', queryBranchUniqueName, 'belongs to company:', queryCompanyUniqueName);
                                 } else {
                                     console.warn(`❌ Branch '${queryBranchUniqueName}' does not belong to company '${queryCompanyUniqueName}'.`);
+                                    console.log('Available branches:', targetCompany.branches);
+                                    console.log('Branch count:', targetCompany.branchCount);
                                 }
                             }
                             
@@ -140,6 +152,14 @@ const createHybridStorage = () => {
                                 companyUser: null, // Will be set by the app when company is selected
                                 currentBranchUniqueName: validatedBranchUniqueName
                             };
+                            
+                            // Debug logging to check query params
+                            console.log('Query params detected:', {
+                                companyUniqueName: queryCompanyUniqueName,
+                                branchUniqueName: queryBranchUniqueName,
+                                targetCompany: targetCompany,
+                                queryTabData: queryTabData
+                            });
                             
                             // Store query-based data in sessionStorage
                             sessionStorage.setItem('session', JSON.stringify(queryTabData));
@@ -163,6 +183,12 @@ const createHybridStorage = () => {
                             // Trigger company/branch switch APIs similar to switchCompany/switchBranch
                             setTimeout(() => {
                                 try {
+                                    console.log('Dispatching giddh-query-params-company-switch event with:', {
+                                        companyUniqueName: queryCompanyUniqueName,
+                                        branchUniqueName: validatedBranchUniqueName,
+                                        company: targetCompany
+                                    });
+                                    
                                     // Dispatch actions to trigger API calls (similar to switchCompany/switchBranch)
                                     const event = new CustomEvent('giddh-query-params-company-switch', {
                                         detail: {
@@ -172,6 +198,7 @@ const createHybridStorage = () => {
                                         }
                                     });
                                     window.dispatchEvent(event);
+                                    console.log('Event dispatched successfully');
                                 } catch (error) {
                                     console.warn('Error dispatching query params company switch event:', error);
                                 }

@@ -380,42 +380,6 @@ export class AdvanceSearchModelComponent implements OnInit, OnDestroy, OnChanges
     }
 
     /**
-     * onDDElementSelect
-     */
-    public onDDElementSelect(type: string, data: any[]) {
-        let values = [];
-        if (data && data.length > 0) {
-            data.forEach(element => {
-                values.push(element?.value);
-            });
-        }
-        switch (type) {
-            case 'particulars':
-                this.advanceSearchForm.get('particulars')?.patchValue(values);
-                break;
-            case 'accountUniqueNames':
-                this.advanceSearchForm.get('accountUniqueNames')?.patchValue(values);
-                break;
-            case 'vouchers':
-                this.advanceSearchForm.get('vouchers')?.patchValue(values);
-                break;
-            case 'inventory':
-                this.advanceSearchForm.get('inventory.inventories')?.patchValue(values);
-                break;
-            case 'groupUniqueNames':
-                this.advanceSearchForm.get('groupUniqueNames')?.patchValue(values);
-                break;
-        }
-    }
-
-    /**
-     * onDDClear
-     */
-    public onDDClear(type: string) {
-        this.onDDElementSelect(type, []);
-    }
-
-    /**
      * onRangeSelect
      */
     public onRangeSelect(type: string, data: IOption) {

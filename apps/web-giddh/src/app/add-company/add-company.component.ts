@@ -28,6 +28,7 @@ import { AddCompanyComponentStore } from "./utility/add-company.store";
 import { userLoginStateEnum } from "../models/user-login-state";
 import { CommonService } from "../services/common.service";
 import { ChangeBillingComponentStore } from "../subscription/change-billing/utility/change-billing.store";
+import { PhoneNumberUtil } from 'google-libphonenumber';
 import { ViewSubscriptionComponentStore } from "../subscription/view-subscription/utility/view-subscription.store";
 import { ServiceConfig } from "../services/service.config";
 
@@ -292,14 +293,8 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             }
         });
 
-        /** Library to separate phone number and calling code */
-        if (window['libphonenumber'] === undefined) {
-            let scriptTag = document.createElement('script');
-            scriptTag.src = 'https://cdnjs.cloudflare.com/ajax/libs/libphonenumber-js/1.10.41/libphonenumber-js.min.js';
-            scriptTag.type = 'text/javascript';
-            scriptTag.defer = true;
-            document.body.appendChild(scriptTag);
-        }
+        /** Library to separate phone number and calling code - Using npm package instead of CDN */
+        // Removed CDN loading as google-libphonenumber package is already available in package.json
         /** Library to separate phone number and calling code */
 
         this.loggedInUser = this.generalService.user;
@@ -952,14 +947,14 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
 
             if (this.showMobileField && this.firstStepForm.value.mobile) {
                 let mobileValue = this.firstStepForm.value.mobile;
-                
+
                 // Parse the mobile number to extract national number (removes existing country code)
                 let parsedMobileNo = window['libphonenumber']?.parsePhoneNumber(mobileValue);
                 mobileValue = parsedMobileNo?.nationalNumber ?? mobileValue.replace(/^\+\d+/, '');
-                
+
                 // Get current country's dial code from selectedCountryCode
                 const currentDialCode = event?.additional?.callingCode || '';
-                
+
                 // Add current country code to the number
                 if (mobileValue && currentDialCode) {
                     mobileValue = `+${currentDialCode}${mobileValue}`;

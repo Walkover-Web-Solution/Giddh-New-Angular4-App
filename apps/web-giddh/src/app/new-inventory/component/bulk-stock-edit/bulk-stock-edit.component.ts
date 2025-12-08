@@ -257,7 +257,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
         // Add CSS class to body element
         this.renderer.addClass(document.body, 'bulk-stock-edit');
         this.searchInputObservableInitialize();
-        
+
         this.store.pipe(
             select(select => select.inventory.bulkStock),
             takeUntil(this.destroyed$)
@@ -372,7 +372,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
 
     /**
      * This will use for get stock groups
-     * 
+     *
      * @memberof BulkStockEditComponent
      */
     public getStockGroups(): void {
@@ -411,7 +411,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
 
     /**
      * This will use for value changes on update
-     * 
+     *
      * @param {number} selectTableRowIndex
      * @memberof BulkStockEditComponent
      */
@@ -449,7 +449,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
 
     /**
      * This will use for hide table input
-     * 
+     *
      * @memberof BulkStockEditComponent
      */
     public hideTableInput(): void {
@@ -464,7 +464,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
 
     /**
      * This will use for show table input
-     * 
+     *
      * @param {any} $event
      * @param {number} index
      * @memberof BulkStockEditComponent
@@ -483,7 +483,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
 
     /**
      * This will use for get taxes
-     * 
+     *
      * @memberof BulkStockEditComponent
      */
     public getTaxes(): void {
@@ -536,10 +536,10 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
         }
 
         let isSelected = this.selectedTaxes[currentRowIndex]?.filter(selectedTax => selectedTax === taxSelected.uniqueName);
-        
+
         if (taxSelected.taxType !== 'gstcess') {
             let index = this.taxTempArray[currentRowIndex].findIndex((taxTemp) => taxTemp.taxType === taxSelected.taxType);
-            
+
             if (index > -1 && !isSelected?.length) {
                 rowTaxes.forEach((tax) => {
                     if (tax.taxType === taxSelected.taxType) {
@@ -654,7 +654,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
 
     /**
      * This will use for get stock units
-     * 
+     *
      * @param {number} index
      * @memberof BulkStockEditComponent
      */
@@ -740,7 +740,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
 
     /**
      * Creates FormArray for custom fields
-     * 
+     *
      * @param {any[]} customFields - Array of custom field objects
      * @returns {FormArray} FormArray containing FormGroups for each custom field
      * @memberof BulkStockEditComponent
@@ -808,11 +808,11 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
         }
     }
 
-    /** 
+    /**
      * This will use for update form data
-     * 
-     * @param {*} requestBody 
-     * @param {*} selectTableRowIndex 
+     *
+     * @param {*} requestBody
+     * @param {*} selectTableRowIndex
      * @memberof BulkStockEditComponent
      */
     public updateForm(requestBody: any, selectTableRowIndex: number): void {

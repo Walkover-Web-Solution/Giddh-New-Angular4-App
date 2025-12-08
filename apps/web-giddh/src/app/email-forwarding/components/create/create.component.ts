@@ -18,6 +18,7 @@ import { SalesActions } from '../../../actions/sales/sales.action';
 @Component({
     selector: 'create',
     templateUrl: './create.component.html',
+    styles: [``],
     providers: [EmailForwardingComponentStore]
 })
 export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {

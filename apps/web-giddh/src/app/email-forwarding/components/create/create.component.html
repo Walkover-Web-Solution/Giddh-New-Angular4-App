@@ -280,7 +280,7 @@
 <ng-template #accountAsideMenu>
     <generic-aside-menu-account
         (closeAsideEvent)="accountAsideMenuRef?.close()"
-        [selectedGrpUniqueName]="accountSearchRequest.group"
+        [selectedGrpUniqueName]="'bankaccounts'"
         [allGroups]="false"
         [keyboardShortcut]="'esc'"
         (onShortcutPress)="accountAsideMenuRef?.close()"
