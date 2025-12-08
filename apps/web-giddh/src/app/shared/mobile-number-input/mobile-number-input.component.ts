@@ -197,7 +197,7 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
     
     /** Event emitted when mobile number changes */
     @Output() public mobileChanged = new EventEmitter<string>();
-
+    
     /** Form controls */
     public countryControl = new FormControl<Country | null>(null);
     public mobileControl = new FormControl<string>('');

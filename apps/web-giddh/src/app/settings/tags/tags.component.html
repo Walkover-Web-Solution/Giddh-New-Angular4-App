@@ -4,7 +4,7 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-    <div class=" p-3 section-center">
+    <div class=" p-3 section-center pt-5">
         <form [formGroup]="tagForm" >
             <div class="row">
                 <div class="col-12 px-0">
@@ -25,7 +25,8 @@
                                 <i class="icon-cross"></i>
                             </button>
                             </mat-chip-row>
-                            <input  
+                            <input
+                                #tagInput
                                 [placeholder]="localeData?.tag_name_placeholder"
                                 [matChipInputFor]="chipGrid"
                                 [matChipInputSeparatorKeyCodes]="separatorKeysCodes"

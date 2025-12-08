@@ -161,7 +161,6 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
             }
             setTimeout(() => {
                 this.changeDetectionRef.detectChanges();
-                console.log("changes")
             }, 2000);
             if (!this.manufactureUniqueName) {
                 this.increaseExpenseAmount = this.manufacturingObject.manufacturingDetails[0].increaseAssetValue;
@@ -247,7 +246,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
 
         this.preventStocksApiCall = true;
 
-        if (q) {
+        if (typeof q === 'string') {
             stockObject.stocksQ = q;
         } else if (stockObject.stocksQ) {
             q = stockObject.stocksQ;
@@ -302,7 +301,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         }
 
         this.preventByProductStocksApiCall = true;
-        if (q) {
+        if (typeof q === 'string') {
             stockObject.stocksQ = q;
         } else if (stockObject.stocksQ) {
             q = stockObject.stocksQ;
@@ -1708,7 +1707,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
     public onLiabilitiesAssetAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
         this.liabilitiesAssetAccountsSearchResultsPaginationData.query = query;
         if (!this.preventLiabilitiesAssetDefaultScrollApiCall &&
-            (query || (this.defaultLiabilitiesAssetAccountSuggestions && this.defaultLiabilitiesAssetAccountSuggestions.length === 0) || successCallback)) {
+            (typeof query === 'string' || (this.defaultLiabilitiesAssetAccountSuggestions && this.defaultLiabilitiesAssetAccountSuggestions.length === 0) || successCallback)) {
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
             const requestObject: any = {
                 q: encodeURIComponent(query),
@@ -1766,7 +1765,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
     public onExpenseAccountSearchQueryChanged(query: string, page: number = 1, successCallback?: Function): void {
         this.expenseAccountsSearchResultsPaginationData.query = query;
         if (!this.preventExpenseDefaultScrollApiCall &&
-            (query || (this.defaultExpenseAccountSuggestions && this.defaultExpenseAccountSuggestions.length === 0) || successCallback)) {
+            (typeof query === 'string' || (this.defaultExpenseAccountSuggestions && this.defaultExpenseAccountSuggestions.length === 0) || successCallback)) {
             // Call the API when either query is provided, default suggestions are not present or success callback is provided
             const requestObject: any = {
                 q: encodeURIComponent(query),

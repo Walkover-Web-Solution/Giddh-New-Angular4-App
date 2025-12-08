@@ -146,6 +146,8 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     public isLoading$: Observable<any> = this.componentStore.isLoading$;
     /** Holds dynamic columns list for customised columns */
     public dynamicCustomColumns: any[] = [];
+    /** Hide selected options from dropdown list */
+    public hideSelectedOptions: boolean = true;
 
     constructor(
         public dialog: MatDialog,
@@ -764,7 +766,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * This will use for select filters in chiplist
+     * This will use for select filters in chiplist - removes selected option from dropdown
      *
      * @param {*} option
      * @return {*}  {void}
@@ -823,13 +825,14 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         this.stockReportRequestExport.variantUniqueNames = this.stockReportRequest.variantUniqueNames;
         this.filtersChipList?.push(selectOptionValue);
         this.searchRequest.q = "";
+        // This will refresh filtered options and hide the selected item from dropdown
         this.searchInventory();
         this.isFilterActive();
         this.emitFilters();
     }
 
     /**
-     * This will be used for remove chiplist from search filter
+     * This will be used for remove chiplist from search filter - adds removed option back to dropdown
      *
      * @param {*} selectOptionValue
      * @param {number} index
@@ -863,6 +866,7 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             this.balanceStockReportRequest.stockUniqueNames = this.stockReportRequest.stockUniqueNames;
             this.balanceStockReportRequest.variantUniqueNames = this.stockReportRequest.variantUniqueNames;
             this.searchRequest.q = "";
+            // This will refresh filtered options and show the removed item back in dropdown
             this.searchInventory();
             this.isFilterActive();
             this.emitFilters();
@@ -870,7 +874,25 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * Searches the group/stock/variant
+     * Filters options to hide selected items from dropdown
+     *
+     * @private
+     * @param {any[]} options
+     * @returns {any[]}
+     * @memberof ReportFiltersComponent
+     */
+    private getFilteredOptionsForHideSelected(options: any[]): any[] {
+        if (!this.hideSelectedOptions || !options) {
+            return options || [];
+        }
+        
+        return options.filter(option => {
+            return !this.filtersChipList?.some(chip => chip?.uniqueName === option?.uniqueName);
+        });
+    }
+
+    /**
+     * Searches the group/stock/variant and filters out selected options
      *
      * @param {boolean} [loadMore]
      * @memberof ReportFiltersComponent
@@ -904,11 +926,14 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             }
             this.inventoryService.searchStockTransactionReport(searchRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                 if (response && response.body && response.status === 'success') {
+                    let allOptions = [];
                     if (loadMore) {
-                        this.fieldFilteredOptions = this.fieldFilteredOptions.concat(response.body.results);
+                        allOptions = this.fieldFilteredOptions.concat(response.body.results);
                     } else {
-                        this.fieldFilteredOptions = response.body.results;
+                        allOptions = response.body.results;
                     }
+                    // Filter out selected options to hide them from dropdown
+                    this.fieldFilteredOptions = this.getFilteredOptionsForHideSelected(allOptions);
                     this.searchRequest.totalItems = response.body.totalItems;
                     this.searchRequest.totalPages = response.body.totalPages;
                     if (this.autoSelectSearchOption) {

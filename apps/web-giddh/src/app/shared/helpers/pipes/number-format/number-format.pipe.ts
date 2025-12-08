@@ -4,25 +4,28 @@ import { ReplaySubject } from 'rxjs';
 import { OnDestroy, Pipe, PipeTransform } from '@angular/core';
 import { distinctUntilKeyChanged, takeUntil } from 'rxjs/operators';
 import { giddhRoundOff } from '../../helperFunctions';
-import { NUMBER_FORMAT_LOCALE_MAP, COUNTRY_LOCALE_MAP } from '../../../../app.constant';
+import { NUMBER_FORMAT_LOCALE_MAP, DEFAULT_NUMBER_FORMAT_LOCALE, DEFAULT_NUMBER_DISPLAY_FORMAT } from '../../../../app.constant';
 
 @Pipe({ name: 'giddhNumberFormat', pure: true })
 
 export class GiddhNumberFormatPipe implements OnDestroy, PipeTransform {
+    /** Subject to handle component destruction and unsubscribe from observables */
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Number of decimal places for formatting, derived from company settings */
     public companyDecimalPlaces: number = 2;
-    private locale: string = 'en-IN'; // Default locale
+    /** Locale string for number formatting (e.g., 'en-IN', 'en-US', 'fr-FR') */
+    private locale: string = DEFAULT_NUMBER_FORMAT_LOCALE;
 
     constructor(private store: Store<AppState>) {
-        this.store.pipe(select(p => p.settings.profile), distinctUntilKeyChanged('balanceDisplayFormat'), takeUntil(this.destroyed$)).subscribe((profile) => {
+        this.store.pipe(select(state => state.settings.profile), distinctUntilKeyChanged('balanceDisplayFormat'), takeUntil(this.destroyed$)).subscribe((profile) => {
             if (profile && profile.name) {
                 this.companyDecimalPlaces = profile.balanceDecimalPlaces ? profile.balanceDecimalPlaces : 2;
                 if (this.companyDecimalPlaces) {
-                    localStorage.setItem('currencyDecimalType', this.companyDecimalPlaces?.toString());
+                    localStorage.setItem('currencyDecimalType', this.companyDecimalPlaces.toString());
                 }
 
                 // Set locale based on balance display format
-                const displayFormat = profile.balanceDisplayFormat || 'IND_COMMA_SEPARATED';
+                const displayFormat = profile.balanceDisplayFormat || DEFAULT_NUMBER_DISPLAY_FORMAT;
                 this.locale = this.getLocaleFromDisplayFormat(displayFormat);
                 localStorage.setItem('companyLocale', this.locale);
                 localStorage.setItem('currencyNumberType', displayFormat);
@@ -30,6 +33,11 @@ export class GiddhNumberFormatPipe implements OnDestroy, PipeTransform {
         });
     }
 
+    /**
+     * Cleanup method to unsubscribe from observables
+     *
+     * @memberof GiddhNumberFormatPipe
+     */
     public ngOnDestroy() {
         this.destroyed$.next(true);
         this.destroyed$.complete();
@@ -44,20 +52,9 @@ export class GiddhNumberFormatPipe implements OnDestroy, PipeTransform {
      * @memberof GiddhNumberFormatPipe
      */
     private getLocaleFromDisplayFormat(displayFormat: string): string {
-        return NUMBER_FORMAT_LOCALE_MAP[displayFormat] || 'en-IN';
+        return NUMBER_FORMAT_LOCALE_MAP[displayFormat] || DEFAULT_NUMBER_FORMAT_LOCALE;
     }
 
-    /**
-     * Maps country code to appropriate locale
-     *
-     * @private
-     * @param {string} countryCode Two-letter country code (e.g., 'IN', 'US', 'FR')
-     * @returns {string} Locale string (e.g., 'en-IN', 'en-US', 'fr-FR')
-     * @memberof GiddhNumberFormatPipe
-     */
-    private getLocaleFromCountryCode(countryCode: string): string {
-        return COUNTRY_LOCALE_MAP[countryCode?.toUpperCase()] || 'en-IN';
-    }
 
     /**
      * Transforms the number with company decimal places and locale-specific formatting
@@ -81,7 +78,7 @@ export class GiddhNumberFormatPipe implements OnDestroy, PipeTransform {
         // Get decimal places with fallback chain
         const decimalPlaces = customDecimalPlaces ??
             this.companyDecimalPlaces ??
-            parseInt(localStorage.getItem('currencyDecimalType') || '2');
+            (parseInt(localStorage.getItem('currencyDecimalType') || '2') || 2);
 
         const roundedValue = giddhRoundOff(value, decimalPlaces);
 

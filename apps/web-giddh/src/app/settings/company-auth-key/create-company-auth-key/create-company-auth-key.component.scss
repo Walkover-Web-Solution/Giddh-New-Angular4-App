@@ -1,0 +1,18 @@
+
+:host ::ng-deep .mat-select-btn {
+    .mdc-button__label {
+        width: 100%;
+    }
+}
+
+.lh-34 {
+    line-height: 34px;
+}
+
+.ip-range {
+    i {
+        position: relative;
+        right: 2px;
+        color: var(--color-dark-black);
+    }
+}

@@ -237,7 +237,7 @@ export class AiOcrListComponent implements OnInit, OnDestroy {
                     if (!response) {
                         this.aiOcrService.dateRangeEmit$.pipe(takeUntil(this.destroyed$), takeUntil(this.routeScope$)).subscribe((res) => {
                             if (res) {
-                                this.ocrDocumentsRequestParams.from = res.from;
+                               this.ocrDocumentsRequestParams.from = res.from;
                                 this.ocrDocumentsRequestParams.to = res.to;
                             }
                         });

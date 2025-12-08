@@ -69,14 +69,14 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     @Input() public chipListUniqueName: string[] = [];
     /** True if field is required */
     @Input() public required: boolean = false;
+    /** Hide selected options from dropdown list */
+    @Input() public hideSelectedOptions: boolean = true;
     /** Emits the scroll to bottom event when pagination is required  */
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
     /** Emits dynamic searched query */
     @Output() public dynamicSearchedQuery: EventEmitter<string> = new EventEmitter();
     /** Callback for create new option selected */
     @Output() public createOption: EventEmitter<boolean> = new EventEmitter<boolean>();
-    /** Callback for clear selected value */
-    @Output() public onClear: EventEmitter<any> = new EventEmitter<any>();
     /** Callback for option selected */
     @Output() public selectedOption: EventEmitter<any> = new EventEmitter<any>();
     /** Emits the updated list of selected option unique names whenever the selection changes. */
@@ -103,6 +103,10 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     public value: any[] = [];
     /** Holds last search value */
     public lastSearchString: string = null;
+    /** Returns true if suffix or prefix is not empty string */
+    private get isSuffixPrefixUsed(): boolean {
+        return Boolean(this.chipPrefix || this.chipSuffix);
+    }
 
 
     constructor(
@@ -120,13 +124,7 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
                 this.lastSearchString = search;
                 if (this.enableDynamicSearch) {
                     this.dynamicSearchedQuery.emit(search);
-                    if (!search) {
-                        this.onClear.emit({ label: "", value: "" });
-                    }
                 } else {
-                    if (search === "") {
-                        this.onClear.emit({ label: "", value: "" });
-                    }
                     this.filterOptions(search);
                 }
                 this.changeDetection.detectChanges();
@@ -157,13 +155,26 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
      */
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes?.options) {
-            this.fieldFilteredOptions$ = of(cloneDeep(changes.options.currentValue));
+            // Apply filtering when options change to respect hideSelectedOptions
+            if (!this.enableDynamicSearch) {
+                this.filterOptions(this.lastSearchString || "");
+            } else {
+                // For dynamic search, filter options to hide selected ones
+                this.fieldFilteredOptions$ = of(this.getFilteredOptionsForDynamicSearch(changes.options.currentValue));
+            }
         }
         if (changes?.selectedValues && changes.selectedValues.currentValue) {
             if (typeof changes.selectedValues.currentValue === "string") {
                 this.chipList = cloneDeep(changes.selectedValues.currentValue?.split(","));
             } else {
                 this.chipList = cloneDeep(changes.selectedValues.currentValue);
+            }
+            // Refresh filtered options when selected values change
+            if (!this.enableDynamicSearch && this.options) {
+                this.filterOptions("");
+            } else if (this.enableDynamicSearch && this.options) {
+                // For dynamic search, refresh filtered options to hide selected items
+                this.fieldFilteredOptions$ = of(this.getFilteredOptionsForDynamicSearch(this.options));
             }
         }
     }
@@ -192,7 +203,7 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     }
 
     /**
-     * Filters the option based on search
+     * Filters the option based on search and hides selected options if enabled
      *
      * @private
      * @param {string} search
@@ -201,7 +212,16 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     private filterOptions(search: string): void {
         let filteredOptions: IOption[] = [];
         this.options?.forEach(option => {
-            if (typeof search !== "string" || option?.label?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1) {
+            const matchesSearch = typeof search !== "string" || option?.label?.toLowerCase()?.indexOf(search?.toLowerCase()) > -1;
+            let value = option?.value;
+            let label = option?.label;
+            if (this.isSuffixPrefixUsed) {
+                value = this.chipPrefix + option?.value + this.chipSuffix;
+                label = this.chipPrefix + option?.label + this.chipSuffix;
+            }
+            const isNotSelected = !this.hideSelectedOptions || !(this.selectedValues?.includes(value) || this.selectedValues?.includes(label));
+            
+            if (matchesSearch && isNotSelected) {
                 filteredOptions.push({ label: option.label, value: option?.value, additional: option });
             }
         });
@@ -211,7 +231,7 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     }
 
     /**
-     * Callback for select option from dropdown
+     * Callback for select option from dropdown - removes selected option from dropdown list
      *
      * @param {*} option
      * @memberof SelectMultipleFieldsComponent
@@ -224,21 +244,29 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
         this.writeValue([...this.value, option?.option?.value?.value]);
         if (selectOptionValue && !this.chipList.includes(this.chipPrefix + selectOptionValue + this.chipSuffix)) {
             this.chipListUniqueName.push(option.option.value.value);
+            if (!this.isSuffixPrefixUsed) {
+                 if (Array.isArray(this.selectedValues)) {
+                     this.selectedValues.push(option.option.value.value);
+                } else if (typeof this.selectedValues === 'string') {
+                    this.selectedValues = cloneDeep((this.selectedValues as string).split(","));
+                }
+            }
             this.chipList.push(this.chipPrefix + selectOptionValue + this.chipSuffix);
+            // This will refresh filtered options and hide the selected item from dropdown
             this.emitList();
         }
     }
 
     /**
-     * Callback for remove option from chip
+     * Callback for remove option from chip - adds removed option back to dropdown list
      *
      * @param {number} index
      * @memberof SelectMultipleFieldsComponent
      */
     public removeOption(index: number): void {
         if (index >= 0) {
-            this.chipList.splice(index, 1);
             this.chipListUniqueName.splice(index, 1);
+            this.chipList.splice(index, 1);
             this.value.splice(index, 1);
             this.writeValue(this.value);
             // Close the autocomplete dropdown if it's open
@@ -247,6 +275,7 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
                     this.closePanel();
                 }
             }, 100);  // Delay slightly to allow for view update
+            // This will refresh filtered options and show the removed item back in dropdown
             this.emitList();
         }
     }
@@ -307,7 +336,31 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     }
 
     /**
-     * Emits list of selected chips
+     * Filters options for dynamic search to hide selected items
+     *
+     * @private
+     * @param {any[]} options
+     * @returns {IOption[]}
+     * @memberof SelectMultipleFieldsComponent
+     */
+    private getFilteredOptionsForDynamicSearch(options: any[]): IOption[] {
+        if (!this.hideSelectedOptions || !options) {
+            return cloneDeep(options) || [];
+        }
+        
+        return options.filter(option => {
+            let value = option?.value;
+            let label = option?.label;
+            if (this.isSuffixPrefixUsed) {
+                value = this.chipPrefix + option?.value + this.chipSuffix;
+                label = this.chipPrefix + option?.label + this.chipSuffix;
+            }
+            return !(this.selectedValues?.includes(value) || this.selectedValues?.includes(label));
+        });
+    }
+
+    /**
+     * Emits list of selected chips and refreshes filtered options
      *
      * @private
      * @memberof SelectMultipleFieldsComponent
@@ -315,6 +368,13 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     private emitList(): void {
         this.selectedOption.emit(this.chipList);
         this.selectedOptionUniqueName.emit(this.chipListUniqueName);
+        // Refresh filtered options to hide newly selected items
+        if (!this.enableDynamicSearch) {
+            this.filterOptions(this.lastSearchString || "");
+        } else if (this.options) {
+            // For dynamic search, filter options to hide selected items
+            this.fieldFilteredOptions$ = of(this.getFilteredOptionsForDynamicSearch(this.options));
+        }
         this.changeDetection.detectChanges();
     }
 
@@ -382,6 +442,10 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     public panelOpened(): void {
         if (this.enableDynamicSearch) {
             this.dynamicSearchedQuery.emit("");
+            // Also filter options to hide selected items for dynamic search
+            if (this.options) {
+                this.fieldFilteredOptions$ = of(this.getFilteredOptionsForDynamicSearch(this.options));
+            }
         } else {
             this.filterOptions("");
         }

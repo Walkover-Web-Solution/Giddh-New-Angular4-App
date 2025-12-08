@@ -1,7 +1,7 @@
 <form #formDiv name="addEditStockForm" class="row" [formGroup]="addStockForm" novalidate="" autocomplete="off">
     <section class="w-100">
         <div class="dialog-header">
-            <span>{{ isUpdatingStockForm ? 'Update Stock' : 'Create Stock' }}</span>
+            <span>{{ isUpdatingStockForm ? "Update Stock" : "Create Stock" }}</span>
             <button mat-icon-button aria-label="close" (click)="closeAsidePane()">
                 <i class="icon-cross"></i>
             </button>
@@ -94,7 +94,9 @@
                                                     formControlName="showCodeType"
                                                     value="sac"
                                                 />
-                                                <label for="sacCodeType" class="ml-1 radio-custom-label">SAC Code</label>
+                                                <label for="sacCodeType" class="ml-1 radio-custom-label"
+                                                    >SAC Code</label
+                                                >
                                             </span>
                                             <input
                                                 type="number"
@@ -113,7 +115,7 @@
                                                 *ngIf="addStockForm.get('showCodeType')?.value === 'sac'"
                                             />
                                         </div>
-        
+
                                         <div class="form-group col-sm-4 col-12">
                                             <label>Tax</label>
                                             <button
@@ -147,7 +149,7 @@
                                             </mat-menu>
                                         </div>
                                     </div>
-        
+
                                     <div class="row">
                                         <div class="form-group col-sm-4 col-12">
                                             <label>Open. Qty</label>
@@ -161,7 +163,7 @@
                                                 formControlName="openingQuantity"
                                             />
                                         </div>
-        
+
                                         <div class="form-group col-sm-4 col-12">
                                             <label>Amount</label>
                                             <input
@@ -174,7 +176,7 @@
                                                 formControlName="openingAmount"
                                             />
                                         </div>
-        
+
                                         <div class="form-group col-sm-4 col-12">
                                             <label>Rate</label>
                                             <input
@@ -186,7 +188,7 @@
                                             />
                                         </div>
                                     </div>
-        
+
                                     <div class="row sku-row">
                                         <!-- SKU Code -->
                                         <div class="form-group col-sm-4 col-12">
@@ -200,7 +202,7 @@
                                                 (keyup)="validateSKU($event)"
                                             />
                                         </div>
-        
+
                                         <!-- field 1 -->
                                         <div
                                             class="form-group col-sm-4 col-12"
@@ -225,12 +227,14 @@
                                                     formControlName="customField1Heading"
                                                     (blur)="customField1HeadingEditing = !customField1HeadingEditing"
                                                 />
-        
+
                                                 <span class="pull-right">
                                                     <i
                                                         *ngIf="!customField1HeadingEditing"
                                                         class="icon-edit-pencil"
-                                                        (click)="customField1HeadingEditing = !customField1HeadingEditing"
+                                                        (click)="
+                                                            customField1HeadingEditing = !customField1HeadingEditing
+                                                        "
                                                     ></i>
                                                     <i
                                                         class="icon-cross text-danger"
@@ -270,12 +274,14 @@
                                                     formControlName="customField2Heading"
                                                     (blur)="customField2HeadingEditing = !customField2HeadingEditing"
                                                 />
-        
+
                                                 <span class="pull-right">
                                                     <i
                                                         *ngIf="!customField2HeadingEditing"
                                                         class="icon-edit-pencil"
-                                                        (click)="customField2HeadingEditing = !customField2HeadingEditing"
+                                                        (click)="
+                                                            customField2HeadingEditing = !customField2HeadingEditing
+                                                        "
                                                     ></i>
                                                     <i
                                                         class="icon-cross text-danger"
@@ -311,13 +317,9 @@
                 <div class="row">
                     <div class="col-sm-6 col-12">
                         <div class="checkbox">
-                            <mat-checkbox
-                                formControlName="enablePurchase"
-                                color="primary"
-                            >
+                            <mat-checkbox formControlName="enablePurchase" color="primary">
                                 Purchase Information
-                            </mat-checkbox
-                            >
+                            </mat-checkbox>
                         </div>
                         <div class="form-group">
                             <label class="bold-head">Account Name</label>
@@ -379,11 +381,7 @@
                                         >
                                             <i class="icon-plus text-green"></i>
                                         </button>
-                                        <button
-                                            mat-stroked-button
-                                            (click)="removePurchaseUnitRates(i)"
-                                            *ngIf="!l"
-                                        >
+                                        <button mat-stroked-button (click)="removePurchaseUnitRates(i)" *ngIf="!l">
                                             <i class="icon-cross text-red"></i>
                                         </button>
                                     </div>
@@ -394,16 +392,12 @@
 
                     <div class="col-sm-6 col-12">
                         <div class="checkbox">
-                            <mat-checkbox
-                                formControlName="enableSales"
-                                color="primary"
-                            >
+                            <mat-checkbox formControlName="enableSales" color="primary">
                                 Sales Information
-                            </mat-checkbox
-                            >
+                            </mat-checkbox>
                         </div>
                         <div class="form-group">
-                            <label >Account Name</label>
+                            <label>Account Name</label>
                             <reactive-dropdown-field
                                 [options]="salesAccountsDropDown$ | async"
                                 formControlName="salesAccountUniqueName"
@@ -468,14 +462,9 @@
                 <div class="row pl-1 pr-1">
                     <div class="col-12 col-sm-12">
                         <div class="checkbox">
-                            <mat-checkbox
-                                formControlName="isFsStock"
-                                [disabled]=""
-                                color="primary"
-                            >
+                            <mat-checkbox formControlName="isFsStock" [disabled]="" color="primary">
                                 Is it a finished stock? (Manufacturing/Combo)
-                            </mat-checkbox
-                            >
+                            </mat-checkbox>
                         </div>
                     </div>
                 </div>
@@ -485,7 +474,7 @@
                         <p class="section-head border-bottom">
                             <strong>{{ addStockForm.controls["name"]?.value }} (Made with)</strong>
                         </p>
-                        <table class="no-hover width-100">
+                        <table class="no-hover w-100">
                             <tbody formGroupName="manufacturingDetails">
                                 <tr class="output-row">
                                     <td class="form-group">
@@ -518,7 +507,7 @@
                                         colspan="2"
                                     >
                                         <label class="d-block">&nbsp;</label>
-                                        <span class="width-100"
+                                        <span class="w-100"
                                             ><strong
                                                 >= (
                                                 {{
@@ -596,11 +585,7 @@
                                             >
                                                 <i class="icon-plus text-green"></i>
                                             </button>
-                                            <button
-                                                mat-stroked-button
-                                                (click)="removeItemInLinkedStocks(i)"
-                                                *ngIf="!l"
-                                            >
+                                            <button mat-stroked-button (click)="removeItemInLinkedStocks(i)" *ngIf="!l">
                                                 <i class="icon-cross text-red"></i>
                                             </button>
                                         </td>
@@ -619,7 +604,8 @@
                                 *ngIf="!isUpdatingStockForm"
                                 [ladda]="isStockAddInProcess$ | async"
                                 (click)="submit()"
-                                mat-raised-button color="primary"
+                                mat-raised-button
+                                color="primary"
                                 [disabled]="addStockForm.invalid || disableStockButton"
                             >
                                 Save
@@ -628,7 +614,8 @@
                                 type="button"
                                 *ngIf="isUpdatingStockForm"
                                 [ladda]="isStockUpdateInProcess$ | async"
-                                mat-raised-button color="primary"
+                                mat-raised-button
+                                color="primary"
                                 (click)="update()"
                                 [disabled]="addStockForm.invalid || disableStockButton"
                             >
