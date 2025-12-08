@@ -1675,7 +1675,6 @@
                                                 </th>
                                             </tr>
                                         </thead>
-                                        <!--  <tbody (clickOutside)="openEntryDatepicker ? null : handleOutsideClick($event)"> -->
                                         <tbody (clickOutside)="handleOutsideClick($event)">
                                             <ng-container
                                                 *ngFor="
@@ -1715,9 +1714,6 @@
                                                                             cdkMonitorElementFocus
                                                                             (focus)="setActiveEntryIndex(entryIndex)"
                                                                         >
-                                                                            <!--   (keydown.shift.tab)="
-                                                                                setActiveEntryIndex(null)
-                                                                            " -->
                                                                             {{
                                                                                 transaction.get("account.name")?.value
                                                                                     ? transaction.get("stock.name")
@@ -3159,11 +3155,13 @@
                                                                                         role="button"
                                                                                         cdkMonitorElementFocus
                                                                                         (keydown.enter)="
+                                                                                            $event.preventDefault();
                                                                                             deleteDepositRow(
                                                                                                 depositIndex
                                                                                             )
                                                                                         "
                                                                                         (keydown.space)="
+                                                                                            $event.preventDefault();
                                                                                             deleteDepositRow(
                                                                                                 depositIndex
                                                                                             )
@@ -3191,8 +3189,14 @@
                                                                         class="cursor-pointer"
                                                                         tabindex="0"
                                                                         cdkMonitorElementFocus
-                                                                        (keydown.enter)="addNewDepositRow(true)"
-                                                                        (keydown.space)="addNewDepositRow(true)"
+                                                                        (keydown.enter)="
+                                                                            $event.preventDefault();
+                                                                            addNewDepositRow(true)
+                                                                        "
+                                                                        (keydown.space)="
+                                                                            $event.preventDefault();
+                                                                            addNewDepositRow(true)
+                                                                        "
                                                                         (click)="addNewDepositRow(true)"
                                                                         >{{ localeData?.add_new_line }}</span
                                                                     >

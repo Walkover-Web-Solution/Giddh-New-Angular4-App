@@ -198,8 +198,8 @@
                                                         role="button"
                                                         [attr.aria-label]="localeData?.add_image"
                                                         cdkMonitorElementFocus
-                                                        (keydown.enter)="triggerFileInput()"
-                                                        (keydown.space)="triggerFileInput()"
+                                                        (keydown.enter)="$event.preventDefault(); triggerFileInput()"
+                                                        (keydown.space)="$event.preventDefault(); triggerFileInput()"
                                                     >
                                                         <input
                                                             #fileInput
@@ -1094,8 +1094,14 @@
                                                                                     localeData?.add_image
                                                                                 "
                                                                                 cdkMonitorElementFocus
-                                                                                (keydown.enter)="triggerFileInput()"
-                                                                                (keydown.space)="triggerFileInput()"
+                                                                                (keydown.enter)="
+                                                                                    $event.preventDefault();
+                                                                                    triggerFileInput()
+                                                                                "
+                                                                                (keydown.space)="
+                                                                                    $event.preventDefault();
+                                                                                    triggerFileInput()
+                                                                                "
                                                                             >
                                                                                 <input
                                                                                     #fileInput

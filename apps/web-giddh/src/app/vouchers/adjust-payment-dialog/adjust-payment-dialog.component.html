@@ -228,8 +228,8 @@
                                     href="javascript:void(0)"
                                     aria-label="delete icon"
                                     (click)="deleteAdjustVoucherRow(entryIdx)"
-                                    (keydown.enter)="deleteAdjustVoucherRow(entryIdx)"
-                                    (keydown.space)="deleteAdjustVoucherRow(entryIdx)"
+                                    (keydown.enter)="$event.preventDefault(); deleteAdjustVoucherRow(entryIdx)"
+                                    (keydown.space)="$event.preventDefault(); deleteAdjustVoucherRow(entryIdx)"
                                     tabindex="0"
                                     role="button"
                                     cdkMonitorElementFocus
@@ -245,8 +245,8 @@
                             href="javascript:void(0)"
                             aria-label="new line"
                             (click)="addNewBlankAdjustVoucherRow()"
-                            (keydown.enter)="addNewBlankAdjustVoucherRow()"
-                            (keydown.space)="addNewBlankAdjustVoucherRow()"
+                            (keydown.enter)="$event.preventDefault(); addNewBlankAdjustVoucherRow()"
+                            (keydown.space)="$event.preventDefault(); addNewBlankAdjustVoucherRow()"
                             tabindex="0"
                             role="button"
                             cdkMonitorElementFocus

@@ -388,9 +388,12 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         if (isAltC && isFocused) {
             event.preventDefault();
             event.stopPropagation();
+            event.stopImmediatePropagation();
             this.createNewRecord();
         }
     }
+
+    
 
     /**
      * This will use for open dropdown panel
