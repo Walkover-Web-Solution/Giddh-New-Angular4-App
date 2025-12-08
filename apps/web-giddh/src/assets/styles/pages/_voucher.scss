@@ -1,22 +1,22 @@
 .vouchers {
     .custom-date-entries {
-            giddh-datepicker {
+        giddh-datepicker {
+            width: 80px;
+            padding-top: 2px;
+            input {
                 width: 80px;
-                padding-top: 2px;
-                input {
-                    width: 80px;
             }
-         }
-     }
-     .vouchers-entry-table {
+        }
+    }
+    .vouchers-entry-table {
         table {
             tr {
                 td {
                     input,
                     textarea,
                     mat-select {
-                        &:not(.hsn-sac-code){
-                            border: none !important;
+                        &:not(.hsn-sac-code) {
+                            border: none;
                             background-color: var(--color-transparent) !important;
                         }
                     }

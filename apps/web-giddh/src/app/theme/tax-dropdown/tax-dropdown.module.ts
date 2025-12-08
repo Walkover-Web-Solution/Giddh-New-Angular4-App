@@ -6,6 +6,7 @@ import { MatMenuModule } from "@angular/material/menu";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { FormFieldsModule } from "../form-fields/form-fields.module";
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { A11yModule } from "@angular/cdk/a11y";
 
 @NgModule({
     declarations: [
@@ -18,7 +19,8 @@ import { MatTooltipModule } from "@angular/material/tooltip";
         MatMenuModule,
         MatCheckboxModule,
         FormFieldsModule,
-        MatTooltipModule
+        MatTooltipModule,
+        A11yModule
     ],
     exports: [
         TaxDropdownComponent

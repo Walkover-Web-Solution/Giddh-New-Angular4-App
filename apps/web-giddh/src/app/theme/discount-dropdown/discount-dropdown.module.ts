@@ -5,6 +5,7 @@ import { FormFieldsModule } from "../form-fields/form-fields.module";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { A11yModule } from "@angular/cdk/a11y";
 
 @NgModule({
     declarations: [
@@ -16,7 +17,8 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
         ReactiveFormsModule,
         MatMenuModule,
         FormFieldsModule,
-        MatCheckboxModule
+        MatCheckboxModule,
+        A11yModule
     ],
     exports: [
         DiscountDropdownComponent

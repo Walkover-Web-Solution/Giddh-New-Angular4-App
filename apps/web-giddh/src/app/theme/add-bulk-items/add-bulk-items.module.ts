@@ -9,6 +9,7 @@ import { MatExpansionModule } from "@angular/material/expansion";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { A11yModule } from "@angular/cdk/a11y";
 import { TranslateDirectiveModule } from "../translate/translate.directive.module";
 import { GiddhNumberFormatPipe } from "../../shared/helpers/pipes/number-format/number-format.pipe";
 
@@ -27,6 +28,7 @@ import { GiddhNumberFormatPipe } from "../../shared/helpers/pipes/number-format/
         MatTooltipModule,
         FormsModule,
         ReactiveFormsModule,
+        A11yModule,
         TranslateDirectiveModule
     ],
     exports: [

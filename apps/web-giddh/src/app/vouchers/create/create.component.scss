@@ -33,7 +33,6 @@
         .vouchers-form-fields {
             max-width: 415px;
             min-width: 230px;
-
         }
 
         .vouchers-form-fields-detail {
@@ -95,7 +94,6 @@
                     }
                 }
             }
-
         }
 
         .vouchers-large-container {
@@ -110,7 +108,6 @@
             .vouchers-entry-table {
                 table {
                     tr {
-
                         th,
                         td {
                             padding: 16px 8px;
@@ -119,7 +116,6 @@
                             &.total-column {
                                 min-width: 120px;
                                 padding-bottom: 36px !important;
-
                             }
 
                             &.product-column {
@@ -134,7 +130,6 @@
                         }
 
                         th {
-
                             &:not(:first-child, :nth-child(2)) {
                                 padding-right: 14px !important;
                             }
@@ -148,7 +143,8 @@
                                 bottom: 18px;
                                 transition: all 200ms;
 
-                                &:hover {
+                                &:hover,
+                                &:focus {
                                     transform: scale(1.2);
                                 }
                             }
@@ -272,7 +268,8 @@
     }
 }
 
-.option-value, .option-value-stock {
+.option-value,
+.option-value-stock {
     color: var(--color-medium-gray);
 }
 .option-label {
