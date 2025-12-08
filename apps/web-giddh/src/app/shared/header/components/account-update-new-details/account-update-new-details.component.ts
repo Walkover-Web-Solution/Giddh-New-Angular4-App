@@ -1021,6 +1021,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     public openingBalanceTypeChanged(type: string) {
+        if (this.company?.isActive) {
+            return;
+        }
         if (Number(this.addAccountForm.get('openingBalance')?.value) > 0 || Number(this.addAccountForm.get('foreignOpeningBalance')?.value) > 0) {
             this.addAccountForm.get('openingBalanceType')?.patchValue(type);
         }
@@ -2365,8 +2368,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 } else if (acc.sacNumber) {
                     this.addAccountForm.get('hsnOrSac')?.patchValue('sac');
                 }
-                const accountData = acc.accountOpeningBalance?.[0].openingBalanceType;
-                this.openingBalanceTypeChanged(this.company.isActive ? accountDetails.openingBalanceType : (accountData || accountDetails.openingBalanceType));
+                const accountData = acc.accountOpeningBalance?.[0]?.openingBalanceType;
+                this.addAccountForm.get('openingBalanceType')?.patchValue(this.company.isActive ? accountDetails.openingBalanceType : (accountData || accountDetails.openingBalanceType));
                 if (accountDetails.mobileNo) {
 
                     if (accountDetails.mobileNo.indexOf('-') > -1) {

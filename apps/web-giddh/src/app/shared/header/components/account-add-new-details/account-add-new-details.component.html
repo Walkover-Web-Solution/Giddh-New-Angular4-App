@@ -95,6 +95,7 @@
                                     class="input-group-addon d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1"
                                     (click)="openingBalanceTypeChanged('DEBIT')"
                                     [ngClass]="{
+                                        'cursor-not-allowed': company?.isActive,
                                         'active-toggle-btn':
                                             addAccountForm.get('openingBalanceType')?.value === 'DEBIT',
                                         'cursor-pointer': addAccountForm.get('openingBalance')?.value > 0
@@ -109,6 +110,7 @@
                                     class="input-group-addon only-right-radius d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1"
                                     (click)="openingBalanceTypeChanged('CREDIT')"
                                     [ngClass]="{
+                                        'cursor-not-allowed': company?.isActive,
                                         'active-toggle-btn':
                                             addAccountForm.get('openingBalanceType')?.value === 'CREDIT',
                                         'cursor-pointer':
@@ -171,6 +173,7 @@
                                     class="input-group-addon d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1"
                                     (click)="openingBalanceTypeChanged('DEBIT')"
                                     [ngClass]="{
+                                        'cursor-not-allowed': company?.isActive,
                                         'active-toggle-btn':
                                             addAccountForm.get('openingBalanceType')?.value === 'DEBIT',
                                         'cursor-pointer':
@@ -184,6 +187,7 @@
                                     class="input-group-addon only-right-radius d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1"
                                     (click)="openingBalanceTypeChanged('CREDIT')"
                                     [ngClass]="{
+                                        'cursor-not-allowed': company?.isActive,
                                         'active-toggle-btn':
                                             addAccountForm.get('openingBalanceType')?.value === 'CREDIT',
                                         'cursor-pointer':
