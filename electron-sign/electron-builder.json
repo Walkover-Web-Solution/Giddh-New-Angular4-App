@@ -23,7 +23,7 @@
         "entitlements": "./../../../electron-sign/default.entitlements.mas.plist",
         "entitlementsInherit": "./../../../electron-sign/default.entitlements.mas.inherit.plist",
         "provisioningProfile": "./../../../electron-sign/embedded.provisionprofile",
-        "icon": "icon.png",
+        "icon": "./resources/icon.icns",
         "hardenedRuntime": true,
         "gatekeeperAssess": false
     },
@@ -36,7 +36,7 @@
         "provisioningProfile": "./../../../electron-sign/embedded.provisionprofile"
     },
     "linux": {
-        "icon": "icon.png",
+        "icon": "./resources/icon.png",
         "maintainer": "Walkover Technologies Pvt Ltd",
         "target": [
             "AppImage",
@@ -51,7 +51,7 @@
             "zip"
         ],
         "icon": "./resources/icon.ico",
-        "legalTrademarks": "",
+        "legalTrademarks": "Giddh is a trademark of Walkover Web Solutions Private Limited",
         "signAndEditExecutable": false
     },
     "nsis": {
@@ -60,7 +60,11 @@
         "createStartMenuShortcut": true,
         "menuCategory": "Accounting",
         "shortcutName": "Giddh",
-        "perMachine": false
+        "perMachine": false,
+        "installerIcon": "./resources/icon.ico",
+        "uninstallerIcon": "./resources/icon.ico",
+        "displayLanguageSelector": false,
+        "installerHeaderIcon": "./resources/icon.ico"
     },
     "asar": true
 }
