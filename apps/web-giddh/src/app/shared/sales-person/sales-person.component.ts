@@ -170,6 +170,7 @@ export class SalesPersonComponent implements OnInit, OnDestroy, AfterViewInit {
                 } else {
                     this.salesPersonUniqueName = null;
                 }
+                this.focusInputField();
             });
             this.componentStore.patchState({ openTransferAndArchiveDialog: false });
         })).subscribe();
@@ -254,6 +255,7 @@ export class SalesPersonComponent implements OnInit, OnDestroy, AfterViewInit {
                             this.salesPersonUniqueName = element?.uniqueName;
                             this.componentStore.deleteSalesPerson(element?.uniqueName);
                         }
+                        this.focusInputField();
                     });
                 } else {    
                      if (element?.linkedEntities && element?.linkedEntities.includes(SalesPersonErrorDetailsEnum.ENTRY_VOUCHER)) {
@@ -296,6 +298,7 @@ export class SalesPersonComponent implements OnInit, OnDestroy, AfterViewInit {
                         if (response === this.commonLocaleData?.app_yes) {
                             this.componentStore.archiveUnarchiveSalesPerson({ model: { action: ActionTypeEnum.UNARCHIVED }, uniqueName: element?.uniqueName });
                         }
+                        this.focusInputField();
                     });
                 } else {
                     this.salesPersonUniqueName = element?.uniqueName;
@@ -377,6 +380,7 @@ export class SalesPersonComponent implements OnInit, OnDestroy, AfterViewInit {
             if (model) {
                 this.componentStore.archiveUnarchiveSalesPerson({ model: model, uniqueName: this.salesPersonUniqueName });
             }
+            this.focusInputField();
         });
     }
 
