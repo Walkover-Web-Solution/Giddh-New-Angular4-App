@@ -7,8 +7,7 @@ function getAppVersion(): string {
         // Use Electron's app.getVersion() which reads from package.json automatically
         return app.getVersion();
     } catch (error) {
-        console.error('Failed to get app version:', error);
-        return '9.0.11'; // fallback to current version
+        return '0.0.0'; // fallback to current version
     }
 }
 
@@ -46,9 +45,7 @@ export default function setMenu() {
             {
                 label: `About Giddh v${getAppVersion()}`,
                 click: async () => {
-                    console.log('About menu clicked'); // Debug log
                     try {
-                        console.log('Attempting to show dialog...');
                         const result = await dialog.showMessageBox({
                             type: 'info',
                             title: 'About Giddh',
@@ -56,7 +53,6 @@ export default function setMenu() {
                             detail: `Version: ${getAppVersion()}\nElectron: ${process.versions.electron}\n\nBuilt with ❤️ by Walkover Technologies`,
                             buttons: ['OK']
                         });
-                        console.log('Dialog result:', result);
                     } catch (error) {
                         console.error('Dialog failed:', error);
                     }

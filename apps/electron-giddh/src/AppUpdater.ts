@@ -72,18 +72,6 @@ export default class AppUpdaterV1 {
 
         autoUpdater.checkForUpdatesAndNotify();
     }
-
-    /**
-     * Manually install the downloaded update
-     * This can be called if user previously chose "Later" and now wants to install
-     */
-    public installUpdate(): void {
-        if (this.isUpdateDownloaded) {
-            autoUpdater.quitAndInstall();
-        } else {
-            console.warn('No update available to install');
-        }
-    }
 }
 
 export function checkForUpdates(menuItem, focusedWindow, event) {
