@@ -70,10 +70,10 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     ) {
         this.isProdMode = PRODUCTION_ENV;
         this.isElectron = isElectron;
-        
+
         // Bind the method for proper event listener cleanup
         this.boundHandleQueryParamsCompanySwitch = (event: any) => this.handleQueryParamsCompanySwitch(event.detail);
-        
+
         this.store.pipe(select(s => s.session), takeUntil(this.destroyed$)).subscribe(ss => {
             if (ss?.user && ss.user.session && ss.user.session.id) {
                 let a = pick(ss.user, ['isNewUser']);
@@ -298,15 +298,15 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
         this._generalService.IAmLoaded.next(true);
         this._cdr.detectChanges();
-        this.router.events.pipe(takeUntil(this.destroyed$)).subscribe((evt) => {
-            if ((evt instanceof NavigationStart) && this.newVersionAvailableForWebApp && !isElectron) {
+        this.router.events.pipe(takeUntil(this.destroyed$)).subscribe((event) => {
+            if ((event instanceof NavigationStart) && this.newVersionAvailableForWebApp && !isElectron) {
                 // need to save last state
-                const redirectState = this.getLastStateFromUrl(evt.url);
+                const redirectState = this.getLastStateFromUrl(event.url);
                 localStorage.setItem('lastState', redirectState);
                 window.location.reload();
                 return;
             }
-            if (!(evt instanceof NavigationEnd)) {
+            if (!(event instanceof NavigationEnd)) {
                 return;
             }
             window.scrollTo(0, 0);
@@ -414,7 +414,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
      */
     private handleQueryParamsCompanySwitch(detail: any): void {
         console.log('handleQueryParamsCompanySwitch called with:', detail);
-        
+
         if (!detail || !detail.companyUniqueName || !detail.company) {
             console.warn('Invalid detail provided to handleQueryParamsCompanySwitch:', detail);
             return;
@@ -426,12 +426,12 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         // Reset active company data and warehouse response (same as switchCompany)
         this.store.dispatch(this.companyActions.resetActiveCompanyData());
         this.store.dispatch(this.warehouseActions.resetWarehouseResponse());
-        
+
         // Update general service properties
         this._generalService.companyUniqueName = companyUniqueName;
         this._generalService.voucherApiVersion = company?.voucherVersion || 2;
         this.store.dispatch(this.commonActions.setBranchConsolidated(false));
-        
+
         // Update store with company and branch details
         this.store.dispatch(this.companyActions.setStateDetailsRequest({
             lastState: '',

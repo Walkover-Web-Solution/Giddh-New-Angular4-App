@@ -879,7 +879,7 @@ export class GeneralService {
      * @returns {Array<AllItems>}
      * @memberof GeneralService
      */
-    public getVisibleMenuItems(module: string, apiItems: Array<any>, itemList: Array<AllItems>, countryCode: string = ""): Array<AllItems> {
+    public getVisibleMenuItems(module: string, apiItems: Array<any>, itemList: Array<AllItems>, countryCode: string = "", voucherApiVersion?: number): Array<AllItems> {
         const visibleMenuItems = cloneDeep(itemList);
         const localData = localStorage.getItem('session');
         // New tab - initialize with localStorage data
@@ -2621,5 +2621,31 @@ export class GeneralService {
                 console.warn('Error marking forms as pristine:', error);
             }
         });
+    }
+
+    /**
+     * Gets the dynamic decimal format string based on company settings
+     *
+     * @param {number} decimalPlaces Number of decimal places from company settings
+     * @returns {string} Decimal format string for Angular DecimalPipe
+     * @memberof GeneralService
+     */
+    public getDecimalFormat(decimalPlaces: number): string {
+        return `1.${decimalPlaces}-${decimalPlaces}`;
+    }
+
+    /**
+     * Formats amount with proper decimal places
+     *
+     * @param {number} amount Amount to format
+     * @param {number} decimalPlaces Number of decimal places from company settings
+     * @returns {string} Formatted amount
+     * @memberof GeneralService
+     */
+    public formatAmount(amount: number, decimalPlaces: number): string {
+        if (amount == null || amount === undefined) {
+            return '0.' + '0'.repeat(decimalPlaces);
+        }
+        return amount.toFixed(decimalPlaces);
     }
 }
