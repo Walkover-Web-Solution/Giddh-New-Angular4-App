@@ -5,7 +5,6 @@ import { ReportType } from './multi-currency.const';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-    selector: 'multi-currency-report',
     templateUrl: './multi-currency-reports.component.html',
     styleUrls: ['./multi-currency-reports.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

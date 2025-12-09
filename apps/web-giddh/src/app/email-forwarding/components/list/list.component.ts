@@ -14,7 +14,6 @@ import { Router } from '@angular/router';
 import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
-    selector: 'email-forwarding-list',
     templateUrl: './list.component.html',
     styles: [``],
     providers: [EmailForwardingComponentStore]

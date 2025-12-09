@@ -5,7 +5,6 @@ import { ReplaySubject } from 'rxjs';
 import { ClipboardService } from 'ngx-clipboard';
 
 @Component({
-    selector: 'tally-integration',
     templateUrl: './tally.intergation.component.html',
     styleUrls: ['./tally.intergation.component.scss']
 })

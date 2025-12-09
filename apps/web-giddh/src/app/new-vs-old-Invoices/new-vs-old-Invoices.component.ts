@@ -15,7 +15,6 @@ import { ASIDE_PANE_CONFIG, GetBifurcationType, IOption } from '../app.constant'
 import { GeneralService } from '../services/general.service';
 
 @Component({
-    selector: 'new-vs-old-invoices',
     templateUrl: './new-vs-old-Invoices.component.html',
     styleUrls: [`./new-vs-old-Invoices.component.scss`],
 })

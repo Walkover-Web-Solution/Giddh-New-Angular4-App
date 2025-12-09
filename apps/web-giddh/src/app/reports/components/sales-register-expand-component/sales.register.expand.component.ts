@@ -20,7 +20,6 @@ import { ServiceConfig } from '../../../services/service.config';
 import { CompanyActions } from '../../../actions/company.actions';
 import { PageEvent } from '@angular/material/paginator';
 @Component({
-    selector: 'sales-register-expand',
     templateUrl: './sales.register.expand.component.html',
     styleUrls: ['./sales.register.expand.component.scss']
 })

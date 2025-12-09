@@ -18,7 +18,6 @@ import { PageEvent } from '@angular/material/paginator';
 import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
 
 @Component({
-    selector: 'columnar-report-component',
     templateUrl: './columnar.report.component.html',
     styleUrls: ['./columnar.report.component.scss']
 })

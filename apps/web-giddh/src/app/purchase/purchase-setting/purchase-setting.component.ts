@@ -19,7 +19,6 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 import { ASIDE_PANE_CONFIG } from '../../app.constant';
 
 @Component({
-    selector: 'purchase-setting',
     templateUrl: './purchase-setting.component.html',
     styleUrls: ['./purchase-setting.component.scss']
 })

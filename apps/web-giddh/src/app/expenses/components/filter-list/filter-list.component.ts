@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 import { ExpenseResults } from '../../../models/api-models/Expences';
 
 @Component({
-    selector: 'app-filter-list',
     templateUrl: './filter-list.component.html',
     styleUrls: ['./filter-list.component.scss'],
 })

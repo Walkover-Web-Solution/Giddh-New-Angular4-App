@@ -21,7 +21,6 @@ import { TransferDialogComponent } from '../transfer-dialog/transfer-dialog.comp
 import { PaymentMethodDialogComponent } from '../payment-method-dialog/payment-method-dialog.component';
 import { CompanyListDialogComponentStore } from '../company-list-dialog/utility/company-list-dialog.store';
 @Component({
-    selector: 'subscription-list',
     templateUrl: './subscription-list.component.html',
     styleUrls: ['./subscription-list.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

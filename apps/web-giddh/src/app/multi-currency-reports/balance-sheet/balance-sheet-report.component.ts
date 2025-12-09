@@ -18,7 +18,6 @@ import { MultiCurrencyReportsComponentStore } from '../multi-currency-reports.st
 import { prepareBalanceSheetData } from '../../store/tl-pl/tl-pl.reducer';
 
 @Component({
-    selector: 'balance-sheet-report',
     templateUrl: './balance-sheet-report.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [MultiCurrencyReportsComponentStore]

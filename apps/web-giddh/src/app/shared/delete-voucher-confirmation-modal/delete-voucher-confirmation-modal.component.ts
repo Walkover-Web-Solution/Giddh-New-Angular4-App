@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ILedgersInvoiceResult } from '../../models/api-models/Invoice';
 
 @Component({
-    selector: 'delete-voucher-confirmation-modal',
     templateUrl: './delete-voucher-confirmation-modal.component.html'
 })
 export class DeleteVoucherConfirmationModalComponent {

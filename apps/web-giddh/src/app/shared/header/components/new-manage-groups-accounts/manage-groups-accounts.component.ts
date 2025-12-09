@@ -13,7 +13,6 @@ import { PageLeaveUtilityService } from 'apps/web-giddh/src/app/services/page-le
 import { IOption } from 'apps/web-giddh/src/app/app.constant';
 
 @Component({
-    selector: 'app-manage-groups-accounts',
     templateUrl: './manage-groups-accounts.component.html',
     styleUrls: ['./manage-groups-accounts.component.scss']
 })

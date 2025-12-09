@@ -2,9 +2,6 @@ import { Component, Input } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
-    selector: 'layout-main',
-    standalone: false,
-    templateUrl: './layout.component.html',
     styleUrls: ['./layout.component.scss']
 })
 

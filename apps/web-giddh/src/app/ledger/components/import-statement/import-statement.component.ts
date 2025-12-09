@@ -18,7 +18,6 @@ import { ImportStepEnum, ImportStatementType, VoucherType, VoucherImportType } f
 import { FileTypeEnum } from '../../../shared/Enums/common.enum';
 
 @Component({
-    selector: 'import-statement',
     templateUrl: './import-statement.component.html',
     styleUrls: ['./import-statement.component.scss'],
     providers: [LedgerComponentStore],

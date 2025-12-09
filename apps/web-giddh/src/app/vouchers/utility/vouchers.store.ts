@@ -1,7 +1,8 @@
 import { PurchaseOrderService } from './../../services/purchase-order.service';
 import { AuthenticationService } from './../../services/authentication.service';
 import { Injectable } from "@angular/core";
-import { ComponentStore, tapResponse } from "@ngrx/component-store";
+import { ComponentStore } from "@ngrx/component-store";
+import { tap } from "rxjs/operators";
 import { select, Store } from "@ngrx/store";
 import { Observable, switchMap, catchError, EMPTY, of, mergeMap } from "rxjs";
 import { BaseResponse } from "../../models/api-models/BaseResponse";
@@ -244,7 +245,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         return data.pipe(
             switchMap(() => {
                 return this.settingsDiscountService.GetDiscounts().pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<IDiscountList[], any>) => {
                             return this.patchState({
                                 discountsList: res?.body ?? []
@@ -268,7 +269,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
             switchMap(() => {
                 this.patchState({ isLoading: true });
                 return this.voucherService.getInvoiceSettings().pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<InvoiceSetting, any>) => {
                             return this.patchState({
                                 isLoading: false,
@@ -294,7 +295,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
             switchMap((req) => {
                 this.patchState({ getLastVouchersInProgress: true });
                 return this.voucherService.getAllVouchers(req.model, req.type).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<LastVouchersResponse, any>) => {
                             if (res.status === "error" && res.message) {
                                 this.toaster.showSnackBar("error", res.message);
@@ -324,7 +325,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
             switchMap((req) => {
                 this.patchState({ getLastVouchersInProgress: true });
                 return this.voucherService.getAllProformaEstimate(req.model, req.type).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "error" && res.message) {
                                 this.toaster.showSnackBar("error", res.message);
@@ -353,7 +354,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         return data.pipe(
             switchMap((req) => {
                 return this.voucherService.getAllCreatedTemplates(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
                                 createdTemplates: res?.body ?? []
@@ -376,7 +377,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         return data.pipe(
             mergeMap((req) => {
                 return this.ledgerService.loadStockVariants(req.q).pipe(
-                    tapResponse(
+                    tap(
                         (res: Array<IVariant>) => {
                             return this.patchState({
                                 stockVariants: { results: res?.map(res => { return { label: res.name, value: res.uniqueName } }) ?? [], entryIndex: req.index, autoSelectVariant: req.autoSelectVariant, stockUniqueName: req.q }
@@ -400,7 +401,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
             switchMap((req) => {
                 this.patchState({ deleteAttachmentInProgress: true, deleteAttachmentIsSuccess: false });
                 return this.ledgerService.removeAttachment(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
                                 this.toaster.showSnackBar("success", res.body);
@@ -429,7 +430,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
             switchMap((req) => {
                 this.patchState({ exchangeRate: null, exchangeRateInProgress: true });
                 return this.ledgerService.GetCurrencyRateNewApi(req.fromCurrency, req.toCurrency, req.date).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
                                 exchangeRate: res?.body ?? 1,
@@ -454,7 +455,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         return data.pipe(
             switchMap((req) => {
                 return this.voucherService.getBriefAccounts(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
                                 briefAccounts: res?.body?.results?.map(res => { return { label: res.name, value: res.uniqueName, additional: { currency: res?.currency } } }) ?? []
@@ -477,7 +478,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         return data.pipe(
             switchMap((req) => {
                 return this.accountService.GetAccountDetailsV2(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
                                 accountDetails: res?.body ?? {}
@@ -500,7 +501,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         return data.pipe(
             switchMap((req) => {
                 return this.commonService.getCountryStates(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
                                 countryData: res?.body ?? {}
@@ -523,7 +524,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         return data.pipe(
             switchMap((req) => {
                 return this.commonService.getCountryStates(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
                                 accountCountryData: res?.body ?? {}
@@ -546,7 +547,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         return data.pipe(
             switchMap((req) => {
                 return this.voucherService.getVendorPurchaseOrders(req.request, req.payload).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             let vendorPurchaseOrders = [];
                             let linkedPoOrders = [];
@@ -594,7 +595,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         return data.pipe(
             switchMap((req) => {
                 return this.searchService.loadDetails(req.accountUniqueName, req.payload).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === "success") {
                                 return this.patchState({
@@ -624,7 +625,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         return data.pipe(
             switchMap((req) => {
                 return this.voucherService.getPurchaseOrder(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             let voucherDetails = res?.body ?? {};
                             voucherDetails.isCopyVoucher = false;
@@ -649,7 +650,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         return data.pipe(
             switchMap((req) => {
                 return this.voucherService.getEstimateProforma(req.payload, req.voucherType).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             let voucherDetails = res?.body ?? {};
                             voucherDetails.isCopyVoucher = false;
@@ -674,7 +675,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         return data.pipe(
             switchMap((req) => {
                 return this.voucherService.getVoucherDetails(req.accountUniqueName, req.payload).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             let voucherDetails = res?.body ?? {};
                             voucherDetails.isCopyVoucher = req.isCopyVoucher;
@@ -715,7 +716,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
             switchMap((req) => {
                 this.patchState({ sendEmailInProgress: true, sendEmailIsSuccess: null });
                 return this.voucherService.sendVoucherOnEmail(req.accountUniqueName, req.payload).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
                                 this.toaster.showSnackBar("success", res.body);
@@ -741,7 +742,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
             switchMap((req) => {
                 this.patchState({ sendEmailInProgress: true, sendEmailIsSuccess: null });
                 return this.voucherService.sendProformaEstimateOnEmail(req.request, req.voucherType).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
                                 this.toaster.showSnackBar("success", res.body);
@@ -767,7 +768,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
             switchMap((req) => {
                 this.patchState({ vouchersForAdjustment: null });
                 return this.voucherService.getVouchersList(req.request, req.date).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
                                 res.request = req.request;
@@ -792,7 +793,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         return data.pipe(
             switchMap((req) => {
                 return this.ledgerService.getInvoiceListsForCreditNote(req.request, req.date).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
                                 voucherListForCreditDebitNote: res ?? null
@@ -815,7 +816,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         return data.pipe(
             switchMap((req) => {
                 return this.voucherService.getVendorPurchaseOrders(req.request, req.payload).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
                                 pendingPurchaseOrders: res.body
@@ -839,7 +840,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
             mergeMap((req) => {
                 this.patchState({ getLastVouchersInProgress: true });
                 return this.voucherService.getPurchaseOrderList(req.request).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             res.body['voucherType'] = 'purchase-order';
                             return this.patchState({
@@ -865,7 +866,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         return data.pipe(
             switchMap((req) => {
                 return this.commonService.GetCountry(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
                                 countryList: res?.body ?? {}
@@ -888,7 +889,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         return data.pipe(
             switchMap((req) => {
                 return this.voucherService.getEntriesByEntryUniqueNames(req.accountUniqueName, req.payload).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
                                 ledgerEntries: res.body?.entries
@@ -911,7 +912,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         return data.pipe(
             switchMap((req) => {
                 return this.voucherService.getVoucherBalances(req.payload, req.requestType).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
                                 voucherBalances: res.body
@@ -934,7 +935,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         return data.pipe(
             switchMap((req) => {
                 return this.voucherService.exportVouchers(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === "success") {
                                 return this.patchState({
@@ -964,7 +965,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         return data.pipe(
             switchMap((req) => {
                 return this.voucherService.bulkUpdateInvoice(req.payload, req.actionType).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
                                 this.toaster.showSnackBar("success", res.body);
@@ -996,7 +997,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
             switchMap((req) => {
                 this.patchState({ bulkUpdateVoucherIsSuccess: false, bulkUpdateVoucherInProgress: true });
                 return this.voucherService.bulkUpdateInvoice(req.payload, req.actionType).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
                                 this.toaster.showSnackBar("success", res.body);
@@ -1034,7 +1035,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                     bulkExportVoucherResponse: null
                 });
                 return this.voucherService.bulkExport(req.getRequest, req.postRequest).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
                                 if (res.body.type !== "base64") {
@@ -1075,7 +1076,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                     actionVoucherIsSuccess: false
                 });
                 return this.voucherService.actionVoucher(req.voucherUniqueName, req.payload).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
                                 this.patchState({
@@ -1111,7 +1112,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                     actionVoucherIsSuccess: false
                 });
                 return this.voucherService.updateAction(req.request, req.voucherType).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
                                 this.patchState({
@@ -1144,7 +1145,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                     convertToInvoice: false
                 });
                 return this.voucherService.generateInvoice(req.request, req.voucherType).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
                                 this.patchState({
@@ -1177,7 +1178,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                     convertToProforma: false
                 });
                 return this.voucherService.generateProforma(req.request, req.voucherType).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
                                 this.patchState({
@@ -1210,7 +1211,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                     adjustVoucherIsSuccess: false
                 });
                 return this.voucherService.adjustAnInvoiceWithAdvanceReceipts(req.adjustments, req.voucherUniqueName).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
                                 this.patchState({
@@ -1243,7 +1244,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                     uploadImageBase64InProgress: true
                 });
                 return this.commonService.uploadImageBase64(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
                                 uploadImageBase64Response: res?.body,
@@ -1324,7 +1325,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
             switchMap((req) => {
                 this.patchState({ deleteVoucherIsSuccess: false });
                 return this.voucherService.deleteReceipt(req.accountUniqueName, req.model).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success" && typeof res.body === "string") {
                                 this.toaster.showSnackBar("success", res.body);
@@ -1353,7 +1354,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
             switchMap((req) => {
                 this.patchState({ deleteVoucherIsSuccess: false });
                 return this.voucherService.deleteEstimsteProformaVoucher(req.payload, req.voucherType).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success" && typeof res.body === "string") {
                                 this.toaster.showSnackBar("success", res.body);
@@ -1382,7 +1383,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
             switchMap((req) => {
                 this.patchState({ deleteVoucherIsSuccess: false });
                 return this.voucherService.deleteSinglePOVoucher(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success" && typeof res.body === "string") {
                                 this.toaster.showSnackBar("success", res.body);
@@ -1416,7 +1417,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                     sendEmailInProgress: true, sendEmailIsSuccess: null
                 });
                 return this.voucherService.sendEmail(req.request, req.model).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
                                 res.body && this.toaster.showSnackBar("success", res.body);
@@ -1451,7 +1452,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
             switchMap((req) => {
                 this.patchState({ bulkUpdateVoucherIsSuccess: false, bulkUpdateVoucherInProgress: true });
                 return this.voucherService.bulkUpdate(req.actionType, req.payload).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
                                 res.body && this.toaster.showSnackBar("success", res.body);
@@ -1490,7 +1491,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
             switchMap((req) => {
                 this.patchState({ actionVoucherInProgress: true, actionVoucherIsSuccess: false });
                 return this.voucherService.purchaseOrderStatusUpdate(req.accountUniqueName, req.payload).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
                                 return this.patchState({
@@ -1528,7 +1529,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                     this.patchState({ isVoucherDownloading: true, isVoucherDownloadError: false });
                 }
                 return this.voucherService.downloadPdfFile(req.model, req.type, req.fileType, req.voucherType).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
                                 if (req.isDownloadFromDialog) {
@@ -1597,7 +1598,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
             switchMap((req) => {
                 this.patchState({ isVoucherVersionsInProgress: true });
                 return this.voucherService.getVoucherVersions(req.getRequestObject, req.postRequestObject, req.voucherType).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
                                 return this.patchState({
@@ -1631,7 +1632,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
             switchMap((req) => {
                 this.patchState({ uploadFileInProgress: true });
                 return this.voucherService.uploadFile(req.postRequestObject).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
                                 return this.patchState({
@@ -1664,7 +1665,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
         return data.pipe(
             switchMap((req) => {
                 return this.voucherService.updateAttachmentInVoucher(req.postRequestObject).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
                                 return this.patchState({
@@ -1700,7 +1701,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
             switchMap((req) => {
                 this.patchState({ saveGmailAuthCodeIsSuccess: null });
                 return this.authenticationService.saveGmailAuthCode(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === "success") {
                                 return this.patchState({
@@ -1736,7 +1737,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
             switchMap((req) => {
                 this.patchState({ cancelEInvoiceInProgress: true });
                 return this.voucherService.cancelEInvoice(req.getRequestObject, req.postRequestObject).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
                                 typeof res.body === 'string' && this.toaster.showSnackBar("success", res.body);
@@ -1776,7 +1777,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
             switchMap((req) => {
                 this.patchState({ verifyEmailIsSuccess: null });
                 return this.purchaseOrderService.updateSettingsEmail(req.getRequestObject, req.postRequestObject).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
                                 typeof res.body === 'string' && this.toaster.showSnackBar("success", res.body);

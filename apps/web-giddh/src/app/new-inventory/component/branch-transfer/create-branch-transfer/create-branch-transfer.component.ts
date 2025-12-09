@@ -28,7 +28,6 @@ import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 
 @Component({
-    selector: 'app-create-branch-transfer',
     templateUrl: './create-branch-transfer.component.html',
     styleUrls: ['./create-branch-transfer.component.scss']
 })

@@ -30,7 +30,6 @@ import { cloneDeep, isEqual, orderBy } from '../../../lodash-optimized';
 import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
-    selector: 'invetory-group-stock-report',
     templateUrl: './group.stockreport.component.html',
     styleUrls: ['./group.stockreport.component.scss']
 })

@@ -9,7 +9,6 @@ import { GeneralService } from '../../services/general.service';
 
 
 @Component({
-    selector: 'payment-method-dialog',
     templateUrl: './payment-method-dialog.component.html',
     styleUrls: ['./payment-method-dialog.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

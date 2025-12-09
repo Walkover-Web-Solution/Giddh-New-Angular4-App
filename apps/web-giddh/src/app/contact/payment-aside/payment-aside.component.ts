@@ -20,7 +20,6 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { IOption } from '../../app.constant';
 
 @Component({
-    selector: 'payment-aside',
     templateUrl: './payment-aside.component.html',
     styleUrls: [`./payment-aside.component.scss`],
 })

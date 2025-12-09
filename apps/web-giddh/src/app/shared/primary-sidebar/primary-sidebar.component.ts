@@ -24,7 +24,6 @@ import { FlatTreeControl } from '@angular/cdk/tree';
 import { ASIDE_PANE_CONFIG } from '../../app.constant';
 
 @Component({
-    selector: 'primary-sidebar',
     templateUrl: './primary-sidebar.component.html',
     styleUrls: ['./primary-sidebar.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

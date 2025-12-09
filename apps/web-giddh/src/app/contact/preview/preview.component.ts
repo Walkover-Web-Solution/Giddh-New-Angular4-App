@@ -20,7 +20,6 @@ import { AccountRequestV2 } from "../../models/api-models/Account";
 import { cloneDeep } from "../../lodash-optimized";
 import { AccountingGroupEnum } from "../../shared/Enums/common.enum";
 @Component({
-    selector: "preview",
     templateUrl: "./preview.component.html",
     styleUrls: ["./preview.component.scss"],
     providers: [ContactComponentStore]

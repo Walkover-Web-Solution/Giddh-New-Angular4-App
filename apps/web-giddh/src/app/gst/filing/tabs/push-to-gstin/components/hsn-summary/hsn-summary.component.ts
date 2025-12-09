@@ -5,7 +5,6 @@ import { GstReport } from 'apps/web-giddh/src/app/gst/constants/gst.constant';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
 @Component({
-    // tslint:disable-next-line:component-selector
     selector: 'hsn-summary',
     templateUrl: './hsn-summary.component.html',
     styleUrls: ['hsn-summary.component.css'],

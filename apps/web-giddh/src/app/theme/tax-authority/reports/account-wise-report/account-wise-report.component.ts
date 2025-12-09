@@ -12,7 +12,6 @@ import { PageEvent } from '@angular/material/paginator';
 
 
 @Component({
-    selector: 'account-wise-report',
     templateUrl: './account-wise-report.component.html',
     styleUrls: ['./account-wise-report.component.scss'],
     providers: [TaxAuthorityComponentStore]

@@ -99,7 +99,6 @@ export interface DateRangeClicked {
 }
 
 @Component({
-    selector: 'ngx-daterangepicker-material',
     styleUrls: ['./ngx-daterangepicker.component.scss'],
     templateUrl: './ngx-daterangepicker.component.html',
     encapsulation: ViewEncapsulation.ShadowDom,

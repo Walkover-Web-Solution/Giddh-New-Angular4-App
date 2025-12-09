@@ -6,7 +6,6 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { ToasterService } from '../../services/toaster.service';
 
 @Component({
-    selector: 'app-email-send-dialog',
     templateUrl: './email-send-dialog.component.html',
     styleUrls: ['./email-send-dialog.component.scss'],
     providers: [VoucherComponentStore]

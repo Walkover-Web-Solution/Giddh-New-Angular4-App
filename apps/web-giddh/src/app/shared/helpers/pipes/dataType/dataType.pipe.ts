@@ -1,6 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-@Pipe({ name: 'dataType', pure: true })
-
+@Pipe({
 export class DataTypePipe implements PipeTransform {
   /**
    * Returns type of data 

@@ -14,7 +14,6 @@ import { ASIDE_PANE_CONFIG } from '../../app.constant';
 import { GeneralService } from '../../services/general.service';
 
 @Component({
-    selector: 'setting-discount',
     templateUrl: './discount.component.html',
     styleUrls: ['./discount.component.scss']
 })

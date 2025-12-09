@@ -31,7 +31,6 @@ import { PageEvent } from '@angular/material/paginator';
 import { EwayBillComponentStore } from '../utility/eWayBill.store';
 
 @Component({
-    // tslint:disable-next-line:component-selector
     selector: 'app-ewaybill-component',
     templateUrl: './eWayBill.component.html',
     styleUrls: [`./eWayBill.component.scss`],

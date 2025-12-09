@@ -9,9 +9,6 @@ import { giddhRoundOff } from "../../shared/helpers/helperFunctions";
 import { isEqual } from "../../lodash-optimized";
 
 @Component({
-    selector: "tax-dropdown",
-    standalone: false,
-    templateUrl: "./tax-dropdown.component.html",
     styleUrls: ["./tax-dropdown.component.scss"]
 })
 export class TaxDropdownComponent implements OnChanges {

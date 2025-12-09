@@ -8,7 +8,6 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
-    selector: 'app-eWayBill-credentials-modal',
     templateUrl: './eWayBillCredentials.component.html',
     styleUrls: [`./eWayBillCredentials.component.scss`]
 })

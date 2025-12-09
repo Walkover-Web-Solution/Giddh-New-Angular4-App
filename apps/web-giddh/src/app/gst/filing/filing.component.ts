@@ -15,7 +15,6 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 import { RestrictedModules } from '../../app.constant';
 
 @Component({
-    // tslint:disable-next-line:component-selector
     selector: 'filing',
     templateUrl: 'filing.component.html',
     styleUrls: ['filing.component.scss'],

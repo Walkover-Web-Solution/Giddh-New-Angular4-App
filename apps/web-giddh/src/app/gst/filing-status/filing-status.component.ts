@@ -11,7 +11,6 @@ import { FormControl } from "@angular/forms";
 import { PageEvent } from "@angular/material/paginator";
 
 @Component({
-    selector: 'filing-status',
     templateUrl: './filing-status.component.html',
     styleUrls: ['./filing-status.component.scss']
 })

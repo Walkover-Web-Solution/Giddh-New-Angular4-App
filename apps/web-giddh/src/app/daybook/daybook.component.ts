@@ -29,7 +29,6 @@ import { saveAs } from 'file-saver';
 import { PageLeaveUtilityService } from '../services/page-leave-utility.service';
 
 @Component({
-    selector: 'daybook',
     templateUrl: './daybook.component.html',
     styleUrls: [`./daybook.component.scss`]
 })

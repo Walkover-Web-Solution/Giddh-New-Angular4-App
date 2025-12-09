@@ -10,7 +10,6 @@ import { LedgerService } from "../../services/ledger.service";
 import { ToasterService } from "../../services/toaster.service";
 
 @Component({
-    selector: "sales-purchase-register-export",
     templateUrl: "./sales-purchase-register-export.component.html",
     styleUrls: ["./sales-purchase-register-export.component.scss"],
 })

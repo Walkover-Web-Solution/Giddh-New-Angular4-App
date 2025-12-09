@@ -9,7 +9,6 @@ import { GeneralService } from '../services/general.service';
 import { ServiceConfig } from '../services/service.config';
 
 @Component({
-    selector: 'verify-subscription-transfer-ownership',
     templateUrl: './verify-subscription-transfer-ownership.component.html',
     styleUrls: ['./verify-subscription-transfer-ownership.component.scss'],
     providers: [SubscriptionComponentStore]

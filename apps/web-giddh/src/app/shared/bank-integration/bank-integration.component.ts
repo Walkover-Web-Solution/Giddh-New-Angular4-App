@@ -21,7 +21,6 @@ import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-mod
 import { ServiceConfig } from "../../services/service.config";
 
 @Component({
-    selector: 'bank-integration',
     templateUrl: './bank-integration.component.html',
     styleUrls: ['./bank-integration.component.scss'],
     providers: [BankIntegrationComponentStore],

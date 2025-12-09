@@ -31,7 +31,6 @@ export interface GetActivityLogs {
 /** Hold information of activity logs */
 const ELEMENT_DATA: GetActivityLogs[] = [];
 @Component({
-    selector: 'activity-logs',
     templateUrl: './activity-logs.component.html',
     styleUrls: [`./activity-logs.component.scss`],
     changeDetection: ChangeDetectionStrategy.OnPush

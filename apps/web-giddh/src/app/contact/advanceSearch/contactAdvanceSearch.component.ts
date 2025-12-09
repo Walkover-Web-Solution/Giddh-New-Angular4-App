@@ -4,7 +4,6 @@ import { IOption } from '../../app.constant';
 import { ContactAdvanceSearchCommonModal } from '../../models/api-models/Contact';
 
 @Component({
-    selector: 'app-contact-advance-search-component',
     templateUrl: './contactAdvanceSearch.component.html',
     styleUrls: [`./contactAdvanceSearch.component.scss`]
 })

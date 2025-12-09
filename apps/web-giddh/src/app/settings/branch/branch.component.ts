@@ -25,7 +25,6 @@ import { FormControl } from '@angular/forms';
 import { ASIDE_PANE_CONFIG, BranchHierarchyType } from '../../app.constant';
 import { ServiceConfig } from '../../services/service.config';
 @Component({
-    selector: 'setting-branch',
     templateUrl: './branch.component.html',
     styleUrls: ['./branch.component.scss']
 })

@@ -24,7 +24,6 @@ import { OrganizationType } from "../../../models/user-login-state";
 import { ServiceConfig } from "../../../services/service.config";
 
 @Component({
-    selector: "inventory-transaction-list",
     templateUrl: "./inventory-transaction-list.component.html",
     styleUrls: ["./inventory-transaction-list.component.scss"],
     changeDetection: ChangeDetectionStrategy.OnPush

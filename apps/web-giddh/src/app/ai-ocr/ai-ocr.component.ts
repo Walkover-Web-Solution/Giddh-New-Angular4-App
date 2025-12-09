@@ -21,7 +21,6 @@ export enum OcrAction {
     Upload = "upload",
 }
 @Component({
-    selector: "ai-ocr",
     templateUrl: "./ai-ocr.component.html",
     styleUrls: ["./ai-ocr.component.scss"],
     changeDetection: ChangeDetectionStrategy.OnPush,

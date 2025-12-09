@@ -26,7 +26,6 @@ import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { AppState } from '../store';
 
 @Component({
-    selector: 'all-giddh-item',
     templateUrl: './all-item.component.html',
     styleUrls: ['./all-item.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

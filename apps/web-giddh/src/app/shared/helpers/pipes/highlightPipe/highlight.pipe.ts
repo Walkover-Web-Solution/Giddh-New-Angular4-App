@@ -1,8 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 // tslint:disable-next-line:pipe-naming
-@Pipe({ name: 'highlight' })
-export class HighlightPipe implements PipeTransform {
+@Pipe({
     public transform(text: string, search): string {
         if (search && text) {
             let pattern = search?.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');

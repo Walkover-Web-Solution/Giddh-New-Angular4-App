@@ -23,7 +23,6 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { GstComponentStore } from '../gst.store';
 
 @Component({
-    selector: 'file-gstr3',
     templateUrl: './gstR3.component.html',
     styleUrls: ['gstR3.component.scss'],
     providers: [GstComponentStore]

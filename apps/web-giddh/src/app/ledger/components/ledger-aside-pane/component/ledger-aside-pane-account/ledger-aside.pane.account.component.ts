@@ -8,7 +8,6 @@ import { AccountRequestV2 } from '../../../../../models/api-models/Account';
 import { IOption } from 'apps/web-giddh/src/app/app.constant';
 
 @Component({
-    selector: 'ledger-aside-pane-account',
     styleUrls: ['./ledger-aside.pane.account.component.scss'],
     templateUrl: './ledger-aside.pane.account.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush

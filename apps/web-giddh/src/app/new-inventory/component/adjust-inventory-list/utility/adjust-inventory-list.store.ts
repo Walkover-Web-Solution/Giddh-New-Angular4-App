@@ -1,6 +1,7 @@
 
 import { Injectable, OnDestroy } from "@angular/core";
-import { ComponentStore, tapResponse } from "@ngrx/component-store";
+import { ComponentStore } from "@ngrx/component-store";
+import { tap } from "rxjs/operators";
 import { Observable, switchMap, catchError, EMPTY } from "rxjs";
 import { Store } from "@ngrx/store";
 import { AppState } from "apps/web-giddh/src/app/store";
@@ -49,7 +50,7 @@ export class AdjustInventoryListComponentStore extends ComponentStore<AdjustInve
             switchMap((req) => {
                 this.patchState({ adjustInventoryListInProgress: true });
                 return this.inventoryService.getAdjustmentInventoryReport(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
                                 return this.patchState({
@@ -88,7 +89,7 @@ export class AdjustInventoryListComponentStore extends ComponentStore<AdjustInve
             switchMap((req) => {
                 this.patchState({ deleteAdjustInventoryInProgress: true, deleteAdjustInventoryIsSuccess: false });
                 return this.inventoryService.deleteInventoryAdjust(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
                                 this.toaster.showSnackBar("success", res?.body);

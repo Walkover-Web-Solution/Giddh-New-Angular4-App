@@ -7,7 +7,6 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ASIDE_PANE_CONFIG } from '../../../app.constant';
 
 @Component({
-    selector: 'inventory-inout-header',
     templateUrl: './inventory-header.component.html'
 })
 

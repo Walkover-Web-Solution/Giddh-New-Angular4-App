@@ -17,7 +17,6 @@ import { VoucherService } from '../../services/voucher.service';
 const NO_ADVANCE_RECEIPT_FOUND = 'There is no advanced receipt for adjustment.';
 
 @Component({
-    selector: 'voucher-adjustments',
     templateUrl: './adjust-payment-dialog.component.html',
     styleUrls: ['./adjust-payment-dialog.component.scss']
 })

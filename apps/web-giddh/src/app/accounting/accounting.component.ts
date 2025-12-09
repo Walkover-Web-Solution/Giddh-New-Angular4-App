@@ -78,7 +78,6 @@ export const PAGE_SHORTCUT_MAPPING = [
 export const PAGES_WITH_CHILD = ['Purchase', 'Sales', 'Credit note', 'Debit note'];
 
 @Component({
-    templateUrl: './accounting.component.html',
     styleUrls: ['./accounting.component.scss']
 })
 

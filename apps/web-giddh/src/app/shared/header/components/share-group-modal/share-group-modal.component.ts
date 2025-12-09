@@ -16,7 +16,6 @@ import { IOption, RestrictedModules } from 'apps/web-giddh/src/app/app.constant'
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
-    selector: 'share-group-modal',
     templateUrl: './share-group-modal.component.html',
     styleUrls: [`./share-group-modal.component.scss`]
 })

@@ -1,5 +1,6 @@
 import { Injectable, OnDestroy } from "@angular/core";
-import { ComponentStore, tapResponse } from "@ngrx/component-store";
+import { ComponentStore } from "@ngrx/component-store";
+import { tap } from "rxjs/operators";
 import { Observable, switchMap, catchError, EMPTY } from "rxjs";
 import { BaseResponse, CommonPaginatedResponse } from "../../../models/api-models/BaseResponse";
 import { ToasterService } from "../../../services/toaster.service";
@@ -43,7 +44,7 @@ export class SalesBifurcationDetailsStore extends ComponentStore<SalesBifurcatio
             switchMap(({ params }) => {
                 this.patchState({ salesBifurcationDetailsList: null, salesBifurcationDetailsListInProgress: true });
                 return this.salesBifurcationDetailsService.salesBifurcationDetails(params).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 this.patchState({

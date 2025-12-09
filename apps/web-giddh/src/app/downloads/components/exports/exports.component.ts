@@ -23,7 +23,6 @@ import { ServiceConfig } from '../../../services/service.config';
 /** Hold information of Download  */
 const ELEMENT_DATA: DownloadData[] = [];
 @Component({
-    selector: 'exports',
     templateUrl: './exports.component.html',
     styleUrls: ['./exports.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

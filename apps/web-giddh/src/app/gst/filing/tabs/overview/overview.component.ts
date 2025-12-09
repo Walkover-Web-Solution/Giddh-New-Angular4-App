@@ -5,7 +5,6 @@ import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
-    // tslint:disable-next-line:component-selector
     selector: 'filing-overview',
     templateUrl: './overview.component.html',
     styleUrls: ['overview.component.scss'],

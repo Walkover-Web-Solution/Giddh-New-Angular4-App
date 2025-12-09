@@ -21,7 +21,6 @@ import { OrganizationType } from '../../models/user-login-state';
 import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
-    selector: 'jobwork',
     templateUrl: './jobwork.component.html',
     styleUrls: ['./jobwork.component.scss']
 })

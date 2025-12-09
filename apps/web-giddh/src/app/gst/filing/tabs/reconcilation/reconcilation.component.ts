@@ -12,7 +12,6 @@ import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
 @Component({
-    selector: 'reconcile',
     templateUrl: './reconcilation.component.html',
     styleUrls: ['./reconcilation.component.scss']
 })

@@ -4,7 +4,6 @@ import { NilSummary } from '../../../../../../models/api-models/GstReconcile';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
 @Component({
-    // tslint:disable-next-line:component-selector
     selector: 'nil-summary',
     templateUrl: './nil-summary.component.html',
     styleUrls: ['nil-summary.component.css'],

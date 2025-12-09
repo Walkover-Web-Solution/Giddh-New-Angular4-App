@@ -6,7 +6,6 @@ import { AppState } from '../../store';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
-    selector: 'discount-control-component',
     templateUrl: './discount-control-component.html',
     styleUrls: ['./discount-control-component.scss']
 })

@@ -8,7 +8,6 @@ import { ReplaySubject } from 'rxjs';
 import { forIn } from 'apps/web-giddh/src/app/lodash-optimized';
 
 @Component({
-    selector: 'e-sign-modal-component',
     templateUrl: './e-Sign.component.html'
 })
 

@@ -5,7 +5,6 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import { IOption } from '../../../app.constant';
 
 @Component({
-    selector: 'bank-integration-popup',
     styleUrls: ['./bank-integration-popup.component.scss'],
     templateUrl: './bank-integration-popup.component.html'
 })

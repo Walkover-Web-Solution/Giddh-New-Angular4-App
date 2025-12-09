@@ -17,7 +17,6 @@ export interface TagInterface {
 }
 
 @Component({
-    selector: 'setting-tags',
     templateUrl: './tags.component.html',
     styleUrls: ['./tags.component.scss'],
 })

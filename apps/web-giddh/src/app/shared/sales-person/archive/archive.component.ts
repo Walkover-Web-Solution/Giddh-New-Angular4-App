@@ -42,7 +42,7 @@ export class ArchiveSalesPersonComponent implements OnInit, OnDestroy {
 
     /**
      * Lifecycle hook runs on component initialization
-     * 
+     *
      * @memberof ArchiveSalesPersonComponent
      */
     public ngOnInit(): void {
@@ -57,7 +57,7 @@ export class ArchiveSalesPersonComponent implements OnInit, OnDestroy {
 
     /**
      * Submit form
-     * 
+     *
      * @memberof ArchiveSalesPersonComponent
      */
     public submit(): void {
@@ -74,7 +74,7 @@ export class ArchiveSalesPersonComponent implements OnInit, OnDestroy {
 
     /**
      * Handle clear
-     * 
+     *
      * @memberof ArchiveSalesPersonComponent
      */
     public handleClear(): void {

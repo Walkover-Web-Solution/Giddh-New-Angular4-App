@@ -19,7 +19,6 @@ import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../app.cons
 import { cloneDeep } from '../../lodash-optimized';
 import { OrganizationType } from '../../models/user-login-state';
 @Component({
-    selector: 'project-wise-accounting',
     styleUrls: ['./project-wise-accounting.component.scss'],
     templateUrl: './project-wise-accounting.component.html',
     providers: [ProjectWiseAccountingComponentStore]

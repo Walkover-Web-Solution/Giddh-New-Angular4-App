@@ -1,5 +1,6 @@
 import { Injectable, OnDestroy } from "@angular/core";
-import { ComponentStore, tapResponse } from "@ngrx/component-store";
+import { ComponentStore } from "@ngrx/component-store";
+import { tap } from "rxjs/operators";
 import { Observable, switchMap, catchError, EMPTY, mergeMap } from "rxjs";
 import { Store } from "@ngrx/store";
 import { ToasterService } from "../services/toaster.service";
@@ -89,7 +90,7 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
             switchMap((req) => {
                 this.patchState({ isSavingProject: true, saveProjectSuccess: null });
                 return this.projectAccountingService.createNewProject(req.request, req.payload).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 this.patchState({ isSavingProject: false, saveProjectSuccess: { body: res.body, isCreateFlow: req.request.isCreateFlow } });
@@ -117,7 +118,7 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
             switchMap((req) => {
                 this.patchState({ isFetchingProjects: true, projectsList: null });
                 return this.projectAccountingService.getAllProjects(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 this.patchState({ isFetchingProjects: false, projectsList: res.body });
@@ -145,7 +146,7 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
             switchMap((req) => {
                 this.patchState({ isFetchingProjects: true, projectDetails: null });
                 return this.projectAccountingService.getProjectById(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 this.patchState({ isFetchingProjects: false, projectDetails: res.body });
@@ -173,7 +174,7 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
             switchMap((req) => {
                 this.patchState({ removeProjectSuccess: null });
                 return this.projectAccountingService.removeProject(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 this.toasterService.showSnackBar('success', 'Project delete successfully');
@@ -202,7 +203,7 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
             mergeMap((req) => {
                 this.patchState({ projectProfitDetails: null });
                 return this.projectAccountingService.getProjectProfit(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 this.patchState({ projectProfitDetails: { profitAndLoss: res.body, uniqueName: req.projectUniqueName } });
@@ -231,7 +232,7 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
             switchMap((req) => {
                 this.patchState({ isEntryProgress: true, entryCreateSuccess: null });
                 return this.projectAccountingService.createEntry(req.request, req.payload).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 this.patchState({ isEntryProgress: false, entryCreateSuccess: res.body });
@@ -260,7 +261,7 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
             switchMap((req) => {
                 this.patchState({ isEntryProgress: true, entryDeleteSuccess: null });
                 return this.projectAccountingService.removeEntry(req.request, req.payload).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 this.toasterService.showSnackBar('success', 'Entry delete successfully');
@@ -289,7 +290,7 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
             switchMap((req) => {
                 this.patchState({ isEntryProgress: true, entryUpdateSuccess: null });
                 return this.projectAccountingService.updateEntry(req.request, req.payload).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 this.toasterService.showSnackBar('success', 'Entry update successfully');
@@ -318,7 +319,7 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
             switchMap((req) => {
                 this.patchState({ entrySearch: null });
                 return this.projectAccountingService.searchEntry(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 this.patchState({ entrySearch: { body: res.body, accountUniqueName: req.accountUniqueName } });
@@ -346,7 +347,7 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
             switchMap((req) => {
                 this.patchState({ accountSearch: null });
                 return this.searchService.searchAccountV3(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 this.patchState({ accountSearch: res.body });
@@ -374,7 +375,7 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
             switchMap((req) => {
                 this.patchState({ isFetchingProjects: true, entryList: null });
                 return this.projectAccountingService.getAllEntryList(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 this.patchState({ isFetchingProjects: false, entryList: res.body });
@@ -402,7 +403,7 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
             switchMap((req) => {
                 this.patchState({ isFetchingProfitAndLoss: true, profitAndLossData: null });
                 return this.projectAccountingService.getProjectProfitAndLoss(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 this.patchState({ isFetchingProfitAndLoss: false, profitAndLossData: res.body });
@@ -430,7 +431,7 @@ export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectA
             switchMap((req) => {
                 this.patchState({ totalRevenueAndExpense: 0 });
                 return this.projectAccountingService.getTotalRevenueAndExpense(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 this.patchState({ totalRevenueAndExpense: res.body });

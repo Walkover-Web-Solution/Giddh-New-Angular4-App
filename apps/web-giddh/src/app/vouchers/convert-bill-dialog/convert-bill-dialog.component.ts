@@ -3,8 +3,6 @@ import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
-    standalone: false,
-    selector: 'app-convert-bill-dialog',
     templateUrl: './convert-bill-dialog.component.html',
     styleUrls: ['./convert-bill-dialog.component.scss']
 })

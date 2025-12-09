@@ -113,8 +113,6 @@ import { Country } from "../../shared/mobile-number-input/countries-data";
 
 @Component({
     selector: "create",
-    standalone: false,
-    templateUrl: "./create.component.html",
     styleUrls: ["./create.component.scss"],
     providers: [VoucherComponentStore, SalesPersonComponentStore, AiOcrStore]
 })

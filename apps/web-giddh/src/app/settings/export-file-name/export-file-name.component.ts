@@ -16,7 +16,6 @@ interface ExportSettingType {
 }
 
 @Component({
-    selector: 'export-file-name',
     templateUrl: './export-file-name.component.html',
     styleUrls: ['./export-file-name.component.scss']
 })

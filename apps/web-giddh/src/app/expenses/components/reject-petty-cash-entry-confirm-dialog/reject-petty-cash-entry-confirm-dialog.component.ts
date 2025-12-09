@@ -7,7 +7,6 @@ import { ExpenseService } from "../../../services/expences.service";
 import { ToasterService } from "../../../services/toaster.service";
 
 @Component({
-    selector: "petty-cash-reject-confirm-dialog",
     templateUrl: "./reject-petty-cash-entry-confirm-dialog.component.html"
 })
 export class RejectPettyCashEntryConfirmDialogComponent implements OnInit, OnDestroy {

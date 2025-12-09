@@ -5,9 +5,6 @@ import { AppState } from "../../../../store";
 import { giddhRoundOff } from "../../../../shared/helpers/helperFunctions";
 
 @Directive({
-    selector: '[entryAmount]',
-    standalone: false
-})
 export class EntryAmountDirective implements OnChanges, OnDestroy {
     @Input() public calculateAmount: boolean = true;
     /** Default rate */

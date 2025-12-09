@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
-import { ComponentStore, tapResponse } from "@ngrx/component-store";
+import { ComponentStore } from "@ngrx/component-store";
+import { tap } from "rxjs/operators";
 import { Observable, switchMap, catchError, EMPTY, of, mergeMap } from "rxjs";
 import { ToasterService } from "../../services/toaster.service";
 import { VatService } from "../../services/vat.service";
@@ -59,7 +60,7 @@ export class VatReportComponentStore extends ComponentStore<VatReportState> {
             switchMap((req) => {
                 this.patchState({ liabilityPaymentList: null, liabilityPaymentListInProgress: true });
                 return this.vatService.getPaymentLiabilityList(req.payload, req.searchForm, req.isPaymentMode).pipe(
-                    tapResponse(
+                    tap(
                         (res: any) => {
                             if (res?.status === "success") {
                                 return this.patchState({ liabilityPaymentList: res, liabilityPaymentListInProgress: false });
@@ -89,7 +90,7 @@ export class VatReportComponentStore extends ComponentStore<VatReportState> {
             switchMap(() => {
                 this.patchState({ taxNumber: null, getTaxNumberInProgress: true });
                 return this.gstReconcileService.getTaxDetails().pipe(
-                    tapResponse(
+                    tap(
                         (res: any) => {
                             if (res?.status === "success") {
                                 return this.patchState({ taxNumber: res, getTaxNumberInProgress: false });
@@ -119,7 +120,7 @@ export class VatReportComponentStore extends ComponentStore<VatReportState> {
             switchMap((req) => {
                 this.patchState({ connectToHMRCUrl: null, getHMRCInProgress: true });
                 return this.vatService.getHMRCAuthorization(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: any) => {
                             if (res?.status === "success") {
                                 return this.patchState({ connectToHMRCUrl: res, getHMRCInProgress: false });
@@ -149,7 +150,7 @@ export class VatReportComponentStore extends ComponentStore<VatReportState> {
             switchMap((req) => {
                 this.patchState({ obligationList: null, getObligationListInProgress: true });
                 return this.vatService.getVatObligations(req.companyUniqueName, req.payload).pipe(
-                    tapResponse(
+                    tap(
                         (res: any) => {
                             if (res?.status === "success") {
                                 return this.patchState({ obligationList: res, getObligationListInProgress: false });

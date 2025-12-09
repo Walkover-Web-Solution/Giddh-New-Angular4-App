@@ -28,7 +28,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 
 @Component({
-    selector: 'balance-sheet-grid',
     templateUrl: './balance-sheet-grid.component.html',
     styleUrls: [`./balance-sheet-grid.component.scss`],
     changeDetection: ChangeDetectionStrategy.OnPush,

@@ -11,7 +11,6 @@ import { PageLeaveUtilityService } from "apps/web-giddh/src/app/services/page-le
 import { IOption } from "apps/web-giddh/src/app/app.constant";
 
 @Component({
-    selector: 'icici-payor-account-create-edit',
     templateUrl: './payor-create-edit.component.html',
     styleUrls: ['./payor-create-edit.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

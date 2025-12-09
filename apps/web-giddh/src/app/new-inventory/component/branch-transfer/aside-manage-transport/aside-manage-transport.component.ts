@@ -17,7 +17,6 @@ export interface transporterDetails {
 }
 const ELEMENT_DATA: transporterDetails[] = [];
 @Component({
-    selector: 'aside-manage-transport',
     templateUrl: './aside-manage-transport.component.html',
     styleUrls: ['./aside-manage-transport.component.scss']
 })

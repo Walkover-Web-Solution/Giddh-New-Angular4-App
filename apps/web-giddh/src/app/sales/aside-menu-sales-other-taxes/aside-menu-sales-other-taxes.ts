@@ -5,7 +5,6 @@ import { cloneDeep } from '../../lodash-optimized';
 import { IOption } from '../../app.constant';
 
 @Component({
-    selector: 'app-aside-menu-sales-other-taxes',
     templateUrl: './aside-menu-sales-other-taxes.html',
     styleUrls: [`./aside-menu-sales-other-taxes.scss`],
     changeDetection: ChangeDetectionStrategy.OnPush

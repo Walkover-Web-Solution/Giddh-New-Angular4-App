@@ -2,7 +2,6 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ConfirmationModalConfiguration } from './confirmation-modal.interface';
 
 @Component({
-    selector: 'confirmation-modal',
     styleUrls: ['./confirmation-modal.component.scss'],
     templateUrl: './confirmation-modal.component.html'
 })

@@ -5,7 +5,6 @@ import { LedgerDiscountClass } from '../../models/api-models/SettingsDiscount';
 import { SettingsDiscountService } from '../../services/settings.discount.service';
 
 @Component({
-    selector: 'discount-list',
     templateUrl: 'discountList.component.html',
     styleUrls: ['./discountList.component.scss']
 })

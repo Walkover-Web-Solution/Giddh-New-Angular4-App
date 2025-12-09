@@ -19,7 +19,6 @@ enum InvoicesEnum {
     Invoices = 'invoices'
 };
 @Component({
-    selector: 'download-or-send-mail-invoice',
     templateUrl: './download-or-send-mail.component.html',
     styleUrls: ['./download-or-send-mail.component.scss']
 })

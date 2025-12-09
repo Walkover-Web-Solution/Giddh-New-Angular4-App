@@ -1,5 +1,6 @@
 import { Injectable, OnDestroy } from "@angular/core";
-import { ComponentStore, tapResponse } from "@ngrx/component-store";
+import { ComponentStore } from "@ngrx/component-store";
+import { tap } from "rxjs/operators";
 import { Observable, switchMap, catchError, EMPTY } from "rxjs";
 import { BaseResponse, CommonPaginatedResponse } from "../../../models/api-models/BaseResponse";
 import { ToasterService } from "../../../services/toaster.service";
@@ -69,7 +70,7 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
             switchMap(({ isDropdown, params }) => {
                 this.patchState({ salesPersonListInProgress: true });
                 return this.salesPersonService.salesPerson(HttpMethod.GET, isDropdown, null, params).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 let response = res?.body;
@@ -117,7 +118,7 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
             switchMap((req) => {
                 this.patchState({ salesPersonSaveInProgress: true, createUpdateSalesPersonSuccess: false });
                 return this.salesPersonService.salesPerson(req.uniqueName ? HttpMethod.PUT : HttpMethod.POST, req.model, req.uniqueName).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 if (req.uniqueName) {
@@ -163,7 +164,7 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
             switchMap((uniqueName) => {
                 this.patchState({ deleteSalesPersonSuccess: false });
                 return this.salesPersonService.salesPerson(HttpMethod.DELETE, {}, uniqueName).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 typeof res.body === "string" && this.toasterService.showSnackBar('success', res.body);
@@ -212,7 +213,7 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
             switchMap((model) => {
                 this.patchState({ archiveSalesPersonSuccess: false });
                 return this.salesPersonService.salesPersonArchive(model.model, model.uniqueName).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 typeof res.body === "string" && this.toasterService.showSnackBar('success', res.body);

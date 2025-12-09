@@ -17,7 +17,6 @@ import { ServiceConfig } from '../../../services/service.config';
 import { GeneralService } from '../../../services/general.service';
 
 @Component({
-    selector: 'app-rejected-list',
     templateUrl: './rejected-list.component.html',
     styleUrls: ['./rejected-list.component.scss'],
 })

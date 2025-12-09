@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, Output, ChangeDetectionStrategy } from '@angular/core';
 import { GST_UTILITY_DOWNLOAD_LINK } from '../../../app.constant';
 @Component({
-    selector: 'push-to-portal',
     templateUrl: './push-to-portal.component.html',
     styleUrls: ['./push-to-portal.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

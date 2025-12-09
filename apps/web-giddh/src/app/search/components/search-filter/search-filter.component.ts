@@ -5,7 +5,6 @@ import { digitsOnly } from '../../../shared/helpers/customValidationHelper';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
 
 @Component({
-    selector: 'search-filter',
     templateUrl: './search-filter.component.html',
     styleUrls: ['./search-filter.component.scss']
 })

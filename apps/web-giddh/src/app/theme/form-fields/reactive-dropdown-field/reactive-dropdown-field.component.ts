@@ -6,9 +6,6 @@ import { IOption } from "../../../app.constant";
 import { isEqual } from "../../../lodash-optimized";
 
 @Component({
-    selector: "reactive-dropdown-field",
-    standalone: false,
-    templateUrl: "./reactive-dropdown-field.component.html",
     styleUrls: ["./reactive-dropdown-field.component.scss"],
     providers: [
         {

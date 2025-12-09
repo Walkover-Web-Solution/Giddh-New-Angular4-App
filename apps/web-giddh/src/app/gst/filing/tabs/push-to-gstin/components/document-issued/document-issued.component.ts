@@ -4,7 +4,6 @@ import { DocIssueSummary, DocIssueSummaryDetailsDocs } from '../../../../../../m
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
 @Component({
-    // tslint:disable-next-line:component-selector
     selector: 'document-issued',
     templateUrl: './document-issued.component.html',
     styleUrls: ['./document-issued.component.css'],

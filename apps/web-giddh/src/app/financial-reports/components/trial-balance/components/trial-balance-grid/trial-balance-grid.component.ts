@@ -28,7 +28,6 @@ import { GeneralService } from 'apps/web-giddh/src/app/services/general.service'
 import { ASIDE_PANE_CONFIG } from 'apps/web-giddh/src/app/app.constant';
 
 @Component({
-    selector: 'trial-balance-grid',
     templateUrl: './trial-balance-grid.component.html',
     styleUrls: [`./trial-balance-grid.component.scss`],
     changeDetection: ChangeDetectionStrategy.OnPush,

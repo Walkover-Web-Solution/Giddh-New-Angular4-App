@@ -17,7 +17,6 @@ import { GiddhNumberFormatPipe } from '../../../shared/helpers/pipes/number-form
 Chart.register(...registerables);
 
 @Component({
-    selector: 'revenue-chart',
     templateUrl: 'revenue-chart.component.html',
     styleUrls: ['revenue-chart.component.scss', '../../home.component.scss'],
     providers: [TitleCasePipe],

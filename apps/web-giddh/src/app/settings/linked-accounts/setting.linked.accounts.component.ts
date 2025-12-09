@@ -20,7 +20,6 @@ import { Router } from '@angular/router';
 import { IOption } from '../../app.constant';
 
 @Component({
-    selector: 'setting-linked-accounts',
     templateUrl: './setting.linked.accounts.component.html',
     styleUrls: ['./setting.linked.accounts.component.scss']
 })

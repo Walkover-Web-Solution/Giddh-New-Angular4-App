@@ -26,7 +26,6 @@ enum ExportTypeEnum {
 };
 
 @Component({
-    selector: 'app-bulk-export',
     templateUrl: './bulk-export.component.html',
     styleUrls: ['./bulk-export.component.scss'],
     providers: [VoucherComponentStore]

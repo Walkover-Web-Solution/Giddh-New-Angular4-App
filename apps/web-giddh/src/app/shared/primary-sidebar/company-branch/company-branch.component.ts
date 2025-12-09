@@ -19,7 +19,6 @@ import { CommonActions } from '../../../actions/common.actions';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 
 @Component({
-    selector: 'company-branch',
     templateUrl: './company-branch.component.html',
     styleUrls: ['./company-branch.component.scss'],
 })

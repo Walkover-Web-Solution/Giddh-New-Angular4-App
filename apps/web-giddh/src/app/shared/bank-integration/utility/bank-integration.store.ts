@@ -1,6 +1,7 @@
 
 import { Injectable, OnDestroy } from "@angular/core";
-import { ComponentStore, tapResponse } from "@ngrx/component-store";
+import { ComponentStore } from "@ngrx/component-store";
+import { tap } from "rxjs/operators";
 import { Observable, switchMap, catchError, EMPTY } from "rxjs";
 import { BaseResponse } from "../../../models/api-models/BaseResponse";
 import { ToasterService } from "../../../services/toaster.service";
@@ -44,7 +45,7 @@ export class BankIntegrationComponentStore extends ComponentStore<BankIntegratio
             switchMap((req) => {
                 this.patchState({ institutionsListInProgress: true });
                 return this.settingsIntegrationService.getAllInstitutions(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
                                 return this.patchState({
@@ -83,7 +84,7 @@ export class BankIntegrationComponentStore extends ComponentStore<BankIntegratio
             switchMap((req) => {
                 this.patchState({ requistionListInProgress: true });
                 return this.settingsIntegrationService.getRequisition(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
                                 return this.patchState({
@@ -121,7 +122,7 @@ export class BankIntegrationComponentStore extends ComponentStore<BankIntegratio
         return data.pipe(
             switchMap((req) => {
                 return this.settingsIntegrationService.createEndUserAgreementByInstitutionId(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
@@ -159,7 +160,7 @@ export class BankIntegrationComponentStore extends ComponentStore<BankIntegratio
             switchMap((req) => {
                 this.patchState({ deleteAccountSuccess: false });
                 return this.settingsIntegrationService.deleteEndUserAgreementDetails(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({

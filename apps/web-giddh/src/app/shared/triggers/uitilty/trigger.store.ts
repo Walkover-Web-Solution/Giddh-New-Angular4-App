@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
-import { ComponentStore, tapResponse } from "@ngrx/component-store";
+import { ComponentStore } from "@ngrx/component-store";
+import { tap } from "rxjs/operators";
 import { ToasterService } from "../../../services/toaster.service";
 import { catchError, EMPTY, Observable, switchMap } from "rxjs";
 import { InvoiceService } from "../../../services/invoice.service";
@@ -51,7 +52,7 @@ export class TriggerComponentStore extends ComponentStore<TriggerState> {
             switchMap((model) => {
                 this.patchState({ createUpdateTriggerIsSuccess: false });
                 return this.invoiceService.createTrigger(model).pipe(
-                    tapResponse(
+                    tap(
                         (res: any) => {
                             if (res?.status === "success") {
                                 res?.body && this.toaster.showSnackBar("success", res.body);
@@ -83,7 +84,7 @@ export class TriggerComponentStore extends ComponentStore<TriggerState> {
             switchMap((req) => {
                 this.patchState({ createUpdateTriggerIsSuccess: false });
                 return this.invoiceService.updateTrigger(req.model, req.uniqueName).pipe(
-                    tapResponse(
+                    tap(
                         (res: any) => {
                             if (res?.status === "success") {
                                 res?.body && this.toaster.showSnackBar("success", res.body);
@@ -114,7 +115,7 @@ export class TriggerComponentStore extends ComponentStore<TriggerState> {
             switchMap((request) => {
                 this.patchState({ triggerList: null, isLoading: true });
                 return this.invoiceService.getTriggerList(request).pipe(
-                    tapResponse(
+                    tap(
                         (res: any) => {
                             if (res?.status === "success" && res?.body) {
                                 return this.patchState({ triggerList: res.body, isLoading: false });
@@ -144,7 +145,7 @@ export class TriggerComponentStore extends ComponentStore<TriggerState> {
             switchMap((request) => {
                 this.patchState({ triggerAdvanceList: null, isLoading: true });
                 return this.campaignIntegrationService.getTriggersList(request).pipe(
-                    tapResponse(
+                    tap(
                         (res: any) => {
                             if (res?.status === "success" && res?.body) {
                                 return this.patchState({ triggerAdvanceList: res.body, isLoading: false });
@@ -176,7 +177,7 @@ export class TriggerComponentStore extends ComponentStore<TriggerState> {
             switchMap((uniqueName) => {
                 this.patchState({ triggerDetails: null, isTriggerDetailsLoading: true });
                 return this.invoiceService.getTriggerDetails(uniqueName).pipe(
-                    tapResponse(
+                    tap(
                         (res: any) => {
                             if (res?.status === "success" && res?.body) {
                                 return this.patchState({ triggerDetails: res.body, isTriggerDetailsLoading: false });
@@ -205,7 +206,7 @@ export class TriggerComponentStore extends ComponentStore<TriggerState> {
         return data.pipe(
             switchMap((uniqueName) => {
                 return this.invoiceService.deleteTrigger(uniqueName).pipe(
-                    tapResponse(
+                    tap(
                         (res: any) => {
                             if (res?.status === "success" && res?.body) {
                                 this.getTriggerList({page: 1, count: this.get().triggerList?.count});

@@ -18,7 +18,6 @@ interface SequenceConfig {
 }
 
 @Component({
-    // tslint:disable-next-line:component-selector
     selector: 'overview-summary',
     templateUrl: './summary.component.html',
     styleUrls: ['summary.component.scss']

@@ -2,7 +2,6 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { cloneDeep, each, isUndefined } from '../../../lodash-optimized';
 
 @Pipe({
-    // tslint:disable-next-line:pipe-naming
     name: 'grpsrch',
     pure: true
 })

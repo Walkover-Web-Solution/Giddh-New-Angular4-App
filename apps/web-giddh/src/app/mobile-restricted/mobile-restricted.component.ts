@@ -8,7 +8,6 @@ import { ServiceConfig } from "../services/service.config";
 import { BREAKPOINT_SCREEN_SIZE } from "../app.constant";
 
 @Component({
-    selector: 'mobile-restricted',
     templateUrl: './mobile-restricted.component.html',
     styleUrls: ['./mobile-restricted.component.scss']
 })

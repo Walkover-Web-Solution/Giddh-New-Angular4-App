@@ -14,7 +14,6 @@ import { ProjectWiseAccountingComponentStore } from '../../../project-wise-accou
 import { TlPlService } from '../../../services/tl-pl.service';
 
 @Component({
-    selector: 'profit-loss',
     templateUrl: './profit-loss.component.html',
     providers: [ProjectWiseAccountingComponentStore]
 })

@@ -32,7 +32,6 @@ import { ServiceConfig } from "../services/service.config";
 declare var initSendOTP: any;
 
 @Component({
-    selector: "signup",
     templateUrl: "./signup.component.html",
     styleUrls: ["./signup.component.scss"]
 })

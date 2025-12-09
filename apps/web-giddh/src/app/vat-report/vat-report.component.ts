@@ -12,7 +12,6 @@ import { saveAs } from "file-saver";
 import { SettingsFinancialYearService } from '../services/settings.financial-year.service';
 import { RestrictedModules } from '../app.constant';
 @Component({
-    selector: 'app-vat-report',
     styleUrls: ['./vat-report.component.scss'],
     templateUrl: './vat-report.component.html'
 })

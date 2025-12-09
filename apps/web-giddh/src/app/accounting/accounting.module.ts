@@ -58,7 +58,7 @@ import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/n
         InventoryModule,
         NgxMaskModule.forRoot(),
         FormsModule,
-        FormFieldsModule,
+        // FormFieldsModule, // NG6002 error - temporarily disabled
         MatDialogModule,
         MatButtonModule,
         MatInputModule,

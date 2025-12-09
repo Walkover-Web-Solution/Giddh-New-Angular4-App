@@ -100,7 +100,7 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
       const compareValue = value.compareValue?.[0] ?? value.compareValue;
       if (compareValue > 0) {
         this.setCompareWithField(compareValue, value.compareType?.[0]);
-        // Execute if value set by list option 
+        // Execute if value set by list option
         if (value.compareValue?.[0]) {
           this.showCustomInput = false;
         }
@@ -138,7 +138,7 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
     if (('startDate' in changes) || ('endDate' in changes) || ('universalDateRangeLabel' in changes)) {
       const startDateObj = dayjs(this.startDate, GIDDH_DATE_FORMAT);
       const endDateObj = dayjs(this.endDate, GIDDH_DATE_FORMAT);
-      if (startDateObj.isValid() && endDateObj.isValid()) { 
+      if (startDateObj.isValid() && endDateObj.isValid()) {
         this.setCompareValues();
       }
     }
@@ -256,7 +256,7 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
         return false;
     }
   }
-  
+
   /**
    * This method will be use for checking if the date selection range is valid
    *
@@ -290,7 +290,7 @@ export class CompareWithDateRangePickerComponent implements OnInit, OnChanges, O
 
     const isSameQuarter = startDate.isSame(startOfQuarter, 'day') && endDate.isSame(endOfQuarter, 'day') && startDate.isSame(endDate, 'quarter') && startDate.isSame(endDate, 'year');
     const isYearSelected = startDate.isSame(startOfMonth, 'day') && endDate.isSame(endOfMonth, 'day') && (dayCount === 365 || dayCount === 366);
-    
+
     return {
       isMonthSelected: isSameMonth || (!isSameMonth && !isYearSelected && !isSameQuarter && dayCount <= 31),
       isQuarterSelected: isSameQuarter || (!isSameQuarter && !isYearSelected && dayCount <= 90),

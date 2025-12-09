@@ -22,7 +22,6 @@ import { ActivatedRoute } from "@angular/router";
 import { VoucherTypeEnum } from "../../models/api-models/Sales";
 
 @Component({
-    selector: "ai-ocr-list",
     templateUrl: "./ai-ocr-list.component.html",
     styleUrls: ["./ai-ocr-list.component.scss"],
     changeDetection: ChangeDetectionStrategy.OnPush,

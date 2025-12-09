@@ -5,7 +5,6 @@ import { takeUntil } from "rxjs/operators";
 import { AppState } from "../../store";
 
 @Directive({
-    selector: '[validateSectionPermission]'
 })
 
 export class ValidateSectionPermissionDirective implements OnChanges, OnDestroy {

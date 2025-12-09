@@ -12,7 +12,6 @@ import { forEach, omit } from '../../../lodash-optimized';
 import { IOption } from '../../../app.constant';
 
 @Component({
-    selector: 'permission-model',
     templateUrl: './permission.model.component.html',
     styleUrls: ['./permission.model.component.scss']
 })

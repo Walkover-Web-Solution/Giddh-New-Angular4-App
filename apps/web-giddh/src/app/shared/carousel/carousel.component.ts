@@ -28,7 +28,7 @@ export class CarouselComponent {
     @Output() public navigateNext: EventEmitter<boolean> = new EventEmitter<boolean>();
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
-    
+
     constructor(
     ) { }
 

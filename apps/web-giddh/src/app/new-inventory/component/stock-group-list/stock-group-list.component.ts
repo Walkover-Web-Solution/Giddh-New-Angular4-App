@@ -5,7 +5,6 @@ import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 
 @Component({
-    selector: 'stock-group-list',
     templateUrl: './stock-group-list.component.html',
     styleUrls: ['./stock-group-list.component.scss'],
 })

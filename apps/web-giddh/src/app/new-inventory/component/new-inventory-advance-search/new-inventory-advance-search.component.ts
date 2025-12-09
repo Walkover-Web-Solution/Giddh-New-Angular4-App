@@ -11,7 +11,6 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { cloneDeep } from '../../../lodash-optimized';
 
 @Component({
-    selector: 'new-inventory-advance-search',
     templateUrl: './new-inventory-advance-search.component.html',
     styleUrls: ['./new-inventory-advance-search.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

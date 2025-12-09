@@ -39,7 +39,6 @@ import { GeneralService } from '../../../services/general.service';
 import { cloneDeep, isEqual, orderBy } from '../../../lodash-optimized';
 
 @Component({
-    selector: 'invetory-stock-report',
     templateUrl: './inventory.stockreport.component.html',
     styleUrls: ['./inventory.stockreport.component.scss']
 })

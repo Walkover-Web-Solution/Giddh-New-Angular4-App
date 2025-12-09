@@ -12,7 +12,6 @@ import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
 import { PageEvent } from '@angular/material/paginator';
 
 @Component({
-    selector: 'ledger-columnar-report-table',
     templateUrl: './ledger-columnar-report-table.component.html',
     styleUrls: ['./ledger-columnar-report-table.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

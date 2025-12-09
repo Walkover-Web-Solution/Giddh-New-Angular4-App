@@ -2,7 +2,6 @@ import { Component, Input, OnInit, OnDestroy, Output, EventEmitter } from '@angu
 import { ReplaySubject } from 'rxjs';
 import { ColumnDefinition } from './giddh-table.component.const';
 @Component({
-    selector: 'giddh-table',
     templateUrl: './giddh-table.component.html',
     styleUrls: ['./giddh-table.component.scss']
 })

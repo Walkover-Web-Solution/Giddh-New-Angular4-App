@@ -30,7 +30,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { ReportsComponentStore } from '../reports.store';
 import { GroupBy } from '../../constants/reports.constant';
 @Component({
-    selector: 'reports-details-component',
     templateUrl: './report.details.component.html',
     styleUrls: ['./report.details.component.scss'],
     providers: [ReportsComponentStore, SalesPersonComponentStore]

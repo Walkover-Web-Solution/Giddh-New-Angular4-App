@@ -2,7 +2,6 @@ import { Component, OnInit, Inject, ViewChild, ElementRef, ChangeDetectionStrate
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import * as jsondiffpatch from "jsondiffpatch"
 @Component({
-    selector: 'activity-compare-json',
     templateUrl: './activity-compare-json.component.html',
     styleUrls: ['activity-compare-json.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

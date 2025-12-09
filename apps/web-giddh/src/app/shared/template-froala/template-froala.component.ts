@@ -18,7 +18,6 @@ import { AccountingGroupEnum } from '../Enums/common.enum';
 import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
 
 @Component({
-    selector: 'template-froala',
     templateUrl: './template-froala.component.html',
     styleUrls: ['./template-froala.component.scss'],
     providers: [CustomEmailComponentStore, TriggerComponentStore]

@@ -46,7 +46,6 @@ import { SalesPersonComponent } from '../../../sales-person/sales-person.compone
 import { ActionTypeEnum } from '../../../sales-person/utility/sales-person.constant';
 
 @Component({
-    selector: 'account-add-new-details',
     templateUrl: './account-add-new-details.component.html',
     styleUrls: ['./account-add-new-details.component.scss'],
     providers: [AccountAddNewDetailsComponentStore, SalesPersonComponentStore]

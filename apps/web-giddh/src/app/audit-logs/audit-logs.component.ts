@@ -12,7 +12,6 @@ import { AuditLogsFormComponent } from './components/audit-logs-form/audit-logs-
 import { GetAuditLogsRequest } from '../models/api-models/Logs';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../app.constant';
 @Component({
-    selector: 'audit-logs',
     templateUrl: './audit-logs.component.html',
     styleUrls: [`./audit-logs.component.scss`],
 })

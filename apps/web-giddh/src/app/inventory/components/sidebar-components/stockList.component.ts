@@ -10,7 +10,6 @@ import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { InvViewService } from '../../inv.view.service';
 import { takeUntil } from 'rxjs/operators';
 @Component({
-    selector: 'stock-list',
     styleUrls: ['stockList.component.scss'],
     template: `
     <ul class="list-unstyled stock-items clear-both" [hidden]="!Groups.isOpen">

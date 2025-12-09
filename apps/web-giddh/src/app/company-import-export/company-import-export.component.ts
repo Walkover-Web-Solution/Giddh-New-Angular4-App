@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
-    selector: 'company-import-export-component',
     templateUrl: 'company-import-export.component.html',
     styleUrls: [`company-import-export.component.scss`],
     changeDetection: ChangeDetectionStrategy.OnPush

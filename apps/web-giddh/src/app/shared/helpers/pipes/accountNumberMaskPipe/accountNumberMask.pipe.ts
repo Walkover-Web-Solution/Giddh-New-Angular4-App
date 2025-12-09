@@ -1,7 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-    name: 'accountNumberMask',
     pure: true
 })
 export class AccountNumberMaskPipe implements PipeTransform {

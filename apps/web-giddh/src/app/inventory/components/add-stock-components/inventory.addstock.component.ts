@@ -24,7 +24,6 @@ import { InvoiceService } from '../../../services/invoice.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 @Component({
-    selector: 'inventory-add-stock',
     templateUrl: './inventory.addstock.component.html',
     styleUrls: ['./inventory.addstock.component.scss']
 })

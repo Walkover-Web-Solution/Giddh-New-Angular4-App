@@ -6,7 +6,6 @@ import { SearchService } from '../../../services/search.service';
 import { IOption } from '../../../app.constant';
 
 @Component({
-    selector: 'petty-cash-approve-confirm-dialog',
     templateUrl: './approve-petty-cash-entry-confirm-dialog.component.html'
 })
 export class ApprovePettyCashEntryConfirmDialogComponent implements OnInit {

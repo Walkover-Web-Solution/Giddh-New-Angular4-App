@@ -4,7 +4,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReplaySubject, takeUntil } from 'rxjs';
 
 @Component({
-    selector: 'aside-create-reason',
     templateUrl: './aside-create-reason.component.html',
     styleUrls: ['./aside-create-reason.component.scss'],
     providers: [AdjustInventoryComponentStore]

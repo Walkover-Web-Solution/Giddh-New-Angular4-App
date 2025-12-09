@@ -6,7 +6,6 @@ import { AppState } from '../../store';
 import { isEmpty } from '../../lodash-optimized';
 
 @Component({
-    selector: 'shopify-integration',
     templateUrl: './shopify.intergation.component.html',
     styleUrls: ['./shopify.intergation.component.scss']
 })

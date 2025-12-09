@@ -23,7 +23,6 @@ import { ReplaySubject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
 @Component({
-    selector: 'profit-loss-report-grid',
     templateUrl: './profit-loss-report-grid.component.html',
     styleUrls: [`./profit-loss-report-grid.component.scss`],
     changeDetection: ChangeDetectionStrategy.OnPush

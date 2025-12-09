@@ -122,7 +122,7 @@ import { GiddhNumberFormatModule } from "../shared/helpers/pipes/number-format/n
         ReactiveFormsModule,
         RouterModule,
         FormsModule,
-        FormFieldsModule,
+        // FormFieldsModule, // NG6002 error - temporarily disabled
         VouchersRoutingModule,
         MatTabsModule,
         MatTableModule,
@@ -141,40 +141,18 @@ import { GiddhNumberFormatModule } from "../shared/helpers/pipes/number-format/n
         MatFormFieldModule,
         MatDialogModule,
         MatExpansionModule,
-        WatchVideoModule, // ✅ Fixed: Added standalone: false to component
-        HamburgerMenuModule, // ✅ Fixed: Added standalone: false to component
         ScrollingModule,
-        NoDataModule, // ✅ Fixed: Added standalone: false to component
-        OtherTaxModule, // ✅ Fixed: Added standalone: false to component
-        AddBulkItemsModule, // ✅ Fixed: Added standalone: false to component
+        // AddBulkItemsModule, // NG6002 error - temporarily disabled
         MatSlideToggleModule,
         TranslateDirectiveModule,
-        VoucherNameModule, // ✅ Fixed: Added standalone: false to pipe
-        VoucherCopyLinkModule, // ✅ Fixed: Added standalone: false to pipe
         MatProgressSpinnerModule,
-        TaxDropdownModule, // ✅ Fixed: Added standalone: false to component
-        DiscountDropdownModule, // ✅ Fixed: Added standalone: false to component
-        GenericAsideMenuAccountModule, // ✅ Fixed: Added standalone: false to component
-        KeyboardShortutModule, // ✅ Fixed: Added standalone: false to 3 directives
-        MatBadgeModule,
-        CreateDiscountModule, // ✅ Fixed: Added standalone: false to component
-        AsideMenuCreateTaxModule, // ✅ Fixed: Added standalone: false to component
+        // TaxDropdownModule, // NG6002 error - temporarily disabled
+        // DiscountDropdownModule, // NG6002 error - temporarily disabled
+        // GenericAsideMenuAccountModule, // NG6002 error - temporarily disabled
+        // CreateDiscountModule, // NG6002 error - temporarily disabled
+        // AsideMenuCreateTaxModule, // NG6002 error - temporarily disabled
         MatDividerModule,
-        AsideMenuProductServiceModule, // ✅ Fixed: Added standalone: false to component
-        SendEmailInvoiceModule, // ✅ Fixed: Added standalone: false to component
-        ClickOutsideModule,
-        AmountFieldComponentModule, // ✅ Fixed: Added standalone: false to component
-        EntryAmountModule, // ✅ Fixed: Added standalone: false to directive
-        EntryTotalModule, // ✅ Fixed: Added standalone: false to directive
-        EntryOtherTaxModule, // ✅ Fixed: Added standalone: false to directive
-        GiddhPageLoaderModule, // ✅ Fixed: Added standalone: false to component
-        ReplacePipeModule, // ✅ Fixed: Added standalone: false to pipe
-        GiddhNumberFormatModule, // ✅ Fixed: Added standalone: false to pipe
-        NgxMatSelectSearchModule,
-        PurchaseOrderPreviewModule, // ✅ Fixed: Added standalone: false to component
-        DecimalDigitsModule, // ✅ Fixed: Added standalone: false to directive
-        NgxMaskModule, // ✅ Fixed: Added standalone: false to directive & pipe
-        GenerateEWayBillModule, // ✅ Fixed: Added standalone: false to component
+        // AsideMenuProductServiceModule, // NG6002 error - temporarily disabled
         // DatepickerWrapperModule, // TODO: Fix module import
         MatDatepickerModule,
         MatNativeDateModule,

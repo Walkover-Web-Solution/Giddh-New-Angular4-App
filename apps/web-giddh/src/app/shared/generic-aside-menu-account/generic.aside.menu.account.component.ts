@@ -10,9 +10,6 @@ import { VoucherTypeEnum } from '../../vouchers/utility/vouchers.const';
 import { IOption } from '../../app.constant';
 
 @Component({
-    selector: 'generic-aside-menu-account',
-    standalone: false,
-    styleUrls: [`./generic.aside.menu.account.component.scss`],
     templateUrl: './generic.aside.menu.account.component.html'
 })
 export class GenericAsideMenuAccountComponent implements OnInit, OnDestroy, OnChanges {

@@ -13,7 +13,6 @@ import { saveAs } from "file-saver";
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 
 @Component({
-    selector: 'cash-flow-statement-component',
     templateUrl: './cash.flow.statement.component.html',
     styleUrls: ['./cash.flow.statement.component.scss']
 })

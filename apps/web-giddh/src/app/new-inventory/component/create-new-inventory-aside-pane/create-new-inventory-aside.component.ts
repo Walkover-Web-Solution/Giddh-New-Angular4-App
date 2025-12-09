@@ -2,7 +2,6 @@ import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
-    selector: 'aside-create-new-inventory',
     templateUrl: './create-new-inventory-aside.component.html',
     styleUrls: ['./create-new-inventory-aside.component.scss']
 })

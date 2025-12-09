@@ -6,7 +6,6 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 
 @Component({
-    selector: 'aside-inventory-stock-group',
     styleUrls: [`./aside-inventory.components.scss`],
     templateUrl: './aside-inventory.components.html'
 })

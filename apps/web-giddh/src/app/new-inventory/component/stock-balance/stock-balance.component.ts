@@ -17,7 +17,6 @@ import { ToasterService } from "../../../services/toaster.service";
 import { SelectFieldComponent } from "../../../theme/form-fields/select-field/select-field.component";
 import { ServiceConfig } from "../../../services/service.config";
 @Component({
-    selector: 'stock-balance',
     templateUrl: './stock-balance.component.html',
     styleUrls: ['./stock-balance.component.scss']
 })

@@ -2,7 +2,6 @@ import { Component, OnDestroy } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 
 @Component({
-    selector: 'welcome-jobwork',
     templateUrl: './welcome-jobwork.component.html'
 })
 export class JobworkWelcomeComponent implements OnDestroy {

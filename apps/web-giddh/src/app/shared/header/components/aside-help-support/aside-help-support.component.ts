@@ -8,7 +8,6 @@ import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
-    selector: 'aside-help-support',
     templateUrl: './aside-help-support.component.html',
     styleUrls: [`./aside-help-support.component.scss`],
 })

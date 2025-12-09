@@ -5,7 +5,6 @@ import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { AppState } from 'apps/web-giddh/src/app/store';
 
 @Component({
-    selector: 'balance-sheet-export-xls',
     templateUrl: './export-xls.component.html'
 })
 export class BalanceSheetExportXlsComponent implements OnInit {

@@ -25,7 +25,6 @@ import { ReplaySubject } from 'rxjs/internal/ReplaySubject';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
-    selector: 'list-manufacturing',
     templateUrl: './list-manufacturing.component.html',
     styleUrls: ['./list-manufacturing.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

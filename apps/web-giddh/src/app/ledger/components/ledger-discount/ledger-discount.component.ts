@@ -6,7 +6,6 @@ import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
-    selector: 'ledger-discount',
     templateUrl: 'ledger-discount.component.html',
     styleUrls: [`./ledger-discount.component.scss`]
 })

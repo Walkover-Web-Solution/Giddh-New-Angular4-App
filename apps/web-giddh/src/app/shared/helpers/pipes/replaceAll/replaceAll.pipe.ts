@@ -9,7 +9,6 @@ import { Pipe, PipeTransform } from "@angular/core";
  * @implements {PipeTransform}
  */
 @Pipe({
-    name: 'replaceAll',
     pure: true
 })
 export class ReplaceAllPipe implements PipeTransform {

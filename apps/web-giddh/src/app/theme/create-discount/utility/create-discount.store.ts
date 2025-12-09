@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
-import { ComponentStore, tapResponse } from "@ngrx/component-store";
+import { ComponentStore } from "@ngrx/component-store";
+import { tap } from "rxjs/operators";
 import { Observable, switchMap, catchError, EMPTY } from "rxjs";
 import { ToasterService } from "../../../services/toaster.service";
 import { BaseResponse } from "../../../models/api-models/BaseResponse";
@@ -40,7 +41,7 @@ export class CreateDiscountComponentStore extends ComponentStore<CreateDiscountS
         return data.pipe(
             switchMap(() => {
                 return this.salesService.getAccountsWithCurrency('discount').pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
                                 discountsAccountList: res?.body?.results?.map(res => { return { label: res.name, value: res.uniqueName, additional: { currency: res?.currency } } }) ?? []
@@ -64,7 +65,7 @@ export class CreateDiscountComponentStore extends ComponentStore<CreateDiscountS
             switchMap((req) => {
                 this.patchState({ createDiscountSuccess: false, createDiscountInProgress: true });
                 return this.settingsDiscountService.CreateDiscount(req as any).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             this.toaster.showSnackBar('success', res.body);
                             return this.patchState({
@@ -91,7 +92,7 @@ export class CreateDiscountComponentStore extends ComponentStore<CreateDiscountS
             switchMap((req) => {
                 this.patchState({ createDiscountSuccess: false, createDiscountInProgress: true });
                 return this.settingsDiscountService.UpdateDiscount(req as any).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             this.toaster.showSnackBar('success', this.localeService.translate("app_messages.discount_updated"));
                             return this.patchState({

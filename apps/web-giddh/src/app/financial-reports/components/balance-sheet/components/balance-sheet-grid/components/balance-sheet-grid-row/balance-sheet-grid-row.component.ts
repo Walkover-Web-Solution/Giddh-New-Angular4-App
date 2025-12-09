@@ -12,7 +12,6 @@ import { TlPlService } from 'apps/web-giddh/src/app/services/tl-pl.service';
 import { ReplaySubject, takeUntil } from 'rxjs';
 
 @Component({
-    selector: '[balance-sheet-grid-row]',
     templateUrl: './balance-sheet-grid-row.component.html',
     styleUrls: [`./balance-sheet-grid-row.component.scss`],
     changeDetection: ChangeDetectionStrategy.OnPush,

@@ -13,7 +13,6 @@ import { SettingsAmountLimitDuration, UNLIMITED_LIMIT } from "../../../../consta
 import { PageLeaveUtilityService } from "apps/web-giddh/src/app/services/page-leave-utility.service";
 
 @Component({
-    selector: 'icici-account-create-edit',
     templateUrl: './account-create-edit.component.html',
     styleUrls: ['./account-create-edit.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

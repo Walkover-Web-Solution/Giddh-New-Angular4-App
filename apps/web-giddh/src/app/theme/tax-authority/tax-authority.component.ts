@@ -7,7 +7,6 @@ import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-mod
 import { ASIDE_PANE_CONFIG } from '../../app.constant';
 
 @Component({
-    selector: 'tax-authority',
     templateUrl: './tax-authority.component.html',
     styleUrls: ['./tax-authority.component.scss'],
     providers: [TaxAuthorityComponentStore]

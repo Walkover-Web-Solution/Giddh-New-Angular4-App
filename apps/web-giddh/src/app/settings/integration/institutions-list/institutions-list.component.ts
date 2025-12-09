@@ -8,7 +8,6 @@ import { GeneralService } from '../../../services/general.service';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
-    selector: 'institutions-list',
     styleUrls: ['./institutions-list.component.scss'],
     templateUrl: './institutions-list.component.html',
     providers: [SettingIntegrationComponentStore],

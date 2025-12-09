@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit }
 import { MatSnackBarRef, MAT_SNACK_BAR_DATA } from "@angular/material/snack-bar";
 
 @Component({
-    selector: 'snackbar',
     templateUrl: './snackbar.component.html',
     styleUrls: ['./snackbar.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

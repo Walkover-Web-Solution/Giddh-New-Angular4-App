@@ -4,7 +4,6 @@ import { B2CSSummary } from '../../../../../../models/api-models/GstReconcile';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
 @Component({
-    // tslint:disable-next-line:component-selector
     selector: 'b2cs-summary',
     templateUrl: './b2cs-summary.component.html',
     styleUrls: ['./b2cs-summary.component.css'],

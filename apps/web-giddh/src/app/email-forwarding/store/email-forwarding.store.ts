@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
-import { ComponentStore, tapResponse } from "@ngrx/component-store";
+import { ComponentStore } from "@ngrx/component-store";
+import { tap } from "rxjs/operators";
 import { ToasterService } from "../../services/toaster.service";
 import { catchError, EMPTY, Observable, switchMap } from "rxjs";
 import { EmailForwardingService } from "../services/email-forwarding.service";
@@ -66,7 +67,7 @@ export class EmailForwardingComponentStore extends ComponentStore<BankStatementS
             switchMap(() => {
                 this.patchState({ isGeneratingEmail: true, generatedEmail: null });
                 return this.emailForwardingService.generateEmail().pipe(
-                    tapResponse(
+                    tap(
                         (res: any) => {
                             if (res?.status === "success") {
                                 // res?.body && this.toaster.showSnackBar("success", "Email generated successfully");
@@ -106,7 +107,7 @@ export class EmailForwardingComponentStore extends ComponentStore<BankStatementS
             switchMap(() => {
                 this.patchState({ emailForwardingList: null, isLoading: true });
                 return this.emailForwardingService.getAllEmailForwarding().pipe(
-                    tapResponse(
+                    tap(
                         (res: any) => {
                             if (res?.status === "success" && res?.body) {
                                 return this.patchState({ 
@@ -145,7 +146,7 @@ export class EmailForwardingComponentStore extends ComponentStore<BankStatementS
             switchMap((uniqueName) => {
                 this.patchState({ emailForwardingDetails: null, isEmailForwardingDetailsLoading: true });
                 return this.emailForwardingService.getEmailForwarding(uniqueName).pipe(
-                    tapResponse(
+                    tap(
                         (res: any) => {
                             if (res?.status === "success" && res?.body) {
                                 return this.patchState({ 
@@ -184,7 +185,7 @@ export class EmailForwardingComponentStore extends ComponentStore<BankStatementS
             switchMap((model) => {
                 this.patchState({ createUpdateEmailForwardingIsSuccess: null });
                 return this.emailForwardingService.createEmailForwarding(model).pipe(
-                    tapResponse(
+                    tap(
                         (res: any) => {
                             if (res?.status === "success") {
                                 this.toaster.showSnackBar("success", "Email forwarding configuration created successfully");
@@ -215,7 +216,7 @@ export class EmailForwardingComponentStore extends ComponentStore<BankStatementS
             switchMap((req) => {
                 this.patchState({ createUpdateEmailForwardingIsSuccess: null });
                 return this.emailForwardingService.updateEmailForwarding(req.uniqueName, req.model).pipe(
-                    tapResponse(
+                    tap(
                         (res: any) => {
                             if (res?.status === "success") {
                                 this.toaster.showSnackBar("success", "Email forwarding configuration updated successfully");
@@ -246,7 +247,7 @@ export class EmailForwardingComponentStore extends ComponentStore<BankStatementS
             switchMap((uniqueName) => {
                 this.patchState({ deleteEmailForwardingIsSuccess: null });
                 return this.emailForwardingService.deleteEmailForwarding(uniqueName).pipe(
-                    tapResponse(
+                    tap(
                         (res: any) => {
                             if (res?.status === "success") {
                                 this.toaster.showSnackBar("success", "Email forwarding configuration deleted successfully");
@@ -291,7 +292,7 @@ export class EmailForwardingComponentStore extends ComponentStore<BankStatementS
             switchMap((req) => {
                 this.patchState({ accountSearch: null });
                 return this.salesService.getAccountsWithCurrency(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 this.patchState({ 

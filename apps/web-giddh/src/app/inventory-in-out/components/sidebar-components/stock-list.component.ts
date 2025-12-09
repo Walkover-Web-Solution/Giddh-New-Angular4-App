@@ -2,7 +2,6 @@ import { Component, Input } from '@angular/core';
 import { IStocksItem } from '../../../models/interfaces/stocks-item.interface';
 
 @Component({
-    selector: 'inout-stock-list',
     styles: [`
     .active > a {
       color: #d35f29 !important;

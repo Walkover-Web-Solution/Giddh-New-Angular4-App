@@ -2,7 +2,6 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { Account } from '../../models/api-models/Search';
 
 @Pipe({
-    name: 'accountsFilter',
     pure: true
 })
 export class AccountsFilterPipe implements PipeTransform {

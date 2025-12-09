@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import {Router } from '@angular/router';
 
 @Component({
-    selector: 'dummy',
     template: `
         <giddh-page-loader></giddh-page-loader>
   `

@@ -31,7 +31,6 @@ const TABLE_DATA: any[] = [
     { name: '', transactions: 0, amount: 0, companies: 0, consultant: '', unlimited_users: true, unlimited_customers: true, desktop_mobile_app: true, check_all_features: true }
 ];
 @Component({
-    selector: 'subscriptions-plans',
     styleUrls: ['./subscriptions-plans.component.scss'],
     templateUrl: './subscriptions-plans.component.html'
 })

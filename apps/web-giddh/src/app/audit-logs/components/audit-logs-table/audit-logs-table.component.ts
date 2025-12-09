@@ -8,7 +8,6 @@ import { GetAuditLogsRequest } from '../../../models/api-models/Logs';
 import { AppState } from '../../../store/roots';
 
 @Component({
-    selector: 'audit-logs-table',
     templateUrl: './audit-logs-table.component.html',
     styleUrls: ['audit-logs-table.component.scss']
 })

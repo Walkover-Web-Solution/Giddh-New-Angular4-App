@@ -1,7 +1,6 @@
 import { Component } from "@angular/core";
 
 @Component({
-    selector: "stock-create",
     templateUrl: './main.component.html'
 })
 export class MainComponent {

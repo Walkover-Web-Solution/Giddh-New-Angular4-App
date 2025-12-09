@@ -3,7 +3,6 @@ import { GeneralService } from '../services/general.service';
 import { ServiceConfig } from '../services/service.config';
 
 @Component({
-    selector: 'app-login-success',
     styleUrls: ['./app-login-success.scss'],
     templateUrl: './app-login-success.html'
 })

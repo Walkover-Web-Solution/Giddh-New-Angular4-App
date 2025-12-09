@@ -1,5 +1,6 @@
 import { Injectable, OnDestroy } from "@angular/core";
-import { ComponentStore, tapResponse } from "@ngrx/component-store";
+import { ComponentStore } from "@ngrx/component-store";
+import { tap } from "rxjs/operators";
 import { ToasterService } from "../services/toaster.service";
 import { catchError, EMPTY, Observable, switchMap } from "rxjs";
 import { BaseResponse } from "../models/api-models/BaseResponse";
@@ -52,7 +53,7 @@ export class LedgerComponentStore extends ComponentStore<LedgerState> implements
             switchMap((req) => {
                 this.patchState({ ledgerBalance: null });
                 return this.ledgerService.getLedgerBalance(req.trxRequest, req.payload).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
@@ -100,7 +101,7 @@ export class LedgerComponentStore extends ComponentStore<LedgerState> implements
             switchMap((req) => {
                 this.patchState({ uploadVoucherSuccess: false });
                 return this.ledgerService.uploadVoucher(req.url, req.file).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res.statusText === "OK") {
                                 return this.patchState({
@@ -136,7 +137,7 @@ export class LedgerComponentStore extends ComponentStore<LedgerState> implements
             switchMap((req) => {
                 this.patchState({ signedUrlSuccess: null });
                 return this.ledgerService.getSignedUrl(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
@@ -172,7 +173,7 @@ export class LedgerComponentStore extends ComponentStore<LedgerState> implements
             switchMap((req) => {
                 this.patchState({ importVoucherSuccess: null });
                 return this.ledgerService.importVoucher(req.requestObject, req.signedUrlResponse).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
@@ -208,7 +209,7 @@ export class LedgerComponentStore extends ComponentStore<LedgerState> implements
             switchMap((req) => {
                 this.patchState({ accountSearch: null });
                 return this.searchService.searchAccountV3(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 this.patchState({ accountSearch: res.body });
@@ -238,7 +239,7 @@ export class LedgerComponentStore extends ComponentStore<LedgerState> implements
             switchMap((req) => {
                 this.patchState({ isLedgerViewChange: null });
                 return this.accountService.UpdateAccountWithoutGroupUniqueName(req.model, req.accountUniqueName).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 res.body?.message && this.toasterService.showSnackBar('success', res.body.message);

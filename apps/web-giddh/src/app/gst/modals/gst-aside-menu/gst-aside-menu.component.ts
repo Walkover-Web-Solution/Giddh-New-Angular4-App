@@ -12,7 +12,6 @@ import { cloneDeep, isEqual } from '../../../lodash-optimized';
 import { IOption } from '../../../app.constant';
 
 @Component({
-    // tslint:disable-next-line:component-selector
     selector: 'gst-aside-menu',
     styleUrls: [`./gst-aside-menu.component.scss`],
     templateUrl: './gst-aside-menu.component.html'

@@ -6,9 +6,6 @@ import { Store } from '@ngrx/store';
 import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
-    selector: 'page',
-    standalone: false,
-    template: `
     <div id="main" [ngClass]="{'subscription-page': isSubscriptionPage}">
       <giddh-loader></giddh-loader>
       <app-header (menuStateChange)="sidebarStatusChange($event)"></app-header>

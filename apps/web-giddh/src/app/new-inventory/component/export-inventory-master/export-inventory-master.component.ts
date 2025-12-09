@@ -8,7 +8,6 @@ import { Router } from "@angular/router";
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-export-inventory-master',
   templateUrl: './export-inventory-master.component.html',
   styleUrls: ['./export-inventory-master.component.scss']
 })

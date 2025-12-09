@@ -5,7 +5,6 @@ import { Router } from '@angular/router';
 import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
 @Component({
-    selector: 'restricted-module-message',
     styleUrls: [`./subscription-upgrade-button.component.scss`],
     templateUrl: './subscription-upgrade-button.component.html'
 })

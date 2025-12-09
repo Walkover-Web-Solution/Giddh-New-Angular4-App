@@ -17,7 +17,6 @@ import { ToasterService } from '../../../services/toaster.service';
 import { saveAs } from 'file-saver';
 
 @Component({
-    selector: 'company-import-export-form-component',
     templateUrl: 'company-import-export-form.html',
     styleUrls: [`./company-import-export-form.scss`],
 })

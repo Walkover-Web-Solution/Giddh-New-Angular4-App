@@ -54,7 +54,6 @@ class FormatCsv implements IFormatable {
 }
 
 @Component({
-    selector: 'trial-balance-export-csv',
     templateUrl: './export-csv.component.html',
     providers: [RecTypePipe]
 })

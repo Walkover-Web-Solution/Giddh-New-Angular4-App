@@ -1,6 +1,7 @@
 
 import { Injectable, OnDestroy } from "@angular/core";
-import { ComponentStore, tapResponse } from "@ngrx/component-store";
+import { ComponentStore } from "@ngrx/component-store";
+import { tap } from "rxjs/operators";
 import { Observable, switchMap, catchError, EMPTY } from "rxjs";
 import { BaseResponse } from "../../../models/api-models/BaseResponse";
 import { SubscriptionsService } from "../../../services/subscriptions.service";
@@ -42,7 +43,7 @@ export class PaymentMethodDialogComponentStore extends ComponentStore<PaymentSta
             switchMap((req) => {
                 this.patchState({ providerListInProgress: true });
                 return this.subscriptionService.getPaymentProviderListBySubscriptionID(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
                                 return this.patchState({
@@ -80,7 +81,7 @@ export class PaymentMethodDialogComponentStore extends ComponentStore<PaymentSta
         return data.pipe(
             switchMap((req) => {
                 return this.subscriptionService.savePaymentProviderBySubscriptionID(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
@@ -118,7 +119,7 @@ export class PaymentMethodDialogComponentStore extends ComponentStore<PaymentSta
             switchMap((req) => {
                 this.patchState({ deletePaymentSuccess: false });
                 return this.subscriptionService.deletePaymentMethod(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 res.body && this.toasterService.showSnackBar('success', res.body);
@@ -157,7 +158,7 @@ export class PaymentMethodDialogComponentStore extends ComponentStore<PaymentSta
             switchMap((req) => {
                 this.patchState({ setDetaultPaymentMethodIsSuccess: false });
                 return this.subscriptionService.setDetaultPaymentMethod(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 res.body && this.toasterService.showSnackBar('success', res.body);

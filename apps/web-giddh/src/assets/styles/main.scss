@@ -1,14 +1,14 @@
-// FONTS
-// --------------------------------------------------------------------------
-// Import font files before any other styles
-@import "../fonts/Inter/_inter_fonts.css";
-
-// 1. ABSTRACTS
+Main.scss // 1. ABSTRACTS (must come first with @use)
 // --------------------------------------------------------------------------
 // Variables, functions, mixins - no actual CSS output
 @use "abstracts/variables";
 @use "abstracts/functions";
 @use "abstracts/mixins";
+
+// FONTS
+// --------------------------------------------------------------------------
+// Import font files after @use rules
+@import "../fonts/Inter/_inter_fonts.css";
 
 // 2. VENDORS
 // --------------------------------------------------------------------------

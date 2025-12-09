@@ -26,7 +26,6 @@ import { cloneDeep, forEach } from '../../lodash-optimized';
 import { IOption } from '../../app.constant';
 
 @Component({
-    templateUrl: './mf.edit.component.html',
     styleUrls: [`./mf.edit.component.scss`]
 })
 

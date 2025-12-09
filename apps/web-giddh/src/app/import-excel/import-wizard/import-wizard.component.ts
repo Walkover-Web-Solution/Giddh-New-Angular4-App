@@ -12,7 +12,6 @@ import { LedgerComponentStore } from '../../ledger/ledger.store';
 import { ImportStatementType, VoucherType } from '../../ledger/components/import-statement/import-statement.const';
 
 @Component({
-    selector: 'import-wizard',
     styleUrls: ['./import-wizard.component.scss'],
     templateUrl: './import-wizard.component.html',
     providers: [LedgerComponentStore]

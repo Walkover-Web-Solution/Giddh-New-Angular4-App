@@ -22,7 +22,6 @@ import { FieldTypes } from '../../../custom-fields/custom-fields.constant';
 import { IDiscountList } from '../../../models/api-models/SettingsDiscount';
 
 @Component({
-    selector: 'bulk-stock',
     templateUrl: './bulk-stock-edit.component.html',
     styleUrls: ['./bulk-stock-edit.component.scss'],
     providers: [InventoryComponentStore]

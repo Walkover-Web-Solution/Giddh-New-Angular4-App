@@ -25,7 +25,6 @@ import { ICurrencyResponse } from "../../models/api-models/Company";
 import { AccountResponse, AccountResponseV2 } from "../../models/api-models/Account";
 import { LedgerService } from "../../services/ledger.service";
 @Component({
-    selector: 'ledger-statement',
     templateUrl: './ledger-statement.component.html',
     styleUrls: ['./ledger-statement.component.scss'],
     providers: [LedgerStatementComponentStore, LedgerComponentStore, SettingIntegrationComponentStore],

@@ -22,7 +22,6 @@ import { StateCode } from '../models/api-models/Sales';
 import { ServiceConfig } from '../services/service.config';
 
 @Component({
-    selector: 'billing-details',
     templateUrl: 'billing-details.component.html',
     styleUrls: ['billing-details.component.scss']
 })

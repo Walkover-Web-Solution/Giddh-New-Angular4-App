@@ -13,7 +13,6 @@ import { GeneralService } from "../../services/general.service";
 
 
 @Component({
-    selector: 'unit-mapping',
     templateUrl: './unit-mapping.component.html',
     styleUrls: ['./unit-mapping.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

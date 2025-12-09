@@ -5,7 +5,6 @@ import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { AppState } from 'apps/web-giddh/src/app/store';
 
 @Component({
-    selector: 'profit-loss-export-xls',
     templateUrl: './export-xls.component.html'
 })
 export class ProfitLossExportXlsComponent implements OnInit {

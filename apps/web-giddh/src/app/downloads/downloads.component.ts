@@ -4,7 +4,6 @@ import { ReplaySubject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 
 @Component({
-    selector: "downloads",
     templateUrl: "./downloads.component.html",
     styleUrls: ["./downloads.component.scss"],
     changeDetection: ChangeDetectionStrategy.OnPush

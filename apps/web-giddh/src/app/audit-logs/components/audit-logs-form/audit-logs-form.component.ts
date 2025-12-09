@@ -18,7 +18,6 @@ import { AuditLogsSidebarVM } from './Vm';
 import { ReactiveDropdownFieldComponent } from '../../../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component';
 
 @Component({
-    selector: 'audit-logs-form',
     templateUrl: './audit-logs-form.component.html',
     styleUrls: ['audit-logs-form.component.scss']
 })

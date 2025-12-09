@@ -19,7 +19,6 @@ import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 
 @Component({
-    selector: 'app-vat-report-transactions',
     styleUrls: ['./vat-report-transactions.component.scss'],
     templateUrl: './vat-report-transactions.component.html'
 })

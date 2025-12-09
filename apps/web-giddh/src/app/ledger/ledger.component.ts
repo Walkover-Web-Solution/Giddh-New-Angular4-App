@@ -66,7 +66,6 @@ import { LedgerDropdownTypeEnum } from '../models/api-models/Ledger';
 import { IOption } from '../app.constant';
 
 @Component({
-    selector: 'ledger',
     templateUrl: './ledger.component.html',
     styleUrls: ['./ledger.component.scss'],
     providers: [LedgerComponentStore, BankIntegrationComponentStore, HomeComponentStore, SettingIntegrationComponentStore],

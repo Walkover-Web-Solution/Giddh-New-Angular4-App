@@ -20,7 +20,6 @@ import { ServiceConfig } from '../../../services/service.config';
 import { ASIDE_PANE_CONFIG, RestrictedModules } from '../../../app.constant';
 
 @Component({
-    // tslint:disable-next-line:component-selector
     selector: 'filing-header',
     templateUrl: 'filing-header.component.html',
     styleUrls: ['filing-header.component.scss']

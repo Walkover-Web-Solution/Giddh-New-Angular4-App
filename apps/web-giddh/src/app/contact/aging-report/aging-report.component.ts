@@ -47,7 +47,6 @@ import { DomSanitizer } from "@angular/platform-browser";
 import { ServiceConfig } from "../../services/service.config";
 
 @Component({
-    selector: "aging-report",
     templateUrl: "aging-report.component.html",
     styleUrls: ["aging-report.component.scss"]
 })

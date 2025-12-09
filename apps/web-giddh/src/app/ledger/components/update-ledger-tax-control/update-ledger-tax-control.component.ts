@@ -35,7 +35,6 @@ export class UpdateLedgerTaxData {
 }
 
 @Component({
-    selector: 'update-ledger-tax-control',
     templateUrl: 'update-ledger-tax-control.component.html',
     styleUrls: [`./update-ledger-tax-control.component.scss`],
     providers: [TAX_CONTROL_VALUE_ACCESSOR]

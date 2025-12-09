@@ -82,7 +82,6 @@ const SEARCH_TYPE = {
 declare var window;
 
 @Component({
-    selector: 'voucher-component',
     templateUrl: './voucher.component.html',
     styleUrls: [`./voucher.component.scss`],
     animations: [

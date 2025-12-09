@@ -3,9 +3,6 @@ import { SelectedInvoices } from 'apps/web-giddh/src/app/models/api-models/Invoi
 import { TemplateRef } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 @Component({
-    selector: 'app-generate-ewaybill-dialog',
-    standalone: false,
-    templateUrl: './generateEWayBill.component.html',
     styleUrls: [`./generateEWayBill.component.scss`]
 })
 

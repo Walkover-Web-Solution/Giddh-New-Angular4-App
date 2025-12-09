@@ -36,7 +36,6 @@ declare var initSendOTP: any;
 declare var window: any;
 
 @Component({
-    selector: 'add-company',
     templateUrl: './add-company.component.html',
     styleUrls: ['./add-company.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

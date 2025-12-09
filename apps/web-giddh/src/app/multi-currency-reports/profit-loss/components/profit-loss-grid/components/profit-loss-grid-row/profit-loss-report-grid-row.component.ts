@@ -5,7 +5,6 @@ import {
 import { Account, ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Search';
 
 @Component({
-    selector: '[profit-loss-report-grid-row]',
     templateUrl: './profit-loss-report-grid-row.component.html',
     styleUrls: ['./profit-loss-report-grid-row.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

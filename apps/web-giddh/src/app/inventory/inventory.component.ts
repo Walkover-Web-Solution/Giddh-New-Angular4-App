@@ -39,7 +39,6 @@ export const IsyncData = [
 ];
 
 @Component({
-    selector: 'inventory',
     templateUrl: './inventory.component.html',
     styleUrls: ['./inventory.component.scss']
 })

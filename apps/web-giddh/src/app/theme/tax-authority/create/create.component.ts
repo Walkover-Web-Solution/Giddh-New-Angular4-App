@@ -9,7 +9,6 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
-    selector: 'create-tax-authority',
     templateUrl: './create.component.html',
     styleUrls: ['./create.component.scss'],
     providers: [TaxAuthorityComponentStore]

@@ -18,7 +18,6 @@ import { GiddhNumberFormatPipe } from '../../../shared/helpers/pipes/number-form
 Chart.register(...registerables);
 
 @Component({
-    selector: 'total-overdues-chart',
     templateUrl: 'total-overdues-chart.component.html',
     styleUrls: ['../../home.component.scss', './total-overdues-chart.component.scss'],
 })

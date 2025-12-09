@@ -27,7 +27,6 @@ import { saveAs } from 'file-saver';
 import { InvoiceService } from '../../../services/invoice.service';
 
 @Component({
-    selector: 'advance-receipt-report',
     templateUrl: './advance-receipt-report.component.html',
     styleUrls: ['./advance-receipt-report.component.scss']
 })

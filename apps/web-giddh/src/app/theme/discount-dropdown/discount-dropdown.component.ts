@@ -6,9 +6,6 @@ import { GeneralService } from "../../services/general.service";
 import { MatMenuTrigger } from "@angular/material/menu";
 
 @Component({
-    selector: "discount-dropdown",
-    standalone: false,
-    templateUrl: "./discount-dropdown.component.html",
     styleUrls: ["./discount-dropdown.component.scss"]
 })
 export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {

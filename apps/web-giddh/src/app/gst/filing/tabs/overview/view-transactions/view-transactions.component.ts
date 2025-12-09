@@ -30,7 +30,6 @@ export const filterTransaction = {
 };
 
 @Component({
-    // tslint:disable-next-line:component-selector
     selector: 'view-transactions',
     templateUrl: './view-transactions.component.html',
     styleUrls: ['./view-transactions.component.scss'],

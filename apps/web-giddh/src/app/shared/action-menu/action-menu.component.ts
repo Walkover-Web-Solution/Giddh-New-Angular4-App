@@ -148,7 +148,7 @@ export class ActionMenuComponent {
      */
     public goToRoute(part: string, additionalParams: string = "", accUniqueName: string): void {
         let url: string;
-        
+
         if (this.generalService.voucherApiVersion === 2) {
             // Construct direct page URL
             url = `/pages/${part}`;
@@ -167,7 +167,7 @@ export class ActionMenuComponent {
                 url = `${url}${additionalParams}`;
             }
         }
-        
+
         if (isElectron) {
             const ipcRenderer = (window as any).require('electron').ipcRenderer;
             const electronUrl = `${location.origin}${location.pathname}#./pages/${part}${part?.includes('ledger') ? `/${accUniqueName}` : ""}`;

@@ -11,7 +11,6 @@ import { AppState } from 'apps/web-giddh/src/app/store';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
 
 @Component({
-  selector: 'app-export-master-dialog',
   templateUrl: './export-master-dialog.component.html',
   styleUrls: ['./export-master-dialog.component.scss']
 })

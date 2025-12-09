@@ -22,7 +22,6 @@ import { ServiceConfig } from "../../../services/service.config";
 import { IOption } from "../../../app.constant";
 
 @Component({
-    selector: 'create-update-group',
     templateUrl: './create-update-group.component.html',
     styleUrls: ['./create-update-group.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

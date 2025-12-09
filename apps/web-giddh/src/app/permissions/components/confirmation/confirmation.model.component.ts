@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
 
 @Component({
-    selector: 'delete-role-confirmation-model',
     templateUrl: './confirmation.model.component.html'
 })
 

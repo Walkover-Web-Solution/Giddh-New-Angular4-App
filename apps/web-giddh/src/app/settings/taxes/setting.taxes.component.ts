@@ -18,7 +18,6 @@ import { ASIDE_PANE_CONFIG } from '../../app.constant';
 import { GeneralService } from '../../services/general.service';
 
 @Component({
-    selector: 'setting-taxes',
     templateUrl: './setting.taxes.component.html',
     styleUrls: ['./setting.taxes.component.scss']
 })

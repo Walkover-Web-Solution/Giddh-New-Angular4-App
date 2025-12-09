@@ -33,7 +33,6 @@ import { MatTabChangeEvent } from "@angular/material/tabs";
 import { PageLeaveUtilityService } from "../../../services/page-leave-utility.service";
 
 @Component({
-    selector: "stock-create-edit",
     templateUrl: "./stock-create-edit.component.html",
     styleUrls: ["./stock-create-edit.component.scss"],
     providers: [InventoryComponentStore, VoucherComponentStore]

@@ -8,7 +8,6 @@ import { takeUntil } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 @Component({
-    // tslint:disable-next-line:component-selector
     selector: 'push-to-gstin',
     templateUrl: './push-to-gstin.component.html',
     styleUrls: ['./push-to-gstin.component.scss'],

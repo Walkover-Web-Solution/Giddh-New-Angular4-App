@@ -22,7 +22,6 @@ export interface ActiveTriggers {
     isActive: boolean;
 }
 @Component({
-    selector: 'app-setting-campaign',
     templateUrl: './setting-campaign.component.html',
     styleUrls: ['./setting-campaign.component.scss']
 })

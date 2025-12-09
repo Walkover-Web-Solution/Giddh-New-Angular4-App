@@ -29,7 +29,6 @@ enum TaxTypeNameEnum {
 }
 
 @Component({
-    selector: 'create-address',
     templateUrl: './create-address.component.html',
     styleUrls: ['./create-address.component.scss'],
 })

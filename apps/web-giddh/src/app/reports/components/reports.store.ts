@@ -1,5 +1,6 @@
 import { Injectable, OnDestroy } from "@angular/core";
-import { ComponentStore, tapResponse } from "@ngrx/component-store";
+import { ComponentStore } from "@ngrx/component-store";
+import { tap } from "rxjs/operators";
 import { Observable, switchMap, catchError, EMPTY } from "rxjs";
 import { SearchService } from "../../services/search.service";
 import { ToasterService } from "../../services/toaster.service";
@@ -47,7 +48,7 @@ export class ReportsComponentStore extends ComponentStore<ReportsState> implemen
             switchMap((params) => {
                 this.patchState({ accountList: null });
                 return this.searchService.searchAccountV3(params).pipe(
-                    tapResponse(
+                    tap(
                             (res: BaseResponse<any, any>) => {
                                 if (res?.status === 'success') {
                                     this.patchState({ accountList: res?.body || [] });
@@ -78,7 +79,7 @@ export class ReportsComponentStore extends ComponentStore<ReportsState> implemen
             switchMap((req) => {
                 this.patchState({ salesPurchaseList: null, salesPurchaseListInProgress: true });
                 return this.companyService.getSalesRegisterV2(req.payload, req.params, req.isSalesRegister).pipe(
-                    tapResponse(
+                    tap(
                             (res: BaseResponse<any, any>) => {
                                 if (res?.status === 'success') {
                                     this.patchState({ salesPurchaseList: res?.body || [], salesPurchaseListInProgress: false });

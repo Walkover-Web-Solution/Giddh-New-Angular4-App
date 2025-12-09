@@ -3,7 +3,6 @@ import { MaskApplierService } from './mask-applier.service';
 import { IConfig } from './config';
 
 @Pipe({
-    name: 'mask',
     pure: true,
     standalone: false
 })

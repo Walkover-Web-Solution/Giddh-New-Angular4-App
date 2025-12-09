@@ -11,7 +11,6 @@ import { ClipboardService } from 'ngx-clipboard';
 import { NewConfirmationModalComponent } from '../../theme/new-confirmation-modal/confirmation-modal.component';
 
 @Component({
-    selector: 'setting-company-auth-key',
     templateUrl: './company-auth-key.component.html',
     styleUrls: ['./company-auth-key.component.scss']
 })

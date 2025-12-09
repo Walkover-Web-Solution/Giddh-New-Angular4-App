@@ -6,9 +6,6 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { GeneralService } from "../../services/general.service";
 
 @Component({
-    selector: "create-discount",
-    standalone: false,
-    templateUrl: "./create-discount.component.html",
     styleUrls: ["./create-discount.component.scss"],
     providers: [CreateDiscountComponentStore]
 })

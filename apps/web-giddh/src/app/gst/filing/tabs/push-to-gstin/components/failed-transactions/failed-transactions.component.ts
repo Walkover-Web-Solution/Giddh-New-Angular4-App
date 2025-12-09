@@ -7,7 +7,6 @@ import { DROPDOWN_ITEMS_COUNT_LIMIT, PAGE_SIZE_OPTIONS } from '../../../../../..
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
 @Component({
-    // tslint:disable-next-line:component-selector
     selector: 'failed-transactions',
     templateUrl: './failed-transactions.component.html',
     styleUrls: ['failed-transactions.component.scss'],

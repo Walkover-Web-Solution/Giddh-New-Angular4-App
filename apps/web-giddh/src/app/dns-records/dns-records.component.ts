@@ -17,7 +17,6 @@ export interface GetDomainList {
 /** Hold information of activity logs */
 const ELEMENT_DATA: GetDomainList[] = [];
 @Component({
-    selector: 'dns-records',
     templateUrl: './dns-records.component.html',
     styleUrls: ['./dns-records.component.scss']
 })

@@ -39,7 +39,6 @@ interface SidebarFlatNode {
     level: number;
 }
 @Component({
-    selector: 'inventory-sidebar',
     templateUrl: './inventory-sidebar.component.html',
     styleUrls: [`./inventory-sidebar.component.scss`],
     changeDetection: ChangeDetectionStrategy.OnPush

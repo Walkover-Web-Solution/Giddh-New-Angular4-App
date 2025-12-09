@@ -9,7 +9,6 @@ export interface IAutoCompleteScrollEvent {
 }
 
 @Directive({
-    selector: 'mat-autocomplete[optionsScroll]',
     exportAs: 'mat-autocomplete[optionsScroll]',
     standalone: false
 })

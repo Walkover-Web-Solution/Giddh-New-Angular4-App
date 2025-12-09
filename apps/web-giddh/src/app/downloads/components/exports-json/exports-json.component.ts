@@ -3,7 +3,6 @@ import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import * as jsonTreeViewer from 'json-tree-viewer';
 
 @Component({
-    selector: 'exports-json',
     templateUrl: './exports-json.component.html',
     styleUrls: ['./exports-json.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

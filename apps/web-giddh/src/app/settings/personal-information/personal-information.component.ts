@@ -11,7 +11,6 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { ServiceConfig } from '../../services/service.config';
 @Component({
-    selector: 'personal-information',
     templateUrl: './personal-information.component.html',
     styleUrls: ['./personal-information.component.scss']
 })

@@ -20,7 +20,6 @@ import { GeneralService } from '../../services/general.service';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 @Component({
-    selector: 'purchase-order-preview',
     templateUrl: './purchase-order-preview.component.html',
     styleUrls: ['./purchase-order-preview.component.scss']
 })

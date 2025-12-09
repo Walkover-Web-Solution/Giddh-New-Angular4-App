@@ -6,7 +6,6 @@ import { IOption } from '../../../app.constant';
 import { SettingIntegrationComponentStore } from '../../../settings/integration/utility/setting.integration.store';
 
 @Component({
-    selector: 'bank-link',
     styleUrls: ['./bank-link.component.scss'],
     templateUrl: './bank-link.component.html',
     providers: [SettingIntegrationComponentStore]

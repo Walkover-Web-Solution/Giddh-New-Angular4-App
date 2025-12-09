@@ -11,7 +11,6 @@ import { InvoiceActions } from '../../actions/invoice/invoice.actions';
 import { VoucherTypeEnum } from '../../models/api-models/Sales';
 
 @Component({
-    selector: 'purchase-send-email-modal',
     templateUrl: './purchase-send-email.component.html',
     styleUrls: ['./purchase-send-email.component.scss']
 })

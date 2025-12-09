@@ -1,6 +1,7 @@
 
 import { Injectable, OnDestroy } from "@angular/core";
-import { ComponentStore, tapResponse } from "@ngrx/component-store";
+import { ComponentStore } from "@ngrx/component-store";
+import { tap } from "rxjs/operators";
 import { Observable, switchMap, catchError, EMPTY } from "rxjs";
 import { BaseResponse } from "../../models/api-models/BaseResponse";
 import { ToasterService } from "../../services/toaster.service";
@@ -66,7 +67,7 @@ export class ContactComponentStore extends ComponentStore<ContactState> implemen
             switchMap((req) => {
                 this.patchState({ sendBulkEmailIsSuccess: false });
                 return this.contactService.sendBulkEmailTemplate(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 res?.body && this.toasterService.showSnackBar('success', res?.body);
@@ -134,7 +135,7 @@ export class ContactComponentStore extends ComponentStore<ContactState> implemen
                     params.postData,
                     params.branchUniqueName
                 ).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 this.patchState({
@@ -173,7 +174,7 @@ export class ContactComponentStore extends ComponentStore<ContactState> implemen
                 // Optionally patch state to indicate loading if needed
                 this.patchState({ getAccountStatementInProgress: true, accountStatementList: [] });
                 return this.contactService.getAccountStatementList(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 this.patchState({
@@ -221,7 +222,7 @@ export class ContactComponentStore extends ComponentStore<ContactState> implemen
                     exportAccountStatementResponse: null
                 });
                 return this.contactService.exportAccountStatement(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
                                 this.patchState({

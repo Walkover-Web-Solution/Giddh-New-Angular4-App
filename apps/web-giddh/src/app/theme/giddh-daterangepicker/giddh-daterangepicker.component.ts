@@ -9,7 +9,6 @@ import { AppState } from '../../store';
 import { SettingsFinancialYearActions } from '../../actions/settings/financial-year/financial-year.action';
 
 @Component({
-    selector: 'giddh-daterangepicker',
     styleUrls: ['./giddh-daterangepicker.component.scss'],
     templateUrl: './giddh-daterangepicker.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush

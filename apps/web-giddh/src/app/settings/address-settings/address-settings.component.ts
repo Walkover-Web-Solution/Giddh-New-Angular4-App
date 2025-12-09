@@ -15,7 +15,6 @@ import { WarehouseActions } from '../warehouse/action/warehouse.action';
 import { GeneralService } from '../../services/general.service';
 
 @Component({
-    selector: 'address-settings',
     templateUrl: './address-settings.component.html',
     styleUrls: ['./address-settings.component.scss']
 })

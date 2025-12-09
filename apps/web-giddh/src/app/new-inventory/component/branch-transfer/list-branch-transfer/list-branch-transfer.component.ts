@@ -24,7 +24,6 @@ import { Router } from '@angular/router';
 import { saveAs } from 'file-saver';
 
 @Component({
-    selector: 'app-list-branch-transfer',
     templateUrl: './list-branch-transfer.component.html',
     styleUrls: ['./list-branch-transfer.component.scss']
 })

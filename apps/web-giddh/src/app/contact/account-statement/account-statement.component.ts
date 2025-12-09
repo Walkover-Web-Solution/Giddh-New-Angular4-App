@@ -18,7 +18,6 @@ import { saveAs } from 'file-saver';
 import { GiddhNumberFormatPipe } from "../../shared/helpers/pipes/number-format/number-format.pipe";
 
 @Component({
-    selector: "account-statement",
     templateUrl: "account-statement.component.html",
     styleUrls: ["account-statement.component.scss"],
     providers: [ContactComponentStore]

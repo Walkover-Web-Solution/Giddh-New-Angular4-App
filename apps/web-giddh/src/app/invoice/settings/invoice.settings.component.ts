@@ -24,7 +24,6 @@ import { TemplateFroalaComponent } from '../../shared/template-froala/template-f
 import { ServiceConfig } from '../../services/service.config';
 
 @Component({
-    selector: 'app-invoice-setting',
     templateUrl: './invoice.settings.component.html',
     styleUrls: ['./invoice.setting.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

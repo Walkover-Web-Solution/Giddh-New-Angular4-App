@@ -7,7 +7,6 @@ import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/default
 import { IOption } from 'apps/web-giddh/src/app/app.constant';
 
 @Component({
-    selector: 'transfer-inventory-user',
     templateUrl: './transfer-inventory-user.component.html',
     styles: [`
 

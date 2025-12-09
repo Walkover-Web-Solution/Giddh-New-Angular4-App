@@ -22,7 +22,6 @@ import { SettingsBranchActions } from '../../../actions/settings/branch/settings
 import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
-    selector: 'adjust-inventory-list',
     templateUrl: './adjust-inventory-list.component.html',
     styleUrls: ['./adjust-inventory-list.component.scss'],
     providers: [AdjustInventoryListComponentStore]

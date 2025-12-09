@@ -1,6 +1,7 @@
 
 import { Injectable, OnDestroy } from "@angular/core";
-import { ComponentStore, tapResponse } from "@ngrx/component-store";
+import { ComponentStore } from "@ngrx/component-store";
+import { tap } from "rxjs/operators";
 import { Observable, switchMap, catchError, EMPTY } from "rxjs";
 import { BaseResponse } from "../../../models/api-models/BaseResponse";
 import { SubscriptionsService } from "../../../services/subscriptions.service";
@@ -47,7 +48,7 @@ export class ChangeBillingComponentStore extends ComponentStore<BillingState> im
             switchMap((req) => {
                 this.patchState({ getBillingDetailsInProgress: true });
                 return this.subscriptionService.getBillingDetails(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
@@ -85,7 +86,7 @@ export class ChangeBillingComponentStore extends ComponentStore<BillingState> im
             switchMap((req) => {
                 this.patchState({ updateBillingDetailsInProgress: true });
                 return this.subscriptionService.updateBillingDetails(req.request, req.id).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 this.toasterService.showSnackBar('success', res?.body);

@@ -6,9 +6,6 @@ import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.a
 import { takeUntil, take } from 'rxjs/operators';
 
 @Component({
-    selector: 'hamburger-menu',
-    standalone: false,
-    templateUrl: './hamburger-menu.component.html',
     styleUrls: ['hamburger-menu.component.scss']
 })
 

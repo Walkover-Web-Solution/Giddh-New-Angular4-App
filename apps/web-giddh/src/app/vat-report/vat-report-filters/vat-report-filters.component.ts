@@ -27,7 +27,6 @@ interface DateCheckResult {
     year?: number;
 }
 @Component({
-    selector: 'vat-report-filters',
     templateUrl: './vat-report-filters.component.html',
     styleUrls: ['./vat-report-filters.component.scss'],
     providers: [TaxAuthorityComponentStore]

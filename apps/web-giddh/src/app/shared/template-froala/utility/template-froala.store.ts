@@ -1,5 +1,6 @@
 import { Injectable, OnDestroy } from "@angular/core";
-import { ComponentStore, tapResponse } from "@ngrx/component-store";
+import { ComponentStore } from "@ngrx/component-store";
+import { tap } from "rxjs/operators";
 import { Observable, switchMap, catchError, EMPTY } from "rxjs";
 import { ToasterService } from "apps/web-giddh/src/app/services/toaster.service";
 import { BaseResponse } from "apps/web-giddh/src/app/models/api-models/BaseResponse";
@@ -43,7 +44,7 @@ export class CustomEmailComponentStore extends ComponentStore<CustomEmailState> 
             switchMap((triggerModule) => {
                 this.patchState({ emailConditionSuggestions: null });
                 return this.invoiceService.getEmailConditions(triggerModule).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
@@ -81,7 +82,7 @@ export class CustomEmailComponentStore extends ComponentStore<CustomEmailState> 
             switchMap((req) => {
                 this.patchState({ updateCustomEmailIsSuccess: null });
                 return this.invoiceService.updateCustomEmailTemplate(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 this.toaster.showSnackBar("success", res?.body);
@@ -118,7 +119,7 @@ export class CustomEmailComponentStore extends ComponentStore<CustomEmailState> 
             switchMap((searchTerm) => {
                 this.patchState({ emailContentSuggestions: null });
                 return this.invoiceService.getEmailContentSuggestions(searchTerm).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
@@ -156,7 +157,7 @@ export class CustomEmailComponentStore extends ComponentStore<CustomEmailState> 
             switchMap((req) => {
                 this.patchState({ emailTemplates: null });
                 return this.invoiceService.getEmailTemplate(req).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
@@ -194,7 +195,7 @@ export class CustomEmailComponentStore extends ComponentStore<CustomEmailState> 
             switchMap((req) => {
                 this.patchState({ accountGroupList: [] });
                 return this.inventoryService.getFlattenGroupWithAccountsList(req.request, req.model).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({

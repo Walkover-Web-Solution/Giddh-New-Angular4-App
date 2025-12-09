@@ -8,7 +8,6 @@ import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-mod
 import { SubscriptionComponentStore } from '../utility/subscription.store';
 
 @Component({
-    selector: 'verify-ownership-dilaog',
     templateUrl: './verify-ownership-dilaog.component.html',
     styleUrls: ['./verify-ownership-dilaog.component.scss'],
     providers: [SubscriptionComponentStore]

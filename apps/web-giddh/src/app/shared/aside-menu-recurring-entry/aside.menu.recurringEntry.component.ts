@@ -13,7 +13,6 @@ import { RecurringVoucherService } from '../../services/recurring-voucher.servic
 import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
 
 @Component({
-    selector: 'app-aside-recurring-entry',
     templateUrl: './aside.menu.recurringEntry.component.html',
     styleUrls: ['./aside.menu.recurringEntry.component.scss'],
 })

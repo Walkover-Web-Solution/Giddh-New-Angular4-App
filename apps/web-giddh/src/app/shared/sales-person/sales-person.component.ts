@@ -146,13 +146,13 @@ export class SalesPersonComponent implements OnInit, OnDestroy {
             }
         });
 
-        // Delete which liked with Account Only 
+        // Delete which liked with Account Only
         this.componentStore.openTransferAndDeleteDialog$.pipe(takeUntil(this.destroyed$), filter(Boolean), tap(() => {
             this.openTransferAndDeleteDialog(false, this.commonLocaleData?.app_delete, this.localeData?.delete_confirmation_message, this.localeData?.transfer_and_delete);
             this.componentStore.patchState({ openTransferAndDeleteDialog: false });
         })).subscribe();
 
-        // Delete which liked with Voucher/ Entry 
+        // Delete which liked with Voucher/ Entry
         this.componentStore.openTransferAndArchiveDialog$.pipe(takeUntil(this.destroyed$), filter(Boolean), tap(() => {
             const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
                 panelClass: ['mat-dialog-sm'],
@@ -246,7 +246,7 @@ export class SalesPersonComponent implements OnInit, OnDestroy {
                             this.componentStore.deleteSalesPerson(element?.uniqueName);
                         }
                     });
-                } else {    
+                } else {
                      if (element?.linkedEntities && element?.linkedEntities.includes(SalesPersonErrorDetailsEnum.ENTRY_VOUCHER)) {
                         this.salesPersonUniqueName = element?.uniqueName;
                         this.componentStore.patchState({
@@ -317,7 +317,7 @@ export class SalesPersonComponent implements OnInit, OnDestroy {
     public closeDialog(): void {
         let response = null;
         if (this.salesPersonListIsModified) {
-            response = { 
+            response = {
                 isTransfer: this.activeSalePersonIsTransfer
             };
         }

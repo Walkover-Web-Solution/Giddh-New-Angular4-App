@@ -10,7 +10,6 @@ import { Store, select } from '@ngrx/store';
 import { IForceClear } from '../../../models/api-models/Sales';
 
 @Component({
-    selector: 'connect-bank-modal',
     templateUrl: './connect.bank.modal.component.html',
     styles: [`iframe {
     width: 100%;

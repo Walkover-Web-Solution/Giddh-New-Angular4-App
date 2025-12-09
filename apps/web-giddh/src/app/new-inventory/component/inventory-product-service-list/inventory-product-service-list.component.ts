@@ -95,7 +95,6 @@ const ELEMENT_DATA: PeriodicElement[] = [
 
 
 @Component({
-    selector: "inventory-product-service-list",
     templateUrl: "./inventory-product-service-list.component.html",
     styleUrls: ["./inventory-product-service-list.component.scss"],
 

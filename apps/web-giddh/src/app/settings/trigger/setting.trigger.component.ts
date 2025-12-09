@@ -18,7 +18,6 @@ import { NgForm } from '@angular/forms';
 import { SettingsTriggersService } from '../../services/settings.triggers.service';
 
 @Component({
-    selector: 'setting-trigger',
     templateUrl: './setting.trigger.component.html',
     styleUrls: [`./setting.trigger.component.scss`]
 })

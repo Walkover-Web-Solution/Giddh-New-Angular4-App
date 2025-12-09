@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
-import { ComponentStore, tapResponse } from "@ngrx/component-store";
+import { ComponentStore } from "@ngrx/component-store";
+import { tap } from "rxjs/operators";
 import { Store } from "@ngrx/store";
 import { Observable, switchMap, catchError, EMPTY } from "rxjs";
 import { AppState } from "../../../store";

@@ -23,7 +23,6 @@ import { ServiceConfig } from '../../../services/service.config';
 /** Hold information of import  */
 const ELEMENT_DATA: ImportsData[] = [];
 @Component({
-    selector: 'imports',
     templateUrl: './imports.component.html',
     styleUrls: ['./imports.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

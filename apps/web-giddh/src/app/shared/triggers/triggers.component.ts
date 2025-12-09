@@ -7,7 +7,6 @@ import { Router } from "@angular/router";
 import { ASIDE_PANE_CONFIG } from "../../app.constant";
 
 @Component({
-    selector: 'app-triggers',
     templateUrl: './triggers.component.html',
     styleUrls: ['./triggers.component.scss'],
     providers: [TriggerComponentStore]

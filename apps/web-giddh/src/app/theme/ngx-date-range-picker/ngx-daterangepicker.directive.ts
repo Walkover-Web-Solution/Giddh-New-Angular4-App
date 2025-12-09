@@ -8,7 +8,6 @@ import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 
 @Directive({
-    selector: 'input[ngxDaterangepickerMd]',
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,

@@ -9,7 +9,6 @@ import { PAGE_SIZE_OPTIONS } from '../../app.constant';
 import { PageEvent } from '@angular/material/paginator';
 
 @Component({
-    selector: 'app-history-dialog',
     templateUrl: './history-dialog.component.html',
     styleUrls: ['./history-dialog.component.scss'],
     providers: [VoucherComponentStore]

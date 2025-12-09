@@ -20,7 +20,6 @@ import { VoucherTypeEnum } from '../../models/api-models/Sales';
 const NO_ADVANCE_RECEIPT_FOUND = 'There is no advanced receipt for adjustment.';
 
 @Component({
-    selector: 'advance-receipt-adjustment-component',
     templateUrl: './advance-receipt-adjustment.component.html',
     styleUrls: [`./advance-receipt-adjustment.component.scss`],
     changeDetection: ChangeDetectionStrategy.OnPush

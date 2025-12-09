@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
-    selector: 'aside-create-unit-group',
     templateUrl: './aside-create-unit-group.component.html',
     styleUrls: ['./aside-create-unit-group.component.scss']
 })

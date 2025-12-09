@@ -18,7 +18,6 @@ import { VoucherTypeEnum } from '../utility/vouchers.const';
 import { IOption } from '../../app.constant';
 
 @Component({
-    selector: 'app-bulk-update',
     templateUrl: './bulk-update.component.html',
     styleUrls: ['./bulk-update.component.scss'],
     providers: [VoucherComponentStore]

@@ -5,7 +5,6 @@ import { takeUntil } from "rxjs/operators";
 import { AppState } from "../../store";
 
 @Directive({
-    selector: '[validateSubscription]'
 })
 
 export class ValidateSubscriptionDirective implements OnInit, OnDestroy {

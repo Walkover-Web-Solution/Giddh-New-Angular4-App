@@ -10,7 +10,6 @@ import { ReportType } from '../multi-currency.const';
 import { prepareProfitLossData } from '../../store/tl-pl/tl-pl.reducer';
 
 @Component({
-    selector: 'profit-loss-report',
     templateUrl: './profit-loss-report.component.html',
     providers: [MultiCurrencyReportsComponentStore]
 })

@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
-import { ComponentStore, tapResponse } from "@ngrx/component-store";
+import { ComponentStore } from "@ngrx/component-store";
+import { tap } from "rxjs/operators";
 import { Store } from "@ngrx/store";
 import { Observable, switchMap, catchError, EMPTY, mergeMap } from "rxjs";
 import { BaseResponse } from "../../../models/api-models/BaseResponse";
@@ -49,7 +50,7 @@ export class GstSettingComponentStore extends ComponentStore<GstSettingState> {
             switchMap(() => {
                 this.patchState({ isLoading: true });
                 return this.gstReconcileService.getLutNumberList().pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
                                 lutNumberList: res?.body ?? [],
@@ -76,7 +77,7 @@ export class GstSettingComponentStore extends ComponentStore<GstSettingState> {
             switchMap((req) => {
                 this.patchState({ isLoading: true, deleteLutNumberIsSuccess: false });
                 return this.gstReconcileService.deleteLutNumber(req.lutNumberUniqueName).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
                                 this.toaster.showSnackBar("success", res.body);
@@ -103,7 +104,7 @@ export class GstSettingComponentStore extends ComponentStore<GstSettingState> {
             mergeMap((req) => {
                 this.patchState({ isLoading: true, lutNumberResponse: null });
                 return this.gstReconcileService.createLutNumber(req.q).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({
@@ -133,7 +134,7 @@ export class GstSettingComponentStore extends ComponentStore<GstSettingState> {
             mergeMap((req) => {
                 this.patchState({ isLoading: true, lutNumberResponse: null });
                 return this.gstReconcileService.updateLutNumber(req.q).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({

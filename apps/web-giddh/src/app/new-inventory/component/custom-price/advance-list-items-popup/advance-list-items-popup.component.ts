@@ -13,7 +13,6 @@ const DIRECTIONAL_KEYS = [
 const SPECIAL_KEYS = [...DIRECTIONAL_KEYS, CAPS_LOCK, TAB, SHIFT, CONTROL, ALT, MAC_WK_CMD_LEFT, MAC_WK_CMD_RIGHT, MAC_META];
 
 @Component({
-    selector: "items-list-popup",
     templateUrl: "./advance-list-items-popup.component.html",
     styleUrls: ["./advance-list-items-popup.component.scss"],
     changeDetection: ChangeDetectionStrategy.OnPush
