@@ -337,6 +337,13 @@ export class TallyModuleService {
                     encodeURIComponent('bankaccounts, cash, loanandoverdraft,sundrycreditors,sundrydebtors '),
                 exceptGroups: encodeURIComponent('')
             };
+        } else if (voucherType.toLowerCase() === VOUCHERS.PURCHASE) {
+            return {
+                group: selectedTransactionType?.toLowerCase() === 'to' ?
+                    encodeURIComponent('bankaccounts, cash, loanandoverdraft, sundrycreditors, creditcardaccounts') :
+                    encodeURIComponent('operatingcost, indirectexpenses, purchases, directexpenses, fixedassets'),
+                exceptGroups: encodeURIComponent('')
+            };
         }
         else {
             return {

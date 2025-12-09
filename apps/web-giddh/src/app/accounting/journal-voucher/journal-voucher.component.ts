@@ -80,6 +80,15 @@ export const PAGE_SHORTCUT_MAPPING = [
             gridType: 'voucher'
         }
     },
+    {
+        keyCode: 120, // 'F9',
+        key: FUNCTIONAL_KEYS.F9,
+        inputForFn: {
+            page: 'Purchase',
+            uniqueName: 'purchases',
+            gridType: 'voucher'
+        }
+    }
     //{
     //     keyCode: 119, // 'F8',
     //     key: FUNCTIONAL_KEYS.F8,
@@ -144,8 +153,8 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
     public showDiscountEvent: boolean;
     /** Hold show tax event  */
     public showTaxEvent: boolean;
-    /** Hold sales entry event  */
-    public salesEntry: boolean;
+    /** Hold show discount and tax event  */
+    public showDiscountAndTax: boolean;
 
     /** @ignore */
     constructor(
@@ -262,7 +271,7 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
      * @memberof JournalVoucherComponent
      */
     public getSalesEntryEvent(event: any): void {
-        this.salesEntry = event;
+        this.showDiscountAndTax = event;
     }
 
     /**

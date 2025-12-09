@@ -277,8 +277,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     @Output() public hideTaxSidebar: EventEmitter<boolean> = new EventEmitter();
     /** True if it is sales entry*/
     public isSalesEntry: boolean = false;
-    /** Emits the value if it is sales entry */
-    @Output() public salesEntry: EventEmitter<boolean> = new EventEmitter();
+    /** Emits when show discount and tax event */
+    @Output() public showDiscountAndTax: EventEmitter<boolean> = new EventEmitter();
     /** True if api call in progress  */
     public loadMoreInProgress: boolean = false;
     /** Holds voucher api version */
@@ -449,7 +449,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 this.isInitialCalculationDone = false;
                 this.previousTotalDebit = 0;
                 this.previousTotalCredit = 0;
-                this.salesEntry.emit(false);
+                this.showDiscountAndTax.emit(false);
             }
         });
 
@@ -1693,7 +1693,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 let filteredWithoutTaxDiscountData = [];
                 let filteredDiscountData = data?.transactions?.filter(transaction => transaction?.isDiscountApplied);
                 let filteredTaxData = data?.transactions?.filter(transaction => transaction?.isTaxApplied);
-                if (voucherTypeControl.value === VOUCHERS.SALES || voucherTypeControl.value === VOUCHERS.JOURNAL) {
+                if (voucherTypeControl.value === VOUCHERS.SALES || voucherTypeControl.value === VOUCHERS.JOURNAL || voucherTypeControl.value === VOUCHERS.PURCHASE) {
                     filteredWithoutTaxDiscountData = data?.transactions?.filter(transaction => !transaction?.isDiscountApplied && !transaction?.isTaxApplied);
                     if (filteredDiscountData?.length) {
                         filteredDiscountData?.forEach(discount => {
@@ -1869,7 +1869,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.adjustmentTransaction = {};
         this.chequeDetailForm?.reset();
         this.isSalesEntry = false;
-        this.salesEntry.emit(this.isSalesEntry);
+        this.showDiscountAndTax.emit(this.isSalesEntry);
 
         // Set entry date
         this.journalVoucherForm.patchValue({
@@ -1905,9 +1905,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     break;
 
                 case VOUCHERS.SALES:
+                case VOUCHERS.PURCHASE:
                     firstTransaction.patchValue({ type: 'by' });
                     this.isSalesEntry = true;
-                    this.salesEntry.emit(this.isSalesEntry);
+                    this.showDiscountAndTax.emit(this.isSalesEntry);
                     break;
 
                 default:
