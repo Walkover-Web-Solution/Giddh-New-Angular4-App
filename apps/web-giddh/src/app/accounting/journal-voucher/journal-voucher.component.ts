@@ -80,6 +80,15 @@ export const PAGE_SHORTCUT_MAPPING = [
             gridType: 'voucher'
         }
     },
+    {
+        keyCode: 120, // 'F9',
+        key: FUNCTIONAL_KEYS.F9,
+        inputForFn: {
+            page: 'Purchase',
+            uniqueName: 'purchases',
+            gridType: 'voucher'
+        }
+    }
     //{
     //     keyCode: 119, // 'F8',
     //     key: FUNCTIONAL_KEYS.F8,
