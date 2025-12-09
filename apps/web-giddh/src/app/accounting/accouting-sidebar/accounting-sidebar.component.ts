@@ -31,8 +31,8 @@ export class AccountingSidebarComponent implements OnInit, OnChanges, OnDestroy 
     @Output() public showDiscountEvent: EventEmitter<boolean> = new EventEmitter();
     /** Emits the show tax event  */
     @Output() public showTaxEvent: EventEmitter<boolean> = new EventEmitter();
-    /** Hold sales entry event  */
-    @Input() public salesEntry: boolean;
+    /** Hold show discount and tax event  */
+    @Input() public showDiscountAndTax: boolean;
 
     constructor(private _tallyModuleService: TallyModuleService) {
         //

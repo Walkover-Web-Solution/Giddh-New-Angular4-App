@@ -153,8 +153,8 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
     public showDiscountEvent: boolean;
     /** Hold show tax event  */
     public showTaxEvent: boolean;
-    /** Hold sales entry event  */
-    public salesEntry: boolean;
+    /** Hold show discount and tax event  */
+    public showDiscountAndTax: boolean;
 
     /** @ignore */
     constructor(
@@ -271,7 +271,7 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
      * @memberof JournalVoucherComponent
      */
     public getSalesEntryEvent(event: any): void {
-        this.salesEntry = event;
+        this.showDiscountAndTax = event;
     }
 
     /**
