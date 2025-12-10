@@ -142,7 +142,7 @@
             >
                 {{ commonLocaleData?.app_update }}
             </button>
-            <button mat-stroked-button (click)="onCancel()">{{ commonLocaleData?.app_cancel }}</button>
+            <button mat-stroked-button role="button" (click)="onCancel()">{{ commonLocaleData?.app_cancel }}</button>
         </div>
     </div>
 </ng-container>
@@ -207,7 +207,7 @@
             >
                 {{ commonLocaleData?.app_update }}
             </button>
-            <button mat-stroked-button (click)="onCancel()">{{ commonLocaleData?.app_cancel }}</button>
+            <button mat-stroked-button (click)="onCancel()" role="button">{{ commonLocaleData?.app_cancel }}</button>
         </div>
     </div>
 </ng-container>

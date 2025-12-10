@@ -275,7 +275,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="d-flex column-gap-15 mt-2">
+                    <div class="d-flex column-gap-1 mt-2">
                         <button
                             mat-raised-button
                             color="primary"
@@ -284,7 +284,7 @@
                         >
                             {{ commonLocaleData?.app_proceed }}
                         </button>
-                        <button mat-stroked-button (click)="toggleCancelModel()">
+                        <button mat-stroked-button role="button" (click)="toggleCancelModel()">
                             {{ commonLocaleData?.app_cancel }}
                         </button>
                     </div>

@@ -20,6 +20,9 @@
             {{ inputData?.commonLocaleData?.app_back }}
         </button>
     </div>
+    <button *ngIf="importStep === importStepEnum.First" mat-icon-button aria-label="close" mat-dialog-close>
+        <i class="icon-cross"></i>
+    </button>
 </div>
 <div class="modal-body p-0">
     <!-- Step first -->

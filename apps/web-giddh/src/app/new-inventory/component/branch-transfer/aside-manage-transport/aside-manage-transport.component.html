@@ -3,14 +3,10 @@
     [file]="'inventory/branch-transfer'"
     (commonLocaleData)="commonLocaleData = $event"
     (localeData)="localeData = $event"
-
 >
     <section class="aside-dialog-wrapper">
         <div class="dialog-header">
             <span>{{ commonLocaleData?.app_manage_transporter }}</span>
-            <button mat-icon-button aria-label="close" mat-dialog-close>
-                <i class="icon-cross"></i>
-            </button>
         </div>
         <mat-dialog-content class="dialog-body">
             <div class="create-group-aside-body">
@@ -75,6 +71,9 @@
                                 <button mat-stroked-button (click)="clearTransportForm()">
                                     {{ commonLocaleData?.app_clear }}
                                 </button>
+                                <button mat-stroked-button mat-dialog-close role="button">
+                                    {{ commonLocaleData?.app_cancel }}
+                                </button>
                             </div>
                         </div>
                     </form>
@@ -85,17 +84,23 @@
                         <table mat-table [dataSource]="transporterListDetails">
                             <!-- Name Column -->
                             <ng-container matColumnDef="name">
-                                <th mat-header-cell *matHeaderCellDef class="mat-table-name">{{commonLocaleData?.app_name}}</th>
+                                <th mat-header-cell *matHeaderCellDef class="mat-table-name">
+                                    {{ commonLocaleData?.app_name }}
+                                </th>
                                 <td mat-cell *matCellDef="let element">{{ element.transporterName }}</td>
                             </ng-container>
                             <!-- Weight Column -->
                             <ng-container matColumnDef="transporterId">
-                                <th mat-header-cell *matHeaderCellDef class="mat-table-id">{{commonLocaleData?.app_transporter_id}}</th>
+                                <th mat-header-cell *matHeaderCellDef class="mat-table-id">
+                                    {{ commonLocaleData?.app_transporter_id }}
+                                </th>
                                 <td mat-cell *matCellDef="let element">{{ element.transporterId }}</td>
                             </ng-container>
                             <!-- Symbol Column -->
                             <ng-container matColumnDef="action">
-                                <th mat-header-cell *matHeaderCellDef class="text-right mat-table-action">{{commonLocaleData?.app_actions}}</th>
+                                <th mat-header-cell *matHeaderCellDef class="text-right mat-table-action">
+                                    {{ commonLocaleData?.app_actions }}
+                                </th>
                                 <td mat-cell *matCellDef="let element">
                                     <div class="d-flex column-gap-05 justify-content-end edit-delete-btn">
                                         <button mat-stroked-button (click)="editTransporter(element)">
@@ -111,9 +116,7 @@
                             <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                         </table>
                     </div>
-                    <div
-                        *ngIf="transporterObj?.totalItems > pageSizeOptions[0] && !isLoading"
-                    >
+                    <div *ngIf="transporterObj?.totalItems > pageSizeOptions[0] && !isLoading">
                         <mat-paginator
                             [length]="transporterObj?.totalItems"
                             [pageSize]="transporterObj.count"
