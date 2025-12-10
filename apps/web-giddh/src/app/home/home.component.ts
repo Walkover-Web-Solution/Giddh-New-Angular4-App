@@ -13,6 +13,8 @@ import { CrDrComponent } from './components/cr-dr-list/cr-dr-list.component';
 import { GeneralService } from "../services/general.service";
 
 @Component({
+    selector: 'home',
+standalone: false,
     styleUrls: ['./home.component.scss'],
     templateUrl: './home.component.html'
 })

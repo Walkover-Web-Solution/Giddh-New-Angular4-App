@@ -10,6 +10,8 @@ import { Chart, registerables } from 'chart.js';
 Chart.register(...registerables);
 
 @Component({
+    selector: 'ratio-analysis-chart',
+standalone: false,
     templateUrl: 'ratio-analysis-chart.component.html',
     styleUrls: ['ratio-analysis-chart.component.scss', '../../home.component.scss']
 })

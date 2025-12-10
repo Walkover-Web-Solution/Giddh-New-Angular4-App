@@ -6,6 +6,9 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { GeneralService } from '../../services/general.service';
 
 @Component({
+    selector: 'purchase-order-preview',
+    templateUrl: './purchase-order-preview.component.html',
+standalone: false,
     styleUrls: ['./purchase-order-preview.component.scss']
 })
 

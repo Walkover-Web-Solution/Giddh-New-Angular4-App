@@ -12,6 +12,8 @@ export class UpdateLedgerDiscountData {
 }
 
 @Component({
+    selector: 'update-ledger-discount',
+standalone: false,
     templateUrl: 'update-ledger-discount.component.html',
     styleUrls: ['./update-ledger-discount.component.scss']
 })

@@ -1,14 +1,15 @@
 import { NgModule } from "@angular/core";
 import { NewInventoryComponent } from "./new-inventory.component";
 import { NewInventoryRoutingModule } from "./new-inventory.routing.module";
-import { SharedModule } from "../shared/shared.module";
+// import { SharedModule } from "../shared/shared.module";
 import { MatTabsModule } from "@angular/material/tabs";
 import { CreateNewUnitComponent } from "./component/create-unit/create-unit.component";
 import { StockGroupListComponent } from "./component/stock-group-list/stock-group-list.component";
 import { ProductServiceListComponent } from "./component/inventory-product-service-list/inventory-product-service-list.component";
 import { InventoryTransactionListComponent } from "./component/inventory-transaction-list/inventory-transaction-list.component";
 import { NewInventoryAdvanceSearch } from "./component/new-inventory-advance-search/new-inventory-advance-search.component";
-import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
+// import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
+// Temporarily disabled;
 import { TranslateDirectiveModule } from "../theme/translate/translate.directive.module";
 import { CommonModule } from "@angular/common";
 import { DecimalDigitsModule } from "../shared/helpers/directives/decimalDigits/decimalDigits.module";
@@ -26,7 +27,7 @@ import { StockCreateEditModule } from "./component/stock-create-edit/stock-creat
 import { InventorySidebarModule } from "./component/inventory-sidebar/inventory-sidebar.module";
 import { StockBalanceComponent } from "./component/stock-balance/stock-balance.component";
 import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
-import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-loader.module";
+// import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-loader.module";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatTooltipModule } from "@angular/material/tooltip";
@@ -61,6 +62,9 @@ import { MatPaginatorModule } from "@angular/material/paginator";
 import { AsideCreateNewReasonComponent } from "./component/aside-create-reason/aside-create-reason.component";
 import { PreviewVariantImageComponent } from "./component/preview-variant-image/preview-variant-image.component";
 import { AmountFieldComponentModule } from "../shared/amount-field/amount-field.module";
+import { TextFieldComponent } from "../theme/form-fields/text-field/text-field.component";
+import { ReactiveDropdownFieldComponent } from "../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component";
+import { InputFieldComponent } from "../theme/form-fields/input-field/input-field.component";
 
 @NgModule({
     declarations: [
@@ -85,14 +89,16 @@ import { AmountFieldComponentModule } from "../shared/amount-field/amount-field.
         ExportInventoryMasterComponent,
         AdjustInventoryComponent,
         AsideCreateNewReasonComponent,
-        PreviewVariantImageComponent
+        PreviewVariantImageComponent,
+        TextFieldComponent, // Added since FormFieldsModule is disabled
+        ReactiveDropdownFieldComponent, // Added since FormFieldsModule is disabled
+        InputFieldComponent, // Added since FormFieldsModule is disabled
+        AmountFieldComponent, // Added since FormFieldsModule is disabled
+    
     ],
     imports: [
         NewInventoryRoutingModule,
-        SharedModule,
         CommonModule,
-        FormFieldsModule,
-        TranslateDirectiveModule,
         DecimalDigitsModule,
         MatButtonModule,
         MatIconModule,
@@ -109,17 +115,12 @@ import { AmountFieldComponentModule } from "../shared/amount-field/amount-field.
         GroupCreateEditModule,
         StockCreateEditModule,
         NgxMatSelectSearchModule,
-        GiddhPageLoaderModule,
         MatDialogModule,
         MatAutocompleteModule,
         MatTooltipModule,
-        SelectTableColumnModule,
-        MatGridListModule,
         MatListModule,
         RecipeModule,
         ManufacturingModule,
-        CdkScrollModule,
-        FormsModule,
         NoDataModule,
         DragDropModule,
         CustomPriceModule,
@@ -127,8 +128,8 @@ import { AmountFieldComponentModule } from "../shared/amount-field/amount-field.
         MatSlideToggleModule,
         MatExpansionModule,
         MatPaginatorModule,
-        ReactiveFormsModule,
-        AmountFieldComponentModule
+        ReactiveFormsModule
+    
     ],
     exports: [
         NewInventoryComponent,

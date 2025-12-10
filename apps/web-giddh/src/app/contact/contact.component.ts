@@ -58,6 +58,8 @@ import { ContactsTab, ContactsColumn } from './contacts.enum';
 import { GiddhNumberFormatPipe } from '../shared/helpers/pipes/number-format/number-format.pipe';
 
 @Component({
+    selector: 'contact',
+standalone: false,
     templateUrl: "./contact.component.html",
     styleUrls: ["./contact.component.scss"],
     providers: [ContactComponentStore]

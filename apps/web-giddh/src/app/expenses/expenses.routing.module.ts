@@ -5,16 +5,19 @@ import { NeedsAuthentication } from '../decorators/needsAuthentication';
 
 @NgModule({
     imports: [
-        RouterModule.forChild([
-            {
-                path: '', component: ExpensesComponent, canActivate: [NeedsAuthentication]
+        RouterModule.forChild([ { path: '',
+        component: ExpensesComponent,
+        canActivate: [NeedsAuthentication
+    ]
             },
             {
                 path: ':type', component: ExpensesComponent, canActivate: [NeedsAuthentication]
             }
         ])
     ],
-    exports: [RouterModule]
+    exports: [
+        RouterModule
+    ]
 })
 export class ExpensesRoutingModule {
 }

@@ -7,6 +7,8 @@ import { ToasterService } from '../../../services/toaster.service';
 import { cloneDeep } from '../../../lodash-optimized';
 
 @Component({
+    selector: 'columnar.report.table',
+standalone: false,
     templateUrl: './columnar.report.table.component.html',
     styleUrls: ['./columnar.report.table.component.scss']
 })

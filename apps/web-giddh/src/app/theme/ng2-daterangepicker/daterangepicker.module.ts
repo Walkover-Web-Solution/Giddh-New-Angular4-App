@@ -3,9 +3,15 @@ import { DaterangePickerComponent } from './daterangepicker.component';
 import { DaterangepickerConfig } from './config.service';
 
 @NgModule({
-    declarations: [DaterangePickerComponent],
-    providers: [DaterangepickerConfig],
-    exports: [DaterangePickerComponent]
+    declarations: [
+        DaterangePickerComponent
+    ],
+    providers: [
+        DaterangepickerConfig
+    ],
+    exports: [
+        DaterangePickerComponent
+    ]
 })
 
 export class Daterangepicker {

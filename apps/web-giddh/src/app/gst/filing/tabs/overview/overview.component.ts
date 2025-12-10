@@ -6,6 +6,7 @@ import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'filing-overview',
+    standalone: false,
     templateUrl: './overview.component.html',
     styleUrls: ['overview.component.scss'],
 })
@@ -34,7 +35,7 @@ export class FilingOverviewComponent implements OnInit, OnDestroy {
             this.showTransaction = this.route.routerState.snapshot.url.includes('transaction');
             this.showHsnSummary = this.route.routerState.snapshot.url.includes('hsn-summary');
         });
-        
+
         this.activatedRoute.url.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             this.showTransaction = this.route.routerState.snapshot.url.includes('transaction');
             this.showHsnSummary = this.route.routerState.snapshot.url.includes('hsn-summary');

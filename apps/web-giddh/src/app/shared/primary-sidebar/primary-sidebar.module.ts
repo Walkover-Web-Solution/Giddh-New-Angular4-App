@@ -25,6 +25,7 @@ import { MatInputModule } from "@angular/material/input";
     declarations: [
         PrimarySidebarComponent,
         CompanyBranchComponent
+    
     ],
     imports: [
         CommonModule,
@@ -37,28 +38,22 @@ import { MatInputModule } from "@angular/material/input";
         CheckPermissionModule,
         CommandKModule,
         SocialLoginModule,
-        GenericAsideMenuAccountModule,
-        MatDialogModule,
         MatTabsModule,
         MatMenuModule,
         MatButtonModule,
         CdkTreeModule,
         MatInputModule
+    
     ],
     exports: [
         PrimarySidebarComponent
+    
     ],
     providers: [
-        {
-            provide: AuthServiceConfig,
-            useFactory: (injector: Injector) => {
-                const serviceConfig = injector.get(ServiceConfig) as IServiceConfigArgs;
-                return new AuthServiceConfig(
-                    [
-                        {
-                            id: GoogleLoginProvider.PROVIDER_ID,
-                            provider: new GoogleLoginProvider(serviceConfig?.GOOGLE_CLIENT_ID || '')
-                        }
+        { provide: AuthServiceConfig,
+        useFactory: (injector: Injector) => { const serviceConfig = injector.get(ServiceConfig) as IServiceConfigArgs; return new AuthServiceConfig( [ { id: GoogleLoginProvider.PROVIDER_ID,
+        provider: new GoogleLoginProvider(serviceConfig?.GOOGLE_CLIENT_ID || '') }
+    
                     ],
                     false
                 );

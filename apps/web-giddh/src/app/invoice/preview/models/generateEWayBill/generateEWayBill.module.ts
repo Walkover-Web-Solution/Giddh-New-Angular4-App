@@ -10,17 +10,20 @@ import { MatButtonModule } from "@angular/material/button";
 @NgModule({
     declarations: [
         GenerateEWayBillComponent
+    
     ],
     imports: [
         CommonModule,
-        MatTooltipModule, 
+        MatTooltipModule,
         TranslateDirectiveModule,
         MatBadgeModule,
         MatDialogModule,
         MatButtonModule
+    
     ],
     exports: [
         GenerateEWayBillComponent
+    
     ]
 })
 export class GenerateEWayBillModule { }

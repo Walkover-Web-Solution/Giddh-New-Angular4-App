@@ -16,6 +16,8 @@ import { createSelector } from "reselect";
 import { each, find, orderBy } from '../../../lodash-optimized';
 
 @Component({
+    selector: 'aside-branch-transfer-pane',
+standalone: false,
     templateUrl: './aside-branch-transfer-pane.component.html',
     styleUrls: ['./aside-branch-transfer-pane.component.scss']
 })

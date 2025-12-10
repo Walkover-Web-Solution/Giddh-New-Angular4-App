@@ -26,6 +26,8 @@ import { GiddhNumberFormatPipe } from '../../../shared/helpers/pipes/number-form
 Chart.register(...registerables);
 
 @Component({
+    selector: 'profile-loss',
+standalone: false,
     templateUrl: 'profit-loss.component.html',
     styleUrls: ['../../home.component.scss', './profit-loss.component.scss'],
 })

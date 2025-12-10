@@ -5,6 +5,7 @@ import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
 @Component({
     selector: 'document-issued',
+    standalone: false,
     templateUrl: './document-issued.component.html',
     styleUrls: ['./document-issued.component.css'],
 })

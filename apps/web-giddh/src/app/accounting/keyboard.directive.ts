@@ -11,6 +11,7 @@ const KEY_CODE_CONSTANTS = {
 };
 
 @Directive({
+  standalone: false,
 })
 export class OnReturnDirective {
     @Input() public onReturn: string;

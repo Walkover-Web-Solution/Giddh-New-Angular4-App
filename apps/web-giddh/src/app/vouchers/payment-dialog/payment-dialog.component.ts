@@ -12,6 +12,8 @@ import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { InvoicePaymentRequest } from '../../models/api-models/Invoice';
 
 @Component({
+    selector: 'payment-dialog',
+standalone: false,
     templateUrl: './payment-dialog.component.html',
     styleUrls: ['./payment-dialog.component.scss'],
     providers: [VoucherComponentStore]

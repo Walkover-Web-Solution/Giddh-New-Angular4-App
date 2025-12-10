@@ -6,6 +6,8 @@ import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/default
 import { IOption } from 'apps/web-giddh/src/app/app.constant';
 
 @Component({
+    selector: 'inventory-user',
+standalone: false,
     templateUrl: './inventory-user.component.html'
 })
 

@@ -6,6 +6,7 @@ import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
 @Component({
     selector: 'hsn-summary',
+    standalone: false,
     templateUrl: './hsn-summary.component.html',
     styleUrls: ['hsn-summary.component.css'],
 })

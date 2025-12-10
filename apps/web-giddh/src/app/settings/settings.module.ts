@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { ContactModule } from '../contact/contact.module';
 import { AsideMenuCreateTaxModule } from '../shared/aside-menu-create-tax/aside-menu-create-tax.module';
 import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
-import { SharedModule } from '../shared/shared.module';
+// import { SharedModule } from '../shared/shared.module';
 import { BranchComponent } from './branch/branch.component';
 import { DiscountComponent } from './discount/discount.component';
 import { FinancialYearComponent } from './financial-year/financial-year.component';
@@ -41,7 +41,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ConfirmModalModule } from '../theme/confirm-modal/confirm-modal.module';
 import { MatGridListModule } from '@angular/material/grid-list';
-import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+// import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+// Temporarily disabled;
 import { MatInputModule } from '@angular/material/input';
 import { ClipboardModule } from 'ngx-clipboard';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -79,6 +80,10 @@ import { ReplaceAllPipeModule } from '../shared/helpers/pipes/replaceAll/replace
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { CompanyAuthKeyComponent } from './company-auth-key/company-auth-key.component';
 import { CreateCompanyAuthKeyComponent } from './company-auth-key/create-company-auth-key/create-company-auth-key.component';
+import { TextFieldComponent } from "../theme/form-fields/text-field/text-field.component";
+import { ReactiveDropdownFieldComponent } from "../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component";
+import { InputFieldComponent } from "../theme/form-fields/input-field/input-field.component";
+import { AmountFieldComponent } from "../shared/amount-field/amount-field.component";
 
 @NgModule({
     declarations: [
@@ -109,15 +114,17 @@ import { CreateCompanyAuthKeyComponent } from './company-auth-key/create-company
         OtherSettingsComponent,
         CreateBranchComponent,
         InstitutionsListComponent,
-        ExportFileNameComponent
+        ExportFileNameComponent,
+        TextFieldComponent, // Added since FormFieldsModule is disabled
+        ReactiveDropdownFieldComponent, // Added since FormFieldsModule is disabled
+        InputFieldComponent, // Added since FormFieldsModule is disabled
+        AmountFieldComponent, // Added since FormFieldsModule is disabled
+    
     ],
     imports: [
         CommonModule,
-        SharedModule,
         MatListModule,
         SettingRountingModule,
-        AsideMenuCreateTaxModule,
-        ContactModule,
         FormsModule,
         ReactiveFormsModule,
         GiddhNumberFormatModule,
@@ -138,8 +145,6 @@ import { CreateCompanyAuthKeyComponent } from './company-auth-key/create-company
         ConfirmModalModule,
         MatSlideToggleModule,
         MatGridListModule,
-        FormFieldsModule,
-        MatInputModule,
         ClipboardModule,
         MatCheckboxModule,
         MatChipsModule,
@@ -164,10 +169,9 @@ import { CreateCompanyAuthKeyComponent } from './company-auth-key/create-company
         NewConfirmModalModule,
         OverlayModule,
         GiddhDatepickerModule,
-        TributeMentionModule,
-        ReplaceAllPipeModule,
         TitleCasePipe,
         MatPaginatorModule
+    
     ],
 })
 

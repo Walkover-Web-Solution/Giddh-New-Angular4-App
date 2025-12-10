@@ -8,12 +8,14 @@ import { DownloadRoutingModule } from "./download.routing.module";
 @NgModule({
     declarations: [
         DownloadComponent
+    
     ],
     imports: [
         CommonModule,
         RouterModule,
         TranslateDirectiveModule,
         DownloadRoutingModule
+    
     ]
 })
 

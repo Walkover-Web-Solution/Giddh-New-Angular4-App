@@ -17,6 +17,8 @@ import { DROPDOWN_ITEMS_COUNT_LIMIT, IOption } from '../../../app.constant';
 import { IForceClear } from '../../../models/api-models/Sales';
 
 @Component({
+    selector: 'audit-logs.sidebar',
+standalone: false,
     templateUrl: './audit-logs.sidebar.component.html',
     styleUrls: ['audit-logs.sidebar.component.scss']
 })

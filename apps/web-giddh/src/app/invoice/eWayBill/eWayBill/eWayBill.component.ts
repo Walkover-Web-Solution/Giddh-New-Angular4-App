@@ -32,6 +32,7 @@ import { EwayBillComponentStore } from '../utility/eWayBill.store';
 
 @Component({
     selector: 'app-ewaybill-component',
+    standalone: false,
     templateUrl: './eWayBill.component.html',
     styleUrls: [`./eWayBill.component.scss`],
     providers: [VoucherComponentStore, EwayBillComponentStore]
@@ -462,7 +463,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Open add vehicle/cancel dialog 
+     * Open add vehicle/cancel dialog
      *
      * @memberof EWayBillComponent
      */
@@ -706,7 +707,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         } else {
             this.isDropUp = true;
         }
-        
+
         this._cd.detectChanges();
     }
 

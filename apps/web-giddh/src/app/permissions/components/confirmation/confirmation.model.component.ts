@@ -2,6 +2,8 @@ import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
 import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
 
 @Component({
+    selector: 'confirmation.model',
+standalone: false,
     templateUrl: './confirmation.model.component.html'
 })
 

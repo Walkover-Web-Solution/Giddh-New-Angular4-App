@@ -10,7 +10,7 @@ import { SalesModule } from '../sales/sales.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
-import { SharedModule } from '../shared/shared.module';
+// import { SharedModule } from '../shared/shared.module';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { ApprovePettyCashEntryConfirmDialogComponent } from './components/approve-petty-cash-entry-confirm-dialog/approve-petty-cash-entry-confirm-dialog.component';
 import { ExpenseDetailsComponent } from './components/expense-details/expense-details.component';
@@ -29,8 +29,13 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatInputModule } from '@angular/material/input';
 import { LightboxModule } from 'ngx-lightbox';
 import { RejectPettyCashEntryConfirmDialogComponent } from './components/reject-petty-cash-entry-confirm-dialog/reject-petty-cash-entry-confirm-dialog.component';
-import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+// import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+// Temporarily disabled;
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { TextFieldComponent } from "../theme/form-fields/text-field/text-field.component";
+import { ReactiveDropdownFieldComponent } from "../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component";
+import { InputFieldComponent } from "../theme/form-fields/input-field/input-field.component";
+import { AmountFieldComponent } from "../shared/amount-field/amount-field.component";
 
 @NgModule({
     declarations: [
@@ -40,10 +45,16 @@ import { MatFormFieldModule } from '@angular/material/form-field';
         FilterListComponent,
         ExpenseDetailsComponent,
         ApprovePettyCashEntryConfirmDialogComponent,
-        RejectPettyCashEntryConfirmDialogComponent
+        RejectPettyCashEntryConfirmDialogComponent,
+        TextFieldComponent, // Added since FormFieldsModule is disabled
+        ReactiveDropdownFieldComponent, // Added since FormFieldsModule is disabled
+        InputFieldComponent, // Added since FormFieldsModule is disabled
+        AmountFieldComponent, // Added since FormFieldsModule is disabled
+    
     ],
     providers: [],
-    imports: [CommonModule,
+    imports: [
+        CommonModule,
         ReactiveFormsModule,
         FormsModule,
         Daterangepicker,
@@ -51,7 +62,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
         LedgerModule,
         GiddhNumberFormatModule,
         MatPaginatorModule,
-        SharedModule,
         ElementViewChildModule,
         SalesModule,
         UpdateLedgerEntryPanelModule,
@@ -66,13 +76,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
         MatDividerModule,
         MatInputModule,
         LightboxModule,
-        MatMenuModule,
-        FormFieldsModule,
-        MatFormFieldModule
+        MatMenuModule
+    
     ],
     exports: [
         ExpensesComponent,
         GiddhNumberFormatModule
+    
     ]
 })
 export class ExpensesModule {

@@ -12,6 +12,8 @@ import { saveAs } from 'file-saver';
 type bulkExportVoucherTypes = 'sales' | 'debit note' | 'credit note' | 'purchase' | 'payment' | 'receipt';
 
 @Component({
+    selector: 'bulk-export-voucher',
+standalone: false,
     templateUrl: './bulk-export-voucher.component.html',
     styleUrls: [`./bulk-export-voucher.component.scss`]
 })

@@ -6,13 +6,16 @@ import { FinancialReportsComponent } from './financial-reports.component';
 
 @NgModule({
     imports: [
-        RouterModule.forChild([
-            {
-                path: '', component: FinancialReportsComponent, canActivate: [NeedsAuthentication]
+        RouterModule.forChild([ { path: '',
+        component: FinancialReportsComponent,
+        canActivate: [NeedsAuthentication
+    ]
             }
         ])
     ],
-    exports: [RouterModule]
+    exports: [
+        RouterModule
+    ]
 })
 export class FinancialReportsRoutingModule {
 }

@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { MainComponent } from './main.component';
 import { InventorySidebarModule } from '../inventory-sidebar/inventory-sidebar.module';
 import { HamburgerMenuModule } from '../../../shared/header/components/hamburger-menu/hamburger-menu.module';
-import { FormFieldsModule } from '../../../theme/form-fields/form-fields.module';
+// import { FormFieldsModule } from '../../../theme/form-fields/form-fields.module';
+// Temporarily disabled;
 import { MatButtonModule } from '@angular/material/button';
 import { GiddhDatepickerModule } from '../../../theme/giddh-datepicker/giddh-datepicker.module';
 import { BranchTransferRoutingModule } from './branch-transfer.routing.module';
@@ -17,7 +18,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-
+// 
 import { GiddhPageLoaderModule } from '../../../shared/giddh-page-loader/giddh-page-loader.module';
 
 import { MatSortModule } from '@angular/material/sort';
@@ -28,36 +29,46 @@ import { CreateBranchTransferComponent } from './create-branch-transfer/create-b
 import { ListBranchTransferComponent } from './list-branch-transfer/list-branch-transfer.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { GiddhNumberFormatModule } from '../../../shared/helpers/pipes/number-format/number-format.module';
+import { TextFieldComponent } from "../theme/form-fields/text-field/text-field.component";
+import { ReactiveDropdownFieldComponent } from "../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component";
+import { InputFieldComponent } from "../theme/form-fields/input-field/input-field.component";
+import { AmountFieldComponent } from "../shared/amount-field/amount-field.component";
 @NgModule({
     imports: [
         CommonModule,
         InventorySidebarModule,
         HamburgerMenuModule,
         BranchTransferRoutingModule,
-        FormFieldsModule,
-        MatButtonModule,
         MatTooltipModule,
         MatTableModule,
         MatDialogModule,
         MatMenuModule,
-        DatepickerWrapperModule,
-        GiddhDatepickerModule,
         MatRadioModule,
         FormsModule,
         ClickOutsideModule,
         MatFormFieldModule,
         MatInputModule,
-        GiddhPageLoaderModule,
         GiddhNumberFormatModule,
         MatSortModule,
         ReactiveFormsModule,
-        TranslateDirectiveModule,
-        AsideMenuProductServiceModule,
-        MatPaginatorModule
+        TranslateDirectiveModule
+    
     ],
     exports: [
-        AsideManageTransportComponent, CreateBranchTransferComponent, ListBranchTransferComponent
+        AsideManageTransportComponent,
+        CreateBranchTransferComponent,
+        ListBranchTransferComponent
+    
     ],
-    declarations: [MainComponent, AsideManageTransportComponent, CreateBranchTransferComponent, ListBranchTransferComponent]
+    declarations: [
+        MainComponent,
+        AsideManageTransportComponent,
+        CreateBranchTransferComponent,
+        ListBranchTransferComponent,
+        TextFieldComponent, // Added since FormFieldsModule is disabled
+        ReactiveDropdownFieldComponent, // Added since FormFieldsModule is disabled
+        InputFieldComponent, // Added since FormFieldsModule is disabled
+        AmountFieldComponent, // Added since FormFieldsModule is disabled
+    ]
 })
 export class BranchTransferModule { }

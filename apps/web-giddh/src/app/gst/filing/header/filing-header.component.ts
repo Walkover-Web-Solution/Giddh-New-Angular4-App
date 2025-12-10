@@ -21,6 +21,7 @@ import { ASIDE_PANE_CONFIG, RestrictedModules } from '../../../app.constant';
 
 @Component({
     selector: 'filing-header',
+    standalone: false,
     templateUrl: 'filing-header.component.html',
     styleUrls: ['filing-header.component.scss']
 })

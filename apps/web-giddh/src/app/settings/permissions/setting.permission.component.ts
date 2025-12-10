@@ -15,6 +15,8 @@ import { SettingsProfileActions } from '../../actions/settings/profile/settings.
 import { NewConfirmationModalComponent } from '../../theme/new-confirmation-modal/confirmation-modal.component';
 
 @Component({
+    selector: 'setting.permission',
+standalone: false,
     templateUrl: './setting.permission.component.html',
     styleUrls: ['./setting.permission.component.scss']
 })

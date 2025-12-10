@@ -12,6 +12,8 @@ import { SearchSubscriptionRequest } from '../../models/api-models/Subscriptions
 import { IOption } from '../../app.constant';
 
 @Component({
+    selector: 'move-company',
+standalone: false,
     styleUrls: ['./move-company.component.scss'],
     templateUrl: './move-company.component.html',
     providers: [SubscriptionComponentStore],

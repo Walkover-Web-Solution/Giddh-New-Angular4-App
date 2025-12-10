@@ -13,6 +13,8 @@ import { StockUnitRequest } from '../../../models/api-models/Inventory';
 import { CustomStockUnitAction } from '../../../actions/inventory/custom-stock-unit.actions';
 
 @Component({
+    selector: 'aside-menu',
+standalone: false,
     templateUrl: './aside-menu.component.html',
     styleUrls: ['./aside-menu.component.scss'],
 })

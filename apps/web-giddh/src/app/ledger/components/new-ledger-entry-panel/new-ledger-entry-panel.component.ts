@@ -57,6 +57,8 @@ const NEW_LEDGER_ENTRIES = [
 ];
 
 @Component({
+    selector: 'new-ledger-entry-panel',
+standalone: false,
     templateUrl: 'new-ledger-entry-panel.component.html',
     styleUrls: ['./new-ledger-entry-panel.component.scss'],
     providers: [SalesPersonComponentStore],

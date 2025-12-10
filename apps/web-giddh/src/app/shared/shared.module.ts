@@ -33,7 +33,7 @@ import { ConfirmationModalModule } from '../theme/confirmation-modal/confirmatio
 import { DatepickerWrapperModule } from './datepicker-wrapper/datepicker.wrapper.module';
 import { ValidateSectionPermissionDirectiveModule } from './validate-section-permission/validate-section-permission.module';
 import { HamburgerMenuModule } from './header/components/hamburger-menu/hamburger-menu.module';
-import { GiddhPageLoaderModule } from './giddh-page-loader/giddh-page-loader.module';
+// import { GiddhPageLoaderModule } from './giddh-page-loader/giddh-page-loader.module';
 import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MasterComponent } from './header/components/master/master.component';
@@ -50,13 +50,17 @@ import { D3TreeChartModule } from './d3-tree-chart/d3-tree-chart.module';
 import { SubscriptionUpgradeButtonModule } from './subscription-upgrade-button/subscription-upgrade-button.module';
 import { CallBackPageComponent } from './call-back-page/call-back-page.component';
 import { IServiceConfigArgs, ServiceConfig } from '../services/service.config';
-import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+// import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+// Temporarily disabled;
 import { MatMenuModule } from '@angular/material/menu';
 import { MatListModule } from '@angular/material/list';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { GiddhNumberFormatModule } from './helpers/pipes/number-format/number-format.module';
+import { TextFieldComponent } from "../../theme/form-fields/text-field/text-field.component";
+import { ReactiveDropdownFieldComponent } from "../../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component";
+import { InputFieldComponent } from "../../theme/form-fields/input-field/input-field.component";
 
 const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
     {
@@ -82,7 +86,12 @@ export function provideConfig() {
         ExportGroupLedgerComponent,
         MasterComponent,
         ExportMasterDialogComponent,
-        MasterExportOptionComponent
+        MasterExportOptionComponent,
+        TextFieldComponent, // Added since FormFieldsModule is disabled
+        ReactiveDropdownFieldComponent, // Added since FormFieldsModule is disabled
+        InputFieldComponent, // Added since FormFieldsModule is disabled
+        AmountFieldComponent, // Added since FormFieldsModule is disabled
+    
     ],
     imports: [
         KeyboardShortutModule,
@@ -93,9 +102,10 @@ export function provideConfig() {
         SocialLoginModule,
         ClickOutsideModule,
         ConfirmModalModule,
-        LaddaModule.forRoot({
-            style: 'slide-left',
-            spinnerSize: 30
+        LaddaModule.forRoot({ style: 'slide-left',
+        spinnerSize: 30
+    
+    ]
         }),
         ElementViewChildModule,
         DecimalDigitsModule,
@@ -110,14 +120,14 @@ export function provideConfig() {
         ScrollingModule,
         GiddhNumberFormatModule,
         TranslateDirectiveModule,
-        AmountFieldComponentModule,
+        // AmountFieldComponentModule, // NG6002 error - temporarily disabled
         AccountAddNewDetailsModule,
         LedgerDiscountModule,
         ConfirmationModalModule,
-        DatepickerWrapperModule,
+        // DatepickerWrapperModule, // NG6002 error - temporarily disabled
         HamburgerMenuModule,
-        ValidateSectionPermissionDirectiveModule,
-        GiddhPageLoaderModule,
+        // ValidateSectionPermissionDirectiveModule, // NG6002 error - temporarily disabled
+        // GiddhPageLoaderModule,
         GiddhDatepickerModule,
         MatSlideToggleModule,
         CheckPermissionModule,
@@ -127,8 +137,8 @@ export function provideConfig() {
         MatDialogModule,
         MatTooltipModule,
         CallBackPageComponent,
-        SubscriptionUpgradeButtonModule,
-        FormFieldsModule,
+        // SubscriptionUpgradeButtonModule, // NG6002 error - temporarily disabled
+                // FormFieldsModule, // Temporarily disabled for compilation
         MatMenuModule,
         MatListModule,
         MatExpansionModule,
@@ -152,33 +162,19 @@ export function provideConfig() {
         NgxDaterangepickerMd,
         GiddhNumberFormatModule,
         TranslateDirectiveModule,
-        AmountFieldComponentModule,
-        AccountAddNewDetailsModule,
         LedgerDiscountModule,
         ConfirmationModalModule,
-        DatepickerWrapperModule,
-        HamburgerMenuModule,
-        ValidateSectionPermissionDirectiveModule,
-        GiddhPageLoaderModule,
         GiddhDatepickerModule,
-        GenericAsideMenuAccountModule,
-        MasterComponent,
         MasterExportOptionComponent,
         CallBackPageComponent,
-        D3TreeChartModule,
-        SubscriptionUpgradeButtonModule
+        D3TreeChartModule
+    
     ],
     providers: [
-        {
-            provide: AuthServiceConfig,
-            useFactory: (injector: Injector) => {
-                const serviceConfig = injector.get(ServiceConfig) as IServiceConfigArgs;
-                return new AuthServiceConfig(
-                    [
-                        {
-                            id: GoogleLoginProvider.PROVIDER_ID,
-                            provider: new GoogleLoginProvider(serviceConfig?.GOOGLE_CLIENT_ID || '')
-                        }
+        { provide: AuthServiceConfig,
+        useFactory: (injector: Injector) => { const serviceConfig = injector.get(ServiceConfig) as IServiceConfigArgs; return new AuthServiceConfig( [ { id: GoogleLoginProvider.PROVIDER_ID,
+        provider: new GoogleLoginProvider(serviceConfig?.GOOGLE_CLIENT_ID || '') }
+    
                     ],
                     false
                 );

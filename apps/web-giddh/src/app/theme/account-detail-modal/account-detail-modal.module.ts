@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { TranslateDirectiveModule } from '../translate/translate.directive.module';
 import { AsideMenuAccountModule } from '../../shared/aside-menu-account/aside.menu.account.module';
 import { ClickOutsideModule } from 'ng-click-outside';
-import { GiddhPageLoaderModule } from '../../shared/giddh-page-loader/giddh-page-loader.module';
+// import { GiddhPageLoaderModule } from '../../shared/giddh-page-loader/giddh-page-loader.module';
 import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
@@ -15,11 +15,15 @@ import { MatDialogModule } from '@angular/material/dialog';
         TranslateDirectiveModule,
         AsideMenuAccountModule,
         ClickOutsideModule,
-        GiddhPageLoaderModule,
         MatDialogModule
+    
     ],
-    exports: [AccountDetailModalComponent],
-    declarations: [AccountDetailModalComponent],
+    exports: [
+        AccountDetailModalComponent
+    ],
+    declarations: [
+        AccountDetailModalComponent
+    ],
     providers: [],
 })
 export class AccountDetailModalModule {

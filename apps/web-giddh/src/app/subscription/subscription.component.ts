@@ -23,6 +23,8 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 
 dayjs.extend(duration)
 @Component({
+    selector: 'subscription',
+standalone: false,
     templateUrl: './subscription.component.html',
     styleUrls: ['./subscription.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

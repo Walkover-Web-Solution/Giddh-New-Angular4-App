@@ -16,6 +16,8 @@ import { GroupService } from '../../../services/group.service';
 import { cloneDeep } from '../../../lodash-optimized';
 
 @Component({
+    selector: 'search.sidebar',
+standalone: false,
     templateUrl: './search.sidebar.component.html',
     styleUrls: [`./search.sidebar.component.scss`],
 })

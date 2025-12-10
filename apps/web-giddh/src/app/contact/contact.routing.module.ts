@@ -5,17 +5,19 @@ import { ContactPreviewComponent } from './preview/preview.component';
 
 @NgModule({
     imports: [
-        RouterModule.forChild([
-            {
-                path: '',
-                redirectTo: 'customer',
-                pathMatch: 'full'
-            },
-            { path: ':type', component: ContactComponent },
-            { path: ':type/:accountUniqueName', component: ContactPreviewComponent },
+        RouterModule.forChild([ { path: '',
+        redirectTo: 'customer',
+        pathMatch: 'full' },
+        { path: ':type',
+        component: ContactComponent },
+        { path: ':type/:accountUniqueName',
+        component: ContactPreviewComponent }
+    
         ])
     ],
-    exports: [RouterModule]
+    exports: [
+        RouterModule
+    ]
 })
 export class ContactRoutingModule {
 }

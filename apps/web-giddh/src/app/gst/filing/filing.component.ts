@@ -16,6 +16,7 @@ import { RestrictedModules } from '../../app.constant';
 
 @Component({
     selector: 'filing',
+    standalone: false,
     templateUrl: 'filing.component.html',
     styleUrls: ['filing.component.scss'],
     encapsulation: ViewEncapsulation.Emulated

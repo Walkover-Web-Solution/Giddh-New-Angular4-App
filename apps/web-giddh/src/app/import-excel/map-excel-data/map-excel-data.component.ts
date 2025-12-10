@@ -11,6 +11,8 @@ interface DataModel {
 }
 
 @Component({
+    selector: 'map-excel-data',
+standalone: false,
     styleUrls: ['./map-excel-data.component.scss'],
     templateUrl: './map-excel-data.component.html'
 })

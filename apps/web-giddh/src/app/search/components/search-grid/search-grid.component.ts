@@ -28,6 +28,8 @@ export interface SearchTable {
 /** Hold information of activity logs */
 const ELEMENT_DATA: SearchTable[] = [];
 @Component({
+    selector: 'search-grid',
+standalone: false,
     templateUrl: './search-grid.component.html'
 })
 export class SearchGridComponent implements OnInit, OnDestroy {

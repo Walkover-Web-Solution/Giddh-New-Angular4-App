@@ -7,9 +7,10 @@ import { MfReportComponent } from './report/mf.report.component';
 
 @NgModule({
     imports: [
-        RouterModule.forChild([
-            {
-                path: '', component: ManufacturingComponent, canActivate: [NeedsAuthentication],
+        RouterModule.forChild([ { path: '',
+        component: ManufacturingComponent,
+        canActivate: [NeedsAuthentication
+    ],
                 children: [
                     { path: '', redirectTo: 'report', pathMatch: 'full' },
                     { path: 'report', component: MfReportComponent },
@@ -18,7 +19,9 @@ import { MfReportComponent } from './report/mf.report.component';
             }
         ])
     ],
-    exports: [RouterModule]
+    exports: [
+        RouterModule
+    ]
 })
 export class ManufacturingRoutingModule {
 }

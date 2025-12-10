@@ -8,12 +8,14 @@ import { NgInitDirective } from './ng-init.directive';
     declarations: [
         KeyboardShortcutDirective,
         NavigationWalkerDirective,
-        NgInitDirective,
+        NgInitDirective
+    
     ],
     exports: [
         KeyboardShortcutDirective,
         NavigationWalkerDirective,
-        NgInitDirective,
+        NgInitDirective
+    
     ]
 })
 export class KeyboardShortutModule {

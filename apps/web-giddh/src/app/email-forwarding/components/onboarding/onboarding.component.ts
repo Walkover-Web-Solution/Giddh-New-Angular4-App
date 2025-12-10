@@ -6,6 +6,8 @@ import { EmailForwardingComponentStore } from '../../store/email-forwarding.stor
 import { GeneralService } from '../../../services/general.service';
 
 @Component({
+    selector: 'onboarding',
+standalone: false,
     templateUrl: './onboarding.component.html',
     styleUrls: ['./onboarding.component.scss'],
     providers: [EmailForwardingComponentStore]

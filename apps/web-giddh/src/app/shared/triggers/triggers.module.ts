@@ -18,14 +18,19 @@ import { AdvanceTriggerComponent } from './components/advance-trigger/advance-tr
 import { TriggersComponent } from './triggers.component';
 import { TranslateDirectiveModule } from '../../theme/translate/translate.directive.module';
 import { GiddhDateRangepickerModule } from '../../theme/giddh-daterangepicker/giddh-daterangepicker.module';
-import { GiddhPageLoaderModule } from '../giddh-page-loader/giddh-page-loader.module';
+// import { GiddhPageLoaderModule } from '../giddh-page-loader/giddh-page-loader.module';
 import { HamburgerMenuModule } from '../header/components/hamburger-menu/hamburger-menu.module';
 import { MatMenuModule } from '@angular/material/menu';
-import { FormFieldsModule } from '../../theme/form-fields/form-fields.module';
-import { SharedModule } from '../shared.module';
+// import { FormFieldsModule } from '../../theme/form-fields/form-fields.module';
+// Temporarily disabled;
+// import { SharedModule } from '../shared.module';
 import { MatCardModule } from '@angular/material/card';
 import { ReplaceAllPipeModule } from '../helpers/pipes/replaceAll/replaceAll.module';
 import { FroalaTemplateEditorModule } from '../template-froala/template-froala.module';
+import { TextFieldComponent } from "../../theme/form-fields/text-field/text-field.component";
+import { ReactiveDropdownFieldComponent } from "../../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component";
+import { InputFieldComponent } from "../../theme/form-fields/input-field/input-field.component";
+import { AmountFieldComponent } from "../../shared/amount-field/amount-field.component";
 
 @NgModule({
   imports: [
@@ -44,17 +49,26 @@ import { FroalaTemplateEditorModule } from '../template-froala/template-froala.m
         TranslateDirectiveModule,
         MatTableModule,
         GiddhDateRangepickerModule,
-        GiddhPageLoaderModule,
         HamburgerMenuModule,
         MatPaginatorModule,
         MatMenuModule,
-        FormFieldsModule,
-        SharedModule,
-        MatCardModule,
         ReplaceAllPipeModule,
         FroalaTemplateEditorModule
+    
     ],
-    exports: [TriggersComponent, BasicTriggerComponent, AdvanceTriggerComponent],
-    declarations: [TriggersComponent, BasicTriggerComponent, AdvanceTriggerComponent]
+    exports: [
+        TriggersComponent,
+        BasicTriggerComponent,
+        AdvanceTriggerComponent
+    ],
+    declarations: [
+        TriggersComponent,
+        BasicTriggerComponent,
+        AdvanceTriggerComponent,
+        TextFieldComponent, // Added since FormFieldsModule is disabled
+        ReactiveDropdownFieldComponent, // Added since FormFieldsModule is disabled
+        InputFieldComponent, // Added since FormFieldsModule is disabled
+        AmountFieldComponent, // Added since FormFieldsModule is disabled
+    ]
 })
 export class TriggersModule { }

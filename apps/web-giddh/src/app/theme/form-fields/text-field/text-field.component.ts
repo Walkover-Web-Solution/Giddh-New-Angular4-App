@@ -7,6 +7,8 @@ const noop = () => {
 };
 
 @Component({
+    selector: 'text-field',
+standalone: false,
     templateUrl: "./text-field.component.html",
     providers: [
         {

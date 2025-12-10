@@ -7,6 +7,7 @@ import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { Router } from '@angular/router';
 
 @Component({
+  standalone: false,
     styleUrls: ['aside-pane.components.scss'],
     templateUrl: './aside-pane.components.html'
 })

@@ -5,9 +5,10 @@ import { PageLeaveConfirmationGuard } from '../decorators/page-leave-confirmatio
 
 @NgModule({
     imports: [
-        RouterModule.forChild([
-            {
-                path: ':accountUniqueName', component: LedgerComponent, canDeactivate: [PageLeaveConfirmationGuard]
+        RouterModule.forChild([ { path: ':accountUniqueName',
+        component: LedgerComponent,
+        canDeactivate: [PageLeaveConfirmationGuard
+    ]
             },
             {
                 path: ':accountUniqueName/:from/:to', component: LedgerComponent, canDeactivate: [PageLeaveConfirmationGuard]
@@ -17,7 +18,9 @@ import { PageLeaveConfirmationGuard } from '../decorators/page-leave-confirmatio
             }
         ])
     ],
-    exports: [RouterModule]
+    exports: [
+        RouterModule
+    ]
 })
 export class LedgerRoutingModule {
 }

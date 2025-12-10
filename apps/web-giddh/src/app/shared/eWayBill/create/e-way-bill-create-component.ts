@@ -14,6 +14,7 @@ import { ASIDE_PANE_CONFIG, IOption, PAGINATION_LIMIT } from '../../../app.const
 import { PageEvent } from '@angular/material/paginator';
 
 @Component({
+  standalone: false,
     templateUrl: './e-way-bill-create-component.html',
     styleUrls: [`./e-way-bill-create-component.scss`],
     providers: [EWayBillComponentStore]

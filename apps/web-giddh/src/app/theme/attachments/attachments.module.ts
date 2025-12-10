@@ -6,7 +6,7 @@ import { MatListModule } from '@angular/material/list';
 import { CommonModule } from "@angular/common";
 import { NewConfirmModalModule } from "../new-confirm-modal";
 import { MatDialogModule } from "@angular/material/dialog";
-import { GiddhPageLoaderModule } from "../../shared/giddh-page-loader/giddh-page-loader.module";
+// import { GiddhPageLoaderModule } from "../../shared/giddh-page-loader/giddh-page-loader.module";
 import { FormsModule } from "@angular/forms";
 import { TranslateDirectiveModule } from "../translate/translate.directive.module";
 import { MatTooltipModule } from "@angular/material/tooltip";
@@ -14,6 +14,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 @NgModule({
     declarations: [
         AttachmentsComponent
+    
     ],
     imports: [
         MatButtonModule,
@@ -21,14 +22,15 @@ import { MatTooltipModule } from "@angular/material/tooltip";
         MatListModule,
         CommonModule,
         NewConfirmModalModule,
-        GiddhPageLoaderModule,
         FormsModule,
         TranslateDirectiveModule,
         MatDialogModule,
         MatTooltipModule
+    
     ],
     exports: [
         AttachmentsComponent
+    
     ]
 })
 export class AttachmentsModule {

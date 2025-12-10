@@ -3,6 +3,7 @@ import { GeneralService } from '../services/general.service';
 import { ServiceConfig } from '../services/service.config';
 
 @Component({
+  standalone: false,
     styleUrls: ['./app-login-success.scss'],
     templateUrl: './app-login-success.html'
 })

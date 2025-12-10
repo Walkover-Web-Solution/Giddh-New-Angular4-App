@@ -13,7 +13,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { MatGridListModule } from "@angular/material/grid-list";
-import { FormFieldsModule } from "../../theme/form-fields/form-fields.module";
+// import { FormFieldsModule } from "../../theme/form-fields/form-fields.module";
+// Temporarily disabled;
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatInputModule } from "@angular/material/input";
 import { MatChipsModule } from "@angular/material/chips";
@@ -26,12 +27,25 @@ import { NgModule } from "@angular/core";
 import { TranslateDirectiveModule } from "../../theme/translate/translate.directive.module";
 import { SettingIntegrationPaymentModule } from "../../settings/integration/payment/setting.integration.payment.module";
 import { AccountNumberMaskModule } from "../helpers/pipes/accountNumberMaskPipe/accountNumberMask.module";
-import { GiddhPageLoaderModule } from "../giddh-page-loader/giddh-page-loader.module";
+// import { GiddhPageLoaderModule } from "../giddh-page-loader/giddh-page-loader.module";
 import { BankLinkComponent } from "./bank-link/bank-link.component";
 import { BankIntegrationDialogComponent } from "./bank-integration-popup/bank-integration-popup.component";
+import { TextFieldComponent } from "../../theme/form-fields/text-field/text-field.component";
+import { ReactiveDropdownFieldComponent } from "../../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component";
+import { InputFieldComponent } from "../../theme/form-fields/input-field/input-field.component";
+import { AmountFieldComponent } from "../../shared/amount-field/amount-field.component";
 
 @NgModule({
-    declarations: [BankIntegrationComponent, InstitutionsListComponent, BankLinkComponent, BankIntegrationDialogComponent ],
+    declarations: [
+        BankIntegrationComponent,
+        InstitutionsListComponent,
+        BankLinkComponent,
+        BankIntegrationDialogComponent,
+        TextFieldComponent, // Added since FormFieldsModule is disabled
+        ReactiveDropdownFieldComponent, // Added since FormFieldsModule is disabled
+        InputFieldComponent, // Added since FormFieldsModule is disabled
+        AmountFieldComponent, // Added since FormFieldsModule is disabled
+     ],
     imports: [
         CommonModule,
         MatListModule,
@@ -47,8 +61,6 @@ import { BankIntegrationDialogComponent } from "./bank-integration-popup/bank-in
         MatDialogModule,
         MatSlideToggleModule,
         MatGridListModule,
-        FormFieldsModule,
-        MatInputModule,
         MatCheckboxModule,
         MatChipsModule,
         MatAutocompleteModule,
@@ -60,10 +72,13 @@ import { BankIntegrationDialogComponent } from "./bank-integration-popup/bank-in
         WatchVideoModule,
         TranslateDirectiveModule,
         SettingIntegrationPaymentModule,
-        AccountNumberMaskModule,
-        GiddhPageLoaderModule
-
+        AccountNumberMaskModule
     ],
-    exports: [BankIntegrationComponent, InstitutionsListComponent, BankLinkComponent, BankIntegrationDialogComponent]
+    exports: [
+        BankIntegrationComponent,
+        InstitutionsListComponent,
+        BankLinkComponent,
+        BankIntegrationDialogComponent
+    ]
 })
 export class BankIntegrationModule {}

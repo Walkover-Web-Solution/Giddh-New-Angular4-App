@@ -20,6 +20,8 @@ import { ASIDE_PANE_CONFIG, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../..
 import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-modal/confirmation-modal.component';
 
 @Component({
+    selector: 'e-way-bill.create',
+standalone: false,
     templateUrl: './eWayBill.create.component.html',
     styleUrls: [`./eWayBill.create.component.scss`]
 })

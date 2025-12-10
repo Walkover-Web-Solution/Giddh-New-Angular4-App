@@ -16,6 +16,8 @@ import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { TemplateModeEnum, TemplateTypeEnum, VoucherTypeEnum } from '../../../models/api-models/Sales';
 
 @Component({
+    selector: 'template-edit-filter',
+    standalone: false,
     templateUrl: './template-edit-filter.component.html',
     styleUrls: ['./template-edit-filter.component.scss'],
 

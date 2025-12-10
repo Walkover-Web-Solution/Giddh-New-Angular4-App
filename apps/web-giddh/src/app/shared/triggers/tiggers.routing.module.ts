@@ -8,12 +8,12 @@ import { TriggersComponent } from './triggers.component';
 
 @NgModule({
     imports: [
-        RouterModule.forChild([
-            {
-                path: '', 
-                pathMatch: 'full',
-                component: TriggersComponent, 
-                canActivate: [NeedsAuthentication, NeedsAuthorization]
+        RouterModule.forChild([ { path: '',
+        pathMatch: 'full',
+        component: TriggersComponent,
+        canActivate: [NeedsAuthentication,
+        NeedsAuthorization
+    ]
             },
             {
                 path: 'basic', 
@@ -27,7 +27,9 @@ import { TriggersComponent } from './triggers.component';
             }
         ])
     ],
-    exports: [RouterModule]
+    exports: [
+        RouterModule
+    ]
 })
 export class TriggersRoutingModule {
 }

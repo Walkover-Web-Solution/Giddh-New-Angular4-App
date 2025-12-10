@@ -17,6 +17,8 @@ import { NgForm } from '@angular/forms';
 import { IOption } from '../../../app.constant';
 
 @Component({
+    selector: 'inventory.customstock',
+standalone: false,
     templateUrl: './inventory.customstock.component.html',
     styleUrls: ['./inventory.customstock.component.scss']
 })

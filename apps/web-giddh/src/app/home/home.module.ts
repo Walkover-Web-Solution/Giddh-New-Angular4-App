@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
 import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
-import { SharedModule } from '../shared/shared.module';
+// import { SharedModule } from '../shared/shared.module';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { BankAccountsComponent } from './components/bank-accounts/bank-accounts.component';
 import { CrDrComponent } from './components/cr-dr-list/cr-dr-list.component';
@@ -28,31 +28,34 @@ import { GiddhNumberFormatPipe } from '../shared/helpers/pipes/number-format/num
 
 @NgModule({
     declarations: [
-        // Components / Directives/ Pipes
-        HomeComponent,
         RevenueChartComponent,
         RatioAnalysisChartComponent,
         TotalOverduesChartComponent,
         ProfitLossComponent,
         BankAccountsComponent,
         CrDrComponent
+    
     ],
-    exports: [HomeComponent],
+    exports: [
+        HomeComponent
+    ],
     providers: [
-            GiddhNumberFormatPipe,
+        GiddhNumberFormatPipe
+    
     ],
     imports: [
         CommonModule,
         FormsModule,
         HomeRoutingModule,
-        LaddaModule.forRoot({
-            style: 'slide-left',
-            spinnerSize: 30
+        LaddaModule.forRoot({ style: 'slide-left',
+        spinnerSize: 30
+    
+    ]
         }),
 
         Daterangepicker,
         GiddhNumberFormatModule,
-        SharedModule,
+        // SharedModule,
         MatCardModule,
         MatMenuModule,
         MatButtonModule,

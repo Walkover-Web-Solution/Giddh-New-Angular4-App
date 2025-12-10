@@ -95,9 +95,10 @@ const ELEMENT_DATA: PeriodicElement[] = [
 
 
 @Component({
+    selector: 'inventory-product-service-list',
+standalone: false,
     templateUrl: "./inventory-product-service-list.component.html",
     styleUrls: ["./inventory-product-service-list.component.scss"],
-
 })
 
 export class ProductServiceListComponent implements OnInit {

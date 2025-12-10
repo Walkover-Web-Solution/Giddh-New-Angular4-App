@@ -24,6 +24,8 @@ const IP_ADDR = 'ip_address';
 const CIDR_RANGE = 'cidr_range';
 
 @Component({
+    selector: 'form',
+standalone: false,
     templateUrl: './form.component.html',
     styleUrls: ['./form.component.scss']
 })

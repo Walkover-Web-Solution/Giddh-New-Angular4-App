@@ -16,6 +16,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IOption } from '../../app.constant';
 
 @Component({
+    selector: 'aside-menu-create-tax',
+    templateUrl: './aside-menu-create-tax.component.html',
+standalone: false,
     styleUrls: [`./aside-menu-create-tax.component.scss`],
     providers: [TaxAuthorityComponentStore]
 })

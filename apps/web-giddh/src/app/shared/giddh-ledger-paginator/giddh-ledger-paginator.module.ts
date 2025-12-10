@@ -9,10 +9,14 @@ import { GiddhLedgerPaginatorComponent } from './giddh-ledger-paginator.componen
         CommonModule,
         MatIconModule,
         MatButtonToggleModule
+    
     ],
     exports: [
         GiddhLedgerPaginatorComponent
+    
     ],
-    declarations: [GiddhLedgerPaginatorComponent]
+    declarations: [
+        GiddhLedgerPaginatorComponent
+    ]
 })
 export class GiddhLedgerPaginatorModule { }

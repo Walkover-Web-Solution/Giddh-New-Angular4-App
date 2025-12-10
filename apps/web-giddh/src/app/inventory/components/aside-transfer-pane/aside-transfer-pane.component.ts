@@ -13,6 +13,8 @@ import { StockUnitRequest } from '../../../models/api-models/Inventory';
 import { CustomStockUnitAction } from '../../../actions/inventory/custom-stock-unit.actions';
 
 @Component({
+    selector: 'aside-transfer-pane',
+standalone: false,
     templateUrl: './aside-transfer-pane.component.html',
     styleUrls: ['./aside-transfer-pane.component.scss'],
 })

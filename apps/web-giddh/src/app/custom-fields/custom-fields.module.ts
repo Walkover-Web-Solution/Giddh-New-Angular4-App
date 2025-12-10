@@ -10,24 +10,33 @@ import { CustomFieldsListComponent } from "./list/list.component";
 import { MainComponent } from "./main.component";
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatCommonModule } from '@angular/material/core';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
-import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
+// import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
+// Temporarily disabled;
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { TranslateDirectiveModule } from "../theme/translate/translate.directive.module";
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-loader.module";
+// import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-loader.module";
 import { NoDataModule } from "../shared/no-data/no-data.module";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
+import { TextFieldComponent } from "../theme/form-fields/text-field/text-field.component";
+import { ReactiveDropdownFieldComponent } from "../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component";
+import { InputFieldComponent } from "../theme/form-fields/input-field/input-field.component";
+import { AmountFieldComponent } from "../shared/amount-field/amount-field.component";
 
 @NgModule({
     declarations: [
         MainComponent,
         CustomFieldsListComponent,
         CustomFieldsCreateEditComponent,
+        TextFieldComponent, // Added since FormFieldsModule is disabled
+        ReactiveDropdownFieldComponent, // Added since FormFieldsModule is disabled
+        InputFieldComponent, // Added since FormFieldsModule is disabled
+        AmountFieldComponent, // Added since FormFieldsModule is disabled
+    
     ],
     imports: [
         CommonModule,
@@ -38,19 +47,16 @@ import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
         MatTableModule,
         MatFormFieldModule,
         MatInputModule,
-        MatCommonModule,
         MatRadioModule,
         MatSelectModule,
-        FormFieldsModule,
-        MatTooltipModule,
         TranslateDirectiveModule,
         MatPaginatorModule,
         FormsModule,
-        GiddhPageLoaderModule,
         NoDataModule,
         MatSlideToggleModule,
         WatchVideoModule,
         ReactiveFormsModule
+    
     ]
 })
 export class CustomFieldsModule {

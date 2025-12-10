@@ -9,6 +9,8 @@ import { PageLeaveUtilityService } from '../../../services/page-leave-utility.se
 import { GeneralService } from '../../../services/general.service';
 
 @Component({
+    selector: 'ledger-aside-pane',
+standalone: false,
     templateUrl: './ledger-aside-pane.component.html',
     styleUrls: ['./ledger-aside-pane.component.scss']
 })

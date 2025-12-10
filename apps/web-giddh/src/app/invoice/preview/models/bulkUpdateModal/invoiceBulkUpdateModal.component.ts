@@ -20,6 +20,8 @@ import { GeneralService } from 'apps/web-giddh/src/app/services/general.service'
 import { CommonService } from 'apps/web-giddh/src/app/services/common.service';
 
 @Component({
+    selector: 'invoice-bulk-update-modal',
+standalone: false,
     templateUrl: './invoiceBulkUpdateModal.component.html',
     styleUrls: ['./invoiceBulkUpdateModal.component.scss']
 })

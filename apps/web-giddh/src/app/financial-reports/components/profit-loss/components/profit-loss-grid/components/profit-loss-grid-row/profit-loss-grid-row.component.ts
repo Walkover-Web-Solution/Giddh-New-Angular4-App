@@ -12,6 +12,8 @@ import { TlPlService } from 'apps/web-giddh/src/app/services/tl-pl.service';
 import { ReplaySubject, takeUntil } from 'rxjs';
 
 @Component({
+    selector: 'profit-loss-grid-row',
+standalone: false,
     templateUrl: './profit-loss-grid-row.component.html',
     styleUrls: ['./profit-loss-grid-row.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

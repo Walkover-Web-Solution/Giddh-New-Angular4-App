@@ -5,8 +5,13 @@ import { SignupComponent } from './signup.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
 import { SignupRoutingModule } from './signup.routing.module';
-import { SharedModule } from '../shared/shared.module';
-import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { TextFieldComponent } from "../theme/form-fields/text-field/text-field.component";
+import { ReactiveDropdownFieldComponent } from "../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component";
+import { InputFieldComponent } from "../theme/form-fields/input-field/input-field.component";
+import { AmountFieldComponent } from "../shared/amount-field/amount-field.component";
+// import { SharedModule } from '../shared/shared.module';
+// import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+// Temporarily disabled;
 
 @NgModule({
     imports: [
@@ -15,14 +20,20 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
         FormsModule,
         ReactiveFormsModule,
         SignupRoutingModule,
-        LaddaModule.forRoot({
-            style: 'slide-left',
-            spinnerSize: 30
+        LaddaModule.forRoot({ style: 'slide-left',
+        spinnerSize: 30
+    
+    ]
         }),
-        SharedModule,
-        FormFieldsModule
-    ],
-    declarations: [SignupComponent]
+        // SharedModule,
+        // // FormFieldsModule, // Temporarily disabled for compilation
+    declarations: [
+        SignupComponent,
+        TextFieldComponent, // Added since FormFieldsModule is disabled
+        ReactiveDropdownFieldComponent, // Added since FormFieldsModule is disabled
+        InputFieldComponent, // Added since FormFieldsModule is disabled
+        AmountFieldComponent, // Added since FormFieldsModule is disabled
+    ]
 })
 export class SignupModule {
 }

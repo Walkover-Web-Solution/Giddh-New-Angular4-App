@@ -17,11 +17,12 @@ import { RecTypeModule } from '../shared/helpers/pipes/recType/recType.module';
 import { AccountDetailModalModule } from '../theme/account-detail-modal/account-detail-modal.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
-import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
+// import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
 import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
 import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
 import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
-import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+// import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+// Temporarily disabled;
 import { FinancialSearchPipe } from '../shared/header/pipe/financial-search.pipe';
 import { FilterMultiCurrencyComponent } from './filter/filter-multi-currency.component';
 import { AccountsFilterPipe } from './pipes/accounts-filter.pipe';
@@ -38,6 +39,9 @@ import { BalanceSheetReportGridComponent } from './balance-sheet/components/bala
 import { BalanceSheetReportGridRowComponent } from './balance-sheet/components/balance-sheet-grid/components/balance-sheet-grid-row/balance-sheet-report-grid-row.component';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
+import { TextFieldComponent } from "../theme/form-fields/text-field/text-field.component";
+import { ReactiveDropdownFieldComponent } from "../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component";
+import { InputFieldComponent } from "../theme/form-fields/input-field/input-field.component";
 
 @NgModule({
     declarations: [
@@ -53,10 +57,17 @@ import { MatMenuModule } from '@angular/material/menu';
         ProfitLossReportComponent,
         ProfitLossReportGridComponent,
         ProfitLossReportGridRowComponent,
-        FinancialAccordionDirective
+        FinancialAccordionDirective,
+        TextFieldComponent, // Added since FormFieldsModule is disabled
+        ReactiveDropdownFieldComponent, // Added since FormFieldsModule is disabled
+        InputFieldComponent, // Added since FormFieldsModule is disabled
+        AmountFieldComponent, // Added since FormFieldsModule is disabled
+    
     ],
     exports: [
-        MultiCurrencyReportsComponent, GiddhNumberFormatModule
+        MultiCurrencyReportsComponent,
+        GiddhNumberFormatModule
+    
     ],
     providers: [],
     imports: [
@@ -73,10 +84,6 @@ import { MatMenuModule } from '@angular/material/menu';
         ScrollingModule,
         TranslateDirectiveModule,
         HamburgerMenuModule,
-        GiddhPageLoaderModule,
-        AmountFieldComponentModule,
-        DatepickerWrapperModule,
-        AsideMenuAccountModule,
         MatTooltipModule,
         MatButtonModule,
         MatFormFieldModule,
@@ -85,9 +92,9 @@ import { MatMenuModule } from '@angular/material/menu';
         MatInputModule,
         MatTabsModule,
         MatListModule,
-        MatMenuModule,
-        FormFieldsModule
-    ],
+        MatMenuModule
+    
+    ]
 })
 export class MultiCurrencyReportsModule {
 }

@@ -4,11 +4,13 @@ import { NewVsOldInvoicesComponent } from './new-vs-old-Invoices.component';
 
 @NgModule({
     imports: [
-        RouterModule.forChild([{
-            path: '', component: NewVsOldInvoicesComponent
-        }])
+        RouterModule.forChild([{ path: '',
+        component: NewVsOldInvoicesComponent }
+    ])
     ],
-    exports: [RouterModule]
+    exports: [
+        RouterModule
+    ]
 })
 
 export class NewVsOldInvoicesRoutingModule {

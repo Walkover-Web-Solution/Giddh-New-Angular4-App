@@ -5,6 +5,7 @@ import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
 @Component({
     selector: 'b2cs-summary',
+    standalone: false,
     templateUrl: './b2cs-summary.component.html',
     styleUrls: ['./b2cs-summary.component.css'],
 })

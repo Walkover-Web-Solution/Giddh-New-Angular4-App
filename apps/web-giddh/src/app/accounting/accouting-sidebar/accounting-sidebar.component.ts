@@ -6,6 +6,8 @@ import { isEqual } from 'apps/web-giddh/src/app/lodash-optimized';
 import { VOUCHERS } from '../constants/accounting.constant';
 
 @Component({
+    selector: 'accounting-sidebar',
+standalone: false,
     templateUrl: './accounting-sidebar.component.html',
     styleUrls: ['./accounting-sidebar.component.scss']
 })

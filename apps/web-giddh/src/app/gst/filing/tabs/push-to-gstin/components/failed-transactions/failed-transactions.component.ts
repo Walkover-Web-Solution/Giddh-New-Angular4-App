@@ -8,6 +8,7 @@ import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
 @Component({
     selector: 'failed-transactions',
+    standalone: false,
     templateUrl: './failed-transactions.component.html',
     styleUrls: ['failed-transactions.component.scss'],
 })

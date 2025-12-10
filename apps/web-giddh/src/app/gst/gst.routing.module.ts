@@ -18,7 +18,7 @@ const GST_ROUTES: Routes = [
         children: [
             { path: '', component: FilingComponent },
             { path: 'transaction', component: FilingComponent },
-            { path: 'hsn-summary', component: FilingComponent },
+            { path: 'hsn-summary', component: FilingComponent }
         ]
     },
     { path: 'unit-mapping', component: UnitMappingComponent },
@@ -35,11 +35,13 @@ const GST_ROUTES: Routes = [
         ReactiveFormsModule,
         RouterModule.forChild(GST_ROUTES),
         GiddhNumberFormatModule
+    
     ],
     exports: [
         RouterModule,
         FormsModule,
-        CommonModule,
+        CommonModule
+    
     ]
 })
 export class GstRoutingModule { }

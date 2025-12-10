@@ -12,6 +12,9 @@ import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service'
 import { cloneDeep, concat, filter, find, findIndex, forEach, isEmpty, map, remove } from '../../../lodash-optimized';
 
 @Component({
+    selector: 'permission.details',
+    templateUrl: './permission.details.component.html',
+standalone: false,
     styleUrls: [`./permission.details.scss`]
 })
 

@@ -19,6 +19,9 @@ import { GstReport } from './constants/gst.constant';
 import { FormControl } from '@angular/forms';
 import { ServiceConfig } from '../services/service.config';
 @Component({
+    selector: 'gst',
+    templateUrl: './gst.component.html',
+standalone: false,
     styleUrls: ['./gst.component.scss']
 })
 export class GstComponent implements OnInit, OnDestroy {

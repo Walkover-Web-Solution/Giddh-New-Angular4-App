@@ -12,6 +12,8 @@ import { ReplaySubject } from 'rxjs';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
+    selector: 'share-ledger',
+standalone: false,
     templateUrl: './share-ledger.component.html',
     styleUrls: ['./share-ledger.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

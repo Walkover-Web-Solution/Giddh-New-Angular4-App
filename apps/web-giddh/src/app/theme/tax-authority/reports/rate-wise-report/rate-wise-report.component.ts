@@ -11,6 +11,8 @@ import { IPagination } from 'apps/web-giddh/src/app/models/interfaces/paginated-
 import { PageEvent } from '@angular/material/paginator';
 
 @Component({
+    selector: 'rate-wise-report',
+standalone: false,
     templateUrl: './rate-wise-report.component.html',
     styleUrls: ['./rate-wise-report.component.scss'],
     providers: [TaxAuthorityComponentStore]

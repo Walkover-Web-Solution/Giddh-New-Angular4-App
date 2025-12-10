@@ -11,6 +11,8 @@ import { GeneralService } from "../../services/general.service";
 import { IOption } from "../../app.constant";
 
 @Component({
+    selector: 'create-edit',
+standalone: false,
     templateUrl: "./create-edit.component.html",
     styleUrls: ["./create-edit.component.scss"],
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -5,6 +5,7 @@ import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
 @Component({
     selector: 'nil-summary',
+    standalone: false,
     templateUrl: './nil-summary.component.html',
     styleUrls: ['nil-summary.component.css'],
 })

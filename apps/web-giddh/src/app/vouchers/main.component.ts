@@ -1,8 +1,10 @@
 import { Component } from "@angular/core";
 
 @Component({
-    template: "<router-outlet></router-outlet>"
+    selector: 'main',
+    standalone: false,
+    templateUrl: './main.component.html'
 })
 export class MainComponent {
-    
+
 }

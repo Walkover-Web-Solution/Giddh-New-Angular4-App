@@ -5,16 +5,19 @@ import { AuditLogsComponent } from './audit-logs.component';
 
 @NgModule({
     imports: [
-        RouterModule.forChild([
-            {
-                path: '', component: AuditLogsComponent, canActivate: [NeedsAuthentication],
+        RouterModule.forChild([ { path: '',
+        component: AuditLogsComponent,
+        canActivate: [NeedsAuthentication
+    ],
             },
             {
                 path: ':version', component: AuditLogsComponent, canActivate: [NeedsAuthentication],
             }
         ])
     ],
-    exports: [RouterModule]
+    exports: [
+        RouterModule
+    ]
 })
 export class AuditLogsRoutingModule {
 }

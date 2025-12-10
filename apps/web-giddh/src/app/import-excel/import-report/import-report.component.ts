@@ -17,6 +17,8 @@ import { ImportExcelService } from '../../services/import-excel.service';
 import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../app.constant';
 
 @Component({
+    selector: 'import-report',
+standalone: false,
     templateUrl: './import-report.component.html',
     styleUrls: [`./import-report.component.scss`]
 })

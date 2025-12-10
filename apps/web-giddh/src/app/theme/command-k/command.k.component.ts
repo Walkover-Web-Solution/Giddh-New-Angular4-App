@@ -19,6 +19,8 @@ const DIRECTIONAL_KEYS = [
 const SPECIAL_KEYS = [...DIRECTIONAL_KEYS, CAPS_LOCK, TAB, SHIFT, CONTROL, ALT, MAC_WK_CMD_LEFT, MAC_WK_CMD_RIGHT, MAC_META];
 
 @Component({
+    selector: 'command.k',
+standalone: false,
     styleUrls: ['./command.k.component.scss'],
     templateUrl: './command.k.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush

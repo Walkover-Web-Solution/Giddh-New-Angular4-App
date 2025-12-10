@@ -25,6 +25,8 @@ const IP_ADDR = 'ip_address';
 const CIDR_RANGE = 'cidr_range';
 
 @Component({
+    selector: 'create-company-auth-key',
+standalone: false,
     templateUrl: "./create-company-auth-key.component.html",
     styleUrls: ["./create-company-auth-key.component.scss"]
 })

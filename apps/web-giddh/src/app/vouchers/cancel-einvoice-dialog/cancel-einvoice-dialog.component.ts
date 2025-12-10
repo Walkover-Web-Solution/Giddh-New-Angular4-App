@@ -7,6 +7,8 @@ import { IOption } from '../../app.constant';
 
 
 @Component({
+    selector: 'cancel-einvoice-dialog',
+standalone: false,
     templateUrl: './cancel-einvoice-dialog.component.html',
     styleUrls: ['./cancel-einvoice-dialog.component.scss'],
     providers: [VoucherComponentStore]

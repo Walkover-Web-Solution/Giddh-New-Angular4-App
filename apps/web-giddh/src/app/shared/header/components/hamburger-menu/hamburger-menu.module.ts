@@ -10,11 +10,17 @@ import { HamburgerMenuComponent } from "./hamburger-menu.component";
  * @class HamburgerMenuModule
  */
 @NgModule({
-    declarations: [HamburgerMenuComponent],
+    declarations: [
+        HamburgerMenuComponent
+    ],
     imports: [
         CommonModule,
         MatTooltipModule
+    
     ],
-    exports: [HamburgerMenuComponent]
+    exports: [
+        HamburgerMenuComponent
+    ]
 })
-export class HamburgerMenuModule {}
+export class HamburgerMenuModule {
+}

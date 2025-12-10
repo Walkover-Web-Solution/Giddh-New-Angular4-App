@@ -12,6 +12,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { BranchHierarchyType } from 'apps/web-giddh/src/app/app.constant';
 
 @Component({
+    selector: 'bulk-add-dialog',
+standalone: false,
     templateUrl: './bulk-add-dialog.component.html',
     styleUrls: ['./bulk-add-dialog.component.scss'],
     providers: [AccountAddNewDetailsComponentStore]

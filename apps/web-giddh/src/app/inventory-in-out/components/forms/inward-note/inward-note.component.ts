@@ -13,6 +13,8 @@ import { ReplaySubject } from 'rxjs';
 import { IOption } from 'apps/web-giddh/src/app/app.constant';
 
 @Component({
+    selector: 'inward-note',
+standalone: false,
     templateUrl: './inward-note.component.html',
     styleUrls: ['./inward-note.component.scss'],
 })

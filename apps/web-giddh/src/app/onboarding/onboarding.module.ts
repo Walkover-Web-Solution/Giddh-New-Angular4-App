@@ -14,6 +14,7 @@ import { AsideMenuAccountModule } from "../shared/aside-menu-account/aside.menu.
 @NgModule({
     declarations: [
         OnboardingComponent
+    
     ],
     imports: [
         CommonModule,
@@ -26,6 +27,7 @@ import { AsideMenuAccountModule } from "../shared/aside-menu-account/aside.menu.
         FormsModule,
         MatListModule,
         AsideMenuAccountModule
+    
     ]
 })
 

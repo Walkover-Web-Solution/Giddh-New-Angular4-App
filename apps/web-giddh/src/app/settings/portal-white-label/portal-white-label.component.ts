@@ -19,6 +19,8 @@ export interface GetDomainList {
 /** Hold information of activity logs */
 const ELEMENT_DATA: GetDomainList[] = [];
 @Component({
+    selector: 'portal-white-label',
+standalone: false,
     templateUrl: './portal-white-label.component.html',
     styleUrls: ['./portal-white-label.component.scss']
 })

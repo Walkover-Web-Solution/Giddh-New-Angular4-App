@@ -22,6 +22,8 @@ import { ServiceConfig } from '../../../services/service.config';
 import { ASIDE_PANE_CONFIG, IOption } from '../../../app.constant';
 
 @Component({
+    selector: 'expense-details',
+standalone: false,
     templateUrl: './expense-details.component.html',
     styleUrls: ['./expense-details.component.scss']
 })

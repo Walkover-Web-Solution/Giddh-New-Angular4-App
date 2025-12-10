@@ -2,6 +2,8 @@ import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChange
 import * as dayjs from 'dayjs';
 
 @Component({
+    selector: 'datepicker.wrapper',
+standalone: false,
     templateUrl: './datepicker.wrapper.component.html'
 })
 

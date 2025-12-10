@@ -2,6 +2,7 @@ import { Directive, ElementRef } from '@angular/core';
 import { WindowRef } from '../../window.object';
 
 @Directive({
+  standalone: false,
 })
 export class FullPageHeight {
 

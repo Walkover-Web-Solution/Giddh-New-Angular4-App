@@ -13,6 +13,8 @@ import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-mod
 import { CountryNames } from '../../shared/Enums/common.enum';
 
 @Component({
+    selector: 'template-edit-dialog',
+standalone: false,
   templateUrl: './template-edit-dialog.component.html',
   styleUrls: ['./template-edit-dialog.component.scss']
 })

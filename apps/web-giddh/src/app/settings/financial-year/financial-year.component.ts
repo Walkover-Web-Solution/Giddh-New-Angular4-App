@@ -21,6 +21,8 @@ export interface IGstObj {
 }
 
 @Component({
+    selector: 'financial-year',
+standalone: false,
     templateUrl: './financial-year.component.html',
     styleUrls: ['./financial-year.component.scss']
 })

@@ -42,6 +42,8 @@ import { ServiceConfig } from '../../services/service.config';
  * @implements {OnDestroy}
  */
 @Component({
+    selector: 'warehouse',
+standalone: false,
     templateUrl: './warehouse.component.html',
     styleUrls: ['./warehouse.component.scss'],
     providers: [VoucherComponentStore]

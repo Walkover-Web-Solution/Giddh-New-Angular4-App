@@ -9,7 +9,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { SelectTableColumnComponent } from './select-table-column.component';
 
 @NgModule({
-    declarations: [SelectTableColumnComponent],
+    declarations: [
+        SelectTableColumnComponent
+    ],
     imports: [
         CommonModule,
         MatIconModule,
@@ -18,7 +20,10 @@ import { SelectTableColumnComponent } from './select-table-column.component';
         MatTooltipModule,
         MatCheckboxModule,
         FormsModule
+    
     ],
-    exports: [SelectTableColumnComponent]
+    exports: [
+        SelectTableColumnComponent
+    ]
 })
 export class SelectTableColumnModule { }

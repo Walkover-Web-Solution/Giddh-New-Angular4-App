@@ -12,6 +12,8 @@ import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { ICICI_ALLOWED_COMPANIES } from 'apps/web-giddh/src/app/app.constant';
 
 @Component({
+    selector: 'aside-setting',
+standalone: false,
     templateUrl: './aside-setting.component.html',
     styleUrls: [`./aside-setting.component.scss`],
 })

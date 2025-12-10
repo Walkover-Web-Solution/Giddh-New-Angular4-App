@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
+    selector: 'confirmation.modal',
+standalone: false,
     templateUrl: './confirmation.modal.component.html'
 })
 

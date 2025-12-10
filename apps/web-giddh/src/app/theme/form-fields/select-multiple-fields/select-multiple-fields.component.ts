@@ -8,6 +8,9 @@ import { EMAIL_VALIDATION_REGEX, IOption, MOBILE_REGEX_PATTERN } from "../../../
 import { cloneDeep } from "../../../lodash-optimized";
 
 @Component({
+    selector: 'select-multiple-fields',
+    templateUrl: './select-multiple-fields.component.html',
+standalone: false,
     styleUrls: ["./select-multiple-fields.component.scss"],
     changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [

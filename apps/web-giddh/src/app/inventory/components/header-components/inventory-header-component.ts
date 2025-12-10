@@ -9,6 +9,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ASIDE_PANE_CONFIG } from '../../../app.constant';
 
 @Component({
+  standalone: false,
     styles: [`
   `],
     template: `

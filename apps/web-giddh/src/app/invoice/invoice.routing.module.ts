@@ -13,18 +13,20 @@ const INVOICE_ROUTES: Routes = [
         component: InvoiceRendererComponent,
         children: [
             { path: '', redirectTo: 'preview/sales', pathMatch: 'full' },
-            { path: 'ewaybill/create', component: EWayBillCreateComponent },
+            { path: 'ewaybill/create', component: EWayBillCreateComponent }
         ]
     },
-    { path: 'ewaybill', canActivate: [NeedsAuthentication], component: EWayBillComponent },
+    { path: 'ewaybill', canActivate: [NeedsAuthentication], component: EWayBillComponent }
 ];
 
 @NgModule({
     imports: [
-        RouterModule.forChild(INVOICE_ROUTES),
+        RouterModule.forChild(INVOICE_ROUTES)
+    
     ],
     exports: [
         RouterModule
+    
     ]
 })
 export class InvoiceRoutingModule {

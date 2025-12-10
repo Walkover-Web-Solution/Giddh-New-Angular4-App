@@ -4,9 +4,11 @@ import { OnloadDirective } from "./onload.directive";
 @NgModule({
     declarations: [
         OnloadDirective
+    
     ],
     exports: [
         OnloadDirective
+    
     ]
 })
 export class OnloadDirectiveModule {

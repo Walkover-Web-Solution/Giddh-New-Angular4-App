@@ -9,6 +9,7 @@ import { MatDialogModule } from "@angular/material/dialog";
 @NgModule({
     declarations: [
         DeleteVoucherConfirmationModalComponent
+    
     ],
     imports: [
         CommonModule,
@@ -16,9 +17,11 @@ import { MatDialogModule } from "@angular/material/dialog";
         ReactiveFormsModule,
         MatDialogModule,
         MatButtonModule
+    
     ],
     exports: [
         DeleteVoucherConfirmationModalComponent
+    
     ]
 })
 export class DeleteVoucherConfirmationModalModule {

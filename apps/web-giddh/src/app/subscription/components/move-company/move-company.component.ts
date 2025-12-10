@@ -12,6 +12,8 @@ import { UntypedFormControl } from '@angular/forms';
 import { SubscriptionComponentStore } from '../../../subscription/utility/subscription.store';
 
 @Component({
+    selector: 'move-company',
+standalone: false,
     styleUrls: ['./move-company.component.scss'],
     templateUrl: './move-company.component.html'
 })

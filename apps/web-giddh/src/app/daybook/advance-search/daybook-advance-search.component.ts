@@ -19,10 +19,11 @@ import { SettingsTagService } from '../../services/settings.tag.service';
 import { SalesPersonComponentStore } from '../../shared/sales-person/utility/sales-person.store';
 
 @Component({
+    selector: 'daybook-advance-search',
+standalone: false,
     templateUrl: './daybook-advance-search.component.html',
     styleUrls: ['./daybook-advance-search.component.scss'],
     providers: [SalesPersonComponentStore]
-
 })
 export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, OnDestroy {
     /** Instance of mat accordion */

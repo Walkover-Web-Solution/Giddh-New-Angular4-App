@@ -5,18 +5,28 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatSelectModule } from "@angular/material/select";
 import { MatTooltipModule } from "@angular/material/tooltip";
-import { GiddhPageLoaderModule } from "../../../shared/giddh-page-loader/giddh-page-loader.module";
+// import { GiddhPageLoaderModule } from "../../../shared/giddh-page-loader/giddh-page-loader.module";
 import { DecimalDigitsModule } from "../../../shared/helpers/directives/decimalDigits/decimalDigits.module";
 import { DigitsOnlyModule } from "../../../shared/helpers/directives/digitsOnly/digitsOnly.module";
-import { FormFieldsModule } from "../../../theme/form-fields/form-fields.module";
+// import { FormFieldsModule } from "../../../theme/form-fields/form-fields.module";
+// Temporarily disabled;
 import { TranslateDirectiveModule } from "../../../theme/translate/translate.directive.module";
 import { AccountCreateEditComponent } from "./icici/account-create-edit/account-create-edit.component";
 import { PayorCreateEditComponent } from "./icici/payor-create-edit/payor-create-edit.component";
+import { TextFieldComponent } from "../theme/form-fields/text-field/text-field.component";
+import { ReactiveDropdownFieldComponent } from "../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component";
+import { InputFieldComponent } from "../theme/form-fields/input-field/input-field.component";
+import { AmountFieldComponent } from "../shared/amount-field/amount-field.component";
 
 @NgModule({
     declarations: [
         AccountCreateEditComponent,
-        PayorCreateEditComponent
+        PayorCreateEditComponent,
+        TextFieldComponent, // Added since FormFieldsModule is disabled
+        ReactiveDropdownFieldComponent, // Added since FormFieldsModule is disabled
+        InputFieldComponent, // Added since FormFieldsModule is disabled
+        AmountFieldComponent, // Added since FormFieldsModule is disabled
+    
     ],
     imports: [
         ReactiveFormsModule,
@@ -24,12 +34,10 @@ import { PayorCreateEditComponent } from "./icici/payor-create-edit/payor-create
         CommonModule,
         TranslateDirectiveModule,
         DecimalDigitsModule,
-        GiddhPageLoaderModule,
         MatDialogModule,
         MatTooltipModule,
-        FormFieldsModule,
-        MatSelectModule,
         MatButtonModule
+    
     ],
     exports: [
         AccountCreateEditComponent,

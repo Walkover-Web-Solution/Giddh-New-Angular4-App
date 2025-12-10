@@ -5,11 +5,15 @@ import { PageLeaveConfirmationGuard } from "../decorators/page-leave-confirmatio
 
 @NgModule({
     imports: [
-        RouterModule.forChild([
-            { path: '', component: AddCompanyComponent, canDeactivate: [PageLeaveConfirmationGuard] }
+        RouterModule.forChild([ { path: '',
+        component: AddCompanyComponent,
+        canDeactivate: [PageLeaveConfirmationGuard
+    ] }
         ])
     ],
-    exports: [RouterModule]
+    exports: [
+        RouterModule
+    ]
 })
 export class AddCompanyRoutingModule {
 }

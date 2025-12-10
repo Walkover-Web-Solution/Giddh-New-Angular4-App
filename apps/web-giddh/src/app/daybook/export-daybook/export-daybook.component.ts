@@ -4,6 +4,8 @@ import { some } from '../../lodash-optimized';
 import { ReplaySubject } from 'rxjs';
 
 @Component({
+    selector: 'export-daybook',
+standalone: false,
     templateUrl: './export-daybook.component.html',
     styleUrls: ['./export-daybook.component.scss']
 })

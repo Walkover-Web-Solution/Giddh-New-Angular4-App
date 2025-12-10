@@ -10,9 +10,11 @@ import { PageLeaveConfirmationGuard } from '../decorators/page-leave-confirmatio
 
 @NgModule({
     imports: [
-        RouterModule.forChild([
-            {
-                path: '', component: SettingsComponent, canActivate: [NeedsAuthentication, NeedsAuthorization], canDeactivate: [SettingsDeactivateGuard], pathMatch: 'full'
+        RouterModule.forChild([ { path: '',
+        component: SettingsComponent,
+        canActivate: [NeedsAuthentication,
+        NeedsAuthorization
+    ], canDeactivate: [SettingsDeactivateGuard], pathMatch: 'full'
             },
             {
                 path: 'create-branch', component: CreateBranchComponent, canActivate: [NeedsAuthentication, NeedsAuthorization], canDeactivate: [SettingsDeactivateGuard, PageLeaveConfirmationGuard]
@@ -31,8 +33,12 @@ import { PageLeaveConfirmationGuard } from '../decorators/page-leave-confirmatio
             }
         ])
     ],
-    providers: [SettingsDeactivateGuard],
-    exports: [RouterModule]
+    providers: [
+        SettingsDeactivateGuard
+    ],
+    exports: [
+        RouterModule
+    ]
 })
 export class SettingRountingModule {
 }

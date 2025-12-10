@@ -26,6 +26,8 @@ export interface CustomerVendorDiscountBasic {
 }
 
 @Component({
+    selector: 'customer-wise',
+standalone: false,
     templateUrl: "./customer-wise.component.html",
     styleUrls: ["./customer-wise.component.scss"]
 })

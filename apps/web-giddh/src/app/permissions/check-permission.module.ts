@@ -4,9 +4,11 @@ import { CheckPermissionDirective } from "./check-permission.directive";
 @NgModule({
     declarations: [
         CheckPermissionDirective
+    
     ],
     exports: [
         CheckPermissionDirective
+    
     ]
 })
 

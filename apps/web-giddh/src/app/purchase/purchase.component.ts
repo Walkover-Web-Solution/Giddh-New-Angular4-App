@@ -4,6 +4,8 @@ import { PurchaseOrderActions } from '../actions/purchase-order/purchase-order.a
 import { AppState } from '../store';
 
 @Component({
+    selector: 'purchase',
+standalone: false,
     templateUrl: './purchase.component.html'
 })
 export class PurchaseComponent implements OnDestroy {

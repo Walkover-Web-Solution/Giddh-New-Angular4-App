@@ -15,6 +15,8 @@ import { MatDialog } from "@angular/material/dialog";
 import { IOption } from "../../app.constant";
 
 @Component({
+    selector: 'gst-setting',
+standalone: false,
     templateUrl: './gst-setting.component.html',
     styleUrls: ['./gst-setting.component.scss'],
     providers: [GstSettingComponentStore]

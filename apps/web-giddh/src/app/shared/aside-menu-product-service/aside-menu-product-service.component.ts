@@ -14,6 +14,8 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ASIDE_PANE_CONFIG } from '../../app.constant';
 
 @Component({
+    selector: 'aside-menu-product-service',
+standalone: false,
     templateUrl: './aside-menu-product-service.component.html'
 })
 export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {

@@ -6,6 +6,8 @@ import { GeneralService } from '../services/general.service';
 import { ServiceConfig } from '../services/service.config';
 
 @Component({
+    selector: 'group-name',
+standalone: false,
   templateUrl: './group-name.component.html',
   styleUrls: ['./group-name.component.scss']
 })

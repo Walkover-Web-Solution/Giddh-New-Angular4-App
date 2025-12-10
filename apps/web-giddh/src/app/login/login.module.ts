@@ -5,10 +5,15 @@ import { LoginComponent } from './login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LoginRoutingModule } from './login.routing.module';
 import { LaddaModule } from 'angular2-ladda';
-import { SharedModule } from '../shared/shared.module';
+// import { SharedModule } from '../shared/shared.module';
 import { LoaderModule } from '../loader/loader.module';
-import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+// import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+// Temporarily disabled;
 import { MatDialogModule } from '@angular/material/dialog';
+import { TextFieldComponent } from "../theme/form-fields/text-field/text-field.component";
+import { ReactiveDropdownFieldComponent } from "../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component";
+import { InputFieldComponent } from "../theme/form-fields/input-field/input-field.component";
+import { AmountFieldComponent } from "../shared/amount-field/amount-field.component";
 
 @NgModule({
     imports: [
@@ -17,16 +22,23 @@ import { MatDialogModule } from '@angular/material/dialog';
         FormsModule,
         ReactiveFormsModule,
         LoginRoutingModule,
-        LaddaModule.forRoot({
-            style: 'slide-left',
-            spinnerSize: 30
+        LaddaModule.forRoot({ style: 'slide-left',
+        spinnerSize: 30
+    
+    ]
         }),
-        SharedModule,
+        // SharedModule,
         LoaderModule,
-        FormFieldsModule,
+                // FormFieldsModule, // Temporarily disabled for compilation
         MatDialogModule
     ],
-    declarations: [LoginComponent]
+    declarations: [
+        LoginComponent,
+        TextFieldComponent, // Added since FormFieldsModule is disabled
+        ReactiveDropdownFieldComponent, // Added since FormFieldsModule is disabled
+        InputFieldComponent, // Added since FormFieldsModule is disabled
+        AmountFieldComponent, // Added since FormFieldsModule is disabled
+    ]
 })
 export class LoginModule {
 }

@@ -10,6 +10,7 @@ import { PageRoutingModule } from "./page.routing.module";
 @NgModule({
     declarations: [
         PageComponent
+    
     ],
     imports: [
         CommonModule,
@@ -18,9 +19,11 @@ import { PageRoutingModule } from "./page.routing.module";
         GiddhLayoutModule,
         LoaderModule,
         HeaderModule
+    
     ],
     exports: [
         PageComponent
+    
     ]
 })
 

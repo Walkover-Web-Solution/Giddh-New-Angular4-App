@@ -2,6 +2,7 @@ import {Directive, ElementRef, Input, OnDestroy, OnInit, Output, EventEmitter, S
 import Tribute from 'tributejs';
 
 @Directive({
+  standalone: false,
   exportAs: 'appTributeMention'
 })
 export class TributeMentionDirective implements OnInit, OnDestroy, OnChanges {

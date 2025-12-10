@@ -7,11 +7,11 @@ import { VerifyEmailRoutingModule } from "./verify-email.routing.module";
 @NgModule({
     declarations: [
         VerifyEmailComponent
+    
     ],
     imports: [
-        GiddhPageLoaderModule,
-        VerifyEmailRoutingModule,
         MatSnackBarModule
+    
     ]
 })
 export class VerifyEmailModule {

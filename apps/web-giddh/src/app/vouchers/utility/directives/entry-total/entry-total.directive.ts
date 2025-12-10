@@ -6,6 +6,9 @@ import { giddhRoundOff } from "../../../../shared/helpers/helperFunctions";
 import { isEqual } from "apps/web-giddh/src/app/lodash-optimized";
 
 @Directive({
+    selector: '[entryTotal]',
+    standalone: false
+})
 export class EntryTotalDirective implements OnChanges, OnDestroy {
     /** Entry */
     @Input() public entry: any;

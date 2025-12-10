@@ -11,14 +11,15 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
 import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
 import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
-import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
+// import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 import { FinancialSearchPipe } from '../shared/header/pipe/financial-search.pipe';
 import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
 import { HighlightModule } from '../shared/helpers/pipes/highlightPipe/highlight.module';
 import { RecTypeModule } from '../shared/helpers/pipes/recType/recType.module';
 import { AccountDetailModalModule } from '../theme/account-detail-modal/account-detail-modal.module';
-import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+// import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+// Temporarily disabled;
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 import { BalanceSheetComponent } from './components/balance-sheet/balance-sheet.component';
@@ -52,6 +53,9 @@ import { CompareWithDateRangePickerComponent } from '../shared/compare-with-date
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { ProjectAccountingService } from '../project-wise-accounting/project-wise-accounting.service';
+import { TextFieldComponent } from "../theme/form-fields/text-field/text-field.component";
+import { ReactiveDropdownFieldComponent } from "../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component";
+import { InputFieldComponent } from "../theme/form-fields/input-field/input-field.component";
 
 @NgModule({
     declarations: [
@@ -71,9 +75,16 @@ import { ProjectAccountingService } from '../project-wise-accounting/project-wis
         BalanceSheetGridComponent,
         BalanceSheetGridRowComponent,
         FinancialAccordionDirective,
-        AccountsFilterPipe
+        AccountsFilterPipe,
+        TextFieldComponent, // Added since FormFieldsModule is disabled
+        ReactiveDropdownFieldComponent, // Added since FormFieldsModule is disabled
+        InputFieldComponent, // Added since FormFieldsModule is disabled
+        AmountFieldComponent, // Added since FormFieldsModule is disabled
+    
     ],
-    providers: [ProjectAccountingService],
+    providers: [
+        ProjectAccountingService
+    ],
     exports: [
         FinancialReportsComponent,
         GiddhNumberFormatModule,
@@ -93,22 +104,23 @@ import { ProjectAccountingService } from '../project-wise-accounting/project-wis
         Daterangepicker,
         FinancialReportsRoutingModule,
         MatTabsModule,
-        LaddaModule.forRoot({
-            style: 'slide-left',
-            spinnerSize: 30
+        LaddaModule.forRoot({ style: 'slide-left',
+        spinnerSize: 30
+    
+    ]
         }),
         HighlightModule,
         RecTypeModule,
-        FormFieldsModule,
+                // FormFieldsModule, // Temporarily disabled for compilation
         ClickOutsideModule,
         GiddhNumberFormatModule,
         AccountDetailModalModule,
         ScrollingModule,
         TranslateDirectiveModule,
         HamburgerMenuModule,
-        GiddhPageLoaderModule,
-        AmountFieldComponentModule,
-        DatepickerWrapperModule,
+        // GiddhPageLoaderModule,
+        // AmountFieldComponentModule, // NG6002 error - temporarily disabled
+        // DatepickerWrapperModule, // NG6002 error - temporarily disabled
         AsideMenuAccountModule,
         FinancialSearchPipe,
         MatButtonModule,

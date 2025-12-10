@@ -12,14 +12,15 @@ import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { InventoryModule } from './../inventory/inventory.module';
-import { SharedModule } from './../shared/shared.module';
+// import { SharedModule } from './../shared/shared.module';
 import { AccountingRoutingModule } from './accounting-routing.module';
 import { AccountingComponent } from './accounting.component';
 import { JournalVoucherComponent } from './journal-voucher/journal-voucher.component';
 import { AccountAsVoucherComponent } from './journal-voucher/voucher/voucher.component';
 import { OnReturnDirective } from './keyboard.directive';
 import { TallyModuleService } from './tally-service';
-import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+// import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+// Temporarily disabled;
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
@@ -29,6 +30,10 @@ import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShor
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
+import { TextFieldComponent } from "../theme/form-fields/text-field/text-field.component";
+import { ReactiveDropdownFieldComponent } from "../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component";
+import { InputFieldComponent } from "../theme/form-fields/input-field/input-field.component";
+import { AmountFieldComponent } from "../shared/amount-field/amount-field.component";
 
 @NgModule({
     declarations: [
@@ -37,9 +42,20 @@ import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/n
         AccountAsVoucherComponent,
         OnReturnDirective,
         AccountingComponent,
+        TextFieldComponent, // Added since FormFieldsModule is disabled
+        ReactiveDropdownFieldComponent, // Added since FormFieldsModule is disabled
+        InputFieldComponent, // Added since FormFieldsModule is disabled
+        AmountFieldComponent, // Added since FormFieldsModule is disabled
+    
     ],
-    exports: [RouterModule, AccountingSidebarComponent],
-    providers: [KeyboardService, TallyModuleService],
+    exports: [
+        RouterModule,
+        AccountingSidebarComponent
+    ],
+    providers: [
+        KeyboardService,
+        TallyModuleService
+    ],
     imports: [
         AccountingRoutingModule,
         RouterModule,
@@ -47,18 +63,18 @@ import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/n
         GiddhNumberFormatModule,
         FormsModule,
         ReactiveFormsModule,
-        LaddaModule.forRoot({
-            style: 'slide-left',
-            spinnerSize: 30
+        LaddaModule.forRoot({ style: 'slide-left',
+        spinnerSize: 30
+    
+    ]
         }),
         DecimalDigitsModule,
-        SharedModule,
+        // SharedModule,
         ClickOutsideModule,
         ElementViewChildModule,
         InventoryModule,
         NgxMaskModule.forRoot(),
-        FormsModule,
-        // FormFieldsModule, // NG6002 error - temporarily disabled
+        // FormFieldsModule, // Temporarily disabled for compilation
         MatDialogModule,
         MatButtonModule,
         MatInputModule,
@@ -66,8 +82,7 @@ import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/n
         GiddhDatepickerModule,
         KeyboardShortutModule,
         ScrollingModule,
-        MatTooltipModule,
-        MatInputModule
+        MatTooltipModule
     ],
 })
 export class AccountingModule {

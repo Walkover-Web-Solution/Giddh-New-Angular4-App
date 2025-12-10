@@ -1,6 +1,8 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 
 @Component({
+    selector: 'all-features',
+standalone: false,
     styleUrls: ['./all-features.component.scss'],
     templateUrl: './all-features.component.html'
 })

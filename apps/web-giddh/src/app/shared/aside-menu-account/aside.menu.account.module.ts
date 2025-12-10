@@ -10,6 +10,7 @@ import { MatButtonModule } from "@angular/material/button";
 @NgModule({
     declarations: [
         AsideMenuAccountInContactComponent
+    
     ],
     imports: [
         CommonModule,
@@ -18,9 +19,11 @@ import { MatButtonModule } from "@angular/material/button";
         ConfirmModalModule,
         MatDialogModule,
         MatButtonModule
+    
     ],
     exports: [
         AsideMenuAccountInContactComponent
+    
     ]
 })
 export class AsideMenuAccountModule {

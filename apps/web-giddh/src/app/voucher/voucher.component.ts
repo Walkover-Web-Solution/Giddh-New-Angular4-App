@@ -82,13 +82,15 @@ const SEARCH_TYPE = {
 declare var window;
 
 @Component({
+    selector: 'voucher',
+standalone: false,
     templateUrl: './voucher.component.html',
     styleUrls: [`./voucher.component.scss`],
     animations: [
         trigger('slideInOut', [
             state('in', style({
                 transform: 'translate3d(0, 0, 0)'
-            })),
+})),
             state('out', style({
                 transform: 'translate3d(100%, 0, 0)'
             })),

@@ -10,6 +10,8 @@ import { TemplateFroalaComponent } from "../../../template-froala/template-froal
 import { PageEvent } from "@angular/material/paginator";
 
 @Component({
+    selector: 'basic-trigger',
+standalone: false,
     templateUrl: './basic-trigger.component.html',
     styleUrls: ['./basic-trigger.component.scss'],
     providers: [TriggerComponentStore]

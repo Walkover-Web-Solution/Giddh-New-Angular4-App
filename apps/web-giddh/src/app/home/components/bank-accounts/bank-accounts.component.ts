@@ -21,6 +21,8 @@ import { BankIntegrationDialogComponent } from '../../../shared/bank-integration
 import { Router } from '@angular/router';
 
 @Component({
+    selector: 'bank-accounts',
+standalone: false,
     templateUrl: 'bank-accounts.component.html',
     styleUrls: ['./bank-accounts.component.scss', '../../home.component.scss'],
     providers: [BankIntegrationComponentStore, HomeComponentStore, SettingIntegrationComponentStore]

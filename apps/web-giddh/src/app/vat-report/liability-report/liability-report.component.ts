@@ -11,6 +11,8 @@ import { saveAs } from 'file-saver';
 import { Router } from '@angular/router';
 
 @Component({
+    selector: 'liability-report',
+standalone: false,
     templateUrl: './liability-report.component.html',
     styleUrls: ['./liability-report.component.scss']
 })

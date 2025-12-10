@@ -6,6 +6,8 @@ import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
 
 @Component({
+    selector: 'company-details-sidebar',
+standalone: false,
     styleUrls: ['./company-details-sidebar.component.scss'],
     templateUrl: './company-details-sidebar.component.html'
 })

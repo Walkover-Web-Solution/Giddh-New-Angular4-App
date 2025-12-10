@@ -19,6 +19,8 @@ import { GeneralService } from '../../../services/general.service';
 import { ServiceConfig } from '../../../services/service.config';
 
 @Component({
+    selector: 'pending-list',
+standalone: false,
     templateUrl: './pending-list.component.html',
     styleUrls: ['./pending-list.component.scss'],
 })

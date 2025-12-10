@@ -20,6 +20,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { CustomerPortalComponentStore } from './utility/customer-portal.store';
 
 @Component({
+    selector: 'customer.portal',
+standalone: false,
     templateUrl: './customer.portal.component.html',
     styleUrls: ['./customer.portal.component.scss'],
     providers: [CustomerPortalComponentStore]

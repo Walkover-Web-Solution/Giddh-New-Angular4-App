@@ -13,12 +13,13 @@ import { MatSortModule } from "@angular/material/sort";
 import { MatTableModule } from "@angular/material/table";
 import { MatTabsModule } from "@angular/material/tabs";
 import { HamburgerMenuModule } from "../../../shared/header/components/hamburger-menu/hamburger-menu.module";
-import { FormFieldsModule } from "../../../theme/form-fields/form-fields.module";
+// import { FormFieldsModule } from "../../../theme/form-fields/form-fields.module";
+// Temporarily disabled;
 import { StockCreateEditComponent } from "./stock-create-edit.component";
 import { StockCreateEditRoutingModule } from "./stock-create-edit.routing.module";
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MainComponent } from "./main.component";
-import { GiddhPageLoaderModule } from "../../../shared/giddh-page-loader/giddh-page-loader.module";
+// import { GiddhPageLoaderModule } from "../../../shared/giddh-page-loader/giddh-page-loader.module";
 import { InventorySidebarModule } from "../inventory-sidebar/inventory-sidebar.module";
 import { TranslateDirectiveModule } from "../../../theme/translate/translate.directive.module";
 import { MatTooltipModule } from "@angular/material/tooltip";
@@ -29,11 +30,20 @@ import { SortByModule } from "../../../shared/helpers/pipes/sort-by/sort-by.modu
 import { WatchVideoModule } from "../../../theme/watch-video/watch-video.module";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { PageLeaveConfirmationGuard } from "../../../decorators/page-leave-confirmation-guard";
+import { TextFieldComponent } from "../theme/form-fields/text-field/text-field.component";
+import { ReactiveDropdownFieldComponent } from "../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component";
+import { InputFieldComponent } from "../theme/form-fields/input-field/input-field.component";
+import { AmountFieldComponent } from "../shared/amount-field/amount-field.component";
 
 @NgModule({
     declarations: [
         MainComponent,
-        StockCreateEditComponent
+        StockCreateEditComponent,
+        TextFieldComponent, // Added since FormFieldsModule is disabled
+        ReactiveDropdownFieldComponent, // Added since FormFieldsModule is disabled
+        InputFieldComponent, // Added since FormFieldsModule is disabled
+        AmountFieldComponent, // Added since FormFieldsModule is disabled
+    
     ],
     imports: [
         CommonModule,
@@ -52,9 +62,6 @@ import { PageLeaveConfirmationGuard } from "../../../decorators/page-leave-confi
         MatSelectModule,
         HamburgerMenuModule,
         ReactiveFormsModule,
-        FormFieldsModule,
-        MatAutocompleteModule,
-        GiddhPageLoaderModule,
         InventorySidebarModule,
         TranslateDirectiveModule,
         MatTooltipModule,
@@ -64,12 +71,14 @@ import { PageLeaveConfirmationGuard } from "../../../decorators/page-leave-confi
         SortByModule,
         WatchVideoModule,
         MatProgressSpinnerModule
+    
     ],
     exports: [
         StockCreateEditComponent
     ],
     providers: [
         PageLeaveConfirmationGuard
+    
     ]
 })
 export class StockCreateEditModule {

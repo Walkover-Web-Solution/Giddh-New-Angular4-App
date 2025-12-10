@@ -15,6 +15,8 @@ import { GstReconcileActions } from '../../actions/gst-reconcile/gst-reconcile.a
 import { ServiceConfig } from '../../services/service.config';
 
 @Component({
+    selector: 'tax-sidebar',
+standalone: false,
     templateUrl: './tax-sidebar.component.html',
     styleUrls: ['tax-sidebar.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

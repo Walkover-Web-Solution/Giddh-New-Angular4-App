@@ -10,25 +10,34 @@ import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatMenuModule } from '@angular/material/menu';
 import { NoDataModule } from '../shared/no-data/no-data.module';
-import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
+// import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+// import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+// Temporarily disabled;
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
-import { SharedModule } from '../shared/shared.module';
+// import { SharedModule } from '../shared/shared.module';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatInputModule } from '@angular/material/input';
 import { ActivityCompareJsonComponent } from './components/activity-compare-json/activity-compare-json.component';
+import { TextFieldComponent } from "../theme/form-fields/text-field/text-field.component";
+import { ReactiveDropdownFieldComponent } from "../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component";
+import { InputFieldComponent } from "../theme/form-fields/input-field/input-field.component";
+import { AmountFieldComponent } from "../shared/amount-field/amount-field.component";
 
 @NgModule({
     declarations: [
-        // Components / Directives/ Pipes
-        ActivityLogsJsonComponent,
         ActivityLogsComponent,
-        ActivityCompareJsonComponent
+        ActivityCompareJsonComponent,
+        TextFieldComponent, // Added since FormFieldsModule is disabled
+        ReactiveDropdownFieldComponent, // Added since FormFieldsModule is disabled
+        InputFieldComponent, // Added since FormFieldsModule is disabled
+        AmountFieldComponent, // Added since FormFieldsModule is disabled
+    
     ],
     exports: [
-        ActivityLogsComponent],
+        ActivityLogsComponent
+    ],
     providers: [],
     imports: [
         CommonModule,
@@ -39,15 +48,12 @@ import { ActivityCompareJsonComponent } from './components/activity-compare-json
         MatTableModule,
         MatTooltipModule,
         NoDataModule,
-        GiddhPageLoaderModule,
         TranslateDirectiveModule,
         MatPaginatorModule,
-        FormFieldsModule,
-        HamburgerMenuModule,
-        SharedModule,
         MatCheckboxModule,
         MatInputModule,
         MatMenuModule
+    
     ],
 })
 export class ActivityLogsModule {

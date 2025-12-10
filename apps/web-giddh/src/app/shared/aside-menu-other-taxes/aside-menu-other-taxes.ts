@@ -6,6 +6,7 @@ import { cloneDeep } from '../../lodash-optimized';
 import { IOption } from '../../app.constant';
 
 @Component({
+  standalone: false,
     templateUrl: './aside-menu-other-taxes.html',
     styleUrls: ['./aside-menu-other-taxes.scss'],
     host: { 'class': 'app-aside-menu-other-taxes' },

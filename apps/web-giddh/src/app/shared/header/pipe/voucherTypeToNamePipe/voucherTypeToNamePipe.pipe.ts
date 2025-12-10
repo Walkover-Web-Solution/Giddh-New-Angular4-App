@@ -2,6 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { VoucherTypeEnum } from '../../../../models/api-models/Sales';
 
 @Pipe({
+    name: 'voucherTypeToName',
+    standalone: false,
     pure: true
 })
 

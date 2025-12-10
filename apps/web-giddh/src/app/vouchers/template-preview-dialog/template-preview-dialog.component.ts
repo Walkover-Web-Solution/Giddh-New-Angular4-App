@@ -8,6 +8,8 @@ import { ToasterService } from '../../services/toaster.service';
 import { VoucherTypeEnum } from '../utility/vouchers.const';
 
 @Component({
+    selector: 'template-preview-dialog',
+standalone: false,
   templateUrl: './template-preview-dialog.component.html',
   styleUrls: ['./template-preview-dialog.component.scss']
 })

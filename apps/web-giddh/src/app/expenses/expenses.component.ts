@@ -24,6 +24,8 @@ export enum EExpenseTabName {
 }
 
 @Component({
+    selector: 'expenses',
+standalone: false,
     templateUrl: './expenses.component.html',
     styleUrls: ['./expenses.component.scss'],
 })

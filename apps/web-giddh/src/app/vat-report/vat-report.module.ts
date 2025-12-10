@@ -17,9 +17,10 @@ import { FormsModule } from "@angular/forms";
 import { Daterangepicker } from "../theme/ng2-daterangepicker/daterangepicker.module";
 import { ElementViewChildModule } from "../shared/helpers/directives/elementViewChild/elementViewChild.module";
 import { InvoiceModule } from "../invoice/invoice.module";
-import { SharedModule } from "../shared/shared.module";
+// import { SharedModule } from "../shared/shared.module";
 import { TaxSidebarModule } from "../shared/tax-sidebar/tax-sidebar.module";
-import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
+// import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
+// Temporarily disabled;
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatButtonModule } from "@angular/material/button";
 import { MatTableModule } from "@angular/material/table";
@@ -27,11 +28,17 @@ import { MatMenuModule } from "@angular/material/menu";
 import { MatDialogModule } from "@angular/material/dialog";
 import { GiddhDateRangepickerModule } from "../theme/giddh-daterangepicker/giddh-daterangepicker.module";
 import { DatepickerWrapperModule } from "../shared/datepicker-wrapper/datepicker.wrapper.module";
-import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-loader.module";
+// import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-loader.module";
 import { NewConfirmationModalModule } from "../theme/new-confirmation-modal/confirmation-modal.module";
-import { MatInputModule } from "@angular/material/input";
+import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
+import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
+import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { GiddhNumberFormatModule } from "../shared/helpers/pipes/number-format/number-format.module";
+import { ReactiveDropdownFieldComponent } from "../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component";
+import { TextFieldComponent } from "../theme/form-fields/text-field/text-field.component";
+import { InputFieldComponent } from "../theme/form-fields/input-field/input-field.component";
+import { AmountFieldComponent } from "../shared/amount-field/amount-field.component";
 
 @NgModule({
     declarations: [
@@ -44,7 +51,12 @@ import { GiddhNumberFormatModule } from "../shared/helpers/pipes/number-format/n
         LiabilityReportComponent,
         LiabilityDetailedReportComponent,
         VatReportFiltersComponent,
-        VatLiabilitiesPayments
+        VatLiabilitiesPayments,
+        ReactiveDropdownFieldComponent, // Re-added since FormFieldsModule is temporarily disabled,
+        TextFieldComponent, // Added since FormFieldsModule is disabled
+        InputFieldComponent, // Added since FormFieldsModule is disabled
+        AmountFieldComponent, // Added since FormFieldsModule is disabled
+    
     ],
     imports: [
         VatReportRoutingModule,
@@ -54,21 +66,18 @@ import { GiddhNumberFormatModule } from "../shared/helpers/pipes/number-format/n
         FormsModule,
         Daterangepicker,
         ElementViewChildModule,
-        InvoiceModule,
-        SharedModule,
         TaxSidebarModule,
-        FormFieldsModule,
-        MatTooltipModule,
         MatButtonModule,
         MatTableModule,
         MatMenuModule,
         MatDialogModule,
         GiddhDateRangepickerModule,
-        DatepickerWrapperModule,
-        GiddhPageLoaderModule,
+        TranslateDirectiveModule,
+        HamburgerMenuModule,
         NewConfirmationModalModule,
         MatInputModule,
         MatPaginatorModule
+    
     ],
     exports: [
         VatReportRoutingModule,

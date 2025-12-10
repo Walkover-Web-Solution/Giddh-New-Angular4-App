@@ -27,6 +27,8 @@ import { TlPlService } from '../../../services/tl-pl.service';
 import { GeneralService } from '../../../services/general.service';
 
 @Component({
+    selector: 'grid-row',
+standalone: false,
     styleUrls: ['./grid-row.component.scss'],
     templateUrl: './grid-row.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush,

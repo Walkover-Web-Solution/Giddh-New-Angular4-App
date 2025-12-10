@@ -8,6 +8,8 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { AgingReportActions } from '../../actions/aging-report.actions';
 
 @Component({
+    selector: 'aging.dropdown',
+standalone: false,
     templateUrl: 'aging.dropdown.component.html',
     styleUrls: ['./aging.dropdown.component.scss']
 })

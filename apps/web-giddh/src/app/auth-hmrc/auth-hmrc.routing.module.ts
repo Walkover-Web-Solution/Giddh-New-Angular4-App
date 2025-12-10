@@ -5,13 +5,16 @@ import { AuthHMRCComponent } from './auth-hmrc.component';
 
 @NgModule({
     imports: [
-        RouterModule.forChild([
-            {
-                path: '', component: AuthHMRCComponent, canActivate: [NeedsAuthentication],
+        RouterModule.forChild([ { path: '',
+        component: AuthHMRCComponent,
+        canActivate: [NeedsAuthentication
+    ],
             }
         ])
     ],
-    exports: [RouterModule]
+    exports: [
+        RouterModule
+    ]
 })
 export class AuthHMRCRoutingModule {
 }

@@ -35,6 +35,8 @@ import { cloneDeep, isEmpty } from '../../../lodash-optimized';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
+    selector: 'new.branch.transfer.add',
+standalone: false,
     templateUrl: './new.branch.transfer.add.component.html',
     styleUrls: ['./new.branch.transfer.component.scss']
 })

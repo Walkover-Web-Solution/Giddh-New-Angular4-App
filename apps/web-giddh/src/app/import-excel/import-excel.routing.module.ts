@@ -7,18 +7,25 @@ import { ImportReportComponent } from './import-report/import-report.component';
 
 @NgModule({
     imports: [
-        RouterModule.forChild([
-            {
-                path: '', component: ImportComponent, children: [
-                    { path: '', redirectTo: 'select-type', pathMatch: 'full' },
-                    { path: 'select-type', component: ImportTypeSelectComponent },
-                    { path: ':type', component: ImportWizardComponent },
-                    { path: 'report/import-report', component: ImportReportComponent }
+        RouterModule.forChild([ { path: '',
+        component: ImportComponent,
+        children: [ { path: '',
+        redirectTo: 'select-type',
+        pathMatch: 'full' },
+        { path: 'select-type',
+        component: ImportTypeSelectComponent },
+        { path: ':type',
+        component: ImportWizardComponent },
+        { path: 'report/import-report',
+        component: ImportReportComponent }
+    
                 ]
             }
         ])
     ],
-    exports: [RouterModule]
+    exports: [
+        RouterModule
+    ]
 })
 export class ImportExcelRoutingModule {
 }

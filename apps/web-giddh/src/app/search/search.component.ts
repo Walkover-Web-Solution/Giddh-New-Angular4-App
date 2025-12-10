@@ -5,6 +5,8 @@ import { SearchRequest } from '../models/api-models/Search';
 import { SearchActions } from '../actions/search.actions';
 
 @Component({
+    selector: 'search',
+standalone: false,
     templateUrl: './search.component.html'
 })
 export class SearchComponent implements OnDestroy {

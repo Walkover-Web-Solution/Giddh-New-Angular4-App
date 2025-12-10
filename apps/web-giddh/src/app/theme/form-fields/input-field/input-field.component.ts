@@ -1,20 +1,15 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, Optional, Output, Self, SimpleChanges, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, forwardRef, Inject, Input, OnChanges, OnDestroy, Optional, Output, Self, SimpleChanges, ViewChild } from "@angular/core";
 import { ControlValueAccessor, NgControl } from "@angular/forms";
-import { MatFormFieldControl } from "@angular/material/form-field";
 import { Subject } from "rxjs";
 
 const noop = () => {
 };
 
 @Component({
+    selector: 'input-field',
+    standalone: false,
     templateUrl: "./input-field.component.html",
-    providers: [
-        {
-            provide: MatFormFieldControl,
-            useExisting: InputFieldComponent,
-            multi: true
-        }
-    ],
+    providers: [],
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAccessor {

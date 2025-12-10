@@ -4,13 +4,20 @@ import { AiOcrComponent } from './ai-ocr.component';
 
 @NgModule({
     imports: [
-        RouterModule.forChild([
-            { path: '', redirectTo: 'income', pathMatch: 'full' },
-            { path: 'ai-ocr', redirectTo: 'income', pathMatch: 'full' },
-            { path: ':type', component: AiOcrComponent },
+        RouterModule.forChild([ { path: '',
+        redirectTo: 'income',
+        pathMatch: 'full' },
+        { path: 'ai-ocr',
+        redirectTo: 'income',
+        pathMatch: 'full' },
+        { path: ':type',
+        component: AiOcrComponent }
+    
         ])
     ],
-    exports: [RouterModule]
+    exports: [
+        RouterModule
+    ]
 })
 
 export class AiOcrRoutingModule {

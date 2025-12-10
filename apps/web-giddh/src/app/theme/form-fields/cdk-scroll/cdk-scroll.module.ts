@@ -5,9 +5,16 @@ import { CdkScrollComponent } from './cdk-scroll.component';
 
 @NgModule({
     imports: [
-        CommonModule, ScrollingModule
+        CommonModule,
+        ScrollingModule
+    
     ],
-    declarations: [CdkScrollComponent],
-    exports: [ScrollingModule, CdkScrollComponent]
+    declarations: [
+        CdkScrollComponent
+    ],
+    exports: [
+        ScrollingModule,
+        CdkScrollComponent
+    ]
 })
 export class CdkScrollModule { }

@@ -31,6 +31,7 @@ export const filterTransaction = {
 
 @Component({
     selector: 'view-transactions',
+    standalone: false,
     templateUrl: './view-transactions.component.html',
     styleUrls: ['./view-transactions.component.scss'],
 })

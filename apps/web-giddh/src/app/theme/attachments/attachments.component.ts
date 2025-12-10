@@ -23,6 +23,8 @@ import { VoucherTypeEnum } from "../../models/api-models/Sales";
 import { ServiceConfig } from "../../services/service.config";
 
 @Component({
+    selector: 'attachments',
+standalone: false,
     templateUrl: "./attachments.component.html",
     styleUrls: ["./attachments.component.scss"],
     changeDetection: ChangeDetectionStrategy.OnPush

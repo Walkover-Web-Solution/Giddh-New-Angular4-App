@@ -11,6 +11,8 @@ import { digitsOnly } from '../../../helpers';
 import { AccountsAction } from 'apps/web-giddh/src/app/actions/accounts.actions';
 
 @Component({
+    selector: 'group-add',
+standalone: false,
     templateUrl: 'group-add.component.html',
     styleUrls: ['group-add.component.scss']
 })

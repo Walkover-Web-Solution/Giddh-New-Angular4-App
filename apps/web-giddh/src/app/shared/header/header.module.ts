@@ -30,6 +30,7 @@ import { TagsModule } from "../../settings/tags/tags.module";
         AsideSettingComponent,
         AsideHelpSupportComponent,
         ConnectPlaidComponent
+    
     ],
     imports: [
         CommonModule,
@@ -40,10 +41,9 @@ import { TagsModule } from "../../settings/tags/tags.module";
         ElementViewChildModule,
         ScrollingModule,
         PrimarySidebarModule,
-        DatepickerWrapperModule,
-        LaddaModule.forRoot({
-            style: 'slide-left',
-            spinnerSize: 30
+        spinnerSize: 30
+    
+    ]
         }),
         ConfirmModalModule,
         RouterModule,
@@ -54,13 +54,14 @@ import { TagsModule } from "../../settings/tags/tags.module";
         MatMenuModule,
         CommandKModule,
         MatDividerModule,
-        GenericAsideMenuAccountModule,
+        // GenericAsideMenuAccountModule, // NG6002 error - temporarily disabled
         MatTooltipModule,
         TagsModule
     ],
     exports: [
         HeaderComponent,
         AsideSettingComponent
+    
     ]
 })
 

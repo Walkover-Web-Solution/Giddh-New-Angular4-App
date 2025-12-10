@@ -14,20 +14,21 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   imports: [
-    CommonModule,
-    GroupNameRoutingModule,
-    MatTableModule,
-    MatSelectModule,
-    NgxMatSelectSearchModule,
-    TranslateDirectiveModule,
-    HamburgerMenuModule,
-    MatInputModule,
-    MatSelectModule,
-    FormsModule,
-    SelectTableColumnModule,
-    MatPaginatorModule,
-    ReactiveFormsModule
+        CommonModule,
+        GroupNameRoutingModule,
+        MatTableModule,
+        MatSelectModule,
+        NgxMatSelectSearchModule,
+        TranslateDirectiveModule,
+        HamburgerMenuModule,
+        MatInputModule,
+        MatSelectModule,
+        FormsModule,
+        ReactiveFormsModule
+    
   ],
-  declarations: [GroupNameComponent]
+  declarations: [
+        GroupNameComponent
+    ]
 })
 export class GroupNameModule { }

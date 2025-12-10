@@ -7,6 +7,8 @@ import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
 import { IOption } from "../../../app.constant";
 
 @Component({
+    selector: 'select-field',
+standalone: false,
     templateUrl: "./select-field.component.html",
     changeDetection: ChangeDetectionStrategy.OnPush
 })

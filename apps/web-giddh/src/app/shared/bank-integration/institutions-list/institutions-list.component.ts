@@ -8,6 +8,8 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import { BankIntegrationComponentStore } from '../utility/bank-integration.store';
 
 @Component({
+    selector: 'institutions-list',
+standalone: false,
     styleUrls: ['./institutions-list.component.scss'],
     templateUrl: './institutions-list.component.html',
     providers: [BankIntegrationComponentStore],

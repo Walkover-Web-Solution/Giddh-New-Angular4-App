@@ -8,13 +8,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
+// import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSortModule } from '@angular/material/sort';
-import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+// import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+// Temporarily disabled;
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NewConfirmationModalModule } from '../theme/new-confirmation-modal/confirmation-modal.module';
 import { ChangeBillingComponent } from './change-billing/change-billing.component';
@@ -41,7 +42,7 @@ import { SubscriptionsPlansComponent } from './components/subscriptions-plans/su
 import { UserDetailsPipe } from './user-details.pipe';
 import { LaddaModule } from 'angular2-ladda';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
-import { SharedModule } from '../shared/shared.module';
+// import { SharedModule } from '../shared/shared.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -56,6 +57,9 @@ import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 import { PaymentMethodDialogComponent } from './payment-method-dialog/payment-method-dialog.component';
 import { CallBackPageComponent } from '../shared/call-back-page/call-back-page.component';
 import { MobileNumberInputComponent } from '../shared/mobile-number-input';
+import { TextFieldComponent } from "../theme/form-fields/text-field/text-field.component";
+import { ReactiveDropdownFieldComponent } from "../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component";
+import { InputFieldComponent } from "../theme/form-fields/input-field/input-field.component";
 
 @NgModule({
     imports: [
@@ -73,13 +77,10 @@ import { MobileNumberInputComponent } from '../shared/mobile-number-input';
         MatTableModule,
         MatTooltipModule,
         NoDataModule,
-        GiddhPageLoaderModule,
         MatSliderModule,
         HamburgerMenuModule,
         MatMenuModule,
         MatSortModule,
-        FormFieldsModule,
-        ReactiveFormsModule,
         FormsModule,
         ElementViewChildModule,
         WatchVideoModule,
@@ -91,8 +92,6 @@ import { MobileNumberInputComponent } from '../shared/mobile-number-input';
         MatStepperModule,
         MatRadioModule,
         MatButtonToggleModule,
-        AmountFieldComponentModule,
-        MatSlideToggleModule,
         MatGridListModule,
         MatTabsModule,
         ClickOutsideModule,
@@ -100,21 +99,23 @@ import { MobileNumberInputComponent } from '../shared/mobile-number-input';
         MatExpansionModule,
         DecimalDigitsModule,
         MatDividerModule,
-        SharedModule,
-        LaddaModule.forRoot({
-            style: 'slide-left',
-            spinnerSize: 30
+        LaddaModule.forRoot({ style: 'slide-left',
+        spinnerSize: 30
+    
+    ]
         }),
         MobileNumberInputComponent
 
     ],
-    exports: [SubscriptionListComponent,
+    exports: [
+        SubscriptionListComponent,
         UserDetailsPipe,
         SubscriptionsPlansComponent,
         CompanyDetailsSidebarComponent,
         MoveCompanyComponent,
         AllFeaturesComponent,
         SubscriptionComponent
+    
     ],
     declarations: [
         SubscriptionComponent,
@@ -132,10 +133,16 @@ import { MobileNumberInputComponent } from '../shared/mobile-number-input';
         CompanyDetailsSidebarComponent,
         MoveCompanyComponent,
         AllFeaturesComponent,
-        UserDetailsPipe
+        UserDetailsPipe,
+        TextFieldComponent, // Added since FormFieldsModule is disabled
+        ReactiveDropdownFieldComponent, // Added since FormFieldsModule is disabled
+        InputFieldComponent, // Added since FormFieldsModule is disabled
+        AmountFieldComponent, // Added since FormFieldsModule is disabled
+    
     ],
     providers: [
         DecimalPipe
+    
     ]
 })
 export class SubscriptionModule { }

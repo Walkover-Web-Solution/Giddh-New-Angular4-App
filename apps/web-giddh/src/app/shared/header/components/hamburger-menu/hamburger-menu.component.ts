@@ -1,12 +1,15 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { AppState } from 'apps/web-giddh/src/app/store';
+import { AppState } from '../../../../store';
 import { ReplaySubject } from 'rxjs';
-import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';
+import { GeneralActions } from '../../../../actions/general/general.actions';
 import { takeUntil, take } from 'rxjs/operators';
 
 @Component({
-    styleUrls: ['hamburger-menu.component.scss']
+    selector: 'hamburger-menu',
+    standalone: false,
+    templateUrl: './hamburger-menu.component.html',
+    styleUrls: ['./hamburger-menu.component.scss']
 })
 
 export class HamburgerMenuComponent implements OnInit, OnDestroy {

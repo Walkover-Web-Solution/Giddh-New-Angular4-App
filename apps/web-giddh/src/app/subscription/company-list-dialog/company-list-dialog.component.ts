@@ -20,6 +20,8 @@ export interface CompanyRequest {
 }
 
 @Component({
+    selector: 'company-list-dialog',
+standalone: false,
     templateUrl: './company-list-dialog.component.html',
     styleUrls: ['./company-list-dialog.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

@@ -8,6 +8,8 @@ import { Pipe, PipeTransform } from "@angular/core";
  * @implements {PipeTransform}
  */
 @Pipe({
+    name: 'particular',
+    standalone: false,
     pure: true
 })
 export class ParticularPipe implements PipeTransform {

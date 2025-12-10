@@ -24,28 +24,33 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { AttachmentsModule } from '../../../theme/attachments/attachments.module';
 import { LaddaModule } from 'angular2-ladda';
-import { FormFieldsModule } from '../../../theme/form-fields/form-fields.module';
+// import { FormFieldsModule } from '../../../theme/form-fields/form-fields.module';
+// Temporarily disabled;
 import { MatMenuModule } from '@angular/material/menu';
 import { MatTabsModule } from '@angular/material/tabs';
 import { AsideMenuCreateTaxModule } from '../../../shared/aside-menu-create-tax/aside-menu-create-tax.module';
 import { OverlayModule } from '@angular/cdk/overlay';
+import { TextFieldComponent } from "../theme/form-fields/text-field/text-field.component";
+import { ReactiveDropdownFieldComponent } from "../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component";
+import { InputFieldComponent } from "../theme/form-fields/input-field/input-field.component";
 
 @NgModule({
     declarations: [
         UpdateLedgerEntryPanelComponent,
         UpdateLedgerTaxControlComponent,
-        UpdateLedgerDiscountComponent
+        UpdateLedgerDiscountComponent,
+        TextFieldComponent, // Added since FormFieldsModule is disabled
+        ReactiveDropdownFieldComponent, // Added since FormFieldsModule is disabled
+        InputFieldComponent, // Added since FormFieldsModule is disabled
+        AmountFieldComponent, // Added since FormFieldsModule is disabled
+    
     ],
     imports: [
         ConfirmModalModule,
         CommonModule,
         FormsModule,
         TranslateDirectiveModule,
-        AmountFieldComponentModule,
-        NumberToWordsModule,
         NgxMaskModule,
-        AdvanceReceiptAdjustmentModule,
-        DecimalDigitsModule,
         ClickOutsideModule,
         ReplacePipeModule,
         AsideMenuSalesOtherTaxesModule,
@@ -58,17 +63,18 @@ import { OverlayModule } from '@angular/cdk/overlay';
         MatSelectModule,
         MatExpansionModule,
         ReactiveFormsModule,
-        FormFieldsModule,
-        MatMenuModule,
         AttachmentsModule,
         MatTabsModule,
-        AsideMenuCreateTaxModule,
-        LaddaModule.forRoot({
-            style: 'slide-left',
-            spinnerSize: 30
+        spinnerSize: 30
+    
+    ]
         }),
         OverlayModule
     ],
-    exports: [UpdateLedgerEntryPanelComponent, UpdateLedgerTaxControlComponent, UpdateLedgerDiscountComponent]
+    exports: [
+        UpdateLedgerEntryPanelComponent,
+        UpdateLedgerTaxControlComponent,
+        UpdateLedgerDiscountComponent
+    ]
 })
 export class UpdateLedgerEntryPanelModule {}

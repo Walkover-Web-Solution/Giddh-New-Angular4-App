@@ -5,13 +5,16 @@ import { MultiCurrencyReportsComponent } from './multi-currency-reports.componen
 
 @NgModule({
     imports: [
-        RouterModule.forChild([
-            {
-                path: '', component: MultiCurrencyReportsComponent, canActivate: [NeedsAuthentication]
+        RouterModule.forChild([ { path: '',
+        component: MultiCurrencyReportsComponent,
+        canActivate: [NeedsAuthentication
+    ]
             }
         ])
     ],
-    exports: [RouterModule]
+    exports: [
+        RouterModule
+    ]
 })
 export class MultiCurrencyReportsRoutingModule {
 }

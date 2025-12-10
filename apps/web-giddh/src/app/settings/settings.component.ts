@@ -23,6 +23,9 @@ import { GeneralService } from '../services/general.service';
 import { PageLeaveUtilityService } from '../services/page-leave-utility.service';
 import { ServiceConfig } from '../services/service.config';
 @Component({
+    selector: 'settings',
+    templateUrl: './settings.component.html',
+standalone: false,
     styleUrls: ['./settings.component.scss']
 })
 export class SettingsComponent implements OnInit, OnDestroy {

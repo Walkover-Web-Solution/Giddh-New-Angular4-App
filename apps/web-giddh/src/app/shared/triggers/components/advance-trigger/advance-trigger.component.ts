@@ -21,6 +21,8 @@ export interface ActiveTriggers {
     isActive: boolean;
 }
 @Component({
+    selector: 'advance-trigger',
+standalone: false,
     templateUrl: './advance-trigger.component.html',
     styleUrls: ['./advance-trigger.component.scss']
 })

@@ -14,6 +14,8 @@ import { GeneralService } from "../../../services/general.service";
 import { StockCreateEditComponent } from "../stock-create-edit/stock-create-edit.component";
 
 @Component({
+    selector: 'inventory-master',
+standalone: false,
     templateUrl: "./inventory-master.component.html",
     styleUrls: ["./inventory-master.component.scss"]
 })

@@ -17,12 +17,15 @@ import { MatDialogModule } from '@angular/material/dialog';
         MatCheckboxModule,
         MatButtonModule,
         MatDialogModule
+    
     ],
     exports: [
         SendEmailInvoiceComponent
+    
     ],
     declarations: [
         SendEmailInvoiceComponent
+    
     ],
     providers: [],
 })

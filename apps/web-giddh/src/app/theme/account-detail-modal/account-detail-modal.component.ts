@@ -13,6 +13,8 @@ import { Router } from '@angular/router';
 import { ASIDE_PANE_CONFIG } from '../../app.constant';
 
 @Component({
+    selector: 'account-detail-modal',
+standalone: false,
     templateUrl: './account-detail-modal.component.html',
     styleUrls: ['./account-detail-modal.component.scss']
 })

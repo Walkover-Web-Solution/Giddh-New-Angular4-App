@@ -15,6 +15,8 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 
 @Component({
+    selector: 'vat-liabilities-payments',
+standalone: false,
     templateUrl: './vat-liabilities-payments.component.html',
     styleUrls: ['./vat-liabilities-payments.component.scss'],
     providers: [VatReportComponentStore]

@@ -5,16 +5,19 @@ import { BillingDetailComponent } from './billing-details.component';
 
 @NgModule({
     imports: [
-        RouterModule.forChild([
-            {
-                path: '', component: BillingDetailComponent, canActivate: [NeedsAuthorization]
+        RouterModule.forChild([ { path: '',
+        component: BillingDetailComponent,
+        canActivate: [NeedsAuthorization
+    ]
             },
             {
                 path: 'buy-plan', component: BillingDetailComponent
             }
         ])
     ],
-    exports: [RouterModule]
+    exports: [
+        RouterModule
+    ]
 })
 export class BillingDetailRoutingModule {
 }

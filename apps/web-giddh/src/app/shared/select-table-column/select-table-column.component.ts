@@ -7,6 +7,8 @@ import { InventoryModuleName } from "../../new-inventory/inventory.enum";
 import { ContactsTab } from "../../contact/contacts.enum";
 import { VoucherReportFilterModuleEnum } from "../../vouchers/utility/vouchers.const";
 @Component({
+    selector: 'select-table-column',
+standalone: false,
     styleUrls: ["./select-table-column.component.scss"],
     templateUrl: "./select-table-column.component.html",
     changeDetection: ChangeDetectionStrategy.OnPush

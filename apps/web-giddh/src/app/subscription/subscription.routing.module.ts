@@ -9,34 +9,28 @@ import { CallBackPageComponent } from '../shared/call-back-page/call-back-page.c
 
 @NgModule({
     imports: [
-        RouterModule.forChild([
-            {
-                path: '', component: SubscriptionComponent
-            },
-            {
-                path: ':type', component: SubscriptionComponent
-            },
-            {
-                path: 'subscription/change-billing/:billingAccountUnqiueName', component: ChangeBillingComponent
-            },
-            {
-                path: 'subscription/view-subscription/:id', component: ViewSubscriptionComponent
-            },
-            {
-                path: 'verify-ownership/:requestId', component: VerifyOwnershipDialogComponent
-            },
-            {
-                path: 'subscription/buy-plan', component: BuyPlanComponent
-            },
-            {
-                path: 'subscription/buy-plan/:id', component: BuyPlanComponent
-            },
-            {
-                path: 'subscription/call-back', component: CallBackPageComponent
-            }
+        RouterModule.forChild([ { path: '',
+        component: SubscriptionComponent },
+        { path: ':type',
+        component: SubscriptionComponent },
+        { path: 'subscription/change-billing/:billingAccountUnqiueName',
+        component: ChangeBillingComponent },
+        { path: 'subscription/view-subscription/:id',
+        component: ViewSubscriptionComponent },
+        { path: 'verify-ownership/:requestId',
+        component: VerifyOwnershipDialogComponent },
+        { path: 'subscription/buy-plan',
+        component: BuyPlanComponent },
+        { path: 'subscription/buy-plan/:id',
+        component: BuyPlanComponent },
+        { path: 'subscription/call-back',
+        component: CallBackPageComponent }
+    
         ])
     ],
-    exports: [RouterModule]
+    exports: [
+        RouterModule
+    ]
 })
 
 export class SubscriptionRoutingModule {

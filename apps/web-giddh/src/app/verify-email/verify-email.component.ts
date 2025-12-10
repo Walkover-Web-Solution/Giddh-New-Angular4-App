@@ -8,6 +8,8 @@ import { ToasterService } from "../services/toaster.service";
 import { GeneralService } from "../services/general.service";
 
 @Component({
+    selector: 'verify-email',
+standalone: false,
     templateUrl: "./verify-email.component.html",
     styleUrls: ["./verify-email.component.scss"],
     changeDetection: ChangeDetectionStrategy.OnPush

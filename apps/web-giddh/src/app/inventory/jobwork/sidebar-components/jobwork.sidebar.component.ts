@@ -11,6 +11,8 @@ import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { InvViewService } from '../../inv.view.service';
 
 @Component({
+    selector: 'jobwork.sidebar',
+standalone: false,
     templateUrl: './jobwork.sidebar.component.html',
     styleUrls: ['./jobwork.sidebar.component.scss']
 })

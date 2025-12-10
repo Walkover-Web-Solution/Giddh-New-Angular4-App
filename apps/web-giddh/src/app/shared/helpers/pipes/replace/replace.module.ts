@@ -8,7 +8,11 @@ import { ReplacePipe } from "./replace.pipe";
  * @class ReplacePipeModule
  */
 @NgModule({
-    declarations: [ReplacePipe],
-    exports: [ReplacePipe]
+    declarations: [
+        ReplacePipe
+    ],
+    exports: [
+        ReplacePipe
+    ]
 })
 export class ReplacePipeModule {}

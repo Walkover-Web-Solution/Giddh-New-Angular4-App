@@ -7,7 +7,7 @@ import { TranslateDirectiveModule } from '../theme/translate/translate.directive
 import { MatTableModule } from '@angular/material/table';
 import { ClipboardModule } from 'ngx-clipboard';
 import { MatCardModule } from '@angular/material/card';
-import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
+// import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
 
 @NgModule({
     imports: [
@@ -17,9 +17,10 @@ import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-lo
         TranslateDirectiveModule,
         MatTableModule,
         ClipboardModule,
-        MatCardModule,
-        GiddhPageLoaderModule
+        MatCardModule
     ],
-    declarations: [DnsRecordsComponent]
+    declarations: [
+        DnsRecordsComponent
+    ]
 })
 export class DnsRecordsModule { }

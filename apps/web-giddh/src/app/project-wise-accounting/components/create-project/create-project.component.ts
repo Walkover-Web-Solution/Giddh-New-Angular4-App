@@ -6,6 +6,8 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { ProjectDialogData } from '../../project-wise-accounting';
 
 @Component({
+    selector: 'create-project',
+standalone: false,
     templateUrl: './create-project.component.html',
     styleUrls: ['./create-project.component.scss'],
     providers: [ProjectWiseAccountingComponentStore]

@@ -8,6 +8,8 @@ import { ToasterService } from '../../services/toaster.service';
 import { GeneralService } from '../../services/general.service';
 
 @Component({
+    selector: 'view-return',
+standalone: false,
     styleUrls: ['./view-return.component.scss'],
     templateUrl: './view-return.component.html',
 })

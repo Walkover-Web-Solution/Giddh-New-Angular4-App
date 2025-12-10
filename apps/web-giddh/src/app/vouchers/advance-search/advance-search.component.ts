@@ -10,6 +10,8 @@ import { SalesPersonComponentStore } from '../../shared/sales-person/utility/sal
 import { SalesPersonComponent } from '../../shared/sales-person/sales-person.component';
 
 @Component({
+    selector: 'advance-search',
+standalone: false,
     templateUrl: './advance-search.component.html',
     styleUrls: ['./advance-search.component.scss'],
     providers: [SalesPersonComponentStore]

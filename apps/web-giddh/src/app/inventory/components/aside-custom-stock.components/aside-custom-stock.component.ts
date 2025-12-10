@@ -5,6 +5,8 @@ import { AppState } from '../../../store';
 import { Observable, ReplaySubject } from 'rxjs';
 
 @Component({
+    selector: 'aside-custom-stock',
+standalone: false,
     templateUrl: './aside-custom-stock.component.html'
 })
 export class AsideCustomStockComponent implements OnInit, OnDestroy {

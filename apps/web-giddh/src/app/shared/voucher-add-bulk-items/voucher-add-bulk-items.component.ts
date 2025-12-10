@@ -12,6 +12,8 @@ import { IOption, PAGINATION_LIMIT } from '../../app.constant';
 import { FormControl } from '@angular/forms';
 
 @Component({
+    selector: 'voucher-add-bulk-items',
+standalone: false,
     templateUrl: './voucher-add-bulk-items.component.html',
     styleUrls: [`./voucher-add-bulk-items.component.scss`],
     changeDetection: ChangeDetectionStrategy.OnPush

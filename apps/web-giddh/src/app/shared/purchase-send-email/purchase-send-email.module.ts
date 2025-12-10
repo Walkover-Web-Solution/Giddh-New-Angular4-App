@@ -9,6 +9,7 @@ import { MatButtonModule } from "@angular/material/button";
 @NgModule({
     declarations: [
         PurchaseSendEmailModalComponent
+    
     ],
     imports: [
         CommonModule,
@@ -17,9 +18,11 @@ import { MatButtonModule } from "@angular/material/button";
         FormsModule,
         MatDialogModule,
         MatButtonModule
+    
     ],
     exports: [
         PurchaseSendEmailModalComponent
+    
     ]
 })
 export class PurchaseSendEmailModule {

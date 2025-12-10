@@ -31,6 +31,8 @@ import { Router } from "@angular/router";
 import { MatMenuTrigger } from "@angular/material/menu";
 
 @Component({
+    selector: 'new.branch.transfer.list',
+standalone: false,
     templateUrl: "./new.branch.transfer.list.component.html",
     styleUrls: ["./new.branch.transfer.component.scss"]
 })

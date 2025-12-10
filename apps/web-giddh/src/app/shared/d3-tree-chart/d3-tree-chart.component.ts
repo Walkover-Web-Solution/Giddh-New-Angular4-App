@@ -2,6 +2,8 @@ import { ReplaySubject } from 'rxjs';
 import { Component, ElementRef, Input, OnChanges, OnDestroy, SimpleChanges, ViewChild } from '@angular/core';
 import { OrgChart } from 'd3-org-chart';
 @Component({
+    selector: 'd3-tree-chart',
+standalone: false,
     styleUrls: [`./d3-tree-chart.component.scss`],
     templateUrl: './d3-tree-chart.component.html'
 })

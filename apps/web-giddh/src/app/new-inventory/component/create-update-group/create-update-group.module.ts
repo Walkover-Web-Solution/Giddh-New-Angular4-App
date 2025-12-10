@@ -7,9 +7,10 @@ import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatRadioModule } from "@angular/material/radio";
 import { MatSelectModule } from "@angular/material/select";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
-import { GiddhPageLoaderModule } from "../../../shared/giddh-page-loader/giddh-page-loader.module";
+// import { GiddhPageLoaderModule } from "../../../shared/giddh-page-loader/giddh-page-loader.module";
 import { HamburgerMenuModule } from "../../../shared/header/components/hamburger-menu/hamburger-menu.module";
-import { FormFieldsModule } from "../../../theme/form-fields/form-fields.module";
+// import { FormFieldsModule } from "../../../theme/form-fields/form-fields.module";
+// Temporarily disabled;
 import { TranslateDirectiveModule } from "../../../theme/translate/translate.directive.module";
 import { InventorySidebarModule } from "../inventory-sidebar/inventory-sidebar.module";
 import { CreateUpdateGroupComponent } from "./create-update-group.component";
@@ -17,17 +18,24 @@ import { GroupCreateEditRoutingModule } from "./create-update-group.routing.modu
 import { MainGroupComponent } from "./main-group.component";
 import { WatchVideoModule } from "../../../theme/watch-video/watch-video.module";
 import { PageLeaveConfirmationGuard } from "../../../decorators/page-leave-confirmation-guard";
+import { TextFieldComponent } from "../theme/form-fields/text-field/text-field.component";
+import { ReactiveDropdownFieldComponent } from "../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component";
+import { InputFieldComponent } from "../theme/form-fields/input-field/input-field.component";
+import { AmountFieldComponent } from "../shared/amount-field/amount-field.component";
 
 @NgModule({
     declarations: [
         MainGroupComponent,
-        CreateUpdateGroupComponent
+        CreateUpdateGroupComponent,
+        TextFieldComponent, // Added since FormFieldsModule is disabled
+        ReactiveDropdownFieldComponent, // Added since FormFieldsModule is disabled
+        InputFieldComponent, // Added since FormFieldsModule is disabled
+        AmountFieldComponent, // Added since FormFieldsModule is disabled
+    
     ],
     imports: [
         CommonModule,
         FormsModule,
-        FormFieldsModule,
-        ReactiveFormsModule,
         GroupCreateEditRoutingModule,
         InventorySidebarModule,
         TranslateDirectiveModule,
@@ -37,15 +45,16 @@ import { PageLeaveConfirmationGuard } from "../../../decorators/page-leave-confi
         HamburgerMenuModule,
         MatButtonModule,
         MatSlideToggleModule,
-        GiddhPageLoaderModule,
         MatAutocompleteModule,
         WatchVideoModule
+    
     ],
     exports: [
         CreateUpdateGroupComponent
     ],
     providers: [
         PageLeaveConfirmationGuard
+    
     ]
 })
 export class GroupCreateEditModule {

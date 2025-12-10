@@ -2,6 +2,7 @@ import { Directive, ElementRef, HostListener } from '@angular/core';
 import { ToasterService } from '../../../../services/toaster.service';
 
 @Directive({
+  standalone: false,
 })
 export class UniqueNameDirective {
     public el: HTMLInputElement;

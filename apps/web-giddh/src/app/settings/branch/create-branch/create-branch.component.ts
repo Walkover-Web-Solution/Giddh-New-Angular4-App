@@ -27,6 +27,8 @@ import { ASIDE_PANE_CONFIG, BranchHierarchyType } from '../../../app.constant';
 import { ServiceConfig } from '../../../services/service.config';
 
 @Component({
+    selector: 'create-branch',
+standalone: false,
     templateUrl: './create-branch.component.html',
     styleUrls: ['./create-branch.component.scss']
 })

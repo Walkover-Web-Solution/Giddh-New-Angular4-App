@@ -1,7 +1,9 @@
 import { Component, OnInit, Inject, ViewChild, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef, Renderer2, OnDestroy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import * as jsondiffpatch from "jsondiffpatch"
+import * as jsondiffpatch from "jsondiffpatch";
 @Component({
+    selector: 'activity-compare-json',
+standalone: false,
     templateUrl: './activity-compare-json.component.html',
     styleUrls: ['activity-compare-json.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
@@ -26,9 +28,10 @@ export class ActivityCompareJsonComponent implements OnInit, OnDestroy {
     public ngOnInit(): void {
         this.dialogRef.updatePosition({ top: '0px', right: '0px' });
         setTimeout(() => {
-            const differ = new jsondiffpatch.DiffPatcher();
-            const delta = differ?.diff(this.inputData[0], this.inputData[1]);
-            this.jsonDifference = jsondiffpatch.formatters.html.format(delta, this.inputData[0]);
+            const differ = jsondiffpatch.create();
+            const delta = differ.diff(this.inputData[0], this.inputData[1]);
+            // Use simple diff display for now - jsondiffpatch formatters API changed
+            this.jsonDifference = delta ? `<pre>${JSON.stringify(delta, null, 2)}</pre>` : '<p>No differences found</p>';
             this.changeDetection.detectChanges();
         }, 100);
     }

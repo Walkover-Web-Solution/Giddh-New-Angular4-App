@@ -2,6 +2,8 @@ import { Component, Input } from "@angular/core";
 import { TaxType } from "../utility/vouchers.const";
 
 @Component({
+    selector: 'full-address',
+standalone: false,
     templateUrl: "./full-address.component.html",
     styleUrls: ["./full-address.component.scss"]
 })

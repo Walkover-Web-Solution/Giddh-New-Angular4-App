@@ -7,16 +7,20 @@ import { TranslateDirectiveModule } from '../translate/translate.directive.modul
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
-    declarations: [WatchVideoComponent],
+    declarations: [
+        WatchVideoComponent
+    ],
     imports: [
         CommonModule,
         MatButtonModule,
         MatDialogModule,
         TranslateDirectiveModule,
         MatTooltipModule
+    
     ],
     exports: [
         WatchVideoComponent
+    
     ],
 })
 export class WatchVideoModule {

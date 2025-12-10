@@ -10,6 +10,9 @@ import { SettingsTaxesActions } from "../../actions/settings/taxes/settings.taxe
 import { ASIDE_PANE_CONFIG } from "../../app.constant";
 
 @Component({
+    selector: 'other-tax',
+    templateUrl: './other-tax.component.html',
+standalone: false,
     styleUrls: ["./other-tax.component.scss"],
     providers: [OtherTaxComponentStore],
 })

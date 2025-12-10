@@ -12,6 +12,8 @@ import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MONTH_YEAR } from '../../shared/he
 const noop = () => { };
 
 @Component({
+    selector: 'giddh-datepicker',
+standalone: false,
     templateUrl: './giddh-datepicker.component.html',
     providers: [
         {

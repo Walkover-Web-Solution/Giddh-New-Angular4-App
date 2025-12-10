@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
-import { SharedModule } from '../shared/shared.module';
+// import { SharedModule } from '../shared/shared.module';
 import { AccountDetailModalModule } from '../theme/account-detail-modal/account-detail-modal.module';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { CashFlowStatementComponent } from './components/cash-flow-statement-component/cash.flow.statement.component';
@@ -20,7 +20,8 @@ import { ReportsRoutingModule } from './reports.routing.module';
 import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
 import { MatCardModule } from '@angular/material/card';
-import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+// import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+// Temporarily disabled;
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -43,6 +44,10 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { SalesPersonService } from '../shared/sales-person/utility/sales-person.service';
+import { TextFieldComponent } from "../theme/form-fields/text-field/text-field.component";
+import { ReactiveDropdownFieldComponent } from "../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component";
+import { InputFieldComponent } from "../theme/form-fields/input-field/input-field.component";
+import { AmountFieldComponent } from "../shared/amount-field/amount-field.component";
 
 @NgModule({
     declarations: [
@@ -55,14 +60,22 @@ import { SalesPersonService } from '../shared/sales-person/utility/sales-person.
         ColumnarReportComponent,
         ColumnarReportTableComponent,
         CashFlowStatementComponent,
-        SalesPurchaseRegisterExportComponent
+        SalesPurchaseRegisterExportComponent,
+        TextFieldComponent, // Added since FormFieldsModule is disabled
+        ReactiveDropdownFieldComponent, // Added since FormFieldsModule is disabled
+        InputFieldComponent, // Added since FormFieldsModule is disabled
+        AmountFieldComponent, // Added since FormFieldsModule is disabled
+    
     ],
     exports: [
         ReportsComponent,
         ReportsDetailsComponent,
         Daterangepicker
+    
     ],
-    providers: [SalesPersonService],
+    providers: [
+        SalesPersonService
+    ],
     imports: [
         ReportsRoutingModule,
         CommonModule,
@@ -73,12 +86,9 @@ import { SalesPersonService } from '../shared/sales-person/utility/sales-person.
         ReactiveFormsModule,
         ClickOutsideModule,
         ElementViewChildModule,
-        SharedModule,
         TaxSidebarModule,
         NoDataModule,
         MatCardModule,
-        FormFieldsModule,
-        MatMenuModule,
         MatButtonModule,
         MatTooltipModule,
         NewConfirmModalModule,
@@ -86,8 +96,6 @@ import { SalesPersonService } from '../shared/sales-person/utility/sales-person.
         SendEmailModule,
         ConfirmModalModule,
         MatSlideToggleModule,
-        SelectTableColumnModule,
-        BulkExportVoucherModule,
         MatTableModule,
         MatPaginatorModule,
         MatInputModule,
@@ -98,6 +106,7 @@ import { SalesPersonService } from '../shared/sales-person/utility/sales-person.
         NgxMatSelectSearchModule,
         MatDatepickerModule,
         MatNativeDateModule
+    
     ]
 })
 

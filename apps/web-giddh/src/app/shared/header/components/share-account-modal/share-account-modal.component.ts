@@ -16,6 +16,8 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
+    selector: 'share-account-modal',
+standalone: false,
     templateUrl: './share-account-modal.component.html',
     styleUrls: [`./share-account-modal.component.scss`]
 })

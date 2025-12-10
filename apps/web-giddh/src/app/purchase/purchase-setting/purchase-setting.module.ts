@@ -11,6 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 @NgModule({
     declarations: [
         PurchaseSettingComponent
+    
     ],
     imports: [
         CommonModule,
@@ -20,9 +21,11 @@ import { MatButtonModule } from '@angular/material/button';
         MatSlideToggleModule,
         GiddhDatepickerModule,
         MatButtonModule
+    
     ],
     exports: [
         PurchaseSettingComponent
+    
     ]
 })
 export class PurchaseSettingModule { }

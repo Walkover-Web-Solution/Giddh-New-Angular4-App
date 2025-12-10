@@ -28,6 +28,8 @@ import { CompanyService } from './services/company.service';
  * Top Level Component
  */
 @Component({
+    selector: 'app',
+standalone: false,
     encapsulation: ViewEncapsulation.None,
     styleUrls: [
         './app.component.css'

@@ -1,5 +1,5 @@
 import { APP_BASE_HREF } from '@angular/common';
-import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, provideHttpClient } from '@angular/common/http';
 import { APP_INITIALIZER, ErrorHandler, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -35,8 +35,13 @@ import { LoaderModule } from './loader/loader.module';
 import { PageModule } from './page/page.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatButtonModule } from '@angular/material/button';
-import { FormFieldsModule } from './theme/form-fields/form-fields.module';
+// import { FormFieldsModule } from './theme/form-fields/form-fields.module';
+// Temporarily disabled;
 import { VerifySubscriptionTransferOwnershipModule } from './verify-subscription-transfer-ownership/verify-subscription-transfer-ownership.module';
+import { TextFieldComponent } from "../theme/form-fields/text-field/text-field.component";
+import { ReactiveDropdownFieldComponent } from "../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component";
+import { InputFieldComponent } from "../theme/form-fields/input-field/input-field.component";
+import { AmountFieldComponent } from "../shared/amount-field/amount-field.component";
 // Get white label configuration from localStorage
 const whiteLabelString = localStorage.getItem('whiteLabel');
 let whiteLabelConfig = whiteLabelString ? JSON.parse(whiteLabelString) : null;
@@ -584,19 +589,24 @@ export function getServiceConfigAfterInit(): () => Promise<any> {
         AppComponent,
         AppLoginSuccessComponent,
         MobileRestrictedComponent,
+        TextFieldComponent, // Added since FormFieldsModule is disabled
+        ReactiveDropdownFieldComponent, // Added since FormFieldsModule is disabled
+        InputFieldComponent, // Added since FormFieldsModule is disabled
+        AmountFieldComponent, // Added since FormFieldsModule is disabled
+    
     ],
     imports: [
         BrowserModule,
         isElectron ? NoopAnimationsModule : BrowserAnimationsModule,
         FormsModule,
         ReactiveFormsModule,
-        FormFieldsModule,
-        VerifySubscriptionTransferOwnershipModule,
-        HttpClientModule,
         ServiceModule.forRoot(),
         ActionModule.forRoot(),
         DecoratorsModule.forRoot(),
-        ToastrModule.forRoot({ preventDuplicates: true, maxOpened: 3 }),
+        ToastrModule.forRoot({ preventDuplicates: true,
+        maxOpened: 3
+    
+    ] }),
         StoreModule.forRoot(reducers, { metaReducers, runtimeChecks: { strictStateImmutability: false, strictActionImmutability: false } }),
         ScrollingModule,
         RouterModule.forRoot(ROUTES, {
@@ -614,11 +624,12 @@ export function getServiceConfigAfterInit(): () => Promise<any> {
         ...CONDITIONAL_IMPORTS
     ],
     providers: [
-        {
-            provide: APP_INITIALIZER,
-            useFactory: getServiceConfigAfterInit,
-            multi: true,
-            deps: [HttpClient]
+        provideHttpClient(),
+        { provide: APP_INITIALIZER,
+        useFactory: getServiceConfigAfterInit,
+        multi: true,
+        deps: [HttpClient
+    ]
         },
         {
             provide: ServiceConfig,

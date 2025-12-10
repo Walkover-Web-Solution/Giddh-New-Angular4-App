@@ -17,6 +17,8 @@ import { Router } from '@angular/router';
 import { FormControl } from "@angular/forms";
 
 @Component({
+    selector: 'reverse-charge-report',
+standalone: false,
     templateUrl: './reverse-charge-report.component.html',
     styleUrls: ['./reverse-charge-report.component.scss']
 })

@@ -6,6 +6,8 @@ import { GeneralService } from '../services/general.service';
 import { ServiceConfig } from '../services/service.config';
 
 @Component({
+    selector: 'download',
+standalone: false,
     templateUrl: './download.component.html',
     styleUrls: ['./download.component.scss'],
 })

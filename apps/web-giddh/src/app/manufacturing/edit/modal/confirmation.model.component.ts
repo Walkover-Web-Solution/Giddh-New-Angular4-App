@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
+    selector: 'confirmation.model',
+standalone: false,
     templateUrl: './confirmation.model.component.html'
 })
 

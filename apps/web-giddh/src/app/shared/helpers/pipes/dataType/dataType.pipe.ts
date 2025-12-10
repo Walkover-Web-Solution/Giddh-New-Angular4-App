@@ -1,8 +1,11 @@
 import { Pipe, PipeTransform } from '@angular/core';
 @Pipe({
+    name: 'dataType',
+    standalone: false
+})
 export class DataTypePipe implements PipeTransform {
   /**
-   * Returns type of data 
+   * Returns type of data
    *
    * @param {*} value
    * @return {*}  {*}

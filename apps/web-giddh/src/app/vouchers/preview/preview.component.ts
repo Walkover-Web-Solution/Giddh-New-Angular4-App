@@ -28,6 +28,8 @@ import { DownloadVoucherComponent } from "../download-voucher/download-voucher.c
 import { ServiceConfig } from "../../services/service.config";
 
 @Component({
+    selector: 'preview',
+standalone: false,
     templateUrl: "./preview.component.html",
     styleUrls: ["./preview.component.scss"],
     providers: [VoucherComponentStore]

@@ -5,6 +5,8 @@ import { ReplaySubject, takeUntil } from 'rxjs';
 import { SubscriptionComponentStore } from '../utility/subscription.store';
 
 @Component({
+    selector: 'transfer-dialog',
+standalone: false,
     templateUrl: './transfer-dialog.component.html',
     styleUrls: ['./transfer-dialog.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

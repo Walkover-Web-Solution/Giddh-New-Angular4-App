@@ -13,6 +13,8 @@ import { PageLeaveUtilityService } from '../../services/page-leave-utility.servi
 import { IOption } from '../../app.constant';
 
 @Component({
+    selector: 'aside.menu.account',
+standalone: false,
     styleUrls: ['aside.menu.account.component.scss'],
     templateUrl: './aside.menu.account.component.html'
 })

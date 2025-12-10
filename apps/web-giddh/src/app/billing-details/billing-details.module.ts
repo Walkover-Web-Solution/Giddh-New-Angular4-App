@@ -15,7 +15,11 @@ import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.
 import { SnackBarModule } from '../theme/snackbar/snackbar.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
-import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { TextFieldComponent } from "../theme/form-fields/text-field/text-field.component";
+import { ReactiveDropdownFieldComponent } from "../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component";
+import { InputFieldComponent } from "../theme/form-fields/input-field/input-field.component";
+// import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+// Temporarily disabled;
 
 
 @NgModule({
@@ -33,12 +37,13 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
         MatAutocompleteModule,
         MatSelectModule,
         MatButtonModule,
-        AmountFieldComponentModule,
-        TranslateDirectiveModule,
         HamburgerMenuModule,
-        FormFieldsModule
-    ],
-    declarations: [BillingDetailComponent]
+        TextFieldComponent, // Added since FormFieldsModule is disabled
+        ReactiveDropdownFieldComponent, // Added since FormFieldsModule is disabled
+        InputFieldComponent, // Added since FormFieldsModule is disabled
+        AmountFieldComponent, // Added since FormFieldsModule is disabled
+    
+    ]
 })
 export class BillingDetailModule {
 }

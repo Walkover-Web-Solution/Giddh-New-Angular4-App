@@ -11,6 +11,8 @@ import { ConfirmationModalConfiguration } from '../../theme/confirmation-modal/c
 import { GeneralService } from '../../services/general.service';
 
 @Component({
+    selector: 'file-return',
+standalone: false,
     styleUrls: ['./file-return.component.scss'],
     templateUrl: './file-return.component.html',
 })

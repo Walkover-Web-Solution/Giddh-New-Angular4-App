@@ -25,6 +25,8 @@ import { ServiceConfig } from '../../../services/service.config';
 import { InventoryComponentStore } from '../inventory.store';
 
 @Component({
+    selector: 'reports',
+standalone: false,
     templateUrl: './reports.component.html',
     styleUrls: ['./reports.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

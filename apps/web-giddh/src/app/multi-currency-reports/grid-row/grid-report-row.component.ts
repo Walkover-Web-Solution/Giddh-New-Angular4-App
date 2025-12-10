@@ -20,6 +20,8 @@ import { TRIAL_BALANCE_VIEWPORT_LIMIT } from '../../financial-reports/constants/
 import { SearchService } from '../../services/search.service';
 
 @Component({
+    selector: 'grid-report-row',
+standalone: false,
     styleUrls: ['./grid-report-row.component.scss'],
     templateUrl: './grid-report-row.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush

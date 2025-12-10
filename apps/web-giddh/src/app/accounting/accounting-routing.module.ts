@@ -5,13 +5,16 @@ import { JournalVoucherComponent } from './journal-voucher/journal-voucher.compo
 
 @NgModule({
     imports: [
-        RouterModule.forChild([
-            {
-                path: '', component: JournalVoucherComponent, canActivate: [NeedsAuthentication],
+        RouterModule.forChild([ { path: '',
+        component: JournalVoucherComponent,
+        canActivate: [NeedsAuthentication
+    ],
             }
         ])
     ],
-    exports: [RouterModule]
+    exports: [
+        RouterModule
+    ]
 })
 export class AccountingRoutingModule {
 }

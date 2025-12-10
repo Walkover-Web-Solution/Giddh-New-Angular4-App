@@ -9,6 +9,8 @@ import { AppState } from "../../store";
 import { CommonActions } from "../../actions/common.actions";
 
 @Component({
+    selector: 'connect-plaid',
+standalone: false,
     templateUrl: "./connect-plaid.component.html"
 })
 export class ConnectPlaidComponent implements OnInit {

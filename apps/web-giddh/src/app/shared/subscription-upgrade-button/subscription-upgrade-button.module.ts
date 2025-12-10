@@ -7,14 +7,17 @@ import { TranslateDirectiveModule } from "../../theme/translate/translate.direct
 @NgModule({
     declarations: [
         SubscriptionUpgradeButtonComponent
+    
     ],
     imports: [
         CommonModule,
         MatButtonModule,
         TranslateDirectiveModule
+    
     ],
     exports: [
         SubscriptionUpgradeButtonComponent
+    
     ]
 })
 

@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { MainComponent } from './main.component';
 import { InventorySidebarModule } from '../inventory-sidebar/inventory-sidebar.module';
 import { HamburgerMenuModule } from '../../../shared/header/components/hamburger-menu/hamburger-menu.module';
-import { FormFieldsModule } from '../../../theme/form-fields/form-fields.module';
+// import { FormFieldsModule } from '../../../theme/form-fields/form-fields.module';
+// Temporarily disabled;
 import { MatButtonModule } from '@angular/material/button';
 import { TranslateDirectiveModule } from '../../../theme/translate/translate.directive.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -14,7 +15,7 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 
 import { MatDialogModule } from '@angular/material/dialog';
 import { CommandKModule } from '../../../theme/command-k/command.k.module';
-import { GiddhPageLoaderModule } from '../../../shared/giddh-page-loader/giddh-page-loader.module';
+// import { GiddhPageLoaderModule } from '../../../shared/giddh-page-loader/giddh-page-loader.module';
 import { AdvanceListItemsPopupComponent } from './advance-list-items-popup/advance-list-items-popup.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { NewConfirmModalModule } from '../../../theme/new-confirm-modal';
@@ -23,14 +24,16 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatRadioModule } from '@angular/material/radio';
 import { WatchVideoModule } from '../../../theme/watch-video/watch-video.module';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { TextFieldComponent } from "../theme/form-fields/text-field/text-field.component";
+import { ReactiveDropdownFieldComponent } from "../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component";
+import { InputFieldComponent } from "../theme/form-fields/input-field/input-field.component";
+import { AmountFieldComponent } from "../shared/amount-field/amount-field.component";
 
 @NgModule({
     imports: [
         CommonModule,
         InventorySidebarModule,
         HamburgerMenuModule,
-        FormFieldsModule,
-        MatButtonModule,
         TranslateDirectiveModule,
         FormsModule,
         CustomPriceRoutingModule,
@@ -38,7 +41,6 @@ import { MatPaginatorModule } from '@angular/material/paginator';
         MatSlideToggleModule,
         MatDialogModule,
         CommandKModule,
-        GiddhPageLoaderModule,
         ScrollingModule,
         ReactiveFormsModule,
         NewConfirmModalModule,
@@ -47,11 +49,21 @@ import { MatPaginatorModule } from '@angular/material/paginator';
         MatRadioModule,
         WatchVideoModule,
         MatPaginatorModule
+    
     ],
     exports: [
         CustomerWiseComponent,
         AdvanceListItemsPopupComponent
+    
     ],
-    declarations: [MainComponent, CustomerWiseComponent, AdvanceListItemsPopupComponent]
+    declarations: [
+        MainComponent,
+        CustomerWiseComponent,
+        AdvanceListItemsPopupComponent,
+        TextFieldComponent, // Added since FormFieldsModule is disabled
+        ReactiveDropdownFieldComponent, // Added since FormFieldsModule is disabled
+        InputFieldComponent, // Added since FormFieldsModule is disabled
+        AmountFieldComponent, // Added since FormFieldsModule is disabled
+    ]
 })
 export class CustomPriceModule { }

@@ -14,6 +14,8 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 
 @Component({
+    selector: 'onboarding',
+standalone: false,
     templateUrl: './onboarding.component.html',
     styleUrls: ['./onboarding.component.scss'],
     providers: [OnboardingComponentStore]

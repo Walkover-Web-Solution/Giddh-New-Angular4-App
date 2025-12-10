@@ -10,7 +10,8 @@ import { MatTableModule } from "@angular/material/table";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatButtonModule } from "@angular/material/button";
 import { MatInputModule } from "@angular/material/input";
-import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
+// import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
+// Temporarily disabled for compilation
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatDialogModule } from "@angular/material/dialog";
@@ -30,6 +31,10 @@ import { MatCardModule } from "@angular/material/card";
 import { MatExpansionModule } from "@angular/material/expansion";
 import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
 import { HamburgerMenuModule } from "../shared/header/components/hamburger-menu/hamburger-menu.module";
+import { ReactiveDropdownFieldComponent } from "../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component";
+import { TextFieldComponent } from "../theme/form-fields/text-field/text-field.component";
+import { AmountFieldComponent } from "../shared/amount-field/amount-field.component";
+import { InputFieldComponent } from "../theme/form-fields/input-field/input-field.component";
 import { VouchersPreviewComponent } from "./preview/preview.component";
 import { ScrollingModule } from "@angular/cdk/scrolling";
 import { NoDataModule } from "../shared/no-data/no-data.module";
@@ -61,7 +66,7 @@ import { ClickOutsideModule } from "ng-click-outside";
 import { AmountFieldComponentModule } from "../shared/amount-field/amount-field.module";
 import { EntryAmountModule } from "./utility/directives/entry-amount/entry-amount.module";
 import { EntryTotalModule } from "./utility/directives/entry-total/entry-total.module";
-import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-loader.module";
+// import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-loader.module";
 import { ReplacePipeModule } from "../shared/helpers/pipes/replace/replace.module";
 
 import { NgxMatSelectSearchModule } from "ngx-mat-select-search";
@@ -93,6 +98,7 @@ import { AllTemplatesComponent } from "./template/all-templates/all-templates.co
 import { TemplateEditFilterComponent } from "./template/template-edit-filter/template-edit-filter.component";
 import { MobileNumberInputComponent } from "../shared/mobile-number-input/mobile-number-input.component";
 import { GiddhNumberFormatModule } from "../shared/helpers/pipes/number-format/number-format.module";
+import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
 
 @NgModule({
     declarations: [
@@ -116,14 +122,15 @@ import { GiddhNumberFormatModule } from "../shared/helpers/pipes/number-format/n
         DownloadVoucherComponent,
         CancelEInvoiceDialogComponent,
         AllTemplatesComponent,
+        ReactiveDropdownFieldComponent
+    
     ],
     imports: [
         CommonModule,
         ReactiveFormsModule,
         RouterModule,
         FormsModule,
-        // FormFieldsModule, // NG6002 error - temporarily disabled
-        VouchersRoutingModule,
+        FormFieldsModule,
         MatTabsModule,
         MatTableModule,
         MatButtonModule,
@@ -142,38 +149,27 @@ import { GiddhNumberFormatModule } from "../shared/helpers/pipes/number-format/n
         MatDialogModule,
         MatExpansionModule,
         ScrollingModule,
-        // AddBulkItemsModule, // NG6002 error - temporarily disabled
-        MatSlideToggleModule,
+        AddBulkItemsModule,
         TranslateDirectiveModule,
         MatProgressSpinnerModule,
-        // TaxDropdownModule, // NG6002 error - temporarily disabled
-        // DiscountDropdownModule, // NG6002 error - temporarily disabled
-        // GenericAsideMenuAccountModule, // NG6002 error - temporarily disabled
-        // CreateDiscountModule, // NG6002 error - temporarily disabled
-        // AsideMenuCreateTaxModule, // NG6002 error - temporarily disabled
-        MatDividerModule,
-        // AsideMenuProductServiceModule, // NG6002 error - temporarily disabled
-        // DatepickerWrapperModule, // TODO: Fix module import
-        MatDatepickerModule,
+        TaxDropdownModule,
+        AsideMenuProductServiceModule,
         MatNativeDateModule,
-        // PurchaseSettingModule, // TODO: Fix module import
-        // InvoiceSettingModule, // TODO: Fix module import
-        // CdkScrollModule, // TODO: Fix module import
-        // TrimPipeModule, // TODO: Fix module import
-        A11yModule,
-        // EWayBillModule, // TODO: Fix module import
-        // ValidateSectionPermissionDirectiveModule, // TODO: Fix module import
-        // SubscriptionUpgradeButtonModule, // TODO: Fix module import
-        // SelectTableColumnModule, // TODO: Fix module import
-        MatButtonToggleModule,
-        // TributeMentionModule, // TODO: Fix module import
-        MobileNumberInputComponent
+        PurchaseSettingModule,
+        EWayBillModule,
+        TributeMentionModule
+    
     ],
     exports: [
         VoucherCreateComponent,
-        AllTemplatesComponent,
+        AllTemplatesComponent
+    
     ],
-    providers: [TitleCasePipe, InvoiceUiDataService, SalesPersonService]
+    providers: [
+        TitleCasePipe,
+        InvoiceUiDataService,
+        SalesPersonService
+    ]
 })
 export class VouchersModule {
 

@@ -22,14 +22,18 @@ const INVOICE_ROUTES: Routes = [
         FormsModule,
         CommonModule,
         ReactiveFormsModule,
-        RouterModule.forChild(INVOICE_ROUTES),
+        RouterModule.forChild(INVOICE_ROUTES)
+    
     ],
     exports: [
         RouterModule,
         FormsModule,
-        CommonModule,
+        CommonModule
+    
     ],
-    providers: [Location]
+    providers: [
+        Location
+    ]
 })
 export class PurchaseRoutingModule {
 }

@@ -21,6 +21,8 @@ export interface ActiveTriggers {
     isActive: boolean;
 }
 @Component({
+    selector: 'triggers',
+standalone: false,
     templateUrl: './triggers.component.html',
     styleUrls: ['./triggers.component.scss']
 })

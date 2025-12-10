@@ -8,6 +8,8 @@ import { GeneralActions } from '../../actions/general/general.actions';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store';
 @Component({
+    selector: 'ai-ocr-create',
+standalone: false,
     templateUrl: './ai-ocr-create.component.html',
     styleUrls: ['./ai-ocr-create.component.scss']
 })

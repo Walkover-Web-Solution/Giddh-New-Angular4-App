@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { InventoryUser } from '../../../models/api-models/Inventory-in-out';
 
 @Component({
+  standalone: false,
     styles: [`
     .active > a {
       color: #d35f29 !important;

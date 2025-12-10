@@ -13,6 +13,7 @@ import { SubscriptionUpgradeButtonModule } from '../../shared/subscription-upgra
 @NgModule({
     declarations: [
         InvoiceSettingComponent
+    
     ],
     imports: [
         CommonModule,
@@ -20,13 +21,12 @@ import { SubscriptionUpgradeButtonModule } from '../../shared/subscription-upgra
         MatTabsModule,
         TranslateDirectiveModule,
         MatSlideToggleModule,
-        ValidateSectionPermissionDirectiveModule,
-        GiddhDatepickerModule,
-        MatButtonModule,
-        SubscriptionUpgradeButtonModule
+        MatButtonModule
+    
     ],
     exports: [
         InvoiceSettingComponent
+    
     ]
 })
 export class InvoiceSettingModule { }

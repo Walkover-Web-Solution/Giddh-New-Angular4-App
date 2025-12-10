@@ -3,8 +3,12 @@ import { NumberToWordsPipe } from './numberToWords.pipe';
 
 @NgModule({
     imports: [],
-    exports: [NumberToWordsPipe],
-    declarations: [NumberToWordsPipe],
+    exports: [
+        NumberToWordsPipe
+    ],
+    declarations: [
+        NumberToWordsPipe
+    ],
 })
 export class NumberToWordsModule {
 }

@@ -8,6 +8,8 @@ import { ReportType } from '../multi-currency.const';
 import { TrialBalanceReportGridComponent } from './components/trial-balance-grid/trial-balance-report-grid.component';
 
 @Component({
+    selector: 'trial-balance-report',
+standalone: false,
     templateUrl: './trial-balance-report.component.html',
     providers: [MultiCurrencyReportsComponentStore]
 })

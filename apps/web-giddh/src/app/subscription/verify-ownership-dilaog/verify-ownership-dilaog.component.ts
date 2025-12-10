@@ -1,13 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TransferComponent } from '../transfer/transfer.component';
+import { TransferDialogComponent } from '../transfer-dialog/transfer-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
-import { ViewSubscriptionComponentStore } from './utility/view-subscription.store';
+import { ViewSubscriptionComponentStore } from '../view-subscription/utility/view-subscription.store';
 import { ReplaySubject, takeUntil } from 'rxjs';
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
 import { SubscriptionComponentStore } from '../utility/subscription.store';
 
 @Component({
+    selector: 'verify-ownership-dilaog',
+standalone: false,
     templateUrl: './verify-ownership-dilaog.component.html',
     styleUrls: ['./verify-ownership-dilaog.component.scss'],
     providers: [SubscriptionComponentStore]

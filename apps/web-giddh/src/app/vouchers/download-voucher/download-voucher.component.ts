@@ -8,6 +8,8 @@ import { GeneralService } from '../../services/general.service';
 import { VoucherComponentStore } from '../utility/vouchers.store';
 import { InvoicePreviewDetailsVm } from '../../models/api-models/Invoice';
 @Component({
+    selector: 'download-voucher',
+standalone: false,
     templateUrl: './download-voucher.component.html',
     styleUrls: ['./download-voucher.component.scss'],
     providers: [VoucherComponentStore]

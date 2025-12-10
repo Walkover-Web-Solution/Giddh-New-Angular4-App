@@ -11,6 +11,8 @@ import { VoucherType } from '../../ledger/components/import-statement/import-sta
 import { ServiceConfig } from '../../services/service.config';
 
 @Component({
+    selector: 'import-type-select',
+standalone: false,
     styleUrls: ['./import-type-select.component.scss'],
     templateUrl: './import-type-select.component.html'
 })

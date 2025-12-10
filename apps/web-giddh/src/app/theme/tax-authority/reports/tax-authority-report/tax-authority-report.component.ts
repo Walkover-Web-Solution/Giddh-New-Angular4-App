@@ -11,6 +11,8 @@ import { PageEvent } from '@angular/material/paginator';
 
 
 @Component({
+    selector: 'tax-authority-report',
+standalone: false,
     templateUrl: './tax-authority-report.component.html',
     styleUrls: ['./tax-authority-report.component.scss'],
     providers: [TaxAuthorityComponentStore]

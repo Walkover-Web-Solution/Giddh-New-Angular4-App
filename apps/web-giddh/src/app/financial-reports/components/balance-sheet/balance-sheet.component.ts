@@ -21,6 +21,8 @@ import { BalanceSheetGridComponent } from './components/balance-sheet-grid/balan
 import { TlPlService } from '../../../services/tl-pl.service';
 
 @Component({
+    selector: 'balance-sheet',
+standalone: false,
     templateUrl: './balance-sheet.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush
 })

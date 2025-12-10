@@ -63,7 +63,7 @@ const routes: Routes = [
             {
                 path: ":type/adjust/:refNo",
                 component: AdjustInventoryComponent
-            },
+            }
         ],
     },
     {
@@ -93,14 +93,18 @@ const routes: Routes = [
     {
         path: "stock-balance",
         component: StockBalanceComponent,
-    },
+    }
 ];
 
 
 @NgModule({
     declarations: [],
-    imports: [RouterModule.forChild(routes)],
-    exports: [RouterModule],
+    imports: [
+        RouterModule.forChild(routes)
+    ],
+    exports: [
+        RouterModule
+    ],
 })
 export class NewInventoryRoutingModule {
 }

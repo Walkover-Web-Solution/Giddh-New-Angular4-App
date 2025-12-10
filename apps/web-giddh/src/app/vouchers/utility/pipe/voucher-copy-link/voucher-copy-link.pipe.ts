@@ -3,7 +3,10 @@ import { VoucherTypeEnum } from "../../vouchers.const";
 import { VouchersUtilityService } from "../../vouchers.utility.service";
 
 @Pipe({
+    name: 'voucherCopyLink',
     pure: true,
+    standalone: false
+})
 export class VoucherCopyLinkPipe implements PipeTransform {
 
     constructor(

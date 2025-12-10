@@ -19,6 +19,8 @@ import { OrganizationType } from '../../models/user-login-state';
 import { AccountingGroupEnum } from '../../shared/Enums/common.enum';
 
 @Component({
+    selector: 'revenue-expense-list',
+standalone: false,
     styleUrls: ['./revenue-expense-list.component.scss'],
     templateUrl: './revenue-expense-list.component.html',
     providers: [ProjectWiseAccountingComponentStore]

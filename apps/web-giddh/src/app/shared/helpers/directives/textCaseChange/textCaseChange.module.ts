@@ -5,9 +5,11 @@ import { TextCaseChangeDirective } from './textCaseChange.directive';
     imports: [],
     declarations: [
         TextCaseChangeDirective
+    
     ],
     exports: [
         TextCaseChangeDirective
+    
     ]
 })
 export class TextCaseChangeModule {

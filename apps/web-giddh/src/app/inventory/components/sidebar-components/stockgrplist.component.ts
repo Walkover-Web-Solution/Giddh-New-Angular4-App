@@ -11,6 +11,8 @@ import { InvViewService } from '../../inv.view.service';
 import { ScrollDispatcher } from '@angular/cdk/scrolling';
 
 @Component({
+    selector: 'stockgrplist',
+standalone: false,
     styleUrls: ['stockgrplist.component.scss'],
     templateUrl: 'stockgrplist.component.html'
 })

@@ -4,13 +4,14 @@ import { DnsRecordsComponent } from "./dns-records.component";
 
 @NgModule({
     imports: [
-        RouterModule.forChild([
-            {
-                path: '', component: DnsRecordsComponent
-            }
+        RouterModule.forChild([ { path: '',
+        component: DnsRecordsComponent }
+    
         ])
     ],
-    exports: [RouterModule]
+    exports: [
+        RouterModule
+    ]
 })
 export class DnsRecordsRoutingModule {
 }

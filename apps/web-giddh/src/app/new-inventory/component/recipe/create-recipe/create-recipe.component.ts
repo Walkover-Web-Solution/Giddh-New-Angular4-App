@@ -10,6 +10,8 @@ import { Observable, of, ReplaySubject } from 'rxjs';
 import { map, takeUntil, tap } from 'rxjs/operators';
 
 @Component({
+    selector: 'create-recipe',
+standalone: false,
     templateUrl: './create-recipe.component.html',
     styleUrls: ['./create-recipe.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

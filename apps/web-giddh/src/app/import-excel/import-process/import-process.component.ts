@@ -4,6 +4,8 @@ import { cloneDeep } from '../../lodash-optimized';
 import { IOption } from '../../app.constant';
 
 @Component({
+    selector: 'import-process',
+standalone: false,
     styleUrls: ['./import-process.component.scss'],
     templateUrl: './import-process.component.html'
 })

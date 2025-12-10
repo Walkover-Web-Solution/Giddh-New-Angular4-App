@@ -4,10 +4,9 @@ import { OnboardingComponent } from "./onboarding.component";
 
 @NgModule({
     imports: [
-        RouterModule.forChild([
-            {
-                path: '', component: OnboardingComponent
-            }
+        RouterModule.forChild([ { path: '',
+        component: OnboardingComponent }
+    
         ])
     ]
 })

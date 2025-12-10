@@ -5,7 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
-import { HttpClientModule } from '@angular/common/http';
+// HttpClientModule removed for Angular 21 compatibility - use provideHttpClient() in app config
 import { distinctUntilChanged, Subject, takeUntil } from 'rxjs';
 import * as libphonenumber from 'google-libphonenumber';
 import { Country, COUNTRIES_DATA } from './countries-data';
@@ -144,7 +144,7 @@ function isSequential(number: string): boolean {
         MatSelectModule,
         MatInputModule,
         MatIconModule,
-        HttpClientModule
+        // HttpClientModule // Removed for Angular 21 - use provideHttpClient() in app config
     ],
     providers: [
         {

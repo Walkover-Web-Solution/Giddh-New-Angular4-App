@@ -20,15 +20,19 @@ import { MatButtonModule } from '@angular/material/button';
         MatListModule,
         MatDialogModule,
         MatButtonModule
+    
     ],
     declarations: [
         CommandKComponent
+    
     ],
     exports: [
         CommandKComponent
+    
     ],
     providers: [
-        CommandKService,
+        CommandKService
+    
     ]
 })
 

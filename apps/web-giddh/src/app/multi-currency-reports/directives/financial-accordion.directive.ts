@@ -3,6 +3,7 @@ import { Directive, HostListener, Input } from '@angular/core';
 import { Account, ChildGroup } from '../../models/api-models/Search';
 
 @Directive({
+  standalone: false,
 })
 export class FinancialAccordionDirective {
     // tslint:disable-next-line:no-input-rename

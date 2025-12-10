@@ -7,6 +7,7 @@ import { AuthService } from './auth.service';
     exports: [],
     providers: [
         AuthService
+    
     ]
 })
 export class SocialLoginModule {

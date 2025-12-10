@@ -16,6 +16,8 @@ import { GeneralService } from '../../services/general.service';
 import { IOption } from '../../app.constant';
 
 @Component({
+    selector: 'change-billing',
+standalone: false,
     templateUrl: './change-billing.component.html',
     styleUrls: ['./change-billing.component.scss'],
     providers: [ChangeBillingComponentStore]

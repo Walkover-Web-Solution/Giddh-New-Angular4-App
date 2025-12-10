@@ -35,6 +35,8 @@ import { ExportMasterDialogComponent } from '../export-master-dialog/export-mast
 import { IOption } from 'apps/web-giddh/src/app/app.constant';
 
 @Component({
+    selector: 'account-operations',
+standalone: false,
     templateUrl: './account-operations.component.html',
     styleUrls: [`./account-operations.component.scss`]
 })

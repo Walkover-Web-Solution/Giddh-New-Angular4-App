@@ -1,6 +1,8 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
+    selector: 'giddh-ledger-paginator',
+standalone: false,
     templateUrl: './giddh-ledger-paginator.component.html',
     styleUrls: ['./giddh-ledger-paginator.component.scss']
 })

@@ -4,9 +4,11 @@ import { VoucherNamePipe } from "./voucher-name.pipe";
 @NgModule({
     declarations: [
         VoucherNamePipe
+    
     ],
     exports: [
         VoucherNamePipe
+    
     ]
 })
 export class VoucherNameModule {

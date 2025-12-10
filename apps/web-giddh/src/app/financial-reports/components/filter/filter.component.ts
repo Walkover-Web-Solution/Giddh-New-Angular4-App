@@ -26,6 +26,8 @@ import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-m
 import { TlPlService } from '../../../services/tl-pl.service';
 
 @Component({
+    selector: 'filter',
+standalone: false,
     templateUrl: './filter.component.html',
     styleUrls: [`./filter.component.scss`],
     providers: [FinancialReportsComponentStore],

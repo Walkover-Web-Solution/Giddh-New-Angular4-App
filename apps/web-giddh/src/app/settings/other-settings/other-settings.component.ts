@@ -13,6 +13,8 @@ import { OrganizationProfile } from '../constants/settings.constant';
 import { LedgerViewEnum } from '../../models/api-models/Ledger';
 
 @Component({
+    selector: 'other-settings',
+standalone: false,
     templateUrl: './other-settings.component.html',
     styleUrls: ['./other-settings.component.scss']
 })

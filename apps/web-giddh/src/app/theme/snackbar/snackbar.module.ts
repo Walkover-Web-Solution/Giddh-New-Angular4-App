@@ -5,12 +5,15 @@ import { SnackBarComponent } from "./snackbar.component";
 @NgModule({
     declarations: [
         SnackBarComponent
+    
     ],
     imports: [
         CommonModule
+    
     ],
     exports: [
         SnackBarComponent
+    
     ]
 })
 

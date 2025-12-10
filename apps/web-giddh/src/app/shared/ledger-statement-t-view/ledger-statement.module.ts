@@ -10,7 +10,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { MatGridListModule } from "@angular/material/grid-list";
-import { FormFieldsModule } from "../../theme/form-fields/form-fields.module";
+// import { FormFieldsModule } from "../../theme/form-fields/form-fields.module";
+// Temporarily disabled;
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatInputModule } from "@angular/material/input";
 import { MatChipsModule } from "@angular/material/chips";
@@ -21,16 +22,25 @@ import { MatDatepickerModule } from "@angular/material/datepicker";
 import { WatchVideoModule } from "../../theme/watch-video/watch-video.module";
 import { NgModule } from "@angular/core";
 import { TranslateDirectiveModule } from "../../theme/translate/translate.directive.module";
-import { GiddhPageLoaderModule } from "../giddh-page-loader/giddh-page-loader.module";
+// import { GiddhPageLoaderModule } from "../giddh-page-loader/giddh-page-loader.module";
 import { LedgerStatementComponent } from "./ledger-statement.component";
 import { ValidateSectionPermissionDirectiveModule } from '../validate-section-permission/validate-section-permission.module';
 import { ParticularPipeModule } from '../../ledger/pipes/particular/particular.module';
 import { AmountFieldComponentModule } from '../amount-field/amount-field.module';
 import { LedgerModule } from '../../ledger/ledger.module';
 import { GiddhLedgerPaginatorModule } from '../giddh-ledger-paginator/giddh-ledger-paginator.module';
+import { TextFieldComponent } from "../../theme/form-fields/text-field/text-field.component";
+import { ReactiveDropdownFieldComponent } from "../../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component";
+import { InputFieldComponent } from "../../theme/form-fields/input-field/input-field.component";
 
 @NgModule({
-    declarations: [LedgerStatementComponent],
+    declarations: [
+        LedgerStatementComponent,
+        TextFieldComponent, // Added since FormFieldsModule is disabled
+        ReactiveDropdownFieldComponent, // Added since FormFieldsModule is disabled
+        InputFieldComponent, // Added since FormFieldsModule is disabled
+        AmountFieldComponent, // Added since FormFieldsModule is disabled
+    ],
     imports: [
         CommonModule,
         MatListModule,
@@ -45,8 +55,6 @@ import { GiddhLedgerPaginatorModule } from '../giddh-ledger-paginator/giddh-ledg
         MatDialogModule,
         MatSlideToggleModule,
         MatGridListModule,
-        FormFieldsModule,
-        MatInputModule,
         MatCheckboxModule,
         MatChipsModule,
         MatAutocompleteModule,
@@ -55,13 +63,11 @@ import { GiddhLedgerPaginatorModule } from '../giddh-ledger-paginator/giddh-ledg
         MatDatepickerModule,
         WatchVideoModule,
         TranslateDirectiveModule,
-        GiddhPageLoaderModule,
-        ValidateSectionPermissionDirectiveModule,
-        ParticularPipeModule,
-        AmountFieldComponentModule,
-        LedgerModule,
         GiddhLedgerPaginatorModule
+    
     ],
-    exports: [LedgerStatementComponent]
+    exports: [
+        LedgerStatementComponent
+    ]
 })
 export class LedgerStatementModule {}

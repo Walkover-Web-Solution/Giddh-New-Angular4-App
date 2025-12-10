@@ -5,9 +5,10 @@ import { PageComponent } from "./page.component";
 
 @NgModule({
     imports: [
-        RouterModule.forChild([
-            {
-                path: '', component: PageComponent, canActivate: [UserAuthenticated]
+        RouterModule.forChild([ { path: '',
+        component: PageComponent,
+        canActivate: [UserAuthenticated
+    ]
             }
         ])
     ]

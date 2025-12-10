@@ -15,6 +15,7 @@ import { MatDialogModule } from "@angular/material/dialog";
     declarations: [
         InventorySidebarComponent,
         CreateNewInventoryAsideComponent
+    
     ],
     imports: [
         CommonModule,
@@ -25,10 +26,12 @@ import { MatDialogModule } from "@angular/material/dialog";
         MatButtonModule,
         TranslateDirectiveModule,
         MatDialogModule
+    
     ],
     exports: [
         InventorySidebarComponent,
         CreateNewInventoryAsideComponent
+    
     ]
 })
 export class InventorySidebarModule {

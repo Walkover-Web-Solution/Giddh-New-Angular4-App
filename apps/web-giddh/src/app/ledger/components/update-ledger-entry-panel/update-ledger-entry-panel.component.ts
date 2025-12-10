@@ -76,6 +76,8 @@ import { SalesPersonComponent } from '../../../shared/sales-person/sales-person.
 const ADJUSTMENT_INFO_MESSAGE = 'Voucher should be generated in order to make adjustments';
 
 @Component({
+    selector: 'update-ledger-entry-panel',
+standalone: false,
     templateUrl: './update-ledger-entry-panel.component.html',
     styleUrls: ['./update-ledger-entry-panel.component.scss'],
     providers: [VoucherComponentStore, SalesPersonComponentStore]

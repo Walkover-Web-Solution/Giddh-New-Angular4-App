@@ -20,6 +20,8 @@ export interface ObligationsStatus {
     value: '' | 'F' | 'O';
 }
 @Component({
+    selector: 'obligations',
+standalone: false,
     templateUrl: './obligations.component.html',
     styleUrls: ['./obligations.component.scss'],
     providers: [VatReportComponentStore]

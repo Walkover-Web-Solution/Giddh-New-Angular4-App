@@ -23,6 +23,8 @@ import { ReplaySubject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 
 @Component({
+    selector: 'balance-sheet-report-grid',
+standalone: false,
     templateUrl: './balance-sheet-report-grid.component.html',
     styleUrls: [`./balance-sheet-report-grid.component.scss`],
     changeDetection: ChangeDetectionStrategy.OnPush

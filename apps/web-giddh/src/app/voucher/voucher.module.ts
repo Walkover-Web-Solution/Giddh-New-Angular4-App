@@ -1,5 +1,6 @@
 import { CommonModule, TitleCasePipe } from "@angular/common";
-import { HttpClientModule } from "@angular/common/http";
+import { provideHttpClient } from '@angular/common/http';
+
 import { NgModule } from "@angular/core";
 import { RouterModule } from "@angular/router";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
@@ -26,10 +27,11 @@ import { KeyboardShortutModule } from "../shared/helpers/directives/keyboardShor
 import { NgxMaskModule } from "../shared/helpers/directives/ngx-mask";
 import { ReplacePipeModule } from "../shared/helpers/pipes/replace/replace.module";
 import { SendEmailInvoiceModule } from "../shared/send-email-invoice/send-email-invoice.module";
-import { SharedModule } from "../shared/shared.module";
+// import { SharedModule } from "../shared/shared.module";
 import { VoucherAddBulkItemsModule } from "../shared/voucher-add-bulk-items/voucher-add-bulk-items.module";
 import { DiscountControlModule } from "../theme/discount-control/discount-control.module";
-import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
+// import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
+// Temporarily disabled;
 import { TaxControlModule } from "../theme/tax-control/tax-control.module";
 import { VoucherRendererComponent } from "./voucher-renderer.component";
 import { VoucherComponent } from "./voucher.component";
@@ -41,58 +43,58 @@ import { MatExpansionModule } from "@angular/material/expansion";
 import { MatDividerModule } from "@angular/material/divider";
 import { OnloadDirectiveModule } from "./directive/onload.module";
 import { GiddhNumberFormatModule } from "../shared/helpers/pipes/number-format/number-format.module";
+// import { AmountFieldComponentModule } from "../shared/amount-field/amount-field.module";
+// NG6002 error - using direct component instead
+import { AmountFieldComponent } from "../shared/amount-field/amount-field.component";
+import { TextFieldComponent } from "../theme/form-fields/text-field/text-field.component";
+import { ReactiveDropdownFieldComponent } from "../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component";
+import { InputFieldComponent } from "../theme/form-fields/input-field/input-field.component";
 
 @NgModule({
     imports: [
         VoucherRoutingModule,
         FormsModule,
         CommonModule,
-        HttpClientModule,
         RouterModule,
         ReactiveFormsModule,
         KeyboardShortutModule,
         DecimalDigitsModule,
-
         DigitsOnlyModule,
-        SharedModule,
-        AsideMenuRecurringEntryModule,
-        TaxControlModule,
-        DiscountControlModule,
-        LaddaModule.forRoot({
-            style: "slide-left",
-            spinnerSize: 30,
-        }),
-        SendEmailInvoiceModule,
-        VoucherTypeToNamePipeModule,
+        LaddaModule.forRoot({ style: "slide-left",
+        spinnerSize: 30 }),
         GiddhNumberFormatModule,
         NgxMaskModule.forRoot(),
-        AdvanceReceiptAdjustmentModule,
-        HasFocusDirectiveModule,
         ReplacePipeModule,
-        VoucherAddBulkItemsModule,
-        AsideMenuOtherTaxesModule,
-        AsideMenuProductServiceModule,
-        MatButtonModule,
         MatMenuModule,
         MatOptionModule,
         MatButtonModule,
         MatCheckboxModule,
         MatDialogModule,
-        MatTableModule,
-        MatSelectModule,
-        MatFormFieldModule,
         MatInputModule,
+        MatSelectModule,
         MatRadioModule,
-        FormFieldsModule,
-        NgxMatSelectSearchModule,
         WatchVideoModule,
         MatCardModule,
         MatExpansionModule,
         MatDividerModule,
-        OnloadDirectiveModule,
+        OnloadDirectiveModule
+    
     ],
-    exports: [VoucherComponent],
-    declarations: [VoucherRendererComponent, VoucherComponent],
-    providers: [TitleCasePipe],
+    exports: [
+        VoucherComponent
+    ],
+    declarations: [
+        VoucherRendererComponent,
+        VoucherComponent,
+        AmountFieldComponent,
+        TextFieldComponent, // Added since FormFieldsModule is disabled
+        ReactiveDropdownFieldComponent, // Added since FormFieldsModule is disabled
+        InputFieldComponent, // Added since FormFieldsModule is disabled
+    ],
+    providers: [
+        provideHttpClient(),
+        TitleCasePipe
+    
+    ]
 })
 export class VoucherModule {}

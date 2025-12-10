@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 
 @Component({
+    selector: 'voucher-renderer',
     standalone: false,
-    template: `<router-outlet></router-outlet>`
+    templateUrl: './voucher-renderer.component.html'
 })
 
 export class VoucherRendererComponent {

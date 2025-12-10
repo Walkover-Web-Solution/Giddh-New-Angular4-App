@@ -39,6 +39,8 @@ const filter2 = [
 ];
 
 @Component({
+    selector: 'mf.report',
+standalone: false,
     templateUrl: './mf.report.component.html',
     styleUrls: ['./mf.report.component.scss']
 })

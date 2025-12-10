@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { IStocksItem } from '../../../models/interfaces/stocks-item.interface';
 
 @Component({
+  standalone: false,
     styles: [`
     .active > a {
       color: #d35f29 !important;

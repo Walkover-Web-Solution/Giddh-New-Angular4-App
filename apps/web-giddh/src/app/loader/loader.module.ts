@@ -6,13 +6,16 @@ import { LoaderComponent } from "./loader.component";
 @NgModule({
     declarations: [
         LoaderComponent
+    
     ],
     imports: [
         CommonModule,
         RouterModule
+    
     ],
     exports: [
         LoaderComponent
+    
     ]
 })
 

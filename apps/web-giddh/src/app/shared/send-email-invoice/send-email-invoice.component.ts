@@ -3,6 +3,9 @@ import { VoucherTypeEnum } from '../../models/api-models/Sales';
 import { GeneralService } from '../../services/general.service';
 
 @Component({
+    selector: 'send-email-invoice',
+    templateUrl: './send-email-invoice.component.html',
+standalone: false,
     styleUrls: ['./send-email-invoice.component.scss']
 })
 

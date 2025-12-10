@@ -22,6 +22,8 @@ import { IOption } from '../../../app.constant';
 import { CopyType } from '../../../shared/Enums/common.enum';
 import { TributeConfig } from '../../../shared/helpers/directives/tributeMention/tributeType';
 @Component({
+    selector: 'export-ledger',
+standalone: false,
     templateUrl: './export-ledger.component.html',
     styleUrls: ['./export-ledger.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,

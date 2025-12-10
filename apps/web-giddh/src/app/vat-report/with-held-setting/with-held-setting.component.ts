@@ -10,6 +10,8 @@ import { SettingsProfileService } from '../../services/settings.profile.service'
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
 
 @Component({
+    selector: 'with-held-setting',
+standalone: false,
     templateUrl: './with-held-setting.component.html',
     styleUrls: ['./with-held-setting.component.scss']
 })

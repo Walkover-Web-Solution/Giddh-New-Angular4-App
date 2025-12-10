@@ -4,6 +4,8 @@ import { ASIDE_PANE_CONFIG } from '../../../app.constant';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
+    selector: 'welcome-inventory',
+standalone: false,
     templateUrl: './welcome-inventory.component.html',
     styleUrls: ['./welcome-inventory.scss']
 })

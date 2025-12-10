@@ -35,6 +35,8 @@ export const TAX_CONTROL_VALUE_ACCESSOR: any = {
 };
 
 @Component({
+    selector: 'tax-control',
+standalone: false,
     templateUrl: 'tax-control.component.html',
     styleUrls: ['./tax-control.component.scss'],
     providers: [TAX_CONTROL_VALUE_ACCESSOR]

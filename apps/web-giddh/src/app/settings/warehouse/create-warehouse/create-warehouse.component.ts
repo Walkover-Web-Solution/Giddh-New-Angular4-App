@@ -22,6 +22,8 @@ import { ServiceConfig } from '../../../services/service.config';
 import { ASIDE_PANE_CONFIG } from '../../../app.constant';
 
 @Component({
+    selector: 'create-warehouse',
+standalone: false,
     templateUrl: './create-warehouse.component.html',
     styleUrls: ['./create-warehouse.component.scss']
 })

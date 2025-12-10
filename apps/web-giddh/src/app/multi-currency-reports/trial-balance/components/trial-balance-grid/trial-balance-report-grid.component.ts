@@ -24,6 +24,8 @@ import { ReplaySubject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
 
 @Component({
+    selector: 'trial-balance-report-grid',
+standalone: false,
     templateUrl: './trial-balance-report-grid.component.html',
     styleUrls: [`./trial-balance-report-grid.component.scss`],
     changeDetection: ChangeDetectionStrategy.OnPush

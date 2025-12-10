@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
 @Component({
+    selector: 'list-recipe',
+standalone: false,
   templateUrl: './list-recipe.component.html',
   styleUrls: ['./list-recipe.component.scss']
 })

@@ -14,6 +14,8 @@ import { Router } from '@angular/router';
 import { ToasterService } from '../../../services/toaster.service';
 
 @Component({
+    selector: 'list',
+standalone: false,
     templateUrl: './list.component.html',
     styles: [``],
     providers: [EmailForwardingComponentStore]

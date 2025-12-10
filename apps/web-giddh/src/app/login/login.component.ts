@@ -33,6 +33,8 @@ import { ServiceConfig } from "../services/service.config";
 declare var initSendOTP: any;
 
 @Component({
+    selector: 'login',
+standalone: false,
     templateUrl: "./login.component.html",
     styleUrls: ["./login.component.scss"]
 })

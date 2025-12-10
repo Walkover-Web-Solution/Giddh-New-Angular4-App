@@ -19,11 +19,15 @@ import { MatInputModule } from '@angular/material/input';
         MatCheckboxModule,
         MatFormFieldModule,
         MatInputModule
+    
     ],
     exports: [
         DiscountControlComponent
+    
     ],
-    declarations: [DiscountControlComponent],
+    declarations: [
+        DiscountControlComponent
+    ],
     providers: [],
 })
 export class DiscountControlModule {

@@ -13,6 +13,9 @@ import { GeneralService } from '../../../services/general.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
+    selector: 'permission.list',
+    templateUrl: './permission.list.component.html',
+standalone: false,
     styleUrls: ['./permission.component.scss']
 })
 export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy {

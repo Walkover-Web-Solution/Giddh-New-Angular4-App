@@ -11,6 +11,8 @@ import { PageLeaveUtilityService } from "apps/web-giddh/src/app/services/page-le
 import { IOption } from "apps/web-giddh/src/app/app.constant";
 
 @Component({
+    selector: 'payor-create-edit',
+standalone: false,
     templateUrl: './payor-create-edit.component.html',
     styleUrls: ['./payor-create-edit.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
 @Component({
+    selector: 'subscription-upgrade-button',
+standalone: false,
     styleUrls: [`./subscription-upgrade-button.component.scss`],
     templateUrl: './subscription-upgrade-button.component.html'
 })

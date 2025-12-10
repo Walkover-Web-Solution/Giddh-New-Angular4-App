@@ -6,14 +6,19 @@ import { TaxSidebarComponent } from './tax-sidebar.component';
 import { MatListModule } from '@angular/material/list';
 
 @NgModule({
-    declarations: [TaxSidebarComponent],
+    declarations: [
+        TaxSidebarComponent
+    ],
     imports: [
         RouterModule,
         TranslateDirectiveModule,
         CommonModule,
         MatListModule
+    
     ],
-    exports: [TaxSidebarComponent]
+    exports: [
+        TaxSidebarComponent
+    ]
 })
 export class TaxSidebarModule {
 }

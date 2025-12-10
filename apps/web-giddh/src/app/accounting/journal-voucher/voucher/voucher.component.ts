@@ -50,6 +50,8 @@ const CustomShortcode = [
 ];
 
 @Component({
+    selector: 'voucher',
+standalone: false,
     templateUrl: './voucher.component.html',
     styleUrls: ['../../accounting.component.scss', './voucher.component.scss']
 })

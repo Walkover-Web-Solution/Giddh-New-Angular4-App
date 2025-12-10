@@ -4,13 +4,14 @@ import { DownloadComponent } from "./download.component";
 
 @NgModule({
     imports: [
-        RouterModule.forChild([
-            {
-                path: '', component: DownloadComponent
-            }
+        RouterModule.forChild([ { path: '',
+        component: DownloadComponent }
+    
         ])
     ],
-    exports: [RouterModule]
+    exports: [
+        RouterModule
+    ]
 })
 export class DownloadRoutingModule {
 }

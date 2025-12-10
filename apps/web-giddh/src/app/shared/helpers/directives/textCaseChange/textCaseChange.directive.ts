@@ -2,6 +2,7 @@ import { Directive, HostListener, Input } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 
 @Directive({
+  standalone: false,
 })
 export class TextCaseChangeDirective {
     @Input() public control: UntypedFormControl;

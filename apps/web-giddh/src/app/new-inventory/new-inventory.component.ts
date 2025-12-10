@@ -3,9 +3,10 @@ import { ReplaySubject } from 'rxjs';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../app.constant';
 import * as dayjs from 'dayjs';
 @Component({
+    selector: 'new-inventory',
+standalone: false,
     templateUrl: './new-inventory.component.html',
     styleUrls: ['./new-inventory.component.scss'],
-
 })
 
 export class NewInventoryComponent {

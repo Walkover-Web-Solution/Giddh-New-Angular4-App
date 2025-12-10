@@ -8,6 +8,8 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { AppState } from '../../../store/roots';
 
 @Component({
+    selector: 'audit-logs-grid',
+standalone: false,
     templateUrl: './audit-logs-grid.component.html',
     styleUrls: [`./audit-logs-grid.component.scss`]
 })

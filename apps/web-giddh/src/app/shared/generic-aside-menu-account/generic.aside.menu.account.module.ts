@@ -10,6 +10,7 @@ import { MatButtonModule } from "@angular/material/button";
 @NgModule({
     declarations: [
         GenericAsideMenuAccountComponent
+    
     ],
     imports: [
         CommonModule,
@@ -18,9 +19,11 @@ import { MatButtonModule } from "@angular/material/button";
         AccountUpdateNewDetailsModule,
         MatDialogModule,
         MatButtonModule
+    
     ],
     exports: [
         GenericAsideMenuAccountComponent
+    
     ]
 })
 

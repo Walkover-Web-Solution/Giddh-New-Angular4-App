@@ -16,7 +16,7 @@ import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digits
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { TextCaseChangeModule } from '../shared/helpers/directives/textCaseChange/textCaseChange.module';
 import { GiddhRoundOffPipeModule } from '../shared/helpers/pipes/round-off/round-off.module';
-import { SharedModule } from '../shared/shared.module';
+// import { SharedModule } from '../shared/shared.module';
 import { ConfirmModalModule } from '../theme';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { InventoryAddGroupComponent } from './components/add-group-components/inventory.addgroup.component';
@@ -42,7 +42,8 @@ import { InventoryRoutingModule } from './inventory.routing.module';
 import { JobworkSidebarComponent } from './jobwork/sidebar-components/jobwork.sidebar.component';
 import { ManufacturingComponent } from './manufacturing/manufacturing.component';
 import { AsideMenuProductServiceModule } from '../shared/aside-menu-product-service/aside-menu-product-service.module';
-import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+// import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+// Temporarily disabled;
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -54,11 +55,13 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
 import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
+import { TextFieldComponent } from "../theme/form-fields/text-field/text-field.component";
+import { ReactiveDropdownFieldComponent } from "../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component";
+import { InputFieldComponent } from "../theme/form-fields/input-field/input-field.component";
+import { AmountFieldComponent } from "../shared/amount-field/amount-field.component";
 
 @NgModule({
     declarations: [
-        // Components / Directives/ Pipes
-        InventoryComponent,
         InventorySidebarComponent,
         InventoryAddGroupComponent,
         InventoryHearderComponent,
@@ -84,7 +87,12 @@ import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/n
         ManufacturingComponent,
         NewBranchTransferAddComponent,
         NewBranchTransferListComponent,
-        DateFormatterPipe
+        DateFormatterPipe,
+        TextFieldComponent, // Added since FormFieldsModule is disabled
+        ReactiveDropdownFieldComponent, // Added since FormFieldsModule is disabled
+        InputFieldComponent, // Added since FormFieldsModule is disabled
+        AmountFieldComponent, // Added since FormFieldsModule is disabled
+    
     ],
     exports: [
         InventoryComponent,
@@ -114,12 +122,14 @@ import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/n
         NewBranchTransferAddComponent,
         NewBranchTransferListComponent,
         InventoryAddStockModule
+    
     ],
-    providers: [ExceptionLogService],
+    providers: [
+        ExceptionLogService
+    ],
     imports: [
         MatButtonModule,
         InventoryRoutingModule,
-        SharedModule,
         Daterangepicker,
         TextCaseChangeModule,
         GiddhNumberFormatModule,
@@ -131,9 +141,6 @@ import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/n
         InventoryAddStockModule,
         ConfirmModalModule,
         ScrollingModule,
-        AsideMenuProductServiceModule,
-        FormFieldsModule,
-        MatSlideToggleModule,
         MatDialogModule,
         MatPaginatorModule,
         GiddhDatepickerModule,
@@ -145,6 +152,7 @@ import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/n
         MatCheckboxModule,
         MatRadioModule,
         MatExpansionModule
+    
     ]
 })
 export class InventoryModule { }

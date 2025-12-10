@@ -11,14 +11,12 @@ import { VatLiabilitiesPayments } from './vat-liabilities-payments/vat-liabiliti
 
 @NgModule({
     imports: [
-        RouterModule.forChild([
-            {
-                path: '', component: VatReportComponent, children: [
-                    {
-                        path: "",
-                        pathMatch: "full",
-                        component: VatReportComponent
-                    }
+        RouterModule.forChild([ { path: '',
+        component: VatReportComponent,
+        children: [ { path: "",
+        pathMatch: "full",
+        component: VatReportComponent }
+    
                 ]
             },
             {
@@ -58,7 +56,9 @@ import { VatLiabilitiesPayments } from './vat-liabilities-payments/vat-liabiliti
             }
         ])
     ],
-    exports: [RouterModule]
+    exports: [
+        RouterModule
+    ]
 })
 export class VatReportRoutingModule {
 }

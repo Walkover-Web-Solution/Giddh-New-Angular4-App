@@ -10,6 +10,8 @@ import { SidebarAction } from '../../../actions/inventory/sidebar.actions';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 
 @Component({
+    selector: 'inventory.sidebar',
+standalone: false,
     templateUrl: './inventory.sidebar.component.html',
     styles: [`
         .parent-group > ul > li ul li div {

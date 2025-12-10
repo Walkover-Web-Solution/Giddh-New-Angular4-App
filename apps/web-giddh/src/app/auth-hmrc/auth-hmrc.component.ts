@@ -8,6 +8,8 @@ import { ToasterService } from '../services/toaster.service';
 import { GeneralService } from '../services/general.service';
 
 @Component({
+    selector: 'auth-hmrc',
+standalone: false,
     templateUrl: './auth-hmrc.component.html',
     styleUrls: ['./auth-hmrc.component.scss']
 })

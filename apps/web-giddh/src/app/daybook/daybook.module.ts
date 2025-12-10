@@ -10,7 +10,7 @@ import { ElementViewChildModule } from '../shared/helpers/directives/elementView
 import { ExportDaybookComponent } from './export-daybook/export-daybook.component';
 import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
-import { SharedModule } from '../shared/shared.module';
+// import { SharedModule } from '../shared/shared.module';
 import { SalesModule } from '../sales/sales.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
 import { UpdateLedgerEntryPanelModule } from '../ledger/components/update-ledger-entry-panel/update-ledger-entry-panel.module';
@@ -30,10 +30,23 @@ import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { MatSelectModule } from '@angular/material/select';
 import { MatMenuModule } from '@angular/material/menu';
-import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { TextFieldComponent } from "../theme/form-fields/text-field/text-field.component";
+import { ReactiveDropdownFieldComponent } from "../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component";
+import { InputFieldComponent } from "../theme/form-fields/input-field/input-field.component";
+import { AmountFieldComponent } from "../shared/amount-field/amount-field.component";
+// import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+// Temporarily disabled;
 
 @NgModule({
-    declarations: [DaybookComponent, ExportDaybookComponent, DaybookAdvanceSearchModelComponent],
+    declarations: [
+        DaybookComponent,
+        ExportDaybookComponent,
+        DaybookAdvanceSearchModelComponent,
+        TextFieldComponent, // Added since FormFieldsModule is disabled
+        ReactiveDropdownFieldComponent, // Added since FormFieldsModule is disabled
+        InputFieldComponent, // Added since FormFieldsModule is disabled
+        AmountFieldComponent, // Added since FormFieldsModule is disabled
+    ],
     providers: [],
     imports: [
         CommonModule,
@@ -44,7 +57,6 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
         DaybookRoutingModule,
         ElementViewChildModule,
         GiddhNumberFormatModule,
-        SharedModule,
         NgxMaskModule.forRoot(),
         AsideMenuSalesOtherTaxesModule,
         SalesModule,
@@ -64,8 +76,8 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
         WatchVideoModule,
         NgxMatSelectSearchModule,
         MatSelectModule,
-        MatMenuModule,
-        FormFieldsModule
+        MatMenuModule
+    
     ]
 })
 export class DaybookModule {

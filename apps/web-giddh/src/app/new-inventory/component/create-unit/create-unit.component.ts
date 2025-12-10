@@ -10,6 +10,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '../../../theme/new-confirm-modal/confirm-modal.component';
 
 @Component({
+    selector: 'create-unit',
+standalone: false,
     templateUrl: './create-unit.component.html',
     styleUrls: ['./create-unit.component.scss']
 })

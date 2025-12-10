@@ -7,6 +7,8 @@ import { ToasterService } from "../../../services/toaster.service";
 import { ASIDE_PANE_CONFIG } from "../../../app.constant";
 
 @Component({
+    selector: 'custom-units',
+standalone: false,
     templateUrl: "./custom-units.component.html",
     styleUrls: ["./custom-units.component.scss"]
 })

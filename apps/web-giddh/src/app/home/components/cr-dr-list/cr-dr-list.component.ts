@@ -13,6 +13,8 @@ import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { OrganizationType } from '../../../models/user-login-state';
 
 @Component({
+    selector: 'cr-dr-list',
+standalone: false,
     templateUrl: 'cr-dr-list.component.html',
     styleUrls: ['./cr-dr-list.component.scss', '../../home.component.scss'],
 })

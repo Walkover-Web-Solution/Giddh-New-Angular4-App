@@ -6,6 +6,9 @@ import { LoaderState } from './loader';
 import { LoaderService } from './loader.service';
 
 @Component({
+    selector: 'giddh-loader',
+    standalone: false,
+    templateUrl: './loader.component.html',
     styleUrls: ['./loader.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush
 })

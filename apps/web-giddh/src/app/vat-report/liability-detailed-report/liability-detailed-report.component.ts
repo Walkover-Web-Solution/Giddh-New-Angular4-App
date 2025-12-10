@@ -8,6 +8,8 @@ import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../app.constant';
 import { PageEvent } from '@angular/material/paginator';
 
 @Component({
+    selector: 'liability-detailed-report',
+standalone: false,
     templateUrl: './liability-detailed-report.component.html',
     styleUrls: ['./liability-detailed-report.component.scss']
 })

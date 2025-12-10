@@ -23,6 +23,8 @@ import { InventoryModuleName, InventoryReportType } from "../../inventory.enum";
 import { InventoryComponentStore } from "../inventory.store";
 
 @Component({
+    selector: 'report-filters',
+standalone: false,
     templateUrl: "./report-filters.component.html",
     styleUrls: ["./report-filters.component.scss"],
     changeDetection: ChangeDetectionStrategy.OnPush,

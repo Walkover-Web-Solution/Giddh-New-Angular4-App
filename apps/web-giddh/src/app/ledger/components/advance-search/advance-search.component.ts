@@ -20,6 +20,8 @@ import { cloneDeep } from '../../../lodash-optimized';
 import { SalesPersonComponentStore } from '../../../shared/sales-person/utility/sales-person.store';
 
 @Component({
+    selector: 'advance-search',
+standalone: false,
     templateUrl: './advance-search.component.html',
     styleUrls: ['./advance-search.component.scss'],
     providers: [SalesPersonComponentStore],

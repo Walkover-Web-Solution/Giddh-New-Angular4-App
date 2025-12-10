@@ -37,22 +37,29 @@ export class PickDateAdapter extends NativeDateAdapter {
 @NgModule({
     declarations: [
         GiddhDaterangepickerComponent
+    
     ],
     imports: [
         MatNativeDateModule,
         MatFormFieldModule,
         MatInputModule,
         MatDatepickerModule
+    
     ],
     exports: [
         GiddhDaterangepickerComponent
+    
     ],
     providers: [
         MatDatepickerModule,
         MatNativeDateModule,
-        { provide: MAT_DATE_FORMATS, useValue: GIDDH_DATEPICKER_FORMAT },
-        { provide: DateAdapter, useClass: PickDateAdapter },
-        { provide: LOCALE_ID, useValue: 'en' }
+        { provide: MAT_DATE_FORMATS,
+        useValue: GIDDH_DATEPICKER_FORMAT },
+        { provide: DateAdapter,
+        useClass: PickDateAdapter },
+        { provide: LOCALE_ID,
+        useValue: 'en' }
+    
     ]
 })
 

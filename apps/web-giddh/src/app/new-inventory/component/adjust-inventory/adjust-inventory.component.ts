@@ -20,6 +20,8 @@ import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { AdjustmentInventory, DROPDOWN_ITEMS_COUNT_LIMIT, ASIDE_PANE_CONFIG } from '../../../app.constant';
 import { cloneDeep } from '../../../lodash-optimized';
 @Component({
+    selector: 'adjust-inventory',
+standalone: false,
     templateUrl: './adjust-inventory.component.html',
     styleUrls: ['./adjust-inventory.component.scss'],
     providers: [AdjustInventoryComponentStore]

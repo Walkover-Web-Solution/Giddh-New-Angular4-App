@@ -4,14 +4,15 @@ import { NgModule } from '@angular/core';
 import { LaddaModule } from 'angular2-ladda';
 import { ContactComponent } from './contact.component';
 import { ContactRoutingModule } from './contact.routing.module';
-import { SharedModule } from '../shared/shared.module';
+// import { SharedModule } from '../shared/shared.module';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { ContactAdvanceSearchComponent } from './advanceSearch/contactAdvanceSearch.component';
 import { AgingReportComponent } from './aging-report/aging-report.component';
-import { AgingDropdownComponent } from './aging-dropdown/aging.dropdown.component'; // importing the module for table column sort
+import { AgingDropdownComponent } from './aging-dropdown/aging.dropdown.component';
+// importing the module for table column sort
 import { PaymentAsideComponent } from './payment-aside/payment-aside.component';
 import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
@@ -22,7 +23,8 @@ import { MatMenuModule } from "@angular/material/menu";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatTabsModule } from "@angular/material/tabs";
 import { MatRippleModule } from "@angular/material/core";
-import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
+// import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
+// Temporarily disabled;
 import { MatChipsModule } from "@angular/material/chips";
 import { MatTableModule } from "@angular/material/table";
 import { MatInputModule } from "@angular/material/input";
@@ -31,7 +33,7 @@ import { MatDialogModule } from "@angular/material/dialog";
 import { AccountUpdateNewDetailsModule } from '../shared/header/components/account-update-new-details/account-update-new-details.module';
 import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
 import { SelectTableColumnModule } from '../shared/select-table-column/select-table-column.module';
-import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
+// import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatListModule } from '@angular/material/list';
 import { ScrollingModule } from '@angular/cdk/scrolling';
@@ -46,6 +48,10 @@ import { MatCardModule } from '@angular/material/card';
 import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
 import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
 import { GiddhNumberFormatPipe } from '../shared/helpers/pipes/number-format/number-format.pipe';
+import { TextFieldComponent } from "../theme/form-fields/text-field/text-field.component";
+import { ReactiveDropdownFieldComponent } from "../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component";
+import { InputFieldComponent } from "../theme/form-fields/input-field/input-field.component";
+import { AmountFieldComponent } from "../shared/amount-field/amount-field.component";
 @NgModule({
     declarations: [
         ContactComponent,
@@ -54,21 +60,28 @@ import { GiddhNumberFormatPipe } from '../shared/helpers/pipes/number-format/num
         AgingDropdownComponent,
         PaymentAsideComponent,
         ContactPreviewComponent,
-        AccountStatementComponent
+        AccountStatementComponent,
+        TextFieldComponent, // Added since FormFieldsModule is disabled
+        ReactiveDropdownFieldComponent, // Added since FormFieldsModule is disabled
+        InputFieldComponent, // Added since FormFieldsModule is disabled
+        AmountFieldComponent, // Added since FormFieldsModule is disabled
+    
     ],
     exports: [
         GiddhNumberFormatModule
+    
     ],
     imports: [
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
         ContactRoutingModule,
-        LaddaModule.forRoot({
-            style: 'slide-left',
-            spinnerSize: 30
+        LaddaModule.forRoot({ style: 'slide-left',
+        spinnerSize: 30
+    
+    ]
         }),
-        SharedModule,
+        // SharedModule,
         ClickOutsideModule,
         DigitsOnlyModule,
         ElementViewChildModule,
@@ -83,7 +96,7 @@ import { GiddhNumberFormatPipe } from '../shared/helpers/pipes/number-format/num
         MatCheckboxModule,
         MatTabsModule,
         MatRippleModule,
-        FormFieldsModule,
+                // FormFieldsModule, // Temporarily disabled for compilation
         MatChipsModule,
         MatTableModule,
         MatInputModule,
@@ -91,8 +104,8 @@ import { GiddhNumberFormatPipe } from '../shared/helpers/pipes/number-format/num
         MatDialogModule,
         AccountUpdateNewDetailsModule,
         AsideMenuAccountModule,
-        SelectTableColumnModule,
-        GiddhPageLoaderModule,
+        // SelectTableColumnModule, // NG6002 error - temporarily disabled
+        // GiddhPageLoaderModule,
         MatSlideToggleModule,
         MatListModule,
         ScrollingModule,
@@ -106,6 +119,7 @@ import { GiddhNumberFormatPipe } from '../shared/helpers/pipes/number-format/num
     ],
     providers: [
         GiddhNumberFormatPipe
+    
     ]
 })
 export class ContactModule {

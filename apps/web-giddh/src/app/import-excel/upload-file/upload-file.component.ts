@@ -15,6 +15,8 @@ import { cloneDeep } from '../../lodash-optimized';
 import { VoucherType } from '../../ledger/components/import-statement/import-statement.const';
 
 @Component({
+    selector: 'upload-file',
+standalone: false,
     styleUrls: ['./upload-file.component.scss'],
     templateUrl: './upload-file.component.html',
     providers: [LedgerComponentStore]

@@ -6,10 +6,9 @@ import { DownloadsComponent } from "./downloads.component";
 
 @NgModule({
     imports: [
-        RouterModule.forChild([
-            {
-                path: '',
-                canActivate: [NeedsAuthentication],
+        RouterModule.forChild([ { path: '',
+        canActivate: [NeedsAuthentication
+    ],
                 component: DownloadsComponent
             },
             {
@@ -19,7 +18,9 @@ import { DownloadsComponent } from "./downloads.component";
             }
         ])
     ],
-    exports: [RouterModule]
+    exports: [
+        RouterModule
+    ]
 })
 
 export class DownloadsRoutingModule {

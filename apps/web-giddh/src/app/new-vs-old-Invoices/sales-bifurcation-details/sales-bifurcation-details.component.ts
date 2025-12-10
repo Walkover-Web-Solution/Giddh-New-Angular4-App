@@ -9,6 +9,8 @@ import { SalesBifurcationDetailsActionEnum } from './utility/sales-bifurcation-d
 import { PageEvent } from '@angular/material/paginator';
 
 @Component({
+    selector: 'sales-bifurcation-details',
+standalone: false,
     templateUrl: './sales-bifurcation-details.component.html',
     styleUrls: ['./sales-bifurcation-details.component.scss'],
     providers: [SalesBifurcationDetailsService, SalesBifurcationDetailsStore]

@@ -2,6 +2,8 @@ import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output
 import { VoucherTypeEnum } from '../../models/api-models/Sales';
 
 @Component({
+    selector: 'send-email',
+standalone: false,
     templateUrl: './send-email.component.html',
     styleUrls: ['./send-email.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

@@ -8,7 +8,11 @@ import { ParticularPipe } from './particular.pipe';
  * @class ParticularPipeModule
  */
 @NgModule({
-    declarations: [ParticularPipe],
-    exports: [ParticularPipe]
+    declarations: [
+        ParticularPipe
+    ],
+    exports: [
+        ParticularPipe
+    ]
 })
 export class ParticularPipeModule {}

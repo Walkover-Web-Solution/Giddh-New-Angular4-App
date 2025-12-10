@@ -18,6 +18,8 @@ import { InvoiceService } from '../../../services/invoice.service';
 import { IOption } from '../../../app.constant';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 @Component({
+    selector: 'inventory.addgroup',
+standalone: false,
     templateUrl: './inventory.addgroup.component.html',
     styleUrls: [`./inventory.addgroup.component.scss`],
 })

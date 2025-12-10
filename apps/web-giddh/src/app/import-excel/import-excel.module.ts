@@ -11,14 +11,19 @@ import { ImportWizardComponent } from './import-wizard/import-wizard.component';
 import { LaddaModule } from 'angular2-ladda';
 import { UploadSuccessComponent } from './upload-success/upload-success.component';
 import { ImportReportComponent } from './import-report/import-report.component';
-import { SharedModule } from '../shared/shared.module';
+// import { SharedModule } from '../shared/shared.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+// import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+// Temporarily disabled;
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { TextFieldComponent } from "../theme/form-fields/text-field/text-field.component";
+import { ReactiveDropdownFieldComponent } from "../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component";
+import { InputFieldComponent } from "../theme/form-fields/input-field/input-field.component";
+import { AmountFieldComponent } from "../shared/amount-field/amount-field.component";
 
 @NgModule({
     declarations: [
@@ -29,25 +34,33 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
         UploadFileComponent,
         UploadSuccessComponent,
         ImportWizardComponent,
-        ImportReportComponent
+        ImportReportComponent,
+        TextFieldComponent, // Added since FormFieldsModule is disabled
+        ReactiveDropdownFieldComponent, // Added since FormFieldsModule is disabled
+        InputFieldComponent, // Added since FormFieldsModule is disabled
+        AmountFieldComponent, // Added since FormFieldsModule is disabled
+    
     ],
-    exports: [ImportComponent],
+    exports: [
+        ImportComponent
+    ],
     providers: [],
     imports: [
         CommonModule,
         FormsModule,
         ImportExcelRoutingModule,
-        LaddaModule.forRoot({
-            style: 'slide-left',
-            spinnerSize: 30
+        LaddaModule.forRoot({ style: 'slide-left',
+        spinnerSize: 30
+    
+    ]
         }),
         ScrollingModule,
-        SharedModule,
+        // SharedModule,
         WatchVideoModule,
         MatSlideToggleModule,
         MatButtonModule,
         MatTooltipModule,
-        FormFieldsModule,
+                // FormFieldsModule, // Temporarily disabled for compilation
         MatCheckboxModule
     ],
 })

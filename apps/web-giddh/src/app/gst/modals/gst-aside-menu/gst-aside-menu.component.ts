@@ -13,7 +13,8 @@ import { IOption } from '../../../app.constant';
 
 @Component({
     selector: 'gst-aside-menu',
-    styleUrls: [`./gst-aside-menu.component.scss`],
+    standalone: false,
+    styleUrls: ['./gst-aside-menu.component.scss'],
     templateUrl: './gst-aside-menu.component.html'
 })
 export class GstAsideMenuComponent implements OnInit, OnDestroy {

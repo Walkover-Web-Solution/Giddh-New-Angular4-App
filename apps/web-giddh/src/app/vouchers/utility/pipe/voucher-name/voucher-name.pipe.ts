@@ -2,7 +2,10 @@ import { Pipe, PipeTransform } from "@angular/core";
 import { VouchersUtilityService } from "../../vouchers.utility.service";
 
 @Pipe({
+    name: 'voucherName',
     pure: true,
+    standalone: false
+})
 export class VoucherNamePipe implements PipeTransform {
 
     constructor(

@@ -28,6 +28,8 @@ import { GeneralService } from 'apps/web-giddh/src/app/services/general.service'
 import { NewConfirmationModalComponent } from 'apps/web-giddh/src/app/theme/new-confirmation-modal/confirmation-modal.component';
 
 @Component({
+    selector: 'profit-loss-grid',
+standalone: false,
     templateUrl: './profit-loss-grid.component.html',
     styleUrls: [`./profit-loss-grid.component.scss`],
     changeDetection: ChangeDetectionStrategy.OnPush,

@@ -17,6 +17,8 @@ import { AccountArchivedStatusEnum } from "../../../Enums/common.enum";
 import { IOption } from "apps/web-giddh/src/app/app.constant";
 
 @Component({
+    selector: 'master',
+standalone: false,
     templateUrl: "./master.component.html",
     styleUrls: ["./master.component.scss"],
     changeDetection: ChangeDetectionStrategy.OnPush

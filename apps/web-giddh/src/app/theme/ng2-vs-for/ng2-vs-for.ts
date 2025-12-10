@@ -74,6 +74,7 @@ function nextElementSibling(el: any) {
 }
 
 @Directive({
+  standalone: false,
     exportAs: 'vsFor'
 })
 

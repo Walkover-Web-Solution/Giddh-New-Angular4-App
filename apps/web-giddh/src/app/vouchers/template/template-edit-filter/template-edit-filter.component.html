@@ -8,18 +8,19 @@
         <mat-tab [label]="localeData?.design_tab">
             <div>
                 <div class="option-value-field design-field my-3">
-                    <input-field
-                        [type]="'text'"
-                        [placeholder]="localeData?.enter_template_name"
-                        [name]="'fieldName'"
-                        [(ngModel)]="customTemplate.name"
-                        (ngModelChange)="onChangeFieldVisibility()"
-                        [label]="localeData?.template_name"
-                        [maxlength]="'18'"
-                        [autocomplete]="'off'"
-                        [floatLabel]="'always'"
-                    >
-                    </input-field>
+                    <mat-form-field appearance="outline" floatLabel="always">
+                        <mat-label>{{ localeData?.template_name }}</mat-label>
+                        <input
+                            matInput
+                            type="text"
+                            [placeholder]="localeData?.enter_template_name"
+                            name="fieldName"
+                            [(ngModel)]="customTemplate.name"
+                            (ngModelChange)="onChangeFieldVisibility()"
+                            maxlength="18"
+                            autocomplete="off"
+                        >
+                    </mat-form-field>
                 </div>
                 <div class="template-scroll">
                     <mat-accordion class="template-design-wrap">
@@ -331,7 +332,7 @@
                 <div class="mt-2">
                     <mat-accordion class="template-design-wrap">
                         <div>
-                            <mat-expansion-panel class="mb-2" [expanded]="templateSectionsVisible.header">
+                            <mat-expansion-panel class="mb-2" >
                                 <mat-expansion-panel-header>
                                     <mat-panel-title>
                                         <i class="icon-change_template mr-2"></i>
@@ -1842,7 +1843,7 @@
                                 </div>
                             </mat-expansion-panel>
                             <!-- table-fields-start -->
-                            <mat-expansion-panel class="mb-2" [expanded]="templateSectionsVisible.table">
+                            <mat-expansion-panel class="mb-2" >
                                 <mat-expansion-panel-header>
                                     <mat-panel-title>
                                         <i class="icon-change_template mr-2"></i>
@@ -2807,7 +2808,7 @@
                             <!-- table-fields-end -->
 
                             <!-- footer-fields-start -->
-                            <mat-expansion-panel class="mb-2" [expanded]="templateSectionsVisible.footer">
+                            <mat-expansion-panel class="mb-2" >
                                 <mat-expansion-panel-header>
                                     <mat-panel-title>
                                         <i class="icon-change_template mr-2"></i>

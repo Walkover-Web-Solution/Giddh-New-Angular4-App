@@ -12,6 +12,8 @@ import { VoucherTypeEnum } from '../utility/vouchers.const';
 import { VoucherComponentStore } from '../utility/vouchers.store';
 
 @Component({
+    selector: 'print-voucher',
+standalone: false,
     templateUrl: './print-voucher.component.html',
     styleUrls: ['./print-voucher.component.scss']
 })

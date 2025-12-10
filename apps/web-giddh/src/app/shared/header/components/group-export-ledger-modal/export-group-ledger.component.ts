@@ -16,6 +16,8 @@ import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service'
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
 
 @Component({
+    selector: 'export-group-ledger',
+standalone: false,
     templateUrl: './export-group-ledger.component.html',
     styleUrls: ['./export-group-ledger.component.scss']
 })

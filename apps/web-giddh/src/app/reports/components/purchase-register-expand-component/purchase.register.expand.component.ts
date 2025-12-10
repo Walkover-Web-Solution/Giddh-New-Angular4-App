@@ -21,6 +21,8 @@ import { CompanyActions } from '../../../actions/company.actions';
 import { PageEvent } from '@angular/material/paginator';
 
 @Component({
+    selector: 'purchase.register.expand',
+standalone: false,
     templateUrl: "./purchase.register.expand.component.html",
     styleUrls: ["./purchase.register.expand.component.scss"],
 })

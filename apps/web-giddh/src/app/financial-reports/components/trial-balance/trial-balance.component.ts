@@ -14,6 +14,8 @@ import { TrialBalanceGridComponent } from './components/trial-balance-grid/trial
 import { TlPlService } from '../../../services/tl-pl.service';
 
 @Component({
+    selector: 'trial-balance',
+standalone: false,
     templateUrl: './trial-balance.component.html'
 })
 export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {

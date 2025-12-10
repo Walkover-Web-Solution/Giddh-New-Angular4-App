@@ -26,6 +26,8 @@ import { Configuration, IOption, PaymentProvider } from '../../app.constant';
 import { ServiceConfig } from '../../services/service.config';
 
 @Component({
+    selector: 'buy-plan',
+standalone: false,
     templateUrl: './buy-plan.component.html',
     styleUrls: ['./buy-plan.component.scss'],
     providers: [BuyPlanComponentStore, ChangeBillingComponentStore, ViewSubscriptionComponentStore, SubscriptionComponentStore]

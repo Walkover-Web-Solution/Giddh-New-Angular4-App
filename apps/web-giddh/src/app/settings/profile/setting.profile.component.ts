@@ -33,6 +33,8 @@ export interface IGstObj {
     isDefault: boolean;
 }
 @Component({
+    selector: 'setting.profile',
+standalone: false,
     templateUrl: './setting.profile.component.html',
     styleUrls: ['./setting.profile.component.scss'],
     host: { 'class': 'settings-profile' }

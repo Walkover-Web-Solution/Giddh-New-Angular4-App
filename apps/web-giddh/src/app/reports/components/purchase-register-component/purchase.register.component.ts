@@ -29,6 +29,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { ReportsComponentStore } from '../reports.store';
 import { GroupBy } from '../../constants/reports.constant';
 @Component({
+    selector: 'purchase.register',
+standalone: false,
     templateUrl: './purchase.register.component.html',
     styleUrls: ['./purchase.register.component.scss'],
     providers: [ReportsComponentStore, SalesPersonComponentStore]

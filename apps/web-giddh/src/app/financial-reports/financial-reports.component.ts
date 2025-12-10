@@ -8,6 +8,8 @@ import { CompanyResponse } from '../models/api-models/Company';
 import { AppState } from '../store';
 
 @Component({
+    selector: 'financial-reports',
+standalone: false,
     templateUrl: './financial-reports.component.html',
     styleUrls: ['./financial-reports.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

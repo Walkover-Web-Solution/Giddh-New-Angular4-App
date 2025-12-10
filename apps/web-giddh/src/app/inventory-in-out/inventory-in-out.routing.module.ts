@@ -4,13 +4,14 @@ import { InventoryInOutComponent } from './inventory-in-out.component';
 
 @NgModule({
     imports: [
-        RouterModule.forChild([
-            {
-                path: '', component: InventoryInOutComponent
-            }
+        RouterModule.forChild([ { path: '',
+        component: InventoryInOutComponent }
+    
         ])
     ],
-    exports: [RouterModule]
+    exports: [
+        RouterModule
+    ]
 })
 export class InventoryInOutRoutingModule {
 }

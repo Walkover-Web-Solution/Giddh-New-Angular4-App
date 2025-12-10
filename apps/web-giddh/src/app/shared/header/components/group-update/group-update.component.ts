@@ -21,6 +21,8 @@ import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { DROPDOWN_ITEMS_COUNT_LIMIT, IOption, TCS_TDS_TAXES_TYPES } from 'apps/web-giddh/src/app/app.constant';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 @Component({
+    selector: 'group-update',
+standalone: false,
     templateUrl: 'group-update.component.html',
     styleUrls: ['group-update.component.scss']
 })

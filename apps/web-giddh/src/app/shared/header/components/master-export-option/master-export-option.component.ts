@@ -3,6 +3,8 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ReplaySubject, takeUntil } from 'rxjs';
 
 @Component({
+    selector: 'master-export-option',
+standalone: false,
   templateUrl: './master-export-option.component.html',
   styleUrls: ['./master-export-option.component.scss']
 })

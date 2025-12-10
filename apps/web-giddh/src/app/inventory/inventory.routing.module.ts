@@ -15,55 +15,32 @@ import { NewBranchTransferListComponent } from "./components/new-branch-transfer
 
 @NgModule({
     imports: [
-        RouterModule.forChild([
-            {
-                path: "",
-                component: InventoryComponent,
-
-                children: [
-                    {
-                        path: "add-group/:groupUniqueName",
-                        pathMatch: "full",
-                        component: InventoryUpdateGroupComponent
-                    },
-                    {
-                        path: "add-group/:groupUniqueName/add-stock/:stockUniqueName",
-                        component: InventoryAddStockComponent
-                    },
-                    {
-                        path: "stock/:groupUniqueName/report/:stockUniqueName",
-                        component: InventoryStockReportComponent
-                    },
-                    {
-                        path: "group/:groupUniqueName/report",
-                        component: InventoryGroupStockReportComponent
-                    },
-                    {
-                        path: "custom-stock",
-                        component: InventoryCustomStockComponent
-                    },
-                    {
-                        path: "",
-                        pathMatch: "full",
-                        component: InventoryWelcomeComponent
-                    },
-                    {
-                        path: "jobwork",
-                        component: JobworkComponent
-                    },
-                    {
-                        path: "jobwork/:type/:uniqueName",
-                        component: JobworkComponent
-                    },
-                    {
-                        path: "manufacturing",
-                        component: ManufacturingComponent
-                    },
-                    {
-                        path: "report",
-                        pathMatch: "full",
-                        component: NewBranchTransferListComponent
-                    }
+        RouterModule.forChild([ { path: "",
+        component: InventoryComponent,
+        children: [ { path: "add-group/:groupUniqueName",
+        pathMatch: "full",
+        component: InventoryUpdateGroupComponent },
+        { path: "add-group/:groupUniqueName/add-stock/:stockUniqueName",
+        component: InventoryAddStockComponent },
+        { path: "stock/:groupUniqueName/report/:stockUniqueName",
+        component: InventoryStockReportComponent },
+        { path: "group/:groupUniqueName/report",
+        component: InventoryGroupStockReportComponent },
+        { path: "custom-stock",
+        component: InventoryCustomStockComponent },
+        { path: "",
+        pathMatch: "full",
+        component: InventoryWelcomeComponent },
+        { path: "jobwork",
+        component: JobworkComponent },
+        { path: "jobwork/:type/:uniqueName",
+        component: JobworkComponent },
+        { path: "manufacturing",
+        component: ManufacturingComponent },
+        { path: "report",
+        pathMatch: "full",
+        component: NewBranchTransferListComponent }
+    
                 ]
             },
                        {
@@ -71,10 +48,14 @@ import { NewBranchTransferListComponent } from "./components/new-branch-transfer
                          pathMatch: "full",
                         component: InventoryComponent
                     }
-        ]),
+        ])
 
     ],
-    exports: [RouterModule],
-    providers: [InvViewService]
+    exports: [
+        RouterModule
+    ],
+    providers: [
+        InvViewService
+    ]
 })
 export class InventoryRoutingModule { }

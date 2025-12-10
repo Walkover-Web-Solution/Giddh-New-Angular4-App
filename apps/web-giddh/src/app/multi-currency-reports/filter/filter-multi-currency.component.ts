@@ -12,6 +12,8 @@ import { cloneDeep, orderBy } from '../../lodash-optimized';
 import { MultiCurrencyReportsComponentStore } from '../multi-currency-reports.store';
 
 @Component({
+    selector: 'filter-multi-currency',
+standalone: false,
     templateUrl: './filter-multi-currency.component.html',
     styleUrls: [`./filter-multi-currency.component.scss`],
     changeDetection: ChangeDetectionStrategy.OnPush

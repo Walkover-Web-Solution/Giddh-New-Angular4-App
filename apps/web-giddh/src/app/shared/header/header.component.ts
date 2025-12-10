@@ -54,6 +54,9 @@ interface SubscriptionErrorFlags {
 };
 
 @Component({
+    selector: 'header',
+    templateUrl: './header.component.html',
+standalone: false,
     styleUrls: ['./header.component.scss']
 })
 

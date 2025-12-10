@@ -4,6 +4,8 @@ import { Store, select } from '@ngrx/store';
 import { take } from 'rxjs/operators';
 
 @Component({
+    selector: 'confirm-modal',
+standalone: false,
     templateUrl: './confirm-modal.component.html',
     styleUrls: ['./confirm-modal.component.scss']
 })

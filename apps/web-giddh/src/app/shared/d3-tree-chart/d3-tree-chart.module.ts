@@ -5,12 +5,15 @@ import { D3TreeChartComponent } from "./d3-tree-chart.component";
 @NgModule({
     declarations: [
         D3TreeChartComponent
+    
     ],
     imports: [
         CommonModule
+    
     ],
     exports: [
         D3TreeChartComponent
+    
     ]
 })
 

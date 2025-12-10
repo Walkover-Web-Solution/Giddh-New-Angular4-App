@@ -12,6 +12,8 @@ import { GeneralService } from '../../services/general.service';
 import { ToasterService } from '../../services/toaster.service';
 
 @Component({
+    selector: 'view-subscription',
+standalone: false,
     templateUrl: './view-subscription.component.html',
     styleUrls: ['./view-subscription.component.scss'],
     providers: [ViewSubscriptionComponentStore, SubscriptionComponentStore, BuyPlanComponentStore]

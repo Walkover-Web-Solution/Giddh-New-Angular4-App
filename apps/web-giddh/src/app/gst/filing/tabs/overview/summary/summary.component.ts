@@ -19,6 +19,7 @@ interface SequenceConfig {
 
 @Component({
     selector: 'overview-summary',
+    standalone: false,
     templateUrl: './summary.component.html',
     styleUrls: ['summary.component.scss']
 })

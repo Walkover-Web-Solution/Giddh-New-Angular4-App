@@ -13,6 +13,9 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { GiddhNumberFormatPipe } from "../../shared/helpers/pipes/number-format/number-format.pipe";
 
 @Component({
+    selector: 'add-bulk-items',
+    templateUrl: './add-bulk-items.component.html',
+standalone: false,
     styleUrls: ["./add-bulk-items.component.scss"],
     providers: [AddBulkItemsComponentStore]
 })

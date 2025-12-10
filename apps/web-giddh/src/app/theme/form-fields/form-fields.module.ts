@@ -26,6 +26,7 @@ import { InputFieldComponent } from "./input-field/input-field.component";
 import { ReactiveDropdownFieldComponent } from "./reactive-dropdown-field/reactive-dropdown-field.component";
 import { OptionsScrollDirective } from "./reactive-dropdown-field/reactive-dropdown-options-scroll.directive";
 import { MatDividerModule } from "@angular/material/divider";
+import { AmountFieldComponent } from "../../shared/amount-field/amount-field.component";
 
 @NgModule({
     declarations: [
@@ -34,7 +35,9 @@ import { MatDividerModule } from "@angular/material/divider";
         SelectMultipleFieldsComponent,
         InputFieldComponent,
         ReactiveDropdownFieldComponent,
-        OptionsScrollDirective
+        OptionsScrollDirective,
+        AmountFieldComponent, // Added since FormFieldsModule is disabled
+    
     ],
     imports: [
         CommonModule,
@@ -53,12 +56,11 @@ import { MatDividerModule } from "@angular/material/divider";
         NgxMaskModule,
         ClickOutsideModule,
         MatChipsModule,
-        CdkScrollModule,
-        ScrollingModule,
         MatIconModule,
         MatMenuModule,
         MatButtonModule,
         MatDividerModule
+    
     ],
     exports: [
         TextFieldComponent,

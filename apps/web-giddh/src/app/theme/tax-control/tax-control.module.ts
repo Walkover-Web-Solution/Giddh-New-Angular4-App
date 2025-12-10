@@ -9,7 +9,12 @@ import { NgxMaskModule } from '../../shared/helpers/directives/ngx-mask';
 import { TaxControlComponent } from './tax-control.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { FormFieldsModule } from '../form-fields/form-fields.module';
+import { TextFieldComponent } from "../../theme/form-fields/text-field/text-field.component";
+import { ReactiveDropdownFieldComponent } from "../../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component";
+import { InputFieldComponent } from "../../theme/form-fields/input-field/input-field.component";
+import { AmountFieldComponent } from "../../shared/amount-field/amount-field.component";
+// import { FormFieldsModule } from '../form-fields/form-fields.module';
+// Temporarily disabled;
 
 @NgModule({
     imports: [
@@ -21,11 +26,19 @@ import { FormFieldsModule } from '../form-fields/form-fields.module';
         MatButtonModule,
         MatCheckboxModule,
         MatInputModule,
-        MatFormFieldModule,
-        FormFieldsModule
+        MatFormFieldModule
+    
     ],
-    declarations: [TaxControlComponent],
-    exports: [TaxControlComponent]
+    declarations: [
+        TaxControlComponent,
+        TextFieldComponent, // Added since FormFieldsModule is disabled
+        ReactiveDropdownFieldComponent, // Added since FormFieldsModule is disabled
+        InputFieldComponent, // Added since FormFieldsModule is disabled
+        AmountFieldComponent, // Added since FormFieldsModule is disabled
+    ],
+    exports: [
+        TaxControlComponent
+    ]
 })
 
 export class TaxControlModule { }

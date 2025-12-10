@@ -5,13 +5,16 @@ import { DaybookComponent } from 'apps/web-giddh/src/app/daybook/daybook.compone
 
 @NgModule({
     imports: [
-        RouterModule.forChild([
-            {
-                path: '', component: DaybookComponent, canActivate: [NeedsAuthentication]
+        RouterModule.forChild([ { path: '',
+        component: DaybookComponent,
+        canActivate: [NeedsAuthentication
+    ]
             }
         ])
     ],
-    exports: [RouterModule]
+    exports: [
+        RouterModule
+    ]
 })
 export class DaybookRoutingModule {
 }

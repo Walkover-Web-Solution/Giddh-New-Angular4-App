@@ -12,10 +12,9 @@ import { CashFlowStatementComponent } from './components/cash-flow-statement-com
 
 @NgModule({
     imports: [
-        RouterModule.forChild([
-            {
-                path: '',
-                canActivate: [NeedsAuthentication],
+        RouterModule.forChild([ { path: '',
+        canActivate: [NeedsAuthentication
+    ],
                 component: ReportsComponent,
                 children: [
                     { path: '', redirectTo: 'sales-register', pathMatch: 'full' },
@@ -28,9 +27,11 @@ import { CashFlowStatementComponent } from './components/cash-flow-statement-com
                     { path: 'cash-flow-statement', component: CashFlowStatementComponent }
                 ]
             }
-        ]),
+        ])
     ],
-    exports: [RouterModule]
+    exports: [
+        RouterModule
+    ]
 })
 
 export class ReportsRoutingModule {
