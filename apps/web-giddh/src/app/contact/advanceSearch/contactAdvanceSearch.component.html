@@ -1,9 +1,6 @@
 <div>
     <div class="dialog-header">
         <span>{{ commonLocaleData?.app_advance_search }}</span>
-        <button mat-icon-button aria-label="close" (click)="onCancel()">
-            <i class="icon-cross"></i>
-        </button>
     </div>
     <mat-dialog-content class="dialog-body" id="export-body">
         <form name="newRole" novalidate autocomplete="off">
@@ -55,10 +52,10 @@
             </div>
             <!--endregion-->
             <div class="pull-right">
-                <button mat-raised-button color="primary" type="submit" class="mr-2" (click)="save()">
+                <button mat-raised-button color="primary" type="submit" class="mr-3" (click)="save()">
                     {{ commonLocaleData?.app_search }}
                 </button>
-                <button mat-stroked-button type="submit" (click)="onCancel()">
+                <button mat-stroked-button type="button" (click)="onCancel()">
                     {{ commonLocaleData?.app_cancel }}
                 </button>
             </div>

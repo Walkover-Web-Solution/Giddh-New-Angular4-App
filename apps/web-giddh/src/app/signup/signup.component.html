@@ -20,7 +20,7 @@
                     <div class="giddh-login">
                         <div class="giddh-login-inner">
                             <div class="logo-login">
-                                <a [href]="giddhDomainUrl"  aria-label="brand-logo">
+                                <a [href]="giddhDomainUrl" aria-label="brand-logo">
                                     <img [src]="giddhLogoSrc" alt="brand-logo" width="141px" />
                                 </a>
                             </div>
@@ -30,7 +30,6 @@
                                 <div class="form-wrapper" *ngIf="loginUsing">
                                     <!-- login with email form -->
                                     <form
-
                                         name="verifyEmailForm"
                                         novalidate
                                         [formGroup]="emailVerifyForm"
@@ -45,7 +44,8 @@
                                                 required
                                             />
                                             <button
-                                                mat-raised-button color="primary"
+                                                mat-raised-button
+                                                color="primary"
                                                 [disabled]="!emailVerifyForm.controls['email'].valid"
                                                 [ladda]="isLoginWithEmailInProcess$ | async"
                                                 (click)="LoginWithEmail(emailVerifyForm.controls['email']?.value)"
@@ -63,9 +63,10 @@
                                             />
                                             <div class="clear-both mb-4">
                                                 <button
-                                                    mat-raised-button color="primary"
+                                                    mat-raised-button
+                                                    color="primary"
                                                     [disabled]="!emailVerifyForm.controls['token'].valid"
-                                                        [ladda]="isVerifyEmailInProcess$ | async"
+                                                    [ladda]="isVerifyEmailInProcess$ | async"
                                                     (click)="
                                                         VerifyEmail(
                                                             emailVerifyForm.controls['email']?.value,
@@ -89,7 +90,7 @@
 
                                     <!-- login with userName form -->
                                     <form
-                                        class="position-relative "
+                                        class="position-relative"
                                         id="signUpWithPwd"
                                         [formGroup]="signUpWithPasswdForm"
                                         (ngSubmit)="SignupWithPasswd(signUpWithPasswdForm)"
@@ -115,7 +116,8 @@
                                                 autocomplete="false"
                                             />
                                             <button
-                                                mat-raised-button color="primary"
+                                                mat-raised-button
+                                                color="primary"
                                                 class="mt-2"
                                                 type="submit"
                                                 [disabled]="
@@ -129,7 +131,6 @@
                                     </form>
                                     <!-- form end/ -->
                                     <form
-
                                         *ngIf="isSignupWithPasswordSuccess$ | async"
                                         id="signupVerifyForm"
                                         [formGroup]="signupVerifyForm"
@@ -145,9 +146,10 @@
                                             />
                                             <div class="clear-both mb-4">
                                                 <button
-                                                    mat-raised-button color="primary"
+                                                    mat-raised-button
+                                                    color="primary"
                                                     [disabled]="!signupVerifyForm.controls['verificationCode'].valid"
-                                                        (click)="
+                                                    (click)="
                                                         VerifyEmail(
                                                             signupVerifyForm.controls['email']?.value,
                                                             signupVerifyForm.controls['verificationCode']?.value
@@ -171,7 +173,8 @@
                                 <ul class="social-login">
                                     <li class="google-ico">
                                         <a href="javascript:void(0);" (click)="signInWithProviders('google')"
-                                            ><i class="ico-google"> <img src="./assets/images/new/google_ico.svg" alt="google img" /> </i
+                                            ><i class="ico-google">
+                                                <img src="./assets/images/new/google_ico.svg" alt="google img" /> </i
                                             ><span>Signup with Google</span></a
                                         >
                                     </li>
@@ -188,7 +191,14 @@
                                 </ul>
                                 <div class="d-flex align-items-center account mt-1">
                                     <p class="mb-0 mr-2 font-weight-semibold">Already have an account?</p>
-                                    <a mat-raised-button color="primary" routerLink="/login" class="btn-sm" href="javascript:void(0);">Login</a>
+                                    <a
+                                        mat-raised-button
+                                        color="primary"
+                                        routerLink="/login"
+                                        class="btn-sm"
+                                        href="javascript:void(0);"
+                                        >Login</a
+                                    >
                                 </div>
                             </div>
                         </div>
@@ -203,9 +213,6 @@
 <ng-template #emailVerifyTemplate>
     <div class="dialog-header">
         <span>Sign Up with Giddh</span>
-        <button mat-icon-button aria-label="close" mat-dialog-close (click)="hideEmailModal()">
-            <i class="icon-cross"></i>
-        </button>
     </div>
     <mat-dialog-content class="dialog-body">
         <form class="col-xs-12" name="verifyEmailForm" novalidate [formGroup]="emailVerifyForm">
@@ -217,16 +224,19 @@
                     placeholder="Enter your email address"
                     required
                 />
-                <button
-                    [disabled]="!emailVerifyForm.controls['email'].valid"
-                    [ladda]="isLoginWithEmailInProcess$ | async"
-                    mat-raised-button
-                    color="primary"
-                    class="sharp mt-2"
-                    (click)="LoginWithEmail(emailVerifyForm.controls['email']?.value)"
-                >
-                    Submit
-                </button>
+                <div class="d-flex column-gap-1">
+                    <button
+                        [disabled]="!emailVerifyForm.controls['email'].valid"
+                        [ladda]="isLoginWithEmailInProcess$ | async"
+                        mat-raised-button
+                        color="primary"
+                        class="sharp mt-2"
+                        (click)="LoginWithEmail(emailVerifyForm.controls['email']?.value)"
+                    >
+                        Submit
+                    </button>
+                    <button mat-stroked-button class="sharp mt-2" (click)="hideEmailModal()">Cancel</button>
+                </div>
             </div>
             <div *ngIf="isLoginWithEmailSubmited$ | async" class="clear-both form-group form-group-lg">
                 <input
@@ -237,21 +247,24 @@
                     required
                 />
                 <small>We have sent a verification code to your registered email.</small>
-                <button
-                    [disabled]="!emailVerifyForm.controls['token'].valid"
-                    mat-raised-button
-    color="primary"
-    class="sharp mt-2"
-                    [ladda]="isVerifyEmailInProcess$ | async"
-                    (click)="
-                        VerifyEmail(
-                            emailVerifyForm.controls['email']?.value,
-                            emailVerifyForm.controls['token']?.value
-                        )
-                    "
-                >
-                    Last step to go
-                </button>
+                <div class="d-flex column-gap-1">
+                    <button
+                        [disabled]="!emailVerifyForm.controls['token'].valid"
+                        mat-raised-button
+                        color="primary"
+                        class="sharp mt-2"
+                        [ladda]="isVerifyEmailInProcess$ | async"
+                        (click)="
+                            VerifyEmail(
+                                emailVerifyForm.controls['email']?.value,
+                                emailVerifyForm.controls['token']?.value
+                            )
+                        "
+                    >
+                        Last step to go
+                    </button>
+                    <button mat-stroked-button class="sharp mt-2" (click)="hideEmailModal()">Cancel</button>
+                </div>
                 <a
                     mat-stroked-button
                     class="cursor-pointer pull-right"
@@ -269,18 +282,9 @@
 <ng-template #mobileVerifyTemplate>
     <div class="dialog-header">
         <span>Sign Up with Giddh</span>
-        <button mat-icon-button aria-label="close" mat-dialog-close (click)="hideMobileModal()">
-            <i class="icon-cross"></i>
-        </button>
     </div>
     <mat-dialog-content class="dialog-body">
-        <form
-            class="col-xs-12"
-            id="verifyMobile"
-            name="verifyEmailForm"
-            novalidate
-            [formGroup]="mobileVerifyForm"
-        >
+        <form class="col-xs-12" id="verifyMobile" name="verifyEmailForm" novalidate [formGroup]="mobileVerifyForm">
             <div class="clear-both form-group-lg" *ngIf="!(isLoginWithMobileSubmited$ | async)">
                 <reactive-dropdown-field
                     [options]="countryCodeList"
@@ -299,41 +303,46 @@
                     required
                 />
             </div>
-            <button
-                *ngIf="!(isLoginWithMobileSubmited$ | async)"
-                mat-raised-button
-                color="primary"
-                class="sharp mt-2"
-                (click)="
-                    getOtp(
-                        mobileVerifyForm.controls['mobileNumber']?.value,
-                        mobileVerifyForm.controls['country']?.value
-                    )
-                "
-                [ladda]="isLoginWithMobileInProcess$ | async"
-                [disabled]="!mobileVerifyForm.controls['mobileNumber'].valid"
-            >
-                {{ !(isLoginWithMobileInProcess$ | async) ? "Get Otp" : "Resend" }}
-            </button>
-            <div class="clear-both form-group form-group-lg" *ngIf="isLoginWithMobileSubmited$ | async">
-                <hr class="mrtb10" />
-                <input class="form-control square" placeholder="Enter OTP" formControlName="otp" />
+            <div *ngIf="!(isLoginWithMobileSubmited$ | async)" class="d-flex column-gap-1">
                 <button
-                    type="login"
                     mat-raised-button
                     color="primary"
                     class="sharp mt-2"
-                    [ladda]="isVerifyMobileInProcess$ | async"
                     (click)="
-                        VerifyCode(
+                        getOtp(
                             mobileVerifyForm.controls['mobileNumber']?.value,
-                            mobileVerifyForm.controls['otp']?.value
+                            mobileVerifyForm.controls['country']?.value
                         )
                     "
-                    [disabled]="!mobileVerifyForm.controls['otp'].valid"
+                    [ladda]="isLoginWithMobileInProcess$ | async"
+                    [disabled]="!mobileVerifyForm.controls['mobileNumber'].valid"
                 >
-                    Login
+                    {{ !(isLoginWithMobileInProcess$ | async) ? "Get Otp" : "Resend" }}
                 </button>
+                <button mat-stroked-button class="sharp mt-2" (click)="hideMobileModal()">Cancel</button>
+            </div>
+            <div class="clear-both form-group form-group-lg" *ngIf="isLoginWithMobileSubmited$ | async">
+                <hr class="mrtb10" />
+                <input class="form-control square" placeholder="Enter OTP" formControlName="otp" />
+                <div class="d-flex column-gap-1">
+                    <button
+                        type="login"
+                        mat-raised-button
+                        color="primary"
+                        class="sharp mt-2"
+                        [ladda]="isVerifyMobileInProcess$ | async"
+                        (click)="
+                            VerifyCode(
+                                mobileVerifyForm.controls['mobileNumber']?.value,
+                                mobileVerifyForm.controls['otp']?.value
+                            )
+                        "
+                        [disabled]="!mobileVerifyForm.controls['otp'].valid"
+                    >
+                        Login
+                    </button>
+                    <button mat-stroked-button class="sharp mt-2" (click)="hideMobileModal()">Cancel</button>
+                </div>
             </div>
         </form>
     </mat-dialog-content>
@@ -344,33 +353,27 @@
 <ng-template #twoWayAuthTemplate>
     <div class="dialog-header">
         <span>Sign Up with Giddh</span>
-        <button mat-icon-button aria-label="close" mat-dialog-close (click)="resetTwoWayAuthModal()">
-            <i class="icon-cross"></i>
-        </button>
     </div>
     <mat-dialog-content class="dialog-body">
-        <form
-            class="col-xs-12"
-            id="authModal"
-            name="verifyEmailForm"
-            novalidate
-            [formGroup]="twoWayOthForm"
-        >
+        <form class="col-xs-12" id="authModal" name="verifyEmailForm" novalidate [formGroup]="twoWayOthForm">
             <div class="clear-both form-group form-group-lg">
                 <hr class="mrtb10" />
                 <input class="form-control square" placeholder="Enter OTP" formControlName="otp" />
                 <small>We have sent an OTP to your registered mobile number.</small>
-                <button
-                    type="login"
-                    mat-raised-button
-                    color="primary"
-                    class="sharp mt-2"
-                    [ladda]="isTwoWayAuthInProcess$ | async"
-                    (click)="verifyTwoWayCode()"
-                    [disabled]="twoWayOthForm.get('otp').invalid"
-                >
-                    Submit
-                </button>
+                <div class="d-flex column-gap-1 mt-2">
+                    <button
+                        type="login"
+                        mat-raised-button
+                        color="primary"
+                        class="sharp"
+                        [ladda]="isTwoWayAuthInProcess$ | async"
+                        (click)="verifyTwoWayCode()"
+                        [disabled]="twoWayOthForm.get('otp').invalid"
+                    >
+                        Submit
+                    </button>
+                    <button mat-stroked-button class="sharp" (click)="resetTwoWayAuthModal()">Cancel</button>
+                </div>
             </div>
         </form>
     </mat-dialog-content>

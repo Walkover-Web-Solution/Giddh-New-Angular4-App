@@ -6,9 +6,6 @@
 >
     <div class="dialog-header">
         <span class="font-size-16">{{ localeData?.create_e_way_bill }}</span>
-        <button mat-icon-button aria-label="close" mat-dialog-close>
-            <i class="icon-cross"></i>
-        </button>
     </div>
     <div mat-dialog-content class="dialog-body">
         <div *ngIf="generateEwayBillform">
@@ -199,12 +196,15 @@
                             >
                         </div>
                     </div>
-                    <div class="row clear-both d-flex justify-content-end column-gap-15">
+                    <div class="row clear-both d-flex justify-content-end column-gap-1">
                         <button mat-raised-button color="primary" (click)="onSubmitEwaybill()">
                             {{ localeData?.save_generate }}
                         </button>
                         <button mat-stroked-button (click)="onResetGenerateBillForm()">
                             {{ commonLocaleData?.app_reset }}
+                        </button>
+                        <button mat-stroked-button type="button" mat-dialog-close>
+                            {{ commonLocaleData?.app_cancel }}
                         </button>
                     </div>
                 </div>
@@ -215,10 +215,7 @@
     <!-- Account Aside Menu -->
     <ng-template #accountAsideMenu>
         <div class="dialog-header">
-            <span class="font-size-16">{{ commonLocaleData?.app_manage_transporter }}</span>
-            <button mat-icon-button aria-label="close" mat-dialog-close>
-                <i class="icon-cross"></i>
-            </button>
+            <span>{{ commonLocaleData?.app_manage_transporter }}</span>
         </div>
         <div mat-dialog-content class="dialog-body">
             <form autocomplete="off" name="generateNewTransporterForm" [formGroup]="generateNewTransporterForm">
@@ -261,7 +258,7 @@
                     </div>
 
                     <div class="form-group mt-3">
-                        <div class="clear-both d-flex justify-content-end column-gap-15" *ngIf="!transportEditMode">
+                        <div class="clear-both d-flex justify-content-end column-gap-1" *ngIf="!transportEditMode">
                             <button
                                 mat-raised-button
                                 color="primary"
@@ -274,8 +271,11 @@
                             <button mat-raised-button color="primary" (click)="clearTransportForm()" type="button">
                                 {{ commonLocaleData?.app_clear }}
                             </button>
+                            <button mat-stroked-button type="button" mat-dialog-close>
+                                {{ commonLocaleData?.app_cancel }}
+                            </button>
                         </div>
-                        <div class="clear-both d-flex justify-content-end column-gap-15" *ngIf="transportEditMode">
+                        <div class="clear-both d-flex justify-content-end column-gap-1" *ngIf="transportEditMode">
                             <button
                                 mat-raised-button
                                 color="primary"
@@ -287,6 +287,9 @@
                             </button>
                             <button mat-stroked-button (click)="clearTransportForm()">
                                 {{ commonLocaleData?.app_clear }}
+                            </button>
+                            <button mat-stroked-button type="button" mat-dialog-close>
+                                {{ commonLocaleData?.app_cancel }}
                             </button>
                         </div>
                     </div>

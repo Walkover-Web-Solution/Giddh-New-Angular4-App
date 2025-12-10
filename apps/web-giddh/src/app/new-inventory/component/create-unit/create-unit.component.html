@@ -138,7 +138,12 @@
                     <div class="col-xl-1 col-lg-1 col-md-2 col-sm-12 pl-0">
                         <div class="inc-dec">
                             <div class="plus-minus">
-                                <button mat-stroked-button class="mr-0" aria-label="delete icon" (click)="removeMappedUnit(i)">
+                                <button
+                                    mat-stroked-button
+                                    class="mr-0"
+                                    aria-label="delete icon"
+                                    (click)="removeMappedUnit(i)"
+                                >
                                     <i class="icon-trash text-red"></i>
                                 </button>
                             </div>
@@ -155,7 +160,7 @@
             </div>
             <div class="row mt-4">
                 <div class="col-sm-4 pr-0">
-                    <div class="d-flex column-gap-15">
+                    <div class="d-flex column-gap-1">
                         <button
                             aria-label="save"
                             mat-raised-button
@@ -176,15 +181,10 @@
                         >
                             {{ commonLocaleData?.app_update }}
                         </button>
-                    </div>
-                </div>
-                <div class="col-lg-8">
-                    <div class="pull-right d-flex column-gap-15">
                         <button
                             aria-label="clear"
                             mat-stroked-button
                             type="button"
-                            class="btn-sm mr-0"
                             (click)="resetForm()"
                             *ngIf="!unitDetails?.uniqueName"
                         >
@@ -194,12 +194,14 @@
                             aria-label="close"
                             mat-stroked-button
                             type="button"
-                            class="btn-sm"
                             (click)="closeAsideEvent.emit(false)"
-                            *ngIf="unitDetails?.uniqueName"
                         >
-                            {{ commonLocaleData?.app_close }}
+                            {{ commonLocaleData?.app_cancel }}
                         </button>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="pull-right d-flex column-gap-15">
                         <button
                             aria-label="delete"
                             mat-stroked-button
