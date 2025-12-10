@@ -129,11 +129,10 @@ export default class WindowManager {
             }
             this.stateManager.save();
         });
-        window.on('closed', () => {
-            const index = this.windows.indexOf(window);
-            if (index >= 0) {
-                this.windows.splice(index, 1);
-            }
+        window.on('closed', (event: WindowEvent) => {
+            const index = this.windows.indexOf(event.sender);
+            console.assert(index >= 0);
+            this.windows.splice(index, 1);
         });
 
         window.on('app-command', (e: any, command: string) => {

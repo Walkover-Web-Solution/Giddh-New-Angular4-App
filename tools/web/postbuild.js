@@ -11,7 +11,6 @@ const writeFile = util.promisify(fs.writeFile);
 const readFile = util.promisify(fs.readFile);
 const renameFile = util.promisify(fs.rename);
 const mkdir = util.promisify(fs.mkdir);
-const copyFile = util.promisify(fs.copyFile);
 
 console.log('\nRunning post-build tasks');
 
@@ -249,20 +248,6 @@ readDir(path.join(__dirname, rootDirectiory))
     .then(() => {
         console.log('Creating .platform folder ');
         return mkdir(path.join(__dirname, rootDirectiory, '.platform', 'nginx', 'conf.d'), { recursive: true });
-    })
-    .then(() => {
-        console.log('Copying icon files to resources directory...');
-        const sourceFavicon = path.join(__dirname, '../../apps/web-giddh/src/assets/icon/favicon.ico');
-        const destFavicon = path.join(__dirname, rootDirectiory, 'resources/favicon.ico');
-
-        // Ensure resources directory exists
-        return mkdir(path.join(__dirname, rootDirectiory, 'resources'), { recursive: true })
-            .then(() => copyFile(sourceFavicon, destFavicon))
-            .then(() => console.log('Successfully copied favicon.ico to resources directory'))
-            .catch(err => {
-                console.warn('Warning: Could not copy favicon.ico:', err.message);
-                // Don't fail the build for this
-            });
     })
     .then(() => {
         console.log('Post-build tasks completed successfully.');
