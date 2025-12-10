@@ -389,7 +389,7 @@
                     <button mat-raised-button color="primary" (click)="send('sundrycreditors')" aria-label="set">
                         {{ messageBody.btn.set }}
                     </button>
-                    <button mat-stroked-button (click)="closeAllDialogs()">
+                    <button role="button" mat-stroked-button (click)="closeAllDialogs()">
                         {{ commonLocaleData?.app_cancel }}
                     </button>
                 </div>
@@ -440,7 +440,7 @@
                     <button mat-raised-button color="primary" (click)="send('sundrydebtors')" aria-label="set">
                         {{ messageBody.btn.set }}
                     </button>
-                    <button mat-stroked-button (click)="closeAllDialogs()">
+                    <button role="button" mat-stroked-button (click)="closeAllDialogs()">
                         {{ commonLocaleData?.app_cancel }}
                     </button>
                 </div>
@@ -1130,7 +1130,11 @@
                                                     >
                                                         {{ messageBody.btn.set }}
                                                     </button>
-                                                    <button mat-stroked-button (click)="closeAllDialogs()">
+                                                    <button
+                                                        role="button"
+                                                        mat-stroked-button
+                                                        (click)="closeAllDialogs()"
+                                                    >
                                                         {{ commonLocaleData?.app_cancel }}
                                                     </button>
                                                 </div>
