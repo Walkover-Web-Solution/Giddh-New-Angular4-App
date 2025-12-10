@@ -658,7 +658,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.getDiscountsList();
         this.getCompanyBranches();
         this.getCompanyTaxes();
-        this.getWarehouses();
         this.getSalesPersonList();
 
         combineLatest([this.activatedRoute.params, this.activatedRoute.queryParams])
@@ -715,6 +714,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.getCreatedTemplates();
                         this.getAccountOnboardingFormData();
                         this.searchStock();
+                        
+                        if (!this.invoiceType.isPaymentInvoice && !this.invoiceType.isReceiptInvoice) {
+                            this.getWarehouses();
+                        }
 
                         if (this.invoiceType.isCashInvoice) {
                             this.invoiceForm.get("account.uniqueName")?.patchValue("cash");
@@ -5301,6 +5304,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         } else {
             label = this.ocrVoucherType;
         }
+        if (!this.invoiceType.isPaymentInvoice && !this.invoiceType.isReceiptInvoice) {
+            this.getWarehouses();
+        }
         this.voucherType = this.vouchersUtilityService.parseVoucherType(label);
         this.company.countryName = null;
         this.getAccountOnboardingFormData();
@@ -5309,7 +5315,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.getDiscountsList();
         this.getCompanyBranches();
         this.getCompanyTaxes();
-        this.getWarehouses();
         this.getIsTcsTdsApplicable();
         this.getInvoiceSettings();
         this.getCreatedTemplates();
@@ -5387,6 +5392,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             balanceDue: 0,
         };
         this.hasStock = false;
+        this.showWarehouse = false;
 
         this.isAdjustAmount = false;
         this.adjustPaymentData = {
