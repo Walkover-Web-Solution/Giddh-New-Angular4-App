@@ -6,7 +6,6 @@
         cdkMonitorElementFocus
         (keydown.enter)="$event.preventDefault(); taxMenuTrigger.openMenu()"
         (keydown.space)="$event.preventDefault(); taxMenuTrigger.openMenu()"
-        (focus)="$event.preventDefault(); taxMenuTrigger.openMenu()"
         #taxMenuTrigger="matMenuTrigger"
         [matMenuTriggerFor]="taxControlMenu"
         [placeholder]="currency + '0'"

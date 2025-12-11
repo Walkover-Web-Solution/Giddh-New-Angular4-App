@@ -94,7 +94,6 @@ body {
             }
         }
     }
-
 }
 
 .select-all-checkbox-wrapper {
@@ -114,10 +113,13 @@ body {
     }
 }
 
-.create-new-wrapper {
-    left: 0;
-    bottom: 0px;
-    background-color: var(--mat-autocomplete-background-color);
+.create-new-option {
+    .mdc-list-item__primary-text {
+        width: 100%;
+    }
+    .mat-pseudo-checkbox {
+        display: none !important;
+    }
 }
 
 reactive-dropdown-field {
