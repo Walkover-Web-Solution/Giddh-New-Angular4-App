@@ -334,14 +334,10 @@
                                         cdkMonitorElementFocus
                                         class="vouchers-form-fields-detail cursor-pointer"
                                         (keydown.enter)="
-                                            $event.preventDefault();
-                                            showExchangeRateEditField = false;
-                                            focusNextElement($event)
+                                            $event.preventDefault(); toggleAccountAsidePane(accountType.customer, false)
                                         "
                                         (keydown.space)="
-                                            $event.preventDefault();
-                                            toggleAccountAsidePane(accountType.customer, false);
-                                            focusNextElement($event)
+                                            $event.preventDefault(); toggleAccountAsidePane(accountType.customer, false)
                                         "
                                         (click)="toggleAccountAsidePane(accountType.customer, false)"
                                     >
