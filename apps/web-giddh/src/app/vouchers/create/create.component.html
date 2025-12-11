@@ -983,6 +983,16 @@
                                         </label>
                                         <i
                                             *ngIf="!invoiceType.isCashInvoice"
+                                            tabindex="0"
+                                            role="button"
+                                            cdkMonitorElementFocus
+                                            (keydown.enter)="
+                                                $event.preventDefault(); companyBillingAddressTrigger.openMenu()
+                                            "
+                                            (keydown.space)="
+                                                $event.preventDefault(); companyBillingAddressTrigger.openMenu()
+                                            "
+                                            #companyBillingAddressTrigger="matMenuTrigger"
                                             [matMenuTriggerFor]="companyBillingAddress"
                                             class="icon-edit text-primary pl-2 font-size-12"
                                         >
@@ -1143,6 +1153,16 @@
                                         </label>
                                         <i
                                             *ngIf="!invoiceType.isCashInvoice"
+                                            tabindex="0"
+                                            role="button"
+                                            cdkMonitorElementFocus
+                                            (keydown.enter)="
+                                                $event.preventDefault(); companyShippingAddressTrigger.openMenu()
+                                            "
+                                            (keydown.space)="
+                                                $event.preventDefault(); companyShippingAddressTrigger.openMenu()
+                                            "
+                                            #companyShippingAddressTrigger="matMenuTrigger"
                                             [matMenuTriggerFor]="companyShippingAddress"
                                             class="icon-edit text-primary pl-2 font-size-12"
                                         ></i>
