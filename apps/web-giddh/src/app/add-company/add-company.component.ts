@@ -130,7 +130,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Hold business type list */
     public businessTypeList: IOption[] = [];
     /** Hold business nature list */
-    public businessNatureList: IOption[] = [{ label: "Food", value: "Food" }, { label: "Service", value: "Service" }, { label: "Manufacturing", value: "Manufacturing" }, { label: "Retail", value: "Retail" }, { label: "Other", value: "Other" }];
+    public businessNatureList: IOption[] = [];
     /** Stores the item on boarding store data */
     public itemOnBoardingDetails: ItemOnBoardingState;
     /** Hold state gst code list */
@@ -1423,8 +1423,12 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                     value: "Manufacturing"
                 },
                 {
-                    label: this.localeData?.retails,
+                    label: this.localeData?.retail,
                     value: "Retail"
+                },
+                {
+                    label: this.localeData?.other,
+                    value: "Other"
                 }
             ];
             this.changeDetection.detectChanges();
