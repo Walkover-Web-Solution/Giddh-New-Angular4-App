@@ -18,14 +18,14 @@ import {
     MoveGroupResponse
 } from '../../models/api-models/Group';
 import { cloneDeep } from '../../lodash-optimized';
-import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
+import { GroupWithAccountsAction } from '../../actions/clean-constants';
 import { IGroupsWithAccounts } from '../../models/interfaces/groups-with-accounts.interface';
-import { AccountsAction } from '../../actions/accounts.actions';
+import { AccountsAction } from '../../actions/clean-constants';
 import { IAccountsInfo } from '../../models/interfaces/account-info.interface';
 import { CustomActions } from '../custom-actions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
 import { INameUniqueName } from '../../models/api-models/Inventory';
-import { SALES_ACTIONS } from '../../actions/sales/sales.const';
+import { SALES_ACTIONS } from '../../actions/clean-constants';
 import { CurrentPage } from '../../models/api-models/Common';
 
 export interface GeneralState {
@@ -514,7 +514,7 @@ const addNewAccountFunc = (groups: IGroupsWithAccounts[], aData: IAccountsInfo, 
     return result;
 };
 
-const findAndRemoveAccountFunc = (groups: IGroupsWithAccounts[], uniqueName: string, result: boolean) => {
+const findAndRemoveAccountFunc = (groups: IGroupsWithAccounts[], uniqueName: string, result: boolean): any => {
     for (let grp of groups) {
         let accIndex = grp.accounts?.findIndex(f => f?.uniqueName === uniqueName);
 

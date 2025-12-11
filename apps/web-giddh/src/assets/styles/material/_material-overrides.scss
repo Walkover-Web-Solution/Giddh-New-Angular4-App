@@ -28,11 +28,15 @@
 .mdc-switch--disabled,
 .mdc-switch--disabled + label,
 .mat-sort-header-disabled .mat-sort-header-container .form-control:disabled {
-    @include cursor(not-allowed);
-    @include pointer-events(auto);
+    // COMMENTED OUT - MISSING MIXIN: @include cursor(not-allowed);
+    cursor: not-allowed;
+    // COMMENTED OUT - MISSING MIXIN: @include pointer-events(auto);
+    pointer-events: auto;
     * {
-        @include cursor(not-allowed);
-        @include pointer-events(auto);
+        // COMMENTED OUT - MISSING MIXIN: @include cursor(not-allowed);
+        cursor: not-allowed;
+        // COMMENTED OUT - MISSING MIXIN: @include pointer-events(auto);
+        pointer-events: auto;
     }
 }
 

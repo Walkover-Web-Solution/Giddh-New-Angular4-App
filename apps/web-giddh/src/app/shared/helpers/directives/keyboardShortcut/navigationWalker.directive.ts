@@ -11,6 +11,7 @@ const keyMaps = {
  * Useful for Navigation using arrow keys
  */
 @Directive({
+    selector: '[appNavigationWalker]',
     exportAs: 'navigationWalker',
     standalone: false
 })

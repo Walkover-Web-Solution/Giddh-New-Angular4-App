@@ -1,10 +1,4 @@
-<ng-container
-    appTranslate
-    [file]="'all-items'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
-    (translationComplete)="translationComplete($event)"
->
+<div class="app-translate-container" appTranslate file="'all-items'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <div class="giddh-all-items-wrapper">
         <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
         <div class="container-fluid pb-5">
@@ -82,7 +76,7 @@
             </div>
         </div>
     </div>
-</ng-container>
+</div>
 <!--Modal for All Items -->
 <ng-template #allItemModal>
     <div (click)="$event.stopPropagation()">

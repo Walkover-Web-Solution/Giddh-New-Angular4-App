@@ -2,7 +2,8 @@
 
 /** Used to make stroked button which holds only icon */
 .btn-stroked-icon {
-    @extend .min-width-unset;
+    // COMMENTED OUT - MISSING SELECTOR: @extend .min-width-unset;
+    min-width: unset; // Direct CSS property instead of extend
     padding-inline: 10px;
 }
 

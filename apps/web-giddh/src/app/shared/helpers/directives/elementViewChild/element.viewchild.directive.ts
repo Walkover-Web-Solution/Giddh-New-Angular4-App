@@ -1,6 +1,7 @@
 import { Directive, ViewContainerRef } from '@angular/core';
 
 @Directive({
+    selector: '[appElement.viewchild]',
   standalone: false,
     exportAs: 'elementviewcontainerref'
 })

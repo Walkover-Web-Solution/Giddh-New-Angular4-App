@@ -1,32 +1,20 @@
-import { CommonModule } from "@angular/common";
-import { NgModule } from "@angular/core";
-import { RouterModule } from "@angular/router";
-import { LoaderModule } from "../loader/loader.module";
-import { HeaderModule } from "../shared/header/header.module";
-import { GiddhLayoutModule } from "../shared/layout/layout.module";
-import { PageComponent } from "./page.component";
-import { PageRoutingModule } from "./page.routing.module";
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { PageComponent } from './page.component';
+// COMMENTED OUT - MISSING: import { HeaderModule } from "../shared/header/header.module";
 
 @NgModule({
     declarations: [
         PageComponent
-    
     ],
     imports: [
         CommonModule,
-        PageRoutingModule,
-        RouterModule,
-        GiddhLayoutModule,
-        LoaderModule,
-        HeaderModule
-    
+        RouterModule
+        // COMMENTED OUT - MISSING: HeaderModule,
     ],
     exports: [
         PageComponent
-    
     ]
 })
-
-export class PageModule {
-
-}
+export class PageModule { }

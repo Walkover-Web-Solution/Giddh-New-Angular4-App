@@ -1,6 +1,6 @@
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { TaxResponse } from '../../models/api-models/Company';
-import { CompanyActions } from '../../actions/company.actions';
+import { CompanyActions } from '../../actions/clean-constants';
 import { SETTINGS_TAXES_ACTIONS } from '../../actions/settings/taxes/settings.taxes.const';
 import { CustomActions } from '../custom-actions';
 import * as dayjs from 'dayjs';
@@ -102,7 +102,7 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
 
         case SETTINGS_TAXES_ACTIONS.CREATE_TAX_RESPONSE: {
             let res: BaseResponse<TaxResponse, string> = action.payload;
-            if (res?.status === 'success') {                
+            if (res?.status === 'success') {
                 return {
                     ...state,
                     taxes: [...state.taxes, res.body],

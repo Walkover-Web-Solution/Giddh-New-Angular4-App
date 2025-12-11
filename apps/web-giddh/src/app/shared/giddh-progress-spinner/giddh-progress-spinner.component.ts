@@ -7,10 +7,7 @@ type ProgressSpinnerColor = 'primary' | 'accent' | 'warn' | false;
   selector: 'giddh-progress-spinner',
   templateUrl: './giddh-progress-spinner.component.html',
   styleUrls: ['./giddh-progress-spinner.component.scss'],
-  standalone: true,
-  imports: [
-    MatProgressSpinnerModule
-  ]
+  standalone: false
 })
 export class GiddhProgressSpinnerComponent  {
   /** The diameter of the spinner, in pixels. */

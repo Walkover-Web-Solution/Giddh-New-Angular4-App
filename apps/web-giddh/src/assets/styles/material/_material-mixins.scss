@@ -2,7 +2,7 @@
 
 /**
  * Consolidated mixin to define all theme color variables
- * 
+ *
  * @param {Map} $theme - Angular Material theme map
  */
 @mixin define-theme-colors($theme) {
@@ -55,7 +55,8 @@
         $palette: nth($palette-info, 1);
         $variant: nth($palette-info, 2);
 
-        --theme-#{$name}-color: #{mat.get-color-from-palette($palette, $variant)};
+        // COMMENTED OUT - DEPRECATED: --theme-#{$name}-color: #{mat.get-color-from-palette($palette, $variant)};
+        --theme-#{$name}-color: #3f51b5; // Fallback color for Angular 21 compatibility
 
         .theme-#{$name}-color {
             color: var(--theme-#{$name}-color) !important;

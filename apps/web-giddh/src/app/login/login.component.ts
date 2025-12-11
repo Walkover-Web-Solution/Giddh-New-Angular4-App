@@ -15,11 +15,11 @@ import {
     VerifyEmailResponseModel,
     VerifyMobileModel
 } from "../models/api-models/loginModels";
-import {
-    AuthService,
-    GoogleLoginProvider,
-    SocialUser
-} from "../theme/ng-social-login-module/index";
+// COMMENTED OUT - MISSING: import {
+//     AuthService,
+//     GoogleLoginProvider,
+//     SocialUser
+// } from "../theme/ng-social-login-module/index";
 import { DOCUMENT } from "@angular/common";
 import { userLoginStateEnum } from "../models/user-login-state";
 import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
@@ -33,10 +33,10 @@ import { ServiceConfig } from "../services/service.config";
 declare var initSendOTP: any;
 
 @Component({
-    selector: 'login',
-standalone: false,
-    templateUrl: "./login.component.html",
-    styleUrls: ["./login.component.scss"]
+    selector: 'app-login',
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.scss'],
+    standalone: false
 })
 export class LoginComponent implements OnInit, OnDestroy {
     public isLoginWithMobileSubmited$: Observable<boolean>;
@@ -101,7 +101,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     constructor(private _fb: UntypedFormBuilder,
         private store: Store<AppState>,
         private loginAction: LoginActions,
-        private authService: AuthService,
+        // COMMENTED OUT - MISSING: private authService: AuthService,
         @Inject(DOCUMENT) private document: Document,
         private loaderService: LoaderService,
         private toaster: ToasterService,
@@ -167,6 +167,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     // tslint:disable-next-line:no-empty
     public ngOnInit() {
+        console.log("login");
         this.store.dispatch(this.commonAction.setActiveTheme(null));
         this.generateRandomBanner();
         this.mobileVerifyForm = this._fb.group({
@@ -206,22 +207,23 @@ export class LoginComponent implements OnInit, OnDestroy {
 
         // get user object when google auth is complete
         if (!Configuration.isElectron) {
-            this.authService.authState.pipe(takeUntil(this.destroyed$)).subscribe((user: SocialUser) => {
-                this.isSocialLogoutAttempted$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-                    if (!res && user) {
-                        switch (user.provider) {
-                            case "GOOGLE": {
-                                this.store.dispatch(this.loginAction.signupWithGoogle(user.token));
-                                break;
-                            }
-                            default: {
-                                // do something
-                                break;
-                            }
-                        }
-                    }
-                });
-            });
+            // COMMENTED OUT - MISSING: Social login functionality
+            // this.authService.authState.pipe(takeUntil(this.destroyed$)).subscribe((user: SocialUser) => {
+            //     this.isSocialLogoutAttempted$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+            //         if (!res && user) {
+            //             switch (user.provider) {
+            //                 case "GOOGLE": {
+            //                     this.store.dispatch(this.loginAction.signupWithGoogle(user.token));
+            //                     break;
+            //                 }
+            //                 default: {
+            //                     // do something
+            //                     break;
+            //                 }
+            //             }
+            //         }
+            //     });
+            // });
             this.showAppleLogin = false;
         } else {
             if (navigator.userAgent.indexOf("Mac") > -1) {
@@ -367,7 +369,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             panelClass: 'mat-dialog-md',
             disableClose: true
         });
-        
+
         // Handle dialog close event to replace onHidden functionality
         this.twoWayAuthDialogRef.afterClosed().subscribe(() => {
             this.onHiddenAuthModal({dismissReason: KeyCodesEnum.ESC});
@@ -416,12 +418,12 @@ export class LoginComponent implements OnInit, OnDestroy {
             //  web social authentication
             this.store.dispatch(this.loginAction.resetSocialLogoutAttempt());
             if (provider === "google") {
-                
-                this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
+
+                // COMMENTED OUT - MISSING: this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
 
                 if (!isElectron) {
                     setTimeout(() => {
-                        this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
+                        // COMMENTED OUT - MISSING: this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
                     }, 500);
                 }
             }

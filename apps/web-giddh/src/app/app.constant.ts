@@ -4,6 +4,23 @@ dayjs.extend(quarterOfYear) // use plugin
 import { CountryCodeService } from './services/country-code.service';
 import { MatDialogConfig } from '@angular/material/dialog';
 
+// ENVIRONMENT AND CORE CONSTANTS - Must be declared first
+export const PRODUCTION_ENV = false;
+export const STAGING_ENV = false;
+export const LOCAL_ENV = true;
+export const TEST_ENV = false;
+export const isElectron = false;
+export const AppUrl = 'http://localhost:4200/';
+export const APP_FOLDER = '';
+export const ApiUrl = 'https://apitest.giddh.com/';
+export const UkApiUrl = 'https://ukapi.giddh.com/';
+export const PORTAL_URL = 'https://portal.giddh.com/';
+export const OTP_WIDGET_ID = '326a63733354393830313330';
+export const OTP_TOKEN_AUTH = '205968TmXguUAwoD633af103P1';
+export const GOOGLE_CLIENT_ID = '';
+export const GOOGLE_CLIENT_SECRET = '';
+export const RAZORPAY_KEY = '';
+
 /** Add Company business type*/
 export enum BusinessTypes {
     Registered = 'Registered',
@@ -584,7 +601,6 @@ export const OTP_PROVIDER_URL = `https://verify.msg91.com/otp-provider.js?time=$
 export const ELECTRON_OTP_PROVIDER_URL = `https://control.msg91.com/app/assets/otp-provider/otp-provider.js?time=${new Date().getTime()}`;
 export const RESTRICTED_VOUCHERS_FOR_DOWNLOAD = ['journal'];
 export const SAMPLE_FILES_URL = 'https://giddh-import-sample-files.s3.ap-south-1.amazonaws.com/sample-file-';
-export const OTP_WIDGET_ID = '326a63733354393830313330';
 export const OTP_WIDGET_TOKEN = '205968TmXguUAwoD633af103P1';
 export const OTP_WIDGET_ID_NEW = '33686b716134333831313239';
 export const OTP_WIDGET_TOKEN_NEW = '205968TmXguUAwoD633af103P1';
@@ -994,3 +1010,4 @@ export const DEFAULT_NUMBER_FORMAT_LOCALE = 'en-IN';
 
 /** Default display format for number formatting */
 export const DEFAULT_NUMBER_DISPLAY_FORMAT = 'IND_COMMA_SEPARATED';
+

@@ -1,6 +1,7 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
+  "newProjectRoot": "apps",
   "projects": {
     "electron-giddh": {
       "root": "apps/web-giddh/",
@@ -100,7 +101,6 @@
             "main": "apps/web-giddh/src/main.ts",
             "polyfills": "apps/web-giddh/src/polyfills.ts",
             "tsConfig": "apps/web-giddh/tsconfig.app.json",
-            "aot": true,
             "assets": [
               { "glob": "**/*", "input": "apps/web-giddh/src/assets/", "output": "/assets/" },
               { "glob": "**/*", "input": "apps/web-giddh/src/meta/", "output": "/" },
@@ -172,6 +172,19 @@
     }
   },
   "cli": {
-    "analytics": "74b7c6ce-2189-4755-86d1-a3a5a55f636e"
+    "analytics": "74b7c6ce-2189-4755-86d1-a3a5a55f636e",
+    "packageManager": "npm"
+  },
+  "schematics": {
+    "@angular/cli:component": {
+      "style": "scss",
+      "standalone": false
+    },
+    "@angular/cli:directive": {
+      "standalone": false
+    },
+    "@angular/cli:pipe": {
+      "standalone": false
+    }
   }
 }

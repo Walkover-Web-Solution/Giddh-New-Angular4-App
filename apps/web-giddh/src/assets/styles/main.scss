@@ -1,54 +1,82 @@
-// Main.scss - 1. ABSTRACTS (must come first with @use)
-// --------------------------------------------------------------------------
-// Variables, functions, mixins - no actual CSS output
 @use "abstracts/variables";
 @use "abstracts/functions";
 @use "abstracts/mixins";
-
-// FONTS
-// --------------------------------------------------------------------------
-// Import font files after @use rules
-@import "../fonts/Inter/_inter_fonts.css";
-
-// 2. VENDORS
-// --------------------------------------------------------------------------
-// Third-party CSS libraries and frameworks
 @use "vendors/_boostrap.css";
 @use "vendors/json-tree.scss";
 @use "vendors/json-diff.scss";
-
-// 3. BASE
-// --------------------------------------------------------------------------
-// Basic styles, resets, typography
 @use "base/reset";
 @use "base/typography";
 @use "base/global";
-
-// 4. THEMES
-// --------------------------------------------------------------------------
-// Theme-specific styles and configurations
 @use "themes/custom-theme";
 @use "themes/theme-base-classes";
-
-// 5. MATERIAL DESIGN
-// --------------------------------------------------------------------------
-// Angular Material customizations
 @use "material/material-variables";
 @use "material/material-overrides";
 @use "material/material_customise";
 @use "material/material-mixins";
+@use "layout/header";
+@use "layout/sidebar";
+@use "layout/grid";
+@use "utilities/spacing";
+@use "utilities/text";
+@use "utilities/responsive";
+@use "utilities/other.scss";
+@use "./old-material-overide.scss";
+
+// @import rules must come after @use rules
+@import "../fonts/Inter/_inter_fonts.css";
+
+// --------------------------------------------------------------------------
+// Third-party CSS libraries and frameworks
+
+// 3. BASE
+// --------------------------------------------------------------------------
+// Basic styles, resets, typography
+
+// 4. THEMES
+// --------------------------------------------------------------------------
+// Theme-specific styles and configurations
+
+// 5. MATERIAL DESIGN
+// --------------------------------------------------------------------------
+// Angular Material customizations
 
 // 6. LAYOUT
 // --------------------------------------------------------------------------
 // Layout-specific styles (header, sidebar, grid, etc.)
-@use "layout/header";
-@use "layout/sidebar";
-@use "layout/grid";
 
 // 7. COMPONENTS
 // --------------------------------------------------------------------------
 // Component-specific styles
 // @import 'components/buttons';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Main.scss - 1. ABSTRACTS (must come first with @use)
+// --------------------------------------------------------------------------
+// Variables, functions, mixins - no actual CSS output
+
+// 2. VENDORS (
 
 // 8. PAGES
 // --------------------------------------------------------------------------
@@ -101,10 +129,18 @@
 // 9. UTILITIES
 // --------------------------------------------------------------------------
 // Utility classes and helper styles (if needed)
-@use "utilities/spacing";
-@use "utilities/text";
-@use "utilities/responsive";
-@use "utilities/other.scss";
 
 // Other Temp
-@use "./old-material-overide.scss";
+
+// FONTS
+// --------------------------------------------------------------------------
+// Import font files after all
+
+// 10. APP TRANSLATE CONTAINER FIX
+// --------------------------------------------------------------------------
+// CSS for app-translate-container divs created by fix-app-translate-ng-container.js
+// These styles ensure the div containers behave like ng-container (minimal visual impact)
+.app-translate-container {
+    // Make the container behave like ng-container - no visual impact
+    display: contents;
+}

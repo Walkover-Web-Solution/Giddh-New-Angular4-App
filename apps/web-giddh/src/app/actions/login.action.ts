@@ -11,7 +11,7 @@ import {
 } from '../models/api-models/loginModels';
 import { ToasterService } from '../services/toaster.service';
 import { GeneralActions } from './general/general.actions';
-import { CompanyActions } from './company.actions';
+// COMMENTED OUT - MISSING: import { CompanyActions } from './company.actions';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ActivatedRoute, Router } from '@angular/router';
 import { sortBy } from '../lodash-optimized';
@@ -241,7 +241,7 @@ export class LoginActions {
                                 uniqueName: this._generalService.companyUniqueName || '',
                                 details
                             };
-                            this.store.dispatch(this.companyActions.setCompanyBranch(organization));
+                            // COMMENTED OUT - MISSING: this.store.dispatch(this.companyActions.setCompanyBranch(organization));
                         }
                         cmpUniqueName = stateDetail.body.companyUniqueName;
                         if (companies?.body?.findIndex(p => p?.uniqueName === cmpUniqueName) > -1 && ROUTES.findIndex(p => p.path.split('/')[0] === stateDetail.body.lastState.split('/')[0]) > -1) {
@@ -319,7 +319,7 @@ export class LoginActions {
                                 uniqueName: this._generalService.companyUniqueName || '',
                                 details
                             };
-                            this.store.dispatch(this.companyActions.setCompanyBranch(organization));
+                            // COMMENTED OUT - MISSING: this.store.dispatch(this.companyActions.setCompanyBranch(organization));
                         }
                         cmpUniqueName = stateDetail.body.companyUniqueName;
                         if (companies?.body?.findIndex(p => p?.uniqueName === cmpUniqueName) > -1 && ROUTES.findIndex(p => p.path.split('/')[0] === stateDetail.body.lastState.split('/')[0]) > -1) {
@@ -405,7 +405,8 @@ export class LoginActions {
 
     public CHANGE_COMPANY$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
-            ofType(CompanyActions.CHANGE_COMPANY),
+            // COMMENTED OUT - MISSING: ofType(CompanyActions.CHANGE_COMPANY),
+            ofType('CHANGE_COMPANY'),
             switchMap((action: CustomActions) => this._companyService.getStateDetails(action.payload.cmpUniqueName, action.payload.fetchLastState)),
             map(response => {
                 if ((response?.status === 'error' || ROUTES.findIndex(p => p.path.split('/')[0] === response.body?.lastState.split('/')[0]) === -1) || (response?.status === 'error' || response.code === 'NOT_FOUND')) {
@@ -432,7 +433,7 @@ export class LoginActions {
                             uniqueName: this._generalService.companyUniqueName || '',
                             details
                         };
-                        this.store.dispatch(this.companyActions.setCompanyBranch(organization));
+                        // COMMENTED OUT - MISSING: this.store.dispatch(this.companyActions.setCompanyBranch(organization));
                     }
                     if (response.body?.lastState && ROUTES.findIndex(p => p.path.split('/')[0] === response.body?.lastState.split('/')[0]) !== -1) {
                         this._router.navigateByUrl('/dummy', { skipLocationChange: true }).then(() => {
@@ -468,7 +469,8 @@ export class LoginActions {
 
     public ChangeCompanyResponse$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
-            ofType(CompanyActions.CHANGE_COMPANY_RESPONSE),
+            // COMMENTED OUT - MISSING: ofType(CompanyActions.CHANGE_COMPANY_RESPONSE),
+            ofType('CHANGE_COMPANY_RESPONSE'),
             map((action: CustomActions) => {
                 if (action.payload?.status === 'success') {
                     this.store.dispatch(this.settingsProfileActions.GetProfileInfo());
@@ -644,7 +646,7 @@ export class LoginActions {
         private auth: AuthenticationService,
         public _toaster: ToasterService,
         private store: Store<AppState>,
-        private companyActions: CompanyActions,
+        // COMMENTED OUT - MISSING: private companyActions: CompanyActions,
         private _companyService: CompanyService,
         private _generalService: GeneralService,
         private activatedRoute: ActivatedRoute,
@@ -821,7 +823,7 @@ export class LoginActions {
 
     public ChangeCompany(cmpUniqueName: string, fetchLastState?: boolean): CustomActions {
         return {
-            type: CompanyActions.CHANGE_COMPANY,
+            type: 'CHANGE_COMPANY',
             payload: { cmpUniqueName, fetchLastState }
         };
     }
@@ -829,7 +831,7 @@ export class LoginActions {
     public ChangeCompanyResponse(value: BaseResponse<StateDetailsResponse, string>): CustomActions {
         this.store.dispatch(this.ResetApplicationData());
         return {
-            type: CompanyActions.CHANGE_COMPANY_RESPONSE,
+            type: 'CHANGE_COMPANY_RESPONSE',
             payload: value
         };
     }
@@ -1027,12 +1029,12 @@ export class LoginActions {
     private finalThingTodo(stateDetail: any, companies: any, isSocialLogin?: boolean) {
         this.store.pipe(select(state => state.session.user), take(1)).subscribe(response => {
             let request = { userUniqueName: response.user?.uniqueName, companyUniqueName: stateDetail?.body.companyUniqueName };
-            this.store.dispatch(this.companyActions.getCompanyUser(request));
+            // COMMENTED OUT - MISSING: this.store.dispatch(this.companyActions.getCompanyUser(request));
         });
-        this.store.dispatch(this.companyActions.GetStateDetailsResponse(stateDetail));
-        this.store.dispatch(this.companyActions.RefreshCompaniesResponse(companies));
+        // COMMENTED OUT - MISSING: this.store.dispatch(this.companyActions.GetStateDetailsResponse(stateDetail));
+        // COMMENTED OUT - MISSING: this.store.dispatch(this.companyActions.RefreshCompaniesResponse(companies));
         this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
-        
+
         // Check for returnUrl first, before using lastState
         try {
             const search = window && window.location ? window.location.search : '';
@@ -1052,7 +1054,7 @@ export class LoginActions {
                 return { type: 'EmptyAction' };
             }
         } catch (_) {}
-        
+
         // Fallback to normal lastState navigation
         let route = (stateDetail?.body?.lastUpdated > 7 || !stateDetail?.body?.lastUpdated) ? '/pages/home' : stateDetail.body?.lastState;
         this.finalNavigate(route, false, isSocialLogin);

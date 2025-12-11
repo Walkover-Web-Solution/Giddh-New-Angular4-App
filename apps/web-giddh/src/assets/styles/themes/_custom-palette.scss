@@ -1,5 +1,6 @@
 @use '@angular/material' as mat;
-@use '@angular/material/theming' as theming;
+// COMMENTED OUT - DEPRECATED: @use '@angular/material/theming' as theming;
+// Angular 21 uses @angular/material for theming
 
 $custom-primary-palette: (
     50: #e8eaf6,

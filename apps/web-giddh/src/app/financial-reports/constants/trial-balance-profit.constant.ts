@@ -1,1 +1,0 @@
-export const TRIAL_BALANCE_VIEWPORT_LIMIT = 20;

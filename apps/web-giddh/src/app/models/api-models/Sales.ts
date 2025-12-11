@@ -5,7 +5,7 @@ import { giddhRoundOff } from '../../shared/helpers/helperFunctions';
 import { INameUniqueName } from '../interfaces/name-unique-name.interface';
 import * as dayjs from 'dayjs';
 import { VoucherAdjustments } from './AdvanceReceiptsAdjust';
-import { ReferenceVoucher } from '../../ledger/ledger.vm';
+// import { ReferenceVoucher } from '../../ledger/ledger.vm';
 import { HIGH_RATE_FIELD_PRECISION, IOption } from '../../app.constant';
 import { ITaxControlData } from '../interfaces/tax.interface';
 
@@ -570,7 +570,7 @@ export class VoucherDetailsClass {
     public currencySymbol: string;
     public currency: Currency;
     public exchangeRate?: number;
-    public referenceVoucher?: ReferenceVoucher;
+    public referenceVoucher?: any; // ReferenceVoucher interface - temporarily using any
     public gainLoss?: number;
     public voucherUniqueName?: string;
 

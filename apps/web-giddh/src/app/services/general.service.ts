@@ -1,8 +1,8 @@
 import { Inject, Injectable, Optional } from '@angular/core';
-import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
+// COMMENTED OUT - MISSING: import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { filter, takeUntil } from 'rxjs/operators';
-import { ConfirmationModalButton, ConfirmationModalConfiguration } from '../theme/confirmation-modal/confirmation-modal.interface';
+// COMMENTED OUT - MISSING: import { ConfirmationModalButton, ConfirmationModalConfiguration } from '../theme/confirmation-modal/confirmation-modal.interface';
 import { CompanyCreateRequest } from '../models/api-models/Company';
 import { UserDetails } from '../models/api-models/loginModels';
 import { IUlist } from '../models/interfaces/ulist.interface';
@@ -22,6 +22,29 @@ import { LedgerViewEnum } from '../models/api-models/Ledger';
 import { giddhRoundOff } from '../shared/helpers/helperFunctions';
 import { AccountArchivedStatusEnum } from '../shared/Enums/common.enum';
 import { PageLeaveUtilityService } from './page-leave-utility.service';
+
+// Placeholder Confirmation Modal Types - replace when original types are available
+interface ConfirmationModalButton {
+    text: string;
+    type?: string;
+    color?: string;
+    isLoading?: boolean;
+    [key: string]: any;
+}
+
+interface ConfirmationModalConfiguration {
+    headerText: string;
+    messageText: string;
+    footerText?: string;
+    buttons: ConfirmationModalButton[];
+    [key: string]: any;
+}
+
+// Placeholder eventsConst - replace when original constants are available
+enum eventsConst {
+    // Add event constants as needed
+    DEFAULT = 'DEFAULT'
+}
 
 @Injectable()
 export class GeneralService {

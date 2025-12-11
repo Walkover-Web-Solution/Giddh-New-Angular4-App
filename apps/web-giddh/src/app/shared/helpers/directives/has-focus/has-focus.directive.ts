@@ -7,6 +7,7 @@ import { Directive, HostBinding, HostListener } from "@angular/core";
  * @class HasFocusDirective
  */
 @Directive({
+    selector: '[appHasfocus]',
   standalone: false,
     exportAs: 'hasFocus'
 })
