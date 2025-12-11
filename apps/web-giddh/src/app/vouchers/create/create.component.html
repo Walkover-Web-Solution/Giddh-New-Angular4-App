@@ -239,7 +239,6 @@
                                                 cdkMonitorElementFocus
                                                 (keydown.enter)="$event.preventDefault(); copyVoucherTrigger.openMenu()"
                                                 (keydown.space)="$event.preventDefault(); copyVoucherTrigger.openMenu()"
-                                                (focus)="$event.preventDefault(); copyVoucherTrigger.openMenu()"
                                                 #copyVoucherTrigger="matMenuTrigger"
                                                 [matMenuTriggerFor]="copyLastVouchers"
                                                 class="vouchers-copy-sales ml-5 cursor-pointer"
@@ -488,7 +487,6 @@
                                                 (keydown.space)="
                                                     $event.preventDefault(); billingDetailsTrigger.openMenu()
                                                 "
-                                                (focus)="$event.preventDefault(); billingDetailsTrigger.openMenu()"
                                                 #billingDetailsTrigger="matMenuTrigger"
                                                 [matMenuTriggerFor]="billingDetails"
                                                 class="icon-edit text-primary pl-2 font-size-12"
@@ -690,7 +688,6 @@
                                                 (keydown.space)="
                                                     $event.preventDefault(); shippingDetailsTrigger.openMenu()
                                                 "
-                                                (focus)="$event.preventDefault(); shippingDetailsTrigger.openMenu()"
                                                 #shippingDetailsTrigger="matMenuTrigger"
                                                 [matMenuTriggerFor]="shippingDetails"
                                                 class="icon-edit text-primary pl-2 font-size-12"
@@ -986,6 +983,16 @@
                                         </label>
                                         <i
                                             *ngIf="!invoiceType.isCashInvoice"
+                                            tabindex="0"
+                                            role="button"
+                                            cdkMonitorElementFocus
+                                            (keydown.enter)="
+                                                $event.preventDefault(); companyBillingAddressTrigger.openMenu()
+                                            "
+                                            (keydown.space)="
+                                                $event.preventDefault(); companyBillingAddressTrigger.openMenu()
+                                            "
+                                            #companyBillingAddressTrigger="matMenuTrigger"
                                             [matMenuTriggerFor]="companyBillingAddress"
                                             class="icon-edit text-primary pl-2 font-size-12"
                                         >
@@ -1146,6 +1153,16 @@
                                         </label>
                                         <i
                                             *ngIf="!invoiceType.isCashInvoice"
+                                            tabindex="0"
+                                            role="button"
+                                            cdkMonitorElementFocus
+                                            (keydown.enter)="
+                                                $event.preventDefault(); companyShippingAddressTrigger.openMenu()
+                                            "
+                                            (keydown.space)="
+                                                $event.preventDefault(); companyShippingAddressTrigger.openMenu()
+                                            "
+                                            #companyShippingAddressTrigger="matMenuTrigger"
                                             [matMenuTriggerFor]="companyShippingAddress"
                                             class="icon-edit text-primary pl-2 font-size-12"
                                         ></i>
@@ -1538,6 +1555,7 @@
                                     <div class="col-12" *ngIf="invoiceType.isReceiptInvoice">
                                         <strong
                                             ><a
+                                                tabindex="-1"
                                                 href="javascript:;"
                                                 (click)="invoiceForm.get('isAdvanceReceipt')?.patchValue(false)"
                                                 >{{ commonLocaleData?.app_voucher_types?.receipt }}</a
@@ -1588,6 +1606,7 @@
                                         <text-field
                                             [cssClass]="'form-control'"
                                             [type]="'number'"
+                                            [autoFocus]="true"
                                             [matSuffix]="account?.baseCurrency"
                                             formControlName="exchangeRate"
                                         ></text-field>
@@ -1605,8 +1624,16 @@
                                         class="icon-save text-primary cursor-pointer"
                                         tabindex="0"
                                         cdkMonitorElementFocus
-                                        (keydown.enter)="$event.preventDefault(); showExchangeRateEditField = false"
-                                        (keydown.space)="$event.preventDefault(); showExchangeRateEditField = false"
+                                        (keydown.enter)="
+                                            $event.preventDefault();
+                                            showExchangeRateEditField = false;
+                                            focusNextElement($event)
+                                        "
+                                        (keydown.space)="
+                                            $event.preventDefault();
+                                            showExchangeRateEditField = false;
+                                            focusNextElement($event)
+                                        "
                                         (click)="showExchangeRateEditField = false"
                                         *ngIf="showExchangeRateEditField"
                                     ></i>
@@ -1773,7 +1800,14 @@
                                                                         [openDropdown]="
                                                                             entryIndex === activeEntryIndex &&
                                                                             !transaction.get('account.uniqueName')
-                                                                                ?.value
+                                                                                ?.value &&
+                                                                            (invoiceType.isCashInvoice
+                                                                                ? invoiceForm.controls['account'].get(
+                                                                                      'customerName'
+                                                                                  )?.value
+                                                                                : invoiceForm.controls['account'].get(
+                                                                                      'uniqueName'
+                                                                                  )?.value)
                                                                         "
                                                                         [showOptionDivider]="true"
                                                                         [showMatLabel]="false"
@@ -2050,11 +2084,6 @@
                                                                                 $event.preventDefault();
                                                                                 hsnSacTrigger.openMenu()
                                                                             "
-                                                                            (focus)="
-                                                                                $event.preventDefault();
-                                                                                updateCurrentHsnSac(entry);
-                                                                                hsnSacTrigger.openMenu()
-                                                                            "
                                                                             #hsnSacTrigger="matMenuTrigger"
                                                                             [matMenuTriggerFor]="update"
                                                                             (click)="updateCurrentHsnSac(entry)"
@@ -2317,7 +2346,6 @@
                                                                                             resolvedStockUnits
                                                                                         )
                                                                                     "
-                                                                                    (focus)="unitSelect.open()"
                                                                                     name="transactionUnit{{
                                                                                         entryIndex
                                                                                     }}"
@@ -2833,6 +2861,16 @@
                                                                             aria-label="edit-icon"
                                                                             *ngIf="!isEinvoiceGenerated"
                                                                             (click)="
+                                                                                openOtherTaxDialog(entry, entryIndex)
+                                                                            "
+                                                                            tabindex="0"
+                                                                            cdkMonitorElementFocus
+                                                                            (keydown.enter)="
+                                                                                $event.preventDefault();
+                                                                                openOtherTaxDialog(entry, entryIndex)
+                                                                            "
+                                                                            (keydown.space)="
+                                                                                $event.preventDefault();
                                                                                 openOtherTaxDialog(entry, entryIndex)
                                                                             "
                                                                         >
@@ -3851,7 +3889,7 @@
                                         >
                                             <i class="caret rotate-180"></i>
                                         </button>
-                                        <mat-menu #moreOptions="matMenu">
+                                        <mat-menu #moreOptions="matMenu" yPosition="above">
                                             <button mat-menu-item (click)="createSendVoucher()">
                                                 {{ localeData?.create_send }}
                                             </button>

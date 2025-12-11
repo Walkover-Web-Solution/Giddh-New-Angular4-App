@@ -5,6 +5,7 @@ import {
     ElementRef,
     HostListener,
     Inject,
+    NgZone,
     OnDestroy,
     OnInit,
     TemplateRef,
@@ -112,6 +113,8 @@ import { ReactiveDropdownFieldComponent } from "../../theme/form-fields/reactive
 import { ActionTypeEnum } from "../../shared/sales-person/utility/sales-person.constant";
 import { Country } from "../../shared/mobile-number-input/countries-data";
 import { GiddhDatepickerComponent } from "../../theme/giddh-datepicker/giddh-datepicker.component";
+import { FocusMonitor } from "@angular/cdk/a11y";
+import { Platform } from "@angular/cdk/platform";
 
 @Component({
     selector: "create",
@@ -641,7 +644,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         private titleCasePipe: TitleCasePipe,
         private changeDetection: ChangeDetectorRef,
         private aiOcrService: AiOcrService,
-        private salesPersonStore: SalesPersonComponentStore
+        private salesPersonStore: SalesPersonComponentStore,
+        private focusMonitor: FocusMonitor,
+        private platform: Platform,
+        private ngZone: NgZone
     ) {
         this.imgPath = isElectron ? "assets/images/" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + "assets/images/";
     }
@@ -1331,8 +1337,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     });
 
                     this.checkIfEntriesHasStock();
-
-                    this.openAccountDropdown = true;
+                    this.openAccountDropdown = false;
+                    setTimeout(() => {
+                        this.openAccountDropdown = true;
+                    }, 100);
                     this.startLoader(false);
                     this.changeDetection.detectChanges();
                 }
@@ -3826,6 +3834,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.emailDialogRef = this.dialog.open(this.sendEmailModal, {
                 width: "650px",
             });
+            this.emailDialogRef.afterClosed().subscribe(() => {
+                this.openAccountDropdown = true;
+            });
         });
     }
 
@@ -3838,9 +3849,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.storeFocus();
         this.saveVoucher((voucher) => {
             this.voucherDetails = voucher?.body;
-            this.dialog.open(this.printVoucherModal, {
+            const dialogRef = this.dialog.open(this.printVoucherModal, {
                 width: "60vw",
                 height: "80vh",
+            });
+            dialogRef.afterClosed().subscribe(() => {
+                this.openAccountDropdown = true;
             });
         });
     }
@@ -5439,7 +5453,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
         this.checkRcm();
         this.forceClear = true;
-
+        if (openAccountDropdown) {
+            this.openAccountDropdown = false;
+        }
         setTimeout(() => {
             this.forceClear = false;
             this.openAccountDropdown = openAccountDropdown;
@@ -7144,5 +7160,67 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         } else {
             this.lastFocusedElement = document.activeElement as HTMLElement;
         }
+    }
+
+    /**
+     * Moves focus to the next focusable element using Angular CDK, simulating Tab key behavior
+     * 
+     * @public
+     * @param {Event} event - The keyboard event
+     * @memberof VoucherCreateComponent
+     */
+    public focusNextElement(event: Event): void {
+        if (!this.platform.isBrowser) {
+            return;
+        }
+
+        const currentElement = event.target as HTMLElement;
+        if (!currentElement) {
+            return;
+        }
+
+        // Use Angular CDK to find focusable elements within the component's view
+        const focusableElements = this.getFocusableElements();
+        const currentIndex = focusableElements.indexOf(currentElement);
+        
+        if (currentIndex !== -1 && currentIndex < focusableElements.length - 1) {
+            const nextElement = focusableElements[currentIndex + 1];
+            
+            // Use NgZone for Angular-optimized async operations
+            this.ngZone.runOutsideAngular(() => {
+                // Use FocusMonitor for better focus management
+                this.focusMonitor.focusVia(nextElement, 'keyboard');
+            });
+        }
+    }
+
+    /**
+     * Gets all focusable elements using Angular CDK patterns
+     * 
+     * @private
+     * @returns {HTMLElement[]} Array of focusable elements
+     * @memberof VoucherCreateComponent
+     */
+    private getFocusableElements(): HTMLElement[] {
+        const focusableSelectors = [
+            'input:not([disabled]):not([tabindex="-1"])',
+            'button:not([disabled]):not([tabindex="-1"])',
+            'select:not([disabled]):not([tabindex="-1"])',
+            'textarea:not([disabled]):not([tabindex="-1"])',
+            '[tabindex]:not([tabindex="-1"]):not([disabled])',
+            'mat-select:not([disabled])',
+            'mat-checkbox:not([disabled])',
+            'mat-radio-button:not([disabled])',
+            '[cdkMonitorElementFocus]:not([disabled])'
+        ];
+
+        return Array.from(
+            document.querySelectorAll<HTMLElement>(focusableSelectors.join(', '))
+        ).filter(element => {
+            // Additional Angular-specific filtering
+            return element.offsetParent !== null && // Element is visible
+                   !element.hasAttribute('aria-hidden') && // Not hidden from screen readers
+                   element.tabIndex !== -1; // Can receive focus
+        });
     }
 }

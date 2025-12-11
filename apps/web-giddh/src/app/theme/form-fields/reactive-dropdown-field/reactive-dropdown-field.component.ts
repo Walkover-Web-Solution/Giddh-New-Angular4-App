@@ -205,15 +205,9 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             }
         }
         if (changes?.forceClear && !changes.forceClear.firstChange && changes.forceClear.currentValue !== changes.forceClear.previousValue) {
-            this.writeValue("", false);
-            this.controlLabelValue = "";
-            this.clearDropdownValue();
-            this.fieldFilteredOptions$ = of([]);
-            setTimeout(() => {
-                this.fieldFilteredOptions$ = of(this.options);
-            }, 100);
+           this.handleForceClear();
         }
-        if (changes?.openDropdown?.currentValue && !changes?.openDropdown?.previousValue) {
+        if (changes?.openDropdown?.currentValue && !changes?.openDropdown?.previousValue && changes.openDropdown.currentValue !== changes.openDropdown.previousValue) {
             this.openDropdownPanel();
         }
 
@@ -226,6 +220,22 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             this.labelValue = "";
             this.controlLabelValue = "";
         }
+    }
+
+    /**
+     * Handle force clear and reset dropdown list
+     * 
+     * @private
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    private handleForceClear(): void {
+         this.writeValue("", false);
+        this.controlLabelValue = "";
+        this.clearDropdownValue();
+        this.fieldFilteredOptions$ = of([]);
+        setTimeout(() => {
+            this.fieldFilteredOptions$ = of(this.options);
+        }, 100);
     }
 
     /**
@@ -366,6 +376,18 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     public createNewRecord(): void {
         this.closeDropdownPanel();
         this.createOption.emit(true);
+    }
+
+    /**
+     * Handles create new option selection change event
+     *
+     * @param {any} event - Selection change event from mat-option
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    public handleCreateNewSelection(event: any): void {
+        if (event.isUserInput && event.source.selected) {
+            this.createNewRecord();
+        }
     }
 
     /**

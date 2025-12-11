@@ -51,6 +51,19 @@
                     #auto="matAutocomplete"
                 >
                     <span class="position-relative">
+                        <mat-option
+                            *ngIf="showCreateNew && createNewText"
+                            class="create-new-option"
+                            (onSelectionChange)="handleCreateNewSelection($event)"
+                            [attr.aria-label]="createNewText"
+                        >
+                            <div class="theme-primary-color d-flex justify-content-between">
+                                <div class="item create-new">{{ createNewText }}</div>
+                                <div class="item create-new-command" *ngIf="showKeyboardCommand">
+                                    {{ showKeyboardCommand }}
+                                </div>
+                            </div>
+                        </mat-option>
                         <ng-container *ngFor="let option of fieldFilteredOptions$ | async">
                             <mat-option
                                 [value]="option"
@@ -72,17 +85,6 @@
                         <mat-option disabled *ngIf="!(fieldFilteredOptions$ | async)?.length">
                             {{ noResultsFoundMessage || commonLocaleData?.app_no_result_found }}
                         </mat-option>
-                        <a
-                            href="javascript:;"
-                            *ngIf="showCreateNew && createNewText"
-                            (click)="createNewRecord()"
-                            class="position-sticky create-new-wrapper d-flex justify-content-between px-3 py-2"
-                        >
-                            <div class="item create-new">{{ createNewText }}</div>
-                            <div class="item create-new-command" *ngIf="showKeyboardCommand">
-                                {{ showKeyboardCommand }}
-                            </div>
-                        </a>
                     </span>
                 </mat-autocomplete>
                 <div
