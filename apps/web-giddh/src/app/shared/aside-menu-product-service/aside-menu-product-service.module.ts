@@ -13,6 +13,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatRadioModule } from "@angular/material/radio";
 import { MatDialogModule } from "@angular/material/dialog";
+import { KeyboardShortutModule } from "../helpers/directives/keyboardShortcut/keyboardShortut.module";
 
 @NgModule({
     declarations: [
@@ -32,7 +33,8 @@ import { MatDialogModule } from "@angular/material/dialog";
         MatButtonModule,
         MatCheckboxModule,
         MatRadioModule,
-        MatDialogModule
+        MatDialogModule,
+        KeyboardShortutModule
     ],
     exports: [
         AsideMenuProductServiceComponent

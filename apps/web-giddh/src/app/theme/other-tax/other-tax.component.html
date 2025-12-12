@@ -5,7 +5,12 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="other-tax aside-dialog-wrapper">
+    <div
+        class="other-tax aside-dialog-wrapper"
+        [keyboardShortcut]="'esc'"
+        [config]="{ dialogMode: true }"
+        (onShortcutPress)="dialogRef?.close()"
+    >
         <div class="dialog-header">
             <span class="font-size-16">{{ commonLocaleData?.app_tax_applicable }}</span>
         </div>

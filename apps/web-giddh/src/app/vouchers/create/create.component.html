@@ -192,7 +192,7 @@
                                                 [labelValue]="
                                                     invoiceForm.controls['account'].get('customerName')?.value
                                                 "
-                                                [showKeyboardCommand]="commonLocaleData?.app_alt_c"
+                                                [showKeyboardCommand]="commonLocaleData?.app_alt_shift_n"
                                                 (scrollEnd)="handleSearchAccountScrollEnd()"
                                                 (selectedOption)="selectAccount($event)"
                                                 (dynamicSearchedQuery)="searchAccount($event, 1)"
@@ -656,6 +656,12 @@
                                                     invoiceType.isCashInvoice
                                                 "
                                                 (change)="copyBillingInShipping('account', $event)"
+                                                #copyAccountBillingInShippingAddressRef
+                                                (keydown.enter)="
+                                                    $event.preventDefault();
+                                                    copyAccountBillingInShippingAddressRef.toggle();
+                                                    copyBillingInShipping('account', $event)
+                                                "
                                             >
                                                 {{ localeData?.shipping_billing_same }}
                                             </mat-checkbox>
@@ -1130,6 +1136,12 @@
                                                 invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled ||
                                                 invoiceType.isCashInvoice
                                             "
+                                            #copyCompanyBillingInShippingAddressRef
+                                            (keydown.enter)="
+                                                $event.preventDefault();
+                                                copyCompanyBillingInShippingAddressRef.toggle();
+                                                copyBillingInShipping('company', $event)
+                                            "
                                             (change)="copyBillingInShipping('company', $event)"
                                         >
                                             {{ localeData?.shipping_billing_same }}
@@ -1504,6 +1516,11 @@
                                             [disabled]="isEinvoiceGenerated"
                                             color="primary"
                                             id="reverse-charge"
+                                            (keydown.enter)="
+                                                $event.preventDefault();
+                                                rcmCheckbox.toggle();
+                                                toggleRcmCheckbox(rcmCheckbox, 'checkbox')
+                                            "
                                             (change)="
                                                 !isEinvoiceGenerated ? toggleRcmCheckbox(rcmCheckbox, 'checkbox') : ''
                                             "
@@ -1528,7 +1545,12 @@
                                         <div class="col-12">
                                             <mat-checkbox
                                                 color="primary"
-                                                (keydown.enter)="$event.preventDefault()"
+                                                #touristSchemeApplicable
+                                                (keydown.enter)="
+                                                    $event.preventDefault();
+                                                    touristSchemeApplicable.toggle();
+                                                    toggleTouristSchemeApplicable()
+                                                "
                                                 id="tourist-scheme"
                                                 name="touristSchemeApplicable"
                                                 class="mr-2"
@@ -2835,6 +2857,12 @@
                                                                     color="primary"
                                                                     formControlName="isChecked"
                                                                     (change)="openOtherTaxDialog(entry, entryIndex)"
+                                                                    #otherTaxRef
+                                                                    (keydown.enter)="
+                                                                        $event.preventDefault();
+                                                                        otherTaxRef.toggle();
+                                                                        openOtherTaxDialog(entry, entryIndex)
+                                                                    "
                                                                 >
                                                                 </mat-checkbox>
                                                                 {{ localeData?.other_tax }}
@@ -3937,6 +3965,7 @@
         [selectedGrpUniqueName]="accountParentGroup === 'bankaccounts' ? '' : accountParentGroup"
         [allGroups]="accountParentGroup === 'bankaccounts' ? true : false"
         [keyboardShortcut]="{ 'esc': !hasUnsavedChanges }"
+        [config]="{ dialogMode: true }"
         [selectedAccountUniqueName]="
             accountParentGroup !== 'bankaccounts' && !createNewAccount
                 ? invoiceForm.controls['account'].get('uniqueName')?.value

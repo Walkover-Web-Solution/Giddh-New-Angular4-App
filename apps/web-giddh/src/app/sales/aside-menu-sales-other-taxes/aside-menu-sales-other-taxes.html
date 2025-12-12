@@ -1,4 +1,4 @@
-<div [keyboardShortcut]="'esc'" (onShortcutPress)="closeTaxesModal()">
+<div [keyboardShortcut]="'esc'" [config]="{ dialogMode: true }" (onShortcutPress)="closeTaxesModal()">
     <div class="dialog-header">
         <span>{{ commonLocaleData?.app_tax_applicable }}</span>
         <button mat-icon-button aria-label="close" (click)="closeTaxesModal()">
@@ -23,7 +23,8 @@
                             [labelValue]="defaultOtherTaxesModal?.appliedOtherTax?.name"
                             [showClearIcon]="true"
                             (onClear)="selectedTaxUniqueName = null; defaultOtherTaxesModal.appliedOtherTax = null"
-                            (selectedOption)="applyTax($event)">
+                            (selectedOption)="applyTax($event)"
+                        >
                         </reactive-dropdown-field>
 
                         <label class="label-select-tax" *ngIf="defaultOtherTaxesModal?.appliedOtherTax?.name">
@@ -40,7 +41,8 @@
                         [(ngModel)]="defaultOtherTaxesModal.tcsCalculationMethod"
                         [options]="calculationMethodOptions"
                         [labelValue]="calculationMethodLabel"
-                        [required]="true">
+                        [required]="true"
+                    >
                     </reactive-dropdown-field>
                 </div>
             </div>

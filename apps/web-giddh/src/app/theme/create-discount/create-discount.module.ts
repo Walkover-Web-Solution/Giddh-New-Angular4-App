@@ -9,6 +9,7 @@ import { CommonModule } from "@angular/common";
 import { LaddaModule } from "angular2-ladda";
 import { TranslateDirectiveModule } from "../translate/translate.directive.module";
 import { GiddhPageLoaderModule } from "../../shared/giddh-page-loader/giddh-page-loader.module";
+import { KeyboardShortutModule } from "../../shared/helpers/directives/keyboardShortcut/keyboardShortut.module";
 
 @NgModule({
     declarations: [
@@ -24,7 +25,8 @@ import { GiddhPageLoaderModule } from "../../shared/giddh-page-loader/giddh-page
         FormsModule,
         LaddaModule,
         TranslateDirectiveModule,
-        GiddhPageLoaderModule
+        GiddhPageLoaderModule,
+        KeyboardShortutModule
     ],
     exports: [
         CreateDiscountComponent

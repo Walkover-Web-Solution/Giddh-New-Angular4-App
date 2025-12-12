@@ -219,7 +219,7 @@
         "weekly": "साप्ताहिक",
         "month": "महिना",
         "year": "वर्ष",
-       "daily": "दैनिक"
+        "daily": "दैनिक"
     },
     "app_tax_subtypes": {
         "receivable": "प्राप्य",
@@ -478,6 +478,7 @@
     "app_select_branch": "शाखा का चयन करें",
     "app_voucher": "वाउचर",
     "app_alt_c": "Alt+C",
+    "app_alt_shift_n": "Alt+Shift+N",
     "app_alt_d": "Alt+D",
     "app_alt_t": "Alt+T",
     "app_generate_multiple": "एकाधिक उत्पन्न करें",
@@ -771,7 +772,7 @@
     "app_click_here": "यहाँ क्लिक करें",
     "go_to_company_mode": "संपादन के लिए कंपनी मोड पर जाएं.",
     "app_link_account": "खाते लिंक करें",
-    "app_bank_accounts":"बैंक खाते",
+    "app_bank_accounts": "बैंक खाते",
     "app_upload": "अपलोड",
     "app_file": "फ़ाइल",
     "app_choose_file": "फ़ाइल चुनें",
@@ -805,7 +806,7 @@
     "app_sales_person_placeholder": "विक्रेता चुनें",
     "app_variable_search_hint": "'{' का उपयोग करके वेरिएबल खोजें या नाम मैन्युअली लिखें",
     "app_skip_and_next": "छोड़ें और अगला",
-    "app_save_and_next":"सहेजें और अगला",
+    "app_save_and_next": "सहेजें और अगला",
     "app_export_file_name_change_note": "फ़ाइल नाम बदलने के लिए कंपनी सेटिंग पेज पर जाएं",
     "app_unassigned": "सौंपे नहीं गए"
 }

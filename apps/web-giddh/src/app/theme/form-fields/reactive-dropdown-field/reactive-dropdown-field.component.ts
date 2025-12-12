@@ -391,7 +391,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     }
 
     /**
-     * Handles Alt+C keyboard shortcut for create new functionality
+     * Handles Alt+N keyboard shortcut for create new functionality
      *
      * @param {KeyboardEvent} event - The keyboard event
      * @memberof ReactiveDropdownFieldComponent
@@ -401,13 +401,13 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         // Early exit if create new is not enabled
         if (!this.showCreateNew) return;
 
-        // Check for Alt+C combination (cross-platform)
-        const isAltC = event.altKey && event.code === 'KeyC';
+        // Check for Alt+Shift+N combination (cross-platform)
+        const isAltShiftN = event.altKey && event.shiftKey && event.code === 'KeyN';
         
         // Check if dropdown is focused or open
         const isFocused = this.selectField?.nativeElement === document.activeElement || this.trigger?.panelOpen;
 
-        if (isAltC && isFocused) {
+        if (isAltShiftN && isFocused) {
             event.preventDefault();
             event.stopPropagation();
             event.stopImmediatePropagation();
@@ -512,7 +512,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
                 this.createNewText = this.commonLocaleData?.app_create_new;
             }
             if (this.showCreateNew && this.showKeyboardCommand === '') {
-                this.showKeyboardCommand = this.commonLocaleData?.app_alt_c;
+                this.showKeyboardCommand = this.commonLocaleData?.app_alt_shift_n;
             }
         }
     }

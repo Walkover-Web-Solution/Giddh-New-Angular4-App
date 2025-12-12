@@ -46,7 +46,7 @@
                     class="py-0"
                     [enableDynamicSearch]="enableDynamicSearch"
                     (optionsScroll)="onScroll()"
-                    autoActiveFirstOption
+                    [autoActiveFirstOption]="false"
                     [displayWith]="displayLabel"
                     #auto="matAutocomplete"
                 >
@@ -141,21 +141,23 @@
             optionsScroll
             [enableDynamicSearch]="enableDynamicSearch"
             (optionsScroll)="onScroll()"
-            autoActiveFirstOption
+            [autoActiveFirstOption]="false"
             [displayWith]="displayLabel"
             #auto="matAutocomplete"
         >
-            <a
-                href="javascript:;"
+            <mat-option
                 *ngIf="showCreateNew && createNewText"
-                (click)="createNewRecord()"
-                class="d-flex justify-content-between px-3 py-2"
-            >
-                <div class="item create-new">{{ createNewText }}</div>
-                <div class="item create-new-command" *ngIf="showKeyboardCommand">
-                    {{ showKeyboardCommand }}
+                class="create-new-option"
+                (onSelectionChange)="handleCreateNewSelection($event)"
+                [attr.aria-label]="createNewText"
+                >\
+                <div class="theme-primary-color d-flex justify-content-between">
+                    <div class="item create-new">{{ createNewText }}</div>
+                    <div class="item create-new-command" *ngIf="showKeyboardCommand">
+                        {{ showKeyboardCommand }}
+                    </div>
                 </div>
-            </a>
+            </mat-option>
             <mat-option
                 *ngFor="let option of fieldFilteredOptions$ | async"
                 [value]="option"
