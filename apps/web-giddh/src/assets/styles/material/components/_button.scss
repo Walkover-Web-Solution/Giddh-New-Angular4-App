@@ -1,6 +1,2 @@
-.mat-mdc-raised-button {
-    &:not(:disabled, .mat-primary) {
-        --mdc-protected-button-label-text-color: var(--color-black) !important;
-        --mdc-protected-button-container-color: var(--color-white) !important;
-    }
+.mat-mdc-raised-button { &:not(:disabled, .mat-primary) { --mdc-protected-button-label-text-color: var(--color-black) !important; --mdc-protected-button-container-color: var(--color-white) !important; }
 }
