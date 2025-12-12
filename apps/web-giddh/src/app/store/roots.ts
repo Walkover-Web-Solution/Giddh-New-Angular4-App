@@ -27,8 +27,8 @@ import * as fromUserSession from './general/session.reducer';
 // COMMENTED OUT - MISSING: import * as fromSubscriptions from './user-subscriptions/subscriptions.reducer';
 // COMMENTED OUT - MISSING: import * as fromProforma from './proforma/proforma.reducer';
 import * as fromCommon from './common/common.reducer';
-// COMMENTED OUT - MISSING: import * as fromItemOnBoarding from './item-on-boarding/item-on-boarding.reducer';
-// COMMENTED OUT - MISSING: import { fromWarehouse } from '../models/placeholder-types';
+import * as fromItemOnBoarding from './item-on-boarding/item-on-boarding.reducer';
+import * as fromWarehouse from './warehouse/warehouse.reducer';
 // COMMENTED OUT - MISSING: import * as fromPurchaseRecord from '../store/purchase-record/purchase-record.reducer';
 // COMMENTED OUT - MISSING: import * as fromPurchaseOrder from '../store/purchase-order/purchase-order.reducer';
 import { ActionReducerMap } from '@ngrx/store';
@@ -65,8 +65,8 @@ export interface AppState {
     // COMMENTED OUT - MISSING: subscriptions: fromSubscriptions.SubscriptionState;
     // COMMENTED OUT - MISSING: proforma: fromProforma.ProformaState;
     common: fromCommon.CurrentCommonState;
-    // COMMENTED OUT - MISSING: itemOnboarding: fromItemOnBoarding.ItemOnBoardingState;
-    // COMMENTED OUT - MISSING: warehouse: fromWarehouse.WarehouseState;
+    itemOnboarding: fromItemOnBoarding.ItemOnBoardingState;
+    warehouse: fromWarehouse.WarehouseState;
     // COMMENTED OUT - MISSING: purchaseRecord: fromPurchaseRecord.PurchaseRecordState;
     // COMMENTED OUT - MISSING: purchaseOrder: fromPurchaseOrder.PurchaseOrderState;
 }
@@ -103,8 +103,8 @@ export const reducers: ActionReducerMap<AppState> = {
     // COMMENTED OUT - MISSING: subscriptions: fromSubscriptions.SubscriptionReducer,
     // COMMENTED OUT - MISSING: proforma: fromProforma.ProformaReducer,
     common: fromCommon.CommonReducer,
-    // COMMENTED OUT - MISSING: itemOnboarding: fromItemOnBoarding.itemOnBoardingReducer,
-    // COMMENTED OUT - MISSING: warehouse: fromWarehouse.warehouseReducer,
+    itemOnboarding: fromItemOnBoarding.itemOnBoardingReducer,
+    warehouse: fromWarehouse.warehouseReducer,
     // COMMENTED OUT - MISSING: purchaseRecord: fromPurchaseRecord.purchaseRecordReducer,
     // COMMENTED OUT - MISSING: purchaseOrder: fromPurchaseOrder.purchaseOrderReducer
 };

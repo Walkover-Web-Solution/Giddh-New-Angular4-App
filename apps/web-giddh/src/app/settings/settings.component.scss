@@ -1,0 +1,15 @@
+:host {
+    .setting-container {
+        min-height: calc(100vh - 158px);
+    }
+
+    .video-link {
+        right: 0;
+        top: 15px;
+        z-index: 2;
+    }
+
+    .auto-save {
+        top: 22px !important;
+    }
+}

@@ -1,5 +1,5 @@
 import { APP_BASE_HREF } from '@angular/common';
-import { HTTP_INTERCEPTORS, HttpClient, provideHttpClient } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
 import { APP_INITIALIZER, ErrorHandler, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -589,6 +589,7 @@ MobileRestrictedComponent
 ],
 imports: [
 BrowserModule,
+HttpClientModule,
 NoopAnimationsModule,
 FormsModule,
 ReactiveFormsModule,
@@ -616,7 +617,6 @@ PageModule,
 ...CONDITIONAL_IMPORTS
 ],
 providers: [
-provideHttpClient(),
 { provide: APP_INITIALIZER,
 useFactory: getServiceConfigAfterInit,
 multi: true,

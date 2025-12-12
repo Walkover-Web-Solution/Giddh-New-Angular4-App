@@ -12,7 +12,7 @@
         "**/*.spec.ts"
     ],
     "include": [
-        "src/**/*.d.ts"
+        "src/**/*.ts"
     ],
     "files": [
         "src/main.ts",

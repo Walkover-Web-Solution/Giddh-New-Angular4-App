@@ -5,7 +5,9 @@ import { Observable } from "rxjs";
 import { LoaderService } from "../loader/loader.service";
 import { GeneralService } from "./general.service";
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class HttpWrapperService {
     constructor(
         private http: HttpClient,

@@ -8,7 +8,9 @@ import { REMOVE_TRAILING_ZERO_REGEX } from 'apps/web-giddh/src/app/app.constant'
 import { giddhRoundOff } from '../../helperFunctions';
 
 @Pipe({
-    standalone: false,
+    name: 'giddhCurrency',
+    standalone: false
+})
 export class GiddhCurrencyPipe implements OnDestroy, PipeTransform {
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public _currencyNumberType: string;

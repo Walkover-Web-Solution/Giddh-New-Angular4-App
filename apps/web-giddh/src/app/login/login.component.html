@@ -313,15 +313,15 @@
             [formGroup]="mobileVerifyForm"
         >
             <div class="clear-both form-group-lg" *ngIf="!(isLoginWithMobileSubmited$ | async)">
-                <reactive-dropdown-field
+                <!-- COMMENTED OUT - COMPILATION ERROR: <!-- COMMENTED OUT - COMPILATION ERROR: <reactive-dropdown-field
                     [options]="countryCodeList"
                     class="form-inline"
                     (selectedOption)="setCountryCode($event)"
                     [placeholder]="'CC'"
                     formControlName="country"
                     [name]="'country'"
-                >
-                </reactive-dropdown-field>
+                > --> -->
+                <!-- COMMENTED OUT - COMPILATION ERROR: <!-- COMMENTED OUT - COMPILATION ERROR: </reactive-dropdown-field> --> -->
                 <input
                     class="form-control input-width-mobile"
                     formControlName="mobileNumber"

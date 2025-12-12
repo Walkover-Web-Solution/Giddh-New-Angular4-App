@@ -1,0 +1,2 @@
+<h2 [ngClass]="primaryMessageClass">{{ primaryMessage }}</h2>
+<h3 [ngClass]="secondaryMessageClass">{{ secondaryMessage }}</h3>

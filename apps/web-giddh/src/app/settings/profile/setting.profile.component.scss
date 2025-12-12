@@ -1,0 +1,55 @@
+.input-group-addon {
+    position: relative;
+    position: relative;
+    width: 45px;
+
+}
+.input-group-addon {
+    .checkbox-custom-label {
+        position: absolute;
+        left: 14px;
+        top: 8px;
+    }
+}
+
+.profile-form {
+    .form-group {
+        .input-group {
+
+            input {
+                border-left: none !important;
+                border-right: none !important;
+            }
+        }
+    }
+}
+.branch-vector {
+    text-align: right;
+    position: absolute;
+    bottom: -70px;
+    right: 90px;
+}
+
+::ng-deep .dropdown-item:focus,
+.dropdown-item:hover {
+    color: var(--color-black);
+    text-decoration: none;
+    background-color: var(--color-light-gray);
+}
+
+::ng-deep .dropdown-item.active,
+.dropdown-item:active {
+    background: var(--color-light-gray);
+}
+
+::ng-deep .dropdown-item.disabled,
+.dropdown-item:disabled {
+    color: var(--color-dark-gray);
+    cursor: not-allowed;
+    background-color: transparent;
+}
+
+::ng-deep .dropdown-item.active,
+.dropdown-item:active {
+    background: var(--color-light-gray);
+}

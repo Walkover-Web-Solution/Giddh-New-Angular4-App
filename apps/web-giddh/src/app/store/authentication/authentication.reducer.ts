@@ -28,6 +28,7 @@ export interface SessionState {
     currentLocale: string;
     activeTheme: string;
     lastState: any;
+    totalNumberOfcompanies: number;
 }
 
 export interface IBranchConsolidatedState {
@@ -62,7 +63,8 @@ const initialSessionState: SessionState = {
     companyUniqueName: '',
     currentLocale: 'en',
     activeTheme: 'default',
-    lastState: null
+    lastState: null,
+    totalNumberOfcompanies: 0
 };
 
 const initialBranchState: IBranchConsolidatedState = {
