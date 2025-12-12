@@ -8,6 +8,7 @@ import { CommonModule } from "@angular/common";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { AsideMenuCreateTaxModule } from "../../shared/aside-menu-create-tax/aside-menu-create-tax.module";
 import { TranslateDirectiveModule } from "../translate/translate.directive.module";
+import { KeyboardShortutModule } from "../../shared/helpers/directives/keyboardShortcut/keyboardShortut.module";
 
 @NgModule({
     declarations: [
@@ -22,7 +23,8 @@ import { TranslateDirectiveModule } from "../translate/translate.directive.modul
         MatDialogModule,
         MatSelectModule,
         AsideMenuCreateTaxModule,
-        TranslateDirectiveModule
+        TranslateDirectiveModule,
+        KeyboardShortutModule
     ],
     exports: [
         OtherTaxComponent

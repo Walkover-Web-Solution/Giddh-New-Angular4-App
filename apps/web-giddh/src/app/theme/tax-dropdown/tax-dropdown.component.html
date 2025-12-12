@@ -11,6 +11,8 @@
         [placeholder]="currency + '0'"
         readonly
         [value]="currency + totalTaxAmount"
+        (menuOpened)="handleMenuOpened()"
+        (menuClosed)="handleMenuClosed()"
     />
     <mat-menu #taxControlMenu="matMenu">
         <ng-template matMenuContent>
@@ -41,6 +43,14 @@
                             >
                                 <mat-checkbox
                                     (change)="enableDisableTaxes()"
+                                    (keydown.enter)="
+                                        $event.preventDefault();
+                                        taxRef.toggle();
+                                        enableDisableTaxes();
+                                        menuClosedByEnter = true;
+                                        taxMenuTrigger?.closeMenu()
+                                    "
+                                    #taxRef
                                     formControlName="isChecked"
                                     color="primary"
                                     ><span class="font-size-15">{{ tax?.get("name")?.value }}</span></mat-checkbox
@@ -53,9 +63,15 @@
                     <span
                         class="text-primary"
                         tabindex="0"
+                        role="button"
                         cdkMonitorElementFocus
-                        (keydown.enter)="$event.preventDefault(); createNew()"
-                        (keydown.space)="$event.preventDefault(); createNew()"
+                        [attr.aria-label]="commonLocaleData?.app_create_new"
+                        (keydown.enter)="
+                            $event.preventDefault(); createNew(); menuClosedByEnter = true; taxMenuTrigger?.closeMenu()
+                        "
+                        (keydown.space)="
+                            $event.preventDefault(); createNew(); menuClosedByEnter = true; taxMenuTrigger?.closeMenu()
+                        "
                     >
                         {{ commonLocaleData?.app_create_new }}
                     </span>
