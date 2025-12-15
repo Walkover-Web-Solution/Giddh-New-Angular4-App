@@ -59,6 +59,7 @@
     "service": "सेवा",
     "manufacturing": "उत्पादन",
     "retail": "खुदरा",
+	"other": "अन्य",
     "enter_company_name":"कंपनी का नाम दर्ज करें",
     "enter_country_name":"देश का नाम दर्ज करें",
     "enter_currency_name":"मुद्रा का नाम दर्ज करें",

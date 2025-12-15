@@ -51,7 +51,17 @@
             >{{ commonLocaleData?.app_keys?.f8 }}: {{ commonLocaleData?.app_voucher_types?.sales }}</a
         >
     </li>
-    <ng-container *ngIf="salesEntry">
+    <li role="account-items">
+        <a
+            href="javascript:;"
+            aria-label="purchases"
+            class="cursor-pointer"
+            (click)="setSelectedPage(accountingVouchers.PURCHASE, 'voucher', 'purchases')"
+            [ngClass]="{ 'active-parent': (selectedVoucher | lowercase) === accountingVouchers.PURCHASE }"
+            >{{ commonLocaleData?.app_keys?.f9 }}: {{ commonLocaleData?.app_voucher_types?.purchases }}</a
+        >
+    </li>
+    <ng-container *ngIf="showDiscountAndTax">
         <li role="account-items">
             <a
                 class="cursor-pointer text-underline"

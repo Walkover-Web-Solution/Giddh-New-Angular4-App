@@ -277,8 +277,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     @Output() public hideTaxSidebar: EventEmitter<boolean> = new EventEmitter();
     /** True if it is sales entry*/
     public isSalesEntry: boolean = false;
-    /** Emits the value if it is sales entry */
-    @Output() public salesEntry: EventEmitter<boolean> = new EventEmitter();
+    /** Emits when show discount and tax event */
+    @Output() public showDiscountAndTax: EventEmitter<boolean> = new EventEmitter();
     /** True if api call in progress  */
     public loadMoreInProgress: boolean = false;
     /** Holds voucher api version */
@@ -449,7 +449,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 this.isInitialCalculationDone = false;
                 this.previousTotalDebit = 0;
                 this.previousTotalCredit = 0;
-                this.salesEntry.emit(false);
+                this.showDiscountAndTax.emit(false);
             }
         });
 
@@ -506,6 +506,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
     @HostListener('window:keydown', ['$event'])
     handleKeyDown(event: KeyboardEvent) {
+        this.keyUpDownEvent = event;
         if (event.key === 'F6') {
             event.preventDefault(); // Prevent default F6 behavior
             this.customFunctionForF6();
@@ -532,10 +533,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 this.showLedgerAccountList = false;
             }
         }
-        if (this.showDiscountSidebar) {
-            this.keydownUp(event);
-        }
-        if (this.showTaxSidebar) {
+        else if (this.showDiscountSidebar || this.showTaxSidebar || this.showLedgerAccountList) {
+            // Handle all keyboard navigation for open sidebars
             this.keydownUp(event);
         }
     }
@@ -1168,7 +1167,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                         this.changeTab('enter', 'account', true);
                     }
 
-                    this.calculateAmount(Number(transactionAtIndex.get('amount').value), transactionAtIndex, idx);
+                    this.calculateAmount(Number(transactionAtIndex?.get('amount').value), transactionAtIndex, idx);
 
                     if (response.body.applicableDiscounts?.length) {
                         response.body.applicableDiscounts.forEach(discount => {
@@ -1693,7 +1692,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 let filteredWithoutTaxDiscountData = [];
                 let filteredDiscountData = data?.transactions?.filter(transaction => transaction?.isDiscountApplied);
                 let filteredTaxData = data?.transactions?.filter(transaction => transaction?.isTaxApplied);
-                if (voucherTypeControl.value === VOUCHERS.SALES || voucherTypeControl.value === VOUCHERS.JOURNAL) {
+                if (voucherTypeControl.value === VOUCHERS.SALES || voucherTypeControl.value === VOUCHERS.JOURNAL || voucherTypeControl.value === VOUCHERS.PURCHASE) {
                     filteredWithoutTaxDiscountData = data?.transactions?.filter(transaction => !transaction?.isDiscountApplied && !transaction?.isTaxApplied);
                     if (filteredDiscountData?.length) {
                         filteredDiscountData?.forEach(discount => {
@@ -1869,7 +1868,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.adjustmentTransaction = {};
         this.chequeDetailForm?.reset();
         this.isSalesEntry = false;
-        this.salesEntry.emit(this.isSalesEntry);
+        this.showDiscountAndTax.emit(this.isSalesEntry);
 
         // Set entry date
         this.journalVoucherForm.patchValue({
@@ -1905,9 +1904,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     break;
 
                 case VOUCHERS.SALES:
+                case VOUCHERS.PURCHASE:
                     firstTransaction.patchValue({ type: 'by' });
                     this.isSalesEntry = true;
-                    this.salesEntry.emit(this.isSalesEntry);
+                    this.showDiscountAndTax.emit(this.isSalesEntry);
                     break;
 
                 default:
@@ -2019,23 +2019,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         if (byOrTo) {
             this.tallyModuleService.selectedFieldType.next(byOrTo);
         }
-    }
-
-    /**
-     * This will be use for detect key
-     *
-     * @param {KeyboardEvent} ev
-     * @memberof AccountAsVoucherComponent
-     */
-    public detectKey(ev: KeyboardEvent): void {
-        this.keyUpDownEvent = ev;
-        this.keydownUp(ev);
-        //  if (ev.keyCode === 27) {
-        //   this.deleteRow(this.selectedIdx);
-        //  }
-        //  if (ev.keyCode === 40 || ev.keyCode === 38 || ev.keyCode === 13) {
-        //   this.arrowInput = { key: ev.keyCode };
-        //  }
     }
 
     /**
@@ -2611,16 +2594,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 this.selectedIndex = Math.max(this.selectedIndex - 1, 0);
             } else if (key === this.KEYS.DOWN) {
                 event.preventDefault();
-                this.selectedIndex = Math.min(this.selectedIndex + 1, this.showDiscountSidebar ? this.discountsList.length - 1 : this.companyTaxesList?.length - 1);
+                this.selectedIndex = Math.min(this.selectedIndex + 1, this.showDiscountSidebar ? this.discountsList.length - 1 : this.showLedgerAccountList ? this.inputForList?.length - 1 : this.companyTaxesList?.length - 1);
             }
             if (elements.length > 0) {
-                elements.forEach((element, index) => {
-                    if (index === this.selectedIndex) {
-                        element.classList.add('hilighted');
-                    } else {
-                        element.classList.remove('hilighted');
-                    }
-                });
                 elements[this.selectedIndex]?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
             }
         }
