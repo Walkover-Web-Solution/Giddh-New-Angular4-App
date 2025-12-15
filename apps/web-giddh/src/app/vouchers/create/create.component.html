@@ -239,6 +239,7 @@
                                                 cdkMonitorElementFocus
                                                 (keydown.enter)="$event.preventDefault(); copyVoucherTrigger.openMenu()"
                                                 (keydown.space)="$event.preventDefault(); copyVoucherTrigger.openMenu()"
+                                                #copyVoucherElement
                                                 #copyVoucherTrigger="matMenuTrigger"
                                                 [matMenuTriggerFor]="copyLastVouchers"
                                                 class="vouchers-copy-sales ml-5 cursor-pointer"
