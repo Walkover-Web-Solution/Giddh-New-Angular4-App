@@ -1,19 +1,12 @@
 <div>
     <div class="dialog-header">
         <span>{{ localeData?.share_account }}</span>
-        <button mat-icon-button aria-label="close" (click)="closeModal()">
-            <i class="icon-cross"></i>
-        </button>
     </div>
     <mat-dialog-content class="dialog-body">
-        <div class="pb-5">
+        <div>
             <p class="pb-2">{{ localeData?.share_with }}</p>
             <!--share account from-->
-            <form
-                [formGroup]="shareAccountForm"
-                novalidate
-                autocomplete="off"
-            >
+            <form [formGroup]="shareAccountForm" novalidate autocomplete="off">
                 <div class="row pb-4">
                     <div class="col-md-6">
                         <input-field
@@ -25,9 +18,9 @@
                             [pattern]="giddhEmailRegex"
                         ></input-field>
                     </div>
-                    <div class="col-md-6 d-flex align-items-center justify-content-between">
+                    <div class="col-md-6">
                         <reactive-dropdown-field
-                            class="pull-left w-75"
+                            class="w-100"
                             [label]="localeData?.permission_role_name"
                             [placeholder]="commonLocaleData?.app_select"
                             [disabled]="isUserRestricted"
@@ -37,23 +30,36 @@
                             [required]="true"
                             formControlName="permission"
                             [labelValue]="selectedPermission"
-                            (selectedOption)="$event && selectedPermission = $event.label"
+                            (selectedOption)="$event && (selectedPermission = $event.label)"
                         >
                         </reactive-dropdown-field>
-                        <button
-                            mat-raised-button
-                            color="primary"
-                            [disabled]="shareAccountForm.invalid || isUserRestricted"
-                            (click)="shareAccount()">
-                            {{ commonLocaleData?.app_share }}
-                        </button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="d-flex justify-content-end column-gap-1">
+                            <button
+                                mat-raised-button
+                                color="primary"
+                                [disabled]="shareAccountForm.invalid || isUserRestricted"
+                                (click)="shareAccount()"
+                            >
+                                {{ commonLocaleData?.app_share }}
+                            </button>
+                            <button mat-stroked-button type="button" mat-dialog-close (click)="closeModal()">
+                                {{ commonLocaleData?.app_cancel }}
+                            </button>
+                        </div>
                     </div>
                 </div>
             </form>
         </div>
 
-        <restricted-module-message [restrictedModule]="restrictedModules.Users"
-            [isUserRestricted]="isUserRestricted" (onUpgradePlan)="buyPlan($event)">
+        <restricted-module-message
+            [restrictedModule]="restrictedModules.Users"
+            [isUserRestricted]="isUserRestricted"
+            (onUpgradePlan)="buyPlan($event)"
+        >
         </restricted-module-message>
 
         <!--shared with array-->
