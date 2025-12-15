@@ -23,6 +23,7 @@
                             [placeholder]="localeData?.select_tax"
                             [labelValue]="otherTaxForm.get('name')?.value"
                             formControlName="tax"
+                            [openDropdown]="openAccountDropdown"
                             [name]="'tax'"
                             [options]="taxesList$ | async"
                             (onClear)="otherTaxForm.get('tax')?.patchValue(null)"

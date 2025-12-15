@@ -50,6 +50,7 @@
                         [showError]="!isValidForm && !taxForm?.get('taxType')?.value"
                         (selectedOption)="selectTax($event)"
                         (onClear)="taxForm?.get('taxType')?.patchValue('')"
+                        #dropdownRef
                     ></reactive-dropdown-field>
                 </div>
 
