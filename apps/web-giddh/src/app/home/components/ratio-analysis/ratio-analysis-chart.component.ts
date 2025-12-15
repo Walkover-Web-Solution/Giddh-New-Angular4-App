@@ -45,6 +45,10 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
     }
 
     public ngOnDestroy() {
+        if (this.chart) {
+            this.chart.destroy();
+            this.chart = null;
+        }
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }

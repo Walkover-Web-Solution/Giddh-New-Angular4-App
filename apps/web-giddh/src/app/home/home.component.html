@@ -1,7 +1,6 @@
 <div appTranslate (commonLocaleData)="commonLocaleData = $event">
     <hamburger-menu [pageHeading]="commonLocaleData?.app_dashboard"></hamburger-menu>
     <section id="dashboard" class="clear-both">
-        {{commonLocaleData| json}}
         <div class="container-fluid top-bar">
             <div class="dashboard-container" *ngIf="companyUniqueName">
                 <div class="row">

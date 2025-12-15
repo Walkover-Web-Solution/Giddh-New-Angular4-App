@@ -76,11 +76,11 @@ import { TagsModule } from "../../settings/tags/tags.module";
         MatMenuModule,
         CommandKModule,
         MatDividerModule,
-        // GenericAsideMenuAccountModule, // Commented out due to NG6002 errors
+        GenericAsideMenuAccountModule,
         MatTooltipModule,
         MatSlideToggleModule,
         MatRadioModule,
-        // TagsModule, // Commented out due to NG6002 errors
+        TagsModule,
     ],
     exports: [
         HeaderComponent,
