@@ -1,0 +1,32 @@
+.form-box .btn {
+    width: 95px;
+}
+
+.export-group-ledger {
+    margin-right: 15px;
+}
+
+.dropdown-wrapper{
+    height: calc(100vh - 170px);
+}
+.loader-parent-container {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+}
+
+.master-export-btn {
+    height: calc(100vh - 94px);
+}
+
+@media (max-width: 1300px) {
+    .full-width {
+        max-width: 100% !important;
+        flex: 0 0 100%;
+        padding-left: 15px !important;
+        padding-right: 15px !important;
+        button[mat-stroked-button] {
+            margin-top: 10px !important;
+        }
+    }
+}

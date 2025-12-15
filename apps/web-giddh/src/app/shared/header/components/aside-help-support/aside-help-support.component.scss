@@ -1,0 +1,160 @@
+:host {
+    position: fixed;
+    left: auto;
+    top: calc(var(--top-distance) + 60px);
+    right: -5px;
+    bottom: 0;
+    max-width: 330px;
+    width: 100%;
+    z-index: 990;
+    box-shadow: -3px 0 6px var(--color-shadow-light);
+    &:after {
+        position: absolute;
+        content: "";
+        width: 12px;
+        height: 12px;
+        background-color: var(--color-light-gray);
+        top: -6px;
+        right: 128px;
+        @media screen and (max-width: 1024px) {
+            right: 92px;
+        }
+        @media screen and (max-width: 992px) {
+            right: 82px;
+        }
+        z-index: 1;
+        transform: rotate(45deg);
+    }
+}
+:host.in #close {
+    display: block;
+    position: fixed;
+    left: -41px;
+    top: var(--top-distance);
+    z-index: 5;
+    border: 0;
+    cursor: pointer;
+    border-radius: var(--mat-border-radius-0);
+}
+
+:host .aside-pane {
+    max-width: 760px;
+    width: 100%;
+    box-shadow: -3px 0 6px var(--color-shadow-light);
+}
+.support-mail-tel {
+    margin: 0 auto;
+    max-width: 168px;
+}
+
+.aside-pane {
+    .aside-help-header {
+        display: flex;
+        justify-content: space-between;
+        padding: 18px 15px;
+        border-bottom: 1px solid var(--border-color);
+        position: sticky;
+        top: 0;
+        background-color: inherit;
+        h2 {
+            font-weight: var(--font-weight-semibold) !important;
+            font-size: var(--font-size-16) !important;
+            color: var(--text-primary-color) !important;
+            line-height: 20px !important;
+            &::before{
+                display: none !important;
+            }
+        }
+    }
+    .help-aside-body {
+        .faq-block {
+            border-bottom: 1px solid var(--border-color);
+            a {
+                display: block;
+                color: var(--theme-foreground-color);
+
+                p {
+                    font-size: var(--font-size-15);
+                    font-weight: var(--font-weight-semibold);
+                }
+                small {
+                    font-size: var(--font-size-12);
+                }
+            }
+        }
+        .feature-block {
+            padding: 15px 10px;
+            border-bottom: 1px solid var(--border-color);
+            ul {
+                li {
+                    font-size: var(--font-size-15);
+                    font-weight: var(--font-weight-semibold);
+                    margin-bottom: 10px;
+                    a {
+                        color: var(--theme-foreground-color);
+                        display: flex;
+                        padding: 5px 0;
+                    }
+                }
+            }
+        }
+        .download-block {
+            padding: 15px 10px;
+            border-bottom: 1px solid var(--border-color);
+            h3 {
+                color: var(--theme-foreground-color);
+            }
+            h4 {
+                padding-bottom: 5px;
+                font-size: var(--font-size-15);
+                font-weight: var(--font-weight-semibold);
+            }
+            ul {
+                li {
+                    float: left;
+                    width: 50%;
+                    padding-bottom: 10px;
+                    a {
+                        color: var(--theme-foreground-color);
+                        padding-bottom: 15px;
+                        font-size: var(--font-size-15);
+                    }
+                }
+            }
+        }
+        .file-image {
+            padding: 15px 15px 0;
+            text-align: center;
+            img {
+                display: block;
+                margin: 0px auto 15px;
+                max-width: 100px;
+            }
+            p {
+                font-size: var(--font-size-15);
+                margin-bottom: 5px;
+            }
+        }
+        .contact-block {
+            text-align: center;
+            font-size: var(--font-size-16);
+            line-height: 1.5;
+            p {
+                a,i  {
+                    color: var(--theme-foreground-color);
+                }
+            }
+        }
+    }
+}
+
+@media (max-height: 900px) {
+    .aside-pane {
+        .help-aside-body {
+            padding-bottom: 0;
+            .contact-block {
+                font-size: var(--font-size-15);
+            }
+        }
+    }
+}

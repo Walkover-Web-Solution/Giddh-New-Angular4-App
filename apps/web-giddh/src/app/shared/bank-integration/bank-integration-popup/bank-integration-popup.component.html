@@ -1,0 +1,22 @@
+<div class="dialog-header d-flex align-items-center">
+    <p>{{ commonLocaleData?.app_bank_accounts }}</p>
+    <i (click)="closeDialog()" aria-label="close icon" class="icon-cross"></i>
+</div>
+<mat-dialog-content class="dialog-body">
+    <div class="row m-0">
+        <div class="col-md-6 p-0 bank-link-card" (click)="integrateBank()">
+            <div class="d-flex justify-content-center cursor-pointer flex-column align-items-center">
+                <img src="assets/images/create-new-report.svg" />
+                <p class="text-center mt-4 font-size-15">
+                    {{ commonLocaleData?.app_create_new }}
+                </p>
+            </div>
+        </div>
+        <div class="col-md-6 p-0 bank-link-card" (click)="linkBank()">
+            <div class="d-flex justify-content-center cursor-pointer flex-column align-items-center">
+                <img src="assets/images/link-button.svg" />
+                <p class="text-center mt-4 font-size-15">{{ commonLocaleData?.app_link_account }}</p>
+            </div>
+        </div>
+    </div>
+</mat-dialog-content>

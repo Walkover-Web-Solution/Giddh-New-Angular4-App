@@ -1,0 +1,148 @@
+<div
+    id="getGroupModal"
+    class="full-screen-modal get-group-modal manage-group-acc"
+    #myModel
+    (click)="keyupInitialized = true"
+    appTranslate
+    [file]="'accounts'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
+>
+    <!-- start header -->
+    <div class="dialog-header d-flex flex-row-reverse" id="alb" aria-labelledby="masterdialog" #header>
+        <span class="d-flex align-items-center">
+            <!-- Dropdown for Archive Accounts Filter -->
+            <a
+                href="javascript:void(0);"
+                aria-label="add financial year"
+                class="d-block position-relative mr-2 modal-title bg underline"
+                (click)="archivedDropdownIsOpen = true"
+                *ngIf="!archivedDropdownIsOpen; else archivedDropdown"
+            >
+                {{ selectedArchivedLabel ?? commonLocaleData?.app_account_status }}
+            </a>
+            <ng-template #archivedDropdown>
+                <select-field
+                    class="d-block position-relative mr-2"
+                    [cssClass]="'form-control border bg-white text-black'"
+                    [placeholder]="commonLocaleData?.app_account_status"
+                    [options]="archivedOptions"
+                    (selectedOption)="onArchivedFilterSelected($event)"
+                    [allowValueReset]="true"
+                    [defaultValue]="selectedArchivedLabel"
+                    (onClear)="selectedArchivedOption = undefined; searchGroups(searchString)"
+                    [openDropdown]="true"
+                    [showDropdownIcon]="true"
+                ></select-field>
+            </ng-template>
+            <div class="pull-right mr-2 search-bar-wrapper">
+                <div class="form-inline">
+                    <div class="form-group search-bar mb-0">
+                        <input
+                            matInput
+                            type="text"
+                            name="grpSrch"
+                            #grpSrch
+                            id="grpSrch"
+                            [(ngModel)]="searchString"
+                            (ngModelChange)="searchString === '' ? resetGroupSearchString(): null"
+                            (keyup)="searchGroups(grpSrch?.value)"
+                            class="form-control bg-white text-black"
+                            [placeholder]="localeData?.search_accounts"
+                            financial-accordion="search"
+                            [style.width.px]="260"
+                            autocomplete="off"
+                        />
+                        <a
+                            href="javascript:void(0);"
+                            class="position-absolute btn-link"
+                            (click)="resetGroupSearchString()"
+                            *ngIf="grpSrch?.value"
+                            >{{ commonLocaleData?.app_clear }}</a
+                        >
+                    </div>
+                </div>
+                <!-- form-inline -->
+            </div>
+            <i aria-label="close icon" class="icon-cross cursor-pointer" (click)="closePopupEvent()"></i>
+        </span>
+        <span>
+            <p class="bg pt-1">{{ localeData?.page_heading }}</p>
+        </span>
+    </div>
+    <!-- end header -->
+
+    <div class="modal-body p-0">
+        <div class="clear-both">
+            <div
+                class="grp-col p-0"
+                [ngStyle]="{
+                    'height': (myModelRect ? myModelRect.height : 0) - (headerRect ? headerRect.height : 0) + 'px'
+                }"
+            >
+                <div class="search-loading" *ngIf="searchLoad | async">
+                    <div class="vertical-center">
+                        <span class="spinner small"></span> {{ commonLocaleData?.app_loading }}
+                    </div>
+                </div>
+                <div class="search-loading no-result" *ngIf="!(searchLoad | async) && !topSharedGroups?.length">
+                    <div class="vertical-center">
+                        <p>{{ localeData?.no_result_found }}</p>
+                    </div>
+                </div>
+                <div>
+                    <div
+                        id="horizontal-master-scroll"
+                        class="scroll-container"
+                    >
+                        <div
+                            *ngIf="!(searchLoad | async)"
+                            [ngStyle]="{ 'width': master?.masterColumnsData?.length * 255 + 'px' }"
+                            class="wrap-account-sidebar"
+                        >
+                            <master
+                                #master
+                                [topSharedGroups]="topSharedGroups"
+                                [searchedMasterData]="searchedMasterData"
+                                [ngStyle]="{
+                                    'height':
+                                        (myModelRect ? myModelRect.height : 0) -
+                                        (headerRect ? headerRect.height : 0) +
+                                        'px'
+                                }"
+                                [height]="(myModelRect ? myModelRect.height : 0) - (headerRect ? headerRect.height : 0)"
+                                [isSearchingGroups]="!(grpSrch?.value === '')"
+                                [localeData]="localeData"
+                                [commonLocaleData]="commonLocaleData"
+                                (resetSearchString)="resetGroupSearchString(false)"
+                                (breadcrumbPathChanged)="breadcrumbPathChanged($event)"
+                                (activeGroupUniqueName)="activeGroupUniqueName = $event"
+                                (scrollToRight)="scrollToRight()"
+                            >
+                            </master>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- middle body -->
+            <div class="form-box height-in-vh">
+                <account-operations
+                    [topSharedGroups]="topSharedGroups"
+                    [height]="(myModelRect ? myModelRect.height : 0) - (headerRect ? headerRect.height : 0)"
+                    [breadcrumbPath]="breadcrumbPath"
+                    [breadcrumbUniquePath]="breadcrumbUniquePath"
+                    [localeData]="localeData"
+                    [commonLocaleData]="commonLocaleData"
+                    [isMasterOpen]="true"
+                    [activeGroupUniqueName]="activeGroupUniqueName"
+                    (accountUpdated)="handleUpdateAccount()"
+                    #form
+                    *ngIf="localeData?.page_heading"
+                >
+                </account-operations>
+            </div>
+        </div>
+    </div>
+    <!-- end modal body -->
+</div>

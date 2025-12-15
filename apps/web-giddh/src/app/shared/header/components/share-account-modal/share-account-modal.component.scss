@@ -1,0 +1,54 @@
+.group-shared-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border-top: 1px solid var(--border-color);
+    margin-top: 15px;
+    padding-top: 20px;
+    li {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        text-align: left;
+        align-items: center;
+        margin-bottom: 10px;
+        border-bottom: none !important;
+    }
+
+    .user-name-email {
+        width: 40%;
+        display: flex;
+        white-space: normal;
+        word-break: break-all;
+        i {
+            position: relative;
+            top: 3px;
+        }
+        .user-email {
+            display: inline-flex;
+            flex-direction: column;
+            small {
+                &:first-child {
+                    font-size: var(--font-size-15);
+                }
+            }
+        }
+    }
+}
+
+.share-grp {
+    &.account-share-modal {
+        .add-mailer {
+            .input-group {
+                input {
+                    min-width: 100% !important;
+                    max-width: 100% !important;
+                }
+            }
+        }
+    }
+}
+
+.mat-list-item-height {
+    height: 60px !important;
+}

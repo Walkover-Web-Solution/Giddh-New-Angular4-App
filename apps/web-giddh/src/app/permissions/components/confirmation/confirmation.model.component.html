@@ -1,0 +1,21 @@
+<div>
+    <div class="dialog-header">
+        <span>{{ commonLocaleData?.app_confirmation }}</span>
+        <button mat-icon-button aria-label="close" (click)="onCancel()">
+            <i class="icon-cross"></i>
+        </button>
+    </div>
+    <mat-dialog-content class="dialog-body" id="export-body">
+        <form name="newRole" novalidate autocomplete="off">
+            <p [innerHTML]="confirmationMessage"></p>
+            <div class="text-right mt-5 clear-both">
+                <button mat-raised-button color="primary" class="mr-2" (click)="onConfirmation()">
+                    {{ commonLocaleData?.app_yes }}
+                </button>
+                <button mat-stroked-button (click)="onCancel()">
+                    {{ commonLocaleData?.app_no }}
+                </button>
+            </div>
+        </form>
+    </mat-dialog-content>
+</div>

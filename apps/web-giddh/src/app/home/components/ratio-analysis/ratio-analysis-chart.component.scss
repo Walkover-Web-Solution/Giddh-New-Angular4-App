@@ -1,0 +1,22 @@
+.ratio-analysis-panel-body {
+    padding-left: 0;
+    padding-right: 0;
+}
+.ratio-analysis-panel-body h1 {
+    font-size: var(--font-size-15);
+    color: var(--color-black);
+}
+
+.ratio-analysis-panel-body small {
+    color: var(--color-dark-gray);
+    font-size: var(--font-size-15);
+}
+.ratio-chart-block {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.full-height {
+    height: 374px;
+}

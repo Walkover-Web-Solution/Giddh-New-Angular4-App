@@ -2,8 +2,8 @@ import { Directive, ElementRef } from '@angular/core';
 import { WindowRef } from '../../window.object';
 
 @Directive({
-    selector: '[appPageHeight]',
-    
+    selector: '[PageHeight]',
+
   standalone: false,
 })
 export class FullPageHeight {

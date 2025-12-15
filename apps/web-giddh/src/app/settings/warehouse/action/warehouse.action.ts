@@ -42,4 +42,10 @@ export class WarehouseActions {
             payload: warehouseUniqueName
         };
     }
+
+    resetWarehouseResponse(): any {
+        return {
+            type: 'RESET_WAREHOUSE_RESPONSE'
+        };
+    }
 }

@@ -10,6 +10,8 @@ export interface BlankLedgerVM {
 
 // Permission related types
 export interface GetAllPermissionResponse {
+    name: string;
+    uniqueName: string;
     [key: string]: any;
 }
 

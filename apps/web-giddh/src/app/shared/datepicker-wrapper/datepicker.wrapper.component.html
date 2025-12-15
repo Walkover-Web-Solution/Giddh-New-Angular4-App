@@ -1,0 +1,23 @@
+<ngx-daterangepicker-material
+    class="show-calendar"
+    [inputStartDate]="inputStartDate"
+    [inputEndDate]="inputEndDate"
+    [minDate]="minDate"
+    [maxDate]="maxDate"
+    name="selectedDateRange"
+    ngxDaterangepickerMd
+    [alwaysShowCalendars]="true"
+    [ranges]="ranges"
+    [selectedRangeLabel]="selectedRangeLabel"
+    [showClearButton]="false"
+    [showCancel]="true"
+    [showDropdowns]="false"
+    (rangeClicked)="selectedRange($event)"
+    (datesUpdated)="selectedDate($event)"
+    (closeCalender)="handleCloseCalender()"
+    [keepCalendarOpeningWithRange]="true"
+    [singleDatePicker]="true"
+    [showRangeLabelOnInput]="false"
+    [showConfirmationOnChange]="showConfirmationOnChange"
+    [confirmationMessage]="confirmationMessage"
+></ngx-daterangepicker-material>

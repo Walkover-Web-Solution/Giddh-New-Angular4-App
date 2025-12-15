@@ -1,0 +1,103 @@
+.inc-dec {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+
+}
+
+.aside-pane-form label {
+    margin-bottom: 5px;
+    display: block;
+}
+
+.cr-dr-account span {
+    width: 36px;
+    display: inline-flex;
+    height: 36px;
+    text-align: center;
+    vertical-align: middle;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 25px;
+    right: 0;
+}
+
+.cr-dr-account span.active {
+    background-color: var(--bg-primary-color);
+    color: var(--color-white);
+}
+
+.upper-form {
+    margin-bottom: 20px;
+
+    .input-group {
+        .input-group-addon {
+            border-left: 1px solid var(--border-color) !important;
+        }
+
+        input {
+            border-left: 1px solid var(--border-color) !important;
+            border-radius: var(--mat-border-radius-4);
+
+            &:focus {
+                border-left: 1px solid var(--theme-primary-color) !important;
+            }
+        }
+    }
+}
+
+.add-address-default {
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--color-silver);
+    padding: 6px 10px;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.add-address-default h3 {
+    font-size: var(--font-size-15);
+    color: var(--color-black);
+}
+
+.contact-form,
+.other-form-wrap,
+.bank-details-form {
+    padding-top: 15px;
+}
+
+.width-select {
+    width: calc(100% - 112px);
+}
+
+.name-of-field {
+    display: flex;
+    align-items: center;
+
+    label {
+        margin-bottom: 0;
+        margin-right: 10px;
+        min-width: 180px;
+        max-width: 180px;
+        line-height: 1.5;
+        word-break: break-word;
+        max-width: 180px;
+        white-space: normal;
+    }
+}
+
+.is-default-address {
+    margin-top: 5px !important;
+    height: 29px;
+}
+
+.w-30 {
+    width: 30% !important;
+}
+
+.expiry-days-input-width {
+    min-width: 220px;
+}

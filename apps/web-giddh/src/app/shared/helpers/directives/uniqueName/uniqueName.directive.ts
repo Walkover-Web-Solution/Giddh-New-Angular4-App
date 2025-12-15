@@ -2,8 +2,8 @@ import { Directive, ElementRef, HostListener } from '@angular/core';
 import { ToasterService } from '../../../../services/toaster.service';
 
 @Directive({
-    selector: '[appUniqueName]',
-    
+    selector: '[UniqueNameDirective]',
+
   standalone: false,
 })
 export class UniqueNameDirective {

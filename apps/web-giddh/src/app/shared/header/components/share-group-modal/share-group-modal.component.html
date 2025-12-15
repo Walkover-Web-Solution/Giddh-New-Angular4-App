@@ -1,0 +1,100 @@
+<div>
+    <div class="dialog-header">
+        <span>{{ localeData?.share_group }}</span>
+        <button mat-icon-button aria-label="close" mat-dialog-close (click)="closeModal()">
+            <i class="icon-cross"></i>
+        </button>
+    </div>
+    <mat-dialog-content class="dialog-body">
+        <div class="pb-5">
+            <p class="pb-2">{{ localeData?.share_with }}</p>
+            <!--share group from-->
+            <form [formGroup]="shareGroupForm" novalidate autocomplete="off">
+                <div class="row pb-4">
+                    <div class="col-md-6">
+                        <!-- <input-field
+                            formControlName="email"
+                            [placeholder]="commonLocaleData?.app_email_id"
+                            [name]="'userEmail'"
+                            [required]="true"
+                            [disabled]="isUserRestricted"
+                            [pattern]="giddhEmailRegex"
+                        ></input-field> -->
+                        <input type="email" class="form-control" formControlName="email"
+                               [placeholder]="commonLocaleData?.app_email_id"
+                               [disabled]="isUserRestricted" required>
+                    </div>
+                    <div class="col-md-6 d-flex align-items-center justify-content-between">
+                        <!-- <reactive-dropdown-field
+                            class="pull-left w-75"
+                            [label]="localeData?.permission_role_name"
+                            [placeholder]="commonLocaleData?.app_select"
+                            [disabled]="isUserRestricted"
+                            [readonly]="isUserRestricted"
+                            [options]="allPermissions"
+                            formControlName="permission"
+                            [name]="'selectedPermission'"
+                            [required]="true"
+                            (selectedOption)="$event && (selectedPermission = $event.label)"
+                            [labelValue]="selectedPermission"
+                        >
+                        </reactive-dropdown-field> -->
+                        <select class="form-control pull-left w-75" formControlName="permission" [disabled]="isUserRestricted">
+                            <option value="">{{ commonLocaleData?.app_select }}</option>
+                            <option *ngFor="let permission of allPermissions" [value]="permission.value">{{ permission.label }}</option>
+                        </select>
+                        <button
+                            mat-raised-button
+                            color="primary"
+                            [disabled]="shareGroupForm.invalid || isUserRestricted"
+                            (click)="shareGroup()">
+                            {{ commonLocaleData?.app_share }}
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- <restricted-module-message [restrictedModule]="restrictedModules.Users"
+            [isUserRestricted]="isUserRestricted" (onUpgradePlan)="buyPlan($event)">
+        </restricted-module-message> -->
+        <!--shared with array-->
+        <div class="pt-2" *ngIf="(activeGroupSharedWith$ | async)?.length">
+            <mat-list role="list" class="shared-list group-shared-list">
+                <ng-container *ngFor="let val of activeGroupSharedWith$ | async; let i = index">
+                    <mat-list-item class="p-0 mat-list-item-height">
+                        <div class="d-flex pt-2 pb-2">
+                            <div class="user-name-email col-md-6">
+                                <i class="icon-user1 pr-2"></i>
+                                <span class="user-email">
+                                    <small *ngIf="val.emailId !== val.userName">{{ val.userName }}</small>
+                                    <small>{{ val.emailId }}</small>
+                                </span>
+                            </div>
+                            <div class="col-md-6 d-flex align-items-center justify-content-between pr-0">
+                                <reactive-dropdown-field
+                                    class="pull-left w-75"
+                                    [label]="localeData?.permission_role_name"
+                                    [placeholder]="commonLocaleData?.app_select"
+                                    [options]="allPermissions"
+                                    [name]="'selectedPermission' + i"
+                                    [labelValue]="val?.roleName"
+                                    (selectedOption)="$event && updatePermission(val, $event)"
+                                >
+                                </reactive-dropdown-field>
+                                <button
+                                    mat-stroked-button
+                                    color="primary"
+                                    (click)="unShareGroup(val?.uniqueName, val?.entityUniqueName)"
+                                    aria-label="delete icon"
+                                >
+                                    <i class="icon-trash text-red"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </mat-list-item>
+                </ng-container>
+            </mat-list>
+        </div>
+    </mat-dialog-content>
+</div>
+

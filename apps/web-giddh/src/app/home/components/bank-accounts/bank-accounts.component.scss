@@ -1,0 +1,45 @@
+p.bank-name {
+    font-size: var(--font-size-15);
+    color: var(--theme-foreground-color);
+    margin-bottom: 5px;
+}
+
+p.bank-balance {
+    color: var(--color-dark-gray);
+    font-size: var(--font-size-15);
+    display: flex;
+    justify-content: space-between;
+}
+
+.single-bank-detail {
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+a
+
+.add-bank-details {
+    display: flex;
+    height: 300px;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+p {
+    color: var(--color-dark-gray);
+}
+
+.banks-scrollbar-wrapper {
+    row-gap: 0;
+}
+
+.bank-menu {
+    top: -39px;
+    float: right;
+}
+
+.width-86 {
+    width: 86% !important;
+}

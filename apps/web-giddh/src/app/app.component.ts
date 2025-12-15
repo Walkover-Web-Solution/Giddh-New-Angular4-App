@@ -9,18 +9,18 @@ import { ReplaySubject } from 'rxjs';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { DbService } from './services/db.service';
 import { reassignNavigationalArray } from './models/default-menus'
-import { BREAKPOINT_SCREEN_SIZE, Configuration, COUNTRY_REGION_MAP, LOCAL_ENV, STAGING_ENV, TEST_ENV, PRODUCTION_ENV, AppUrl, isElectron, APP_FOLDER } from "./app.constant";
+import { BREAKPOINT_SCREEN_SIZE, Configuration, COUNTRY_REGION_MAP, LOCAL_ENV, STAGING_ENV, TEST_ENV, PRODUCTION_ENV, APP_FOLDER } from "./app.constant";
 import { filter, take, takeUntil } from 'rxjs/operators';
 import { LoaderService } from './loader/loader.service';
-// COMMENTED OUT - MISSING: import { CompanyActions } from './actions/company.actions';
+import { CompanyActions } from './actions/company.actions';
 import { OrganizationType } from './models/user-login-state';
 import { CommonActions } from './actions/common.actions';
 import { MatDialog } from '@angular/material/dialog';
 import { ServiceConfig } from './services/service.config';
 import { PageLeaveUtilityService } from './services/page-leave-utility.service';
 import { LoginActions } from './actions/login.action';
-// COMMENTED OUT - MISSING: import { InvoiceActions } from './actions/invoice/invoice.actions';
-// COMMENTED OUT - MISSING: import { WarehouseActions } from './settings/warehouse/action/warehouse.action';
+import { InvoiceActions } from './actions/invoice/invoice.actions';
+import { WarehouseActions } from './settings/warehouse/action/warehouse.action';
 import { CompanyService } from './services/company.service';
 
 /**
@@ -29,10 +29,12 @@ import { CompanyService } from './services/company.service';
  */
 @Component({
     selector: 'app-component',
+    encapsulation: ViewEncapsulation.None,
+    styleUrls: [
+        './app.component.css'
+    ],
     templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss'],
-    standalone: false,
-    encapsulation: ViewEncapsulation.None
+    standalone: false
 })
 export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     public sideMenu: { isopen: boolean } = { isopen: true };
@@ -57,19 +59,18 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         private breakpointObserver: BreakpointObserver,
         private dbServices: DbService,
         private loadingService: LoaderService,
-        // COMMENTED OUT - MISSING: private companyActions: CompanyActions,
+        private companyActions: CompanyActions,
         private commonActions: CommonActions,
         public dialog: MatDialog,
         @Inject(ServiceConfig) private serviceConfig,
         private pageLeaveUtilityService: PageLeaveUtilityService,
         private loginActions: LoginActions,
-        // COMMENTED OUT - MISSING: private invoiceActions: InvoiceActions,
-        // COMMENTED OUT - MISSING: private warehouseActions: WarehouseActions,
+        private invoiceActions: InvoiceActions,
+        private warehouseActions: WarehouseActions,
         private companyService: CompanyService
     ) {
-        console.log('🔍 DEBUG: AppComponent constructor started - All dependencies injected successfully');
         this.isProdMode = PRODUCTION_ENV;
-        this.isElectron = isElectron;
+        this.isElectron = Configuration.isElectron;
 
         // Bind the method for proper event listener cleanup
         this.boundHandleQueryParamsCompanySwitch = (event: any) => this.handleQueryParamsCompanySwitch(event.detail);
@@ -96,25 +97,15 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             this._generalService.setParameterInLocalStorage("voucherApiVersion", this._generalService.getUrlParameter("version"));
         }
 
-        console.log('🔍 DEBUG: App Component Constructor - Checking authentication');
-        console.log('🔍 DEBUG: User:', this._generalService.user);
-        console.log('🔍 DEBUG: SessionId:', this._generalService.sessionId);
-
         if (!(this._generalService.user && this._generalService.sessionId)) {
             const href = window.location.href;
             const path = window.location.pathname || '';
             const search = window.location.search || '';
             const isLoginLike = href.includes('login') || href.includes('token-verify') || href.includes('download') || href.includes('verify-subscription-ownership') || href.includes('dns');
-
-            console.log('🔍 DEBUG: Not authenticated, checking path');
-            console.log('🔍 DEBUG: Current href:', href);
-            console.log('🔍 DEBUG: Current path:', path);
-            console.log('🔍 DEBUG: Is login-like:', isLoginLike);
-
             // Generate returnUrl for any non-login-like path (including root path)
             if (!isLoginLike) {
                 const isLocalHost = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-                if (PRODUCTION_ENV && !isElectron && !isLocalHost) {
+                if (PRODUCTION_ENV && !Configuration.isElectron && !isLocalHost) {
                     const currentUrl = path + search;
                     let returnUrl = '';
                     if (currentUrl.startsWith('/pages/')) {
@@ -133,15 +124,10 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                     } else {
                         returnUrl = currentUrl.startsWith('/') ? currentUrl.substring(1) : currentUrl;
                     }
-                    console.log('🔍 DEBUG: Navigating to login page');
-                    console.log('🔍 DEBUG: Return URL:', returnUrl);
-
                     if (returnUrl && returnUrl !== 'login' && returnUrl !== 'token-verify' && returnUrl !== '') {
-                        try { sessionStorage.setItem('returnUrl', returnUrl); } catch (_) {}
-                        console.log('🔍 DEBUG: Navigating to login with returnUrl:', returnUrl);
+                        try { sessionStorage.setItem('returnUrl', returnUrl); } catch (_) { }
                         this.router.navigate(['/login'], { queryParams: { returnUrl } });
                     } else {
-                        console.log('🔍 DEBUG: Navigating to login without returnUrl');
                         this.router.navigate(['/login']);
                     }
                 }
@@ -161,7 +147,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                 'LOCAL_ENV': LOCAL_ENV,
                 'TEST_ENV': TEST_ENV,
                 'PRODUCTION_ENV': PRODUCTION_ENV,
-                'AppUrl': (this.serviceConfig.AppUrl || AppUrl),
+                'AppUrl': (this.serviceConfig.AppUrl || Configuration.AppUrl),
                 'APP_FOLDER': APP_FOLDER
             });
             ipcRenderer.on('app-close-requested', () => {
@@ -216,6 +202,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
@@ -225,7 +212,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this.breakpointObserver.observe([
             BREAKPOINT_SCREEN_SIZE.TABLET
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-                this.changeOnMobileView(result?.breakpoints[BREAKPOINT_SCREEN_SIZE.TABLET]);
+            this.changeOnMobileView(result?.breakpoints[BREAKPOINT_SCREEN_SIZE.TABLET]);
         });
         this.breakpointObserver.observe([
             BREAKPOINT_SCREEN_SIZE.UNSUPPORTED
@@ -239,9 +226,9 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                if (this.activeLocale !== response) {
-                    this.activeLocale = response;
-                    this.store.dispatch(this.commonActions.getCommonLocaleData(response));
+                if (this.activeLocale !== response?.value) {
+                    this.activeLocale = response?.value;
+                    this.store.dispatch(this.commonActions.getCommonLocaleData(response.value));
                 }
             } else {
                 let supportedLocales = this._generalService.getSupportedLocales();
@@ -253,7 +240,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             if (response) {
                 document.querySelector("body")?.classList?.remove("dark-theme");
                 document.querySelector("body")?.classList?.remove("default-theme");
-                document.querySelector("body")?.classList?.add(response);
+                document.querySelector("body")?.classList?.add(response?.value);
             } else {
                 let availableThemes = this._generalService.getAvailableThemes();
                 this.store.dispatch(this.commonActions.setActiveTheme(availableThemes[0]));
@@ -307,14 +294,14 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
         if (this._generalService.companyUniqueName && !window.location.href.includes('login') && !window.location.href.includes('token-verify')) {
             setTimeout(() => {
-                // COMMENTED OUT - MISSING: this.store.dispatch(this.companyActions.RefreshCompanies());
+                this.store.dispatch(this.companyActions.RefreshCompanies());
             }, 1000);
         }
 
         this._generalService.IAmLoaded.next(true);
         this._cdr.detectChanges();
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe((evt) => {
-            if ((evt instanceof NavigationStart) && this.newVersionAvailableForWebApp && !isElectron) {
+            if ((evt instanceof NavigationStart) && this.newVersionAvailableForWebApp && !Configuration.isElectron) {
                 // need to save last state
                 const redirectState = this.getLastStateFromUrl(evt.url);
                 localStorage.setItem('lastState', redirectState);
@@ -334,7 +321,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             if (raw && raw.trim()) {
                 try {
                     const decoded = decodeURIComponent(raw);
-                    if (!isElectron) {
+                    if (!Configuration.isElectron) {
                         const target = decoded.startsWith('pages/') ? decoded : `pages/${decoded.startsWith('/') ? decoded.substring(1) : decoded}`;
                         this.router.navigateByUrl(`/${target}`);
                         return;
@@ -355,7 +342,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                     this.router.navigateByUrl(`/${target}`);
                     return;
                 }
-            } catch (_) {}
+            } catch (_) { }
         }
 
         const lastState = localStorage.getItem('lastState');
@@ -365,8 +352,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             return this.router.navigate([lastState]);
         }
 
-        if (!LOCAL_ENV && !isElectron) {
-            this._versionCheckService.initVersionCheck((this.serviceConfig.AppUrl || AppUrl) + 'version.json');
+        if (!LOCAL_ENV && !Configuration.isElectron) {
+            this._versionCheckService.initVersionCheck((this.serviceConfig.AppUrl || Configuration.AppUrl) + 'version.json');
             this._versionCheckService.onVersionChange$.pipe(takeUntil(this.destroyed$)).subscribe((isChanged: boolean) => {
                 if (isChanged) {
                     this.newVersionAvailableForWebApp = _.clone(isChanged);
@@ -439,8 +426,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         console.log('Processing company/branch switch:', { companyUniqueName, branchUniqueName, company });
 
         // Reset active company data and warehouse response (same as switchCompany)
-        // COMMENTED OUT - MISSING: this.store.dispatch(this.companyActions.resetActiveCompanyData());
-        // COMMENTED OUT - MISSING: this.store.dispatch(this.warehouseActions.resetWarehouseResponse());
+        this.store.dispatch(this.companyActions.resetActiveCompanyData());
+        this.store.dispatch(this.warehouseActions.resetWarehouseResponse());
 
         // Update general service properties
         this._generalService.companyUniqueName = companyUniqueName;
@@ -448,11 +435,11 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this.store.dispatch(this.commonActions.setBranchConsolidated(false));
 
         // Update store with company and branch details
-        // COMMENTED OUT - MISSING: this.store.dispatch(this.companyActions.setStateDetailsRequest({
-        //     lastState: '',
-        //     companyUniqueName: companyUniqueName,
-        //     currentBranchUniqueName: branchUniqueName || ''
-        // }));
+        this.store.dispatch(this.companyActions.setStateDetailsRequest({
+            lastState: '',
+            companyUniqueName: companyUniqueName,
+            currentBranchUniqueName: branchUniqueName || ''
+        }));
 
         // Set organization details
         const details = {
@@ -465,7 +452,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             this.setOrganizationDetails(OrganizationType.Branch, details);
             this._generalService.currentBranchUniqueName = branchUniqueName;
             // Trigger invoice settings for branch (same as switchBranch)
-            // COMMENTED OUT - MISSING: this.store.dispatch(this.invoiceActions.getInvoiceSetting());
+            this.store.dispatch(this.invoiceActions.getInvoiceSetting());
         } else {
             this.setOrganizationDetails(OrganizationType.Company, details);
         }
@@ -501,6 +488,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             uniqueName: this._generalService.companyUniqueName,
             details: branchDetails
         };
-        // COMMENTED OUT - MISSING: this.store.dispatch(this.companyActions.setCompanyBranch(organization));
+        this.store.dispatch(this.companyActions.setCompanyBranch(organization));
     }
 }

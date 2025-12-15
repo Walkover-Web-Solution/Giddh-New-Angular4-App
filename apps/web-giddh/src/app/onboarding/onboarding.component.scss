@@ -1,0 +1,46 @@
+.welcome-container {
+    .border-btm {
+        font-size: var(--font-size-16);
+        font-weight: var(--font-weight-semibold);
+        border-bottom: 1px solid var(--border-color);
+        padding: 7px 0;
+        margin-bottom: 10px;
+    }
+
+    .manage-invoice {
+        a {
+            background: var(--theme-primary-light);
+            color: var(--theme-foreground-color);
+            box-shadow: 1px 1px 3px var(--color-shadow-light);
+            padding: 9px 15px;
+            font-size: var(--font-size-15);
+            display: flex;
+            align-items: center;
+            width: 356px;
+            i {
+                margin-right: 20px;
+                font-size: 23px;
+                color: var(--color-dark-gray);
+            }
+        }
+    }
+
+    .right-section {
+        span {
+            font-size: var(--font-size-15);
+            display: block;
+        }
+        .schedule-img {
+            img {
+                width: 200px;
+            }
+        }
+    }
+    .onboarding-video {
+        overflow: hidden;
+        iframe {
+            max-width: 760px;
+            min-height: 430px;
+        }
+    }
+}

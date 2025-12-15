@@ -1,0 +1,13 @@
+.bank-link-card {
+   > div {
+        height: 186px;
+
+        p {
+            color: var(--color-black);
+        }
+    }
+}
+
+.bank-link-card:hover div {
+    background-color: var(--color-light-gray);
+}

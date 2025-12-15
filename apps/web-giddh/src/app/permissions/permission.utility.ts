@@ -1,49 +1,58 @@
-export interface GetAllPermissionResponse {
-    body?: Permission[];
-    status?: string;
-    queryString?: any;
+import { Permission, Scope } from '../models/api-models/Permission';
+
+export class NewRoleClass {
+    constructor(
+        public name: string,
+        public scopes: Scope[],
+        public isFixed?: boolean,
+        public uniqueName?: string,
+        public isUpdateCase?: boolean,
+    ) {
+    }
 }
 
-export interface Permission {
-    name?: string;
-    uniqueName?: string;
-    scope?: string;
-    isFixed?: boolean;
-    isDefault?: boolean;
-    parentUniqueName?: string;
-    additional?: any;
-}
-
-export interface UserPermission {
-    uniqueName?: string;
-    allowed?: boolean;
-    name?: string;
-}
-
-export interface PermissionRequest {
-    page?: number;
-    count?: number;
-    q?: string;
+export class NewPermissionObj {
+    constructor(
+        public code: string,
+        public isSelected: boolean
+    ) {
+    }
 }
 
 export interface IPageStr {
-    uniqueName?: string;
-    name?: string;
-    isSelected?: boolean;
-    additional?: any;
+    [index: number]: string;
 }
 
-export class PermissionUtility {
-    static hasPermission(userPermissions: UserPermission[], requiredPermission: string): boolean {
-        if (!userPermissions || !requiredPermission) {
-            return false;
-        }
+export interface IPage {
+    name: string;
+    isSelected: boolean;
+}
 
-        const permission = userPermissions.find(p => p.uniqueName === requiredPermission);
-        return permission ? permission.allowed : false;
-    }
+export interface GetAllPermissionResponse {
+    name: string;
+    scopes: Scope[];
+    isFixed?: boolean;
+    uniqueName?: string;
+    isUpdateCase?: boolean;
+}
 
-    static filterPermissionsByScope(permissions: Permission[], scope: string): Permission[] {
-        return permissions.filter(p => p.scope === scope);
-    }
+export interface Pages {
+    name: string;
+    permissions: Permission[];
+}
+
+export class NewRoleFormClass implements INewRoleFormObj {
+    public name: string;
+    public isFresh: boolean;
+    public uniqueName?: string;
+    public isSelectedAllPages?: any;
+    public pageList?: any;
+}
+
+export interface INewRoleFormObj {
+    name: string;
+    isFresh: boolean;
+    uniqueName?: string;
+    isSelectedAllPages?: any;
+    pageList?: any;
 }

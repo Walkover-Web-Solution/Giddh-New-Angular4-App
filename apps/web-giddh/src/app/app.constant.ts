@@ -10,8 +10,8 @@ export const STAGING_ENV = false;
 export const LOCAL_ENV = true;
 export const TEST_ENV = false;
 export const isElectron = false;
-export const AppUrl = 'http://localhost:4200/';
-export const APP_FOLDER = '';
+export const AppUrl = '';
+export const APP_FOLDER = '/';
 export const ApiUrl = 'https://apitest.giddh.com/';
 export const UkApiUrl = 'https://ukapi.giddh.com/';
 export const PORTAL_URL = 'https://portal.giddh.com/';
@@ -746,7 +746,6 @@ export const Configuration = {
     'OTP_TOKEN_AUTH': OTP_TOKEN_AUTH,
     'UkApiUrl': UkApiUrl,
     'isElectron': isElectron,
-    'APP_FOLDER': APP_FOLDER,
     'GOOGLE_CLIENT_ID': GOOGLE_CLIENT_ID,
     'GOOGLE_CLIENT_SECRET': GOOGLE_CLIENT_SECRET,
     'RAZORPAY_KEY': RAZORPAY_KEY
