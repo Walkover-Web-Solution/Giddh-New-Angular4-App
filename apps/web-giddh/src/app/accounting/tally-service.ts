@@ -341,7 +341,7 @@ export class TallyModuleService {
             return {
                 group: selectedTransactionType?.toLowerCase() === 'by' ?
                     encodeURIComponent('operatingcost, indirectexpenses, fixedassets') :
-                    encodeURIComponent('bankaccounts, cash, loanandoverdraft, sundrycreditors'),
+                    encodeURIComponent('bankaccounts, cash, loanandoverdraft, sundrycreditors, sundrydebtors'),
                 exceptGroups: encodeURIComponent('')
             };
         }

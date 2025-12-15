@@ -506,6 +506,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
     @HostListener('window:keydown', ['$event'])
     handleKeyDown(event: KeyboardEvent) {
+        this.keyUpDownEvent = event;
         if (event.key === 'F6') {
             event.preventDefault(); // Prevent default F6 behavior
             this.customFunctionForF6();
@@ -532,10 +533,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 this.showLedgerAccountList = false;
             }
         }
-        if (this.showDiscountSidebar) {
-            this.keydownUp(event);
-        }
-        if (this.showTaxSidebar) {
+        else if (this.showDiscountSidebar || this.showTaxSidebar || this.showLedgerAccountList) {
+            // Handle all keyboard navigation for open sidebars
             this.keydownUp(event);
         }
     }
@@ -1168,7 +1167,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                         this.changeTab('enter', 'account', true);
                     }
 
-                    this.calculateAmount(Number(transactionAtIndex.get('amount').value), transactionAtIndex, idx);
+                    this.calculateAmount(Number(transactionAtIndex?.get('amount').value), transactionAtIndex, idx);
 
                     if (response.body.applicableDiscounts?.length) {
                         response.body.applicableDiscounts.forEach(discount => {
@@ -2023,23 +2022,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     /**
-     * This will be use for detect key
-     *
-     * @param {KeyboardEvent} ev
-     * @memberof AccountAsVoucherComponent
-     */
-    public detectKey(ev: KeyboardEvent): void {
-        this.keyUpDownEvent = ev;
-        this.keydownUp(ev);
-        //  if (ev.keyCode === 27) {
-        //   this.deleteRow(this.selectedIdx);
-        //  }
-        //  if (ev.keyCode === 40 || ev.keyCode === 38 || ev.keyCode === 13) {
-        //   this.arrowInput = { key: ev.keyCode };
-        //  }
-    }
-
-    /**
      * This will be use for data entered
      *
      * @memberof AccountAsVoucherComponent
@@ -2612,16 +2594,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 this.selectedIndex = Math.max(this.selectedIndex - 1, 0);
             } else if (key === this.KEYS.DOWN) {
                 event.preventDefault();
-                this.selectedIndex = Math.min(this.selectedIndex + 1, this.showDiscountSidebar ? this.discountsList.length - 1 : this.companyTaxesList?.length - 1);
+                this.selectedIndex = Math.min(this.selectedIndex + 1, this.showDiscountSidebar ? this.discountsList.length - 1 : this.showLedgerAccountList ? this.inputForList?.length - 1 : this.companyTaxesList?.length - 1);
             }
             if (elements.length > 0) {
-                elements.forEach((element, index) => {
-                    if (index === this.selectedIndex) {
-                        element.classList.add('hilighted');
-                    } else {
-                        element.classList.remove('hilighted');
-                    }
-                });
                 elements[this.selectedIndex]?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
             }
         }
