@@ -290,7 +290,11 @@
             animationDuration="0ms"
         >
             <mat-tab [label]="localeData?.tabs?.address" class="gstin-address" *ngIf="!isHsnSacEnabledAcc">
-                <div class="pt-3 px-1 overflow-hidden" formArrayName="addresses">
+                <div
+                    class="pt-3 px-1 overflow-hidden"
+                    formArrayName="addresses"
+                    *ngIf="addAccountForm.get('addresses')?.length"
+                >
                     <ng-container
                         *ngFor="
                             let gst of addAccountForm.get('addresses')['controls'] | slice : 0 : gstDetailsLength;
@@ -883,8 +887,8 @@
 
             <mat-tab [label]="localeData?.tabs?.custom">
                 <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isCustomFieldLoading"></giddh-page-loader>
-                <div class="pt-3 px-1 overflow-hidden">
-                    <ng-container *ngIf="addAccountForm?.get('addresses')?.value?.length" formArrayName="customFields">
+                <div class="pt-3 px-1 overflow-hidden" *ngIf="addAccountForm.get('customFields')?.length">
+                    <ng-container formArrayName="customFields">
                         <ng-container
                             *ngFor="
                                 let item of companyCustomFields;
@@ -1136,15 +1140,7 @@
                                 cdkConnectedOverlay
                                 [cdkConnectedOverlayOrigin]="discountTrigger"
                                 [cdkConnectedOverlayOpen]="currentDiscount === inAppDiscount"
-                                [cdkConnectedOverlayPositions]="[
-                                    {
-                                        originX: 'end',
-                                        originY: 'center',
-                                        overlayX: 'start',
-                                        overlayY: 'center',
-                                        offsetX: 8
-                                    }
-                                ]"
+                                [cdkConnectedOverlayPositions]="overlayPositions"
                             >
                                 <div class="tax-tooltip bg-gray font-size-14 custom-cdk-overlay-wrapper">
                                     <div>
@@ -1214,15 +1210,7 @@
                                         cdkConnectedOverlay
                                         [cdkConnectedOverlayOrigin]="taxTrigger"
                                         [cdkConnectedOverlayOpen]="currentTax === inAppTax"
-                                        [cdkConnectedOverlayPositions]="[
-                                            {
-                                                originX: 'end',
-                                                originY: 'center',
-                                                overlayX: 'start',
-                                                overlayY: 'center',
-                                                offsetX: 8
-                                            }
-                                        ]"
+                                        [cdkConnectedOverlayPositions]="overlayPositions"
                                     >
                                         <div class="tax-tooltip font-size-14 custom-cdk-overlay-wrapper">
                                             <div>

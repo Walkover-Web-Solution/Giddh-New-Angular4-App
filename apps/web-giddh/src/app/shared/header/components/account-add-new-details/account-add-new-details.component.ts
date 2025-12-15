@@ -1512,15 +1512,15 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     /**
-     * To render custom field form
+     * Renders custom field form controls with enhanced type safety validation
      *
-     * @param {*} obj
-     * @param {*} customFieldLength
+     * @param {any} obj - Custom field object containing field configuration
+     * @param {number} customFieldLength - Expected number of custom fields
      * @memberof AccountAddNewDetailsComponent
      */
-    public renderCustomFieldDetails(obj: any, customFieldLength: any): void {
+    public renderCustomFieldDetails(obj: any, customFieldLength: number): void {
         const customField = this.addAccountForm.get('customFields') as FormArray;
-        if (customField?.length < customFieldLength) {
+        if (Array.isArray(customField?.value) && customField?.value.length < customFieldLength) {
             customField.push(this.initialCustomFieldDetailsForm(obj));
         }
     }
