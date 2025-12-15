@@ -284,7 +284,11 @@
             (selectedTabChange)="tabChanged($event)"
         >
             <mat-tab [label]="localeData?.tabs?.address" class="gstin-address" *ngIf="!isHsnSacEnabledAcc">
-                <div class="pt-3 overflow-hidden" formArrayName="addresses">
+                <div
+                    class="pt-3 overflow-hidden"
+                    formArrayName="addresses"
+                    *ngIf="addAccountForm.get('addresses')?.length"
+                >
                     <ng-container
                         *ngFor="
                             let gst of addAccountForm.get('addresses')['controls'] | slice : 0 : gstDetailsLength;
@@ -888,7 +892,7 @@
 
             <mat-tab [label]="localeData?.tabs?.custom">
                 <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isCustomFieldLoading"></giddh-page-loader>
-                <div class="pt-3 overflow-hidden">
+                <div class="pt-3 overflow-hidden" *ngIf="addAccountForm.get('customFields')?.length">
                     <ng-container formArrayName="customFields">
                         <ng-container
                             *ngFor="

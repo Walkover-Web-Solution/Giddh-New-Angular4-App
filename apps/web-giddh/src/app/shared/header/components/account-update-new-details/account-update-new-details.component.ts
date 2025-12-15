@@ -12,6 +12,7 @@ import {
     TemplateRef,
     ViewChild,
 } from '@angular/core';
+import { ConnectedPosition } from '@angular/cdk/overlay';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { createSelector, select, Store } from '@ngrx/store';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
@@ -276,6 +277,16 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public isParentSundryCreditors: boolean = false;
     /** Flag to determine if the parent group is "bank accounts". */
     public isParentBankAccounts: boolean = false;
+    /** CDK overlay positions for discount and tax tooltips */
+    public overlayPositions: ConnectedPosition[] = [
+        {
+            originX: 'end',
+            originY: 'center',
+            overlayX: 'start',
+            overlayY: 'center',
+            offsetX: 8
+        }
+    ];
     /** Enum representing the types of accounting group type */
     public accountingGroupEnum: typeof AccountingGroupEnum = AccountingGroupEnum;
     /** Stores the list of selected tax labels to display in the UI. */
@@ -1800,15 +1811,15 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     /**
-     * To render custom field form
+     * Renders custom field form controls with enhanced type safety validation
      *
-     * @param {*} obj
-     * @param {*} customFieldLength
+     * @param {any} obj - Custom field object containing field configuration
+     * @param {number} customFieldLength - Expected number of custom fields
      * @memberof AccountUpdateNewDetailsComponent
      */
-    public renderCustomFieldDetails(obj: any, customFieldLength: any): void {
+    public renderCustomFieldDetails(obj: any, customFieldLength: number): void {
         const customField = this.addAccountForm.get('customFields') as FormArray;
-        if (customField?.length < customFieldLength) {
+        if (Array.isArray(customField?.value) && customField?.value.length < customFieldLength) {
             customField.push(this.initialCustomFieldDetailsForm(obj));
         }
     }
