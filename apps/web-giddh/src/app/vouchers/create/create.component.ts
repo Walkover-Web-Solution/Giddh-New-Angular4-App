@@ -147,6 +147,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     @ViewChild('billingDetailsTrigger') billingDetailsTrigger!: MatMenuTrigger;
     /** Shipping details menu trigger */
     @ViewChild('shippingDetailsTrigger') shippingDetailsTrigger!: MatMenuTrigger;
+    /** Copy Voucher div element for focusing */
+    @ViewChild('copyVoucherElement') copyVoucherElement!: ElementRef<HTMLDivElement>;
     /**  This will use for dayjs */
     public dayjs: any = dayjs;
     /** Holds current voucher type */
@@ -1337,10 +1339,17 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     });
 
                     this.checkIfEntriesHasStock();
-                    this.openAccountDropdown = false;
-                    setTimeout(() => {
-                        this.openAccountDropdown = true;
-                    }, 100);
+
+                    if (voucherDetails.isCopyVoucher) {
+                        setTimeout(() => {
+                            this.copyVoucherElement?.nativeElement?.focus();
+                        }, 100);
+                    } else {
+                        this.openAccountDropdown = false;
+                        setTimeout(() => {
+                            this.openAccountDropdown = true;
+                        }, 100);
+                    }
                     this.startLoader(false);
                     this.changeDetection.detectChanges();
                 }
