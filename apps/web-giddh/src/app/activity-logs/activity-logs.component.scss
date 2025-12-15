@@ -1,0 +1,141 @@
+.activity-container {
+    .custom-datepicker-wrapper {
+        display: flex;
+        text-align: center;
+        justify-content: center;
+        margin-left: 10px;
+        margin-right: 10px;
+    }
+
+    .delete-row {
+        margin: auto;
+        margin-left: 5px;
+        margin-right: 5px;
+    }
+
+    .remove-filter {
+        font-size: 16px;
+    }
+
+    .filter-wrapper {
+        display: flex;
+        background-color: var(--theme-primary-light);
+        padding-bottom: 4px;
+        padding-top: 4px;
+        margin-bottom: 0px;
+    }
+
+    .and-text {
+        margin-left: 10px !important;
+        margin-right: 10px !important;
+        font-size: 16px;
+        color: var(--color-black) !important;
+        margin: auto;
+    }
+
+    .add-button {
+        border: none;
+        height: -webkit-fill-available;
+        cursor: pointer;
+        background-color: var(--theme-primary-light);
+        font-size: var(--font-size-24);
+        padding-left: 0px !important;
+        padding-right: 0px !important;
+        min-width: 55px !important;
+        color: var(--color-black) !important;
+        padding-top: 0 !important;
+        border-radius: var(--mat-border-radius-0) !important;
+        padding-top: 4px !important;
+        margin: auto;
+        margin-left: 3px;
+        margin-right: 0 !important;
+        padding-bottom: 4px;
+    }
+
+    .entity-wrapper {
+        display: flex;
+    }
+
+    .activity-filter-wrap {
+        align-items: stretch;
+        display: flex;
+        flex-wrap: wrap;
+        row-gap: 5px;
+    }
+
+    .activity-table {
+        .activity-td {
+            width: 18%;
+            position: relative;
+        }
+
+        .history-icon {
+            visibility: hidden;
+            transition: 0ms;
+        }
+
+        tr {
+            &:hover {
+                .history-icon {
+                    visibility: visible;
+                    z-index: 9999;
+                }
+            }
+        }
+
+        td {
+            .history-icon {
+                padding: 13px 20px;
+                width: 66px;
+                float: left;
+            }
+        }
+    }
+
+    .activity-child-table {
+        .activity-history {
+            min-height: 0;
+        }
+
+        .history-child-row {
+            position: relative;
+
+            .history-checkbox {
+                padding: 13px 0px;
+                z-index: 99;
+                position: relative;
+            }
+        }
+
+        .compare-json {
+            text-decoration: underline;
+            color: var(--text-primary-color);
+            z-index: 99;
+            padding: 13px 20px;
+
+            &:hover {
+                color: var(--text-primary-color);
+            }
+        }
+
+        .child-td-name {
+            padding-left: 30px !important;
+        }
+    }
+}
+
+@media (max-width: 1180px) {
+    .activity-container {
+        .activity-table {
+            .activity-td {
+                width: 16.9%;
+            }
+        }
+
+        .add-button {
+            padding-left: 0px !important;
+            padding-right: 0px !important;
+            padding-top: 0 !important;
+        }
+    }
+}

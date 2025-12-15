@@ -101,6 +101,11 @@
             "main": "apps/web-giddh/src/main.ts",
             "polyfills": "apps/web-giddh/src/polyfills.ts",
             "tsConfig": "apps/web-giddh/tsconfig.app.json",
+            "aot": true,
+            "buildOptimizer": true,
+            "optimization": true,
+            "extractLicenses": false,
+            "sourceMap": false,
             "assets": [
               { "glob": "**/*", "input": "apps/web-giddh/src/assets/", "output": "/assets/" },
               { "glob": "**/*", "input": "apps/web-giddh/src/meta/", "output": "/" },

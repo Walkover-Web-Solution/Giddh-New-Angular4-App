@@ -18,8 +18,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 // import { MobileNumberInputComponent } from '../../../mobile-number-input';
 
 @NgModule({
-    declarations: [AccountAddNewDetailsComponent],
-    exports: [AccountAddNewDetailsComponent],
+    declarations: [AccountAddNewDetailsComponent, BulkAddDialogComponent],
+    exports: [AccountAddNewDetailsComponent, BulkAddDialogComponent],
     imports: [
         CommonModule,
         ReactiveFormsModule,

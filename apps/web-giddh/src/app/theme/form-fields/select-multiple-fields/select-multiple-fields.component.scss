@@ -1,0 +1,18 @@
+:host {
+    &:has(mat-label) {
+        display: inherit;
+        margin-top: 10px;
+    }
+}
+.chiplist-error {
+    border-bottom: 2px solid var(--color-red) !important;
+    float: left;
+    width: 100%;
+    margin-bottom: 0 !important;
+}
+
+.select-multiple-field-input {
+    width: 100%;
+    font-weight: normal !important;
+    font-size: var(--font-size-15) !important;
+}

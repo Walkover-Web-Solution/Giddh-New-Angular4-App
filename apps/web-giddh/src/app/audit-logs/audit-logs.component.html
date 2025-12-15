@@ -1,0 +1,81 @@
+<div
+    appTranslate
+    [file]="'audit-logs'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <hamburger-menu [pageHeading]="localeData?.page_heading" *ngIf="!isNewVersion"></hamburger-menu>
+    <hamburger-menu [pageHeading]="localeData?.page_heading_new" *ngIf="isNewVersion"></hamburger-menu>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12 col-md-12 audit-log-sidebar" [ngClass]="!isNewVersion ? 'col-lg-3' : 'col-lg-12'">
+                <!--sidebar-->
+                <audit-logs-sidebar
+                    *ngIf="!isNewVersion && localeData?.page_heading"
+                    [localeData]="localeData"
+                    [commonLocaleData]="commonLocaleData"
+                ></audit-logs-sidebar>
+                <audit-logs-form
+                    #auditLogFormComponent
+                    *ngIf="isNewVersion"
+                    [fromDate]="fromDate"
+                    [toDate]="toDate"
+                    [localeData]="localeData"
+                    [commonLocaleData]="commonLocaleData"
+                ></audit-logs-form>
+                <!--/sidebar-->
+            </div>
+            <div class="col-12 d-flex align-items-center">
+                <div class="mt-3 mb-3 custom-datepicker-wrapper" *ngIf="isNewVersion">
+                    <div class="custom-datepicker"
+                         [matMenuTriggerFor]="universalDatepicker"
+                         #universalDatepickerTrigger="matMenuTrigger"
+                         role="button"
+                         tabindex="0"
+                         aria-haspopup="true"
+                         aria-controls="universal-datepicker-menu">
+                        <input
+                            matInput
+                            type="text"
+                            name="selectedDateRange"
+                            [value]="selectedDateRangeUi"
+                            class="giddh-datepicker date-range-picker"
+                            readonly
+                        />
+                    </div>
+                </div>
+                <a *ngIf="isNewVersion && showClearFilter" class="font-size-12 pl-2 clear-filter" (click)="resetFilter()">
+                    <span class="icon-refresh"></span> {{ commonLocaleData?.app_clear_filter }}
+                </a>
+            </div>
+            <div class="col-12 col-md-12" [ngClass]="!isNewVersion ? 'col-lg-9' : 'col-lg-12'">
+                <audit-logs-grid *ngIf="!isNewVersion" [localeData]="localeData" [commonLocaleData]="commonLocaleData">
+                </audit-logs-grid>
+                <audit-logs-table *ngIf="isNewVersion" [localeData]="localeData" [commonLocaleData]="commonLocaleData">
+                </audit-logs-table>
+            </div>
+        </div>
+    </div>
+
+    <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+        <ng-template matMenuContent>
+            <app-datepicker-wrapper
+                [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate"
+                [alwaysShowCalendars]="true"
+                [ranges]="datePickerOptions"
+                [selectedRangeLabel]="selectedRangeLabel"
+                [showCustomRangeLabel]="true"
+                [showClearButton]="false"
+                [showCancel]="true"
+                [linkedCalendars]="true"
+                [showDropdowns]="true"
+                (rangeClicked)="dateSelectedCallback($event)"
+                (datesUpdated)="dateSelectedCallback($event)"
+                (closeCalender)="toggleGiddhDatepicker(false)"
+                [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false"
+            ></app-datepicker-wrapper>
+        </ng-template>
+    </mat-menu>
+</div>

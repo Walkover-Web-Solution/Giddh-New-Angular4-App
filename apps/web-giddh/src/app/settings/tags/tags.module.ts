@@ -16,7 +16,7 @@ import { MatDialogModule } from '@angular/material/dialog';
     ],
     imports: [
         CommonModule,
-        SharedModule,
+        // SharedModule, // COMMENTED OUT - CAUSING CIRCULAR DEPENDENCY NG6002 ERRORS
         FormsModule,
         ReactiveFormsModule,
         NoDataModule,

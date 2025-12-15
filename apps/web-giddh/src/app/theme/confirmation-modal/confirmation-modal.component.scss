@@ -1,0 +1,26 @@
+.custom-confirmation-modal {
+    display: inline-block;
+    max-width: 650px;
+    position: relative;
+    width: 100%;
+    box-shadow: 0 0 6px var(--color-shadow-light);
+    font-family: var(--font-family);
+    background-color: var(--color-white);
+
+    p {
+        font-size: var(--font-size-15);
+        color: var(--color-black);
+    }
+}
+@media (max-width: 1366px) {
+    .custom-confirmation-modal {
+        max-width: 100%;
+        width: 100%;
+    }
+}
+@media (max-width: 1280px) {
+    .custom-confirmation-modal {
+        max-width: 100%;
+        width: 100%;
+    }
+}

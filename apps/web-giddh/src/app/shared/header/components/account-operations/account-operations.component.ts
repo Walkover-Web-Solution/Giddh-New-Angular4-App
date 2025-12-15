@@ -37,7 +37,8 @@ import { IOption } from 'apps/web-giddh/src/app/app.constant';
 @Component({
     selector: 'account-operations',
     templateUrl: './account-operations.component.html',
-    styleUrls: [`./account-operations.component.scss`]
+    styleUrls: [`./account-operations.component.scss`],
+    standalone:false
 })
 
 export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {

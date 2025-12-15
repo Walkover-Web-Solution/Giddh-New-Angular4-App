@@ -58,7 +58,7 @@ import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state
 import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
 import { AccountAddNewDetailsComponentStore } from '../account-add-new-details/utility/account-add-new-details.store';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-// import { NewConfirmationModalComponent } from 'apps/web-giddh/src/app/theme/new-confirmation-modal/confirmation-modal.component';
+import { NewConfirmationModalComponent } from 'apps/web-giddh/src/app/theme/new-confirmation-modal/confirmation-modal.component';
 // import { SalesPersonComponentStore } from '../../../sales-person/utility/sales-person.store';
 // import { SalesPersonComponent } from '../../../sales-person/sales-person.component';
 // import { ActionTypeEnum } from '../../../sales-person/utility/sales-person.constant';
@@ -1547,21 +1547,18 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      */
     public openDeleteMergedAccountDialog(): void {
         const configuration = this.generalService.getVoucherDeleteConfiguration(this.localeData?.delete_merged_account_title, this.deleteMergedAccountModalBody, '', this.commonLocaleData);
-        // const confirnationDialogRef = this.dialog.open(NewConfirmationModalComponent, {
-        //     panelClass: ['mat-dialog-md'],
-        //     data: {
-        //         configuration: configuration
-        //     },
-        //     disableClose: true
-        // });
-        // confirnationDialogRef.afterClosed().subscribe(result => {
-        //     if (result) {
-        //         this.deleteMergedAccount();
-        //     }
-        // });
-
-        // Placeholder until NewConfirmationModalComponent is available
-        console.log('NewConfirmationModalComponent dialog would open here');
+        const confirnationDialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            panelClass: ['mat-dialog-md'],
+            data: {
+                configuration: configuration
+            },
+            disableClose: true
+        });
+        confirnationDialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                this.deleteMergedAccount();
+            }
+        });
     }
 
     public deleteMergedAccount() {

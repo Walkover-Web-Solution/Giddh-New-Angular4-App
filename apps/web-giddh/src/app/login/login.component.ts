@@ -515,12 +515,32 @@ export class LoginComponent implements OnInit, OnDestroy {
             scriptTag.type = 'text/javascript';
             scriptTag.defer = true;
             scriptTag.onload = () => {
-                initSendOTP(configuration);
+                try {
+                    if (typeof window['initSendOTP'] === 'function') {
+                        window['initSendOTP'](configuration);
+                    } else {
+                        console.error('initSendOTP is not available');
+                        this.toaster.errorToast('Unable to load OTP service. Please try again.');
+                    }
+                } catch (error) {
+                    console.error('Error initializing OTP provider:', error);
+                    this.toaster.errorToast('An error occurred while loading OTP service.');
+                }
+                this.loaderService.hide();
+            };
+            scriptTag.onerror = () => {
+                console.error('Failed to load OTP provider script');
+                this.toaster.errorToast('Failed to load OTP service. Please check your connection.');
                 this.loaderService.hide();
             };
             document.body.appendChild(scriptTag);
         } else {
-            initSendOTP(configuration);
+            try {
+                window['initSendOTP'](configuration);
+            } catch (error) {
+                console.error('Error initializing OTP provider:', error);
+                this.toaster.errorToast('An error occurred while loading OTP service.');
+            }
             this.loaderService.hide();
         }
     }
