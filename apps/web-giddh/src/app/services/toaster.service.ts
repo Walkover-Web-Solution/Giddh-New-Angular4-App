@@ -1,33 +1,73 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { APP_DEFAULT_TITLE, DEFAULT_TOASTER_OPTIONS, DEFAULT_TOASTER_OPTIONS_WITH_HTML } from '../app.constant';
+import { ToastrService } from 'ngx-toastr';
+import { MatSnackBar } from '@angular/material/snack-bar';
+// import { SnackbarComponent } from '../theme/snackbar/snackbar.component';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class ToasterService {
-    constructor() {}
 
-    successToast(message: string, title?: string): void {
-        console.log('Success:', message);
+    constructor(private toaster: ToastrService, private snackBar: MatSnackBar) {
+
     }
 
-    errorToast(message: string, title?: string, duration?: number): void {
-        console.error('Error:', message);
+    public successToast(msg: string, title: string = APP_DEFAULT_TITLE): void {
+        this.toaster.success(msg, title, Object.assign({}, DEFAULT_TOASTER_OPTIONS));
     }
 
-    warningToast(message: string, title?: string): void {
-        console.warn('Warning:', message);
+    /**
+     * This function is used to show success message with html
+     *
+     * @param {string} msg
+     * @param {string} [title=APP_DEFAULT_TITLE]
+     * @memberof ToasterService
+     */
+    public successToastWithHtml(msg: string, title: string = APP_DEFAULT_TITLE): void {
+        this.toaster.success(msg, title, Object.assign({}, DEFAULT_TOASTER_OPTIONS_WITH_HTML));
     }
 
-    infoToast(message: string, title?: string): void {
-        console.info('Info:', message);
+    public errorToast(msg: string, title: string = APP_DEFAULT_TITLE, params?: any): void {
+        if (params) {
+            params = { timeOut: params };
+            this.toaster.error(msg, title, Object.assign({}, { ...DEFAULT_TOASTER_OPTIONS, ...params }));
+        } else {
+            this.toaster.error(msg, title, Object.assign({}, DEFAULT_TOASTER_OPTIONS));
+        }
     }
 
-    clearAllToaster(): void {
-        // Placeholder method
+    public warningToast(msg: string, title: string = APP_DEFAULT_TITLE): void {
+        this.toaster.warning(msg, title, Object.assign({}, DEFAULT_TOASTER_OPTIONS));
     }
 
-    successToastWithHtml(message: string): void {
-        console.log('Success HTML:', message);
+    public warningToastWithTime(timeout: number, msg: string, title: string = APP_DEFAULT_TITLE): void {
+        let defaultToasterOptions = DEFAULT_TOASTER_OPTIONS_WITH_HTML;
+        defaultToasterOptions.timeOut = timeout;
+        this.toaster.warning(msg, title, Object.assign({}, defaultToasterOptions));
+    }
+
+    public infoToast(msg: string, title: string = APP_DEFAULT_TITLE): void {
+        this.toaster.info(msg, title, Object.assign({}, DEFAULT_TOASTER_OPTIONS));
+    }
+
+    public clearAllToaster(): void {
+        this.toaster.clear();
+    }
+
+    /**
+     * This will show snack bar for alert messages
+     *
+     * @param {string} type
+     * @param {string} message
+     * @param {string} [title=APP_DEFAULT_TITLE]
+     * @memberof ToasterService
+     */
+    public showSnackBar(type: string, message: string, title: string = APP_DEFAULT_TITLE): void {
+        // this.snackBar.openFromComponent(SnackbarComponent, {
+        //     data: { title: title, message: message },
+        //     horizontalPosition: "center",
+        //     verticalPosition: "top",
+        //     panelClass: type
+        // });
+        console.log(`${type}: ${title} - ${message}`);
     }
 }

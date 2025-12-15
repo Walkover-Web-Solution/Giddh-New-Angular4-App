@@ -12,36 +12,15 @@ import { ESTIMATES_API, PROFORMA_API } from "./apiurls/proforma.api";
 import { InvoiceReceiptFilter, ReceiptVoucherDetailsRequest, ReciptDeleteRequest, ReciptResponse, Voucher, VoucherRequest } from "../models/api-models/recipt";
 import { RECEIPT_API } from "./apiurls/receipt.api";
 import { CustomTemplateResponse } from "../models/api-models/Invoice";
-// COMMENTED OUT - MISSING: import { VouchersUtilityService } from "../vouchers/utility/vouchers.utility.service";
+import { VouchersUtilityService } from "../vouchers/utility/vouchers.utility.service";
 import { SALES_API_V2, SALES_API_V4 } from "./apiurls/sales.api";
 import { PURCHASE_ORDER_API } from "./apiurls/purchase-order.api";
 import { PAGINATION_LIMIT } from "../app.constant";
 import { ADVANCE_RECEIPTS_API } from "./apiurls/advance-receipt-adjustment.api";
 import { BULK_VOUCHER_EXPORT_API } from "./apiurls/bulkvoucherexport.api";
 import { COMMON_API } from "./apiurls/common.api";
-// COMMENTED OUT - MISSING: import { VoucherTypeEnum } from "../vouchers/utility/vouchers.const";
+import { VoucherTypeEnum } from "../vouchers/utility/vouchers.const";
 import { LEDGER_API } from "./apiurls/ledger.api";
-
-// Placeholder VoucherTypeEnum - replace when original module is available
-enum VoucherTypeEnum {
-    sales = 'sales',
-    creditNote = 'creditNote',
-    debitNote = 'debitNote',
-    purchase = 'purchase',
-    receipt = 'receipt',
-    payment = 'payment',
-    generateProforma = 'generateProforma',
-    generateEstimate = 'generateEstimate',
-    purchaseOrder = 'purchaseOrder'
-}
-
-// Placeholder VouchersUtilityService - replace when original service is available
-class VouchersUtilityService {
-    createQueryString(baseUrl: string, params: any): string {
-        const queryParams = new URLSearchParams(params).toString();
-        return queryParams ? `${baseUrl}?${queryParams}` : baseUrl;
-    }
-}
 
 
 @Injectable()

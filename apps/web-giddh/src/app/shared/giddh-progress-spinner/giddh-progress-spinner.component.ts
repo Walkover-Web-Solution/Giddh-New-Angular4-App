@@ -1,5 +1,4 @@
 import { Component, Input } from '@angular/core';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 type ProgressSpinnerMode = 'determinate' | 'indeterminate';
 type ProgressSpinnerColor = 'primary' | 'accent' | 'warn' | false;
 

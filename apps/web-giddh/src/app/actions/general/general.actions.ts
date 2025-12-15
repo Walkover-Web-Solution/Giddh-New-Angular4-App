@@ -11,7 +11,7 @@ import { GroupsWithAccountsResponse } from '../../models/api-models/GroupsWithAc
 import { IUpdateDbRequest } from '../../models/interfaces/ulist.interface';
 import { CompanyService } from '../../services/company.service';
 import { DbService } from '../../services/db.service';
-// COMMENTED OUT - MISSING: import { GroupService } from '../../services/group.service';
+import { GroupService } from '../../services/group.service';
 import { CustomActions } from '../../store/custom-actions';
 import { GENERAL_ACTIONS } from './general.const';
 
@@ -22,8 +22,7 @@ export class GeneralActions {
         .pipe(
             ofType(GENERAL_ACTIONS.GENERAL_GET_GROUP_WITH_ACCOUNTS),
             switchMap((action: CustomActions) =>
-                // COMMENTED OUT - MISSING: this._groupService.getGroupsWithAccounts(action.payload)
-                of({ status: 'success', body: [] })
+                this._groupService.getGroupsWithAccounts(action.payload)
             ),
             map(response => {
                 return this.getGroupWithAccountsResponse(response);
@@ -99,7 +98,7 @@ export class GeneralActions {
             switchMap(() => this._companyService.getMenuItems()),
             map(resp => this.saveSideMenuItems(resp?.body))));
 
-    constructor(private action$: Actions, /* private _groupService: GroupService, */ private _companyService: CompanyService, private _dbService: DbService, private route: Router) {
+    constructor(private action$: Actions, private _groupService: GroupService, private _companyService: CompanyService, private _dbService: DbService, private route: Router) {
 
     }
 
