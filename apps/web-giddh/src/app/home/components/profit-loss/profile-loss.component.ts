@@ -16,7 +16,7 @@ import {
 import { TBPlBsActions } from "../../../actions/tl-pl.actions";
 
 import { GeneralService } from '../../../services/general.service';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, Configuration, APP_FOLDER } from '../../../app.constant';
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { TlPlService } from '../../../services/tl-pl.service';
 import { cloneDeep } from '../../../lodash-optimized';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
@@ -84,7 +84,7 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
 
     public ngOnInit() {
         // img path
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || Configuration.AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {

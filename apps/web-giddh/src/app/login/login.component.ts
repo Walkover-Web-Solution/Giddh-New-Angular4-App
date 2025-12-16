@@ -15,11 +15,11 @@ import {
     VerifyEmailResponseModel,
     VerifyMobileModel
 } from "../models/api-models/loginModels";
-// COMMENTED OUT - MISSING: import {
-//     AuthService,
-//     GoogleLoginProvider,
-//     SocialUser
-// } from "../theme/ng-social-login-module/index";
+import {
+    AuthService,
+    GoogleLoginProvider,
+    SocialUser
+} from "../theme/ng-social-login-module/index";
 import { DOCUMENT } from "@angular/common";
 import { userLoginStateEnum } from "../models/user-login-state";
 import { contriesWithCodes } from "../shared/helpers/countryWithCodes";
@@ -101,7 +101,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     constructor(private _fb: UntypedFormBuilder,
         private store: Store<AppState>,
         private loginAction: LoginActions,
-        // COMMENTED OUT - MISSING: private authService: AuthService,
+        private authService: AuthService,
         @Inject(DOCUMENT) private document: Document,
         private loaderService: LoaderService,
         private toaster: ToasterService,
@@ -209,22 +209,22 @@ export class LoginComponent implements OnInit, OnDestroy {
         // get user object when google auth is complete
         if (!Configuration.isElectron) {
             // COMMENTED OUT - MISSING: Social login functionality
-            // this.authService.authState.pipe(takeUntil(this.destroyed$)).subscribe((user: SocialUser) => {
-            //     this.isSocialLogoutAttempted$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
-            //         if (!res && user) {
-            //             switch (user.provider) {
-            //                 case "GOOGLE": {
-            //                     this.store.dispatch(this.loginAction.signupWithGoogle(user.token));
-            //                     break;
-            //                 }
-            //                 default: {
-            //                     // do something
-            //                     break;
-            //                 }
-            //             }
-            //         }
-            //     });
-            // });
+            this.authService.authState.pipe(takeUntil(this.destroyed$)).subscribe((user: SocialUser) => {
+                this.isSocialLogoutAttempted$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
+                    if (!res && user) {
+                        switch (user.provider) {
+                            case "GOOGLE": {
+                                this.store.dispatch(this.loginAction.signupWithGoogle(user.token));
+                                break;
+                            }
+                            default: {
+                                // do something
+                                break;
+                            }
+                        }
+                    }
+                });
+            });
             this.showAppleLogin = false;
         } else {
             if (navigator.userAgent.indexOf("Mac") > -1) {
@@ -373,7 +373,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
         // Handle dialog close event to replace onHidden functionality
         this.twoWayAuthDialogRef.afterClosed().subscribe(() => {
-            this.onHiddenAuthModal({dismissReason: KeyCodesEnum.ESC});
+            this.onHiddenAuthModal({ dismissReason: KeyCodesEnum.ESC });
         });
     }
 
@@ -420,11 +420,11 @@ export class LoginComponent implements OnInit, OnDestroy {
             this.store.dispatch(this.loginAction.resetSocialLogoutAttempt());
             if (provider === "google") {
 
-                // COMMENTED OUT - MISSING: this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
+                this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
 
                 if (!isElectron) {
                     setTimeout(() => {
-                        // COMMENTED OUT - MISSING: this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
+                        this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
                     }, 500);
                 }
             }
@@ -495,7 +495,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     public signInWithOtp(): void {
         this.loaderService.show();
         let configuration = {
-            widgetId: this.serviceConfig.OTP_WIDGET_ID || OTP_WIDGET_ID ,
+            widgetId: this.serviceConfig.OTP_WIDGET_ID || OTP_WIDGET_ID,
             tokenAuth: this.serviceConfig.OTP_TOKEN_AUTH || OTP_TOKEN_AUTH,
             success: (data: any) => {
                 this.ngZone.run(() => {
@@ -571,7 +571,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     public async appleLogin(): Promise<void> {
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
         const CLIENT_ID = "com.giddh.appsignin.client"
-        const url = PRODUCTION_ENV || isElectron ? 'https://api.giddh.com' : whiteLabel?.giddhWhiteLabel?.apiDomain ?`${whiteLabel.giddhWhiteLabel.apiDomain}` : 'https://apitest.giddh.com';
+        const url = PRODUCTION_ENV || isElectron ? 'https://api.giddh.com' : whiteLabel?.giddhWhiteLabel?.apiDomain ? `${whiteLabel.giddhWhiteLabel.apiDomain}` : 'https://apitest.giddh.com';
         const REDIRECT_API_URL = url + "/v2/apple-login-callback";
 
         window.open(`https://appleid.apple.com/auth/authorize?client_id=${CLIENT_ID}&redirect_uri=${encodeURIComponent(REDIRECT_API_URL)}&response_type=code id_token&scope=name email&response_mode=form_post`, '_blank');

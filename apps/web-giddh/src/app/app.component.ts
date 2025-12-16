@@ -9,7 +9,7 @@ import { ReplaySubject } from 'rxjs';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { DbService } from './services/db.service';
 import { reassignNavigationalArray } from './models/default-menus'
-import { BREAKPOINT_SCREEN_SIZE, Configuration, COUNTRY_REGION_MAP, LOCAL_ENV, STAGING_ENV, TEST_ENV, PRODUCTION_ENV, APP_FOLDER } from "./app.constant";
+import { BREAKPOINT_SCREEN_SIZE, Configuration } from "./app.constant";
 import { filter, take, takeUntil } from 'rxjs/operators';
 import { LoaderService } from './loader/loader.service';
 import { CompanyActions } from './actions/company.actions';
@@ -202,7 +202,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-
+        console.log("called");
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;

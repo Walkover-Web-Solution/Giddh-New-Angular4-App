@@ -30,6 +30,10 @@ export class ImportTypeSelectComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** Holds a reference to the `VoucherType` enum */
     // public voucherType: typeof VoucherType = VoucherType; // Commented out due to missing import
+    public voucherType = {
+        AccountWise: 'AccountWise',
+        VoucherWise: 'VoucherWise'
+    };
     /** Holds images folder path */
     public imgPath: string = "";
 

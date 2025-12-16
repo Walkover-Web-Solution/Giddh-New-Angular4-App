@@ -6,7 +6,6 @@ import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { CompanyResponse } from '../models/api-models/Company';
 import { AppState } from '../store';
-import { TEST_ENV } from '../app.constant';
 
 @Component({
     selector: 'financial-reports',

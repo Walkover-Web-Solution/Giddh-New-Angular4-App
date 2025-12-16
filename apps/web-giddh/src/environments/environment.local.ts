@@ -9,7 +9,7 @@ export const environment: Environment = {
     ApiUrl: 'https://apitest.giddh.com/',
     UkApiUrl: 'https://gbapi.giddh.com/',
     isElectron: false,
-    APP_FOLDER: 'app/',
+    APP_FOLDER: '',
     PORTAL_URL: '',
     GOOGLE_CLIENT_ID: '',
     GOOGLE_CLIENT_SECRET: '',

@@ -49,7 +49,7 @@
                             <p>{{ commonLocaleData?.app_import_type?.inventory }}</p>
                         </a>
                     </li>
-                    <div *ngIf="isBranch || branches?.length === 1">
+                    <ng-container *ngIf="isBranch || branches?.length === 1">
                         <li>
                             <a
                                 class="theme-foreground-color h-100"
@@ -76,7 +76,7 @@
                                 </p>
                             </a>
                         </li>
-                    </div>
+                    </ng-container>
                 </ul>
             </div>
         </div>

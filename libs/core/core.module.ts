@@ -22,11 +22,8 @@ import { LogService } from './services/log.service';
 LogService.DEBUG.LEVEL_4 = !environment.production;
 
 export const BASE_PROVIDERS: any[] = [
-    ...CORE_PROVIDERS,
-    {
-        provide: APP_BASE_HREF,
-        useValue: '/'
-    }
+    ...CORE_PROVIDERS
+    // APP_BASE_HREF removed - handled by main app.module.ts
 ];
 
 @NgModule({

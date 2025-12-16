@@ -8,7 +8,7 @@ import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { DashboardService } from '../../../services/dashboard.service';
 import { GeneralService } from '../../../services/general.service';
-import { GIDDH_DATE_RANGE_PICKER_RANGES, Configuration, APP_FOLDER } from '../../../app.constant';
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { cloneDeep } from '../../../lodash-optimized';
 import { ReceiptService } from '../../../services/receipt.service';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
@@ -87,7 +87,7 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         // img path
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || Configuration.AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {

@@ -4,22 +4,8 @@ dayjs.extend(quarterOfYear) // use plugin
 import { CountryCodeService } from './services/country-code.service';
 import { MatDialogConfig } from '@angular/material/dialog';
 
-// ENVIRONMENT AND CORE CONSTANTS - Must be declared first
-export const PRODUCTION_ENV = false;
-export const STAGING_ENV = false;
-export const LOCAL_ENV = true;
-export const TEST_ENV = false;
-export const isElectron = false;
-export const AppUrl = '';
-export const APP_FOLDER = '/';
-export const ApiUrl = 'https://apitest.giddh.com/';
-export const UkApiUrl = 'https://ukapi.giddh.com/';
-export const PORTAL_URL = 'https://portal.giddh.com/';
-export const OTP_WIDGET_ID = '326a63733354393830313330';
-export const OTP_TOKEN_AUTH = '205968TmXguUAwoD633af103P1';
-export const GOOGLE_CLIENT_ID = '';
-export const GOOGLE_CLIENT_SECRET = '';
-export const RAZORPAY_KEY = '';
+// ENVIRONMENT AND CORE CONSTANTS - Now using webpack DefinePlugin and environment variables
+// These are injected at build time via webpack.partial.js
 
 /** Add Company business type*/
 export enum BusinessTypes {
