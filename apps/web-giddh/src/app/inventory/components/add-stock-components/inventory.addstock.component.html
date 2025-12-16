@@ -102,7 +102,7 @@
                                                 type="number"
                                                 class="form-control"
                                                 maxlength="10"
-                                                digitsOnlyDirective
+                                                decimalDigitsDirective
                                                 formControlName="hsnNumber"
                                                 *ngIf="addStockForm.get('showCodeType')?.value === 'hsn'"
                                             />
@@ -110,7 +110,7 @@
                                                 type="number"
                                                 class="form-control"
                                                 maxlength="10"
-                                                digitsOnlyDirective
+                                                decimalDigitsDirective
                                                 formControlName="sacNumber"
                                                 *ngIf="addStockForm.get('showCodeType')?.value === 'sac'"
                                             />
