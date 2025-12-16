@@ -1,0 +1,80 @@
+.table-container {
+    padding: unset;
+
+    section {
+        div {
+            .group {
+                text-transform: capitalize;
+            }
+        }
+    }
+
+    thead {
+        tr {
+            th {
+                &:first-child {
+                    border-left: 0;
+                }
+            }
+        }
+    }
+}
+
+:host ::ng-deep {
+    .table-container {
+        &.profit-loss section div>div {
+            padding-left: 8px;
+        }
+
+        div {
+            &.row {
+                border-bottom: 0;
+            }
+        }
+    }
+
+    .basic {
+        margin-bottom: 0;
+
+        >thead {
+            >tr {
+                >th {
+                    padding: 8px 8px;
+                }
+            }
+        }
+    }
+}
+
+.pl-table-grid {
+    th {
+        border: none !important;
+        border-bottom: 1px solid var(--border-color) !important;
+        padding: 13px 8px 14px 0 !important;
+
+        &:first-child {
+            padding: 0 !important;
+        }
+
+        input {
+            height: 47px;
+        }
+    }
+}
+
+.tb-wrapper {
+    width: 70%;
+    margin: auto;
+
+    @media (max-width: 1024px) {
+        width: 100%;
+        margin: auto;
+
+        .table-container {
+            overflow-x: auto;
+        }
+    }
+}
+.row-height {
+    min-height: 37px;
+}

@@ -1,0 +1,17 @@
+.account-detail-custom-title {
+    font-weight: var(--font-weight-semibold) !important;
+    word-break: break-word !important;
+}
+.account-detail-padding {
+    padding: 1px;
+    text-transform: none !important;
+}
+
+.account-detail-custom-header {
+    border-right: 0;
+    padding: 11px 10px 10px;
+    color: var(--color-black);
+    background: var(--color-border-light);
+    width: 260px;
+    margin-top: -8px;
+}

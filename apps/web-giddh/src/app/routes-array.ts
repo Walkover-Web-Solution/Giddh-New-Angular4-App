@@ -66,7 +66,7 @@ export const ROUTES: Routes = [
             { path: 'search', loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./search/search.module') */ Promise.resolve(DummyModule) },
             {
                 path: 'trial-balance-and-profit-loss',
-                loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./financial-reports/financial-reports.module') */ Promise.resolve(DummyModule),
+                loadChildren: () => import('./financial-reports/financial-reports.module').then(module => module.FinancialReportsModule),
                 data: { preload: true }
             },
             { path: 'audit-logs', loadChildren: () => import('./audit-logs/audit-logs.module').then(module => module.AuditLogsModule) },

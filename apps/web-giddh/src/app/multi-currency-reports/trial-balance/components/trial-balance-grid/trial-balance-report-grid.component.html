@@ -1,0 +1,215 @@
+<ng-container
+    appTranslate
+    [file]="'trial-profit-balance/trial-balance/grid'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <div class="tb-wrapper clear-both">
+        <div class="mt-1 mb-2 pull-right">
+            <div class="tbpl-list">
+                <ul class="list-inline color-codes pull-right">
+                    <li>
+                        <span class="circle square liabilities"></span>
+                        <span>{{ commonLocaleData?.app_liabilities }}</span>
+                    </li>
+                    <li>
+                        <span class="circle square assets"></span>
+                        <span>{{ commonLocaleData?.app_assets }}</span>
+                    </li>
+                    <li>
+                        <span class="circle square income"></span>
+                        <span>{{ commonLocaleData?.app_income }}</span>
+                    </li>
+                    <li>
+                        <span class="circle square expenses"></span>
+                        <span>{{ commonLocaleData?.app_expenses }}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="table-container clear-both trial-balance">
+            <section class="tb-section">
+                <div class="row">
+                    <div
+                        class="col-4 d-flex align-items-center"
+                        #searchContainer
+                        (clickOutside)="clickedOutside($event, searchContainer)"
+                    >
+                        <span [ngClass]="{ 'd-none': showClearSearch }" class="d-flex align-items-center">
+                            <span class="pr-2"
+                                ><strong>{{ localeData?.particular }}</strong></span
+                            >
+                            <i
+                                class="position-relative font-size-14 pr-2 cursor-pointer d-flex align-items-center light-gray"
+                                id="showSearch"
+                                (click)="toggleSearch()"
+                            ></i>
+                        </span>
+                        <span [hidden]="!showClearSearch" class="show-clear-search d-flex">
+                            <input
+                                matInput
+                                type="search"
+                                #searchInputEl
+                                class="form-control"
+                                [placeholder]="commonLocaleData?.app_search"
+                                aria-label="search"
+                                [formControl]="accountSearchControl"
+                            />
+                        </span>
+                    </div>
+                    <div class="col-2 text-right table-th">
+                        <strong>{{ localeData?.opening_balance }}</strong>
+                    </div>
+                    <div class="col-2 text-right table-th">
+                        <strong>{{ commonLocaleData?.app_debit }}</strong>
+                    </div>
+                    <div class="col-2 text-right table-th">
+                        <strong>{{ commonLocaleData?.app_credit }}</strong>
+                    </div>
+                    <div class="col-2 text-right table-th-closing">
+                        <strong>{{ localeData?.closing_balance }}</strong>
+                    </div>
+                </div>
+            </section>
+            <div *ngIf="data$?.groupDetails">
+                <ng-template #groupDetails let-list let-padding="padding" let-isSubGroup="isSubGroup">
+                    <ng-container *ngIf="!expandAll || isSubGroup || (expandAll && search)">
+                        <ng-container *ngFor="let grp of list; trackBy: trackByFn">
+                            <section
+                                *ngIf="grp.isVisible"
+                                [ngClass]="!isSubGroup ? grp.category : ''"
+                                grid-report-row
+                                [isExpandToggledDuringSearch]="isExpandToggledDuringSearch"
+                                [groupDetail]="grp"
+                                [padding]="padding"
+                                [search]="search"
+                                [expandAll]="expandAll"
+                                (openAccountModal)="openAccountModal($event)"
+                            >
+                                <ng-container
+                                    *ngTemplateOutlet="
+                                        groupDetails;
+                                        context: {
+                                            $implicit: grp.childGroups,
+                                            padding: padding + 20,
+                                            isSubGroup: true
+                                        }
+                                    "
+                                >
+                                </ng-container>
+                            </section>
+                        </ng-container>
+                    </ng-container>
+                    <cdk-virtual-scroll-viewport
+                        *ngIf="expandAll && !isSubGroup && !search"
+                        [itemSize]="35"
+                        class="trial-balance-viewport"
+                    >
+                        <ng-container *cdkVirtualFor="let grp of list; trackBy: trackByFn">
+                            <section
+                                *ngIf="grp.isVisible"
+                                [ngClass]="!isSubGroup ? grp.category : ''"
+                                grid-report-row
+                                [isExpandToggledDuringSearch]="isExpandToggledDuringSearch"
+                                [groupDetail]="grp"
+                                [padding]="padding"
+                                [search]="search"
+                                [expandAll]="expandAll"
+                                (openAccountModal)="openAccountModal($event)"
+                            >
+                                <ng-container
+                                    *ngTemplateOutlet="
+                                        groupDetails;
+                                        context: {
+                                            $implicit: grp.childGroups,
+                                            padding: padding + 20,
+                                            isSubGroup: true
+                                        }
+                                    "
+                                >
+                                </ng-container>
+                            </section>
+                        </ng-container>
+                    </cdk-virtual-scroll-viewport>
+                </ng-template>
+                <ng-container
+                    *ngTemplateOutlet="
+                        groupDetails;
+                        context: {
+                            $implicit: data$.groupDetails | financialSearch : search,
+                            padding: 8,
+                            tbfrom: from,
+                            tbto: to
+                        }
+                    "
+                >
+                </ng-container>
+            </div>
+            <div class="table-responsive">
+                <table class="table basic mb-0 table-footer">
+                    <thead>
+                        <tr>
+                            <th width="33.5%;">
+                                <span>{{ localeData?.grand_total }}</span>
+                            </th>
+                            <th width="16.6%;" class="text-right">
+                                <span class="d-inline-flex">
+                                    <amount-field
+                                        [amount]="data$?.forwardedBalance?.amount"
+                                        [currencySymbol]="false"
+                                        [currencyCode]="false"
+                                    >
+                                    </amount-field>
+                                </span>
+                            </th>
+                            <th width="16.6%;" class="text-right">
+                                <span class="d-inline-flex">
+                                    <amount-field
+                                        [amount]="data$.debitTotal"
+                                        [currencySymbol]="false"
+                                        [currencyCode]="false"
+                                    >
+                                    </amount-field>
+                                </span>
+                            </th>
+                            <th width="16.6%;" class="text-right">
+                                <span class="d-inline-flex">
+                                    <amount-field
+                                        [amount]="data$.creditTotal"
+                                        [currencySymbol]="false"
+                                        [currencyCode]="false"
+                                    >
+                                    </amount-field>
+                                </span>
+                            </th>
+                            <th width="16.6%;" class="text-right">
+                                <span>
+                                    <span class="d-inline-flex">
+                                        <amount-field
+                                            [amount]="data$.closingBalance?.amount"
+                                            [currencySymbol]="false"
+                                            [currencyCode]="false"
+                                        >
+                                        </amount-field>
+                                    </span>
+                                </span>
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</ng-container>
+<ng-template #createNew>
+    <aside-menu-account
+        [activeGroupUniqueName]="activeGroupUniqueName"
+        [activeAccountDetails]="accountDetails"
+        [isUpdateAccount]="true"
+        class="account-aside-menu-state transform-inherit"
+        [commonLocaleData]="commonLocaleData"
+        (closeAsideEvent)="createNewAccountDialogRef?.close(); getUpdatedList(false)"
+        (getUpdateList)="getUpdatedList(true)"
+    >
+    </aside-menu-account>
+</ng-template>

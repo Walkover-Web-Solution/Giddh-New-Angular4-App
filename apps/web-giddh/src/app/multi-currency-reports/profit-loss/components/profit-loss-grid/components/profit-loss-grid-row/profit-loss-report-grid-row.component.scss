@@ -1,0 +1,12 @@
+.account {
+    div {
+        -webkit-line-clamp: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+.trial-balance-viewport {
+    background-color: var(--color-light-gray);
+}

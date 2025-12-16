@@ -1,0 +1,727 @@
+<div
+    appTranslate
+    [file]="'daybook'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
+    <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
+    <div *ngIf="!showLoader">
+        <div class="transactions-page position-relative clear-both">
+            <div class="d-flex align-items-center column-gap-1 p-3">
+                <div
+                    *ngIf="
+                        currentCompanyBranches?.length > 2 &&
+                        (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
+                    "
+                >
+                    <reactive-dropdown-field
+                        [options]="currentCompanyBranches"
+                        [(ngModel)]="currentBranch.uniqueName"
+                        [name]="'currentBranch'"
+                        (selectedOption)="handleBranchChange($event)"
+                        [placeholder]="localeData?.select_entity"
+                        [labelValue]="currentBranch?.name"
+                    ></reactive-dropdown-field>
+                </div>
+                <div class="custom-datepicker-wrapper">
+                    <div
+                        class="custom-datepicker"
+                        [matMenuTriggerFor]="universalDatepicker"
+                        #universalDatepickerTrigger="matMenuTrigger"
+                        role="button"
+                        aria-haspopup="true"
+                        aria-controls="universalDatepicker"
+                    >
+                        <input
+                            matInput
+                            type="text"
+                            name="selectedDateRange"
+                            [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                            class="giddh-datepicker date-range-picker"
+                            readonly
+                        />
+                    </div>
+                </div>
+                <div class="expand-collapse-btn">
+                    <button
+                        mat-stroked-button
+                        aria-label="expand icon"
+                        [matTooltip]="commonLocaleData?.app_expand_all"
+                        [matTooltipPosition]="'above'"
+                        (click)="toggleExpand()"
+                        class="btn-stroked-icon"
+                    >
+                        <span [ngClass]="isAllExpanded ? 'icon-collapse' : 'icon-expandIcon'"></span>
+                    </button>
+                </div>
+                <button *ngIf="showAdvanceSearchIcon" mat-stroked-button (click)="initialRequest()" class="mx-0">
+                    <span class="icon-cross icon-font-size-14"></span> {{ commonLocaleData?.app_clear_filter }}
+                </button>
+                <div class="d-flex align-items-center column-gap-1 ml-auto">
+                    <watch-video [cssClass]="'text-primary'" [moduleName]="'DAYBOOK'"></watch-video>
+                    <button
+                        [matTooltip]="commonLocaleData?.app_advance_search"
+                        [matTooltipPosition]="'above'"
+                        (click)="onOpenAdvanceSearch()"
+                        mat-raised-button
+                        color="primary"
+                    >
+                        <span class="pr-1">{{ commonLocaleData?.app_filter }}</span>
+                        <i class="icon-advance-filter"></i>
+                    </button>
+                    <button
+                        mat-raised-button
+                        color="primary"
+                        type="button"
+                        (click)="exportDaybook()"
+                        *ngIf="daybookData?.entries?.length > 0"
+                    >
+                        {{ commonLocaleData?.app_export }}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-fluid overflow-visible">
+            <div class="clear-both daybook-table overflow-visible">
+                <div class="clear-both trial-balance table-responsive overflow-visible">
+                    <table mat-table class="w-100" [dataSource]="daybookData?.entries" multiTemplateDataRows>
+                        <ng-container matColumnDef="entry_date">
+                            <th
+                                mat-header-cell
+                                [hidden]="!daybookData?.entries?.length"
+                                *matHeaderCellDef
+                                class="daybook-w-150"
+                            >
+                                {{ commonLocaleData?.app_date }}
+                            </th>
+                            <td
+                                mat-cell
+                                *matCellDef="let entry"
+                                class="daybook-w-150"
+                                [attr.data-title]="commonLocaleData?.app_date"
+                            >
+                                {{ entry.entryDate }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="particular">
+                            <th
+                                mat-header-cell
+                                [hidden]="!daybookData?.entries?.length"
+                                *matHeaderCellDef
+                                class="daybook-w-300"
+                            >
+                                {{ commonLocaleData?.app_particular }}
+                            </th>
+                            <td
+                                mat-cell
+                                *matCellDef="let entry"
+                                [attr.data-title]="commonLocaleData?.app_particular"
+                                class="daybook-w-300 cursor-pointer"
+                            >
+                                {{ entry.particular.name }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="voucher_name">
+                            <th
+                                mat-header-cell
+                                [hidden]="!daybookData?.entries?.length"
+                                *matHeaderCellDef
+                                class="daybook-w-200"
+                            >
+                                {{ localeData?.voucher_name }}
+                            </th>
+                            <td
+                                mat-cell
+                                *matCellDef="let entry"
+                                [attr.data-title]="localeData?.voucher_name"
+                                class="daybook-w-200"
+                            >
+                                {{ entry.voucherName }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="voucher_no">
+                            <th
+                                mat-header-cell
+                                [hidden]="!daybookData?.entries?.length"
+                                *matHeaderCellDef
+                                class="text-right daybook-w-150"
+                            >
+                                {{ localeData?.voucher_no }}
+                            </th>
+                            <td
+                                mat-cell
+                                *matCellDef="let entry"
+                                class="text-right daybook-w-150"
+                                [attr.data-title]="localeData?.voucher_no"
+                            >
+                                {{
+                                    entry.voucherNo
+                                        ? entry.voucherNo
+                                        : entry.voucherName === "purchase"
+                                        ? commonLocaleData?.app_not_available
+                                        : ""
+                                }}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="debit_amount">
+                            <th
+                                mat-header-cell
+                                [hidden]="!daybookData?.entries?.length"
+                                *matHeaderCellDef
+                                class="text-right daybook-w-150"
+                            >
+                                {{ localeData?.debit_amount }}
+                            </th>
+                            <td
+                                mat-cell
+                                *matCellDef="let entry"
+                                class="text-right daybook-w-150"
+                                [attr.data-title]="localeData?.debit_amount"
+                            >
+                                <span class="d-flex justify-content-end">
+                                    <amount-field
+                                        [amount]="entry.debitAmount || 0"
+                                        [currencySymbol]="false"
+                                        [currencyCode]="false"
+                                    >
+                                    </amount-field>
+                                </span>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="credit_amount">
+                            <th
+                                mat-header-cell
+                                [hidden]="!daybookData?.entries?.length"
+                                *matHeaderCellDef
+                                class="text-right daybook-w-150"
+                            >
+                                {{ localeData?.credit_amount }}
+                            </th>
+                            <td
+                                mat-cell
+                                *matCellDef="let entry"
+                                class="text-right daybook-w-150"
+                                [attr.data-title]="localeData?.credit_amount"
+                            >
+                                <span class="d-flex justify-content-end">
+                                    <amount-field
+                                        [amount]="entry.creditAmount || 0"
+                                        [currencySymbol]="false"
+                                        [currencyCode]="false"
+                                    >
+                                    </amount-field>
+                                </span>
+                            </td>
+                        </ng-container>
+                        <ng-container *ngIf="isEntryExpanded" matColumnDef="product_service">
+                            <th
+                                mat-header-cell
+                                [hidden]="!daybookData?.entries?.length"
+                                *matHeaderCellDef
+                                class="daybook-w-200"
+                            >
+                                {{ localeData?.product_service }}
+                            </th>
+                            <td
+                                mat-cell
+                                *matCellDef="let entry"
+                                [attr.data-title]="localeData?.product_service"
+                                class="daybook-w-200"
+                            ></td>
+                        </ng-container>
+                        <ng-container *ngIf="isEntryExpanded" matColumnDef="quantity">
+                            <th
+                                mat-header-cell
+                                [hidden]="!daybookData?.entries?.length"
+                                class="text-right daybook-w-100"
+                                *matHeaderCellDef
+                            >
+                                {{ localeData?.qty }}
+                            </th>
+                            <td
+                                mat-cell
+                                *matCellDef="let entry"
+                                class="text-right daybook-w-100"
+                                [attr.data-title]="localeData?.qty"
+                            ></td>
+                        </ng-container>
+                        <ng-container *ngIf="isEntryExpanded" matColumnDef="unit">
+                            <th
+                                mat-header-cell
+                                [hidden]="!daybookData?.entries?.length"
+                                *matHeaderCellDef
+                                class="daybook-w-100"
+                            >
+                                {{ commonLocaleData?.app_unit }}
+                            </th>
+                            <td
+                                mat-cell
+                                *matCellDef="let entry"
+                                [attr.data-title]="commonLocaleData?.app_unit"
+                                class="daybook-w-100"
+                            ></td>
+                        </ng-container>
+                        <ng-container *ngIf="isEntryExpanded" matColumnDef="rate">
+                            <th
+                                mat-header-cell
+                                [hidden]="!daybookData?.entries?.length"
+                                class="text-right daybook-w-150"
+                                *matHeaderCellDef
+                            >
+                                {{ commonLocaleData?.app_rate }}
+                            </th>
+                            <td
+                                mat-cell
+                                *matCellDef="let entry"
+                                class="text-right daybook-w-150"
+                                [attr.data-title]="commonLocaleData?.app_rate"
+                            ></td>
+                        </ng-container>
+                        <ng-container *ngIf="isEntryExpanded" matColumnDef="hsn_sac">
+                            <th
+                                mat-header-cell
+                                [hidden]="!daybookData?.entries?.length"
+                                *matHeaderCellDef
+                                class="daybook-w-100"
+                            >
+                                {{ commonLocaleData?.app_hsn_sac }}
+                            </th>
+                            <td
+                                mat-cell
+                                *matCellDef="let entry"
+                                [attr.data-title]="commonLocaleData?.app_hsn_sac"
+                                class="daybook-w-100"
+                            ></td>
+                        </ng-container>
+                        <ng-container *ngIf="isEntryExpanded" matColumnDef="sku">
+                            <th
+                                mat-header-cell
+                                [hidden]="!daybookData?.entries?.length"
+                                *matHeaderCellDef
+                                class="daybook-w-100"
+                            >
+                                {{ commonLocaleData?.app_sku }}
+                            </th>
+                            <td
+                                mat-cell
+                                *matCellDef="let entry"
+                                [attr.data-title]="commonLocaleData?.app_sku"
+                                class="daybook-w-100"
+                            ></td>
+                        </ng-container>
+                        <ng-container *ngIf="isEntryExpanded" matColumnDef="warehouse">
+                            <th
+                                mat-header-cell
+                                [hidden]="!daybookData?.entries?.length"
+                                *matHeaderCellDef
+                                class="daybook-w-200"
+                            >
+                                {{ commonLocaleData?.app_warehouse }}
+                            </th>
+                            <td
+                                mat-cell
+                                *matCellDef="let entry"
+                                [attr.data-title]="commonLocaleData?.app_warehouse"
+                                class="daybook-w-200"
+                            ></td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="expandedDetail">
+                            <td
+                                mat-cell
+                                class="p-0 w-100 child-td"
+                                *matCellDef="let entry"
+                                [hidden]="!entry.isExpanded"
+                                [attr.colspan]="isEntryExpanded ? tableAllColumns?.length : tableColumns?.length"
+                            >
+                                <div class="d-flex overflow-hidden">
+                                    <div class="w-100" *ngIf="entry.isExpanded && entry.otherTransactions?.length">
+                                        <table
+                                            class="w-100 nested-table"
+                                            mat-table
+                                            [dataSource]="entry.otherTransactions"
+                                        >
+                                            <ng-container matColumnDef="expanded_entry_date">
+                                                <th
+                                                    mat-header-cell
+                                                    [hidden]="true"
+                                                    *matHeaderCellDef
+                                                    class="daybook-w-100"
+                                                ></th>
+                                                <td
+                                                    mat-cell
+                                                    *matCellDef="let details"
+                                                    class="hide-td daybook-w-100"
+                                                ></td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="expanded_particular">
+                                                <th
+                                                    mat-header-cell
+                                                    [hidden]="true"
+                                                    *matHeaderCellDef
+                                                    class="daybook-w-300"
+                                                ></th>
+                                                <td
+                                                    mat-cell
+                                                    *matCellDef="let details"
+                                                    [attr.data-title]="commonLocaleData?.app_particular"
+                                                    class="daybook-w-300"
+                                                >
+                                                    {{ details.particular.name }}
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="expanded_voucher_name">
+                                                <th
+                                                    mat-header-cell
+                                                    [hidden]="true"
+                                                    *matHeaderCellDef
+                                                    class="daybook-w-200"
+                                                ></th>
+                                                <td
+                                                    mat-cell
+                                                    *matCellDef="let details"
+                                                    class="hide-td daybook-w-200"
+                                                ></td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="expanded_voucher_no">
+                                                <th
+                                                    mat-header-cell
+                                                    [hidden]="true"
+                                                    *matHeaderCellDef
+                                                    class="daybook-w-150"
+                                                ></th>
+                                                <td
+                                                    mat-cell
+                                                    *matCellDef="let details"
+                                                    class="hide-td daybook-w-150"
+                                                ></td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="expanded_debit_amount">
+                                                <th
+                                                    mat-header-cell
+                                                    [hidden]="true"
+                                                    *matHeaderCellDef
+                                                    class="text-right daybook-w-150"
+                                                ></th>
+                                                <td
+                                                    mat-cell
+                                                    *matCellDef="let details"
+                                                    class="text-right daybook-w-150"
+                                                    [attr.data-title]="localeData?.debit_amount"
+                                                >
+                                                    <span *ngIf="details.type === 'DEBIT'">
+                                                        <span class="d-flex justify-content-end">
+                                                            <amount-field
+                                                                [amount]="details.amount || 0"
+                                                                [currencySymbol]="false"
+                                                                [currencyCode]="false"
+                                                            >
+                                                            </amount-field>
+                                                        </span>
+                                                    </span>
+                                                    <span *ngIf="details.type !== 'DEBIT'">-</span>
+                                                </td>
+                                            </ng-container>
+                                            <ng-container matColumnDef="expanded_credit_amount">
+                                                <th
+                                                    mat-header-cell
+                                                    [hidden]="true"
+                                                    *matHeaderCellDef
+                                                    class="text-right daybook-w-150"
+                                                ></th>
+                                                <td
+                                                    mat-cell
+                                                    *matCellDef="let details"
+                                                    class="text-right daybook-w-150"
+                                                    [attr.data-title]="localeData?.credit_amount"
+                                                >
+                                                    <span *ngIf="details.type === 'CREDIT'">
+                                                        <span class="d-flex justify-content-end">
+                                                            <amount-field
+                                                                [amount]="details.amount || 0"
+                                                                [currencySymbol]="false"
+                                                                [currencyCode]="false"
+                                                            >
+                                                            </amount-field>
+                                                        </span>
+                                                    </span>
+                                                    <span *ngIf="details.type !== 'CREDIT'">-</span>
+                                                </td>
+                                            </ng-container>
+                                            <ng-container
+                                                *ngIf="isEntryExpanded"
+                                                matColumnDef="expanded_product_service"
+                                            >
+                                                <th
+                                                    mat-header-cell
+                                                    [hidden]="true"
+                                                    *matHeaderCellDef
+                                                    class="daybook-w-200"
+                                                ></th>
+                                                <td
+                                                    mat-cell
+                                                    *matCellDef="let details"
+                                                    [attr.data-title]="localeData?.product_service"
+                                                    class="daybook-w-200"
+                                                >
+                                                    {{ details?.inventory?.stock?.name }}
+                                                </td>
+                                            </ng-container>
+                                            <ng-container *ngIf="isEntryExpanded" matColumnDef="expanded_quantity">
+                                                <th
+                                                    mat-header-cell
+                                                    [hidden]="true"
+                                                    *matHeaderCellDef
+                                                    class="text-right daybook-w-100"
+                                                ></th>
+                                                <td
+                                                    mat-cell
+                                                    *matCellDef="let details"
+                                                    class="text-right daybook-w-100"
+                                                    [attr.data-title]="localeData?.qty"
+                                                >
+                                                    {{
+                                                        details.inventory
+                                                            ? (details.inventory.quantity | giddhNumberFormat)
+                                                            : "-"
+                                                    }}
+                                                </td>
+                                            </ng-container>
+                                            <ng-container *ngIf="isEntryExpanded" matColumnDef="expanded_unit">
+                                                <th
+                                                    mat-header-cell
+                                                    [hidden]="true"
+                                                    *matHeaderCellDef
+                                                    class="daybook-w-100"
+                                                ></th>
+                                                <td
+                                                    mat-cell
+                                                    *matCellDef="let details"
+                                                    [attr.data-title]="commonLocaleData?.app_unit"
+                                                    class="daybook-w-100"
+                                                >
+                                                    {{ details?.inventory?.unit?.name }}
+                                                </td>
+                                            </ng-container>
+                                            <ng-container *ngIf="isEntryExpanded" matColumnDef="expanded_rate">
+                                                <th
+                                                    mat-header-cell
+                                                    [hidden]="true"
+                                                    *matHeaderCellDef
+                                                    class="text-right daybook-w-150"
+                                                ></th>
+                                                <td
+                                                    mat-cell
+                                                    *matCellDef="let details"
+                                                    class="text-right daybook-w-150"
+                                                    [attr.data-title]="commonLocaleData?.app_rate"
+                                                >
+                                                    <span class="d-flex justify-content-end" *ngIf="details.inventory">
+                                                        <amount-field
+                                                            [amount]="details.inventory.rate"
+                                                            [currencySymbol]="false"
+                                                            [currencyCode]="false"
+                                                        >
+                                                        </amount-field>
+                                                    </span>
+                                                    <span *ngIf="!details.inventory" class="text-right">-</span>
+                                                </td>
+                                            </ng-container>
+                                            <ng-container *ngIf="isEntryExpanded" matColumnDef="expanded_hsn_sac">
+                                                <th
+                                                    mat-header-cell
+                                                    [hidden]="true"
+                                                    *matHeaderCellDef
+                                                    class="daybook-w-100"
+                                                ></th>
+                                                <td
+                                                    mat-cell
+                                                    *matCellDef="let details"
+                                                    [attr.data-title]="commonLocaleData?.app_hsn_sac"
+                                                    class="daybook-w-100"
+                                                >
+                                                    {{ details?.inventory?.hsnNumber || details?.inventory?.sacNumber }}
+                                                </td>
+                                            </ng-container>
+                                            <ng-container *ngIf="isEntryExpanded" matColumnDef="expanded_sku">
+                                                <th
+                                                    mat-header-cell
+                                                    [hidden]="true"
+                                                    *matHeaderCellDef
+                                                    class="daybook-w-100"
+                                                ></th>
+                                                <td
+                                                    mat-cell
+                                                    *matCellDef="let details"
+                                                    [attr.data-title]="commonLocaleData?.app_sku"
+                                                    class="daybook-w-100"
+                                                >
+                                                    {{ details?.inventory?.skuCode }}
+                                                </td>
+                                            </ng-container>
+                                            <ng-container *ngIf="isEntryExpanded" matColumnDef="expanded_warehouse">
+                                                <th
+                                                    mat-header-cell
+                                                    [hidden]="true"
+                                                    *matHeaderCellDef
+                                                    class="daybook-w-200"
+                                                ></th>
+                                                <td
+                                                    mat-cell
+                                                    *matCellDef="let details"
+                                                    class="warehouse-name daybook-w-200"
+                                                    [attr.data-title]="commonLocaleData?.app_warehouse"
+                                                >
+                                                    {{ details?.inventory?.warehouse?.name }}
+                                                </td>
+                                            </ng-container>
+                                            <tr
+                                                mat-header-row
+                                                [hidden]="true"
+                                                *matHeaderRowDef="
+                                                    isEntryExpanded ? tableExpandedAllColumns : tableExpandedColumns
+                                                "
+                                            ></tr>
+                                            <tr
+                                                mat-row
+                                                *matRowDef="
+                                                    let entry;
+                                                    columns: isEntryExpanded
+                                                        ? tableExpandedAllColumns
+                                                        : tableExpandedColumns
+                                                "
+                                            ></tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </td>
+                        </ng-container>
+
+                        <tr
+                            mat-header-row
+                            *matHeaderRowDef="isEntryExpanded ? tableAllColumns : tableColumns; sticky: true"
+                        ></tr>
+                        <tr
+                            mat-row
+                            *matRowDef="let entry; columns: isEntryExpanded ? tableAllColumns : tableColumns"
+                            (click)="expandEntry(entry)"
+                            (touchend)="showUpdateLedgerModalIpad(entry)"
+                            (dblclick)="showUpdateLedgerModal(entry)"
+                            (keydown.enter)="showUpdateLedgerModal(entry)"
+                        ></tr>
+                        <tr
+                            mat-row
+                            *matRowDef="let entry; columns: ['expandedDetail']"
+                            [ngClass]="{
+                                'daybook-other-transactions': true,
+                                'border-none':
+                                    !entry.isExpanded || (entry.isExpanded && entry.otherTransactions?.length === 1)
+                            }"
+                            [hidden]="!entry.isExpanded"
+                        ></tr>
+                    </table>
+                </div>
+                <mat-paginator
+                    *ngIf="daybookData?.totalItems > pageSizeOptions[0]"
+                    [length]="daybookData?.totalItems"
+                    [pageSize]="daybookData?.count"
+                    [pageSizeOptions]="pageSizeOptions"
+                    [pageIndex]="daybookData?.page - 1"
+                    (page)="handlePageEvent($event)"
+                    [hidePageSize]="false"
+                    [showFirstLastButtons]="true"
+                >
+                </mat-paginator>
+                <section class="mb-custom-80"></section>
+            </div>
+            <div class="no-data" *ngIf="!daybookData?.entries?.length">
+                <no-data></no-data>
+            </div>
+        </div>
+    </div>
+
+    <!-- Advance search popup -->
+    <ng-template #advanceSearchModal>
+        <daybook-advance-search-model
+            [startDate]="daybookQueryRequest.from"
+            [endDate]="daybookQueryRequest.to"
+            [localeData]="localeData"
+            [commonLocaleData]="commonLocaleData"
+            [searchFilterData]="searchFilterData"
+            (closeModelEvent)="closeAdvanceSearchPopup($event)"
+        >
+        </daybook-advance-search-model>
+    </ng-template>
+    <!-- ./Advance  search popup -->
+
+    <!-- export ladger popup -->
+    <ng-template #exportDaybookModal>
+        <export-daybook
+            [localeData]="localeData"
+            [commonLocaleData]="commonLocaleData"
+            (closeExportDaybookModal)="hideExportDaybookModal($event)"
+        ></export-daybook>
+    </ng-template>
+    <!-- ./ export ladger popup -->
+    <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+        <ng-template matMenuContent>
+            <app-datepicker-wrapper
+                [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate"
+                [alwaysShowCalendars]="true"
+                [ranges]="datePickerOptions"
+                [selectedRangeLabel]="selectedRangeLabel"
+                [showCustomRangeLabel]="true"
+                [showClearButton]="false"
+                [showCancel]="true"
+                [linkedCalendars]="true"
+                [showDropdowns]="true"
+                (rangeClicked)="dateSelectedCallback($event)"
+                (datesUpdated)="dateSelectedCallback($event)"
+                (closeCalender)="toggleGiddhDatepicker(false)"
+                [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false"
+            ></app-datepicker-wrapper>
+        </ng-template>
+    </mat-menu>
+</div>
+
+<!-- update ladger entry popup -->
+<ng-template #updateLedgerModal>
+    <update-ledger-entry-panel
+        [isPettyCash]="false"
+        (closeUpdateLedgerModal)="hideUpdateLedgerModal()"
+        (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane()"
+        [entrySide]="entrySide"
+        [activeCompany]="activeCompany"
+        (showQuickAccountModalFromUpdateLedger)="toggleAsidePane()"
+        [isDaybook]="true"
+    ></update-ledger-entry-panel>
+</ng-template>
+
+<!-- aside menu section -->
+<ng-template #ledgerAsidePane>
+    <ledger-aside-pane
+        [keyboardShortcut]="'esc'"
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+        (onShortcutPress)="ledgerAsidePaneModal?.close()"
+        (closeAsideEvent)="ledgerAsidePaneModal?.close()"
+    >
+    </ledger-aside-pane>
+</ng-template>
+
+<!-- aside menu section -->
+<ng-template #asideMenuStateForOtherTaxes>
+    <app-aside-menu-sales-other-taxes
+        [class]="asideMenuStateForOtherTaxes"
+        [taxes]="companyTaxesList"
+        [otherTaxesModal]="updateLedgerComponent?.vm?.selectedLedger?.otherTaxModal"
+        [commonLocaleData]="commonLocaleData"
+        (closeModal)="asideMenuStateForOtherTaxesDialogRef.close()"
+        (applyTaxes)="calculateOtherTaxes($event); asideMenuStateForOtherTaxesDialogRef.close()"
+    >
+    </app-aside-menu-sales-other-taxes>
+</ng-template>

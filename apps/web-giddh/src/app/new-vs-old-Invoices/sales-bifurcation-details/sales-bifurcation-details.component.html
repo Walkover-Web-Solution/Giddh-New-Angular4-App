@@ -1,0 +1,221 @@
+<div
+    appTranslate
+    (commonLocaleData)="commonLocaleData = $event"
+    [keyboardShortcut]="'esc'"
+    (onShortcutPress)="closeDialog()"
+>
+    <div class="dialog-header">
+        <p class="modal-title">
+            {{
+                salesBifurcationDetailsData?.subType === salesBifurcationDetailsActionEnum.Client
+                    ? commonLocaleData?.app_client
+                    : commonLocaleData?.app_invoice
+            }}
+            details
+        </p>
+        <i (click)="closeDialog()" aria-label="close icon" class="icon-cross cursor-pointer"></i>
+    </div>
+    <mat-dialog-content class="dialog-content">
+        <div class="d-flex mb-3 p-0 align-items-center">
+            <mat-form-field class="w-100" appearance="outline">
+                <mat-label>
+                    {{ commonLocaleData?.app_search }}
+                </mat-label>
+                <input
+                    matInput
+                    tabindex="1"
+                    #nameField
+                    type="text"
+                    name="name"
+                    [autofocus]="true"
+                    [formControl]="searchValue"
+                    [placeholder]="
+                        salesBifurcationDetailsData?.subType === salesBifurcationDetailsActionEnum.Client
+                            ? commonLocaleData?.app_search_by_name_and_unique_name
+                            : commonLocaleData?.app_search_by_invoice_number_customer_name_and_amount
+                    "
+                />
+                <button
+                    mat-icon-button
+                    matSuffix
+                    tabindex="-1"
+                    aria-label="Search or Clear"
+                    (click)="searchValue?.value ? searchValue.setValue('') : null"
+                >
+                    <i [ngClass]="searchValue?.value ? 'icon-cross font-size-16' : 'icon-search font-size-16'"></i>
+                </button>
+            </mat-form-field>
+            <div *ngIf="showClearFilter">
+                <a
+                    class="cursor-pointer refresh-button p-2 ml-2"
+                    (click)="resetFilter()"
+                    matTooltip="{{ commonLocaleData?.app_reset_filter }}"
+                >
+                    <span class="icon-refresh"></span>
+                </a>
+            </div>
+        </div>
+        <giddh-page-loader *ngIf="salesBifurcationDetailsListInProgress$ | async" class="mt-5"></giddh-page-loader>
+        <section
+            class="table-responsive mt-3"
+            *ngIf="
+                !(salesBifurcationDetailsListInProgress$ | async) &&
+                salesBifurcationDetailsData?.subType === salesBifurcationDetailsActionEnum.Client &&
+                (salesBifurcationDetailsList$ | async)?.clientDetails?.length > 0
+            "
+        >
+            <table
+                class="giddh-table table border"
+                mat-table
+                [dataSource]="(salesBifurcationDetailsList$ | async)?.clientDetails"
+            >
+                <!-- Name Column -->
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef width="30%">
+                        <span class="pl-3">{{ commonLocaleData?.app_name }}</span>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        <span class="text-transform-none pl-3">{{ element.name }}</span>
+                    </td>
+                </ng-container>
+                <!-- Email Column -->
+                <ng-container matColumnDef="uniqueName">
+                    <th mat-header-cell *matHeaderCellDef width="25%">{{ commonLocaleData?.app_unique_name }}</th>
+                    <td mat-cell *matCellDef="let element" class="text-lowercase">{{ element.uniqueName }}</td>
+                </ng-container>
+                <!-- Action Column -->
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>&nbsp;</th>
+                    <td mat-cell *matCellDef="let element; let i = index" class="text-right">
+                        <app-action-menu
+                            [account]="element"
+                            [isTabletScreen]="isTabletScreen"
+                            [commonLocaleData]="commonLocaleData"
+                            [showGotoLedger]="true"
+                            [showGenerateInvoice]="true"
+                            [showSendEmail]="true"
+                            (sendEmail)="sendEmailSuccess($event)"
+                            [activeRowIndex]="activeRowIndex"
+                            [rowIndex]="i"
+                            [useRowIndexVisibility]="true"
+                            (editAccount)="updateAccount()"
+                            [fromDate]="goToLedgerDateRangeFrom"
+                            [toDate]="goToLedgerDateRangeTo"
+                        >
+                        </app-action-menu>
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="clientDisplayedColumns; sticky: true"></tr>
+                <tr
+                    mat-row
+                    *matRowDef="let rowHistory; columns: clientDisplayedColumns; let i = index"
+                    (mouseover)="activeRowIndex = i"
+                    (mouseout)="activeRowIndex = -1"
+                ></tr>
+            </table>
+            <mat-paginator
+                *ngIf="
+                    !(salesBifurcationDetailsListInProgress$ | async) &&
+                    (salesBifurcationDetailsList$ | async)?.totalItems > pageSizeOptions[0]
+                "
+                (page)="handlePageChange($event)"
+                [length]="(salesBifurcationDetailsList$ | async)?.totalItems"
+                [pageSize]="requestParams.count"
+                [showFirstLastButtons]="true"
+                [pageSizeOptions]="pageSizeOptions"
+                [hidePageSize]="false"
+                [pageIndex]="requestParams.page - 1"
+            ></mat-paginator>
+            <section class="mb-custom-80"></section>
+        </section>
+
+        <section
+            class="table-responsive mt-3"
+            *ngIf="
+                !(salesBifurcationDetailsListInProgress$ | async) &&
+                salesBifurcationDetailsData?.subType === salesBifurcationDetailsActionEnum.Invoice &&
+                (salesBifurcationDetailsList$ | async)?.invoiceDetails?.length > 0
+            "
+        >
+            <table
+                class="giddh-table table border"
+                mat-table
+                matSort
+                (matSortChange)="sortChange($event)"
+                [matSortActive]="requestParams?.sortBy"
+                [matSortDirection]="requestParams?.sort"
+                [dataSource]="salesBifurcationDetailsInvoiceList"
+            >
+                <!-- Date Column -->
+                <ng-container matColumnDef="date">
+                    <th mat-header-cell *matHeaderCellDef width="20%" mat-sort-header>
+                        <span class="pl-3">{{ commonLocaleData?.app_date }}</span>
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        <span class="pl-3"> {{ element.date }}</span>
+                    </td>
+                </ng-container>
+                <!-- Invoice Number Column -->
+                <ng-container matColumnDef="invoiceNumber">
+                    <th mat-header-cell *matHeaderCellDef width="20%">
+                        {{ commonLocaleData?.app_invoice_number }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        <a href="javascript:void(0);" (click)="openInvoice(attachments, element)">{{
+                            element.invoiceNumber
+                        }}</a>
+                    </td>
+                </ng-container>
+                <!-- Customer Name Column -->
+                <ng-container matColumnDef="customerName">
+                    <th mat-header-cell *matHeaderCellDef width="20%">{{ commonLocaleData?.app_customer_name }}</th>
+                    <td mat-cell *matCellDef="let element" class="white-space-normal">{{ element.customerName }}</td>
+                </ng-container>
+                <!-- Amount Column -->
+                <ng-container matColumnDef="amount">
+                    <th mat-header-cell *matHeaderCellDef width="20%" mat-sort-header>
+                        {{ commonLocaleData?.app_amount }}
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        <amount-field [amount]="element.amount" [currencySymbol]="false" [currencyCode]="false">
+                        </amount-field>
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="invoiceDisplayedColumns; sticky: true"></tr>
+                <tr
+                    mat-row
+                    *matRowDef="let rowHistory; columns: invoiceDisplayedColumns; let i = index"
+                    (mouseover)="activeRowIndex = i"
+                    (mouseout)="activeRowIndex = -1"
+                ></tr>
+            </table>
+            <mat-paginator
+                *ngIf="
+                    !(salesBifurcationDetailsListInProgress$ | async) &&
+                    (salesBifurcationDetailsList$ | async)?.totalItems > pageSizeOptions[0]
+                "
+                (page)="handlePageChange($event)"
+                [length]="(salesBifurcationDetailsList$ | async)?.totalItems"
+                [pageSize]="requestParams.count"
+                [showFirstLastButtons]="true"
+                [pageSizeOptions]="pageSizeOptions"
+                [hidePageSize]="false"
+                [pageIndex]="requestParams.page - 1"
+            ></mat-paginator>
+            <section class="mb-custom-80"></section>
+        </section>
+        <div
+            class="mt-4 no-data-found text-center"
+            *ngIf="
+                !(salesBifurcationDetailsListInProgress$ | async) &&
+                (salesBifurcationDetailsList$ | async)?.totalItems <= 0
+            "
+        >
+            <img src="{{ imgPath }}search-data-not-found.svg" alt="result not found" /><br />
+            {{ commonLocaleData?.app_no_result_found }}
+        </div>
+    </mat-dialog-content>
+</div>
+<ng-template #attachments>
+    <attachments [selectedItem]="selectedItem" (isDeletedAccount)="isDeletedAccount($event)"></attachments>
+</ng-template>

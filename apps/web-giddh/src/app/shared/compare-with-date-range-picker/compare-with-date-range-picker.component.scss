@@ -1,0 +1,16 @@
+.compare-with-wrapper {
+    min-width: 200px;
+}
+
+.compare-with-menu {
+    width: 310px;
+    max-width: 310px;
+    max-height: 90vh;
+
+    .mdc-list-item {
+
+        &.active-option {
+            border-left-color: 3px solid var(--theme-primary-color);
+        }
+    }
+}

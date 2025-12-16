@@ -1,0 +1,89 @@
+:host ::ng-deep .table-container {
+    padding: 0;
+}
+
+:host ::ng-deep {
+    .table-container {
+        .profit-loss {
+            section {
+                >div {
+                    >div {
+                        min-width: 275px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+:host ::ng-deep .basic {
+    margin-bottom: 0;
+}
+
+:host ::ng-deep .table-container thead tr th:first-child {
+    border-left: 0;
+}
+
+:host ::ng-deep .basic > thead > tr > th {
+    padding: 8px 8px;
+}
+
+:host ::ng-deep .table-container section div .group {
+    text-transform: capitalize;
+}
+
+:host ::ng-deep .table-container div.row {
+    border-bottom: 0;
+}
+.pl-table-grid {
+    th {
+        border: none !important;
+        border-bottom: 1px solid var(--border-color) !important;
+        padding: 13px 5px 14px 0 !important;
+        min-width: 275px;
+
+        &:first-child {
+            padding: 0 !important;
+            min-width: 300px;
+            max-width: 300px;
+            width: 300px;
+        }
+
+        input {
+            height: 47px;
+        }
+    }
+}
+.tb-wrapper {
+    width: 100%;
+    max-width: 70%;
+    overflow: auto;
+    margin: auto;
+}
+.account {
+    .col {
+        min-width: 275px;
+        padding-block: 10px;
+        background: var(--color-light-gray);
+        color: var(--color-black);
+    }
+}
+
+.pl-content-width {
+    min-width: 275px;
+    min-height: 38px;
+}
+
+.row-height {
+    min-height: 37px;
+}
+
+@media (max-width: 1024px) {
+    .tb-wrapper {
+        width: 100%;
+        margin: auto;
+        .table-container {
+            overflow-x: auto;
+        }
+    }
+}

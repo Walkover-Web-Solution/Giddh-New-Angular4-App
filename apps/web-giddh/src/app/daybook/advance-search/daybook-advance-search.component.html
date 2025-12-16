@@ -1,0 +1,476 @@
+<section>
+    <div class="dialog-header">
+        <span>{{ commonLocaleData?.app_advance_search }}</span>
+        <button mat-icon-button aria-label="close" (click)="onCancel()">
+            <i class="icon-cross"></i>
+        </button>
+    </div>
+    <mat-dialog-content class="dialog-body max-height-80vh">
+        <form [formGroup]="advanceSearchForm" class="daybook-advance-search theme-foreground-color">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12">
+                    <div class="row">
+                        <div class="col-sm-3 col-xs-12">
+                            <label>{{ commonLocaleData?.app_date_range }}</label>
+                        </div>
+                        <div class="col-sm-9 col-xs-12 custom-datepicker-wrapper">
+                            <div
+                                class="custom-datepicker"
+                                [matMenuTriggerFor]="universalDatepicker"
+                                #universalDatepickerTrigger="matMenuTrigger"
+                                role="button"
+                                aria-haspopup="true"
+                                aria-controls="universalDatepicker"
+                            >
+                                <input
+                                    matInput
+                                    type="text"
+                                    name="selectedDateRange"
+                                    [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                    class="giddh-datepicker date-range-picker"
+                                    readonly
+                                />
+                            </div>
+                            <mat-menu
+                                #universalDatepicker="matMenu"
+                                class="universal-datepicker-menu-panel"
+                                xPosition="after"
+                            >
+                                <ng-template matMenuContent>
+                                    <app-datepicker-wrapper
+                                        [inputStartDate]="selectedDateRange?.startDate"
+                                        [inputEndDate]="selectedDateRange?.endDate"
+                                        [alwaysShowCalendars]="true"
+                                        [ranges]="datePickerOptions"
+                                        [selectedRangeLabel]="selectedRangeLabel"
+                                        [showCustomRangeLabel]="true"
+                                        [showClearButton]="false"
+                                        [showCancel]="true"
+                                        [linkedCalendars]="true"
+                                        [showDropdowns]="true"
+                                        (rangeClicked)="dateSelectedCallback($event)"
+                                        (datesUpdated)="dateSelectedCallback($event)"
+                                        (closeCalender)="toggleGiddhDatepicker(false)"
+                                        [keepCalendarOpeningWithRange]="false"
+                                        [showRangeLabelOnInput]="false"
+                                    ></app-datepicker-wrapper>
+                                </ng-template>
+                            </mat-menu>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-12 mt-4 pt-4 border-top">
+                    <div class="row">
+                        <div class="col-sm-5 col-xs-12">
+                            <label>{{ commonLocaleData?.app_particulars }}</label>
+                            <p>
+                                <small>{{ localeData?.accounts_selected_message }}</small>
+                            </p>
+                        </div>
+                        <div class="col-sm-7 col-xs-12">
+                            <div class="row">
+                                <div class="col-3">
+                                    <mat-slide-toggle
+                                        color="primary"
+                                        formControlName="includeParticulars"
+                                        class="mt-2"
+                                    >
+                                        <span
+                                            class="pull-left"
+                                            *ngIf="advanceSearchForm.get('includeParticulars')?.value"
+                                            >{{ commonLocaleData?.app_include }}</span
+                                        >
+                                        <span
+                                            class="pull-right"
+                                            *ngIf="!advanceSearchForm.get('includeParticulars')?.value"
+                                            >{{ commonLocaleData?.app_exclude }}</span
+                                        >
+                                    </mat-slide-toggle>
+                                </div>
+                                <div class="col-9">
+                                    <div class="form-group">
+                                        <select-multiple-fields
+                                            [name]="'particulars'"
+                                            [appearance]="'outline'"
+                                            [label]="commonLocaleData?.app_select_accounts"
+                                            [placeholder]="commonLocaleData?.app_select"
+                                            [commonLocaleData]="commonLocaleData"
+                                            [showMatLabel]="true"
+                                            [options]="accounts$ | async"
+                                            [chipListUniqueName]="advanceSearchForm?.controls['particulars']?.value" 
+                                            (selectedOptionUniqueName)="advanceSearchForm?.controls['particulars']?.patchValue($event)"
+                                            (selectedOption)="advanceSearchForm?.controls['defaultParticularsLabel']?.patchValue($event)"
+                                            [selectedValues]="advanceSearchForm?.controls['defaultParticularsLabel']?.value"
+                                            [enableDynamicSearch]="true"
+                                            (scrollEnd)="handleScrollEnd()"
+                                            (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
+                                        ></select-multiple-fields>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-12">
+                    <div class="row">
+                        <div class="col-sm-5 col-xs-12">
+                            <label>{{ commonLocaleData?.app_voucher_type }}</label>
+                            <p>
+                                <small>{{ localeData?.vouchers_selected_message }}</small>
+                            </p>
+                        </div>
+                        <div class="col-sm-7 col-xs-12">
+                            <div class="row">
+                                <div class="col-3">
+                                    <mat-slide-toggle
+                                        color="primary"
+                                        formControlName="includeVouchers"
+                                        class="mt-2"
+                                    >
+                                        <span
+                                            class="pull-left"
+                                            *ngIf="advanceSearchForm.get('includeVouchers')?.value"
+                                            >{{ commonLocaleData?.app_include }}</span
+                                        >
+                                        <span
+                                            class="pull-right"
+                                            *ngIf="!advanceSearchForm.get('includeVouchers')?.value"
+                                            >{{ commonLocaleData?.app_exclude }}</span
+                                        >
+                                    </mat-slide-toggle>
+                                </div>
+                                <div class="col-9">
+                                    <div class="form-group">
+                                        <select-multiple-fields
+                                            [name]="'vouchers'"
+                                            [appearance]="'outline'"
+                                            [label]="commonLocaleData?.app_voucher_type"
+                                            [placeholder]="commonLocaleData?.app_select"
+                                            [commonLocaleData]="commonLocaleData"
+                                            [showMatLabel]="true"
+                                            [options]="voucherTypeList | async"
+                                            [chipListUniqueName]="advanceSearchForm?.controls['vouchers']?.value" 
+                                            (selectedOptionUniqueName)="advanceSearchForm?.controls['vouchers']?.patchValue($event)"
+                                            (selectedOption)="advanceSearchForm?.controls['defaultVouchersLabel']?.patchValue($event)"
+                                            [selectedValues]="advanceSearchForm?.controls['defaultVouchersLabel']?.value"
+                                        ></select-multiple-fields>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-12 mt-4 pt-4 border-top">
+                    <div class="row">
+                        <div class="col-sm-5 col-xs-12">
+                            <label>{{ localeData?.tags }}</label>
+                        </div>
+                        <div class="col-sm-7 col-xs-12">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <mat-slide-toggle color="primary" formControlName="includeTag" class="mt-2">
+                                        <span
+                                            class="pull-left"
+                                            *ngIf="advanceSearchForm.get('includeTag')?.value"
+                                            >{{ commonLocaleData?.app_include }}</span
+                                        >
+                                        <span
+                                            class="pull-right"
+                                            *ngIf="!advanceSearchForm.get('includeTag')?.value"
+                                            >{{ commonLocaleData?.app_exclude }}</span
+                                        >
+                                    </mat-slide-toggle>
+                                </div>
+                                <div class="col-sm-9">
+                                    <div class="form-group">
+                                        <select-multiple-fields
+                                            [name]="'tags'"
+                                            [appearance]="'outline'"
+                                            [commonLocaleData]="commonLocaleData"
+                                            [showMatLabel]="true"
+                                            [label]="localeData?.tags"
+                                            [placeholder]="localeData?.select_tags"
+                                            [options]="tags$ | async"
+                                            [chipListUniqueName]="advanceSearchForm?.controls['tags']?.value" 
+                                            (selectedOptionUniqueName)="advanceSearchForm?.controls['tags']?.patchValue($event)"
+                                            (selectedOption)="advanceSearchForm?.controls['tagsLabel']?.patchValue($event)"
+                                            [selectedValues]="advanceSearchForm?.controls['tagsLabel']?.value"
+                                        ></select-multiple-fields>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-12">
+                    <div class="row mr-0 ml-0">
+                        <div class="col-md-5 pl-0 d-flex align-items-center">
+                            <label>{{ commonLocaleData?.app_sales_person }}</label>
+                        </div>
+                        <div class="col-md-7 pr-0">
+                            <div class="row">
+                                <div class="pr-0 col-sm-3 col-12 d-flex align-items-center">
+                                    <div class="checkbox mat-switch">
+                                        <mat-slide-toggle
+                                            color="primary"
+                                            id="includeSalesPersons"
+                                            [formControl]="advanceSearchForm?.controls['includeSalesPersons']"
+                                        >
+                                            <span
+                                                class="pull-left"
+                                                *ngIf="advanceSearchForm.get('includeSalesPersons')?.value"
+                                                >{{ commonLocaleData?.app_include }}</span
+                                            >
+                                            <span
+                                                class="pull-right"
+                                                *ngIf="!advanceSearchForm.get('includeSalesPersons')?.value"
+                                                >{{ commonLocaleData?.app_exclude }}</span
+                                            >
+                                        </mat-slide-toggle>
+                                    </div>
+                                </div>
+                                <div class="col-sm-9 col-8 col-12">
+                                    <div class="mt-3">
+                                        <mat-form-field appearance="outline" class="initial-height">
+                                            <mat-label>{{ commonLocaleData?.app_sales_person }}</mat-label>
+                                            <mat-select
+                                                panelClass="py-0"
+                                                name="salesPerson"
+                                                [multiple]="true"
+                                                [formControl]="advanceSearchForm?.controls?.salesPersonUniqueNames"
+                                            >
+                                                <mat-option class="mt-0">
+                                                    <ngx-mat-select-search
+                                                        [placeholderLabel]="
+                                                            commonLocaleData?.app_sales_person_placeholder
+                                                        "
+                                                        [noEntriesFoundLabel]="
+                                                            commonLocaleData?.app_no_result_found
+                                                        "
+                                                        [formControl]="salesPersonDropdown"
+                                                    >
+                                                        <i class="icon-cross" ngxMatSelectSearchClear></i>
+                                                    </ngx-mat-select-search>
+                                                </mat-option>
+                                                <mat-option
+                                                    *ngFor="let salesPerson of filteredSalesPersonList"
+                                                    [value]="salesPerson?.value"
+                                                >
+                                                    {{ salesPerson?.label }}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-12 pt-4">
+                    <div class="row">
+                        <div class="col-sm-5 col-xs-12">
+                            <label>{{ commonLocaleData?.app_amount }}</label>
+                        </div>
+                        <div class="col-sm-7 col-xs-12">
+                            <div class="row">
+                                <div class="col-6 col-sm-6">
+                                    <div class="form-group">
+                                        <reactive-dropdown-field
+                                            (selectedOption)="onRangeSelect('amount', $event)"
+                                            [options]="comparisonFilterDropDown$ | async"
+                                            [name]="'amountRange'"
+                                            formControlName="amountRange"
+                                            [placeholder]="commonLocaleData?.app_select_range"
+                                        >
+                                        </reactive-dropdown-field>
+                                    </div>
+                                </div>
+                                <div class="col-6 col-sm-6">
+                                    <div class="form-group">
+                                        <input-field
+                                            [type]="'number'"
+                                            [name]="'amount'"
+                                            formControlName="amount"
+                                            [placeholder]="commonLocaleData?.app_amount"
+                                            [allowDecimalDigitsOnly]="true"
+                                        ></input-field>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <mat-accordion class="w-100 m-2" multi>
+                    <mat-expansion-panel [expanded]="isExpanded" class="mt-2">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title (click)="toggleOtherDetails()">{{
+                                commonLocaleData?.app_other_details
+                            }}</mat-panel-title>
+                        </mat-expansion-panel-header>
+
+                        <div class="col-xs-12 col-sm-12 mt-4">
+                            <div class="mb-2 clear-both">
+                                <div class="row">
+                                    <div class="col-sm-5 col-xs-12">
+                                        <label>{{ commonLocaleData?.app_inventory }}</label>
+                                    </div>
+                                    <div class="col-sm-7 col-xs-12" formGroupName="inventory">
+                                        <div class="row">
+                                            <div class="pr-0 col-sm-3 col-12">
+                                                <mat-slide-toggle
+                                                    color="primary"
+                                                    formControlName="includeInventory"
+                                                    class="mt-2"
+                                                >
+                                                    <span
+                                                        class="pull-left"
+                                                        *ngIf="
+                                                            advanceSearchForm.get('inventory.includeInventory')
+                                                                ?.value
+                                                        "
+                                                        >{{ commonLocaleData?.app_include }}</span
+                                                    >
+                                                    <span
+                                                        class="pull-right"
+                                                        *ngIf="
+                                                            !advanceSearchForm.get('inventory.includeInventory')
+                                                                ?.value
+                                                        "
+                                                        >{{ commonLocaleData?.app_exclude }}</span
+                                                    >
+                                                </mat-slide-toggle>
+                                            </div>
+                                            <div class="col-sm-9 col-12">
+                                                <div class="form-group">
+                                                    <select-multiple-fields
+                                                        [name]="'inventory'"
+                                                        [appearance]="'outline'"
+                                                        [label]="commonLocaleData?.app_select_accounts"
+                                                        [placeholder]="commonLocaleData?.app_select"
+                                                        [commonLocaleData]="commonLocaleData"
+                                                        [showMatLabel]="true"
+                                                        [options]="stockListDropDown$ | async"
+                                                        [chipListUniqueName]="advanceSearchForm?.controls['inventory'].controls['inventories']?.value"
+                                                        (selectedOptionUniqueName)="advanceSearchForm?.controls['inventory'].controls['inventories']?.patchValue($event)"
+                                                        (selectedOption)="advanceSearchForm?.controls['inventory'].controls['defaultInventoriesLabel']?.patchValue($event)"
+                                                        [selectedValues]="advanceSearchForm?.controls['inventory'].controls['defaultInventoriesLabel']?.value"
+                                                        [enableDynamicSearch]="true"
+                                                        (scrollEnd)="handleStockScrollEnd()"
+                                                        (dynamicSearchedQuery)="onStockSearchQueryChanged($event)"
+                                                    ></select-multiple-fields>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <reactive-dropdown-field
+                                                        (selectedOption)="onRangeSelect('inventoryQty', $event)"
+                                                        [options]="comparisonFilterDropDown$ | async"
+                                                        [name]="'inventoryQuantity'"
+                                                        formControlName="inventoryQuantity"
+                                                        [placeholder]="commonLocaleData?.app_select_range"
+                                                    ></reactive-dropdown-field>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <input-field
+                                                        [type]="'number'"
+                                                        [name]="'quantity'"
+                                                        formControlName="quantity"
+                                                        [customDecimalPlaces]="4"
+                                                        [mask]="inputMaskFormat"
+                                                        [placeholder]="commonLocaleData?.app_quantity"
+                                                        [allowDecimalDigitsOnly]="true"
+                                                    ></input-field>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <reactive-dropdown-field
+                                                        (selectedOption)="onRangeSelect('inventoryVal', $event)"
+                                                        [options]="comparisonFilterDropDown$ | async"
+                                                        [name]="'inventoryValue'"
+                                                        formControlName="inventoryValue"
+                                                        [placeholder]="commonLocaleData?.app_select_range"
+                                                    ></reactive-dropdown-field>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <input-field
+                                                        [type]="'number'"
+                                                        [name]="'inventoryValue'"
+                                                        formControlName="itemValue"
+                                                        [customDecimalPlaces]="3"
+                                                        [mask]="inputMaskFormat"
+                                                        [placeholder]="commonLocaleData?.app_value"
+                                                        [allowDecimalDigitsOnly]="true"
+                                                    ></input-field>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 mt-4">
+                            <div class="row">
+                                <div class="col-sm-5 col-xs-12">
+                                    <label>{{ localeData?.cheque_details }}</label>
+                                </div>
+                                <div class="col-sm-7 col-xs-12">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <input-field
+                                                    [type]="'text'"
+                                                    [name]="'chequeNumber'"
+                                                    formControlName="chequeNumber"
+                                                    [placeholder]="localeData?.cheque_number"
+                                                ></input-field>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <giddh-datepicker
+                                                    [placeholder]="localeData?.clearance_date"
+                                                    name="from"
+                                                    [appearance]="'outline'"
+                                                    formControlName="dateOnCheque"
+                                                    [showToggleIcon]="false"
+                                                >
+                                                </giddh-datepicker>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-expansion-panel>
+                </mat-accordion>
+
+                <div class="col-xs-12 col-sm-12 text-right">
+                    <button
+                        mat-raised-button
+                        color="primary"
+                        class="mr-0"
+                        type="button"
+                        (click)="emitAdvanceSearchParams()"
+                    >
+                        {{ commonLocaleData?.app_search }}
+                    </button>
+                </div>
+            </div>
+        </form>
+    </mat-dialog-content>
+</section>

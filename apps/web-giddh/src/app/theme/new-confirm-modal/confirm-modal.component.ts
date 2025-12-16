@@ -1,23 +1,26 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
-    selector: 'app-confirm-modal',
-    template: `
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title">Confirm Action</h4>
-            </div>
-            <div class="modal-body">
-                <p>Are you sure you want to proceed?</p>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary">Cancel</button>
-                <button type="button" class="btn btn-primary">Confirm</button>
-            </div>
-        </div>
-    `,
-    standalone: false
+    selector: 'new-confirm-modal',
+    templateUrl: './confirm-modal.component.html',
+    styleUrls: ['./confirm-modal.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone:false
 })
 export class ConfirmModalComponent {
-    constructor() {}
+    constructor(
+        @Inject(MAT_DIALOG_DATA) public inputData,
+        public dialogRef: MatDialogRef<any>) {
+    }
+
+    /**
+     * This will close the dialog and will send response
+     *
+     * @param {boolean} response
+     * @memberof ConfirmModalComponent
+     */
+    public sendResponse(response: boolean): void {
+        this.dialogRef.close(response);
+    }
 }

@@ -56,11 +56,11 @@ export const ROUTES: Routes = [
         children: [
             { path: 'home', loadChildren: () => import('./home/home.module').then(module => module.HomeModule), canActivate: [NeedsAuthorization] },
             // { path: 'invoice', loadChildren: () => import('./invoice/invoice.module').then(module => module.InvoiceModule), canActivate: [NeedsAuthorization] },
-            // {
-            //     path: 'daybook',
-            //     loadChildren: () => import('./daybook/daybook.module').then(module => module.DaybookModule),
-            //     canActivate: [NeedsAuthorization]
-            // },
+            {
+                path: 'daybook',
+                loadChildren: () => import('./daybook/daybook.module').then(module => module.DaybookModule),
+                canActivate: [NeedsAuthorization]
+            },
             {
                 path: 'purchase',
                 redirectTo: 'purchase-management'
@@ -69,7 +69,7 @@ export const ROUTES: Routes = [
             { path: 'inventory/v2', loadChildren: () => import('./new-inventory/new-inventory.module').then(module => module.NewInventoryModule), canActivate: [NeedsAuthorization] },
             // { path: 'inventory-in-out', loadChildren: () => import('./inventory-in-out/inventory-in-out.module').then(module => module.InventoryInOutModule), canActivate: [NeedsAuthorization] },
             { path: 'search', loadChildren: () => import('./search/search.module').then(module => module.SearchModule) },
-            // { path: 'trial-balance-and-profit-loss', loadChildren: () => import('./financial-reports/financial-reports.module').then(module => module.FinancialReportsModule), canActivate: [NeedsAuthentication, NeedsAuthorization] },
+            { path: 'trial-balance-and-profit-loss', loadChildren: () => import('./financial-reports/financial-reports.module').then(module => module.FinancialReportsModule), canActivate: [NeedsAuthentication, NeedsAuthorization] },
             { path: 'audit-logs', loadChildren: () => import('./audit-logs/audit-logs.module').then(module => module.AuditLogsModule), canActivate: [NeedsAuthorization] },
             { path: 'activity-logs', loadChildren: () => import('./activity-logs/activity-logs.module').then(module => module.ActivityLogsModule), canActivate: [NeedsAuthorization] },
             // { path: 'ledger', loadChildren: () => import('./ledger/ledger.module').then(module => module.LedgerModule), canActivate: [NeedsAuthorization] },
@@ -78,7 +78,7 @@ export const ROUTES: Routes = [
             // { path: 'manufacturing', loadChildren: () => import('./manufacturing/manufacturing.module').then(module => module.ManufacturingModule), canActivate: [NeedsAuthorization] },
             // { path: 'journal-voucher', loadChildren: () => import('./accounting/accounting.module').then(module => module.AccountingModule), canActivate: [NeedsAuthorization] },
             // { path: 'contact', loadChildren: () => import('./contact/contact.module').then(module => module.ContactModule), canActivate: [NeedsAuthorization] },
-            // { path: 'new-vs-old-invoices', loadChildren: () => import('./new-vs-old-Invoices/new-vs-old-Invoices.module').then(module => module.NewVsOldInvoicesModule), canActivate: [NeedsAuthorization] },
+            { path: 'new-vs-old-invoices', loadChildren: () => import('./new-vs-old-Invoices/new-vs-old-Invoices.module').then(module => module.NewVsOldInvoicesModule), canActivate: [NeedsAuthorization] },
             { path: 'import', loadChildren: () => import('./import-excel/import-excel.module').then(module => module.ImportExcelModule), canActivate: [NeedsAuthorization] },
             // { path: 'gstfiling', loadChildren: () => import('./gst/gst.module').then(module => module.GstModule) },
             // { path: 'company-import-export', loadChildren: () => import('./company-import-export/company-import-export.module').then(module => module.CompanyImportExportModule) },
@@ -101,7 +101,7 @@ export const ROUTES: Routes = [
             // { path: 'vouchers', loadChildren: () => import('./vouchers/vouchers.module').then(module => module.VouchersModule), canActivate: [NeedsAuthorization] },
             // { path: 'group-name', loadChildren: () => import('./group-name/group-name.module').then(module => module.GroupNameModule), canActivate: [NeedsAuthorization] },
             // { path: 'auth-hmrc', loadChildren: () => import('./auth-hmrc/auth-hmrc.module').then(module => module.AuthHMRCModule), canActivate: [NeedsAuthorization] },
-            // { path: 'multi-currency-report', loadChildren: () => import('./multi-currency-reports/multi-currency-reports.module').then(module => module.MultiCurrencyReportsModule), canActivate: [NeedsAuthorization] },
+            { path: 'multi-currency-report', loadChildren: () => import('./multi-currency-reports/multi-currency-reports.module').then(module => module.MultiCurrencyReportsModule), canActivate: [NeedsAuthorization] },
             { path: 'project-wise-accounting', loadChildren: () => import('./project-wise-accounting/project-wise-accounting.module').then(module => module.ProjectWiseAccountingModule), canActivate: [NeedsAuthorization] },
             // { path: 'email-forwarding', loadChildren: () => import('./email-forwarding/email-forwarding.module').then(m => m.BankStatementModule), canActivate: [NeedsAuthorization] },
             { path: '**', redirectTo: 'home', pathMatch: 'full' }

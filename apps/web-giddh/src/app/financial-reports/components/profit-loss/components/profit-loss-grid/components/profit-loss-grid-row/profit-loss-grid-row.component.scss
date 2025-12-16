@@ -1,0 +1,19 @@
+.account {
+    .account-name {
+        -webkit-line-clamp: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+.trial-balance-viewport {
+    background-color: var(--color-light-gray);
+}
+
+.row-height {
+    height: 37px;
+}
+.pl-grid-row {
+    border-bottom: 1px solid var(--color-border-light) !important;
+    height: 38px;
+}

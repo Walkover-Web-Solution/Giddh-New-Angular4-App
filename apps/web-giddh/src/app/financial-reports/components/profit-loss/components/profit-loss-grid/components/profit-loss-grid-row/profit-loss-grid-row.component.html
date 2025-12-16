@@ -1,0 +1,137 @@
+<div
+    class="pl-grid-row row"
+    [financial-accordion]="groupDetail"
+    *ngIf="groupDetail.groupName && (groupDetail.isVisible || groupDetail.isCreated)"
+    [ngClass]="{ 'isHidden': !groupDetail.isVisible, 'tailed-row': groupDetail.checked }"
+>
+    <div
+        class="col-4 group pl-sticky-group d-flex align-items-center row-height"
+        [style.padding-left]="padding + 'px !important'"
+    >
+        <mat-checkbox
+            *ngIf="!groupDetail.level1 && !groupDetail?.isSelfCreatedGroup"
+            color="primary"
+            (change)="onItemChecked($event, groupDetail?.uniqueName, 'group')"
+            [(ngModel)]="groupDetail.checked"
+            [checked]="groupDetail?.checked"
+            (click)="$event.stopPropagation()"
+            class="tailed-checkbox"
+        ></mat-checkbox>
+        <span [innerHTML]="groupDetail?.groupName | highlight : search"></span>
+    </div>
+    <div class="col group p-0">
+        <span class="row">
+            <ng-container *ngIf="!groupDetail.level1; else elseBlock">
+                <ng-container *ngFor="let key of getKeys(groupDetail.closingBalance) ">
+                    <span
+                        class="col text-right py-2 px-0 pr-3 border-left row-height"
+                    >
+                            <span
+                                *ngIf="
+                                    groupDetail.category === 'income' &&
+                                    groupDetail.closingBalance[key].type === 'DEBIT' &&
+                                    groupDetail.closingBalance[key].amount !== 0
+                                "
+                                >-</span
+                            >
+                            <span
+                                *ngIf="
+                                    groupDetail.category === 'expenses' &&
+                                    groupDetail.closingBalance[key].type === 'CREDIT' &&
+                                    groupDetail.closingBalance[key].amount !== 0
+                                "
+                                >-</span
+                            >
+                            <span class="d-inline-flex">
+                                <amount-field
+                                    [amount]="groupDetail.closingBalance[key].amount"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                >
+                                </amount-field>
+                            </span>
+                        </span>
+                    </ng-container>
+                </ng-container>
+            <ng-template #elseBlock>
+                <ng-container *ngFor="let key of plHeaders">
+                    <span class="col py-2 px-0 border-left row-height">&nbsp;</span>
+                </ng-container>
+            </ng-template>
+        </span>
+    </div>
+</div>
+<cdk-virtual-scroll-viewport
+    *ngIf="
+        (groupDetail?.isOpen || (search && !isExpandToggledDuringSearch)) &&
+        (groupDetail?.accounts | accountsFilter : !groupDetail?.isOpen && search)?.length >= minimumViewportLimit
+    "
+    [itemSize]="35"
+    minBufferPx="500"
+    maxBufferPx="1000"
+    class="trial-balance-viewport"
+>
+    <ng-container *cdkVirtualFor="let account of groupDetail?.accounts | accountsFilter; trackBy: trackByFn">
+        <ng-container *ngTemplateOutlet="templateSection; context: { $implicit: account }"></ng-container>
+    </ng-container>
+</cdk-virtual-scroll-viewport>
+<ng-container
+    *ngIf="
+        (groupDetail?.isOpen || (search && !isExpandToggledDuringSearch)) &&
+        (groupDetail?.accounts | accountsFilter)?.length < minimumViewportLimit
+    "
+>
+    <ng-container *ngFor="let account of groupDetail?.accounts | accountsFilter; trackBy: trackByFn">
+        <ng-container *ngTemplateOutlet="templateSection; context: { $implicit: account }"></ng-container>
+    </ng-container>
+</ng-container>
+<ng-content></ng-content>
+<ng-template #templateSection let-account>
+    <section class="row-2 account" [ngClass]="{ 'isHidden': !account.isVisible }" (dblclick)="entryClicked(account)">
+        <div class="pl-grid-row row" [ngClass]="{ 'tailed-row': account.checked }">
+            <div
+                class="col-4 pl-sticky-group d-flex align-items-center row-height"
+                [style.padding-left]="padding + 20 + 'px !important'"
+            >
+                <mat-checkbox
+                    class="ml-1"
+                    color="primary"
+                    (change)="onItemChecked($event, account?.uniqueName, 'account')"
+                    [(ngModel)]="account.checked"
+                    [checked]="account?.checked"
+                    (click)="$event.stopPropagation()"
+                    class="tailed-checkbox"
+                ></mat-checkbox>
+                <p class="account-name" [innerHTML]="account.name | lowercase | highlight : search"></p>
+            </div>
+            <ng-container *ngFor="let key of getKeys(account.closingBalance)">
+                <div class="col border-left text-right px-0 pr-3">
+                    <span
+                        *ngIf="
+                            account.category === 'income' &&
+                            account.closingBalance[key].type === 'DEBIT' &&
+                            account.closingBalance[key].amount !== 0
+                        "
+                        >-</span
+                    >
+                    <span
+                        *ngIf="
+                            account.category === 'expenses' &&
+                            account.closingBalance[key].type === 'CREDIT' &&
+                            account.closingBalance[key].amount !== 0
+                        "
+                        >-</span
+                    >
+                    <span class="d-inline-flex">
+                        <amount-field
+                            [amount]="account.closingBalance[key].amount"
+                            [currencySymbol]="false"
+                            [currencyCode]="false"
+                        >
+                        </amount-field>
+                    </span>
+                </div>
+            </ng-container>
+        </div>
+    </section>
+</ng-template>
