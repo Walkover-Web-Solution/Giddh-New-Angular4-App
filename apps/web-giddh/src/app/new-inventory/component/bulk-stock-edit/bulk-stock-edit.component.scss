@@ -1,0 +1,91 @@
+.bulk-stock {
+    min-height: calc(100vh - 100px);
+    height: 100%;
+    &-warpper {
+        height: inherit;
+    }
+    &-header {
+        height: 80px;
+        p {
+            span {
+                font-weight: 600;
+            }
+        }
+        button {
+            .icon-cross {
+                top: 1px;
+            }
+        }
+    }
+    &-body {
+        min-height: calc(100vh - 185px);
+        height: 100%;
+        .bulk-stock-table {
+            height: 100%;
+            min-height: inherit;
+            table {
+                thead {
+                    th {
+                        border-width: 2px;
+                        vertical-align: baseline;
+                        p {
+                            padding: 0 10px;
+                            line-height: 38.5px;
+                            position: relative;
+                        }
+                    }
+                }
+
+                td,
+                th {
+                    padding: 0;
+                    min-width: 216px;
+                    height: 36px;
+                    .border-line {
+                        border: 2px solid transparent;
+                        height: inherit;
+                        > * {
+                            height: inherit;
+                            width: inherit;
+                        }
+                        // &.active {
+                        //     border-color: var(--theme-primary-color);
+                        // }
+                        .custom-padding {
+                            padding: 6px 10px;
+                        }
+                    }
+                    //========= PLEASE UN COMMENT BELOW CODE TO SHOW LINE ON HOVER ON THE TABLE CELL =============
+                    // &:hover{
+                    //     .border-line{
+                    //         border-color: var(--theme-primary-color);
+                    //     }
+                    // }
+                    &.min-width-140 {
+                        min-width: 140px !important;
+                        input {
+                            min-width: 140px !important;
+                        }
+                    }
+                    &.min-width-240 {
+                        min-width: 240px !important;
+                        input {
+                            min-width: 240px !important;
+                        }
+                    }
+                }
+                .no-data {
+                    height: calc(100vh - 420px);
+                    width: calc(100vw - 240px);
+                }
+            }
+        }
+    }
+}
+
+// Remove CDK backdrop for mat-select
+::ng-deep .bulk-stock-edit .no-backdrop {
+    .cdk-overlay-backdrop {
+        display: none !important;
+    }
+}

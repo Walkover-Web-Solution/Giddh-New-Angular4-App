@@ -1,0 +1,33 @@
+table {
+    table-layout: fixed;
+}
+
+.basic > thead > tr > th {
+    width: 140px;
+    white-space: inherit;
+}
+
+.dropdown-menu li a {
+    padding: 6px 10px;
+    color: rgba(0, 0, 0, 0.8);
+}
+
+.action-btn {
+    right: 15px;
+}
+
+.basic > thead > tr > th:hover .edit_column {
+    opacity: 1;
+}
+
+.basic > thead > tr > th {
+    border: 1px solid var(--border-color);
+}
+
+.cdk-virtual-scroll-viewport{
+    min-height: calc(100vh - 200px);
+}
+
+.import-column {
+    min-width: 200px;
+}

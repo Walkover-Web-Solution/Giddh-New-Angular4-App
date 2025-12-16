@@ -1,0 +1,49 @@
+<!-- Review Field start-->
+<div class="review-data">
+    <div class="text-right">
+        <div class="action-btn">
+            <button mat-stroked-button [matTooltip]="commonLocaleData?.app_back" matTooltipPosition="above"  class="mr-2" (click)="onBack.emit()">{{ commonLocaleData?.app_back }}</button>
+            <button mat-raised-button [matTooltip]="commonLocaleData?.app_import" matTooltipPosition="above" [disabled]="!importDisable" color="primary" [ladda]="isLoading" (click)="save()">
+                {{ commonLocaleData?.app_import }}
+            </button>
+        </div>
+    </div>
+    <cdk-virtual-scroll-viewport [itemSize]="100">
+        <div class="table-responsive">
+            <table class="table basic border mt-2">
+                <thead>
+                    <tr>
+                        <th *ngFor="let col of sheetHeaders; let i = index" class="import-column border-left-none border-right-none">
+                            <reactive-dropdown-field
+                                [name]="'giddhHeaders_' + i"
+                                [label]="commonLocaleData?.app_select_column"
+                                [placeholder]="commonLocaleData?.app_select"
+                                [options]="giddhHeaders"
+                                [labelValue]="mappings[i]?.mappedColumn || unmapHeader"
+                                (onClear)="mappings[i].mappedColumn = null"
+                                (selectedOption)="mappings[i].mappedColumn = $event?.value"
+                                [required]="true"
+                            >
+                            </reactive-dropdown-field>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th *ngFor="let col of sheetHeaders; let i = index" class="border-left-none border-right-none">
+                            {{ col }}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of importData.data.items">
+                        <td *ngFor="let row of item.row">
+                            <div class="text-ellipsis" [matTooltip]="row.columnValue">
+                                {{ row.columnValue }}
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </cdk-virtual-scroll-viewport>
+</div>
+<!-- Review Field end-->

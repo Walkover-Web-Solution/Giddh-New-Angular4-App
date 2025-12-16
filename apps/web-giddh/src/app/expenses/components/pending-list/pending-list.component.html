@@ -1,0 +1,210 @@
+<div class="container-fluid" *ngIf="!isPettyCashPendingReportLoading && !isRowExpand">
+    <div class="table-responsive overflow-visible" *ngIf="pettyCashPendingReportResponse?.totalItems > 0">
+        <table
+            mat-table
+            class="w-100"
+            [dataSource]="expensesItems"
+            matSort
+            (matSortChange)="sortChange($event)"
+            [matSortActive]="pettycashRequest.sortBy"
+            [matSortDirection]="pettycashRequest.sort"
+        >
+            <div matColumnDef="s_no">
+                <th mat-header-cell [hidden]="!expensesItems?.length" *matHeaderCellDef class="serial-no-column">#</th>
+                <td mat-cell *matCellDef="let expenses" data-title="#">
+                    <span class="responsive-label" [hidden]="!expensesItems?.length">#</span>
+                    {{ expenses.index + 1 }}
+                </td>
+            </div>
+
+            <div matColumnDef="entry_date">
+                <th mat-header-cell [hidden]="!expensesItems?.length" *matHeaderCellDef mat-sort-header class="mat-mdc-entry">
+                    {{ commonLocaleData?.app_date }}
+                </th>
+                <td mat-cell *matCellDef="let expenses" [attr.data-title]="commonLocaleData?.app_date">
+                    <span class="responsive-label" [hidden]="!expensesItems?.length">{{
+                        commonLocaleData?.app_date
+                    }}</span>
+                    {{ expenses.entryDate }}
+                </td>
+            </div>
+
+            <div matColumnDef="submitted_by">
+                <th mat-header-cell [hidden]="!expensesItems?.length" *matHeaderCellDef class="mat-mdc-submit">
+                    {{ localeData?.submitted_by }}
+                </th>
+                <td mat-cell *matCellDef="let expenses" [attr.data-title]="localeData?.submitted_by">
+                    <span class="responsive-label" [hidden]="!expensesItems?.length">{{
+                        localeData?.submitted_by
+                    }}</span>
+                    {{ expenses?.createdBy?.name }}
+                </td>
+            </div>
+
+            <div matColumnDef="account">
+                <th mat-header-cell [hidden]="!expensesItems?.length" *matHeaderCellDef class="mat-mdc-submit">
+                    {{ commonLocaleData?.app_account }}
+                </th>
+                <td mat-cell *matCellDef="let expenses" [attr.data-title]="commonLocaleData?.app_account">
+                    <span class="responsive-label" [hidden]="!expensesItems?.length">{{
+                        commonLocaleData?.app_account
+                    }}</span>
+                    <i class="dot-icon dot-warning" *ngIf="expenses.entryType === 'sales'"></i>
+                    <i class="dot-icon dot-success" *ngIf="expenses.entryType === 'deposit'"></i>
+                    <i class="dot-icon dot-primary" *ngIf="expenses.entryType === 'expense'"></i>
+                    {{ expenses?.particularAccount?.name }}
+                </td>
+            </div>
+
+            <div matColumnDef="amount">
+                <th
+                    mat-header-cell
+                    [hidden]="!expensesItems?.length"
+                    *matHeaderCellDef
+                    mat-sort-header
+                    class="text-right mat-mdc-submit"
+                >
+                    {{ commonLocaleData?.app_amount }}
+                </th>
+                <td
+                    mat-cell
+                    *matCellDef="let expenses"
+                    class="text-right"
+                    [attr.data-title]="commonLocaleData?.app_amount"
+                >
+                    <span class="responsive-label" [hidden]="!expensesItems?.length">{{
+                        commonLocaleData?.app_amount
+                    }}</span>
+                    {{ expenses.currencySymbol }}
+                    {{ expenses.amount | giddhNumberFormat }}
+                </td>
+            </div>
+
+            <div matColumnDef="receipt">
+                <th mat-header-cell [hidden]="!expensesItems?.length" *matHeaderCellDef class="mat-mdc-submit">
+                    {{ localeData?.payment_receipt }}
+                </th>
+                <td mat-cell *matCellDef="let expenses" [attr.data-title]="localeData?.payment_receipt">
+                    <span class="responsive-label" [hidden]="!expensesItems?.length">{{
+                        localeData?.payment_receipt
+                    }}</span>
+                    <span *ngIf="expenses.baseAccountCategory === 'OTHER'" class="font-size-12 text-light mr-1">{{
+                        commonLocaleData?.app_ac
+                    }}</span>
+                    <span
+                        *ngIf="expenses.baseAccountCategory === 'BANK'"
+                        class="font-size-12 text-light icon-atm-card mr-1"
+                    ></span>
+                    <span
+                        *ngIf="expenses.baseAccountCategory === 'CASH'"
+                        class="font-size-12 text-light icon-cash mr-1"
+                    ></span>
+                    {{ expenses?.baseAccount?.name }}
+                </td>
+            </div>
+
+            <div matColumnDef="file">
+                <th mat-header-cell [hidden]="!expensesItems?.length" *matHeaderCellDef class="mat-mdc-submit">
+                    {{ localeData?.file }}
+                </th>
+                <td mat-cell *matCellDef="let expenses" [attr.data-title]="localeData?.file">
+                    <span class="responsive-label" [hidden]="!expensesItems?.length">{{ localeData?.file }}</span>
+                    <i
+                        *ngIf="expenses.fileNames"
+                        (click)="openZoomImageView($event, expenses.fileNames)"
+                        class="icon-image vertical-align-middle text-light"
+                    ></i>
+                </td>
+            </div>
+
+            <div matColumnDef="description">
+                <th mat-header-cell [hidden]="!expensesItems?.length" *matHeaderCellDef class="mat-mdc-entry">
+                    {{ commonLocaleData?.app_description }}
+                </th>
+                <td mat-cell *matCellDef="let expenses" [attr.data-title]="commonLocaleData?.app_description">
+                    <span class="responsive-label" [hidden]="!expensesItems?.length">{{
+                        commonLocaleData?.app_description
+                    }}</span>
+                    <span *ngIf="expenses.description">{{ expenses.description }}</span
+                    ><span *ngIf="!expenses.description">-</span>
+                </td>
+            </div>
+
+            <div matColumnDef="action">
+                <th mat-header-cell [hidden]="!expensesItems?.length" *matHeaderCellDef class="mat-mdc-entry">
+                    {{ commonLocaleData?.app_action }}
+                </th>
+                <td mat-cell *matCellDef="let expenses" [attr.data-title]="commonLocaleData?.app_action" class="action-btn">
+                    <div class="d-flex column-gap-15">
+                        <button
+                        mat-raised-button
+                        color="primary"
+                        (click)="showApproveConfirmPopup(approveConfirm, expenses); $event.stopPropagation()"
+                        class="mt-2"
+                    >
+                        {{ localeData?.approve }}
+                    </button>
+                    <button
+                        mat-stroked-button
+                        (click)="showRejectConfirmPopup(rejectConfirm, expenses); $event.stopPropagation()"
+                        class="mt-2 mb-2"
+                    >
+                        {{ localeData?.reject }}
+                    </button>
+                    </div>
+                </td>
+            </div>
+
+            <tr mat-header-row *matHeaderRowDef="pendingTableColumns; sticky: true"></tr>
+            <tr
+                mat-row
+                class="cursor-pointer"
+                *matRowDef="let expenses; columns: pendingTableColumns"
+                (click)="editExpense(expenses)"
+            ></tr>
+        </table>
+        <mat-paginator
+            *ngIf="pettyCashPendingReportResponse?.totalItems > pageSizeOptions[0] && !isPettyCashPendingReportLoading"
+            [length]="pettyCashPendingReportResponse?.totalItems"
+            [pageSize]="pettycashRequest.count"
+            [pageIndex]="pettycashRequest.page - 1"
+            [pageSizeOptions]="pageSizeOptions"
+            [showFirstLastButtons]="true"
+            [hidePageSize]="false"
+            (page)="handlePageEvent($event)"
+        ></mat-paginator>
+    </div>
+</div>
+<div *ngIf="isPettyCashPendingReportLoading">
+    <giddh-page-loader></giddh-page-loader>
+</div>
+
+<div class="no-data" *ngIf="pettyCashPendingReportResponse?.totalItems === 0">
+    <no-data></no-data>
+</div>
+<section class="mb-custom-80"></section>
+
+<ng-template #approveConfirm>
+    <petty-cash-approve-confirm-dialog
+        [selectedEntryForApprove]="selectedEntryForApprove"
+        [approveEntryRequestInProcess]="approveEntryRequestInProcess"
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+        [pettyCashEntry]="accountEntryPettyCash"
+        [entryAgainstObject]="entryAgainstObject"
+        [showCategoryOption]="true"
+        (approveEntry)="hideApproveConfirmPopup($event)"
+    >
+    </petty-cash-approve-confirm-dialog>
+</ng-template>
+
+<!-- modal start -->
+<ng-template #rejectConfirm>
+    <petty-cash-reject-confirm-dialog
+        [selectedItem]="selectedEntryForApprove"
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+        (rejectEntry)="hideRejectConfirmPopup($event)"
+    ></petty-cash-reject-confirm-dialog>
+</ng-template>
+<!-- modal end -->

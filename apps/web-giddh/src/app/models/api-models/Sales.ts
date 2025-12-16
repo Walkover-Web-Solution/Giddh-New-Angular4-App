@@ -570,7 +570,7 @@ export class VoucherDetailsClass {
     public currencySymbol: string;
     public currency: Currency;
     public exchangeRate?: number;
-    public referenceVoucher?: any; // ReferenceVoucher interface - temporarily using any
+    // public referenceVoucher?: ReferenceVoucher;
     public gainLoss?: number;
     public voucherUniqueName?: string;
 

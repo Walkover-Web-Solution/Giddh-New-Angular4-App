@@ -1,0 +1,30 @@
+.petty-cash {
+    position: relative;
+    top: -4px;
+}
+.left-expense {
+    width: 30%;
+    max-width: 400px;
+    box-shadow: 3px 3px 6px var(--color-shadow-light);
+    background: var(--theme-background-color);
+    position: relative;
+    overflow-y: auto;
+    max-height: calc(100vh - 135px);
+}
+.main-expense-details {
+    flex: 1;
+    overflow-y: auto;
+    padding-top: 10px;
+    max-height: calc(100vh - 135px);
+}
+.main-edit-expense {
+    display: flex;
+}
+.input-calender {
+    width: 225px;
+}
+.input-calender > span {
+    background: none;
+    border-radius: var(--mat-border-radius-0);
+    border-left: 1px solid var(--border-color) !important;
+}

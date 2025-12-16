@@ -1,0 +1,27 @@
+<div
+    appTranslate
+    [file]="'downloads'"
+    (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event"
+>
+    <hamburger-menu class="hamburger-menu"></hamburger-menu>
+    <div class="position-relative overflow-visible">
+        <div class="clear-both petty-cash overflow-visible">
+            <mat-tab-group
+                mat-stretch-tabs="false"
+                animationDuration="0ms"
+                [selectedIndex]="selectedTabIndex"
+                (selectedTabChange)="tabChanged($event)"
+                [disableRipple]="true"
+                class="table-header-sticky"
+            >
+                <mat-tab [label]="'Exports'">
+                    <exports *ngIf="selectedTabIndex === 0"></exports>
+                </mat-tab>
+                <mat-tab [label]="'Imports'">
+                    <imports *ngIf="selectedTabIndex === 1"></imports>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+    </div>
+</div>

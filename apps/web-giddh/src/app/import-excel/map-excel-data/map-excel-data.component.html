@@ -1,0 +1,52 @@
+<!-- Map Field start-->
+<div class="row">
+    <div class="col-lg-8 col-md-12">
+        <div class="map-fields">
+            <div class="left-bar-width">
+                <div class="row">
+                    <div class="col-lg-12 col-md-9 col-sm-8 left-head">
+                        <strong>{{ localeData?.map_fields_content }}</strong>
+                    </div>
+                </div>
+                <div class="checkbox d-flex mt-1">
+                    <mat-checkbox
+                        [(ngModel)]="importData.isHeaderProvided"
+                        color="primary"
+                    >
+                        {{ localeData?.header_provided }}
+                    </mat-checkbox>
+                </div>
+                <div class="row mt-2 d-flex">
+                    <div class="col-12 col-md-4 col-lg-6">
+                        <small class="text-light">{{ localeData?.imported_file_fields }}</small>
+                    </div>
+                    <div class="col-12 col-md-5 col-lg-6">
+                        <small class="text-light">{{ localeData?.giddh_fields }}</small>
+                    </div>
+                </div>
+                <div class="row mt-2 d-flex" *ngFor="let data of dataModel">
+                    <div class="col-12 col-md-4 col-lg-6 d-flex align-items-center">
+                        <label>{{ data.field.columnHeader }}</label>
+                    </div>
+                    <div class="col-12 col-md-5 col-lg-6">
+                        <reactive-dropdown-field
+                            [options]="data.options"
+                            class="pull-left mr-2 select-field-width"
+                            [placeholder]="commonLocaleData?.app_select_field"
+                            [(ngModel)]="data.selected"
+                            (selectedOption)="columnSelected($event, data)"
+                            (onClear)="clearSelected($event, data)"
+                            [labelValue]="data.selected"
+                            [name]="'fieldMapping'"
+                        ></reactive-dropdown-field>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-5">
+                <button mat-stroked-button (click)="onBack.emit()">{{ commonLocaleData?.app_back }}</button>
+                <button mat-raised-button color="primary" (click)="mapExcelData()">{{ commonLocaleData?.app_next }}</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Map Field end -->

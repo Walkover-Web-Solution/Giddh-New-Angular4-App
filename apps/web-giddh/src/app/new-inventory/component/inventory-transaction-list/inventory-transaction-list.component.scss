@@ -1,0 +1,84 @@
+.stock-group-footer {
+    background-color: var(--color-white);
+    z-index: 3;
+    width: calc(100% - 240px);
+    padding-right: 15px;
+    line-height: 1.8;
+    box-shadow: 0 0 6px var(--color-shadow-light);
+    padding-top: 5px;
+
+    .stock-value {
+        padding-right: 80px;
+
+    }
+}
+
+.unit-badge {
+    text-transform: lowercase;
+}
+
+.td-search-box {
+.input-container {
+        input {
+            height: 36px;
+            min-width: 100%;
+            padding: 11px 40px 11px 11px;
+            border: none;
+            background-color: var(--color-light-gray);
+            border-radius: var(--mat-border-radius-4);
+        }
+    }
+}
+
+.inventory-report-table {
+    overflow-x: visible !important;
+
+}
+
+::ng-deep {
+
+    .inventory-transaction-list {
+        tbody {
+            .mat-no-data-row:last-child {
+                border-bottom: none !important;
+
+                td {
+                    border-bottom: none !important;
+                }
+            }
+        }
+    }
+
+}
+
+.transaction-report-wrapper {
+    margin-bottom: 40px;
+}
+
+@media (max-width: 1024px) {
+    .select-multiple-chiplist-inventory {
+        width: 57%;
+    }
+
+    .stock-mat-salect {
+        min-width: 187px;
+    }
+    .inventory-report-table {
+        overflow-x: scroll !important;
+    }
+}
+
+@media (max-width: 1019px) {
+    .select-multiple-chiplist-inventory {
+        width: 57%;
+    }
+
+    .stock-mat-salect {
+        min-width: 199px;
+    }
+
+}
+
+.account-name-column {
+    padding-left: 0 !important;
+}

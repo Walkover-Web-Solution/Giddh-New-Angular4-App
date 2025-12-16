@@ -1,0 +1,37 @@
+.table-responsive {
+    table {
+        tbody {
+            tr {
+                td {
+                    border: none;
+                    &:last-child {
+                        padding-right: 25px;
+                    }
+                    .icon-trash {
+                        right: 0px;
+                        top: 22px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+::ng-deep .option-extra-content {
+    vertical-align: top;
+    line-height: 16px;
+
+    &:first-child {
+        width: 75px;
+    }
+}
+
+:host ::ng-deep {
+
+    .show-tailed-checkbox {
+        .tailed-checkbox {
+            display: inline-block;
+        }
+    }
+
+}

@@ -1,0 +1,45 @@
+.filter-list {
+    .inner-filter-list {
+        overflow-y: auto;
+
+        .mat-list-item {
+            padding-top: 15px;
+            padding-bottom: 15px;
+            height: auto !important;
+
+            &:hover {
+                background: var(--color-border-light);
+                transition: 0.5s all ease;
+            }
+
+            .left-item {
+                width: 100%;
+            }
+
+            .right-item {
+                width: 160px;
+                text-align: right;
+
+                i {
+                    color: var(--color-medium-gray);
+                    margin-left: 5px;
+                }
+            }
+        }
+    }
+
+    .activeItem {
+        background-color: var(--color-border-light);
+
+        .text-light {
+            color: var(--color-black) !important;
+        }
+    }
+
+    .mat-mdc-list {
+        .mat-mdc-list-item {
+            height: auto !important;
+            padding-block: 6px;
+        }
+    }
+}

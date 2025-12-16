@@ -1,0 +1,38 @@
+.adjustment {
+
+    .mat-expansion-panel {
+        box-shadow: unset;
+        border: 1px solid var(--border-color);
+
+        .mat-expansion-panel-header {
+            padding-top: 15px !important;
+            padding-bottom: 15px !important;
+            padding-left: 0 !important;
+
+            table {
+                tr {
+                    td {
+                        padding: 5px 10px;
+                    }
+                }
+            }
+        }
+
+        .table-border-none {
+            &table {
+                tr {
+                    th {
+                        border-bottom-style: 0 !important;
+                    }
+
+                    td {
+                        border-bottom-style: unset !important;
+
+                    }
+                }
+            }
+        }
+
+    }
+
+}

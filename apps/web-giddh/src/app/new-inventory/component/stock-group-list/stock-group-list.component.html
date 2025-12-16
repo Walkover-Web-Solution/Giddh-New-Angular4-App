@@ -1,0 +1,139 @@
+<div class="stock-group-list-page">
+    <div class="table-responsive">
+        <!-- Date Picker Header -->
+        <div class="date-picker-header mb-3">
+            <div class="custom-datepicker">
+                <div class="custom-datepicker" [matMenuTriggerFor]="universalDatepicker" #universalDatepickerTrigger="matMenuTrigger" role="button" aria-haspopup="true" aria-controls="universalDatepicker">
+                    <input
+                        matInput
+                        type="text"
+                        name="selectedDateRange"
+                        [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                        class="giddh-datepicker date-range-picker"
+                        placeholder="Enter Date"
+                        readonly
+                    />
+                </div>
+            </div>
+        </div>
+
+        <!-- Mat Table -->
+        <table mat-table [dataSource]="dataSource" class="table giddh-table on-mobile-view">
+            <!-- Date Column -->
+            <div matColumnDef="date">
+                <th mat-header-cell *matHeaderCellDef>Date</th>
+                <td mat-cell *matCellDef="let element" data-title="Date">{{ element.date }}</td>
+            </div>
+
+            <!-- Voucher Type Column -->
+            <div matColumnDef="voucherType">
+                <th mat-header-cell *matHeaderCellDef>Voucher Type</th>
+                <td mat-cell *matCellDef="let element" data-title="Voucher Type">{{ element.voucherType }}</td>
+            </div>
+
+            <!-- Account Name Column -->
+            <div matColumnDef="accountName">
+                <th mat-header-cell *matHeaderCellDef>Account Name</th>
+                <td mat-cell *matCellDef="let element" data-title="Account Name">{{ element.accountName }}</td>
+            </div>
+
+            <!-- Inwards Column -->
+            <div matColumnDef="inwards">
+                <th mat-header-cell *matHeaderCellDef class="text-right">Inwards</th>
+                <td mat-cell *matCellDef="let element" data-title="Inwards" class="text-right">{{ element.inwards }}</td>
+            </div>
+
+            <!-- Outwards Column -->
+            <div matColumnDef="outwards">
+                <th mat-header-cell *matHeaderCellDef class="text-right">Outwards</th>
+                <td mat-cell *matCellDef="let element" data-title="Outwards" class="text-right">{{ element.outwards }}</td>
+            </div>
+
+            <!-- Rate Column -->
+            <div matColumnDef="rate">
+                <th mat-header-cell *matHeaderCellDef class="text-right">Rate</th>
+                <td mat-cell *matCellDef="let element" data-title="Rate" class="text-right">{{ element.rate }}</td>
+            </div>
+
+            <!-- Value Column -->
+            <div matColumnDef="value">
+                <th mat-header-cell *matHeaderCellDef class="text-right">Value</th>
+                <td mat-cell *matCellDef="let element" data-title="Value" class="text-right">{{ element.value }}</td>
+            </div>
+
+            <!-- Qty Column -->
+            <div matColumnDef="qty">
+                <th mat-header-cell *matHeaderCellDef class="text-right">Qty</th>
+                <td mat-cell *matCellDef="let element" data-title="Qty" class="text-right">{{ element.qty }}</td>
+            </div>
+
+            <!-- Header and Row Definitions -->
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+    </div>
+</div>
+<div class="sticky-footer stock-group-footer">
+    <div class="footer-wrapper">
+        <div class="row">
+            <div class="col-lg-3 col-md-6 col-12">
+                <div class="text-left pl-3">
+                    <label class="text-light font-size-15">Profit/Loss</label>
+                    <p class="text-primary">1,02,377.50 <span class="by-date">(Apr 1, 2018 - Dec 11, 2020)</span></p>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-6 col-12">
+                <label class="text-light font-size-15"
+                    >Transaction Count : <span class="total-transction text-primary">1.00</span></label
+                >
+                <p>Inward: <span class="total-inward">0.00</span></p>
+                <p>Outward: <span class="total-outward">0.00</span></p>
+            </div>
+            <div class="col-lg-7 col-md-12">
+                <div class="d-flex justify-content-end stock-value">
+                    <div class="total-stock-value">
+                        <label class="text-light font-size-15">Opening</label>
+                        <p class="font-size-15">432.00</p>
+                        <p class="font-size-15">(433.00 box)</p>
+                    </div>
+                    <div class="total-stock-value">
+                        <label class="text-light font-size-15">Inward</label>
+                        <p class="font-size-15">432.00</p>
+                        <p class="font-size-15">(433.00 box)</p>
+                    </div>
+                    <div class="total-stock-value">
+                        <label class="text-light font-size-15">Outward</label>
+                        <p class="font-size-15">1,02,378.50</p>
+                        <p class="font-size-15">(433.00 box)</p>
+                    </div>
+                    <div class="total-stock-value">
+                        <label class="text-light font-size-15">Closing Stock</label>
+                        <p class="font-size-15 text-primary">432.00</p>
+                        <p class="font-size-15">(433.00 box)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+    <ng-template matMenuContent>
+        <app-datepicker-wrapper
+            [inputStartDate]="selectedDateRange?.startDate"
+            [inputEndDate]="selectedDateRange?.endDate"
+            [alwaysShowCalendars]="true"
+            [ranges]="datePickerOptions"
+            [selectedRangeLabel]="selectedRangeLabel"
+            [showCustomRangeLabel]="true"
+            [showClearButton]="false"
+            [showCancel]="true"
+            [linkedCalendars]="true"
+            [showDropdowns]="true"
+            (rangeClicked)="dateSelectedCallback($event)"
+            (datesUpdated)="dateSelectedCallback($event)"
+            (closeCalender)="toggleGiddhDatepicker(false)"
+            [keepCalendarOpeningWithRange]="false"
+            [showRangeLabelOnInput]="false"
+        ></app-datepicker-wrapper>
+    </ng-template>
+</mat-menu>

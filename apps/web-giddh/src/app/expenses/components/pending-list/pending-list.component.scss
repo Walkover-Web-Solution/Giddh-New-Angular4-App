@@ -1,0 +1,33 @@
+.icon-sort-asc.active-text-color {
+    color: var(--text-primary-color) !important;
+}
+.td-search-box {
+    div {
+        display: flex;
+        i {
+            margin-top: 1px;
+            padding-right: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding-left: 8px;
+        }
+    }
+}
+
+.action-btn{
+    button{
+        min-width: 90px;
+    }
+}
+table{
+    .mat-mdc-entry{
+        width: 12%;
+    }
+    .mat-mdc-submit{
+        width: 10%;
+    }
+}
+.responsive-label {
+    display: none;
+}
