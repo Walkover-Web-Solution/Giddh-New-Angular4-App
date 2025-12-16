@@ -2124,7 +2124,10 @@
                                                                         }}
                                                                     </div>
                                                                     <!-- Update Menu  -->
-                                                                    <mat-menu #update="matMenu">
+                                                                    <mat-menu
+                                                                        #update="matMenu"
+                                                                        (closed)="handleHsnSacMenuClosed($event, entry)"
+                                                                    >
                                                                         <ng-template matMenuContent>
                                                                             <div
                                                                                 class="p-3"

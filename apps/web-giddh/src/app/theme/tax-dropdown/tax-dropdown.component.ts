@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
-import { MatMenuTrigger } from "@angular/material/menu";
+import { MatMenuTrigger, MenuCloseReason } from "@angular/material/menu";
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 import { ReplaySubject, takeUntil } from "rxjs";
@@ -48,8 +48,6 @@ export class TaxDropdownComponent implements OnChanges {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Element ref for mat menu */
     @ViewChild('taxMenuTrigger') public taxMenuTrigger: MatMenuTrigger;
-    /** Holds true if menu closed by enter */
-    public menuClosedByEnter: boolean = false;
     /** Stores last saved form values when menu opens */
     private lastSavedFormValues: any = null;
 
@@ -239,10 +237,14 @@ export class TaxDropdownComponent implements OnChanges {
     /**
      * Handles menu closed event and resets menu state
      *
+     * @param reason The reason the menu was closed
      * @memberof TaxDropdownComponent
      */
-    public handleMenuClosed(): void {
-        if (!this.menuClosedByEnter && this.lastSavedFormValues) {
+    public handleMenuClosed(reason: MenuCloseReason): void {
+        if (!reason) return;
+        
+        const isClosedByEscape = reason === 'keydown';
+        if (isClosedByEscape && this.lastSavedFormValues) {
             const taxesArray = this.taxForm.get('taxes') as FormArray;
             this.lastSavedFormValues.taxes?.forEach((tax: any, index: number) => {
                 if (taxesArray.controls[index]) {
@@ -252,8 +254,6 @@ export class TaxDropdownComponent implements OnChanges {
             
             this.calculateTaxAmount();
         }
-
-        this.menuClosedByEnter = false;
         this.lastSavedFormValues = null;
     }
 
@@ -264,5 +264,53 @@ export class TaxDropdownComponent implements OnChanges {
      */
     public closeTaxMenu(): void {
         this.taxMenuTrigger?.closeMenu();
+    }
+
+    /**
+     * Focuses the next available checkbox in the tax list
+     *
+     * @param {HTMLElement} currentElement - The currently focused checkbox element
+     * @param {number} currentIndex - The index of the current checkbox
+     * @memberof TaxDropdownComponent
+     */
+    public focusNextCheckbox(currentElement: HTMLElement, currentIndex: number): void {
+        setTimeout(() => {
+            // Find the tax wrapper container
+            const taxWrapper = document.querySelector('.discount-checkbox-wrapper');
+            if (taxWrapper) {
+                // Get all mat-checkbox elements (Angular Material checkboxes)
+                const checkboxes = taxWrapper.querySelectorAll('mat-checkbox');
+                
+                if (checkboxes.length > 0) {
+                    const nextIndex = currentIndex + 1;
+                    
+                    if (nextIndex < checkboxes.length) {
+                        // Focus next checkbox - target the actual input element inside mat-checkbox
+                        const nextCheckbox = checkboxes[nextIndex] as HTMLElement;
+                        const inputElement = nextCheckbox.querySelector('input[type="checkbox"]') as HTMLElement;
+                        if (inputElement) {
+                            inputElement.focus();
+                        } else {
+                            nextCheckbox.focus();
+                        }
+                    } else {
+                        // If at the end, try to focus "Create New" button or cycle back to first checkbox
+                        const createNewButton = document.querySelector('.create-new span[tabindex="0"]');
+                        if (createNewButton) {
+                            (createNewButton as HTMLElement)?.focus();
+                        } else if (checkboxes.length > 0) {
+                            // Cycle back to first checkbox
+                            const firstCheckbox = checkboxes[0] as HTMLElement;
+                            const firstInputElement = firstCheckbox.querySelector('input[type="checkbox"]') as HTMLElement;
+                            if (firstInputElement) {
+                                firstInputElement.focus();
+                            } else {
+                                firstCheckbox.focus();
+                            }
+                        }
+                    }
+                }
+            }
+        }, 150);
     }
 }

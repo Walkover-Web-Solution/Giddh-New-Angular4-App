@@ -12,9 +12,8 @@
         readonly
         [value]="currency + totalTaxAmount"
         (menuOpened)="handleMenuOpened()"
-        (menuClosed)="handleMenuClosed()"
     />
-    <mat-menu #taxControlMenu="matMenu">
+    <mat-menu #taxControlMenu="matMenu" (closed)="handleMenuClosed($event)">
         <ng-template matMenuContent>
             <div
                 class="d-flex flex-column px-3 pt-2 discount-wrapper"
@@ -42,17 +41,26 @@
                                 matTooltipPosition="above"
                             >
                                 <mat-checkbox
-                                    (change)="enableDisableTaxes()"
+                                    (change)="enableDisableTaxes(); focusNextCheckbox($event.target, i)"
+                                    formControlName="isChecked"
+                                    color="primary"
+                                    #taxRef
+                                    [attr.data-index]="i"
+                                    tabindex="0"
+                                    cdkMonitorElementFocus
                                     (keydown.enter)="
                                         $event.preventDefault();
                                         taxRef.toggle();
                                         enableDisableTaxes();
-                                        menuClosedByEnter = true;
+                                        focusNextCheckbox($event.target, i);
                                         taxMenuTrigger?.closeMenu()
                                     "
-                                    #taxRef
-                                    formControlName="isChecked"
-                                    color="primary"
+                                    (keydown.space)="
+                                        $event.preventDefault();
+                                        taxRef.toggle();
+                                        enableDisableTaxes();
+                                        focusNextCheckbox($event.target, i)
+                                    "
                                     ><span class="font-size-15">{{ tax?.get("name")?.value }}</span></mat-checkbox
                                 >
                             </span>
@@ -66,12 +74,8 @@
                         role="button"
                         cdkMonitorElementFocus
                         [attr.aria-label]="commonLocaleData?.app_create_new"
-                        (keydown.enter)="
-                            $event.preventDefault(); createNew(); menuClosedByEnter = true; taxMenuTrigger?.closeMenu()
-                        "
-                        (keydown.space)="
-                            $event.preventDefault(); createNew(); menuClosedByEnter = true; taxMenuTrigger?.closeMenu()
-                        "
+                        (keydown.enter)="$event.preventDefault(); createNew(); taxMenuTrigger?.closeMenu()"
+                        (keydown.space)="$event.preventDefault(); createNew(); taxMenuTrigger?.closeMenu()"
                     >
                         {{ commonLocaleData?.app_create_new }}
                     </span>

@@ -3,7 +3,7 @@ import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
 import { ReplaySubject, takeUntil } from "rxjs";
 import { isEqual } from "../../lodash-optimized";
 import { GeneralService } from "../../services/general.service";
-import { MatMenuTrigger } from "@angular/material/menu";
+import { MatMenuTrigger, MenuCloseReason } from "@angular/material/menu";
 
 @Component({
     selector: "discount-dropdown",
@@ -45,8 +45,6 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
     public totalDiscountAmount: number = 0;
     /** True if field is readonly */
     @Input() public readonly: boolean = false;
-    /** Holds true if menu closed by enter */
-    public menuClosedByEnter: boolean = false;
     /** Stores last saved form values when menu opens */
     private lastSavedFormValues: any = null;
 
@@ -254,10 +252,14 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
     /**
      * Handles menu closed event and resets menu state
      *
+     * @param reason The reason the menu was closed
      * @memberof DiscountDropdownComponent
      */
-    public handleMenuClosed(): void {
-        if (!this.menuClosedByEnter && this.lastSavedFormValues) {
+    public handleMenuClosed(reason: MenuCloseReason): void {
+        if (!reason) return;
+
+        const isClosedByEscape = reason === 'keydown';
+        if (isClosedByEscape && this.lastSavedFormValues) {
             this.allowDiscountValueChanges = false;
             this.discountForm.patchValue({
                 percentage: this.lastSavedFormValues.percentage,
@@ -274,8 +276,54 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
             this.allowDiscountValueChanges = true;
             this.calculateDiscountAmount();
         }
-
-        this.menuClosedByEnter = false;
         this.lastSavedFormValues = null;
+    }
+
+    /**
+     * Focuses the next available checkbox in the discount list
+     *
+     * @param {HTMLElement} currentElement - The currently focused checkbox element
+     * @param {number} currentIndex - The index of the current checkbox
+     * @memberof DiscountDropdownComponent
+     */
+    public focusNextCheckbox(currentElement: HTMLElement, currentIndex: number): void {
+        setTimeout(() => {
+            // Find the discount wrapper container
+            const discountWrapper = document.querySelector('.discount-checkbox-wrapper');
+            if (discountWrapper) {
+                // Get all mat-checkbox elements (Angular Material checkboxes)
+                const checkboxes = discountWrapper.querySelectorAll('mat-checkbox');
+                
+                if (checkboxes.length > 0) {
+                    const nextIndex = currentIndex + 1;
+                    
+                    if (nextIndex < checkboxes.length) {
+                        // Focus next checkbox - target the actual input element inside mat-checkbox
+                        const nextCheckbox = checkboxes[nextIndex] as HTMLElement;
+                        const inputElement = nextCheckbox.querySelector('input[type="checkbox"]') as HTMLElement;
+                        if (inputElement) {
+                            inputElement.focus();
+                        } else {
+                            nextCheckbox.focus();
+                        }
+                    } else {
+                        // If at the end, try to focus "Create New" button or cycle back to first checkbox
+                        const createNewButton = document.querySelector('.create-new span[tabindex="0"]');
+                        if (createNewButton) {
+                            (createNewButton as HTMLElement)?.focus();
+                        } else if (checkboxes.length > 0) {
+                            // Cycle back to first checkbox
+                            const firstCheckbox = checkboxes[0] as HTMLElement;
+                            const firstInputElement = firstCheckbox.querySelector('input[type="checkbox"]') as HTMLElement;
+                            if (firstInputElement) {
+                                firstInputElement.focus();
+                            } else {
+                                firstCheckbox.focus();
+                            }
+                        }
+                    }
+                }
+            }
+        }, 150);
     }
 }

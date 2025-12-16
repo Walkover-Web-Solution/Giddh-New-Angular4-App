@@ -12,6 +12,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { A11yModule } from "@angular/cdk/a11y";
 import { TranslateDirectiveModule } from "../translate/translate.directive.module";
 import { GiddhNumberFormatPipe } from "../../shared/helpers/pipes/number-format/number-format.pipe";
+import { KeyboardShortutModule } from "../../shared/helpers/directives/keyboardShortcut/keyboardShortut.module";
 
 @NgModule({
     declarations: [
@@ -29,7 +30,8 @@ import { GiddhNumberFormatPipe } from "../../shared/helpers/pipes/number-format/
         FormsModule,
         ReactiveFormsModule,
         A11yModule,
-        TranslateDirectiveModule
+        TranslateDirectiveModule,
+        KeyboardShortutModule
     ],
     exports: [
         AddBulkItemsComponent

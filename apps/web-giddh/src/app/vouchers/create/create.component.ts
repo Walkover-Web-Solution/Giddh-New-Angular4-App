@@ -61,7 +61,7 @@ import {
 } from "../utility/vouchers.const";
 import { SearchService } from "../../services/search.service";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
-import { MatMenuTrigger } from "@angular/material/menu";
+import { MatMenuTrigger, MenuCloseReason } from "@angular/material/menu";
 import { OtherTaxComponent } from "../../theme/other-tax/other-tax.component";
 import { LastInvoices, OptionInterface, VoucherForm } from "../../models/api-models/Voucher";
 import { PageLeaveUtilityService } from "../../services/page-leave-utility.service";
@@ -3108,8 +3108,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     voucherType: this.voucherType,
                     exchangeRate: this.invoiceForm.get("exchangeRate")?.value ?? 1,
                     highPrecisionRate: this.highPrecisionRate,
-                    customerUniqueName: this.invoiceForm.get("account.uniqueName")?.value,
+                    customerUniqueName: this.invoiceForm.get("account.uniqueName")?.value
                 },
+                disableClose: true
             })
         );
 
@@ -3572,6 +3573,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 right: "0",
                 top: "0",
             },
+            autoFocus: false
         });
     }
 
@@ -4015,6 +4017,23 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public cancelHsnSacEdit(entry: FormGroup): void {
         entry.get("hsnNumber")?.patchValue(this.currentHsnSac.hsnNumber);
         entry.get("sacNumber")?.patchValue(this.currentHsnSac.sacNumber);
+    }
+
+    /**
+     * Handles HSN/SAC menu closed event and resets values if closed by escape
+     *
+     * @param {MenuCloseReason} reason - The reason the menu was closed
+     * @param {FormGroup} entry - The form group entry
+     * @memberof VoucherCreateComponent
+     */
+    public handleHsnSacMenuClosed(reason: MenuCloseReason, entry: FormGroup): void {
+        if (!reason) return;
+        
+        const isClosedByEscape = reason === 'keydown';
+        if (isClosedByEscape) {
+            // Reset to saved values when closed by escape key
+            this.cancelHsnSacEdit(entry);
+        }
     }
 
     /**

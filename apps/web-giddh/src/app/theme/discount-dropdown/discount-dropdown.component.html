@@ -12,9 +12,8 @@
         readonly
         [value]="currency + totalDiscountAmount"
         (menuOpened)="handleMenuOpened()"
-        (menuClosed)="handleMenuClosed()"
     />
-    <mat-menu #discountControlMenu="matMenu" [hasBackdrop]="hasBackdrop">
+    <mat-menu #discountControlMenu="matMenu" [hasBackdrop]="hasBackdrop" (closed)="handleMenuClosed($event)">
         <ng-template matMenuContent>
             <div
                 class="d-flex flex-column px-3 pt-2 discount-wrapper"
@@ -36,7 +35,7 @@
                         [cssClass]="'text-right'"
                         formControlName="percentage"
                         [readonly]="discountForm.get('fixedValue')?.value > 0"
-                        (keydown.enter)="$event.preventDefault(); menuClosedByEnter = true; menuTrigger?.closeMenu()"
+                        (keydown.enter)="$event.preventDefault(); menuTrigger?.closeMenu()"
                     ></input-field>
                     <input-field
                         [type]="'number'"
@@ -47,7 +46,7 @@
                         [cssClass]="'text-right'"
                         formControlName="fixedValue"
                         [readonly]="discountForm.get('percentage')?.value > 0"
-                        (keydown.enter)="$event.preventDefault(); menuClosedByEnter = true; menuTrigger?.closeMenu()"
+                        (keydown.enter)="$event.preventDefault(); menuTrigger?.closeMenu()"
                     ></input-field>
                 </div>
                 <div class="discount-separator position-relative text-center my-2" *ngIf="discountsList?.length">
@@ -64,11 +63,18 @@
                                 formControlName="isActive"
                                 color="primary"
                                 #discountRef
+                                [attr.data-index]="i"
+                                tabindex="0"
+                                (change)="focusNextCheckbox($event.target, i)"
+                                cdkMonitorElementFocus
                                 (keydown.enter)="
                                     $event.preventDefault();
                                     discountRef.toggle();
-                                    menuClosedByEnter = true;
+                                    focusNextCheckbox($event.target, i);
                                     menuTrigger?.closeMenu()
+                                "
+                                (keydown.space)="
+                                    $event.preventDefault(); discountRef.toggle(); focusNextCheckbox($event.target, i)
                                 "
                             >
                                 <span class="font-size-15">
@@ -89,12 +95,8 @@
                         role="button"
                         cdkMonitorElementFocus
                         [attr.aria-label]="commonLocaleData?.app_create_new"
-                        (keydown.enter)="
-                            $event.preventDefault(); createNew(); menuClosedByEnter = true; menuTrigger?.closeMenu()
-                        "
-                        (keydown.space)="
-                            $event.preventDefault(); createNew(); menuClosedByEnter = true; menuTrigger?.closeMenu()
-                        "
+                        (keydown.enter)="$event.preventDefault(); createNew(); menuTrigger?.closeMenu()"
+                        (keydown.space)="$event.preventDefault(); createNew(); menuTrigger?.closeMenu()"
                     >
                         {{ commonLocaleData?.app_create_new }}
                     </span>
