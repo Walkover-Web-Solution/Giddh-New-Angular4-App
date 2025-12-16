@@ -48,7 +48,6 @@ import { GiddhNumberFormatModule } from "../shared/helpers/pipes/number-format/n
         ReactiveFormsModule,
         KeyboardShortutModule,
         DecimalDigitsModule,
-
         DigitsOnlyModule,
         SharedModule,
         AsideMenuRecurringEntryModule,

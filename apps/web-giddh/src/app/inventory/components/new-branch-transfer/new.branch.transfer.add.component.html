@@ -101,7 +101,7 @@
                                     name="productHsnCode"
                                     class="form-control"
                                     maxlength="10"
-                                    digitsOnlyDirective
+                                    decimalDigitsDirective
                                     *ngIf="branchTransfer.products[0].showCodeType === 'hsn'"
                                     [(ngModel)]="branchTransfer.products[0].hsnNumber"
                                 />
@@ -110,7 +110,7 @@
                                     name="productHsnCode"
                                     class="form-control"
                                     maxlength="10"
-                                    digitsOnlyDirective
+                                    decimalDigitsDirective
                                     *ngIf="branchTransfer.products[0].showCodeType === 'sac'"
                                     [(ngModel)]="branchTransfer.products[0].sacNumber"
                                 />
@@ -342,7 +342,7 @@
                                     name="productHsnCode"
                                     class="form-control"
                                     maxlength="10"
-                                    digitsOnlyDirective
+                                    decimalDigitsDirective
                                     *ngIf="branchTransfer.products[0].showCodeType === 'hsn'"
                                     [(ngModel)]="branchTransfer.products[0].hsnNumber"
                                 />
@@ -351,7 +351,7 @@
                                     name="productHsnCode"
                                     class="form-control"
                                     maxlength="10"
-                                    digitsOnlyDirective
+                                    decimalDigitsDirective
                                     *ngIf="branchTransfer.products[0].showCodeType === 'sac'"
                                     [(ngModel)]="branchTransfer.products[0].sacNumber"
                                 />
@@ -696,7 +696,7 @@
                                                 <input
                                                     type="number"
                                                     maxlength="10"
-                                                    digitsOnlyDirective
+                                                    decimalDigitsDirective
                                                     placeholder="{{
                                                         product.showCodeType === 'hsn' ? 'HSN' : 'SAC'
                                                     }} Code"

@@ -56,14 +56,13 @@
                             >
                                 <span class="d-flex w-100 font-weight-regular">
                                     {{ selectedTimeSpan }}
-                                    <span class="ml-auto"><span class="fa fa-caret-down font-size-15 mr-2"></span></span>
+                                    <span class="ml-auto"
+                                        ><span class="fa fa-caret-down font-size-15 mr-2"></span
+                                    ></span>
                                 </span>
                             </button>
                             <mat-menu #menu="matMenu">
-                                <section
-                                    class="mb-2 time-span-dropdown max-w-300"
-                                    (click)="$event.stopPropagation()"
-                                >
+                                <section class="mb-2 time-span-dropdown max-w-300" (click)="$event.stopPropagation()">
                                     <div class="p-3">
                                         <mat-radio-group formControlName="periodOptions" class="d-flex flex-column">
                                             <mat-radio-button
@@ -129,7 +128,7 @@
                                                     <input-field
                                                         [label]="localeData?.select_past_period_label"
                                                         [name]="'duration'"
-                                                        [allowDigitsOnly]="true"
+                                                        [allowDecimalDigitsOnly]="true"
                                                         formControlName="duration"
                                                         [type]="'number'"
                                                         [placeholder]="localeData?.select_past_period_placeholder"

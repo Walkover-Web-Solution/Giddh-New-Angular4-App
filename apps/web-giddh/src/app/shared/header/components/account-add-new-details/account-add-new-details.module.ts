@@ -16,6 +16,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { SalesPersonService } from '../../../sales-person/utility/sales-person.service';
 import { MobileNumberInputComponent } from '../../../mobile-number-input';
 import { A11yModule } from '@angular/cdk/a11y';
+import { DecimalDigitsModule } from '../../../helpers/directives/decimalDigits/decimalDigits.module';
 
 @NgModule({
     declarations: [AccountAddNewDetailsComponent, BulkAddDialogComponent],
@@ -35,7 +36,8 @@ import { A11yModule } from '@angular/cdk/a11y';
         NewConfirmModalModule,
         MatTooltipModule,
         MobileNumberInputComponent,
-        A11yModule
+        A11yModule,
+        DecimalDigitsModule
     ],
     providers: [SalesPersonService]
 })

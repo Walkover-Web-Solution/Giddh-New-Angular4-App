@@ -40,7 +40,7 @@
                             type="number"
                             class="form-control"
                             maxlength="10"
-                            digitsOnlyDirective
+                            decimalDigitsDirective
                             formControlName="hsnNumber"
                             *ngIf="addGroupForm.get('showCodeType')?.value === 'hsn'"
                         />
@@ -49,7 +49,7 @@
                             class="form-control"
                             maxlength="10"
                             formControlName="sacNumber"
-                            digitsOnlyDirective
+                            decimalDigitsDirective
                             *ngIf="addGroupForm.get('showCodeType')?.value === 'sac'"
                         />
                     </div>

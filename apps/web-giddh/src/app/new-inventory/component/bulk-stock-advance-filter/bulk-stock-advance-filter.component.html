@@ -60,7 +60,7 @@
                                     [placeholder]="localeData?.advance_search_filter?.enter_amount"
                                     [name]="'amount'"
                                     [(ngModel)]="advanceSearchFormObj.amount"
-                                    [allowDigitsOnly]="true"
+                                    [allowDecimalDigitsOnly]="true"
                                     (onClear)="advanceSearchFormObj.amount = ''"
                                     [autocomplete]="'off'"
                                     [label]="localeData?.advance_search_filter?.amount"

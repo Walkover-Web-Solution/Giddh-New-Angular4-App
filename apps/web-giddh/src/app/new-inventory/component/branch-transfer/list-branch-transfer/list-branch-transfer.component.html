@@ -359,7 +359,7 @@
                                         [placeholder]="'0'"
                                         [name]="'amount'"
                                         [(ngModel)]="branchTransferAdvanceSearchFormObj.amount"
-                                        [allowDigitsOnly]="true"
+                                        [allowDecimalDigitsOnly]="true"
                                         (onClear)="branchTransferAdvanceSearchFormObj.amount = ''"
                                         [autocomplete]="'off'"
                                         [label]="commonLocaleData?.app_total_amount"
