@@ -246,8 +246,9 @@ export class TaxDropdownComponent implements OnChanges {
         const isClosedByEscape = reason === 'keydown';
         if (isClosedByEscape && this.lastSavedFormValues) {
             const taxesArray = this.taxForm.get('taxes') as FormArray;
-            this.lastSavedFormValues.taxes?.forEach((tax: any, index: number) => {
-                if (taxesArray.controls[index]) {
+            this.lastSavedFormValues.taxes?.forEach((tax: any) => {
+                const index = taxesArray?.controls?.findIndex(control => control.value.uniqueName === tax.uniqueName);
+                if (index > -1) {
                     taxesArray.controls[index].patchValue(tax);
                 }
             });
