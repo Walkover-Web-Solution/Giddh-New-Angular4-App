@@ -46,6 +46,7 @@ import { MatCardModule } from '@angular/material/card';
 import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
 import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
 import { GiddhNumberFormatPipe } from '../shared/helpers/pipes/number-format/number-format.pipe';
+import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 @NgModule({
     declarations: [
         ContactComponent,
@@ -71,6 +72,7 @@ import { GiddhNumberFormatPipe } from '../shared/helpers/pipes/number-format/num
         SharedModule,
         ClickOutsideModule,
         DigitsOnlyModule,
+        DecimalDigitsModule,
         ElementViewChildModule,
         GiddhNumberFormatModule,
         Daterangepicker,

@@ -16,79 +16,74 @@
             <span>
                 {{ activePayorAccount ? localeData?.payment?.edit_user : localeData?.payment?.add_user }}
             </span>
-            <button
-                mat-icon-button
-                aria-label="close"
-                (click)="closeAccountUserModal()"
-            >
+            <button mat-icon-button aria-label="close" (click)="closeAccountUserModal()">
                 <i class="icon-cross"></i>
             </button>
         </div>
         <mat-dialog-content class="dialog-body icici-payor-account-create-edit">
-                    <ng-container *ngIf="localeData?.payment">
-                        <div class="clear-both">
-                            <div class="d-inline-block col-md-6 pl-0">
-                                <label>{{ localeData?.payment?.account_number_label }}</label
-                                ><br />
-                                <span class="font-weight-semibold font-size-15">{{
-                                    activeBankAccount?.bankResource?.accountNumber
-                                }}</span>
-                            </div>
-                            <div class="d-inline-block col-md-6 pl-0 pr-0">
-                                <label>{{ localeData?.payment?.linked_account }}</label
-                                ><br />
-                                <span class="font-weight-semibold font-size-15">{{ activeBankAccount?.account?.name }}</span>
-                            </div>
-                        </div>
-                        <div class="clear-both mt-4" *ngIf="!activePayorAccount">
+            <ng-container *ngIf="localeData?.payment">
+                <div class="clear-both">
+                    <div class="d-inline-block col-md-6 pl-0">
+                        <label>{{ localeData?.payment?.account_number_label }}</label
+                        ><br />
+                        <span class="font-weight-semibold font-size-15">{{
+                            activeBankAccount?.bankResource?.accountNumber
+                        }}</span>
+                    </div>
+                    <div class="d-inline-block col-md-6 pl-0 pr-0">
+                        <label>{{ localeData?.payment?.linked_account }}</label
+                        ><br />
+                        <span class="font-weight-semibold font-size-15">{{ activeBankAccount?.account?.name }}</span>
+                    </div>
+                </div>
+                <div class="clear-both mt-4" *ngIf="!activePayorAccount">
+                    <input-field
+                        [label]="localeData?.payment?.login_id_label"
+                        [required]="true"
+                        [name]="'loginId'"
+                        formControlName="loginId"
+                        [type]="'text'"
+                        [placeholder]="localeData?.payment?.login_id_placeholder"
+                    >
+                    </input-field>
+                </div>
+                <div class="clear-both mt-2">
+                    <reactive-dropdown-field
+                        (selectedOption)="accountUserForm.get('userUniqueName').patchValue($event.value)"
+                        [label]="localeData?.payment?.user"
+                        [name]="'userUniqueName'"
+                        [placeholder]="localeData?.payment?.select_user"
+                        [options]="usersList"
+                        [required]="true"
+                    ></reactive-dropdown-field>
+                </div>
+                <div class="clear-both mt-2">
+                    <div class="clear-both">
+                        <div class="d-inline-block col-md-6 pl-0">
                             <input-field
-                                [label]="localeData?.payment?.login_id_label"
-                                [required]="true"
-                                [name]="'loginId'"
-                                formControlName="loginId"
+                                [label]="localeData?.payment?.limit_upto"
+                                formControlName="maxAmount"
+                                [name]="'maxAmount'"
                                 [type]="'text'"
-                                [placeholder]="localeData?.payment?.login_id_placeholder"
-                            >
-                            </input-field>
+                                [placeholder]="localeData?.payment?.enter_amount"
+                                [allowDecimalDigitsOnly]="true"
+                            ></input-field>
                         </div>
-                        <div class="clear-both mt-2">
+                        <div class="d-inline-block col-md-6 pr-0">
                             <reactive-dropdown-field
-                                (selectedOption)="accountUserForm.get('userUniqueName').patchValue($event.value)"
-                                [label]="localeData?.payment?.user"
-                                [name]="'userUniqueName'"
-                                [placeholder]="localeData?.payment?.select_user"
-                                [options]="usersList"
-                                [required]="true"
+                                (selectedOption)="accountUserForm.get('duration').patchValue($event.value)"
+                                [label]="localeData?.payment?.limit_upto"
+                                [name]="'duration'"
+                                [placeholder]="localeData?.payment?.duration"
+                                [options]="amountLimitDurations"
                             ></reactive-dropdown-field>
                         </div>
-                        <div class="clear-both mt-2">
-                            <div class="clear-both">
-                                <div class="d-inline-block col-md-6 pl-0">
-                                    <input-field
-                                        [label]="localeData?.payment?.limit_upto"
-                                        formControlName="maxAmount"
-                                        [name]="'maxAmount'"
-                                        [type]="'text'"
-                                        [placeholder]="localeData?.payment?.enter_amount"
-                                        [allowDigitsOnly]="true"
-                                    ></input-field>
-                                </div>
-                                <div class="d-inline-block col-md-6 pr-0">
-                                    <reactive-dropdown-field
-                                        (selectedOption)="accountUserForm.get('duration').patchValue($event.value)"
-                                        [label]="localeData?.payment?.limit_upto"
-                                        [name]="'duration'"
-                                        [placeholder]="localeData?.payment?.duration"
-                                        [options]="amountLimitDurations"
-                                        
-                                    ></reactive-dropdown-field>
-                                </div>
-                            </div>
-                        </div>
-                    </ng-container>
-                    <ng-container *ngIf="!localeData?.payment">
-                        <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
-                    </ng-container>
+                    </div>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="!localeData?.payment">
+                <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
+            </ng-container>
             <div class="d-flex justify-content-end mt-3" *ngIf="localeData?.payment">
                 <button
                     mat-raised-button

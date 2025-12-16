@@ -79,6 +79,7 @@ import { ReplaceAllPipeModule } from '../shared/helpers/pipes/replaceAll/replace
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { CompanyAuthKeyComponent } from './company-auth-key/company-auth-key.component';
 import { CreateCompanyAuthKeyComponent } from './company-auth-key/create-company-auth-key/create-company-auth-key.component';
+import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 
 @NgModule({
     declarations: [
@@ -123,6 +124,7 @@ import { CreateCompanyAuthKeyComponent } from './company-auth-key/create-company
         GiddhNumberFormatModule,
         NgxMaskModule.forRoot(),
         DigitsOnlyModule,
+        DecimalDigitsModule,
         TaxSidebarModule,
         ReplacePipeModule,
         NoDataModule,
