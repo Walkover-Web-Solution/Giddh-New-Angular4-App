@@ -879,16 +879,13 @@ export class GeneralService {
      * @returns {Array<AllItems>}
      * @memberof GeneralService
      */
-    public getVisibleMenuItems(module: string, apiItems: Array<any>, itemList: Array<AllItems>, countryCode: string = "", voucherApiVersion?: number): Array<AllItems> {
+    public getVisibleMenuItems(module: string, apiItems: Array<any>, itemList: Array<AllItems>, countryCode: string = ""): Array<AllItems> {
         const visibleMenuItems = cloneDeep(itemList);
-        const localData = localStorage.getItem('session');
-        // New tab - initialize with localStorage data
-        const localObj = JSON.parse(localData);
-        const voucherVersion = localObj?.activeCompany?.voucherVersion;
+        const voucherApiVersion = this.voucherApiVersion || 2;
         let index = 0;
         itemList?.forEach((menuItem, menuIndex) => {
             visibleMenuItems[menuIndex].items = [];
-            if (visibleMenuItems[menuIndex]?.additional?.queryParams?.voucherVersion && visibleMenuItems[menuIndex]?.additional?.queryParams?.voucherVersion !== voucherVersion) {
+            if (visibleMenuItems[menuIndex]?.additional?.queryParams?.voucherVersion && visibleMenuItems[menuIndex]?.additional?.queryParams?.voucherVersion !== voucherApiVersion) {
                 visibleMenuItems[menuIndex].hide = true;
             } else {
                 visibleMenuItems[menuIndex].itemIndex = index;
@@ -897,7 +894,7 @@ export class GeneralService {
 
             menuItem.items?.forEach(item => {
                 const isValidItem = apiItems.find(apiItem => apiItem?.uniqueName === item.link);
-                if (((isValidItem && item.hide !== module) || (item.alwaysPresent && item.hide !== module)) && (!item.additional?.queryParams?.countrySpecific?.length || item.additional?.queryParams?.countrySpecific?.indexOf(countryCode) > -1) && (!item.additional?.queryParams?.voucherVersion || item.additional?.queryParams?.voucherVersion === voucherVersion)) {
+                if (((isValidItem && item.hide !== module) || (item.alwaysPresent && item.hide !== module)) && (!item.additional?.queryParams?.countrySpecific?.length || item.additional?.queryParams?.countrySpecific?.indexOf(countryCode) > -1) && (!item.additional?.queryParams?.voucherVersion || item.additional?.queryParams?.voucherVersion === voucherApiVersion)) {
                     // If items returned from API have the current item which can be shown in branch/company mode, add it
                     visibleMenuItems[menuIndex].items.push(item);
                 }
