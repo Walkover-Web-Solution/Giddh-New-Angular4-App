@@ -99,7 +99,7 @@ export const ROUTES: Routes = [
                 path: 'company-import-export',
                 loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./company-import-export/company-import-export.module') */ Promise.resolve(DummyModule)
             },
-            { path: 'reports', loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./reports/reports.module') */ Promise.resolve(DummyModule) },
+            { path: 'reports', loadChildren: () => import('./reports/reports.module').then(module => module.ReportsModule) },
             { path: 'purchase-management', loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./purchase/purchase.module') */ Promise.resolve(DummyModule) },
             { path: 'verify-email', loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./verify-email/verify-email.module') */ Promise.resolve(DummyModule) },
             { path: 'billing-detail' },

@@ -1,0 +1,68 @@
+<div
+    appTranslate
+    [file]="'reports/cashflow-statement'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
+    <section class="clear-both text-center pt-5">
+        <div class="container-fluid">
+            <div class="d-flex align-items-center justify-content-center mb-2">
+                <label class="mr-1 font-size-15 mt-2">{{ localeData?.as_on }}</label>
+                <div>
+                    <div>
+                        <p class="mb-3">{{ activeCompany?.name }}</p>
+                        <p class="font-weight-semibold mb-2">{{ localeData?.cashflow_statement }}</p>
+                    </div>
+                    <div class="custom-datepicker custom-new-datepicker"
+                         [matMenuTriggerFor]="universalDatepicker"
+                         #universalDatepickerTrigger="matMenuTrigger"
+                         role="button"
+                         aria-haspopup="true"
+                         aria-controls="universalDatepicker">
+                        <input
+                            matInput
+                            type="text"
+                            name="selectedDateRange"
+                            [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                            class="giddh-datepicker date-range-picker mb-2"
+                            readonly
+                        />
+                    </div>
+                    <button
+                        type="button"
+                        mat-raised-button
+                        color="primary"
+                        class="mr-0 download-btn"
+                        (click)="downloadReport()"
+                        [disabled]="isLoading || !fromDate || !toDate || !downloadRequest.companyUniqueName"
+                    >
+                        {{ commonLocaleData?.app_download_report }}
+                    </button>
+                </div>
+            </div>
+        </div>
+        <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isLoading"></giddh-page-loader>
+    </section>
+    <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+        <ng-template matMenuContent>
+            <app-datepicker-wrapper
+                [inputStartDate]="selectedDateRange?.startDate"
+                [inputEndDate]="selectedDateRange?.endDate"
+                [alwaysShowCalendars]="true"
+                [ranges]="datePickerOptions"
+                [selectedRangeLabel]="selectedRangeLabel"
+                [showCustomRangeLabel]="true"
+                [showClearButton]="false"
+                [showCancel]="true"
+                [linkedCalendars]="true"
+                [showDropdowns]="true"
+                (rangeClicked)="dateSelectedCallback($event)"
+                (datesUpdated)="dateSelectedCallback($event)"
+                (closeCalender)="toggleGiddhDatepicker(false)"
+                [keepCalendarOpeningWithRange]="false"
+                [showRangeLabelOnInput]="false"
+            ></app-datepicker-wrapper>
+        </ng-template>
+    </mat-menu>
+</div>

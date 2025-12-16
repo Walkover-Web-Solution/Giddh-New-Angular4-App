@@ -1,0 +1,365 @@
+<div
+    appTranslate
+    [file]="'reports/reverse-charge'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
+    <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper" *ngIf="asideGstSidebarMenuState">
+        <tax-sidebar
+            (navigateEvent)="handleNavigation()"
+            [exclude]="'#primary-new-header'"
+            class="gst-sidebar"
+        ></tax-sidebar>
+    </div>
+    <div class="reverse-table-report overflow-visible p-3">
+        <div class="container-fluid overflow-visible px-0">
+            <div class="position-sticky left-0 mb-3">
+                <div class="d-flex align-items-center column-gap-1 mb-2">
+                    <reactive-dropdown-field
+                        *ngIf="
+                            currentCompanyBranches?.length > 2 &&
+                            (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
+                        "
+                        [label]="commonLocaleData?.app_entity"
+                        [labelValue]="currentBranch?.name ?? ''"
+                        [options]="currentCompanyBranches"
+                        (selectedOption)="currentBranch.uniqueName = $event.value; handleBranchChange($event)"
+                        [placeholder]="commonLocaleData?.app_select_entity"
+                    ></reactive-dropdown-field>
+                    <div
+                        class="custom-datepicker"
+                        [matMenuTriggerFor]="universalDatepicker"
+                        #universalDatepickerTrigger="matMenuTrigger"
+                        role="button"
+                        aria-haspopup="true"
+                        aria-controls="universalDatepicker"
+                    >
+                        <input
+                            matInput
+                            type="text"
+                            name="selectedDateRange"
+                            [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                            class="giddh-datepicker date-range-picker"
+                            aria-label="Select date range"
+                            readonly
+                        />
+                    </div>
+                    <button mat-stroked-button (click)="resetFilters()" *ngIf="isDateFilterApplied()">
+                        <i class="icon-cross"></i> {{ commonLocaleData?.app_clear_filter }}
+                    </button>
+                </div>
+                <div class="top-content" [hidden]="!reverseChargeReportResults?.items?.length">
+                    <div class="d-flex w-100 justify-content-between overflow-x-auto">
+                        <div class="total-due-sale total-details-box opening-box border-none mr-1">
+                            <h5>
+                                {{ localeData?.total_taxable_value }}
+                                <div>
+                                    <span class="d-inline-flex number-total">
+                                        <amount-field
+                                            [amount]="reverseChargeReportResults?.totalTaxableValue"
+                                            [currencySymbol]="activeCompany?.baseCurrencySymbol"
+                                            [currencyCode]="activeCompany?.baseCurrency"
+                                        >
+                                        </amount-field>
+                                    </span>
+                                </div>
+                            </h5>
+                        </div>
+                        <div class="total-due-sale total-details-box due-box border-none">
+                            <h5>
+                                {{ localeData?.total_tax_amount }}
+                                <div>
+                                    <span class="d-inline-flex number-total">
+                                        <amount-field
+                                            [amount]="reverseChargeReportResults?.totalTaxAmount"
+                                            [currencySymbol]="activeCompany?.baseCurrencySymbol"
+                                            [currencyCode]="activeCompany?.baseCurrency"
+                                        >
+                                        </amount-field>
+                                    </span>
+                                </div>
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="invoice-preview table-responsive table-header-sticky overflow-visible">
+                <table
+                    mat-table
+                    matSort
+                    [dataSource]="reverseChargeReportResults?.items"
+                    (matSortChange)="sortChange($event)"
+                    [matSortActive]="reverseChargeReportGetRequest.sortBy"
+                    [matSortDirection]="reverseChargeReportGetRequest.sort"
+                    *ngIf="!isLoading && (reverseChargeReportResults?.items?.length || isSearching)"
+                >
+                    <!-- Index Column -->
+                    <ng-container matColumnDef="index">
+                        <th mat-header-cell *matHeaderCellDef class="serial-no-column">#</th>
+                        <td mat-cell *matCellDef="let element; let i = index" class="no-wrap">
+                            {{
+                                i
+                                    | serialNumber
+                                        : reverseChargeReportGetRequest.page
+                                        : reverseChargeReportGetRequest.count ?? pageSizeOptions[0]
+                            }}
+                        </td>
+                    </ng-container>
+
+                    <!-- Entry Date Column -->
+                    <ng-container matColumnDef="entryDate">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="table-date-width">
+                            {{ localeData?.entry_date }}
+                        </th>
+                        <td mat-cell *matCellDef="let element">{{ element?.entryDate }}</td>
+                    </ng-container>
+
+                    <!-- Supplier Name Column with Search -->
+                    <ng-container matColumnDef="suppliersName">
+                        <th
+                            mat-header-cell
+                            *matHeaderCellDef
+                            #searchCustomerContainer
+                            (clickOutside)="handleClickOutside($event, searchCustomerContainer, 'name')"
+                        >
+                            <ng-container
+                                *ngTemplateOutlet="
+                                    searchTemplate;
+                                    context: {
+                                        $implicit: showNameSearch,
+                                        fieldName: 'name',
+                                        formControl: searchedName,
+                                        placeholder: localeData?.suppliers_name_placeholder,
+                                        title: commonLocaleData?.app_name
+                                    }
+                                "
+                            ></ng-container>
+                        </th>
+                        <td
+                            mat-cell
+                            *matCellDef="let element"
+                            [matTooltip]="element?.supplierName"
+                            matTooltipPosition="above"
+                        >
+                            {{ element?.supplierName }}
+                        </td>
+                    </ng-container>
+
+                    <!-- Voucher Type Column -->
+                    <ng-container matColumnDef="voucherType">
+                        <th mat-header-cell *matHeaderCellDef width="15%">
+                            <span>{{ commonLocaleData?.app_voucher_type }}</span>
+                            <i [matMenuTriggerFor]="voucherMenu" class="fa fa-ellipsis-v px-2"></i>
+                            <mat-menu #voucherMenu="matMenu">
+                                <button mat-menu-item (click)="changeVoucherType('Journal')">
+                                    {{ commonLocaleData?.app_voucher_types?.journal }}
+                                </button>
+                                <button mat-menu-item (click)="changeVoucherType('Purchase')">
+                                    {{ commonLocaleData?.app_voucher_types?.purchase }}
+                                </button>
+                                <button mat-menu-item (click)="changeVoucherType('Debit Note')">
+                                    {{ commonLocaleData?.app_voucher_types?.debit_note }}
+                                </button>
+                            </mat-menu>
+                        </th>
+                        <td mat-cell *matCellDef="let element">{{ element?.voucherType | titlecase }}</td>
+                    </ng-container>
+
+                    <!-- Invoice Number Column with Search -->
+                    <ng-container matColumnDef="invoiceNumber">
+                        <th
+                            mat-header-cell
+                            *matHeaderCellDef
+                            #searchInvoiceContainer
+                            class="invoice-column"
+                            (clickOutside)="handleClickOutside($event, searchInvoiceContainer, 'invoiceNo')"
+                        >
+                            <ng-container
+                                *ngTemplateOutlet="
+                                    searchTemplate;
+                                    context: {
+                                        $implicit: showInvoiceNoSearch,
+                                        fieldName: 'invoiceNo',
+                                        formControl: searchedInvoiceNo,
+                                        placeholder: commonLocaleData?.app_invoice_no,
+                                        title: commonLocaleData?.app_invoice_no
+                                    }
+                                "
+                            ></ng-container>
+                        </th>
+                        <td mat-cell *matCellDef="let element">{{ element?.invoiceNumber || "-" }}</td>
+                    </ng-container>
+
+                    <!-- Supplier Invoice Date Column -->
+                    <ng-container matColumnDef="supplierInvoiceDate">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header class="width-150">
+                            {{ localeData?.suppliers_invoice_date }}
+                        </th>
+                        <td mat-cell *matCellDef="let element">{{ element?.supplierInvoiceDate || "-" }}</td>
+                    </ng-container>
+
+                    <!-- Supplier Country Column with Search -->
+                    <ng-container matColumnDef="supplierCountry">
+                        <th
+                            mat-header-cell
+                            *matHeaderCellDef
+                            #searchCountryContainer
+                            width="200px"
+                            (clickOutside)="handleClickOutside($event, searchCountryContainer, 'country')"
+                        >
+                            <ng-container
+                                *ngTemplateOutlet="
+                                    searchTemplate;
+                                    context: {
+                                        $implicit: showCountrySearch,
+                                        fieldName: 'country',
+                                        formControl: searchedCountry,
+                                        placeholder: localeData?.suppliers_country_placeholder,
+                                        title: commonLocaleData?.app_country
+                                    }
+                                "
+                            ></ng-container>
+                        </th>
+                        <td mat-cell *matCellDef="let element">{{ element?.suppliersCountry }}</td>
+                    </ng-container>
+
+                    <!-- Taxable Value Column -->
+                    <ng-container matColumnDef="taxableValue">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                            {{ commonLocaleData?.app_taxable_value }}
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            <span class="d-inline-flex">
+                                <amount-field
+                                    [amount]="element?.taxableValue"
+                                    [currencySymbol]="activeCompany?.baseCurrencySymbol"
+                                    [currencyCode]="activeCompany?.baseCurrency"
+                                ></amount-field>
+                            </span>
+                        </td>
+                    </ng-container>
+
+                    <!-- Tax Rate Column -->
+                    <ng-container matColumnDef="taxRate">
+                        <th mat-header-cell *matHeaderCellDef class="width-150">
+                            {{ commonLocaleData?.app_tax_rate }}
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            <span class="d-inline-flex">
+                                <amount-field
+                                    [amount]="element?.taxRate"
+                                    [currencySymbol]="false"
+                                    [currencyCode]="false"
+                                ></amount-field> </span
+                            >%
+                        </td>
+                    </ng-container>
+
+                    <!-- Tax Amount Column -->
+                    <ng-container matColumnDef="taxAmount">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                            {{ commonLocaleData?.app_tax_amount }}
+                        </th>
+                        <td mat-cell *matCellDef="let element">
+                            <span class="d-inline-flex">
+                                <amount-field
+                                    [amount]="element?.taxAmount"
+                                    [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                    [currencyCode]="activeCompany?.baseCurrency"
+                                ></amount-field>
+                            </span>
+                        </td>
+                    </ng-container>
+
+                    <!-- Loader when data is loading -->
+                    <ng-container *ngIf="isLoading">
+                        <tr>
+                            <td colspan="10">
+                                <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+                            </td>
+                        </tr>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                </table>
+                <giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
+                <mat-paginator
+                    *ngIf="!isLoading && reverseChargeReportResults.totalItems > pageSizeOptions[0]"
+                    (page)="pageChanged($event)"
+                    [length]="reverseChargeReportResults.totalItems"
+                    [pageSize]="reverseChargeReportResults.count"
+                    [showFirstLastButtons]="true"
+                    [hidePageSize]="false"
+                    [pageSizeOptions]="pageSizeOptions"
+                    [pageIndex]="reverseChargeReportResults.page - 1"
+                ></mat-paginator>
+                <section class="mb-custom-80"></section>
+            </div>
+            <no-data
+                class="d-block no-data"
+                *ngIf="
+                    !isLoading &&
+                    (!reverseChargeReportResults ||
+                        !reverseChargeReportResults.items ||
+                        reverseChargeReportResults.items?.length === 0)
+                "
+                [secondaryMessageClass]="'p-0'"
+            >
+            </no-data>
+        </div>
+    </div>
+</div>
+
+<!-- Universal Date Picker Menu -->
+<mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+    <ng-template matMenuContent>
+        <app-datepicker-wrapper
+            [inputStartDate]="selectedDateRange?.startDate"
+            [inputEndDate]="selectedDateRange?.endDate"
+            [alwaysShowCalendars]="true"
+            [ranges]="datePickerOptions"
+            [selectedRangeLabel]="selectedRangeLabel"
+            [showCustomRangeLabel]="true"
+            [showClearButton]="false"
+            [showCancel]="true"
+            [linkedCalendars]="true"
+            [showDropdowns]="true"
+            (rangeClicked)="dateSelectedCallback($event)"
+            (datesUpdated)="dateSelectedCallback($event)"
+            (closeCalender)="toggleGiddhDatepicker(false)"
+            [keepCalendarOpeningWithRange]="false"
+            [showRangeLabelOnInput]="false"
+        ></app-datepicker-wrapper>
+    </ng-template>
+</mat-menu>
+
+<!-- region sorting template -->
+<ng-template
+    #searchTemplate
+    let-show
+    let-title="title"
+    let-placeholder="placeholder"
+    let-fieldName="fieldName"
+    let-formControl="formControl"
+>
+    <div class="search-table">
+        <div class="d-flex align-items-center column-gap-1" [hidden]="show">
+            <span class="cursor-pointer" (click)="toggleSearch(fieldName)">
+                <i class="icon-search icon-font-size-16"></i>
+            </span>
+            <span>{{ title }}</span>
+        </div>
+        <div class="align-items-center d-flex pl-3" [hidden]="!show">
+            <text-field
+                [type]="'text'"
+                [placeholder]="placeholder"
+                [cssClass]="'form-control'"
+                [formControl]="formControl"
+                [autoFocus]="show"
+            ></text-field>
+        </div>
+    </div>
+</ng-template>

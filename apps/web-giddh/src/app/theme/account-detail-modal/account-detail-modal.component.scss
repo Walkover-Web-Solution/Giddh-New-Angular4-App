@@ -1,0 +1,80 @@
+.account-detail-modal-header {
+    position: absolute;
+    top: 20px;
+    left: 30%;
+    right: auto;
+    z-index: 1;
+    margin: 0;
+    background: var(--color-white);
+    width: 50%;
+    padding: 1px;
+    box-shadow: 1px 0 9px var(--color-shadow-light);
+}
+
+.account-detail-modal-header-div {
+    padding: 0;
+    border-radius: var(--mat-border-radius-0);
+}
+
+.account-detail-modal-div {
+    height: 100%;
+    padding: 0;
+}
+
+.account-detail-custom-header {
+    border-right: 0;
+    padding: 11px 10px 10px 10px;
+    width: 100%;
+    background: var(--color-border-light);
+    white-space: initial;
+}
+
+.account-detail-custom-title {
+    font-weight: var(--font-weight-semibold) !important;
+    font-size: var(--font-size-15) !important;
+}
+
+.account-detail-padding {
+    padding: 1px;
+    text-transform: none !important;
+}
+
+.custom-detail h4 {
+    color: var(--color-dark-gray);
+    margin-top: 7px;
+    font-size: var(--font-size-15) !important;
+    font-family: var(--font-family) !important;
+}
+
+.height-82px {
+    padding: 10px 10px 15px 10px;
+    border-top: 1px solid var(--border-color);
+}
+
+ul.list-unstyled li {
+    margin-top: 7px;
+}
+
+ul.list-unstyled li a {
+    color: var(--color-black);
+}
+
+.p-modal-tooltip {
+    width: 257px;
+    @media screen and (max-width: 1870px) {
+        width: 225px;
+    }
+    @media screen and (max-width: 1669px) {
+        width: 194px;
+    }
+    @media screen and (max-width: 1499px) {
+        width: 180px;
+    }
+}
+
+.li-link {
+    margin-top: 15px !important;
+    a:hover {
+        color: var(--text-primary-color) !important;
+    }
+}

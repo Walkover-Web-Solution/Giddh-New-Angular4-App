@@ -1,0 +1,35 @@
+<button
+    mat-stroked-button
+    [matMenuTriggerFor]="menu"
+    [matTooltipPosition]="matTooltipPosition"
+    [matTooltip]="matTooltip"
+    [ngClass]="cssClass"
+    class="btn-stroked-icon"
+    aria-label="filter"
+>
+    <i [ngClass]="iconClass"></i>
+    <span *ngIf="buttonText" class="pl-3">{{ buttonText }}</span>
+</button>
+<mat-menu #menu="matMenu" [class]="'columns-wrapper ' + additionalMenuCssClass">
+    <ng-container *ngFor="let item of (isDynamicMode ? dynamicCustomColumns : customiseColumns)">
+        <button
+            [ngClass]="{ 'disabled-button': item.checked && (isDynamicMode ? checkedColumnsCount : displayedColumns.length === 2) }"
+            mat-menu-item
+            (click)="$event.stopPropagation()"
+            (keydown.enter)="$event.stopPropagation(); onKeydownEnter(item)"
+            aria-label="option check"
+        >
+            <mat-checkbox
+                class="inventory-checkbox"
+                color="primary"
+                [name]="item.value"
+                (ngModelChange)="saveSelectedColumns()"
+                [(ngModel)]="item.checked"
+                [disabled]="item.checked && (isDynamicMode ? checkedColumnsCount : displayedColumns.length === 2)"
+                (click)="$event.stopPropagation()"
+            >
+                {{ item.label }}
+            </mat-checkbox>
+        </button>
+    </ng-container>
+</mat-menu>
