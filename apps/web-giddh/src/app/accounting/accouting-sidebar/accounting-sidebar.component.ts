@@ -35,7 +35,7 @@ export class AccountingSidebarComponent implements OnInit, OnChanges, OnDestroy 
     @Input() public showDiscountAndTax: boolean;
 
     constructor(private _tallyModuleService: TallyModuleService) {
-        //
+        this.setSelectedPage('Contra', 'voucher', 'purchases');
     }
 
     public ngOnInit() {
