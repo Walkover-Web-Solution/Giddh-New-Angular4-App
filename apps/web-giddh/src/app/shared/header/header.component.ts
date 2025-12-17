@@ -23,11 +23,11 @@ import { clone, cloneDeep, find } from '../../lodash-optimized';
 import { CompAidataModel } from '../../models/db';
 import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Account';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { environment } from '../../../environments/environment';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { NAVIGATION_ITEM_LIST, reassignNavigationalArray } from '../../models/default-menus';
 import { userLoginStateEnum, OrganizationType } from '../../models/user-login-state';
 import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
-import { environment } from 'apps/web-giddh/src/environments/environment';
 import { CurrentPage, OnboardingFormRequest } from '../../models/api-models/Common';
 import { ACCOUNTING_BREAKPOINTS, ASIDE_PANE_CONFIG, BranchHierarchyType, BREAKPOINT_SCREEN_SIZE, CALENDLY_URL, GIDDH_DATE_RANGE_PICKER_RANGES, ROUTES_WITH_HEADER_BACK_BUTTON } from '../../app.constant';
 import { CommonService } from '../../services/common.service';
@@ -44,6 +44,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { AuthService } from '../../theme/ng-social-login-module';
 import { ServiceConfig } from '../../services/service.config';
+import { Configuration } from '../../app.constant';
 
 interface SubscriptionErrorFlags {
     isObligationExpired: boolean;
@@ -119,7 +120,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public userIsCompanyUser: boolean = false;
     public userName: string;
     public userEmail: string;
-    public isElectron: boolean = isElectron;
+    public isElectron: boolean = Configuration.isElectron;
     public isTodaysDateSelected: boolean = false;
     public isDateRangeSelected: boolean = false;
     public userFullName: string;
@@ -229,7 +230,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     /** Hold broadcast event */
     public broadcast: any;
     /** Hold true in production environment */
-    public isProdMode: boolean = PRODUCTION_ENV;
+    public isProdMode: boolean = environment.production;
     /** Hold broadcast event for project wise accounting */
     public projectBroadcast: any;
     /** Hold broadcast event for AI OCR */
@@ -299,7 +300,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private renderer: Renderer2
     ) {
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-white-logo.svg';
         const calendlyWhiteLabelUrl = whiteLabel?.calendlyUrl || CALENDLY_URL
         this.calendlyUrl = this.sanitizer.bypassSecurityTrustResourceUrl(calendlyWhiteLabelUrl);
@@ -360,7 +361,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
 
             setTimeout(() => {
-                if (this.isElectron) {
+                if (Configuration.isElectron) {
                     this.toggleSidebarPane(false, false);
                 }
             }, 100);
@@ -804,7 +805,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         this.session$.subscribe((s) => {
             if (s === userLoginStateEnum.notLoggedIn) {
-                if (isElectron) {
+                if (Configuration.isElectron) {
                     this.router.navigate(['/login']);
                 } else {
                     const whiteLabel = this.generalService.getDecodedWhiteLabel();
@@ -1867,7 +1868,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         };
         this.setOrganizationDetails(OrganizationType.Company, details);
         localStorage.removeItem('isNewArchitecture');
-        if (isElectron) {
+        if (Configuration.isElectron) {
             this.store.dispatch(this.loginAction.ClearSession());
         } else {
             // check if logged in via social accounts

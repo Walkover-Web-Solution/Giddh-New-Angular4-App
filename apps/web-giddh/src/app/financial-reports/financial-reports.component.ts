@@ -6,6 +6,7 @@ import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { CompanyResponse } from '../models/api-models/Company';
 import { AppState } from '../store';
+import { environment } from '../../environments/environment';
 
 @Component({
     selector: 'financial-reports',
@@ -51,7 +52,7 @@ export class FinancialReportsComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        if (TEST_ENV) {
+        if (!environment.production) {
             this.CanNewTBLoadOnThisEnv = true;
         } else {
             this.CanNewTBLoadOnThisEnv = false;

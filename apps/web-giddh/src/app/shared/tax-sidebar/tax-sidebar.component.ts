@@ -13,6 +13,8 @@ import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
 import { GstReconcileActions } from '../../actions/gst-reconcile/gst-reconcile.actions';
 import { ServiceConfig } from '../../services/service.config';
+import { Configuration } from '../../app.constant';
+import { environment } from '../../../environments/environment';
 
 @Component({
     selector: 'tax-sidebar',
@@ -162,7 +164,7 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
                 this.isMonthSelected = true;
             }
         });
-        this.imgPath = isElectron ? "assets/images/" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + "assets/images/";
+        this.imgPath = Configuration.isElectron ? "assets/images/" : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + "assets/images/";
     }
 
     /**

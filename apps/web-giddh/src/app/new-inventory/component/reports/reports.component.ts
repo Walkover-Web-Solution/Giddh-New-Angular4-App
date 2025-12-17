@@ -23,6 +23,8 @@ import { GeneralService } from '../../../services/general.service';
 import { OrganizationType } from '../../../models/user-login-state';
 import { ServiceConfig } from '../../../services/service.config';
 import { InventoryComponentStore } from '../inventory.store';
+import { Configuration } from '../../../app.constant';
+import { environment } from '../../../../environments/environment';
 
 @Component({
     selector: 'app-reports',
@@ -189,7 +191,7 @@ export class ReportsComponent implements OnInit {
      */
     public ngOnInit(): void {
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;

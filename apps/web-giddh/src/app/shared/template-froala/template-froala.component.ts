@@ -16,6 +16,8 @@ import { TitleCasePipe } from '@angular/common';
 import { IOption, PAGINATION_LIMIT, WeekdaysEnum } from '../../app.constant';
 import { AccountingGroupEnum } from '../Enums/common.enum';
 import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
+import { Configuration } from '../../app.constant';
+import { environment } from '../../../environments/environment';
 
 @Component({
     selector: 'template-froala',
@@ -68,7 +70,7 @@ export class TemplateFroalaComponent implements OnInit {
     /** Hold email suggestion suffix */
     public emailSuggestionSuffix: string = '}';
     /** Instance of is electron variable */
-    public isElectron: any = isElectron;
+    public isElectron: any = Configuration.isElectron;
     /** Hold froala editor options */
     public froalaOptions: any;
     /** Retry counter for Froala initialization */
@@ -289,7 +291,7 @@ export class TemplateFroalaComponent implements OnInit {
                     this.selectedToEmails = response.to;
                 }
                 this.clickedOutsideEmail();
-                
+
                 // Patch existing form instead of recreating it
                 this.emailForm.patchValue({
                     to: response.to ?? [],
@@ -354,14 +356,14 @@ export class TemplateFroalaComponent implements OnInit {
      */
     public getFroalaOptions() : any {
         return {
-            key: FROALA_EDITOR_KEY,
+            key: '',
             attribution: false,
             heightMin: 300,
             heightMax: 300,
             zIndex: 2501,
             toolbarSticky: true,
             // Add Electron-specific configurations
-            requestWithCORS: this.isElectron ? false : true,
+            requestWithCORS: Configuration.isElectron ? false : true,
             toolbarButtons: {
                 moreText: {
                     buttons: [
@@ -397,14 +399,14 @@ export class TemplateFroalaComponent implements OnInit {
             events: {
                 initialized: (event) => {
                     this.froalaEditor = event.getEditor();
-                    
+
                     // Add additional delay for Electron environment
-                    const setupDelay = this.isElectron ? 200 : 0;
+                    const setupDelay = Configuration.isElectron ? 200 : 0;
                     setTimeout(() => {
                         this.setupFroalaEventHandlers();
-                        
+
                         // Set initial content from form control with additional delay for Electron
-                        const contentDelay = this.isElectron ? 300 : 0;
+                        const contentDelay = Configuration.isElectron ? 300 : 0;
                         setTimeout(() => {
                             const currentForm = this.isTrigger ? this.customTriggerForm : this.emailForm;
                             const htmlValue = currentForm?.get('html')?.value;
@@ -425,7 +427,7 @@ export class TemplateFroalaComponent implements OnInit {
                 },
                 // Add error handling for Electron
                 'error': (error) => {
-                    if (this.isElectron && this.froalaInitRetryCount < this.maxFroalaInitRetries) {
+                    if (Configuration.isElectron && this.froalaInitRetryCount < this.maxFroalaInitRetries) {
                         this.retryFroalaInitialization();
                     }
                 }
@@ -456,9 +458,9 @@ export class TemplateFroalaComponent implements OnInit {
             this.froalaEditor.events.on(
                 'keydown',
                 (e) => {
-                    console.log("Triggered : ", e);         
+                    console.log("Triggered : ", e);
                     if ((e.which == FroalaEditor.KEYCODE.ENTER || e.which == FroalaEditor.KEYCODE.BACKSPACE) && this.froalaTribute?.isActive) {
-                        console.log("Run : ", e);  
+                        console.log("Run : ", e);
                         return false;
                     }
                 }
@@ -496,7 +498,7 @@ export class TemplateFroalaComponent implements OnInit {
                 this.initializeTribute(tributeSuggestions);
             } else if (attempt < this.maxFroalaInitRetries) {
                 setTimeout(() => attemptInitialization(attempt + 1), this.froalaInitRetryDelay);
-            } 
+            }
         };
         attemptInitialization();
     }
@@ -532,11 +534,11 @@ export class TemplateFroalaComponent implements OnInit {
             values: tributeSuggestions,
             selectTemplate: (item) => `${item?.original?.value ? this.emailSuggestionPrefix + item.original.value + this.emailSuggestionSuffix : ""}`
         });
-        
+
         if (this.froalaEditor) {
             this.froalaTribute.attach(this.froalaEditor.el);
         }
-        
+
         if (this.subjectInputField && this.subjectInputField.nativeElement) {
             this.subjectTribute.attach(this.subjectInputField.nativeElement);
         }
@@ -750,7 +752,7 @@ export class TemplateFroalaComponent implements OnInit {
 
         // Prepare request based on type
         const req = this.prepareRequest(type, formValue);
-        
+
         // Reset unsaved changes flag as we're saving
         this.hasUnsavedChanges = false;
         this.componentStore.updateCustomTemplate(req);
@@ -793,10 +795,10 @@ export class TemplateFroalaComponent implements OnInit {
                 }
             });
         }
-        
+
         // Reset unsaved changes flag as we're saving
         this.hasUnsavedChanges = false;
-        
+
         if (this.inputData?.triggerUniqueName) {
             // this.triggerStore.updateTrigger({ model: formValue, uniqueName: this.inputData.triggerUniqueName });
         } else {
@@ -996,7 +998,7 @@ export class TemplateFroalaComponent implements OnInit {
 
     /**
      * Handles the change of time action
-     * 
+     *
      * @param event - Selected option
      * @memberof TemplateFroalaComponent
      */
@@ -1084,7 +1086,7 @@ export class TemplateFroalaComponent implements OnInit {
      * @returns {string}
      * @memberof TemplateFroalaComponent
      */
-    public getDayActionLabelValue(): string {  
+    public getDayActionLabelValue(): string {
         const executionTime = this.customTriggerForm?.get('executionTime');
         if (!executionTime) return '';
 
@@ -1145,14 +1147,14 @@ export class TemplateFroalaComponent implements OnInit {
     private validateEmailRecipientsUnchanged(): boolean {
         const currentForm = this.isTrigger ? this.customTriggerForm.value : this.emailForm.value;
         const { to, bcc, cc } = currentForm;
-        
+
         const formRecipients = { to, bcc, cc };
         const selectedRecipients = {
             to: this.selectedToEmails,
             bcc: this.selectedBccEmails,
             cc: this.selectedCcEmails
         };
-        
+
         return isEqual(formRecipients, selectedRecipients);
     }
 }

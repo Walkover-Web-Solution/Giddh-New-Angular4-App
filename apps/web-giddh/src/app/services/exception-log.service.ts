@@ -8,6 +8,7 @@ import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 import { HttpWrapperService } from './http-wrapper.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class ExceptionLogService implements ErrorHandler {
@@ -65,12 +66,12 @@ export class ExceptionLogService implements ErrorHandler {
             user: (user) ? `Name: ${user.name} Email: ${user.email} Company Uniquename: ${this.companyUniqueName}` : `Company Uniquename: ${this.companyUniqueName}`,
             page: (router) ? router.url : '',
             error: (request.component) ? `${request.component} ${request.exception}` : request.exception,
-            env: (PRODUCTION_ENV) ? 'PROD' : (STAGING_ENV) ? 'STAGE' : 'TEST'
+            env: environment.production ? 'PROD' : 'TEST'
         };
 
         const url = `${config.apiUrl}${EXCEPTION_API}`;
 
-        if (!(config.AppUrl || AppUrl).includes('localhost')) {
+        if (!(config.AppUrl || environment.AppUrl).includes('localhost')) {
             return http.post(url, payloadJson).pipe(
                 catchError((e) => errorHandler.HandleCatch<any, any>(e, request)));
         } else {

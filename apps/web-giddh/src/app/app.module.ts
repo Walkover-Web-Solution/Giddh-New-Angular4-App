@@ -16,6 +16,30 @@ import { ActionModule } from './actions/action.module';
 import { AppLoginSuccessComponent } from './app-login-success/app-login-success';
 import { AppComponent } from './app.component';
 import { IS_ELECTRON_WA, APP_FOLDER_WA, APP_URL_WA } from './app.constant';
+
+// Debug: Log all environment variables to verify they're loaded correctly
+console.log('=== ENVIRONMENT VARIABLES DEBUG ===');
+console.log('🌍 Core Environment:');
+console.log('  production:', environment.production);
+console.log('  showDevModule:', environment.showDevModule);
+console.log('  isElectron:', environment.isElectron);
+console.log('');
+console.log('🔗 URLs & Endpoints:');
+console.log('  AppUrl:', environment.AppUrl);
+console.log('  ApiUrl:', environment.ApiUrl);
+console.log('  UkApiUrl:', environment.UkApiUrl);
+console.log('  PORTAL_URL:', environment.PORTAL_URL);
+console.log('  APP_FOLDER:', environment.APP_FOLDER);
+console.log('');
+console.log('🔑 Authentication & Services:');
+console.log('  GOOGLE_CLIENT_ID:', environment.GOOGLE_CLIENT_ID);
+console.log('  GOOGLE_CLIENT_SECRET:', environment.GOOGLE_CLIENT_SECRET ? '***HIDDEN***' : 'NOT SET');
+console.log('  OTP_WIDGET_ID:', environment.OTP_WIDGET_ID);
+console.log('  OTP_TOKEN_AUTH:', environment.OTP_TOKEN_AUTH ? '***HIDDEN***' : 'NOT SET');
+console.log('  RAZORPAY_KEY:', environment.RAZORPAY_KEY);
+console.log('');
+console.log('📊 Environment Object Keys:', Object.keys(environment).filter(key => typeof environment[key] !== 'function'));
+console.log('=== END ENVIRONMENT DEBUG ===');
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { ROUTES } from './app.routes';
 import { DynamicThemeService } from './shared/services/dynamic-theme.service';
@@ -577,15 +601,15 @@ export function getServiceConfigAfterInit(): () => Promise<any> {
  * `AppModule` is the main entry point into Angular2's bootstraping process
  */
 @NgModule({
-    bootstrap: [AppComponent],
     declarations: [
         AppComponent,
         AppLoginSuccessComponent,
         MobileRestrictedComponent,
     ],
+    bootstrap: [AppComponent],
     imports: [
         BrowserModule,
-        IS_ELECTRON_WA ? NoopAnimationsModule : BrowserAnimationsModule,
+        BrowserAnimationsModule,
         FormsModule,
         ReactiveFormsModule,
         FormFieldsModule,
@@ -597,7 +621,7 @@ export function getServiceConfigAfterInit(): () => Promise<any> {
         StoreModule.forRoot(reducers, { metaReducers, runtimeChecks: { strictStateImmutability: false, strictActionImmutability: false } }),
         ScrollingModule,
         RouterModule.forRoot(ROUTES, {
-            useHash: IS_ELECTRON_WA,
+            useHash: false,
             onSameUrlNavigation: 'reload',
             preloadingStrategy: QuicklinkStrategy
         }),

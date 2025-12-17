@@ -25,6 +25,7 @@ import { ReportType } from '../../../multi-currency-reports/multi-currency.const
 import { FinancialReportsComponentStore } from '../../financial-reports.store';
 import { TlPlService } from '../../../services/tl-pl.service';
 import { GeneralService } from '../../../services/general.service';
+import { Configuration } from '../../../app.constant';
 
 @Component({
 selector: '[grid-row]',
@@ -110,7 +111,7 @@ export class GridRowComponent implements OnInit, OnChanges, OnDestroy {
         const separator = url.includes('?') ? '&' : '?';
         url = url + `${separator}redirectUrl=${encodeURIComponent(this.currentUrl)}`;
 
-        if (isElectron) {
+        if (Configuration.isElectron) {
             const ipcRenderer = (window as any).require('electron').ipcRenderer;
             const electronUrl = `${location.origin}${location.pathname}#./pages/ledger/${acc.uniqueName}/${this.from}/${this.to}`;
             ipcRenderer.send('open-url', electronUrl);

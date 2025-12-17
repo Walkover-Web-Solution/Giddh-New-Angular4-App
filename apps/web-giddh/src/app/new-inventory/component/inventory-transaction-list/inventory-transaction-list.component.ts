@@ -22,6 +22,8 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { InventoryModuleName, InventoryReportType } from "../../inventory.enum";
 import { OrganizationType } from "../../../models/user-login-state";
 import { ServiceConfig } from "../../../services/service.config";
+import { Configuration } from '../../../app.constant';
+import { environment } from '../../../../environments/environment';
 
 @Component({
     selector: "inventory-transaction-list",
@@ -170,7 +172,7 @@ export class InventoryTransactionListComponent implements OnInit {
      */
     public ngOnInit(): void {
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         this.stockReportRequest.count = PAGINATION_LIMIT;
 
         this.searchAccountName.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {

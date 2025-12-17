@@ -19,12 +19,12 @@ import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-lo
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSortModule } from '@angular/material/sort';
 import { AttachmentsModule } from '../theme/attachments/attachments.module';
-import { ActionMenuComponent } from '../shared/action-menu/action-menu.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
+import { ActionMenuModule } from '../shared/action-menu/action-menu.module';
 
 
 @NgModule({
@@ -55,12 +55,12 @@ import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/
         MatMenuModule,
         MatSortModule,
         AttachmentsModule,
-        ActionMenuComponent,
         FroalaTemplateEditorModule,
         MatFormFieldModule,
         MatInputModule,
         MatIconModule,
-        HamburgerMenuModule
+        HamburgerMenuModule,
+        // ActionMenuModule // COMMENTED OUT - Template errors with mat-menu
     ],
     providers: []
 })

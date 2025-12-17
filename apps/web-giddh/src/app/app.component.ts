@@ -22,6 +22,7 @@ import { LoginActions } from './actions/login.action';
 import { InvoiceActions } from './actions/invoice/invoice.actions';
 import { WarehouseActions } from './settings/warehouse/action/warehouse.action';
 import { CompanyService } from './services/company.service';
+import { environment } from '../environments/environment';
 
 /**
  * App Component
@@ -69,8 +70,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         private warehouseActions: WarehouseActions,
         private companyService: CompanyService
     ) {
-        this.isProdMode = PRODUCTION_ENV;
-        this.isElectron = Configuration.isElectron;
+        this.isProdMode = environment.production;
+        // Configuration.isElectron is already available via import
 
         // Bind the method for proper event listener cleanup
         this.boundHandleQueryParamsCompanySwitch = (event: any) => this.handleQueryParamsCompanySwitch(event.detail);
@@ -105,7 +106,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             // Generate returnUrl for any non-login-like path (including root path)
             if (!isLoginLike) {
                 const isLocalHost = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-                if (PRODUCTION_ENV && !Configuration.isElectron && !isLocalHost) {
+                if (environment.production && !Configuration.isElectron && !isLocalHost) {
                     const currentUrl = path + search;
                     let returnUrl = '';
                     if (currentUrl.startsWith('/pages/')) {
@@ -143,12 +144,10 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             const { ipcRenderer } = (window as any).require("electron");
             // google
             const t = ipcRenderer.send("take-server-environment", {
-                'STAGING_ENV': STAGING_ENV,
-                'LOCAL_ENV': LOCAL_ENV,
-                'TEST_ENV': TEST_ENV,
-                'PRODUCTION_ENV': PRODUCTION_ENV,
+                'production': environment.production,
+                'isLocalEnv': !environment.production,
                 'AppUrl': (this.serviceConfig.AppUrl || Configuration.AppUrl),
-                'APP_FOLDER': APP_FOLDER
+                'APP_FOLDER': environment.APP_FOLDER
             });
             ipcRenderer.on('app-close-requested', () => {
                 this.pageLeaveUtilityService.confirmPageLeave((confirmed: boolean) => {
@@ -352,7 +351,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             return this.router.navigate([lastState]);
         }
 
-        if (!LOCAL_ENV && !Configuration.isElectron) {
+        if (environment.production && !Configuration.isElectron) {
             this._versionCheckService.initVersionCheck((this.serviceConfig.AppUrl || Configuration.AppUrl) + 'version.json');
             this._versionCheckService.onVersionChange$.pipe(takeUntil(this.destroyed$)).subscribe((isChanged: boolean) => {
                 if (isChanged) {

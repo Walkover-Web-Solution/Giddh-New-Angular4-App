@@ -11,6 +11,7 @@ import { ToasterService } from '../../services/toaster.service';
 import { GeneralService } from '../../services/general.service';
 import { Router } from '@angular/router';
 import { ASIDE_PANE_CONFIG } from '../../app.constant';
+import { Configuration } from '../../app.constant';
 
 @Component({
     selector: '[account-detail-modal-component]',
@@ -149,7 +150,7 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
             url = `${url}${additionalParams}`;
         }
 
-        if (isElectron) {
+        if (Configuration.isElectron) {
             let ipcRenderer = (window as any).require('electron').ipcRenderer;
             if (this.generalService.voucherApiVersion === 2) {
                 url = location.origin + location.pathname + `#./pages/${part}`;

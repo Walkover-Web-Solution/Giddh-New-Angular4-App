@@ -19,6 +19,8 @@ import { ExportsJsonComponent } from '../exports-json/exports-json.component';
 import { download } from '@giddh-workspaces/utils';
 // import { exportTypeEnum } from '../../../new-inventory/inventory.enum';
 import { ServiceConfig } from '../../../services/service.config';
+import { Configuration } from '../../../app.constant';
+import { environment } from '../../../../environments/environment';
 
 /** Hold information of Download  */
 const ELEMENT_DATA: DownloadData[] = [];
@@ -81,7 +83,7 @@ export class ExportsComponent implements OnInit, OnDestroy {
     /** This will use for from date static*/
     public fromDate: string;
     /** Instance of is electron variable */
-    public isElectron: any = isElectron;
+    public isElectron: any = Configuration.isElectron;
     /** Instance for export data in inventory */
     public exportType: any = [
         // exportTypeEnum.ItemWise,
@@ -104,7 +106,7 @@ export class ExportsComponent implements OnInit, OnDestroy {
      * @memberof ExportsComponent
      */
     public ngOnInit(): void {
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         document.querySelector('body')?.classList?.add('download-page');
         /** Universal date observer */
         this.universalDate$.subscribe(dateObj => {

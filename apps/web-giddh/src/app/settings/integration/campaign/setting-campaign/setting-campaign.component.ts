@@ -12,6 +12,8 @@ import * as dayjs from 'dayjs';
 import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 // import { SelectMultipleFieldsComponent } from 'apps/web-giddh/src/app/theme/form-fields/select-multiple-fields/select-multiple-fields.component';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
+import { Configuration } from '../../../../app.constant';
+import { environment } from '../../../../../environments/environment';
 
 export interface ActiveTriggers {
     title: string;
@@ -132,7 +134,7 @@ export class SettingCampaignComponent implements OnInit {
      * @memberof SettingCampaignComponent
      */
     public ngOnInit(): void {
-        this.imgPath = (isElectron) ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = (Configuration.isElectron) ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         this.getCommunicationPlatforms();
     }
 

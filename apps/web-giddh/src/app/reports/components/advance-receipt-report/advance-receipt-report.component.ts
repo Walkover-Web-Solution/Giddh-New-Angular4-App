@@ -18,6 +18,7 @@ import { ReceiptService } from '../../../services/receipt.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
 import { ElementViewContainerRef } from '../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
+import { environment } from '../../../../environments/environment';
 import { AppState } from '../../../store';
 import { ADVANCE_RECEIPT_REPORT_FILTERS, ReceiptAdvanceSearchModel } from '../../constants/reports.constant';
 // import { ReceiptAdvanceSearchComponent } from '../receipt-advance-search/receipt-advance-search.component';
@@ -187,7 +188,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     /** Holds last filters applyed */
     public lastListingFilters: any;
     /** Hold true in production environment */
-    public isProdMode: boolean = PRODUCTION_ENV;
+    public isProdMode: boolean = environment.production;
 
     /** @ignore */
     constructor(

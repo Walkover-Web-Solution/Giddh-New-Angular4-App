@@ -19,6 +19,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ServiceConfig } from '../../../services/service.config';
 import { CompanyActions } from '../../../actions/company.actions';
 import { PageEvent } from '@angular/material/paginator';
+import { Configuration } from '../../../app.constant';
+import { environment } from '../../../../environments/environment';
 
 @Component({
     selector: "purchase-register-expand",
@@ -121,7 +123,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        this.imgPath = isElectron ? "assets/icon/" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + "assets/icon/";
+        this.imgPath = Configuration.isElectron ? "assets/icon/" : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + "assets/icon/";
         this.getDetailedPurchaseRequestFilter.page = 1;
         this.getDetailedPurchaseRequestFilter.count = PAGINATION_LIMIT;
         this.getDetailedPurchaseRequestFilter.q = "";

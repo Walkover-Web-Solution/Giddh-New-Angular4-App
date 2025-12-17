@@ -21,6 +21,8 @@ import * as printJS from 'print-js';
 import { OrganizationType } from "../../models/user-login-state";
 import { VoucherTypeEnum } from "../../models/api-models/Sales";
 import { ServiceConfig } from "../../services/service.config";
+import { Configuration } from '../../app.constant';
+import { environment } from '../../../environments/environment';
 
 @Component({
     selector: "attachments",
@@ -94,7 +96,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
         });
-        this.imgPath = isElectron ? "assets/images/" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + "assets/images/";
+        this.imgPath = Configuration.isElectron ? "assets/images/" : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + "assets/images/";
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {

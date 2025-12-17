@@ -26,6 +26,8 @@ import { AppState } from 'apps/web-giddh/src/app/store';
 import * as dayjs from 'dayjs';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
+import { Configuration } from '../../../../app.constant';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
     selector: 'app-create-branch-transfer',
@@ -209,7 +211,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         /* added image path */
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params?.type) {
                 this.showContent = false;

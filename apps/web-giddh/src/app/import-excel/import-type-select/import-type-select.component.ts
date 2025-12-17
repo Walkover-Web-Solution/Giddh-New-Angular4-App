@@ -9,6 +9,8 @@ import { ReplaySubject } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 // import { VoucherType } from '../../ledger/components/import-statement/import-statement.const';
 import { ServiceConfig } from '../../services/service.config';
+import { Configuration } from '../../app.constant';
+import { environment } from '../../../environments/environment';
 
 @Component({
     selector: 'import-type-select',
@@ -47,7 +49,7 @@ export class ImportTypeSelectComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.branches = response || [];

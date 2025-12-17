@@ -10,6 +10,7 @@ import { ReportType } from 'apps/web-giddh/src/app/multi-currency-reports/multi-
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { TlPlService } from 'apps/web-giddh/src/app/services/tl-pl.service';
 import { ReplaySubject, takeUntil } from 'rxjs';
+import { Configuration } from '../../../../../../../app.constant';
 
 @Component({
 selector: '[balance-sheet-grid-row]',
@@ -77,7 +78,7 @@ export class BalanceSheetGridRowComponent implements OnInit, OnChanges, OnDestro
         const separator = url.includes('?') ? '&' : '?';
         url = url + `${separator}redirectUrl=${encodeURIComponent(this.currentUrl)}`;
 
-        if (isElectron) {
+        if (Configuration.isElectron) {
             const ipcRenderer = (window as any).require('electron').ipcRenderer;
             const electronUrl = `${location.origin}${location.pathname}#./pages/ledger/${acc.uniqueName}/${this.from}/${this.to}`;
             ipcRenderer.send('open-url', electronUrl);

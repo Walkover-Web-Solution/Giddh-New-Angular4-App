@@ -3,6 +3,8 @@ import { HeaderItem, ImportExcelResponseData, Mappings } from '../../models/api-
 import { IOption } from '../../app.constant';
 import { cloneDeep } from '../../lodash-optimized';
 import { ServiceConfig } from '../../services/service.config';
+import { Configuration } from '../../app.constant';
+import { environment } from '../../../environments/environment';
 
 interface DataModel {
     field: HeaderItem;
@@ -46,7 +48,7 @@ export class MapExcelDataComponent implements OnInit {
     }
 
     public ngOnInit() {
-        this.imgPath = isElectron ? 'assets/icon/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/icon/';
+        this.imgPath = Configuration.isElectron ? 'assets/icon/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/icon/';
     }
 
     public mapExcelData() {

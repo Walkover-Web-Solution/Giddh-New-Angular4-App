@@ -5,7 +5,7 @@ import { Component, Inject, NgZone, OnDestroy, OnInit, ViewChild } from "@angula
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { TemplateRef } from '@angular/core';
-import { Configuration, ELECTRON_OTP_PROVIDER_URL, IOption, OTP_PROVIDER_URL } from "../app.constant";
+import { ELECTRON_OTP_PROVIDER_URL, IOption, OTP_PROVIDER_URL } from "../app.constant";
 import { Store, select } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
 import {
@@ -24,13 +24,10 @@ import { ToasterService } from "../services/toaster.service";
 import { AuthenticationService } from "../services/authentication.service";
 import { GeneralService } from "../services/general.service";
 import { ServiceConfig } from "../services/service.config";
+import { environment } from "../../environments/environment";
+import { Configuration } from "../app.constant";
 
 declare var initSendOTP: any;
-declare const OTP_WIDGET_ID: string;
-declare const OTP_TOKEN_AUTH: string;
-declare const isElectron: boolean;
-declare const AppUrl: string;
-declare const APP_FOLDER: string;
 
 @Component({
     selector: 'signup',
@@ -82,7 +79,7 @@ export class SignupComponent implements OnInit, OnDestroy {
         private generalService: GeneralService,
         private dialog: MatDialog
     ) {
-        this.urlPath = (typeof isElectron !== 'undefined' && isElectron) ? "" : (this.serviceConfig?.AppUrl || AppUrl || '') + (APP_FOLDER || '');
+        this.urlPath = (typeof Configuration.isElectron !== 'undefined' && Configuration.isElectron) ? "" : (this.serviceConfig?.AppUrl || environment.AppUrl || '') + (environment.APP_FOLDER || '');
         this.giddhDomainUrl = this.serviceConfig?.AppUrl || 'https://giddh.com';
 
         this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
@@ -131,7 +128,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.imgPath = (typeof isElectron !== 'undefined' && isElectron) ? 'assets/images/' : (AppUrl || '') + (APP_FOLDER || '') + 'assets/images/';
+        this.imgPath = (typeof Configuration.isElectron !== 'undefined' && Configuration.isElectron) ? 'assets/images/' : (environment.AppUrl || '') + (environment.APP_FOLDER || '') + 'assets/images/';
         this.giddhLogoSrc = this.imgPath + 'giddh-logo.png';
         this.generateRandomBanner();
 

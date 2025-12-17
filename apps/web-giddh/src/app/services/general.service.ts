@@ -22,6 +22,7 @@ import { LedgerViewEnum } from '../models/api-models/Ledger';
 import { giddhRoundOff } from '../shared/helpers/helperFunctions';
 import { AccountArchivedStatusEnum } from '../shared/Enums/common.enum';
 import { PageLeaveUtilityService } from './page-leave-utility.service';
+import { Configuration } from '../app.constant';
 
 @Injectable()
 export class GeneralService {
@@ -957,7 +958,7 @@ export class GeneralService {
         } else {
             this.router.navigate([route], parameter);
         }
-        if (isElectron && isSocialLogin) {
+        if (Configuration.isElectron && isSocialLogin) {
             setTimeout(() => {
                 window.location.reload();
             }, 200);

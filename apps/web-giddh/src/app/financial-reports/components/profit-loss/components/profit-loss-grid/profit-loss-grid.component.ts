@@ -26,6 +26,8 @@ import { FinancialReportsComponentStore } from '../../../../financial-reports.st
 import { MatDialog } from '@angular/material/dialog';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { NewConfirmationModalComponent } from 'apps/web-giddh/src/app/theme/new-confirmation-modal/confirmation-modal.component';
+import { Configuration } from '../../../../../app.constant';
+import { environment } from '../../../../../../environments/environment';
 
 @Component({
 selector: 'profit-loss-grid',
@@ -80,7 +82,7 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnInit() {
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : environment.AppUrl + environment.APP_FOLDER + 'assets/images/';
         this.plSearchControl.valueChanges.pipe(
             debounceTime(700),
             distinctUntilChanged(),

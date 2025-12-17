@@ -31,6 +31,8 @@ import { PreviewVariantImageComponent } from "../preview-variant-image/preview-v
 import { ServiceConfig } from "../../../services/service.config";
 import { MatTabChangeEvent } from "@angular/material/tabs";
 import { PageLeaveUtilityService } from "../../../services/page-leave-utility.service";
+import { Configuration } from '../../../app.constant';
+import { environment } from '../../../../environments/environment';
 
 @Component({
     selector: "stock-create-edit",
@@ -333,7 +335,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         // and the parent will handle the page leave confirmation via ViewChild
 
         /* added image path */
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         /** added parent class to body after entering new-inventory page */
         document.querySelector("body").classList.add("stock-create-edit");
 

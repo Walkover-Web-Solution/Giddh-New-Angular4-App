@@ -15,6 +15,8 @@ import { takeUntil } from 'rxjs/operators';
 
 import { DataFormatter, IFormatable } from '../../model/data-formatter';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
+import { Configuration } from '../../../../../app.constant';
+import { environment } from '../../../../../../environments/environment';
 
 export interface Total {
     ob: number;
@@ -90,7 +92,7 @@ export class TrialBalanceExportCsvComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.imgPath = isElectron ? 'assets/images/csv.svg' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/csv.svg';
+        this.imgPath = Configuration.isElectron ? 'assets/images/csv.svg' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/csv.svg';
     }
 
     public ngOnDestroy() {

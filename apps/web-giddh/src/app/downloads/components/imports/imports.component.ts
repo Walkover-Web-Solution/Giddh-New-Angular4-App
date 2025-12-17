@@ -20,6 +20,8 @@ import { GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT } from '../../../shared/hel
 import { AppState } from '../../../store';
 import { ImportsService } from '../../../services/imports.service';
 import { ServiceConfig } from '../../../services/service.config';
+import { Configuration } from '../../../app.constant';
+import { environment } from '../../../../environments/environment';
 /** Hold information of import  */
 const ELEMENT_DATA: ImportsData[] = [];
 @Component({
@@ -95,7 +97,7 @@ export class ImportsComponent implements OnInit, OnDestroy {
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
     /** Instance of is electron variable */
-    public isElectron: any = isElectron;
+    public isElectron: any = Configuration.isElectron;
 
     constructor(@Inject(ServiceConfig) private serviceConfig,  public dialog: MatDialog, private importsService: ImportsService, private changeDetection: ChangeDetectorRef, private generalService: GeneralService, private toaster: ToasterService, private settingsBranchAction: SettingsBranchActions, private store: Store<AppState>) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
@@ -113,7 +115,7 @@ export class ImportsComponent implements OnInit, OnDestroy {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
         });
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         document.querySelector('body')?.classList?.add('import-page');
 
         this.currentOrganizationType = this.generalService.currentOrganizationType;

@@ -16,6 +16,8 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { PageLeaveUtilityService } from '../../../services/page-leave-utility.service';
 import { ComponentCanDeactivate } from '../../../decorators/page-leave-confirmation-guard';
 import { CommonActions } from '../../../actions/common.actions';
+import { Configuration } from '../../../app.constant';
+import { environment } from '../../../../environments/environment';
 
 /**
  * Data with nested structure.
@@ -128,7 +130,7 @@ export class InventorySidebarComponent implements OnDestroy, ComponentCanDeactiv
      * @memberof InventorySidebarComponent
     */
     public ngOnInit(): void {
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         this.currentUrl = this.router.url;
         this.setupNavigationListener();
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {

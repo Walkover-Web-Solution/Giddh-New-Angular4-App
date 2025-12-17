@@ -19,6 +19,8 @@ import { NgForm } from '@angular/forms';
 import { InstitutionsListComponent } from "./institutions-list/institutions-list.component";
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
 import { ServiceConfig } from "../../services/service.config";
+import { Configuration } from '../../app.constant';
+import { environment } from '../../../environments/environment';
 
 @Component({
     selector: 'bank-integration',
@@ -166,7 +168,7 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.loadPaymentData();
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         this.store.pipe(select(profileObj => profileObj.settings.profile), takeUntil(this.destroyed$)).subscribe((res) => {
             if (res && !isEmpty(res)) {
                 res.userEntityRoles.forEach(role => {

@@ -10,6 +10,8 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { LocaleService } from 'apps/web-giddh/src/app/services/locale.service';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { ICICI_ALLOWED_COMPANIES } from 'apps/web-giddh/src/app/app.constant';
+import { Configuration } from '../../../../app.constant';
+import { environment } from '../../../../../environments/environment';
 
 @Component({
     selector: 'aside-setting',
@@ -72,7 +74,7 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
             }
         });
 
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
             if (this.activeLocale && this.activeLocale !== response?.value) {
@@ -107,7 +109,7 @@ export class AsideSettingComponent implements OnInit, OnDestroy {
         this.showHideSettingsHeading(this.router.url);
 
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(event => {
-            if ((!isElectron && event instanceof NavigationEnd) || (isElectron && (event instanceof NavigationStart || event instanceof NavigationEnd))) {
+            if ((!Configuration.isElectron && event instanceof NavigationEnd) || (Configuration.isElectron && (event instanceof NavigationStart || event instanceof NavigationEnd))) {
                 this.showHideSettingsHeading(event.url);
                 this.routerUrl = event.url?.split('?')[0];
             }

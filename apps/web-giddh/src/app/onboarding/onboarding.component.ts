@@ -11,6 +11,8 @@ import { OnboardingComponentStore } from './utility/onboarding.store';
 import { ASIDE_PANE_CONFIG, SYNC_TALLY_HELP_DOC_URL } from '../app.constant';
 import { ServiceConfig } from '../services/service.config';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { Configuration } from '../app.constant';
+import { environment } from '../../environments/environment';
 
 
 @Component({
@@ -67,7 +69,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
 
     public ngOnInit() {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        // this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        // this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
 
         this.store.pipe(select(s => s.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
