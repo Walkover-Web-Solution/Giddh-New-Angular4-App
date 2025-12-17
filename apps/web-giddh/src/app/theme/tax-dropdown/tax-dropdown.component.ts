@@ -253,7 +253,7 @@ export class TaxDropdownComponent implements OnChanges {
                 }
             });
             
-            this.calculateTaxAmount();
+            this.calculateTaxAmount(true);
         }
         this.lastSavedFormValues = null;
     }
