@@ -60,11 +60,6 @@
                                         <td
                                             class="voucher-type"
                                             [style.width.px]="55"
-                                            [ngClass]="{
-                                                'active-row':
-                                                    (activeRowIndex === i) ||
-                                                    (activeRowIndex === null && i == 0)
-                                            }"
                                         >
                                             <text-field
                                                 [autoFocus]="activeRowIndex === i && activeRowType === 'type'"
@@ -89,11 +84,6 @@
                                         </td>
                                         <td
                                             class="particular-account"
-                                            [ngClass]="{
-                                                'active-row':
-                                                    (activeRowIndex === i) ||
-                                                    (activeRowIndex === null && i == 0)
-                                            }"
                                             formGroupName="selectedAccount"
                                         >
                                             <text-field
@@ -126,11 +116,6 @@
                                         </td>
                                         <td
                                             class="amount1"
-                                            [ngClass]="{
-                                                'active-row':
-                                                    (activeRowIndex === i) ||
-                                                    (activeRowIndex === null && i == 0)
-                                            }"
                                         >
                                             <text-field
                                                 [readonly]="
@@ -169,11 +154,6 @@
                                         </td>
                                         <td
                                             class="amount2"
-                                            [ngClass]="{
-                                                'active-row':
-                                                    (activeRowIndex === i) ||
-                                                    (activeRowIndex === null && i == 0)
-                                            }"
                                         >
                                             <text-field
                                                 [readonly]="
@@ -214,11 +194,6 @@
                                     <tr>
                                         <td colspan="100%" formGroupName="selectedAccount">
                                             <span
-                                                [ngClass]="{
-                                                    'active-row-transparent':
-                                                        (activeRowIndex === i) ||
-                                                        (activeRowIndex === null && i == 0)
-                                                }"
                                                 *ngIf="
                                                     journalVoucherForm
                                                         .get('transactions')
@@ -244,7 +219,7 @@
                     </table>
                 </div>
             </div>
-            
+
             <div class="clear-both row">
                 <div class="col-xs-9 col-sm-9">
                     <div class="form-group">
