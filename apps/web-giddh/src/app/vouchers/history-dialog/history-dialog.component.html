@@ -1,14 +1,13 @@
 <div class="aside-dialog-wrapper">
     <div class="dialog-header">
         <span class="font-size-16">{{ inputData?.localeData?.revision_history }}</span>
-        <i mat-dialog-close class="icon-cross icon-font-size-16"></i>
+        <button mat-icon-button mat-dialog-close role="button" aria-label="Close">
+            <i class="icon-cross"></i>
+        </button>
     </div>
     <div mat-dialog-content class="create-discount-aside dialog-body">
         <div class="aside-pane-form position-relative p-3 h-100 overflow-auto">
-            <giddh-page-loader
-                [cssClass]="'my-0'"
-                *ngIf="isVoucherVersionsInProgress$ | async"
-            ></giddh-page-loader>
+            <giddh-page-loader [cssClass]="'my-0'" *ngIf="isVoucherVersionsInProgress$ | async"></giddh-page-loader>
             <ng-container *ngIf="!(isVoucherVersionsInProgress$ | async)">
                 <ng-container *ngFor="let item of versionHistory?.items; let lastItem = last">
                     <div class="py-2" [ngClass]="{ 'border-bottom': lastItem }" *ngFor="let change of item?.changes">
@@ -26,9 +25,7 @@
                 {{ inputData?.commonLocaleData?.app_no_result_found }}
             </div>
             <mat-paginator
-                *ngIf="
-                    (!(isVoucherVersionsInProgress$ | async) && versionHistory?.totalItems > pageSizeOptions[0])
-                "
+                *ngIf="!(isVoucherVersionsInProgress$ | async) && versionHistory?.totalItems > pageSizeOptions[0]"
                 (page)="handlePageChange($event)"
                 [length]="versionHistory?.totalItems"
                 [pageSize]="pagination.count"

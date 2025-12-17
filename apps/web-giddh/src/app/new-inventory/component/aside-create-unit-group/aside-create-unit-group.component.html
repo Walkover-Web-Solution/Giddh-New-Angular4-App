@@ -2,12 +2,9 @@
     <div>
         <div class="header-create-unit dialog-header">
             <span>{{ commonLocaleData?.app_create_group }}</span>
-            <button mat-icon-button aria-label="close" mat-dialog-close>
-                <i class="icon-cross"></i>
-            </button>
         </div>
         <mat-dialog-content class="dialog-body">
-            <create-unit-group (closeAsideEvent)="closeAsidePane($event)"></create-unit-group>
+            <create-unit-group (closeAsideEvent)="closeAsidePane($event)" [isInsideDialog]="true"></create-unit-group>
         </mat-dialog-content>
     </div>
 </ng-container>

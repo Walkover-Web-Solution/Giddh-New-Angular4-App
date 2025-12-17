@@ -55,10 +55,6 @@
                         >
                             {{ commonLocaleData?.app_update }}
                         </button>
-                    </div>
-                </div>
-                <div class="col-sm-8">
-                    <div class="pull-right d-flex column-gap-15">
                         <button
                             mat-stroked-button
                             aria-label="clear"
@@ -69,6 +65,19 @@
                         >
                             {{ commonLocaleData?.app_clear }}
                         </button>
+                        <button
+                            *ngIf="isInsideDialog"
+                            aria-label="close"
+                            mat-stroked-button
+                            type="button"
+                            (click)="closeAsideEvent.emit(false)"
+                        >
+                            {{ commonLocaleData?.app_cancel }}
+                        </button>
+                    </div>
+                </div>
+                <div class="col-sm-8">
+                    <div class="pull-right d-flex column-gap-15">
                         <button
                             mat-stroked-button
                             aria-label="delete"

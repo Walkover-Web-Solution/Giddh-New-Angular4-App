@@ -1,12 +1,12 @@
 <div class="dialog-header">
-    <p class="modal-title">{{ localeData?.filing?.push_to_portal }}</p>
-    <i mat-dialog-close aria-label="close icon" class="icon-cross"></i>
+    <span>{{ localeData?.filing?.push_to_portal }}</span>
+    <button mat-icon-button aria-label="close icon" role="button" mat-dialog-close>
+        <i class="icon-cross"></i>
+    </button>
 </div>
 <mat-dialog-content class="dialog-body">
     <div class="container">
-        <p class="mb-2">
-            {{ commonLocaleData?.app_note }}: {{ commonLocaleData?.app_export_file_name_change_note }}
-        </p>
+        <p class="mb-2">{{ commonLocaleData?.app_note }}: {{ commonLocaleData?.app_export_file_name_change_note }}</p>
         <div class="row main-container">
             <div class="col-sm-6 p-0 left-side">
                 <div class="left-side-center">
@@ -35,12 +35,7 @@
             </div>
             <div class="col-sm-6 p-0 right-side">
                 <div class="right-side-center">
-                    <button
-                        mat-raised-button
-                        color="primary"
-                        class="downloads-button"
-                        (click)="onDownloadJson($event)"
-                    >
+                    <button mat-raised-button color="primary" class="downloads-button" (click)="onDownloadJson($event)">
                         {{ localeData?.filing?.download_json }}
                     </button>
                 </div>

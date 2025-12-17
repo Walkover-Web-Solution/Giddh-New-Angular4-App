@@ -11,7 +11,10 @@
             <div class="search-any-item">
                 <div class="input-group flex-nowrap">
                     <div class="input-group-prepend">
-                        <span class="input-group-text d-inline-flex align-items-center only-left-radius" id="addon-wrapping">
+                        <span
+                            class="input-group-text d-inline-flex align-items-center only-left-radius"
+                            id="addon-wrapping"
+                        >
                             <i class="icon-search theme-foreground-color"></i>
                         </span>
                     </div>
@@ -92,17 +95,23 @@
                 <i class="icon-cross"></i>
             </button>
         </div>
-        <mat-dialog-content class="dialog-body d-flex">
-            <ng-container *ngFor="let item of subMenuItems">
-                <mat-card class="single-item" (click)="redirectSubItemLink(item)" [queryParams]="item?.additional?.queryParams">
-                    <mat-card-title>
-                        <h4><i class="{{ item?.icon }} mr-2"></i> {{ item?.label }}</h4>
-                    </mat-card-title>
-                    <mat-card-content class="p-0">
-                        <p>{{ item?.description }}</p>
-                    </mat-card-content>
-                </mat-card>
-            </ng-container>
+        <mat-dialog-content class="dialog-body">
+            <div class="d-flex">
+                <ng-container *ngFor="let item of subMenuItems">
+                    <mat-card
+                        class="single-item"
+                        (click)="redirectSubItemLink(item)"
+                        [queryParams]="item?.additional?.queryParams"
+                    >
+                        <mat-card-title>
+                            <h4><i class="{{ item?.icon }} mr-2"></i> {{ item?.label }}</h4>
+                        </mat-card-title>
+                        <mat-card-content class="p-0">
+                            <p>{{ item?.description }}</p>
+                        </mat-card-content>
+                    </mat-card>
+                </ng-container>
+            </div>
         </mat-dialog-content>
     </div>
 </ng-template>
