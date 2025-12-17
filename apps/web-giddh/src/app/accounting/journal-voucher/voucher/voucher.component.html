@@ -292,7 +292,6 @@
             </div>
         </div>
     </form>
-    {{activeRowIndex}}=---------{{activeRowType}}
 </div>
 <!-- Unified Sidebar for Accounts, Discounts, and Taxes -->
 <div class="sidebar-list form-control" *ngIf="showLedgerAccountList || showDiscountSidebar || showTaxSidebar">
@@ -301,7 +300,7 @@
         <h3 class="text-primary">
             {{ showDiscountSidebar ? localeData?.discount_list : (showTaxSidebar ? localeData?.tax_list : '') }}
         </h3>
-        <i class="fa fa-close pdR-5 cursor-pointer" 
+        <i class="icon-cross cursor-pointer"
            (click)="showDiscountSidebar ? closeDiscountSidebar() : closeTaxSidebar()"></i>
     </div>
     
@@ -313,7 +312,7 @@
     <div class="h-100 mat-app-background">
         <!-- No Data Found -->
         <ul *ngIf="displayAccountList?.length === 0" class="grp-list group-list-no-found users-last-list">
-            <li class="list-item sidebarTooltip text-overflow-ellipsis">
+            <li class="list-item text-overflow-ellipsis">
                 <span class="account-list d-block w-100">{{ commonLocaleData?.app_no_data_found }}</span>
             </li>
             <!-- Create New Account Option (only for accounts) -->
@@ -338,7 +337,7 @@
                     <li
                         *cdkVirtualFor="let item of displayAccountList; let j = index; trackBy: trackByFn"
                         [ngClass]="{ 'hilighted': j === (selectedIndex || 0) }"
-                        class="list-item sidebarTooltip text-overflow-ellipsis"
+                        class="list-item text-overflow-ellipsis"
                     >
                         <a
                             href="javascript:void(0);"

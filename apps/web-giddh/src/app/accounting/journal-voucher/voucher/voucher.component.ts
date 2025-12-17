@@ -30,7 +30,7 @@ import { AccountResponse, AddAccountRequest, UpdateAccountRequest } from '../../
 import { ToasterService } from '../../../services/toaster.service';
 import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { AppState } from '../../../store';
-import { IOption } from '../../../app.constant';
+import { API_BULK_FETCH_LIMIT, IOption } from '../../../app.constant';
 import { KeyboardService } from '../../keyboard.service';
 import { KEYS } from '../journal-voucher.component';
 import { AdjustmentTypesEnum } from "../../../shared/helpers/adjustmentTypes";
@@ -284,9 +284,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     
     /** Global variables for account search with count management */
     /** Initial load count for both 'by' and 'to' accounts */
-    private readonly INITIAL_ACCOUNT_LOAD_COUNT: number = 200;
+    private readonly INITIAL_ACCOUNT_LOAD_COUNT: number = API_BULK_FETCH_LIMIT;
     /** Search and load more count for both 'by' and 'to' accounts */
-    private readonly SEARCH_LOAD_MORE_COUNT: number = 50;
+    private readonly SEARCH_LOAD_MORE_COUNT: number = PAGINATION_LIMIT;
     
     /** Global account search data for 'by' accounts */
     public byAccountSearchData = {
@@ -547,17 +547,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             this.customFunctionForTaxSidebar();
         }
         else if (event.key === 'Escape') {
-            if (this.showDiscountSidebar) {
-                this.closeDiscountSidebar();
-                this.closeTaxSidebar();
-            }
-            if (this.showTaxSidebar) {
-                this.closeDiscountSidebar();
-                this.closeTaxSidebar();
-            }
-            if (this.showLedgerAccountList) {
-                this.showLedgerAccountList = false;
-            }
+            this.closeDiscountSidebar();
+            this.closeTaxSidebar();
+            this.showLedgerAccountList = false;
         }
         else if (this.showDiscountSidebar || this.showTaxSidebar || this.showLedgerAccountList) {
             // Handle all keyboard navigation for open sidebars
@@ -691,7 +683,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             if (changes?.showTax?.currentValue) {
                 this.searchInTaxList("");
             }
-            this.showTaxSidebar = changes?.showTax?.currentValue;
         }
     }
 
@@ -1086,7 +1077,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     private searchInDiscountList(searchValue: string): void {
         this.showDiscountSidebar = true;
-        this.showTaxSidebar = false;
+        this.closeTaxSidebar();
         this.showLedgerAccountList = false;
         if (!searchValue) {
             this.displayAccountList = this.discountsList
@@ -1110,7 +1101,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     private searchInTaxList(searchValue: string): void {
         this.showTaxSidebar = true;
-        this.showDiscountSidebar = false;
+        this.closeDiscountSidebar();
         this.showLedgerAccountList = false;
         if (!searchValue) {
             this.displayAccountList = this.companyTaxesList;
@@ -1181,8 +1172,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.selectedField = 'account';
         this.showConfirmationBox = false;
         this.selectedTransactionType = transaction.get('type')?.value;    
-        this.showDiscountSidebar = false;
-        this.showTaxSidebar = false;
+        this.closeDiscountSidebar();
+        this.closeTaxSidebar();
         this.showLedgerAccountList = true;
             
         // Determine account type based on actual form field value
@@ -1318,7 +1309,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     const byControlValue = transactionsFormArray.value.find(item => item?.type === "by");
 
                     // Update transaction form group with received data
-                    const amount = !this.isSalesEntry ? this.calculateDiffAmount(transactionAtIndex.get('type')?.value?.toLowerCase()) : byControlValue.amount ?? 0;
+                    const amount = !this.isSalesEntry ? this.calculateDiffAmount(transactionAtIndex.get('type')?.value?.toLowerCase()) : byControlValue?.amount ?? 0;
                     transactionAtIndex?.patchValue({
                         amount: Number(amount),
                         actualAmount: Number(amount),
@@ -2934,7 +2925,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public toggleDiscountSelected(discountObj: any): void {
         if (discountObj) {
-            this.showDiscountSidebar = false;
             let transactionsFormArray = (this.journalVoucherForm.get('transactions') as FormArray);
             let discountTransactionIndex = transactionsFormArray?.value?.findIndex(obj => obj.isDiscountApplied);
             if (discountTransactionIndex === -1) {
@@ -2996,7 +2986,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public toggleTaxSelected(tax: any): void {
         if (tax) {
-            this.showTaxSidebar = false;
             let transactionsFormArray = (this.journalVoucherForm.get('transactions') as FormArray);
             let taxTransactionIndex = transactionsFormArray?.value?.findIndex(obj => obj.isTaxApplied);
             if (taxTransactionIndex === -1) {
