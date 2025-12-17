@@ -10,8 +10,11 @@
     --color-light-gray: #f5f5f5;
     --color-medium-gray: #9b9b9e;
     --color-dark-gray: #505159;
-    --color-silver: #cbcfd2;
     --color-transparent: transparent;
+
+    // M3 Design Token Mappings - Replace old M2 variables
+    --color-silver: var(--theme-outline-variant-color, #c4c6d0);  // M3 outline-variant
+    --color-shadow-light: var(--theme-surface-dim-color, #dbd9dd); // M3 surface-dim
 
     // Material 3 State Colors with alpha transparency
     --color-danger-light: #e545561a;
@@ -20,18 +23,18 @@
     --color-green-light: #36b28326;
     --color-success-light: #e0f3e5;
 
-    // Material 3 Border Colors
-    --color-border-medium: #dee2e6;
+    // Material 3 Border Colors - Map to M3 design tokens
+    --color-border-medium: var(--theme-outline-variant-color, #c4c6d0);
     --color-border-light: #e7e9eb9a;
-    --color-fields-border: #0000001f;
+    --color-fields-border: var(--theme-outline-color, #74777f);
 
     // Material 3 Semantic Colors
     --color-orange: #e58a00;
     --color-deep-orange: #ff9933;
     --color-brown-gold: #996515;
-    --color-red: #c51e3a;
+    --color-red: var(--theme-error-color, #dc3545);  // M3 error color
     --color-blue: #2196f3;
-    --color-green: #098757;
+    --color-green: var(--theme-secondary-color, #198754);  // M3 secondary color
 
     // Font sizes
     --font-size-15: 15px;

@@ -5,60 +5,62 @@
 
 @include mat.core();
 
-// Define palettes
-$primary-palette: palette.$giddh-primary;
-$accent-palette: palette.$giddh-accent;
-$warn-palette: palette.$giddh-warn;
-$typography: typography.$exported-custom-typography;
-
-// Dark theme palettes - using lighter variants for better contrast
-$primary-palette-dark: palette.$giddh-primary-dark;
-$accent-palette-dark: palette.$giddh-accent-dark;
-$warn-palette-dark: palette.$giddh-warn-dark;
-
 // Angular 21 Material 3 Light Theme Configuration
-$light-theme: mat.m2-define-light-theme((
+// Using the new M3 define-theme function with correct properties
+$light-theme: mat.define-theme((
     color: (
-        primary: $primary-palette,
-        accent: $accent-palette,
-        warn: $warn-palette,
+        theme-type: light,
+        primary: palette.$giddh-primary-palette,
+        tertiary: palette.$giddh-tertiary-palette,
     ),
-    typography: typography.$exported-custom-typography,
+    typography: (
+        brand-family: 'Inter, system-ui, sans-serif',
+        plain-family: 'Inter, system-ui, sans-serif',
+    ),
+    density: (
+        scale: 0,
+    ),
 ));
 
 // Angular 21 Material 3 Dark Theme Configuration
-$dark-theme: mat.m2-define-dark-theme((
+// M3 automatically generates appropriate dark theme colors
+$dark-theme: mat.define-theme((
     color: (
-        primary: $primary-palette-dark,
-        accent: $accent-palette-dark,
-        warn: $warn-palette-dark,
+        theme-type: dark,
+        primary: palette.$giddh-primary-palette,
+        tertiary: palette.$giddh-tertiary-palette,
     ),
-    typography: typography.$exported-custom-typography,
+    typography: (
+        brand-family: 'Inter, system-ui, sans-serif',
+        plain-family: 'Inter, system-ui, sans-serif',
+    ),
+    density: (
+        scale: 0,
+    ),
 ));
 
 // Include common styles that don't change between themes (only once)
 @include mat.all-component-typographies($light-theme);
 @include mat.all-component-densities($light-theme);
 
-// Theme-specific mixin for colors only
-@mixin theme-colors($theme, $primary, $accent, $warn) {
-    // Apply only color-specific theme styles
-    @include mat.all-component-colors($theme);
-    @include mixins.define-theme-colors($theme);
-}
+// Material 3 Theme Application
+// M3 themes are applied differently - using the new theme system
 
 // Global CSS variables available at root level
 :root {
+    @include mat.all-component-themes($light-theme);
     @include mixins.define-theme-colors($light-theme);
 }
 
 // Apply theme-specific colors based on the class attached to the body tag
 .default-theme {
-    @include theme-colors($light-theme, $primary-palette, $accent-palette, $warn-palette);
+    @include mat.all-component-colors($light-theme);
+    @include mixins.define-theme-colors($light-theme);
 }
 
 .dark-theme {
-    @include theme-colors($dark-theme, $primary-palette-dark, $accent-palette-dark, $warn-palette-dark);
+    @include mat.all-component-colors($dark-theme);
+    @include mixins.define-theme-colors($dark-theme);
 }
 
 // Specific Angular Material component overrides

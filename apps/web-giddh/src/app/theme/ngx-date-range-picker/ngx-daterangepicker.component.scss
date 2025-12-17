@@ -7,33 +7,37 @@
     @include mat.button-typography($theme);
     @include mat.button-density($theme);
 }
-$primary-palette: palette.$giddh-primary;
-$accent-palette: palette.$giddh-accent;
-$warn-palette: palette.$giddh-warn;
+// Material 3 Light Theme for DateRangePicker
+$light-theme: mat.define-theme((
+    color: (
+        theme-type: light,
+        primary: palette.$giddh-primary-palette,
+        tertiary: palette.$giddh-tertiary-palette,
+    ),
+    typography: (
+        brand-family: 'Inter, system-ui, sans-serif',
+        plain-family: 'Inter, system-ui, sans-serif',
+    ),
+    density: (
+        scale: 0,
+    ),
+));
 
-$primary-palette-dark: palette.$giddh-primary-dark;
-$accent-palette-dark: palette.$giddh-accent-dark;
-$warn-palette-dark: palette.$giddh-warn-dark;
-
-$light-theme: mat.define-theme(
-    (
-        color: (
-            theme-type: light,
-            primary: mat.$azure-palette,
-            tertiary: mat.$blue-palette,
-        ),
-    )
-);
-
-$dark-theme: mat.define-theme(
-    (
-        color: (
-            theme-type: dark,
-            primary: mat.$azure-palette,
-            tertiary: mat.$blue-palette,
-        ),
-    )
-);
+// Material 3 Dark Theme for DateRangePicker
+$dark-theme: mat.define-theme((
+    color: (
+        theme-type: dark,
+        primary: palette.$giddh-primary-palette,
+        tertiary: palette.$giddh-tertiary-palette,
+    ),
+    typography: (
+        brand-family: 'Inter, system-ui, sans-serif',
+        plain-family: 'Inter, system-ui, sans-serif',
+    ),
+    density: (
+        scale: 0,
+    ),
+));
 
 :host-context(.default-theme) {
     @include mat-button-theme($light-theme);
@@ -51,8 +55,8 @@ $dark-theme: mat.define-theme(
     display: flex;
     margin-top: 0;
     font-size: var(--font-size-15);
-    background-color: var(--theme-background-color);
-    box-shadow: 0 2px 4px 0 var(--color-shadow-light), 0 2px 8px 0 var(--color-shadow-light);
+    background-color: var(--theme-surface-color);
+    box-shadow: 0 2px 4px 0 var(--theme-surface-dim-color), 0 2px 8px 0 var(--theme-surface-dim-color);
     &.double {
         width: 100%;
     }
@@ -64,7 +68,7 @@ $dark-theme: mat.define-theme(
     &:after {
         position: absolute;
         display: inline-block;
-        border-bottom-color: var(--color-silver);
+        border-bottom-color: var(--theme-outline-variant-color);
         content: "";
     }
 
