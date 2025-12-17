@@ -100,7 +100,6 @@
                 <ng-container *ngFor="let item of subMenuItems">
                     <mat-card
                         class="single-item"
-                        tabindex="0"
                         (click)="redirectSubItemLink(item)"
                         [queryParams]="item?.additional?.queryParams"
                     >
