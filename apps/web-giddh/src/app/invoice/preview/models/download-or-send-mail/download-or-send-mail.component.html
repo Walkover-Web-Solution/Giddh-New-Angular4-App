@@ -7,13 +7,7 @@
     <div class="dialog-header">
         <span>
             <ng-container *ngIf="showPdfWrap">
-                <button
-                    type="button"
-                    mat-raised-button
-                    class="mr-2"
-                    *ngIf="showEditButton"
-                    (click)="editVoucher()"
-                >
+                <button type="button" mat-raised-button class="mr-2" *ngIf="showEditButton" (click)="editVoucher()">
                     {{ commonLocaleData?.app_edit }}
                 </button>
                 <button
@@ -28,7 +22,9 @@
                 </button>
             </ng-container>
         </span>
-        <i class="icon-cross cursor-pointer" aria-hidden="true" (click)="onCancel('closed')"></i>
+        <button mat-icon-button aria-label="Close" (click)="onCancel('closed')">
+            <i class="icon-cross"></i>
+        </button>
 
         <!-- drop down for Esignature area -->
         <div class="dropdown-menu ml-5" [ngClass]="{ open: showEsign }">
@@ -75,7 +71,9 @@
                             <ng-template [ngIf]="currentVoucherFilter === invoicesEnum && voucherApiVersion === 2">
                                 <ng-container *ngTemplateOutlet="invoiceCopyOptions"></ng-container>
                             </ng-template>
-                            <div [ngClass]="{'mt-3': (currentVoucherFilter === invoicesEnum && voucherApiVersion === 2)}">
+                            <div
+                                [ngClass]="{ 'mt-3': currentVoucherFilter === invoicesEnum && voucherApiVersion === 2 }"
+                            >
                                 <button
                                     type="button"
                                     mat-raised-button

@@ -4,26 +4,27 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-    <div class=" p-3 section-center pt-5">
-        <form [formGroup]="tagForm" >
+    <div class="p-3 section-center pt-5">
+        <form [formGroup]="tagForm">
             <div class="row">
                 <div class="col-12 px-0">
                     <div *ngIf="isLoading">
                         <giddh-page-loader></giddh-page-loader>
                     </div>
                     <mat-form-field class="initial-height w-100" appearance="outline" *ngIf="!isLoading">
-                        <mat-label>{{ localeData?.tags_name  }}</mat-label>
+                        <mat-label>{{ localeData?.tags_name }}</mat-label>
                         <mat-chip-grid #chipGrid aria-label="Enter tag">
-                            <mat-chip-row *ngFor="let tag of tags"
-                                        (removed)="deleteTag(tag)"
-                                        [editable]="true"
-                                        (edited)="updateTag(tag, $event)"
-                                        [aria-description]="'press enter to edit ' + tag?.name"
+                            <mat-chip-row
+                                *ngFor="let tag of tags"
+                                (removed)="deleteTag(tag)"
+                                [editable]="true"
+                                (edited)="updateTag(tag, $event)"
+                                [aria-description]="'press enter to edit ' + tag?.name"
                             >
-                            {{ tag?.name | titlecase }}
-                            <button matChipRemove [attr.aria-label]="'remove ' + tag?.name">
-                                <i class="icon-cross"></i>
-                            </button>
+                                {{ tag?.name | titlecase }}
+                                <button matChipRemove [attr.aria-label]="'remove ' + tag?.name">
+                                    <i class="icon-cross"></i>
+                                </button>
                             </mat-chip-row>
                             <input
                                 #tagInput
@@ -35,7 +36,7 @@
                             />
                         </mat-chip-grid>
                     </mat-form-field>
-                   
+
                     <div class="no-data font-size-24" *ngIf="!isLoading && !tags?.length">
                         <no-data [secondaryMessage]="' '" [secondaryMessageClass]="'p-0'"></no-data>
                     </div>
@@ -50,9 +51,6 @@
             <div class="modal-content">
                 <div class="dialog-header">
                     <span>{{ commonLocaleData?.app_confirmation }}</span>
-                    <button mat-icon-button aria-label="close" mat-dialog-close (click)="onUserConfirmation(false)">
-                        <i class="icon-cross"></i>
-                    </button>
                 </div>
                 <mat-dialog-content class="dialog-body">
                     <div [innerHTML]="confirmationMessage"></div>

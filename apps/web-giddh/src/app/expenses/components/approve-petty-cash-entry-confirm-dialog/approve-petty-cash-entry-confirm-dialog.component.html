@@ -1,8 +1,5 @@
 <div class="dialog-header">
     <span>{{ localeData?.approve }}</span>
-    <button mat-icon-button aria-label="close"  (click)="approveEntry.emit(false)">
-        <i class="icon-cross"></i>
-    </button>
 </div>
 
 <mat-dialog-content class="dialog-body">
@@ -34,24 +31,26 @@
                     }}
                 </p>
 
-                <reactive-dropdown-field 
+                <reactive-dropdown-field
                     *ngIf="showCategoryOption"
                     [showError]="showEntryAgainstRequired"
                     class="text-left multi-select entry-against"
-                    [cssClass]="'border-none'" 
+                    [cssClass]="'border-none'"
                     [(ngModel)]="entryAgainstObject.model"
                     [name]="'depositAccountUniqueName'"
-                    [label]="entryAgainstObject && pettyCashEntry
-                    ? pettyCashEntry?.particular?.name
-                    : selectedEntryForApprove?.baseAccount?.name"
+                    [label]="
+                        entryAgainstObject && pettyCashEntry
+                            ? pettyCashEntry?.particular?.name
+                            : selectedEntryForApprove?.baseAccount?.name
+                    "
                     [placeholder]="commonLocaleData?.app_select_account"
                     [options]="entryAgainstObject.dropDownOption"
                     (selectedOption)="onSelectEntryAgainstAccount($event)"
                     (onClear)="onClearEntryAgainstAccount()"
-                    [enableDynamicSearch]="true" 
+                    [enableDynamicSearch]="true"
                     (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
                     [isPaginationEnabled]="true"
-                    (scrollEnd)="handleAccountScrollEnd()" 
+                    (scrollEnd)="handleAccountScrollEnd()"
                     [labelValue]="entryAgainstObject?.name"
                 >
                 </reactive-dropdown-field>

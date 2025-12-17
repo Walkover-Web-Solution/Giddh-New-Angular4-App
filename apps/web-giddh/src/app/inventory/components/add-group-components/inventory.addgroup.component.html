@@ -1,9 +1,6 @@
 <section>
     <div class="dialog-header">
-        <span>{{ addGroup ? 'Create Group' : 'Update Group' }}</span>
-        <button mat-icon-button aria-label="close" (click)="closeAsidePane()">
-            <i class="icon-cross"></i>
-        </button>
+        <span>{{ addGroup ? "Create Group" : "Update Group" }}</span>
     </div>
     <mat-dialog-content class="dialog-body">
         <form name="updateStockGroup" class="form-body" [formGroup]="addGroupForm" novalidate="">
@@ -36,12 +33,8 @@
                 <div class="row">
                     <div class="form-group col-xs-6 col-sm-6">
                         <mat-radio-group formControlName="showCodeType" class="d-flex mb-2">
-                            <mat-radio-button color="primary" value="hsn" class="mr-3">
-                                HSN Code
-                            </mat-radio-button>
-                            <mat-radio-button color="primary" value="sac">
-                                SAC Code
-                            </mat-radio-button>
+                            <mat-radio-button color="primary" value="hsn" class="mr-3"> HSN Code </mat-radio-button>
+                            <mat-radio-button color="primary" value="sac"> SAC Code </mat-radio-button>
                         </mat-radio-group>
                         <input
                             type="number"
@@ -89,12 +82,7 @@
                     </div>
                     <div class="form-group col-xs-6 col-sm-6">
                         <label>Tax</label>
-                        <button
-                            type="button"
-                            class="form-control text-left"
-                            [matMenuTriggerFor]="taxMenu"
-                            mat-button
-                        >
+                        <button type="button" class="form-control text-left" [matMenuTriggerFor]="taxMenu" mat-button>
                             Selected ({{ taxTempArray?.length }})
                             <span class="pull-right"><span class="caret"></span></span>
                         </button>
@@ -114,9 +102,7 @@
                                     {{ tax.name }}
                                 </mat-checkbox>
                             </div>
-                            <div *ngIf="(companyTaxesList$ | async)?.length < 1" mat-menu-item>
-                                No Tax Found
-                            </div>
+                            <div *ngIf="(companyTaxesList$ | async)?.length < 1" mat-menu-item>No Tax Found</div>
                         </mat-menu>
                     </div>
                 </div>
@@ -132,9 +118,9 @@
                         >
                             Save
                         </button>
-                        <button mat-raised-button color="primary" type="reset">Cancel</button>
+                        <button mat-stroked-button type="button" (click)="closeAsidePane()">Cancel</button>
                     </div>
-                    <div *ngIf="!addGroup">
+                    <div *ngIf="!addGroup" class="d-flex justify-content-end column-gap-1">
                         <button
                             mat-raised-button
                             color="primary"
@@ -153,6 +139,7 @@
                         >
                             Delete
                         </button>
+                        <button mat-stroked-button type="button" (click)="closeAsidePane()">Cancel</button>
                     </div>
                 </div>
             </div>
