@@ -1140,7 +1140,6 @@
                                     [enableDynamicSearch]="true"
                                     [options]="transporterDropdown$ | async"
                                     [(ngModel)]="branchTransfer.transporterDetails.transporterId"
-                                    [createNewText]="'Create New'"
                                     [showCreateNew]="true"
                                     (createOption)="openTransporterPopupDialog()"
                                 ></reactive-dropdown-field>

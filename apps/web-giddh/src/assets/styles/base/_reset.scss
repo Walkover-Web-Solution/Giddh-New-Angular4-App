@@ -6,6 +6,13 @@
     box-sizing: border-box;
 }
 
+* {
+    &:focus,
+    &:focus-visible {
+        outline: none;
+    }
+}
+
 html,
 body {
     overflow: hidden;
@@ -23,6 +30,23 @@ body {
     ::-webkit-scrollbar-thumb {
         border-radius: var(--mat-border-radius-8, 8px);
         background-color: var(--theme-primary-light, lightgray);
+    }
+
+    .cdk-keyboard-focused,
+    .cdk-program-focused {
+        &:not(
+                .mat-calendar-content,
+                .mat-mdc-radio-button,
+                .mat-mdc-list-item,
+                .mat-expansion-panel-header,
+                .mat-mdc-icon-button,
+                .mat-mdc-slide-toggle,
+                .mat-mdc-menu-item
+            ) {
+            border-radius: 2px;
+            outline-offset: 1px;
+            outline: 2px solid var(--theme-primary-color) !important;
+        }
     }
 }
 

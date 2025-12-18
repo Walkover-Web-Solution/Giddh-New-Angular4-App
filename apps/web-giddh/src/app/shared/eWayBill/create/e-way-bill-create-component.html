@@ -6,7 +6,9 @@
 >
     <div class="dialog-header">
         <span class="font-size-16">{{ localeData?.create_e_way_bill }}</span>
-        <i mat-dialog-close class="icon-cross"></i>
+        <button mat-icon-button aria-label="close" mat-dialog-close>
+            <i class="icon-cross"></i>
+        </button>
     </div>
     <div mat-dialog-content class="dialog-body">
         <div *ngIf="generateEwayBillform">
@@ -23,6 +25,7 @@
                                 [type]="'text'"
                                 [minlength]="15"
                                 [maxlength]="15"
+                                [autoFocus]="true"
                                 [label]="localeData?.gstin_receiver_label"
                                 [placeholder]="localeData?.gstin_receiver_placeholder"
                                 formControlName="toGstIn"
@@ -62,7 +65,6 @@
                                 formControlName="transId"
                                 (selectedOption)="$event && generateEwayBillform.get('transName').patchValue($event.label)"
                                 (onClear)="generateEwayBillform.get('transName').patchValue(null); generateEwayBillform.get('transId').patchValue(null)"
-                                [createNewText]="commonLocaleData?.app_create_new"
                                 [showCreateNew]="true"
                                 (createOption)="openTransporterModel()"
                                 [showError]="isFormInvalid && !generateEwayBillform.get('transId').value"
@@ -96,17 +98,41 @@
                         </div>
                         <div class="col-md-8 col-lg-8 col-sm-12 mt-3 pt-3">
                             <mat-radio-group formControlName="transMode" class="d-flex flex-wrap">
-                                <mat-radio-button color="primary" value="1" (click)="updateField('vehType', null)" class="mr-3 mb-2">
-                                    <img alt="Road icon" src="assets/icon/4.svg" class="mr-1" /> {{ commonLocaleData?.app_road }}
+                                <mat-radio-button
+                                    color="primary"
+                                    value="1"
+                                    (click)="updateField('vehType', null)"
+                                    class="mr-3 mb-2"
+                                >
+                                    <img alt="Road icon" src="assets/icon/4.svg" class="mr-1" /> {{
+                                    commonLocaleData?.app_road }}
                                 </mat-radio-button>
-                                <mat-radio-button color="primary" value="2" (click)="updateField('vehType', 'R')" class="mr-3 mb-2">
-                                    <img alt="Railway icon" src="assets/icon/3.svg" class="mr-1" /> {{ commonLocaleData?.app_rail }}
+                                <mat-radio-button
+                                    color="primary"
+                                    value="2"
+                                    (click)="updateField('vehType', 'R')"
+                                    class="mr-3 mb-2"
+                                >
+                                    <img alt="Railway icon" src="assets/icon/3.svg" class="mr-1" /> {{
+                                    commonLocaleData?.app_rail }}
                                 </mat-radio-button>
-                                <mat-radio-button color="primary" value="3" (click)="updateField('vehType', 'R')" class="mr-3 mb-2">
-                                    <img alt="Airway icon" src="assets/icon/1.svg" class="mr-1" /> {{ commonLocaleData?.app_air }}
+                                <mat-radio-button
+                                    color="primary"
+                                    value="3"
+                                    (click)="updateField('vehType', 'R')"
+                                    class="mr-3 mb-2"
+                                >
+                                    <img alt="Airway icon" src="assets/icon/1.svg" class="mr-1" /> {{
+                                    commonLocaleData?.app_air }}
                                 </mat-radio-button>
-                                <mat-radio-button color="primary" value="4" (click)="updateField('vehType', 'R')" class="mb-2">
-                                    <img alt="Ship icon" src="assets/icon/2.svg" class="mr-1" /> {{ commonLocaleData?.app_ship }}
+                                <mat-radio-button
+                                    color="primary"
+                                    value="4"
+                                    (click)="updateField('vehType', 'R')"
+                                    class="mb-2"
+                                >
+                                    <img alt="Ship icon" src="assets/icon/2.svg" class="mr-1" /> {{
+                                    commonLocaleData?.app_ship }}
                                 </mat-radio-button>
                             </mat-radio-group>
                         </div>
@@ -149,6 +175,7 @@
                                 [showToggleIcon]="false"
                                 [appearance]="'outline'"
                                 class="settings-field d-block"
+                                [closeDatepickerOnFocus]="true"
                                 formControlName="transDocDt"
                             ></giddh-datepicker>
                         </div>
@@ -172,14 +199,10 @@
                         </div>
                     </div>
                     <div class="row clear-both d-flex justify-content-end column-gap-15">
-                        <button
-                            mat-raised-button
-                            color="primary"
-                            (click)="onSubmitEwaybill()"
-                        >
+                        <button mat-raised-button color="primary" (click)="onSubmitEwaybill()">
                             {{ localeData?.save_generate }}
                         </button>
-                        <button mat-raised-button color="primary" (click)="onResetGenerateBillForm()">
+                        <button mat-stroked-button (click)="onResetGenerateBillForm()">
                             {{ commonLocaleData?.app_reset }}
                         </button>
                     </div>
@@ -188,165 +211,169 @@
         </div>
     </div>
 
-<!-- Account Aside Menu -->
-<ng-template #accountAsideMenu>
-    <div class="dialog-header">
-        <span class="font-size-16">{{ commonLocaleData?.app_manage_transporter }}</span>
-        <i mat-dialog-close class="icon-cross"></i>
-    </div>
-    <div mat-dialog-content class="dialog-body">
-        <form autocomplete="off" name="generateNewTransporterForm" [formGroup]="generateNewTransporterForm">
-            <div class="aside-body pt-2 pb-1 pr-2 pl-2 bg-gray">
-                <div class="form-group">
-                    <label for="transporterName"
-                        >{{ commonLocaleData?.app_transporter_name }} <span class="text-danger">*</span></label
-                    >
-                    <input-field
-                        [type]="'text'"
-                        [showError]="transporterName?.touched && transporterName?.invalid"
-                        [placeholder]="commonLocaleData?.app_transporter_name_placeholder"
-                        [pattern]="'[a-zA-Z0-9^ .&]{5,100}'"
-                        [name]="'transporterName'"
-                        formControlName="transporterName"
-                    >
-                    </input-field>
-                    <small class="text-danger" *ngIf="transporterName.touched && transporterName?.invalid"
-                        >{{ commonLocaleData?.app_invalid_transporter_name_message }}
-                    </small>
-                </div>
-                <div class="form-group">
-                    <label for="transporterId"
-                        >{{ commonLocaleData?.app_transporter_id }} <span class="text-danger">*</span></label
-                    >
-                    <input-field
-                        [type]="'text'"
-                        [pattern]="'[0-9]{2}[0-9|A-Z]{13}'"
-                        [minlength]="4"
-                        [maxlength]="15"
-                        [showError]="transporterId?.touched && transporterId?.invalid"
-                        [name]="'transporterId'"
-                        formControlName="transporterId"
-                        [placeholder]="commonLocaleData?.app_transporter_id_placeholder"
-                    >
-                    </input-field>
-                    <small class="text-danger" *ngIf="transporterId?.touched && transporterId?.invalid">
-                        {{ commonLocaleData?.app_invalid_transporter_id_message }}
-                    </small>
-                </div>
+    <!-- Account Aside Menu -->
+    <ng-template #accountAsideMenu>
+        <div class="dialog-header">
+            <span class="font-size-16">{{ commonLocaleData?.app_manage_transporter }}</span>
+            <button mat-icon-button aria-label="close" mat-dialog-close>
+                <i class="icon-cross"></i>
+            </button>
+        </div>
+        <div mat-dialog-content class="dialog-body">
+            <form autocomplete="off" name="generateNewTransporterForm" [formGroup]="generateNewTransporterForm">
+                <div class="aside-body pt-2 pb-1 pr-2 pl-2 bg-gray">
+                    <div class="form-group">
+                        <label for="transporterName"
+                            >{{ commonLocaleData?.app_transporter_name }} <span class="text-danger">*</span></label
+                        >
+                        <input-field
+                            [type]="'text'"
+                            [showError]="transporterName?.touched && transporterName?.invalid"
+                            [placeholder]="commonLocaleData?.app_transporter_name_placeholder"
+                            [pattern]="'[a-zA-Z0-9^ .&]{5,100}'"
+                            [name]="'transporterName'"
+                            formControlName="transporterName"
+                        >
+                        </input-field>
+                        <small class="text-danger" *ngIf="transporterName.touched && transporterName?.invalid"
+                            >{{ commonLocaleData?.app_invalid_transporter_name_message }}
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <label for="transporterId"
+                            >{{ commonLocaleData?.app_transporter_id }} <span class="text-danger">*</span></label
+                        >
+                        <input-field
+                            [type]="'text'"
+                            [pattern]="'[0-9]{2}[0-9|A-Z]{13}'"
+                            [minlength]="4"
+                            [maxlength]="15"
+                            [showError]="transporterId?.touched && transporterId?.invalid"
+                            [name]="'transporterId'"
+                            formControlName="transporterId"
+                            [placeholder]="commonLocaleData?.app_transporter_id_placeholder"
+                        >
+                        </input-field>
+                        <small class="text-danger" *ngIf="transporterId?.touched && transporterId?.invalid">
+                            {{ commonLocaleData?.app_invalid_transporter_id_message }}
+                        </small>
+                    </div>
 
-                <div class="form-group mt-3">
-                    <div class="clear-both d-flex justify-content-end column-gap-15" *ngIf="!transportEditMode">
-                        <button
-                            mat-raised-button
-                            color="primary"
-                            [disabled]="generateNewTransporterForm.invalid"
-                            (click)="generateTransporter()"
-                            type="submit"
-                        >
-                            {{ commonLocaleData?.app_save }}
-                        </button>
-                        <button mat-raised-button color="primary" (click)="clearTransportForm()" type="submit">
-                            {{ commonLocaleData?.app_clear }}
-                        </button>
-                    </div>
-                    <div class="clear-both d-flex justify-content-end column-gap-15" *ngIf="transportEditMode">
-                        <button
-                            mat-raised-button
-                            color="primary"
-                            [disabled]="generateNewTransporterForm.invalid"
-                            (click)="updateTransporter()"
-                            type="submit"
-                        >
-                            {{ commonLocaleData?.app_update }}
-                        </button>
-                        <button mat-raised-button color="primary" (click)="clearTransportForm()">
-                            {{ commonLocaleData?.app_clear }}
-                        </button>
+                    <div class="form-group mt-3">
+                        <div class="clear-both d-flex justify-content-end column-gap-15" *ngIf="!transportEditMode">
+                            <button
+                                mat-raised-button
+                                color="primary"
+                                [disabled]="generateNewTransporterForm.invalid"
+                                (click)="generateTransporter()"
+                                type="submit"
+                            >
+                                {{ commonLocaleData?.app_save }}
+                            </button>
+                            <button mat-raised-button color="primary" (click)="clearTransportForm()" type="button">
+                                {{ commonLocaleData?.app_clear }}
+                            </button>
+                        </div>
+                        <div class="clear-both d-flex justify-content-end column-gap-15" *ngIf="transportEditMode">
+                            <button
+                                mat-raised-button
+                                color="primary"
+                                [disabled]="generateNewTransporterForm.invalid"
+                                (click)="updateTransporter()"
+                                type="submit"
+                            >
+                                {{ commonLocaleData?.app_update }}
+                            </button>
+                            <button mat-stroked-button (click)="clearTransportForm()">
+                                {{ commonLocaleData?.app_clear }}
+                            </button>
+                        </div>
                     </div>
                 </div>
+            </form>
+
+            <div class="pt-2 table-responsive">
+                <table class="table basic giddh-table table-modal">
+                    <thead class="thead-background1">
+                        <tr>
+                            <th width="40%">
+                                {{ commonLocaleData?.app_name }}
+                                <div class="icon-pointer pull-right">
+                                    <div
+                                        class="glyphicon glyphicon-triangle-top text-light d-block font-size-9"
+                                        (click)="sortButtonClicked('asc', 'transporterName')"
+                                        [ngClass]="{
+                                        'active-text-color':
+                                            transporterFilterRequest.sortBy === 'transporterName' &&
+                                            transporterFilterRequest.sort === 'asc'
+                                    }"
+                                    ></div>
+                                    <div
+                                        class="glyphicon glyphicon-triangle-bottom text-light d-block font-size-9"
+                                        (click)="sortButtonClicked('desc', 'transporterName')"
+                                        [ngClass]="{
+                                        'active-text-color':
+                                            transporterFilterRequest.sortBy === 'transporterName' &&
+                                            transporterFilterRequest.sort === 'desc'
+                                    }"
+                                    ></div>
+                                </div>
+                            </th>
+                            <th width="40%">
+                                {{ commonLocaleData?.app_transporter_id }}
+                                <div class="icon-pointer pull-right">
+                                    <div
+                                        class="glyphicon glyphicon-triangle-top text-light d-block font-size-9"
+                                        (click)="sortButtonClicked('asc', 'transporterId')"
+                                        [ngClass]="{
+                                        'active-text-color':
+                                            transporterFilterRequest.sortBy === 'transporterId' &&
+                                            transporterFilterRequest.sort === 'asc'
+                                    }"
+                                    ></div>
+                                    <div
+                                        class="glyphicon glyphicon-triangle-bottom text-light d-block font-size-9"
+                                        (click)="sortButtonClicked('desc', 'transporterId')"
+                                        [ngClass]="{
+                                        'active-text-color':
+                                            transporterFilterRequest.sortBy === 'transporterId' &&
+                                            transporterFilterRequest.sort === 'desc'
+                                    }"
+                                    ></div>
+                                </div>
+                            </th>
+                            <th width="20%" class="nowrap">{{ commonLocaleData?.app_actions }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of transporterList$ | async">
+                            <td>{{ item?.transporterName }}</td>
+                            <td>{{ item?.transporterId }}</td>
+                            <td class="d-flex justify-content-center column-gap-15 border-top-none">
+                                <button mat-icon-button color="primary" (click)="editTransporter(item)">
+                                    <i class="icon-edit theme-foreground-color"></i>
+                                </button>
+                                <button mat-icon-button color="primary" (click)="deleteTransporter(item)">
+                                    <i class="icon-trash theme-foreground-color"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-        </form>
-
-        <div class="pt-2 table-responsive">
-            <table class="table basic giddh-table table-modal">
-                <thead class="thead-background1">
-                    <tr>
-                        <th width="40%">
-                            {{ commonLocaleData?.app_name }}
-                            <div class="icon-pointer pull-right">
-                                <div
-                                    class="glyphicon glyphicon-triangle-top text-light d-block font-size-9"
-                                    (click)="sortButtonClicked('asc', 'transporterName')"
-                                    [ngClass]="{
-                                        'active-text-color':
-                                            transporterFilterRequest.sortBy === 'transporterName' &&
-                                            transporterFilterRequest.sort === 'asc'
-                                    }"
-                                ></div>
-                                <div
-                                    class="glyphicon glyphicon-triangle-bottom text-light d-block font-size-9"
-                                    (click)="sortButtonClicked('desc', 'transporterName')"
-                                    [ngClass]="{
-                                        'active-text-color':
-                                            transporterFilterRequest.sortBy === 'transporterName' &&
-                                            transporterFilterRequest.sort === 'desc'
-                                    }"
-                                ></div>
-                            </div>
-                        </th>
-                        <th width="40%">
-                            {{ commonLocaleData?.app_transporter_id }}
-                            <div class="icon-pointer pull-right">
-                                <div
-                                    class="glyphicon glyphicon-triangle-top text-light d-block font-size-9"
-                                    (click)="sortButtonClicked('asc', 'transporterId')"
-                                    [ngClass]="{
-                                        'active-text-color':
-                                            transporterFilterRequest.sortBy === 'transporterId' &&
-                                            transporterFilterRequest.sort === 'asc'
-                                    }"
-                                ></div>
-                                <div
-                                    class="glyphicon glyphicon-triangle-bottom text-light d-block font-size-9"
-                                    (click)="sortButtonClicked('desc', 'transporterId')"
-                                    [ngClass]="{
-                                        'active-text-color':
-                                            transporterFilterRequest.sortBy === 'transporterId' &&
-                                            transporterFilterRequest.sort === 'desc'
-                                    }"
-                                ></div>
-                            </div>
-                        </th>
-                        <th width="20%" class="nowrap">{{ commonLocaleData?.app_actions }}</th>
-                    </tr>
-                </thead>
-                <tr *ngFor="let item of transporterList$ | async">
-                    <td>{{ item?.transporterName }}</td>
-                    <td>{{ item?.transporterId }}</td>
-                    <td class="nowrap d-flex column-gap-15 border-top-none">
-                        <button mat-raised-button color="primary" class="min-width-unset" (click)="editTransporter(item)">
-                            <i class="icon-edit"></i>
-                        </button>
-                        <button mat-raised-button color="primary" class="min-width-unset" (click)="deleteTransporter(item)">
-                            <i class="fa fa-trash"></i>
-                        </button>
-                    </td>
-                </tr>
-            </table>
+            <div class="mb-5" *ngIf="transporterListDetails?.totalItems > pageSizeOptions[0]">
+                <mat-paginator
+                    [length]="transporterListDetails.totalItems"
+                    [pageIndex]="transporterFilterRequest.page - 1"
+                    [pageSize]="transporterFilterRequest.count"
+                    [pageSizeOptions]="pageSizeOptions"
+                    (page)="pageChanged($event)"
+                    [hidePageSize]="false"
+                    [showFirstLastButtons]="true"
+                    aria-label="Select page of transports"
+                ></mat-paginator>
+                <section class="mb-custom-80"></section>
+            </div>
         </div>
-        <div class="mb-5" *ngIf="transporterListDetails?.totalItems > pageSizeOptions[0]">
-            <mat-paginator
-                [length]="transporterListDetails.totalItems"
-                [pageIndex]="transporterFilterRequest.page - 1"
-                [pageSize]="transporterFilterRequest.count"
-                [pageSizeOptions]="pageSizeOptions"
-                (page)="pageChanged($event)"
-                [hidePageSize]="false"
-                [showFirstLastButtons]="true"
-                aria-label="Select page of transports"
-            ></mat-paginator>
-            <section class="mb-custom-80"></section>
-        </div>
-    </div>
-</ng-template>
+    </ng-template>
 </ng-container>

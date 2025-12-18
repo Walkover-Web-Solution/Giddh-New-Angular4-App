@@ -3,7 +3,7 @@ import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
 import { ReplaySubject, takeUntil } from "rxjs";
 import { isEqual } from "../../lodash-optimized";
 import { GeneralService } from "../../services/general.service";
-import { MatMenuTrigger } from "@angular/material/menu";
+import { MatMenuTrigger, MenuCloseReason } from "@angular/material/menu";
 
 @Component({
     selector: "discount-dropdown",
@@ -45,6 +45,8 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
     public totalDiscountAmount: number = 0;
     /** True if field is readonly */
     @Input() public readonly: boolean = false;
+    /** Stores last saved form values when menu opens */
+    private lastSavedFormValues: any = null;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -164,7 +166,7 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
         this.totalDiscountAmount += this.discountForm.get('percentage')?.value ? ((Number(this.discountForm.get('percentage')?.value) / 100) * Number(this.amount)) : 0;
 
         const discounts = this.discountForm.get('discounts') as FormArray;
-        for (let i = 0; i <= discounts.length; i++) {
+        for (let i = 0; i < discounts.length; i++) {
             if (discounts.controls[i]?.get('isActive')?.value) {
                 if (discounts.controls[i].get('discountType')?.value === 'FIX_AMOUNT') {
                     this.totalDiscountAmount += Number(discounts.controls[i].get('discountValue')?.value);
@@ -232,5 +234,96 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
      */
     public closeDiscountMenu(): void {
         this.menuTrigger?.closeMenu();
+    }
+
+    /**
+     * Handles menu opened event and saves current form values
+     *
+     * @memberof DiscountDropdownComponent
+     */
+    public handleMenuOpened(): void {
+        this.lastSavedFormValues = {
+            percentage: this.discountForm.get('percentage')?.value,
+            fixedValue: this.discountForm.get('fixedValue')?.value,
+            discounts: this.discountForm.get('discounts')?.value
+        };
+    }
+
+    /**
+     * Handles menu closed event and resets menu state
+     *
+     * @param reason The reason the menu was closed
+     * @memberof DiscountDropdownComponent
+     */
+    public handleMenuClosed(reason: MenuCloseReason): void {
+        if (!reason) return;
+
+        const isClosedByEscape = reason === 'keydown';
+        if (isClosedByEscape && this.lastSavedFormValues) {
+            this.allowDiscountValueChanges = false;
+            this.discountForm.patchValue({
+                percentage: this.lastSavedFormValues.percentage,
+                fixedValue: this.lastSavedFormValues.fixedValue
+            });
+            
+            const discountsArray = this.discountForm.get('discounts') as FormArray;
+            this.lastSavedFormValues.discounts?.forEach((discount: any, index: number) => {
+                if (discountsArray.controls[index]) {
+                    discountsArray.controls[index].patchValue(discount);
+                }
+            });
+            
+            this.allowDiscountValueChanges = true;
+            this.calculateDiscountAmount();
+        }
+        this.lastSavedFormValues = null;
+    }
+
+    /**
+     * Focuses the next available checkbox in the discount list
+     *
+     * @param {HTMLElement} currentElement - The currently focused checkbox element
+     * @param {number} currentIndex - The index of the current checkbox
+     * @memberof DiscountDropdownComponent
+     */
+    public focusNextCheckbox(currentElement: HTMLElement, currentIndex: number): void {
+        setTimeout(() => {
+            // Find the discount wrapper container
+            const discountWrapper = document.querySelector('.discount-checkbox-wrapper');
+            if (discountWrapper) {
+                // Get all mat-checkbox elements (Angular Material checkboxes)
+                const checkboxes = discountWrapper.querySelectorAll('mat-checkbox');
+                
+                if (checkboxes.length > 0) {
+                    const nextIndex = currentIndex + 1;
+                    
+                    if (nextIndex < checkboxes.length) {
+                        // Focus next checkbox - target the actual input element inside mat-checkbox
+                        const nextCheckbox = checkboxes[nextIndex] as HTMLElement;
+                        const inputElement = nextCheckbox.querySelector('input[type="checkbox"]') as HTMLElement;
+                        if (inputElement) {
+                            inputElement.focus();
+                        } else {
+                            nextCheckbox.focus();
+                        }
+                    } else {
+                        // If at the end, try to focus "Create New" button or cycle back to first checkbox
+                        const createNewButton = document.querySelector('.create-new span[tabindex="0"]');
+                        if (createNewButton) {
+                            (createNewButton as HTMLElement)?.focus();
+                        } else if (checkboxes.length > 0) {
+                            // Cycle back to first checkbox
+                            const firstCheckbox = checkboxes[0] as HTMLElement;
+                            const firstInputElement = firstCheckbox.querySelector('input[type="checkbox"]') as HTMLElement;
+                            if (firstInputElement) {
+                                firstInputElement.focus();
+                            } else {
+                                firstCheckbox.focus();
+                            }
+                        }
+                    }
+                }
+            }
+        }, 150);
     }
 }

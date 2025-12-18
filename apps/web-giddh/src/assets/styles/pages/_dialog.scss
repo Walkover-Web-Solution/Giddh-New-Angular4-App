@@ -17,13 +17,32 @@
     button {
         &.mdc-icon-button {
             padding: 0 !important;
+            $size: 30px;
+            height: $size;
+            width: $size;
+            line-height: $size;
             .icon-cross {
                 color: var(--color-white) !important;
                 font-size: var(--font-size-16);
             }
         }
+
+        &.cdk-keyboard-focused,
+        &.cdk-program-focused {
+            border-radius: 2px;
+            outline-offset: 1px;
+            outline: 2px solid var(--color-white) !important;
+        }
+
+        &.mdc-icon-button {
+            &.cdk-keyboard-focused,
+            &.cdk-program-focused {
+                border-radius: 50% !important;
+            }
+        }
     }
 }
+
 .dialog-body {
     width: 100%;
     height: calc(100% - 60px);

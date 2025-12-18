@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild, forwardRef } from "@angular/core";
+import { AfterViewInit, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild, forwardRef } from "@angular/core";
 import { BehaviorSubject, Observable, Subject, debounceTime, of, skip, Subscription, ReplaySubject, takeUntil } from "rxjs";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
@@ -205,15 +205,9 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             }
         }
         if (changes?.forceClear && !changes.forceClear.firstChange && changes.forceClear.currentValue !== changes.forceClear.previousValue) {
-            this.writeValue("", false);
-            this.controlLabelValue = "";
-            this.clearDropdownValue();
-            this.fieldFilteredOptions$ = of([]);
-            setTimeout(() => {
-                this.fieldFilteredOptions$ = of(this.options);
-            }, 100);
+           this.handleForceClear();
         }
-        if (changes?.openDropdown?.currentValue && !changes?.openDropdown?.previousValue) {
+        if (changes?.openDropdown?.currentValue && !changes?.openDropdown?.previousValue && changes.openDropdown.currentValue !== changes.openDropdown.previousValue) {
             this.openDropdownPanel();
         }
 
@@ -226,6 +220,22 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             this.labelValue = "";
             this.controlLabelValue = "";
         }
+    }
+
+    /**
+     * Handle force clear and reset dropdown list
+     * 
+     * @private
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    private handleForceClear(): void {
+         this.writeValue("", false);
+        this.controlLabelValue = "";
+        this.clearDropdownValue();
+        this.fieldFilteredOptions$ = of([]);
+        setTimeout(() => {
+            this.fieldFilteredOptions$ = of(this.options);
+        }, 100);
     }
 
     /**
@@ -369,6 +379,45 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     }
 
     /**
+     * Handles create new option selection change event
+     *
+     * @param {any} event - Selection change event from mat-option
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    public handleCreateNewSelection(event: any): void {
+        if (event.isUserInput && event.source.selected) {
+            this.createNewRecord();
+        }
+    }
+
+    /**
+     * Handles Alt+N keyboard shortcut for create new functionality
+     *
+     * @param {KeyboardEvent} event - The keyboard event
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    @HostListener('keydown', ['$event'])
+    public onKeyDown(event: KeyboardEvent): void {
+        // Early exit if create new is not enabled
+        if (!this.showCreateNew) return;
+
+        // Check for Alt+Shift+N combination (cross-platform)
+        const isAltShiftN = event.altKey && event.shiftKey && event.code === 'KeyN';
+        
+        // Check if dropdown is focused or open
+        const isFocused = this.selectField?.nativeElement === document.activeElement || this.trigger?.panelOpen;
+
+        if (isAltShiftN && isFocused) {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+            this.createNewRecord();
+        }
+    }
+
+    
+
+    /**
      * This will use for open dropdown panel
      *
      * @memberof ReactiveDropdownFieldComponent
@@ -461,6 +510,9 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         if (event) {
             if (this.showCreateNew && this.createNewText === '') {
                 this.createNewText = this.commonLocaleData?.app_create_new;
+            }
+            if (this.showCreateNew && this.showKeyboardCommand === '') {
+                this.showKeyboardCommand = this.commonLocaleData?.app_alt_shift_n;
             }
         }
     }

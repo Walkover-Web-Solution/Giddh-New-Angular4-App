@@ -1,20 +1,86 @@
 <div class="multi-select">
-    <input type="text" class="form-control text-right total-tax-amount" [matMenuTriggerFor]="taxControlMenu" [placeholder]="currency + '0'"
-        readonly [value]="currency + totalTaxAmount">
-    <mat-menu #taxControlMenu="matMenu">
-        <div class="d-flex flex-column px-3 pt-2 discount-wrapper" (click)="$event.stopPropagation()" [formGroup]="taxForm">
-            <div class="discount-checkbox-wrapper d-flex flex-column">
-                <ng-container *ngFor="let tax of taxForm.get('taxes')['controls']; let i = index" formArrayName="taxes">
-                    <ng-container [formGroupName]="i">
-                        <span [matTooltip]="tax?.get('disableForDate')?.value ? commonLocaleData.app_applicable_date + ': ' + tax?.get('taxDetail')?.value?.date : ''" matTooltipPosition="above">
-                            <mat-checkbox (change)="enableDisableTaxes()" formControlName="isChecked" color="primary"><span class="font-size-15">{{ tax?.get('name')?.value }}</span></mat-checkbox>
-                        </span>
+    <input
+        type="text"
+        class="form-control text-right total-tax-amount"
+        tabindex="0"
+        cdkMonitorElementFocus
+        (keydown.enter)="$event.preventDefault(); taxMenuTrigger.openMenu()"
+        (keydown.space)="$event.preventDefault(); taxMenuTrigger.openMenu()"
+        #taxMenuTrigger="matMenuTrigger"
+        [matMenuTriggerFor]="taxControlMenu"
+        [placeholder]="currency + '0'"
+        readonly
+        [value]="currency + totalTaxAmount"
+        (menuOpened)="handleMenuOpened()"
+    />
+    <mat-menu #taxControlMenu="matMenu" (closed)="handleMenuClosed($event)">
+        <ng-template matMenuContent>
+            <div
+                class="d-flex flex-column px-3 pt-2 discount-wrapper"
+                (click)="$event.stopPropagation()"
+                [formGroup]="taxForm"
+                (keydown.tab)="$event.stopPropagation()"
+                (keydown.shift.tab)="$event.stopPropagation()"
+                cdkTrapFocus
+                cdkTrapFocusAutoCapture
+            >
+                <div class="discount-checkbox-wrapper d-flex flex-column">
+                    <ng-container
+                        *ngFor="let tax of taxForm.get('taxes')['controls']; let i = index"
+                        formArrayName="taxes"
+                    >
+                        <ng-container [formGroupName]="i">
+                            <span
+                                [matTooltip]="
+                                    tax?.get('disableForDate')?.value
+                                        ? commonLocaleData.app_applicable_date +
+                                          ': ' +
+                                          tax?.get('taxDetail')?.value?.date
+                                        : ''
+                                "
+                                matTooltipPosition="above"
+                            >
+                                <mat-checkbox
+                                    (change)="enableDisableTaxes(); focusNextCheckbox($event.target, i)"
+                                    formControlName="isChecked"
+                                    color="primary"
+                                    #taxRef
+                                    [attr.data-index]="i"
+                                    tabindex="0"
+                                    cdkMonitorElementFocus
+                                    (keydown.enter)="
+                                        $event.preventDefault();
+                                        taxRef.toggle();
+                                        enableDisableTaxes();
+                                        focusNextCheckbox($event.target, i);
+                                        taxMenuTrigger?.closeMenu()
+                                    "
+                                    (keydown.space)="
+                                        $event.preventDefault();
+                                        taxRef.toggle();
+                                        enableDisableTaxes();
+                                        focusNextCheckbox($event.target, i)
+                                    "
+                                    ><span class="font-size-15">{{ tax?.get("name")?.value }}</span></mat-checkbox
+                                >
+                            </span>
+                        </ng-container>
                     </ng-container>
-                </ng-container>
+                </div>
+                <div class="create-new pt-2 my-2 text-center cursor-pointer" (click)="createNew()">
+                    <span
+                        class="text-primary"
+                        tabindex="0"
+                        role="button"
+                        cdkMonitorElementFocus
+                        [attr.aria-label]="commonLocaleData?.app_create_new"
+                        (keydown.enter)="$event.preventDefault(); createNew(); taxMenuTrigger?.closeMenu()"
+                        (keydown.space)="$event.preventDefault(); createNew(); taxMenuTrigger?.closeMenu()"
+                    >
+                        {{ commonLocaleData?.app_create_new }}
+                    </span>
+                </div>
             </div>
-            <div class="create-new pt-2 mt-2 text-center cursor-pointer" (click)="createNew()">
-                <span class="text-primary">{{ commonLocaleData?.app_create_new }}</span>
-            </div>
-        </div>
+        </ng-template>
     </mat-menu>
 </div>
