@@ -29,7 +29,6 @@
                             (onClear)="otherTaxForm.get('tax')?.patchValue(null)"
                             [showError]="isFormSubmitted && !otherTaxForm.get('tax')?.value"
                             (createOption)="createTaxDialog()"
-                            [createNewText]="commonLocaleData?.app_create_new"
                             [showCreateNew]="true"
                         >
                         </reactive-dropdown-field>

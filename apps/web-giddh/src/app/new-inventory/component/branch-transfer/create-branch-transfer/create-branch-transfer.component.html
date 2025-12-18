@@ -1565,7 +1565,6 @@
                                                                 #selectAccount
                                                                 (createOption)="onProductNoResultsClicked(0)"
                                                                 [showCreateNew]="true"
-                                                                [createNewText]="commonLocaleData?.app_create_new"
                                                                 [name]="'productName' + i"
                                                                 [placeholder]="localeData?.select_product_name"
                                                                 [options]="stockList"
@@ -2310,7 +2309,6 @@
                                         <reactive-dropdown-field
                                             (createOption)="toggleTransporterModel()"
                                             [showCreateNew]="true"
-                                            [createNewText]="commonLocaleData?.app_create_new"
                                             [name]="'transporterCompany'"
                                             [placeholder]="localeData?.transport_company"
                                             [options]="transporterDropdown"
