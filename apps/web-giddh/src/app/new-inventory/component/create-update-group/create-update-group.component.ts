@@ -6,7 +6,6 @@ import { Store, select } from "@ngrx/store";
 import { Observable, ReplaySubject } from "rxjs";
 import { takeUntil, distinctUntilChanged } from "rxjs/operators";
 import { CompanyActions } from "../../../actions/company.actions";
-import { cloneDeep, findIndex, forEach, isEqual } from "../../../lodash-optimized";
 import { IGroupsWithStocksHierarchyMinItem } from "../../../models/interfaces/groups-with-stocks.interface";
 import { InventoryService } from "../../../services/inventory.service";
 import { ToasterService } from "../../../services/toaster.service";
@@ -22,6 +21,7 @@ import { ServiceConfig } from "../../../services/service.config";
 import { IOption } from "../../../app.constant";
 import { Configuration } from '../../../app.constant';
 import { environment } from '../../../../environments/environment';
+import { cloneDeep, filter, find, findIndex, forEach, get, includes, isArray, isEqual, map, remove, set } from '../../../lodash-optimized';
 
 @Component({
     selector: 'create-update-group',

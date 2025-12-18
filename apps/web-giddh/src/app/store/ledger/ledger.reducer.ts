@@ -5,8 +5,8 @@ import { LEDGER } from '../../actions/ledger/ledger.const';
 import { BlankLedgerVM } from '../../ledger/ledger.vm';
 import { CustomActions } from '../custom-actions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
-import { cloneDeep } from '../../lodash-optimized';
 import { UNAUTHORISED } from '../../app.constant';
+import { cloneDeep, forEach, map } from '../../lodash-optimized';
 
 export interface LedgerState {
     account?: AccountResponse;

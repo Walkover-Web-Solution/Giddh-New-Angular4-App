@@ -89,10 +89,8 @@ export const ROUTES: Routes = [
                 data: { preload: true }
             },
             { path: 'contact', loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./contact/contact.module') */ Promise.resolve(DummyModule) },
-            {
-                path: 'new-vs-old-invoices',
-                loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./new-vs-old-Invoices/new-vs-old-Invoices.module') */ Promise.resolve(DummyModule)
-            },
+            {path: 'new-vs-old-invoices',
+                loadChildren: () => import('./new-vs-old-Invoices/new-vs-old-Invoices.module').then(module => module.NewVsOldInvoicesModule)},
             { path: 'import', loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./import-excel/import-excel.module') */ Promise.resolve(DummyModule) },
             { path: 'gstfiling', loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./gst/gst.module') */ Promise.resolve(DummyModule) },
             {

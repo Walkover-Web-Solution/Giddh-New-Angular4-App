@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef, ViewChildren, QueryList, Output, EventEmitter, Inject } from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewChild, ElementRef, ChangeDetectionStrategy, ChangeDetectorRef, ViewChildren, QueryList, Output, EventEmitter, Inject } from "@angular/core";
 import { GeneralService } from "../../../services/general.service";
 import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../../shared/helpers/defaultDateFormat";
@@ -11,7 +11,6 @@ import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
 import { UntypedFormControl } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSort } from "@angular/material/sort";
-import { cloneDeep } from "../../../lodash-optimized";
 import { BalanceStockTransactionReportRequest, InventoryReportBalanceResponse, StockTransactionReportRequest } from "../../../models/api-models/Inventory";
 import { InventoryService } from "../../../services/inventory.service";
 import { ToasterService } from "../../../services/toaster.service";
@@ -24,16 +23,17 @@ import { OrganizationType } from "../../../models/user-login-state";
 import { ServiceConfig } from "../../../services/service.config";
 import { Configuration } from '../../../app.constant';
 import { environment } from '../../../../environments/environment';
+import { cloneDeep, filter, forEach, includes, set } from '../../../lodash-optimized';
 
 @Component({
     selector: "inventory-transaction-list",
-    
+
     templateUrl: "./inventory-transaction-list.component.html",
     standalone: false,
     styleUrls: ["./inventory-transaction-list.component.scss"],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class InventoryTransactionListComponent implements OnInit {
+export class InventoryTransactionListComponent implements OnInit, OnDestroy {
     @ViewChild(ReportFiltersComponent, { read: ReportFiltersComponent, static: false }) public reportFiltersComponent: ReportFiltersComponent;
     /** Instance of  account name searching column */
     @ViewChild('accountName', { static: true }) public accountName: ElementRef;
@@ -310,7 +310,7 @@ export class InventoryTransactionListComponent implements OnInit {
         this.stockReportRequest.count = event.pageSize;
         this.getStockTransactionalReport(false);
     }
-    
+
 
 
     /**

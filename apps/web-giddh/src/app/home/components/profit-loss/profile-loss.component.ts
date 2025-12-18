@@ -18,13 +18,13 @@ import { TBPlBsActions } from "../../../actions/tl-pl.actions";
 import { GeneralService } from '../../../services/general.service';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { TlPlService } from '../../../services/tl-pl.service';
-import { cloneDeep } from '../../../lodash-optimized';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { Chart, registerables } from 'chart.js';
 import { ServiceConfig } from '../../../services/service.config';
 import { GiddhNumberFormatPipe } from '../../../shared/helpers/pipes/number-format/number-format.pipe';
 import { Configuration } from '../../../app.constant';
 import { environment } from '../../../../environments/environment';
+import { cloneDeep } from '../../../lodash-optimized';
 Chart.register(...registerables);
 
 @Component({

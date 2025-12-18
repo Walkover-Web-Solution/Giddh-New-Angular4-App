@@ -17,6 +17,7 @@ import { GenerateBulkInvoiceRequest, IBulkInvoiceGenerationFalingError } from '.
 import { InvoiceService } from '../../services/invoice.service';
 import { LocaleService } from '../../services/locale.service';
 import { GeneralService } from '../../services/general.service';
+import { forEach, isArray } from '../../lodash-optimized';
 
 @Injectable()
 export class LedgerActions {
@@ -348,10 +349,10 @@ export class LedgerActions {
                 } else {
                     if (typeof data.body === 'string') {
                         this.toaster.showSnackBar("success", data.body);
-                    } else if (_.isArray(data.body) && data.body?.length > 0) {
+                    } else if (isArray(data.body) && data.body?.length > 0) {
                         // Block will execute if multiple invoice generate
                         if (data && data.queryString && data.queryString.reqObj && !data.queryString.reqObj.combined) {
-                            _.forEach(data.body, (item: IBulkInvoiceGenerationFalingError) => {
+                            forEach(data.body, (item: IBulkInvoiceGenerationFalingError) => {
                                 if (item.failedEntries) {
                                     this.toaster.showSnackBar("warning", item.reason);
                                 }
@@ -361,7 +362,7 @@ export class LedgerActions {
                             });
                         } else {
                             //  Block will execute if compound invoice generate
-                            _.forEach(data.body, (item: IBulkInvoiceGenerationFalingError) => {
+                            forEach(data.body, (item: IBulkInvoiceGenerationFalingError) => {
                                 this.toaster.showSnackBar("warning", item.reason);
                             });
                         }

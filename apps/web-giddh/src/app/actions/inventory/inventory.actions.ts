@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 import { CustomActions } from '../../store/custom-actions';
 import { BranchTransferResponse, LinkedStocksResponse, TransferDestinationRequest, TransferProductsRequest } from '../../models/api-models/BranchTransfer';
 import { SalesActions } from '../sales/sales.action';
+import { forEach } from '../../lodash-optimized';
 
 @Injectable()
 export class InventoryAction {

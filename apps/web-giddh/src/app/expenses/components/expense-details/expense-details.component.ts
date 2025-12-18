@@ -11,7 +11,6 @@ import { DownloadLedgerAttachmentResponse } from '../../../models/api-models/Led
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { TaxResponse } from '../../../models/api-models/Company';
 // import { UpdateLedgerEntryPanelComponent } from '../../../ledger/components/update-ledger-entry-panel/update-ledger-entry-panel.component';
-import { cloneDeep } from '../../../lodash-optimized';
 import { SearchService } from '../../../services/search.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CompanyActions } from '../../../actions/company.actions';
@@ -20,6 +19,7 @@ import { GeneralService } from '../../../services/general.service';
 import { CommonService } from '../../../services/common.service';
 import { ServiceConfig } from '../../../services/service.config';
 import { ASIDE_PANE_CONFIG, IOption } from '../../../app.constant';
+import { cloneDeep, concat, forEach, map, some } from '../../../lodash-optimized';
 
 @Component({
     selector: 'app-expense-details',

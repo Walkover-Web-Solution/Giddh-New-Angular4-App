@@ -9,7 +9,7 @@ import { PermissionActions } from '../../../actions/permission/permission.action
 import { IRoleCommonResponseAndRequest, Permission, Scope } from '../../../models/api-models/Permission';
 import { IPage, NewPermissionObj, NewRoleClass } from '../../permission.utility';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
-import { cloneDeep, concat, filter, find, findIndex, forEach, isEmpty, map, remove } from '../../../lodash-optimized';
+import { cloneDeep, concat, filter, find, findIndex, forEach, indexOf, isEmpty, map, remove } from '../../../lodash-optimized';
 
 @Component({
     standalone: false,

@@ -19,6 +19,7 @@ import { MatButtonModule } from "@angular/material/button";
 import {CdkTreeModule} from '@angular/cdk/tree';
 import { MatInputModule } from "@angular/material/input";
 import { CheckPermissionModule } from "../../permissions/check-permission.module";
+import { get } from '../../lodash-optimized';
 
 
 @NgModule({

@@ -10,8 +10,8 @@ import { OrganizationType } from '../../models/user-login-state';
 import { GeneralService } from '../../services/general.service';
 import { ToasterService } from '../../services/toaster.service';
 import { AppState } from '../../store';
+import { cloneDeep, find, forEach, map, some } from '../../lodash-optimized';
 // import { LedgerComponentStore } from '../../ledger/ledger.store';
-import { cloneDeep } from '../../lodash-optimized';
 // import { VoucherType } from '../../ledger/components/import-statement/import-statement.const';
 
 @Component({
@@ -176,7 +176,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
-                    this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
+                    this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
                 }
             } else {
                 if (this.generalService.companyUniqueName) {

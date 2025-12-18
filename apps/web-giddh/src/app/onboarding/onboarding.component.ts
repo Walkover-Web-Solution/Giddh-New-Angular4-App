@@ -13,6 +13,7 @@ import { ServiceConfig } from '../services/service.config';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Configuration } from '../app.constant';
 import { environment } from '../../environments/environment';
+import { cloneDeep } from '../lodash-optimized';
 
 
 @Component({
@@ -136,7 +137,7 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
         this.store.dispatch(this.settingsProfileActions.GetInventoryInfo());
         this.store.pipe(select(p => p.settings.inventory), takeUntil(this.destroyed$)).subscribe((o) => {
             if (o.profileRequest || 1 === 1) {
-                // let inventorySetting = _.cloneDeep(o);
+                // let inventorySetting = cloneDeep(o);
                 this.CompanySettingsObj = o; // Use o directly instead of cloned version
             }
         });

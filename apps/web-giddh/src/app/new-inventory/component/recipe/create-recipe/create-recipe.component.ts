@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { cloneDeep, isEqual } from 'apps/web-giddh/src/app/lodash-optimized';
 import { InventoryService } from 'apps/web-giddh/src/app/services/inventory.service';
 import { LedgerService } from 'apps/web-giddh/src/app/services/ledger.service';
 import { ManufacturingService } from 'apps/web-giddh/src/app/services/manufacturing.service';
@@ -8,6 +7,7 @@ import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service'
 import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
 import { Observable, of, ReplaySubject } from 'rxjs';
 import { map, takeUntil, tap } from 'rxjs/operators';
+import { cloneDeep, filter, forEach, isEqual } from '../../../../lodash-optimized';
 
 @Component({
     selector: 'create-recipe',

@@ -6,6 +6,7 @@ import { TrialBalanceRequest } from '../../models/api-models/tb-pl-bs';
 import { Account, ChildGroup } from '../../models/api-models/Search';
 import { ReportType } from '../multi-currency.const';
 import { TrialBalanceReportGridComponent } from './components/trial-balance-grid/trial-balance-report-grid.component';
+import { forEach } from '../../lodash-optimized';
 
 @Component({
 selector: 'trial-balance-report',

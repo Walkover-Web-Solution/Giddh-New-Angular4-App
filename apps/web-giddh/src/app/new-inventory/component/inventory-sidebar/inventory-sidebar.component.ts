@@ -18,6 +18,7 @@ import { ComponentCanDeactivate } from '../../../decorators/page-leave-confirmat
 import { CommonActions } from '../../../actions/common.actions';
 import { Configuration } from '../../../app.constant';
 import { environment } from '../../../../environments/environment';
+import { filter, forEach, includes } from '../../../lodash-optimized';
 
 /**
  * Data with nested structure.

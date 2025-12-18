@@ -6,6 +6,7 @@ import { Store } from '@ngrx/store';
 import { NavigationEnd, Router } from '@angular/router';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { includes } from '../lodash-optimized';
 
 @Component({
     selector: 'page',

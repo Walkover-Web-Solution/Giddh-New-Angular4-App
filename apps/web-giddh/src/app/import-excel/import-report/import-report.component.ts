@@ -15,6 +15,7 @@ import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { GeneralService } from '../../services/general.service';
 import { ImportExcelService } from '../../services/import-excel.service';
 import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../app.constant';
+import { map } from '../../lodash-optimized';
 
 @Component({
     selector: 'import-report',

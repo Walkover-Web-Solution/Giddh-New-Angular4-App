@@ -8,7 +8,6 @@ import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dial
 import 'froala-editor/js/plugins.pkgd.min.js';
 import 'froala-editor/js/froala_editor.pkgd.min.js';
 import { DEFAULT_TRIGGER_TEMPLATE, EmailType, EntityEnum, OtherTimeOptionsEnum, TriggerActionEnum, TriggerModuleEnum } from './utility/template-froala.const';
-import { cloneDeep, isEqual } from '../../lodash-optimized';
 import { SelectMultipleFieldsComponent } from '../../theme/form-fields/select-multiple-fields/select-multiple-fields.component';
 import { GeneralService } from '../../services/general.service';
 import { TitleCasePipe } from '@angular/common';
@@ -18,6 +17,7 @@ import { AccountingGroupEnum } from '../Enums/common.enum';
 import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
 import { Configuration } from '../../app.constant';
 import { environment } from '../../../environments/environment';
+import { cloneDeep, find, forEach, get, includes, isArray, isEqual, keys, map, remove, set, some } from '../../lodash-optimized';
 
 @Component({
     selector: 'template-froala',

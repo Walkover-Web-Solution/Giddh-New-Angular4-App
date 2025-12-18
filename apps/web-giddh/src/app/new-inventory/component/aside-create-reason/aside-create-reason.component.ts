@@ -2,6 +2,7 @@ import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/cor
 import { AdjustInventoryComponentStore } from '../adjust-inventory/utility/adjust-inventory.store';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ReplaySubject, takeUntil } from 'rxjs';
+import { set } from '../../../lodash-optimized';
 
 @Component({
     selector: 'aside-create-reason',

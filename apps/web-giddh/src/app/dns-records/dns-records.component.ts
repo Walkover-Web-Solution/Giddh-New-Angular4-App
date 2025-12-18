@@ -8,6 +8,7 @@ import { GeneralService } from '../services/general.service';
 import { ServiceConfig } from '../services/service.config';
 import { Configuration } from '../app.constant';
 import { environment } from '../../environments/environment';
+import { map } from '../lodash-optimized';
 export interface GetDomainList {
     type: any;
     hostName: any;

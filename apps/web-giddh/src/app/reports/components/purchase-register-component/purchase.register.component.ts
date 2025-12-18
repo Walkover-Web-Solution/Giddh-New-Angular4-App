@@ -28,6 +28,7 @@ import { SalesPersonComponent } from '../../../shared/sales-person/sales-person.
 import { MatDialog } from '@angular/material/dialog';
 import { ReportsComponentStore } from '../reports.store';
 import { GroupBy } from '../../constants/reports.constant';
+import { cloneDeep, find, forEach, get, includes, indexOf, keys, map, slice } from '../../../lodash-optimized';
 @Component({
     selector: 'purchase-register-component',
     templateUrl: './purchase.register.component.html',
@@ -199,7 +200,7 @@ constructor(
                 if (!this.currentBranch?.uniqueName) {
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
+                        this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
                         this.currentBranch = {
@@ -209,7 +210,7 @@ constructor(
                         };
                     }
                 } else {
-                    const selectedBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === this.currentBranch?.uniqueName));
+                    const selectedBranch = cloneDeep(response.find(branch => branch?.uniqueName === this.currentBranch?.uniqueName));
                     if (selectedBranch) {
                         this.currentBranch.name = selectedBranch.name;
                         this.currentBranch.alias = selectedBranch.alias;
@@ -286,7 +287,7 @@ constructor(
         let indexMonths = 0;
         let weekCount = 1;
         let reportsModelCombined: PurchaseReportsModel = new PurchaseReportsModel();
-        _.forEach(response, (item) => {
+        forEach(response, (item) => {
             let reportsModel: PurchaseReportsModel = new PurchaseReportsModel();
             reportsModel.purchase = item.debitTotal;
             reportsModel.returns = item.creditTotal;
@@ -409,7 +410,7 @@ constructor(
                     selectedFinancialYear = this.selectedCompany.financialYears[0];
                 }
                 if (selectedFinancialYear) {
-                    this.currentActiveFinacialYear = _.cloneDeep(selectedFinancialYear);
+                    this.currentActiveFinacialYear = cloneDeep(selectedFinancialYear);
                 }
                 this.currentBranch.uniqueName = currentBranchUniqueName ?? this.currentBranch?.uniqueName ?? "";
                 const foundBranch = this.currentCompanyBranches?.find(branch => branch?.value === this.currentBranch?.uniqueName);
@@ -555,7 +556,7 @@ constructor(
      */
     private setPurchaseRegisterTotal(transaction: any): void {
         if (transaction) {
-            const item = _.cloneDeep(transaction);
+            const item = cloneDeep(transaction);
             this.purchaseRegisterTotal.purchase += item.debitTotal;
             this.purchaseRegisterTotal.returns += item.creditTotal;
             this.purchaseRegisterTotal.taxTotal += item.taxTotal;

@@ -16,6 +16,7 @@ import { DROPDOWN_ITEMS_COUNT_LIMIT, IOption, PAGINATION_LIMIT } from '../../../
 import { GroupService } from '../../../services/group.service';
 import { PageEvent } from '@angular/material/paginator';
 import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
+import { concat, forEach, map } from '../../../lodash-optimized';
 
 @Component({
     selector: 'columnar-report-component',

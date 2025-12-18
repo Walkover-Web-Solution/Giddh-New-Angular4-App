@@ -8,6 +8,7 @@ import { LOGS_API } from './apiurls/logs.api';
 import { LogsRequest, LogsResponse, GetAuditLogsRequest, AuditLogsResponse } from '../models/api-models/Logs';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
+import { get } from '../lodash-optimized';
 
 @Injectable()
 export class LogsService {

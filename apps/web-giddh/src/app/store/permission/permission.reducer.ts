@@ -5,7 +5,7 @@ import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { AccountsAction } from '../../actions/accounts.actions';
 import { CustomActions } from '../custom-actions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
-import { cloneDeep, sortBy } from '../../lodash-optimized';
+import { cloneDeep, filter, findIndex, forEach, sortBy } from '../../lodash-optimized';
 
 export interface PermissionState {
     roles: IRoleCommonResponseAndRequest[];

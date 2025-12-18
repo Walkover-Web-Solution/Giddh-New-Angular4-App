@@ -9,9 +9,9 @@ const StockUnits = {
 } as any;
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ToasterService } from '../../../services/toaster.service';
-import { cloneDeep } from '../../../lodash-optimized';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '../../../theme/new-confirm-modal/confirm-modal.component';
+import { cloneDeep, filter, forEach, get, includes, map, set } from '../../../lodash-optimized';
 
 @Component({
     selector: 'create-unit',

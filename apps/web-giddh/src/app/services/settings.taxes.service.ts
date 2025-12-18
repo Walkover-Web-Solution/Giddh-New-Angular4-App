@@ -9,6 +9,7 @@ import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { ITaxAuthority } from '../models/interfaces/tax.interface';
 import { CreateTaxAuthority, SalesTaxReport, SalesTaxReportRequest } from '../theme/tax-authority/utility/tax-authority.const';
+import { get } from '../lodash-optimized';
 
 @Injectable()
 export class SettingsTaxesService {

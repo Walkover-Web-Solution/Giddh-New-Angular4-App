@@ -26,6 +26,7 @@ import { FinancialReportsComponentStore } from '../../financial-reports.store';
 import { TlPlService } from '../../../services/tl-pl.service';
 import { GeneralService } from '../../../services/general.service';
 import { Configuration } from '../../../app.constant';
+import { includes, indexOf } from '../../../lodash-optimized';
 
 @Component({
 selector: '[grid-row]',

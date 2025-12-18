@@ -15,7 +15,6 @@ import {
     ViewChild,
 } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
-import { each } from 'apps/web-giddh/src/app/lodash-optimized';
 import { Account, ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Search';
 import { AccountDetails } from 'apps/web-giddh/src/app/models/api-models/tb-pl-bs';
 import { ReportType } from 'apps/web-giddh/src/app/multi-currency-reports/multi-currency.const';
@@ -28,6 +27,7 @@ import { GeneralService } from 'apps/web-giddh/src/app/services/general.service'
 import { ASIDE_PANE_CONFIG } from 'apps/web-giddh/src/app/app.constant';
 import { Configuration } from '../../../../../app.constant';
 import { environment } from '../../../../../../environments/environment';
+import { each, forEach } from '../../../../../lodash-optimized';
 
 @Component({
     selector: 'trial-balance-grid',

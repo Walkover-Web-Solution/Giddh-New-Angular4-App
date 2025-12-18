@@ -12,6 +12,7 @@ import { TranslateDirectiveModule } from '../../theme/translate/translate.direct
 import { DatePickerDefaultRangeEnum } from '../../app.constant';
 import { TextFieldComponent } from '../../theme/form-fields/text-field/text-field.component';
 import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
+import { get } from '../../lodash-optimized';
 
 type compareType = 'month' | 'quarter' | 'year' | 'period' | null;
 enum CompareTypeEnum {

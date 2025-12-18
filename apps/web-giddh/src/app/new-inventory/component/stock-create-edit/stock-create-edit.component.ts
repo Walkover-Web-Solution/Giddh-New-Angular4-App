@@ -9,7 +9,6 @@ import { select, Store } from "@ngrx/store";
 import { AppState } from "../../../store";
 import { WarehouseActions } from "../../../settings/warehouse/action/warehouse.action";
 import { ActivatedRoute, Router } from "@angular/router";
-import { cloneDeep, findIndex, forEach, isEqual } from "../../../lodash-optimized";
 import { NgForm } from "@angular/forms";
 import { INVALID_STOCK_ERROR_MESSAGE, IOption } from "../../../app.constant";
 import { CustomFieldsService } from "../../../services/custom-fields.service";
@@ -33,6 +32,7 @@ import { MatTabChangeEvent } from "@angular/material/tabs";
 import { PageLeaveUtilityService } from "../../../services/page-leave-utility.service";
 import { Configuration } from '../../../app.constant';
 import { environment } from '../../../../environments/environment';
+import { cloneDeep, concat, filter, find, findIndex, forEach, includes, isEqual, keys, map, remove } from '../../../lodash-optimized';
 
 @Component({
     selector: "stock-create-edit",

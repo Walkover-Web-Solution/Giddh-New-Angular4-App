@@ -8,12 +8,12 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { AccountResponseV2 } from '../../../../models/api-models/Account';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { GIDDH_EMAIL_REGEX } from '../../../helpers/defaultDateFormat';
-import { clone, cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { IOption, RestrictedModules } from 'apps/web-giddh/src/app/app.constant';
 import { SettingsProfileActions } from 'apps/web-giddh/src/app/actions/settings/profile/settings.profile.action';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { clone, cloneDeep, find, get, map, remove, set } from '../../../../lodash-optimized';
 
 @Component({
     selector: 'share-account-modal',

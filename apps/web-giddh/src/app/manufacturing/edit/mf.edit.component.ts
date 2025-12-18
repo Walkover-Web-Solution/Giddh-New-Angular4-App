@@ -22,8 +22,8 @@ import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { SearchService } from '../../services/search.service';
 import { WarehouseActions } from '../../settings/warehouse/action/warehouse.action';
 import { GeneralService } from '../../services/general.service';
-import { cloneDeep, forEach } from '../../lodash-optimized';
 import { IOption } from '../../app.constant';
+import { cloneDeep, concat, find, findIndex, forEach, includes, map } from '../../lodash-optimized';
 
 @Component({
     templateUrl: './mf.edit.component.html',

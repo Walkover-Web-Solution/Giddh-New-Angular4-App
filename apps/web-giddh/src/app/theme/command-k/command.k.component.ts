@@ -6,11 +6,11 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { GeneralService } from '../../services/general.service';
 import { CommandKService } from '../../services/commandk.service';
 import { CommandKRequest } from '../../models/api-models/Common';
-import { remove } from '../../lodash-optimized';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { GeneralActions } from '../../actions/general/general.actions';
+import { findIndex, indexOf, remove } from '../../lodash-optimized';
 
 const DIRECTIONAL_KEYS = [
     LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW

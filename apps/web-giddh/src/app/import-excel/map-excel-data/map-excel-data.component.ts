@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Inject, Input, OnInit, Output, ViewChildren } from '@angular/core';
 import { HeaderItem, ImportExcelResponseData, Mappings } from '../../models/api-models/import-excel';
 import { IOption } from '../../app.constant';
-import { cloneDeep } from '../../lodash-optimized';
 import { ServiceConfig } from '../../services/service.config';
 import { Configuration } from '../../app.constant';
 import { environment } from '../../../environments/environment';
+import { cloneDeep, filter, findIndex, indexOf, map } from '../../lodash-optimized';
 
 interface DataModel {
     field: HeaderItem;

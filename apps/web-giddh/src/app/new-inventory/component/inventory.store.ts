@@ -13,6 +13,7 @@ import { SettingsDiscountService } from "../../services/settings.discount.servic
 import { CommonService } from '../../services/common.service';
 import { LedgerService } from "../../services/ledger.service";
 import { CustomFieldsService } from "../../services/custom-fields.service";
+import { map } from '../../lodash-optimized';
 
 export interface InventoryState {
     isLoading: boolean;

@@ -18,7 +18,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { SettingsFinancialYearActions } from '../../../actions/settings/financial-year/financial-year.action';
 import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { AdjustmentInventory, DROPDOWN_ITEMS_COUNT_LIMIT, ASIDE_PANE_CONFIG } from '../../../app.constant';
-import { cloneDeep } from '../../../lodash-optimized';
+import { cloneDeep, concat, filter, forEach, get, set } from '../../../lodash-optimized';
 @Component({
     selector: 'adjust-inventory',
     

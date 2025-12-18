@@ -13,6 +13,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { SalesBifurcationDetailsComponent } from './sales-bifurcation-details/sales-bifurcation-details.component';
 import { ASIDE_PANE_CONFIG, GetBifurcationType, IOption } from '../app.constant';
 import { GeneralService } from '../services/general.service';
+import { find, slice } from '../lodash-optimized';
 
 @Component({
     selector: 'new-vs-old-invoices',

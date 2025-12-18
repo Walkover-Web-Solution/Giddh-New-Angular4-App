@@ -17,6 +17,7 @@ import { InventoryService } from '../../services/inventory.service';
 import { MatAccordion } from '@angular/material/expansion';
 import { SettingsTagService } from '../../services/settings.tag.service';
 import { SalesPersonComponentStore } from '../../shared/sales-person/utility/sales-person.store';
+import { cloneDeep, concat, forEach, get, includes, map } from '../../lodash-optimized';
 
 @Component({
     selector: 'daybook-advance-search-model',
@@ -273,7 +274,7 @@ public advanceSearchObject: DayBookRequestModel = null;
      * @memberof DaybookAdvanceSearchModelComponent
      */
     public emitAdvanceSearchParams(): void {
-        let dataToSend = _.cloneDeep(this.advanceSearchForm?.value) as DayBookRequestModel;
+        let dataToSend = cloneDeep(this.advanceSearchForm?.value) as DayBookRequestModel;
         if (dataToSend.dateOnCheque) {
             if (typeof dataToSend.dateOnCheque === "object") {
                 dataToSend.dateOnCheque = dayjs(dataToSend.dateOnCheque).format(GIDDH_DATE_FORMAT);

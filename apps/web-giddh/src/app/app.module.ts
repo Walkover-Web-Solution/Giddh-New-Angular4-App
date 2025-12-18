@@ -1,6 +1,7 @@
 import { APP_BASE_HREF } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { APP_INITIALIZER, ErrorHandler, NgModule } from '@angular/core';
+import { Angular21CompatibilityErrorHandler } from './angular21-compatibility';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -60,6 +61,7 @@ import { PageModule } from './page/page.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatButtonModule } from '@angular/material/button';
 import { FormFieldsModule } from './theme/form-fields/form-fields.module';
+import { filter, find, forEach, get, includes, keys, startsWith } from './lodash-optimized';
 // import { VerifySubscriptionTransferOwnershipModule } from './verify-subscription-transfer-ownership/verify-subscription-transfer-ownership.module';
 // Get white label configuration from localStorage
 const whiteLabelString = localStorage.getItem('whiteLabel');
@@ -656,7 +658,7 @@ export function getServiceConfigAfterInit(): () => Promise<any> {
         },
         {
             provide: ErrorHandler,
-            useClass: ExceptionLogService
+            useClass: Angular21CompatibilityErrorHandler
         },
         CustomPreloadingStrategy
     ]

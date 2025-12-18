@@ -9,11 +9,11 @@ import { AppState } from '../../../../store/roots';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
 import { Observable, ReplaySubject } from 'rxjs';
 import { GIDDH_EMAIL_REGEX } from '../../../helpers/defaultDateFormat';
-import { clone, cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { Router } from '@angular/router';
 import { SettingsProfileActions } from 'apps/web-giddh/src/app/actions/settings/profile/settings.profile.action';
 import { IOption, RestrictedModules } from 'apps/web-giddh/src/app/app.constant';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { clone, cloneDeep, find, get, map, remove, set } from '../../../../lodash-optimized';
 
 @Component({
     selector: 'share-group-modal',

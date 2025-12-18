@@ -24,6 +24,7 @@ import { GeneralService } from '../services/general.service';
 import { AllItem } from '../shared/helpers/allItems';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { AppState } from '../store';
+import { forEach, includes } from '../lodash-optimized';
 
 @Component({
     selector: 'app-all-items',

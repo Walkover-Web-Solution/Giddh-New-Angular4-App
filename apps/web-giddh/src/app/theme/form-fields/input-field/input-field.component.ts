@@ -20,7 +20,15 @@ const noop = () => {
     standalone: false,
     changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAccessor {
+export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAccessor, MatFormFieldControl<any> {
+    // MatFormFieldControl properties
+    static nextId = 0;
+    controlType = 'input-field';
+    id = `input-field-${InputFieldComponent.nextId++}`;
+    focused = false;
+    errorState = false;
+    userAriaDescribedBy?: string;
+
     /** Instance of input field */
     @ViewChild('textField', { static: false }) public textField: ElementRef;
     /** Regex pattern for the input field */
@@ -43,8 +51,6 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     @Input() public placeholder: any = "";
     /** Taking name as input */
     @Input() public name: any = "";
-    /** Taking id as input */
-    @Input() public id: any = "";
     /** Max length of input field */
     @Input() public maxlength: number;
     /** Min length of input field */
@@ -52,7 +58,7 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     /** True if field is read only */
     @Input() public readonly: boolean;
     /** True if field is disabled */
-    @Input() public disabled: boolean;
+    @Input() public disabled: boolean = false;
     /** Type of input field */
     @Input() public type: string = "text";
     /** Adds red border around field if true */
@@ -112,7 +118,7 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     /** Emits event when content is pasted */
     @Output() public onPaste: EventEmitter<any> = new EventEmitter<any>();
     /** Emits event when content is focus */
-    @Output() public onFocus: EventEmitter<any> = new EventEmitter<any>();
+    @Output() public onFocusEvent: EventEmitter<any> = new EventEmitter<any>();
     /** Emits on suffix icon click */
     @Output() public suffixClick: EventEmitter<boolean> = new EventEmitter<boolean>();
     /** Emits validation status on blur or model change */
@@ -163,6 +169,28 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
         this.stateChanges.complete();
     }
 
+    // MatFormFieldControl implementation
+    get empty(): boolean {
+        return !this.ngModel;
+    }
+
+    get shouldLabelFloat(): boolean {
+        return this.focused || !this.empty;
+    }
+
+    onContainerClick(event: MouseEvent): void {
+        if ((event.target as Element).tagName.toLowerCase() !== 'input') {
+            this.textField?.nativeElement?.focus();
+        }
+    }
+
+    setDescribedByIds(ids: string[]): void {
+        const controlElement = this.elementRef.nativeElement.querySelector(".text-field-container");
+        if (controlElement) {
+            controlElement.setAttribute("aria-describedby", ids.join(" "));
+        }
+    }
+
     //////// ControlValueAccessor //////////
 
     /**
@@ -195,7 +223,19 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
      * @memberof InputFieldComponent
      */
     public onBlur(): void {
+        this.focused = false;
         this.onTouchedCallback();
+        this.stateChanges.next();
+    }
+
+    /**
+     * Handle focus event
+     *
+     * @memberof InputFieldComponent
+     */
+    public onFocus(): void {
+        this.focused = true;
+        this.stateChanges.next();
     }
 
     /**
@@ -232,17 +272,6 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
      */
     public registerOnTouched(fn: any): void {
         this.onTouchedCallback = fn;
-    }
-
-    /**
-     * This method is used by the <mat-form-field> to set element ids that should be used for the aria-describedby attribute of your control
-     *
-     * @param {string[]} ids
-     * @memberof InputFieldComponent
-     */
-    public setDescribedByIds(ids: string[]): void {
-        const controlElement = this.elementRef.nativeElement.querySelector(".text-field-container")!;
-        controlElement.setAttribute("aria-describedby", ids.join(" "));
     }
 
     /**
@@ -301,7 +330,7 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
      * @param {ClipboardEvent} event
      */
     public handleFocus(event: Clipboard): void {
-        this.onFocus.emit(event);
+        this.onFocusEvent.emit(event);
     }
 
     /**

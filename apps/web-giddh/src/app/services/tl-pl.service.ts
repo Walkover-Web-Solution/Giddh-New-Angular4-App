@@ -10,6 +10,7 @@ import { saveAs } from 'file-saver';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { ReportType } from '../multi-currency-reports/multi-currency.const';
+import { filter, get, keys } from '../lodash-optimized';
 
 @Injectable()
 export class TlPlService {

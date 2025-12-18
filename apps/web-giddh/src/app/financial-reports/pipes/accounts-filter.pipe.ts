@@ -1,6 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 import { Account } from '../../models/api-models/Search';
+import { filter } from '../../lodash-optimized';
 
 @Pipe({
     name: 'accountsFilter',

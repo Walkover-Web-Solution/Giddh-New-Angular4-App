@@ -11,6 +11,7 @@ import { GeneralService } from '../../../services/general.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { saveAs } from "file-saver";
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
+import { cloneDeep } from '../../../lodash-optimized';
 
 @Component({
     selector: 'cash-flow-statement-component',
@@ -68,7 +69,7 @@ export class CashFlowStatementComponent implements OnInit, OnDestroy {
         /* Observer to store universal from/to date */
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {
-                let universalDate = _.cloneDeep(dateObj);
+                let universalDate = cloneDeep(dateObj);
 
                 this.selectedDateRange = { startDate: dayjs(universalDate[0]), endDate: dayjs(universalDate[1]) };
                 this.selectedDateRangeUi = dayjs(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);

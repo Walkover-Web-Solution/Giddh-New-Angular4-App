@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../app.constant';
 import * as dayjs from 'dayjs';
@@ -9,7 +9,7 @@ import * as dayjs from 'dayjs';
     standalone: false
 })
 
-export class NewInventoryComponent {
+export class NewInventoryComponent implements OnDestroy {
     /* This will hold the value out/in to open/close setting sidebar popup */
     public asideInventorySidebarMenuState: boolean = true;
     /* show search input field full width */

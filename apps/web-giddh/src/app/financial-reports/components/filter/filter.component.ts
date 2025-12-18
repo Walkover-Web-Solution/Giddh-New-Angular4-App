@@ -15,7 +15,6 @@ import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, IOption } from '..
 import { GeneralService } from '../../../services/general.service';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../../models/user-login-state';
-import { cloneDeep, orderBy } from '../../../lodash-optimized';
 import { SettingsTagService } from '../../../services/settings.tag.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { IForceClear } from '../../../models/api-models/Sales';
@@ -26,6 +25,7 @@ import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-m
 import { TlPlService } from '../../../services/tl-pl.service';
 import { Configuration } from '../../../app.constant';
 import { environment } from '../../../../environments/environment';
+import { cloneDeep, find, findIndex, get, map, orderBy } from '../../../lodash-optimized';
 
 @Component({
 selector: 'financial-filter',

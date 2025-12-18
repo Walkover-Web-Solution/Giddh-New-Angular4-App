@@ -3,7 +3,7 @@ import { BehaviorSubject, Observable, Subject, debounceTime, of, skip, Subscript
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
 import { IOption } from "../../../app.constant";
-import { isEqual } from "../../../lodash-optimized";
+import { find, forEach, indexOf, isEqual } from '../../../lodash-optimized';
 
 @Component({
     selector: "reactive-dropdown-field",

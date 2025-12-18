@@ -18,6 +18,7 @@ import { Account, ChildGroup } from '../../models/api-models/Search';
 import { IFlattenAccountsResultItem } from '../../models/interfaces/flatten-accounts-result-item.interface';
 import { TRIAL_BALANCE_VIEWPORT_LIMIT } from '../../financial-reports/constants/trial-balance-profit.constant';
 import { SearchService } from '../../services/search.service';
+import { indexOf } from '../../lodash-optimized';
 
 @Component({
 selector: '[grid-report-row]',

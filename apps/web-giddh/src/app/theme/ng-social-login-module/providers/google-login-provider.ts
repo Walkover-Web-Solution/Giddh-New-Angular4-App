@@ -1,5 +1,6 @@
 import { BaseLoginProvider } from '../entities/base-login-provider';
 import { LoginProviderClass, SocialUser } from '../entities/user';
+import { get, reject } from '../../../lodash-optimized';
 
 declare let gapi: any;
 

@@ -14,12 +14,12 @@ import { InventoryComponentStore } from '../inventory.store';
 import { SalesService } from '../../../services/sales.service';
 import { InventoryService } from '../../../services/inventory.service';
 import { CompanyActions } from '../../../actions/company.actions';
-import { cloneDeep, isEqual } from '../../../lodash-optimized';
 import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groups-with-stocks.interface';
 import { ManufacturingService } from '../../../services/manufacturing.service';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { FieldTypes } from '../../../custom-fields/custom-fields.constant';
 import { IDiscountList } from '../../../models/api-models/SettingsDiscount';
+import { cloneDeep, find, findIndex, forEach, get, has, includes, isEqual, keys, map, set, toArray } from '../../../lodash-optimized';
 
 @Component({
     selector: 'bulk-stock',

@@ -10,7 +10,6 @@ import { BANK_STATEMENT_HELP_DOC_URL, BROADCAST_CHANNELS, ICICI_ALLOWED_COMPANIE
 import { SalesService } from "../../services/sales.service";
 import { CompanyActions } from "../../actions/company.actions";
 import { SettingsIntegrationService } from '../../services/settings.integration.service';
-import { cloneDeep, isEmpty } from '../../lodash-optimized';
 import { BankIntegrationComponentStore } from "./utility/bank-integration.store";
 // import { ACCOUNT_REGISTERED_STATUS } from "../../settings/constants/settings.constant";
 import { ToasterService } from "../../services/toaster.service";
@@ -21,6 +20,7 @@ import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-mod
 import { ServiceConfig } from "../../services/service.config";
 import { Configuration } from '../../app.constant';
 import { environment } from '../../../environments/environment';
+import { cloneDeep, forEach, includes, isEmpty, map, some } from '../../lodash-optimized';
 
 @Component({
     selector: 'bank-integration',

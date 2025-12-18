@@ -6,6 +6,7 @@ import { LocaleConfig } from './ngx-daterangepicker.config';
 import { NgxDaterangepickerLocaleService } from './ngx-daterangepicker-locale.service';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
+import { find, indexOf } from '../../lodash-optimized';
 
 @Directive({
     selector: 'input[ngxDaterangepickerMd]',

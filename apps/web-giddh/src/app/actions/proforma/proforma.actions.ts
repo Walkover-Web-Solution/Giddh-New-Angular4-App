@@ -11,6 +11,7 @@ import { map, switchMap } from 'rxjs/operators';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { ProformaFilter, ProformaGetAllVersionRequest, ProformaGetAllVersionsResponse, ProformaGetRequest, ProformaResponse, ProformaUpdateActionRequest } from '../../models/api-models/proforma';
 import { LocaleService } from '../../services/locale.service';
+import { get } from '../../lodash-optimized';
 
 @Injectable()
 export class ProformaActions {

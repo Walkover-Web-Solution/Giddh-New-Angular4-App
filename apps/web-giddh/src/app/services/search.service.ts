@@ -8,6 +8,7 @@ import { SearchRequest, SearchResponse } from '../models/api-models/Search';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
+import { concat, forEach, get, keys } from '../lodash-optimized';
 
 @Injectable()
 export class SearchService {

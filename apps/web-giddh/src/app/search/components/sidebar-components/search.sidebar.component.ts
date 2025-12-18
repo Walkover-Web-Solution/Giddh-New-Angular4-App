@@ -13,7 +13,7 @@ import { GeneralService } from '../../../services/general.service';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../../../models/user-login-state';
 import { GroupService } from '../../../services/group.service';
-import { cloneDeep } from '../../../lodash-optimized';
+import { cloneDeep, concat, find, map } from '../../../lodash-optimized';
 
 @Component({
     selector: 'search-sidebar',

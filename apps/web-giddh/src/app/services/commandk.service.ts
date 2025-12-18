@@ -7,6 +7,7 @@ import { CommandKRequest } from '../models/api-models/Common';
 import { HttpWrapperService } from "./http-wrapper.service";
 import { Observable } from "rxjs";
 import { GiddhErrorHandler } from './catchManager/catchmanger';
+import { get } from '../lodash-optimized';
 
 @Injectable()
 export class CommandKService {

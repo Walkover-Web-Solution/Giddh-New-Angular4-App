@@ -1,4 +1,5 @@
 import { Directive, ElementRef, EventEmitter, HostListener, Input, Output } from '@angular/core';
+import { filter, includes, isArray, keys } from '../../../../lodash-optimized';
 
 const keyMaps = {
     backspace: 8,

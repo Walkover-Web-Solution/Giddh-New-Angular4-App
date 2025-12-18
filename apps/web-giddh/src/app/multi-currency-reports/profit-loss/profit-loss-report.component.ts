@@ -4,10 +4,10 @@ import { takeUntil } from 'rxjs/operators';
 import { GetCogsResponse, ProfitLossData, ProfitLossDateRangeResponse, ProfitLossRequest } from '../../models/api-models/tb-pl-bs';
 import { Account, ChildGroup } from '../../models/api-models/Search';
 import { ProfitLossGridComponent } from '../../financial-reports/components/profit-loss/components/profit-loss-grid/profit-loss-grid.component';
-import { cloneDeep } from '../../lodash-optimized';
 import { MultiCurrencyReportsComponentStore } from '../multi-currency-reports.store';
 import { ReportType } from '../multi-currency.const';
 import { prepareProfitLossData } from '../../store/tl-pl/tl-pl.reducer';
+import { cloneDeep, filter, forEach, includes, keys } from '../../lodash-optimized';
 
 @Component({
 selector: 'profit-loss-report',

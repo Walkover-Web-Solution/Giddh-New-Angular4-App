@@ -2,10 +2,10 @@ import { take, takeUntil } from 'rxjs/operators';
 import { AuditLogsActions } from '../../../actions/audit-logs/audit-logs.actions';
 import { ILogsItem } from '../../../models/interfaces/logs.interface';
 import { Store, select } from '@ngrx/store';
-import { cloneDeep } from '../../../lodash-optimized';
 import { Component, OnDestroy, Input, OnInit } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs';
 import { AppState } from '../../../store/roots';
+import { cloneDeep } from '../../../lodash-optimized';
 
 @Component({
     selector: 'audit-logs-grid',

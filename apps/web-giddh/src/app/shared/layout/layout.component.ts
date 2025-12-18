@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
+import { includes } from '../../lodash-optimized';
 
 @Component({
     selector: 'layout-main',

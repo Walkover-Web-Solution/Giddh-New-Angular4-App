@@ -8,6 +8,7 @@ import { SETTINGS_PERMISSION_API } from './apiurls/settings.permission.api';
 import { IUpdatePermissionResponse, ShareRequestForm } from '../models/api-models/Permission';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
+import { get } from '../lodash-optimized';
 
 @Injectable()
 export class SettingsPermissionService {

@@ -8,6 +8,7 @@ import { AccountsAction } from '../../actions/accounts.actions';
 import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
 import { VoucherTypeEnum } from '../../vouchers/utility/vouchers.const';
 import { IOption } from '../../app.constant';
+import { remove } from '../../lodash-optimized';
 
 @Component({
     selector: 'generic-aside-menu-account',

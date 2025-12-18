@@ -8,8 +8,8 @@ import { INewRoleFormObj, IPage, IPageStr, NewRoleFormClass } from '../../permis
 import { INameUniqueName } from '../../../models/api-models/Inventory';
 import { PermissionState } from 'apps/web-giddh/src/app/store/permission/permission.reducer';
 import { IRoleCommonResponseAndRequest } from 'apps/web-giddh/src/app/models/api-models/Permission';
-import { forEach, omit } from '../../../lodash-optimized';
 import { IOption } from '../../../app.constant';
+import { filter, find, forEach, omit } from '../../../lodash-optimized';
 
 @Component({
     selector: 'permission-model',

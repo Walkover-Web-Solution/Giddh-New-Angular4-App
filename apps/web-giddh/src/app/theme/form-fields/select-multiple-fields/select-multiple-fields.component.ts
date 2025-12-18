@@ -5,7 +5,7 @@ import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
 import { Observable, of, ReplaySubject, Subject } from "rxjs";
 import { debounceTime, takeUntil } from "rxjs/operators";
 import { EMAIL_VALIDATION_REGEX, IOption, MOBILE_REGEX_PATTERN } from "../../../app.constant";
-import { cloneDeep } from "../../../lodash-optimized";
+import { cloneDeep, filter, forEach, includes, indexOf, isArray } from '../../../lodash-optimized';
 
 @Component({
     selector: "select-multiple-fields",

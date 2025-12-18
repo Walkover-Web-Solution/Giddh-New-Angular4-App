@@ -14,6 +14,7 @@ import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { Chart, registerables } from 'chart.js';
 import { TitleCasePipe } from '@angular/common';
 import { GiddhNumberFormatPipe } from '../../../shared/helpers/pipes/number-format/number-format.pipe';
+import { forEach, keys } from '../../../lodash-optimized';
 Chart.register(...registerables);
 
 @Component({

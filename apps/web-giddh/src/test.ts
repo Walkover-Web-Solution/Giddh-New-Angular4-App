@@ -2,6 +2,7 @@
 
 import 'zone.js/dist/zone-testing';
 import { getTestBed } from '@angular/core/testing';
+import { keys, map } from './app/lodash-optimized';
 import {
     BrowserDynamicTestingModule,
     platformBrowserDynamicTesting

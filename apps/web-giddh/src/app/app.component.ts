@@ -3,7 +3,6 @@ import { AfterViewInit, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit,
 import { Store, select } from '@ngrx/store';
 import { AppState } from './store/roots';
 import { GeneralService } from './services/general.service';
-import { pick } from './lodash-optimized';
 import { VersionCheckService } from './version-check.service';
 import { ReplaySubject } from 'rxjs';
 import { BreakpointObserver } from '@angular/cdk/layout';
@@ -23,6 +22,7 @@ import { InvoiceActions } from './actions/invoice/invoice.actions';
 import { WarehouseActions } from './settings/warehouse/action/warehouse.action';
 import { CompanyService } from './services/company.service';
 import { environment } from '../environments/environment';
+import { clone, get, includes, pick, remove, startsWith } from './lodash-optimized';
 
 /**
  * App Component
@@ -355,7 +355,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             this._versionCheckService.initVersionCheck((this.serviceConfig.AppUrl || Configuration.AppUrl) + 'version.json');
             this._versionCheckService.onVersionChange$.pipe(takeUntil(this.destroyed$)).subscribe((isChanged: boolean) => {
                 if (isChanged) {
-                    this.newVersionAvailableForWebApp = _.clone(isChanged);
+                    this.newVersionAvailableForWebApp = clone(isChanged);
                 }
             });
         }

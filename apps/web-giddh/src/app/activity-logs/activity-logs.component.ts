@@ -19,7 +19,7 @@ import { MatCheckboxChange } from '@angular/material/checkbox';
 import { ActivityCompareJsonComponent } from './components/activity-compare-json/activity-compare-json.component';
 import { ToasterService } from '../services/toaster.service';
 import { SearchService } from '../services/search.service';
-import { cloneDeep } from '../lodash-optimized';
+import { cloneDeep, concat, filter, forEach, map, remove, slice } from '../lodash-optimized';
 
 /** This will use for interface */
 export interface GetActivityLogs {

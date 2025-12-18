@@ -11,7 +11,6 @@ import { select, Store } from '@ngrx/store';
 import { Observable, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { TBPlBsActions } from '../../../actions/tl-pl.actions';
-import { cloneDeep, each } from '../../../lodash-optimized';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { Account, ChildGroup } from '../../../models/api-models/Search';
 import { BalanceSheetData, ProfitLossRequest } from '../../../models/api-models/tb-pl-bs';
@@ -19,6 +18,7 @@ import { ToasterService } from '../../../services/toaster.service';
 import { AppState } from '../../../store/roots';
 import { BalanceSheetGridComponent } from './components/balance-sheet-grid/balance-sheet-grid.component';
 import { TlPlService } from '../../../services/tl-pl.service';
+import { cloneDeep, each, findIndex, forEach } from '../../../lodash-optimized';
 
 @Component({
 selector: 'balance-sheet',

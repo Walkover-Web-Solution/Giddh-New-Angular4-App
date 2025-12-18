@@ -9,6 +9,7 @@ import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { SETTINGS_BRANCH_API } from './apiurls/settings.branch.api';
 import { BranchFilterRequest } from '../models/api-models/Company';
 import { COMPANY_API } from './apiurls/company.api';
+import { concat, get } from '../lodash-optimized';
 
 @Injectable()
 export class SettingsBranchService {

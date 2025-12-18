@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { LoginProvider, SocialUser } from '.';
 import { LoaderService } from '../../loader/loader.service';
+import { forEach, get, reject, set } from '../../lodash-optimized';
 
 export interface AuthServiceConfigItem {
     id: string;

@@ -22,6 +22,7 @@ import { AccountDetails } from 'apps/web-giddh/src/app/models/api-models/tb-pl-b
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { ReplaySubject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
+import { forEach } from '../../../../lodash-optimized';
 
 @Component({
 selector: 'trial-balance-report-grid',

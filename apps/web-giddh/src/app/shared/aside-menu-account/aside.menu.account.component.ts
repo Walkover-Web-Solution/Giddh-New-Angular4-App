@@ -11,6 +11,7 @@ import { AccountService } from '../../services/account.service';
 import { MatDialog } from '@angular/material/dialog';
 import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
 import { IOption } from '../../app.constant';
+import { flatten, map, omit, remove, some, union } from '../../lodash-optimized';
 
 @Component({
     selector: 'aside-menu-account',
@@ -193,7 +194,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
 
     public makeGroupListFlatwithLessDtl(rawList: any) {
         let obj;
-        obj = _.map(rawList, (item: any) => {
+        obj = map(rawList, (item: any) => {
             obj = {};
             obj.name = item?.name;
             obj.uniqueName = item?.uniqueName;
@@ -206,10 +207,10 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
 
     public flattenGroup(rawList: any[], parents: any[] = []) {
         let listofUN;
-        listofUN = _.map(rawList, (listItem) => {
+        listofUN = map(rawList, (listItem) => {
             let newParents;
             let result;
-            newParents = _.union([], parents);
+            newParents = union([], parents);
             newParents.push({
                 name: listItem?.name,
                 uniqueName: listItem?.uniqueName
@@ -220,13 +221,13 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
             }
             if (listItem?.groups?.length > 0) {
                 result = this.flattenGroup(listItem.groups, newParents);
-                result.push(_.omit(listItem, 'groups'));
+                result.push(omit(listItem, 'groups'));
             } else {
-                result = _.omit(listItem, 'groups');
+                result = omit(listItem, 'groups');
             }
             return result;
         });
-        return _.flatten(listofUN);
+        return flatten(listofUN);
     }
 
     public ngOnDestroy() {

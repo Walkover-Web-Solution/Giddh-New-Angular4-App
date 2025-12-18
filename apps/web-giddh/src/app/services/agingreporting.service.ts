@@ -8,6 +8,7 @@ import { AGINGREPORT_API, DUEAMOUNTREPORT_API_V2, DUEDAYSRANGE_API_V2 } from './
 import { GeneralService } from './general.service';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
+import { concat, get } from '../lodash-optimized';
 
 @Injectable()
 export class AgingreportingService {

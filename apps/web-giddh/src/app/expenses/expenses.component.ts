@@ -16,6 +16,7 @@ import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../app.constan
 import { ExpenseService } from '../services/expences.service';
 import { ToasterService } from '../services/toaster.service';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { cloneDeep, forEach } from '../lodash-optimized';
 
 /** Enum for expense tab names */
 export enum EExpenseTabName {
@@ -125,7 +126,7 @@ export class ExpensesComponent implements OnInit, OnDestroy {
 
         this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
-                let universalDate = _.cloneDeep(dateObj);
+                let universalDate = cloneDeep(dateObj);
 
                 setTimeout(() => {
                     this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
@@ -281,7 +282,7 @@ export class ExpensesComponent implements OnInit, OnDestroy {
             if (res) {
                 this.universalFrom = dayjs(res[0]).format(GIDDH_DATE_FORMAT);
                 this.universalTo = dayjs(res[1]).format(GIDDH_DATE_FORMAT);
-                let universalDate = _.cloneDeep(res);
+                let universalDate = cloneDeep(res);
 
                 if (universalDate && !this.todaySelected) {
                     this.selectedDateRange = { startDate: dayjs(res[0]), endDate: dayjs(res[1]) };

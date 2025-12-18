@@ -11,11 +11,11 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { BalanceSheetData, ProfitLossRequest } from '../../models/api-models/tb-pl-bs';
 import { BalanceSheetReportGridComponent } from './components/balance-sheet-grid/balance-sheet-report-grid.component';
-import { cloneDeep } from '../../lodash-optimized';
 import { Account, ChildGroup } from '../../models/api-models/Search';
 import { ReportType } from '../multi-currency.const';
 import { MultiCurrencyReportsComponentStore } from '../multi-currency-reports.store';
 import { prepareBalanceSheetData } from '../../store/tl-pl/tl-pl.reducer';
+import { cloneDeep, forEach } from '../../lodash-optimized';
 
 @Component({
 selector: 'balance-sheet-report',

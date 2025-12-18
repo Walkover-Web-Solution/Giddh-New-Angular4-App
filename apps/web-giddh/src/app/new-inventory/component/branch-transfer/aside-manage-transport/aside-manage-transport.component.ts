@@ -9,6 +9,7 @@ import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service'
 import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
 import { ReplaySubject, take, takeUntil } from 'rxjs';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { get, set } from '../../../../lodash-optimized';
 
 export interface transporterDetails {
     name: string;

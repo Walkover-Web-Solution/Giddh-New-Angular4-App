@@ -22,13 +22,13 @@ import { API_BULK_FETCH_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DAT
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { ColumnDefinition } from '../../../shared/common-table/giddh-table.component.const';
 import { DurationEnum } from '../../constants/reports.constant';
-import { cloneDeep } from '../../../lodash-optimized';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { SalesPersonComponentStore } from '../../../shared/sales-person/utility/sales-person.store';
 import { SalesPersonComponent } from '../../../shared/sales-person/sales-person.component';
 import { MatDialog } from '@angular/material/dialog';
 import { ReportsComponentStore } from '../reports.store';
 import { GroupBy } from '../../constants/reports.constant';
+import { cloneDeep, find, forEach, get, includes, indexOf, keys, map, slice } from '../../../lodash-optimized';
 @Component({
     selector: 'reports-details-component',
     templateUrl: './report.details.component.html',
@@ -198,7 +198,7 @@ constructor(
                     let currentBranchUniqueName;
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
+                        this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany?.uniqueName : '';
                         this.currentBranch = {
@@ -208,7 +208,7 @@ constructor(
                         };
                     }
                 } else {
-                    const selectedBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === this.currentBranch?.uniqueName));
+                    const selectedBranch = cloneDeep(response.find(branch => branch?.uniqueName === this.currentBranch?.uniqueName));
                     if (selectedBranch) {
                         this.currentBranch.name = selectedBranch.name;
                         this.currentBranch.alias = selectedBranch.alias;
@@ -286,7 +286,7 @@ constructor(
         let indexMonths = 0;
         let weekCount = 1;
         let reportsModelCombined: ReportsModel = new ReportsModel();
-        _.forEach(response, (item) => {
+        forEach(response, (item) => {
             let reportsModel: ReportsModel = new ReportsModel();
             reportsModel.sales = item.creditTotal;
             reportsModel.returns = item.debitTotal;
@@ -552,7 +552,7 @@ constructor(
      * @memberof ReportsDetailsComponent
      */
     private setSalesRegisterTotal(transaction: any): void {
-        const item = _.cloneDeep(transaction);
+        const item = cloneDeep(transaction);
         this.salesRegisterTotal.sales += item.creditTotal;
         this.salesRegisterTotal.returns += item.debitTotal;
         this.salesRegisterTotal.taxTotal += item.taxTotal;

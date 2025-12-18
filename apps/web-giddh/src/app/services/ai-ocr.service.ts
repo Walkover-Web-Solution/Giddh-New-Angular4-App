@@ -8,6 +8,7 @@ import { IServiceConfigArgs, ServiceConfig } from "./service.config";
 import * as dayjs from "dayjs";
 import { GeneralService } from "./general.service";
 import { AI_OCR_API } from "./apiurls/ai-ocr.api";
+import { forEach, get, keys } from '../lodash-optimized';
 
 @Injectable()
 export class AiOcrService {

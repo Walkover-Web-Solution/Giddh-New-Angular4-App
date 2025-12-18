@@ -9,6 +9,7 @@ import { ToasterService } from "../../services/toaster.service";
 import { ConfirmModalComponent } from "../../theme/new-confirm-modal/confirm-modal.component";
 import { FieldModules } from "../custom-fields.constant";
 import { GeneralService } from "../../services/general.service";
+import { map } from '../../lodash-optimized';
 
 export interface CustomFieldsInterface {
     fieldName: string;

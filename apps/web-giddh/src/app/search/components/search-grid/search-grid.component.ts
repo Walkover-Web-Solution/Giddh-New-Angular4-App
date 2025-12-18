@@ -9,11 +9,11 @@ import { CompanyService } from '../../../services/company.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { map, take, takeUntil } from 'rxjs/operators';
 import { GeneralService } from '../../../services/general.service';
-import { cloneDeep } from '../../../lodash-optimized';
 import { MatDialog } from '@angular/material/dialog';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { PageEvent } from '@angular/material/paginator';
 import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
+import { forEach, includes, indexOf } from '../../../lodash-optimized';
 
 export interface SearchTable {
     name: string;

@@ -8,6 +8,7 @@ import { VatDetailedReportRequest, VatReportRequest, VatReportResponse, VatRepor
 import { GiddhErrorHandler } from "./catchManager/catchmanger";
 import { HttpWrapperService } from "./http-wrapper.service";
 import { Observable } from "rxjs";
+import { concat, get } from '../lodash-optimized';
 
 @Injectable()
 export class VatService {

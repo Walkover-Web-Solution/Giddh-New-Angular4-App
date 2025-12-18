@@ -7,6 +7,7 @@ import { ReverseChargeReportGetRequest, ReverseChargeReportPostRequest } from '.
 import { GiddhErrorHandler } from "./catchManager/catchmanger";
 import { HttpWrapperService } from "./http-wrapper.service";
 import { Observable } from "rxjs";
+import { concat } from '../lodash-optimized';
 
 @Injectable()
 export class ReverseChargeService {

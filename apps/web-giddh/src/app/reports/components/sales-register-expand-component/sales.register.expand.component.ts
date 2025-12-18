@@ -21,6 +21,7 @@ import { CompanyActions } from '../../../actions/company.actions';
 import { PageEvent } from '@angular/material/paginator';
 import { Configuration } from '../../../app.constant';
 import { environment } from '../../../../environments/environment';
+import { forEach, includes, map, set } from '../../../lodash-optimized';
 @Component({
     selector: 'sales-register-expand',
     templateUrl: './sales.register.expand.component.html',

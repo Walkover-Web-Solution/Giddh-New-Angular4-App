@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output, OnInit, OnDestroy } from '@angu
 import { AppState } from '../../store';
 import { Store, select } from '@ngrx/store';
 import { take } from 'rxjs/operators';
+import { remove } from '../../lodash-optimized';
 
 @Component({
     selector: 'confirm-modal',

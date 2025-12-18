@@ -6,7 +6,6 @@ import { take, takeUntil } from 'rxjs/operators';
 import { CompanyActions } from '../../../actions/company.actions';
 import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { LoginActions } from '../../../actions/login.action';
-import { orderBy } from '../../../lodash-optimized';
 import { BranchFilterRequest, CompanyResponse, Organization, OrganizationDetails } from '../../../models/api-models/Company';
 import { OrganizationType } from '../../../models/user-login-state';
 import { CompanyService } from '../../../services/company.service';
@@ -17,6 +16,7 @@ import { WarehouseActions } from '../../../settings/warehouse/action/warehouse.a
 import { PageLeaveUtilityService } from '../../../services/page-leave-utility.service';
 import { CommonActions } from '../../../actions/common.actions';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { filter, includes, orderBy } from '../../../lodash-optimized';
 
 @Component({
     selector: 'company-branch',

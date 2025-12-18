@@ -6,6 +6,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { GeneralService } from '../../../services/general.service';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { BankIntegrationComponentStore } from '../utility/bank-integration.store';
+import { filter, get, includes } from '../../../lodash-optimized';
 
 @Component({
     selector: 'institutions-list',

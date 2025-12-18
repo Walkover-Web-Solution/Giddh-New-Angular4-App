@@ -23,7 +23,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { WarehouseActions } from '../../settings/warehouse/action/warehouse.action';
 import { IForceClear } from '../../models/api-models/Sales';
 import { LinkedStocksResponse } from '../../models/api-models/BranchTransfer';
-import { cloneDeep, forEach } from '../../lodash-optimized';
+import { cloneDeep, find, forEach, includes, map } from '../../lodash-optimized';
 
 const filter1 = [
     { label: 'Greater', value: 'greaterThan' },

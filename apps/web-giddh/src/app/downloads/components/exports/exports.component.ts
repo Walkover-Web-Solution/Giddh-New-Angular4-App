@@ -12,7 +12,6 @@ import { GeneralService } from '../../../services/general.service';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store';
 import { DownloadData, DownloadsRequest } from '../../../models/api-models/downloads';
-import { cloneDeep } from '../../../lodash-optimized';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
 import { PageEvent } from '@angular/material/paginator';
 import { ExportsJsonComponent } from '../exports-json/exports-json.component';
@@ -21,6 +20,7 @@ import { download } from '@giddh-workspaces/utils';
 import { ServiceConfig } from '../../../services/service.config';
 import { Configuration } from '../../../app.constant';
 import { environment } from '../../../../environments/environment';
+import { cloneDeep, forEach, includes, remove } from '../../../lodash-optimized';
 
 /** Hold information of Download  */
 const ELEMENT_DATA: DownloadData[] = [];

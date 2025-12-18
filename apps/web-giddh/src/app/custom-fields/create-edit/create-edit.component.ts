@@ -3,12 +3,12 @@ import { FormControl, NgForm } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ReplaySubject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
-import { cloneDeep } from "../../lodash-optimized";
 import { CustomFieldsService } from "../../services/custom-fields.service";
 import { ToasterService } from "../../services/toaster.service";
 import { FieldModules, FieldTypes } from "../custom-fields.constant";
 import { GeneralService } from "../../services/general.service";
 import { IOption } from "../../app.constant";
+import { cloneDeep, find, forEach, get, map, set } from '../../lodash-optimized';
 
 @Component({
     selector: "create-edit",

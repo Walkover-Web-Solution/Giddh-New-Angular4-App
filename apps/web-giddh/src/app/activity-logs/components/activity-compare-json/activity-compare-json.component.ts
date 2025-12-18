@@ -10,6 +10,7 @@ import {
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { create } from 'jsondiffpatch';
 import { format } from 'jsondiffpatch/formatters/html';
+import { remove } from '../../../lodash-optimized';
 
 @Component({
     selector: 'activity-compare-json',

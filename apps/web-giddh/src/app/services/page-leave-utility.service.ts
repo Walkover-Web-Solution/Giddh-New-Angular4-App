@@ -5,6 +5,7 @@ import { LocaleService } from "./locale.service";
 import { CommonActions } from "../actions/common.actions";
 import { AppState } from "../store";
 import { Store } from "@ngrx/store";
+import { remove } from '../lodash-optimized';
 
 @Injectable()
 export class PageLeaveUtilityService {

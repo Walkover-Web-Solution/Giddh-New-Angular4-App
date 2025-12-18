@@ -17,6 +17,7 @@ import { DataFormatter, IFormatable } from '../../model/data-formatter';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { Configuration } from '../../../../../app.constant';
 import { environment } from '../../../../../../environments/environment';
+import { forEach, indexOf } from '../../../../../lodash-optimized';
 
 export interface Total {
     ob: number;

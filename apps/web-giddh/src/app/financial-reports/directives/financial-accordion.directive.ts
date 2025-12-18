@@ -1,6 +1,7 @@
 import { Directive, HostListener, Input } from '@angular/core';
 
 import { Account, ChildGroup } from '../../models/api-models/Search';
+import { forEach } from '../../lodash-optimized';
 
 @Directive({
     selector: '[financial-accordion]',

@@ -5,7 +5,6 @@ import { ReplaySubject } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
 import { SettingsBranchActions } from "../../actions/settings/branch/settings.branch.action";
 import { BranchHierarchyType, FILE_ATTACHMENT_TYPE } from "../../app.constant";
-import { cloneDeep } from "../../lodash-optimized";
 import { CommonService } from "../../services/common.service";
 import { GeneralService } from "../../services/general.service";
 import { ToasterService } from "../../services/toaster.service";
@@ -23,6 +22,7 @@ import { VoucherTypeEnum } from "../../models/api-models/Sales";
 import { ServiceConfig } from "../../services/service.config";
 import { Configuration } from '../../app.constant';
 import { environment } from '../../../environments/environment';
+import { cloneDeep, filter, forEach, includes, map, remove } from '../../lodash-optimized';
 
 @Component({
     selector: "attachments",

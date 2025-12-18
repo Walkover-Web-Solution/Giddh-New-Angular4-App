@@ -4,6 +4,7 @@ import { ProjectWiseAccountingComponentStore } from '../../project-wise-accounti
 import { Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ProjectDialogData } from '../../project-wise-accounting';
+import { get } from '../../../lodash-optimized';
 
 @Component({
     selector: 'create-project',

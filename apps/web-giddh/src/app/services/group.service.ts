@@ -11,6 +11,7 @@ import { GroupsWithAccountsResponse } from '../models/api-models/GroupsWithAccou
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { PAGINATION_LIMIT } from '../app.constant';
+import { concat, flatten, forEach, get, keys, omit, union } from '../lodash-optimized';
 
 declare var _: any;
 
@@ -28,10 +29,10 @@ export class GroupService {
 
     public flattenGroup(rawList: any[], parents: any[] = []) {
         let listofUN;
-        listofUN = _.map(rawList, (listItem) => {
+        listofUN = rawList.map((listItem) => {
             let newParents;
             let result;
-            newParents = _.union([], parents);
+            newParents = union([], parents);
             newParents.push({
                 name: listItem.name,
                 uniqueName: listItem?.uniqueName
@@ -40,13 +41,13 @@ export class GroupService {
             listItem.parentGroups = newParents;
             if (listItem.groups?.length > 0) {
                 result = this.flattenGroup(listItem.groups, newParents);
-                result.push(_.omit(listItem, 'groups'));
+                result.push(omit(listItem, 'groups'));
             } else {
-                result = _.omit(listItem, 'groups');
+                result = omit(listItem, 'groups');
             }
             return result;
         });
-        return _.flatten(listofUN);
+        return flatten(listofUN);
     }
 
     public CreateGroup(model: GroupCreateRequest): Observable<BaseResponse<GroupResponse, GroupCreateRequest>> {

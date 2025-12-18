@@ -5,7 +5,6 @@ import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { AuditLogsActions } from '../../../actions/audit-logs/audit-logs.actions';
 import { DROPDOWN_ITEMS_COUNT_LIMIT, IOption } from '../../../app.constant';
-import { cloneDeep, flatten, map, omit, union } from '../../../lodash-optimized';
 import { GetAuditLogsRequest } from '../../../models/api-models/Logs';
 import { IForceClear } from '../../../models/api-models/Sales';
 import { CompanyService } from '../../../services/company.service';
@@ -16,6 +15,7 @@ import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
 import { AppState } from '../../../store';
 import { AuditLogsSidebarVM } from './Vm';
 import { ReactiveDropdownFieldComponent } from '../../../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component';
+import { cloneDeep, concat, filter, flatten, forEach, map, omit, set, union } from '../../../lodash-optimized';
 
 @Component({
     selector: 'audit-logs-form',

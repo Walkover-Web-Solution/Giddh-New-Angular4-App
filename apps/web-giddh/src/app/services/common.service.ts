@@ -8,6 +8,7 @@ import { HttpWrapperService } from "./http-wrapper.service";
 import { Observable } from "rxjs";
 import { GeneralService } from './general.service';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
+import { get } from '../lodash-optimized';
 
 @Injectable()
 export class CommonService {

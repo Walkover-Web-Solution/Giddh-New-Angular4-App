@@ -8,6 +8,7 @@ import { EBANKS, YODLEE_FASTLINK } from './apiurls/settings.linked.accounts.api'
 import { IAccessTokenResponse, IGetAllEbankAccountResponse } from '../models/api-models/SettingsLinkedAccounts';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
+import { get } from '../lodash-optimized';
 
 @Injectable()
 export class SettingsLinkedAccountsService {

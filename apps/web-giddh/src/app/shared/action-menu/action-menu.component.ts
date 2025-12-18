@@ -7,6 +7,7 @@ import { OrganizationType } from '../../models/user-login-state';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
 import { ASIDE_PANE_CONFIG, Configuration } from '../../app.constant';
+import { includes, map } from '../../lodash-optimized';
 
 @Component({
     selector: 'app-action-menu',

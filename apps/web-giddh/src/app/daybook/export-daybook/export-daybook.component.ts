@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnDestroy, OnInit, Output, Input } from '@angular/core';
 import { PermissionDataService } from 'apps/web-giddh/src/app/permissions/permission-data.service';
-import { some } from '../../lodash-optimized';
 import { ReplaySubject } from 'rxjs';
+import { forEach, some } from '../../lodash-optimized';
 
 @Component({
     selector: 'export-daybook',

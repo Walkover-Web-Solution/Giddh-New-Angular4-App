@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import { Observable, ReplaySubject, of } from 'rxjs';
 import { AppState } from '../../../store';
 import { ToasterService } from '../../../services/toaster.service';
-import { cloneDeep } from '../../../lodash-optimized';
+import { cloneDeep, keys, map } from '../../../lodash-optimized';
 
 @Component({
     selector: 'columnar-report-table-component',

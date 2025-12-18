@@ -9,6 +9,7 @@ import { IServiceConfigArgs, ServiceConfig } from '../services/service.config';
 import { DaybookQueryRequest, DayBookRequestModel } from '../models/api-models/DaybookRequest';
 import { DayBookResponseModel } from '../models/api-models/Daybook';
 import { DAYBOOK_SEARCH_API } from './apiurls/daybook.api';
+import { concat, get } from '../lodash-optimized';
 
 @Injectable()
 export class DaybookService {

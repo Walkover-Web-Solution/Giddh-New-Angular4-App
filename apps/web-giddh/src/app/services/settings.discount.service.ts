@@ -8,6 +8,7 @@ import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { CreateDiscountRequest, IDiscountList } from '../models/api-models/SettingsDiscount';
 import { SETTINGS_DISCOUNT_API } from './apiurls/settings.discount';
+import { get } from '../lodash-optimized';
 
 @Injectable()
 export class SettingsDiscountService {

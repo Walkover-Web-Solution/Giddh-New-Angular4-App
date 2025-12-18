@@ -21,6 +21,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_DD_MMMM_YYYY } from 'apps/web-gidd
 import * as dayjs from 'dayjs';
 import { ReplaySubject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
+import { forEach } from '../../../../lodash-optimized';
 
 @Component({
 selector: 'balance-sheet-report-grid',

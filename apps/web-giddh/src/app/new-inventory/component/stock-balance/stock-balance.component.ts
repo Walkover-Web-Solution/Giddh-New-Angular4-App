@@ -8,7 +8,6 @@ import { PAGINATION_LIMIT, PAGE_SIZE_OPTIONS, IOption } from '../../../app.const
 import { PageEvent } from '@angular/material/paginator';
 import { AppState } from '../../../store';
 import { WarehouseActions } from "../../../settings/warehouse/action/warehouse.action";
-import { cloneDeep } from "../../../lodash-optimized";
 import { IGroupsWithStocksHierarchyMinItem } from "../../../models/interfaces/groups-with-stocks.interface";
 import { GroupStockReportRequest } from "../../../models/api-models/Inventory";
 import { SettingsFinancialYearActions } from "../../../actions/settings/financial-year/financial-year.action";
@@ -18,6 +17,7 @@ import { SelectFieldComponent } from "../../../theme/form-fields/select-field/se
 import { ServiceConfig } from "../../../services/service.config";
 import { Configuration } from '../../../app.constant';
 import { environment } from '../../../../environments/environment';
+import { cloneDeep, filter, forEach, includes, indexOf, map, remove } from '../../../lodash-optimized';
 @Component({
     selector: 'stock-balance',
     

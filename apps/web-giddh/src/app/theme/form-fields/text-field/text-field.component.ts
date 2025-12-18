@@ -10,7 +10,6 @@ const noop = () => {
     selector: "text-field",
     styleUrls: ["./text-field.component.scss"],
     templateUrl: "./text-field.component.html",
-    standalone: false,
     providers: [
         {
             provide: MatFormFieldControl,
@@ -19,6 +18,7 @@ const noop = () => {
         }
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone:false
 })
 export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, ControlValueAccessor {
     @ViewChild('textField', { static: false }) public textField: ElementRef;
@@ -101,7 +101,7 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
      *
      * @memberof TextFieldComponent
      */
-    public ngOnDestroy(): void {
+    public ngOnDestroy() {
         this.stateChanges.complete();
     }
 

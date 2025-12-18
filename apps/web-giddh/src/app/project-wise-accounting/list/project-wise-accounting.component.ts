@@ -16,8 +16,8 @@ import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { NewConfirmationModalComponent } from '../../theme/new-confirmation-modal/confirmation-modal.component';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT } from '../../app.constant';
-import { cloneDeep } from '../../lodash-optimized';
 import { OrganizationType } from '../../models/user-login-state';
+import { cloneDeep, filter, forEach, includes, map, set } from '../../lodash-optimized';
 @Component({
     selector: 'project-wise-accounting',
     templateUrl: './project-wise-accounting.component.html',

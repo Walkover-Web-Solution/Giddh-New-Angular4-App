@@ -11,6 +11,7 @@ import { NewRoleClass } from '../../permission.utility';
 import { ToasterService } from '../../../services/toaster.service';
 import { GeneralService } from '../../../services/general.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { findIndex } from '../../../lodash-optimized';
 
 @Component({
     templateUrl: './permission-list.html',

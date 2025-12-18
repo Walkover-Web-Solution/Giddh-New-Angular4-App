@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { ColumnDefinition } from './giddh-table.component.const';
+import { forEach, isArray, isNumber, keys } from '../../lodash-optimized';
 @Component({
     selector: 'giddh-table',
     templateUrl: './giddh-table.component.html',

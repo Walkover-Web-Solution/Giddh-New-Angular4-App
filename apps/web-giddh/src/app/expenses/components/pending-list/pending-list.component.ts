@@ -17,6 +17,7 @@ import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
 import { Lightbox } from 'ngx-lightbox';
 import { GeneralService } from '../../../services/general.service';
 import { ServiceConfig } from '../../../services/service.config';
+import { cloneDeep, forEach, isArray, map, some } from '../../../lodash-optimized';
 
 @Component({
     selector: 'app-pending-list',
@@ -104,7 +105,7 @@ export class PendingListComponent implements OnInit, OnChanges {
             let dateObj = resp[0];
             this.todaySelected = resp[1];
             if (dateObj && !this.todaySelected) {
-                let universalDate = _.cloneDeep(dateObj);
+                let universalDate = cloneDeep(dateObj);
                 let from = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
                 let to = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
                 if (from && to) {

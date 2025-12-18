@@ -30,6 +30,7 @@ import { AuthenticationService } from "../services/authentication.service";
 import { CommonActions } from "../actions/common.actions";
 import { GeneralService } from "../services/general.service";
 import { ServiceConfig } from "../services/service.config";
+import { cloneDeep, filter, get, indexOf, map, set } from '../lodash-optimized';
 
 declare var initSendOTP: any;
 
@@ -478,7 +479,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     public resetPassword(form) {
         let ObjToSend = form?.value;
-        ObjToSend.uniqueKey = _.cloneDeep(this.userUniqueKey);
+        ObjToSend.uniqueKey = cloneDeep(this.userUniqueKey);
         this.store.dispatch(this.loginAction.resetPasswordRequest(ObjToSend));
     }
 

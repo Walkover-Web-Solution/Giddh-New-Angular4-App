@@ -12,6 +12,7 @@ import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { ICICI_ALLOWED_COMPANIES } from 'apps/web-giddh/src/app/app.constant';
 import { Configuration } from '../../../../app.constant';
 import { environment } from '../../../../../environments/environment';
+import { forEach, includes, keys, remove } from '../../../../lodash-optimized';
 
 @Component({
     selector: 'aside-setting',

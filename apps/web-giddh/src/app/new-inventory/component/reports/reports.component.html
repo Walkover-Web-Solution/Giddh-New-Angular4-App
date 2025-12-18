@@ -30,7 +30,8 @@
                 (selectedDynamicColumns)="dynamicColumnsSubject$.next($event)"
             ></report-filters>
         </div>
-        <div class="inventory-transaction-list overflow-visible" *ngIf="!isLoading">
+        @if(!isLoading){
+        <div class="inventory-transaction-list overflow-visible">
             <div *ngIf="isDataAvailable" class="position-sticky mb-3">
                 <div class="row">
                     <div class="col-12">
@@ -328,9 +329,11 @@
                         </div>
                     </div>
                 </div>
-            </div>
+
+          </div>
             <div class="row overflow-visible" *ngIf="isDataAvailable">
                 <div class="col-12 horizontal-padding overflow-visible">
+                    {{displayedColumns?.length}}
                     <div
                         class="table-responsive inventory-report-table overflow-visible table-header-sticky pt-5"
                         *ngIf="displayedColumns?.length"
@@ -733,6 +736,7 @@
                 </div>
             </div>
         </div>
+        }
         <div class="no-data" *ngIf="!isLoading && !dataSource?.length">
             <h2>{{ localeData?.reports?.no_entries_found_1 }}</h2>
             <h3>{{ localeData?.reports?.no_entries_found_2 }}</h3>

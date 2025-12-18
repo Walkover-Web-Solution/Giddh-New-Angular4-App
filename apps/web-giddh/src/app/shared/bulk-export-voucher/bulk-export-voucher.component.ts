@@ -8,6 +8,7 @@ import { ReplaySubject } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { saveAs } from 'file-saver';
+import { forEach } from '../../lodash-optimized';
 
 type bulkExportVoucherTypes = 'sales' | 'debit note' | 'credit note' | 'purchase' | 'payment' | 'receipt';
 

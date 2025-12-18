@@ -1,4 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { filter } from '../../../../lodash-optimized';
 
 // tslint:disable-next-line:pipe-naming
 @Pipe({

@@ -9,6 +9,7 @@ import { GeneralService } from './general.service';
 import { HttpWrapperService } from './http-wrapper.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { environment } from '../../environments/environment';
+import { get, includes } from '../lodash-optimized';
 
 @Injectable()
 export class ExceptionLogService implements ErrorHandler {

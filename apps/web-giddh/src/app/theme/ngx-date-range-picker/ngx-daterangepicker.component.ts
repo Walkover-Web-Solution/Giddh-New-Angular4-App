@@ -30,6 +30,7 @@ import { NewConfirmationModalComponent } from '../new-confirmation-modal/confirm
 import { GeneralService } from '../../services/general.service';
 import { Configuration } from '../../app.constant';
 import { environment } from '../../../environments/environment';
+import { clone, forEach, indexOf, keys, map, remove, set } from '../../lodash-optimized';
 
 export enum DateType {
     start = 'start',

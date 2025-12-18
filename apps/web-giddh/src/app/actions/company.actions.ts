@@ -24,6 +24,7 @@ import { ToasterService } from '../services/toaster.service';
 import { CustomActions } from '../store/custom-actions';
 import { AppState } from '../store/roots';
 import { COMMON_ACTIONS } from './common.const';
+import { findIndex } from '../lodash-optimized';
 
 @Injectable()
 
