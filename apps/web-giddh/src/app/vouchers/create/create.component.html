@@ -2164,50 +2164,52 @@
                                                                                     >
                                                                                 </mat-radio-group>
 
-                                                                                <div class="mt-3">
-                                                                                    <text-field
-                                                                                        *ngIf="
-                                                                                            entry.get('showCodeType')
-                                                                                                ?.value === 'hsn'
-                                                                                        "
-                                                                                        [cssClass]="
-                                                                                            'form-control text-right'
-                                                                                        "
-                                                                                        [type]="'number'"
-                                                                                        formControlName="hsnNumber"
-                                                                                        [maxlength]="10"
-                                                                                        [allowDigitsOnly]="true"
-                                                                                        [placeholder]="
-                                                                                            localeData?.hsn_number
-                                                                                        "
-                                                                                        [readonly]="isEinvoiceGenerated"
-                                                                                        [name]="
-                                                                                            'hsnNumber' + entryIndex
-                                                                                        "
-                                                                                    >
-                                                                                    </text-field>
-                                                                                    <text-field
-                                                                                        *ngIf="
-                                                                                            entry.get('showCodeType')
-                                                                                                ?.value === 'sac'
-                                                                                        "
-                                                                                        [cssClass]="
-                                                                                            'form-control text-right'
-                                                                                        "
-                                                                                        [type]="'number'"
-                                                                                        formControlName="sacNumber"
-                                                                                        [maxlength]="10"
-                                                                                        [allowDigitsOnly]="true"
-                                                                                        [placeholder]="
-                                                                                            localeData?.sac_number
-                                                                                        "
-                                                                                        [readonly]="isEinvoiceGenerated"
-                                                                                        [name]="
-                                                                                            'sacNumber' + entryIndex
-                                                                                        "
-                                                                                    >
-                                                                                    </text-field>
-                                                                                </div>
+                                                                            <div class="mt-3">
+                                                                                <text-field
+                                                                                    *ngIf="
+                                                                                        entry.get('showCodeType')
+                                                                                            ?.value === 'hsn'
+                                                                                    "
+                                                                                    [placeholder]="
+                                                                                        commonLocaleData?.app_hsn_code
+                                                                                    "
+                                                                                    [cssClass]="
+                                                                                        'form-control text-right'
+                                                                                    "
+                                                                                    [type]="'number'"
+                                                                                    formControlName="hsnNumber"
+                                                                                    [maxlength]="10"
+                                                                                    [allowDecimalDigitsOnly]="true"
+                                                                                    [placeholder]="
+                                                                                        localeData?.hsn_number
+                                                                                    "
+                                                                                    [readonly]="isEinvoiceGenerated"
+                                                                                    [name]="'hsnNumber' + entryIndex"
+                                                                                >
+                                                                                </text-field>
+                                                                                <text-field
+                                                                                    *ngIf="
+                                                                                        entry.get('showCodeType')
+                                                                                            ?.value === 'sac'
+                                                                                    "
+                                                                                    [placeholder]="
+                                                                                        commonLocaleData?.app_sac_code
+                                                                                    "
+                                                                                    [cssClass]="
+                                                                                        'form-control text-right'
+                                                                                    "
+                                                                                    [type]="'number'"
+                                                                                    formControlName="sacNumber"
+                                                                                    [maxlength]="10"
+                                                                                    [allowDecimalDigitsOnly]="true"
+                                                                                    [placeholder]="
+                                                                                        localeData?.sac_number
+                                                                                    "
+                                                                                    [readonly]="isEinvoiceGenerated"
+                                                                                    [name]="'sacNumber' + entryIndex"
+                                                                                >
+                                                                                </text-field>
+                                                                            </div>
 
                                                                                 <div class="mt-3">
                                                                                     <button

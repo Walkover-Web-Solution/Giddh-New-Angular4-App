@@ -13,7 +13,7 @@
                     [cssClass]="'form-control input-design'"
                     [name]="'opt_4th'"
                     [type]="'number'"
-                    digitsOnlyDirective
+                    [allowDecimalDigitsOnly]="true"
                     (change)="saveAgingDropdown()"
                     [(ngModel)]="options.fourth"
                     (click)="$event.stopPropagation()"
@@ -28,7 +28,7 @@
                     [cssClass]="'form-control input-design'"
                     [name]="'opt_4th'"
                     [type]="'number'"
-                    digitsOnlyDirective
+                    [allowDecimalDigitsOnly]="true"
                     [(ngModel)]="options.fifth"
                     (change)="saveAgingDropdown()"
                     (click)="$event.stopPropagation()"
@@ -42,7 +42,7 @@
                 <text-field
                     [cssClass]="'form-control input-design'"
                     [name]="'opt_4th'"
-                    digitsOnlyDirective
+                    [allowDecimalDigitsOnly]="true"
                     [type]="'number'"
                     [(ngModel)]="options.sixth"
                     (change)="saveAgingDropdown()"

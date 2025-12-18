@@ -1607,7 +1607,7 @@
                                                         [type]="'number'"
                                                         [placeholder]="localeData?.enter_hsn_code"
                                                         [(ngModel)]="stockForm.hsnNumber"
-                                                        [allowDigitsOnly]="true"
+                                                        [allowDecimalDigitsOnly]="true"
                                                     >
                                                     </input-field>
                                                     <input-field
@@ -1616,7 +1616,7 @@
                                                         [type]="'number'"
                                                         [placeholder]="localeData?.enter_sac_code"
                                                         [(ngModel)]="stockForm.sacNumber"
-                                                        [allowDigitsOnly]="true"
+                                                        [allowDecimalDigitsOnly]="true"
                                                     >
                                                     </input-field>
                                                 </div>
@@ -2290,7 +2290,7 @@
                                                     id="combo-unique-name"
                                                     [type]="'number'"
                                                     [placeholder]="localeData?.enter_hsn_code"
-                                                    [allowDigitsOnly]="true"
+                                                    [allowDecimalDigitsOnly]="true"
                                                 ></input-field>
                                             </div>
                                         </div>
@@ -3191,7 +3191,7 @@
                                                             id="product-name"
                                                             [type]="'number'"
                                                             placeholder="Enter HSN Code"
-                                                            [allowDigitsOnly]="true"
+                                                            [allowDecimalDigitsOnly]="true"
                                                         ></input-field>
                                                     </div>
                                                     <div class="col-sm-6 col-lg-6" *ngIf="!isHSN">
@@ -3199,7 +3199,7 @@
                                                             id="product-name"
                                                             [type]="'number'"
                                                             placeholder="Enter SAC Code"
-                                                            [allowDigitsOnly]="true"
+                                                            [allowDecimalDigitsOnly]="true"
                                                         ></input-field>
                                                     </div>
                                                 </div>
@@ -3774,7 +3774,7 @@
                                                     [type]="'number'"
                                                     placeholder="Enter"
                                                     id="hsn-sac-code"
-                                                    [allowDigitsOnly]="true"
+                                                    [allowDecimalDigitsOnly]="true"
                                                 ></input-field>
                                             </td>
                                             <td data-title="SAC Code">

@@ -256,7 +256,7 @@
                             [type]="'number'"
                             formControlName="hsnNumber"
                             (change)="openConfirmLeaveDialog()"
-                            [allowDigitsOnly]="true"
+                            [allowDecimalDigitsOnly]="true"
                             *ngIf="addAccountForm.get('hsnOrSac')?.value === 'hsn'"
                         >
                         </input-field>
@@ -267,7 +267,7 @@
                             [type]="'number'"
                             formControlName="sacNumber"
                             (change)="openConfirmLeaveDialog()"
-                            [allowDigitsOnly]="true"
+                            [allowDecimalDigitsOnly]="true"
                             *ngIf="addAccountForm.get('hsnOrSac')?.value === 'sac'"
                         >
                         </input-field>
@@ -411,7 +411,7 @@
                                     "
                                     [type]="'number'"
                                     [formControl]="addAccountForm.controls.addresses?.controls?.[i].controls?.pincode"
-                                    [allowDigitsOnly]="true"
+                                    [allowDecimalDigitsOnly]="true"
                                     (change)="openConfirmLeaveDialog()"
                                 >
                                 </input-field>
@@ -855,7 +855,7 @@
                                 [placeholder]="'00'"
                                 [type]="'text'"
                                 [maxlength]="3"
-                                [allowDigitsOnly]="true"
+                                [allowDecimalDigitsOnly]="true"
                                 formControlName="duePeriod"
                                 class="settings-field d-block expiry-days-input-width"
                                 [matSuffix]="commonLocaleData?.app_days"

@@ -32,8 +32,6 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     @Input() public max: number = null;
     /** True if need to allow decimal with digits */
     @Input() public allowDecimalDigitsOnly: boolean = false;
-    /** True if need to allow only digits */
-    @Input() public allowDigitsOnly: boolean = false;
     /** Css classes to be applied on input field */
     @Input() public cssClass: string = "";
     /** Css styles to be applied on input field */

@@ -54,6 +54,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
 import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
+import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 
 @NgModule({
     declarations: [
@@ -126,6 +127,7 @@ import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/n
         MatTabsModule,
         ReactiveFormsModule,
         DigitsOnlyModule,
+        DecimalDigitsModule,
         NgxMaskModule.forRoot(),
         GiddhRoundOffPipeModule,
         InventoryAddStockModule,
