@@ -7,7 +7,6 @@
 >
     <div class="dialog-header">
         <span class="font-size-16">{{ localeData?.page_heading }}</span>
-        <i mat-dialog-close class="icon-cross icon-font-size-16"></i>
     </div>
     <div mat-dialog-content class="dialog-body">
         <div class="row">
@@ -125,7 +124,7 @@
                             let last = last
                         "
                     >
-                        <div class="row voucher-form pb-1 align-items-start mb-1">
+                        <div class="row voucher-form pb-1 align-items-center mb-1">
                             <div class="col-5">
                                 <div class="form-group mb-0">
                                     <reactive-dropdown-field
@@ -224,14 +223,20 @@
                                     >
                                 </div>
                             </div>
-                            <div class="col d-flex align-items-center">
+                            <div class="col">
                                 <a
                                     href="javascript:void(0)"
                                     aria-label="delete icon"
                                     (click)="deleteAdjustVoucherRow(entryIdx)"
-                                    class="icon-font-22 theme-foreground-color d-inline-block pt-2"
-                                    ><i class="icon-trash"></i
-                                ></a>
+                                    (keydown.enter)="$event.preventDefault(); deleteAdjustVoucherRow(entryIdx)"
+                                    (keydown.space)="$event.preventDefault(); deleteAdjustVoucherRow(entryIdx)"
+                                    tabindex="0"
+                                    role="button"
+                                    cdkMonitorElementFocus
+                                    class="icon-font-22 theme-foreground-color"
+                                >
+                                    <i class="icon-trash"></i>
+                                </a>
                             </div>
                         </div>
                     </ng-container>
@@ -240,6 +245,11 @@
                             href="javascript:void(0)"
                             aria-label="new line"
                             (click)="addNewBlankAdjustVoucherRow()"
+                            (keydown.enter)="$event.preventDefault(); addNewBlankAdjustVoucherRow()"
+                            (keydown.space)="$event.preventDefault(); addNewBlankAdjustVoucherRow()"
+                            tabindex="0"
+                            role="button"
+                            cdkMonitorElementFocus
                             class="font-size-15"
                             ><span class="font-size-15">+</span> {{ commonLocaleData?.app_add_new_line }}</a
                         >
@@ -263,6 +273,9 @@
                             <p>{{ localeData?.adjustment_note }}</p>
                         </div>
                         <div class="d-flex justify-content-end column-gap-1 mt-2" *ngIf="isModal">
+                            <button mat-stroked-button mat-dialog-close type="button">
+                                {{ commonLocaleData?.app_close }}
+                            </button>
                             <button mat-stroked-button (click)="onClear(true)">
                                 {{ commonLocaleData?.app_reset }}
                             </button>

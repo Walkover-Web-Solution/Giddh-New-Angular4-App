@@ -11,6 +11,7 @@ import * as libphonenumber from 'google-libphonenumber';
 import { Country, COUNTRIES_DATA } from './countries-data';
 import { GeolocationService } from './geolocation.service';
 import { LocaleService } from '../../services/locale.service';
+import { A11yModule } from '@angular/cdk/a11y';
 
 /** 
  * Enhanced mobile number validator using Google's libphonenumber library
@@ -144,7 +145,8 @@ function isSequential(number: string): boolean {
         MatSelectModule,
         MatInputModule,
         MatIconModule,
-        HttpClientModule
+        HttpClientModule,
+        A11yModule
     ],
     providers: [
         {

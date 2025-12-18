@@ -9,7 +9,7 @@
     <div class="vouchers bg-light-gray">
         <mat-card class="container-lg mt-4">
             <form autocomplete="off" novalidate name="invoiceForm" [formGroup]="invoiceForm">
-                <mat-card-content>
+                <mat-card-content cdkTrapFocus>
                     <div class="vouchers-title d-flex align-items-center" [ngClass]="{ 'pb-2': ocrDataEnabled }">
                         <div class="d-flex align-items-center">
                             <p
@@ -150,8 +150,11 @@
                                     <div class="d-flex align-items-center">
                                         <div
                                             class="vouchers-form-fields w-100"
-                                            [keyboardShortcut]="'alt+c'"
-                                            (onShortcutPress)="toggleAccountAsidePane(accountType.customer)"
+                                            [cdkTrapFocus]="
+                                                !(invoiceType.isCashInvoice
+                                                    ? invoiceForm.controls['account'].get('customerName')?.value
+                                                    : invoiceForm.controls['account'].get('uniqueName')?.value)
+                                            "
                                         >
                                             <reactive-dropdown-field
                                                 *ngIf="!invoiceType.isCashInvoice"
@@ -189,7 +192,7 @@
                                                 [labelValue]="
                                                     invoiceForm.controls['account'].get('customerName')?.value
                                                 "
-                                                [showKeyboardCommand]="commonLocaleData?.app_alt_c"
+                                                [showKeyboardCommand]="commonLocaleData?.app_alt_shift_n"
                                                 (scrollEnd)="handleSearchAccountScrollEnd()"
                                                 (selectedOption)="selectAccount($event)"
                                                 (dynamicSearchedQuery)="searchAccount($event, 1)"
@@ -231,8 +234,15 @@
                                             "
                                         >
                                             <div
-                                                class="vouchers-copy-sales ml-5 cursor-pointer"
+                                                tabindex="0"
+                                                role="button"
+                                                cdkMonitorElementFocus
+                                                (keydown.enter)="$event.preventDefault(); copyVoucherTrigger.openMenu()"
+                                                (keydown.space)="$event.preventDefault(); copyVoucherTrigger.openMenu()"
+                                                #copyVoucherElement
+                                                #copyVoucherTrigger="matMenuTrigger"
                                                 [matMenuTriggerFor]="copyLastVouchers"
+                                                class="vouchers-copy-sales ml-5 cursor-pointer"
                                             >
                                                 <i class="icon-copy-file"></i>
                                                 {{ voucherType | voucherCopyLink : localeData | titlecase }}
@@ -320,7 +330,16 @@
                                             !invoiceType.isCashInvoice &&
                                             invoiceForm.controls['account'].get('uniqueName')?.value
                                         "
+                                        tabindex="0"
+                                        role="button"
+                                        cdkMonitorElementFocus
                                         class="vouchers-form-fields-detail cursor-pointer"
+                                        (keydown.enter)="
+                                            $event.preventDefault(); toggleAccountAsidePane(accountType.customer, false)
+                                        "
+                                        (keydown.space)="
+                                            $event.preventDefault(); toggleAccountAsidePane(accountType.customer, false)
+                                        "
                                         (click)="toggleAccountAsidePane(accountType.customer, false)"
                                     >
                                         {{
@@ -460,6 +479,16 @@
                                             </label>
                                             <i
                                                 *ngIf="!invoiceType.isCashInvoice"
+                                                tabindex="0"
+                                                role="button"
+                                                cdkMonitorElementFocus
+                                                (keydown.enter)="
+                                                    $event.preventDefault(); billingDetailsTrigger.openMenu()
+                                                "
+                                                (keydown.space)="
+                                                    $event.preventDefault(); billingDetailsTrigger.openMenu()
+                                                "
+                                                #billingDetailsTrigger="matMenuTrigger"
                                                 [matMenuTriggerFor]="billingDetails"
                                                 class="icon-edit text-primary pl-2 font-size-12"
                                             >
@@ -505,8 +534,14 @@
                                                     </ng-container>
                                                     <button
                                                         mat-menu-item
-                                                        class="vouchers-add-new"
-                                                        (click)="toggleAccountAsidePane(accountType.customer, false)"
+                                                        class="vouchers-add-new text-primary-onfocus"
+                                                        (click)="
+                                                            toggleAccountAsidePane(
+                                                                accountType.customer,
+                                                                false,
+                                                                billingDetailsTrigger
+                                                            )
+                                                        "
                                                     >
                                                         {{ localeData?.add_new_address }}
                                                     </button>
@@ -622,6 +657,12 @@
                                                     invoiceType.isCashInvoice
                                                 "
                                                 (change)="copyBillingInShipping('account', $event)"
+                                                #copyAccountBillingInShippingAddressRef
+                                                (keydown.enter)="
+                                                    $event.preventDefault();
+                                                    copyAccountBillingInShippingAddressRef.toggle();
+                                                    copyBillingInShipping('account', $event)
+                                                "
                                             >
                                                 {{ localeData?.shipping_billing_same }}
                                             </mat-checkbox>
@@ -645,6 +686,16 @@
                                             </label>
                                             <i
                                                 *ngIf="!invoiceType.isCashInvoice"
+                                                tabindex="0"
+                                                role="button"
+                                                cdkMonitorElementFocus
+                                                (keydown.enter)="
+                                                    $event.preventDefault(); shippingDetailsTrigger.openMenu()
+                                                "
+                                                (keydown.space)="
+                                                    $event.preventDefault(); shippingDetailsTrigger.openMenu()
+                                                "
+                                                #shippingDetailsTrigger="matMenuTrigger"
                                                 [matMenuTriggerFor]="shippingDetails"
                                                 class="icon-edit text-primary pl-2 font-size-12"
                                             ></i>
@@ -690,8 +741,14 @@
                                                     </ng-container>
                                                     <button
                                                         mat-menu-item
-                                                        class="vouchers-add-new"
-                                                        (click)="toggleAccountAsidePane(accountType.customer, false)"
+                                                        class="vouchers-add-new text-primary-onfocus"
+                                                        (click)="
+                                                            toggleAccountAsidePane(
+                                                                accountType.customer,
+                                                                false,
+                                                                shippingDetailsTrigger
+                                                            )
+                                                        "
                                                     >
                                                         {{ localeData?.add_new_address }}
                                                     </button>
@@ -844,7 +901,6 @@
                                                 invoiceForm?.get('salesPersonName')?.patchValue($event.label)
                                             "
                                             [showCreateNew]="true"
-                                            [createNewText]="commonLocaleData?.app_create_new"
                                             (createOption)="openSalesPersonDialog()"
                                         ></reactive-dropdown-field>
                                     </div>
@@ -881,6 +937,7 @@
                                             <giddh-datepicker
                                                 (keydown.enter)="$event.preventDefault()"
                                                 [label]="localeData?.clearance_date"
+                                                [closeDatepickerOnFocus]="true"
                                                 [placeholder]="'DD-MM-YYYY'"
                                                 name="chequeClearanceDate"
                                                 [showToggleIcon]="false"
@@ -932,6 +989,16 @@
                                         </label>
                                         <i
                                             *ngIf="!invoiceType.isCashInvoice"
+                                            tabindex="0"
+                                            role="button"
+                                            cdkMonitorElementFocus
+                                            (keydown.enter)="
+                                                $event.preventDefault(); companyBillingAddressTrigger.openMenu()
+                                            "
+                                            (keydown.space)="
+                                                $event.preventDefault(); companyBillingAddressTrigger.openMenu()
+                                            "
+                                            #companyBillingAddressTrigger="matMenuTrigger"
                                             [matMenuTriggerFor]="companyBillingAddress"
                                             class="icon-edit text-primary pl-2 font-size-12"
                                         >
@@ -1069,6 +1136,12 @@
                                                 invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled ||
                                                 invoiceType.isCashInvoice
                                             "
+                                            #copyCompanyBillingInShippingAddressRef
+                                            (keydown.enter)="
+                                                $event.preventDefault();
+                                                copyCompanyBillingInShippingAddressRef.toggle();
+                                                copyBillingInShipping('company', $event)
+                                            "
                                             (change)="copyBillingInShipping('company', $event)"
                                         >
                                             {{ localeData?.shipping_billing_same }}
@@ -1092,6 +1165,16 @@
                                         </label>
                                         <i
                                             *ngIf="!invoiceType.isCashInvoice"
+                                            tabindex="0"
+                                            role="button"
+                                            cdkMonitorElementFocus
+                                            (keydown.enter)="
+                                                $event.preventDefault(); companyShippingAddressTrigger.openMenu()
+                                            "
+                                            (keydown.space)="
+                                                $event.preventDefault(); companyShippingAddressTrigger.openMenu()
+                                            "
+                                            #companyShippingAddressTrigger="matMenuTrigger"
                                             [matMenuTriggerFor]="companyShippingAddress"
                                             class="icon-edit text-primary pl-2 font-size-12"
                                         ></i>
@@ -1319,8 +1402,9 @@
                                     <!-- Voucher Date -->
                                     <div class="col-3 pr-2">
                                         <giddh-datepicker
-                                            (keydown.enter)="$event.preventDefault()"
+                                            #voucherDatePicker
                                             [label]="voucherDateLabel"
+                                            [closeDatepickerOnFocus]="true"
                                             [placeholder]="voucherDateLabel"
                                             name="voucherDate"
                                             [showToggleIcon]="false"
@@ -1347,6 +1431,7 @@
                                         <giddh-datepicker
                                             (keydown.enter)="$event.preventDefault()"
                                             [label]="voucherDueDateLabel"
+                                            [closeDatepickerOnFocus]="true"
                                             [placeholder]="voucherDueDateLabel"
                                             name="voucherDueDate"
                                             [showToggleIcon]="false"
@@ -1425,25 +1510,30 @@
                                         "
                                     >
                                         <mat-checkbox
-                                            (keydown.enter)="$event.preventDefault()"
                                             #rcmCheckbox
+                                            cdkMonitorElementFocus
                                             class="mr-1"
                                             [disabled]="isEinvoiceGenerated"
                                             color="primary"
                                             id="reverse-charge"
+                                            (keydown.enter)="
+                                                $event.preventDefault();
+                                                rcmCheckbox.toggle();
+                                                toggleRcmCheckbox(rcmCheckbox, 'checkbox')
+                                            "
                                             (change)="
                                                 !isEinvoiceGenerated ? toggleRcmCheckbox(rcmCheckbox, 'checkbox') : ''
                                             "
                                         >
+                                            <label
+                                                for="reverse-charge"
+                                                (click)="
+                                                    !isEinvoiceGenerated ? toggleRcmCheckbox(rcmCheckbox, 'label') : ''
+                                                "
+                                                [innerHTML]="localeData?.transaction_reverse_charge"
+                                            >
+                                            </label>
                                         </mat-checkbox>
-                                        <label
-                                            for="reverse-charge"
-                                            (click)="
-                                                !isEinvoiceGenerated ? toggleRcmCheckbox(rcmCheckbox, 'label') : ''
-                                            "
-                                            [innerHTML]="localeData?.transaction_reverse_charge"
-                                        >
-                                        </label>
                                     </div>
                                     <!-- For Tourist Scheme -->
                                     <ng-container
@@ -1455,7 +1545,12 @@
                                         <div class="col-12">
                                             <mat-checkbox
                                                 color="primary"
-                                                (keydown.enter)="$event.preventDefault()"
+                                                #touristSchemeApplicable
+                                                (keydown.enter)="
+                                                    $event.preventDefault();
+                                                    touristSchemeApplicable.toggle();
+                                                    toggleTouristSchemeApplicable()
+                                                "
                                                 id="tourist-scheme"
                                                 name="touristSchemeApplicable"
                                                 class="mr-2"
@@ -1482,6 +1577,7 @@
                                     <div class="col-12" *ngIf="invoiceType.isReceiptInvoice">
                                         <strong
                                             ><a
+                                                tabindex="-1"
                                                 href="javascript:;"
                                                 (click)="invoiceForm.get('isAdvanceReceipt')?.patchValue(false)"
                                                 >{{ commonLocaleData?.app_voucher_types?.receipt }}</a
@@ -1515,6 +1611,10 @@
                                         height="15px"
                                         src="{{ imgPath }}switch-icon.svg"
                                         class="cursor-pointer"
+                                        tabindex="0"
+                                        cdkMonitorElementFocus
+                                        (keydown.enter)="$event.preventDefault(); switchCurrency()"
+                                        (keydown.space)="$event.preventDefault(); switchCurrency()"
                                         (click)="switchCurrency()"
                                     />
                                     <span *ngIf="!showExchangeRateEditField"
@@ -1528,17 +1628,34 @@
                                         <text-field
                                             [cssClass]="'form-control'"
                                             [type]="'number'"
+                                            [autoFocus]="true"
                                             [matSuffix]="account?.baseCurrency"
                                             formControlName="exchangeRate"
                                         ></text-field>
                                     </div>
                                     <i
                                         class="icon-edit text-primary"
+                                        tabindex="0"
+                                        cdkMonitorElementFocus
+                                        (keydown.enter)="$event.preventDefault(); showExchangeRateEditField = true"
+                                        (keydown.space)="$event.preventDefault(); showExchangeRateEditField = true"
                                         (click)="showExchangeRateEditField = true"
                                         *ngIf="!showExchangeRateEditField"
                                     ></i>
                                     <i
                                         class="icon-save text-primary cursor-pointer"
+                                        tabindex="0"
+                                        cdkMonitorElementFocus
+                                        (keydown.enter)="
+                                            $event.preventDefault();
+                                            showExchangeRateEditField = false;
+                                            focusNextElement($event)
+                                        "
+                                        (keydown.space)="
+                                            $event.preventDefault();
+                                            showExchangeRateEditField = false;
+                                            focusNextElement($event)
+                                        "
                                         (click)="showExchangeRateEditField = false"
                                         *ngIf="showExchangeRateEditField"
                                     ></i>
@@ -1607,7 +1724,7 @@
                                                 </th>
                                             </tr>
                                         </thead>
-                                        <tbody (clickOutside)="openEntryDatepicker ? null : handleOutsideClick($event)">
+                                        <tbody (clickOutside)="handleOutsideClick($event)">
                                             <ng-container
                                                 *ngFor="
                                                     let entry of invoiceForm?.get('entries')['controls'];
@@ -1641,7 +1758,11 @@
                                                                     <ng-container
                                                                         *ngIf="activeEntryIndex !== entryIndex"
                                                                     >
-                                                                        <div>
+                                                                        <div
+                                                                            tabindex="0"
+                                                                            cdkMonitorElementFocus
+                                                                            (focus)="setActiveEntryIndex(entryIndex)"
+                                                                        >
                                                                             {{
                                                                                 transaction.get("account.name")?.value
                                                                                     ? transaction.get("stock.name")
@@ -1701,7 +1822,14 @@
                                                                         [openDropdown]="
                                                                             entryIndex === activeEntryIndex &&
                                                                             !transaction.get('account.uniqueName')
-                                                                                ?.value
+                                                                                ?.value &&
+                                                                            (invoiceType.isCashInvoice
+                                                                                ? invoiceForm.controls['account'].get(
+                                                                                      'customerName'
+                                                                                  )?.value
+                                                                                : invoiceForm.controls['account'].get(
+                                                                                      'uniqueName'
+                                                                                  )?.value)
                                                                         "
                                                                         [showOptionDivider]="true"
                                                                         [showMatLabel]="false"
@@ -1888,7 +2016,7 @@
                                                                         {{ entry.get("date")?.value }}
                                                                     </div>
                                                                     <div
-                                                                        class="mt-1 d-flex align-items-baseline"
+                                                                        class="mt-1 d-flex align-items-baseline column-gap-05"
                                                                         *ngIf="activeEntryIndex === entryIndex"
                                                                     >
                                                                         <ng-container *ngIf="isUpdateMode">
@@ -1896,34 +2024,28 @@
                                                                         </ng-container>
                                                                         <ng-container *ngIf="!isUpdateMode">
                                                                             <giddh-datepicker
+                                                                                #entryDatePicker
                                                                                 class="date-border"
                                                                                 [showToggleIcon]="false"
+                                                                                [closeDatepickerOnFocus]="true"
                                                                                 [hideLabel]="true"
-                                                                                #dp
-                                                                                (keydown.enter)="
-                                                                                    $event.preventDefault()
-                                                                                "
                                                                                 (dateSelected)="
-                                                                                    onBlurEntryDate(entry, entryIndex);
-                                                                                    openEntryDatepicker = false
+                                                                                    onBlurEntryDate(entry, entryIndex)
                                                                                 "
                                                                                 id="transactionDate{{ entryIndex }}"
                                                                                 [disabled]="isUpdateMode"
-                                                                                [cssClass]="
-                                                                                    'entry-custom-date width-80 border-none'
-                                                                                "
+                                                                                [cssClass]="'width-100 border-bottom'"
                                                                                 name="transactionDate{{ entryIndex }}"
+                                                                                [placeholder]="'DD-MM-YYYY'"
                                                                                 formControlName="date"
                                                                                 [appearance]="'fill'"
-                                                                                (datepickerState)="
-                                                                                    openEntryDatepicker = $event
-                                                                                "
-                                                                                [isOpened]="openEntryDatepicker"
                                                                             >
                                                                             </giddh-datepicker>
                                                                             <i
                                                                                 class="icon-edit text-primary"
-                                                                                (click)="openEntryDatepicker = true"
+                                                                                (click)="
+                                                                                    entryDatePicker.toggleDatepicker()
+                                                                                "
                                                                             ></i>
                                                                         </ng-container>
                                                                     </div>
@@ -1974,10 +2096,20 @@
                                                                                 : entry.get("sacNumber")?.value
                                                                         }}
                                                                         <i
-                                                                            class="icon-edit text-primary"
-                                                                            (click)="updateCurrentHsnSac(entry)"
-                                                                            #menuTrigger="matMenuTrigger"
+                                                                            tabindex="0"
+                                                                            cdkMonitorElementFocus
+                                                                            (keydown.enter)="
+                                                                                $event.preventDefault();
+                                                                                hsnSacTrigger.openMenu()
+                                                                            "
+                                                                            (keydown.space)="
+                                                                                $event.preventDefault();
+                                                                                hsnSacTrigger.openMenu()
+                                                                            "
+                                                                            #hsnSacTrigger="matMenuTrigger"
                                                                             [matMenuTriggerFor]="update"
+                                                                            (click)="updateCurrentHsnSac(entry)"
+                                                                            class="icon-edit text-primary"
                                                                         ></i>
                                                                     </div>
                                                                     <div
@@ -1991,34 +2123,46 @@
                                                                         }}
                                                                     </div>
                                                                     <!-- Update Menu  -->
-                                                                    <mat-menu #update="matMenu">
-                                                                        <div
-                                                                            class="p-3"
-                                                                            (click)="$event.stopPropagation()"
-                                                                        >
-                                                                            <mat-radio-group
-                                                                                formControlName="showCodeType"
-                                                                                name="transactionShowCodeType{{
-                                                                                    entryIndex
-                                                                                }}"
-                                                                                (change)="onChangeHsnSacType(entry)"
-                                                                                [disabled]="isEinvoiceGenerated"
+                                                                    <mat-menu
+                                                                        #update="matMenu"
+                                                                        (closed)="handleHsnSacMenuClosed($event, entry)"
+                                                                    >
+                                                                        <ng-template matMenuContent>
+                                                                            <div
+                                                                                class="p-3"
+                                                                                (click)="$event.stopPropagation()"
+                                                                                (keydown.tab)="$event.stopPropagation()"
+                                                                                (keydown.shift.tab)="
+                                                                                    $event.stopPropagation()
+                                                                                "
+                                                                                cdkTrapFocus
+                                                                                cdkTrapFocusAutoCapture
                                                                             >
-                                                                                <mat-radio-button
-                                                                                    color="primary"
-                                                                                    value="hsn"
-                                                                                    >{{
-                                                                                        commonLocaleData?.app_hsn_code
-                                                                                    }}</mat-radio-button
+                                                                                <mat-radio-group
+                                                                                    cdkFocusInitial
+                                                                                    formControlName="showCodeType"
+                                                                                    name="transactionShowCodeType{{
+                                                                                        entryIndex
+                                                                                    }}"
+                                                                                    (change)="onChangeHsnSacType(entry)"
+                                                                                    [disabled]="isEinvoiceGenerated"
                                                                                 >
-                                                                                <mat-radio-button
-                                                                                    color="primary"
-                                                                                    value="sac"
-                                                                                    >{{
-                                                                                        commonLocaleData?.app_sac_code
-                                                                                    }}</mat-radio-button
-                                                                                >
-                                                                            </mat-radio-group>
+                                                                                    <mat-radio-button
+                                                                                        color="primary"
+                                                                                        value="hsn"
+                                                                                        tabindex="0"
+                                                                                        >{{
+                                                                                            commonLocaleData?.app_hsn_code
+                                                                                        }}</mat-radio-button
+                                                                                    >
+                                                                                    <mat-radio-button
+                                                                                        color="primary"
+                                                                                        value="sac"
+                                                                                        >{{
+                                                                                            commonLocaleData?.app_sac_code
+                                                                                        }}</mat-radio-button
+                                                                                    >
+                                                                                </mat-radio-group>
 
                                                                             <div class="mt-3">
                                                                                 <text-field
@@ -2035,7 +2179,7 @@
                                                                                     [type]="'number'"
                                                                                     formControlName="hsnNumber"
                                                                                     [maxlength]="10"
-                                                                                    [allowDigitsOnly]="true"
+                                                                                    [allowDecimalDigitsOnly]="true"
                                                                                     [placeholder]="
                                                                                         localeData?.hsn_number
                                                                                     "
@@ -2057,7 +2201,7 @@
                                                                                     [type]="'number'"
                                                                                     formControlName="sacNumber"
                                                                                     [maxlength]="10"
-                                                                                    [allowDigitsOnly]="true"
+                                                                                    [allowDecimalDigitsOnly]="true"
                                                                                     [placeholder]="
                                                                                         localeData?.sac_number
                                                                                     "
@@ -2067,26 +2211,31 @@
                                                                                 </text-field>
                                                                             </div>
 
-                                                                            <div class="mt-3">
-                                                                                <button
-                                                                                    mat-raised-button
-                                                                                    color="primary"
-                                                                                    class="mr-2"
-                                                                                    (click)="menuTrigger?.closeMenu()"
-                                                                                >
-                                                                                    {{ commonLocaleData?.app_save }}
-                                                                                </button>
-                                                                                <button
-                                                                                    mat-stroked-button
-                                                                                    (click)="
-                                                                                        cancelHsnSacEdit(entry);
-                                                                                        menuTrigger?.closeMenu()
-                                                                                    "
-                                                                                >
-                                                                                    {{ commonLocaleData?.app_cancel }}
-                                                                                </button>
+                                                                                <div class="mt-3">
+                                                                                    <button
+                                                                                        mat-raised-button
+                                                                                        color="primary"
+                                                                                        class="mr-2"
+                                                                                        (click)="
+                                                                                            hsnSacTrigger?.closeMenu()
+                                                                                        "
+                                                                                    >
+                                                                                        {{ commonLocaleData?.app_save }}
+                                                                                    </button>
+                                                                                    <button
+                                                                                        mat-stroked-button
+                                                                                        (click)="
+                                                                                            cancelHsnSacEdit(entry);
+                                                                                            hsnSacTrigger?.closeMenu()
+                                                                                        "
+                                                                                    >
+                                                                                        {{
+                                                                                            commonLocaleData?.app_cancel
+                                                                                        }}
+                                                                                    </button>
+                                                                                </div>
                                                                             </div>
-                                                                        </div>
+                                                                        </ng-template>
                                                                     </mat-menu>
                                                                 </div>
                                                             </div>
@@ -2208,6 +2357,7 @@
                                                                                 "
                                                                             >
                                                                                 <mat-select
+                                                                                    #unitSelect
                                                                                     *ngIf="
                                                                                         activeEntryIndex === entryIndex
                                                                                     "
@@ -2712,6 +2862,12 @@
                                                                     color="primary"
                                                                     formControlName="isChecked"
                                                                     (change)="openOtherTaxDialog(entry, entryIndex)"
+                                                                    #otherTaxRef
+                                                                    (keydown.enter)="
+                                                                        $event.preventDefault();
+                                                                        otherTaxRef.toggle();
+                                                                        openOtherTaxDialog(entry, entryIndex)
+                                                                    "
                                                                 >
                                                                 </mat-checkbox>
                                                                 {{ localeData?.other_tax }}
@@ -2738,6 +2894,16 @@
                                                                             aria-label="edit-icon"
                                                                             *ngIf="!isEinvoiceGenerated"
                                                                             (click)="
+                                                                                openOtherTaxDialog(entry, entryIndex)
+                                                                            "
+                                                                            tabindex="0"
+                                                                            cdkMonitorElementFocus
+                                                                            (keydown.enter)="
+                                                                                $event.preventDefault();
+                                                                                openOtherTaxDialog(entry, entryIndex)
+                                                                            "
+                                                                            (keydown.space)="
+                                                                                $event.preventDefault();
                                                                                 openOtherTaxDialog(entry, entryIndex)
                                                                             "
                                                                         >
@@ -2792,6 +2958,14 @@
 
                                                         <!-- Delete Row Button -->
                                                         <i
+                                                            tabindex="0"
+                                                            cdkMonitorElementFocus
+                                                            (keydown.enter)="
+                                                                $event.preventDefault(); deleteLineEntry(entryIndex)
+                                                            "
+                                                            (keydown.space)="
+                                                                $event.preventDefault(); deleteLineEntry(entryIndex)
+                                                            "
                                                             class="icon-trash font-size-16 cursor-pointer delete-btn position-absolute"
                                                             (click)="deleteLineEntry(entryIndex)"
                                                         ></i>
@@ -2803,13 +2977,27 @@
                                 </div>
                                 <!-- Add new row/line -->
                                 <div class="text-primary mt-2 px-0">
-                                    <span class="cursor-pointer" (click)="addNewLineEntry()">{{
-                                        localeData?.add_new_line
-                                    }}</span>
+                                    <span
+                                        class="cursor-pointer"
+                                        tabindex="0"
+                                        role="button"
+                                        cdkMonitorElementFocus
+                                        (keydown.enter)="$event.preventDefault(); addNewLineEntry()"
+                                        (keydown.space)="$event.preventDefault(); addNewLineEntry()"
+                                        (click)="addNewLineEntry()"
+                                        >{{ localeData?.add_new_line }}</span
+                                    >
                                     <span class="grey-color px-2">|</span>
-                                    <span class="cursor-pointer" (click)="openBulkEntryDialog()">{{
-                                        localeData?.add_bulk_entries
-                                    }}</span>
+                                    <span
+                                        class="cursor-pointer"
+                                        tabindex="0"
+                                        role="button"
+                                        cdkMonitorElementFocus
+                                        (keydown.enter)="$event.preventDefault(); openBulkEntryDialog()"
+                                        (keydown.space)="$event.preventDefault(); openBulkEntryDialog()"
+                                        (click)="openBulkEntryDialog()"
+                                        >{{ localeData?.add_bulk_entries }}</span
+                                    >
                                 </div>
 
                                 <div class="vouchers-other-detail container-lg mt-4 px-0">
@@ -2884,6 +3072,10 @@
                                                                                         "
                                                                                         [options]="
                                                                                             briefAccounts$ | async
+                                                                                        "
+                                                                                        [openDropdown]="
+                                                                                            activeDepositIndex ===
+                                                                                            depositIndex
                                                                                         "
                                                                                         (onClear)="
                                                                                             selectedDepositAccount(
@@ -3005,7 +3197,22 @@
                                                                                                     true
                                                                                                 )
                                                                                             "
-                                                                                            class="icon-edit text-primary font-size-12"
+                                                                                            tabindex="0"
+                                                                                            role="button"
+                                                                                            cdkMonitorElementFocus
+                                                                                            (keydown.enter)="
+                                                                                                $event.preventDefault();
+                                                                                                openAdjustmentDialog(
+                                                                                                    true
+                                                                                                )
+                                                                                            "
+                                                                                            (keydown.space)="
+                                                                                                $event.preventDefault();
+                                                                                                openAdjustmentDialog(
+                                                                                                    true
+                                                                                                )
+                                                                                            "
+                                                                                            class="icon-edit text-primary font-size-15"
                                                                                         ></i>
                                                                                     </div>
                                                                                     <i
@@ -3014,6 +3221,21 @@
                                                                                             currentVoucherFormDetails?.depositAllowed &&
                                                                                             !isUpdateMode &&
                                                                                             !invoiceType.isCashInvoice
+                                                                                        "
+                                                                                        tabindex="0"
+                                                                                        role="button"
+                                                                                        cdkMonitorElementFocus
+                                                                                        (keydown.enter)="
+                                                                                            $event.preventDefault();
+                                                                                            deleteDepositRow(
+                                                                                                depositIndex
+                                                                                            )
+                                                                                        "
+                                                                                        (keydown.space)="
+                                                                                            $event.preventDefault();
+                                                                                            deleteDepositRow(
+                                                                                                depositIndex
+                                                                                            )
                                                                                         "
                                                                                         (click)="
                                                                                             deleteDepositRow(
@@ -3036,7 +3258,17 @@
                                                                 >
                                                                     <span
                                                                         class="cursor-pointer"
-                                                                        (click)="addNewDepositRow()"
+                                                                        tabindex="0"
+                                                                        cdkMonitorElementFocus
+                                                                        (keydown.enter)="
+                                                                            $event.preventDefault();
+                                                                            addNewDepositRow(true)
+                                                                        "
+                                                                        (keydown.space)="
+                                                                            $event.preventDefault();
+                                                                            addNewDepositRow(true)
+                                                                        "
+                                                                        (click)="addNewDepositRow(true)"
                                                                         >{{ localeData?.add_new_line }}</span
                                                                     >
                                                                 </div>
@@ -3069,6 +3301,7 @@
                                                                                     $event.preventDefault()
                                                                                 "
                                                                                 [label]="templateData?.shippedDateLabel"
+                                                                                [closeDatepickerOnFocus]="true"
                                                                                 [placeholder]="'DD-MM-YYYY'"
                                                                                 name="shippingDate"
                                                                                 [showToggleIcon]="false"
@@ -3200,14 +3433,31 @@
                                                                                 class="vouchers-attachment mat-form-field-border d-flex align-items-center column-gap-1 p-2"
                                                                                 [matTooltip]="'No file chosen'"
                                                                                 matTooltipPosition="right"
+                                                                                tabindex="0"
+                                                                                role="button"
+                                                                                [attr.aria-label]="
+                                                                                    localeData?.attach_file
+                                                                                "
+                                                                                cdkMonitorElementFocus
+                                                                                (keydown.enter)="
+                                                                                    $event.preventDefault();
+                                                                                    triggerFileInput()
+                                                                                "
+                                                                                (keydown.space)="
+                                                                                    $event.preventDefault();
+                                                                                    triggerFileInput()
+                                                                                "
                                                                             >
                                                                                 <input
                                                                                     type="file"
+                                                                                    #fileInput
                                                                                     class="position-absolute"
                                                                                     name="invoiceFile"
                                                                                     id="invoiceFile"
                                                                                     (change)="uploadFile(false)"
                                                                                     droppable="true"
+                                                                                    tabindex="-1"
+                                                                                    aria-hidden="true"
                                                                                 />
                                                                                 <ng-container *ngIf="isFileUploading">
                                                                                     <mat-spinner
@@ -3672,7 +3922,7 @@
                                         >
                                             <i class="caret rotate-180"></i>
                                         </button>
-                                        <mat-menu #moreOptions="matMenu">
+                                        <mat-menu #moreOptions="matMenu" yPosition="above">
                                             <button mat-menu-item (click)="createSendVoucher()">
                                                 {{ localeData?.create_send }}
                                             </button>
@@ -3720,6 +3970,7 @@
         [selectedGrpUniqueName]="accountParentGroup === 'bankaccounts' ? '' : accountParentGroup"
         [allGroups]="accountParentGroup === 'bankaccounts' ? true : false"
         [keyboardShortcut]="{ 'esc': !hasUnsavedChanges }"
+        [config]="{ dialogMode: true }"
         [selectedAccountUniqueName]="
             accountParentGroup !== 'bankaccounts' && !createNewAccount
                 ? invoiceForm.controls['account'].get('uniqueName')?.value

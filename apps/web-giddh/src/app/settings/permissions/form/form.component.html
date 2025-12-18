@@ -124,7 +124,7 @@
                                         <input-field
                                             [label]="localeData?.select_past_period_label"
                                             [name]="'duration'"
-                                            [allowDigitsOnly]="true"
+                                            [allowDecimalDigitsOnly]="true"
                                             formControlName="duration"
                                             [type]="'number'"
                                             [placeholder]="localeData?.select_past_period_placeholder"
@@ -270,6 +270,9 @@
                     >
                         <span *ngIf="!isUpdtCase">{{ commonLocaleData?.app_add }}</span>
                         <span *ngIf="isUpdtCase">{{ commonLocaleData?.app_update }}</span>
+                    </button>
+                    <button *ngIf="isUpdtCase" (click)="closeDialog.emit(false)" mat-stroked-button type="button">
+                        {{ commonLocaleData?.app_cancel }}
                     </button>
                 </div>
             </div>

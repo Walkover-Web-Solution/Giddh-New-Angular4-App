@@ -239,8 +239,8 @@
                             </td>
                         </ng-container>
                     </ng-container>
-                    
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                     <ng-container *ngIf="!shouldShowLoader">
                         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                     </ng-container>
@@ -372,9 +372,6 @@
             <div>
                 <div class="dialog-header">
                     <span>{{ commonLocaleData?.app_confirmation }}</span>
-                    <button mat-icon-button aria-label="close" mat-dialog-close>
-                        <i class="icon-cross"></i>
-                    </button>
                 </div>
                 <mat-dialog-content class="dialog-body">
                     <form name="newRole" novalidate autocomplete="off">
@@ -394,7 +391,7 @@
                             <button
                                 mat-dialog-close
                                 mat-stroked-button
-                                type="submit"
+                                type="button"
                                 class="btn custom-btn"
                                 [attr.aria-label]="commonLocaleData?.app_no"
                             >

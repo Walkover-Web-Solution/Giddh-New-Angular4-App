@@ -42,7 +42,10 @@ export class SettingPermissionFormComponent implements OnInit, OnDestroy {
     @Input() public localeData: any = {};
     /* This will hold common JSON data */
     @Input() public commonLocaleData: any = {};
+    /** Emits when form is submitted */
     @Output() public onSubmitForm: EventEmitter<any> = new EventEmitter(null);
+    /** Emits when dialog is closed */
+    @Output() public closeDialog: EventEmitter<any> = new EventEmitter(null);
     /** Emits true if form has unsaved changes */
     @Output() public hasUnsavedChanges: EventEmitter<boolean> = new EventEmitter(null);
     public showTimeSpan: boolean = false;

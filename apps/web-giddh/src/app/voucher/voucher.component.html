@@ -65,8 +65,8 @@
                                                             invoiceType !== 'cash' &&
                                                             invoiceType !== 'purchase' &&
                                                             voucherApiVersion === 2 &&
-                                                                invoiceType !== 'debit note' &&
-                                                                invoiceType !== 'credit note')
+                                                            invoiceType !== 'debit note' &&
+                                                            invoiceType !== 'credit note')
                                                     "
                                                     [labelValue]="invFormData.voucherDetails.customerName"
                                                     [createNewText]="customerNotFoundText"
@@ -2290,7 +2290,6 @@
                                                                                 "
                                                                                 id="transaction.date_{{ entryIdx }}"
                                                                                 [disabled]="isUpdateMode"
-                                                                                [cssClass]="'entry-custom-date'"
                                                                                 name="transaction.date_{{ entryIdx }}"
                                                                                 [(ngModel)]="entry.entryDate"
                                                                                 [appearance]="'fill'"
@@ -2392,7 +2391,7 @@
                                                                                 [type]="'number'"
                                                                                 [cssClass]="'form-control hsn-sac-code'"
                                                                                 maxLength="10"
-                                                                                [allowDigitsOnly]="true"
+                                                                                [allowDecimalDigitsOnly]="true"
                                                                                 [placeholder]="localeData?.hsn_number"
                                                                                 [name]="
                                                                                     'transaction.hsnNumber_' + entryIdx
@@ -2408,7 +2407,7 @@
                                                                                 [type]="'number'"
                                                                                 [cssClass]="'form-control hsn-sac-code'"
                                                                                 maxLength="10"
-                                                                                [allowDigitsOnly]="true"
+                                                                                [allowDecimalDigitsOnly]="true"
                                                                                 [placeholder]="localeData?.sac_number"
                                                                                 [name]="
                                                                                     'transaction.hsnNumber_' + entryIdx
@@ -3923,10 +3922,8 @@
         [@slideInOut]="accountAsideMenuState"
         (closeAsideEvent)="toggleAccountAsidePane($event)"
         [selectedGrpUniqueName]="selectedGrpUniqueNameForAddEditAccountModal"
-        [keyboardShortcut]="{ 'esc': accountAsideMenuState === 'in' && !hasUnsavedChanges }"
         *ngIf="accountAsideMenuState === 'in'"
         [selectedAccountUniqueName]="selectedCustomerForDetails"
-        (onShortcutPress)="toggleAccountAsidePane()"
         (addEvent)="addNewSidebarAccount($event)"
         (updateEvent)="updateSidebarAccount($event)"
     >

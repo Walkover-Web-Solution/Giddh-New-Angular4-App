@@ -10,9 +10,6 @@
                     : inputData?.localeData?.purchase_register_export
             }}
         </span>
-        <button mat-icon-button aria-label="close" (click)="onCancel()">
-            <i class="icon-cross"></i>
-        </button>
     </div>
     <mat-dialog-content class="dialog-body">
         <p class="pb-3">
@@ -174,9 +171,12 @@
                 </div>
             </div>
         </form>
-        <div class="d-flex justify-content-end">
+        <div class="d-flex justify-content-end column-gap-1">
             <button mat-raised-button color="primary" (click)="export()">
                 {{ inputData?.commonLocaleData?.app_download }}
+            </button>
+            <button mat-stroked-button type="button" (click)="onCancel()">
+                {{ inputData?.commonLocaleData?.app_cancel }}
             </button>
         </div>
     </mat-dialog-content>

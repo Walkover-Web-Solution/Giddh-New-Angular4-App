@@ -7,8 +7,9 @@
     <div>
         <!-- Dialog Header -->
         <div class="dialog-header">
-            <span class="font-size-16">{{ inputData?.isCreateFlow ? localeData?.create_project : localeData?.update_project }}</span>
-            <i mat-dialog-close class="icon-cross"></i>
+            <span class="font-size-16">{{
+                inputData?.isCreateFlow ? localeData?.create_project : localeData?.update_project
+            }}</span>
         </div>
 
         <!-- Dialog Body -->
@@ -26,9 +27,9 @@
                 *ngIf="!(isSavingProject$ | async)"
             >
                 <div class="col-8">
-                    <input-field 
+                    <input-field
                         [type]="'text'"
-                        [name]="'projectName'" 
+                        [name]="'projectName'"
                         [placeholder]="localeData.enter_project_name"
                         [label]="localeData.project_name"
                         formControlName="projectName"

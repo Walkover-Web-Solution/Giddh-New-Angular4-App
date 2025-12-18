@@ -23,7 +23,9 @@
                         <div class="clear-both p-3 pb-0">
                             <div class="date-advance-search row">
                                 <div class="col-sm-12 mb-3 d-flex justify-content-between">
-                                    <form class="form-inline input-group-date-range-picker position-relative d-flex flex-row mr-0">
+                                    <form
+                                        class="form-inline input-group-date-range-picker position-relative d-flex flex-row mr-0"
+                                    >
                                         <div class="mr-1 branch-header-content w-100">
                                             <div class="search-field form-top-fields w-100">
                                                 <div class="search-branch-box">
@@ -159,25 +161,37 @@
                                                                         class="cursor-pointer"
                                                                         cdkOverlayOrigin
                                                                         #addressTemplate="cdkOverlayOrigin"
-                                                                        (mouseenter)="openAddressInfo(true, address?.uniqueName + branch.uniqueName)"
+                                                                        (mouseenter)="
+                                                                            openAddressInfo(
+                                                                                true,
+                                                                                address?.uniqueName + branch.uniqueName
+                                                                            )
+                                                                        "
                                                                         (mouseleave)="openAddressInfo(false)"
                                                                     >
-                                                                    <i
-                                                                        (click)="setDefault(address, branch, 'address')"
-                                                                        *ngIf="!address?.isDefault"
-                                                                        class="cursor-pointer icon-no-selected mr-1"
-                                                                    ></i>
-                                                                    <i
-                                                                        (click)="setDefault(address, branch, 'address')"
-                                                                        *ngIf="address?.isDefault"
-                                                                        class="cursor-pointer icon-favorite-selected mr-1"
-                                                                    ></i>
+                                                                        <i
+                                                                            (click)="
+                                                                                setDefault(address, branch, 'address')
+                                                                            "
+                                                                            *ngIf="!address?.isDefault"
+                                                                            class="cursor-pointer icon-no-selected mr-1"
+                                                                        ></i>
+                                                                        <i
+                                                                            (click)="
+                                                                                setDefault(address, branch, 'address')
+                                                                            "
+                                                                            *ngIf="address?.isDefault"
+                                                                            class="cursor-pointer icon-favorite-selected mr-1"
+                                                                        ></i>
                                                                         {{ address?.name }}
                                                                     </span>
                                                                     <ng-template
                                                                         cdkConnectedOverlay
                                                                         [cdkConnectedOverlayOrigin]="addressTemplate"
-                                                                        [cdkConnectedOverlayOpen]="isAddressInfoOpen === (address?.uniqueName + branch.uniqueName)"
+                                                                        [cdkConnectedOverlayOpen]="
+                                                                            isAddressInfoOpen ===
+                                                                            address?.uniqueName + branch.uniqueName
+                                                                        "
                                                                         [cdkConnectedOverlayPositions]="[
                                                                             {
                                                                                 originX: 'end',
@@ -186,13 +200,25 @@
                                                                                 overlayY: 'center',
                                                                                 offsetX: 8
                                                                             }
-                                                                        ]">
-                                                                        <div class="tax-tooltip font-size-14 custom-cdk-overlay-wrapper " (mouseenter)="openAddressInfo(true, address?.uniqueName + branch.uniqueName)"
-                                                                        (mouseleave)="openAddressInfo(false)">
-                                                                            {{ address?.address }} {{ address?.stateCode }}
+                                                                        ]"
+                                                                    >
+                                                                        <div
+                                                                            class="tax-tooltip font-size-14 custom-cdk-overlay-wrapper"
+                                                                            (mouseenter)="
+                                                                                openAddressInfo(
+                                                                                    true,
+                                                                                    address?.uniqueName +
+                                                                                        branch.uniqueName
+                                                                                )
+                                                                            "
+                                                                            (mouseleave)="openAddressInfo(false)"
+                                                                        >
+                                                                            {{ address?.address }}
+                                                                            {{ address?.stateCode }}
                                                                             <p
                                                                                 *ngIf="
-                                                                                    address?.taxType && address?.taxNumber
+                                                                                    address?.taxType &&
+                                                                                    address?.taxNumber
                                                                                 "
                                                                             >
                                                                                 {{ address?.taxType }} :
@@ -271,9 +297,6 @@
                                     <div class="modal-content">
                                         <div class="dialog-header clear-both">
                                             <span>{{ commonLocaleData?.app_confirmation }}</span>
-                                            <button mat-icon-button aria-label="close" mat-dialog-close (click)="onUserConfirmation(false)">
-                                                <i class="icon-cross"></i>
-                                            </button>
                                         </div>
                                         <mat-dialog-content class="dialog-body">
                                             <div [innerHTML]="confirmationMessage"></div>
@@ -287,6 +310,7 @@
                                                 </button>
                                                 <button
                                                     mat-stroked-button
+                                                    role="button"
                                                     (click)="onUserConfirmation(false)"
                                                 >
                                                     {{ commonLocaleData?.app_no }}

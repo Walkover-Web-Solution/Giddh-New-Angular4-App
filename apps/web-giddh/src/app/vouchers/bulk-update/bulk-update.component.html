@@ -1,6 +1,5 @@
 <div class="dialog-header">
-    <span class="font-size-16">{{ localeData?.bulk_update }}</span>
-    <i mat-dialog-close class="icon-cross icon-font-size-16"></i>
+    <span>{{ localeData?.bulk_update }}</span>
 </div>
 <ng-container *ngIf="!isPOVoucher">
     <div mat-dialog-content class="dialog-body" [formGroup]="bulkUpdateForm">
@@ -11,7 +10,7 @@
                 [placeholder]="commonLocaleData?.app_select"
                 [options]="fieldOptions"
                 formControlName="selectedField"
-                (selectedOption)="resetFormData(); handleSelectedFieldSelect();"
+                (selectedOption)="resetFormData(); handleSelectedFieldSelect()"
                 class="w-100"
             >
             </reactive-dropdown-field>
@@ -143,7 +142,7 @@
             >
                 {{ commonLocaleData?.app_update }}
             </button>
-            <button mat-stroked-button (click)="onCancel()">{{ commonLocaleData?.app_cancel }}</button>
+            <button mat-stroked-button role="button" (click)="onCancel()">{{ commonLocaleData?.app_cancel }}</button>
         </div>
     </div>
 </ng-container>
@@ -208,7 +207,7 @@
             >
                 {{ commonLocaleData?.app_update }}
             </button>
-            <button mat-stroked-button (click)="onCancel()">{{ commonLocaleData?.app_cancel }}</button>
+            <button mat-stroked-button (click)="onCancel()" role="button">{{ commonLocaleData?.app_cancel }}</button>
         </div>
     </div>
 </ng-container>

@@ -90,6 +90,8 @@
                                     <div
                                         class="input-group-addon d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1"
                                         (click)="openingBalanceTypeChanged('DEBIT')"
+                                        (keydown.enter)="$event.preventDefault(); openingBalanceTypeChanged('DEBIT')"
+                                        (keydown.space)="$event.preventDefault(); openingBalanceTypeChanged('DEBIT')"
                                         [ngClass]="{
                                             'active-toggle-btn':
                                                 addAccountForm.get('openingBalanceType')?.value === 'DEBIT',
@@ -98,12 +100,21 @@
                                                 addAccountForm.get('foreignOpeningBalance')?.value > 0
                                         }"
                                         *ngIf="addAccountForm.get('openingBalance')?.value > 0"
+                                        tabindex="0"
+                                        role="button"
+                                        cdkMonitorElementFocus
+                                        [attr.aria-pressed]="
+                                            addAccountForm.get('openingBalanceType')?.value === 'DEBIT'
+                                        "
+                                        [attr.aria-label]="'Select debit balance type'"
                                     >
                                         {{ commonLocaleData?.app_dr?.toUpperCase() }}
                                     </div>
                                     <div
                                         class="only-right-radius input-group-addon d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1"
                                         (click)="openingBalanceTypeChanged('CREDIT')"
+                                        (keydown.enter)="$event.preventDefault(); openingBalanceTypeChanged('CREDIT')"
+                                        (keydown.space)="$event.preventDefault(); openingBalanceTypeChanged('CREDIT')"
                                         [ngClass]="{
                                             'active-toggle-btn':
                                                 addAccountForm.get('openingBalanceType')?.value === 'CREDIT',
@@ -112,6 +123,13 @@
                                                 addAccountForm.get('foreignOpeningBalance')?.value > 0
                                         }"
                                         *ngIf="addAccountForm.get('openingBalance')?.value > 0"
+                                        tabindex="0"
+                                        role="button"
+                                        cdkMonitorElementFocus
+                                        [attr.aria-pressed]="
+                                            addAccountForm.get('openingBalanceType')?.value === 'CREDIT'
+                                        "
+                                        [attr.aria-label]="'Select credit balance type'"
                                     >
                                         {{ commonLocaleData?.app_cr?.toUpperCase() }}
                                     </div>
@@ -141,7 +159,6 @@
                             [options]="salesPersonList$ | async"
                             [showCreateNew]="true"
                             (selectedOption)="addAccountForm.get('salesPersonName')?.patchValue($event?.label)"
-                            [createNewText]="commonLocaleData?.app_create_new"
                             (createOption)="openSalesPersonDialog()"
                         ></reactive-dropdown-field>
                     </div>
@@ -172,24 +189,38 @@
                                 <div
                                     class="input-group-addon d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1"
                                     (click)="openingBalanceTypeChanged('DEBIT')"
+                                    (keydown.enter)="$event.preventDefault(); openingBalanceTypeChanged('DEBIT')"
+                                    (keydown.space)="$event.preventDefault(); openingBalanceTypeChanged('DEBIT')"
                                     [ngClass]="{
                                         'active-toggle-btn':
                                             addAccountForm.get('openingBalanceType')?.value === 'DEBIT',
                                         'cursor-pointer': addAccountForm.get('foreignOpeningBalance')?.value > 0
                                     }"
                                     *ngIf="addAccountForm.get('foreignOpeningBalance')?.value > 0"
+                                    tabindex="0"
+                                    role="button"
+                                    cdkMonitorElementFocus
+                                    [attr.aria-pressed]="addAccountForm.get('openingBalanceType')?.value === 'DEBIT'"
+                                    [attr.aria-label]="'Select debit balance type for foreign opening balance'"
                                 >
                                     {{ commonLocaleData?.app_dr?.toUpperCase() }}
                                 </div>
                                 <div
                                     class="only-right-radius input-group-addon d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1"
                                     (click)="openingBalanceTypeChanged('CREDIT')"
+                                    (keydown.enter)="$event.preventDefault(); openingBalanceTypeChanged('CREDIT')"
+                                    (keydown.space)="$event.preventDefault(); openingBalanceTypeChanged('CREDIT')"
                                     [ngClass]="{
                                         'active-toggle-btn':
                                             addAccountForm.get('openingBalanceType')?.value === 'CREDIT',
                                         'cursor-pointer': addAccountForm.get('foreignOpeningBalance')?.value > 0
                                     }"
                                     *ngIf="addAccountForm.get('foreignOpeningBalance')?.value > 0"
+                                    tabindex="0"
+                                    role="button"
+                                    cdkMonitorElementFocus
+                                    [attr.aria-pressed]="addAccountForm.get('openingBalanceType')?.value === 'CREDIT'"
+                                    [attr.aria-label]="'Select credit balance type for foreign opening balance'"
                                 >
                                     {{ commonLocaleData?.app_cr?.toUpperCase() }}
                                 </div>
@@ -225,7 +256,7 @@
                             [type]="'number'"
                             formControlName="hsnNumber"
                             (change)="openConfirmLeaveDialog()"
-                            [allowDigitsOnly]="true"
+                            [allowDecimalDigitsOnly]="true"
                             *ngIf="addAccountForm.get('hsnOrSac')?.value === 'hsn'"
                         >
                         </input-field>
@@ -236,7 +267,7 @@
                             [type]="'number'"
                             formControlName="sacNumber"
                             (change)="openConfirmLeaveDialog()"
-                            [allowDigitsOnly]="true"
+                            [allowDecimalDigitsOnly]="true"
                             *ngIf="addAccountForm.get('hsnOrSac')?.value === 'sac'"
                         >
                         </input-field>
@@ -254,7 +285,11 @@
             animationDuration="0ms"
         >
             <mat-tab [label]="localeData?.tabs?.address" class="gstin-address" *ngIf="!isHsnSacEnabledAcc">
-                <div class="pt-3 overflow-hidden" formArrayName="addresses">
+                <div
+                    class="pt-3 px-1 overflow-hidden"
+                    formArrayName="addresses"
+                    *ngIf="addAccountForm.get('addresses')?.length"
+                >
                     <ng-container
                         *ngFor="
                             let gst of addAccountForm.get('addresses')['controls'] | slice : 0 : gstDetailsLength;
@@ -376,7 +411,7 @@
                                     "
                                     [type]="'number'"
                                     [formControl]="addAccountForm.controls.addresses?.controls?.[i].controls?.pincode"
-                                    [allowDigitsOnly]="true"
+                                    [allowDecimalDigitsOnly]="true"
                                     (change)="openConfirmLeaveDialog()"
                                 >
                                 </input-field>
@@ -436,7 +471,7 @@
             </mat-tab>
 
             <mat-tab [label]="localeData?.tabs?.contact" class="contact-form-wrap">
-                <div class="pt-3 overflow-hidden pb-5">
+                <div class="pt-3 px-1 overflow-hidden pb-5">
                     <div class="row pb-4">
                         <div class="col-sm-6">
                             <input-field
@@ -492,9 +527,9 @@
                     (activeGroupUniqueName === accountingGroupEnum.SundryDebtors || isParentSundryDebtors)
                 "
             >
-                <div formArrayName="portalDomain" class="pt-3 overflow-hidden pb-5">
+                <div formArrayName="portalDomain" class="pt-3 px-1 overflow-hidden pb-5">
                     <div
-                        class="row pb-4"
+                        class="row pb-4 align-items-center"
                         *ngFor="let domain of addAccountForm?.get('portalDomain')['controls']; let i = index"
                         [formGroupName]="i"
                     >
@@ -506,7 +541,9 @@
                                 [placeholder]="localeData?.portal_attention_to"
                                 [type]="'email'"
                                 (input)="portalIndex = i"
+                                [autoFocus]="activePortalIndex === i"
                                 formControlName="name"
+                                ]
                             >
                             </input-field>
                         </div>
@@ -569,14 +606,28 @@
                             </span>
                         </div>
                         <div class="pl-2 mt-1">
-                            <button mat-stroked-button (click)="removePortalUser(domain, i)" aria-label="delete icon">
+                            <button
+                                mat-stroked-button
+                                (click)="removePortalUser(domain, i)"
+                                class="btn-stroked-icon"
+                                aria-label="delete icon"
+                            >
                                 <i class="icon-trash text-red"></i>
                             </button>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-lg-12">
-                            <a class="mr-0 add-new" href="javascript:void(0);" (click)="addNewPortalUser()">
+                            <a
+                                class="mr-0 add-new"
+                                href="javascript:void(0);"
+                                (click)="addNewPortalUser(null, true)"
+                                tabindex="0"
+                                role="button"
+                                cdkMonitorElementFocus
+                                (keydown.enter)="$event.preventDefault(); addNewPortalUser(null, true)"
+                                (keydown.space)="$event.preventDefault(); addNewPortalUser(null, true)"
+                            >
                                 <i class="icon-plus"></i> {{ localeData?.portal_add_user }}
                             </a>
                         </div>
@@ -587,7 +638,7 @@
 
             <!-- bank details visible when sundry creditors selected , right now is hide -->
             <mat-tab [label]="localeData?.tabs?.bank_details" class="bank-details-form" *ngIf="showBankDetail">
-                <div *ngIf="showBankDetail" class="pt-3 overflow-hidden">
+                <div *ngIf="showBankDetail" class="pt-3 px-1 overflow-hidden">
                     <div formArrayName="accountBankDetails">
                         <div
                             class="row"
@@ -702,7 +753,7 @@
             </mat-tab>
 
             <mat-tab [label]="localeData?.tabs?.others" class="other-form-wrap">
-                <div class="pt-3 overflow-hidden">
+                <div class="pt-3 px-1 overflow-hidden">
                     <div class="row">
                         <div class="col-sm-6">
                             <input-field
@@ -748,6 +799,8 @@
                                     <div
                                         class="input-group-addon d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1"
                                         (click)="closingBalanceTypeChanged('DEBIT')"
+                                        (keydown.enter)="$event.preventDefault(); closingBalanceTypeChanged('DEBIT')"
+                                        (keydown.space)="$event.preventDefault(); closingBalanceTypeChanged('DEBIT')"
                                         [ngClass]="{
                                             'active-toggle-btn':
                                                 addAccountForm.get('closingBalanceTriggerAmountType')?.value ===
@@ -756,12 +809,21 @@
                                                 addAccountForm.get('closingBalanceTriggerAmount')?.value > 0
                                         }"
                                         *ngIf="addAccountForm.get('closingBalanceTriggerAmount')?.value > 0"
+                                        tabindex="0"
+                                        role="button"
+                                        cdkMonitorElementFocus
+                                        [attr.aria-pressed]="
+                                            addAccountForm.get('closingBalanceTriggerAmountType')?.value === 'DEBIT'
+                                        "
+                                        [attr.aria-label]="'Select debit balance type for closing balance trigger'"
                                     >
                                         {{ commonLocaleData?.app_dr?.toUpperCase() }}
                                     </div>
                                     <div
                                         class="input-group-addon only-right-radius d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1"
                                         (click)="closingBalanceTypeChanged('CREDIT')"
+                                        (keydown.enter)="$event.preventDefault(); closingBalanceTypeChanged('CREDIT')"
+                                        (keydown.space)="$event.preventDefault(); closingBalanceTypeChanged('CREDIT')"
                                         [ngClass]="{
                                             'active-toggle-btn':
                                                 addAccountForm.get('closingBalanceTriggerAmountType')?.value ===
@@ -770,6 +832,13 @@
                                                 addAccountForm.get('closingBalanceTriggerAmount')?.value > 0
                                         }"
                                         *ngIf="addAccountForm.get('closingBalanceTriggerAmount')?.value > 0"
+                                        tabindex="0"
+                                        role="button"
+                                        cdkMonitorElementFocus
+                                        [attr.aria-pressed]="
+                                            addAccountForm.get('closingBalanceTriggerAmountType')?.value === 'CREDIT'
+                                        "
+                                        [attr.aria-label]="'Select credit balance type for closing balance trigger'"
                                     >
                                         {{ commonLocaleData?.app_cr?.toUpperCase() }}
                                     </div>
@@ -786,7 +855,7 @@
                                 [placeholder]="'00'"
                                 [type]="'text'"
                                 [maxlength]="3"
-                                [allowDigitsOnly]="true"
+                                [allowDecimalDigitsOnly]="true"
                                 formControlName="duePeriod"
                                 class="settings-field d-block expiry-days-input-width"
                                 [matSuffix]="commonLocaleData?.app_days"
@@ -813,8 +882,8 @@
 
             <mat-tab [label]="localeData?.tabs?.custom">
                 <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isCustomFieldLoading"></giddh-page-loader>
-                <div class="pt-3 overflow-hidden">
-                    <ng-container *ngIf="addAccountForm?.get('addresses')?.value?.length" formArrayName="customFields">
+                <div class="pt-3 px-1 overflow-hidden" *ngIf="addAccountForm.get('customFields')?.length">
+                    <ng-container formArrayName="customFields">
                         <ng-container
                             *ngFor="
                                 let item of companyCustomFields;
@@ -1066,15 +1135,7 @@
                                 cdkConnectedOverlay
                                 [cdkConnectedOverlayOrigin]="discountTrigger"
                                 [cdkConnectedOverlayOpen]="currentDiscount === inAppDiscount"
-                                [cdkConnectedOverlayPositions]="[
-                                    {
-                                        originX: 'end',
-                                        originY: 'center',
-                                        overlayX: 'start',
-                                        overlayY: 'center',
-                                        offsetX: 8
-                                    }
-                                ]"
+                                [cdkConnectedOverlayPositions]="overlayPositions"
                             >
                                 <div class="tax-tooltip bg-gray font-size-14 custom-cdk-overlay-wrapper">
                                     <div>
@@ -1144,15 +1205,7 @@
                                         cdkConnectedOverlay
                                         [cdkConnectedOverlayOrigin]="taxTrigger"
                                         [cdkConnectedOverlayOpen]="currentTax === inAppTax"
-                                        [cdkConnectedOverlayPositions]="[
-                                            {
-                                                originX: 'end',
-                                                originY: 'center',
-                                                overlayX: 'start',
-                                                overlayY: 'center',
-                                                offsetX: 8
-                                            }
-                                        ]"
+                                        [cdkConnectedOverlayPositions]="overlayPositions"
                                     >
                                         <div class="tax-tooltip font-size-14 custom-cdk-overlay-wrapper">
                                             <div>

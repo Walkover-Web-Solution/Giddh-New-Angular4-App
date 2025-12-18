@@ -7,7 +7,7 @@
 >
     <div class="position-relative white-bg">
         <hamburger-menu></hamburger-menu>
-        
+
         <mat-tab-group
             #staticTabs
             class="custom-mat-tabs customer-aging table-header-sticky"
@@ -40,13 +40,14 @@
                                         [name]="'branch'"
                                         [options]="currentCompanyBranches"
                                         [labelValue]="currentBranch?.name"
-                                        (selectedOption)="handleBranchChange($event)">
+                                        (selectedOption)="handleBranchChange($event)"
+                                    >
                                     </reactive-dropdown-field>
 
                                     <!-- Universal Date Range Picker -->
                                     <div class="custom-datepicker-wrapper">
-                                        <div 
-                                            class="custom-datepicker" 
+                                        <div
+                                            class="custom-datepicker"
                                             [matMenuTriggerFor]="universalDatepicker"
                                             #universalDatepickerTrigger="matMenuTrigger"
                                             role="button"
@@ -265,7 +266,9 @@
                                         </div>
                                     </h5>
                                 </div>
-                                <div class="total-details-box mr-1 border-none sales-purchase min-width-230 max-width-378">
+                                <div
+                                    class="total-details-box mr-1 border-none sales-purchase min-width-230 max-width-378"
+                                >
                                     <h5>
                                         <span *ngIf="activeTab === 'vendor'">{{ commonLocaleData?.app_purchase }}</span>
                                         <span *ngIf="activeTab === 'customer'">{{ commonLocaleData?.app_sales }}</span>
@@ -282,7 +285,9 @@
                                         </div>
                                     </h5>
                                 </div>
-                                <div class="total-details-box mr-1 border-none payment-receipt min-width-230 max-width-378">
+                                <div
+                                    class="total-details-box mr-1 border-none payment-receipt min-width-230 max-width-378"
+                                >
                                     <h5>
                                         <span *ngIf="activeTab === 'vendor'">{{ commonLocaleData?.app_payment }}</span>
                                         <span *ngIf="activeTab === 'customer'">{{
@@ -327,8 +332,7 @@
                                     <ng-container *ngTemplateOutlet="mainTable"></ng-container>
                                 </div>
 
-                                <giddh-page-loader *ngIf="isGetAccountsInProcess">
-                                </giddh-page-loader>
+                                <giddh-page-loader *ngIf="isGetAccountsInProcess"> </giddh-page-loader>
                             </div>
                         </div>
                     </div>
@@ -351,9 +355,6 @@
         <div>
             <div class="dialog-header">
                 <span>{{ messageBody.header.set }}</span>
-                <button mat-icon-button aria-label="close"  (click)="closeAllDialogs()">
-                    <i class="icon-cross"></i>
-                </button>
             </div>
             <mat-dialog-content class="dialog-body">
                 <p class="mb-2 font-size-15" *ngIf="messageBody.type == 'Email'">{{ localeData?.enter_subject }}:</p>
@@ -384,15 +385,12 @@
                         }}</mat-chip>
                     </mat-chip-listbox>
                 </div>
-                <div class="mt-5">
-                    <button
-                        mat-raised-button
-                        color="primary"
-                        class="pull-right ml-2"
-                        (click)="send('sundrycreditors')"
-                        aria-label="set"
-                    >
+                <div class="mt-5 d-flex justify-content-end column-gap-1">
+                    <button mat-raised-button color="primary" (click)="send('sundrycreditors')" aria-label="set">
                         {{ messageBody.btn.set }}
+                    </button>
+                    <button role="button" mat-stroked-button (click)="closeAllDialogs()">
+                        {{ commonLocaleData?.app_cancel }}
                     </button>
                 </div>
             </mat-dialog-content>
@@ -405,9 +403,6 @@
         <div>
             <div class="dialog-header">
                 <span>{{ messageBody.header.set }}</span>
-                <button mat-icon-button aria-label="close" (click)="closeAllDialogs()">
-                    <i class="icon-cross"></i>
-                </button>
             </div>
 
             <mat-dialog-content class="dialog-body">
@@ -441,15 +436,12 @@
                     </mat-chip-listbox>
                 </div>
 
-                <div class="mt-5">
-                    <button
-                        mat-stroked-button
-                        color="primary"
-                        class="pull-right ml-2"
-                        (click)="send('sundrydebtors')"
-                        aria-label="set"
-                    >
+                <div class="mt-5 d-flex justify-content-end column-gap-1">
+                    <button mat-raised-button color="primary" (click)="send('sundrydebtors')" aria-label="set">
                         {{ messageBody.btn.set }}
+                    </button>
+                    <button role="button" mat-stroked-button (click)="closeAllDialogs()">
+                        {{ commonLocaleData?.app_cancel }}
                     </button>
                 </div>
             </mat-dialog-content>
@@ -490,7 +482,13 @@
                     (mouseleave)="showSelectAll = false"
                 >
                     <ng-container *ngFor="let customerColumn of dynamicCustomColumns">
-                        <ng-container *ngIf="displayedColumns.includes(customerColumn.value) && customerColumn.value === ContactsColumn.CUSTOMER_NAME" [matColumnDef]="customerColumn.value">
+                        <ng-container
+                            *ngIf="
+                                displayedColumns.includes(customerColumn.value) &&
+                                customerColumn.value === ContactsColumn.CUSTOMER_NAME
+                            "
+                            [matColumnDef]="customerColumn.value"
+                        >
                             <th
                                 class="mat-customer-name name-column"
                                 mat-header-cell
@@ -536,9 +534,12 @@
                                 [matTooltip]="account?.name"
                                 matTooltipPosition="above"
                                 class="hover-trigger name-column-td pl-2"
-                                [ngClass]="{'hover-trigger--active': selectedCheckedContacts.length}"
+                                [ngClass]="{ 'hover-trigger--active': selectedCheckedContacts.length }"
                             >
-                                <div class="d-flex align-items-center w-100 cursor-pointer" (dblclick)="trigger?.openMenu()">
+                                <div
+                                    class="d-flex align-items-center w-100 cursor-pointer"
+                                    (dblclick)="trigger?.openMenu()"
+                                >
                                     <mat-checkbox
                                         color="primary"
                                         class="mr-2 checkbox-left-side-in-table hover-target"
@@ -566,35 +567,35 @@
                                         <i class="icon-dots-three-vertical font-size-15"></i>
                                     </button>
 
-                                <mat-menu #editModelBasic="matMenu">
-                                    <div class="account-detail-custom-header">
-                                        <div class="d-flex p-0">
-                                            <div class="account-detail-padding flex-fill border-right-none">
-                                                <p class="account-detail-custom-title word-break">
-                                                    <span (click)="updateCustomerAcc('customer', account)">
-                                                        {{ account?.name }}
-                                                    </span>
-                                                </p>
+                                    <mat-menu #editModelBasic="matMenu">
+                                        <div class="account-detail-custom-header">
+                                            <div class="d-flex p-0">
+                                                <div class="account-detail-padding flex-fill border-right-none">
+                                                    <p class="account-detail-custom-title word-break">
+                                                        <span (click)="updateCustomerAcc('customer', account)">
+                                                            {{ account?.name }}
+                                                        </span>
+                                                    </p>
+                                                </div>
+                                                <a
+                                                    *ngIf="voucherApiVersion === 2"
+                                                    (click)="updateCustomerAcc('customer', account)"
+                                                    class="edit-icon pl-1 pt-1"
+                                                >
+                                                    <i class="icon-edit-pencil font-size-16 pr-1 cursor-pointer"></i>
+                                                </a>
                                             </div>
-                                            <a
-                                                *ngIf="voucherApiVersion === 2"
-                                                (click)="updateCustomerAcc('customer', account)"
-                                                class="edit-icon pl-1 pt-1"
-                                            >
-                                                <i class="icon-edit-pencil font-size-16 pr-1 cursor-pointer"></i>
-                                            </a>
+                                            <div class="custom-detail">
+                                                <p>{{ account?.mobileNo }}</p>
+                                                <p>{{ account?.email }}</p>
+                                                <p>{{ account?.gstIn }}</p>
+                                            </div>
                                         </div>
-                                        <div class="custom-detail">
-                                            <p>{{ account?.mobileNo }}</p>
-                                            <p>{{ account?.email }}</p>
-                                            <p>{{ account?.gstIn }}</p>
-                                        </div>
-                                    </div>
-                                    <button
-                                        mat-menu-item
-                                        class="menu-table-item"
-                                        (click)="performActions(1, account)"
-                                        aria-label="ledger"
+                                        <button
+                                            mat-menu-item
+                                            class="menu-table-item"
+                                            (click)="performActions(1, account)"
+                                            aria-label="ledger"
                                         >
                                             {{ commonLocaleData?.app_goto_ledger }}
                                         </button>
@@ -619,7 +620,13 @@
                             </td>
                         </ng-container>
 
-                        <ng-container *ngIf="displayedColumns.includes(customerColumn.value) && customerColumn.value === ContactsColumn.PARENT_GROUP" [matColumnDef]="customerColumn.value">
+                        <ng-container
+                            *ngIf="
+                                displayedColumns.includes(customerColumn.value) &&
+                                customerColumn.value === ContactsColumn.PARENT_GROUP
+                            "
+                            [matColumnDef]="customerColumn.value"
+                        >
                             <th mat-header-cell *matHeaderCellDef>
                                 <div class="d-flex align-items-center">
                                     {{ commonLocaleData?.app_parent_group }}
@@ -636,7 +643,13 @@
                             </td>
                         </ng-container>
 
-                        <ng-container *ngIf="displayedColumns.includes(customerColumn.value) && customerColumn.value === ContactsColumn.OPENING" [matColumnDef]="customerColumn.value">
+                        <ng-container
+                            *ngIf="
+                                displayedColumns.includes(customerColumn.value) &&
+                                customerColumn.value === ContactsColumn.OPENING
+                            "
+                            [matColumnDef]="customerColumn.value"
+                        >
                             <th mat-header-cell *matHeaderCellDef>
                                 <div class="d-flex justify-content-end align-items-center">
                                     {{ localeData?.opening }}
@@ -677,7 +690,13 @@
                             </td>
                         </ng-container>
 
-                        <ng-container *ngIf="displayedColumns.includes(customerColumn.value) && customerColumn.value === ContactsColumn.SALES" [matColumnDef]="customerColumn.value">
+                        <ng-container
+                            *ngIf="
+                                displayedColumns.includes(customerColumn.value) &&
+                                customerColumn.value === ContactsColumn.SALES
+                            "
+                            [matColumnDef]="customerColumn.value"
+                        >
                             <th mat-header-cell *matHeaderCellDef>
                                 <div class="d-flex justify-content-end align-items-center">
                                     {{ commonLocaleData?.app_sales }}
@@ -699,7 +718,13 @@
                             </td>
                         </ng-container>
 
-                        <ng-container *ngIf="displayedColumns.includes(customerColumn.value) && customerColumn.value === ContactsColumn.RECEIPT" [matColumnDef]="customerColumn.value">
+                        <ng-container
+                            *ngIf="
+                                displayedColumns.includes(customerColumn.value) &&
+                                customerColumn.value === ContactsColumn.RECEIPT
+                            "
+                            [matColumnDef]="customerColumn.value"
+                        >
                             <th mat-header-cell *matHeaderCellDef>
                                 <div class="d-flex justify-content-end align-items-center">
                                     {{ commonLocaleData?.app_receipt }}
@@ -721,7 +746,13 @@
                             </td>
                         </ng-container>
 
-                        <ng-container *ngIf="displayedColumns.includes(customerColumn.value) && customerColumn.value === ContactsColumn.CLOSING" [matColumnDef]="customerColumn.value">
+                        <ng-container
+                            *ngIf="
+                                displayedColumns.includes(customerColumn.value) &&
+                                customerColumn.value === ContactsColumn.CLOSING
+                            "
+                            [matColumnDef]="customerColumn.value"
+                        >
                             <th mat-header-cell *matHeaderCellDef>
                                 <div class="d-flex justify-content-end align-items-center">
                                     {{ localeData?.closing }}
@@ -762,7 +793,13 @@
                             </td>
                         </ng-container>
 
-                        <ng-container *ngIf="displayedColumns.includes(customerColumn.value) && customerColumn.value === ContactsColumn.CONTACTS" [matColumnDef]="customerColumn.value">
+                        <ng-container
+                            *ngIf="
+                                displayedColumns.includes(customerColumn.value) &&
+                                customerColumn.value === ContactsColumn.CONTACTS
+                            "
+                            [matColumnDef]="customerColumn.value"
+                        >
                             <th class="contact-header" mat-header-cell *matHeaderCellDef>
                                 <div class="d-flex">
                                     <div class="flex-fill">
@@ -785,7 +822,13 @@
                             </td>
                         </ng-container>
 
-                        <ng-container *ngIf="displayedColumns.includes(customerColumn.value) && customerColumn.value === ContactsColumn.GSTIN" [matColumnDef]="customerColumn.value">
+                        <ng-container
+                            *ngIf="
+                                displayedColumns.includes(customerColumn.value) &&
+                                customerColumn.value === ContactsColumn.GSTIN
+                            "
+                            [matColumnDef]="customerColumn.value"
+                        >
                             <th mat-header-cell *matHeaderCellDef>
                                 <div class="d-flex align-items-center">
                                     {{ commonLocaleData?.app_tax_number }}
@@ -798,7 +841,13 @@
                             </td>
                         </ng-container>
 
-                        <ng-container *ngIf="displayedColumns.includes(customerColumn.value) && customerColumn.value === ContactsColumn.STATE" [matColumnDef]="customerColumn.value">
+                        <ng-container
+                            *ngIf="
+                                displayedColumns.includes(customerColumn.value) &&
+                                customerColumn.value === ContactsColumn.STATE
+                            "
+                            [matColumnDef]="customerColumn.value"
+                        >
                             <th mat-header-cell *matHeaderCellDef>
                                 <div class="d-flex align-items-center">
                                     {{ commonLocaleData?.app_state }}
@@ -817,7 +866,13 @@
                             </td>
                         </ng-container>
 
-                        <ng-container *ngIf="displayedColumns.includes(customerColumn.value) && customerColumn.value === ContactsColumn.COMMENT" [matColumnDef]="customerColumn.value">
+                        <ng-container
+                            *ngIf="
+                                displayedColumns.includes(customerColumn.value) &&
+                                customerColumn.value === ContactsColumn.COMMENT
+                            "
+                            [matColumnDef]="customerColumn.value"
+                        >
                             <th class="comment-header" mat-header-cell *matHeaderCellDef>
                                 {{ localeData?.comment }}
                             </th>
@@ -943,9 +998,12 @@
                                 [matTooltip]="account?.name"
                                 matTooltipPosition="above"
                                 class="hover-trigger name-column-td pl-2"
-                                [ngClass]="{'hover-trigger--active': selectedCheckedContacts.length}"
+                                [ngClass]="{ 'hover-trigger--active': selectedCheckedContacts.length }"
                             >
-                                <div class="d-flex align-items-center w-100 cursor-pointer" (dblclick)="trigger?.openMenu()">
+                                <div
+                                    class="d-flex align-items-center w-100 cursor-pointer"
+                                    (dblclick)="trigger?.openMenu()"
+                                >
                                     <mat-checkbox
                                         [ngClass]="{ 'visible-check-box': selectedCheckedContacts.length }"
                                         type="checkbox"
@@ -1029,9 +1087,6 @@
                                         <div (click)="$event.stopPropagation()">
                                             <div class="dialog-header">
                                                 <span>{{ messageBody.header.set }}</span>
-                                                <button mat-icon-button aria-label="close" (click)="closeAllDialogs()">
-                                                    <i class="icon-cross"></i>
-                                                </button>
                                             </div>
 
                                             <mat-dialog-content class="dialog-body">
@@ -1055,9 +1110,7 @@
                                                     rows="4"
                                                     [placeholder]="localeData?.type_message_body_placeholder"
                                                 ></textarea>
-                                                <small class="mt-1 mb-1 grey mt-3 d-block">{{
-                                                    localeData?.tip
-                                                }}</small>
+                                                <small class="mt-1 mb-1 grey mt-3 d-block">{{ localeData?.tip }}</small>
 
                                                 <div class="mat-chip-wrapper">
                                                     <mat-chip-listbox class="font-size-12">
@@ -1068,15 +1121,21 @@
                                                         >
                                                     </mat-chip-listbox>
                                                 </div>
-                                                <div class="mt-5">
+                                                <div class="mt-5 d-flex justify-content-end column-gap-1">
                                                     <button
-                                                        mat-stroked-button
+                                                        mat-raised-button
                                                         color="primary"
-                                                        class="btn-sm pull-right ml-2"
                                                         (click)="send('sundrycreditors')"
                                                         aria-label="set"
                                                     >
                                                         {{ messageBody.btn.set }}
+                                                    </button>
+                                                    <button
+                                                        role="button"
+                                                        mat-stroked-button
+                                                        (click)="closeAllDialogs()"
+                                                    >
+                                                        {{ commonLocaleData?.app_cancel }}
                                                     </button>
                                                 </div>
                                             </mat-dialog-content>
@@ -1484,7 +1543,8 @@
                 [pageSizeOptions]="pageSizeOptions"
                 [showFirstLastButtons]="true"
                 [hidePageSize]="false"
-                (page)="handlePageEvent($event);">
+                (page)="handlePageEvent($event)"
+            >
             </mat-paginator>
             <section class="mb-custom-80"></section>
         </ng-container>
@@ -1504,7 +1564,8 @@
                 [pageSizeOptions]="pageSizeOptions"
                 [showFirstLastButtons]="true"
                 [hidePageSize]="false"
-                (page)="handlePageEvent($event)">
+                (page)="handlePageEvent($event)"
+            >
             </mat-paginator>
             <section class="mb-custom-80"></section>
         </ng-container>
@@ -1593,7 +1654,11 @@
     >
         <div class="search-table">
             <div class="d-flex align-items-center column-gap-05" [hidden]="show">
-            <span class="icon-search icon-font-size-16 cursor-pointer"  aria-label="search" (click)="toggleSearch(fieldName)"></span>
+                <span
+                    class="icon-search icon-font-size-16 cursor-pointer"
+                    aria-label="search"
+                    (click)="toggleSearch(fieldName)"
+                ></span>
                 <span> {{ title }}</span>
             </div>
             <text-field

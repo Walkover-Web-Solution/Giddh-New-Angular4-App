@@ -9,13 +9,16 @@
         >
             {{ localeData?.aside_menu?.choose_provider }}
         </ng-container>
-        <ng-container *ngIf="gstAuthenticated && !pointsAcceptedSubmitted">{{ localeData?.aside_menu?.gst_return_note }}:</ng-container>
-        <ng-container *ngIf="gstAuthenticated && pointsAcceptedSubmitted">{{ localeData?.aside_menu?.submit_gst_returns }}:</ng-container>
-        <ng-container *ngIf="selectedService === taxServiceEnum.RECONCILE">{{ localeData?.aside_menu?.gst_reconcile }}</ng-container>
+        <ng-container *ngIf="gstAuthenticated && !pointsAcceptedSubmitted"
+            >{{ localeData?.aside_menu?.gst_return_note }}:</ng-container
+        >
+        <ng-container *ngIf="gstAuthenticated && pointsAcceptedSubmitted"
+            >{{ localeData?.aside_menu?.submit_gst_returns }}:</ng-container
+        >
+        <ng-container *ngIf="selectedService === taxServiceEnum.RECONCILE">{{
+            localeData?.aside_menu?.gst_reconcile
+        }}</ng-container>
     </span>
-    <button mat-icon-button aria-label="close" (click)="toggleCancelModel()">
-        <i class="icon-cross"></i>
-    </button>
 </div>
 
 <mat-dialog-content class="dialog-body">
@@ -98,10 +101,7 @@
                                     : localeData?.aside_menu?.verify_otp
                             }}
                         </button>
-                        <button
-                            mat-stroked-button
-                            (click)="toggleCancelModel()"
-                        >
+                        <button mat-stroked-button (click)="toggleCancelModel()">
                             {{ commonLocaleData?.app_cancel }}
                         </button>
                     </div>
@@ -223,7 +223,6 @@
                 <!-- region submit gst -->
                 <div *ngIf="pointsAcceptedSubmitted">
                     <div class="gst-body p-3">
-
                         <div class="row mt-1">
                             <div class="col-xs-6 col-lg-6 col-md-6 col-sm-6">
                                 <label class="text-muted">
@@ -264,7 +263,7 @@
                         </div>
                     </div>
 
-                    <div class=" p-3 bg-white">
+                    <div class="p-3 bg-white">
                         <div class="row mt-1">
                             <div class="col-lg-6 col-md-6 col-xs-6 col-sm-6">
                                 <label [innerHTML]="localeData?.aside_menu?.type_submit"></label>
@@ -276,7 +275,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="d-flex column-gap-15 mt-2">
+                    <div class="d-flex column-gap-1 mt-2">
                         <button
                             mat-raised-button
                             color="primary"
@@ -285,7 +284,7 @@
                         >
                             {{ commonLocaleData?.app_proceed }}
                         </button>
-                        <button mat-stroked-button (click)="toggleCancelModel()">
+                        <button mat-stroked-button role="button" (click)="toggleCancelModel()">
                             {{ commonLocaleData?.app_cancel }}
                         </button>
                     </div>

@@ -1,9 +1,6 @@
 <div>
     <div class="dialog-header">
         <span>{{ localeData?.bulk_update }}</span>
-        <button mat-icon-button aria-label="close" (click)="onCancel()">
-            <i class="icon-cross"></i>
-        </button>
     </div>
     <mat-dialog-content class="dialog-body">
         <form #bulkUpdateForm="ngForm" autocomplete="off" (ngSubmit)="updateBulkInvoice()">
@@ -211,9 +208,6 @@
 <ng-template #bulkUpdateImageSloganTemplate>
     <div class="dialog-header">
         <span>{{ commonLocaleData?.app_confirmation }}</span>
-        <button mat-icon-button aria-label="close" (click)="onCancelBulkUpdateImageSloganModal()">
-            <i class="icon-cross"></i>
-        </button>
     </div>
     <div mat-dialog-content class="dialog-body max-height-65vh">
         <p>{{ localeData?.bulk_image_note }}</p>
@@ -225,7 +219,7 @@
         <button type="submit" mat-raised-button color="primary" (click)="onConfirmationUpdateImageSlogan()">
             {{ commonLocaleData?.app_yes }}
         </button>
-        <button type="submit" mat-stroked-button (click)="onCancelBulkUpdateImageSloganModal()">
+        <button type="button" mat-stroked-button (click)="onCancelBulkUpdateImageSloganModal()">
             {{ commonLocaleData?.app_no }}
         </button>
     </div>

@@ -55,6 +55,7 @@
                                                         : localeData?.enter_fixed
                                                 "
                                                 [type]="'text'"
+                                                [autoFocus]="true"
                                                 [(ngModel)]="stockForm.name"
                                                 (ngModelChange)="checkSpacingValidation(stockForm.name)"
                                                 [autocomplete]="'off'"
@@ -178,7 +179,9 @@
                                                 [label]="commonLocaleData?.app_discount"
                                                 [options]="discountsList"
                                                 [(ngModel)]="discountValue"
-                                                (selectedOption)="stockForm.discounts = [$event?.value]; discountValue = $event?.value"
+                                                (selectedOption)="
+                                                    stockForm.discounts = [$event?.value]; discountValue = $event?.value
+                                                "
                                                 (onClear)="stockForm.discounts = []; discountValue = ''"
                                                 [labelValue]="stockForm.discountLabel ?? ''"
                                             >
@@ -191,8 +194,15 @@
                                                         class="variant-attachment mat-form-field-border d-flex align-items-center column-gap-1 p-2 position-relative"
                                                         [matTooltip]="localeData?.no_file_chosen"
                                                         matTooltipPosition="right"
+                                                        tabindex="0"
+                                                        role="button"
+                                                        [attr.aria-label]="localeData?.add_image"
+                                                        cdkMonitorElementFocus
+                                                        (keydown.enter)="$event.preventDefault(); triggerFileInput()"
+                                                        (keydown.space)="$event.preventDefault(); triggerFileInput()"
                                                     >
                                                         <input
+                                                            #fileInput
                                                             accept="image/png, image/jpeg"
                                                             [ngClass]="{
                                                                 'cursor-disable': uploadAttachmentInProgress$ | async
@@ -266,7 +276,7 @@
                                 class="mat-tab-them account-inventory-other-tab"
                             >
                                 <mat-tab [label]="localeData?.linked_account">
-                                    <div class="tab-container-new">
+                                    <div class="tab-container-new px-1">
                                         <div class="sales-purchase-details">
                                             <div class="row">
                                                 <div class="col-12 col-lg-12">
@@ -791,11 +801,24 @@
                                     </div>
                                 </mat-tab>
                                 <mat-tab [label]="localeData?.variant">
-                                    <div class="tab-container-new inventory-tab">
+                                    <div class="tab-container-new inventory-tab px-1">
                                         <a
                                             href="javascript:;"
                                             class="option-color"
                                             *ngIf="!isVariantAvailable"
+                                            role="button"
+                                            tabindex="0"
+                                            cdkMonitorElementFocus
+                                            (keydown.enter)="
+                                                $event.preventDefault();
+                                                isVariantAvailable = !isVariantAvailable;
+                                                !stockForm.options?.length ? addVariantOption() : ''
+                                            "
+                                            (keydown.space)="
+                                                $event.preventDefault();
+                                                isVariantAvailable = !isVariantAvailable;
+                                                !stockForm.options?.length ? addVariantOption() : ''
+                                            "
                                             (click)="
                                                 isVariantAvailable = !isVariantAvailable;
                                                 !stockForm.options?.length ? addVariantOption() : ''
@@ -1065,8 +1088,23 @@
                                                                                     localeData?.no_file_chosen
                                                                                 "
                                                                                 matTooltipPosition="right"
+                                                                                tabindex="0"
+                                                                                role="button"
+                                                                                [attr.aria-label]="
+                                                                                    localeData?.add_image
+                                                                                "
+                                                                                cdkMonitorElementFocus
+                                                                                (keydown.enter)="
+                                                                                    $event.preventDefault();
+                                                                                    triggerFileInput()
+                                                                                "
+                                                                                (keydown.space)="
+                                                                                    $event.preventDefault();
+                                                                                    triggerFileInput()
+                                                                                "
                                                                             >
                                                                                 <input
+                                                                                    #fileInput
                                                                                     accept="image/png, image/jpeg"
                                                                                     [ngClass]="{
                                                                                         'cursor-disable':
@@ -1127,7 +1165,7 @@
                                                                                         )
                                                                                     "
                                                                                     [src]="variant.attachmentName"
-                                                                                    alt="Variant Image{{ index }}"
+                                                                                    alt="Variant Image{{ i }}"
                                                                                 />
                                                                                 <button
                                                                                     mat-icon-button
@@ -1509,36 +1547,40 @@
                                     </div>
                                 </mat-tab>
                                 <mat-tab [label]="localeData?.manufacturing">
-                                    <div class="pl-4 pt-3" *ngIf="!queryParams?.stockUniqueName">
-                                        <button
-                                            aria-label="recipe btn"
-                                            mat-raised-button
-                                            color="primary"
-                                            (click)="createStock(true)"
+                                    <div class="px-1">
+                                        <div class="pl-4 pt-3" *ngIf="!queryParams?.stockUniqueName">
+                                            <button
+                                                aria-label="recipe btn"
+                                                mat-raised-button
+                                                color="primary"
+                                                (click)="createStock(true)"
+                                            >
+                                                {{ localeData?.save_stock_for_recipe }}
+                                            </button>
+                                        </div>
+                                        <div
+                                            class="d-flex align-items-center column-gap-1 pl-4 mt-3"
+                                            [ngClass]="queryParams?.stockUniqueName ? 'mb-2' : 'mb-5'"
                                         >
-                                            {{ localeData?.save_stock_for_recipe }}
-                                        </button>
+                                            <mat-slide-toggle
+                                                class="mb-1"
+                                                color="primary"
+                                                name="runtimeManufacturing"
+                                                [(ngModel)]="stockForm.runtimeManufacturing"
+                                                aria-label="runtime manufacturing"
+                                            >
+                                            </mat-slide-toggle>
+                                            <span>{{
+                                                commonLocaleData?.app_allow_manufacturing_sales_transactions
+                                            }}</span>
+                                        </div>
+                                        <create-recipe
+                                            #createRecipe
+                                            *ngIf="queryParams?.stockUniqueName && stockForm?.uniqueName"
+                                            [stock]="stockForm"
+                                            [variants]="stockForm.variants"
+                                        ></create-recipe>
                                     </div>
-                                    <div
-                                        class="d-flex align-items-center column-gap-1 pl-4 mt-3"
-                                        [ngClass]="queryParams?.stockUniqueName ? 'mb-2' : 'mb-5'"
-                                    >
-                                        <mat-slide-toggle
-                                            class="mb-1"
-                                            color="primary"
-                                            name="runtimeManufacturing"
-                                            [(ngModel)]="stockForm.runtimeManufacturing"
-                                            aria-label="runtime manufacturing"
-                                        >
-                                        </mat-slide-toggle>
-                                        <span>{{ commonLocaleData?.app_allow_manufacturing_sales_transactions }}</span>
-                                    </div>
-                                    <create-recipe
-                                        #createRecipe
-                                        *ngIf="queryParams?.stockUniqueName && stockForm?.uniqueName"
-                                        [stock]="stockForm"
-                                        [variants]="stockForm.variants"
-                                    ></create-recipe>
                                 </mat-tab>
                                 <mat-tab [label]="localeData?.other">
                                     <div class="tab-container-new px-3">
@@ -1565,7 +1607,7 @@
                                                         [type]="'number'"
                                                         [placeholder]="localeData?.enter_hsn_code"
                                                         [(ngModel)]="stockForm.hsnNumber"
-                                                        [allowDigitsOnly]="true"
+                                                        [allowDecimalDigitsOnly]="true"
                                                     >
                                                     </input-field>
                                                     <input-field
@@ -1574,7 +1616,7 @@
                                                         [type]="'number'"
                                                         [placeholder]="localeData?.enter_sac_code"
                                                         [(ngModel)]="stockForm.sacNumber"
-                                                        [allowDigitsOnly]="true"
+                                                        [allowDecimalDigitsOnly]="true"
                                                     >
                                                     </input-field>
                                                 </div>
@@ -1812,7 +1854,7 @@
                                     </div>
                                 </mat-tab>
                                 <mat-tab *ngIf="false" [label]="localeData?.variant">
-                                    <div class="tab-container-new">
+                                    <div class="tab-container-new px-1">
                                         <div class="mb-4 variant-form">
                                             <div class="row">
                                                 <div class="col-xl-12">
@@ -1878,7 +1920,7 @@
                                     </div>
                                 </mat-tab>
                                 <mat-tab *ngIf="false" label="Addon">
-                                    <div class="tab-container-new">
+                                    <div class="tab-container-new px-1">
                                         <div class="mb-4 addon-form">
                                             <div class="row">
                                                 <div class="col-xl-12">
@@ -1952,7 +1994,7 @@
                                     </div>
                                 </mat-tab>
                                 <mat-tab *ngIf="false" label="Bill of Material">
-                                    <div class="tab-container-new">
+                                    <div class="tab-container-new px-1">
                                         <div class="mb-4">
                                             <div class="final-product-recipe">
                                                 <div class="row align-items-center">
@@ -2248,7 +2290,7 @@
                                                     id="combo-unique-name"
                                                     [type]="'number'"
                                                     [placeholder]="localeData?.enter_hsn_code"
-                                                    [allowDigitsOnly]="true"
+                                                    [allowDecimalDigitsOnly]="true"
                                                 ></input-field>
                                             </div>
                                         </div>
@@ -3149,7 +3191,7 @@
                                                             id="product-name"
                                                             [type]="'number'"
                                                             placeholder="Enter HSN Code"
-                                                            [allowDigitsOnly]="true"
+                                                            [allowDecimalDigitsOnly]="true"
                                                         ></input-field>
                                                     </div>
                                                     <div class="col-sm-6 col-lg-6" *ngIf="!isHSN">
@@ -3157,7 +3199,7 @@
                                                             id="product-name"
                                                             [type]="'number'"
                                                             placeholder="Enter SAC Code"
-                                                            [allowDigitsOnly]="true"
+                                                            [allowDecimalDigitsOnly]="true"
                                                         ></input-field>
                                                     </div>
                                                 </div>
@@ -3732,7 +3774,7 @@
                                                     [type]="'number'"
                                                     placeholder="Enter"
                                                     id="hsn-sac-code"
-                                                    [allowDigitsOnly]="true"
+                                                    [allowDecimalDigitsOnly]="true"
                                                 ></input-field>
                                             </td>
                                             <td data-title="SAC Code">

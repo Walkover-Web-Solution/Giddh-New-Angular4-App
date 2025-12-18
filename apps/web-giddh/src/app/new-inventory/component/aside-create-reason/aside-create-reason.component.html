@@ -6,9 +6,6 @@
 >
     <div class="dialog-header">
         <span>{{ localeData?.create_reason }}</span>
-        <button mat-icon-button aria-label="close" mat-dialog-close>
-            <i class="icon-cross"></i>
-        </button>
     </div>
     <mat-dialog-content class="dialog-body">
         <giddh-page-loader *ngIf="createReasonInProgress$ | async"></giddh-page-loader>
@@ -29,7 +26,7 @@
                 </div>
                 <div class="row mt-4">
                     <div class="col-sm-4 pr-0">
-                        <div class="d-flex column-gap-15">
+                        <div class="d-flex column-gap-1">
                             <button
                                 aria-label="save"
                                 mat-raised-button
@@ -38,6 +35,9 @@
                                 (click)="saveReason()"
                             >
                                 {{ commonLocaleData?.app_save }}
+                            </button>
+                            <button aria-label="cancel" mat-stroked-button type="button" mat-dialog-close>
+                                {{ commonLocaleData?.app_cancel }}
                             </button>
                         </div>
                     </div>

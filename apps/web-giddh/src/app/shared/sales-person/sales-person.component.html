@@ -4,151 +4,196 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
     [keyboardShortcut]="'esc'"
+    [config]="{ dialogMode: true }"
     (onShortcutPress)="closeDialog()"
 >
-<div class="aside-dialog-wrapper">
-    <div class="dialog-header">
-        <p class="modal-title">{{ commonLocaleData?.app_sales_person }}</p>
-        <i (click)="closeDialog()" aria-label="close icon" class="icon-cross"></i>
-    </div>
-    <mat-dialog-content class="dialog-body sales-person">
-        <mat-accordion>
-            <mat-expansion-panel [expanded]="openMatExpansionPanel" class="overflow-visible">
-                <mat-expansion-panel-header>
-                    <mat-panel-title class="p-0">
-                        <span>
-                            {{ isEditMode ? commonLocaleData?.app_edit : commonLocaleData?.app_create }} {{ commonLocaleData?.app_sales_person }}
-                        </span>
-                    </mat-panel-title>
-                </mat-expansion-panel-header>
-                <form [formGroup]="salesPersonForm" (ngSubmit)="onSubmit()">
-                    <div class="d-grid grid-column-3 column-gap-15 row-gap-15 mb-3">
-                        <div>
-                            <input-field
-                                tabindex="1"
-                                #nameField
-                                [type]="'text'"
-                                [name]="'name'"
-                                [autofocus]="true"
-                                [label]="commonLocaleData?.app_name"
-                                [placeholder]="commonLocaleData?.app_name"
-                                formControlName="name"
-                                [required]="true"
-                                [maxlength]="250"
-                                [showError]="
-                                    (isFormSubmitted || salesPersonForm?.controls?.name?.dirty) &&
-                                    salesPersonForm?.controls?.name?.invalid
-                                "
-                            ></input-field>
-                        </div>
-                        <div>
-                            <input-field
-                                [type]="'email'"
-                                [name]="'email'"
-                                [label]="commonLocaleData?.app_email"
-                                [placeholder]="commonLocaleData?.app_email"
-                                formControlName="email"
-                                [showError]="
-                                    (isFormSubmitted || salesPersonForm?.controls?.email?.dirty) &&
-                                    salesPersonForm?.controls?.email?.invalid
-                                "
-                            ></input-field>
-                        </div>
-                        <mobile-number-input
-                            formControlName="mobileNumber"
-                            [label]="commonLocaleData?.app_mobile_number"
-                            [required]="false"
-                            [useImageFlags]="true"
-                        >
-                        </mobile-number-input>
-                        <div class="grid-child-column-full d-flex justify-content-end column-gap-15">
-                            <button mat-raised-button color="primary" [disabled]="(salesPersonSaveInProgress$ | async) || salesPersonForm?.invalid">
-                                {{ isEditMode ? commonLocaleData?.app_update : commonLocaleData?.app_save }}
-                            </button>
-                            <button mat-stroked-button tabindex="2" (click)="salesPersonForm?.reset(); salesPersonUniqueName = null; isEditMode = false; nameField?.inputFocus()" [disabled]="(salesPersonSaveInProgress$ | async)">
-                                {{ commonLocaleData?.app_clear }}
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </mat-expansion-panel>
-        </mat-accordion>
-
-        <section class="table-responsive mt-3" *ngIf="(salesPersonList$ | async)?.results?.length">
-            <giddh-page-loader *ngIf="(salesPersonListInProgress$ | async); else showTable" class="mt-5"></giddh-page-loader>
-            <ng-template #showTable>
-                <table
-                    class="giddh-table table border"
-                    mat-table
-                    [dataSource]="(salesPersonList$ | async)?.results"
-                >
-                    <!-- Name Column -->
-                    <ng-container matColumnDef="name">
-                        <th mat-header-cell *matHeaderCellDef width="30%">{{ commonLocaleData?.app_name }}</th>
-                        <td mat-cell *matCellDef="let element">{{ element.name }}</td>
-                    </ng-container>
-                    <!-- Email Column -->
-                    <ng-container matColumnDef="email">
-                        <th mat-header-cell *matHeaderCellDef width="25%">{{ commonLocaleData?.app_email }}</th>
-                        <td mat-cell *matCellDef="let element">{{ element.email }}</td>
-                    </ng-container>
-                    <!-- Mobile Number Column -->
-                    <ng-container matColumnDef="mobileNumber">
-                        <th mat-header-cell *matHeaderCellDef width="25%">{{ commonLocaleData?.app_mobile_number }}</th>
-                        <td mat-cell *matCellDef="let element">{{ element.mobileNumber }}</td>
-                    </ng-container>
-
-                    <!-- Archive Column -->
-                    <ng-container matColumnDef="archiveStatus">
-                        <th mat-header-cell *matHeaderCellDef width="25%">{{ commonLocaleData?.app_status }}</th>
-                        <td mat-cell *matCellDef="let element">{{ element.archiveStatus === salesPersonArchiveEnum.ARCHIVE ? commonLocaleData?.app_archive : commonLocaleData?.app_unarchive }}</td>
-                    </ng-container>
-
-                    <!-- Action Column -->
-                    <ng-container matColumnDef="action">
-                        <th mat-header-cell *matHeaderCellDef>&nbsp;</th>
-                        <td mat-cell *matCellDef="let element; let i = index" class="text-right">
-                            <button
-                                *ngIf="voucherApiVersion === 2" 
-                                [ngClass]="{'invisible': activeRowIndex !== i}"
-                                mat-icon-button
-                                [matMenuTriggerFor]="menu"
-                                aria-label="Sales person actions"
+    <div class="aside-dialog-wrapper">
+        <div class="dialog-header">
+            <p class="modal-title">{{ commonLocaleData?.app_sales_person }}</p>
+            <button mat-icon-button aria-label="close" (click)="closeDialog()">
+                <i aria-label="close icon" class="icon-cross"></i>
+            </button>
+        </div>
+        <mat-dialog-content class="dialog-body sales-person">
+            <mat-accordion>
+                <mat-expansion-panel [expanded]="openMatExpansionPanel" class="overflow-visible">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title class="p-0">
+                            <span>
+                                {{ isEditMode ? commonLocaleData?.app_edit : commonLocaleData?.app_create }}
+                                {{ commonLocaleData?.app_sales_person }}
+                            </span>
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <form [formGroup]="salesPersonForm" (ngSubmit)="onSubmit()">
+                        <div class="d-grid grid-column-3 column-gap-15 row-gap-15 mb-3">
+                            <div>
+                                <input-field
+                                    #nameField
+                                    [type]="'text'"
+                                    [name]="'name'"
+                                    [label]="commonLocaleData?.app_name"
+                                    [placeholder]="commonLocaleData?.app_name"
+                                    formControlName="name"
+                                    [required]="true"
+                                    [maxlength]="250"
+                                    [showError]="isFormSubmitted && salesPersonForm?.controls?.name?.invalid"
+                                ></input-field>
+                            </div>
+                            <div>
+                                <input-field
+                                    [type]="'email'"
+                                    [name]="'email'"
+                                    [label]="commonLocaleData?.app_email"
+                                    [placeholder]="commonLocaleData?.app_email"
+                                    formControlName="email"
+                                    [showError]="
+                                        (isFormSubmitted || salesPersonForm?.controls?.email?.dirty) &&
+                                        salesPersonForm?.controls?.email?.invalid
+                                    "
+                                ></input-field>
+                            </div>
+                            <mobile-number-input
+                                formControlName="mobileNumber"
+                                [label]="commonLocaleData?.app_mobile_number"
+                                [required]="false"
+                                [useImageFlags]="true"
                             >
-                                <i class="icon-dots-three-vertical font-size-15"></i>
-                            </button>
-                            <mat-menu #menu="matMenu">
-                                <ng-container *ngIf="element?.archiveStatus === salesPersonArchiveEnum.UNARCHIVED">
-                                    <button mat-menu-item (click)="salesPersonAction(salesPersonActionEnum.EDIT, element)">
-                                        {{ commonLocaleData?.app_edit }}
-                                    </button>
-                                    <button mat-menu-item (click)="salesPersonAction(salesPersonActionEnum.DELETE, element)">
-                                        {{ commonLocaleData?.app_delete }}
-                                    </button>
-                                </ng-container>
-                                <button mat-menu-item (click)="salesPersonAction(salesPersonActionEnum.ARCHIVE, element)">
-                                    {{ element?.archiveStatus === salesPersonArchiveEnum.UNARCHIVED ? commonLocaleData?.app_archive : commonLocaleData?.app_unarchive }}
+                            </mobile-number-input>
+                            <div class="grid-child-column-full d-flex justify-content-end column-gap-15">
+                                <button
+                                    mat-raised-button
+                                    color="primary"
+                                    [disabled]="(salesPersonSaveInProgress$ | async) || salesPersonForm?.invalid"
+                                >
+                                    {{ isEditMode ? commonLocaleData?.app_update : commonLocaleData?.app_save }}
                                 </button>
-                            </mat-menu>
-                        </td>
-                    </ng-container>
-                    
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let rowHistory; columns: displayedColumns; let i = index" (mouseover)="activeRowIndex = i" (mouseout)="activeRowIndex = -1"></tr>
-                </table>
-                <mat-paginator
-                    *ngIf="!(salesPersonListInProgress$ | async) && (salesPersonList$ | async)?.totalItems > pageSizeOptions[0]"
-                    (page)="handlePageChange($event)"
-                    [length]="(salesPersonList$ | async)?.totalItems"
-                    [pageSize]="requestParams.count"
-                    [showFirstLastButtons]="true"
-                    [pageSizeOptions]="pageSizeOptions"
-                    [hidePageSize]="false"
-                    [pageIndex]="requestParams.page - 1"
-                ></mat-paginator>
-                <section class="mb-custom-80"></section>
-            </ng-template>
-        </section>
-    </mat-dialog-content>
-</div>
+                                <button
+                                    mat-stroked-button
+                                    type="button"
+                                    (click)="
+                                        salesPersonForm?.reset();
+                                        salesPersonUniqueName = null;
+                                        isEditMode = false;
+                                        nameField?.inputFocus()
+                                    "
+                                    [disabled]="salesPersonSaveInProgress$ | async"
+                                >
+                                    {{ commonLocaleData?.app_clear }}
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </mat-expansion-panel>
+            </mat-accordion>
+
+            <section class="table-responsive mt-3" *ngIf="(salesPersonList$ | async)?.results?.length">
+                <giddh-page-loader
+                    *ngIf="salesPersonListInProgress$ | async; else showTable"
+                    class="mt-5"
+                ></giddh-page-loader>
+                <ng-template #showTable>
+                    <table
+                        class="giddh-table table border"
+                        mat-table
+                        [dataSource]="(salesPersonList$ | async)?.results"
+                    >
+                        <!-- Name Column -->
+                        <ng-container matColumnDef="name">
+                            <th mat-header-cell *matHeaderCellDef width="30%">{{ commonLocaleData?.app_name }}</th>
+                            <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+                        </ng-container>
+                        <!-- Email Column -->
+                        <ng-container matColumnDef="email">
+                            <th mat-header-cell *matHeaderCellDef width="25%">{{ commonLocaleData?.app_email }}</th>
+                            <td mat-cell *matCellDef="let element">{{ element.email }}</td>
+                        </ng-container>
+                        <!-- Mobile Number Column -->
+                        <ng-container matColumnDef="mobileNumber">
+                            <th mat-header-cell *matHeaderCellDef width="25%">
+                                {{ commonLocaleData?.app_mobile_number }}
+                            </th>
+                            <td mat-cell *matCellDef="let element">{{ element.mobileNumber }}</td>
+                        </ng-container>
+
+                        <!-- Archive Column -->
+                        <ng-container matColumnDef="archiveStatus">
+                            <th mat-header-cell *matHeaderCellDef width="25%">{{ commonLocaleData?.app_status }}</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{
+                                    element.archiveStatus === salesPersonArchiveEnum.ARCHIVE
+                                        ? commonLocaleData?.app_archive
+                                        : commonLocaleData?.app_unarchive
+                                }}
+                            </td>
+                        </ng-container>
+
+                        <!-- Action Column -->
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef>&nbsp;</th>
+                            <td mat-cell *matCellDef="let element; let i = index" class="text-right">
+                                <button
+                                    *ngIf="voucherApiVersion === 2"
+                                    [ngClass]="{ 'invisible': activeRowIndex !== i }"
+                                    mat-icon-button
+                                    [matMenuTriggerFor]="menu"
+                                    aria-label="Sales person actions"
+                                >
+                                    <i class="icon-dots-three-vertical font-size-15"></i>
+                                </button>
+                                <mat-menu #menu="matMenu">
+                                    <ng-container *ngIf="element?.archiveStatus === salesPersonArchiveEnum.UNARCHIVED">
+                                        <button
+                                            mat-menu-item
+                                            (click)="salesPersonAction(salesPersonActionEnum.EDIT, element)"
+                                        >
+                                            {{ commonLocaleData?.app_edit }}
+                                        </button>
+                                        <button
+                                            mat-menu-item
+                                            (click)="salesPersonAction(salesPersonActionEnum.DELETE, element)"
+                                        >
+                                            {{ commonLocaleData?.app_delete }}
+                                        </button>
+                                    </ng-container>
+                                    <button
+                                        mat-menu-item
+                                        (click)="salesPersonAction(salesPersonActionEnum.ARCHIVE, element)"
+                                    >
+                                        {{
+                                            element?.archiveStatus === salesPersonArchiveEnum.UNARCHIVED
+                                                ? commonLocaleData?.app_archive
+                                                : commonLocaleData?.app_unarchive
+                                        }}
+                                    </button>
+                                </mat-menu>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr
+                            mat-row
+                            *matRowDef="let rowHistory; columns: displayedColumns; let i = index"
+                            (mouseover)="activeRowIndex = i"
+                            (mouseout)="activeRowIndex = -1"
+                        ></tr>
+                    </table>
+                    <mat-paginator
+                        *ngIf="
+                            !(salesPersonListInProgress$ | async) &&
+                            (salesPersonList$ | async)?.totalItems > pageSizeOptions[0]
+                        "
+                        (page)="handlePageChange($event)"
+                        [length]="(salesPersonList$ | async)?.totalItems"
+                        [pageSize]="requestParams.count"
+                        [showFirstLastButtons]="true"
+                        [pageSizeOptions]="pageSizeOptions"
+                        [hidePageSize]="false"
+                        [pageIndex]="requestParams.page - 1"
+                    ></mat-paginator>
+                    <section class="mb-custom-80"></section>
+                </ng-template>
+            </section>
+        </mat-dialog-content>
+    </div>
 </ng-container>

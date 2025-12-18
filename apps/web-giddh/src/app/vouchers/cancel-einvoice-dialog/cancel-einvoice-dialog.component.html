@@ -1,6 +1,5 @@
 <div class="dialog-header">
     <span class="font-size-16">{{ localeData?.cancel_e_invoice }}</span>
-    <i mat-dialog-close class="icon-cross icon-font-size-16"></i>
 </div>
 
 <div mat-dialog-content class="dialog-body" [formGroup]="eInvoiceCancelForm">
@@ -48,7 +47,9 @@
             </mat-form-field>
             <ng-container *ngIf="eInvoiceCancelForm.get('cancellationRemarks')?.value">
                 <span class="max-character-label">{{ commonLocaleData?.app_characters_left }}:&nbsp;</span>
-                <span class="max-character-value">{{ 100 - eInvoiceCancelForm.get("cancellationRemarks")?.value?.length }}</span>
+                <span class="max-character-value">{{
+                    100 - eInvoiceCancelForm.get("cancellationRemarks")?.value?.length
+                }}</span>
             </ng-container>
         </div>
     </div>
@@ -65,6 +66,6 @@
         >
             {{ commonLocaleData?.app_confirm }}
         </button>
-        <button mat-stroked-button mat-dialog-close>{{ commonLocaleData?.app_cancel }}</button>
+        <button mat-stroked-button mat-dialog-close role="button">{{ commonLocaleData?.app_cancel }}</button>
     </div>
 </div>
