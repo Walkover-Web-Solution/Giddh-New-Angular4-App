@@ -21,7 +21,7 @@
             [showTax]="showTaxEvent"
             (hideDiscountSidebar)="showDiscountEvent = false"
             (hideTaxSidebar)="showTaxEvent = false"
-            (salesEntry)="getSalesEntryEvent($event)"
+            (showDiscountAndTax)="getSalesEntryEvent($event)"
         >
         </account-as-voucher>
 
@@ -33,7 +33,7 @@
                 (showTaxEvent)="showTaxEvent = $event"
                 [commonLocaleData]="commonLocaleData"
                 [localeData]="localeData"
-                [salesEntry]="salesEntry"
+                [showDiscountAndTax]="showDiscountAndTax"
             ></accounting-sidebar>
         </div>
     </div>

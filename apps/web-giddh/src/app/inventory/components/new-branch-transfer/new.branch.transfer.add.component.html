@@ -8,10 +8,13 @@
     </div>
     <div class="receipt-note-content">
         <div class="receipt-note-radio-btn pr-3 pl-3 mb-3" *ngIf="!editBranchTransferUniqueName">
-            <mat-radio-group name="transferType" [(ngModel)]="transferType" (change)="changeTransferType()" class="d-flex">
-                <mat-radio-button color="primary" value="products" class="mr-3">
-                    Multiple Products
-                </mat-radio-button>
+            <mat-radio-group
+                name="transferType"
+                [(ngModel)]="transferType"
+                (change)="changeTransferType()"
+                class="d-flex"
+            >
+                <mat-radio-button color="primary" value="products" class="mr-3"> Multiple Products </mat-radio-button>
                 <mat-radio-button color="primary" value="senders">
                     <span *ngIf="branchTransferMode === 'receiptnote'">Multiple Senders</span>
                     <span *ngIf="branchTransferMode === 'deliverynote'">Multiple Receivers</span>
@@ -33,7 +36,9 @@
                             <div class="col-xl-6 col-lg-8">
                                 <giddh-datepicker
                                     name="dateOfSupply"
-                                    [placeholder]="branchTransferMode === 'receiptnote' ? 'Date of Receipt' : 'Date of Supply'"
+                                    [placeholder]="
+                                        branchTransferMode === 'receiptnote' ? 'Date of Receipt' : 'Date of Supply'
+                                    "
                                     [(ngModel)]="tempDateParams.dateOfSupply"
                                     (dateSelected)="selectDateOfSupply($event)"
                                     [required]="true"
@@ -55,7 +60,8 @@
                                     [options]="stockList"
                                     [(ngModel)]="branchTransfer.products[0].uniqueName"
                                     (selectedOption)="selectProduct($event, branchTransfer.products[0])"
-                                    [required]="true">
+                                    [required]="true"
+                                >
                                 </reactive-dropdown-field>
                             </div>
                         </div>
@@ -76,20 +82,23 @@
                             <div class="col-xl-3 col-lg-4">
                                 <label>
                                     <div class="d-flex wrap-hsn-sac align-items-center">
-                                        <mat-radio-group name="showCodeType" [(ngModel)]="branchTransfer.products[0].showCodeType" class="d-flex">
+                                        <mat-radio-group
+                                            name="showCodeType"
+                                            [(ngModel)]="branchTransfer.products[0].showCodeType"
+                                            class="d-flex"
+                                        >
                                             <mat-radio-button color="primary" value="hsn" class="mr-3">
                                                 HSN Code
                                             </mat-radio-button>
-                                            <mat-radio-button color="primary" value="sac">
-                                                SAC Code
-                                            </mat-radio-button>
+                                            <mat-radio-button color="primary" value="sac"> SAC Code </mat-radio-button>
                                         </mat-radio-group>
                                     </div>
                                 </label>
                             </div>
                             <div class="col-xl-6 col-lg-8">
                                 <input
-                                    type="number" name="productHsnCode"
+                                    type="number"
+                                    name="productHsnCode"
                                     class="form-control"
                                     maxlength="10"
                                     digitsOnlyDirective
@@ -97,7 +106,8 @@
                                     [(ngModel)]="branchTransfer.products[0].hsnNumber"
                                 />
                                 <input
-                                    type="number" name="productHsnCode"
+                                    type="number"
+                                    name="productHsnCode"
                                     class="form-control"
                                     maxlength="10"
                                     digitsOnlyDirective
@@ -110,7 +120,7 @@
                             <div class="col-xl-3 col-lg-4">
                                 <label> Sender's Name <span class="text-red">*</span> </label>
                             </div>
-                            <div class="col-xl-6 col-lg-8 position-relative ">
+                            <div class="col-xl-6 col-lg-8 position-relative">
                                 <input
                                     *ngIf="(isBranch || isCompanyWithSingleBranch) && !isUpdateMode"
                                     name="sourceName"
@@ -141,7 +151,8 @@
                                     [options]="senderWarehouses[branchTransfer.sources[0]?.uniqueName]"
                                     [(ngModel)]="branchTransfer.sources[0].warehouse.uniqueName"
                                     (selectedOption)="selectSourceWarehouse($event, branchTransfer.sources[0])"
-                                    [required]="true">
+                                    [required]="true"
+                                >
                                 </reactive-dropdown-field>
                             </div>
                         </div>
@@ -194,7 +205,8 @@
                                     [enableDynamicSearch]="true"
                                     [options]="branchList"
                                     (selectedOption)="selectDestination($event, branchTransfer.destinations[0])"
-                                    [required]="true">
+                                    [required]="true"
+                                >
                                 </reactive-dropdown-field>
                             </div>
                         </div>
@@ -206,8 +218,11 @@
                                     [enableDynamicSearch]="true"
                                     [options]="destinationWarehouses[branchTransfer.destinations[0]?.uniqueName]"
                                     [(ngModel)]="branchTransfer.destinations[0].warehouse.uniqueName"
-                                    (selectedOption)="selectDestinationWarehouse($event, branchTransfer.destinations[0])"
-                                    [required]="true">
+                                    (selectedOption)="
+                                        selectDestinationWarehouse($event, branchTransfer.destinations[0])
+                                    "
+                                    [required]="true"
+                                >
                                 </reactive-dropdown-field>
                             </div>
                         </div>
@@ -262,7 +277,9 @@
                             <div class="col-xl-6 col-lg-8">
                                 <giddh-datepicker
                                     name="dateOfSupply"
-                                    [placeholder]="branchTransferMode === 'receiptnote' ? 'Date of Receipt' : 'Date of Supply'"
+                                    [placeholder]="
+                                        branchTransferMode === 'receiptnote' ? 'Date of Receipt' : 'Date of Supply'
+                                    "
                                     [(ngModel)]="tempDateParams.dateOfSupply"
                                     (dateSelected)="selectDateOfSupply($event)"
                                     [required]="true"
@@ -284,7 +301,8 @@
                                     [options]="stockList"
                                     [(ngModel)]="branchTransfer.products[0].uniqueName"
                                     (selectedOption)="selectProduct($event, branchTransfer.products[0])"
-                                    [required]="true">
+                                    [required]="true"
+                                >
                                 </reactive-dropdown-field>
                             </div>
                         </div>
@@ -305,20 +323,23 @@
                             <div class="col-12">
                                 <label>
                                     <div class="d-flex wrap-hsn-sac align-items-center">
-                                        <mat-radio-group name="showCodeType2" [(ngModel)]="branchTransfer.products[0].showCodeType" class="d-flex">
+                                        <mat-radio-group
+                                            name="showCodeType2"
+                                            [(ngModel)]="branchTransfer.products[0].showCodeType"
+                                            class="d-flex"
+                                        >
                                             <mat-radio-button color="primary" value="hsn" class="mr-3">
                                                 HSN Code
                                             </mat-radio-button>
-                                            <mat-radio-button color="primary" value="sac">
-                                                SAC Code
-                                            </mat-radio-button>
+                                            <mat-radio-button color="primary" value="sac"> SAC Code </mat-radio-button>
                                         </mat-radio-group>
                                     </div>
                                 </label>
                             </div>
                             <div class="col-xl-6 col-lg-8">
                                 <input
-                                    type="number" name="productHsnCode"
+                                    type="number"
+                                    name="productHsnCode"
                                     class="form-control"
                                     maxlength="10"
                                     digitsOnlyDirective
@@ -326,7 +347,8 @@
                                     [(ngModel)]="branchTransfer.products[0].hsnNumber"
                                 />
                                 <input
-                                    type="number" name="productHsnCode"
+                                    type="number"
+                                    name="productHsnCode"
                                     class="form-control"
                                     maxlength="10"
                                     digitsOnlyDirective
@@ -344,7 +366,8 @@
                                     [options]="branchList"
                                     [(ngModel)]="branchTransfer.sources[0].uniqueName"
                                     (selectedOption)="selectSource($event, branchTransfer.sources[0])"
-                                    [required]="true">
+                                    [required]="true"
+                                >
                                 </reactive-dropdown-field>
                                 <i
                                     class="icon-info text-light"
@@ -416,16 +439,14 @@
                             <div class="col-xl-3 col-lg-4">
                                 <label> Receiver's Name <span class="text-red">*</span> </label>
                             </div>
-                            <div class="col-xl-6 col-lg-8 position-relative ">
+                            <div class="col-xl-6 col-lg-8 position-relative">
                                 <reactive-dropdown-field
                                     *ngIf="isUpdateMode"
                                     [name]="'destinationName'"
                                     [(ngModel)]="branchTransfer.destinations[0].uniqueName"
                                     [enableDynamicSearch]="true"
                                     [options]="branches$ | async"
-                                    (selectedOption)="
-                                        selectCompany($event, 'destinations', 0)
-                                    "
+                                    (selectedOption)="selectCompany($event, 'destinations', 0)"
                                     [required]="true"
                                     [disabled]="isUpdateMode"
                                 ></reactive-dropdown-field>
@@ -457,7 +478,7 @@
                                     [enableDynamicSearch]="true"
                                     [options]="destinationWarehouses[branchTransfer.destinations[0]?.uniqueName]"
                                     [(ngModel)]="branchTransfer.destinations[0].warehouse.uniqueName"
-                                    (selectedOption)="getWarehouseDetails('destinations', 0);"
+                                    (selectedOption)="getWarehouseDetails('destinations', 0)"
                                     (onClear)="resetWarehouse('destinations', 0)"
                                     [required]="true"
                                 ></reactive-dropdown-field>
@@ -561,7 +582,7 @@
                                                     (click)="focusSkuNumber()"
                                                     *ngIf="activeRow == i && product?.uniqueName"
                                                 >
-                                                    <label >SKU Code: </label>
+                                                    <label>SKU Code: </label>
                                                     <span
                                                         >{{ product.skuCode }}
                                                         <span class="edit-icon cursor-pointer">
@@ -584,7 +605,8 @@
                                                     />
                                                     <div class="btn-group mt-2 pt-1 d-flex">
                                                         <button
-                                                            mat-raised-button color="primary"
+                                                            mat-raised-button
+                                                            color="primary"
                                                             type="button"
                                                             (click)="saveSkuNumberPopup(product)"
                                                         >
@@ -656,7 +678,12 @@
                                             <div class="hsn-code-dropdown" *ngIf="hsnPopupShow && activeRow == i">
                                                 <label>
                                                     <div class="d-flex wrap-hsn-sac mb-2 align-items-center">
-                                                        <mat-radio-group name="showCodeType3" [(ngModel)]="product.showCodeType" (ngModelChange)="focusHsnNumber()" class="d-flex">
+                                                        <mat-radio-group
+                                                            name="showCodeType3"
+                                                            [(ngModel)]="product.showCodeType"
+                                                            (ngModelChange)="focusHsnNumber()"
+                                                            class="d-flex"
+                                                        >
                                                             <mat-radio-button color="primary" value="hsn" class="mr-3">
                                                                 HSN Code
                                                             </mat-radio-button>
@@ -679,14 +706,16 @@
                                                 />
                                                 <div class="btn-group mt-2 pt-1 d-flex">
                                                     <button
-                                                        mat-raised-button color="primary"
+                                                        mat-raised-button
+                                                        color="primary"
                                                         type="button"
                                                         (click)="saveHsnNumberPopup(product)"
                                                     >
                                                         Save
                                                     </button>
                                                     <button
-                                                        mat-stroked-button class="mr-0"
+                                                        mat-stroked-button
+                                                        class="mr-0"
                                                         type="button"
                                                         (click)="hideHsnNumberPopup()"
                                                     >
@@ -779,9 +808,7 @@
                                                 [enableDynamicSearch]="true"
                                                 [(ngModel)]="destination.uniqueName"
                                                 [options]="branches$ | async"
-                                                (selectedOption)="
-                                                    selectCompany($event, 'destinations', i)
-                                                "
+                                                (selectedOption)="selectCompany($event, 'destinations', i)"
                                             ></reactive-dropdown-field>
                                             <reactive-dropdown-field
                                                 [enableDynamicSearch]="true"
@@ -880,7 +907,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="position-relative ">
+                                    <td class="position-relative">
                                         <div *ngIf="activeRow === i">
                                             <input
                                                 type="text"
@@ -939,9 +966,7 @@
                                                 [enableDynamicSearch]="true"
                                                 [(ngModel)]="source.uniqueName"
                                                 [options]="branches$ | async"
-                                                (selectedOption)="
-                                                    selectCompany($event, 'sources', i)
-                                                "
+                                                (selectedOption)="selectCompany($event, 'sources', i)"
                                             ></reactive-dropdown-field>
                                             <reactive-dropdown-field
                                                 [enableDynamicSearch]="true"
@@ -1032,7 +1057,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="position-relative ">
+                                    <td class="position-relative">
                                         <div *ngIf="activeRow === i">
                                             <input
                                                 type="text"
@@ -1186,7 +1211,8 @@
                         <div class="pull-right position-relative d-flex column-gap-15">
                             <button
                                 type="button"
-                                mat-stroked-button class="d-inline-block vertical-align-middle "
+                                mat-stroked-button
+                                class="d-inline-block vertical-align-middle"
                                 [disabled]="isLoading"
                                 (click)="closeBranchTransferPopup()"
                             >
@@ -1195,9 +1221,11 @@
                             <button
                                 *ngIf="isBranch || isCompanyWithSingleBranch"
                                 type="button"
-                                mat-raised-button color="primary" class="d-inline-block vertical-align-middle {{
-                                    newBranchTransferForm.invalid
-                                }}-{{ isValidSourceTaxNumber }}-{{ isValidDestinationTaxNumber }}"
+                                mat-raised-button
+                                color="primary"
+                                class="d-inline-block vertical-align-middle {{ newBranchTransferForm.invalid }}-{{
+                                    isValidSourceTaxNumber
+                                }}-{{ isValidDestinationTaxNumber }}"
                                 [disabled]="
                                     newBranchTransferForm.invalid ||
                                     !isValidSourceTaxNumber ||
@@ -1220,9 +1248,6 @@
         <div class="form-header">
             <p class="aside-title">Manage Transporter</p>
         </div>
-        <button mat-stroked-button type="button" class="mt-1" (click)="openTransporterPopupDialog()">
-            <i class="icon-cross"></i>
-        </button>
         <form #generateTransporterForm="ngForm" autocomplete="off">
             <div class="aside-body pt-2 pb-1 pr-2 pl-2 bg-gray">
                 <div class="form-group">
@@ -1285,7 +1310,8 @@
                 <div class="form-group mt-3">
                     <div class="clear-both" *ngIf="!transportEditMode">
                         <button
-                            mat-raised-button color="primary"
+                            mat-raised-button
+                            color="primary"
                             class="mr-2"
                             [disabled]="generateTransporterForm.invalid"
                             [ladda]="isGenarateTransporterInProcess$ | async"
@@ -1294,14 +1320,12 @@
                         >
                             Save
                         </button>
-                        <button mat-stroked-button (click)="clearTransportForm()" type="submit">
-                            Clear
-                        </button>
+                        <button mat-stroked-button (click)="clearTransportForm()" type="submit">Clear</button>
                     </div>
-                    <div class="clear-both" *ngIf="transportEditMode">
+                    <div class="clear-both d-flex column-gap-1" *ngIf="transportEditMode">
                         <button
-                            mat-raised-button color="primary"
-                            class="mr-2"
+                            mat-raised-button
+                            color="primary"
                             [disabled]="generateTransporterForm.invalid"
                             [ladda]="updateTransporterInProcess$ | async"
                             (click)="updateTransporter(generateTransporterForm)"
@@ -1310,6 +1334,7 @@
                             Update
                         </button>
                         <button mat-stroked-button (click)="clearTransportForm()">Clear</button>
+                        <button mat-stroked-button (click)="openTransporterPopupDialog()">Cancel</button>
                     </div>
                 </div>
             </div>
@@ -1394,6 +1419,3 @@
     <aside-menu-product-service (closeAsideEvent)="closeAsideMenuProductServiceModal()" [selectedVoucherType]="'sales'">
     </aside-menu-product-service>
 </ng-template>
-
-
-

@@ -59,6 +59,7 @@
     "service": "Service",
     "manufacturing": "Manufacturing",
     "retail": "Retail",
+    "other": "Other",
     "enter_company_name":"Enter Company Name",
     "enter_country_name":"Enter Country Name",
     "enter_currency_name":"Enter Currency Name",

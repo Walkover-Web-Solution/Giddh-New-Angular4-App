@@ -117,7 +117,6 @@
                                                 "
                                                 (blur)="onAccountBlur($event)"
                                                 [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
-                                                (keydown)="detectKey($event)"
                                                 (keydown.Tab)="
                                                     validateAccount(transaction, $event, i);
                                                     showLedgerAccountList = false;
@@ -323,7 +322,7 @@
             </div>
         </div>
     </form>
-    <div class="sidebar-list form-control" [hidden]="!showLedgerAccountList">
+    <div class="sidebar-list form-control" *ngIf="showLedgerAccountList">
         <p class="p-2 border-bottom text-black" *ngIf="selectedField === 'account'">
             {{ localeData?.ledger_accounts_list }}
         </p>
@@ -371,7 +370,7 @@
             </ng-container>
         </div>
     </div>
-    <div class="sidebar-list form-control" [hidden]="!showDiscountSidebar">
+    <div class="sidebar-list form-control" *ngIf="showDiscountSidebar">
         <div class="border-bottom d-flex justify-content-between align-items-center p-1 mat-app-background">
             <h3 class="text-primary">{{ localeData?.discount_list }}</h3>
             <i class="fa fa-close pdR-5 cursor-pointer" (click)="closeDiscountSidebar()"></i>
@@ -426,7 +425,7 @@
             </div>
         </div>
     </div>
-    <div class="sidebar-list form-control" [hidden]="!showTaxSidebar">
+    <div class="sidebar-list form-control" *ngIf="showTaxSidebar">
         <div class="border-bottom d-flex justify-content-between align-items-center p-1 mat-app-background">
             <h3 class="text-primary">{{ localeData?.tax_list }}</h3>
             <i class="fa fa-close pdR-5 cursor-pointer" (click)="closeTaxSidebar()"></i>
@@ -502,9 +501,6 @@
 <ng-template #chequeEntryModal>
     <div class="dialog-header">
         <span>{{ localeData?.cheque_details }}</span>
-        <button mat-icon-button aria-label="close" (click)="closeChequeDetailForm()">
-            <i class="icon-cross"></i>
-        </button>
     </div>
     <mat-dialog-content class="dialog-body">
         <form

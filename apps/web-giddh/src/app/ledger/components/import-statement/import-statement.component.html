@@ -15,12 +15,14 @@
             [matTooltip]="inputData?.commonLocaleData?.app_back"
             matTooltipPosition="above"
             (click)="importStep = importStepEnum.First"
-            class="header-btn mr-4"
+            class="header-btn"
         >
             {{ inputData?.commonLocaleData?.app_back }}
         </button>
-        <i mat-dialog-close aria-label="close icon" class="icon-cross"></i>
     </div>
+    <button *ngIf="importStep === importStepEnum.First" mat-icon-button aria-label="close" mat-dialog-close>
+        <i class="icon-cross"></i>
+    </button>
 </div>
 <div class="modal-body p-0">
     <!-- Step first -->
@@ -53,7 +55,7 @@
         </div>
     </div>
     <!-- Step second -->
-    <div *ngIf="importStep === importStepEnum.Second" class="p-2">
+    <div *ngIf="importStep === importStepEnum.Second" class="p-3">
         <form name="importStatementForm" novalidate autocomplete="off">
             <div class="pb-4 clear-both browse-file-btn">
                 <mat-label class="import-field-label align-bottom file-upload-label"
@@ -142,18 +144,23 @@
                         {{ inputData?.localeData?.download_sample_csv }}
                     </a>
                 </div>
-                <button
-                    mat-raised-button
-                    color="primary"
-                    [matTooltip]="inputData?.commonLocaleData?.app_upload"
-                    matTooltipPosition="above"
-                    [disabled]="!postRequest.file"
-                    (click)="
-                        selectStatement === importStatementType.Voucher ? uploadFile('voucher') : importStatement()
-                    "
-                >
-                    {{ inputData?.commonLocaleData?.app_upload }}
-                </button>
+                <div class="d-flex column-gap-1">
+                    <button
+                        mat-raised-button
+                        color="primary"
+                        [matTooltip]="inputData?.commonLocaleData?.app_upload"
+                        matTooltipPosition="above"
+                        [disabled]="!postRequest.file"
+                        (click)="
+                            selectStatement === importStatementType.Voucher ? uploadFile('voucher') : importStatement()
+                        "
+                    >
+                        {{ inputData?.commonLocaleData?.app_upload }}
+                    </button>
+                    <button mat-stroked-button mat-dialog-close type="button">
+                        {{ inputData?.commonLocaleData?.app_cancel }}
+                    </button>
+                </div>
             </div>
         </form>
     </div>

@@ -9,5 +9,6 @@ export const VOUCHERS = {
     JOURNAL: 'journal',
     SALES: 'sales',
     CREDIT_NOTE: 'credit note',
-    DEBIT_NOTE: 'debit note'
+    DEBIT_NOTE: 'debit note',
+    PURCHASE: 'purchase'
 }

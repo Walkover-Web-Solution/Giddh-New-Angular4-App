@@ -1,5 +1,9 @@
-<ng-container appTranslate [file]="'settings/permission'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event">
+<ng-container
+    appTranslate
+    [file]="'settings/permission'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
     <section class="p-3">
         <div class="pb-4" *ngIf="localeData?.give_permission">
             <div class="d-flex justify-content-between">
@@ -8,12 +12,18 @@
                 </p>
                 <watch-video [cssClass]="'text-primary'" [moduleName]="'MULTI_USER_ACCESS'"></watch-video>
             </div>
-            <setting-permission-form [userdata]="null" [isLblShow]="false" [isUpdtCase]="false" [isHorizntl]="true"
-                [localeData]="localeData" [commonLocaleData]="commonLocaleData"
+            <setting-permission-form
+                [userdata]="null"
+                [isLblShow]="false"
+                [isUpdtCase]="false"
+                [isHorizntl]="true"
+                [localeData]="localeData"
+                [commonLocaleData]="commonLocaleData"
                 (onSubmitForm)="submitPermissionForm($event)"
-                (hasUnsavedChanges)="updateUnsavedChanges($event)"></setting-permission-form>
+                (hasUnsavedChanges)="updateUnsavedChanges($event)"
+            ></setting-permission-form>
         </div>
-    
+
         <div *ngIf="localeData?.give_permission">
             <p class="mb-2">
                 <strong>{{ localeData?.form_heading }}</strong>
@@ -24,60 +34,94 @@
                         <div class="row">
                             <div class="col-xl-2 col-lg-3 col-md-6 col-sm-6 user">
                                 <div class="text-ellipsis">
-                                    <div class="text-ellipsis"><i class="icon-user-black pr-2"></i>{{ usrGrp.name }}</div>
+                                    <div class="text-ellipsis">
+                                        <i class="icon-user-black pr-2"></i>{{ usrGrp.name }}
+                                    </div>
                                     <small class="ml-4">{{ usrGrp.rows[0].emailId }}</small>
                                 </div>
                             </div>
                             <div class="col-12 col-lg-9 col-md-6 col-sm-6">
                                 <div class="row">
                                     <div class="permission-list w-100">
-                                        <div class="col-xl-10 col-lg-12 col-sm-12 permission"
-                                            *ngFor="let user of usrGrp.rows; let i = index">
+                                        <div
+                                            class="col-xl-10 col-lg-12 col-sm-12 permission"
+                                            *ngFor="let user of usrGrp.rows; let i = index"
+                                        >
                                             <div class="row">
                                                 <div class="col-12 col-lg-4 col-md-12 col-sm-12">
                                                     <div class="form-group">
-                                                        <input-field [label]="localeData?.role_name_label"
-                                                            [defaultValue]="user.roleName" [disabled]="true"
-                                                            [readonly]="true"></input-field>
+                                                        <input-field
+                                                            [label]="localeData?.role_name_label"
+                                                            [defaultValue]="user.roleName"
+                                                            [disabled]="true"
+                                                            [readonly]="true"
+                                                        ></input-field>
                                                     </div>
                                                 </div>
-    
-                                                <div class="col-12 col-lg-4 col-md-12 col-sm-12 permission-date-field"
-                                                    *ngIf="user.from || user.period">
+
+                                                <div
+                                                    class="col-12 col-lg-4 col-md-12 col-sm-12 permission-date-field"
+                                                    *ngIf="user.from || user.period"
+                                                >
                                                     <div class="form-group">
-                                                        <input-field *ngIf="user.from && user.to"
+                                                        <input-field
+                                                            *ngIf="user.from && user.to"
                                                             [label]="localeData?.from_to_label"
-                                                            [defaultValue]="user.from + ' - '+ user.to" [disabled]="true"
-                                                            [readonly]="true"></input-field>
-                                                        <input-field *ngIf="user.period && user.duration"
+                                                            [defaultValue]="user.from + ' - ' + user.to"
+                                                            [disabled]="true"
+                                                            [readonly]="true"
+                                                        ></input-field>
+                                                        <input-field
+                                                            *ngIf="user.period && user.duration"
                                                             [label]="localeData?.past_period"
-                                                            [defaultValue]="getPastPeriodDuration(user)" [disabled]="true"
-                                                            [readonly]="true"></input-field>
+                                                            [defaultValue]="getPastPeriodDuration(user)"
+                                                            [disabled]="true"
+                                                            [readonly]="true"
+                                                        ></input-field>
                                                     </div>
                                                 </div>
-    
-                                                <div class="col-12 col-lg-4 col-md-12 col-sm-12 permission-date-field"
-                                                    *ngIf="user.ipsStr || user.cidrsStr">
+
+                                                <div
+                                                    class="col-12 col-lg-4 col-md-12 col-sm-12 permission-date-field"
+                                                    *ngIf="user.ipsStr || user.cidrsStr"
+                                                >
                                                     <div class="form-group">
-                                                        <input-field *ngIf="user.ipsStr" [label]="localeData?.ip_address"
-                                                            [defaultValue]="user.ipsStr" [disabled]="true"
-                                                            [readonly]="true"></input-field>
-                                                        <input-field *ngIf="user.cidrsStr"
-                                                            [label]="localeData?.cidr_range" [defaultValue]="user.cidrsStr"
-                                                            [disabled]="true" [readonly]="true"></input-field>
+                                                        <input-field
+                                                            *ngIf="user.ipsStr"
+                                                            [label]="localeData?.ip_address"
+                                                            [defaultValue]="user.ipsStr"
+                                                            [disabled]="true"
+                                                            [readonly]="true"
+                                                        ></input-field>
+                                                        <input-field
+                                                            *ngIf="user.cidrsStr"
+                                                            [label]="localeData?.cidr_range"
+                                                            [defaultValue]="user.cidrsStr"
+                                                            [disabled]="true"
+                                                            [readonly]="true"
+                                                        ></input-field>
                                                     </div>
                                                 </div>
-    
+
                                                 <div class="ico-btn pull-left col-12 col-lg-4 col-md-12 col-sm-12 mt-1">
-                                                    <button mat-stroked-button class="action-icon-btn mr-2" type="button"
+                                                    <button
+                                                        mat-stroked-button
+                                                        class="action-icon-btn mr-2"
+                                                        type="button"
                                                         [hidden]="usrGrp.rows[0].isLoggedInUser"
-                                                        (click)="showModalForEdit(user)" aria-label="edit icon">
+                                                        (click)="showModalForEdit(user)"
+                                                        aria-label="edit icon"
+                                                    >
                                                         <i aria-hidden="true" class="icon-edit-pencil"></i>
                                                     </button>
-                                                    <button mat-stroked-button class="action-icon-btn" type="button"
+                                                    <button
+                                                        mat-stroked-button
+                                                        class="action-icon-btn"
+                                                        type="button"
                                                         [hidden]="usrGrp.rows[0].isLoggedInUser"
                                                         (click)="onRevokePermission(user?.uniqueName)"
-                                                        aria-label="delete icon">
+                                                        aria-label="delete icon"
+                                                    >
                                                         <i aria-hidden="true" class="icon-trash"></i>
                                                     </button>
                                                 </div>
@@ -98,15 +142,20 @@
         <div class="modal-content">
             <div class="dialog-header">
                 <span>{{ localeData?.create_user_permission }}</span>
-                <button mat-icon-button aria-label="close" (click)="closeEditUserModal(true)">
-                    <i class="icon-cross"></i>
-                </button>
             </div>
             <mat-dialog-content class="dialog-body">
-                <setting-permission-form [isOpenedInModal]="true" [userdata]="selectedUser" [isLblShow]="true"
-                    [isUpdtCase]="selectedUser ? true : false" [isHorizntl]="false" [localeData]="localeData"
-                    [commonLocaleData]="commonLocaleData" (onSubmitForm)="submitPermissionForm($event)"
-                    (hasUnsavedChanges)="hasUnsavedChanges = $event"></setting-permission-form>
+                <setting-permission-form
+                    [isOpenedInModal]="true"
+                    [userdata]="selectedUser"
+                    [isLblShow]="true"
+                    [isUpdtCase]="selectedUser ? true : false"
+                    [isHorizntl]="false"
+                    [localeData]="localeData"
+                    [commonLocaleData]="commonLocaleData"
+                    (onSubmitForm)="submitPermissionForm($event)"
+                    (closeDialog)="closeEditUserModal(true)"
+                    (hasUnsavedChanges)="hasUnsavedChanges = $event"
+                ></setting-permission-form>
             </mat-dialog-content>
         </div>
     </ng-template>

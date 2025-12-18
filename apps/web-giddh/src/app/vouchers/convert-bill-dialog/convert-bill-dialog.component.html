@@ -1,7 +1,6 @@
 <form [formGroup]="convertToBillForm" autocomplete="off" novalidate (ngSubmit)="onFormSubmit()">
     <div class="dialog-header">
-        <span class="font-size-16">{{ localeData?.convert_to_bill }}</span>
-        <i mat-dialog-close class="icon-cross icon-font-size-16"></i>
+        <span>{{ localeData?.convert_to_bill }}</span>
     </div>
     <mat-dialog-content class="dialog-body custom-height">
         <ng-container
