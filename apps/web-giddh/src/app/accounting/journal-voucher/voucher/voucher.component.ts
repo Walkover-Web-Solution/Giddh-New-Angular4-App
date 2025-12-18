@@ -495,7 +495,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 if (createdAccountDetails) {
                     // Add the new account to the appropriate dropdown list
                     this.addNewAccountToDropdown(createdAccountDetails);
-                    this.setAccount(createdAccountDetails);
+                    this.setAccount(createdAccountDetails, null);
                 }
             }
         });
@@ -508,7 +508,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             // Check if transaction already has discount or tax applied
             const isDiscountApplied = transaction.get('isDiscountApplied')?.value;
             const isTaxApplied = transaction.get('isTaxApplied')?.value;
-            const accountType = transaction.get('type')?.value;
             this.selectedIndex = 0;
 
             if (isDiscountApplied || this.showDiscountSidebar) {
@@ -519,7 +518,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 this.searchInTaxList(inputValue);
             } else {
                 // Default: search in account list based on account type
-                this.searchAccount(inputValue, accountType);
+                this.searchAccount(inputValue, transaction);
             }
         });
 
@@ -1171,20 +1170,39 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public onAccountFocus(transaction: FormGroup): void {
         this.selectedField = 'account';
         this.showConfirmationBox = false;
-        this.selectedTransactionType = transaction.get('type')?.value;    
+        const currentAccountType = transaction.get('type')?.value;
         this.closeDiscountSidebar();
         this.closeTaxSidebar();
         this.showLedgerAccountList = true;
             
         // Determine account type based on actual form field value
-        const accountType = this.selectedTransactionType?.toLowerCase() === 'by' ? 'by' : 'to';
+        const accountType = currentAccountType?.toLowerCase() === 'by' ? 'by' : 'to';
         this.selectedInput = accountType;
 
         // Get appropriate search data based on account type
         const searchData = accountType === 'by' ? this.byAccountSearchData : this.toAccountSearchData;
-        
-        // Show account list with data from global variables
-        this.displayAccountList = searchData.accounts;
+
+        // Smart search logic: API call only when total items > current result length
+        if (searchData.isInitialLoaded && searchData.page >= searchData.totalPages) {
+            // Local search - sufficient data exists
+            this.displayAccountList = searchData.accounts;
+        } else {
+            // API call needed - not enough data loaded
+            this.loadAccountsForType(
+                currentAccountType,
+                transaction.get('selectedAccount.account').value,
+                1,
+                this.SEARCH_LOAD_MORE_COUNT,
+                false,
+                (success) => {
+                    if (success && this.showLedgerAccountList) {
+                        // Use the accounts passed into the callback (from loadAccountsForType)
+                        this.displayAccountList = currentAccountType === 'by' ? this.byAccountSearchData.accounts : this.toAccountSearchData.accounts;
+                        this.changeDetectionRef.detectChanges();
+                    }
+                }
+            );
+        }
     }
 
     /**
@@ -1273,7 +1291,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @param {*} acc
      * @memberof AccountAsVoucherComponent
      */
-    public setAccount(acc: any): void {
+    public setAccount(acc: any, dropdownIndex: number): void {
         this.showLedgerAccountList = false;
         const idx = this.activeRowIndex
         let transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
@@ -1283,6 +1301,14 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         if (currentSelectedAccount?.UniqueName === acc.uniqueName) {
             this.changeTab("enter", "account")
             return;
+        } else {
+            dropdownIndex = dropdownIndex === null ? transactionAtIndex.get('type').value === 'by' ? this.byAccountSearchData.accounts.length - 1 : this.toAccountSearchData.accounts.length - 1 : dropdownIndex;
+            // Add or update selectedAccountIndex in the form
+            if (transactionAtIndex.get('selectedAccountIndex')) {
+                transactionAtIndex.get('selectedAccountIndex').setValue(dropdownIndex);
+            } else {
+                transactionAtIndex.addControl('selectedAccountIndex', this.formBuilder.control(dropdownIndex));
+            }
         }
         
         this.searchService.loadDetails(acc?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
@@ -1482,7 +1508,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @param {boolean} isInitialLoad - Whether this is initial load
      * @memberof AccountAsVoucherComponent
      */
-    public loadAccountsForType(accountType: 'by' | 'to', query: string = '', page: number = 1, count: number = this.SEARCH_LOAD_MORE_COUNT, isInitialLoad: boolean = false): void {
+    public loadAccountsForType(accountType: 'by' | 'to', query: string = '', page: number = 1, count: number = this.SEARCH_LOAD_MORE_COUNT, isInitialLoad: boolean = false, callback?: (success: boolean) => void): void {
         const voucherTypeControl = this.journalVoucherForm.get('voucherType');
         const searchData = accountType === 'by' ? this.byAccountSearchData : this.toAccountSearchData;
         
@@ -1537,7 +1563,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 
             }
             searchData.isLoading = false;
-            this.changeDetectionRef.detectChanges();
+            // If a callback is provided, invoke it with the updated accounts and raw response
+            if (callback) {
+                callback(true);
+            }
         });
     }
 
@@ -1586,28 +1615,39 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @param {string} accountName
      * @memberof AccountAsVoucherComponent
      */
-    public searchAccount(accountName: string, currentAccountType: 'by' | 'to'): void {
-        if (accountName) {
-            this.filterByText = accountName;
-            this.showLedgerAccountList = true;
-            this.selectedIndex = 0;
-            
-            // Determine account type based on current selection
-            // const currentAccountType = this.selectedInput || 'by';
-            const searchData = currentAccountType === 'by' ? this.byAccountSearchData : this.toAccountSearchData;
-            
-            // Smart search logic: API call only when total items > current result length
-            if (searchData.isInitialLoaded && searchData.page >= searchData.totalPages) {
-                // Local search - sufficient data exists
-                const filteredAccounts = this.searchLocalAccounts(searchData.accounts, accountName);
-                this.displayAccountList = filteredAccounts;
-            } else {
-                // API call needed - not enough data loaded
-                this.loadAccountsForType(currentAccountType, accountName, 1, this.SEARCH_LOAD_MORE_COUNT, false);
-                
-                // Update display variables
-                this.displayAccountList = searchData.accounts;
-            }
+    public searchAccount(accountName: string, transaction: any): void {
+        if (!accountName) {
+            this.resetAccountOnTypeChange(transaction);
+        }
+        this.filterByText = accountName;
+        this.showLedgerAccountList = true;
+        this.selectedIndex = 0;
+        const currentAccountType = transaction.get('type')?.value?.toLowerCase() === 'by' ? 'by' : 'to';
+
+        // Determine account type based on current selection
+        const searchData = currentAccountType === 'by' ? this.byAccountSearchData : this.toAccountSearchData;
+
+        // Smart search logic: API call only when total items > current result length
+        if (searchData.isInitialLoaded && searchData.page >= searchData.totalPages) {
+            // Local search - sufficient data exists
+            const filteredAccounts = this.searchLocalAccounts(searchData.accounts, accountName);
+            this.displayAccountList = filteredAccounts;
+        } else {
+            // API call needed - not enough data loaded
+            this.loadAccountsForType(
+                currentAccountType,
+                accountName,
+                1,
+                this.SEARCH_LOAD_MORE_COUNT,
+                false,
+                (success) => {
+                    if (success && this.showLedgerAccountList) {
+                        // Use the accounts passed into the callback (from loadAccountsForType)
+                        this.displayAccountList = currentAccountType === 'by' ? this.byAccountSearchData.accounts : this.toAccountSearchData.accounts;
+                        this.changeDetectionRef.detectChanges();
+                    }
+                }
+            );
         }
     }
 
@@ -2422,27 +2462,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public onItemSelected(event: any): void {
-        const dropdownIndex = event.index;
-        // Store the selected account's index in the form array for current row
-        if (dropdownIndex !== undefined && this.activeRowIndex !== undefined) {
-            const transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
-            const currentTransaction = transactionsFormArray.at(this.activeRowIndex) as FormGroup;
-            
-            // Add or update selectedAccountIndex in the form
-            if (currentTransaction.get('selectedAccountIndex')) {
-                currentTransaction.get('selectedAccountIndex').setValue(dropdownIndex);
-            } else {
-                currentTransaction.addControl('selectedAccountIndex', this.formBuilder.control(dropdownIndex));
-            }
-        }
-        
         this.showLedgerAccountList = false;
             
         if (event?.value === 'createnewitem') {
             return this.addNewAccount();
         }
         
-        this.setAccount(event.additional);
+        this.setAccount(event.additional, event.index);
 
         this.changeDetectionRef.detectChanges();
     }
@@ -2733,7 +2759,14 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 searchData.searchQuery,
                 searchData.page + 1,
                 this.SEARCH_LOAD_MORE_COUNT,
-                false
+                false,
+                (success) => {
+                    if (success && this.showLedgerAccountList) {
+                        // Use the accounts passed into the callback (from loadAccountsForType)
+                        this.displayAccountList = currentAccountType === 'by' ? this.byAccountSearchData.accounts : this.toAccountSearchData.accounts;
+                        this.changeDetectionRef.detectChanges();
+                    }
+                }
             );
         } else {
             this.loadMoreInProgress = false;
