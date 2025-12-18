@@ -3,10 +3,9 @@ import { ReplaySubject, Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { CommonService } from "../../services/common.service";
 import { ToasterService } from "../../services/toaster.service";
-import { filter, forEach, has, map } from '../../lodash-optimized';
-// import { InventoryModuleName } from "../../new-inventory/inventory.enum";
-// import { ContactsTab } from "../../contact/contacts.enum";
-// import { VoucherReportFilterModuleEnum } from "../../vouchers/utility/vouchers.const";
+import { InventoryModuleName } from "../../new-inventory/inventory.enum";
+import { ContactsTab } from "../../contact/contacts.enum";
+import { VoucherReportFilterModuleEnum } from "../../vouchers/utility/vouchers.const";
 @Component({
     selector: "select-table-column",
     styleUrls: ["./select-table-column.component.scss"],
@@ -59,21 +58,21 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
     }
     /** Get dynamic module types */
     public dynamicModuleTypes: Set<string> = new Set([
-        'stock',
-        'variant',
-        'bulk',
-        'fixedAssetInventory',
-        'customer',
-        'vendor',
-        'Sales',
-        'Estimate',
-        'Proforma',
-        'CreditNote',
-        'DebitNote',
-        'Receipt',
-        'Payment',
-        'Purchase',
-        'PurchaseOrder'
+        InventoryModuleName.stock,
+        InventoryModuleName.variant,
+        InventoryModuleName.bulk,
+        InventoryModuleName.fixedAssetInventory,
+        ContactsTab.customer,
+        ContactsTab.vendor,
+        VoucherReportFilterModuleEnum.Sales,
+        VoucherReportFilterModuleEnum.Estimate,
+        VoucherReportFilterModuleEnum.Proforma,
+        VoucherReportFilterModuleEnum.CreditNote,
+        VoucherReportFilterModuleEnum.DebitNote,
+        VoucherReportFilterModuleEnum.Receipt,
+        VoucherReportFilterModuleEnum.Payment,
+        VoucherReportFilterModuleEnum.Purchase,
+        VoucherReportFilterModuleEnum.PurchaseOrder
     ]);
     /** Get dynamic mode */
     public get isDynamicMode(): boolean {
