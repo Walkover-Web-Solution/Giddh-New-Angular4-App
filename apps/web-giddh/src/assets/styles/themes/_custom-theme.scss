@@ -5,8 +5,8 @@
 
 @include mat.core();
 
-// Angular 21 Material 3 Light Theme Configuration
-// Using the new M3 define-theme function with correct properties
+// Material Design 3 Theme Configuration with Existing Variables
+// Using existing custom palettes in M3 structure
 $light-theme: mat.define-theme((
     color: (
         theme-type: light,
@@ -22,8 +22,7 @@ $light-theme: mat.define-theme((
     ),
 ));
 
-// Angular 21 Material 3 Dark Theme Configuration
-// M3 automatically generates appropriate dark theme colors
+// Material Design 3 Dark Theme Configuration with Existing Variables
 $dark-theme: mat.define-theme((
     color: (
         theme-type: dark,

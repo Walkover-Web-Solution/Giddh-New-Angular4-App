@@ -1,3 +1,4 @@
+import { environment } from './../../environments/environment.generated';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
@@ -646,7 +647,12 @@ export class GeneralService {
     public getGiddhRegionUrl(): string {
         const countryRegion = localStorage.getItem('Country-Region');
         const region = COUNTRY_REGION_MAP[countryRegion] || null;
-        return region === 'gl' ? 'https://giddh.com/login' : `https://giddh.com/${region}/login`;
+
+        // Use environment-specific AppUrl instead of hardcoded giddh.com
+        const baseUrl = environment.AppUrl || 'https://giddh.com';
+        const loginPath = '/login';
+
+        return region === 'gl' ? `${baseUrl}${loginPath}` : `${baseUrl}/${region}${loginPath}`;
     }
 
     /**
