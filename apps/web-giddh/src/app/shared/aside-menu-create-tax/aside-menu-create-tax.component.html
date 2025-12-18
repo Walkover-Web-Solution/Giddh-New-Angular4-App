@@ -5,11 +5,15 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="dialog-header">
-        <p class="modal-title bg" id="modal-title">
+    <div
+        class="dialog-header"
+        [keyboardShortcut]="'esc'"
+        [config]="{ dialogMode: true }"
+        (onShortcutPress)="closeEvent?.emit()"
+    >
+        <span>
             {{ tax && tax?.uniqueName ? localeData?.update_tax : localeData?.create_new_tax }}
-        </p>
-        <i mat-dialog-close (click)="closeEvent?.emit()" aria-label="close icon" class="icon-cross"></i>
+        </span>
     </div>
     <mat-dialog-content class="dialog-body">
         <!-- Loader -->
@@ -46,6 +50,7 @@
                         [showError]="!isValidForm && !taxForm?.get('taxType')?.value"
                         (selectedOption)="selectTax($event)"
                         (onClear)="taxForm?.get('taxType')?.patchValue('')"
+                        #dropdownRef
                     ></reactive-dropdown-field>
                 </div>
 
@@ -87,7 +92,10 @@
                     ></input-field>
                 </div>
 
-                <div class="col-sm-6 col-xs-12" *ngIf="taxForm?.get('taxType')?.value === 'tds' || taxForm?.get('taxType')?.value === 'tcs'">
+                <div
+                    class="col-sm-6 col-xs-12"
+                    *ngIf="taxForm?.get('taxType')?.value === 'tds' || taxForm?.get('taxType')?.value === 'tcs'"
+                >
                     <reactive-dropdown-field
                         [options]="taxNameTypesMapping[taxForm?.get('taxType')?.value]"
                         [name]="'tdsTcsTaxSubTypes'"
@@ -103,7 +111,12 @@
                 </div>
             </div>
 
-            <div class="row my-3" *ngIf="(taxForm?.get('taxType')?.value === 'cess') || (taxForm?.get('taxType')?.value === 'others' && !tax)">
+            <div
+                class="row my-3"
+                *ngIf="
+                    taxForm?.get('taxType')?.value === 'cess' || (taxForm?.get('taxType')?.value === 'others' && !tax)
+                "
+            >
                 <div class="col-sm-6 col-xs-12" *ngIf="taxForm?.get('taxType')?.value === 'cess'">
                     <reactive-dropdown-field
                         [options]="allTaxes"
@@ -147,6 +160,7 @@
                         [showToggleIcon]="false"
                         [appearance]="'outline'"
                         [placeholder]="localeData?.apply_tax_from"
+                        [closeDatepickerOnFocus]="true"
                         [required]="true"
                     >
                     </giddh-datepicker>
@@ -181,15 +195,9 @@
             </div>
 
             <div class="d-flex column-gap-1 align-items-center">
-                <button
-                    mat-raised-button
-                    color="primary"
-                    aria-label="create"
-                    type="submit"
-                    *ngIf="!tax"
-                >
+                <button mat-raised-button color="primary" aria-label="create" type="submit" *ngIf="!tax">
                     <ng-container *ngIf="!isTaxCreateInProcess; else showSpinner">
-                       {{ commonLocaleData?.app_create }}
+                        {{ commonLocaleData?.app_create }}
                     </ng-container>
                 </button>
 
@@ -207,7 +215,7 @@
 
                 <button mat-stroked-button type="button" (click)="closeEvent?.emit()">
                     {{ commonLocaleData?.app_cancel }}
-                </button>   
+                </button>
             </div>
         </form>
     </mat-dialog-content>

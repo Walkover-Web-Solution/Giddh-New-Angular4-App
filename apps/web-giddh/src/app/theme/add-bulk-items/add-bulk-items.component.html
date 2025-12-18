@@ -4,10 +4,14 @@
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
-    <div class="bulk-entry">
+    <div
+        class="bulk-entry"
+        [keyboardShortcut]="'esc'"
+        [config]="{ dialogMode: true }"
+        (onShortcutPress)="handleGlobalEscape()"
+    >
         <div class="dialog-header">
             <span class="font-size-16">{{ localeData?.add_bulk_items }}</span>
-            <i mat-dialog-close class="icon-cross"></i>
         </div>
         <div mat-dialog-content class="bulk-entry-body dialog-body d-flex">
             <div class="w-100">
@@ -38,7 +42,23 @@
                                                                     class="list-item px-2"
                                                                     [matTooltip]="item.name"
                                                                     (click)="addItem(item, i)"
+                                                                    (keydown.enter)="
+                                                                        $event.preventDefault();
+                                                                        addItem(item, i);
+                                                                        focusNextElement($event.target)
+                                                                    "
+                                                                    (keydown.space)="
+                                                                        $event.preventDefault();
+                                                                        addItem(item, i);
+                                                                        focusNextElement($event.target)
+                                                                    "
+                                                                    (keydown.escape)="handleEscapeKey($event)"
+                                                                    [tabindex]="0"
+                                                                    #listElement
+                                                                    [attr.aria-label]="'Select item: ' + item.name"
+                                                                    role="button"
                                                                     matTooltipPosition="left"
+                                                                    cdkMonitorElementFocus
                                                                 >
                                                                     <span
                                                                         class="d-inline-flex align-items-center column-gap-1"
@@ -65,9 +85,27 @@
                                                             >
                                                                 <mat-list-item
                                                                     (click)="variantChanged(item, variant, i)"
+                                                                    (keydown.enter)="
+                                                                        $event.preventDefault();
+                                                                        variantChanged(item, variant, i);
+                                                                        focusNextElement($event.target)
+                                                                    "
+                                                                    (keydown.space)="
+                                                                        $event.preventDefault();
+                                                                        variantChanged(item, variant, i);
+                                                                        focusNextElement($event.target)
+                                                                    "
+                                                                    (keydown.escape)="handleEscapeKey($event)"
+                                                                    #variantElement
+                                                                    [tabindex]="0"
+                                                                    [attr.aria-label]="
+                                                                        'Select variant: ' + variant?.label
+                                                                    "
+                                                                    role="button"
                                                                     class="list-item pr-2 pl-4"
                                                                     [matTooltip]="variant?.label"
                                                                     matTooltipPosition="left"
+                                                                    cdkMonitorElementFocus
                                                                     >{{ variant?.label }}</mat-list-item
                                                                 >
                                                             </ng-container>
@@ -79,8 +117,24 @@
                                                 <mat-list-item
                                                     class="list-item px-2"
                                                     (click)="addItem(item, i)"
+                                                    (keydown.enter)="
+                                                        $event.preventDefault();
+                                                        addItem(item, i);
+                                                        focusNextElement($event.target)
+                                                    "
+                                                    (keydown.space)="
+                                                        $event.preventDefault();
+                                                        addItem(item, i);
+                                                        focusNextElement($event.target)
+                                                    "
+                                                    (keydown.escape)="handleEscapeKey($event)"
+                                                    [tabindex]="0"
+                                                    #simpleListElement
+                                                    [attr.aria-label]="'Select item: ' + item.name"
+                                                    role="button"
                                                     [matTooltip]="item.name"
                                                     matTooltipPosition="left"
+                                                    cdkMonitorElementFocus
                                                 >
                                                     <span class="d-inline-flex align-items-center column-gap-1">
                                                         <img

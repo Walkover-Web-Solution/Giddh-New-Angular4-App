@@ -2,6 +2,7 @@
     appTranslate
     (commonLocaleData)="commonLocaleData = $event"
     [keyboardShortcut]="'esc'"
+    [config]="{ dialogMode: true }"
     (onShortcutPress)="closeDialog()"
 >
     <div class="dialog-header">

@@ -9,6 +9,7 @@
         <div class="input-wrapper d-flex column-gap-1">
             <div class="country-select-wrapper" (click)="$event.stopPropagation()">
                 <mat-select
+                    cdkMonitorElementFocus
                     [formControl]="countryControl"
                     panelWidth="400px"
                     [id]="id ? id + '-country' : undefined"
