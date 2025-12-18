@@ -1,13 +1,10 @@
 <div class="dialog-header">
     <span>{{ localeData?.manage_payment_methods }}</span>
-    <button mat-icon-button aria-label="close" mat-dialog-close>
-        <i class="icon-cross"></i>
-    </button>
 </div>
 <mat-dialog-content class="dialog-body">
-    <div #paymentMethod class="logs-content">
+    <div #paymentMethod class="logs-content row">
         <div class="col-12">
-            <div class="d-flex pt-3 pb-3 align-items-center justify-content-between">
+            <div class="d-flex pb-3 align-items-center justify-content-between">
                 <div class="d-flex align-items-center">
                     <form [formGroup]="paymentMethodForm">
                         <reactive-dropdown-field
@@ -26,7 +23,7 @@
             </div>
             <div class="row mt-4">
                 <div class="col-4 pr-0">
-                    <div class="d-flex column-gap-15">
+                    <div class="d-flex column-gap-1">
                         <button
                             aria-label="save"
                             mat-raised-button
@@ -35,6 +32,9 @@
                             (click)="savePaymentProvider()"
                         >
                             {{ commonLocaleData?.app_save }}
+                        </button>
+                         <button mat-stroked-button mat-dialog-close type="button">
+                            {{ commonLocaleData?.app_cancel }}
                         </button>
                     </div>
                 </div>
