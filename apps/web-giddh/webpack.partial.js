@@ -12,7 +12,7 @@ module.exports = {
             'errlyticsNeeded': JSON.stringify(false),
             'errlyticsKey': JSON.stringify(''),
             'AppUrl': JSON.stringify('http://localhost:3000/'),
-            'ApiUrl': JSON.stringify('https://apitest.giddh.com/'),
+            'ApiUrl': JSON.stringify('https://api.giddh.com/'),
             'UkApiUrl': JSON.stringify('https://gbapi.giddh.com/'),
             'PORTAL_URL': JSON.stringify('https://portal.giddh.com/'),
             'APP_FOLDER': JSON.stringify(''),

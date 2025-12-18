@@ -62,7 +62,6 @@
                                 formControlName="transId"
                                 (selectedOption)="$event && generateEwayBillform.get('transName').patchValue($event.label)"
                                 (onClear)="generateEwayBillform.get('transName').patchValue(null); generateEwayBillform.get('transId').patchValue(null)"
-                                [createNewText]="commonLocaleData?.app_create_new"
                                 [showCreateNew]="true"
                                 (createOption)="openTransporterModel()"
                                 [showError]="isFormInvalid && !generateEwayBillform.get('transId').value"
