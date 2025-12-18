@@ -351,22 +351,12 @@
                     <tr *ngFor="let item of transporterList$ | async">
                         <td>{{ item?.transporterName }}</td>
                         <td>{{ item?.transporterId }}</td>
-                        <td class="nowrap d-flex column-gap-15 border-top-none">
-                            <button
-                                mat-raised-button
-                                color="primary"
-                                class="min-width-unset"
-                                (click)="editTransporter(item)"
-                            >
-                                <i class="icon-edit"></i>
+                        <td class="d-flex justify-content-center column-gap-15 border-top-none">
+                            <button mat-icon-button color="primary" (click)="editTransporter(item)">
+                                <i class="icon-edit theme-foreground-color"></i>
                             </button>
-                            <button
-                                mat-raised-button
-                                color="primary"
-                                class="min-width-unset"
-                                (click)="deleteTransporter(item)"
-                            >
-                                <i class="fa fa-trash"></i>
+                            <button mat-icon-button color="primary" (click)="deleteTransporter(item)">
+                                <i class="icon-trash theme-foreground-color"></i>
                             </button>
                         </td>
                     </tr>
