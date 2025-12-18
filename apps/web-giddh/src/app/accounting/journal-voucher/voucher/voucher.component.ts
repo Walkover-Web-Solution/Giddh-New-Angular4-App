@@ -292,9 +292,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public byAccountSearchData = {
         accounts: [],
         isInitialLoaded: false,
-        searchQuery: '',
+        searchQuery: null,
         page: 0,
-        totalPages: 0,
+        totalItems: 0,
         isLoading: false
     };
     
@@ -302,9 +302,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public toAccountSearchData = {
         accounts: [],
         isInitialLoaded: false,
-        searchQuery: '',
+        searchQuery: null,
         page: 0,
-        totalPages: 0,
+        totalItems: 0,
         isLoading: false
     };
     
@@ -509,6 +509,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             const isDiscountApplied = transaction.get('isDiscountApplied')?.value;
             const isTaxApplied = transaction.get('isTaxApplied')?.value;
             this.selectedIndex = 0;
+
+            if (!inputValue) {
+                this.resetAccountOnTypeChange(transaction);
+            }
 
             if (isDiscountApplied || this.showDiscountSidebar) {
                 // Search in discount list
@@ -1181,9 +1185,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
         // Get appropriate search data based on account type
         const searchData = accountType === 'by' ? this.byAccountSearchData : this.toAccountSearchData;
-
-        // Smart search logic: API call only when total items > current result length
-        if (searchData.isInitialLoaded && searchData.page >= searchData.totalPages) {
+        if (searchData.isInitialLoaded) {
             // Local search - sufficient data exists
             this.displayAccountList = searchData.accounts;
         } else {
@@ -1196,7 +1198,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 false,
                 (success) => {
                     if (success && this.showLedgerAccountList) {
-                        // Use the accounts passed into the callback (from loadAccountsForType)
                         this.displayAccountList = currentAccountType === 'by' ? this.byAccountSearchData.accounts : this.toAccountSearchData.accounts;
                         this.changeDetectionRef.detectChanges();
                     }
@@ -1420,7 +1421,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     currentBalance: '',
                     applyApplicableTaxes: false,
                     isInclusiveTax: false,
-                    type: transaction.type,
                     taxes: [],
                     total: null,
                     discounts: [],
@@ -1464,7 +1464,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             isInitialLoaded: false,
             searchQuery: '',
             page: 0,
-            totalPages: 0,
+            totalItems: 0,
             isLoading: false
         };
         
@@ -1474,7 +1474,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             isInitialLoaded: false,
             searchQuery: '',
             page: 0,
-            totalPages: 0,
+            totalItems: 0,
             isLoading: false
         };
         
@@ -1509,12 +1509,14 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public loadAccountsForType(accountType: 'by' | 'to', query: string = '', page: number = 1, count: number = this.SEARCH_LOAD_MORE_COUNT, isInitialLoad: boolean = false, callback?: (success: boolean) => void): void {
-        const voucherTypeControl = this.journalVoucherForm.get('voucherType');
         const searchData = accountType === 'by' ? this.byAccountSearchData : this.toAccountSearchData;
-        
-        if (searchData.isLoading) {
+        if (searchData.isLoading || !(searchData.searchQuery === query && page == searchData.page + 1 || searchData.searchQuery !== query)) {
+            if (callback) {
+                callback(true);
+            }
             return;
         }
+        const voucherTypeControl = this.journalVoucherForm.get('voucherType');
         
         searchData.isLoading = true;
         searchData.searchQuery = query;
@@ -1534,7 +1536,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 const searchResults = data.body.results.map((result, i) => {
                     return {
                         value: result?.uniqueName,
-                        label: `${result.name} (${result?.uniqueName})`,
+                        label: result.name,
                         additional: result,
                         index: i
                     }
@@ -1549,20 +1551,20 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     ];
                 }
                 
-                searchData.page = data.body.page;
-                searchData.totalPages = data.body.totalPages;
-                
-                // Update display variables whenever data is loaded
-                if (isInitialLoad) {
-                    searchData.isInitialLoaded = true;
-                    // Auto-show dropdown for 'by' type when initial data is loaded
-                    if (accountType === 'by') {
-                        this.handleTransactionFocus(0);
-                    }
-                }
-                
+                searchData.page = isInitialLoad ? 4 : data.body.page;
+                searchData.totalItems = data.body.totalItems;
             }
             searchData.isLoading = false;
+            searchData.isInitialLoaded = searchData.searchQuery === "" && searchData.accounts.length === searchData.totalItems;
+            // Update display variables whenever data is loaded
+            if (isInitialLoad) {
+                // Auto-show dropdown for 'by' type when initial data is loaded
+                const transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
+                const transaction = transactionsFormArray.at(0) as FormGroup;
+                if (transaction.get("type").value === accountType) {
+                    this.handleTransactionFocus(0);
+                }
+            }
             // If a callback is provided, invoke it with the updated accounts and raw response
             if (callback) {
                 callback(true);
@@ -1579,10 +1581,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public onAccountListScroll(scrolledIndex: number): void {
         const totalItems = this.displayAccountList?.length || 0;
         const remainingItems = totalItems - scrolledIndex;
-        
         // Trigger load more when near the end (within 20 items)
-        if (remainingItems < 20 && !this.loadMoreInProgress) {
-            this.loadMoreInProgress = true;
+        if (remainingItems < 20) {
             this.handleScrollEnd();
             this.changeDetectionRef.detectChanges();
         }
@@ -1616,9 +1616,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public searchAccount(accountName: string, transaction: any): void {
-        if (!accountName) {
-            this.resetAccountOnTypeChange(transaction);
-        }
         this.filterByText = accountName;
         this.showLedgerAccountList = true;
         this.selectedIndex = 0;
@@ -1626,12 +1623,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
         // Determine account type based on current selection
         const searchData = currentAccountType === 'by' ? this.byAccountSearchData : this.toAccountSearchData;
-
         // Smart search logic: API call only when total items > current result length
-        if (searchData.isInitialLoaded && searchData.page >= searchData.totalPages) {
+        if (searchData.isInitialLoaded) {
             // Local search - sufficient data exists
-            const filteredAccounts = this.searchLocalAccounts(searchData.accounts, accountName);
-            this.displayAccountList = filteredAccounts;
+            this.displayAccountList = this.searchLocalAccounts(searchData.accounts, accountName);
         } else {
             // API call needed - not enough data loaded
             this.loadAccountsForType(
@@ -1642,7 +1637,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 false,
                 (success) => {
                     if (success && this.showLedgerAccountList) {
-                        // Use the accounts passed into the callback (from loadAccountsForType)
                         this.displayAccountList = currentAccountType === 'by' ? this.byAccountSearchData.accounts : this.toAccountSearchData.accounts;
                         this.changeDetectionRef.detectChanges();
                     }
@@ -2282,6 +2276,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
                 case VOUCHERS.SALES:
                 case VOUCHERS.PURCHASE:
+                case VOUCHERS.CREDIT_NOTE:
+                case VOUCHERS.DEBIT_NOTE:
                     firstTransaction.patchValue({ type: 'by' });
                     this.isSalesEntry = true;
                     this.showDiscountAndTax.emit(this.isSalesEntry);
@@ -2751,8 +2747,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public handleScrollEnd(): void {
         const currentAccountType = this.selectedInput || 'by';
         const searchData = currentAccountType === 'by' ? this.byAccountSearchData : this.toAccountSearchData;
-        
-        if (searchData.page < searchData.totalPages && !searchData.isLoading) {
+        if (searchData.accounts.length < searchData.totalItems && !searchData.isLoading) {
             // Use search count (50) for load more operations
             this.loadAccountsForType(
                 currentAccountType,
@@ -2762,14 +2757,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 false,
                 (success) => {
                     if (success && this.showLedgerAccountList) {
-                        // Use the accounts passed into the callback (from loadAccountsForType)
                         this.displayAccountList = currentAccountType === 'by' ? this.byAccountSearchData.accounts : this.toAccountSearchData.accounts;
                         this.changeDetectionRef.detectChanges();
                     }
                 }
             );
-        } else {
-            this.loadMoreInProgress = false;
         }
     }
 

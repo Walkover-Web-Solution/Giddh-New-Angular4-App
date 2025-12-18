@@ -562,9 +562,12 @@
         "f6": "F6",
         "f7": "F7",
         "f8": "F8",
-        "f9": "F9"
+        "f9": "F9",
+        "f10": "F10",
+        "f11": "F11"
     },
-    "app_optional": "पर्यायी",
+    "app_alt": "Alt",
+    "app_optional": "ऐच्छिक",
     "app_success": "यश",
     "app_first": "पहिला",
     "app_last": "शेवटचे",
