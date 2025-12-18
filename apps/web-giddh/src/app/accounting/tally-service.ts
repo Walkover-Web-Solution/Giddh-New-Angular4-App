@@ -344,6 +344,20 @@ export class TallyModuleService {
                     encodeURIComponent('bankaccounts, cash, loanandoverdraft, sundrycreditors, sundrydebtors'),
                 exceptGroups: encodeURIComponent('')
             };
+        } else if (voucherType.toLowerCase() === VOUCHERS.DEBIT_NOTE) {
+            return {
+                group: selectedTransactionType?.toLowerCase() === 'by' ?
+                    encodeURIComponent('operatingcost, indirectexpenses, fixedassets') :
+                    encodeURIComponent('bankaccounts, cash, loanandoverdraft, sundrycreditors, sundrydebtors'),
+                exceptGroups: encodeURIComponent('')
+            };
+        } else if (voucherType.toLowerCase() === VOUCHERS.CREDIT_NOTE) {
+            return {
+                group: selectedTransactionType?.toLowerCase() === 'to' ?
+                    encodeURIComponent('revenuefromoperations, otherincome, fixedassets') :
+                    encodeURIComponent('bankaccounts, cash, loanandoverdraft, sundrycreditors, sundrydebtors'),
+                exceptGroups: encodeURIComponent('')
+            };
         }
         else {
             return {

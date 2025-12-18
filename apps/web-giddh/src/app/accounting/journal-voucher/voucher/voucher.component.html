@@ -344,7 +344,7 @@
                             class="account-list"
                             [id]="'acc_' + item.label + '_' + j"
                             [matTooltip]="item.label"
-                            matTooltipPosition="below"
+                            [matTooltipPosition]="'left'"
                             (click)="showLedgerAccountList ? onItemSelected(item) : 
                                     (showDiscountSidebar ? toggleDiscountSelected(item) : toggleTaxSelected(item))"
                             (keydown.enter)="showLedgerAccountList ? onItemSelected(item) : 

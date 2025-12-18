@@ -16,7 +16,9 @@ const FUNCTIONAL_KEYS = {
     F6: 'F6',
     F7: 'F7',
     F8: 'F8',
-    F9: 'F9'
+    F9: 'F9',
+    F10: 'F10',
+    F11: 'F11'
 };
 
 /** Key codes for combination of shortcut with Alt+V, Alt+I and other shortcuts */
@@ -38,6 +40,7 @@ export const PAGE_SHORTCUT_MAPPING = [
     {
         keyCode: 115, // 'F4',
         key: FUNCTIONAL_KEYS.F4,
+        altKey: true,
         inputForFn: {
             page: 'Contra',
             uniqueName: 'purchases',
@@ -47,6 +50,7 @@ export const PAGE_SHORTCUT_MAPPING = [
     {
         keyCode: 116, // 'F5',
         key: FUNCTIONAL_KEYS.F5,
+        altKey: true,
         inputForFn: {
             page: 'Payment',
             uniqueName: 'purchases',
@@ -56,6 +60,7 @@ export const PAGE_SHORTCUT_MAPPING = [
     {
         keyCode: 117, // 'F6',
         key: FUNCTIONAL_KEYS.F6,
+        altKey: true,
         inputForFn: {
             page: 'Receipt',
             uniqueName: 'null',
@@ -65,6 +70,7 @@ export const PAGE_SHORTCUT_MAPPING = [
     {
         keyCode: 118, // 'F7',
         key: FUNCTIONAL_KEYS.F7,
+        altKey: true,
         inputForFn: {
             page: 'Journal',
             uniqueName: 'purchases',
@@ -74,6 +80,7 @@ export const PAGE_SHORTCUT_MAPPING = [
     {
         keyCode: 119, // 'F8',
         key: FUNCTIONAL_KEYS.F8,
+        altKey: true,
         inputForFn: {
             page: 'Sales',
             uniqueName: 'purchases',
@@ -83,8 +90,29 @@ export const PAGE_SHORTCUT_MAPPING = [
     {
         keyCode: 120, // 'F9',
         key: FUNCTIONAL_KEYS.F9,
+        altKey: true,
         inputForFn: {
             page: 'Purchase',
+            uniqueName: 'purchases',
+            gridType: 'voucher'
+        }
+    },
+    {
+        keyCode: 121, // 'F10',
+        key: FUNCTIONAL_KEYS.F10,
+        altKey: true,
+        inputForFn: {
+            page: 'Debit note',
+            uniqueName: 'purchases',
+            gridType: 'voucher'
+        }
+    },
+    {
+        keyCode: 122, // 'F11',
+        key: FUNCTIONAL_KEYS.F11,
+        altKey: true,
+        inputForFn: {
+            page: 'Credit note',
             uniqueName: 'purchases',
             gridType: 'voucher'
         }
@@ -171,11 +199,6 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
         });
     }
 
-    @HostListener('document:keydown', ['$event'])
-    public beforeunloadHandler(event: KeyboardEvent) {
-        return event.key !== FUNCTIONAL_KEYS.F5;
-    }
-
     @HostListener('document:keyup', ['$event'])
     public handleKeyboardEvent(event: KeyboardEvent) {
         if (event.ctrlKey && event.key?.toLowerCase() === 'a') { // Ctrl + A
@@ -232,7 +255,7 @@ export class JournalVoucherComponent implements OnInit, OnDestroy {
                 if (event.altKey) {
                     return page.key === event.key && page.altKey;
                 } else {
-                    return page.key === event.key;
+                    return page.key === event.key && !page.altKey;
                 }
             });
             if (selectedPageIndx > -1) {

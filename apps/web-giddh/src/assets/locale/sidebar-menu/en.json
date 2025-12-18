@@ -636,7 +636,7 @@
                     "description": "Overdues, P&L, Bank account, Ratio Analysis"
                 },
                 {
-                    "label": "Journal Entries *",
+                    "label": "Journal Entries",
                     "link": "/pages/journal-voucher",
                     "icon": "icon-journal-voucher-new",
                     "description": "Entries of Journal Voucher"
