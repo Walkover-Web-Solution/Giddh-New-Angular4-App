@@ -15,6 +15,7 @@ import { NewConfirmModalModule } from 'apps/web-giddh/src/app/theme/new-confirm-
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { SalesPersonService } from '../../../sales-person/utility/sales-person.service';
 import { MobileNumberInputComponent } from '../../../mobile-number-input';
+import { A11yModule } from '@angular/cdk/a11y';
 
 @NgModule({
     declarations: [AccountAddNewDetailsComponent, BulkAddDialogComponent],
@@ -33,7 +34,8 @@ import { MobileNumberInputComponent } from '../../../mobile-number-input';
         FormFieldsModule,
         NewConfirmModalModule,
         MatTooltipModule,
-        MobileNumberInputComponent
+        MobileNumberInputComponent,
+        A11yModule
     ],
     providers: [SalesPersonService]
 })

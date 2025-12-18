@@ -1584,9 +1584,9 @@
                                                             *ngIf="
                                                                 voucherApiVersion === 2 &&
                                                                 transactions.voucherGenerated &&
-                                                                    !restrictedVouchersForDownload.includes(
-                                                                        transactions.voucherGeneratedType
-                                                                    )
+                                                                !restrictedVouchersForDownload.includes(
+                                                                    transactions.voucherGeneratedType
+                                                                )
                                                             "
                                                             (click)="openAttachmentsDialog(attachments, transactions)"
                                                         >
@@ -2371,9 +2371,7 @@
                                                 *ngIf="
                                                     voucherApiVersion === 2 &&
                                                     txn.voucherGenerated &&
-                                                        !restrictedVouchersForDownload.includes(
-                                                            txn.voucherGeneratedType
-                                                        )
+                                                    !restrictedVouchersForDownload.includes(txn.voucherGeneratedType)
                                                 "
                                                 (click)="openAttachmentsDialog(attachments, txn)"
                                                 [matTooltip]="
@@ -3251,8 +3249,6 @@
                     [showMatLabel]="false"
                     [showCaretIcon]="false"
                     [appearance]="'fill'"
-                    [createNewText]="commonLocaleData?.app_create_new"
-                    [showKeyboardCommand]="commonLocaleData?.app_alt_c"
                     [openDropdown]="openDropdown"
                 >
                     <ng-template #optionTemplate let-option="option">

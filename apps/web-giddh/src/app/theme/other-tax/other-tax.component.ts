@@ -29,7 +29,7 @@ export class OtherTaxComponent implements OnInit, OnDestroy {
     /** True if form is submitted to show error if available */
     public isFormSubmitted: boolean = false;
     /** Create tax dialog ref  */
-    public taxAsideMenuRef: MatDialogRef<any>;
+    public taxAsideMenuRef: MatDialogRef<any> = null;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -38,6 +38,8 @@ export class OtherTaxComponent implements OnInit, OnDestroy {
     public otherTax: boolean = false;
     /** Calculation method options for dropdown */
     public calculationMethodOptions: any[] = [];
+    /** This will open account dropdown by default */
+    public openAccountDropdown: boolean = false;
 
     constructor(
         private componentStore: OtherTaxComponentStore,
@@ -51,7 +53,7 @@ export class OtherTaxComponent implements OnInit, OnDestroy {
     ) {
 
     }
-
+    
     /**
      * Hook cycle for component initialization
      *
@@ -119,6 +121,13 @@ export class OtherTaxComponent implements OnInit, OnDestroy {
      */
     public createTaxDialog(): void {
         this.taxAsideMenuRef = this.dialog.open(this.createTax, ASIDE_PANE_CONFIG);
+        this.taxAsideMenuRef.afterClosed().subscribe(() => {
+            this.taxAsideMenuRef = null;
+            this.openAccountDropdown = false; 
+            setTimeout(() => {
+                this.openAccountDropdown = true;
+            }, 50);
+        });
         this.otherTax = true;
     }
 

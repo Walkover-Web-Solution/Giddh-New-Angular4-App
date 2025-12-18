@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, ViewChild } from "@angular/core";
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, Inject, Input, OnDestroy, OnInit, Output, ViewChild } from "@angular/core";
 import { Observable, ReplaySubject } from "rxjs";
 import { distinctUntilChanged, take, takeUntil } from "rxjs/operators";
 import { InventoryService } from "../../../services/inventory.service";
@@ -43,6 +43,8 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
     @ViewChild('stockCreateEditForm', { static: false }) public stockCreateEditForm: NgForm;
     /** Instance of recipe create/update component */
     @ViewChild('createRecipe', { static: false }) public createRecipe: CreateRecipeComponent;
+    /** Instance of fileInput */
+    @ViewChild('fileInput', { static: false }) fileInput?: ElementRef<HTMLInputElement>;
     /* This will hold add stock value from aside menu */
     @Input() public addStock: boolean = false;
     /* This will hold stock type from aside menu */
@@ -2547,5 +2549,14 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         if (!formValues) return true;
         this.changeDetection.detectChanges();
         return this.stockCreateEditForm.form.pristine;
+    }
+
+    /**
+     * Programmatically click to file input
+     *
+     * @memberof StockCreateEditComponent
+     */
+    public triggerFileInput(): void {
+        this.fileInput?.nativeElement.click();
     }
 }

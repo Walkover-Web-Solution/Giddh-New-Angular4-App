@@ -17,8 +17,9 @@
 
                 .list-item {
                     min-height: 40px;
-                    max-width: 80%;
                     cursor: pointer;
+                    transition: background-color 0.2s ease;
+                    outline: none;
 
                     .stock-icon {
                         margin-bottom: 2px;
