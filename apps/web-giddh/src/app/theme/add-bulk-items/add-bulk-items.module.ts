@@ -13,6 +13,7 @@ import { A11yModule } from "@angular/cdk/a11y";
 import { TranslateDirectiveModule } from "../translate/translate.directive.module";
 import { GiddhNumberFormatPipe } from "../../shared/helpers/pipes/number-format/number-format.pipe";
 import { KeyboardShortutModule } from "../../shared/helpers/directives/keyboardShortcut/keyboardShortut.module";
+import { KeyboardNavigationModule } from "../../shared/helpers/directives/enter-next/keyboard-navigation.module";
 
 @NgModule({
     declarations: [
@@ -31,7 +32,8 @@ import { KeyboardShortutModule } from "../../shared/helpers/directives/keyboardS
         ReactiveFormsModule,
         A11yModule,
         TranslateDirectiveModule,
-        KeyboardShortutModule
+        KeyboardShortutModule,
+        KeyboardNavigationModule
     ],
     exports: [
         AddBulkItemsComponent

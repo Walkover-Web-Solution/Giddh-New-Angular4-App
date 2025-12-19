@@ -492,11 +492,12 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             if (this.allowCustomDropdownValue && !this.searchFormControl?.value && !this.controlLabelValue) {
                 this.selectedOption.emit({ label: '', value: '' });
             }
-
+            
             if (this.allowCustomDropdownValue && this.searchFormControl?.value && typeof this.searchFormControl?.value !== "object") {
                 this.value = this.searchFormControl?.value;
                 this.selectedOption.emit({ label: this.value, value: this.value });
             }
+            this.closeDropdownPanel();
         }, 200);
     }
 

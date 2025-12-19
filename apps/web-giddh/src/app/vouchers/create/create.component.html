@@ -158,6 +158,7 @@
                                         >
                                             <reactive-dropdown-field
                                                 *ngIf="!invoiceType.isCashInvoice"
+                                                appEnterNext
                                                 [label]="
                                                     invoiceType.isPurchaseOrder ||
                                                     invoiceType.isPurchaseInvoice ||
@@ -202,6 +203,7 @@
                                             </reactive-dropdown-field>
                                             <input-field
                                                 *ngIf="invoiceType.isCashInvoice"
+                                                appEnterNext
                                                 [name]="'account'"
                                                 [label]="
                                                     invoiceType.isPurchaseOrder ||
@@ -330,16 +332,10 @@
                                             !invoiceType.isCashInvoice &&
                                             invoiceForm.controls['account'].get('uniqueName')?.value
                                         "
-                                        tabindex="0"
-                                        role="button"
-                                        cdkMonitorElementFocus
                                         class="vouchers-form-fields-detail cursor-pointer"
-                                        (keydown.enter)="
-                                            $event.preventDefault(); toggleAccountAsidePane(accountType.customer, false)
-                                        "
-                                        (keydown.space)="
-                                            $event.preventDefault(); toggleAccountAsidePane(accountType.customer, false)
-                                        "
+                                        appFocusableClick
+                                        [componentContext]="this"
+                                        [clickStatements]="'toggleAccountAsidePane(' + accountType.customer + ', false)'"
                                         (click)="toggleAccountAsidePane(accountType.customer, false)"
                                     >
                                         {{
@@ -575,6 +571,7 @@
                                                     </div>
                                                     <div class="state-field w-50 border-bottom" formGroupName="state">
                                                         <reactive-dropdown-field
+                                                            appEnterNext
                                                             [cssClass]="'border-none w-100'"
                                                             [forceClear]="forceClear"
                                                             formControlName="code"
@@ -608,6 +605,7 @@
                                                 <div class="d-flex column-gap-15">
                                                     <div *ngIf="account?.taxTypeLabel" class="w-50 border-bottom">
                                                         <text-field
+                                                            appEnterNext
                                                             [type]="'text'"
                                                             [name]="'billingTaxNumber'"
                                                             (keyup)="copyAccountBillingAddressToShippingAddress()"
@@ -622,6 +620,7 @@
                                                     </div>
                                                     <div class="w-50 border-bottom zip-field-width">
                                                         <text-field
+                                                            appEnterNext
                                                             [type]="'text'"
                                                             [name]="'billingPinCode'"
                                                             (keyup)="copyAccountBillingAddressToShippingAddress()"
@@ -785,6 +784,7 @@
                                                     </div>
                                                     <div class="state-field w-50 border-bottom" formGroupName="state">
                                                         <reactive-dropdown-field
+                                                            appEnterNext
                                                             [cssClass]="'border-none w-100'"
                                                             [forceClear]="forceClear"
                                                             formControlName="code"
@@ -817,6 +817,7 @@
                                                 <div class="d-flex column-gap-15">
                                                     <div *ngIf="account?.taxTypeLabel" class="w-50 border-bottom">
                                                         <text-field
+                                                            appEnterNext
                                                             [type]="'text'"
                                                             [name]="'shippingTaxNumber'"
                                                             [placeholder]="account?.taxTypeLabel"
@@ -830,6 +831,7 @@
                                                     </div>
                                                     <div class="w-50 border-bottom zip-field-width">
                                                         <text-field
+                                                            appEnterNext
                                                             [type]="'text'"
                                                             [name]="'shippingPinCode'"
                                                             [placeholder]="
@@ -856,12 +858,14 @@
                                                     [placeholder]="localeData?.enter_name"
                                                     [type]="'text'"
                                                     formControlName="attentionTo"
+                                                    appEnterNext
                                                 ></input-field>
                                             </div>
 
                                             <!-- Email Id -->
                                             <div class="col-6 mt-3">
                                                 <input-field
+                                                    appEnterNext
                                                     [name]="'email'"
                                                     [label]="commonLocaleData?.app_email_id"
                                                     [placeholder]="localeData?.enter_email"
@@ -891,6 +895,7 @@
                                     <!-- Sales Person -->
                                     <div class="col-6 mt-3">
                                         <reactive-dropdown-field
+                                            appEnterNext
                                             formControlName="salesPersonUniqueName"
                                             [name]="'sales-person'"
                                             [label]="commonLocaleData?.app_sales_person"
@@ -912,6 +917,7 @@
                                         formGroupName="warehouse"
                                     >
                                         <reactive-dropdown-field
+                                            appEnterNext
                                             [cssClass]="'border-none'"
                                             [name]="'warehouse'"
                                             formControlName="uniqueName"
@@ -925,6 +931,7 @@
                                     <ng-container *ngIf="invoiceType.isReceiptInvoice || invoiceType.isPaymentInvoice">
                                         <div class="col-3 pr-2 mt-3">
                                             <input-field
+                                                appEnterNext
                                                 [name]="'email'"
                                                 [label]="localeData?.cheque_no"
                                                 [placeholder]="localeData?.cheque_no_placeholder"
@@ -943,6 +950,7 @@
                                                 [showToggleIcon]="false"
                                                 [appearance]="'outline'"
                                                 formControlName="chequeClearanceDate"
+                                                appEnterNext
                                             >
                                             </giddh-datepicker>
                                         </div>
@@ -1097,6 +1105,7 @@
                                             <div class="d-flex column-gap-15 mb-3">
                                                 <div class="w-50 border-bottom" *ngIf="company?.taxTypeLabel">
                                                     <text-field
+                                                        appEnterNext
                                                         [type]="'text'"
                                                         [name]="'companyBillingTaxNumber'"
                                                         (keyup)="copyCompanyBillingAddressToShippingAddress()"
@@ -1110,6 +1119,7 @@
                                                 </div>
                                                 <div class="w-50 border-bottom zip-field-width">
                                                     <text-field
+                                                        appEnterNext
                                                         [type]="'text'"
                                                         [name]="'companyBillingPinCode'"
                                                         (keyup)="copyCompanyBillingAddressToShippingAddress()"
@@ -1275,6 +1285,7 @@
                                             <div class="d-flex column-gap-15 mb-3">
                                                 <div class="w-50 border-bottom" *ngIf="company?.taxTypeLabel">
                                                     <text-field
+                                                        appEnterNext
                                                         [type]="'text'"
                                                         [name]="'companyShippingTaxNumber'"
                                                         [placeholder]="company.taxTypeLabel"
@@ -1287,6 +1298,7 @@
                                                 </div>
                                                 <div class="w-50 border-bottom zip-field-width">
                                                     <text-field
+                                                        appEnterNext
                                                         [type]="'text'"
                                                         [name]="'companyShippingPinCode'"
                                                         [placeholder]="
@@ -1374,6 +1386,7 @@
                                     <!-- Voucher Number -->
                                     <div class="col-6">
                                         <input-field
+                                            appEnterNext
                                             [name]="'vouchers-number'"
                                             [label]="
                                                 !invoiceType.isPurchaseOrder
@@ -1411,6 +1424,7 @@
                                             [appearance]="'outline'"
                                             formControlName="date"
                                             (dateSelected)="onChangeVoucherDate()"
+                                            appEnterNext
                                         >
                                         </giddh-datepicker>
                                     </div>
@@ -1437,6 +1451,7 @@
                                             [showToggleIcon]="false"
                                             [appearance]="'outline'"
                                             formControlName="dueDate"
+                                            appEnterNext
                                         >
                                         </giddh-datepicker>
                                     </div>
@@ -1450,6 +1465,7 @@
                                         "
                                     >
                                         <reactive-dropdown-field
+                                            appEnterNext
                                             [cssClass]="'border-none'"
                                             [name]="'invoiceLinking'"
                                             [label]="commonLocaleData?.app_select_voucher"
@@ -1563,6 +1579,7 @@
                                         </div>
                                         <div class="col-6" *ngIf="invoiceForm.get('touristSchemeApplicable')?.value">
                                             <input-field
+                                                appEnterNext
                                                 [type]="'text'"
                                                 [name]="'passportNumber'"
                                                 [placeholder]="localeData?.passport_number"
@@ -1626,6 +1643,7 @@
                                     >
                                     <div class="currency-input-wrapper" *ngIf="showExchangeRateEditField">
                                         <text-field
+                                            appEnterNext
                                             [cssClass]="'form-control'"
                                             [type]="'number'"
                                             [autoFocus]="true"
@@ -1782,6 +1800,7 @@
                                                                         </div>
                                                                     </ng-container>
                                                                     <reactive-dropdown-field
+                                                                        appEnterNext
                                                                         class="mat-form-field-clean"
                                                                         #accountDropdown
                                                                         (click)="setUserManuallyClicked()"
@@ -2039,6 +2058,7 @@
                                                                                 [placeholder]="'DD-MM-YYYY'"
                                                                                 formControlName="date"
                                                                                 [appearance]="'fill'"
+                                                                                appEnterNext
                                                                             >
                                                                             </giddh-datepicker>
                                                                             <i
@@ -2151,6 +2171,7 @@
                                                                                         color="primary"
                                                                                         value="hsn"
                                                                                         tabindex="0"
+                                                                                        (keydown.enter)="$event.target.click(); inputHsn.inputFocus(); inputSac.inputFocus()"
                                                                                         >{{
                                                                                             commonLocaleData?.app_hsn_code
                                                                                         }}</mat-radio-button
@@ -2158,6 +2179,7 @@
                                                                                     <mat-radio-button
                                                                                         color="primary"
                                                                                         value="sac"
+                                                                                        (keydown.enter)="$event.target.click(); inputSac.inputFocus(); inputHsn.inputFocus()"
                                                                                         >{{
                                                                                             commonLocaleData?.app_sac_code
                                                                                         }}</mat-radio-button
@@ -2166,9 +2188,15 @@
 
                                                                                 <div class="mt-3">
                                                                                     <text-field
-                                                                                        *ngIf="
+                                                                                        #inputHsn
+                                                                                        (keydown.enter)="$event.preventDefault(); focusNextElement($event)"
+                                                                                        (keydown.space)="
+                                                                                            $event.preventDefault();
+                                                                                            focusNextElement($event)
+                                                                                        "
+                                                                                        [hidden]="
                                                                                             entry.get('showCodeType')
-                                                                                                ?.value === 'hsn'
+                                                                                                ?.value === 'sac'
                                                                                         "
                                                                                         [cssClass]="
                                                                                             'form-control text-right'
@@ -2187,9 +2215,15 @@
                                                                                     >
                                                                                     </text-field>
                                                                                     <text-field
-                                                                                        *ngIf="
+                                                                                        #inputSac
+                                                                                        (keydown.enter)="$event.preventDefault(); focusNextElement($event)"
+                                                                                        (keydown.space)="
+                                                                                            $event.preventDefault();
+                                                                                            focusNextElement($event)
+                                                                                        "
+                                                                                        [hidden]="
                                                                                             entry.get('showCodeType')
-                                                                                                ?.value === 'sac'
+                                                                                                ?.value === 'hsn'
                                                                                         "
                                                                                         [cssClass]="
                                                                                             'form-control text-right'
@@ -2250,6 +2284,8 @@
                                                     >
                                                         <ng-container *ngIf="activeEntryIndex === entryIndex">
                                                             <textarea
+                                                                #inputDescription
+                                                                appEnterNext
                                                                 rows="2"
                                                                 matInput
                                                                 class="form-control"
@@ -2326,6 +2362,7 @@
                                                                             </div>
                                                                         </ng-container>
                                                                         <text-field
+                                                                            appEnterNext
                                                                             *ngIf="activeEntryIndex === entryIndex"
                                                                             [placeholder]="
                                                                                 commonLocaleData?.app_quantity
@@ -2355,6 +2392,8 @@
                                                                                 "
                                                                             >
                                                                                 <mat-select
+                                                                                    appEnterNext
+                                                                                    cdkMonitorElementFocus
                                                                                     #unitSelect
                                                                                     *ngIf="
                                                                                         activeEntryIndex === entryIndex
@@ -2415,6 +2454,7 @@
                                                                         </ng-container>
                                                                         <div class="wrap-td-data">
                                                                             <text-field
+                                                                                appEnterNext
                                                                                 *ngIf="activeEntryIndex === entryIndex"
                                                                                 [placeholder]="
                                                                                     commonLocaleData?.app_rate
@@ -2495,6 +2535,8 @@
                                                                     >
                                                                         <input
                                                                             matInput
+                                                                            appEnterNext
+                                                                            cdkMonitorElementFocus
                                                                             [placeholder]="commonLocaleData?.app_amount"
                                                                             class="form-control text-right"
                                                                             type="text"
@@ -2792,6 +2834,8 @@
                                                                 >
                                                                     <input
                                                                         matInput
+                                                                        appEnterNext
+                                                                        cdkMonitorElementFocus
                                                                         [placeholder]="commonLocaleData?.app_total"
                                                                         class="form-control text-right pr-0"
                                                                         type="text"
@@ -3062,6 +3106,7 @@
                                                                             >
                                                                                 <div class="col">
                                                                                     <reactive-dropdown-field
+                                                                                        appEnterNext
                                                                                         [label]="
                                                                                             commonLocaleData?.app_account
                                                                                         "
@@ -3117,6 +3162,7 @@
                                                                                     *ngIf="!invoiceType.isCashInvoice"
                                                                                 >
                                                                                     <input-field
+                                                                                        appEnterNext
                                                                                         [name]="
                                                                                             'amount_' + depositIndex
                                                                                         "
@@ -3305,11 +3351,13 @@
                                                                                 [showToggleIcon]="false"
                                                                                 [appearance]="'outline'"
                                                                                 formControlName="shippingDate"
+                                                                                appEnterNext
                                                                             >
                                                                             </giddh-datepicker>
                                                                         </div>
                                                                         <div class="col-4 px-2">
                                                                             <input-field
+                                                                                appEnterNext
                                                                                 [type]="'text'"
                                                                                 [placeholder]="
                                                                                     templateData?.shippedViaLabel ||
@@ -3322,6 +3370,7 @@
                                                                         </div>
                                                                         <div class="col-4 px-2">
                                                                             <input-field
+                                                                                appEnterNext
                                                                                 [type]="'text'"
                                                                                 [placeholder]="
                                                                                     templateData?.trackingNumber ||
@@ -3337,6 +3386,7 @@
                                                                         >
                                                                             <div class="col-4 px-2">
                                                                                 <input-field
+                                                                                    appEnterNext
                                                                                     [type]="'text'"
                                                                                     [placeholder]="
                                                                                         templateData?.customField1Label ||
@@ -3349,6 +3399,7 @@
                                                                             </div>
                                                                             <div class="col-4 px-2">
                                                                                 <input-field
+                                                                                    appEnterNext
                                                                                     [type]="'text'"
                                                                                     [placeholder]="
                                                                                         templateData?.customField2Label ||
@@ -3361,6 +3412,7 @@
                                                                             </div>
                                                                             <div class="col-4 px-2">
                                                                                 <input-field
+                                                                                    appEnterNext
                                                                                     [type]="'text'"
                                                                                     [placeholder]="
                                                                                         templateData?.customField3Label ||
@@ -3709,6 +3761,7 @@
                                                         </td>
                                                         <td>
                                                             <text-field
+                                                                appEnterNext
                                                                 [id]="'grandTotalMultiCurrency'"
                                                                 #grandTotalMultiCurrency
                                                                 [type]="'text'"

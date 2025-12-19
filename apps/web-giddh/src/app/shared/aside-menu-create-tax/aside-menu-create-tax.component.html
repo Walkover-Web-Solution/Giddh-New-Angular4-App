@@ -23,6 +23,7 @@
             <div class="row" *ngIf="isUSCompany">
                 <div class="mb-3 col-sm-6 col-xs-12" formGroupName="taxAuthorityRequest">
                     <reactive-dropdown-field
+                        appEnterNext
                         [label]="commonLocaleData?.app_tax_authority"
                         [options]="taxAuthorityList"
                         [name]="'taxAuthority'"
@@ -38,6 +39,7 @@
             <div class="row mb-3">
                 <div class="col-sm-6 col-xs-12">
                     <reactive-dropdown-field
+                        appEnterNext
                         [label]="localeData?.select_tax"
                         [options]="taxListSource$ | async"
                         [name]="'taxType'"
@@ -56,6 +58,7 @@
 
                 <div class="col-sm-6 col-xs-12">
                     <input-field
+                        appEnterNext
                         [label]="localeData?.tax_percent"
                         [type]="'number'"
                         [name]="'taxValue'"
@@ -70,6 +73,7 @@
             <div class="row">
                 <div class="col-sm-6 col-xs-12">
                     <input-field
+                        appEnterNext                    
                         [type]="'text'"
                         [name]="'name'"
                         [label]="commonLocaleData?.app_name"
@@ -83,6 +87,7 @@
 
                 <div class="form-group col-sm-6 col-xs-12" *ngIf="tax && tax?.uniqueName">
                     <input-field
+                        appEnterNext
                         [type]="'text'"
                         [name]="'taxNumber'"
                         [label]="commonLocaleData?.app_unique_name"
@@ -97,6 +102,7 @@
                     *ngIf="taxForm?.get('taxType')?.value === 'tds' || taxForm?.get('taxType')?.value === 'tcs'"
                 >
                     <reactive-dropdown-field
+                        appEnterNext
                         [options]="taxNameTypesMapping[taxForm?.get('taxType')?.value]"
                         [name]="'tdsTcsTaxSubTypes'"
                         [label]="commonLocaleData?.app_type"
@@ -119,6 +125,7 @@
             >
                 <div class="col-sm-6 col-xs-12" *ngIf="taxForm?.get('taxType')?.value === 'cess'">
                     <reactive-dropdown-field
+                        appEnterNext
                         [options]="allTaxes"
                         [name]="'linkTax'"
                         [placeholder]="localeData?.link_tax"
@@ -127,6 +134,7 @@
 
                 <div class="col-sm-6 col-xs-12" *ngIf="taxForm?.get('taxType')?.value === 'others' && !tax">
                     <reactive-dropdown-field
+                        appEnterNext
                         [label]="localeData?.linked_account"
                         [placeholder]="commonLocaleData?.app_select_account"
                         [name]="'account'"
@@ -152,6 +160,7 @@
             <div class="row mt-3">
                 <div class="form-group col-sm-4 col-xs-12">
                     <giddh-datepicker
+                        appEnterNext
                         (dateSelected)="selectDate($event)"
                         name="date"
                         [cssClass]="'w-100'"
@@ -168,6 +177,7 @@
 
                 <div class="form-group col-sm-4 col-xs-12">
                     <reactive-dropdown-field
+                        appEnterNext
                         [label]="localeData?.tax_duration"
                         formControlName="duration"
                         [showError]="!isValidForm && taxForm?.get('duration')?.invalid"
@@ -181,6 +191,7 @@
 
                 <div class="form-group col-sm-4 col-xs-12">
                     <reactive-dropdown-field
+                        appEnterNext
                         [label]="localeData?.filing_date"
                         [placeholder]="commonLocaleData?.app_select_date"
                         formControlName="taxFileDate"

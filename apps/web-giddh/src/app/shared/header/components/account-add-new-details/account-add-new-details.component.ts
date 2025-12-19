@@ -9,7 +9,8 @@ import {
     OnChanges,
     OnDestroy,
     OnInit,
-    Output
+    Output,
+    Renderer2
 } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { digitsOnly } from '../../../helpers';
@@ -252,7 +253,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         private commonService: CommonService,
         private readonly componentStore: AccountAddNewDetailsComponentStore,
         private settingsBranchAction: SettingsBranchActions,
-        private salesPersonStore: SalesPersonComponentStore
+        private salesPersonStore: SalesPersonComponentStore,
+        private renderer: Renderer2
     ) {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
     }
@@ -769,9 +771,22 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         return;
     }
 
-    public removeGstDetailsForm(i: number) {
+    /**
+     * Removes GST details form at specified index and focuses on submit button
+     * @param i - Index of the form to remove
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public removeGstDetailsForm(i: number): void {
         const addresses = this.addAccountForm.get('addresses') as FormArray;
         addresses.removeAt(i);
+        
+        // Focus on submit button after removing address
+        setTimeout(() => {
+           const submitBtn = this.renderer.selectRootElement('button[type="submit"], button[aria-label="save"]', true);
+            if (submitBtn) {
+                submitBtn.focus();
+            }
+        }, 100);
     }
 
     public addBlankGstForm() {

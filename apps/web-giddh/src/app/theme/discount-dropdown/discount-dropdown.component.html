@@ -4,8 +4,8 @@
         class="form-control text-right total-discount-amount"
         tabindex="0"
         cdkMonitorElementFocus
-        (keydown.enter)="$event.preventDefault(); menuTrigger.openMenu()"
-        (keydown.space)="$event.preventDefault(); menuTrigger.openMenu()"
+        (keydown.enter)="$event.preventDefault(); isMenuOpened ? menuTrigger.closeMenu() : menuTrigger.openMenu()"
+        (keydown.space)="$event.preventDefault(); isMenuOpened ? menuTrigger.closeMenu() : menuTrigger.openMenu()"
         [matMenuTriggerFor]="discountControlMenu"
         #menuTrigger="matMenuTrigger"
         [placeholder]="currency + '0'"

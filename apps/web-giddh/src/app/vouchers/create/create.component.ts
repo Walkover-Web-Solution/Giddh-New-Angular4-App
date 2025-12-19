@@ -149,6 +149,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     @ViewChild('shippingDetailsTrigger') shippingDetailsTrigger!: MatMenuTrigger;
     /** Copy Voucher div element for focusing */
     @ViewChild('copyVoucherElement') copyVoucherElement!: ElementRef<HTMLDivElement>;
+    /** Description textarea element for focusing */
+    @ViewChild('inputDescription', { static: false }) inputDescription?: ElementRef<HTMLTextAreaElement>;
     /**  This will use for dayjs */
     public dayjs: any = dayjs;
     /** Holds current voucher type */
@@ -3950,10 +3952,30 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             });
             dialogRef.afterClosed().subscribe((response) => {
                 this.handleDateChangeConfirmation(response);
-                setTimeout(() => {
-                    if (this.voucherDatePicker) {
-                        this.voucherDatePicker.focus();
-                    }
+                // Use NgZone for optimal Angular performance
+                this.ngZone.runOutsideAngular(() => {
+                    setTimeout(() => {
+                        this.ngZone.run(() => {
+                            if (this.voucherDatePicker) {
+                                this.voucherDatePicker.focus();
+                                
+                                setTimeout(() => {
+                                    const datePickerInput = this.voucherDatePicker.dateInput?.nativeElement;
+                                    if (datePickerInput) {
+                                        const enterEvent = new KeyboardEvent('keydown', {
+                                            key: 'Enter',
+                                            code: 'Enter',
+                                            keyCode: 13,
+                                            which: 13,
+                                            bubbles: true,
+                                            cancelable: true
+                                        });
+                                        datePickerInput.dispatchEvent(enterEvent);
+                                    }
+                                }, 100);
+                            }
+                        });
+                    });
                 });
             });
         }
@@ -4027,8 +4049,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public handleHsnSacMenuClosed(reason: MenuCloseReason, entry: FormGroup): void {
+        // Focus to description field after closing HSN/SAC menu
+        setTimeout(() => {
+            if (this.inputDescription?.nativeElement) {
+                this.inputDescription.nativeElement.focus();
+            }
+        }, 150);
+
         if (!reason) return;
-        
         const isClosedByEscape = reason === 'keydown';
         if (isClosedByEscape) {
             // Reset to saved values when closed by escape key
@@ -7157,23 +7185,76 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     * Restores focus to the previously focused element
+     * Restores focus to the next focusable element after dialog closes
      * 
      * @private
      * @memberof VoucherCreateComponent
      */
     private restoreFocus(): void {
-        if (!this.lastFocusedElement?.focus) return;
+        if (!this.lastFocusedElement) return;
         
         setTimeout(() => {
             try {
-                this.lastFocusedElement?.focus();
+                // Find the next focusable element using simple utility logic
+                const nextElement = this.findNextFocusableElementSimple(this.lastFocusedElement);
+                if (nextElement) {
+                    nextElement.focus();
+                } else {
+                    // Fallback to the original element if no next element found
+                    this.lastFocusedElement?.focus();
+                }
             } catch {
                 // Fallback to first focusable element
                 document.querySelector<HTMLElement>('input, button, select, textarea, [tabindex]:not([tabindex="-1"])')?.focus();
             }
             this.lastFocusedElement = null;
         }, 100);
+    }
+
+    /**
+     * Finds the next focusable element after the given element using simple logic
+     * 
+     * @private
+     * @param {HTMLElement} currentElement - The current element
+     * @returns {HTMLElement | null} The next focusable element or null
+     * @memberof VoucherCreateComponent
+     */
+    private findNextFocusableElementSimple(currentElement: HTMLElement): HTMLElement | null {
+        const form = currentElement.closest('form');
+        if (!form) return null;
+        
+        const selector = 'input:not([tabindex="-1"]):not([disabled]), select:not([tabindex="-1"]):not([disabled]), textarea:not([tabindex="-1"]):not([disabled]), button:not([tabindex="-1"]):not([disabled]), [tabindex]:not([tabindex="-1"])';
+        const elements = Array.from(form.querySelectorAll(selector)) as HTMLElement[];
+        const currentIndex = elements.indexOf(currentElement);
+        
+        for (let i = currentIndex + 1; i < elements.length; i++) {
+            if (this.isElementAvailableSimple(elements[i])) {
+                return elements[i];
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Checks if an element is available for focus using simple logic
+     * 
+     * @private
+     * @param {HTMLElement} element - Element to check
+     * @returns {boolean} True if element is available for focus
+     * @memberof VoucherCreateComponent
+     */
+    private isElementAvailableSimple(element: HTMLElement): boolean {
+        if (element.offsetParent === null) return false;
+        const style = window.getComputedStyle(element);
+        if (style.display === 'none' || style.visibility === 'hidden') return false;
+        
+        if (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement) {
+            return !element.disabled && !element.readOnly;
+        }
+        if (element instanceof HTMLSelectElement || element instanceof HTMLButtonElement) {
+            return !element.disabled;
+        }
+        return true;
     }
 
     /**

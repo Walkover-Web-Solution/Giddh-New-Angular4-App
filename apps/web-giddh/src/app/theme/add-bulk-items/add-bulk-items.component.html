@@ -36,24 +36,18 @@
                                             <ng-container *ngIf="item?.additional?.hasVariants">
                                                 <mat-accordion>
                                                     <mat-expansion-panel>
-                                                        <mat-expansion-panel-header class="pl-0">
+                                                        <mat-expansion-panel-header tabindex="-1" class="pl-0">
                                                             <mat-panel-title>
                                                                 <mat-list-item
                                                                     class="list-item px-2"
                                                                     [matTooltip]="item.name"
-                                                                    (click)="addItem(item, i)"
+                                                                    (click)="onItemClick(item, i)"
                                                                     (keydown.enter)="
                                                                         $event.preventDefault();
-                                                                        addItem(item, i);
-                                                                        focusNextElement($event.target)
-                                                                    "
-                                                                    (keydown.space)="
-                                                                        $event.preventDefault();
-                                                                        addItem(item, i);
-                                                                        focusNextElement($event.target)
+                                                                        onItemClick(item, i);
                                                                     "
                                                                     (keydown.escape)="handleEscapeKey($event)"
-                                                                    [tabindex]="0"
+                                                                    [tabindex]="i === 0 ? 0 : -1"
                                                                     #listElement
                                                                     [attr.aria-label]="'Select item: ' + item.name"
                                                                     role="button"
@@ -84,20 +78,14 @@
                                                                 *ngFor="let variant of stockVariants[i] | async"
                                                             >
                                                                 <mat-list-item
-                                                                    (click)="variantChanged(item, variant, i)"
+                                                                    (click)="onVariantClick(item, variant, i)"
                                                                     (keydown.enter)="
                                                                         $event.preventDefault();
-                                                                        variantChanged(item, variant, i);
-                                                                        focusNextElement($event.target)
-                                                                    "
-                                                                    (keydown.space)="
-                                                                        $event.preventDefault();
-                                                                        variantChanged(item, variant, i);
-                                                                        focusNextElement($event.target)
+                                                                        onVariantClick(item, variant, i);
                                                                     "
                                                                     (keydown.escape)="handleEscapeKey($event)"
                                                                     #variantElement
-                                                                    [tabindex]="0"
+                                                                    [tabindex]="i === 0 ? 0 : -1"
                                                                     [attr.aria-label]="
                                                                         'Select variant: ' + variant?.label
                                                                     "
@@ -116,19 +104,14 @@
                                             <ng-container *ngIf="!item?.additional?.hasVariants">
                                                 <mat-list-item
                                                     class="list-item px-2"
-                                                    (click)="addItem(item, i)"
+                                                    [matTooltip]="item.name"
+                                                    (click)="onItemClick(item, i)"
                                                     (keydown.enter)="
                                                         $event.preventDefault();
-                                                        addItem(item, i);
-                                                        focusNextElement($event.target)
-                                                    "
-                                                    (keydown.space)="
-                                                        $event.preventDefault();
-                                                        addItem(item, i);
-                                                        focusNextElement($event.target)
+                                                        onItemClick(item, i);
                                                     "
                                                     (keydown.escape)="handleEscapeKey($event)"
-                                                    [tabindex]="0"
+                                                    [tabindex]="i === 0 ? 0 : -1"
                                                     #simpleListElement
                                                     [attr.aria-label]="'Select item: ' + item.name"
                                                     role="button"
@@ -166,7 +149,7 @@
                                     <ng-container [formGroupName]="bulkIndex">
                                         <mat-list class="p-0">
                                             <mat-list-item class="px-0 mb-3">
-                                                <div class="d-flex align-items-center justify-content-between">
+                                                <div class="d-flex align-items-center justify-content-between p-1">
                                                     <div class="w-75">
                                                         <p>
                                                             {{ item.get("name")?.value }}
