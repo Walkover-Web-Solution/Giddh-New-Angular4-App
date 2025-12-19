@@ -35,6 +35,8 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
     @Output() public selectedDiscounts: EventEmitter<any> = new EventEmitter<any>();
     /** Emitter for discount total */
     @Output() public totalDiscount: EventEmitter<any> = new EventEmitter<any>();
+    /** Emitter for close discount dropdown */
+    @Output() public closeDiscountDropdown: EventEmitter<any> = new EventEmitter<any>();
     /** Form Group for discount form */
     public discountForm: FormGroup;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
@@ -263,7 +265,6 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
      */
     public handleMenuClosed(reason: MenuCloseReason): void {
         if (!reason) return;
-
         this.isMenuOpened = false;
         const isClosedByEscape = reason === 'keydown';
         if (isClosedByEscape && this.lastSavedFormValues) {
@@ -284,6 +285,15 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
             this.calculateDiscountAmount();
         }
         this.lastSavedFormValues = null;
+    }
+
+    /**
+     * Emits close discount dropdown event
+     *
+     * @memberof DiscountDropdownComponent
+     */
+    protected emitCloseDiscountDropdown(): void {
+        this.closeDiscountDropdown.emit(true);
     }
 
     /**

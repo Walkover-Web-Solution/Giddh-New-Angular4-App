@@ -141,7 +141,7 @@
             optionsScroll
             [enableDynamicSearch]="enableDynamicSearch"
             (optionsScroll)="onScroll()"
-            [autoActiveFirstOption]="false"
+            [autoActiveFirstOption]="!showCreateNew"
             [displayWith]="displayLabel"
             #auto="matAutocomplete"
         >

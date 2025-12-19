@@ -230,10 +230,12 @@
                     }
 
                     .remove-attachment {
-                        height: 25px;
-                        width: 25px;
+                        $size: 25px;
+                        height: $size;
+                        width: $size;
+                        line-height: $size;
                         padding: 2px;
-                        color: black;
+                        color: var(--theme-foreground-color);
                     }
                 }
 
