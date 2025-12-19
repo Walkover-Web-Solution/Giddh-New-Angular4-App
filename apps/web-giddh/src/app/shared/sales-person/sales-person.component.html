@@ -29,6 +29,7 @@
                         <div class="d-grid grid-column-3 column-gap-15 row-gap-15 mb-3">
                             <div>
                                 <input-field
+                                    appEnterNext
                                     #nameField
                                     [type]="'text'"
                                     [name]="'name'"
@@ -36,12 +37,14 @@
                                     [placeholder]="commonLocaleData?.app_name"
                                     formControlName="name"
                                     [required]="true"
+                                    [autoFocus]="true"
                                     [maxlength]="250"
                                     [showError]="isFormSubmitted && salesPersonForm?.controls?.name?.invalid"
                                 ></input-field>
                             </div>
                             <div>
                                 <input-field
+                                    appEnterNext
                                     [type]="'email'"
                                     [name]="'email'"
                                     [label]="commonLocaleData?.app_email"

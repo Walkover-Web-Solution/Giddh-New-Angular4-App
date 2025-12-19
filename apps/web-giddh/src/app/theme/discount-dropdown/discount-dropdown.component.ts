@@ -48,6 +48,8 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
     /** Stores last saved form values when menu opens */
     private lastSavedFormValues: any = null;
 
+    public isMenuOpened: boolean = false;
+
     constructor(
         private formBuilder: FormBuilder,
         private generalService: GeneralService
@@ -247,6 +249,10 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
             fixedValue: this.discountForm.get('fixedValue')?.value,
             discounts: this.discountForm.get('discounts')?.value
         };
+
+        setTimeout(() => {
+            this.isMenuOpened = true;
+        }, 100);
     }
 
     /**
@@ -258,6 +264,7 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
     public handleMenuClosed(reason: MenuCloseReason): void {
         if (!reason) return;
 
+        this.isMenuOpened = false;
         const isClosedByEscape = reason === 'keydown';
         if (isClosedByEscape && this.lastSavedFormValues) {
             this.allowDiscountValueChanges = false;

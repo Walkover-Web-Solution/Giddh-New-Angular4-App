@@ -172,6 +172,7 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
             this.isAddStockOpen = false;
             this.isAddServiceOpen = false;
         }
+        this.focusButton();
     }
 
     /**
@@ -187,6 +188,24 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
             {
                 ...ASIDE_PANE_CONFIG,
                 hasBackdrop: false
-            });
+            }
+        );
+        this.accountTemplateRef.afterClosed().subscribe(() => {
+            this.focusButton();
+        });
+    }
+
+    /**
+     * Find the first visible button in the component
+     *
+     * @memberof AsideMenuProductServiceComponent
+     */
+    private focusButton(): void {
+         setTimeout(() => {
+                const visibleButton = document.querySelector('.aside-panel-ledger button[mat-raised-button]:not([hidden])') as HTMLButtonElement;
+                if (visibleButton) {
+                    visibleButton.focus();
+                }
+        }, 200);
     }
 }

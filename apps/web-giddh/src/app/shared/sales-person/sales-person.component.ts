@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { filter, Observable, ReplaySubject, takeUntil, tap } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -22,6 +22,7 @@ import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../app.constant';
 import { MatMenuModule } from '@angular/material/menu';
 import { ArchiveSalesPersonComponent } from './archive/archive.component';
 import { MobileNumberInputComponent } from '../mobile-number-input';
+import { KeyboardNavigationModule } from '../helpers/directives/enter-next/keyboard-navigation.module';
 
 @Component({
     selector: 'app-sales-person',
@@ -40,14 +41,15 @@ import { MobileNumberInputComponent } from '../mobile-number-input';
         GiddhPageLoaderModule,
         ElementViewChildModule,
         MatMenuModule,
-        MobileNumberInputComponent
+        MobileNumberInputComponent,
+        KeyboardNavigationModule
     ],
     templateUrl: './sales-person.component.html',
     styleUrls: ['./sales-person.component.scss'],
     providers: [SalesPersonService, SalesPersonComponentStore]
 })
 
-export class SalesPersonComponent implements OnInit, OnDestroy, AfterViewInit {
+export class SalesPersonComponent implements OnInit, OnDestroy {
     /** ViewChild reference for name field */
     @ViewChild('nameField') nameField: InputFieldComponent;
     /** Subject to release subscription memory */
@@ -184,15 +186,6 @@ export class SalesPersonComponent implements OnInit, OnDestroy, AfterViewInit {
             }
             this.salesPersonAction(SalesPersonActionEnum.GET_ALL);
         })).subscribe();
-    }
-
-    /**
-     * Lifecycle hook runs after component view initialization
-     * 
-     * @memberof SalesPersonComponent
-     */
-    public ngAfterViewInit(): void {
-        this.focusInputField();
     }
 
     /**

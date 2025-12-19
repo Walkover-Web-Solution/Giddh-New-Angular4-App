@@ -9,6 +9,7 @@ import {
     OnDestroy,
     OnInit,
     Output,
+    Renderer2,
     TemplateRef,
     ViewChild,
 } from '@angular/core';
@@ -333,7 +334,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         public dialog: MatDialog,
         private settingsBranchAction: SettingsBranchActions,
         private readonly componentStore: AccountAddNewDetailsComponentStore,
-        private salesPersonStore: SalesPersonComponentStore
+        private salesPersonStore: SalesPersonComponentStore,
+        private renderer: Renderer2
     ) {
 
     }
@@ -958,9 +960,29 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         return;
     }
 
-    public removeGstDetailsForm(i: number) {
+    /**
+     * Removes GST details form at specified index and focuses on submit button
+     * @param i - Index of the form to remove
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public removeGstDetailsForm(i: number): void {
         const addresses = this.addAccountForm.get('addresses') as FormArray;
         addresses.removeAt(i);
+        this.focusSubmitButton();
+    }
+
+    /**
+     * Focuses on the submit button after a delay
+     * @private
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    private focusSubmitButton(): void {
+        setTimeout(() => {
+            const submitBtn = this.renderer.selectRootElement('button[type="submit"], button[ aria-label="update"]', true);
+            if (submitBtn) {
+                submitBtn.focus();
+            }
+        }, 100);
     }
 
     public addBlankGstForm() {
@@ -1499,6 +1521,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
         this.store.dispatch(this.accountsAction.moveAccount(grpObject, activeAcc?.uniqueName, this.activeGroupUniqueName));
         this.moveAccountForm.reset();
+        this.focusSubmitButton();
     }
 
     /**

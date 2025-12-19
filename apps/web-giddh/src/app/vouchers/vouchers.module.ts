@@ -93,6 +93,7 @@ import { AllTemplatesComponent } from "./template/all-templates/all-templates.co
 import { TemplateEditFilterComponent } from "./template/template-edit-filter/template-edit-filter.component";
 import { MobileNumberInputComponent } from "../shared/mobile-number-input/mobile-number-input.component";
 import { GiddhNumberFormatModule } from "../shared/helpers/pipes/number-format/number-format.module";
+import { KeyboardNavigationModule } from "../shared/helpers/directives/enter-next/keyboard-navigation.module";
 
 @NgModule({
     declarations: [
@@ -189,7 +190,8 @@ import { GiddhNumberFormatModule } from "../shared/helpers/pipes/number-format/n
         SelectTableColumnModule,
         MatButtonToggleModule,
         TributeMentionModule,
-        MobileNumberInputComponent
+        MobileNumberInputComponent,
+        KeyboardNavigationModule
     ],
     exports: [
         VoucherCreateComponent,

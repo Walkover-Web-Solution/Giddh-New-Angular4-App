@@ -3,12 +3,15 @@
         appearance="outline"
         floatLabel="always"
         class="pointer-event-none mobile-input"
-        [ngClass]="{ 'mat-form-field-invalid': mobileControl.invalid && (mobileControl.dirty || mobileControl.touched) }"
+        [ngClass]="{
+            'mat-form-field-invalid': mobileControl.invalid && (mobileControl.dirty || mobileControl.touched)
+        }"
     >
         <mat-label>{{ label }}</mat-label>
         <div class="input-wrapper d-flex column-gap-1">
             <div class="country-select-wrapper" (click)="$event.stopPropagation()">
                 <mat-select
+                    #countrySelect
                     cdkMonitorElementFocus
                     [formControl]="countryControl"
                     panelWidth="400px"
@@ -60,6 +63,7 @@
             </div>
             <input
                 #mobileInput
+                appEnterNext
                 matInput
                 type="tel"
                 class="flex-grow-1"
@@ -69,6 +73,7 @@
                 [placeholder]="placeholder || localeData?.enter_mobile_number || 'Enter mobile number'"
                 (input)="onMobileInput($event)"
                 (keypress)="onKeyPress($event)"
+                (focus)="onMobileFocus()"
                 (click)="$event.stopPropagation()"
                 autocomplete="tel"
             />
@@ -100,7 +105,7 @@
         {{ getTranslatedMessage("invalid_number") }}
     </span>
     <span class="text-danger" *ngIf="mobileControl.hasError('notMobile')">
-        {{ getTranslatedMessage('not_mobile') }}
+        {{ getTranslatedMessage("not_mobile") }}
     </span>
     <span class="text-danger" *ngIf="mobileControl.hasError('obviouslyInvalid')">
         {{ getTranslatedMessage("obviously_invalid") }}

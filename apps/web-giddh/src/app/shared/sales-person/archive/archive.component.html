@@ -7,8 +7,11 @@
     <p [innerHTML]="inputData?.message"></p>
 
     <reactive-dropdown-field
+        appEnterNext
         class="d-block w-50 mt-3"
+        [openDropdown]="true"
         (onClear)="handleClear()"
+        (selectedOption)="onOptionSelected($event)"
         [name]="'sales-person'"
         [label]="inputData?.commonLocaleData?.app_sales_person"
         [labelValue]="inputData?.commonLocaleData?.app_unassigned"
@@ -18,7 +21,7 @@
     ></reactive-dropdown-field>
 
     <div class="d-flex column-gap-15 justify-content-end mt-4">
-        <button mat-raised-button color="primary" (click)="submit()">{{ inputData?.button?.primaryText }}</button>
-        <button mat-stroked-button mat-dialog-close>{{ inputData?.button?.secondaryText }}</button>
+        <button mat-raised-button color="primary" type="submit" (click)="submit()">{{ inputData?.button?.primaryText }}</button>
+        <button mat-stroked-button mat-dialog-close type="button">{{ inputData?.button?.secondaryText }}</button>
     </div>
 </mat-dialog-content>
