@@ -4773,7 +4773,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         const entries = [];
         this.invoiceForm.get("entries")["controls"]?.forEach((control) => {
             if (control?.value?.transactions[0]?.account?.uniqueName) {
-                entries.push(control?.value);
+                entries.push(cloneDeep(control?.value));
             }
         });
         return entries;
