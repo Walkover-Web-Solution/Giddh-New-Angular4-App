@@ -17,6 +17,7 @@
                     panelWidth="400px"
                     [id]="id ? id + '-country' : undefined"
                     (selectionChange)="onCountryChange($event.value)"
+                    (openedChange)="openedChange($event)"
                 >
                     <mat-select-trigger>
                         <span *ngIf="selectedCountry" class="selected-country-trigger">

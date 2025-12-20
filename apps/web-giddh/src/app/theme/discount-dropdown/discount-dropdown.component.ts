@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
 import { ReplaySubject, takeUntil } from "rxjs";
 import { isEqual } from "../../lodash-optimized";
@@ -13,6 +13,8 @@ import { MatMenuTrigger, MenuCloseReason } from "@angular/material/menu";
 export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
     /** Element ref for mat menu */
     @ViewChild('menuTrigger') public menuTrigger: MatMenuTrigger;
+    /** Element ref for discount input */
+    @ViewChild('discountInput') public discountInput: ElementRef<HTMLInputElement>;
     /** List of discounsts */
     @Input() public discountsList: any[] = [];
     /** List of selected discounts */
@@ -35,6 +37,8 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
     @Output() public selectedDiscounts: EventEmitter<any> = new EventEmitter<any>();
     /** Emitter for discount total */
     @Output() public totalDiscount: EventEmitter<any> = new EventEmitter<any>();
+    /** Emitter for close discount dropdown */
+    @Output() public closeDiscountDropdown: EventEmitter<any> = new EventEmitter<any>();
     /** Form Group for discount form */
     public discountForm: FormGroup;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
@@ -263,7 +267,6 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
      */
     public handleMenuClosed(reason: MenuCloseReason): void {
         if (!reason) return;
-
         this.isMenuOpened = false;
         const isClosedByEscape = reason === 'keydown';
         if (isClosedByEscape && this.lastSavedFormValues) {
@@ -284,6 +287,20 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
             this.calculateDiscountAmount();
         }
         this.lastSavedFormValues = null;
+    }
+
+    /**
+     * Emits close discount dropdown event with the trigger element
+     *
+     * @memberof DiscountDropdownComponent
+     */
+    protected emitCloseDiscountDropdown(): void {
+        // Create a synthetic event object with the input element as target
+        const triggerElement = this.discountInput?.nativeElement || null;
+        const syntheticEvent = {
+            target: triggerElement
+        };
+        this.closeDiscountDropdown.emit(syntheticEvent);
     }
 
     /**

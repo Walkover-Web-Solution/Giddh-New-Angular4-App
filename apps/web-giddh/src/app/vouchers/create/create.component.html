@@ -657,6 +657,7 @@
                                                 "
                                                 (change)="copyBillingInShipping('account', $event)"
                                                 #copyAccountBillingInShippingAddressRef
+                                                appEnterNext
                                                 (keydown.enter)="
                                                     $event.preventDefault();
                                                     copyAccountBillingInShippingAddressRef.toggle();
@@ -1147,6 +1148,7 @@
                                                 invoiceType.isCashInvoice
                                             "
                                             #copyCompanyBillingInShippingAddressRef
+                                            appEnterNext
                                             (keydown.enter)="
                                                 $event.preventDefault();
                                                 copyCompanyBillingInShippingAddressRef.toggle();
@@ -2286,6 +2288,7 @@
                                                             <textarea
                                                                 #inputDescription
                                                                 appEnterNext
+                                                                cdkMonitorElementFocus
                                                                 rows="2"
                                                                 matInput
                                                                 class="form-control"
@@ -2673,6 +2676,7 @@
                                                                                 activeEntryIndex === entryIndex
                                                                             )
                                                                         "
+                                                                        (closeDiscountDropdown)="focusNextElement($event)"
                                                                     ></discount-dropdown>
                                                                     <span
                                                                         class="font-size-14 text-light mt-1 d-inline-block wrap-td-data"
@@ -2768,6 +2772,7 @@
                                                                             getSelectedTaxes(entryIndex, $event)
                                                                         "
                                                                         (totalTax)="updateTotalTax($event, entry)"
+                                                                        (closeTaxDropdown)="focusNextElement($event)"
                                                                     >
                                                                     </tax-dropdown>
                                                                     <span
@@ -3540,6 +3545,7 @@
                                                                                     selectedFileName
                                                                                 }}</span>
                                                                                 <button
+                                                                                    id="deleteAttachment"
                                                                                     mat-icon-button
                                                                                     (click)="
                                                                                         deleteAttachementConfirmation()

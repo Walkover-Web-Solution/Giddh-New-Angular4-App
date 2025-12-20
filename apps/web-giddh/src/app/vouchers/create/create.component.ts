@@ -3472,7 +3472,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         group: BriedAccountsGroup,
                     });
                 }
-                this.restoreFocus();
+                 this.openAccountDropdown = false;
+                setTimeout(() => {
+                    this.openAccountDropdown = true;
+                }, 50);
             });
     }
 
@@ -3793,6 +3796,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             this.invoiceForm.get("attachedFiles")?.patchValue([response.body?.uniqueName]);
                             if (!this.ocrDataEnabled) {
                                 this.toasterService.showSnackBar("success", this.localeData?.file_uploaded);
+                                setTimeout(() => {
+                                    const deleteAttachmentButton = document.getElementById("deleteAttachment");
+                                    if (deleteAttachmentButton) {
+                                        deleteAttachmentButton?.focus();
+                                    }
+                                }, 200);
                             }
                         } else {
                             this.selectedFileName = "";

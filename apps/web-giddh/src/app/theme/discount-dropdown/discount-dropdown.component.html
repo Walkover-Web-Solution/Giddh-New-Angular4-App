@@ -9,9 +9,10 @@
         [matMenuTriggerFor]="discountControlMenu"
         #menuTrigger="matMenuTrigger"
         [placeholder]="currency + '0'"
-        readonly
         [value]="currency + totalDiscountAmount"
         (menuOpened)="handleMenuOpened()"
+        (menuClosed)="emitCloseDiscountDropdown(); isMenuOpened = false"
+        #discountInput
     />
     <mat-menu #discountControlMenu="matMenu" [hasBackdrop]="hasBackdrop" (closed)="handleMenuClosed($event)">
         <ng-template matMenuContent>

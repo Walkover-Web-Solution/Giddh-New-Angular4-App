@@ -547,9 +547,6 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
         }
         
         this.countryChanged.emit(country);
-        
-        // Focus the mobile input after country change
-        this.focusMobileInput();
     }
     
     /**
@@ -1502,6 +1499,19 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
                     }
                 }
             });
+        }
+    }
+
+    /**
+     * Handles the opened change event of the country select
+     * 
+     * @param {boolean} event - Whether the country select is opened
+     * @memberof MobileNumberInputComponent
+     */
+    public openedChange(event: boolean): void {
+        if (!event) {
+            // Focus the mobile input after country change
+            this.focusMobileInput();
         }
     }
 }
