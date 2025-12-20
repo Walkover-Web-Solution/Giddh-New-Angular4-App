@@ -43,7 +43,7 @@
                     (opened)="panelOpened()"
                     (optionSelected)="optionSelected($event)"
                     optionsScroll
-                    class="py-0"
+                    [class]="'py-0' + (sidebarListView ? ' sidebar-list-view' : '')"
                     [enableDynamicSearch]="enableDynamicSearch"
                     (optionsScroll)="onScroll()"
                     [autoActiveFirstOption]="!showCreateNew"
@@ -139,6 +139,8 @@
         <mat-autocomplete
             (optionSelected)="optionSelected($event)"
             optionsScroll
+            class="py-0"
+            [ngClass]="{ 'sidebar-list-view': sidebarListView }"
             [enableDynamicSearch]="enableDynamicSearch"
             (optionsScroll)="onScroll()"
             [autoActiveFirstOption]="!showCreateNew"

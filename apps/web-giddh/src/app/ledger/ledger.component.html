@@ -3250,6 +3250,7 @@
                     [showCaretIcon]="false"
                     [appearance]="'fill'"
                     [openDropdown]="openDropdown"
+                    [sidebarListView]="ledgerView == ledgerViewEnum.StatementView"
                 >
                     <ng-template #optionTemplate let-option="option">
                         <ng-container *ngIf="!option.additional?.stock">

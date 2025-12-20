@@ -86,6 +86,8 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     @Input() public showClearIcon: boolean = false;
     /** Use custom label value */
     @Input() public useCustomLabelValue: boolean = false;
+    /** Show dropdown list in sidebar */
+    @Input() public sidebarListView: boolean = false;
     /** Emits the scroll to bottom event when pagination is required  */
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
     /** Emits dynamic searched query */
