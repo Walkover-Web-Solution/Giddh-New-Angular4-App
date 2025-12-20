@@ -33,16 +33,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     @ViewChild('generateInvForm', { static: true }) public generateEwayBillForm: NgForm;
     /** Holds generateTransporterForm reference */
     @ViewChild('generateTransporterForm', { static: true }) public generateNewTransporterForm: NgForm;
-    /** Holds invoiceRemoveConfirmationTemplate reference */
-    @ViewChild('invoiceRemoveConfirmationTemplate', { static: true }) public invoiceRemoveConfirmationTemplate: TemplateRef<any>;
-    /** Holds subgrp reference */
-    @ViewChild('subgrp', { static: true }) public subgrp: any;
-    /** Holds doctypes reference */
-    @ViewChild('doctypes', { static: true }) public doctype: any;
-    /** Holds trans reference */
-    @ViewChild('trans', { static: true }) public transport: any;
-    /** Holds transSubType reference */
-    @ViewChild('transSubType', { static: true }) public transSubType: any;
     /** Transporter template reference */
     @ViewChild('transporterTemplate', { static: true }) public transporterTemplate: TemplateRef<any>;
     /** Transporter dialog reference */
@@ -258,8 +248,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
     }
 
     public onCancelGenerateBill() {
-        this.transport.clear();
-        this.transSubType.clear();
         this.generateEwayBillform.toPinCode = this.voucherDetails?.account?.billingDetails?.pincode || '';
         this.generateEwayBillform.transDistance = null;
         this.generateEwayBillform.transMode = null;
@@ -405,7 +393,6 @@ export class EWayBillCreateComponent implements OnInit, OnDestroy {
         }
     }
     public subTypeElementSelected(event) {
-        this.doctype.clear();
         this.TransporterDocType = this.ModifiedTransporterDocType;
         if (event) {
             if (event.label === this.localeData?.subsupply_types_list?.supply || event.label === this.localeData?.subsupply_types_list?.export) {
