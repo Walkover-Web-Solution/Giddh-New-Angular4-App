@@ -58,3 +58,7 @@
         border: 1px solid var(--border-color) !important;
     }
 }
+
+.custom-height {
+    height: calc(100% - 35px);
+}
