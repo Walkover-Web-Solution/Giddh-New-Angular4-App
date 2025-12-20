@@ -12,6 +12,8 @@
         readonly
         [value]="currency + totalTaxAmount"
         (menuOpened)="handleMenuOpened()"
+        (menuClosed)="emitCloseTaxDropdown()"
+        #taxInput
     />
     <mat-menu #taxControlMenu="matMenu" (closed)="handleMenuClosed($event)">
         <ng-template matMenuContent>

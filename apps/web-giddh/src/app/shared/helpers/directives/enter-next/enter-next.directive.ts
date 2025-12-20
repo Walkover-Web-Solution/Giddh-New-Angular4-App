@@ -314,7 +314,7 @@ export class EnterNextDirective implements OnDestroy, AfterViewInit {
 
         // Optimized type checking with early returns
         if (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement) {
-            return !element.disabled && !element.readOnly;
+            return !element.disabled;
         }
         
         if (element instanceof HTMLSelectElement || element instanceof HTMLButtonElement) {

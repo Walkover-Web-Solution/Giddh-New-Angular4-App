@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
 import { ReplaySubject, takeUntil } from "rxjs";
 import { isEqual } from "../../lodash-optimized";
@@ -13,6 +13,8 @@ import { MatMenuTrigger, MenuCloseReason } from "@angular/material/menu";
 export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
     /** Element ref for mat menu */
     @ViewChild('menuTrigger') public menuTrigger: MatMenuTrigger;
+    /** Element ref for discount input */
+    @ViewChild('discountInput') public discountInput: ElementRef<HTMLInputElement>;
     /** List of discounsts */
     @Input() public discountsList: any[] = [];
     /** List of selected discounts */
@@ -288,12 +290,17 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     /**
-     * Emits close discount dropdown event
+     * Emits close discount dropdown event with the trigger element
      *
      * @memberof DiscountDropdownComponent
      */
     protected emitCloseDiscountDropdown(): void {
-        this.closeDiscountDropdown.emit(true);
+        // Create a synthetic event object with the input element as target
+        const triggerElement = this.discountInput?.nativeElement || null;
+        const syntheticEvent = {
+            target: triggerElement
+        };
+        this.closeDiscountDropdown.emit(syntheticEvent);
     }
 
     /**
