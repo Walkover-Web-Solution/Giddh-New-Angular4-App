@@ -28,9 +28,10 @@
                             [name]="'tax'"
                             [options]="taxesList$ | async"
                             (onClear)="otherTaxForm.get('tax')?.patchValue(null)"
-                            [showError]="isFormSubmitted && !otherTaxForm.get('tax')?.value"
+                            [showError]="isFormSubmitted && !otherTaxForm.get('tax')?.value?.uniqueName"
                             (createOption)="createTaxDialog()"
                             [showCreateNew]="true"
+                            [required]="true"
                         >
                         </reactive-dropdown-field>
                     </div>
@@ -42,6 +43,7 @@
                                 [label]="commonLocaleData?.app_calculation_method"
                                 [appearance]="'outline'"
                                 [required]="true"
+                                [showError]="isFormSubmitted && !otherTaxForm.get('calculationMethod')?.value"
                                 formControlName="calculationMethod"
                             >
                             </reactive-dropdown-field>
