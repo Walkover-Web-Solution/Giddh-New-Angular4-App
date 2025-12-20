@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
-import { Observable, ReplaySubject } from "rxjs";
+import { Observable, ReplaySubject, Subscription } from "rxjs";
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../../store";
 import { ContactService } from "../../../services/contact.service";
@@ -31,6 +31,10 @@ import { cloneDeep, filter, forEach, keys, map, some } from '../../../lodash-opt
 export class BankAccountsComponent implements OnInit, OnDestroy {
     public universalDate$: Observable<any>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     public datePickerOptions: any;
     public dayjs = dayjs;
     public toDate: string;
@@ -390,5 +394,17 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
     public getAllBanks(): void {
         this.settingIntegrationComponentStore.getAllBankAccounts();
     }
+
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 
 }

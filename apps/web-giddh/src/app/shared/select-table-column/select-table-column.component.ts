@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from "@angular/core";
-import { ReplaySubject, Subject } from "rxjs";
+import { ReplaySubject, Subject, Subscription } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { CommonService } from "../../services/common.service";
 import { ToasterService } from "../../services/toaster.service";
@@ -48,6 +48,10 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
     @Output() public isLoading: EventEmitter<boolean> = new EventEmitter();
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     /** This will use for stock report displayed columns */
     public displayedColumns: string[] = [];
     /** Emits the selected custom fields filters */

@@ -19,7 +19,7 @@ import { ApplyTaxRequest } from 'apps/web-giddh/src/app/models/api-models/ApplyT
 import { GroupResponse } from 'apps/web-giddh/src/app/models/api-models/Group';
 import { IDiscountList } from 'apps/web-giddh/src/app/models/api-models/SettingsDiscount';
 import { AccountService } from 'apps/web-giddh/src/app/services/account.service';
-import { combineLatest, Observable, of as observableOf, ReplaySubject, timer } from 'rxjs';
+import { combineLatest, Observable, of as observableOf, ReplaySubject, timer, Subscription } from 'rxjs';
 import { take, takeUntil, debounceTime, distinctUntilChanged, filter, tap } from 'rxjs/operators';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { CommonActions } from '../../../../actions/common.actions';
@@ -128,6 +128,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public forceClearDiscount$: Observable<IForceClear> = observableOf({ status: false });
     public isDiscount: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     public countrySource: IOption[] = [];
     public countrySource$: Observable<IOption[]> = observableOf([]);
     public currencies: IOption[] = [];
@@ -2644,4 +2648,15 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public isTabActivated(textLabel: string): boolean {
         return this.activatedTabs.has(textLabel);
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

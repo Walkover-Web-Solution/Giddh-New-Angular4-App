@@ -19,7 +19,7 @@ import { ProfitLossData } from 'apps/web-giddh/src/app/models/api-models/tb-pl-b
 import { ReportType } from 'apps/web-giddh/src/app/multi-currency-reports/multi-currency.const';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { FinancialReportsComponentStore } from '../../../../financial-reports.store';
 import { MatDialog } from '@angular/material/dialog';
@@ -58,6 +58,10 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -308,4 +312,15 @@ export class ProfitLossGridComponent implements OnInit, OnChanges, OnDestroy {
             }
         });
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

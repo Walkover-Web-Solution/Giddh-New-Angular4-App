@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, OnChanges, Input, SimpleChanges } from '@angular/core';
 import { SettingsFinancialYearService } from '../../../services/settings.financial-year.service';
 import { Store } from '@ngrx/store';
-import { Observable, ReplaySubject, of } from 'rxjs';
+import { Observable, ReplaySubject, of, Subscription } from 'rxjs';
 import { AppState } from '../../../store';
 import { ToasterService } from '../../../services/toaster.service';
 import { cloneDeep, keys, map } from '../../../lodash-optimized';
@@ -21,6 +21,10 @@ export class ColumnarReportTableComponent implements OnInit, OnDestroy, OnChange
     /** Array of dynamic month name  */
     public monthName: string[] = [];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     /** Columnar report table response object */
     @Input() columnarReportResponse: any;
     /** Columnar report table status of Cr/Dr to +/-  */
@@ -73,8 +77,29 @@ export class ColumnarReportTableComponent implements OnInit, OnDestroy, OnChange
      * @memberof ColumnarReportTableComponent
      */
     public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
+        this.isDestroying = true;
+
+        // Clean up all tracked subscriptions first
+        this.subscriptions.forEach((subscription, index) => {
+            try {
+                if (subscription && !subscription.closed) {
+                    subscription.unsubscribe();
+                }
+            } catch (error) {
+                console.warn(`Error unsubscribing subscription ${index}:`, error);
+            }
+        });
+        this.subscriptions = [];
+
+        // Safely complete the destroyed$ subject
+        try {
+            if (this.destroyed$ && !this.destroyed$.closed) {
+                this.destroyed$.next(true);
+                this.destroyed$.complete();
+            }
+        } catch (error) {
+            console.warn('Error completing destroyed$ subject:', error);
+        }
     }
 
     /**
@@ -119,4 +144,15 @@ export class ColumnarReportTableComponent implements OnInit, OnDestroy, OnChange
             });
         }
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

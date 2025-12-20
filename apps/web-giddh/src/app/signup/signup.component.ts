@@ -7,7 +7,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { TemplateRef } from '@angular/core';
 import { ELECTRON_OTP_PROVIDER_URL, IOption, OTP_PROVIDER_URL } from "../app.constant";
 import { Store, select } from "@ngrx/store";
-import { Observable, ReplaySubject } from "rxjs";
+import { Observable, ReplaySubject, Subscription } from "rxjs";
 import {
     SignupwithEmaillModel,
     SignupWithMobile,
@@ -50,6 +50,10 @@ export class SignupComponent implements OnInit, OnDestroy {
         public isTwoWayAuthInProcess$: Observable<boolean>;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
 
     public giddhLogoSrc: string = '';
     public giddhDomainUrl: string = "";
@@ -168,4 +172,15 @@ export class SignupComponent implements OnInit, OnDestroy {
         console.log('initiateSignup method placeholder - implement when original files are restored');
         // TODO: Implement signup initiation functionality
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

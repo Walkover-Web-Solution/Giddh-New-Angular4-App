@@ -78,7 +78,7 @@
     "rxjs": "^7.8.1",
     "tributejs": "^5.1.3",
     "tslib": "^2.6.2",
-    "zone.js": "^0.15.0"
+    "zone.js": "^0.15.1"
   },
   "devDependencies": {
     "@angular-builders/custom-webpack": "^20.0.0",

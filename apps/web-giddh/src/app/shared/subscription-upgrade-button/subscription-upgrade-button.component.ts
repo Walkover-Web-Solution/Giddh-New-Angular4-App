@@ -1,9 +1,10 @@
-import { ReplaySubject, takeUntil } from 'rxjs';
+import { Observable, ReplaySubject, Subscription, takeUntil } from 'rxjs';
 import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { RestrictedModules } from '../../app.constant';
 import { Router } from '@angular/router';
 import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
+
 @Component({
     selector: 'restricted-module-message',
     styleUrls: [`./subscription-upgrade-button.component.scss`],
@@ -21,6 +22,10 @@ export class SubscriptionUpgradeButtonComponent implements OnDestroy {
     @Output() public onUpgradePlan = new EventEmitter<string>();
     /** Subject to unsubscribe from listeners */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     /** Active company details */
     public activeCompany: any;
     /** Common locale data for translations */
@@ -77,7 +82,39 @@ export class SubscriptionUpgradeButtonComponent implements OnDestroy {
      * @memberof SubscriptionUpgradeButtonComponent
      */
     public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
+        this.isDestroying = true;
+
+        // Clean up all tracked subscriptions first
+        this.subscriptions.forEach((subscription, index) => {
+            try {
+                if (subscription && !subscription.closed) {
+                    subscription.unsubscribe();
+                }
+            } catch (error) {
+                console.warn(`Error unsubscribing subscription ${index}:`, error);
+            }
+        });
+        this.subscriptions = [];
+
+        // Safely complete the destroyed$ subject
+        try {
+            if (this.destroyed$ && !this.destroyed$.closed) {
+                this.destroyed$.next(true);
+                this.destroyed$.complete();
+            }
+        } catch (error) {
+            console.warn('Error completing destroyed$ subject:', error);
+        }
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

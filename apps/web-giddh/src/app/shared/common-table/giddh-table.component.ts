@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, Subscription } from 'rxjs';
 import { ColumnDefinition } from './giddh-table.component.const';
 import { forEach, isArray, isNumber, keys } from '../../lodash-optimized';
 @Component({
@@ -43,6 +43,10 @@ export class GiddhTableComponent implements OnInit, OnDestroy {
     public displayedColumns: string[] = [];
     /** Subject to unsubscribe from subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
 
     constructor() { }
 
@@ -125,8 +129,29 @@ export class GiddhTableComponent implements OnInit, OnDestroy {
      * @memberof GiddhTableComponent
      */
     public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
+        this.isDestroying = true;
+
+        // Clean up all tracked subscriptions first
+        this.subscriptions.forEach((subscription, index) => {
+            try {
+                if (subscription && !subscription.closed) {
+                    subscription.unsubscribe();
+                }
+            } catch (error) {
+                console.warn(`Error unsubscribing subscription ${index}:`, error);
+            }
+        });
+        this.subscriptions = [];
+
+        // Safely complete the destroyed$ subject
+        try {
+            if (this.destroyed$ && !this.destroyed$.closed) {
+                this.destroyed$.next(true);
+                this.destroyed$.complete();
+            }
+        } catch (error) {
+            console.warn('Error completing destroyed$ subject:', error);
+        }
     }
 
     /**
@@ -139,4 +164,15 @@ export class GiddhTableComponent implements OnInit, OnDestroy {
     public handleClick(item: any, column: string): void {
         this.handleClickEvent.emit({ columnName: column, item: item });
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

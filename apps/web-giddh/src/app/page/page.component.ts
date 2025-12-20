@@ -4,7 +4,7 @@ import { GeneralActions } from '../actions/general/general.actions';
 import { AppState } from '../store';
 import { Store } from '@ngrx/store';
 import { NavigationEnd, Router } from '@angular/router';
-import { ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { includes } from '../lodash-optimized';
 
@@ -26,6 +26,10 @@ export class PageComponent implements AfterViewInit, OnDestroy {
     /**True if it is subscription page */
     public isSubscriptionPage: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
 
     constructor(
         private store: Store<AppState>,
@@ -57,4 +61,15 @@ export class PageComponent implements AfterViewInit, OnDestroy {
         this.sideMenu.isopen = event;
         this.store.dispatch(this.generalActions.setSideMenuBarState(event));
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

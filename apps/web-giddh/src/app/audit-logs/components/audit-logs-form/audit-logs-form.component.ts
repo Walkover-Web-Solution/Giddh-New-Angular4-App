@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import * as dayjs from 'dayjs';
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { AuditLogsActions } from '../../../actions/audit-logs/audit-logs.actions';
 import { DROPDOWN_ITEMS_COUNT_LIMIT, IOption } from '../../../app.constant';
@@ -90,6 +90,10 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
     public searchedGroups: IOption[];
     /** To destroy observers */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     /** From date value of parent datepicker */
     @Input() public fromDate: string;
     /** To date value of parent datepicker */
@@ -175,8 +179,29 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.auditLogFormVM.reset();
         this.store.dispatch(this.auditLogsActions.ResetLogs());
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
+        this.isDestroying = true;
+
+        // Clean up all tracked subscriptions first
+        this.subscriptions.forEach((subscription, index) => {
+            try {
+                if (subscription && !subscription.closed) {
+                    subscription.unsubscribe();
+                }
+            } catch (error) {
+                console.warn(`Error unsubscribing subscription ${index}:`, error);
+            }
+        });
+        this.subscriptions = [];
+
+        // Safely complete the destroyed$ subject
+        try {
+            if (this.destroyed$ && !this.destroyed$.closed) {
+                this.destroyed$.next(true);
+                this.destroyed$.complete();
+            }
+        } catch (error) {
+            console.warn('Error completing destroyed$ subject:', error);
+        }
     }
 
     /**
@@ -521,4 +546,15 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
             this.accounts = [...this.defaultAccountSuggestions];
         });
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

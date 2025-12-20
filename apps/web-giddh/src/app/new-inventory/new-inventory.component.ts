@@ -1,5 +1,5 @@
 import { Component, Output, EventEmitter, OnDestroy } from '@angular/core';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, Subscription } from 'rxjs';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../app.constant';
 import * as dayjs from 'dayjs';
 @Component({
@@ -17,6 +17,10 @@ export class NewInventoryComponent implements OnDestroy {
     /* show search input field full width */
     public dateRangFullWidth: boolean = true;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     /* This will store selected date range to use in api */
     public selectedDateRange: any;
     /* This will store selected date range to show on UI */
@@ -50,5 +54,16 @@ export class NewInventoryComponent implements OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }
 

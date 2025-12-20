@@ -1,4 +1,4 @@
-import { Observable, of, ReplaySubject } from 'rxjs';
+import { Observable, of, ReplaySubject, Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import * as dayjs from 'dayjs';
@@ -110,6 +110,10 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     public totalItems: number;
     public selectedItems: any[] = [];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     private checkboxInfo: any = {
         selectedPage: 1
     };
@@ -547,4 +551,15 @@ export class SearchGridComponent implements OnInit, OnDestroy {
             return element;
         });
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

@@ -10,7 +10,7 @@ import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service'
 import { RecTypePipe } from 'apps/web-giddh/src/app/shared/helpers/pipes/recType/recType.pipe';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { saveAs } from 'file-saver';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { DataFormatter, IFormatable } from '../../model/data-formatter';
@@ -73,6 +73,10 @@ export class TrialBalanceExportCsvComponent implements OnInit, OnDestroy {
 
     private dataFormatter: DataFormatter;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     private exportData: ChildGroup[];
     /* This will hold local JSON data */
     public localeData: any = {};
@@ -176,4 +180,15 @@ export class TrialBalanceExportCsvComponent implements OnInit, OnDestroy {
             }
         });
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

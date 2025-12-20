@@ -8,7 +8,7 @@ import {
     ViewChild,
 } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { TBPlBsActions } from '../../../actions/tl-pl.actions';
 import { CompanyResponse } from '../../../models/api-models/Company';
@@ -65,6 +65,10 @@ export class BalanceSheetComponent implements AfterViewInit, OnDestroy {
     @Input() public isDateSelected: boolean = false;
     @ViewChild('bsGrid', { static: true }) public bsGrid: BalanceSheetGridComponent;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     private _selectedCompany: CompanyResponse;
     /** True if show Tally Report options */
     public showReportTallyOption: boolean;
@@ -145,8 +149,29 @@ export class BalanceSheetComponent implements AfterViewInit, OnDestroy {
     }
 
     public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
+        this.isDestroying = true;
+
+        // Clean up all tracked subscriptions first
+        this.subscriptions.forEach((subscription, index) => {
+            try {
+                if (subscription && !subscription.closed) {
+                    subscription.unsubscribe();
+                }
+            } catch (error) {
+                console.warn(`Error unsubscribing subscription ${index}:`, error);
+            }
+        });
+        this.subscriptions = [];
+
+        // Safely complete the destroyed$ subject
+        try {
+            if (this.destroyed$ && !this.destroyed$.closed) {
+                this.destroyed$.next(true);
+                this.destroyed$.complete();
+            }
+        } catch (error) {
+            console.warn('Error completing destroyed$ subject:', error);
+        }
     }
 
     public findIndex(activeFY, financialYears) {
@@ -185,4 +210,15 @@ export class BalanceSheetComponent implements AfterViewInit, OnDestroy {
     public handleRefresh(): void {
         this.filterData(this.request);
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

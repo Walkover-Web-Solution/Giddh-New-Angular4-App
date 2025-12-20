@@ -10,7 +10,7 @@ import { ToasterService } from "../../../services/toaster.service";
 import { createSelector } from "reselect";
 import { takeUntil, filter, take, skip, debounceTime, tap, distinctUntilChanged } from "rxjs/operators";
 import * as dayjs from 'dayjs';
-import { Observable, ReplaySubject } from "rxjs";
+import { Observable, ReplaySubject, Subscription } from "rxjs";
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MMM_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from "../../../shared/helpers/defaultDateFormat";
 import { CompanyResponse, ActiveFinancialYear } from '../../../models/api-models/Company';
 import { SettingsBranchActions } from '../../../actions/settings/branch/settings.branch.action';
@@ -42,6 +42,10 @@ export class PurchaseRegisterComponent implements OnInit, OnDestroy {
     bsValue = new Date();
     public reportRespone: PurchaseReportsModel[];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     public activeFinacialYr: ActiveFinancialYear;
     public purchaseRegisterTotal: PurchaseReportsModel = new PurchaseReportsModel();
     public monthNames = [];
@@ -595,8 +599,29 @@ constructor(
      * @memberof PurchaseRegisterComponent
      */
     public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
+        this.isDestroying = true;
+
+        // Clean up all tracked subscriptions first
+        this.subscriptions.forEach((subscription, index) => {
+            try {
+                if (subscription && !subscription.closed) {
+                    subscription.unsubscribe();
+                }
+            } catch (error) {
+                console.warn(`Error unsubscribing subscription ${index}:`, error);
+            }
+        });
+        this.subscriptions = [];
+
+        // Safely complete the destroyed$ subject
+        try {
+            if (this.destroyed$ && !this.destroyed$.closed) {
+                this.destroyed$.next(true);
+                this.destroyed$.complete();
+            }
+        } catch (error) {
+            console.warn('Error completing destroyed$ subject:', error);
+        }
     }
 
     /**
@@ -784,4 +809,15 @@ constructor(
             return `${fromDate.format(GIDDH_DATE_FORMAT_MMM_YYYY)}-${toDate.format(GIDDH_DATE_FORMAT_MMM_YYYY)}`;
         }
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

@@ -2,7 +2,7 @@ import { takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, OnDestroy, OnInit, Output, Input } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, Subscription } from 'rxjs';
 import { PermissionActions } from '../../../actions/permission/permission.action';
 import { INewRoleFormObj, IPage, IPageStr, NewRoleFormClass } from '../../permission.utility';
 import { INameUniqueName } from '../../../models/api-models/Inventory';
@@ -29,6 +29,10 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
     public newRoleObj: INewRoleFormObj = new NewRoleFormClass();
     public dropdownHeading: string = '';
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     /** Holds Fresh options list */
     public isFreshOptions = [];
     /** Holds Selected permissions */
@@ -193,4 +197,15 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
         const selectedRole = this.roleOptions.find(role => role.value === this.newRoleObj.uniqueName);
         return selectedRole ? selectedRole.label : '';
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

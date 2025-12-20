@@ -3,7 +3,7 @@ import { Store, select } from '@ngrx/store';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import * as dayjs from 'dayjs';
 import { MatMenuTrigger } from '@angular/material/menu';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject, Subscription } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { CompanyActions } from '../actions/company.actions';
 import { TaxResponse } from '../models/api-models/Company';
@@ -86,6 +86,10 @@ export class DaybookComponent implements OnInit, OnDestroy {
     /** Stores the current company */
     public activeCompany: any;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     private searchFilterData: any = null;
     /** This will hold the daybook api response */
     public daybookData: any = {};
@@ -686,4 +690,15 @@ export class DaybookComponent implements OnInit, OnDestroy {
 
         this.changeDetectorRef.detectChanges();
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

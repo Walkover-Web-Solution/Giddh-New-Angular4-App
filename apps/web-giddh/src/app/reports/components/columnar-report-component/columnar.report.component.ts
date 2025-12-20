@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SettingsFinancialYearService } from '../../../services/settings.financial-year.service';
 import { select, Store } from '@ngrx/store';
 import { takeUntil } from 'rxjs/operators';
-import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
+import { Observable, ReplaySubject, of as observableOf, Subscription } from 'rxjs';
 import { AppState } from '../../../store';
 import { ToasterService } from '../../../services/toaster.service';
 import { GeneralService } from '../../../services/general.service';
@@ -34,6 +34,10 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
     public selectCrDr = [{ label: 'Yes', value: true }, { label: 'No', value: false }];
     public flatGroupsOptions: any = [];
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     public exportRequest: any = {};
     public companyUniqueName: string = '';
     public groupUniqueName: string = '';
@@ -216,8 +220,29 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      * @memberof ColumnarReportComponent
      */
     public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
+        this.isDestroying = true;
+
+        // Clean up all tracked subscriptions first
+        this.subscriptions.forEach((subscription, index) => {
+            try {
+                if (subscription && !subscription.closed) {
+                    subscription.unsubscribe();
+                }
+            } catch (error) {
+                console.warn(`Error unsubscribing subscription ${index}:`, error);
+            }
+        });
+        this.subscriptions = [];
+
+        // Safely complete the destroyed$ subject
+        try {
+            if (this.destroyed$ && !this.destroyed$.closed) {
+                this.destroyed$.next(true);
+                this.destroyed$.complete();
+            }
+        } catch (error) {
+            console.warn('Error completing destroyed$ subject:', error);
+        }
     }
 
     /**
@@ -500,4 +525,15 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
             this.flatGroupsOptions = [...this.defaultGroupSuggestions];
         });
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

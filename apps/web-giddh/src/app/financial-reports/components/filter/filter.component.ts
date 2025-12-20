@@ -6,7 +6,7 @@ import { CompanyResponse } from '../../../models/api-models/Company';
 import * as dayjs from 'dayjs';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
-import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
+import { Observable, ReplaySubject, of as observableOf, Subscription } from 'rxjs';
 import { TagRequest } from '../../../models/api-models/settingsTags';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
@@ -92,6 +92,10 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
     public selectedRangeLabel: any = "";
     public currentOrganizationType: OrganizationType;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     private _selectedCompany: CompanyResponse;
     /** This will hold local JSON data */
     public localeData: any = {};
@@ -660,4 +664,15 @@ export class FinancialReportsFilterComponent implements OnInit, OnDestroy {
             ];
         }
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

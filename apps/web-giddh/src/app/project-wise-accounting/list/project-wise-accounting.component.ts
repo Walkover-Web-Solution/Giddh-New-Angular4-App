@@ -4,7 +4,7 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { CreateProjectComponent } from '../components/create-project/create-project.component';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { debounceTime, take, takeUntil } from 'rxjs/operators';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject, Subscription } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { ProjectWiseAccountingComponentStore } from '../project-wise-accounting.store';
 import { ProjectDetails, ProjectRequestType, ProjectStatusType } from '../project-wise-accounting';
@@ -50,6 +50,10 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
     public isFetchingProjects$: Observable<any> = this.componentStore.isFetchingProjects$;
     /** ReplaySubject to handle component's lifecycle */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     /** If true, the project search box is displayed */
     public isShowSearchBox: any = {
         name: false,
@@ -366,8 +370,29 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
      * @memberof ProjectWiseAccountingListComponent
      */
     public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
+        this.isDestroying = true;
+
+        // Clean up all tracked subscriptions first
+        this.subscriptions.forEach((subscription, index) => {
+            try {
+                if (subscription && !subscription.closed) {
+                    subscription.unsubscribe();
+                }
+            } catch (error) {
+                console.warn(`Error unsubscribing subscription ${index}:`, error);
+            }
+        });
+        this.subscriptions = [];
+
+        // Safely complete the destroyed$ subject
+        try {
+            if (this.destroyed$ && !this.destroyed$.closed) {
+                this.destroyed$.next(true);
+                this.destroyed$.complete();
+            }
+        } catch (error) {
+            console.warn('Error completing destroyed$ subject:', error);
+        }
     }
 
     /**
@@ -532,4 +557,15 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
         this.broadcast = new BroadcastChannel("project-wise-accounting");
         this.broadcast.postMessage({ success: true });
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

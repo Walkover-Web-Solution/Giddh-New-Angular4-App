@@ -3,7 +3,7 @@ import { AuditLogsActions } from '../../../actions/audit-logs/audit-logs.actions
 import { ILogsItem } from '../../../models/interfaces/logs.interface';
 import { Store, select } from '@ngrx/store';
 import { Component, OnDestroy, Input, OnInit } from '@angular/core';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject, Subscription } from 'rxjs';
 import { AppState } from '../../../store/roots';
 import { cloneDeep } from '../../../lodash-optimized';
 
@@ -25,6 +25,10 @@ export class AuditLogsGridComponent implements OnInit, OnDestroy {
     public logs$: Observable<ILogsItem[]>;
     public loadMoreInProcess$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     /** True if api call in progress */
     public isLoading: boolean = false;
     /** Holds table displayed columns name for transactions */
@@ -64,4 +68,15 @@ export class AuditLogsGridComponent implements OnInit, OnDestroy {
             this.store.dispatch(this.auditLogsActions.LoadMoreLogs(request, page));
         });
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

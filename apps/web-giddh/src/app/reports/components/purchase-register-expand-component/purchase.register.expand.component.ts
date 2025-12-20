@@ -6,7 +6,7 @@ import { InvoiceReceiptActions } from '../../../actions/invoice/receipt/receipt.
 import { ReportsDetailedRequestFilter, PurchaseRegisteDetailedResponse } from '../../../models/api-models/Reports';
 import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
 import { take, takeUntil, debounceTime, distinctUntilChanged, skip, filter } from 'rxjs/operators';
-import { ReplaySubject, Observable, combineLatest } from 'rxjs';
+import { ReplaySubject, Observable, combineLatest, Subscription } from 'rxjs';
 import { UntypedFormControl } from '@angular/forms';
 import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT, ZIP_CODE_SUPPORTED_COUNTRIES } from '../../../app.constant';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
@@ -30,6 +30,10 @@ import { forEach, includes, map, set } from '../../../lodash-optimized';
     standalone: false
 })
 export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     public PurchaseRegisteDetailedItems: PurchaseRegisteDetailedResponse;
     public from: string;
     public to: string;
@@ -489,8 +493,29 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
      * @memberof PurchaseRegisterExpandComponent
      */
     public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
+        this.isDestroying = true;
+
+        // Clean up all tracked subscriptions first
+        this.subscriptions.forEach((subscription, index) => {
+            try {
+                if (subscription && !subscription.closed) {
+                    subscription.unsubscribe();
+                }
+            } catch (error) {
+                console.warn(`Error unsubscribing subscription ${index}:`, error);
+            }
+        });
+        this.subscriptions = [];
+
+        // Safely complete the destroyed$ subject
+        try {
+            if (this.destroyed$ && !this.destroyed$.closed) {
+                this.destroyed$.next(true);
+                this.destroyed$.complete();
+            }
+        } catch (error) {
+            console.warn('Error completing destroyed$ subject:', error);
+        }
     }
 
     /**
@@ -597,4 +622,15 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
             this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
         }
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

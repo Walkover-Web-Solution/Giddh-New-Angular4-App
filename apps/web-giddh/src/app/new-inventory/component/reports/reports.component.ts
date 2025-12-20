@@ -4,7 +4,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
 import { select, Store } from '@ngrx/store';
-import { Observable, ReplaySubject, Subject, combineLatest } from 'rxjs';
+import { Observable, ReplaySubject, Subject, combineLatest, Subscription } from 'rxjs';
 import { takeUntil, debounceTime } from 'rxjs/operators';
 import { BalanceStockTransactionReportRequest, InventoryReportRequest, InventoryReportBalanceResponse, StockReportRequest, InventoryReportRequestExport } from '../../../models/api-models/Inventory';
 import { InventoryService } from '../../../services/inventory.service';
@@ -28,12 +28,10 @@ import { cloneDeep, filter, find, map } from '../../../lodash-optimized';
 
 @Component({
     selector: 'app-reports',
-
     templateUrl: './reports.component.html',
-    standalone: false,
     styleUrls: ['./reports.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [InventoryComponentStore]
+    changeDetection: ChangeDetectionStrategy.Default,
+    standalone: false
 })
 export class ReportsComponent implements OnInit, OnDestroy {
     @ViewChild(ReportFiltersComponent, { read: ReportFiltersComponent, static: false }) public reportFiltersComponent: ReportFiltersComponent;
@@ -47,6 +45,10 @@ export class ReportsComponent implements OnInit, OnDestroy {
     public dayjs = dayjs;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     /** Stock Transactional Object */
     public stockReportRequest: InventoryReportRequest = new InventoryReportRequest();
     /** Stock Stock Export Table Data */
@@ -134,9 +136,9 @@ export class ReportsComponent implements OnInit, OnDestroy {
     /** Custom Fields list Observable */
     public customFieldsSuccess$: Observable<any> = this.inventoryStore.customFieldsSuccess$;
     /** Subject for filters changes */
-    private filtersSubject$ = new Subject<any>();
+    public filtersSubject$ = new Subject<any>();
     /** Subject for dynamic columns changes */
-    private dynamicColumnsSubject$ = new Subject<any>();
+    public dynamicColumnsSubject$ = new Subject<any>();
     constructor(
         public route: ActivatedRoute,
         public router: Router,
@@ -469,6 +471,8 @@ export class ReportsComponent implements OnInit, OnDestroy {
                     if (response && response.body && response.status === 'success') {
                         this.isDataAvailable = (response.body.results?.length) ? true : false;
                         this.dataSource = response.body.results;
+                        // Force immediate change detection for Angular 21
+                        this.changeDetection.detectChanges();
                         this.stockReportRequest.page = response.body.page;
                         this.stockReportRequest.totalItems = response.body.totalItems;
                         this.stockReportRequest.totalPages = response.body.totalPages;
@@ -513,6 +517,8 @@ export class ReportsComponent implements OnInit, OnDestroy {
                     if (response && response.body && response.status === 'success') {
                         this.isDataAvailable = (response.body.results?.length) ? true : false;
                         this.dataSource = response.body.results;
+                        // Force immediate change detection for Angular 21
+                        this.changeDetection.detectChanges();
                         this.stockReportRequest.page = response.body.page;
                         this.stockReportRequest.totalItems = response.body.totalItems;
                         this.stockReportRequest.totalPages = response.body.totalPages;
@@ -555,6 +561,8 @@ export class ReportsComponent implements OnInit, OnDestroy {
                     if (response && response.body && response.status === 'success') {
                         this.isDataAvailable = (response.body.results?.length) ? true : false;
                         this.dataSource = response.body.results;
+                        // Force immediate change detection for Angular 21
+                        this.changeDetection.detectChanges();
                         this.stockReportRequest.page = response.body.page;
                         this.stockReportRequest.totalItems = response.body.totalItems;
                         this.stockReportRequest.totalPages = response.body.totalPages;
@@ -806,4 +814,15 @@ export class ReportsComponent implements OnInit, OnDestroy {
         this.filtersSubject$.complete();
         this.dynamicColumnsSubject$.complete();
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit, ViewChild, ElementRef, ChangeDetectionStr
 import { GeneralService } from "../../../services/general.service";
 import * as dayjs from "dayjs";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../../../shared/helpers/defaultDateFormat";
-import { ReplaySubject } from "rxjs";
+import { ReplaySubject, Subscription } from "rxjs";
 import { select, Store } from "@ngrx/store";
 import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
 import { PageEvent } from '@angular/material/paginator';
@@ -49,6 +49,10 @@ export class InventoryTransactionListComponent implements OnInit, OnDestroy {
     public dayjs = dayjs;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     /** Stock Transactional Object */
     public stockReportRequest: StockTransactionReportRequest = new StockTransactionReportRequest();
     /** Stock Transactional Object */
@@ -560,4 +564,15 @@ export class InventoryTransactionListComponent implements OnInit, OnDestroy {
             this.changeDetection.detectChanges();
         }
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

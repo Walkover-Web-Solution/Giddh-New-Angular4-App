@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit, Input } from '@angular/core';
 import { select, Store } from '@ngrx/store';
 import * as dayjs from 'dayjs';
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AuditLogsActions } from '../../../actions/audit-logs/audit-logs.actions';
 import { LogsRequest } from '../../../models/api-models/Logs';
@@ -30,6 +30,10 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     /** Stores the search results pagination details */
     public accountsSearchResultsPaginationData = {
         page: 0,
@@ -500,4 +504,15 @@ export class AuditLogsSidebarComponent implements OnInit, OnDestroy {
             this.accounts = [...this.defaultAccountSuggestions];
         });
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

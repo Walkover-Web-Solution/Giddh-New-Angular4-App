@@ -4,7 +4,7 @@ import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject, Subscription } from 'rxjs';
 import { PermissionActions } from '../../../actions/permission/permission.action';
 import { IRoleCommonResponseAndRequest, Permission, Scope } from '../../../models/api-models/Permission';
 import { IPage, NewPermissionObj, NewRoleClass } from '../../permission.utility';
@@ -21,6 +21,10 @@ export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDest
     public pageList: any[];
     public newRole: any = {};
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     public allRoles: any;
     public adminPageObj: IRoleCommonResponseAndRequest;
     public viewPageObj: IRoleCommonResponseAndRequest;
@@ -372,5 +376,17 @@ export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDest
             }
         });
     }
+
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 
 }

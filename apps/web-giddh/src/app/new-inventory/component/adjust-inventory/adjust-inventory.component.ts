@@ -3,7 +3,7 @@ import { AdjustInventoryComponentStore } from './utility/adjust-inventory.store'
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
 import { WarehouseActions } from '../../../settings/warehouse/action/warehouse.action';
-import { Observable, ReplaySubject, takeUntil, of as observableOf, combineLatest, map, debounceTime, distinctUntilChanged } from 'rxjs';
+import { Observable, ReplaySubject, takeUntil, of as observableOf, combineLatest, map, debounceTime, distinctUntilChanged, Subscription } from 'rxjs';
 import { SettingsUtilityService } from '../../../settings/services/settings-utility.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -37,6 +37,10 @@ export class AdjustInventoryComponent implements OnInit {
     public commonLocaleData: any = {};
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     /** Modal instance */
     public matDialogRef: MatDialogRef<any>;
     /** Create adjust inventory form group */

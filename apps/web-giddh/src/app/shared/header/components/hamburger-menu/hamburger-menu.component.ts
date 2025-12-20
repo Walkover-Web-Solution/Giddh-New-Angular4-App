@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from 'apps/web-giddh/src/app/store';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, Subscription } from 'rxjs';
 import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';
 import { takeUntil, take } from 'rxjs/operators';
 
@@ -18,6 +18,10 @@ export class HamburgerMenuComponent implements OnInit, OnDestroy {
     /* This will show sidebar is open */
     public sideMenu: { isopen: boolean } = { isopen: true };
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
 
@@ -76,4 +80,15 @@ export class HamburgerMenuComponent implements OnInit, OnDestroy {
             this.store.dispatch(this.generalActions.openSideMenu(true));
         }
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

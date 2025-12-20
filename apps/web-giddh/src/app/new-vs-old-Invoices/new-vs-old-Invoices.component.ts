@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NewVsOldInvoicesRequest, NewVsOldInvoicesResponse } from '../models/api-models/new-vs-old-invoices';
 import { AppState } from '../store';
 import { Store, select } from '@ngrx/store';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, Subscription } from 'rxjs';
 import { ToasterService } from '../services/toaster.service';
 import { filter, take, takeUntil, tap } from 'rxjs/operators';
 import { SettingsFinancialYearActions } from '../actions/settings/financial-year/financial-year.action';
@@ -43,6 +43,10 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
     public invoiceCountAll: number = 0;
     /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     /** True if api call in progress */
     public isLoading: boolean = false;
     /* This will hold local JSON data */
@@ -249,4 +253,15 @@ export class NewVsOldInvoicesComponent implements OnInit, OnDestroy {
             this.getSalesBifurcation(); this.salesBifurcationDetailsDialogRef = undefined;
         })).subscribe();
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

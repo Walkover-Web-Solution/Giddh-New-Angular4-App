@@ -2,7 +2,7 @@ import { COMMA, ENTER } from "@angular/cdk/keycodes";
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, forwardRef, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { FormControl, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
-import { Observable, of, ReplaySubject, Subject } from "rxjs";
+import { Observable, of, ReplaySubject, Subject, Subscription } from "rxjs";
 import { debounceTime, takeUntil } from "rxjs/operators";
 import { EMAIL_VALIDATION_REGEX, IOption, MOBILE_REGEX_PATTERN } from "../../../app.constant";
 import { cloneDeep, filter, forEach, includes, indexOf, isArray } from '../../../lodash-optimized';
@@ -92,6 +92,10 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
     public separatorKeysCodes: number[] = [ENTER, COMMA];
     /** Subject to release subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     /** True if we need to allow adding of new chips */
     @Input() private allowAddChip: boolean = true;
     /** Next observable */
@@ -186,8 +190,29 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
      * @memberof SelectMultipleFieldsComponent
      */
     public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
+        this.isDestroying = true;
+
+        // Clean up all tracked subscriptions first
+        this.subscriptions.forEach((subscription, index) => {
+            try {
+                if (subscription && !subscription.closed) {
+                    subscription.unsubscribe();
+                }
+            } catch (error) {
+                console.warn(`Error unsubscribing subscription ${index}:`, error);
+            }
+        });
+        this.subscriptions = [];
+
+        // Safely complete the destroyed$ subject
+        try {
+            if (this.destroyed$ && !this.destroyed$.closed) {
+                this.destroyed$.next(true);
+                this.destroyed$.complete();
+            }
+        } catch (error) {
+            console.warn('Error completing destroyed$ subject:', error);
+        }
     }
 
     /**
@@ -451,4 +476,15 @@ export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChang
             this.filterOptions("");
         }
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

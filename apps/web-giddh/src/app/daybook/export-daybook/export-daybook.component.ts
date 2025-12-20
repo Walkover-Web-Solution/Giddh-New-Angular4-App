@@ -1,6 +1,6 @@
 import { Component, EventEmitter, OnDestroy, OnInit, Output, Input } from '@angular/core';
 import { PermissionDataService } from 'apps/web-giddh/src/app/permissions/permission-data.service';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, Subscription } from 'rxjs';
 import { forEach, some } from '../../lodash-optimized';
 
 @Component({
@@ -33,6 +33,10 @@ export class ExportDaybookComponent implements OnInit, OnDestroy {
     public showEntryVoucher: boolean = false;
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
 
     constructor(private permissionDataService: PermissionDataService) {
 
@@ -57,5 +61,17 @@ export class ExportDaybookComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
+
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 
 }

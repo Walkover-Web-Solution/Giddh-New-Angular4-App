@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit, QueryList, ViewChildren } from '@angular/core';
 import { take, takeUntil } from 'rxjs/operators';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, Subscription } from 'rxjs';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
@@ -105,6 +105,10 @@ export class SettingCampaignComponent implements OnInit {
     public showVariableMapping: boolean = false;
     /** Hold instance of destroyed   */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     /** True if translations loaded */
     public translationLoaded: boolean = false;
     /** True if valid form */

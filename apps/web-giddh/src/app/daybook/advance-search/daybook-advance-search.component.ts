@@ -1,4 +1,4 @@
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
 import { debounceTime, filter, take, takeUntil } from 'rxjs/operators';
 import { FormControl, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Store, select } from '@ngrx/store';
@@ -63,6 +63,10 @@ public advanceSearchObject: DayBookRequestModel = null;
     /* Selected range label */
     public selectedRangeLabel: any = "";
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     /** Mask format for decimal number and comma separation  */
     public inputMaskFormat: string = '';
     /** Stores the search results pagination details */
@@ -790,4 +794,15 @@ public advanceSearchObject: DayBookRequestModel = null;
             this.stocks = [...this.defaultStockSuggestions];
         });
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

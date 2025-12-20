@@ -107,6 +107,10 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     public fieldFilteredOptions$: Observable<IOption[]>;
     /** Flag to track if component is destroyed */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     /** Flag to track if component is destroyed */
     private isDestroyed: boolean = false;
     /** Function to be called when the control value changes */
@@ -270,8 +274,29 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
 
         // Only complete the subject if it hasn't been completed already
         if (!this.destroyed$.closed) {
-            this.destroyed$.next(true);
-            this.destroyed$.complete();
+            this.isDestroying = true;
+
+        // Clean up all tracked subscriptions first
+        this.subscriptions.forEach((subscription, index) => {
+            try {
+                if (subscription && !subscription.closed) {
+                    subscription.unsubscribe();
+                }
+            } catch (error) {
+                console.warn(`Error unsubscribing subscription ${index}:`, error);
+            }
+        });
+        this.subscriptions = [];
+
+        // Safely complete the destroyed$ subject
+        try {
+            if (this.destroyed$ && !this.destroyed$.closed) {
+                this.destroyed$.next(true);
+                this.destroyed$.complete();
+            }
+        } catch (error) {
+            console.warn('Error completing destroyed$ subject:', error);
+        }
         }
     }
 
@@ -465,4 +490,15 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             }
         }
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

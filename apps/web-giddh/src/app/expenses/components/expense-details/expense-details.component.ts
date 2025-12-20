@@ -4,7 +4,7 @@ import { ToasterService } from '../../../services/toaster.service';
 import { ExpenseService } from '../../../services/expences.service';
 import { AppState } from '../../../store';
 import { select, Store } from '@ngrx/store';
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { IForceClear } from '../../../models/api-models/Sales';
 import { DownloadLedgerAttachmentResponse } from '../../../models/api-models/Ledger';
@@ -132,6 +132,10 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         query: ''
     };
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     /** True if account belongs to cash/bank account */
     private cashOrBankEntry: any;
     /** Stores the petty cash entry type */
@@ -878,8 +882,29 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ExpenseDetailsComponent
      */
     public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
+        this.isDestroying = true;
+
+        // Clean up all tracked subscriptions first
+        this.subscriptions.forEach((subscription, index) => {
+            try {
+                if (subscription && !subscription.closed) {
+                    subscription.unsubscribe();
+                }
+            } catch (error) {
+                console.warn(`Error unsubscribing subscription ${index}:`, error);
+            }
+        });
+        this.subscriptions = [];
+
+        // Safely complete the destroyed$ subject
+        try {
+            if (this.destroyed$ && !this.destroyed$.closed) {
+                this.destroyed$.next(true);
+                this.destroyed$.complete();
+            }
+        } catch (error) {
+            console.warn('Error completing destroyed$ subject:', error);
+        }
     }
 
     /**
@@ -935,4 +960,15 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     public openLedgerAsidePaneDialog(): void {
         this.ledgerAsidePaneDialogRef = this.dialog.open(this.ledgerAsidePane, ASIDE_PANE_CONFIG);
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

@@ -1,7 +1,7 @@
 import { takeUntil } from 'rxjs/operators';
 import { Component, Input, OnDestroy, OnInit, ChangeDetectorRef, ViewChild, Inject } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject, Subscription } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import * as dayjs from 'dayjs';
@@ -63,6 +63,10 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
     public universalDate$: Observable<any>;
     public dataFound: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     /* This will hold local JSON data */
     public localeData: any = {};
     /* This will hold common JSON data */
@@ -303,5 +307,17 @@ export class ProfitLossComponent implements OnInit, OnDestroy {
         this.requestInFlight = false;
         this.cdRef.detectChanges();
     }
+
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 
 }

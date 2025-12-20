@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import * as dayjs from 'dayjs';
 import { createSelector } from 'reselect';
-import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
+import { Observable, ReplaySubject, of as observableOf, Subscription } from 'rxjs';
 import { distinct, filter, take, takeUntil } from 'rxjs/operators';
 import { InventoryAction } from '../../actions/inventory/inventory.actions';
 import { ManufacturingActions } from '../../actions/manufacturing/manufacturing.actions';
@@ -85,6 +85,10 @@ export class MfReportComponent implements OnInit, OnDestroy {
     private universalDate: Date[];
     private lastPage: number = 0;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
 
     /** Observable to store the branches of current company */
     public currentCompanyBranches$: Observable<any>;
@@ -464,4 +468,15 @@ constructor(
             }
         });
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

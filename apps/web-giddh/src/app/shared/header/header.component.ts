@@ -144,7 +144,11 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public totalNumberOfcompanies$: Observable<number>;
     public totalNumberOfcompanies: number;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
     private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
+    
 
     private activeCompanyForDb: ICompAidata;
     public isMobileSite: boolean;
@@ -1924,4 +1928,15 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public backToSubscription(): void {
         this.router.navigate(['/pages/user-details/subscription']);
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

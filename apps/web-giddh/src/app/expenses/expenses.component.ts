@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild
 import { AppState } from '../store';
 import { select, Store } from '@ngrx/store';
 import { CommonPaginatedRequest } from '../models/api-models/Invoice';
-import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
+import { Observable, of as observableOf, ReplaySubject, Subscription } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
@@ -26,7 +26,7 @@ export enum EExpenseTabName {
 
 @Component({
     selector: 'app-expenses',
-    
+
       standalone: false,templateUrl: './expenses.component.html',
     styleUrls: ['./expenses.component.scss'],
 })
@@ -47,6 +47,10 @@ export class ExpensesComponent implements OnInit, OnDestroy {
     public activeTab: string;
     public pettycashRequest: CommonPaginatedRequest = new CommonPaginatedRequest();
     public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     public routerSub: any;
     /** Instance of pending list component */
     @ViewChild('pendingListComponent', { read: PendingListComponent, static: false }) public pendingListComponent: PendingListComponent;
@@ -153,7 +157,7 @@ export class ExpensesComponent implements OnInit, OnDestroy {
                             this.pettycashRequest.sort = this.pendingListComponent.pettycashRequest.sort;
                             this.pettycashRequest.sortBy = this.pendingListComponent.pettycashRequest.sortBy;
                         }
-                       
+
 
                         if (this.rejectedListComponent) {
                             this.pettycashRequest.sort = this.rejectedListComponent.pettycashRequest.sort;
@@ -459,4 +463,15 @@ export class ExpensesComponent implements OnInit, OnDestroy {
             this.refreshPendingItem(true);
         }
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

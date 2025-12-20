@@ -1,7 +1,7 @@
 import { takeUntil } from 'rxjs/operators';
 import { Component, Input, OnDestroy, OnInit, ChangeDetectorRef, ViewChild, TemplateRef, Inject } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
-import { combineLatest, Observable, ReplaySubject } from 'rxjs';
+import { combineLatest, Observable, ReplaySubject, Subscription } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
 import * as dayjs from 'dayjs';
@@ -62,6 +62,10 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
     public universalDate$: Observable<any>;
     public dataFound: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     public toRequest: any = { from: '', to: '', refresh: false };
     /** This will hold local JSON data */
     public localeData: any = {};
@@ -317,4 +321,15 @@ export class TotalOverduesChartComponent implements OnInit, OnDestroy {
         this.requestInFlight = false;
         this.cdRef.detectChanges();
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

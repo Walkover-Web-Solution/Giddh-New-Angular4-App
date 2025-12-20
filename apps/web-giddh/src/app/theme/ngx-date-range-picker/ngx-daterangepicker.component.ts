@@ -16,7 +16,7 @@ type Dayjs = ReturnType<typeof dayjs>;
 import { LocaleConfig } from './ngx-daterangepicker.config';
 import { NgxDaterangepickerLocaleService } from './ngx-daterangepicker-locale.service';
 import { takeUntil, debounceTime, take } from 'rxjs/operators';
-import { ReplaySubject, Subject } from 'rxjs';
+import { ReplaySubject, Subject, Subscription } from 'rxjs';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../shared/helpers/defaultDateFormat';
 import { SettingsFinancialYearService } from '../../services/settings.financial-year.service';
 import { Router, NavigationStart } from '@angular/router';
@@ -219,6 +219,10 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public goToNextMonthDisabled: boolean = false;
     private _old: { start: any, end: any } = { start: null, end: null };
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     public financialYears: any[] = [];
     public itemHeight: number = 210;
     public initialCalendarMonths: boolean = true;
@@ -1700,8 +1704,29 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
         this.invalidInlineStartDate = "";
         this.invalidInlineEndDate = "";
         this.invalidInlineDate = "";
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
+        this.isDestroying = true;
+
+        // Clean up all tracked subscriptions first
+        this.subscriptions.forEach((subscription, index) => {
+            try {
+                if (subscription && !subscription.closed) {
+                    subscription.unsubscribe();
+                }
+            } catch (error) {
+                console.warn(`Error unsubscribing subscription ${index}:`, error);
+            }
+        });
+        this.subscriptions = [];
+
+        // Safely complete the destroyed$ subject
+        try {
+            if (this.destroyed$ && !this.destroyed$.closed) {
+                this.destroyed$.next(true);
+                this.destroyed$.complete();
+            }
+        } catch (error) {
+            console.warn('Error completing destroyed$ subject:', error);
+        }
     }
 
     /**
@@ -2383,4 +2408,15 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             break;
         }
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

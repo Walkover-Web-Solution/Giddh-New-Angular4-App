@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { LoginActions } from '../actions/login.action';
 import { AuthenticationService } from '../services/authentication.service';
@@ -20,6 +20,10 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
     public request: any;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     /** True if user is connected with internet */
     public isConnected: boolean = true;
 
@@ -135,4 +139,15 @@ export class TokenVerifyComponent implements OnInit, OnDestroy {
             window.location.href = "/token-verify?request=" + sessionId;
         }
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

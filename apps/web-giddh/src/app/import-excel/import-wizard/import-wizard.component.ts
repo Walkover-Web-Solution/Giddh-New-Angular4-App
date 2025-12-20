@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ImportExcelRequestStates, ImportExcelResponseData, ImportExcelState, ImportExcelStatusPaginatedResponse, UploadExceltableResponse } from '../../models/api-models/import-excel';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ImportExcelService } from '../../services/import-excel.service';
 import { AppState } from '../../store';
@@ -34,6 +34,10 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
     };
 
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     /** Stores the selected branch unique name for import entries */
     private currentBranch: string;
     /* This will hold local JSON data */
@@ -267,4 +271,15 @@ export class ImportWizardComponent implements OnInit, OnDestroy {
 
         return importType;
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

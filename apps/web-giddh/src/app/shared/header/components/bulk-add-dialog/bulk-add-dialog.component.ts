@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
-import { ReplaySubject, takeUntil } from 'rxjs';
+import { ReplaySubject, takeUntil, Subscription } from 'rxjs';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
 import { AppState } from 'apps/web-giddh/src/app/store';
@@ -26,6 +26,10 @@ export class BulkAddDialogComponent implements OnInit {
     public commonLocaleData: any = {};
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     /** Holds company branches */
     public branches: Array<any>;
     /** Holds company specific data */
@@ -188,4 +192,15 @@ export class BulkAddDialogComponent implements OnInit {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

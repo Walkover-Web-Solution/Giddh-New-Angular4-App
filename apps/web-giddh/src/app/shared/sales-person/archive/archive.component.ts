@@ -6,7 +6,7 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/materia
 import { ActionTypeEnum } from '../utility/sales-person.constant';
 import { FormFieldsModule } from '../../../theme/form-fields/form-fields.module';
 import { SalesPersonComponentStore } from '../utility/sales-person.store';
-import { filter, ReplaySubject, takeUntil } from 'rxjs';
+import { filter, ReplaySubject, takeUntil, Subscription } from 'rxjs';
 import { API_BULK_FETCH_LIMIT, IOption } from '../../../app.constant';
 import { get } from '../../../lodash-optimized';
 
@@ -26,6 +26,10 @@ import { get } from '../../../lodash-optimized';
 export class ArchiveSalesPersonComponent implements OnInit, OnDestroy {
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     /** Archive form */
     public archiveForm: FormGroup = new FormGroup({
         action: new FormControl<ActionTypeEnum>(ActionTypeEnum.UNASSIGNED, [Validators.required]),
@@ -97,7 +101,39 @@ export class ArchiveSalesPersonComponent implements OnInit, OnDestroy {
      * @memberof ArchiveSalesPersonComponent
      */
     public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
+        this.isDestroying = true;
+
+        // Clean up all tracked subscriptions first
+        this.subscriptions.forEach((subscription, index) => {
+            try {
+                if (subscription && !subscription.closed) {
+                    subscription.unsubscribe();
+                }
+            } catch (error) {
+                console.warn(`Error unsubscribing subscription ${index}:`, error);
+            }
+        });
+        this.subscriptions = [];
+
+        // Safely complete the destroyed$ subject
+        try {
+            if (this.destroyed$ && !this.destroyed$.closed) {
+                this.destroyed$.next(true);
+                this.destroyed$.complete();
+            }
+        } catch (error) {
+            console.warn('Error completing destroyed$ subject:', error);
+        }
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

@@ -6,7 +6,7 @@ import { AppState } from '../../../store/roots';
 import { ElementViewContainerRef } from '../../../shared/helpers/directives/elementViewChild/element.viewchild.directive';
 import { PermissionActions } from '../../../actions/permission/permission.action';
 import { IRoleCommonResponseAndRequest } from '../../../models/api-models/Permission';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject, Subscription } from 'rxjs';
 import { NewRoleClass } from '../../permission.utility';
 import { ToasterService } from '../../../services/toaster.service';
 import { GeneralService } from '../../../services/general.service';
@@ -31,6 +31,10 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
     public selectedRoleForDelete: IRoleCommonResponseAndRequest;
     public session$: Observable<any>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     /* showBackButton will be used to show/hide the back button */
     public showBackButton: boolean = false;
     /* showPopup will be used to show/hide the popup */
@@ -166,4 +170,15 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
             width: '650px'
         });
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

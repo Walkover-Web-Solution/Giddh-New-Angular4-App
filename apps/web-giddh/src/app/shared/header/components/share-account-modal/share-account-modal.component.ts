@@ -4,7 +4,7 @@ import { GetAllPermissionResponse } from './../../../../permissions/permission.u
 import { Component, EventEmitter, OnDestroy, OnInit, Output, Input } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject, Subscription } from 'rxjs';
 import { AccountResponseV2 } from '../../../../models/api-models/Account';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { GIDDH_EMAIL_REGEX } from '../../../helpers/defaultDateFormat';
@@ -48,6 +48,10 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
     /** Observable to observe create new permission is successfull */
     public createPermissionSuccess$: Observable<boolean>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
 
     constructor(
         private store: Store<AppState>,
@@ -156,4 +160,15 @@ export class ShareAccountModalComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

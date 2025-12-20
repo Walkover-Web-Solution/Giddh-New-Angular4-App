@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { NgxPlaidLinkService, PlaidLinkHandler, LegacyPlaidConfig } from "ngx-plaid-link";
 import { SettingsIntegrationService } from "../../services/settings.integration.service";
-import { ReplaySubject, takeUntil } from "rxjs";
+import { ReplaySubject, takeUntil, Subscription } from "rxjs";
 import { ToasterService } from "../../services/toaster.service";
 import { BROADCAST_CHANNELS } from "../../app.constant";
 import { Store, select } from "@ngrx/store";
@@ -28,6 +28,10 @@ export class ConnectPlaidComponent implements OnInit {
     private isPlaidOpen: boolean = false;
     /** Subject to release subscriptions */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
 
     constructor(
         private store: Store<AppState>,

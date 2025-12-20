@@ -19,14 +19,14 @@ import { WarehouseActions } from 'apps/web-giddh/src/app/settings/warehouse/acti
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import * as dayjs from 'dayjs';
-import { Observable } from 'rxjs/internal/Observable';
-import { ReplaySubject } from 'rxjs/internal/ReplaySubject';
+import { Observable, ReplaySubject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { cloneDeep, find, forEach, map } from '../../../../lodash-optimized';
 
 @Component({
     selector: 'list-manufacturing',
-    
+    // tslint:disable-next-line: max-line-length
+
     templateUrl: './list-manufacturing.component.html',
     standalone: false,
     styleUrls: ['./list-manufacturing.component.scss'],
@@ -65,6 +65,10 @@ export class ListManufacturingComponent implements OnInit {
     private universalDate: Date[];
     /** Clears all the memory leakes */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     /** Stores the branch list of a company */
     public currentCompanyBranches: Array<any>;
     /** Stores the current branch */
@@ -578,7 +582,39 @@ export class ListManufacturingComponent implements OnInit {
      * @memberof ListManufacturingComponent
      */
     public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
+        this.isDestroying = true;
+
+        // Clean up all tracked subscriptions first
+        this.subscriptions.forEach((subscription, index) => {
+            try {
+                if (subscription && !subscription.closed) {
+                    subscription.unsubscribe();
+                }
+            } catch (error) {
+                console.warn(`Error unsubscribing subscription ${index}:`, error);
+            }
+        });
+        this.subscriptions = [];
+
+        // Safely complete the destroyed$ subject
+        try {
+            if (this.destroyed$ && !this.destroyed$.closed) {
+                this.destroyed$.next(true);
+                this.destroyed$.complete();
+            }
+        } catch (error) {
+            console.warn('Error completing destroyed$ subject:', error);
+        }
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

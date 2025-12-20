@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, ChangeDetectorRef, Input, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
-import { Observable, ReplaySubject, of } from "rxjs";
+import { Observable, ReplaySubject, of, Subscription } from "rxjs";
 import { Store, select } from "@ngrx/store";
 import { AppState } from "../../../store";
 import { ContactService } from "../../../services/contact.service";
@@ -30,6 +30,10 @@ export class CrDrComponent implements OnInit, OnDestroy {
     public selectedRangeLabel: any = "";
     public universalDate$: Observable<any>;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
     public dayjs = dayjs;
     public toDate: string;
@@ -214,4 +218,15 @@ export class CrDrComponent implements OnInit, OnDestroy {
             this.getAccountsReport();
         }
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

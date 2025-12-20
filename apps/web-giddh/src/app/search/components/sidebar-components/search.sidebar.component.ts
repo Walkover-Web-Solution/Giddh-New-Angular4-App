@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, T
 import { MatMenuTrigger } from '@angular/material/menu';
 import { AppState } from '../../../store/roots';
 import { Store, select } from '@ngrx/store';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject, Subscription } from 'rxjs';
 import * as dayjs from 'dayjs';
 import { SearchRequest } from '../../../models/api-models/Search';
 import { SearchActions } from '../../../actions/search.actions';
@@ -50,6 +50,10 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
     /** Stores the current company */
     public activeCompany: any;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     private paginationPageNumber: number;
     /** This holds giddh date format */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
@@ -374,4 +378,15 @@ export class SearchSidebarComponent implements OnInit, OnChanges, OnDestroy {
             this.searchedGroups = [...this.defaultGroupSuggestions];
         });
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

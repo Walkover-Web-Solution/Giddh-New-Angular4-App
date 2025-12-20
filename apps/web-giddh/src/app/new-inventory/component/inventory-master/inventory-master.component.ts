@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import { ReplaySubject } from "rxjs";
+import { ReplaySubject, Subscription } from "rxjs";
 import { InventoryService } from "../../../services/inventory.service";
 import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -57,6 +57,10 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
     public parentGroup: any = {};
     /* Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     /** False if we did not need to show Export button */
     public showExportButton: boolean = true;
     /** Reference to create update group component */
@@ -196,8 +200,29 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
             this.unregisterMarkFormsAsPristineCallback();
         }
         
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
+        this.isDestroying = true;
+
+        // Clean up all tracked subscriptions first
+        this.subscriptions.forEach((subscription, index) => {
+            try {
+                if (subscription && !subscription.closed) {
+                    subscription.unsubscribe();
+                }
+            } catch (error) {
+                console.warn(`Error unsubscribing subscription ${index}:`, error);
+            }
+        });
+        this.subscriptions = [];
+
+        // Safely complete the destroyed$ subject
+        try {
+            if (this.destroyed$ && !this.destroyed$.closed) {
+                this.destroyed$.next(true);
+                this.destroyed$.complete();
+            }
+        } catch (error) {
+            console.warn('Error completing destroyed$ subject:', error);
+        }
         this.pageLeaveUtilityService.removeBrowserConfirmationDialog();
     }
 
@@ -725,4 +750,15 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
             data: exportData
         })
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

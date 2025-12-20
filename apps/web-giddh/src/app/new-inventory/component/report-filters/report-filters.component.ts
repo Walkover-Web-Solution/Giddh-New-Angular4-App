@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, In
 import { MatMenuTrigger } from "@angular/material/menu";
 import { UntypedFormControl } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
-import { Observable, ReplaySubject, of as observableOf, Subject } from "rxjs";
+import { Observable, ReplaySubject, of as observableOf, Subject, Subscription } from "rxjs";
 import { debounceTime, distinctUntilChanged, take, takeUntil } from "rxjs/operators";
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from "../../../app.constant";
 import { BalanceStockTransactionReportRequest, SearchStockTransactionReportRequest, StockTransactionReportRequest, StockTransactionReportRequestExport } from "../../../models/api-models/Inventory";
@@ -80,6 +80,10 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     public searchFilters: UntypedFormControl = new UntypedFormControl();
 /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     /** Stock Transactional Object */
     public searchRequest: SearchStockTransactionReportRequest = new SearchStockTransactionReportRequest();
     /** This will store universalDate */
@@ -1064,4 +1068,15 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             });
         }
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

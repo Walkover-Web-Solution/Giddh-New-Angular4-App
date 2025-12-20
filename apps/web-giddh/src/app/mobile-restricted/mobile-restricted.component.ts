@@ -1,7 +1,7 @@
 import { BreakpointObserver } from "@angular/cdk/layout";
 import { Component, Inject } from "@angular/core";
 import { Router } from "@angular/router";
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { GeneralService } from "../services/general.service";
 import { ServiceConfig } from "../services/service.config";
@@ -20,6 +20,10 @@ export class MobileRestrictedComponent {
     /** Holds images folder path */
     public imgPath: string = "";
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     /* Hold giddh logo source */
     public giddhLogoSrc: string = '';
 

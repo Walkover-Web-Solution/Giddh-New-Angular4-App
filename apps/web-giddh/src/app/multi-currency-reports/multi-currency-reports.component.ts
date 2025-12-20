@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
-import { ReplaySubject, takeUntil } from 'rxjs';
+import { ReplaySubject, takeUntil, Subscription } from 'rxjs';
 import { GeneralService } from '../services/general.service';
 import { ReportType } from './multi-currency.const';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -24,6 +24,10 @@ export class MultiCurrencyReportsComponent implements OnInit, OnDestroy {
     public preventTabChangeWithRoute: boolean;
     /** Observable subject to handle component destruction */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     /** Holds the local JSON data for the component */
     public localeData: any = {};
     /** Holds the common JSON data for the component */
@@ -59,8 +63,29 @@ export class MultiCurrencyReportsComponent implements OnInit, OnDestroy {
      * @memberof FinancialReportsComponent
      */
     public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
+        this.isDestroying = true;
+
+        // Clean up all tracked subscriptions first
+        this.subscriptions.forEach((subscription, index) => {
+            try {
+                if (subscription && !subscription.closed) {
+                    subscription.unsubscribe();
+                }
+            } catch (error) {
+                console.warn(`Error unsubscribing subscription ${index}:`, error);
+            }
+        });
+        this.subscriptions = [];
+
+        // Safely complete the destroyed$ subject
+        try {
+            if (this.destroyed$ && !this.destroyed$.closed) {
+                this.destroyed$.next(true);
+                this.destroyed$.complete();
+            }
+        } catch (error) {
+            console.warn('Error completing destroyed$ subject:', error);
+        }
     }
 
     /**
@@ -74,5 +99,16 @@ export class MultiCurrencyReportsComponent implements OnInit, OnDestroy {
         this.selectedTabIndex = selectedTabIndex;
         this.generalService.updateActivatedRouteQueryParams({ val: selectedTabIndex === 0 ? ReportType.TRIAL_BALANCE : selectedTabIndex === 1 ? ReportType.PROFIT_LOSS : ReportType.BALANCE_SHEET, tabIndex: selectedTabIndex });
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }
 

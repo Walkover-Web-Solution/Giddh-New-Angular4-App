@@ -5,7 +5,7 @@ import { take, takeUntil } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../store';
 import { SettingsProfileActions } from '../actions/settings/profile/settings.profile.action';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject, Subscription } from 'rxjs';
 import { GeneralActions } from '../actions/general/general.actions';
 import { OnboardingComponentStore } from './utility/onboarding.store';
 import { ASIDE_PANE_CONFIG, SYNC_TALLY_HELP_DOC_URL } from '../app.constant';
@@ -33,6 +33,10 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
     public loadAPI: Promise<any>;
     public CompanySettingsObj: any = {};
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     public imgPath: string = '';
     public companyCountry: string;
     /* This will hold local JSON data */
@@ -153,7 +157,39 @@ export class OnboardingComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof OnboardingComponent
      */
     public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
+        this.isDestroying = true;
+
+        // Clean up all tracked subscriptions first
+        this.subscriptions.forEach((subscription, index) => {
+            try {
+                if (subscription && !subscription.closed) {
+                    subscription.unsubscribe();
+                }
+            } catch (error) {
+                console.warn(`Error unsubscribing subscription ${index}:`, error);
+            }
+        });
+        this.subscriptions = [];
+
+        // Safely complete the destroyed$ subject
+        try {
+            if (this.destroyed$ && !this.destroyed$.closed) {
+                this.destroyed$.next(true);
+                this.destroyed$.complete();
+            }
+        } catch (error) {
+            console.warn('Error completing destroyed$ subject:', error);
+        }
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

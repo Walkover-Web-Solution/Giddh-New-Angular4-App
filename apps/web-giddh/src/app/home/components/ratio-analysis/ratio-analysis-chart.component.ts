@@ -1,6 +1,6 @@
 import { skipWhile, takeUntil } from 'rxjs/operators';
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject, Subscription } from 'rxjs';
 import { HomeActions } from '../../../actions/home/home.actions';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
@@ -21,6 +21,10 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
     public rationResponse$: Observable<any>;
     public ratioObj: any = {};
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     /** This will hold local JSON data */
     public localeData: any = {};
     public chart:any;
@@ -351,4 +355,15 @@ export class RatioAnalysisChartComponent implements OnInit, OnDestroy {
             }
             });
      }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

@@ -2,7 +2,7 @@ import { debounceTime, takeUntil } from 'rxjs/operators';
 import { AfterViewChecked, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, OnDestroy, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
 import { AppState } from '../../../../store/roots';
 import { Store, select } from '@ngrx/store';
-import { Observable, ReplaySubject, Subject } from 'rxjs';
+import { Observable, ReplaySubject, Subject, Subscription } from 'rxjs';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
 import { GeneralService } from "../../../../services/general.service";
 import { GeneralActions } from 'apps/web-giddh/src/app/actions/general/general.actions';
@@ -36,6 +36,10 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     private groupSearchTerms = new Subject<string>();
     public searchString: any = '';
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     /* This will hold if keyup for focus in search field is initialized */
     public keyupInitialized: boolean = false;
     /* This will hold local JSON data */
@@ -351,4 +355,15 @@ export class ManageGroupsAccountsComponent implements OnInit, OnDestroy, AfterVi
     public handleUpdateAccount(): void {
         this.searchGroups(this.searchString);
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

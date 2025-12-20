@@ -3,7 +3,7 @@ import { RevenueChartComponent } from './components/revenue/revenue-chart.compon
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject, Subscription } from 'rxjs';
 import { HomeActions } from '../actions/home/home.actions';
 import { Router } from '@angular/router';
 import { AccountService } from 'apps/web-giddh/src/app/services/account.service';
@@ -25,6 +25,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     @ViewChild('bankaccount', { static: true }) public bankaccount: BankAccountsComponent;
     @ViewChild('crdrlist', { static: true }) public crdrlist: CrDrComponent;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     public hideallcharts: boolean = false;
     /** This will hold common JSON data */
     public commonLocaleData: any = {};
@@ -76,4 +80,15 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

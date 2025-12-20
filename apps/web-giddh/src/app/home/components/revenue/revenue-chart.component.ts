@@ -1,6 +1,6 @@
 import { takeUntil } from 'rxjs/operators';
 import { Component, Input, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, Subscription } from 'rxjs';
 import { HomeActions } from '../../../actions/home/home.actions';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store/roots';
@@ -46,6 +46,10 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
     public summaryData: any = { totalCurrent: 0, totalLast: 0, highest: 0, lowest: 0, highestLabel: '', lowestLabel: '' };
     public activeCompany: any = {};
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     public getCurrentWeekStartEndDate: any = '';
     public getPreviousWeekStartEndDate: any = '';
     public chartType: 'bar' | 'line' = 'bar';
@@ -562,5 +566,16 @@ export class RevenueChartComponent implements OnInit, OnDestroy {
 
         this.requestInFlight = false;
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }
 

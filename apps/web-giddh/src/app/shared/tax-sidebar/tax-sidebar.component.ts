@@ -5,7 +5,7 @@ import { GstReport } from '../../gst/constants/gst.constant';
 import { AppState } from '../../store';
 import { select, Store } from '@ngrx/store';
 import { take, takeUntil } from 'rxjs/operators';
-import { Observable, of, ReplaySubject } from 'rxjs';
+import { Observable, of, ReplaySubject, Subscription } from 'rxjs';
 import { SALES_TAX_SUPPORTED_COUNTRIES, TRN_SUPPORTED_COUNTRIES, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { GstReconcileService } from '../../services/gst-reconcile.service';
 import { OrganizationType } from '../../models/user-login-state';
@@ -49,6 +49,10 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     /** True if we need to show GST menus */
     public showGstMenus: boolean = false;
     /** True if we need to show Tax menus */
@@ -175,8 +179,29 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
      */
     public ngOnDestroy(): void {
         document.querySelector('body').classList.remove('gst-sidebar-open');
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
+        this.isDestroying = true;
+
+        // Clean up all tracked subscriptions first
+        this.subscriptions.forEach((subscription, index) => {
+            try {
+                if (subscription && !subscription.closed) {
+                    subscription.unsubscribe();
+                }
+            } catch (error) {
+                console.warn(`Error unsubscribing subscription ${index}:`, error);
+            }
+        });
+        this.subscriptions = [];
+
+        // Safely complete the destroyed$ subject
+        try {
+            if (this.destroyed$ && !this.destroyed$.closed) {
+                this.destroyed$.next(true);
+                this.destroyed$.complete();
+            }
+        } catch (error) {
+            console.warn('Error completing destroyed$ subject:', error);
+        }
         if (!this.router.url.includes('pages/gstfiling') && !this.router.url.includes('pages/invoice/ewaybill') && !this.router.url.includes('pages/reports/reverse-charge') && !this.router.url.includes('pages/settings/taxes') && !this.router.url.includes('pages/settings/addresses')) {
             this.store.dispatch(this.gstAction.SetActiveCompanyGstin(''));
         }
@@ -294,4 +319,15 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
             this.taxTypeSidebarLabel = label;
         }
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

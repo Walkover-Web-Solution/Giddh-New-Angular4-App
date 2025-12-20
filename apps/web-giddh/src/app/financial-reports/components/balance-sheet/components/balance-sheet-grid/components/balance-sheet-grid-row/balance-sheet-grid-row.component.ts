@@ -9,7 +9,7 @@ import { Account, ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Se
 import { ReportType } from 'apps/web-giddh/src/app/multi-currency-reports/multi-currency.const';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { TlPlService } from 'apps/web-giddh/src/app/services/tl-pl.service';
-import { ReplaySubject, takeUntil } from 'rxjs';
+import { ReplaySubject, takeUntil, Subscription } from 'rxjs';
 import { Configuration } from '../../../../../../../app.constant';
 import { includes } from '../../../../../../../lodash-optimized';
 
@@ -37,6 +37,10 @@ export class BalanceSheetGridRowComponent implements OnInit, OnChanges, OnDestro
     private currentUrl: string = "";
      /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
 
     constructor(private cd: ChangeDetectorRef, private router: Router, private financialReportsComponentStore: FinancialReportsComponentStore, private tlPlService: TlPlService, private generalService: GeneralService) {
         this.currentUrl = this.router.url;
@@ -127,7 +131,39 @@ export class BalanceSheetGridRowComponent implements OnInit, OnChanges, OnDestro
      * @memberof BalanceSheetGridRowComponent
      */
     public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
+        this.isDestroying = true;
+
+        // Clean up all tracked subscriptions first
+        this.subscriptions.forEach((subscription, index) => {
+            try {
+                if (subscription && !subscription.closed) {
+                    subscription.unsubscribe();
+                }
+            } catch (error) {
+                console.warn(`Error unsubscribing subscription ${index}:`, error);
+            }
+        });
+        this.subscriptions = [];
+
+        // Safely complete the destroyed$ subject
+        try {
+            if (this.destroyed$ && !this.destroyed$.closed) {
+                this.destroyed$.next(true);
+                this.destroyed$.complete();
+            }
+        } catch (error) {
+            console.warn('Error completing destroyed$ subject:', error);
+        }
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

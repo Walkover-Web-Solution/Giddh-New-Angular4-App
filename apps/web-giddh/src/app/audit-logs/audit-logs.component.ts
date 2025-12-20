@@ -2,7 +2,7 @@ import { takeUntil } from 'rxjs/operators';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../store/roots';
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ReplaySubject, Observable } from 'rxjs';
+import { ReplaySubject, Observable, Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { GIDDH_NEW_DATE_FORMAT_UI, GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { MatMenuTrigger } from '@angular/material/menu';
@@ -22,6 +22,10 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
     /** To check module for new version  */
     public isNewVersion: boolean = false;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     /** Date format type */
     public giddhDateFormat: string = GIDDH_DATE_FORMAT;
     /** Angular Material menu trigger for datepicker */
@@ -146,4 +150,15 @@ export class AuditLogsComponent implements OnInit, OnDestroy {
             this.showClearFilter = false;
         }
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

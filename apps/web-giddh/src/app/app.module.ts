@@ -1,7 +1,6 @@
 import { APP_BASE_HREF } from '@angular/common';
 import { HTTP_INTERCEPTORS, HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { APP_INITIALIZER, ErrorHandler, NgModule } from '@angular/core';
-import { Angular21CompatibilityErrorHandler } from './angular21-compatibility';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule, NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -658,7 +657,7 @@ export function getServiceConfigAfterInit(): () => Promise<any> {
         },
         {
             provide: ErrorHandler,
-            useClass: Angular21CompatibilityErrorHandler
+            useClass: ExceptionLogService
         },
         CustomPreloadingStrategy
     ]

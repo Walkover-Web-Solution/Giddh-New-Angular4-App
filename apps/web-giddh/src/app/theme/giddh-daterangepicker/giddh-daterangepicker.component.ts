@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChange
 import * as dayjs from 'dayjs';
 import { MatDatepickerInputEvent, MatDatepicker } from '@angular/material/datepicker';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
@@ -36,6 +36,10 @@ export class GiddhDaterangepickerComponent implements OnInit, OnChanges, OnDestr
 
     /** Subject to unsubscribe from all listeners */
     private destroyed$: ReplaySubject<void> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
 
     constructor(private store: Store<AppState>, private settingsFinancialYearActions: SettingsFinancialYearActions) {
 
@@ -125,4 +129,15 @@ export class GiddhDaterangepickerComponent implements OnInit, OnChanges, OnDestr
             this.picker?.open();
         }
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

@@ -1,4 +1,4 @@
-import { Observable, ReplaySubject } from 'rxjs';
+import { Observable, ReplaySubject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { select, Store } from '@ngrx/store';
@@ -49,6 +49,10 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     private isMasterOpen: boolean = false;
     // private below
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     /** True if account has unsaved changes */
     private hasUnsavedChanges: boolean = false;
     public deleteAccountmodalRef: any;
@@ -270,4 +274,15 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
             }
         });
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

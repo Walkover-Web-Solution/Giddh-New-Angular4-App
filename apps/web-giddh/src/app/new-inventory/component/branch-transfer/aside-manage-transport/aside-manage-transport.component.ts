@@ -7,7 +7,8 @@ import { IAllTransporterDetails } from 'apps/web-giddh/src/app/models/api-models
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
-import { ReplaySubject, take, takeUntil } from 'rxjs';
+import { ReplaySubject, Subscription } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { get, set } from '../../../../lodash-optimized';
 
@@ -19,7 +20,7 @@ export interface transporterDetails {
 const ELEMENT_DATA: transporterDetails[] = [];
 @Component({
     selector: 'aside-manage-transport',
-    
+
     templateUrl: './aside-manage-transport.component.html',
     standalone: false,
     styleUrls: ['./aside-manage-transport.component.scss']
@@ -49,6 +50,14 @@ export class AsideManageTransportComponent implements OnInit {
     public transporterMode: IOption[] = [];
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
+    /** Track subscriptions manually for Angular 21 compatibility */
+    
+    /** Flag to track component destruction state */
+    
     /** Hold get transporter details*/
     public transporterListDetails: IAllTransporterDetails;
     /** Form Group for group form */
@@ -257,13 +266,67 @@ export class AsideManageTransportComponent implements OnInit {
     }
 
     /**
-     * This will be use for component destroyed
+     * This will be use for component destroyed - Angular 21 compatible
      *
      * @memberof AsideManageTransportComponent
      */
     public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
+        this.isDestroying = true;
+
+        // Clean up all tracked subscriptions first
+        this.subscriptions.forEach((subscription, index) => {
+            try {
+                if (subscription && !subscription.closed) {
+                    subscription.unsubscribe();
+                }
+            } catch (error) {
+                console.warn(`Error unsubscribing subscription ${index}:`, error);
+            }
+        });
+        this.subscriptions = [];
+
+        // Safely complete the destroyed$ subject
+        try {
+            if (this.destroyed$ && !this.destroyed$.closed) {
+                this.isDestroying = true;
+
+        // Clean up all tracked subscriptions first
+        this.subscriptions.forEach((subscription, index) => {
+            try {
+                if (subscription && !subscription.closed) {
+                    subscription.unsubscribe();
+                }
+            } catch (error) {
+                console.warn(`Error unsubscribing subscription ${index}:`, error);
+            }
+        });
+        this.subscriptions = [];
+
+        // Safely complete the destroyed$ subject
+        try {
+            if (this.destroyed$ && !this.destroyed$.closed) {
+                this.destroyed$.next(true);
+                this.destroyed$.complete();
+            }
+        } catch (error) {
+            console.warn('Error completing destroyed$ subject:', error);
+        }
+            }
+        } catch (error) {
+            console.warn('Error completing destroyed$ subject:', error);
+        }
     }
+
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 
 }

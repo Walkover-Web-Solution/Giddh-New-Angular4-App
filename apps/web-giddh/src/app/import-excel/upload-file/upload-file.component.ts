@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { saveAs } from 'file-saver';
-import { BehaviorSubject, Observable, ReplaySubject, of } from 'rxjs';
+import { BehaviorSubject, Observable, ReplaySubject, of, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { SettingsBranchActions } from '../../actions/settings/branch/settings.branch.action';
 import { API_BULK_FETCH_LIMIT, BranchHierarchyType, SAMPLE_FILES_URL, IOption } from '../../app.constant';
@@ -51,6 +51,10 @@ export class UploadFileComponent implements OnInit, OnDestroy {
 
     /** Subject to unsubscribe all the listeners */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     public isHeaderProvided: boolean = true;
     /** True if consolidated branch */
     public isConsolidatedBranch: boolean;
@@ -232,8 +236,29 @@ export class UploadFileComponent implements OnInit, OnDestroy {
      * @memberof UploadFileComponent
      */
     public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
+        this.isDestroying = true;
+
+        // Clean up all tracked subscriptions first
+        this.subscriptions.forEach((subscription, index) => {
+            try {
+                if (subscription && !subscription.closed) {
+                    subscription.unsubscribe();
+                }
+            } catch (error) {
+                console.warn(`Error unsubscribing subscription ${index}:`, error);
+            }
+        });
+        this.subscriptions = [];
+
+        // Safely complete the destroyed$ subject
+        try {
+            if (this.destroyed$ && !this.destroyed$.closed) {
+                this.destroyed$.next(true);
+                this.destroyed$.complete();
+            }
+        } catch (error) {
+            console.warn('Error completing destroyed$ subject:', error);
+        }
         this.accountSearchResponseSubject.complete();
     }
 
@@ -306,4 +331,15 @@ export class UploadFileComponent implements OnInit, OnDestroy {
             this.searchAccount(this.accountSearchRequest.q, this.accountSearchRequest.page + 1);
         }
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }
