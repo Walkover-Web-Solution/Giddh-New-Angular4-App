@@ -1,0 +1,114 @@
+.edit-icon {
+    display: none;
+}
+
+tr {
+    &:hover {
+        .edit-icon {
+            display: inline-block !important;
+            z-index: 9999;
+        }
+    }
+}
+
+td {
+    .v-align-center {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+    }
+
+    .edit-icon {
+        width: 66px;
+        float: right;
+    }
+}
+
+.stock-group-footer {
+    background-color: var(--color-white);
+    z-index: 3;
+    width: calc(100% - 240px);
+    padding-right: 15px;
+    line-height: 1.8;
+    box-shadow: 0 0 6px var(--color-shadow-light);
+    padding-top: 5px;
+
+    .stock-value {
+        padding-right: 80px;
+
+    }
+}
+
+.report-quantity {
+    float: left;
+    width: 100%;
+    text-align: right;
+    text-transform: lowercase;
+}
+
+::ng-deep {
+    .inventory-transaction-list {
+        tbody {
+            .mat-no-data-row:last-child {
+                border-bottom: none !important;
+
+                td {
+                    border-bottom: none !important;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 1024px) {
+    .select-multiple-chiplist-inventory {
+        width: 57%;
+    }
+
+    .stock-mat-salect {
+        min-width: 187px;
+    }
+
+    .inventory-report-table {
+        overflow-x: scroll !important;
+    }
+}
+
+@media (max-width: 1019px) {
+    .select-multiple-chiplist-inventory {
+        width: 57%;
+    }
+
+    .stock-mat-salect {
+        min-width: 199px;
+    }
+
+}
+
+@mixin column-header($label) {
+    overflow: visible !important;
+
+    &::before {
+        content: $label;
+        position: absolute;
+        top: -50px;
+        right: 0;
+        transform: translateY(50%);
+    }
+}
+
+.opening-column {
+    @include column-header("Opening Stock");
+}
+
+.inward-column {
+    @include column-header("Inwards");
+}
+
+.outward-column {
+    @include column-header("Outward");
+}
+
+.closing-column {
+    @include column-header("Closing Stock");
+}

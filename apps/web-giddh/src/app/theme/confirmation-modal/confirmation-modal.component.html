@@ -1,0 +1,23 @@
+<div class="custom-confirmation-modal">
+    <div class="dialog-header">
+        <span [ngClass]="configuration?.headerCssClass">{{ configuration?.headerText }}</span>
+        <button mat-icon-button aria-label="close" (click)="handleButtonClick('Close')">
+            <i class="icon-cross"></i>
+        </button>
+    </div>
+    <mat-dialog-content class="dialog-body">
+        <p [ngClass]="configuration?.messageCssClass" [innerHTML]="configuration?.messageText"></p>
+        <p [ngClass]="configuration?.footerCssClass">{{ configuration?.footerText }}</p>
+        <div class="d-flex column-gap-1 mt-3">
+            <button
+                mat-raised-button
+                color="primary"
+                *ngFor="let button of configuration?.buttons"
+                (click)="handleButtonClick(button?.text)"
+                [ngClass]="button?.cssClass"
+            >
+                {{ button?.text }}
+            </button>
+        </div>
+    </mat-dialog-content>
+</div>

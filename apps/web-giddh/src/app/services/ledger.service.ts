@@ -6,34 +6,17 @@ import { Observable } from 'rxjs';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { LEDGER_API } from './apiurls/ledger.api';
-// COMMENTED OUT - MISSING: import { BlankLedgerVM } from '../ledger/ledger.vm';
+import { BlankLedgerVM } from '../ledger/ledger.vm';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { ExportBodyRequest } from '../models/api-models/DaybookRequest';
 import { ToasterService } from './toaster.service';
 import { ReportsDetailedRequestFilter } from '../models/api-models/Reports';
-import { cloneDeep } from '../lodash-optimized';
 import { PAGINATION_LIMIT } from '../app.constant';
 import { HttpBackend, HttpClient } from '@angular/common/http';
+import { cloneDeep, concat, forEach, get } from '../lodash-optimized';
 
-// Placeholder BlankLedgerVM - replace when original interface is available
-interface BlankLedgerVM {
-    entryDate: string;
-    unconfirmedEntry: boolean;
-    transactions: any[];
-    voucherType: string;
-    description: string;
-    generateInvoice: boolean;
-    chequeNumber: string;
-    chequeClearanceDate: string;
-    invoiceNumberAgainstVoucher: string;
-    compoundTotal: number;
-    [key: string]: any;
-}
-
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class LedgerService {
     private companyUniqueName: string;
     private httpClient: HttpClient

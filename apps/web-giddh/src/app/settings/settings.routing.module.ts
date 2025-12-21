@@ -3,8 +3,8 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { NeedsAuthentication } from '../decorators/needsAuthentication';
 import { SettingsDeactivateGuard } from './routing-guards/settings-deactivate.guard';
-import { CreateBranchComponent } from './branch/create-branch/create-branch.component';
-import { CreateWarehouseComponent } from './warehouse/create-warehouse/create-warehouse.component';
+// import { CreateBranchComponent } from './branch/create-branch/create-branch.component';
+// import { CreateWarehouseComponent } from './warehouse/create-warehouse/create-warehouse.component';
 import { NeedsAuthorization } from '../decorators/needAuthorization';
 import { PageLeaveConfirmationGuard } from '../decorators/page-leave-confirmation-guard';
 
@@ -12,12 +12,12 @@ import { PageLeaveConfirmationGuard } from '../decorators/page-leave-confirmatio
     imports: [
         RouterModule.forChild([
             // COMMENTED OUT - COMPILATION ERROR: { path: '', component: SettingsComponent, canActivate: [NeedsAuthentication, NeedsAuthorization], canDeactivate: [SettingsDeactivateGuard], pathMatch: 'full' },
-            {
-                path: 'create-branch', component: CreateBranchComponent, canActivate: [NeedsAuthentication, NeedsAuthorization], canDeactivate: [SettingsDeactivateGuard, PageLeaveConfirmationGuard]
-            },
-            {
-                path: 'create-warehouse', component: CreateWarehouseComponent, canActivate: [NeedsAuthentication, NeedsAuthorization], canDeactivate: [SettingsDeactivateGuard, PageLeaveConfirmationGuard]
-            },
+            // {
+            //     path: 'create-branch', component: CreateBranchComponent, canActivate: [NeedsAuthentication, NeedsAuthorization], canDeactivate: [SettingsDeactivateGuard, PageLeaveConfirmationGuard]
+            // },
+            // {
+            //     path: 'create-warehouse', component: CreateWarehouseComponent, canActivate: [NeedsAuthentication, NeedsAuthorization], canDeactivate: [SettingsDeactivateGuard, PageLeaveConfirmationGuard]
+            // },
             {
                 // COMMENTED OUT - COMPILATION ERROR: path: 'trigger', pathMatch: 'prefix', loadChildren: () => import('../shared/triggers/triggers.module').then(module => module.TriggersModule), canDeactivate: [SettingsDeactivateGuard, PageLeaveConfirmationGuard]
             },

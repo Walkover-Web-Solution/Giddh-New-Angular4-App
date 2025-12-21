@@ -1,0 +1,321 @@
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { FormControl, NgForm } from "@angular/forms";
+import { ActivatedRoute, Router } from "@angular/router";
+import { ReplaySubject, Subscription } from "rxjs";
+import { takeUntil } from "rxjs/operators";
+import { CustomFieldsService } from "../../services/custom-fields.service";
+import { ToasterService } from "../../services/toaster.service";
+import { FieldModules, FieldTypes } from "../custom-fields.constant";
+import { GeneralService } from "../../services/general.service";
+import { IOption } from "../../app.constant";
+import { cloneDeep, find, forEach, get, map, set } from '../../lodash-optimized';
+
+@Component({
+    selector: "create-edit",
+    templateUrl: "./create-edit.component.html",
+    styleUrls: ["./create-edit.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
+})
+export class CustomFieldsCreateEditComponent implements OnInit, OnDestroy {
+    /** Instance of custom field create/edit form */
+    @ViewChild('customFieldCreateEditForm', { static: false }) public customFieldCreateEditForm: NgForm;
+    /** Object for custom field request */
+    public customFieldRequest: any = {
+        fieldName: null,
+        fieldType: {
+            name: null,
+            type: null
+        },
+        fieldInfo: null,
+        isMandatory: null,
+        dataRange: {
+            min: null,
+            max: null
+        },
+        multipleOptions: false,
+        modules: null,
+        status: true
+    };
+    /** This will hold local JSON data */
+    public localeData: any = {};
+    /** This will hold common JSON data */
+    public commonLocaleData: any = {};
+    /** List custom row data type  */
+    public fieldTypes: any[] = [];
+    /** Available field modules list */
+    public fieldModules: IOption[] = [];
+    /** Conditionally visible fields in form */
+    public visibleFields: any = {
+        fieldInfo: true,
+        fieldLimit: true,
+        fieldOptions: false
+    }
+    /** Custom field unique name in edit mode */
+    public customFieldUniqueName: string = "";
+    /** Selected modules */
+    public selectedModules: FormControl = new FormControl([]);
+    /** True if loader is visible */
+    public showLoader: boolean = false;
+    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
+    /** Stores the voucher API version of company */
+    public voucherApiVersion: number;
+
+    constructor(
+        private toasterService: ToasterService,
+        private changeDetector: ChangeDetectorRef,
+        private customFieldsService: CustomFieldsService,
+        private route: ActivatedRoute,
+        private router: Router,
+        private generalService: GeneralService
+    ) {
+
+    }
+
+    /**
+     * Lifecycle hook for initialization
+     *
+     * @memberof CustomFieldsCreateEditComponent
+     */
+    public ngOnInit(): void {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
+        this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            if (params?.customFieldUniqueName) {
+                this.customFieldUniqueName = params?.customFieldUniqueName;
+                this.getCustomField(params?.customFieldUniqueName);
+            }
+        });
+
+        this.selectedModules.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(selectedModules => {
+            if (selectedModules) {
+                let modules: any[] = [];
+                this.selectedModules.value.forEach(uniqueName => {
+                    modules.push(this.fieldModules?.find(module => module.value === uniqueName));
+                });
+                this.customFieldRequest.modules = modules;
+            }
+        })
+    }
+
+    /**
+     * Lifecycle hook for destroy
+     *
+     * @memberof CustomFieldsCreateEditComponent
+     */
+    public ngOnDestroy(): void {
+        this.isDestroying = true;
+
+        // Clean up all tracked subscriptions first
+        this.subscriptions.forEach((subscription, index) => {
+            try {
+                if (subscription && !subscription.closed) {
+                    subscription.unsubscribe();
+                }
+            } catch (error) {
+                console.warn(`Error unsubscribing subscription ${index}:`, error);
+            }
+        });
+        this.subscriptions = [];
+
+        // Safely complete the destroyed$ subject
+        try {
+            if (this.destroyed$ && !this.destroyed$.closed) {
+                this.destroyed$.next(true);
+                this.destroyed$.complete();
+            }
+        } catch (error) {
+            console.warn('Error completing destroyed$ subject:', error);
+        }
+    }
+
+    /**
+     * Get custom field data
+     *
+     * @param {string} customFieldUniqueName
+     * @returns {void}
+     * @memberof CustomFieldsCreateEditComponent
+     */
+    public getCustomField(customFieldUniqueName: string): void {
+        if (!customFieldUniqueName) {
+            return;
+        }
+
+        this.toggleLoader(true);
+        this.customFieldsService.get(customFieldUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                if (response.status === 'success') {
+                    this.customFieldRequest = cloneDeep(response.body);
+                    this.selectFieldType({ label: this.customFieldRequest.fieldType?.name, value: this.customFieldRequest.fieldType?.type });
+                    this.selectedModules.setValue(this.customFieldRequest?.modules?.map(module => module?.uniqueName));
+                } else if (response.message) {
+                    this.toasterService.errorToast(response.message);
+                }
+                this.toggleLoader(false);
+            }
+            this.changeDetector.detectChanges();
+        });
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {boolean} event
+     * @memberof CustomFieldsCreateEditComponent
+     */
+    public translationComplete(event: boolean): void {
+        if (event) {
+            this.fieldTypes = [
+                { label: this.commonLocaleData?.app_datatype_list?.string, value: FieldTypes.String },
+                { label: this.commonLocaleData?.app_datatype_list?.number, value: FieldTypes.Number },
+                { label: this.commonLocaleData?.app_datatype_list?.boolean, value: FieldTypes.Boolean },
+                { label: this.commonLocaleData?.app_datatype_list?.barcode, value: FieldTypes.Barcode }
+            ];
+            if (this.voucherApiVersion === 2) {
+                this.fieldModules = [
+                    { label: this.localeData?.modules?.account, value: FieldModules.Account },
+                    { label: this.commonLocaleData?.app_variant, value: FieldModules.Variant }
+                ];
+            } else {
+                this.fieldModules = [
+                    { label: this.localeData?.modules?.account, value: FieldModules.Account }
+                ];
+            }
+        }
+    }
+
+    /**
+     * Callback for selection of field type
+     *
+     * @param {*} field
+     * @memberof CustomFieldsCreateEditComponent
+     */
+    public selectFieldType(field: any): void {
+        const fieldType = field?.value;
+        if (fieldType === FieldTypes.String || fieldType === FieldTypes.Number || fieldType === FieldTypes.Barcode) {
+            this.visibleFields = {
+                fieldInfo: true,
+                fieldLimit: true,
+                fieldOptions: false
+            }
+        } else if (fieldType === FieldTypes.Boolean) {
+            this.visibleFields = {
+                fieldInfo: false,
+                fieldLimit: false,
+                fieldOptions: false
+            }
+        }
+        this.customFieldRequest.fieldType = { name: field?.label, type: field?.value };
+    }
+
+    /**
+     * Creates custom field
+     *
+     * @param {NgForm} customFieldCreateEditForm
+     * @returns {void}
+     * @memberof CustomFieldsCreateEditComponent
+     */
+    public createCustomField(customFieldCreateEditForm: NgForm): void {
+        if (customFieldCreateEditForm.invalid) {
+            return;
+        }
+        this.toggleLoader(true);
+
+        this.customFieldsService.create([this.customFieldRequest]).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                this.toasterService.showSnackBar("success", this.localeData?.custom_field_created);
+                this.redirectToGetAllPage();
+            } else {
+                this.toasterService.showSnackBar("error", response?.message);
+            }
+            this.toggleLoader(false);
+        });
+    }
+
+    /**
+     * Updates custom field
+     *
+     * @param {NgForm} customFieldCreateEditForm
+     * @returns {void}
+     * @memberof CustomFieldsCreateEditComponent
+     */
+    public updateCustomField(customFieldCreateEditForm: NgForm): void {
+        if (customFieldCreateEditForm.invalid) {
+            return;
+        }
+        this.toggleLoader(true);
+
+        this.customFieldsService.update(this.customFieldRequest, this.customFieldUniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success") {
+                this.toasterService.showSnackBar("success", this.localeData?.custom_field_updated);
+                this.redirectToGetAllPage();
+            } else {
+                this.toasterService.showSnackBar("error", response?.message);
+            }
+            this.toggleLoader(false);
+        });
+    }
+
+    /**
+     * Redirects to get all custom fields page
+     *
+     * @memberof CustomFieldsCreateEditComponent
+     */
+    public redirectToGetAllPage(): void {
+        this.router.navigate(["/pages/custom-fields/list"]);
+    }
+
+    /**
+     * Resets the form
+     *
+     * @param {NgForm} customFieldCreateEditForm
+     * @memberof CustomFieldsCreateEditComponent
+     */
+    public resetForm(customFieldCreateEditForm: NgForm): void {
+        customFieldCreateEditForm?.reset();
+
+        this.customFieldRequest = {
+            fieldName: null,
+            fieldType: {
+                name: null,
+                type: null
+            },
+            fieldInfo: null,
+            isMandatory: null,
+            dataRange: {
+                min: null,
+                max: null
+            },
+            multipleOptions: false,
+            modules: null,
+            status: true
+        };
+    }
+
+    /**
+     * Toggle loader
+     *
+     * @private
+     * @param {boolean} showLoader
+     * @memberof StockCreateEditComponent
+     */
+    private toggleLoader(showLoader: boolean): void {
+        this.showLoader = showLoader;
+        this.changeDetector.detectChanges();
+    }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
+}

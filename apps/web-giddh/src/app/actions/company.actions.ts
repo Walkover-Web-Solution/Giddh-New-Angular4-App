@@ -24,8 +24,10 @@ import { ToasterService } from '../services/toaster.service';
 import { CustomActions } from '../store/custom-actions';
 import { AppState } from '../store/roots';
 import { COMMON_ACTIONS } from './common.const';
+import { findIndex } from '../lodash-optimized';
 
 @Injectable()
+
 export class CompanyActions {
     public static CREATE_COMPANY = 'CompanyCreate';
     public static CREATE_NEW_COMPANY = 'CompanynewCreate';
@@ -77,13 +79,13 @@ export class CompanyActions {
 
     public static SET_STATE_DETAILS_REQUEST = 'SET_STATE_DETAILS_REQUEST';
 
-    public createNewCompany$: Observable<Action> = createEffect(() => this.actions$
+    public createNewCompany$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(CompanyActions.CREATE_NEW_COMPANY),
             switchMap((action: CustomActions) => this._companyService.CreateNewCompany(action.payload)),
             map(response => this.CreateNewCompanyResponse(response))));
 
-    public createCompanyResponse$: Observable<Action> = createEffect(() => this.actions$
+    public createCompanyResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(CompanyActions.CREATE_COMPANY_RESPONSE),
             map((action: CustomActions) => {
@@ -142,7 +144,7 @@ export class CompanyActions {
 
     // CreateNewCompanyPage Response
 
-    public createNewCompanyResponse$: Observable<Action> = createEffect(() => this.actions$
+    public createNewCompanyResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(CompanyActions.CREATE_NEW_COMPANY_RESPONSE),
             map((action: CustomActions) => {
@@ -205,7 +207,7 @@ export class CompanyActions {
                 return this.RefreshCompanies();
             })));
 
-    public RefreshCompanies$: Observable<Action> = createEffect(() => this.actions$
+    public RefreshCompanies$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(CompanyActions.REFRESH_COMPANIES),
             switchMap((action: CustomActions) => this._companyService.CompanyList()),
@@ -217,7 +219,7 @@ export class CompanyActions {
                 return this.RefreshCompaniesResponse(response);
             })));
 
-    public RefreshCompaniesResponse$: Observable<CustomActions> = createEffect(() => this.actions$
+    public RefreshCompaniesResponse$: Observable<CustomActions> = createEffect(() => this.action$
         .pipe(
             ofType(CompanyActions.REFRESH_COMPANIES_RESPONSE),
             map((action: CustomActions) => {
@@ -265,7 +267,7 @@ export class CompanyActions {
                 }
             })));
 
-    public SetStateDetails$: Observable<Action> = createEffect(() => this.actions$
+    public SetStateDetails$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(CompanyActions.SET_STATE_DETAILS),
             switchMap((action: CustomActions) => this._companyService.setStateDetails(action.payload)),
@@ -277,7 +279,7 @@ export class CompanyActions {
                 return this.SetStateDetailsResponse(response);
             })));
 
-    public GetApplicationDate$: Observable<Action> = createEffect(() => this.actions$
+    public GetApplicationDate$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(CompanyActions.GET_APPLICATION_DATE),
             switchMap((action: CustomActions) => this._companyService.getApplicationDate()),
@@ -289,7 +291,7 @@ export class CompanyActions {
                 return this.SeApplicationDateResponse(response);
             })));
 
-    public SetApplicationDate$: Observable<Action> = createEffect(() => this.actions$
+    public SetApplicationDate$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(CompanyActions.SET_APPLICATION_DATE),
             switchMap((action: CustomActions) => this._companyService.setApplicationDate(action.payload)),
@@ -303,7 +305,7 @@ export class CompanyActions {
                 }
             })));
 
-    public CompanyTax$: Observable<Action> = createEffect(() => this.actions$
+    public CompanyTax$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(CompanyActions.GET_TAX),
             switchMap((action: CustomActions) => this._companyService.getCompanyTaxes()),
@@ -311,7 +313,7 @@ export class CompanyActions {
                 return this.getTaxResponse(response);
             })));
 
-    public CompanyTaxResponse$: Observable<Action> = createEffect(() => this.actions$
+    public CompanyTaxResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(CompanyActions.GET_TAX_RESPONSE),
             map((action: CustomActions) => {
@@ -321,7 +323,7 @@ export class CompanyActions {
                 return { type: 'EmptyAction' };
             })));
 
-    public GetRegisteredAccount$: Observable<Action> = createEffect(() => this.actions$
+    public GetRegisteredAccount$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(CompanyActions.GET_REGISTRATION_ACCOUNT),
             switchMap((action: CustomActions) => this._companyService.getRegisteredAccount()),
@@ -329,7 +331,7 @@ export class CompanyActions {
                 return this.getAllRegistrationsResponse(response);
             })));
 
-    public GetRegisteredAccountResponse$: Observable<Action> = createEffect(() => this.actions$
+    public GetRegisteredAccountResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(CompanyActions.GET_REGISTRATION_ACCOUNT_RESPONSE),
             map((action: CustomActions) => {
@@ -339,7 +341,7 @@ export class CompanyActions {
                 return { type: 'EmptyAction' };
             })));
 
-    public getAllIntegratedBankInCompany$: Observable<Action> = createEffect(() => this.actions$
+    public getAllIntegratedBankInCompany$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(CompanyActions.GET_ALL_INTEGRATED_BANK),
             switchMap((action: CustomActions) => this._companyService.getIntegratedBankInCompany(action.payload)),
@@ -347,7 +349,7 @@ export class CompanyActions {
                 return this.getAllIntegratedBankInCompanyResponse(response);
             })));
 
-    public getAllIntegratedBankInCompanyResponse$: Observable<Action> = createEffect(() => this.actions$
+    public getAllIntegratedBankInCompanyResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(CompanyActions.GET_ALL_INTEGRATED_BANK_RESPONSE),
             map((action: CustomActions) => {
@@ -357,7 +359,7 @@ export class CompanyActions {
                 return { type: 'EmptyAction' };
             })));
 
-    public getCompanyUser$: Observable<Action> = createEffect(() => this.actions$
+    public getCompanyUser$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(CompanyActions.GET_COMPANY_USER),
             switchMap((action: CustomActions) => this._companyService.getCompanyUser(action.payload)),
@@ -365,7 +367,7 @@ export class CompanyActions {
                 return this.getCompanyUserResponse(response);
             })));
 
-    public getCompanyUserResponse$: Observable<Action> = createEffect(() => this.actions$
+    public getCompanyUserResponse$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(CompanyActions.GET_COMPANY_USER_RESPONSE),
             map((action: CustomActions) => {
@@ -376,7 +378,7 @@ export class CompanyActions {
             })));
 
     constructor(
-        private actions$: Actions,
+        private action$: Actions,
         private _companyService: CompanyService,
         private _toasty: ToasterService,
         private store: Store<AppState>,

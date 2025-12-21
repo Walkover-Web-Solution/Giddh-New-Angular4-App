@@ -1,0 +1,17 @@
+<div class="help-support-aside setting-sidebar-wrapper" *ngIf="asideInventorySidebarMenuState">
+    <inventory-sidebar class="inventory-sidebar"></inventory-sidebar>
+</div>
+<hamburger-menu></hamburger-menu>
+
+<div class="position-relative new-inventory-page overflow-visible">
+    <div class="container-fluid breadcrumbs overflow-visible p-3">
+        <div class="inventory-card overflow-visible">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+</div>
+
+<!-- inventory advance search  -->
+<ng-template #inventoryAdvanceSearch>
+    <new-inventory-advance-search></new-inventory-advance-search>
+</ng-template>

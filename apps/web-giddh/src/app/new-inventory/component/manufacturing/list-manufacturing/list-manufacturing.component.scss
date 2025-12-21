@@ -1,0 +1,35 @@
+#list-manufacture {
+    .form-fields {
+        .max-width-230 {
+            display: block;
+            width: auto;
+            max-width: 230px;
+        }
+        .gap-between {
+            gap: 1rem;
+            align-items: baseline;
+        }
+        .search-btn {
+            margin-right: 0px !important;
+        }
+    }
+    .list-table-wrapper {
+        border-top: 1px solid var(--border-color);
+    }
+}
+
+@media (max-width: 1440px) {
+    #list-manufacture {
+        .form-fields {
+            .max-width-230 {
+                width: 200px !important;
+            }
+        }
+    }
+}
+.manufacturing-table {
+    .content-table {
+        white-space: normal;
+        word-break: inherit !important;
+    }
+}

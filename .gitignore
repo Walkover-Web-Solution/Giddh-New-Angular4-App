@@ -161,8 +161,17 @@ xplat/**/*.ngsummary.json
 package-lock.json
 /apps/electron-giddh/src/
 
-#
+# Environment Variables - SECURITY: Never commit credentials to public repo
 .env
+.env.local
+.env.stage
+.env.prod
+.env.test
+.env.*.local
+
+# Generated environment files - SECURITY: Contains actual credentials, never commit
+apps/web-giddh/src/environments/environment.generated.ts
+
 .angular/
 
 # Script

@@ -1,0 +1,48 @@
+.total-amount {
+    font-size: var(--font-size-16);
+}
+
+.customer-due-text {
+    color: var(--color-green);
+}
+
+.vendor-due-text {
+    color: var(--color-red);
+}
+
+.dashboard-filter .btn-group span {
+    vertical-align: middle;
+}
+
+.dashboard-filter {
+    display: inline-flex;
+    align-items: center;
+}
+
+.due-amount {
+    font-size: var(--font-size-15);
+    margin: 0;
+    padding: 0;
+}
+
+.dashboard-datepicker {
+    min-width: 218px;
+    border-radius: 30px;
+    border: 1px solid var(--border-color);
+}
+.mt-auto{
+    margin-top: auto;
+}
+@media (max-width: 1300px) and (min-width: 991px) {
+    .panel-heading {
+        align-items: baseline;
+        flex-direction: column;
+        .dashboard-filter {
+            flex-direction: row-reverse;
+            margin-top: 5px;
+            i {
+                margin-left: 15px;
+            }
+        }
+    }
+}

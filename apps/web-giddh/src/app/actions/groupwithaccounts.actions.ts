@@ -15,8 +15,8 @@ import { IGroupsWithAccounts } from '../models/interfaces/groups-with-accounts.i
 import { GeneralActions } from './general/general.actions';
 import { CustomActions } from '../store/custom-actions';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 import { LocaleService } from '../services/locale.service';
-import { eventsConst } from '../shared/header/components/eventsConst';
 
 @Injectable()
 export class GroupWithAccountsAction {
@@ -73,23 +73,23 @@ export class GroupWithAccountsAction {
                 return this.applyGroupTaxResponse(response);
             })));
 
-    // public ApplyGroupTaxResponse$: Observable<Action> = createEffect(() => this.action$
-    //     .pipe(
-    //         ofType(GroupWithAccountsAction.APPLY_GROUP_TAX_RESPONSE),
-    //         map((action: CustomActions) => {
-    //             if (action.payload?.status === 'error') {
-    //                 this._toasty.errorToast(action.payload.message, action.payload.code);
-    //                 return { type: 'EmptyAction' };
-    //             }
-    //             this._toasty.successToast(action.payload.body, action.payload?.status);
-    //             let grouName = null;
-    //             this.store.pipe(take(1)).subscribe((s) => {
-    //                 if (s.groupwithaccounts.activeGroup) {
-    //                     grouName = s.groupwithaccounts.activeGroup?.uniqueName;
-    //                 }
-    //             });
-    //             return this.getTaxHierarchy(grouName);
-    //         })));
+    public ApplyGroupTaxResponse$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(GroupWithAccountsAction.APPLY_GROUP_TAX_RESPONSE),
+            map((action: CustomActions) => {
+                if (action.payload?.status === 'error') {
+                    this._toasty.errorToast(action.payload.message, action.payload.code);
+                    return { type: 'EmptyAction' };
+                }
+                this._toasty.successToast(action.payload.body, action.payload?.status);
+                let grouName = null;
+                this.store.pipe(take(1)).subscribe((s) => {
+                    if (s.groupwithaccounts.activeGroup) {
+                        grouName = s.groupwithaccounts.activeGroup?.uniqueName;
+                    }
+                });
+                return this.getTaxHierarchy(grouName);
+            })));
 
     public SetActiveGroup$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -155,20 +155,20 @@ export class GroupWithAccountsAction {
                 return this.createGroupResponse(response);
             })));
 
-    // public CreateGroupResponse$: Observable<Action> = createEffect(() => this.action$
-    //     .pipe(
-    //         ofType(GroupWithAccountsAction.CREATE_GROUP_RESPONSE),
-    //         map((action: CustomActions) => {
-    //             if (action.payload?.status === 'error') {
-    //                 this._toasty.errorToast(action.payload.message, action.payload.code);
-    //             } else {
-    //                 this._generalService.eventHandler.next({ name: eventsConst.groupAdded, payload: action.payload });
-    //                 this._toasty.successToast(this.localeService.translate("app_messages.subgroup_added"), this.localeService.translate("app_success"));
-    //             }
-    //             return {
-    //                 type: 'EmptyAction'
-    //             };
-    //         })));
+    public CreateGroupResponse$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(GroupWithAccountsAction.CREATE_GROUP_RESPONSE),
+            map((action: CustomActions) => {
+                if (action.payload?.status === 'error') {
+                    this._toasty.errorToast(action.payload.message, action.payload.code);
+                } else {
+                    this._generalService.eventHandler.next({ name: eventsConst.groupAdded, payload: action.payload });
+                    this._toasty.successToast(this.localeService.translate("app_messages.subgroup_added"), this.localeService.translate("app_success"));
+                }
+                return {
+                    type: 'EmptyAction'
+                };
+            })));
 
     public unShareGroup$: Observable<Action> = createEffect(() => this.action$
         .pipe(

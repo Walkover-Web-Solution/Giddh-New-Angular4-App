@@ -1,10 +1,13 @@
-@use '@angular/material' as mat; $custom-primary-palette: ( 50: #e8eaf6, 100: #c5cae9, 200: #9fa8da, 300: #7986cb, 400: #5c6bc0, 500: #3f51b5, 600: #3949ab, 700: #303f9f, 800: #283593, 900: #1a237e, A100: #8c9eff, A200: #536dfe, A400: #3d5afe, A700: #304ffe, contrast: (50: rgba(black, 0.87), 100: rgba(black, 0.87), 200: rgba(black, 0.87), 300: white, 400: white, 500: white, 600: white, 700: white, 800: white, 900: white, A100: rgba(black, 0.87), A200: white, A400: white, A700: white, )
-); $custom-accent-palette: ( 50: #e8f5e8, 100: #c8e6c9, 200: #a5d6a7, 300: #81c784, 400: #66bb6a, 500: #4caf50, 600: #43a047, 700: #388e3c, 800: #2e7d32, 900: #198754, A100: #b9f6ca, A200: #69f0ae, A400: #00e676, A700: #00c853, contrast: (50: rgba(black, 0.87), 100: rgba(black, 0.87), 200: rgba(black, 0.87), 300: rgba(black, 0.87), 400: rgba(black, 0.87), 500: white, 600: white, 700: white, 800: white, 900: white, A100: rgba(black, 0.87), A200: rgba(black, 0.87), A400: rgba(black, 0.87), A700: white, )
-); $custom-warn-palette: ( 50: #ffebee, 100: #ffcdd2, 200: #ef9a9a, 300: #e57373, 400: #ef5350, 500: #f44336, 600: #e53935, 700: #d32f2f, 800: #c62828, 900: #dc3545, A100: #ff8a80, A200: #ff5252, A400: #ff1744, A700: #d50000, contrast: (50: rgba(black, 0.87), 100: rgba(black, 0.87), 200: rgba(black, 0.87), 300: rgba(black, 0.87), 400: rgba(black, 0.87), 500: white, 600: white, 700: white, 800: white, 900: white, A100: rgba(black, 0.87), A200: white, A400: white, A700: white, )
-); // Angular 21 Material 3 Palette Definitions
-$giddh-primary: mat.m2-define-palette($custom-primary-palette, 900); // #1a237e
-$giddh-accent: mat.m2-define-palette($custom-accent-palette, 900); // #198754
-$giddh-warn: mat.m2-define-palette($custom-warn-palette, 900); // #dc3545 // Dark theme variants for better contrast in dark mode
-$giddh-primary-dark: mat.m2-define-palette($custom-primary-palette, 400); // #5c6bc0 (lighter indigo)
-$giddh-accent-dark: mat.m2-define-palette($custom-accent-palette, 400); // #66bb6a (lighter green)
-$giddh-warn-dark: mat.m2-define-palette($custom-warn-palette, 400); // #ef5350 (lighter red)
+@use '@angular/material' as mat;
+
+// Angular 21 Material 3 Color System
+// Using built-in M3 palettes with CSS custom properties for exact brand colors
+
+// Use built-in M3 palettes (M3 compatible)
+$giddh-primary-palette: mat.$violet-palette;    // Closest to original #1a237e
+$giddh-secondary-palette: mat.$green-palette;   // Matches original #198754
+$giddh-tertiary-palette: mat.$azure-palette;    // Blue accent
+$giddh-error-palette: mat.$red-palette;         // Matches original #dc3545
+
+// Export palettes for theme consumption
+// Original brand colors will be applied via CSS custom properties in material-mixins

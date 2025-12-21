@@ -1,0 +1,311 @@
+<div
+    appTranslate
+    [file]="'tax-sidebar'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
+>
+    <div class="aside-pane mat-app-background mat-app-background" asideGstSidebarMenuState>
+        <div class="help-aside-body">
+            <div class="gst-menu-items">
+                <mat-list role="list" *ngIf="showGstMenus">
+                    <mat-list-item
+                        role="listitem"
+                        routerLinkActive
+                        #gstdashboard="routerLinkActive"
+                        [class.active]="gstdashboard.isActive"
+                        [routerLinkActiveOptions]="{ exact: true }"
+                        [routerLink]="['/pages/gstfiling']"
+                    >
+                        <a class="d-block clear-both">
+                            <span><i class="icon-dashboard-new"></i></span>
+                            <span>{{ localeData?.dashboard }}</span>
+                        </a>
+                    </mat-list-item>
+                    <mat-list-item role="listitem"
+                        [ngClass]="{
+                            'disabled': !activeCompanyGstNumber || !isMonthSelected,
+                            'active': selectedGstModule === GstReport.Gstr3b
+                        }"
+                    >
+                        <a
+                            href="javascript:;"
+                            [attr.disabled]="!activeCompanyGstNumber || !isMonthSelected"
+                            [ngClass]="{
+                                'disabled': !activeCompanyGstNumber || !isMonthSelected,
+                                'active': selectedGstModule === GstReport.Gstr3b
+                            }"
+                            class="d-block clear-both"
+                            (click)="navigate(GstReport.Gstr3b)"
+                        >
+                            <span><i class="icon-GSTR"></i></span>
+                            <span>{{ localeData?.gstr3b_summary }}</span>
+                        </a>
+                    </mat-list-item>
+                    <mat-list-item role="listitem"
+                        [ngClass]="{
+                            'disabled': !activeCompanyGstNumber,
+                            'active': selectedGstModule === GstReport.Gstr1
+                        }"
+                    >
+                        <a
+                            href="javascript:;"
+                            [ngClass]="{
+                                'disabled': !activeCompanyGstNumber,
+                                'active': selectedGstModule === GstReport.Gstr1
+                            }"
+                            class="d-block clear-both"
+                            (click)="navigate(GstReport.Gstr1)"
+                        >
+                            <span><i class="icon-GSTR"></i></span>
+                            <span>{{ localeData?.gstr1_label }}</span>
+                        </a>
+                    </mat-list-item>
+                    <mat-list-item role="listitem"
+                        [ngClass]="{
+                            'disabled': !activeCompanyGstNumber || !isMonthSelected,
+                            'active': selectedGstModule === GstReport.Gstr2
+                        }"
+                    >
+                        <a
+                            href="javascript:;"
+                            [ngClass]="{
+                                'disabled': !activeCompanyGstNumber || !isMonthSelected,
+                                'active': selectedGstModule === GstReport.Gstr2
+                            }"
+                            class="d-block clear-both"
+                            (click)="navigate(GstReport.Gstr2)"
+                        >
+                            <span><i class="icon-GSTR"></i></span>
+                            <span>{{ localeData?.gstr2_label }}</span>
+                        </a>
+                    </mat-list-item>
+                </mat-list>
+                <mat-list>
+                    <mat-list-item
+                        role="listitem"
+                        *ngIf="showGstMenus"
+                        [routerLink]="['/pages/invoice/ewaybill']"
+                        routerLinkActive
+                        #ewaybill="routerLinkActive"
+                        [class.active]="ewaybill.isActive"
+                    >
+                        <a href="javascript:;" class="d-block clear-both">
+                            <span><i class="icon-eway-bill-new"></i></span>
+                            <span>{{ localeData?.eway_bill }}</span>
+                        </a>
+                    </mat-list-item>
+                    <mat-list-item
+                        role="listitem"
+                        [routerLink]="['/pages/reports/reverse-charge']"
+                        routerLinkActive
+                        #reversecharge="routerLinkActive"
+                        [class.active]="reversecharge.isActive"
+                    >
+                        <a href="javascript:;" class="d-block clear-both">
+                            <span><i class="icon-reverse-charge"></i></span>
+                            <span>{{ localeData?.reverse_charge }}</span>
+                        </a>
+                    </mat-list-item>
+                    <mat-list-item
+                        role="listitem"
+                        [routerLink]="['/pages/settings/taxes']"
+                        routerLinkActive
+                        #taxes="routerLinkActive"
+                        [class.active]="taxes.isActive"
+                    >
+                        <a href="javascript:;" class="d-block clear-both">
+                            <span><i class="icon-settings-cog"></i></span>
+                            <span>{{ localeData?.manage_tax }}</span>
+                        </a>
+                    </mat-list-item>
+                    <mat-list-item
+                        role="listitem"
+                        *ngIf="showGstMenus"
+                        routerLinkActive
+                        #unitMapping="routerLinkActive"
+                        [class.active]="unitMapping.isActive"
+                        [routerLink]="['/pages/gstfiling/unit-mapping']"
+                    >
+                        <a href="javascript:;" class="d-block clear-both">
+                            <span
+                                ><img src="{{ imgPath }}unit-mapping.svg" alt="unit-mapping" class="unit-mapping-icon"
+                            /></span>
+                            <span>{{ localeData?.unit_mapping }}</span>
+                        </a>
+                    </mat-list-item>
+                    <mat-list-item
+                        role="listitem"
+                        *ngIf="showTaxMenus"
+                        routerLinkActive
+                        #vatReport="routerLinkActive"
+                        [class.active]="vatReport.isActive"
+                        [routerLink]="['/pages/vat-report']"
+                        [routerLinkActiveOptions]="{ exact: true }"
+                    >
+                        <a href="javascript:;" class="d-block clear-both">
+                            <span><i class="icon-vat1"></i></span>
+                            <span>{{ localeData?.vat_report }}</span>
+                        </a>
+                    </mat-list-item>
+                    <mat-list-item
+                        role="listitem"
+                        *ngIf="showTaxMenus && isZimbabweCompany"
+                        routerLinkActive
+                        #vatReportZimbabwe="routerLinkActive"
+                        [class.active]="vatReportZimbabwe.isActive"
+                        [routerLink]="['/pages/vat-report/liability-report']"
+                        [routerLinkActiveOptions]="{ exact: false }"
+                    >
+                        <a href="javascript:;" class="d-block clear-both">
+                            <span><i class="icon-balance-sheet-new"></i></span>
+                            <span>{{ localeData?.liability_report }}</span>
+                        </a>
+                    </mat-list-item>
+                    <ng-container *ngIf="showTaxMenus && isUKCompany">
+                        <mat-list-item
+                            role="listitem"
+                            routerLinkActive
+                            #vatLiability="routerLinkActive"
+                            [class.active]="vatLiability.isActive"
+                            [routerLink]="['/pages/vat-report/liabilities']"
+                            [routerLinkActiveOptions]="{ exact: true }"
+                        >
+                            <a href="javascript:;" class="d-block clear-both">
+                                <span><i class="icon-vat1"></i></span>
+                                <span>{{ localeData.vat_liabilities }}</span>
+                            </a>
+                        </mat-list-item>
+                        <mat-list-item
+                            role="listitem"
+                            routerLinkActive
+                            #vatPayment="routerLinkActive"
+                            [class.active]="vatPayment.isActive"
+                            [routerLink]="['/pages/vat-report/payments']"
+                            [routerLinkActiveOptions]="{ exact: true }"
+                        >
+                            <a href="javascript:;" class="d-block clear-both">
+                                <span><i class="icon-vat1"></i></span>
+                                <span>{{ localeData.vat_payments }}</span>
+                            </a>
+                        </mat-list-item>
+                        <mat-list-item
+                            role="listitem"
+                            routerLinkActive
+                            #vatObligations="routerLinkActive"
+                            [class.active]="vatObligations.isActive"
+                            [routerLink]="['/pages/vat-report/obligations']"
+                        >
+                            <a href="javascript:;" class="d-block clear-both">
+                                <span><i class="icon-vat1"></i></span>
+                                <span>{{ localeData?.vat_obligations }}</span>
+                            </a>
+                        </mat-list-item>
+                    </ng-container>
+                    <mat-list-item
+                        role="listitem"
+                        *ngIf="!isConsolidatedBranch"
+                        [routerLink]="['/pages/settings/addresses']"
+                        routerLinkActive
+                        #addaddress="routerLinkActive"
+                        [class.active]="addaddress.isActive"
+                    >
+                        <a href="javascript:;" class="d-block clear-both">
+                            <span><i class="icon-warehouse1"></i></span>
+                            <span>{{ taxTypeSidebarLabel }}</span>
+                        </a>
+                    </mat-list-item>
+                    <mat-list-item
+                        role="listitem"
+                        *ngIf="showTaxMenus && (isZimbabweCompany || isKenyaCompany)"
+                        routerLinkActive
+                        #withHeld="routerLinkActive"
+                        [class.active]="withHeld.isActive"
+                        [routerLink]="['/pages/vat-report/with-held-setting']"
+                    >
+                        <a href="javascript:;" class="d-block clear-both">
+                            <span><i class="icon-settings-cog"></i></span>
+                            <span>{{ localeData?.with_held_setting }}</span>
+                        </a>
+                    </mat-list-item>
+                    <mat-list-item
+                        role="listitem"
+                        *ngIf="(isCompany || isConsolidatedBranch) && showGstMenus"
+                        routerLinkActive
+                        #gstSetting="routerLinkActive"
+                        [class.active]="gstSetting.isActive"
+                        [routerLink]="['/pages/gstfiling/gst-setting']"
+                    >
+                        <a href="javascript:;" class="d-block clear-both">
+                            <span><i class="icon-settings-cog"></i></span>
+                            <span>{{ localeData?.gst_setting }}</span>
+                        </a>
+                    </mat-list-item>
+                    <mat-list-item
+                        role="listitem"
+                        *ngIf="showGstMenus"
+                        [routerLink]="['/pages/gstfiling/filing-status']"
+                        routerLinkActive
+                        #filingstatus="routerLinkActive"
+                        [class.active]="filingstatus.isActive"
+                    >
+                        <a href="javascript:;" class="d-block clear-both">
+                            <span><i class="icon-GSTR"></i></span>
+                            <span>{{ localeData?.filing_status }}</span>
+                        </a>
+                    </mat-list-item>
+                    <ng-container *ngIf="showSalesTaxMenus && isUSCompany">
+                        <mat-list-item
+                            role="listitem"
+                            [routerLink]="['/pages/settings/manage-tax-authority']"
+                            routerLinkActive
+                            #taxAuthority="routerLinkActive"
+                            [class.active]="taxAuthority.isActive"
+                        >
+                            <a href="javascript:;" class="d-block clear-both pr-2">
+                                <span><i class="icon-settings-cog"></i></span>
+                                <span>{{ localeData?.manage_tax_authority }}</span>
+                            </a>
+                        </mat-list-item>
+                        <mat-list-item
+                            role="listitem"
+                            [routerLink]="['/pages/settings/reports/tax-authority']"
+                            routerLinkActive
+                            #taxAuthorityReport="routerLinkActive"
+                            [class.active]="taxAuthorityReport.isActive"
+                        >
+                            <a href="javascript:;" class="d-block clear-both pr-2">
+                                <span><i class="icon-reports"></i></span>
+                                <span>{{ commonLocaleData?.app_tax_authority }}</span>
+                            </a>
+                        </mat-list-item>
+                        <mat-list-item
+                            role="listitem"
+                            [routerLink]="['/pages/settings/reports/rate-wise']"
+                            routerLinkActive
+                            #rateWiseReport="routerLinkActive"
+                            [class.active]="rateWiseReport.isActive"
+                        >
+                            <a href="javascript:;" class="d-block clear-both pr-2">
+                                <span><i class="icon-reports"></i></span>
+                                <span>{{ localeData?.rate_wise }}</span>
+                            </a>
+                        </mat-list-item>
+                        <mat-list-item
+                            role="listitem"
+                            [routerLink]="['/pages/settings/reports/account-wise']"
+                            routerLinkActive
+                            #accountWise="routerLinkActive"
+                            [class.active]="accountWise.isActive"
+                        >
+                            <a href="javascript:;" class="d-block clear-both pr-2">
+                                <span><i class="icon-reports"></i></span>
+                                <span>{{ localeData?.account_wise }}</span>
+                            </a>
+                        </mat-list-item>
+                    </ng-container>
+                </mat-list>
+            </div>
+        </div>
+    </div>
+</div>

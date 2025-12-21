@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
 import { config, IConfig } from './config';
+import { endsWith, filter, find, has, includes, indexOf, slice, startsWith } from '../../../../lodash-optimized';
 
 export enum Separators {
     SEPARATOR = 'separator',

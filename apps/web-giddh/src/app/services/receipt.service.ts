@@ -19,19 +19,19 @@ import {
     SalesRegisteDetailedResponse,
 } from '../models/api-models/Reports';
 import { VoucherTypeEnum } from '../models/api-models/Sales';
-// import {
-//     PURCHASE_RECORD_DATE_OPERATION,
-//     PURCHASE_RECORD_DUE_DATE_OPERATION,
-//     PURCHASE_RECORD_GRAND_TOTAL_OPERATION,
-//     PurchaseRecordAdvanceSearch,
-// } from '../purchase/purchase-record/constants/purchase-record.interface';
+import {
+    PURCHASE_RECORD_DATE_OPERATION,
+    PURCHASE_RECORD_DUE_DATE_OPERATION,
+    PURCHASE_RECORD_GRAND_TOTAL_OPERATION,
+    PurchaseRecordAdvanceSearch,
+} from '../purchase/purchase-record/constants/purchase-record.interface';
 import { COMPANY_API } from './apiurls/company.api';
 import { RECEIPT_API } from './apiurls/receipt.api';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 import { HttpWrapperService } from './http-wrapper.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
-import { PURCHASE_RECORD_DATE_OPERATION, PURCHASE_RECORD_DUE_DATE_OPERATION, PURCHASE_RECORD_GRAND_TOTAL_OPERATION, PurchaseRecordAdvanceSearch } from '../purchase/purchase-record/constants/purchase-record.interface';
+import { concat, get } from '../lodash-optimized';
 
 @Injectable()
 export class ReceiptService {

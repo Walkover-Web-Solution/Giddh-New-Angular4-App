@@ -1,0 +1,157 @@
+@mixin custom-datepicker {
+    input {
+        width: 100% !important;
+        max-width: 100%;
+    }
+}
+
+#mfReportTbl .table .table td {
+    border: none;
+    text-align: center;
+    padding: 1px 0;
+}
+
+#mfReportTbl .table {
+    th {
+        &:first-child {
+            min-width: 100px;
+        }
+        vertical-align: top !important;
+        text-transform: capitalize;
+        min-width: 140px;
+        max-width: 220px;
+    }
+    td {
+        &:first-child {
+            min-width: 100px;
+        }
+        vertical-align: top !important;
+        text-transform: capitalize;
+        min-width: 140px;
+        max-width: 220px;
+        white-space: normal !important;
+        word-break: break-word;
+    }
+}
+
+#mfReportTbl .table
+
+.manufacture-table {
+
+    tr {
+        &:hover {
+            td.raw-material {
+                background-color: var(--color-silver);
+            }
+        }
+    }
+}
+.regular-font {
+    font-family: var(--font-family);
+}
+.material-head {
+    min-width: 20% !important;
+    max-width: 20% !important;
+    th:first-child {
+        min-width: 110px !important;
+    }
+    th:nth-child(2),
+    th:last-child {
+        min-width: 110px !important;
+        max-width: 110px !important;
+    }
+    th {
+        border: none !important;
+        padding: 0;
+        color: var(--text-primary-color) !important;
+        background: none !important;
+    }
+}
+.material-data {
+    .data-title-td {
+        display: none !important;
+    }
+    .nested-div {
+        div {
+            min-width: 34%;
+            max-width: 50%;
+        }
+    }
+}
+.regular-font {
+    font-family: var(--font-family);
+}
+.row-gray-background th {
+    background-color: var(--color-border-light);
+}
+.mf-report-head {
+    margin-top: 15px;
+    &.parent {
+        margin-top: 55px !important;
+    }
+}
+
+.table-responsive {
+    margin-bottom: 60px;
+}
+
+@media (min-width: 1441px) and (max-width: 1920px) {
+    .manufacturing-head {
+        .col-xl-3 {
+            flex: 0 0 16.666667%;
+            max-width: 16.666667%;
+        }
+        .col-xl-6 {
+            flex: 0 0 66.666667%;
+            max-width: 66.666667%;
+        }
+        .col-xl-9 {
+            flex: 0 0 83%;
+            max-width: 83%;
+        }
+    }
+}
+@media (max-width: 1440px) {
+    .no-branch-head {
+        .col-xl-2 {
+            flex: 0 0 21.666667%;
+            max-width: 21.666667%;
+        }
+
+    }
+    .linked-entities sh-select::ng-deep input {
+        padding-right: 6px !important;
+    }
+}
+@media (max-width: 1199px) {
+    .no-branch-head {
+        .col-xl-2 {
+            flex: 0 0 33.333333%;
+            max-width: 33.333333%;
+        }
+        .col-xl-10 {
+            flex: 0 0 66.666667%;
+            max-width: 66.666667%;
+        }
+    }
+}
+@media (max-width: 1024px) {
+    .manufacturing-form .form-group {
+        width: 100%;
+    }
+
+    .datepicker-flex,
+
+    .no-branch-head {
+        .col-xl-2 {
+            flex: 0 0 50%;
+            max-width: 50%;
+        }
+    }
+    .create-btn {
+        margin-top: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+    }
+}

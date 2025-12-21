@@ -1,0 +1,184 @@
+<div class="container-fluid" *ngIf="!isPettyCashRejectedReportLoading">
+    <div class="table-responsive overflow-visible" *ngIf="pettyCashRejectedReportResponse?.totalItems > 0">
+        <table
+            mat-table
+            class="w-100"
+            [dataSource]="rejectedItems"
+            matSort
+            (matSortChange)="sortChange($event)"
+            [matSortActive]="pettycashRequest.sortBy"
+            [matSortDirection]="pettycashRequest.sort"
+        >
+            <div matColumnDef="s_no">
+                <th mat-header-cell [hidden]="!rejectedItems?.length" *matHeaderCellDef class="serial-no-column">#</th>
+                <td mat-cell *matCellDef="let rejected" data-title="#">
+                    <span class="responsive-label" [hidden]="!rejectedItems?.length">#</span>
+                    {{ rejected.index + 1 }}
+                </td>
+            </div>
+
+            <div matColumnDef="entry_date">
+                <th mat-header-cell [hidden]="!rejectedItems?.length" *matHeaderCellDef mat-sort-header>
+                    {{ commonLocaleData?.app_date }}
+                </th>
+                <td mat-cell *matCellDef="let rejected" [attr.data-title]="commonLocaleData?.app_date">
+                    <span class="responsive-label" [hidden]="!rejectedItems?.length">{{
+                        commonLocaleData?.app_date
+                    }}</span>
+                    {{ rejected.entryDate }}
+                </td>
+            </div>
+
+            <div matColumnDef="submitted_by">
+                <th mat-header-cell [hidden]="!rejectedItems?.length" *matHeaderCellDef>
+                    {{ localeData?.submitted_by }}
+                </th>
+                <td mat-cell *matCellDef="let rejected" [attr.data-title]="localeData?.submitted_by">
+                    <span class="responsive-label" [hidden]="!rejectedItems?.length">{{
+                        localeData?.submitted_by
+                    }}</span>
+                    {{ rejected?.createdBy?.name }}
+                </td>
+            </div>
+
+            <div matColumnDef="account">
+                <th mat-header-cell [hidden]="!rejectedItems?.length" *matHeaderCellDef>
+                    {{ commonLocaleData?.app_account }}
+                </th>
+                <td mat-cell *matCellDef="let rejected" [attr.data-title]="commonLocaleData?.app_account">
+                    <span class="responsive-label" [hidden]="!rejectedItems?.length">{{
+                        commonLocaleData?.app_account
+                    }}</span>
+                    <i class="dot-icon dot-warning" *ngIf="rejected.entryType === 'sales'"></i>
+                    <i class="dot-icon dot-success" *ngIf="rejected.entryType === 'deposit'"></i>
+                    <i class="dot-icon dot-primary" *ngIf="rejected.entryType === 'expense'"></i
+                    >{{ rejected?.particularAccount?.name }}
+                </td>
+            </div>
+
+            <div matColumnDef="amount">
+                <th
+                    mat-header-cell
+                    [hidden]="!rejectedItems?.length"
+                    *matHeaderCellDef
+                    mat-sort-header
+                    class="text-right"
+                >
+                    {{ commonLocaleData?.app_amount }}
+                </th>
+                <td
+                    mat-cell
+                    *matCellDef="let rejected"
+                    [attr.data-title]="commonLocaleData?.app_amount"
+                    class="text-right"
+                >
+                    <span class="responsive-label" [hidden]="!rejectedItems?.length">{{
+                        commonLocaleData?.app_amount
+                    }}</span>
+                    {{ rejected.currencySymbol }}
+                    {{ rejected.amount | giddhNumberFormat }}
+                </td>
+            </div>
+
+            <div matColumnDef="receipt">
+                <th mat-header-cell [hidden]="!rejectedItems?.length" *matHeaderCellDef>
+                    {{ localeData?.payment_receipt }}
+                </th>
+                <td mat-cell *matCellDef="let rejected" [attr.data-title]="localeData?.payment_receipt">
+                    <span class="responsive-label" [hidden]="!rejectedItems?.length">{{
+                        localeData?.payment_receipt
+                    }}</span>
+                    <span *ngIf="rejected.baseAccountCategory === 'OTHER'" class="font-size-12 text-light mr-1">{{
+                        commonLocaleData?.app_ac
+                    }}</span>
+                    <span
+                        *ngIf="rejected.baseAccountCategory === 'BANK'"
+                        class="font-size-12 text-light icon-atm-card mr-1"
+                    ></span>
+                    <span
+                        *ngIf="rejected.baseAccountCategory === 'CASH'"
+                        class="font-size-12 text-light icon-cash mr-1"
+                    ></span>
+                    {{ rejected?.baseAccount?.name ? rejected.baseAccount.name : "-" }}
+                </td>
+            </div>
+
+            <div matColumnDef="file">
+                <th mat-header-cell [hidden]="!rejectedItems?.length" *matHeaderCellDef>{{ localeData?.file }}</th>
+                <td mat-cell *matCellDef="let rejected" [attr.data-title]="localeData?.file">
+                    <span class="responsive-label" [hidden]="!rejectedItems?.length">{{ localeData?.file }}</span>
+                    <i
+                        *ngIf="rejected.fileNames"
+                        (click)="openZoomImageView(rejected.fileNames)"
+                        class="icon-image vertical-align-middle text-light pointer"
+                    ></i>
+                </td>
+            </div>
+
+            <div matColumnDef="reason_rejection">
+                <th mat-header-cell [hidden]="!rejectedItems?.length" *matHeaderCellDef>
+                    {{ localeData?.reason_of_rejection }}
+                </th>
+                <td mat-cell *matCellDef="let rejected" [attr.data-title]="localeData?.reason_of_rejection">
+                    <span class="responsive-label" [hidden]="!rejectedItems?.length">{{
+                        localeData?.reason_of_rejection
+                    }}</span>
+                    {{ rejected.statusMessage ? rejected.statusMessage : "-" }}
+                </td>
+            </div>
+
+            <div matColumnDef="action">
+                <th mat-header-cell [hidden]="!rejectedItems?.length" *matHeaderCellDef>
+                    {{ commonLocaleData?.app_action }}
+                </th>
+                <td
+                    mat-cell
+                    *matCellDef="let rejected"
+                    [attr.data-title]="commonLocaleData?.app_action"
+                    class="action-btns"
+                >
+                    <div class="d-flex align-items-center">
+                        <a (click)="revertActionClicked(rejected)" class="btn-icon">
+                            <i class="icon-Revert"></i>
+                        </a>
+                        <a (click)="deleteActionClicked(rejected, deleteEntryModal)" class="btn-icon">
+                            <i class="icon-trash"></i>
+                        </a>
+                    </div>
+                </td>
+            </div>
+
+            <tr mat-header-row *matHeaderRowDef="rejectedTableColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let rejected; columns: rejectedTableColumns"></tr>
+        </table>
+        <mat-paginator
+            *ngIf="pettyCashRejectedReportResponse?.totalItems > pageSizeOptions[0] && !isPettyCashRejectedReportLoading"
+            [length]="pettyCashRejectedReportResponse?.totalItems"
+            [pageSize]="pettycashRequest.count"
+            [pageIndex]="pettycashRequest.page - 1"
+            [pageSizeOptions]="pageSizeOptions"
+            [showFirstLastButtons]="true"
+            [hidePageSize]="false"
+            (page)="handlePageEvent($event)"
+        ></mat-paginator>
+    </div>
+</div>
+<div *ngIf="isPettyCashRejectedReportLoading">
+    <giddh-page-loader></giddh-page-loader>
+</div>
+
+<div class="no-data" *ngIf="!pettyCashRejectedReportResponse?.totalItems && !isPettyCashRejectedReportLoading">
+    <no-data></no-data>
+</div>
+
+<section class="mb-custom-80"></section>
+
+<ng-template #deleteEntryModal>
+    <confirm-modal
+        [title]="commonLocaleData?.app_delete"
+        [body]="localeData?.delete_transaction"
+        (cancelCallBack)="deleteEntryModalRef?.close()"
+        (successCallBack)="deleteEntry(); deleteEntryModalRef?.close()"
+    >
+    </confirm-modal>
+</ng-template>

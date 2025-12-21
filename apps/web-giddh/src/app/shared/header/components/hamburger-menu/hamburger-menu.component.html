@@ -1,0 +1,14 @@
+<ul class="nav navbar-nav hamburger-menu-icon" [ngClass]="{ 'page-has-heading': pageHeading?.trim() }">
+    <li class="hamburger-menu cursor-pointer" (click)="sideBarStateChange((sideMenu.isopen = !sideMenu.isopen))">
+        <button
+            class="btn mr-0"
+            id="hamburger-menu"
+            aria-label="hamburger"
+            name="hamburger-menu"
+            [matTooltip]="sideMenu.isopen ? commonLocaleData?.app_collapse : commonLocaleData?.app_expand"
+            matTooltipPosition="right"
+        >
+            <i class="icon-bar"></i>
+        </button>
+    </li>
+</ul>

@@ -1,8 +1,7 @@
 import { Directive, ElementRef, EventEmitter, OnInit, Output } from '@angular/core';
 
 @Directive({
-    selector: '[appNginit]',
-    
+    selector: '[ngInit]',
     standalone: false
 })
 export class NgInitDirective implements OnInit {

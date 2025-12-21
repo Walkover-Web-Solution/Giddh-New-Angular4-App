@@ -1,0 +1,636 @@
+import { Component, OnInit, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy, TemplateRef, Inject } from '@angular/core';
+import { MatMenuTrigger } from '@angular/material/menu';
+import { Store, select } from '@ngrx/store';
+import { AppState } from '../../../store';
+import { InvoiceReceiptActions } from '../../../actions/invoice/receipt/receipt.actions';
+import { ReportsDetailedRequestFilter, PurchaseRegisteDetailedResponse } from '../../../models/api-models/Reports';
+import { ActivatedRoute, NavigationStart, Router } from '@angular/router';
+import { take, takeUntil, debounceTime, distinctUntilChanged, skip, filter } from 'rxjs/operators';
+import { ReplaySubject, Observable, combineLatest, Subscription } from 'rxjs';
+import { UntypedFormControl } from '@angular/forms';
+import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT, ZIP_CODE_SUPPORTED_COUNTRIES } from '../../../app.constant';
+import { CurrentCompanyState } from '../../../store/company/company.reducer';
+import { GeneralService } from '../../../services/general.service';
+import { MatDialog } from '@angular/material/dialog';
+import { SalesPurchaseRegisterExportComponent } from '../../sales-purchase-register-export/sales-purchase-register-export.component';
+import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MM_DD_YYYY, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
+import * as dayjs from 'dayjs';
+import { MatTableDataSource } from '@angular/material/table';
+import { ServiceConfig } from '../../../services/service.config';
+import { CompanyActions } from '../../../actions/company.actions';
+import { PageEvent } from '@angular/material/paginator';
+import { Configuration } from '../../../app.constant';
+import { environment } from '../../../../environments/environment';
+import { forEach, includes, map, set } from '../../../lodash-optimized';
+
+@Component({
+    selector: "purchase-register-expand",
+    templateUrl: "./purchase.register.expand.component.html",
+    styleUrls: ["./purchase.register.expand.component.scss"],
+    standalone: false
+})
+export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
+    public PurchaseRegisteDetailedItems: PurchaseRegisteDetailedResponse;
+    public from: string;
+    public to: string;
+    public purchaseRegisteDetailedResponse$: Observable<PurchaseRegisteDetailedResponse>;
+    public isGetPurchaseDetailsInProcess$: Observable<boolean>;
+    public isGetPurchaseDetailsSuccess$: Observable<boolean>;
+    public getDetailedPurchaseRequestFilter: ReportsDetailedRequestFilter = new ReportsDetailedRequestFilter();
+    public selectedMonth: string;
+    public showSearchInvoiceNo: boolean = false;
+    /** True, if company country supports other tax (TCS/TDS) */
+    public isTcsTdsApplicable: boolean;
+
+    public destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    // searching
+    @ViewChild('invoiceSearch', { static: true }) public invoiceSearch: ElementRef;
+    /** Directive to get reference of datepicker menu trigger */
+    @ViewChild('universalDatepickerTrigger') public universalDatepickerTrigger: MatMenuTrigger;
+    public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
+    public monthNames = [];
+    public monthYear: string[] = [];
+    public modalUniqueName: string;
+    public imgPath: string;
+    public expand: boolean = false;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+    /** True, if custom date filter is selected or custom searching or sorting is performed */
+    public showClearFilter: boolean = false;
+    /** Stores the voucher API version of current company */
+    public voucherApiVersion: number;
+    /* This will hold module type */
+    public moduleType = "PURCHASE_REGISTER";
+    /** This will use for purchase register column check values */
+    public customiseColumns = [];
+    /** This will use for purchase register displayed columns */
+    public displayedColumns: any[] = [];
+    /** True if translations loaded */
+    public translationLoaded: boolean = false;
+    /** True if api call in progress */
+    public isLoading: boolean = false;
+    /** Universal date observer */
+    public universalDate$: Observable<any>;
+    /* This will store selected date range to use in api */
+    public selectedDateRange: any;
+    /* This will store selected date range to show on UI */
+    public selectedDateRangeUi: any;
+    /* This will store available date ranges */
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    /* Selected range label */
+    public selectedRangeLabel: any = "";
+    /** Date format type */
+    public giddhDateFormat: string = GIDDH_DATE_FORMAT;
+/** Hold initial params data */
+    private params: any = { from: '', to: '' };
+    /**True if API called on single time */
+    public isDefaultLoaded: boolean = false;
+    /** Hold active company country code */
+    public activeCompanyCountryCode: string = '';
+    /** Holds list of countries which use ZIP Code in address */
+    public zipCodeSupportedCountryList: string[] = ZIP_CODE_SUPPORTED_COUNTRIES;
+    /** Datasource of Purchase Register report */
+    public dataSource: MatTableDataSource<any> = new MatTableDataSource();
+    /** Holds page size options for pagination */
+    public pageSizeOptions: number[] = PAGE_SIZE_OPTIONS;
+
+    constructor(
+        private store: Store<AppState>,
+        private invoiceReceiptActions: InvoiceReceiptActions,
+        private activeRoute: ActivatedRoute,
+        @Inject(ServiceConfig) private serviceConfig,
+        private router: Router,
+        private _cd: ChangeDetectorRef,
+        private generalService: GeneralService,
+        private dialog: MatDialog,
+        private companyActions: CompanyActions
+    ) {
+        this.purchaseRegisteDetailedResponse$ = this.store.pipe(
+            select((appState) => appState.receipt.PurchaseRegisteDetailedResponse),
+            takeUntil(this.destroyed$)
+        );
+        this.isGetPurchaseDetailsInProcess$ = this.store.pipe(
+            select((p) => p.receipt.isGetPurchaseDetailsInProcess),
+            takeUntil(this.destroyed$)
+        );
+        this.isGetPurchaseDetailsSuccess$ = this.store.pipe(
+            select((p) => p.receipt.isGetPurchaseDetailsSuccess),
+            takeUntil(this.destroyed$)
+        );
+        this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), skip(1), takeUntil(this.destroyed$));
+    }
+
+    public ngOnInit(): void {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
+        this.imgPath = Configuration.isElectron ? "assets/icon/" : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + "assets/icon/";
+        this.getDetailedPurchaseRequestFilter.page = 1;
+        this.getDetailedPurchaseRequestFilter.count = PAGINATION_LIMIT;
+        this.getDetailedPurchaseRequestFilter.q = "";
+        this.store
+            .pipe(
+                select((appState) => appState.company),
+                takeUntil(this.destroyed$)
+            )
+            .subscribe((companyData: CurrentCompanyState) => {
+                if (companyData) {
+                    this.isTcsTdsApplicable = companyData.isTcsTdsApplicable;
+                }
+            });
+
+        this.isGetPurchaseDetailsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe(success => {
+            if (success) {
+                this.isDefaultLoaded = true;
+            }
+        });
+
+        combineLatest([this.activeRoute.queryParams.pipe(takeUntil(this.destroyed$)), this.store.pipe(select((state: AppState) => state.session.registerReportFilters))]).pipe(takeUntil(this.destroyed$)).subscribe(([params, registerReportFilters]) => {
+            if (params.from && params.to) {
+                this.from = params.from;
+                this.to = params.to;
+                this.getDetailedPurchaseRequestFilter.from = this.from;
+                this.getDetailedPurchaseRequestFilter.to = this.to;
+                this.getDetailedPurchaseRequestFilter.branchUniqueName = params.branchUniqueName;
+                this.getDetailedPurchaseRequestFilter.salesPersonUniqueName = params.salesPersonUniqueName;
+                this.getDetailedPurchaseRequestFilter.accountUniqueNames = registerReportFilters?.accountUniqueNames;
+                this.params = params;
+                this.setDataPickerDateRange();
+                this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
+            }
+        });
+
+        /** Universal date observer */
+        this.universalDate$.subscribe(dateObj => {
+            if (dateObj && this.isDefaultLoaded) {
+                this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+                this.from = dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT);
+                this.to = dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT);
+                this.getDetailedPurchaseRequestFilter.from = this.from;
+                this.getDetailedPurchaseRequestFilter.to = this.to;
+                this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
+            }
+        });
+
+        this.purchaseRegisteDetailedResponse$
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe((res: PurchaseRegisteDetailedResponse) => {
+                if (res) {
+                    this.PurchaseRegisteDetailedItems = res;
+                    this.dataSource.data = this.PurchaseRegisteDetailedItems.items.map((obj: any) => {
+                        obj.date = this.getDateToDMY(obj.date);
+                        return obj;
+                    });
+                    if (this.voucherNumberInput?.value) {
+                        setTimeout(() => {
+                            this.invoiceSearch?.nativeElement.focus();
+                        }, 200);
+                    }
+                }
+                setTimeout(() => {
+                    this.detectChange();
+                }, 200);
+            });
+
+        this.voucherNumberInput?.valueChanges
+            ?.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$))
+            .subscribe((searching) => {
+                if (searching !== null && searching !== undefined) {
+                    this.showClearFilter = true;
+                    this.getDetailedPurchaseRequestFilter.sort = null;
+                    this.getDetailedPurchaseRequestFilter.sortBy = null;
+                    this.getDetailedPurchaseRequestFilter.q = encodeURIComponent(searching);
+                    this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
+                    this.showSearchInvoiceNo = false;
+                }
+            });
+        this.customiseColumns = [
+            {
+                "value": "date",
+                "label": "Date",
+                "checked": true,
+            },
+            {
+                "value": "account",
+                "label": "Account",
+                "checked": true,
+            },
+            {
+                "value": "parent_group",
+                "label": "Parent Group",
+                "checked": false,
+            },
+            {
+                "value": "tax_no",
+                "label": "Tax no.",
+                "checked": false,
+            },
+            {
+                "value": "address",
+                "label": "Address",
+                "checked": false,
+            },
+            {
+                "value": "pincode",
+                "label": "Pincode",
+                "checked": false,
+            },
+            {
+                "value": "email",
+                "label": "Email",
+                "checked": false,
+            },
+            {
+                "value": "mobile_no",
+                "label": "Mobile No.",
+                "checked": false,
+            },
+            {
+                "value": "purchase_account",
+                "label": "Purchase Account",
+                "checked": false,
+            },
+            {
+                "value": "voucher_type",
+                "label": "Voucher Type",
+                "checked": true,
+            },
+            {
+                "value": "voucher_no",
+                "label": "Voucher No.",
+                "checked": true,
+            },
+            {
+                "value": "purchase",
+                "label": "Purchase",
+                "checked": true,
+            },
+            {
+                "value": "return",
+                "label": "Return",
+                "checked": true,
+            },
+            {
+                "value": "app_unit",
+                "label": "Unit",
+                "checked": true,
+                "isCommonLocaleData": true
+            },
+            {
+                "value": "app_rate",
+                "label": "Rate",
+                "checked": true,
+                "isCommonLocaleData": true
+            },
+            {
+                "value": "discount",
+                "label": "Discount",
+                "checked": true,
+            },
+            {
+                "value": "tax",
+                "label": "Tax",
+                "checked": true,
+            },
+            {
+                "value": "net_purchase",
+                "label": "Net Purchase",
+                "checked": true,
+            },
+        ];
+
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                this.activeCompanyCountryCode = activeCompany.countryV2?.alpha2CountryCode;
+            }
+        });
+        this.router.events.pipe(
+            filter(event => (event instanceof NavigationStart && !(event.url.includes('/reports/purchase-register') || event.url.includes('/reports/purchase-detailed-expand')))),
+            takeUntil(this.destroyed$)).subscribe(() => {
+                // Reset the chosen financial year when user leaves the module
+                this.store.dispatch(this.companyActions.resetUserChosenFinancialYear());
+            });
+    }
+
+    public getDetailedPurchaseReport(PurchaseDetailedfilter) {
+        setTimeout(() => {
+            this.detectChange();
+        }, 200);
+        this.store.dispatch(this.invoiceReceiptActions.GetPurchaseRegistedDetails(PurchaseDetailedfilter));
+    }
+
+    public sortbyApi(ord, key) {
+        this.showClearFilter = true;
+        this.getDetailedPurchaseRequestFilter.sortBy = key;
+        this.getDetailedPurchaseRequestFilter.sort = ord;
+        this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
+    }
+
+    /**
+     * Redirects to Purchase Register Page
+     *
+     * @memberof PurchaseRegisterExpandComponent
+     */
+    public gotoPurchaseRegister(): void {
+        this.activeRoute.queryParams.pipe(take(1)).subscribe((params) => {
+            this.router.navigate(["pages", "reports", "purchase-register"], {
+                queryParams: {
+                    from: params.from,
+                    to: params.to,
+                    branchUniqueName: params.branchUniqueName,
+                    interval: params.interval,
+                    selectedMonth: params.selectedMonth,
+                },
+            });
+        });
+    }
+
+    /**
+     * emitExpand
+     */
+    public emitExpand() {
+        this.expand = !this.expand;
+    }
+
+    public getDateToDMY(selecteddate) {
+        let date = selecteddate.split("-");
+        if (date?.length === 3) {
+            this.translationComplete(true);
+            let month = this.monthNames[parseInt(date[1]) - 1]?.substr(0, 3);
+            let year = date[2]?.substr(2, 4);
+            return date[0] + " " + month + " " + year;
+        } else {
+            return selecteddate;
+        }
+    }
+
+    public getCurrentMonthYear() {
+        if (this.from && this.to) {
+            let currentYearFrom = this.from.split("-")[2];
+            let currentYearTo = this.to.split("-")[2];
+            let idx = this.from.split("-");
+            this.monthYear = [];
+            if (currentYearFrom === currentYearTo) {
+                this.monthNames.forEach((element) => {
+                    this.monthYear.push(element + " " + currentYearFrom);
+                });
+            }
+            this.selectedMonth = this.monthYear[parseInt(idx[1]) - 1];
+        }
+    }
+
+    public getDateFromMonth(selectedMonth) {
+        let mdyFrom = this.from.split("-");
+        let mdyTo = this.to.split("-");
+
+        let startDate;
+
+        if (mdyFrom[1] > selectedMonth) {
+            startDate = "01-" + (selectedMonth - 1) + "-" + mdyTo[2];
+        } else {
+            startDate = "01-" + (selectedMonth - 1) + "-" + mdyFrom[2];
+        }
+        let startDateSplit = startDate.split("-");
+        let dt = new Date(startDateSplit[2], startDateSplit[1], startDateSplit[0]);
+        // GET THE MONTH AND YEAR OF THE SELECTED DATE.
+        let month = (dt.getMonth() + 1)?.toString(),
+            year = dt.getFullYear();
+
+        // GET THE FIRST AND LAST DATE OF THE MONTH.
+        if (parseInt(month) < 10) {
+            month = "0" + month;
+        }
+        let firstDay = "01-" + month + "-" + year;
+        let lastDay = new Date(year, parseInt(month), 0).getDate() + "-" + month + "-" + year;
+
+        return { firstDay, lastDay };
+    }
+
+    public toggleSearch(fieldName: string) {
+        if (fieldName === "invoiceNumber") {
+            this.showSearchInvoiceNo = true;
+            setTimeout(() => {
+                this.invoiceSearch?.nativeElement.focus();
+            }, 200);
+        } else {
+            this.showSearchInvoiceNo = false;
+        }
+        this.detectChange();
+    }
+
+    public clickedOutsideEvent() {
+        this.showSearchInvoiceNo = false;
+    }
+
+    detectChange() {
+        if (!this._cd["destroyed"]) {
+            this._cd.detectChanges();
+        }
+    }
+
+    /**
+     * Callback for translation response complete
+     *
+     * @param {boolean} event
+     * @memberof PurchaseRegisterExpandComponent
+     */
+    public translationComplete(event: boolean): void {
+        if (event) {
+            this.customiseColumns = this.customiseColumns?.map((column) => {
+                if (column.isCommonLocaleData) {
+                    column.label = this.commonLocaleData[column.value];
+                } else {
+                    column.label = this.localeData[column.value];
+                }
+                return column;
+            });
+            this.monthNames = [
+                this.commonLocaleData?.app_months_full.january,
+                this.commonLocaleData?.app_months_full.february,
+                this.commonLocaleData?.app_months_full.march,
+                this.commonLocaleData?.app_months_full.april,
+                this.commonLocaleData?.app_months_full.may,
+                this.commonLocaleData?.app_months_full.june,
+                this.commonLocaleData?.app_months_full.july,
+                this.commonLocaleData?.app_months_full.august,
+                this.commonLocaleData?.app_months_full.september,
+                this.commonLocaleData?.app_months_full.october,
+                this.commonLocaleData?.app_months_full.november,
+                this.commonLocaleData?.app_months_full.december,
+            ];
+            this.getCurrentMonthYear();
+        }
+    }
+
+    /**
+     * Resets the advance search when user clicks on Clear Filter
+     *
+     * @memberof PurchaseRegisterExpandComponent
+     */
+    public resetAdvanceSearch() {
+        this.showClearFilter = false;
+        this.voucherNumberInput?.reset();
+        this.showSearchInvoiceNo = false;
+        this.getDetailedPurchaseRequestFilter.page = 1;
+        this.getDetailedPurchaseRequestFilter.count = PAGINATION_LIMIT;
+        this.getDetailedPurchaseRequestFilter.q = "";
+        this.getDetailedPurchaseRequestFilter.sort = null;
+        this.getDetailedPurchaseRequestFilter.sortBy = null;
+        this.getDetailedPurchaseRequestFilter.from = this.params?.from;
+        this.getDetailedPurchaseRequestFilter.to = this.params?.to;
+        this.setDataPickerDateRange();
+        this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
+    }
+
+    /**
+     * Releases memory
+     *
+     * @memberof PurchaseRegisterExpandComponent
+     */
+    public ngOnDestroy(): void {
+        this.isDestroying = true;
+
+        // Clean up all tracked subscriptions first
+        this.subscriptions.forEach((subscription, index) => {
+            try {
+                if (subscription && !subscription.closed) {
+                    subscription.unsubscribe();
+                }
+            } catch (error) {
+                console.warn(`Error unsubscribing subscription ${index}:`, error);
+            }
+        });
+        this.subscriptions = [];
+
+        // Safely complete the destroyed$ subject
+        try {
+            if (this.destroyed$ && !this.destroyed$.closed) {
+                this.destroyed$.next(true);
+                this.destroyed$.complete();
+            }
+        } catch (error) {
+            console.warn('Error completing destroyed$ subject:', error);
+        }
+    }
+
+    /**
+     * Exports purchase register detailed report
+     *
+     * @memberof PurchaseRegisterExpandComponent
+     */
+    public export(): void {
+        let exportData = {
+            from: this.from,
+            to: this.to,
+            exportType: "PURCHASE_REGISTER_DETAILED_EXPORT",
+            fileType: "CSV",
+            isExpanded: this.expand,
+            q: this.voucherNumberInput?.value,
+            branchUniqueName: this.getDetailedPurchaseRequestFilter?.branchUniqueName,
+            commonLocaleData: this.commonLocaleData,
+            localeData: this.localeData,
+        };
+        this.dialog.open(SalesPurchaseRegisterExportComponent, {
+            width: "630px",
+            panelClass: 'export-container',
+            data: exportData,
+        });
+    }
+
+    /**
+     * This will use for show hide main table columns from customise columns
+     *
+     * @param {*} event
+     * @memberof PurchaseRegisterExpandComponent
+     */
+    public getSelectedTableColumns(event: any): void {
+        this.displayedColumns = event;
+    }
+
+    /**
+     * This will toggle the datepicker
+     *
+     * @param {boolean} isOpen Set to true to open the datepicker, false to close it
+     * @memberof PurchaseRegisterExpandComponent
+     */
+    public toggleGiddhDatepicker(isOpen: boolean): void {
+        if (this.universalDatepickerTrigger) {
+            if (isOpen) {
+                this.universalDatepickerTrigger.openMenu();
+            } else {
+                this.universalDatepickerTrigger.closeMenu();
+            }
+        }
+    }
+
+    /**
+     * Call back function for date/range selection in datepicker
+     *
+     * @param {*} value Selected date range object
+     * @memberof PurchaseRegisterExpandComponent
+     */
+    public dateSelectedCallback(value?: any): void {
+        if (value && value.event === "cancel") {
+            this.toggleGiddhDatepicker(false);
+            return;
+        }
+        this.selectedRangeLabel = "";
+
+        if (value && value.name) {
+            this.selectedRangeLabel = value.name;
+        }
+        this.toggleGiddhDatepicker(false);
+        if (value && value.startDate && value.endDate) {
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.from = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.to = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.showClearFilter = true;
+            this.getDetailedPurchaseRequestFilter.from = this.from;
+            this.getDetailedPurchaseRequestFilter.to = this.to;
+            this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
+        }
+    }
+    /**
+     * Set the initial date range from query params
+     *
+     * @private
+     * @memberof SalesRegisterExpandComponent
+     */
+    private setDataPickerDateRange(): void {
+        let dateRange = { fromDate: '', toDate: '' };
+        dateRange = this.generalService.dateConversionToSetComponentDatePicker(this.params?.from, this.params?.to);
+        this.selectedDateRange = { startDate: dayjs(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY), endDate: dayjs(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY) };
+        this.selectedDateRangeUi = dayjs(dateRange.fromDate, GIDDH_DATE_FORMAT_MM_DD_YYYY).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateRange.toDate, GIDDH_DATE_FORMAT_MM_DD_YYYY).format(GIDDH_NEW_DATE_FORMAT_UI);
+    }
+
+    /**
+     * Handle page change event and make API call
+     *
+     * @param {*} event
+     * @memberof PurchaseRegisterExpandComponent
+     */
+    public handlePageChange(event: PageEvent): void {
+        if (event) {
+            this.getDetailedPurchaseRequestFilter.page = this.getDetailedPurchaseRequestFilter.count !== event.pageSize ? 1 : event.pageIndex + 1;
+            this.getDetailedPurchaseRequestFilter.count = event.pageSize;
+            this.getDetailedPurchaseReport(this.getDetailedPurchaseRequestFilter);
+        }
+    }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
+}

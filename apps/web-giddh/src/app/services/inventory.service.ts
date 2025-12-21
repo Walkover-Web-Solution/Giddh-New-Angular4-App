@@ -38,13 +38,11 @@ import {
     NewBranchTransferRequest, NewBranchTransferResponse, NewBranchTransferListResponse, NewBranchTransferListPostRequestParams, NewBranchTransferListGetRequestParams, NewBranchTransferDownloadRequest
 } from '../models/api-models/BranchTransfer';
 import { PAGINATION_LIMIT } from '../app.constant';
-import { cloneDeep } from '../lodash-optimized';
+import { cloneDeep, concat, get } from '../lodash-optimized';
 
 declare var _: any;
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class InventoryService {
     private companyUniqueName: string;
     private _: any;

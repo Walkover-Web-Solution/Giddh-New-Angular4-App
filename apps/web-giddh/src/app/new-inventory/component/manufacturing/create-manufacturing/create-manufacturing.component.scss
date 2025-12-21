@@ -1,0 +1,261 @@
+#create-manufacturing {
+    .manufacturing-wrapper {
+        padding: 15px;
+
+        .row {
+            margin-left: unset;
+            margin-right: unset;
+        }
+        .max-width-stock {
+            max-width: 1400px;
+        }
+        .less-than-text {
+            font-size: 32px;
+            color: var(--color-dark-gray);
+            position: absolute;
+            top: 120px;
+        }
+
+        .branch-msg {
+            color: var(--text-primary-color);
+            background-color: var(--color-light-gray);
+            display: flex;
+            justify-content: center;
+            max-width: 250px;
+            margin: 0 auto 15px auto;
+            padding: 5px;
+        }
+
+        .form-fields {
+
+            .gap-between {
+                gap: 1rem;
+            }
+            small {
+                font-size: var(--font-size-12);
+            }
+            label {
+                font-size: var(--font-size-15);
+                font-weight: 400;
+            }
+        }
+
+        .field-max-width {
+            max-width: 241px;
+        }
+
+        .consumption-details-wrapper {
+            .mat-accordion {
+                .mat-expansion-panel {
+                    margin-bottom: 15px;
+                }
+            }
+            #table-raw-stock {
+                width: 100%;
+                th,
+                td {
+                    padding: 10px 5px;
+                    font-size: var(--font-size-15);
+                    text-align: right;
+                    &:first-child,
+                    &:nth-child(2) {
+                        text-align: left;
+                    }
+                }
+
+                thead {
+                    border-bottom: 1px solid var(--border-color);
+                    tr {
+                        th {
+                            font-weight: 500;
+                        }
+                    }
+                }
+                tbody {
+                    tr {
+                        td {
+
+                            .mat-stroked-button {
+                                padding: 4px 6px !important;
+                                line-height: unset !important;
+                                font-size: var(--font-size-12) !important;
+                            }
+                            .table-column-width {
+                                max-width: 250px;
+                                column-gap: 20px;
+                            }
+                        }
+                        &:first-child {
+                            td {
+                                &.before-line {
+                                    &::before {
+                                        border-top: 2px solid
+                                            var(--color-silver) !important;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                tfoot {
+                    border-top: 1px solid var(--border-color);
+                    tr {
+                        td {
+                            font-weight: 100;
+                            &:nth-child(2) {
+                                text-align: right;
+                            }
+                        }
+                    }
+                }
+                .table-name {
+                    width: 25%;
+                }
+                .table-variant {
+                    width: 20%;
+                }
+                .table-quantity {
+                    width: 10%;
+                }
+                .table-unit {
+                    width: 20%;
+                }
+                .table-rate {
+                    width: 10%;
+                }
+                .table-amount {
+                    width: 15%;
+                }
+                .table-name2 {
+                    width: 30%;
+                }
+                .table-variant2 {
+                    width: 30%;
+                }
+                .table-amount2 {
+                    width: 30%;
+                }
+                .table-delete {
+                    width: 10%;
+                }
+            }
+
+        }
+        .total-cost-card {
+            padding: 15px 0;
+
+            &-head {
+                padding: 12px 19px;
+                background-color: var(--color-dark-gray);
+                color: var(--color-white);
+            }
+
+            &-body {
+                font-weight: 600;
+                padding: 10px 0;
+
+                .col-5 {
+                    flex: unset !important;
+
+                }
+            }
+        }
+
+        .custom-card {
+            padding: 12px 15px;
+            border-radius: var(--mat-border-radius-4);
+            min-width: 280px;
+
+            &.bg-green {
+                background-color: var(--color-green-light);
+                color: var(--color-green);
+            }
+            &.bg-vivid-gamboge {
+                background-color: var(--color-orange-light);
+                color: var(--color-deep-orange);
+            }
+            &.bg-expense {
+                background-color: var(--color-border-light);
+                color: var(--text-primary-color);
+            }
+            .card-head-text {
+                font-size: var(--font-size-12);
+                color: var(--color-dark-gray);
+            }
+            .card-text {
+                font-size: var(--font-size-16);
+                font-weight: 500;
+            }
+        }
+    }
+}
+::ng-deep .disable-bg {
+    border: 0;
+    background-color: transparent !important;
+
+    &.mat-datepicker-input {
+        &:disabled {
+            background-color: transparent !important;
+        }
+    }
+}
+
+@media screen and (max-width: 1440px) {
+    #create-manufacturing {
+        .manufacturing-wrapper {
+            .custom-card {
+                min-width: 210px;
+            }
+            .consumption-details-wrapper {
+                #table-raw-stock {
+                    tbody {
+                        tr {
+                            td {
+                                .table-column-width {
+                                    column-gap: 8px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 1366px) {
+    #create-manufacturing {
+        .manufacturing-wrapper {
+            .custom-card {
+                min-width: 200px;
+            }
+        }
+    }
+    .responsive-width {
+        padding-left: 0;
+    }
+}
+
+@media screen and (max-width: 1280px) {
+    #create-manufacturing {
+        .manufacturing-wrapper {
+            .custom-card {
+                min-width: 160px;
+            }
+            .less-than-text {
+                top: 0px;
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 1080px) {
+    #create-manufacturing {
+        .manufacturing-wrapper {
+            .custom-card {
+                min-width: 120px;
+                padding: 12px;
+            }
+        }
+    }
+}

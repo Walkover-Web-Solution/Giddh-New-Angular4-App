@@ -1,27 +1,19 @@
+import { INameUniqueName } from '../api-models/Inventory';
+import { IPagination } from './paginated-response.interface';
+import { IFlattenAccountsResultItem } from './flatten-accounts-result-item.interface';
+// import { IInventoryUnit, WarehouseDetails } from '../../ledger/ledger.vm';
 
-// Missing interface definitions - add these at the top
+// Placeholder interfaces for missing imports
 export interface IInventoryUnit {
     name?: string;
+    uniqueName?: string;
     code?: string;
-    stockUnitCode?: string;
 }
 
 export interface WarehouseDetails {
     name?: string;
     uniqueName?: string;
-    address?: string;
 }
-
-export interface IInventory {
-    // Existing IInventory interface properties
-    unit?: IInventoryUnit;
-    warehouse?: WarehouseDetails;
-}
-
-import { INameUniqueName } from '../api-models/Inventory';
-import { IPagination } from './paginated-response.interface';
-import { IFlattenAccountsResultItem } from './flatten-accounts-result-item.interface';
-// import { IInventoryUnit, WarehouseDetails } from '../../ledger/ledger.vm';
 import { IVariant } from '../api-models/Ledger';
 
 /**
@@ -53,7 +45,7 @@ export interface IInventory {
     quantity: number;
     rate: number;
     stock?: INameUniqueName;
-    unit?: IInventoryUnit;
+    unit: IInventoryUnit;
     warehouse?: WarehouseDetails;
     variant?: IVariant;
     taxInclusive?: boolean;

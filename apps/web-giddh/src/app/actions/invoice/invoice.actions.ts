@@ -35,6 +35,7 @@ import { InvoiceBulkUpdateService } from '../../services/invoice.bulkupdate.serv
 import { LocaleService } from '../../services/locale.service';
 import { GeneralService } from '../../services/general.service';
 import { PAGINATION_LIMIT } from '../../app.constant';
+import { forEach, isArray } from '../../lodash-optimized';
 
 @Injectable()
 export class InvoiceActions {
@@ -129,8 +130,8 @@ export class InvoiceActions {
                 } else {
                     if (typeof data?.body === 'string') {
                         this._toasty.successToast(data?.body);
-                    } else if (_.isArray(data?.body) && data?.body?.length > 0) {
-                        _.forEach(data?.body, (item: IBulkInvoiceGenerationFalingError) => {
+                    } else if (isArray(data?.body) && data?.body?.length > 0) {
+                        forEach(data?.body, (item: IBulkInvoiceGenerationFalingError) => {
                             this._toasty.warningToast(item.reason);
                         });
                     }

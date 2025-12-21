@@ -2,11 +2,11 @@ import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
-    selector: 'confirmation-modal',
-standalone: false,
+    selector: 'new-confirmation-modal',
     templateUrl: './confirmation-modal.component.html',
     styleUrls: ['./confirmation-modal.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone:false
 })
 export class NewConfirmationModalComponent {
     constructor(

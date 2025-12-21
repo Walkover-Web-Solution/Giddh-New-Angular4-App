@@ -1,0 +1,12 @@
+#exportModal {
+    #export-body {
+        .clear-both {
+            .radio-inline {
+                mat-slide-toggle {
+                    position: relative;
+                    top: 8px;
+                }
+            }
+        }
+    }
+}

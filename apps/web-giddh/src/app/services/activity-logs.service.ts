@@ -8,11 +8,8 @@ import { ACTIVITY_LOGS_API } from './apiurls/activity-logs.api';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class ActivityLogsService {
-
     private companyUniqueName: string;
 
     constructor(private errorHandler: GiddhErrorHandler, public http: HttpWrapperService,

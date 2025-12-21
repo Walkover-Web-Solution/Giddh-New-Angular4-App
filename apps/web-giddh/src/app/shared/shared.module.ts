@@ -6,90 +6,194 @@ import { LaddaModule } from 'angular2-ladda';
 import { DigitsOnlyModule } from 'apps/web-giddh/src/app/shared/helpers/directives/digitsOnly/digitsOnly.module';
 import { HighlightModule } from 'apps/web-giddh/src/app/shared/helpers/pipes/highlightPipe/highlight.module';
 import { ClickOutsideModule } from 'ng-click-outside';
+import { MfReportComponent } from '../manufacturing/report/mf.report.component';
+import { CommandKModule } from '../theme/command-k/command.k.module';
+import { ConfirmModalModule } from '../theme/confirm-modal';
+import { AuthServiceConfig, GoogleLoginProvider, SocialLoginModule } from '../theme/ng-social-login-module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
+import { AccountOperationsComponent, ManageGroupsAccountsComponent } from './header/components';
+import { GroupAddComponent } from './header/components/group-add/group-add.component';
+import { ExportGroupLedgerComponent } from './header/components/group-export-ledger-modal/export-group-ledger.component';
+import { GroupUpdateComponent } from './header/components/group-update/group-update.component';
+import { ShareAccountModalComponent } from './header/components/share-account-modal/share-account-modal.component';
+import { ShareGroupModalComponent } from './header/components/share-group-modal/share-group-modal.component';
+import { AccountFilterPipe } from './header/pipe/accountfilter.pipe';
+import { DecimalDigitsModule } from './helpers/directives/decimalDigits/decimalDigits.module';
+import { ElementViewChildModule } from './helpers/directives/elementViewChild/elementViewChild.module';
+import { KeyboardShortutModule } from './helpers/directives/keyboardShortcut/keyboardShortut.module';
+import { NgxMaskModule } from './helpers/directives/ngx-mask';
+import { Configuration } from '../app.constant';
+import { environment } from '../../environments/environment';
+import { TextCaseChangeModule } from './helpers/directives/textCaseChange/textCaseChange.module';
+import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
+import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
+import { AmountFieldComponentModule } from './amount-field/amount-field.module';
+import { AccountAddNewDetailsModule } from './header/components/account-add-new-details/account-add-new-details.module';
+// import { LedgerDiscountModule } from '../ledger/components/ledger-discount/ledger-discount.module'; // MISSING FILE
+import { ConfirmationModalModule } from '../theme/confirmation-modal/confirmation-modal.module';
+import { DatepickerWrapperModule } from './datepicker-wrapper/datepicker.wrapper.module';
+import { ValidateSectionPermissionDirectiveModule } from './validate-section-permission/validate-section-permission.module';
+import { HamburgerMenuModule } from './header/components/hamburger-menu/hamburger-menu.module';
+import { GiddhPageLoaderModule } from './giddh-page-loader/giddh-page-loader.module';
+import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MasterComponent } from './header/components/master/master.component';
+import { CheckPermissionModule } from '../permissions/check-permission.module';
+import { GenericAsideMenuAccountModule } from './generic-aside-menu-account/generic.aside.menu.account.module';
+import { AccountUpdateNewDetailsModule } from './header/components/account-update-new-details/account-update-new-details.module';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
+import { ExportMasterDialogComponent } from './header/components/export-master-dialog/export-master-dialog.component';
+import { MasterExportOptionComponent } from './header/components/master-export-option/master-export-option.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { D3TreeChartModule } from './d3-tree-chart/d3-tree-chart.module';
+import { SubscriptionUpgradeButtonModule } from './subscription-upgrade-button/subscription-upgrade-button.module';
+import { CallBackPageComponent } from './call-back-page/call-back-page.component';
+import { IServiceConfigArgs, ServiceConfig } from '../services/service.config';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatListModule } from '@angular/material/list';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { OverlayModule } from '@angular/cdk/overlay';
+import { GiddhNumberFormatModule } from './helpers/pipes/number-format/number-format.module';
+import { get } from '../lodash-optimized';
 
-// COMMENTED OUT - MISSING MODULE IMPORTS
-// import { CommandKModule } from '../theme/command-k/command.k.module';
-// import { ConfirmModalModule } from '../theme/confirm-modal';
-// import { AuthServiceConfig, GoogleLoginProvider, SocialLoginModule } from '../theme/ng-social-login-module';
-// import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
-// import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
-// import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
-// import { ConfirmationModalModule } from '../theme/confirmation-modal/confirmation-modal.module';
-// import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
 
-// COMMENTED OUT - MISSING COMPONENT IMPORTS
-// import { ShareAccountModalComponent } from './header/components/share-account-modal/share-account-modal.component';
-// import { ShareGroupModalComponent } from './header/components/share-group-modal/share-group-modal.component';
-// import { GroupAddComponent } from './header/components/group-add/group-add.component';
-// import { ExportGroupLedgerComponent } from './header/components/group-export-ledger-modal/export-group-ledger.component';
-// import { GroupUpdateComponent } from './header/components/group-update/group-update.component';
-// import { AccountOperationsComponent, ManageGroupsAccountsComponent } from './header/components';
-// import { MasterComponent } from './header/components/master/master.component';
-// import { AccountAddNewDetailsModule } from './header/components/account-add-new-details/account-add-new-details.module';
-// import { AccountUpdateNewDetailsModule } from './header/components/account-update-new-details/account-update-new-details.module';
-// import { ExportMasterDialogComponent } from './header/components/export-master-dialog/export-master-dialog.component';
-// import { MasterExportOptionComponent } from './header/components/master-export-option/master-export-option.component';
+const SOCIAL_CONFIG = Configuration.isElectron ? null : new AuthServiceConfig([
+    {
+        id: GoogleLoginProvider.PROVIDER_ID,
+        provider: new GoogleLoginProvider(environment.GOOGLE_CLIENT_ID)
+    }
+], false);
+
+export function provideConfig() {
+    return SOCIAL_CONFIG || { id: null, providers: [] };
+}
 
 @NgModule({
     declarations: [
-        // Add component declarations here when components are available
+        MfReportComponent,
+        ManageGroupsAccountsComponent,
+        AccountOperationsComponent,
+        AccountFilterPipe,
+        GroupAddComponent,
+        GroupUpdateComponent,
+        ShareGroupModalComponent,
+        ShareAccountModalComponent,
+        ExportGroupLedgerComponent,
+        MasterComponent,
+        ExportMasterDialogComponent,
+        MasterExportOptionComponent
     ],
     imports: [
+        // KeyboardShortutModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
         CommonModule,
+        RouterModule,
         FormsModule,
         ReactiveFormsModule,
-        RouterModule,
-        LaddaModule,
-        DigitsOnlyModule,
-        HighlightModule,
-        ClickOutsideModule,
-        ScrollingModule
-        // COMMENTED OUT - MISSING MODULES:
-        // CommandKModule,
-        // ConfirmModalModule,
-        // SocialLoginModule,
-        // Daterangepicker,
-        // NgxDaterangepickerMd.forRoot(),
-        // TranslateDirectiveModule,
-        // ConfirmationModalModule,
-        // GiddhDatepickerModule
+        // SocialLoginModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
+        // ClickOutsideModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
+        ConfirmModalModule,
+        LaddaModule.forRoot({
+            style: 'slide-left',
+            spinnerSize: 30
+        }),
+        // ElementViewChildModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
+        DecimalDigitsModule,
+        // DigitsOnlyModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
+        MatPaginatorModule,
+        // Daterangepicker, // COMMENTED OUT - CAUSING NG6002 ERRORS
+        // TextCaseChangeModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
+        // HighlightModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
+        // NgxMaskModule.forRoot(), // COMMENTED OUT - CAUSING NG6002 ERRORS
+        // CommandKModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
+        // NgxDaterangepickerMd.forRoot(), // COMMENTED OUT - CAUSING NG6002 ERRORS
+        ScrollingModule,
+        // GiddhNumberFormatModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
+        TranslateDirectiveModule,
+        // AmountFieldComponentModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
+        AccountAddNewDetailsModule,
+        // LedgerDiscountModule,
+        ConfirmationModalModule,
+        // DatepickerWrapperModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
+        // HamburgerMenuModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
+        // ValidateSectionPermissionDirectiveModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
+        // GiddhPageLoaderModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
+        // GiddhDatepickerModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
+        // MatSlideToggleModule, // COMMENTED OUT - MISSING IMPORT
+        // CheckPermissionModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
+        // AccountUpdateNewDetailsModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
+        MatButtonModule,
+        MatDialogModule,
+        MatTooltipModule,
+        MatRadioModule,
+        CallBackPageComponent,
+        SubscriptionUpgradeButtonModule,
+        FormFieldsModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
+        MatMenuModule,
+        MatListModule,
+        MatExpansionModule,
+        OverlayModule
     ],
     exports: [
         CommonModule,
+        DecimalDigitsModule,
         FormsModule,
         ReactiveFormsModule,
-        RouterModule,
         LaddaModule,
-        DigitsOnlyModule,
-        HighlightModule,
+        ManageGroupsAccountsComponent,
+        AccountFilterPipe,
         ClickOutsideModule,
-        ScrollingModule
-        // COMMENTED OUT - MISSING EXPORTS:
-        // CommandKModule,
-        // ConfirmModalModule,
-        // NgxDaterangepickerMd,
-        // TranslateDirectiveModule,
-        // ConfirmationModalModule,
-        // GiddhDatepickerModule
+        ScrollingModule,
+        ConfirmModalModule,
+        TextCaseChangeModule,
+        KeyboardShortutModule,
+        MfReportComponent,
+        ElementViewChildModule,
+        // NgxDaterangepickerMd, // COMMENTED OUT - CAUSING NG6002 ERRORS
+        // GiddhNumberFormatModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
+        TranslateDirectiveModule,
+        // AmountFieldComponentModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
+        // AccountAddNewDetailsModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
+        // LedgerDiscountModule,
+        ConfirmationModalModule,
+        // DatepickerWrapperModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
+        // HamburgerMenuModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
+        // ValidateSectionPermissionDirectiveModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
+        // GiddhPageLoaderModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
+        // GiddhDatepickerModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
+        GenericAsideMenuAccountModule,
+        MasterComponent,
+        MasterExportOptionComponent,
+        CallBackPageComponent,
+        D3TreeChartModule,
+        SubscriptionUpgradeButtonModule
     ],
     providers: [
-        // COMMENTED OUT - MISSING AUTH PROVIDER:
-        // {
-        //     provide: AuthServiceConfig,
-        //     useFactory: (injector: Injector) => {
-        //         const serviceConfig = injector.get(ServiceConfig) as IServiceConfigArgs;
-        //         return new AuthServiceConfig([{
-        //             id: GoogleLoginProvider.PROVIDER_ID,
-        //             provider: new GoogleLoginProvider(serviceConfig?.GOOGLE_CLIENT_ID || '')
-        //         }], false);
-        //     },
-        //     deps: [Injector]
-        // }
+        {
+            provide: AuthServiceConfig,
+            useFactory: (injector: Injector) => {
+                const serviceConfig = injector.get(ServiceConfig) as IServiceConfigArgs;
+                return new AuthServiceConfig(
+                    [
+                        {
+                            id: GoogleLoginProvider.PROVIDER_ID,
+                            provider: new GoogleLoginProvider(serviceConfig?.GOOGLE_CLIENT_ID || '')
+                        }
+                    ],
+                    false
+                );
+            },
+            deps: [Injector]
+        }
     ]
 })
 export class SharedModule {
-    static forRoot(): ModuleWithProviders<SharedModule> {
+    constructor(private injector: Injector) { }
+    public static forRoot(): ModuleWithProviders<SharedModule> {
         return {
             ngModule: SharedModule,
             providers: []

@@ -1,0 +1,394 @@
+<div
+    appTranslate
+    [file]="'trial-profit-balance/profit-loss/grid'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <!-- no data start -->
+    <div class="no-data" *ngIf="noData">
+        <h2>{{ localeData?.no_data_found }}</h2>
+        <img src="/assets/images/no-data.png" [alt]="localeData?.no_data_found" />
+    </div>
+    <!-- nodata end -->
+    <div>
+        <div *ngIf="!noData" class="tb-wrapper">
+            <div class="mt-4 clear-both">
+                <!--top heading  labels-->
+                <!--Main Grid-->
+                <div class="table-container">
+                    <div class="income">
+                        <section class="clear-both profit-loss">
+                            <table class="table basic pl-table-grid">
+                                <thead>
+                                    <tr>
+                                        <th class="p-0 font-size-16 pl-sticky-group" width="33.35%">
+                                            <div
+                                                #searchContainer
+                                                (clickOutside)="clickedOutside($event, searchContainer)"
+                                            >
+                                                <div
+                                                    [ngStyle]="{ 'display': showClearSearch ? 'none' : 'flex' }"
+                                                    class="align-items-center"
+                                                >
+                                                    <span
+                                                        class="tailed-checkbox p-2"
+                                                        [matTooltip]="commonLocaleData?.app_clear_selected"
+                                                        matTooltipPosition="before"
+                                                        (click)="openConfirmDialog()"
+                                                        aria-label="clear selection"
+                                                    >
+                                                        <img src="{{ imgPath }}deselect-all.svg" class="uncheck-all-icon" aria-label="clear selection icon" /> 
+                                                    </span>
+                                                    <span class="ml-2 mr-1">{{ localeData?.account }}</span>
+                                                    <i class="icon-search" (click)="toggleSearch()"></i>
+                                                </div>
+                                                <div [hidden]="!showClearSearch">
+                                                    <input
+                                                        type="search"
+                                                        #searchInputEl
+                                                        class="form-control"
+                                                        [placeholder]="commonLocaleData?.app_search"
+                                                        aria-describedby="sizing-addon3"
+                                                        id="w-398px"
+                                                        [formControl]="plSearchControl"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </th>
+                                        <ng-container *ngFor="let heading of plData.headers">
+                                            <th class="text-right font-size-16">
+                                                {{ heading }}
+                                            </th>
+                                        </ng-container>
+                                    </tr>
+                                </thead>
+                            </table>
+                            <div *ngIf="plData && plData.incArr && !hideData">
+                                <!--Grid-->
+                                <ng-template #groupDetails let-list let-padding="padding">
+                                    <ng-container *ngFor="let grp of list">
+                                        <section
+                                            class="row-1"
+                                            *ngIf="grp.isVisible"
+                                            profit-loss-grid-row
+                                            [isExpandToggledDuringSearch]="isExpandToggledDuringSearch"
+                                            [expandAll]="expandAll"
+                                            [groupDetail]="grp"
+                                            [plHeaders]="plData.headers"
+                                            [padding]="padding"
+                                            [search]="search"
+                                            [from]="from"
+                                            [to]="to"
+                                            [incomeStatement]="plData?.incomeStatement"
+                                        >
+                                            <ng-container
+                                                *ngTemplateOutlet="
+                                                    groupDetails;
+                                                    context: { $implicit: grp.childGroups, padding: padding + 10 }
+                                                "
+                                            >
+                                            </ng-container>
+                                        </section>
+                                    </ng-container>
+                                </ng-template>
+                                <ng-container
+                                    *ngTemplateOutlet="
+                                        groupDetails;
+                                        context: { $implicit: plData.incArr | financialSearch: search, padding: 10 }
+                                    "
+                                >
+                                </ng-container>
+                                <ng-container
+                                    *ngTemplateOutlet="
+                                        groupDetails;
+                                        context: { $implicit: [cogsData] | financialSearch: search, padding: 10 }
+                                    "
+                                >
+                                </ng-container>
+                                <section class="row-1">
+                                    <div class="pl-grid-row row">
+                                        <div class="col-4 group pl-sticky-group pl-2">{{ localeData?.total_cost_of_goods_sold }}</div>
+                                        <div class="col group text-right pull-right p-0">
+                                            <span class="d-flex justify-content-between">
+                                                <ng-container *ngFor="let key of getKeys(cogsData?.closingBalance)">
+                                                    <span class="d-inline-flex w-100 justify-content-end pl-content-width py-2 pr-1 border-left">
+                                                        <amount-field
+                                                            [amount]="cogsData?.closingBalance[key].amount"
+                                                            [currencySymbol]="false"
+                                                            [currencyCode]="false"
+                                                        >
+                                                        </amount-field>
+                                                    </span>
+                                                </ng-container>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </section>
+                                <!--/Grid-->
+                            </div>
+                            <div class="account clear-both row flex-nowrap" *ngIf="plData && plData.incomeStatement && !hideData">
+                                <div class="col-4 group pl-sticky-group">
+                                    <strong class="font-size-15">{{ localeData?.gross_profit }}</strong>
+                                </div>
+                                <div class="col group text-right pull-right p-0">
+                                    <div class="row flex-nowrap">
+                                        <ng-container *ngFor="let key of getKeys(plData?.incomeStatement.grossProfit)">
+                                            <strong class="col font-size-15 px-0 pr-1 border-left">
+                                                <span class="d-inline-flex">
+                                                    <amount-field
+                                                        [amount]="plData?.incomeStatement.grossProfit[key].amount"
+                                                        [currencySymbol]="false"
+                                                        [currencyCode]="false"
+                                                    >
+                                                    </amount-field>
+                                                </span>
+                                            </strong>
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <div class="expenses">
+                        <section class="clear-both profit-loss table-responsive overflow-visible">
+                            <div *ngIf="plData && plData.expArr && !hideData">
+                                <!--Grid-->
+                                <ng-template #groupDetails let-list let-padding="padding">
+                                    <ng-container *ngFor="let grp of list">
+                                        <section
+                                            class="row-1"
+                                            *ngIf="grp.isVisible"
+                                            profit-loss-grid-row
+                                            [isExpandToggledDuringSearch]="isExpandToggledDuringSearch"
+                                            [groupDetail]="grp"
+                                            [plHeaders]="plData.headers"
+                                            [padding]="padding"
+                                            [search]="search"
+                                            [from]="from"
+                                            [to]="to"
+                                        >
+                                            <ng-container
+                                                *ngTemplateOutlet="
+                                                    groupDetails;
+                                                    context: { $implicit: grp.childGroups, padding: padding + 10 }
+                                                "
+                                            >
+                                            </ng-container>
+                                        </section>
+                                        <section class="row-1" *ngIf="grp.groupName && grp?.uniqueName === 'revenue'">
+                                            <div class="pl-grid-row row">
+                                                <div class="col-4 group pl-sticky-group  pl-2">{{ localeData?.total_revenue }}</div>
+                                                <div class="col border-left group text-right pull-right px-0">
+                                                    <ng-container *ngFor="let key of getKeys(plData?.incomeStatement?.revenue)">
+                                                        <span>
+                                                            <ng-container
+                                                                *ngTemplateOutlet="
+                                                                    operatorSign;
+                                                                    context: {
+                                                                        $implicit: plData?.incomeStatement?.revenue[key],
+                                                                        category: grp.category
+                                                                    }
+                                                                "
+                                                            >
+                                                            </ng-container>
+                                                            <span class="d-inline-flex">
+                                                                <amount-field
+                                                                    [amount]="plData?.incomeStatement.revenue[key].amount"
+                                                                    [currencySymbol]="false"
+                                                                    [currencyCode]="false"
+                                                                >
+                                                                </amount-field>
+                                                            </span>
+                                                        </span>
+                                                    </ng-container>
+                                                </div>
+                                            </div>
+                                        </section>
+                                        <div
+                                            class="group clear-both row"
+                                            *ngIf="grp.groupName && grp?.uniqueName === 'operatingcost'"
+                                        >
+                                            <div class="col-4 group pl-sticky-group  pl-2">
+                                                {{ localeData?.total_operating_expenses }}
+                                            </div>
+                                            <div class="col group text-right pull-right p-0">
+                                                <div class="row flex-nowrap">
+                                                    <ng-container *ngFor="let key of getKeys(plData?.incomeStatement.operatingExpenses)">
+                                                        <div class="col px-0 pr-1 border-left row-height">
+                                                            <ng-container
+                                                                *ngTemplateOutlet="
+                                                                    operatorSign;
+                                                                    context: {
+                                                                        $implicit: plData?.incomeStatement?.operatingExpenses[key],
+                                                                        category: grp.category
+                                                                    }
+                                                                "
+                                                            >
+                                                            </ng-container>
+                                                            <span class="d-inline-flex">
+                                                                <amount-field
+                                                                    [amount]="plData?.incomeStatement.operatingExpenses[key].amount"
+                                                                    [currencySymbol]="false"
+                                                                    [currencyCode]="false"
+                                                                >
+                                                                </amount-field>
+                                                            </span>
+                                                        </div>
+                                                    </ng-container>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="account clear-both font-size-15 row flex-nowrap"
+                                            *ngIf="grp.groupName && grp?.uniqueName === 'operatingcost'"
+                                        >
+                                            <div class="col-4 group pl-sticky-group">
+                                                <strong class="font-size-15">{{ localeData?.operating_profit_loss }}</strong>
+                                            </div>
+                                            <div class="col group text-right pull-right p-0">
+                                                <div class="row flex-nowrap">
+                                                    <ng-container *ngFor="let key of getKeys(plData?.incomeStatement.operatingProfit)">
+                                                        <strong class="col font-size-15 px-0 pr-1 border-left">
+                                                            <span class="d-inline-flex">
+                                                                <amount-field
+                                                                    [amount]="plData?.incomeStatement.operatingProfit[key].amount"
+                                                                    [currencySymbol]="false"
+                                                                    [currencyCode]="false"
+                                                                >
+                                                                </amount-field>
+                                                            </span>
+                                                        </strong>
+                                                    </ng-container>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <section
+                                            class="row-1"
+                                            *ngIf="grp.groupName && grp?.uniqueName === 'otherexpenses'"
+                                        >
+                                            <div class="pl-grid-row row">
+                                                <div class="col-4 group pl-sticky-group pl-2">
+                                                    {{ localeData?.total_other_expense }}
+                                                </div>
+                                                <div class="col group text-right pull-right p-0">
+                                                    <div class="row flex-nowrap">
+                                                        <ng-container *ngFor="let key of getKeys(plData?.incomeStatement?.otherExpenses)">
+                                                            <div class="col px-0 pr-1 border-left row-height">
+                                                                <span>
+                                                                    <ng-container
+                                                                        *ngTemplateOutlet="
+                                                                            operatorSign;
+                                                                            context: {
+                                                                                $implicit: plData?.incomeStatement?.otherExpenses[key],
+                                                                                category: grp.category
+                                                                            }
+                                                                        "
+                                                                    >
+                                                                    </ng-container>
+                                                                    <span class="d-inline-flex">
+                                                                        <amount-field
+                                                                            [amount]="plData?.incomeStatement.otherExpenses[key].amount"
+                                                                            [currencySymbol]="false"
+                                                                            [currencyCode]="false"
+                                                                        >
+                                                                        </amount-field>
+                                                                    </span>
+                                                                </span>
+                                                            </div>
+                                                        </ng-container>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </section>
+                                    </ng-container>
+                                </ng-template>
+                                <ng-container
+                                    *ngTemplateOutlet="
+                                        groupDetails;
+                                        context: { $implicit: plData.expArr | financialSearch: search, padding: 10 }
+                                    "
+                                >
+                                </ng-container>
+                                <!--/Grid-->
+                            </div>
+                        </section>
+                    </div>
+                    <div class="income-before-taxes">
+                        <section class="clear-both profit-loss">
+                            <div class="account clear-both row flex-nowrap" *ngIf="plData && plData?.incomeStatement && !hideData">
+                                <div class="col-4 group pl-sticky-group">
+                                    <strong class="font-size-15">{{ localeData?.income_before_taxes }}</strong>
+                                </div>
+                                <div class="col group text-right pull-right p-0">
+                                    <div class="row flex-nowrap">
+                                        <ng-container *ngFor="let key of getKeys(plData?.incomeStatement?.incomeBeforeTaxes)">
+                                            <strong class="col font-size-15 px-0 pr-1 border-left">
+                                                <span
+                                                    *ngIf="
+                                                        plData?.incomeStatement.incomeBeforeTaxes[key].type === 'DEBIT' &&
+                                                        plData?.incomeStatement.incomeBeforeTaxes[key].amount !== 0
+                                                    "
+                                                    >-</span
+                                                >
+                                                <span class="d-inline-flex">
+                                                    <amount-field
+                                                        [amount]="plData?.incomeStatement.incomeBeforeTaxes[key].amount"
+                                                        [currencySymbol]="false"
+                                                        [currencyCode]="false"
+                                                    >
+                                                    </amount-field>
+                                                </span>
+                                            </strong>
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <ng-container *ngFor="let key of getKeys(plData?.incomeStatement?.incomeBeforeTaxes)">
+                        <ng-template
+                            *ngIf="
+                                plData &&
+                                plData?.incomeStatement &&
+                                plData?.incomeStatement.incomeBeforeTaxes[key].type === 'CREDIT'
+                            "
+                        >
+                            <div class="group clear-both font-size-15 row">
+                                <div class="col-4 group pl-sticky-group pl-2">
+                                    {{ localeData?.taxes_30 }}
+                                </div>
+                                <div class="col group text-right pull-right p-0">
+                                    <div class="row flex-nowrap">
+                                        <ng-container *ngFor="let key of getKeys(plData?.incomeStatement.appliedTax)">
+                                            <div class="col px-0 pr-1 border-left row-height">
+                                                <span class="d-inline-flex">
+                                                    <amount-field
+                                                        [amount]="plData?.incomeStatement.appliedTax[key]"
+                                                        [currencySymbol]="false"
+                                                        [currencyCode]="false"
+                                                    >
+                                                    </amount-field>
+                                                </span>
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ng-container>
+                    <!-- end of expenses -->
+                </div>
+                <!-- end row -->
+            </div>
+        </div>
+    </div>
+    <ng-template #operatorSign let-data let-category="category">
+        <span
+            *ngIf="
+                ((category === 'income' && data.type === 'DEBIT') ||
+                    (category === 'expenses' && data.type === 'CREDIT')) &&
+                data.amount !== 0
+            "
+            >-</span
+        >
+    </ng-template>

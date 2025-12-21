@@ -1,11 +1,13 @@
 import { BreakpointObserver } from "@angular/cdk/layout";
 import { Component, Inject } from "@angular/core";
 import { Router } from "@angular/router";
-import { ReplaySubject } from 'rxjs';
+import { ReplaySubject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { GeneralService } from "../services/general.service";
 import { ServiceConfig } from "../services/service.config";
 import { BREAKPOINT_SCREEN_SIZE } from "../app.constant";
+import { Configuration } from '../app.constant';
+import { environment } from '../../environments/environment';
 
 @Component({
     selector: 'mobile-restricted',
@@ -18,11 +20,15 @@ export class MobileRestrictedComponent {
     /** Holds images folder path */
     public imgPath: string = "";
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     /* Hold giddh logo source */
     public giddhLogoSrc: string = '';
 
     constructor(@Inject(ServiceConfig) private serviceConfig,  private breakpointObserver: BreakpointObserver, private router: Router, private generalService: GeneralService) {
-        this.imgPath = isElectron ? "assets/images/" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + "assets/images/";
+        this.imgPath = Configuration.isElectron ? "assets/images/" : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + "assets/images/";
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
         this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-text-primary-logo.svg';
         this.breakpointObserver.observe([

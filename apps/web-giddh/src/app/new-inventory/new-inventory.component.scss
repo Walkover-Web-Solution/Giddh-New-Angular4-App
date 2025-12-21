@@ -1,0 +1,20 @@
+.inventory-header {
+    padding-top: 15px;
+    justify-content: space-between;
+
+    i {
+        width: 36px;
+        height: 36px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border: 1px solid var(--border-color);
+        color: var(--color-medium-gray);
+        background-color: var(--color-white);
+        cursor: pointer;
+    }
+
+    .input-group {
+        width: 36px;
+    }
+}

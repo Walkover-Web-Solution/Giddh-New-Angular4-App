@@ -41,7 +41,8 @@ declare module 'modern-lru' {
 }
 */
 
-// Global variables for Angular 21 - replaced by webpack DefinePlugin
+// Global variables for Angular 21 - injected by webpack DefinePlugin
+declare var VERSION: string;
 declare var ENV: string;
 declare var HMR: boolean;
 declare var System: SystemJS;
@@ -64,7 +65,6 @@ declare var enableVoucherAdjustmentMultiCurrency: boolean;
 declare var GOOGLE_CLIENT_ID: string;
 declare var GOOGLE_CLIENT_SECRET: string;
 declare var RAZORPAY_KEY: string;
-declare var FROALA_EDITOR_KEY: string;
 declare var OTP_WIDGET_ID: string;
 declare var OTP_TOKEN_AUTH: string;
 
@@ -84,6 +84,7 @@ interface SystemJS {
 }
 
 interface GlobalEnvironment {
+    VERSION: string;
     ENV: string;
     HMR: boolean;
     SystemJS: SystemJS;
@@ -101,6 +102,11 @@ interface GlobalEnvironment {
     errlyticsKey: string;
     APP_FOLDER: string;
     RAZORPAY_KEY: string;
+    enableVoucherAdjustmentMultiCurrency: boolean;
+    PRODUCTION_ENV: boolean;
+    STAGING_ENV: boolean;
+    TEST_ENV: boolean;
+    LOCAL_ENV: boolean;
 }
 
 interface Es6PromiseLoader {

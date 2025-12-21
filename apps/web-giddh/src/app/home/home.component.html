@@ -1,0 +1,31 @@
+<div appTranslate (commonLocaleData)="commonLocaleData = $event">
+    <hamburger-menu [pageHeading]="commonLocaleData?.app_dashboard"></hamburger-menu>
+    <section id="dashboard" class="clear-both">
+        <div class="container-fluid top-bar">
+            <div class="dashboard-container" *ngIf="companyUniqueName">
+                <div class="row">
+                    <!-- total overdues -->
+                    <div class="col-sm-12 col-md-12 col-lg-6 col-12 col-xl-4 panel-block" *ngIf="!hideallcharts">
+                        <total-overdues-chart #overdues></total-overdues-chart>
+                    </div>
+                    <!-- profit loss -->
+                    <div class="col-sm-12 col-md-12 col-lg-6 col-12 col-xl-4 panel-block" *ngIf="!hideallcharts">
+                        <profit-loss></profit-loss>
+                    </div>
+                    <!-- bank accounts -->
+                    <div class="col-sm-12 col-md-12 col-lg-12 col-xl-4 col-12 panel-block" *ngIf="!hideallcharts">
+                        <bank-accounts></bank-accounts>
+                    </div>
+                    <!-- sales graph -->
+                    <div class="col-12 col-lg-12">
+                        <revenue-chart #revenue></revenue-chart>
+                    </div>
+                    <!-- Debtors / Creditors table -->
+                    <div class="col-12 col-lg-12" *ngIf="!hideallcharts">
+                        <cr-dr-list [initializeDateWithUniversalDate]="true"></cr-dr-list>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

@@ -1,0 +1,75 @@
+<ng-container *ngIf="!hideLabel">
+    <div [ngClass]="{ 'readonly-field': disabled }">
+        <mat-form-field
+            class="toggle-Icon"
+            [ngClass]="{ 'mat-form-field-invalid': showError, 'text-center month-year-picker': monthYearMode }"
+            [appearance]="appearance"
+            [floatLabel]="'auto'"
+        >
+            <mat-label *ngIf="!monthYearMode && appearance === 'outline'">{{ label ? label : placeholder }}</mat-label>
+            <input
+                matInput
+                [matDatepicker]="picker"
+                [placeholder]="placeholder"
+                [value]="calendarDate"
+                [min]="minDate"
+                (input)="dateInputChange($event)"
+                autocomplete="off"
+                (focus)="closeDatepickerOnFocus ? picker?.close() : toggleDatepicker()"
+                (click)="toggleDatepicker()"
+                (dateChange)="monthYearMode ? null : dateChange($event)"
+                [class]="cssClass"
+                [disabled]="disabled"
+                [ngClass]="{ 'error-box': showError }"
+                [required]="required"
+                [readonly]="monthYearMode"
+            />
+            <ng-container *ngIf="showToggleIcon">
+                <mat-datepicker-toggle
+                    matSuffix
+                    [for]="picker"
+                    (focusout)="!isDatepickerOpen ? focusOut.emit(true) : ''"
+                    (click)="emitDatepickerState(true); picker?.open()"
+                >
+                </mat-datepicker-toggle>
+            </ng-container>
+            <mat-datepicker
+                [opened]="isOpened"
+                (closed)="isDatepickerOpen = false; emitDatepickerState(false)"
+                [startView]="monthYearMode ? startView : 'month'"
+                [startAt]="monthYearMode ? startAt : null"
+                (monthSelected)="monthYearMode ? setMonthAndYear($event, picker) : null"
+                (yearSelected)="monthYearMode ? setYear($event) : null"
+                #picker
+            ></mat-datepicker>
+        </mat-form-field>
+    </div>
+</ng-container>
+
+<ng-container *ngIf="hideLabel">
+    <input
+        matInput
+        [matDatepicker]="picker"
+        [placeholder]="placeholder"
+        [value]="calendarDate"
+        [min]="minDate"
+        autocomplete="off"
+        (focus)="toggleDatepicker()"
+        (click)="toggleDatepicker()"
+        (dateChange)="monthYearMode ? null : dateChange($event)"
+        [class]="cssClass"
+        [disabled]="disabled"
+        [ngClass]="{ 'error-box': showError }"
+        [required]="required"
+        [readonly]="monthYearMode"
+    />
+    <mat-datepicker
+        [opened]="isOpened"
+        (closed)="isDatepickerOpen = false; emitDatepickerState(false)"
+        [startView]="monthYearMode ? startView : 'month'"
+        [startAt]="monthYearMode ? startAt : null"
+        (monthSelected)="monthYearMode ? setMonthAndYear($event, picker) : null"
+        (yearSelected)="monthYearMode ? setYear($event) : null"
+        #picker
+    ></mat-datepicker>
+</ng-container>

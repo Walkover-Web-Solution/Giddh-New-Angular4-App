@@ -1,0 +1,153 @@
+.td-search-box {
+    padding: 0px !important;
+    position: relative;
+}
+
+.td-search-box div {
+    display: flex;
+}
+
+.td-search-box div i {
+    margin-top: 1px;
+    padding-right: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+}
+
+.td-search-box div {
+    display: flex;
+}
+
+.td-search-box .input-container input {
+    height: 36px;
+    min-width: 100%;
+    padding: 11px;
+    color: var(--color-black);
+    border: none;
+    background-color: var(--color-light-gray);
+    border-radius: var(--mat-border-radius-4);
+}
+
+.basic tbody tr td p {
+    margin-bottom: 10px;
+}
+
+.basic tbody tr td p:last-child {
+    margin-bottom: 0px;
+}
+
+.middle {
+    vertical-align: middle;
+}
+
+.report-dropdown li {
+    float: left;
+    width: 51px;
+}
+
+ul#dropdown-nested {
+    min-width: 254px;
+}
+
+.report-dropdown {
+    left: 100% !important;
+}
+
+.top-bar {
+    padding: 15px;
+}
+
+.custom-month-select button.btn {
+    background: transparent !important;
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+.custom-month-select button.btn:active,
+.custom-month-select button.btn:focus,
+.custom-month-select button.btn:hover {
+    background: transparent !important;
+    box-shadow: none !important;
+    outline: none !important;
+}
+
+table th {
+    position: relative;
+}
+
+.icon-pointer {
+    cursor: pointer;
+    margin-left: 6px;
+}
+.icon-pointer .active-text-color {
+    color: var(--text-primary-color);
+}
+
+.top-bar {
+    .icon-options {
+        width: 36px;
+        height: 36px;
+        border: 1px solid var(--border-color);
+        background-color: var(--color-white);
+        border-radius: var(--mat-border-radius-4);
+        color: var(--text-primary-color);
+        font-size: 20px;
+        position: relative;
+        padding: 7px;
+        &:hover {
+            background: var(--bg-primary-color);
+            color: var(--color-white);
+            border-color: var(--theme-primary-color);
+        }
+    }
+    .btn-group.d-flex.open.show {
+        display: flex !important;
+    }
+}
+
+.verticle-align-top a {
+    color: var(--text-primary-color);
+
+    &:hover {
+        color: var(--text-primary-color);
+    }
+}
+
+.report-breadcrum {
+    position: absolute !important;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 7px 0px 10px 36px !important;
+    border-bottom: 1px solid var(--border-color);
+    .nav-report {
+        li {
+            font-weight: var(--font-weight-semibold);
+            font-size: var(--font-size-16);
+            a {
+                color: var(--text-primary-color);
+            }
+        }
+    }
+    .custom-month-select {
+        font-weight: var(--font-weight-semibold);
+        color: var(--text-primary-color);
+        .btn {
+            font-size: var(--font-size-16);
+            padding: 0;
+        }
+        li {
+            font-family: var(--font-family);
+        }
+    }
+}
+
+.voucher-width {
+    width: 210px !important;
+}
+
+.position-left {
+    left: 0;
+}

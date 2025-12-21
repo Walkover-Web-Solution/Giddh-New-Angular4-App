@@ -6,6 +6,7 @@ import { GeneralService } from './../../../../services/general.service';
 import { distinctUntilKeyChanged, takeUntil } from 'rxjs/operators';
 import { REMOVE_TRAILING_ZERO_REGEX } from 'apps/web-giddh/src/app/app.constant';
 import { giddhRoundOff } from '../../helperFunctions';
+import { includes } from '../../../../lodash-optimized';
 
 @Pipe({
     name: 'giddhCurrency',

@@ -1,7 +1,6 @@
 import { take } from 'rxjs/operators';
 import { Component, ElementRef, OnInit, TemplateRef, ViewChild, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { cloneDeep, map, orderBy } from '../../lodash-optimized';
 import { SettingsTagService } from '../../services/settings.tag.service';
 import { ToasterService } from '../../services/toaster.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
@@ -9,6 +8,7 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { MatChipEditedEvent, MatChipInputEvent } from '@angular/material/chips';
 import { GeneralService } from '../../services/general.service';
+import { cloneDeep, get, map, orderBy, set } from '../../lodash-optimized';
 
 export interface TagInterface {
     name: string,
@@ -17,8 +17,8 @@ export interface TagInterface {
 }
 
 @Component({
-    selector: 'tags',
-standalone: false,
+    selector: 'setting-tags',
+    standalone: false,
     templateUrl: './tags.component.html',
     styleUrls: ['./tags.component.scss'],
 })

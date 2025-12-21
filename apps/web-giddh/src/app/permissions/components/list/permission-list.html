@@ -1,0 +1,81 @@
+<div
+    appTranslate
+    [file]="'permissions'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
+    <div class="container-fluid clear-both" *ngIf="allRoles?.length > 0">
+        <div class="col-sm-12 mt-4 mb-4 d-flex justify-content-end column-gap-05">
+            <button mat-raised-button color="primary" (click)="openPermissionDialog()">
+                {{localeData?.add_new_role}}
+            </button>
+            <button
+                mat-stroked-button
+                *ngIf="showBackButton"
+                class="btn custom-btn"
+                [routerLink]="['/pages/settings/permission']"
+            >
+                {{commonLocaleData?.app_back}}
+            </button>
+        </div>
+        <div class="col-sm-12 mt-3 p-0 role clear-both btn-show" *ngFor="let role of allRoles">
+            <div class="row mr-0 ml-0">
+                <div class="col-md-3 col-sm-3 col-12 p-0 role-head cursor-pointer">
+                    <span class="vertical-center">
+                        <h1>{{role.name}}</h1>
+                        <div class="text-center mt-4 on-hover d-flex column-gap-1">
+                            <button
+                                mat-stroked-button
+                                *ngIf="!role.isFixed"
+                                class="custom-btn"
+                                (click)="updateRole(role)"
+                            >
+                                {{commonLocaleData?.app_edit}}
+                            </button>
+                            <button
+                                mat-stroked-button
+                                *ngIf="!role.isFixed"
+                                (click)="deleteRole(role);"
+                            >
+                                {{commonLocaleData?.app_delete}}
+                            </button>
+                            <button mat-raised-button color="primary" (click)="updateRole(role)">
+                                {{commonLocaleData?.app_view}}
+                            </button>
+                        </div>
+                    </span>
+                </div>
+                <div class="col-md-9 col-sm-9 col-12">
+                    <ul>
+                        <li *ngFor="let item of role?.scopes">{{ item.name | capitalize }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--add and manage role model -->
+    <ng-template #permissiomDialog>
+        <div class="modal-content">
+            <permission-model
+                [localeData]="localeData"
+                [commonLocaleData]="commonLocaleData"
+                (closeEvent)="closePopupEvent($event)"
+            ></permission-model>
+        </div>
+    </ng-template>
+
+    <!--delete role confirmation model -->
+    <ng-template #permissionConfirmationDialog>
+        <div class="modal-content">
+            <delete-role-confirmation-model
+                [selectedRoleForDelete]="selectedRoleForDelete"
+                [localeData]="localeData"
+                [commonLocaleData]="commonLocaleData"
+                (confirmDeleteEvent)="deleteConfirmedRole()"
+                (closeModelEvent)="closeConfirmationPopup()"
+            >
+            </delete-role-confirmation-model>
+        </div>
+    </ng-template>

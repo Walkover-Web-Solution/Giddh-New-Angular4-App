@@ -3,10 +3,10 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../../store';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { includes, indexOf } from '../../../../lodash-optimized';
 
 @Directive({
-    selector: '[appDecimalDigits]',
-    
+    selector: '[decimalDigitsDirective]',
     standalone: false
 })
 export class DecimalDigitsDirective implements OnDestroy {

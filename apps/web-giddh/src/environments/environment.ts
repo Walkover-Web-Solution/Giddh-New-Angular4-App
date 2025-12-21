@@ -3,11 +3,12 @@
 import { ApplicationRef, NgModuleRef } from '@angular/core';
 import { enableDebugTools } from '@angular/platform-browser';
 import { Environment } from './model';
+import { get } from '../app/lodash-optimized';
 
 Error.stackTraceLimit = Infinity;
 
 export const environment: Environment = {
-    production: true,
+    production: false,
     AppUrl: 'http://localhost:3000/',
     ApiUrl: 'https://apitest.giddh.com/',
     UkApiUrl: 'https://gbapi.giddh.com/',

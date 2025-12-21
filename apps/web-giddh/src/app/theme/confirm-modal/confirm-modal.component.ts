@@ -2,12 +2,13 @@ import { Component, EventEmitter, Input, Output, OnInit, OnDestroy } from '@angu
 import { AppState } from '../../store';
 import { Store, select } from '@ngrx/store';
 import { take } from 'rxjs/operators';
+import { remove } from '../../lodash-optimized';
 
 @Component({
     selector: 'confirm-modal',
-standalone: false,
     templateUrl: './confirm-modal.component.html',
-    styleUrls: ['./confirm-modal.component.scss']
+    styleUrls: ['./confirm-modal.component.scss'],
+    standalone:false
 })
 export class ConfirmModalComponent implements OnInit, OnDestroy {
     @Input() public title: string = '';
@@ -30,22 +31,22 @@ export class ConfirmModalComponent implements OnInit, OnDestroy {
      * @memberof ConfirmModalComponent
      */
     public ngOnInit(): void {
-        // this.store.pipe(select(state => state.session.commonLocaleData), take(1)).subscribe((response) => {
-        //     if (response) {
-        //         if (!this.title) {
-        //             this.title = response.app_confirmation;
-        //         }
-        //         if (!this.ok) {
-        //             this.ok = response.app_yes;
-        //         }
-        //         if (!this.cancel) {
-        //             this.cancel = response.app_no;
-        //         }
-        //         if (!this.permanentlyDeleteMessage) {
-        //             this.permanentlyDeleteMessage = response.app_permanently_delete_message;
-        //         }
-        //     }
-        // });
+        this.store.pipe(select(state => state.session.commonLocaleData), take(1)).subscribe((response) => {
+            if (response) {
+                if (!this.title) {
+                    this.title = response.app_confirmation;
+                }
+                if (!this.ok) {
+                    this.ok = response.app_yes;
+                }
+                if (!this.cancel) {
+                    this.cancel = response.app_no;
+                }
+                if (!this.permanentlyDeleteMessage) {
+                    this.permanentlyDeleteMessage = response.app_permanently_delete_message;
+                }
+            }
+        });
     }
 
     public onSuccess(e: Event) {
@@ -58,7 +59,7 @@ export class ConfirmModalComponent implements OnInit, OnDestroy {
 
     /**
      * Removes modal-open class on component destroy
-     *
+     * 
      * @memberof ConfirmModalComponent
      */
     public ngOnDestroy(): void {

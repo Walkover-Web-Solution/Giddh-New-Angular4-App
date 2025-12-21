@@ -1,0 +1,86 @@
+.date-range-picker {
+    background-size: 17px !important;
+    background-position: 9px 8px !important;
+    background-repeat: no-repeat !important;
+    position: relative;
+    z-index: 1;
+    cursor: default;
+    border: 1px solid var(--border-color);
+    width: 230px;
+}
+
+.date-range-picker:focus {
+    border-color: var(--border-color) !important;
+}
+
+.input-wrapper:before {
+    position: absolute;
+    content: "";
+    display: block;
+    height: 36px;
+    width: 1px;
+    background-color: var(--color-silver);
+    left: 37px !important;
+    z-index: 2;
+    top: 0;
+}
+.transactions-page .form-group label {
+    padding-bottom: 5px;
+}
+.table > tbody + tbody {
+    border-top: none;
+}
+
+.warehouse-name {
+    white-space: normal;
+}
+
+.linked-entities {
+    width: 200px;
+}
+.mobile-view {
+    display: none !important;
+}
+
+.daybook-w-100 {
+    width: 100px;
+    min-width: 100px;
+}
+
+.daybook-w-150 {
+    width: 150px;
+    min-width: 150px;
+}
+
+.daybook-w-200 {
+    width: 200px;
+    min-width: 200px;
+    text-transform: capitalize;
+}
+
+.daybook-w-300 {
+    width: 300px;
+    min-width: 300px;
+}
+:host ::ng-deep .daybook-table {
+    tr.mat-row,
+    tr.mat-footer-row {
+        border-top: 1px solid var(--border-color);
+    }
+    td.mat-mdc-cell {
+        border-top: 1px solid var(--border-color);
+    }
+    .nested-table {
+        > tbody {
+            tr {
+                td {
+                    border: 0 !important;
+                    padding: 8px 0;
+                }
+                &:first-child {
+                    border-top: none !important;
+                }
+            }
+        }
+    }
+}

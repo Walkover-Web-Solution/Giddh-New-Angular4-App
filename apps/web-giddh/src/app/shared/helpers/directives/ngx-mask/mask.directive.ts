@@ -9,6 +9,7 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../../store';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
+import { filter, includes, indexOf, isArray, map, slice, startsWith } from '../../../../lodash-optimized';
 
 const unSupportedPrefixAndSuffix = [
     {

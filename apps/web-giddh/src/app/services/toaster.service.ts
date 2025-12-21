@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { APP_DEFAULT_TITLE, DEFAULT_TOASTER_OPTIONS, DEFAULT_TOASTER_OPTIONS_WITH_HTML } from '../app.constant';
 import { ToastrService } from 'ngx-toastr';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { SnackBarComponent } from '../theme/snackbar/snackbar.component';
+// import { SnackbarComponent } from '../theme/snackbar/snackbar.component';
 
 @Injectable()
 export class ToasterService {
@@ -62,11 +62,12 @@ export class ToasterService {
      * @memberof ToasterService
      */
     public showSnackBar(type: string, message: string, title: string = APP_DEFAULT_TITLE): void {
-        this.snackBar.openFromComponent(SnackBarComponent, {
-            data: { title: title, message: message },
-            horizontalPosition: "center",
-            verticalPosition: "top",
-            panelClass: type
-        });
+        // this.snackBar.openFromComponent(SnackbarComponent, {
+        //     data: { title: title, message: message },
+        //     horizontalPosition: "center",
+        //     verticalPosition: "top",
+        //     panelClass: type
+        // });
+        console.log(`${type}: ${title} - ${message}`);
     }
 }

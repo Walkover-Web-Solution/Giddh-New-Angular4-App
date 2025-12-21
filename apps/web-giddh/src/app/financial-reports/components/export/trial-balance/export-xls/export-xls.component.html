@@ -1,0 +1,21 @@
+<div appTranslate [file]="'trial-profit-balance/export'" (localeData)="localeData = $event">
+    <a href="javascript:void(0);" aria-label="download" [matMenuTriggerFor]="xlsDownloadMenu"
+        class="cursor-pointer new-icon-img">
+        <img [src]="imgPath" alt="download img" />
+    </a>
+    <!-- Menu -->
+    <mat-menu #xlsDownloadMenu="matMenu" xPosition="before" yPosition="below">
+        <button mat-menu-item (click)="downloadTbXls('main-group')" aria-label="report">
+            {{ localeData?.xls?.main_group_report }}
+        </button>
+        <button mat-menu-item (click)="downloadTbXls('group')" aria-label="downloadreport">
+            {{ localeData?.xls?.all_group_report }}
+        </button>
+        <button mat-menu-item (click)="downloadTbXls('account')" aria-label="account">
+            {{ localeData?.xls?.all_account_report }}
+        </button>
+        <button mat-menu-item (click)="downloadTbXls('all')" aria-label="report">
+            {{ localeData?.xls?.complete_report }}
+        </button>
+    </mat-menu>
+</div>

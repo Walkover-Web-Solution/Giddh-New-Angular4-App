@@ -4,6 +4,7 @@ import { OrganizationType } from '../models/user-login-state';
 import { RESTRICTED_BRANCH_ROUTES } from '../app.constant';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
+import { includes } from '../lodash-optimized';
 
 @Injectable()
 export class NeedsAuthorization {

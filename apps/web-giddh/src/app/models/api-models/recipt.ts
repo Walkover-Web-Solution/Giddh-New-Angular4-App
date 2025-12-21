@@ -56,7 +56,7 @@ export interface ReceiptItem {
     eInvoiceStatusTooltip?: string;
     gainLoss?: number;
     exchangeRate?: number;
-    referenceVoucher?: any; // ReferenceVoucher interface - temporarily using any
+    // referenceVoucher?: ReferenceVoucher;
     adjustments?: any;
 }
 

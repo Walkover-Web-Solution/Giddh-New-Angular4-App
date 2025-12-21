@@ -9,10 +9,9 @@ import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { CommonPaginatedRequest } from '../models/api-models/Invoice';
 import { ActionPettycashRequest, PettyCashReportResponse, PettyCashResonse } from '../models/api-models/Expences';
 import { EXPENSE_API } from './apiurls/expense.api';
+import { get } from '../lodash-optimized';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class ExpenseService {
     private companyUniqueName: string;
 

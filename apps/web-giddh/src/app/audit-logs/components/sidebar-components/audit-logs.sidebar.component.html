@@ -1,0 +1,122 @@
+<p class="page-title ml-0 mb-3">{{ localeData?.filter_heading }}</p>
+<div class="clear-both mt-3">
+    <label>{{ localeData?.filter_by_label }}</label>
+    <reactive-dropdown-field
+        [options]="vm.dateOptions"
+        [placeholder]="commonLocaleData?.app_select_option"
+        [(ngModel)]="vm.selectedDateOption"
+        [name]="'selectedDateOption'"
+        (onClear)="resetFilterBy()">
+    </reactive-dropdown-field>
+</div>
+<div class="clear-both mt-3" *ngIf="vm.selectedDateOption == '1'">
+    <label>{{ localeData?.from_date }}</label>
+    <giddh-datepicker
+        name="from"
+        [placeholder]="giddhDateFormat"
+        [(ngModel)]="vm.selectedFromDate"
+        [appearance]="'outline'"
+        class="w-100"
+    ></giddh-datepicker>
+</div>
+<div class="clear-both mt-3" *ngIf="vm.selectedDateOption == '1'">
+    <label>{{ localeData?.to_date }}</label>
+    <giddh-datepicker
+        name="to"
+        [placeholder]="giddhDateFormat"
+        [(ngModel)]="vm.selectedToDate"
+        [appearance]="'outline'"
+        class="w-100"
+    ></giddh-datepicker>
+</div>
+<div class="clear-both mt-3" *ngIf="vm.selectedDateOption == '0'">
+    <div class="mb-4 select-log">
+        <mat-radio-group name="entryDate" [(ngModel)]="vm.logOrEntry" class="d-flex">
+            <mat-radio-button color="primary" value="entryDate" class="mr-3">
+                {{ localeData?.entry_date }}
+            </mat-radio-button>
+            <mat-radio-button color="primary" value="logDate">
+                {{ localeData?.log_date }}
+            </mat-radio-button>
+        </mat-radio-group>
+        <br />
+    </div>
+    <div class="input-group">
+        <giddh-datepicker
+            name="logdate"
+            [placeholder]="giddhDateFormat"
+            [(ngModel)]="vm.selectedLogDate"
+            [appearance]="'outline'"
+            class="w-100"
+        ></giddh-datepicker>
+    </div>
+</div>
+
+<div class="clear-both mt-3">
+    <label>{{ localeData?.select_operation_label }}</label>
+    <reactive-dropdown-field
+        [options]="vm.filters"
+        [placeholder]="commonLocaleData?.app_select_option"
+        [(ngModel)]="vm.selectedOperation"
+        [name]="'selectedOperation'"
+        (onClear)="resetOperation()">
+    </reactive-dropdown-field>
+</div>
+
+<div class="clear-both mt-3">
+    <label>{{ commonLocaleData?.app_select_entity }}</label>
+    <reactive-dropdown-field
+        [options]="vm.entities"
+        [placeholder]="commonLocaleData?.app_select_option"
+        [(ngModel)]="vm.selectedEntity"
+        [name]="'selectedEntity'"
+        (onClear)="resetEntity()">
+    </reactive-dropdown-field>
+</div>
+
+<div class="clear-both mt-3">
+    <label>{{ commonLocaleData?.app_select_account }}</label>
+    <reactive-dropdown-field
+        [options]="vm.accounts$ | async"
+        [placeholder]="commonLocaleData?.app_select_option"
+        [(ngModel)]="vm.selectedAccountUnq"
+        [enableDynamicSearch]="true"
+        [isPaginationEnabled]="true"
+        (scrollEnd)="handleScrollEnd()"
+        (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
+        [name]="'selectedAccountUnq'"
+        (onClear)="resetAccount()">
+    </reactive-dropdown-field>
+</div>
+
+<div class="clear-both mt-3">
+    <label>{{ localeData?.select_group_label }}</label>
+    <reactive-dropdown-field
+        [options]="vm.groups$ | async"
+        [placeholder]="commonLocaleData?.app_select_option"
+        [(ngModel)]="vm.selectedGroupUnq"
+        [enableDynamicSearch]="true"
+        [isPaginationEnabled]="true"
+        (scrollEnd)="handleGroupScrollEnd()"
+        (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)"
+        [name]="'selectedGroupUnq'"
+        (onClear)="resetGroup()">
+    </reactive-dropdown-field>
+</div>
+<div class="clear-both mt-3">
+    <label>{{ localeData?.select_user_label }}</label>
+    <reactive-dropdown-field
+        [options]="vm.users$ | async"
+        [placeholder]="commonLocaleData?.app_select_option"
+        [(ngModel)]="vm.selectedUserUnq"
+        [name]="'selectedUserUnq'"
+        (onClear)="resetUser()">
+    </reactive-dropdown-field>
+</div>
+<button mat-raised-button color="primary" class="pull-left mt-3" [ladda]="vm.getLogsInprocess$ | async" (click)="getLogfilters()">
+    {{ localeData?.get_logs }}
+</button>
+<button mat-stroked-button class="pull-left mt-3 ml-1" (click)="resetFilters()">
+    {{ commonLocaleData?.app_reset }}
+</button>
+<br />

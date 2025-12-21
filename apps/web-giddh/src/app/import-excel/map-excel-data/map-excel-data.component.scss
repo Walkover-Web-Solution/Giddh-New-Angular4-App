@@ -1,0 +1,20 @@
+input.green-checkbox[type="checkbox"]:before {
+    border: 2px solid var(--color-white) !important;
+    border-top-style: none !important;
+    border-right-style: none !important;
+    left: 0px !important;
+}
+
+input.green-checkbox[type="checkbox"]:checked:after {
+    background-color: var(--color-green) !important;
+}
+
+.select-field-width {
+    width: 100% !important;
+}
+
+@media (max-width: 1140px) {
+    .left-bar-width {
+        width: 80%;
+    }
+}

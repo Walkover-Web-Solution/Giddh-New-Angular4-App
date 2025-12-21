@@ -2,8 +2,8 @@ import { Directive, HostListener, Input } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 
 @Directive({
-    selector: '[appTextCaseChange]',
-    
+    selector: '[textCaseChangeDirective]',
+
   standalone: false,
 })
 export class TextCaseChangeDirective {

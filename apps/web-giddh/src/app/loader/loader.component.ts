@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { NavigationCancel, NavigationEnd, NavigationStart, RouteConfigLoadEnd, Router } from '@angular/router';
-import { Observable, of, ReplaySubject } from 'rxjs';
+import { Observable, of, ReplaySubject, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { LoaderState } from './loader';
 import { LoaderService } from './loader.service';
@@ -17,6 +17,10 @@ export class LoaderComponent implements OnInit, OnDestroy {
     public showLoader: boolean = false;
     public navigationEnd$: Observable<boolean> = of(true);
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
 
     constructor(
         private loaderService: LoaderService,
@@ -53,4 +57,15 @@ export class LoaderComponent implements OnInit, OnDestroy {
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

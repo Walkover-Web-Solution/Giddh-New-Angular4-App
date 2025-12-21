@@ -10,15 +10,14 @@ import { ACCOUNT_STATEMENT_API, CONTACT_API } from './apiurls/contact.api';
 import { ContactAdvanceSearchModal, SendBulkEmailTemplateRequest } from "../models/api-models/Contact";
 import { PAGINATION_LIMIT } from '../app.constant';
 import { AccountArchivedStatusEnum } from '../shared/Enums/common.enum';
+import { concat, get, keys } from '../lodash-optimized';
 
 interface IBankRefreshResponse {
     success: boolean;
     message: string;
 }
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class ContactService {
     private companyUniqueName: string;
 

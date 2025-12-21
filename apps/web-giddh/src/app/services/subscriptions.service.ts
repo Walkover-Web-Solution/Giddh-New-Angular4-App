@@ -10,24 +10,10 @@ import * as dayjs from 'dayjs';
 import { SubscriptionsUser } from '../models/api-models/Subscriptions';
 import { GIDDH_DATE_FORMAT } from '../shared/helpers/defaultDateFormat';
 import { GeneralService } from './general.service';
-// COMMENTED OUT - MISSING: import { TaxSupportedCountries, TaxType } from '../vouchers/utility/vouchers.const';
+import { TaxSupportedCountries, TaxType } from '../vouchers/utility/vouchers.const';
+import { get } from '../lodash-optimized';
 
-// Placeholder Tax Types - replace when original types are available
-enum TaxSupportedCountries {
-    IN = 'IN',
-    UAE = 'UAE',
-    UK = 'UK'
-}
-
-enum TaxType {
-    GST = 'GST',
-    TRN = 'TRN',
-    VAT = 'VAT'
-}
-
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class SubscriptionsService {
     public dayjs = dayjs;
 

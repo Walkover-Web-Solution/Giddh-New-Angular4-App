@@ -1,0 +1,73 @@
+<button
+    mat-icon-button
+    [ngClass]="useRowIndexVisibility ? { 'invisible': activeRowIndex !== rowIndex } : {}"
+    [matMenuTriggerFor]="menu"
+    aria-label="actions"
+>
+    <span class="icon-dots-three-vertical font-size-15"></span>
+</button>
+
+<mat-menu #menu="matMenu">
+    <div class="account-detail-custom-header">
+        <div class="d-flex p-0">
+            <div class="account-detail-padding flex-fill border-right-none">
+                <p class="account-detail-custom-title word-break font-size-15 mt-1">
+                    <span (click)="performActions(4, account)">
+                        {{ account?.name }}
+                    </span>
+                </p>
+            </div>
+            <a (click)="performActions(4, account)" class="cursor-pointer pl-1 pt-1">
+                <i class="icon-edit-pencil font-size-16 pr-1 cursor-pointer"></i>
+            </a>
+        </div>
+        <div class="custom-detail">
+            <p>{{ account?.mobileNo }}</p>
+            <p>{{ account?.email }}</p>
+            <p>{{ account?.gstIn }}</p>
+        </div>
+    </div>
+
+    <button
+        mat-menu-item
+        *ngIf="showGotoLedger && !isTabletScreen"
+        class="menu-table-item"
+        (click)="performActions(1, account)"
+        aria-label="ledger"
+    >
+        {{ commonLocaleData?.app_goto_ledger }}
+    </button>
+
+    <button
+        mat-menu-item
+        *ngIf="showGenerateInvoice && !isCompany"
+        class="menu-table-item"
+        (click)="performActions(2, account)"
+        aria-label="generate invoice"
+    >
+        {{ commonLocaleData?.app_generate_invoice }}
+    </button>
+
+    <button
+        mat-menu-item
+        *ngIf="showSendEmail"
+        class="menu-table-item"
+        (click)="performActions(3, account)"
+        aria-label="send email"
+    >
+        {{ commonLocaleData?.app_send_email }}
+    </button>
+</mat-menu>
+
+<ng-template #asideMenuTemplate>
+    <aside-menu-account
+        [activeGroupUniqueName]="selectedGroupForCreateAcc"
+        [activeAccountDetails]="activeAccountDetails"
+        [isUpdateAccount]="isUpdateAccount"
+        [commonLocaleData]="commonLocaleData"
+        (closeAsideEvent)="asideMenuDialogRef?.close()"
+        (getUpdateList)="getUpdatedList($event)"
+        [isActionMenu]="isActionMenu"
+    >
+    </aside-menu-account>
+</ng-template>

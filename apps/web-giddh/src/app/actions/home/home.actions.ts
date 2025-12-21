@@ -1,11 +1,11 @@
-import { Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Action } from '@ngrx/store';
 import { HOME } from './home.const';
 import { BaseResponse } from '../../models/api-models/BaseResponse';
 import { ToasterService } from '../../services/toaster.service';
-// COMMENTED OUT - MISSING: import { DashboardService } from '../../services/dashboard.service';
+import { DashboardService } from '../../services/dashboard.service';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { BankAccountsResponse, GraphTypesResponse } from '../../models/api-models/Dashboard';
 import { CustomActions } from '../../store/custom-actions';
@@ -18,8 +18,7 @@ export class HomeActions {
         .pipe(
             ofType(HOME.GET_RATIO_ANALYSIS),
             switchMap((action: CustomActions) => {
-                // COMMENTED OUT - MISSING: return this._dashboardService.GetRationAnalysis(action.payload.date, action.payload.refresh);
-                return of({ status: 'success', body: [] });
+                return this._dashboardService.GetRationAnalysis(action.payload.date, action.payload.refresh);
             }), map((res) => this.validateResponse<BankAccountsResponse[], string>(res, {
                 type: HOME.GET_RATIO_ANALYSIS_RESPONSE,
                 payload: res
@@ -31,13 +30,10 @@ export class HomeActions {
     public getRevenueGraphTypes$: Observable<Action> = createEffect(() => this.action$
         .pipe(
             ofType(HOME.GET_REVENUE_GRAPH_TYPES),
-            switchMap((action: CustomActions) =>
-                // COMMENTED OUT - MISSING: this._dashboardService.GetRevenueGraphTypes()
-                of({ status: 'success', body: [] })
-            ),
+            switchMap((action: CustomActions) => this._dashboardService.GetRevenueGraphTypes()),
             map(response => this.getRevenueGraphTypesResponse(response))));
 
-    constructor(private action$: Actions, private _toasty: ToasterService /* , private _dashboardService: DashboardService */) {
+    constructor(private action$: Actions, private _toasty: ToasterService, private _dashboardService: DashboardService) {
 
     }
 

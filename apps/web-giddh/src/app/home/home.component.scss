@@ -1,0 +1,101 @@
+.dashboard-option {
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    margin: 0 -15px;
+    flex-direction: row;
+
+}
+
+.warning-msg-row {
+    background-color: var(--color-white);
+    padding: 9px;
+    margin-bottom: 10px;
+    font-size: var(--font-size-15);
+    box-shadow: 1px 1px 3px var(--color-shadow-light);
+}
+
+.dashboard-container {
+    max-width: 1200px;
+    width: 100%;
+}
+
+span
+.icon-traingle-info {
+    color: var(--color-red);
+    font-size: 15px;
+    margin-right: 10px;
+}
+
+span
+.icon-info-icon {
+    color: var(--color-medium-gray);
+    font-size: var(--font-size-16);
+    margin-right: 10px;
+}
+
+.dashboard-notification {
+    margin-bottom: 20px;
+}
+
+.panel-heading {
+    padding: 15px 12px;
+    font-size: var(--font-size-15);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    strong{
+        letter-spacing: -1px;
+    }
+}
+
+.basic > tbody > tr:hover td {
+    background: transparent;
+}
+
+.form-control:focus {
+    border-color: var(--theme-primary-color) !important;
+}
+
+.no-data-available {
+    display: flex;
+    height: 181px;
+    justify-content: center;
+    align-items: center;
+}
+
+.menu-trigger-btn {
+    display: flex;
+    align-items: flex-start;
+    height: 40px;
+
+.icon-arrow-down {
+        line-height: 22px !important;
+    }
+}
+.dashboard-doughnut-chart-container {
+    height: 150px;
+    min-width: 220px;
+}
+
+.dashboard-line-chart-container {
+    height: 300px;
+    max-width: 660px;
+}
+
+.hide-chart {
+    display: none !important;
+}
+@media (max-width: 1500px) {
+    .dashboard-container {
+        margin-bottom: 40px;
+    }
+}
+
+@media (max-width: 1299px) {
+    .dashboard-container {
+        mat-card {
+            min-height: 446px;
+        }
+    }
+}

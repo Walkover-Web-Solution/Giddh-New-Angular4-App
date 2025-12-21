@@ -9,17 +9,10 @@ import { AccountDetails, BalanceSheetRequest, GetCogsRequest, GetCogsResponse, P
 import { saveAs } from 'file-saver';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
-// COMMENTED OUT - MISSING: import { ReportType } from '../multi-currency-reports/multi-currency.const';
+import { ReportType } from '../multi-currency-reports/multi-currency.const';
+import { filter, get, keys } from '../lodash-optimized';
 
-// Placeholder ReportType - replace when original module is available
-enum ReportType {
-    TRIAL_BALANCE = 'TRIAL_BALANCE',
-    PROFIT_LOSS = 'PROFIT_LOSS'
-}
-
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class TlPlService {
     private companyUniqueName: string;
     public isReportTailed$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(null);

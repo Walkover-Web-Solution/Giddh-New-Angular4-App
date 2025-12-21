@@ -6,17 +6,10 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatDialogModule } from "@angular/material/dialog";
 
 @NgModule({
-    declarations: [
-        ConfirmModalComponent
-    ],
-    imports: [
-        CommonModule,
-        MatButtonModule,
-        MatDialogModule
-    ],
+    declarations: [ConfirmModalComponent],
+    imports: [CommonModule, MatButtonModule, MatDialogModule],
     exports: [
         ConfirmModalComponent
-    
     ],
 })
 export class ConfirmModalModule {

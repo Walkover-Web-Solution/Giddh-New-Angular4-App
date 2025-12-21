@@ -17,16 +17,16 @@ import {
     MoveGroupRequest,
     MoveGroupResponse
 } from '../../models/api-models/Group';
-import { cloneDeep } from '../../lodash-optimized';
-import { GroupWithAccountsAction } from '../../actions/clean-constants';
+import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { IGroupsWithAccounts } from '../../models/interfaces/groups-with-accounts.interface';
-import { AccountsAction } from '../../actions/clean-constants';
+import { AccountsAction } from '../../actions/accounts.actions';
 import { IAccountsInfo } from '../../models/interfaces/account-info.interface';
 import { CustomActions } from '../custom-actions';
 import { COMMON_ACTIONS } from '../../actions/common.const';
 import { INameUniqueName } from '../../models/api-models/Inventory';
-import { SALES_ACTIONS } from '../../actions/clean-constants';
+import { SALES_ACTIONS } from '../../actions/sales/sales.const';
 import { CurrentPage } from '../../models/api-models/Common';
+import { cloneDeep, filter, findIndex, forEach, isArray, map } from '../../lodash-optimized';
 
 export interface GeneralState {
     groupswithaccounts: GroupsWithAccountsResponse[];
@@ -97,7 +97,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
         //  accounts actions
         case AccountsAction.CREATE_ACCOUNT_RESPONSEV2: {
             let accountData: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
-            let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+            let groupArray: GroupsWithAccountsResponse[] = cloneDeep(state.groupswithaccounts);
             if (accountData?.status === 'success' && groupArray) {
                 addCreatedAccountFunc(groupArray, accountData.body, accountData.queryString?.groupUniqueName, false);
                 return {
@@ -110,7 +110,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
         case AccountsAction.UPDATE_ACCOUNT_RESPONSEV2: {
             let updatedAccount: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
             if (updatedAccount?.status === 'success') {
-                let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+                let groupArray: GroupsWithAccountsResponse[] = cloneDeep(state.groupswithaccounts);
                 if (groupArray) {
                     UpdateAccountFunc(groupArray, updatedAccount.body, updatedAccount.queryString?.groupUniqueName, updatedAccount.queryString.accountUniqueName, false);
                     return {
@@ -125,7 +125,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
         //  add item to flatten accounts as we are adding item from side bar account
         case SALES_ACTIONS.ADD_ACCOUNT_DETAILS_RESPONSE: {
             let accountData: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
-            let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+            let groupArray: GroupsWithAccountsResponse[] = cloneDeep(state.groupswithaccounts);
             if (accountData?.status === 'success' && groupArray) {
                 addCreatedAccountFunc(groupArray, accountData.body, accountData.queryString?.groupUniqueName, false);
 
@@ -153,7 +153,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
         case SALES_ACTIONS.UPDATE_ACCOUNT_DETAILS_RESPONSE: {
             let updatedAccount: BaseResponse<AccountResponseV2, AccountRequestV2> = action.payload;
             if (updatedAccount?.status === 'success') {
-                let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+                let groupArray: GroupsWithAccountsResponse[] = cloneDeep(state.groupswithaccounts);
                 if (groupArray) {
                     UpdateAccountFunc(groupArray, updatedAccount.body, updatedAccount.queryString?.groupUniqueName, updatedAccount.queryString.accountUniqueName, false);
                     return {
@@ -168,7 +168,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
         case AccountsAction.DELETE_ACCOUNT_RESPONSE: {
             let d: BaseResponse<string, any> = action.payload;
             if (d?.status === 'success') {
-                let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+                let groupArray: GroupsWithAccountsResponse[] = cloneDeep(state.groupswithaccounts);
                 if (groupArray) {
                     removeAccountFunc(groupArray, action?.payload?.request?.groupUniqueName, d.request.accountUniqueName, null);
                     return {
@@ -182,7 +182,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
         case AccountsAction.MOVE_ACCOUNT_RESPONSE: {
             let mAcc: BaseResponse<string, AccountMoveRequest> = action.payload;
             if (mAcc?.status === 'success') {
-                let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+                let groupArray: GroupsWithAccountsResponse[] = cloneDeep(state.groupswithaccounts);
                 if (groupArray) {
                     let deletedItem = removeAccountFunc(groupArray, action?.payload?.queryString?.activeGroupUniqueName, mAcc.queryString.accountUniqueName, null);
                     addNewAccountFunc(groupArray, deletedItem, mAcc.request?.uniqueName, false);
@@ -197,7 +197,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
         case AccountsAction.MERGE_ACCOUNT_RESPONSE: {
             let dd: BaseResponse<string, AccountMergeRequest[]> = action.payload;
             if (dd?.status === 'success') {
-                let groupArray: GroupsWithAccountsResponse[] = _.cloneDeep(state.groupswithaccounts);
+                let groupArray: GroupsWithAccountsResponse[] = cloneDeep(state.groupswithaccounts);
                 if (groupArray) {
                     dd.request.forEach(f => {
                         findAndRemoveAccountFunc(groupArray, f?.uniqueName, false);
@@ -214,7 +214,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
             }
         }
         case GENERAL_ACTIONS.CLOSE_ADD_AND_MANAGE: {
-            let newState = _.cloneDeep(state);
+            let newState = cloneDeep(state);
             newState.addAndManageClosed = !newState.addAndManageClosed;
             return Object.assign({}, state, newState);
         }
@@ -514,7 +514,7 @@ const addNewAccountFunc = (groups: IGroupsWithAccounts[], aData: IAccountsInfo, 
     return result;
 };
 
-const findAndRemoveAccountFunc = (groups: IGroupsWithAccounts[], uniqueName: string, result: boolean): any => {
+const findAndRemoveAccountFunc = (groups: IGroupsWithAccounts[], uniqueName: string, result: boolean) => {
     for (let grp of groups) {
         let accIndex = grp.accounts?.findIndex(f => f?.uniqueName === uniqueName);
 

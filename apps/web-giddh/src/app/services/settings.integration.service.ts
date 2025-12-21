@@ -9,6 +9,7 @@ import { SETTINGS_INTEGRATION_API } from './apiurls/settings.integration.api';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { HttpMethod } from '../app.constant';
+import { get } from '../lodash-optimized';
 
 @Injectable()
 export class SettingsIntegrationService {

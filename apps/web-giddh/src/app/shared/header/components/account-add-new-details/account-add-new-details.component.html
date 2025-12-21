@@ -1,0 +1,912 @@
+<div
+    appTranslate
+    [file]="'accounts'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
+>
+    <form class="create-acc-form" [formGroup]="addAccountForm" (ngSubmit)="submit()">
+        <div>
+            <div class="upper-form">
+                <div class="row pb-4">
+                    <div class="col-sm-4">
+                        <reactive-dropdown-field
+                            [label]="commonLocaleData?.app_group"
+                            [placeholder]="localeData?.select_group_label"
+                            [name]="'activeGroup'"
+                            [id]="'activeGroup'"
+                            [options]="flatGroupsOptions"
+                            (scrollEnd)="handleGroupScrollEnd()"
+                            [enableDynamicSearch]="true"
+                            [isPaginationEnabled]="true"
+                            (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)"
+                            formControlName="activeGroupUniqueName"
+                            [required]="true"
+                            [showError]="!isValidForm && !addAccountForm.get('activeGroupUniqueName')?.value"
+                            (selectedOption)="selectGroup($event); openConfirmLeaveDialog()"
+                        >
+                        </reactive-dropdown-field>
+                    </div>
+                    <div class="col-sm-8">
+                        <input-field
+                            [name]="'accountName'"
+                            [id]="'accountName'"
+                            [label]="localeData?.account_name"
+                            [placeholder]="localeData?.account_name"
+                            [type]="'text'"
+                            formControlName="name"
+                            [autoFocus]="true"
+                            [required]="true"
+                            [showError]="!isValidForm && !addAccountForm.get('name')?.value"
+                            (change)="openConfirmLeaveDialog()"
+                        >
+                        </input-field>
+                    </div>
+                </div>
+                <div class="row pb-4">
+                    <div class="col-sm-4" formGroupName="country">
+                        <reactive-dropdown-field
+                            [label]="commonLocaleData?.app_country"
+                            [placeholder]="commonLocaleData?.app_select"
+                            [labelValue]="selectedCountry"
+                            [options]="countrySource"
+                            formControlName="countryCode"
+                            [required]="true"
+                            [showError]="!isValidForm && !addAccountForm.get('country').get('countryCode')?.value"
+                            (selectedOption)="selectCountry($event); openConfirmLeaveDialog()"
+                        >
+                        </reactive-dropdown-field>
+                    </div>
+                    <div class="col-sm-4">
+                        <reactive-dropdown-field
+                            [label]="localeData?.currency"
+                            [placeholder]="commonLocaleData?.app_select"
+                            [labelValue]="addAccountForm.get('currency').value ?? ''"
+                            [options]="currencySource$ | async"
+                            formControlName="currency"
+                            (change)="openConfirmLeaveDialog()"
+                        >
+                        </reactive-dropdown-field>
+                    </div>
+                    <div class="col-sm-4">
+                        <div
+                            [ngClass]="{ 'input-group': addAccountForm.get('openingBalance')?.value > 0 }"
+                            class="ml-0"
+                        >
+                            <input-field
+                                [name]="'number'"
+                                [id]="'numbertel'"
+                                class="flex-grow-1"
+                                [cssClass]="'text-right'"
+                                [ngClass]="{ 'w100 remove-right-border-radius': addAccountForm.get('openingBalance')?.value > 0 }"
+                                #autoFocusUpdate
+                                [placeholder]="'0.00'"
+                                [label]="localeData?.opening_balance"
+                                [type]="'text'"
+                                formControlName="openingBalance"
+                                [readonly]="company?.isActive"
+                                [min]="0"
+                                [allowDecimalDigitsOnly]="true"
+                                (change)="openConfirmLeaveDialog()"
+                            >
+                            </input-field>
+                            <div class="d-flex">
+                                <div
+                                    class="input-group-addon d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1"
+                                    (click)="openingBalanceTypeChanged('DEBIT')"
+                                    [ngClass]="{
+                                        'active-toggle-btn':
+                                            addAccountForm.get('openingBalanceType')?.value === 'DEBIT',
+                                        'cursor-pointer': addAccountForm.get('openingBalance')?.value > 0
+                                    }"
+                                    *ngIf="
+                                        addAccountForm.get('openingBalance')?.value > 0
+                                    "
+                                >
+                                    {{ commonLocaleData?.app_dr?.toUpperCase() }}
+                                </div>
+                                <div
+                                    class="input-group-addon only-right-radius d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1"
+                                    (click)="openingBalanceTypeChanged('CREDIT')"
+                                    [ngClass]="{
+                                        'active-toggle-btn':
+                                            addAccountForm.get('openingBalanceType')?.value === 'CREDIT',
+                                        'cursor-pointer':
+                                            addAccountForm.get('openingBalance')?.value > 0 ||
+                                            addAccountForm.get('foreignOpeningBalance')?.value > 0
+                                    }"
+                                    *ngIf="
+                                        addAccountForm.get('openingBalance')?.value > 0
+                                    "
+                                >
+                                    {{ commonLocaleData?.app_cr?.toUpperCase() }}
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="company?.isActive" class="d-flex justify-content-end">
+                            <span (click)="openBulkAddDialog()" class="font-size-14 cursor-pointer text-primary">{{
+                                localeData?.bulk_add
+                            }}</span>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    class="row pb-4"
+                >
+                    <!-- Sales Person -->
+                    <div class="col-sm-4">
+                        <reactive-dropdown-field
+                            formControlName="salesPersonUniqueName"
+                            [name]="'sales-person'"
+                            [label]="commonLocaleData?.app_sales_person"
+                            [labelValue]="addAccountForm.get('salesPersonName').value"
+                            [placeholder]="commonLocaleData?.app_sales_person_placeholder"
+                            [options]="salesPersonList$ | async"
+                            [showCreateNew]="true"
+                            [createNewText]="commonLocaleData?.app_create_new"
+                            (createOption)="openSalesPersonDialog()"
+                        ></reactive-dropdown-field>
+                    </div>
+                    <div class="col-sm-4" *ngIf="addAccountForm.get('currency')?.value !== companyCurrency">
+                        <div [ngClass]="{ 'input-group': addAccountForm.get('foreignOpeningBalance')?.value > 0 }" class="ml-0"
+                        >
+                            <input-field
+                                [name]="'number'"
+                                [id]="'accountnumber'"
+                                class="flex-grow-1"
+                                [cssClass]="'text-right'"
+                                [ngClass]="{ 'w100 remove-right-border-radius': addAccountForm.get('foreignOpeningBalance')?.value > 0 }"
+                                [label]="localeData?.foreign_opening_balance"
+                                [placeholder]="'0.00'"
+                                [type]="'text'"
+                                formControlName="foreignOpeningBalance"
+                                [readonly]="company?.isActive"
+                                [min]="0"
+                                [allowDecimalDigitsOnly]="true"
+                                (change)="openConfirmLeaveDialog()"
+                            >
+                            </input-field>
+                            <div class="d-flex">
+                                <div
+                                    class="input-group-addon d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1"
+                                    (click)="openingBalanceTypeChanged('DEBIT')"
+                                    [ngClass]="{
+                                        'active-toggle-btn':
+                                            addAccountForm.get('openingBalanceType')?.value === 'DEBIT',
+                                        'cursor-pointer':
+                                            addAccountForm.get('foreignOpeningBalance')?.value > 0
+                                    }"
+                                    *ngIf="addAccountForm.get('foreignOpeningBalance')?.value > 0"
+                                >
+                                    {{ commonLocaleData?.app_dr?.toUpperCase() }}
+                                </div>
+                                <div
+                                    class="input-group-addon only-right-radius d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1"
+                                    (click)="openingBalanceTypeChanged('CREDIT')"
+                                    [ngClass]="{
+                                        'active-toggle-btn':
+                                            addAccountForm.get('openingBalanceType')?.value === 'CREDIT',
+                                        'cursor-pointer':
+                                            addAccountForm.get('foreignOpeningBalance')?.value > 0
+                                    }"
+                                    *ngIf="addAccountForm.get('foreignOpeningBalance')?.value > 0"
+                                >
+                                    {{ commonLocaleData?.app_cr?.toUpperCase() }}
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="company?.isActive" class="d-flex justify-content-end">
+                            <span href="javascript:;" (click)="openBulkAddDialog()" class="font-size-14 cursor-pointer text-primary">{{
+                                localeData?.bulk_add
+                            }}</span>
+                        </div>
+                    </div>
+                </div>
+                <ng-container *ngIf="isHsnSacEnabledAcc">
+                    <div class="row pl-4 d-flex">
+                        <div class="d-flex align-items-center">
+                            <mat-radio-group name="hsnOrSac" formControlName="hsnOrSac">
+                                <mat-radio-button
+                                    color="primary"
+                                    value="hsn"
+                                    (change)="openConfirmLeaveDialog()"
+                                >
+                                    {{ commonLocaleData?.app_hsn }}
+                                </mat-radio-button>
+                                <mat-radio-button
+                                    color="primary"
+                                    value="sac"
+                                    (change)="openConfirmLeaveDialog()"
+                                >
+                                    {{ commonLocaleData?.app_sac }}
+                                </mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+                        <input-field
+                            class="ml-4"
+                            [label]="commonLocaleData?.app_hsn"
+                            [placeholder]="commonLocaleData?.app_hsn"
+                            [type]="'number'"
+                            formControlName="hsnNumber"
+                            [maxlength]="10"
+                            [allowDigitsOnly]="true"
+                            *ngIf="addAccountForm.get('hsnOrSac')?.value === 'hsn'"
+                            (change)="openConfirmLeaveDialog()"
+                        >
+                        </input-field>
+                        <input-field
+                            class="ml-4"
+                            [label]="commonLocaleData?.app_sac"
+                            [placeholder]="commonLocaleData?.app_sac"
+                            [type]="'number'"
+                            formControlName="sacNumber"
+                            [allowDigitsOnly]="true"
+                            [maxlength]="10"
+                            *ngIf="addAccountForm.get('hsnOrSac')?.value === 'sac'"
+                            (change)="openConfirmLeaveDialog()"
+                        >
+                        </input-field>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+        <mat-tab-group
+            mat-stretch-tabs="false"
+            mat-align-tabs="start"
+            [disablePagination]=true
+            [selectedIndex]="selectedTabIndex"
+            (selectedTabChange)="tabChanged($event)"
+        >
+            <mat-tab
+                [label]="localeData?.tabs?.address"
+                class="gstin-address"
+                *ngIf="!isHsnSacEnabledAcc"
+            >
+                <div class="pt-3 overflow-hidden" formArrayName="addresses">
+                    <ng-container
+                        *ngFor="
+                            let gst of addAccountForm.get('addresses')['controls']
+                                | slice : 0 : gstDetailsLength;
+                            let i = index;
+                            let firstItem = first;
+                            let lastItem = last
+                        "
+                        [formGroupName]="i"
+                    >
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="add-address-default">
+                                    <p class="text-black">{{ commonLocaleData?.app_address }} {{ i + 1 }}</p>
+                                    <div class="remove-radio-btn">
+                                        <span class="pr-2" *ngIf="!firstItem">
+                                            <button
+                                                mat-stroked-button
+                                                (click)="removeGstDetailsForm(i)"
+                                                class="bg-white"
+                                            >
+                                                <span class="text-red d-inline-flex align-items-center column-gap-1">
+                                                    <i class="icon-cross"></i>
+                                                    <span>{{ commonLocaleData?.app_remove }}</span>
+                                                </span>
+                                            </button>
+                                        </span>
+                                        <span
+                                            [matTooltip]="localeData?.address_tooltip"
+                                            class="pull-right is-default-address"
+                                            matTooltipPosition="left"
+                                        >
+                                            <mat-slide-toggle
+                                                aria-label="address"
+                                                formControlName="isDefault"
+                                                name="defaultGst_{{ i }}"
+                                                color="primary"
+                                                (change)="
+                                                    isDefaultAddressSelected(gst.get('isDefault')?.value, i)
+                                                "
+                                            >
+                                            </mat-slide-toggle>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="gstAddr">{{ commonLocaleData?.app_street }}</label>
+                                    <textarea
+                                        id="gstAddr"
+                                        name="gstAddr_{{ i }}"
+                                        formControlName="address"
+                                        rows="4"
+                                        cols="5"
+                                        maxlength="120"
+                                        class="form-control"
+                                        (change)="openConfirmLeaveDialog()"
+                                    ></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4 mb-4">
+                                <reactive-dropdown-field
+                                    *ngIf="(statesSource$ | async)?.length"
+                                    [label]="commonLocaleData?.app_state"
+                                    [placeholder]="commonLocaleData?.app_select"
+                                    [options]="statesSource$ | async"
+                                    [labelValue]="gst?.value.state.code && gst?.value.state.name ? gst.value.state.code + ' - ' + gst.value.state.name : ''"
+                                    formControlName="stateCode"
+                                    [required]="isStateRequired"
+                                    [showError]="!isValidForm && !addAccountForm.get('addresses')?.controls[i]?.get('stateCode')?.value && isStateRequired"
+                                    (selectedOption)="selectedState(gst, $event); openConfirmLeaveDialog()"
+                                    [disabled]="isGstValid && gst.value.gstNumber?.length >= 2"
+                                    [readonly]="isGstValid && gst.value.gstNumber?.length >= 2"
+                                    [matTooltip]="isGstValid && gst.value.gstNumber?.length >= 2 ? localeData?.change_gst_number_to_update_the_state : ''"
+                                    matTooltipPosition="above"
+                                >
+                                </reactive-dropdown-field>
+
+                                <reactive-dropdown-field
+                                    *ngIf="countyList?.length"
+                                    [label]="isUKCompany ? commonLocaleData?.app_county : commonLocaleData?.app_region"
+                                    [placeholder]="commonLocaleData?.app_select"
+                                    [options]="countyList"
+                                    formControlName="countyCode"
+                                    [required]="isStateRequired"
+                                    [showError]="!isValidForm && !addAccountForm.get('addresses')?.controls[i]?.get('countyCode')?.value && isStateRequired"
+                                    (selectedOption)="selectedCounty(gst, $event); openConfirmLeaveDialog()"
+                                >
+                                </reactive-dropdown-field>
+                            </div>
+                            <div class="col-sm-4 mb-4" *ngIf="GSTIN_OR_TRN">
+                                <input-field
+                                    [name]="'gstNumber'"
+                                    [label]="formFields['taxName']?.label"
+                                    [placeholder]="taxNamePlaceholder"
+                                    [type]="'text'"
+                                    #gstNumberField
+                                    [formControl]="addAccountForm.controls.addresses?.controls?.[i].controls?.gstNumber"
+                                    (input)="checkGstNumValidation(gstNumberField); getStateCode(gst)"
+                                    [maxlength]="15"
+                                    (change)="openConfirmLeaveDialog()"
+                                    [showError]="!isValidForm && !isGstValid"
+                                >
+                                </input-field>
+                            </div>
+                            <!-- static code added for the pincode -->
+                            <div class="col-sm-4 mb-4">
+                                <input-field
+                                    [name]="'pinCodeNum'"
+                                    [label]="zipCodeSupportedCountryList.includes(
+                                        activeCompany.countryV2.alpha2CountryCode
+                                    )
+                                        ? commonLocaleData?.app_zip_code
+                                        : commonLocaleData?.app_pin_code"
+                                    [placeholder]="zipCodeSupportedCountryList.includes(
+                                        activeCompany.countryV2.alpha2CountryCode
+                                    )
+                                        ? commonLocaleData?.app_enter_zip_code
+                                        : commonLocaleData?.app_enter_pin_code"
+                                    [type]="'number'"
+                                    [formControl]="addAccountForm.controls.addresses?.controls?.[i].controls?.pincode"
+                                    [allowDigitsOnly]="true"
+                                    (change)="openConfirmLeaveDialog()"
+                                >
+                                </input-field>
+                            </div>
+                            <!-- end -->
+                            <ng-container *ngIf="['IN', 'ZW', 'KE'].includes(companyCountry)">
+                                <div class="col-sm-4 mb-4" *ngIf="partyTypeSource.length">
+                                    <reactive-dropdown-field
+                                        [label]="localeData?.party_type"
+                                        [placeholder]="commonLocaleData?.app_select"
+                                        [options]="partyTypeSource"
+                                        [formControl]="addAccountForm.controls.addresses?.controls?.[i].controls?.partyType"
+                                        [labelValue]="partyTypeSource?.[0]?.label"
+                                        [required]="true"
+                                        [showError]="!isValidForm && !addAccountForm.get('addresses')?.controls[i]?.get('partyType')?.value"
+                                        (selectedOption)="openConfirmLeaveDialog()"
+                                    >
+                                    </reactive-dropdown-field>
+                                </div>
+                            </ng-container>
+                        </div>
+                        <div
+                            class="d-flex justify-content-between column-gap-15 pb-4"
+                            *ngIf="
+                                lastItem &&
+                                addAccountForm.get('addresses')['controls']?.length > 3 &&
+                                !moreGstDetailsVisible
+                            "
+                        >
+                            <button
+                                mat-raised-button
+                                color="primary"
+                                class="text-left w-50 pr-4"
+                                (click)="showMoreGst()"
+                                >{{ commonLocaleData?.app_show_all }} ({{
+                                    addAccountForm.get("addresses")["controls"]?.length
+                                }})
+                            </button>
+                            <button
+                                mat-raised-button
+                                color="primary"
+                                class="text-left w-50"
+                                (click)="showLessGst()"
+                            > {{ commonLocaleData?.app_show_less }}
+                            </button>
+                        </div>
+                        <div *ngIf="lastItem">
+                            <button
+                                mat-stroked-button
+                                (click)="addGstDetailsForm(gst.get('gstNumber')?.value); openConfirmLeaveDialog()"
+                            >
+                                + {{ localeData?.add_address }}
+                            </button>
+                            <ng-container *ngTemplateOutlet="templateForSaveButton"></ng-container>
+                        </div>
+                    </ng-container>
+                </div>
+            </mat-tab>
+
+            <mat-tab [label]="localeData?.tabs?.contact" class="contact-form-wrap">
+                <div class="pt-3 overflow-hidden pb-5">
+                    <div class="row pb-4">
+                        <div class="col-sm-6">
+                            <input-field
+                                [name]="'attention'"
+                                [id]="'attention'"
+                                [label]="localeData?.attention_to"
+                                [placeholder]="localeData?.attention_to"
+                                [type]="'text'"
+                                formControlName="attentionTo"
+                                (change)="openConfirmLeaveDialog()"
+                            >
+                            </input-field>
+                        </div>
+                        <div class="col-sm-6 mobile-number mobile-number-wrapper voucher-preview-edit">
+                             <mobile-number-input
+                                formControlName="mobileNo"
+                                [label]="commonLocaleData?.app_mobile_number"
+                                [placeholder]="localeData?.mobile_no_placeholder"
+                                [required]="false"
+                                [useImageFlags]="true"
+                                (change)="openConfirmLeaveDialog()"
+                            >
+                            </mobile-number-input>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <input-field
+                                    [name]="'emailId'"
+                                    [label]="commonLocaleData?.app_email_id"
+                                    [placeholder]="commonLocaleData?.app_email_id"
+                                    [type]="'email'"
+                                    formControlName="email"
+                                    (change)="openConfirmLeaveDialog()"
+                                >
+                                </input-field>
+                                <span
+                                    class="error-msg"
+                                    *ngIf="addAccountForm.get('email').dirty && addAccountForm.get('email').errors"
+                                    >{{ localeData?.email_id_error }}</span
+                                >
+                            </div>
+                        </div>
+                    </div>
+                    <ng-container *ngTemplateOutlet="templateForSaveButton"></ng-container>
+                </div>
+            </mat-tab>
+            <mat-tab
+                [label]="localeData?.tabs?.portal"
+                class="contact-form-wrap"
+                *ngIf="voucherApiVersion === 2 && (activeGroupUniqueName === accountingGroupEnum.SundryDebtors || isParentSundrydebtors)"
+            >
+                <div formArrayName="portalDomain" class="pt-3 overflow-hidden pb-5">
+                    <div
+                        class="row pb-4"
+                        *ngFor="let domain of addAccountForm?.get('portalDomain')['controls']; let i = index"
+                        [formGroupName]="i"
+                    >
+                        <div class="w-25 pl-3">
+                            <input-field
+                                [name]="'name_' + i"
+                                [id]="'name' + i"
+                                [label]="localeData?.portal_attention_to"
+                                [placeholder]="localeData?.portal_attention_to"
+                                [type]="'text'"
+                                (input)="portalIndex = i"
+                                formControlName="name"
+                            >
+                            </input-field>
+                        </div>
+                        <div class="pl-2">
+                            <input-field
+                                [name]="'email_' + i"
+                                [id]="'emailid' + i"
+                                [label]="commonLocaleData?.app_email_id"
+                                [placeholder]="commonLocaleData?.app_email_id"
+                                [type]="'email'"
+                                (input)="portalIndex = i"
+                                formControlName="email"
+                                [required]="!addAccountForm.get('portalDomain')?.controls[i]?.get('email')?.valid"
+                                [showError]="!isValidForm && !addAccountForm.get('portalDomain')?.controls[i]?.get('email')?.value && !addAccountForm.get('portalDomain')?.controls[i]?.get('email')?.valid"
+                            >
+                            </input-field>
+                            <span
+                                class="error-msg"
+                                *ngIf="
+                                    domain.get('email').dirty &&
+                                    (domain.get('email').hasError('required') || domain.get('email').invalid) &&
+                                    !domain.get('email').hasError('duplicate')
+                                "
+                                id="emailError_{{ i }}"
+                                >{{ localeData?.email_id_error }}
+                            </span>
+                            <span
+                                class="error-msg"
+                                *ngIf="domain.get('email').hasError('duplicate') && i === lastDuplicateEmailIndex"
+                                id="emailValidationError_{{ i }}"
+                                >{{ localeData?.duplicate_email }}
+                            </span>
+                        </div>
+                        <div class="w-30 pl-2 mobile-number mobile-number-wrapper voucher-preview-edit" [ngClass]="{'load-bar-wrap': isActivePortalMobileNumber === i}" (click)="isActivePortalMobileNumber = i">
+                           <mobile-number-input
+                                [id]="'mobile-input-' + i"
+                                [name]="'contactNo_' + i"
+                                formControlName="contactNo"
+                                [label]="commonLocaleData?.app_mobile_number"
+                                [placeholder]="localeData?.mobile_no_placeholder"
+                                [required]="false"
+                                [useImageFlags]="true"
+                                (input)="portalIndex = i"
+                                (change)="openConfirmLeaveDialog()"
+                            >
+                            </mobile-number-input>
+                            <span
+                                class="error-msg"
+                                *ngIf="domain.get('contactNo').hasError('duplicate') && i === lastDuplicateContactIndex"
+                                id="contactValidationError_{{ i }}"
+                                >{{ localeData?.duplicate_mobile_number }}
+                            </span>
+                        </div>
+                        <div class="pl-2 mt-1">
+                            <button
+                                mat-stroked-button
+                                color="primary"
+                                type="button"
+                                aria-label="delete icon"
+                                (click)="removePortalUser(i)"
+                            >
+                                <i class="icon-trash text-red"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <a href="javascript:void(0);" (click)="addNewPortalUser()">
+                                <i class="icon-plus"></i> {{ localeData?.portal_add_user }}
+                            </a>
+                        </div>
+                    </div>
+                    <ng-container *ngTemplateOutlet="templateForSaveButton"></ng-container>
+                </div>
+            </mat-tab>
+            <!-- bank details visible when sundry credtiors selected , right now is hide -->
+            <mat-tab [label]="localeData?.tabs?.bank_details" class="bank-details-form" *ngIf="showBankDetail">
+                <div class="pt-3 overflow-hidden">
+                    <div formArrayName="accountBankDetails">
+                        <div
+                            class="row"
+                            *ngFor="
+                                let bank of addAccountForm.get('accountBankDetails')['controls'];
+                                let i = index;
+                                let firstItem = first;
+                                let lastItem = last
+                            "
+                            [formGroupName]="i"
+                        >
+                            <div class="form-group col-sm-6" *ngIf="selectedCountryCode === 'AE'">
+                                <input-field
+                                    [type]="'text'"
+                                    [id]="'beneficiaryName' + i"
+                                    [placeholder]="localeData?.beneficiary_name_placeholder"
+                                    [label]="localeData?.beneficiary_name_label"
+                                    [name]="'beneficiaryName_' + i"
+                                    formControlName="beneficiaryName"
+                                >
+                                </input-field>
+                            </div>
+                            <div
+                                class="form-group"
+                                [ngClass]="{
+                                    'col-sm-5': selectedCountryCode !== 'AE',
+                                    'col-sm-6': selectedCountryCode === 'AE'
+                                }"
+                            >
+                                <input-field
+                                    [type]="'text'"
+                                    [placeholder]="localeData?.bank_name_placeholder"
+                                    [label]="localeData?.bank_name_label"
+                                    [name]="'bankName_' + i"
+                                    formControlName="bankName"
+                                >
+                                </input-field>
+                            </div>
+                            <div class="form-group col-sm-4" *ngIf="selectedCountryCode === 'AE'">
+                                <div>
+                                    <input-field
+                                        [type]="'text'"
+                                        [id]="'branchName' + i"
+                                        [placeholder]="localeData?.branch_name_placeholder"
+                                        [label]="localeData?.branch_name_label"
+                                        [name]="'branchName_' + i"
+                                        formControlName="branchName"
+                                    >
+                                    </input-field>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-4">
+                                <div>
+                                    <input-field
+                                        [type]="'text'"
+                                        [id]="'accountNum' + i"
+                                        #bankaccount
+                                        [placeholder]="commonLocaleData?.app_account_number_placeholder"
+                                        [label]="selectedCountryCode === 'IN' ? commonLocaleData?.app_account_number : commonLocaleData?.app_iban"
+                                        [maxlength]="bankIbanNumberMaxLength"
+                                        [minlength]="bankIbanNumberMinLength"
+                                        [name]="'accountNum_' + i"
+                                        (onChange)="showBankDetailsValidation(bankaccount, 'bankAccountNo')"
+                                        (keyup)="bankDetailsValidator(bankaccount, 'bankAccountNo')"
+                                        formControlName="bankAccountNo"
+                                    >
+                                    </input-field>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-4" *ngIf="selectedCountryCode === 'AE'">
+                                <input-field
+                                    [type]="'text'"
+                                    [id]="'swiftCode' + i"
+                                    [placeholder]="commonLocaleData?.app_swift_code_placeholder"
+                                    [label]="commonLocaleData?.app_swift_code_label"
+                                    [maxlength]="11"
+                                    [minlength]="8"
+                                    #swiftcode
+                                    [name]="'swiftCode_' + i"
+                                    (onChange)="showBankDetailsValidation(swiftcode, 'swiftCode')"
+                                    (keyup)="bankDetailsValidator(swiftcode, 'swiftCode')"
+                                    formControlName="swiftCode"
+                                >
+                                </input-field>
+                            </div>
+                            <div *ngIf="selectedCountryCode !== 'AE'" class="form-group col-sm-3">
+                                <input-field
+                                    [type]="'text'"
+                                    [id]="'ifsc' + i"
+                                    [placeholder]="commonLocaleData?.app_ifsc_code_placeholder"
+                                    [label]="commonLocaleData?.app_ifsc_code_label"
+                                    [name]="'ifsc_' + i"
+                                    formControlName="ifsc"
+                                >
+                                </input-field>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-container *ngTemplateOutlet="templateForSaveButton"></ng-container>
+                </div>
+            </mat-tab>
+
+            <mat-tab [label]="localeData?.tabs?.others" class="other-form-wrap">
+                <div class="pt-3 overflow-hidden">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <input-field
+                                [type]="'text'"
+                                [id]="'accUnqname'"
+                                [label]="localeData?.account_uniquename"
+                                [placeholder]="localeData?.account_uniquename"
+                                formControlName="uniqueName"
+                                [name]="'accUniqueName'"
+                            >
+                            </input-field>
+                        </div>
+
+                        <div class="form-group col-sm-6">
+                            <div
+                                [ngClass]="{
+                                    'input-group': addAccountForm.get('closingBalanceTriggerAmount')?.value > 0
+                                }"
+                            >
+                                <input-field
+                                    [type]="'text'"
+                                    [min]="'0'"
+                                    class="flex-grow-1"
+                                    [cssClass]="'text-right'"
+                                    [ngClass]="{'remove-right-border-radius': addAccountForm.get('closingBalanceTriggerAmount')?.value > 0 }"
+                                    formControlName="closingBalanceTriggerAmount"
+                                    [label]="localeData?.balance_for_trigger"
+                                    [placeholder]="
+                                        commonLocaleData?.app_numbers?.zero +
+                                        '' +
+                                        commonLocaleData?.app_numbers?.zero +
+                                        '.' +
+                                        commonLocaleData?.app_numbers?.zero +
+                                        '' +
+                                        commonLocaleData?.app_numbers?.zero
+                                    "
+                                    [allowDecimalDigitsOnly]="true"
+                                >
+                                </input-field>
+                                <div class="d-flex">
+                                    <div
+                                        class="input-group-addon d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1"
+                                        (click)="closingBalanceTypeChanged('DEBIT')"
+                                        [ngClass]="{
+                                            'active-toggle-btn':
+                                                addAccountForm.get('closingBalanceTriggerAmountType')?.value === 'DEBIT',
+                                            'cursor-pointer': addAccountForm.get('closingBalanceTriggerAmount')?.value > 0
+                                        }"
+                                        *ngIf="addAccountForm.get('closingBalanceTriggerAmount')?.value > 0"
+                                    >
+                                        {{ commonLocaleData?.app_dr?.toUpperCase() }}
+                                    </div>
+                                    <div
+                                        class="input-group-addon only-right-radius d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1"
+                                        (click)="closingBalanceTypeChanged('CREDIT')"
+                                        [ngClass]="{
+                                            'active-toggle-btn':
+                                                addAccountForm.get('closingBalanceTriggerAmountType')?.value === 'CREDIT',
+                                            'cursor-pointer': addAccountForm.get('closingBalanceTriggerAmount')?.value > 0
+                                        }"
+                                        *ngIf="addAccountForm.get('closingBalanceTriggerAmount')?.value > 0"
+                                    >
+                                        {{ commonLocaleData?.app_cr?.toUpperCase() }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row pb-4">
+                        <div class="col-sm-6">
+                            <input-field
+                                [name]="'duePeriod'"
+                                [label]="localeData?.default_expiry_days"
+                                [placeholder]="'00'"
+                                [type]="'text'"
+                                [maxlength]="3"
+                                [allowDigitsOnly]="true"
+                                formControlName="duePeriod"
+                                class="settings-field d-block expiry-days-input-width"
+                                [matSuffix]="commonLocaleData?.app_days"
+                            ></input-field>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label>{{ commonLocaleData?.app_note }}</label>
+                                <textarea
+                                    id="description"
+                                    rows="3 "
+                                    cols="4"
+                                    name="description"
+                                    formControlName="description"
+                                    class="form-control"
+                                ></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-container *ngTemplateOutlet="templateForSaveButton"></ng-container>
+                </div>
+            </mat-tab>
+
+            <mat-tab [label]="localeData?.tabs?.custom">
+                <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isCustomFieldLoading"></giddh-page-loader>
+                <div class="pt-3 overflow-hidden">
+                    <ng-container formArrayName="customFields">
+                        <ng-container
+                            *ngFor="let item of companyCustomFields; let index = index; let first = first; let last = last"
+                            [formGroupName]="index"
+                        >
+                            <ng-container
+                                *ngFor="
+                                    let customFieldsItem of addAccountForm.get('customFields')['controls'];
+                                    let index = index
+                                "
+                            >
+                                <div
+                                    class="row mb-3"
+                                    *ngIf="item?.uniqueName === customFieldsItem.get('uniqueName')?.value"
+                                >
+                                    <div class="col-lg-8">
+                                        <div class="name-of-field">
+                                            <label for="values"
+                                                >{{ item.fieldName }}
+                                                <span class="text-red" *ngIf="item.isMandatory">*</span>
+                                            </label>
+                                            <input-field
+                                                *ngIf="
+                                                    item.fieldType?.type === availableFieldTypes.String ||
+                                                    item.fieldType?.type === availableFieldTypes.Barcode
+                                                "
+                                                [type]="'text'"
+                                                [name]="'values' + index"
+                                                formControlName="value"
+                                                [cssClass]="'custom-field'"
+                                                [maxLength]="item.dataRange?.max"
+                                                [attr.pattern]="item.regex"
+                                                [required]="item.isMandatory"
+                                                [placeholder]="item.fieldInfo ? item.fieldInfo : ''"
+                                                [label]="localeData?.enter_value"
+                                                [showError]="!isValidForm && !addAccountForm.get('customFields')?.controls[i]?.get('value')?.value && item.isMandatory"
+                                            >
+                                            </input-field>
+                                            <input-field
+                                                *ngIf="item.fieldType?.type === availableFieldTypes.Number"
+                                                [type]="'number'"
+                                                [id]="'values'"
+                                                [name]="'values' + index"
+                                                formControlName="value"
+                                                [cssClass]="'custom-field'"
+                                                [min]="item.dataRange?.min"
+                                                [max]="item.dataRange?.max"
+                                                [allowDecimalDigitsOnly]="true"
+                                                [attr.pattern]="item.regex"
+                                                [required]="item.isMandatory"
+                                                [placeholder]="item.fieldInfo ? item.fieldInfo : ''"
+                                                [label]="localeData?.enter_value"
+                                                [showError]="!isValidForm && !addAccountForm.get('customFields')?.controls[i]?.get('value')?.value && item.isMandatory"
+                                            >
+                                            </input-field>
+                                            <mat-radio-group name="ownerPermission" [value]="customFieldsItem.get('value')?.value" *ngIf="item.fieldType?.type === availableFieldTypes.Boolean" class="d-flex flex-column">
+                                                <mat-radio-button
+                                                    color="primary"
+                                                    [value]="true"
+                                                    (change)="selectedBooleanCustomField($event.value, index)"
+                                                    >{{ commonLocaleData?.app_true?.toUpperCase() }}
+                                                </mat-radio-button>
+                                                <mat-radio-button
+                                                    color="primary"
+                                                    [value]="false"
+                                                    (change)="selectedBooleanCustomField($event.value, index)"
+                                                >
+                                                    {{ commonLocaleData?.app_false?.toUpperCase() }}
+                                                </mat-radio-button>
+                                            </mat-radio-group>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                    </ng-container>
+                </div>
+                <a
+                    href="javascript:;"
+                    class="btn-link"
+                    [routerLink]="'/pages/custom-fields/list'"
+                    *ngIf="!companyCustomFields?.length"
+                    (click)="closeMaster()"
+                    >{{ commonLocaleData?.app_create_custom_field }}</a
+                >
+            </mat-tab>
+        </mat-tab-group>
+        <ng-container *ngIf="isCustomSelectedTab">
+            <ng-container *ngTemplateOutlet="templateForSaveButton"></ng-container>
+        </ng-container>
+    </form>
+</div>
+<ng-template #templateForSaveButton>
+    <div class="row pt-4" *ngIf="voucherApiVersion === 2">
+        <div class="col-sm-12">
+            <button
+                mat-raised-button
+                color="primary"
+                aria-label="save"
+                type="submit"
+            >
+                {{ commonLocaleData?.app_save }}
+            </button>
+        </div>
+    </div>
+</ng-template>

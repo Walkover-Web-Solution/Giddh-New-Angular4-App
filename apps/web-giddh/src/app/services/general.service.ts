@@ -1,3 +1,4 @@
+import { environment } from './../../environments/environment';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
@@ -6,7 +7,6 @@ import { ConfirmationModalButton, ConfirmationModalConfiguration } from '../them
 import { CompanyCreateRequest } from '../models/api-models/Company';
 import { UserDetails } from '../models/api-models/loginModels';
 import { IUlist } from '../models/interfaces/ulist.interface';
-import { cloneDeep, find, orderBy } from '../lodash-optimized';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
 import { ActivatedRoute, NavigationStart, Params, QueryParamsHandling, Router } from '@angular/router';
@@ -22,12 +22,10 @@ import { LedgerViewEnum } from '../models/api-models/Ledger';
 import { giddhRoundOff } from '../shared/helpers/helperFunctions';
 import { AccountArchivedStatusEnum } from '../shared/Enums/common.enum';
 import { PageLeaveUtilityService } from './page-leave-utility.service';
+import { Configuration } from '../app.constant';
+import { cloneDeep, concat, find, findIndex, forEach, includes, indexOf, keys, map, orderBy, remove, set, slice, some } from '../lodash-optimized';
 
-@Injectable(
-    {
-        providedIn: 'root'
-    }
-)
+@Injectable()
 export class GeneralService {
     invokeEvent: Subject<any> = new Subject();
     public isCurrencyPipeLoaded: boolean = false;
@@ -83,7 +81,7 @@ export class GeneralService {
         this._createNewCompany = newCompanyRequest;
     }
 
-    public eventHandler: Subject<{ name: eventsConst, payload: any }> = new Subject();
+    public eventHandler: Subject<{ name: string, payload: any }> = new Subject();
     public IAmLoaded: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     private _user: UserDetails;
@@ -649,7 +647,12 @@ export class GeneralService {
     public getGiddhRegionUrl(): string {
         const countryRegion = localStorage.getItem('Country-Region');
         const region = COUNTRY_REGION_MAP[countryRegion] || null;
-        return region === 'gl' ? 'https://giddh.com/login' : `https://giddh.com/${region}/login`;
+
+        // Use environment-specific AppUrl instead of hardcoded giddh.com
+        const baseUrl = environment.AppUrl || 'https://giddh.com';
+        const loginPath = '/login';
+
+        return region === 'gl' ? `${baseUrl}${loginPath}` : `${baseUrl}/${region}${loginPath}`;
     }
 
     /**
@@ -883,7 +886,7 @@ export class GeneralService {
      * @returns {Array<AllItems>}
      * @memberof GeneralService
      */
-    public getVisibleMenuItems(module: string, apiItems: Array<any>, itemList: Array<AllItems>, countryCode: string = "", voucherApiVersion?: number): Array<AllItems> {
+    public getVisibleMenuItems(module: string, apiItems: Array<any>, itemList: Array<AllItems>, countryCode: string = ""): Array<AllItems> {
         const visibleMenuItems = cloneDeep(itemList);
         const localData = localStorage.getItem('session');
         // New tab - initialize with localStorage data
@@ -961,7 +964,7 @@ export class GeneralService {
         } else {
             this.router.navigate([route], parameter);
         }
-        if (isElectron && isSocialLogin) {
+        if (Configuration.isElectron && isSocialLogin) {
             setTimeout(() => {
                 window.location.reload();
             }, 200);
@@ -2495,7 +2498,7 @@ export class GeneralService {
                         document.querySelector("body")?.classList?.remove("page-leave-confirmation-modal-wrapper");
 
                         if (action === true) {
-                            // User confirmed to leave - clean up and navigate
+                        // User confirmed to leave - clean up and navigate
 
                             pageLeaveUtilityService.removeBrowserConfirmationDialog();
                             cleanupCallback();
@@ -2625,31 +2628,5 @@ export class GeneralService {
                 console.warn('Error marking forms as pristine:', error);
             }
         });
-    }
-
-    /**
-     * Gets the dynamic decimal format string based on company settings
-     *
-     * @param {number} decimalPlaces Number of decimal places from company settings
-     * @returns {string} Decimal format string for Angular DecimalPipe
-     * @memberof GeneralService
-     */
-    public getDecimalFormat(decimalPlaces: number): string {
-        return `1.${decimalPlaces}-${decimalPlaces}`;
-    }
-
-    /**
-     * Formats amount with proper decimal places
-     *
-     * @param {number} amount Amount to format
-     * @param {number} decimalPlaces Number of decimal places from company settings
-     * @returns {string} Formatted amount
-     * @memberof GeneralService
-     */
-    public formatAmount(amount: number, decimalPlaces: number): string {
-        if (amount == null || amount === undefined) {
-            return '0.' + '0'.repeat(decimalPlaces);
-        }
-        return amount.toFixed(decimalPlaces);
     }
 }

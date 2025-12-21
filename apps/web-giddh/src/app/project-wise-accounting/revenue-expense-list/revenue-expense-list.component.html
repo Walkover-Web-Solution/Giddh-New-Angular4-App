@@ -1,0 +1,345 @@
+<div
+    appTranslate
+    [file]="'project-wise-account'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
+>
+    <hamburger-menu></hamburger-menu>
+    <div class="project-wise-accounting">
+        <mat-tab-group
+            mat-stretch-tabs="false"
+            mat-align-tabs="start"
+            class="w-100"
+            [selectedIndex]="selectedTabIndex"
+            (selectedTabChange)="tabChanged($event)"
+        >
+            <mat-tab [label]="localeData?.revenue">
+                <div *ngTemplateOutlet="commonTemplateForIncomeAndExpense"></div>
+            </mat-tab>
+            <mat-tab [label]="localeData?.expense">
+                <div *ngTemplateOutlet="commonTemplateForIncomeAndExpense"></div>
+            </mat-tab>
+            <mat-tab [label]="localeData?.profit_and_loss">
+                <div class=" p-3 " *ngIf="defaultParamsValue?.projectUniqueName && selectedTabIndex === 2">
+                    <profit-loss [projectUniqueName]="defaultParamsValue.projectUniqueName" [selectedCompany]="activeCompany"></profit-loss>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
+</div>
+
+<ng-template #commonTemplateForIncomeAndExpense>
+    <div class="section-center p-3">
+       <header class="d-flex align-items-center justify-content-between">
+            <div class="custom-datepicker" 
+                 [matMenuTriggerFor]="universalDatepicker" 
+                 #universalDatepickerTrigger="matMenuTrigger"
+                 role="button"
+                 aria-haspopup="true"
+                 aria-controls="universalDatepicker">
+                <input
+                    matInput
+                    type="text"
+                    name="selectedDateRange"
+                    aria-label="Select date range"
+                    [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                    class="giddh-datepicker date-range-picker"
+                    readonly
+                />
+            </div>
+            <div>
+                <span *ngIf="totalRevenueAndExpense$ | async as tre">
+                    <span>{{ defaultParamsValue.category === projectWiseAccountingType.Income ? localeData?.total_revenue : localeData?.total_expense }} : {{ tre.nonAssetsTotal }}</span>
+                    <span>&nbsp;&nbsp; | &nbsp;&nbsp;</span>
+                    <span>{{ localeData?.total_fixed_asset }} : {{ tre.assetsTotal }}</span>&nbsp;&nbsp;
+                </span>
+                <button [routerLink]="'/pages/project-wise-accounting/list'" mat-stroked-button>
+                    {{ commonLocaleData?.app_back }}
+                </button>
+            </div>
+       </header>
+        <giddh-page-loader *ngIf="(isFetchingProjects$ | async)">
+        </giddh-page-loader>
+        <div class="table-responsive mt-5" *ngIf="!(isFetchingProjects$ | async)">
+            <table class="table entry-table editable-table">
+                <thead *ngIf="!isCompany || totalResults">
+                    <tr>
+                        <th class="text-left">{{ commonLocaleData?.app_account }}</th>
+                        <th class="text-left">{{ localeData?.entry }}</th>
+                        <th class="text-left">{{ localeData?.method }}</th>
+                        <th class="text-left">{{ commonLocaleData?.app_amount }}</th>
+                        <th *ngIf="!isCompany" class="text-left">{{ commonLocaleData?.app_action }}</th>
+                    </tr>
+                    <tr *ngIf="!isCompany" [formGroup]="createAccountEntryForm">
+                        <td>
+                            <reactive-dropdown-field
+                                [label]="commonLocaleData?.app_select_account"
+                                [placeholder]="commonLocaleData?.app_select"
+                                [options]="accountSearchResponse"
+                                [labelValue]="createAccountEntryForm.get('account')?.value"
+                                formControlName="accountUniqueName"
+                                [enableDynamicSearch]="true"
+                                [isPaginationEnabled]="true"
+                                (scrollEnd)="handleSearchAccountScrollEnd()"
+                                (dynamicSearchedQuery)="searchAccount($event)"
+                                (selectedOption)="selectAccount($event.value); ($event.label != createAccountEntryForm.get('account')?.value) && (createAccountEntryForm.get('entryUniqueName')?.patchValue(null) || createAccountEntryForm.get('entry')?.patchValue(null)); createAccountEntryForm.get('account')?.patchValue($event.label)"
+                                (onClear)="createAccountEntryForm.get('account')?.patchValue(null); createAccountEntryForm.get('accountUniqueName')?.patchValue(null)"
+                                [showError]="!isCreateAccountValidForm && !createAccountEntryForm.get('accountUniqueName')?.value"
+                                [required]="true"
+                            >
+                            </reactive-dropdown-field>
+                        </td>
+                        <td>
+                            <reactive-dropdown-field
+                                (click)="currentEntry(createAccountEntryForm.get('accountUniqueName')?.value)"
+                                [label]="localeData?.select_entry"
+                                [placeholder]="commonLocaleData?.app_select"
+                                [options]="accountAndEntryList[createAccountEntryForm.get('accountUniqueName')?.value]?.data"
+                                [labelValue]="createAccountEntryForm.get('entry')?.value"
+                                formControlName="entryUniqueName"
+                                [enableDynamicSearch]="true"
+                                [isPaginationEnabled]="true"
+                                (scrollEnd)="handleSearchEntryScrollEnd(createAccountEntryForm.get('accountUniqueName')?.value)"
+                                (dynamicSearchedQuery)="createAccountEntryForm.get('accountUniqueName')?.value && searchEntry($event, 1, createAccountEntryForm.get('accountUniqueName')?.value)"
+                                (selectedOption)="createAccountEntryForm.get('entry')?.patchValue($event.label)"
+                                (onClear)="createAccountEntryForm.get('entry')?.patchValue(null); createAccountEntryForm.get('entryUniqueName')?.patchValue(null)"
+                                [showError]="!isCreateAccountValidForm && !createAccountEntryForm.get('entryUniqueName')?.value"
+                                [required]="true"
+                            >
+                                <ng-template #optionTemplate let-option="option">
+                                    <div aria-label="label" class="my-2">
+                                        <span class="text-primary">{{ option?.label | titlecase }}</span>
+                                        <div class="text-light font-size-12">
+                                            <table class="w-100">
+                                                <tr>
+                                                    <td class="option-extra-content" width="75px">{{ commonLocaleData?.app_dated }}</td>
+                                                    <td class="option-extra-content">: {{ option?.additional?.entryDate }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="option-extra-content" width="75px">{{ commonLocaleData?.app_voucher_no }}</td>
+                                                    <td class="option-extra-content">: {{ option?.additional?.voucherNumber }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="option-extra-content" width="75px">{{ commonLocaleData?.app_amount }}</td>
+                                                    <td class="option-extra-content">
+                                                        : <span class="d-inline-flex">
+                                                                <amount-field
+                                                                    [amount]="
+                                                                        option?.additional?.amount
+                                                                    "
+                                                                    [currencySymbol]="option?.additional?.currency?.symbol"
+                                                                    [currencyCode]="option?.additional?.currency?.code"
+                                                                >
+                                                                </amount-field>
+                                                            </span>
+                                                        {{ option?.additional?.type | titlecase }}
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </reactive-dropdown-field>
+                        </td>
+
+                        <td>
+                            <reactive-dropdown-field
+                                [label]="commonLocaleData?.app_select_method"
+                                [placeholder]="commonLocaleData?.app_select"
+                                [options]="selectMethod"
+                                [labelValue]="createAccountEntryForm.get('calculationMethod')?.value"
+                                formControlName="calculationMethod"
+                                (onClear)="createAccountEntryForm.get('calculationMethod')?.patchValue(null);"
+                                [showError]="!isCreateAccountValidForm && !createAccountEntryForm.get('calculationMethod')?.value"
+                                [required]="true"
+                            >
+                            </reactive-dropdown-field>
+                        </td>
+                        <td>
+                            <input-field
+                                [name]="'amount'"
+                                [type]="'number'"
+                                [label]="commonLocaleData?.app_amount"
+                                [placeholder]="localeData?.enter_amount"
+                                formControlName="value"
+                                [showError]="!isCreateAccountValidForm &&(!createAccountEntryForm.get('value')?.value || createAccountEntryForm.get('value')?.value === '0')"
+                                [required]="true"
+                            >
+                            </input-field>
+                        </td>
+                        <td>
+                            <button
+                                mat-raised-button
+                                color="primary"
+                                (click)="createEntry(createAccountEntryForm.get('value')?.value)"
+                            >
+                            {{ commonLocaleData?.app_save }}</button>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <div *ngIf="totalResults" [formGroup]="accountEntryListForm" >
+                        <div formArrayName="entryList">
+                            <div
+                                *ngFor="let entry of accountEntryListForm?.get('entryList')['controls']; let i = index">
+                                <tr [formGroupName]="i" [ngClass]="{'active-row' : activeRowIndex === i || entry?.invalid}" (mouseenter)="activeRowIndex = i" (mouseleave)="activeRowIndex = -1">
+                                    <td>
+                                        <reactive-dropdown-field
+                                            [readonly]="isCompany"
+                                            [label]="commonLocaleData?.app_select_account"
+                                            [placeholder]="commonLocaleData?.app_select"
+                                            [labelValue]="entry?.get('account')?.value"
+                                            [options]="accountSearchResponse"
+                                            formControlName="accountUniqueName"
+                                            [enableDynamicSearch]="true"
+                                            [isPaginationEnabled]="true"
+                                            (scrollEnd)="handleSearchAccountScrollEnd()"
+                                            (dynamicSearchedQuery)="searchAccount($event)"
+                                            (onClear)="entry?.get('accountUniqueName')?.patchValue(null); entry?.get('entryUniqueName')?.patchValue(null) ; entry?.get('entry')?.patchValue(null)"
+                                            (selectedOption)="selectAccount($event.value); ($event.label != entry?.get('account')?.value) && (entry?.get('entryUniqueName')?.patchValue(null) || entry?.get('entry')?.patchValue(null)); entry?.get('account')?.patchValue($event.label)"
+                                            [showError]="!entry?.get('accountUniqueName')?.value"
+                                            [required]="true"
+                                        >
+                                        </reactive-dropdown-field>
+                                    </td>
+                                    <td>
+                                        <reactive-dropdown-field
+                                            [readonly]="isCompany"
+                                            (click)="!isCompany && currentEntry(entry?.get('accountUniqueName')?.value)"
+                                            [label]="localeData?.select_entry"
+                                            [placeholder]="commonLocaleData?.app_select"
+                                            [labelValue]="entry?.get('entry')?.value"
+                                            [options]="accountAndEntryList[entry?.get('accountUniqueName')?.value]?.data"
+                                            formControlName="entryUniqueName"
+                                            [enableDynamicSearch]="true"
+                                            [isPaginationEnabled]="true"
+                                            (scrollEnd)="handleSearchEntryScrollEnd(entry?.get('accountUniqueName')?.value)"
+                                            (selectedOption)="entry?.get('entry')?.patchValue($event.label)"
+                                            (onClear)="entry?.get('entryUniqueName')?.patchValue(null)"
+                                            (dynamicSearchedQuery)="entry?.get('accountUniqueName')?.value && searchEntry($event, 1, entry?.get('accountUniqueName')?.value)"
+                                            [showError]="!entry?.get('entryUniqueName')?.value"
+                                            [required]="true"
+                                        >
+                                            <ng-template #optionTemplate let-option="option">
+                                                <div aria-label="label" class="my-2">
+                                                    <span class="text-primary">{{ option?.label | titlecase }}</span>
+                                                    <div class="text-light font-size-12">
+                                                        <table class="w-100">
+                                                            <tr>
+                                                                <td class="option-extra-content" width="75px">{{ commonLocaleData?.app_dated }}</td>
+                                                                <td class="option-extra-content">: {{ option?.additional?.entryDate }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="option-extra-content" width="75px">{{ commonLocaleData?.app_voucher_no }}</td>
+                                                                <td class="option-extra-content">: {{ option?.additional?.voucherNumber }}</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="option-extra-content" width="75px">{{ commonLocaleData?.app_amount }}</td>
+                                                                <td class="option-extra-content">
+                                                                    : <span class="d-inline-flex">
+                                                                            <amount-field
+                                                                                [amount]="
+                                                                                    option?.additional?.amount
+                                                                                "
+                                                                                [currencySymbol]="option?.additional?.currency?.symbol"
+                                                                                [currencyCode]="option?.additional?.currency?.code"
+                                                                            >
+                                                                            </amount-field>
+                                                                        </span>
+                                                                    {{ option?.additional?.type | titlecase }}
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </ng-template>
+                                        </reactive-dropdown-field>
+                                    </td>
+
+                                    <td>
+                                        <reactive-dropdown-field
+                                            [readonly]="isCompany"
+                                            [label]="commonLocaleData?.app_select_method"
+                                            [placeholder]="commonLocaleData?.app_select"
+                                            [labelValue]="entry?.get('calculationMethod')?.value"
+                                            [options]="selectMethod"
+                                            formControlName="calculationMethod"
+                                            (onClear)="entry?.get('calculationMethod')?.patchValue(null)"
+                                            [showError]="!entry?.get('calculationMethod')?.value"
+                                            [required]="true"
+                                        >
+                                        </reactive-dropdown-field>
+                                    </td>
+                                    <td>
+                                        <input-field
+                                            [readonly]="isCompany"
+                                            [name]="'amount'"
+                                            [type]="'number'"
+                                            [label]="commonLocaleData?.app_amount"
+                                            [placeholder]="localeData?.enter_amount"
+                                            formControlName="value"
+                                            [min]="1"
+                                            [showError]="!entry.get('value')?.value || entry.get('value')?.value === '0'"
+                                            [required]="true"
+                                        >
+                                        </input-field>
+                                    </td>
+                                    <td *ngIf="!isCompany" class="position-relative ">
+                                        <span class="editable-table-hide-element">
+                                            <button mat-raised-button color="primary" (click)="entry?.valid && entry.get('value')?.value !== '0' && updateSingleEntry(i)">{{ commonLocaleData?.app_update }}</button>
+                                            <i (click)="openDeleteEntryDialog(i)" color="primary" class="cursor-pointer icon-trash font-size-16 position-absolute"></i>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </div>
+                        </div>
+                    </div>
+                    <tr>
+                        <td colspan="100%">
+                            <div class="no-data" *ngIf="!totalResults">
+                                <no-data [primaryMessage]="isCompany ? localeData?.no_entries_found : commonLocaleData?.app_no_data_found" [secondaryMessage]="' '"></no-data>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <mat-paginator
+                *ngIf="totalResults > pageSizeOptions[0] && !(isFetchingProjects$ | async)"
+                (page)="handlePageChange($event)"
+                [length]="totalResults"
+                [pageSize]="getProjectEntryListRequest.count"
+                [showFirstLastButtons]="true"
+                [pageSizeOptions]="pageSizeOptions"
+                [hidePageSize]="false"
+                [pageIndex]="getProjectEntryListRequest.page - 1"
+            ></mat-paginator>
+            <section class="mb-custom-80"></section>
+        </div>
+    </div>
+</ng-template>
+
+<!-- Date Picker Menu -->
+<mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+    <ng-template matMenuContent>
+        <app-datepicker-wrapper
+            [inputStartDate]="selectedDateRange?.startDate"
+            [inputEndDate]="selectedDateRange?.endDate"
+            [alwaysShowCalendars]="true"
+            [ranges]="datePickerOptions"
+            [selectedRangeLabel]="selectedRangeLabel"
+            [showCustomRangeLabel]="true"
+            [showClearButton]="false"
+            [showCancel]="true"
+            [linkedCalendars]="true"
+            [showDropdowns]="true"
+            (rangeClicked)="dateSelectedCallback($event)"
+            (datesUpdated)="dateSelectedCallback($event)"
+            (closeCalender)="toggleGiddhDatepicker(false)"
+            [keepCalendarOpeningWithRange]="false"
+            [showRangeLabelOnInput]="false"
+            >
+        </app-datepicker-wrapper>
+    </ng-template>
+</mat-menu>

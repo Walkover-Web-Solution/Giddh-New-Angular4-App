@@ -1,0 +1,241 @@
+:host.inventory-sidebar {
+    position: fixed;
+    top: var(--top-sidebar);
+    bottom: 0;
+    min-height: 100vh;
+    width: 240px;
+    left: -240px;
+    z-index: 991;
+
+    .inventory-aside-pane {
+        padding-bottom: 60px !important;
+    }
+
+    .help-aside-body {
+        overflow-y: unset !important;
+    }
+
+    .aside-pane {
+        overflow-x: hidden;
+        overflow-y: auto;
+        z-index: unset;
+        padding-bottom: 200px;
+
+        .back-to-main-slider {
+            display: block;
+            padding: 15px 13px;
+            margin-bottom: 0;
+            .heading {
+                position: relative;
+                left: 21px;
+                bottom: 25px;
+                z-index: 1;
+                font-size: var(--font-size-16);
+                font-family: var(--font-family);
+                text-transform: uppercase !important;
+            }
+            .icon-pull-top {
+                position: relative;
+                z-index: 2;
+                top: -6px;
+                height: 14px;
+            }
+        }
+
+        .help-aside-body {
+            .inventory-items {
+                ul {
+                    li {
+                        padding: 0px;
+
+                        a {
+                            display: flex;
+                            align-items: flex-start;
+                            padding: 7px 15px;
+
+                            span {
+                                i {
+                                    color: var(--color-border-light);
+                                    margin-right: 10px;
+                                    font-size: var(--font-size-15);
+                                }
+                            }
+                        }
+                    }
+                }
+                mat-tree {
+                    width: 240px;
+                    background-color: var(--color-transparent);
+
+                    mat-tree-node {
+                        min-height: 30px;
+                        .sidebar-menu-icons {
+                            position: relative;
+                            right: 7px;
+                            height: 14px;
+                            width: 14px;
+                            filter: var(--color-image-filter-quaternary);
+                        }
+                        &:first-child {
+                            .sidebar-menu-icons {
+                                top: 2px;
+                            }
+                        }
+                    }
+
+                    .sidebar-list-icon {
+                        position: absolute;
+                        bottom: 15px;
+                        left: 220px;
+                    }
+                    .sub-option {
+                        &:hover {
+                            color: var(--color-white);
+                            background-color: var(--bg-primary-color);
+                            .sidebar-menu-icons {
+                                filter: var(--filter-image-color-white);
+                            }
+                        }
+                        &.sub-option[aria-level="1"] {
+                            position: relative;
+                            padding-left: 20px !important;
+                            height: 27px;
+                            width: 100%;
+                            line-height: 15px;
+                        }
+                    }
+                    .list {
+                        width: 260px;
+                        position: relative;
+                        right: 20px;
+                        cursor: pointer;
+                        letter-spacing: 0.14px;
+                        height: 27px;
+                        font: normal normal 600 var(--font-size-15) / 30px;
+                        font-family: var(--font-family);
+                        &:last-child {
+                            min-height: 37px;
+                        }
+                        &:hover {
+                            color: var(--text-primary-color);
+                            .sidebar-list-icon {
+                                color: var(--text-primary-color);
+                            }
+                            .sidebar-icon {
+                                color: var(--text-primary-color);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.inventory-items {
+    position: relative;
+    bottom: 25px;
+
+    ul {
+        padding: 0;
+        font-size: var(--font-size-15);
+        font-weight: var(--font-weight-semibold);
+
+        li {
+            padding: 6px 20px;
+            margin-bottom: 0px;
+
+            a {
+                cursor: pointer;
+
+                img {
+                    margin-right: 12px;
+                }
+
+                span {
+                    color: var(--color-black);
+                    &:first-child {
+                        line-height: 1.6;
+                        height: 20px;
+                        display: inline-flex;
+                        -webkit-box-align: center;
+                        align-items: center;
+                        width: 28px;
+                        float: left;
+                    }
+
+                    &:last-child {
+                        float: left;
+                        width: 80%;
+                    }
+                }
+            }
+
+            &:hover {
+                background-color: var(--theme-primary-light);
+            }
+        }
+    }
+}
+
+.inventory-items ul li:hover a span i {
+    color: var(--color-black) !important;
+}
+
+.inventory-sub-bar {
+    font-family: var(--font-family) !important;
+
+    li {
+        a {
+            color: var(--color-black) !important;
+            padding-left: 50px !important;
+
+            &:hover {
+                background-color: var(--color-border-light);
+                color: var(--text-primary-color) !important;
+            }
+
+            &.active {
+                background-color: var(--color-border-light);
+                color: var(--text-primary-color) !important;
+            }
+        }
+    }
+}
+.active {
+    background-color: var(--bg-primary-color) !important;
+    color: var(--color-white) !important;
+    .sidebar-menu-icons {
+        filter: var(--filter-image-color-white) !important;
+    }
+    &:hover {
+        background-color: var(--bg-primary-color) !important;
+        color: var(--color-white) !important;
+    }
+}
+
+// Angular 21 compatibility: Ensure mat-app-background works
+:host {
+    .mat-app-background {
+        background-color: var(--mat-sys-surface, #fefbff);
+        color: var(--mat-sys-on-surface, #1d1b20);
+    }
+
+    .inventory-aside-pane.mat-app-background {
+        background-color: var(--mat-sys-surface-container-low, #f7f2fa);
+        border-right: 1px solid var(--mat-sys-outline-variant, #c4c7c5);
+    }
+}
+
+// Dark theme support
+:host-context(.dark-theme) {
+    .mat-app-background {
+        background-color: var(--mat-sys-surface, #141218);
+        color: var(--mat-sys-on-surface, #e6e0e9);
+    }
+
+    .inventory-aside-pane.mat-app-background {
+        background-color: var(--mat-sys-surface-container-low, #1d1a22);
+        border-right: 1px solid var(--mat-sys-outline-variant, #49454f);
+    }
+}

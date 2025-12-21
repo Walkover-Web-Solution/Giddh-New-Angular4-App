@@ -1,0 +1,330 @@
+<section id="manufacture" class="clear-both">
+    <hamburger-menu *ngIf="!isInventoryPage" [pageHeading]="'Mfg. Journal Register'"></hamburger-menu>
+    <div class="clear-both mr-3 create-btn" *ngIf="isTabletScreen">
+        <div class="mr-3" *ngIf="showClearFilter()">
+            <label class="d-none">&nbsp;</label>
+            <button mat-stroked-button type="button" (click)="clearFilters()">Clear Filter</button>
+        </div>
+        <div>
+            <label class="d-none">&nbsp;</label>
+            <button *ngIf="(!isCompany && !isConsolidatedBranch)" mat-raised-button color="primary" class="pull-right mr-0" (click)="goToCreateNewPage()" type="button">
+                Create Manufacture
+            </button>
+        </div>
+    </div>
+    <div class="col-12 col-sm-12 mf-report-head" [ngClass]="{ 'parent': fromParentComponent }">
+        <div class="row">
+            <div
+                class="col-12"
+                [ngClass]="currentCompanyBranches?.length > 2 ? 'manufacturing-head' : 'no-branch-head'"
+            >
+                <div class="row">
+                    <div
+                        class="col-xl-3 col-lg-4 col-md-6 mb-3"
+                        *ngIf="currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
+                    >
+                        <div class="link-entity-dropdown">
+                            <label class="d-block pb-1 font-size-15">Entity</label>
+                            <reactive-dropdown-field
+                                [options]="currentCompanyBranches"
+                                [(ngModel)]="currentBranch.uniqueName"
+                                class="branch-dropdown"
+                                [name]="'entityDropdown'"
+                                (selectedOption)="handleBranchChange($event)"
+                                [placeholder]="'Select Entity'"
+                                [labelValue]="currentBranch?.name"
+                            >
+                            </reactive-dropdown-field>
+                        </div>
+                    </div>
+                    <div
+                        class="col-md-6 mb-3 datepicker-flex"
+                        [ngClass]="
+                            currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
+                                ? 'col-xl-3 col-lg-4 '
+                                : 'col-xl-3 col-lg-4'
+                        "
+                    >
+                        <label class="d-block font-size-15 pb-1">From - To</label>
+                        <div 
+                            class="custom-datepicker" 
+                            [matMenuTriggerFor]="universalDatepicker"
+                            #universalDatepickerTrigger="matMenuTrigger"
+                            role="button"
+                            aria-haspopup="true"
+                            aria-controls="universalDatepicker"
+                        >
+                            <input
+                                matInput
+                                type="text"
+                                name="selectedDateRange"
+                                [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                class="giddh-datepicker date-range-picker"
+                                readonly
+                            />
+                        </div>
+                        <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+                            <ng-template matMenuContent>
+                                <app-datepicker-wrapper
+                                    [inputStartDate]="selectedDateRange?.startDate"
+                                    [inputEndDate]="selectedDateRange?.endDate"
+                                    [alwaysShowCalendars]="true"
+                                    [ranges]="datePickerOptions"
+                                    [selectedRangeLabel]="selectedRangeLabel"
+                                    [showCustomRangeLabel]="true"
+                                    [showClearButton]="false"
+                                    [showCancel]="true"
+                                    [linkedCalendars]="true"
+                                    [showDropdowns]="true"
+                                    (rangeClicked)="dateSelectedCallback($event)"
+                                    (datesUpdated)="dateSelectedCallback($event)"
+                                    (closeCalender)="toggleGiddhDatepicker(false)"
+                                    [keepCalendarOpeningWithRange]="false"
+                                    [showRangeLabelOnInput]="false"
+                                ></app-datepicker-wrapper>
+                            </ng-template>
+                        </mat-menu>
+                    </div>
+                    <div
+                        class="col-md-6"
+                        [ngClass]="
+                            currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
+                                ? 'col-xl-6 col-lg-4'
+                                : 'col-xl-9 col-lg-8'
+                        "
+                        *ngIf="!isTabletScreen"
+                    >
+                        <div
+                            class="d-flex"
+                            [ngClass]="showClearFilter() ? 'justify-content-between' : 'justify-content-end'"
+                        >
+                            <div *ngIf="showClearFilter()">
+                                <label class="d-block">&nbsp;</label>
+                                <button mat-stroked-button type="button" (click)="clearFilters()">
+                                    Clear Filter
+                                </button>
+                            </div>
+                            <!-- <div>
+                                <label class="d-block">&nbsp;</label>
+                                <button
+                                    *ngIf="(!isCompany && !isConsolidatedBranch)"
+                                    mat-raised-button
+                                    color="primary"
+                                    class="pull-right mr-0 mobile-none"
+                                    (click)="goToCreateNewPage()"
+                                    type="button"
+                                >
+                                    Create Manufacture
+                                </button>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- form -->
+    <div class="col-12 col-sm-12">
+        <div class="mf-stock-search-request-form clear-both">
+            <form
+                #mfStockSearchRequestForm="ngForm"
+                class="mt-0 col-12 pl-0 pr-0 mt-3 mb-1 manufacturing-form"
+                (submit)="getReports()"
+                autocomplete="off"
+            >
+                <div class="row">
+                    <div class="form-group col-xl-2 col-lg-2 col-md-6">
+                        <label class="d-block">Final Product</label>
+                        <reactive-dropdown-field
+                            [placeholder]="'--Select Product--'"
+                            [name]="'product'"
+                            #productList="ngModel"
+                            [required]="true"
+                            [(ngModel)]="mfStockSearchRequest.product"
+                            [options]="stockListDropDown"
+                            (selectedOption)="setActiveStockGroup($event)"
+                        >
+                        </reactive-dropdown-field>
+                    </div>
+                    <div class="form-group col-xl-2 col-lg-3 col-md-6 col-12">
+                        <label class="d-block">Warehouse</label>
+                        <reactive-dropdown-field
+                            [placeholder]="'--Select Warehouse--'"
+                            [name]="'warehouse'"
+                            [options]="warehouses"
+                            [(ngModel)]="mfStockSearchRequest.warehouseUniqueName"
+                            (onClear)="clearWarehouse()"
+                        ></reactive-dropdown-field>
+                    </div>
+
+                    <div class="form-group col-xl-2 col-lg-2 col-md-6 col-xs-6">
+                        <label class="d-block">Search By</label>
+                        <reactive-dropdown-field
+                            [placeholder]="'--Select--'"
+                            [name]="'searchBy'"
+                            [(ngModel)]="mfStockSearchRequest.searchBy"
+                            [options]="filtersForSearchBy"
+                        >
+                        </reactive-dropdown-field>
+                    </div>
+                    <div class="form-group col-xl-2 col-lg-2 col-md-6 col-xs-6">
+                        <label class="d-block">Operation</label>
+                        <reactive-dropdown-field
+                            [placeholder]="'--Select--'"
+                            [name]="'searchOperation'"
+                            [(ngModel)]="mfStockSearchRequest.searchOperation"
+                            [options]="filtersForSearchOperation"
+                        >
+                        </reactive-dropdown-field>
+                    </div>
+                    <div class="form-group col-xl-2 col-lg-2 col-md-6 col-xs-6">
+                        <label class="d-block">Value</label>
+                        <input
+                            type="text"
+                            decimalDigitsDirective
+                            [DecimalPlaces]="4"
+                            class="form-control"
+                            placeholder="Value"
+                            name="searchValue"
+                            [(ngModel)]="mfStockSearchRequest.searchValue"
+                        />
+                    </div>
+                    <div class="form-group col-xl-1 col-lg-1 col-md-6">
+                        <label class="d-block d-none-xs">&nbsp;</label>
+                        <button mat-raised-button color="primary" type="submit">Go</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!-- search form end -->
+    <section *ngIf="isReportLoading$ | async" class="clear-both mt-custom-100 col-md-12">
+        <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
+    </section>
+    <div
+        class="no-data mt-custom-100 col-12 col-sm-12"
+        *ngIf="!(isReportLoading$ | async) && reportData && reportData.results?.length === 0"
+    >
+        <h2>No entries found within given criteria.</h2>
+        <h2>Do search with some other dates</h2>
+    </div>
+    <section *ngIf="!(isReportLoading$ | async) && reportData && reportData.results?.length > 0">
+        <div id="mfReportTbl">
+            <div class="col-12 col-sm-12 table-responsive">
+                <table mat-table [dataSource]="reportData.results" class="table basic border giddh-table on-mobile-view manufacture-table">
+                    <!-- Date Column -->
+                    <ng-container matColumnDef="date">
+                        <th mat-header-cell *matHeaderCellDef class="text-center">
+                            Date
+                        </th>
+                        <td mat-cell *matCellDef="let item" data-title="Date" (dblclick)="editMFItem(item)">
+                            {{ dayjs(item.date, "DD-MM-YYYY") | date : "d MMM y" }}
+                        </td>
+                    </ng-container>
+
+                    <!-- Voucher Number Column -->
+                    <ng-container matColumnDef="voucherNumber">
+                        <th mat-header-cell *matHeaderCellDef class="text-center">
+                            Voucher No.
+                        </th>
+                        <td mat-cell *matCellDef="let item" data-title="Voucher No." class="cursor-pointer" (dblclick)="editMFItem(item)">
+                            {{ item.voucherNumber }}
+                        </td>
+                    </ng-container>
+
+                    <!-- Stock Name Column -->
+                    <ng-container matColumnDef="stockName">
+                        <th mat-header-cell *matHeaderCellDef class="text-center">
+                            Finished Product
+                        </th>
+                        <td mat-cell *matCellDef="let item" data-title="Product Name" (dblclick)="editMFItem(item)">
+                            {{ item.stockName }}
+                        </td>
+                    </ng-container>
+
+                    <!-- Manufacturing Quantity Column -->
+                    <ng-container matColumnDef="manufacturingQuantity">
+                        <th mat-header-cell *matHeaderCellDef class="text-center">
+                            Qty Outwards
+                        </th>
+                        <td mat-cell *matCellDef="let item" data-title="Qty Outwards" (dblclick)="editMFItem(item)">
+                            {{ item.manufacturingQuantity }}
+                        </td>
+                    </ng-container>
+
+                    <!-- Manufacturing Unit Column -->
+                    <ng-container matColumnDef="manufacturingUnit">
+                        <th mat-header-cell *matHeaderCellDef class="text-center">
+                            Unit
+                        </th>
+                        <td mat-cell *matCellDef="let item" data-title="Unit" (dblclick)="editMFItem(item)">
+                            {{ item.manufacturingUnit }}
+                        </td>
+                    </ng-container>
+
+                    <!-- Material Data Column -->
+                    <ng-container matColumnDef="materialData">
+                        <th mat-header-cell *matHeaderCellDef class="material-head">
+                            <table class="table">
+                                <tr>
+                                    <th class="regular-font">Material Used</th>
+                                    <th class="regular-font">Qty Inwards</th>
+                                    <th class="regular-font">Unit</th>
+                                </tr>
+                            </table>
+                        </th>
+                        <td mat-cell *matCellDef="let item" class="material-data" (dblclick)="editMFItem(item)">
+                            <div class="d-flex flex-column data-title-td">
+                                <div *ngFor="let row of item.linkedStocks" class="mb-3">
+                                    <div>Material Used</div>
+                                    <div>Qty Inwards</div>
+                                    <div>Unit</div>
+                                </div>
+                            </div>
+                            <div>
+                                <div
+                                    class="d-flex flex-md-row flex-column nested-div"
+                                    *ngFor="let row of item.linkedStocks"
+                                >
+                                    <div class="d-flex flex-column">
+                                        <span>{{ row.stockName }}</span>
+                                    </div>
+                                    <div class="d-flex flex-column">
+                                        <span>{{ row.manufacturingQuantity }}</span>
+                                    </div>
+                                    <div class="d-flex flex-column">
+                                        <span>{{ row.manufacturingUnit }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </ng-container>
+
+                    <!-- Warehouse Column -->
+                    <ng-container matColumnDef="warehouse">
+                        <th mat-header-cell *matHeaderCellDef class="text-center">
+                            Warehouse
+                        </th>
+                        <td mat-cell *matCellDef="let item" data-title="Warehouse" (dblclick)="editMFItem(item)">
+                            {{ item.warehouse?.name }}
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns" class="row-gray-background"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+                <mat-paginator
+                    *ngIf="reportData?.totalItems > pageSizeOptions[0]"
+                    [length]="reportData.totalItems"
+                    [pageSize]="mfStockSearchRequest.count"
+                    [pageIndex]="reportData.page - 1"
+                    [pageSizeOptions]="pageSizeOptions"
+                    [showFirstLastButtons]="true"
+                    [hidePageSize]="false"
+                    (page)="handlePageEvent($event)"
+                ></mat-paginator>
+                <section class="mb-custom-80"></section>
+            </div>
+        </div>
+    </section>
+</section>

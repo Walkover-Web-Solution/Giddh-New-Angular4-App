@@ -1,0 +1,80 @@
+<div class="add-new-role-modal">
+    <div class="dialog-header">
+        <span>{{ localeData?.add_role }}</span>
+        <button mat-icon-button aria-label="close" (click)="closePopupEvent()">
+            <i class="icon-cross"></i>
+        </button>
+    </div>
+    <mat-dialog-content class="dialog-body" id="export-body">
+        <form #newRoleForm="ngForm" (submit)="addNewRole()" autocomplete="off">
+            <div>
+                <div class="form-group">
+                    <input-field
+                        [label]="localeData?.role_name_label"
+                        [type]="'text'"
+                        [required]="true"
+                        [name]="'name'"
+                        [(ngModel)]="newRoleObj.name"
+                        [placeholder]="localeData?.role_name_label"
+                        #name="ngModel"
+                    ></input-field>
+                </div>
+                <div class="form-group custom-select position-relative bg-transparent">
+                    <reactive-dropdown-field
+                        [label]="localeData?.role_type_label"
+                        [required]="true"
+                        (selectedOption)="newRoleObj.isFresh = $event?.value"
+                        [name]="'isFresh'"
+                        [options]="isFreshOptions"
+                    ></reactive-dropdown-field>
+                </div>
+                <div class="form-group" *ngIf="newRoleObj.isFresh">
+                    <mat-form-field class="w-100" appearance="outline">
+                        <mat-label>{{ dropdownHeading }}</mat-label>
+                        <mat-select class="px-0" [(ngModel)]="selectedValues" name="page-list" multiple>
+                            <div class="custom-select-all-option">
+                                <mat-checkbox
+                                    color="primary"
+                                    (change)="selectAllPages($event)"
+                                    [checked]="newRoleObj.isSelectedAllPages"
+                                >
+                                    {{ commonLocaleData?.app_select_all }}
+                                </mat-checkbox>
+                            </div>
+                            <ng-container *ngFor="let item of newRoleObj.pageList; let i = index">
+                                <mat-option
+                                    (click)="item.isSelected = !item.isSelected; enableDisableSelectAll()"
+                                    [name]="'item' + i"
+                                    [value]="item"
+                                >
+                                    {{ item.name | capitalize }}
+                                </mat-option>
+                            </ng-container>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div *ngIf="!newRoleObj.isFresh">
+                    <reactive-dropdown-field
+                        [label]="localeData?.copy_permission"
+                        [placeholder]="commonLocaleData?.app_please_select"
+                        [options]="roleOptions"
+                        [(ngModel)]="newRoleObj.uniqueName"
+                        [name]="'roles'"
+                        [required]="true"
+                        [labelValue]="selectedRoleName"
+                        (selectedOption)="onRoleSelect($event)"
+                        class="w-100"
+                    ></reactive-dropdown-field>
+                </div>
+                <div class="clear-both text-right mt-5">
+                    <button mat-raised-button color="primary" type="submit" [disabled]="!isFormValid">
+                        {{ commonLocaleData?.app_next }}
+                    </button>
+                    <button mat-stroked-button class="ml-2" type="button" (click)="closePopupEvent()">
+                        {{ commonLocaleData?.app_cancel }}
+                    </button>
+                </div>
+            </div>
+        </form>
+    </mat-dialog-content>
+</div>

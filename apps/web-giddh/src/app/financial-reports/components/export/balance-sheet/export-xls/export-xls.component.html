@@ -1,0 +1,21 @@
+<div
+    class="form-group xls-export cursor-pointer mb-0 mt-0 mr-0"
+    appTranslate
+    [file]="'trial-profit-balance/export'"
+    (localeData)="localeData = $event"
+>
+
+    <a href="javascript:void(0);" aria-label="download" *ngIf="enableDownload" [matMenuTriggerFor]="downloadMenu"
+        class="cursor-pointer new-icon-img">
+        <img [src]="imgPath" alt="xsl img" />
+    </a>
+    <!-- Menu -->
+    <mat-menu #downloadMenu="matMenu" xPosition="before" yPosition="below">
+        <button mat-menu-item (click)="downloadBsXls(false)" aria-label="group report">
+            {{ localeData?.xls?.main_group_report }}
+        </button>
+        <button mat-menu-item (click)="downloadBsXls(true)" aria-label="complete report">
+            {{ localeData?.xls?.complete_report }}
+        </button>
+    </mat-menu>
+</div>

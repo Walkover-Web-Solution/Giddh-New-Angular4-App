@@ -6,20 +6,12 @@ import { CreateNewRoleRequest, CreateNewRoleResponse, IRoleCommonResponseAndRequ
 import { PERMISSION_API } from './apiurls/permission.api';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
-// COMMENTED OUT - MISSING: import { IPageStr } from '../permissions/permission.utility';
+import { IPageStr } from '../permissions/permission.utility';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
+import { get } from '../lodash-optimized';
 
-// Placeholder IPageStr - replace when original interface is available
-interface IPageStr {
-    name: string;
-    uniqueName: string;
-    [key: string]: any;
-}
-
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class PermissionService {
     private companyUniqueName: string;
 

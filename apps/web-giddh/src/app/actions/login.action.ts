@@ -14,10 +14,11 @@ import { GeneralActions } from './general/general.actions';
 import { CompanyActions } from './company.actions';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ActivatedRoute, Router } from '@angular/router';
-import { sortBy } from '../lodash-optimized';
 import { COMMON_ACTIONS } from './common.const';
 import { AppState } from '../store';
 import { Inject, Injectable, NgZone } from '@angular/core';
+import { environment } from '../../environments/environment';
+import { Configuration } from '../app.constant';
 import { map, switchMap, take, tap } from 'rxjs/operators';
 import { OrganizationType, userLoginStateEnum } from '../models/user-login-state';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
@@ -33,6 +34,7 @@ import { SettingsProfileActions } from "./settings/profile/settings.profile.acti
 import { LocaleService } from '../services/locale.service';
 import { COUNTRY_REGION_MAP } from '../app.constant';
 import { ServiceConfig } from '../services/service.config';
+import { findIndex, get, sortBy, startsWith } from '../lodash-optimized';
 
 @Injectable()
 export class LoginActions {
@@ -343,13 +345,13 @@ export class LoginActions {
         .pipe(
             ofType(LoginActions.LogOut),
             map((action: CustomActions) => {
-                if (PRODUCTION_ENV && !isElectron) {
+                if (environment.production && !Configuration.isElectron) {
                     window.location.href = this._generalService.getGiddhRegionUrl();
-                } else if (isElectron) {
+                } else if (Configuration.isElectron) {
                     this._router.navigate(['/login']);
                     window.location.reload();
                 } else {
-                    window.location.href = (this.serviceConfig.AppUrl || AppUrl) + 'login/';
+                    window.location.href = (this.serviceConfig.AppUrl || environment.AppUrl) + 'login/';
                 }
                 return { type: 'EmptyAction' };
             })));

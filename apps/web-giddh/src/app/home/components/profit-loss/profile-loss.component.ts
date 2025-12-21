@@ -1,0 +1,323 @@
+import { takeUntil } from 'rxjs/operators';
+import { Component, Input, OnDestroy, OnInit, ChangeDetectorRef, ViewChild, Inject } from '@angular/core';
+import { MatMenuTrigger } from '@angular/material/menu';
+import { Observable, ReplaySubject, Subscription } from 'rxjs';
+import { select, Store } from '@ngrx/store';
+import { AppState } from '../../../store/roots';
+import * as dayjs from 'dayjs';
+import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from '../../../shared/helpers/defaultDateFormat';
+import {
+    ProfitLossData,
+    ProfitLossRequest,
+    GetRevenueResponse,
+    GetTotalExpenseResponse,
+    GetIncomeBeforeTaxes
+} from "../../../models/api-models/tb-pl-bs";
+import { TBPlBsActions } from "../../../actions/tl-pl.actions";
+
+import { GeneralService } from '../../../services/general.service';
+import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
+import { TlPlService } from '../../../services/tl-pl.service';
+import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
+import { Chart, registerables } from 'chart.js';
+import { ServiceConfig } from '../../../services/service.config';
+import { GiddhNumberFormatPipe } from '../../../shared/helpers/pipes/number-format/number-format.pipe';
+import { Configuration } from '../../../app.constant';
+import { environment } from '../../../../environments/environment';
+import { cloneDeep } from '../../../lodash-optimized';
+Chart.register(...registerables);
+
+@Component({
+    selector: 'profit-loss',
+    templateUrl: 'profit-loss.component.html',
+    styleUrls: ['../../home.component.scss', './profit-loss.component.scss'],
+    standalone:false
+})
+
+export class ProfitLossComponent implements OnInit, OnDestroy {
+    @Input() public refresh: boolean = false;
+    /** Angular Material menu trigger for datepicker */
+    @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
+    /* This will store selected date range to use in api */
+    public selectedDateRange: any;
+    /* This will store selected date range to show on UI */
+    public selectedDateRangeUi: any;
+    /* This will store available date ranges */
+    public datePickerOptions: any = GIDDH_DATE_RANGE_PICKER_RANGES;
+    /* Selected range label */
+    public selectedRangeLabel: any = "";
+    /* Selected from date */
+    public fromDate: string;
+    /* Selected to date */
+    public toDate: string;
+    public imgPath: string = '';
+    public requestInFlight: boolean = true;
+    public totalIncome: number = 0;
+    public totalIncomeType: string = '';
+    public totalExpense: number = 0;
+    public totalExpenseType: string = '';
+    public netProfitLoss: number = 0;
+    public netProfitLossType: string = '';
+    public plRequest: ProfitLossRequest = { from: '', to: '', refresh: false };
+    public amountSettings: any = { baseCurrencySymbol: '' };
+    public universalDate$: Observable<any>;
+    public dataFound: boolean = false;
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
+    /* This will hold local JSON data */
+    public localeData: any = {};
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+    /* this will store active company data */
+    public activeCompany: any = {};
+    /** Decimal places from company settings */
+    public giddhBalanceDecimalPlaces: number = 2;
+    /** Chart object */
+    public chart: any;
+
+    constructor(@Inject(ServiceConfig) private serviceConfig, private store: Store<AppState>, public tlPlActions: TBPlBsActions, public currencyPipe: GiddhNumberFormatPipe, private cdRef: ChangeDetectorRef, private generalService: GeneralService, private tlPlService: TlPlService) {
+        this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
+
+        this.store.pipe(select(p => p.settings.profile), takeUntil(this.destroyed$)).subscribe((profile) => {
+            if (profile) {
+                this.giddhBalanceDecimalPlaces = profile.balanceDecimalPlaces;
+            }
+        });
+    }
+
+    public ngOnInit() {
+        // img path
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+
+        this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
+            if (activeCompany) {
+                this.amountSettings.baseCurrencySymbol = activeCompany.baseCurrencySymbol;
+                this.activeCompany = activeCompany;
+            }
+        });
+
+        // listen for universal date
+        this.universalDate$.subscribe(dateObj => {
+            if (dateObj) {
+                let dates = [];
+                dates = [dayjs(dateObj[0]).format(GIDDH_DATE_FORMAT), dayjs(dateObj[1]).format(GIDDH_DATE_FORMAT), false];
+
+                this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
+                this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
+
+                this.getFilterDate(dates);
+            }
+        });
+    }
+
+    public resetChartData() {
+        this.dataFound = false;
+        this.totalIncome = 0;
+        this.totalIncomeType = '';
+        this.totalExpense = 0;
+        this.totalExpenseType = '';
+        this.netProfitLossType = '';
+        this.netProfitLoss = 0;
+        this.requestInFlight = false;
+        this.cdRef.detectChanges();
+    }
+
+    public ngOnDestroy() {
+        if (this.chart) {
+            this.chart.destroy();
+            this.chart = null;
+        }
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+    }
+
+    public getFilterDate(dates: any) {
+        if (dates !== null) {
+            this.requestInFlight = true;
+            this.plRequest.from = dates[0];
+            this.plRequest.to = dates[1];
+            this.plRequest.refresh = false;
+            this.getProfitLossData();
+        }
+    }
+
+    /**
+     * API call to get refresh chart
+     *
+     * @memberof ProfitLossComponent
+     */
+    public refreshChart() {
+        this.requestInFlight = true;
+        this.plRequest.refresh = true;
+        this.getProfitLossData();
+    }
+
+    /**
+     * To show/hide the datepicker
+     *
+     * @param {boolean} isOpen - If true, opens the datepicker; if false, closes it
+     * @memberof ProfitLossComponent
+     */
+    public toggleGiddhDatepicker(isOpen: boolean = true): void {
+        if (isOpen) {
+            this.universalDatepickerTrigger?.openMenu();
+        } else {
+            this.universalDatepickerTrigger?.closeMenu();
+        }
+    }
+
+    /**
+    * Call back function for date/range selection in datepicker
+    *
+    * @param {*} value
+    * @memberof ProfitLossComponent
+    */
+    public dateSelectedCallback(value?: any): void {
+        if (value && value.event === "cancel") {
+            this.toggleGiddhDatepicker(false);
+            return;
+        }
+        this.selectedRangeLabel = "";
+
+        if (value && value.name) {
+            this.selectedRangeLabel = value.name;
+        }
+        this.toggleGiddhDatepicker(false);
+        if (value && value.startDate && value.endDate) {
+            this.selectedDateRange = { startDate: dayjs(value.startDate), endDate: dayjs(value.endDate) };
+            this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
+            this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
+            this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
+            this.requestInFlight = true;
+            this.plRequest.from = this.fromDate;
+            this.plRequest.to = this.toDate;
+            this.plRequest.refresh = false;
+            this.getProfitLossData();
+        }
+    }
+
+    /**
+     * This will get Profit/loss data
+     *
+     * @memberof ProfitLossComponent
+     */
+    public getProfitLossData(): void {
+        this.tlPlService.GetProfitLoss(cloneDeep(this.plRequest)).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.status === "success" && response?.body) {
+                this.dataFound = true;
+                let data = cloneDeep(response.body) as ProfitLossData;
+                let revenue;
+                let expense;
+                let npl;
+
+                if (data && data.incomeStatement && data.incomeStatement.revenue) {
+                    revenue = cloneDeep(data.incomeStatement.revenue) as GetRevenueResponse;
+                    this.totalIncome = giddhRoundOff(revenue.amount, this.giddhBalanceDecimalPlaces);
+                    this.totalIncomeType = (revenue.type === "CREDIT") ? "Cr." : "Dr.";
+                } else {
+                    this.totalIncome = 0;
+                    this.totalIncomeType = '';
+                }
+
+                if (data && data.incomeStatement && data.incomeStatement.totalExpenses) {
+                    expense = cloneDeep(data.incomeStatement.totalExpenses) as GetTotalExpenseResponse;
+                    this.totalExpense = giddhRoundOff(expense.amount, this.giddhBalanceDecimalPlaces);
+                    this.totalExpenseType = (expense.type === "CREDIT") ? "Cr." : "Dr.";
+                } else {
+                    this.totalExpense = 0;
+                    this.totalExpenseType = '';
+                }
+
+                if (data && data.incomeStatement && data.incomeStatement.incomeBeforeTaxes) {
+                    npl = cloneDeep(data.incomeStatement.incomeBeforeTaxes) as GetIncomeBeforeTaxes;
+                    this.netProfitLossType = (npl.type === "CREDIT") ? "+" : "-";
+                    this.netProfitLoss = giddhRoundOff(npl.amount, this.giddhBalanceDecimalPlaces);
+                } else {
+                    this.netProfitLossType = '';
+                    this.netProfitLoss = 0;
+                }
+
+                if (this.totalIncome === 0 && this.totalExpense === 0) {
+                    this.resetChartData();
+                } else {
+                    this.createChart()
+                }
+            }
+            this.requestInFlight = false;
+        });
+    }
+
+    /**
+     * Create chart
+     *
+     * @memberof ProfitLossComponent
+     */
+    public createChart(): void {
+        let totalIncome = this.amountSettings.baseCurrencySymbol + " " + this.currencyPipe.transform(this.totalIncome) + "/-";
+        let totalExpense = this.amountSettings.baseCurrencySymbol + " " + this.currencyPipe.transform(this.totalExpense) + "/-";
+        let label = [totalIncome, totalExpense];
+        let data = [this.totalIncome, this.totalExpense];
+
+        this.chart?.destroy();
+
+        this.chart = new Chart("profitLossChartCanvas", {
+            type: 'doughnut',
+            data: {
+                labels: label,
+                datasets: [{
+                    label: '',
+                    data: data,
+                    backgroundColor: ['#A52A2A', '#1a237e'],
+                    hoverOffset: 18,
+                    hoverBorderColor: '#fff',
+                    borderWidth: 1,
+                    offset: 6
+                }],
+            },
+
+            options: {
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(255, 255, 255,0.8)',
+                        borderColor: 'rgb(95, 172, 255)',
+                        bodyFont: {
+                            size: 0,
+                        },
+                        titleColor: 'rgb(0, 0, 0)',
+                        borderWidth: 0.5,
+                        titleFont: {
+                            weight: 'normal'
+                        },
+                        displayColors: false
+                    }
+                },
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: 50,
+                radius: '95%'
+            }
+        });
+
+        this.requestInFlight = false;
+        this.cdRef.detectChanges();
+    }
+
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
+
+}

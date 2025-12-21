@@ -1,0 +1,26 @@
+.bs-table-grid {
+    th {
+        border: none !important;
+        border-bottom: 1px solid var(--border-color) !important;
+        padding: 13px 8px 14px 0 !important;
+        &:first-child {
+            padding: 0 !important;
+        }
+        input {
+            height: 47px;
+        }
+    }
+}
+.tb-wrapper {
+    width: 70%;
+    margin: auto;
+}
+@media (max-width: 1024px) {
+    .tb-wrapper {
+        width: 100%;
+        margin: auto;
+        .table-container {
+            overflow-x: auto;
+        }
+    }
+}

@@ -7,17 +7,18 @@ import { SalesService } from "apps/web-giddh/src/app/services/sales.service";
 import { SettingsIntegrationService } from "apps/web-giddh/src/app/services/settings.integration.service";
 import { ToasterService } from "apps/web-giddh/src/app/services/toaster.service";
 import { AppState } from "apps/web-giddh/src/app/store";
-import { Observable, of as observableOf, ReplaySubject } from "rxjs";
+import { Observable, of as observableOf, ReplaySubject, Subscription } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
 import { SettingsAmountLimitDuration, UNLIMITED_LIMIT } from "../../../../constants/settings.constant";
 import { PageLeaveUtilityService } from "apps/web-giddh/src/app/services/page-leave-utility.service";
+import { filter, forEach, get, includes, map } from '../../../../../lodash-optimized';
 
 @Component({
-    selector: 'account-create-edit',
-standalone: false,
+    selector: 'icici-account-create-edit',
     templateUrl: './account-create-edit.component.html',
     styleUrls: ['./account-create-edit.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class AccountCreateEditComponent implements OnInit, OnDestroy {
@@ -49,6 +50,10 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
     public paymentAlerts: any[] = [];
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
     /** Holds the amount limit duration options */
     public amountLimitDurations: IOption[] = [];
     /** True if api call is pending */
@@ -111,8 +116,29 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
      * @memberof AccountCreateEditComponent
      */
     public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
+        this.isDestroying = true;
+
+        // Clean up all tracked subscriptions first
+        this.subscriptions.forEach((subscription, index) => {
+            try {
+                if (subscription && !subscription.closed) {
+                    subscription.unsubscribe();
+                }
+            } catch (error) {
+                console.warn(`Error unsubscribing subscription ${index}:`, error);
+            }
+        });
+        this.subscriptions = [];
+
+        // Safely complete the destroyed$ subject
+        try {
+            if (this.destroyed$ && !this.destroyed$.closed) {
+                this.destroyed$.next(true);
+                this.destroyed$.complete();
+            }
+        } catch (error) {
+            console.warn('Error completing destroyed$ subject:', error);
+        }
     }
 
     /**
@@ -345,4 +371,15 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
     public isSelectAllChecked(value: any): boolean {
         return ((this.selectAllRecords === value && this.paymentAlerts?.includes(value) && this.paymentAlerts?.length === this.paymentAlertsUsersList?.length) || (this.selectAllRecords === value && !this.paymentAlerts?.includes(value) && this.paymentAlerts?.length === this.paymentAlertsUsersList?.length - 1));
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

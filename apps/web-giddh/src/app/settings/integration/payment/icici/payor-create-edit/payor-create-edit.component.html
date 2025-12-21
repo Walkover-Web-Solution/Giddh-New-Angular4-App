@@ -1,4 +1,9 @@
-<div class="app-translate-container" appTranslate file="'settings/integration'" (localeData)="localeData = $event">
+<div
+    appTranslate
+    [file]="'settings/integration'"
+    [requireCommonData]="false"
+    (localeData)="localeData = $event"
+>
     <form
         autocomplete="off"
         novalidate
@@ -36,47 +41,47 @@
                             </div>
                         </div>
                         <div class="clear-both mt-4" *ngIf="!activePayorAccount">
-                            <!-- COMMENTED OUT - COMPILATION ERROR: <!-- COMMENTED OUT - COMPILATION ERROR: <input-field
+                            <input-field
                                 [label]="localeData?.payment?.login_id_label"
                                 [required]="true"
                                 [name]="'loginId'"
                                 formControlName="loginId"
                                 [type]="'text'"
                                 [placeholder]="localeData?.payment?.login_id_placeholder"
-                            > --> -->
-                            <!-- COMMENTED OUT - COMPILATION ERROR: <!-- COMMENTED OUT - COMPILATION ERROR: </input-field> --> -->
+                            >
+                            </input-field>
                         </div>
                         <div class="clear-both mt-2">
-                            <!-- COMMENTED OUT - COMPILATION ERROR: <!-- COMMENTED OUT - COMPILATION ERROR: <reactive-dropdown-field
+                            <reactive-dropdown-field
                                 (selectedOption)="accountUserForm.get('userUniqueName').patchValue($event.value)"
                                 [label]="localeData?.payment?.user"
                                 [name]="'userUniqueName'"
                                 [placeholder]="localeData?.payment?.select_user"
                                 [options]="usersList"
                                 [required]="true"
-                            > --> --><!-- COMMENTED OUT - COMPILATION ERROR: <!-- COMMENTED OUT - COMPILATION ERROR: </reactive-dropdown-field> --> -->
+                            ></reactive-dropdown-field>
                         </div>
                         <div class="clear-both mt-2">
                             <div class="clear-both">
                                 <div class="d-inline-block col-md-6 pl-0">
-                                    <!-- COMMENTED OUT - COMPILATION ERROR: <!-- COMMENTED OUT - COMPILATION ERROR: <input-field
+                                    <input-field
                                         [label]="localeData?.payment?.limit_upto"
                                         formControlName="maxAmount"
                                         [name]="'maxAmount'"
                                         [type]="'text'"
                                         [placeholder]="localeData?.payment?.enter_amount"
                                         [allowDigitsOnly]="true"
-                                    > --> --><!-- COMMENTED OUT - COMPILATION ERROR: <!-- COMMENTED OUT - COMPILATION ERROR: </input-field> --> -->
+                                    ></input-field>
                                 </div>
                                 <div class="d-inline-block col-md-6 pr-0">
-                                    <!-- COMMENTED OUT - COMPILATION ERROR: <!-- COMMENTED OUT - COMPILATION ERROR: <reactive-dropdown-field
+                                    <reactive-dropdown-field
                                         (selectedOption)="accountUserForm.get('duration').patchValue($event.value)"
                                         [label]="localeData?.payment?.limit_upto"
                                         [name]="'duration'"
                                         [placeholder]="localeData?.payment?.duration"
                                         [options]="amountLimitDurations"
 
-                                    > --> --><!-- COMMENTED OUT - COMPILATION ERROR: <!-- COMMENTED OUT - COMPILATION ERROR: </reactive-dropdown-field> --> -->
+                                    ></reactive-dropdown-field>
                                 </div>
                             </div>
                         </div>

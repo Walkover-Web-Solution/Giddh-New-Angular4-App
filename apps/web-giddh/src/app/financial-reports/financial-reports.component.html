@@ -1,0 +1,38 @@
+<div
+    class="relative"
+    appTranslate
+    [file]="'trial-profit-balance'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <hamburger-menu></hamburger-menu>
+    <mat-tab-group 
+        class="setting-page tb-pl-bs-tabs"
+        mat-stretch-tabs="false"
+        mat-align-tabs="start"
+        [selectedIndex]="selectedTabIndex"
+        (selectedTabChange)="onTabChanged($event)"
+        #staticTabsTBPL>
+        <mat-tab [label]="localeData?.tabs?.trial_balance">
+            <div class="pt-3 pb-3">
+                <div class="container-fluid tb-pl-bs-header-tab">
+                    <trial-balance [isV2]="false" [selectedCompany]="selectedCompany" *ngIf="CanTBLoad"></trial-balance>
+                </div>
+            </div>
+        </mat-tab>
+        <mat-tab [label]="localeData?.tabs?.profit_loss">
+            <div class="pt-3 pb-3">
+                <div class="container-fluid tb-pl-bs-header-tab">
+                    <profit-loss [selectedCompany]="selectedCompany" *ngIf="CanPLLoad"></profit-loss>
+                </div>
+            </div>
+        </mat-tab>
+        <mat-tab [label]="localeData?.tabs?.balance_sheet">
+            <div class="pt-3 pb-3">
+                <div class="container-fluid tb-pl-bs-header-tab">
+                    <balance-sheet [selectedCompany]="selectedCompany" *ngIf="CanBSLoad"></balance-sheet>
+                </div>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>

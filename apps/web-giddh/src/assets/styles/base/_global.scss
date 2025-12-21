@@ -5148,11 +5148,6 @@ body {
         }
     }
 
-    .cdk-overlay-container {
-        .page-leave-confirmation-modal-backdrop {
-            z-index: 9999 !important;
-        }
-    }
 
     div>a[href*="froala.com/wysiwyg-editor"] {
         display: none !important;
@@ -9985,12 +9980,6 @@ body {
         .cdk-overlay-container,
         .cdk-global-overlay-wrapper {
             z-index: 99999 !important;
-        }
-    }
-
-    .cdk-overlay-container {
-        .page-leave-confirmation-modal-backdrop {
-            z-index: 9999 !important;
         }
     }
 

@@ -4,7 +4,7 @@ import { CustomTemplateResponse } from '../models/api-models/Invoice';
 import { CompanyResponse } from '../models/api-models/Company';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { NgForm } from '@angular/forms';
-import { cloneDeep } from '../lodash-optimized';
+import { cloneDeep, forEach, keys, set } from '../lodash-optimized';
 
 export class TemplateContentUISectionVisibility {
     public header: boolean = true;
@@ -12,9 +12,7 @@ export class TemplateContentUISectionVisibility {
     public footer: boolean = false;
 }
 declare var _: any;
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 
 export class InvoiceUiDataService {
     /** Holds the current custom template data */

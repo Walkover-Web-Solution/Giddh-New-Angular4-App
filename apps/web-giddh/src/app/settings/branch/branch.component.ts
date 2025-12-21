@@ -194,13 +194,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         //     }
         // }
         // });
-        });
-
-        // COMMENTED OUT - COMPILATION ERROR: this.store.pipe(select(s => s.settings.branchRemoved), takeUntil(this.destroyed$)).subscribe(res => {
-            if (res !== null) {
-                this.getAllBranches();
-            }
-        });
+ 
 
         this.imgPath = isElectron ? 'assets/images/warehouse-vector.svg' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/warehouse-vector.svg';
     }
@@ -229,6 +223,13 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         if (this.isBranch) {
             this.openCreateCompanyDialog();
         }
+    }
+
+    /**
+     * Handle tab change event
+     */
+    public onTabChanged(event: any): void {
+        this.selectedTabIndex = event.index;
     }
 
     /**
@@ -317,7 +318,7 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         }
     }
 
-    public ngOnDestroy() {
+    public ngOnDestroy(): void {
         document.querySelector("body")?.classList?.remove("setting-branch-body");
         this.destroyed$.next(true);
         this.destroyed$.complete();

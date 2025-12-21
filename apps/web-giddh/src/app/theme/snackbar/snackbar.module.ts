@@ -1,10 +1,10 @@
 import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
-import { SnackBarComponent } from "./snackbar.component";
+import { SnackbarComponent } from "./snackbar.component";
 
 @NgModule({
     declarations: [
-        SnackBarComponent
+        SnackbarComponent
     
     ],
     imports: [
@@ -12,7 +12,7 @@ import { SnackBarComponent } from "./snackbar.component";
     
     ],
     exports: [
-        SnackBarComponent
+        SnackbarComponent
     
     ]
 })

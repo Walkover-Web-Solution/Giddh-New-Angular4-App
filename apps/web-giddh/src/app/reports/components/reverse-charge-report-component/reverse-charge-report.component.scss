@@ -1,0 +1,11 @@
+.input-grp-date-range-picker input.form-control {
+    padding-left: 45px !important;
+    width: 210px;
+    &:focus {
+        border-color: var(--border-color) !important;
+    }
+}
+
+.invoice-column {
+    min-width: 200px;
+}

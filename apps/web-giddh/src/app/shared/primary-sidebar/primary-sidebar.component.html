@@ -1,0 +1,306 @@
+<div
+    appTranslate
+    [file]="'sidebar-menu'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
+>
+    <div class="primary-sidebar py-3 position-relative" (clickOutside)="hidePrimarySidebarCompanyList()">
+        <div
+            class="company-branch-block pl-4 pr-4 position-relative"
+            [ngClass]="{ 'padding-14': !currentBranch && (currentCompanyBranches$ | async)?.length > 1 }"
+        >
+            <ul
+                class="list-style-none branch-connection dropdown-toggle"
+                id="button-company-branch"
+                (click)="openCompanyBranchDropdown(); isGoToBranch = false"
+            >
+                <span class="outer-span" *ngIf="(currentCompanyBranches$ | async)?.length > 1">
+                    <span class="inner-span"></span>
+                </span>
+                <li class="company-name position-relative">
+                    <h3 class="font-size-15 d-flex flex-column cursor-pointer">
+                        <div class="d-flex flex-column">
+                            <div class="d-flex align-items-center">
+                                <span class="company-alice mr-1 text-uppercase">{{ companyInitials }}</span>
+                                <span class="d-flex justify-content-between w-100 company-full-name flex-column">
+                                    <span
+                                        class="company-ellipsis"
+                                        [matTooltip]="selectedCompanyDetails?.name"
+                                        matTooltipPosition="above"
+                                        >{{ selectedCompanyDetails?.name }}</span
+                                    >
+                                    <span
+                                        class="branch-ellipsis"
+                                        *ngIf="currentBranch && (currentCompanyBranches$ | async)?.length > 1"
+                                        ><span>{{ currentBranch?.name }}</span>
+                                    </span>
+                                    <i
+                                        class="icon-branch-connect"
+                                        *ngIf="currentBranch && (currentCompanyBranches$ | async)?.length > 1"
+                                    ></i>
+                                </span>
+                                <button mat-icon-button class="ml-1 toggle-btn">
+                                    <i
+                                        [ngClass]="{
+                                            'icon-cross font-size-15': showCompanyBranchSwitch,
+                                            'icon-down-new': !showCompanyBranchSwitch
+                                        }"
+                                    ></i>
+                                </button>
+                            </div>
+                        </div>
+                    </h3>
+                </li>
+            </ul>
+            <div class="dropdown-menu company-branch-nav left-0" *ngIf="showCompanyBranchSwitch">
+                <company-branch
+                    [localeData]="localeData"
+                    [commonLocaleData]="commonLocaleData"
+                    [isGoToBranch]="isGoToBranch"
+                ></company-branch>
+            </div>
+        </div>
+        <div>
+            <div class="wrap-menus mt-3">
+                <div class="account-block mb-4 pl-4 pr-4" *ngIf="accountItemsFromIndexDB?.length > 0">
+                    <div class="account-collapse">
+                        <p class="font-size-12 d-flex justify-content-between">
+                            {{ localeData?.accounts }}
+                            <i class="icon-add-new cursor-pointer" (click)="showManageGroupsModal()"></i>
+                        </p>
+                        <ul class="left-fixed-header list-style-none font-size-15 lh33 mt-1">
+                            <li *ngFor="let acc of accountItemsFromIndexDB">
+                                <a
+                                    aria-label="account"
+                                    [routerLinkActive]="['active']"
+                                    class="cursor-pointer"
+                                    [class.active]="isLedgerAccSelected && selectedLedgerName === acc?.uniqueName"
+                                    (click)="analyzeAccounts($event, acc); $event.stopPropagation()"
+                                    >{{ acc.name }} {{ commonLocaleData?.app_ac }}</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="javascript:void(0);"
+                                    aria-label="show more"
+                                    (click)="showNavigationModal()"
+                                    class="show-more cursor-pointer"
+                                    >{{ localeData?.show_more }}</a
+                                >
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="account-dropdown btn-group" [attr.container]="!isOpen ? 'body' : ''">
+                        <a
+                            href="javascript:void(0);"
+                            aria-label="account-icon"
+                            id="button-basic-01"
+                            type="button"
+                            class="dropdown-toggle"
+                        >
+                            <span [matTooltip]="localeData?.accounts"><i class="icon-accounts-new"></i> </span>
+                            <i class="icon-right ml-2 font-size-15"></i>
+                        </a>
+                        <ul
+                            class="dropdown-menu account-dropdown-collapse list-style-none sub-menu"
+                            role="menu"
+                            aria-labelledby="button-basic-01"
+                        >
+                            <li *ngFor="let acc of accountItemsFromIndexDB" role="menuitem">
+                                <a
+                                    href="javascript:void(0);"
+                                    aria-label="account item"
+                                    routerLink="ledger/{{ acc?.uniqueName }}"
+                                    (click)="analyzeAccounts($event, acc)"
+                                    >{{ acc.name }} {{ commonLocaleData?.app_ac }}</a
+                                >
+                            </li>
+                            <li role="menuitem">
+                                <a
+                                    href="javascript:void(0);"
+                                    aria-label="Show more"
+                                    (click)="showNavigationModal()"
+                                    class="show-more cursor-pointer"
+                                    >{{ localeData?.show_more }}</a
+                                >
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="menu-block">
+                    <div class="menu-item-wrapper font-size-15">
+                        <div class="menu-item pl-4 pr-4">
+                            <p class="d-flex align-items-center justify-content-between font-size-12">
+                                <span
+                                    [routerLink]="['/pages/giddh-all-items']"
+                                    class="d-inline-flex align-items-center cursor-pointer"
+                                >
+                                    {{ localeData?.menu }}
+                                    <i class="icon-down-new ml-1"></i>
+                                </span>
+                                <span class="text-light cursor-pointer" [routerLink]="['/pages/giddh-all-items']">
+                                    <i class="icon-go font-size-16"></i>
+                                </span>
+                            </p>
+                        </div>
+                        <cdk-tree [dataSource]="dataSource" [treeControl]="treeControl">
+                            <cdk-tree-node
+                                *cdkTreeNodeDef="let node; when: hasChild"
+                                role="menuitem"
+                                [style.display]="shouldRender(node) ? 'block' : 'none !important'"
+                                [style.padding-left.px]="node.level * 20"
+                            >
+                                <div class="main-item-wrapper">
+                                    <span aria-label="menu" (click)="toggleNode(node)" class="main-item">
+                                        <span class="item-label">
+                                            <i [ngClass]="node?.icon"></i>
+                                            <span class="item-name">{{ node.label }}</span>
+                                        </span>
+                                        <i
+                                            class="ml-2 font-size-15 icon-right"
+                                            [ngClass]="{ 'rotate-270': isExpanded(node) }"
+                                        ></i>
+                                    </span>
+                                </div>
+                            </cdk-tree-node>
+
+                            <!-- Child nodes (leaf nodes) -->
+                            <cdk-tree-node
+                                *cdkTreeNodeDef="let node"
+                                [style.display]="shouldRender(node) ? 'flex' : 'none !important'"
+                                [style.padding-left.px]="node.level * 20"
+                                role="menu"
+                                class="has-no-child"
+                                [ngClass]="{
+                                    'active':
+                                        isActiveRoute === node?.link &&
+                                        node?.additional?.queryParams?.tabIndex == queryParams
+                                }"
+                            >
+                                <!-- Parent menu without children -->
+                                <div class="main-item-wrapper" *ngIf="node?.link && node?.level === 0">
+                                    <span
+                                        aria-label="menu"
+                                        (click)="toggleNode(node)"
+                                        [routerLink]="[node?.link]"
+                                        [queryParams]="node?.additional?.queryParams"
+                                        class="main-item"
+                                    >
+                                        <span class="item-label">
+                                            <i [ngClass]="node?.icon"></i>
+                                            <span class="item-name">{{ node?.label }}</span>
+                                        </span>
+                                    </span>
+                                </div>
+                                <!-- Child menu without link -->
+                                <div class="main-item-wrapper sub-menu pr-0" *ngIf="node?.level === 1 && !node?.link">
+                                    <span class="main-item" aria-label="menu" (click)="handleItemClick(node)">
+                                        <span class="item-label">
+                                            <i [ngClass]="node?.icon"></i>
+                                            {{ node?.label }}
+                                        </span>
+                                    </span>
+                                </div>
+                                <!-- Child menu with link -->
+                                <div class="main-item-wrapper sub-menu pr-0" *ngIf="node?.level === 1 && node?.link">
+                                    <div
+                                        aria-label="menu"
+                                        class="main-item"
+                                        [routerLink]="[node?.link]"
+                                        [queryParams]="node?.additional?.queryParams"
+                                    >
+                                        <span class="item-label">
+                                            <i [ngClass]="node?.icon"></i>
+                                            {{ node?.label }}
+                                        </span>
+                                        <ng-container
+                                            *ngIf="
+                                                !isConsolidatedBranch &&
+                                                (currentOrganizationType === 'BRANCH' || isCompanyWithoutBranch)
+                                            "
+                                        >
+                                            <ng-container
+                                                *ngIf="
+                                                    !(
+                                                        node?.additional?.createNew?.queryParams?.addVendor ||
+                                                        node?.additional?.createNew?.queryParams?.addCustomer
+                                                    )
+                                                "
+                                            >
+                                                <span
+                                                    class="ml-auto create-new"
+                                                    *ngIf="node?.additional?.createNew"
+                                                    (click)="$event.stopPropagation()"
+                                                    [routerLink]="[node?.additional?.createNew?.link]"
+                                                    [queryParams]="node?.additional?.createNew?.queryParams"
+                                                >
+                                                    {{ node?.additional?.createNew?.label }}
+                                                </span>
+                                            </ng-container>
+                                            <ng-container
+                                                *ngIf="
+                                                    node?.additional?.createNew?.queryParams?.addVendor ||
+                                                    node?.additional?.createNew?.queryParams?.addCustomer
+                                                "
+                                            >
+                                                <span
+                                                    class="ml-auto create-new"
+                                                    (click)="
+                                                        $event.stopPropagation();
+                                                        selectedGroupForCreateAccount = node?.additional?.createNew
+                                                            ?.queryParams?.addCustomer
+                                                            ? 'sundrydebtors'
+                                                            : 'sundrycreditors';
+                                                        openAccountAsidePane()
+                                                    "
+                                                >
+                                                    {{ node?.additional?.createNew?.label }}
+                                                </span>
+                                            </ng-container>
+                                        </ng-container>
+                                    </div>
+                                </div>
+                            </cdk-tree-node>
+                        </cdk-tree>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--CMD + G modal  -->
+    <ng-template #navigationModal>
+        <command-k
+            (newTeamCreationEmitter)="handleNewTeamCreationEmitter($event)"
+            (groupEmitter)="makeGroupEntryInDB($event)"
+            (selectedItemEmitter)="onItemSelected($event)"
+            (closeDailogEmitter)="closeEvent()"
+            [parentEle]="mdl"
+            [isOpen]="true"
+            [setParentWidth]="true"
+        ></command-k>
+        <div class="shortcuts">
+            <strong>↑</strong> <strong>↓</strong>&nbsp; {{ localeData?.to_navigate }}
+            <strong class="ml-2" [attr.aria-label]="commonLocaleData?.app_return">↵</strong>&nbsp;
+            {{ localeData?.to_select }}
+            <strong class="ml-2" [attr.aria-label]="commonLocaleData?.app_escape">{{
+                commonLocaleData?.app_esc
+            }}</strong
+            >&nbsp;
+            {{ localeData?.to_dismiss }}
+        </div>
+    </ng-template>
+</div>
+
+<!-- Generic aside menu account template open from cmd+k-->
+<ng-template #genericAsideMenuAccountTemplate>
+    <generic-aside-menu-account
+        (closeAsideEvent)="closeAccountAsidePane($event)"
+        (closeAccountModal)="closeAccountAsidePane($event)"
+        [selectedGrpUniqueName]="selectedGroupForCreateAccount"
+        [createAccountFromCommandK]="true"
+        [keyboardShortcut]="{ 'esc': !hasUnsavedChanges }"
+        (addEvent)="addNewAccount($event)"
+    >
+    </generic-aside-menu-account>
+</ng-template>

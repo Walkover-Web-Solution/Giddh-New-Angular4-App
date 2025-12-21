@@ -1,0 +1,334 @@
+<div
+    appTranslate
+    [file]="'home/revenue'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <mat-card id="pie-chart" *ngIf="!graphExpanded">
+        <mat-card-content>
+            <div class="row">
+                <div class="col-lg-9 col-md-12">
+                    <div class="left-column">
+                        <div class="panel-heading pl-0 pt-0 clear-both">
+                            <div class="panel-heading-inner-content w-100">
+                                <div class="cursor-pointer">
+                                    <span [matMenuTriggerFor]="revenueChartMenu" class="menu-trigger-btn" role="button" aria-label="income-select">
+                                        <span *ngIf="activeGraphType !== undefined">
+                                            <strong>{{ activeGraphType["uniqueName"] | titlecase }}</strong>
+                                        </span>
+                                        <span class="icon-arrow-down ml-2"></span>
+                                    </span>
+                                    <mat-menu #revenueChartMenu="matMenu" xPosition="after">
+                                        <span
+                                            mat-menu-item
+                                            (click)="changeGraphType(gtype)"
+                                            *ngFor="let gtype of revenueGraphTypes"
+                                        >
+                                            {{ gtype?.uniqueName | titlecase }}
+                                        </span>
+                                    </mat-menu>
+                                </div>
+
+                                <div class="refresh-btn">
+                                    <i class="icon-refresh pull-right pl-3" (click)="refreshChart()"></i>
+                                    <span class="this-week pull-right"
+                                        ><span
+                                            class="icon-collapse-icon ml-2"
+                                            [matTooltip]="commonLocaleData?.app_expand"
+                                            (click)="showLineChart()"
+                                        ></span>
+                                    </span>
+                                    <ul class="dashboard-option pull-right">
+                                        <li class="secondary-dark-bg">
+                                            <span></span> {{ commonLocaleData?.app_last_week }}
+                                        </li>
+                                        <li class="secondary-light-bg">
+                                            <span></span> {{ commonLocaleData?.app_this_week }}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body pl-0 pr-0 position-relative ">
+                            <div class="dashboard-reconnect-block" *ngIf="requestInFlight">
+                                <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
+                            </div>
+                            <div class="chart-div">
+                                <cdk-virtual-scroll-viewport [itemSize]="300" class="virtual-group-list overflow-x-hidden">
+                                    <div class="dashboard-line-chart-container">
+                                        <canvas
+                                            id="revenueChartCanvas"
+                                            width="100%"
+                                            height="300px"
+                                            [hidden]="!chart"
+                                        ></canvas>
+                                    </div>
+                                </cdk-virtual-scroll-viewport>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-12">
+                    <div class="total-sale-detail" *ngIf="activeGraphType !== undefined">
+                        <div class="single-sale-detail">
+                            <p>
+                                {{ commonLocaleData?.app_total }} {{ activeGraphType["uniqueName"] }} ({{
+                                    commonLocaleData?.app_this_week
+                                }})
+                            </p>
+                            <p>
+                                <span class="d-inline-flex">
+                                    <amount-field
+                                        [amount]="summaryData.totalCurrent"
+                                        [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                        [currencyCode]="activeCompany?.baseCurrency"
+                                    >
+                                    </amount-field>
+                                </span>
+                            </p>
+                        </div>
+                        <div class="single-sale-detail">
+                            <p>
+                                {{ commonLocaleData?.app_total }} {{ activeGraphType["uniqueName"] }} ({{
+                                    commonLocaleData?.app_last_week
+                                }})
+                            </p>
+                            <p>
+                                <span class="d-inline-flex">
+                                    <amount-field
+                                        [amount]="summaryData.totalLast"
+                                        [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                        [currencyCode]="activeCompany?.baseCurrency"
+                                    >
+                                    </amount-field>
+                                </span>
+                            </p>
+                        </div>
+                        <div class="single-sale-detail">
+                            <p>{{ localeData?.highest }} {{ activeGraphType["uniqueName"] }}</p>
+                            <p>
+                                <span class="d-inline-flex">
+                                    <amount-field
+                                        [amount]="summaryData.highest"
+                                        [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                        [currencyCode]="activeCompany?.baseCurrency"
+                                    >
+                                    </amount-field>
+                                </span>
+                            </p>
+                            <span>{{ summaryData.highestLabel }}</span>
+                        </div>
+                        <div class="single-sale-detail">
+                            <p>{{ localeData?.lowest }} {{ activeGraphType["uniqueName"] }}</p>
+                            <p>
+                                <span class="d-inline-flex">
+                                    <amount-field
+                                        [amount]="summaryData.lowest"
+                                        [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                        [currencyCode]="activeCompany?.baseCurrency"
+                                    >
+                                    </amount-field>
+                                </span>
+                            </p>
+                            <span>{{ summaryData.lowestLabel }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+    <div *ngIf="graphExpanded">
+        <div class="total-sales-header">
+            <div class="row total-income-wrap">
+                <div class="col-lg-8 col-md-12">
+                    <div class="row row h-100 align-items-center">
+                        <div class="col-sm-4">
+                            <div class="date-range-block">
+                                <mat-form-field
+                                    appearance="outline"
+                                    class="w-100 mr-3"
+                                    (click)="campaignOnepicker?.open()"
+                                >
+                                    <mat-label>{{ localeData?.date_range }}</mat-label>
+                                    <mat-date-range-input
+                                        [rangePicker]="campaignOnePicker"
+                                        [comparisonStart]="previousDateRangePickerValue[0]"
+                                        [comparisonEnd]="previousDateRangePickerValue[1]"
+                                    >
+                                        <input
+                                            readonly
+                                            matStartDate
+                                            placeholder="Start date"
+                                            (dateChange)="setPreviousDate()"
+                                            [(ngModel)]="previousDateRangePickerValue[0]"
+                                        />
+                                        <input
+                                            readonly
+                                            matEndDate
+                                            placeholder="End date"
+                                            (dateChange)="setPreviousDate()"
+                                            [(ngModel)]="previousDateRangePickerValue[1]"
+                                        />
+                                    </mat-date-range-input>
+                                    <mat-date-range-picker #campaignOnePicker></mat-date-range-picker>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="date-range-block">
+                                <mat-form-field appearance="outline" class="w-100" (click)="campaignTwopicker?.open()">
+                                    <mat-label>{{ localeData?.compare_to }}</mat-label>
+                                    <mat-date-range-input
+                                        [rangePicker]="campaignTwoPicker"
+                                        [comparisonStart]="previousDateRangePickerValue[0]"
+                                        [comparisonEnd]="previousDateRangePickerValue[1]"
+                                    >
+                                        <input
+                                            readonly
+                                            matStartDate
+                                            (dateChange)="setCurrentDate()"
+                                            [(ngModel)]="currentDateRangePickerValue[0]"
+                                            placeholder="Start date"
+                                        />
+                                        <input
+                                            readonly
+                                            matEndDate
+                                            (dateChange)="setCurrentDate()"
+                                            [(ngModel)]="currentDateRangePickerValue[1]"
+                                            placeholder="End date"
+                                        />
+                                    </mat-date-range-input>
+                                    <mat-date-range-picker #campaignTwoPicker></mat-date-range-picker>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-12">
+                    <div class="page-title">
+                        <div class="collapse-close" (click)="showColumnChart()">
+                            <span class="icon-collapse-icon" [matTooltip]="commonLocaleData?.app_collapse"></span>
+                        </div>
+                        <h1>{{ commonLocaleData?.app_total }} {{ activeGraphType["uniqueName"] | titlecase }}</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <mat-card class="mt-3">
+            <mat-card-content>
+                <div class="clear-both top-dates">
+                    <div class="pull-left about-date">
+                        <div class="active-date">
+                            <span></span>{{ getPreviousWeekStartEndDate[0] | date }} -
+                            {{ getPreviousWeekStartEndDate[1] | date }}
+                        </div>
+                        <div class="in-active-date">
+                            <span></span>{{ getCurrentWeekStartEndDate[0] | date }} -
+                            {{ getCurrentWeekStartEndDate[1] | date }}
+                        </div>
+                        <div class="pull-right revenue-tabs">
+                            <div class="total-sales-tabs">
+                                <span
+                                    [ngClass]="{ 'active-graph': graphParams.interval == 'daily' }"
+                                    (click)="updateChartFrequency('daily')"
+                                    >{{ localeData?.daily }}</span
+                                >|<span
+                                    [ngClass]="{ 'active-graph': graphParams.interval == 'weekly' }"
+                                    (click)="updateChartFrequency('weekly')"
+                                    >{{ localeData?.weekly }}</span
+                                >|<span
+                                    [ngClass]="{ 'active-graph': graphParams.interval == 'monthly' }"
+                                    (click)="updateChartFrequency('monthly')"
+                                    >{{ localeData?.monthly }}</span
+                                >
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="requestInFlight"></giddh-page-loader>
+                <div [ngClass]="{ 'd-none': requestInFlight }">
+                    <div class="d-flex justify-content-center dashboard-line-chart-container">
+                        <canvas id="revenueChartLargeCanvas" width="100%" height="300px" [hidden]="!chart"></canvas>
+                    </div>
+                </div>
+                <div class="total-sale-data clear-both">
+                    <div class="row">
+                        <div class="col-sm-3 single-sale-data">
+                            <div>
+                                <p class="small-heading">
+                                    {{ commonLocaleData?.app_total }} {{ activeGraphType["uniqueName"] }} ({{
+                                        getCurrentWeekStartEndDate[1] | date
+                                    }})
+                                </p>
+                                <p>
+                                    <span class="d-inline-flex">
+                                        <amount-field
+                                            [amount]="summaryData.totalCurrent"
+                                            [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                            [currencyCode]="activeCompany?.baseCurrency"
+                                        >
+                                        </amount-field>
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 single-sale-data">
+                            <div>
+                                <p class="small-heading">
+                                    {{ commonLocaleData?.app_total }} {{ activeGraphType["uniqueName"] }} ({{
+                                        getPreviousWeekStartEndDate[1] | date
+                                    }})
+                                </p>
+                                <p>
+                                    <span class="d-inline-flex">
+                                        <amount-field
+                                            [amount]="summaryData.totalLast"
+                                            [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                            [currencyCode]="activeCompany?.baseCurrency"
+                                        >
+                                        </amount-field>
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 single-sale-data">
+                            <div>
+                                <p class="small-heading">
+                                    {{ localeData?.highest }} {{ activeGraphType["uniqueName"] }}
+                                </p>
+                                <p>
+                                    <span class="d-inline-flex">
+                                        <amount-field
+                                            [amount]="summaryData.highest"
+                                            [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                            [currencyCode]="activeCompany?.baseCurrency"
+                                        >
+                                        </amount-field>
+                                    </span>
+                                </p>
+                                <span class="date-wise-sale">{{ summaryData.highestLabel }}</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 single-sale-data">
+                            <div>
+                                <p class="small-heading">
+                                    {{ localeData?.lowest }} {{ activeGraphType["uniqueName"] }}
+                                </p>
+                                <p>
+                                    <span class="d-inline-flex">
+                                        <amount-field
+                                            [amount]="summaryData.lowest"
+                                            [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                            [currencyCode]="activeCompany?.baseCurrency"
+                                        >
+                                        </amount-field>
+                                    </span>
+                                </p>
+                                <span class="date-wise-sale">{{ summaryData.lowestLabel }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>

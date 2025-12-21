@@ -1,0 +1,510 @@
+<div
+    appTranslate
+    [file]="'template-froala'"
+    (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event"
+    (translationComplete)="translationComplete($event)"
+>
+    <section class="aside-dialog-wrapper">
+        <div class="dialog-header d-flex align-items-center form-header position-sticky top-0">
+            <p>{{ commonLocaleData?.app_custom_email_template }}</p>
+            <button mat-icon-button cdkFocusInitial (click)="handleDialogClose()" aria-label="close icon" class="p-0">
+                <i class="icon-cross"></i>
+            </button>
+        </div>
+
+        <mat-dialog-content class="dialog-body d-flex flex-column template-froala-wrapper">
+            <form [formGroup]="isTrigger ? customTriggerForm : emailForm" class="d-flex flex-column flex-grow-1">
+                <div class="d-grid grid-column-3 column-gap-15 row-gap-15 mb-4" *ngIf="isTrigger">
+                    <!-- Trigger Name -->
+                    <div>
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>{{ localeData?.trigger_name }}</mat-label>
+                            <input
+                                matInput
+                                name="triggerName"
+                                formControlName="title"
+                                [required]="true"
+                                [placeholder]="localeData?.enter_trigger_name"
+                            />
+                        </mat-form-field>
+                    </div>
+
+                    <!-- Trigger Module -->
+                    <div>
+                        <reactive-dropdown-field
+                            [name]="'triggerModule'"
+                            formControlName="triggerModule"
+                            [label]="localeData?.trigger_module"
+                            [labelValue]="
+                                getLabelValue(triggerOptions, customTriggerForm?.controls?.triggerModule?.value)
+                            "
+                            [placeholder]="localeData?.select_trigger_module"
+                            [options]="triggerOptions"
+                            [required]="true"
+                            [showError]="isFormInvalid && customTriggerForm?.controls?.triggerModule?.invalid"
+                        >
+                        </reactive-dropdown-field>
+                    </div>
+
+                    <!-- Actions -->
+                    <div>
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>{{ localeData?.actions }}</mat-label>
+                            <mat-select
+                                name="actions"
+                                [multiple]="true"
+                                [formControl]="customTriggerForm?.controls?.actions"
+                            >
+                                <mat-select-trigger>
+                                    {{ (customTriggerForm?.controls?.actions?.value?.[0] | replaceAll : '_' :
+                                    ' ') | titlecase }}
+                                    <span
+                                        *ngIf="(customTriggerForm?.controls?.actions?.value?.length || 0) > 1"
+                                        class="example-additional-selection"
+                                    >
+                                        (+{{ (customTriggerForm?.controls?.actions?.value?.length || 0) - 1 }}
+                                        {{
+                                            customTriggerForm?.controls?.actions?.value?.length === 2
+                                                ? localeData?.other
+                                                : localeData?.others
+                                        }})
+                                    </span>
+                                </mat-select-trigger>
+                                <mat-option class="balance-options">
+                                    <ngx-mat-select-search
+                                        [placeholderLabel]="localeData?.select_action"
+                                        [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
+                                        [formControl]="actionListDropdown"
+                                        [clearSearchInput]="false"
+                                    >
+                                        <i class="icon-cross" ngxMatSelectSearchClear></i>
+                                    </ngx-mat-select-search>
+                                </mat-option>
+
+                                <mat-option *ngFor="let action of filteredActionList" [value]="action?.value">
+                                    {{ action?.label }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <!-- Conditions (Dynamic fields) -->
+                    <ng-container *ngFor="let field of emailConditionSuggestions$ | async">
+                        <div>
+                            <reactive-dropdown-field
+                                [name]="field.variable"
+                                [labelValue]="
+                                    getLabelValue(
+                                        emailConditionSuggestionsLabelOptions[field.variable].options,
+                                        customTriggerForm?.controls?.conditions?.get(field.variable)?.get('key')?.value
+                                    )
+                                "
+                                [formControl]="customTriggerForm?.controls?.conditions?.get(field.variable)?.get('key')"
+                                [placeholder]="commonLocaleData?.app_select"
+                                [label]="emailConditionSuggestionsLabelOptions[field.variable].dropdownLabel"
+                                [options]="emailConditionSuggestionsLabelOptions[field.variable].options"
+                                [showError]="isFormInvalid && customTriggerForm?.controls?.conditions?.invalid"
+                                (onClear)="
+                                    customTriggerForm?.controls?.conditions
+                                        ?.get(field.variable)
+                                        ?.get('key')
+                                        ?.patchValue(null)
+                                "
+                            >
+                            </reactive-dropdown-field>
+                        </div>
+                        <div>
+                            <mat-form-field appearance="outline" class="w-100">
+                                <mat-label>{{
+                                    emailConditionSuggestionsLabelOptions[field.variable].inputLabel
+                                }}</mat-label>
+                                <input
+                                    matInput
+                                    [name]="field.variable"
+                                    autocomplete="off"
+                                    [formControl]="
+                                        customTriggerForm?.controls?.conditions?.get(field.variable)?.get('value')
+                                    "
+                                    [placeholder]="commonLocaleData?.app_enter"
+                                />
+                            </mat-form-field>
+                        </div>
+                    </ng-container>
+
+                    <!-- Execution Time -->
+                    <div formGroupName="executionTime">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>{{ commonLocaleData?.app_time }}</mat-label>
+                            <input matInput type="time" [placeholder]="localeData?.enter_time" formControlName="time" />
+                        </mat-form-field>
+                    </div>
+
+                    <!-- Day Action (Day of Week or Day of Month) -->
+                    <div>
+                        <reactive-dropdown-field
+                            [labelValue]="getDayActionLabelValue()"
+                            [name]="'entity'"
+                            [label]="localeData?.day_action"
+                            [placeholder]="localeData?.select_time_action"
+                            [options]="timeOtherOptions"
+                            [(ngModel)]="selectedTimeAction"
+                            (selectedOption)="onTimeActionChange($event)"
+                            (onClear)="onTimeActionChange(); showDayOfWeek = null; setTimeActionValidator()"
+                        >
+                        </reactive-dropdown-field>
+                    </div>
+
+                    <!-- Day of Week or Day of Month -->
+                    <div formGroupName="executionTime" *ngIf="showDayOfWeek !== null">
+                        <!-- Day of Week -->
+                        <reactive-dropdown-field
+                            *ngIf="showDayOfWeek; else dayOfMonthTemplate"
+                            [name]="'entity'"
+                            [label]="localeData?.day_of_week"
+                            [placeholder]="localeData?.select_day_of_week"
+                            [options]="dayOfWeekOptions"
+                            [labelValue]="
+                                getLabelValue(
+                                    dayOfWeekOptions,
+                                    customTriggerForm?.controls?.executionTime?.get('dayOfWeek')?.value
+                                )
+                            "
+                            formControlName="dayOfWeek"
+                            [required]="true"
+                            [showError]="
+                                isFormInvalid &&
+                                customTriggerForm?.controls?.executionTime?.controls?.dayOfWeek?.invalid
+                            "
+                        >
+                        </reactive-dropdown-field>
+                        <!-- Day of Month -->
+                        <ng-template #dayOfMonthTemplate>
+                            <reactive-dropdown-field
+                                [name]="'entity'"
+                                [label]="localeData?.date_of_month"
+                                [placeholder]="localeData?.select_date_of_month"
+                                [options]="dayOfMonthOptions"
+                                [labelValue]="
+                                    getLabelValue(
+                                        dayOfMonthOptions,
+                                        customTriggerForm?.controls?.executionTime?.get('dayOfMonth')?.value
+                                    )
+                                "
+                                formControlName="dayOfMonth"
+                                [required]="true"
+                                [showError]="
+                                    isFormInvalid &&
+                                    customTriggerForm?.controls?.executionTime?.controls?.dayOfMonth?.invalid
+                                "
+                            >
+                            </reactive-dropdown-field>
+                        </ng-template>
+                    </div>
+
+                    <!-- Entity Dropdown (Account or Group) -->
+                    <div>
+                        <reactive-dropdown-field
+                            [name]="'entity'"
+                            formControlName="entity"
+                            [label]="commonLocaleData?.app_entity"
+                            [placeholder]="commonLocaleData?.app_select_entity"
+                            [options]="entityOptions"
+                            [labelValue]="getLabelValue(entityOptions, customTriggerForm?.controls?.entity?.value)"
+                            (selectedOption)="onEntityChange($event)"
+                            [required]="true"
+                            [showError]="isFormInvalid && customTriggerForm?.controls?.entity?.invalid"
+                        >
+                        </reactive-dropdown-field>
+                    </div>
+
+                    <!-- List of Account or Group dropdown -->
+                    <div *ngIf="customTriggerForm?.controls?.entity?.value">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>{{
+                                customTriggerForm?.controls?.entity?.value === entityEnum.Account
+                                    ? commonLocaleData?.app_account
+                                    : commonLocaleData?.app_group
+                            }}</mat-label>
+                            <mat-select
+                                name="voucherTypes"
+                                [multiple]="true"
+                                [formControl]="customTriggerForm?.controls?.entityUniqueNames"
+                            >
+                                <mat-select-trigger>
+                                    {{ customTriggerForm?.controls?.entityUniqueNames?.value?.[0] |
+                                titlecase }}
+                                    <span
+                                        *ngIf="(customTriggerForm?.controls?.entityUniqueNames?.value?.length || 0) > 1"
+                                        class="example-additional-selection"
+                                    >
+                                        (+{{
+                                            (customTriggerForm?.controls?.entityUniqueNames?.value?.length || 0) - 1
+                                        }}
+                                        {{
+                                            customTriggerForm?.controls?.entityUniqueNames?.value?.length === 2
+                                                ? localeData?.other
+                                                : localeData?.others
+                                        }})
+                                    </span>
+                                </mat-select-trigger>
+                                <mat-option class="balance-options">
+                                    <ngx-mat-select-search
+                                        [placeholderLabel]="
+                                            customTriggerForm?.controls?.entity?.value === entityEnum.Account
+                                                ? commonLocaleData?.app_select_account
+                                                : commonLocaleData?.app_select_group
+                                        "
+                                        [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
+                                        [formControl]="accountGroupDropdown"
+                                        [clearSearchInput]="false"
+                                    >
+                                        <i class="icon-cross" ngxMatSelectSearchClear></i>
+                                    </ngx-mat-select-search>
+                                </mat-option>
+
+                                <mat-option
+                                    *ngFor="let accountGroup of accountGroupList$ | async"
+                                    [value]="accountGroup?.uniqueName"
+                                >
+                                    {{ accountGroup?.name }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <!-- Voucher Types -->
+                    <div>
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>{{ commonLocaleData?.app_voucher }}</mat-label>
+                            <mat-select
+                                name="voucherTypes"
+                                [multiple]="true"
+                                [formControl]="customTriggerForm?.controls?.voucherTypes"
+                            >
+                                <mat-select-trigger>
+                                    {{ customTriggerForm?.controls?.voucherTypes?.value?.[0] | titlecase
+                                    }}
+                                    <span
+                                        *ngIf="(customTriggerForm?.controls?.voucherTypes?.value?.length || 0) > 1"
+                                        class="example-additional-selection"
+                                    >
+                                        (+{{ (customTriggerForm?.controls?.voucherTypes?.value?.length || 0) - 1 }}
+                                        {{
+                                            customTriggerForm?.controls?.voucherTypes?.value?.length === 2
+                                                ? localeData?.other
+                                                : localeData?.others
+                                        }})
+                                    </span>
+                                </mat-select-trigger>
+                                <mat-option class="balance-options">
+                                    <ngx-mat-select-search
+                                        [placeholderLabel]="commonLocaleData?.app_select_voucher"
+                                        [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
+                                        [formControl]="voucherListDropdown"
+                                        [clearSearchInput]="false"
+                                    >
+                                        <i class="icon-cross" ngxMatSelectSearchClear></i>
+                                    </ngx-mat-select-search>
+                                </mat-option>
+
+                                <mat-option *ngFor="let voucher of filteredVoucherList" [value]="voucher?.value">
+                                    {{ voucher?.label }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <!-- Disabled Trigger Checkbox -->
+                    <div>
+                        <mat-checkbox formControlName="disabled" color="primary">
+                            <span class="font-size-15">{{ localeData?.disabled_trigger }}</span>
+                        </mat-checkbox>
+                    </div>
+                </div>
+
+                <div class="chip-gap" (clickOutside)="clickedOutsideEmail()" (click)="clickedInsideEmail()">
+                    <div
+                        class="form-group position-relative"
+                        (click)="clickedInsideEmailSection && setEmailFocus(emailType.To)"
+                    >
+                        <div class="d-flex border-bottom">
+                            <label *ngIf="clickedInsideEmailSection" class="mr-2">{{ localeData?.to }}</label>
+                            <div [hidden]="!allStaticEmails.length" class="w-100 mb-1">
+                                {{ allStaticEmails }}
+                                <span
+                                    class="suffix-emails font-size-15 d-inline-block text-primary"
+                                    *ngIf="hiddenEmailList.length"
+                                    (click)="$event.stopPropagation(); clickedInsideEmail()"
+                                    >{{ hiddenEmailList }}</span
+                                >
+                            </div>
+                            <div
+                                class="d-flex w-100 mat-form-field-clean"
+                                [ngClass]="{ 'flex-column': selectedToEmails.length }"
+                                *ngIf="!getTotalEmailsCount || clickedInsideEmailSection"
+                            >
+                                <select-multiple-fields
+                                    [placeholder]="
+                                        !(getTotalEmailsCount || clickedInsideEmailSection)
+                                            ? localeData?.recipients
+                                            : ''
+                                    "
+                                    [options]="toEmails"
+                                    (selectedOption)="selectedToEmails = $event"
+                                    [selectedValues]="selectedToEmails"
+                                    [validations]="['email']"
+                                    [chipPrefix]="emailSuggestionPrefix"
+                                    [chipSuffix]="emailSuggestionSuffix"
+                                    [autoFocus]="emailFocusStates.isTo"
+                                    [name]="emailType.To"
+                                    class="select-multiple-chiplist w-100"
+                                    [optionClass]="'email-dropdown-width'"
+                                    [commonLocaleData]="commonLocaleData"
+                                ></select-multiple-fields>
+                                <div
+                                    *ngIf="clickedInsideEmailSection && !showCc && !showBcc"
+                                    class="d-flex column-gap-1 justify-content-end"
+                                >
+                                    <a
+                                        class="btn-link"
+                                        href="javascript:;"
+                                        (click)="$event.stopPropagation(); toggleBccCc(emailType.Cc)"
+                                        >{{ localeData?.cc }}</a
+                                    >
+                                    <a
+                                        class="btn-link"
+                                        href="javascript:;"
+                                        (click)="$event.stopPropagation(); toggleBccCc(emailType.Bcc)"
+                                        >{{ localeData?.bcc }}</a
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="form-group position-relative"
+                        *ngIf="showCc && clickedInsideEmailSection"
+                        (click)="setEmailFocus(emailType.Cc)"
+                    >
+                        <div class="d-flex border-bottom">
+                            <label class="mr-2">{{ localeData?.cc }}</label>
+                            <div
+                                class="d-flex w-100 mat-form-field-clean"
+                                [ngClass]="{ 'flex-column': selectedCcEmails.length }"
+                            >
+                                <select-multiple-fields
+                                    [options]="ccEmails"
+                                    (selectedOption)="selectedCcEmails = $event"
+                                    [selectedValues]="selectedCcEmails"
+                                    [validations]="['email']"
+                                    [chipPrefix]="emailSuggestionPrefix"
+                                    [chipSuffix]="emailSuggestionSuffix"
+                                    [autoFocus]="emailFocusStates.isCc"
+                                    [name]="emailType.Cc"
+                                    class="select-multiple-chiplist w-100"
+                                    [optionClass]="'email-dropdown-width'"
+                                    [commonLocaleData]="commonLocaleData"
+                                ></select-multiple-fields>
+
+                                <div class="d-flex column-gap-1 justify-content-end">
+                                    <a
+                                        *ngIf="!showBcc"
+                                        class="btn-link"
+                                        href="javascript:;"
+                                        (click)="$event.stopPropagation(); toggleBccCc(emailType.Bcc)"
+                                        >{{ localeData?.bcc }}</a
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="form-group position-relative"
+                        *ngIf="showBcc && clickedInsideEmailSection"
+                        (click)="setEmailFocus(emailType.Bcc)"
+                    >
+                        <div class="d-flex border-bottom">
+                            <label class="mr-2">{{ localeData?.bcc }}</label>
+                            <div
+                                class="d-flex w-100 mat-form-field-clean"
+                                [ngClass]="{ 'flex-column': selectedBccEmails.length }"
+                            >
+                                <select-multiple-fields
+                                    [options]="bccEmails"
+                                    (selectedOption)="selectedBccEmails = $event"
+                                    [selectedValues]="selectedBccEmails"
+                                    [validations]="['email']"
+                                    [chipPrefix]="emailSuggestionPrefix"
+                                    [chipSuffix]="emailSuggestionSuffix"
+                                    [autoFocus]="emailFocusStates.isBcc"
+                                    [name]="emailType.Bcc"
+                                    class="select-multiple-chiplist w-100"
+                                    [optionClass]="'email-dropdown-width'"
+                                    [commonLocaleData]="commonLocaleData"
+                                ></select-multiple-fields>
+
+                                <div class="d-flex column-gap-1 justify-content-end">
+                                    <a
+                                        *ngIf="!showCc"
+                                        class="btn-link"
+                                        href="javascript:;"
+                                        (click)="$event.stopPropagation(); toggleBccCc(emailType.Cc)"
+                                        >{{ localeData?.cc }}</a
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" (click)="$event.stopPropagation()">
+                        <input
+                            type="text"
+                            #subjectInputField
+                            name="emailSubject"
+                            matInput
+                            formControlName="emailSubject"
+                            class="form-control border-bottom border-left-none border-right-none border-top-none"
+                            [placeholder]="localeData?.subject"
+                        />
+                        <p
+                            class="text-danger font-size-14"
+                            *ngIf="isFormInvalid && customTriggerForm?.controls?.emailSubject?.invalid"
+                        >
+                            {{ localeData?.validation_error_message?.email_subject_required }}
+                        </p>
+                    </div>
+                </div>
+                <div class="form-group editor-container">
+                    <textarea [froalaEditor]="froalaOptions" formControlName="html"></textarea>
+                    <p
+                        class="text-danger font-size-14"
+                        *ngIf="isFormInvalid && customTriggerForm?.controls?.html?.invalid"
+                    >
+                        {{ localeData?.validation_error_message?.email_content_required }}
+                    </p>
+                </div>
+            </form>
+            <div class="d-flex column-gap-1">
+                <button
+                    aria-label="save"
+                    mat-raised-button
+                    color="primary"
+                    type="button"
+                    (click)="isTrigger ? createUpdateTrigger() : onSubmit('save')"
+                >
+                    {{ inputData?.triggerUniqueName ? commonLocaleData?.app_update : commonLocaleData?.app_save }}
+                </button>
+                <button
+                    *ngIf="inputData?.activeTab"
+                    aria-label="save and send email"
+                    mat-raised-button
+                    color="primary"
+                    type="button"
+                    (click)="onSubmit('send')"
+                >
+                    {{ localeData?.save_and_send }}
+                </button>
+            </div>
+        </mat-dialog-content>
+    </section>
+</div>

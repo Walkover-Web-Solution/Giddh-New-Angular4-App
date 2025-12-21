@@ -1,0 +1,193 @@
+import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { select, Store } from '@ngrx/store';
+import { createSelector } from 'reselect';
+import { Observable, ReplaySubject, Subscription } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { TBPlBsActions } from '../../../actions/tl-pl.actions';
+import { CompanyResponse } from '../../../models/api-models/Company';
+import { Account, ChildGroup } from '../../../models/api-models/Search';
+import { AccountDetails, TrialBalanceRequest } from '../../../models/api-models/tb-pl-bs';
+import { ToasterService } from '../../../services/toaster.service';
+import { AppState } from '../../../store';
+import { TrialBalanceGridComponent } from './components/trial-balance-grid/trial-balance-grid.component';
+import { TlPlService } from '../../../services/tl-pl.service';
+import { cloneDeep, each, forEach } from '../../../lodash-optimized';
+
+@Component({
+selector: 'trial-balance',
+    templateUrl: './trial-balance.component.html',
+    standalone: false
+})
+export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
+    /** This will hold local JSON data */
+    public localeData: any = {};
+    /** This will hold common JSON data */
+    public commonLocaleData: any = {};
+    public showLoader: Observable<boolean>;
+    public data$: Observable<AccountDetails>;
+    public request: TrialBalanceRequest;
+    public expandAll: boolean;
+    public search: string;
+    public from: string;
+    public to: string;
+    @ViewChild('tbGrid', { static: true }) public tbGrid: TrialBalanceGridComponent;
+    @Input() public isV2: boolean = false;
+    @Input() public isDateSelected: boolean = false;
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
+    private _selectedCompany: CompanyResponse;
+    /** True if show Tally Report options */
+    public showReportTallyOption: boolean;
+
+    constructor(
+        private store: Store<AppState>,
+        private cd: ChangeDetectorRef,
+        public tlPlActions: TBPlBsActions,
+        private toaster: ToasterService,
+        private tlPlService: TlPlService) {
+        this.showLoader = this.store.pipe(select(p => p.tlPl.tb.showLoader), takeUntil(this.destroyed$));
+    }
+
+    public get selectedCompany(): CompanyResponse {
+        return this._selectedCompany;
+    }
+
+    // set company and fetch data...
+    @Input()
+    public set selectedCompany(value: CompanyResponse) {
+        this._selectedCompany = value;
+        if (value && value.activeFinancialYear && !this.isDateSelected) {
+            this.request = {
+                refresh: false,
+                from: value.activeFinancialYear.financialYearStarts,
+                to: this.selectedCompany.activeFinancialYear.financialYearEnds
+            };
+        }
+    }
+
+    public ngOnInit() {
+        this.data$ = this.store.pipe(select(createSelector((p: AppState) => p.tlPl.tb.data, (p: AccountDetails) => {
+            let d = cloneDeep(p) as AccountDetails;
+            if (d) {
+                this.expandAll = false;
+                if (d.message) {
+                    setTimeout(() => {
+                        this.toaster.clearAllToaster();
+                        this.toaster.infoToast(d.message);
+                    }, 100);
+                }
+                this.InitData(d.groupDetails);
+                d.groupDetails.forEach(g => {
+                    g.isVisible = true;
+                    g.isCreated = true;
+                });
+            }
+            return d;
+        })), takeUntil(this.destroyed$));
+        this.data$.pipe(takeUntil(this.destroyed$)).subscribe(() => {
+            this.tlPlService.isReportTailed$.next(true);
+            this.cd.markForCheck();
+        });
+    }
+
+    public InitData(d: ChildGroup[]) {
+        each(d, (grp: ChildGroup) => {
+            grp.isVisible = false;
+            grp.isCreated = false;
+            grp.isIncludedInSearch = true;
+            each(grp.accounts, (acc: Account) => {
+                acc.isIncludedInSearch = true;
+                acc.isCreated = false;
+                acc.isVisible = false;
+            });
+            if (grp.childGroups) {
+                this.InitData(grp.childGroups);
+            }
+        });
+    }
+
+    public ngAfterViewInit() {
+        this.cd.detectChanges();
+    }
+
+    /**
+     * Filters the trial balance report based on the given request.
+     *
+     * @param request The request that contains the filter data.
+     * @memberof TrialBalanceComponent
+     */
+    public filterData(request: TrialBalanceRequest): void {
+        this.request = request;
+        this.from = request.from;
+        this.to = request.to;
+        this.isDateSelected = request && request.selectedDateOption === '1';
+        if (this.isV2) {
+            this.store.dispatch(this.tlPlActions.GetV2TrialBalance(cloneDeep(request)));
+        } else {
+            this.store.dispatch(this.tlPlActions.GetTrialBalance(cloneDeep(request)));
+        }
+    }
+
+    public ngOnDestroy(): void {
+        this.isDestroying = true;
+
+        // Clean up all tracked subscriptions first
+        this.subscriptions.forEach((subscription, index) => {
+            try {
+                if (subscription && !subscription.closed) {
+                    subscription.unsubscribe();
+                }
+            } catch (error) {
+                console.warn(`Error unsubscribing subscription ${index}:`, error);
+            }
+        });
+        this.subscriptions = [];
+
+        // Safely complete the destroyed$ subject
+        try {
+            if (this.destroyed$ && !this.destroyed$.closed) {
+                this.destroyed$.next(true);
+                this.destroyed$.complete();
+            }
+        } catch (error) {
+            console.warn('Error completing destroyed$ subject:', error);
+        }
+    }
+
+    public expandAllEvent() {
+        setTimeout(() => {
+            this.cd.detectChanges();
+        }, 1);
+    }
+
+    public searchChanged(event: string) {
+        this.search = event;
+        if (!this.search) {
+            this.expandAll = false;
+        }
+        this.cd.detectChanges();
+    }
+
+    /**
+     * Handles the refresh even
+     *
+     * @memberof TrialBalanceComponent
+     */
+    public handleRefresh(): void {
+        this.filterData(this.request);
+    }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
+}

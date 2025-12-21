@@ -1,5 +1,5 @@
 import { APP_BASE_HREF } from '@angular/common';
-import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { APP_INITIALIZER, ErrorHandler, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -15,7 +15,31 @@ import { environment } from '../environments/environment';
 import { ActionModule } from './actions/action.module';
 import { AppLoginSuccessComponent } from './app-login-success/app-login-success';
 import { AppComponent } from './app.component';
-import { IS_ELECTRON_WA } from './app.constant';
+import { IS_ELECTRON_WA, APP_FOLDER_WA, APP_URL_WA } from './app.constant';
+
+// Debug: Log all environment variables to verify they're loaded correctly
+console.log('=== ENVIRONMENT VARIABLES DEBUG ===');
+console.log('🌍 Core Environment:');
+console.log('  production:', environment.production);
+console.log('  showDevModule:', environment.showDevModule);
+console.log('  isElectron:', environment.isElectron);
+console.log('');
+console.log('🔗 URLs & Endpoints:');
+console.log('  AppUrl:', environment.AppUrl);
+console.log('  ApiUrl:', environment.ApiUrl);
+console.log('  UkApiUrl:', environment.UkApiUrl);
+console.log('  PORTAL_URL:', environment.PORTAL_URL);
+console.log('  APP_FOLDER:', environment.APP_FOLDER);
+console.log('');
+console.log('🔑 Authentication & Services:');
+console.log('  GOOGLE_CLIENT_ID:', environment.GOOGLE_CLIENT_ID);
+console.log('  GOOGLE_CLIENT_SECRET:', environment.GOOGLE_CLIENT_SECRET ? '***HIDDEN***' : 'NOT SET');
+console.log('  OTP_WIDGET_ID:', environment.OTP_WIDGET_ID);
+console.log('  OTP_TOKEN_AUTH:', environment.OTP_TOKEN_AUTH ? '***HIDDEN***' : 'NOT SET');
+console.log('  RAZORPAY_KEY:', environment.RAZORPAY_KEY);
+console.log('');
+console.log('📊 Environment Object Keys:', Object.keys(environment).filter(key => typeof environment[key] !== 'function'));
+console.log('=== END ENVIRONMENT DEBUG ===');
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { ROUTES } from './app.routes';
 import { DynamicThemeService } from './shared/services/dynamic-theme.service';
@@ -27,16 +51,17 @@ import { ServiceModule } from './services/service.module';
 import { WindowRef } from './shared/helpers/window.object';
 import { reducers } from './store';
 import { QuicklinkModule, QuicklinkStrategy } from 'ngx-quicklink';
-// COMMENTED OUT - MISSING: import { SnackBarModule } from '@angular/material/snack-bar';
-// COMMENTED OUT - MISSING: import { SnackBarModule } from './theme/snackbar/snackbar.module';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+// import { SnackBarModule } from './theme/snackbar/snackbar.module';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MobileRestrictedComponent } from './mobile-restricted/mobile-restricted.component';
 import { LoaderModule } from './loader/loader.module';
 import { PageModule } from './page/page.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatButtonModule } from '@angular/material/button';
-// import { } from './theme/form-fields/form-fields.module';
-// COMMENTED OUT - MISSING: import { // COMMENTED OUT - MISSING: VerifySubscriptionTransferOwnershipModule } from './verify-subscription-transfer-ownership/verify-subscription-transfer-ownership.module';
+import { FormFieldsModule } from './theme/form-fields/form-fields.module';
+import { filter, find, forEach, get, includes, keys, startsWith } from './lodash-optimized';
+// import { VerifySubscriptionTransferOwnershipModule } from './verify-subscription-transfer-ownership/verify-subscription-transfer-ownership.module';
 // Get white label configuration from localStorage
 const whiteLabelString = localStorage.getItem('whiteLabel');
 let whiteLabelConfig = whiteLabelString ? JSON.parse(whiteLabelString) : null;
@@ -63,9 +88,7 @@ const APP_PROVIDERS = [
         provide: APP_BASE_HREF,
         useValue: IS_ELECTRON_WA
             ? './'
-            : whiteLabelConfig?.body?.giddhWhiteLabel?.domainName
-                ? `${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` + APP_FOLDER
-                : AppUrl + APP_FOLDER
+            : '/'
     }
 ];
 
@@ -217,8 +240,8 @@ const createHybridStorage = () => {
 
                         // Check if localStorage has valid company data
                         const hasValidCompanyData = localObj.activeCompany &&
-                                                  localObj.activeCompany.uniqueName &&
-                                                  localObj.companyUniqueName;
+                            localObj.activeCompany.uniqueName &&
+                            localObj.companyUniqueName;
 
                         if (hasValidCompanyData) {
                             // Extract tab-specific data and store in sessionStorage for this tab
@@ -529,15 +552,15 @@ let giddhRegion = document.cookie
     .find(cookie => cookie.startsWith('giddh_region='))
     ?.split('=')[1];
 giddhRegion = giddhRegion?.toUpperCase();
-    if (giddhRegion === "UK") {
-        localStorage.setItem("Country-Region", "GB");
-    } else if (giddhRegion === "AE") {
-        localStorage.setItem("Country-Region", "AE");
-    } else if (giddhRegion === "IN") {
-        localStorage.setItem("Country-Region", "IN");
-    } else {
-        localStorage.setItem("Country-Region", "GL");
-    }
+if (giddhRegion === "UK") {
+    localStorage.setItem("Country-Region", "GB");
+} else if (giddhRegion === "AE") {
+    localStorage.setItem("Country-Region", "AE");
+} else if (giddhRegion === "IN") {
+    localStorage.setItem("Country-Region", "IN");
+} else {
+    localStorage.setItem("Country-Region", "GL");
+}
 
 // GetServiceConfig returns a configuration object with API URLs, app URLs, and various authentication tokens, using whiteLabelConfig or default Configuration values.
 export function getServiceConfig(): any {
@@ -549,9 +572,9 @@ export function getServiceConfig(): any {
 
     return {
         apiUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain ? `${whiteLabelConfig.body.giddhWhiteLabel.apiDomain}/` :
-        (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
+            (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
         ApiUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain ? `${whiteLabelConfig.body.giddhWhiteLabel.apiDomain}/` :
-        (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
+            (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
         appUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.domainName ? `${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` : Configuration.AppUrl,
         AppUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.domainName ? `${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` : Configuration.AppUrl,
         PORTAL_URL: whiteLabelConfig?.body?.giddhWhiteLabel?.portalDomain || Configuration.PORTAL_URL,
@@ -578,67 +601,65 @@ export function getServiceConfigAfterInit(): () => Promise<any> {
 /**
  * `AppModule` is the main entry point into Angular2's bootstraping process
  */
-console.log('🔍 DEBUG: app.module.ts - Loading AppModule');
-
 @NgModule({
-bootstrap: [AppComponent],
-declarations: [
-AppComponent,
-AppLoginSuccessComponent,
-MobileRestrictedComponent
-],
-imports: [
-BrowserModule,
-HttpClientModule,
-NoopAnimationsModule,
-FormsModule,
-ReactiveFormsModule,
-ServiceModule.forRoot(),
-ActionModule.forRoot(),
-DecoratorsModule.forRoot(),
-ToastrModule.forRoot({
-preventDuplicates: true,
-maxOpened: 3
-}),
-StoreModule.forRoot(reducers, { metaReducers, runtimeChecks: { strictStateImmutability: false, strictActionImmutability: false } }),
-ScrollingModule,
-RouterModule.forRoot(ROUTES, {
-useHash: IS_ELECTRON_WA,
-onSameUrlNavigation: 'reload',
-preloadingStrategy: QuicklinkStrategy
-}),
-QuicklinkModule,
-// COMMENTED OUT - MISSING: SnackBarModule,
-MatDialogModule,
-MatButtonModule,
-LoaderModule,
-PageModule,
-// COMMENTED OUT - MISSING: VerifySubscriptionTransferOwnershipModule,
-...CONDITIONAL_IMPORTS
-],
-providers: [
-{ provide: APP_INITIALIZER,
-useFactory: getServiceConfigAfterInit,
-multi: true,
-deps: [HttpClient]
-},
-{
-provide: ServiceConfig,
-useFactory: getServiceConfig
-},
-environment.ENV_PROVIDERS,
-APP_PROVIDERS,
-WindowRef,
-{
-provide: HTTP_INTERCEPTORS,
-useClass: GiddhHttpInterceptor,
-multi: true
-},
-{
-provide: ErrorHandler,
-useClass: ExceptionLogService
-},
-CustomPreloadingStrategy
-]
+    declarations: [
+        AppComponent,
+        AppLoginSuccessComponent,
+        MobileRestrictedComponent,
+    ],
+    bootstrap: [AppComponent],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        FormsModule,
+        ReactiveFormsModule,
+        FormFieldsModule,
+        // VerifySubscriptionTransferOwnershipModule,
+        ServiceModule.forRoot(),
+        ActionModule.forRoot(),
+        DecoratorsModule.forRoot(),
+        ToastrModule.forRoot({ preventDuplicates: true, maxOpened: 3 }),
+        StoreModule.forRoot(reducers, { metaReducers, runtimeChecks: { strictStateImmutability: false, strictActionImmutability: false } }),
+        ScrollingModule,
+        RouterModule.forRoot(ROUTES, {
+            useHash: false,
+            onSameUrlNavigation: 'reload',
+            preloadingStrategy: QuicklinkStrategy
+        }),
+        QuicklinkModule,
+        MatSnackBarModule,
+        // SnackBarModule,
+        MatDialogModule,
+        MatButtonModule,
+        LoaderModule,
+        PageModule,
+        ...CONDITIONAL_IMPORTS
+    ],
+    providers: [
+        provideHttpClient(withInterceptorsFromDi()),
+        {
+            provide: APP_INITIALIZER,
+            useFactory: getServiceConfigAfterInit,
+            multi: true,
+            deps: [HttpClient]
+        },
+        {
+            provide: ServiceConfig,
+            useFactory: getServiceConfig
+        },
+        environment.ENV_PROVIDERS,
+        APP_PROVIDERS,
+        WindowRef,
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: GiddhHttpInterceptor,
+            multi: true
+        },
+        {
+            provide: ErrorHandler,
+            useClass: ExceptionLogService
+        },
+        CustomPreloadingStrategy
+    ]
 })
 export class AppModule { }

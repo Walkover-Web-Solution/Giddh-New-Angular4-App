@@ -1,0 +1,18 @@
+<div
+    appTranslate
+    (commonLocaleData)="commonLocaleData = $event"
+>
+<div *ngIf="activeCompany && shouldShowMessage()" class="pt-2">
+    <span class="d-flex align-items-center column-gap-05">
+        {{ commonLocaleData?.app_no_access_limit_module }}
+        <button
+            mat-raised-button
+            color="primary"
+            aria-label="upgrade"
+            class="mr-0"
+            (click)="onUpgrade()">
+            {{ commonLocaleData?.app_upgrade }}
+        </button>
+    </span>
+</div>
+</div>

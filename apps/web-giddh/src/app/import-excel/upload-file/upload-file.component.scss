@@ -1,0 +1,81 @@
+.upload-and-map-content {
+    h2 {
+        font-size: var(--font-size-32);
+    }
+}
+.upload-excel {
+    display: flex;
+    height: 320px;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    margin: 20px auto 0 !important;
+}
+.center-block {
+    margin: 0 auto;
+}
+.max-width-500 {
+    max-width: 500px;
+}
+
+.dashed-border {
+    border: 2px dashed var(--color-silver);
+}
+
+.import-type li {
+    width: 320px;
+    height: 150px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    margin: 0 15px;
+    border: 1px solid var(--border-color);
+    padding: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.import-type h2 {
+    margin-bottom: 30px;
+}
+
+.import-type li:hover {
+    transform: scale(1.01);
+}
+
+#csvUploadInput {
+    opacity: 0;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    height: 100%;
+    z-index: 2;
+}
+
+.select-file {
+    color: var(--color-green);
+}
+.file-upload-panel {
+    width: 100%;
+    text-align: left;
+    border: 1px solid var(--border-color);
+    padding: 8px;
+    border-radius: var(--mat-border-radius-4);
+}
+#is-header-provided {
+    margin-right: 0px;
+    top: 3px;
+}
+@media (max-width: 991px) {
+    .import-type {
+        flex-wrap: wrap;
+        li {
+            width: 27%;
+            margin: 0 15px 30px;
+        }
+    }
+}

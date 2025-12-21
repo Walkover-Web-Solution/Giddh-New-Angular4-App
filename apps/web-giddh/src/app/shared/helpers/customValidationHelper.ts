@@ -1,5 +1,6 @@
 import { AbstractControl, UntypedFormArray, UntypedFormControl, ValidatorFn } from '@angular/forms';
 import { EMAIL_VALIDATION_REGEX } from '../../app.constant';
+import { get } from '../../lodash-optimized';
 
 export const emailValidator = (control: UntypedFormControl) => {
     return new Promise<any>((resolve, reject) => {

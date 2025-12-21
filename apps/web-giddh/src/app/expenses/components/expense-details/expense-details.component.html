@@ -1,0 +1,176 @@
+<div *ngIf="!isPettyCashEntryLoading">
+    <div>
+        <div class="row">
+            <div class="col-sm-6">
+                <p class="font-weight-semibold mb-1">{{ selectedItem?.entryDate }} | {{ selectedItem?.baseAccount?.name }}</p>
+            </div>
+            <div class="col-sm-6 text-right xs-left">
+                <div class="d-flex justify-content-end align-items-center column-gap-1">
+                    <button
+                        mat-raised-button
+                        color="primary"
+                        class="mb-1 d-flex align-items-center"
+                        type="button"
+                        (click)="showApproveConfirmPopup(approveConfirm)"
+                    >
+                        {{ localeData?.approve }}
+                    </button>
+                    <button
+                        mat-stroked-button
+                        class="mb-1"
+                        type="button"
+                        (click)="openModal(rejectionReason)"
+                    >
+                        {{ localeData?.reject }}
+                    </button>
+                    <span class="mb-1 close-modal cursor-pointer pull-right" (click)="closeDetailsMode()">
+                        <img src="assets/images/multiply.svg" />
+                    </span>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="upload-file" *ngIf="!isImageZoomView">
+                    <ul>
+                        <div *ngFor="let item of imageURL; let i = index">
+                            <li>
+                                <div class="upload-img">
+                                    <img [src]="item.src" (click)="openZoomImageView(i)" [id]="'signatureImage_'+i" />
+                                </div>
+                            </li>
+                        </div>
+                        <li>
+                            <div class="upload-img add-img">
+                                <label for="signatureImg-edit"><i class="icon-add"></i></label>
+                                <input
+                                    type="file"
+                                    accept="image/png, image/jpeg"
+                                    id="signatureImg-edit"
+                                    (change)="uploadFile()"
+                                />
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="petty-cash">
+                    <div class="bg-color pb-2">
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <mat-form-field appearance="outline" class="initial-height w-100">
+                                    <mat-label>{{ commonLocaleData?.app_description }}</mat-label>
+                                    <textarea
+                                        matInput
+                                        rows="3"
+                                        [name]="'comment'"
+                                        [(ngModel)]="comment"
+                                        [placeholder]="localeData?.description_placeholder"
+                                    ></textarea>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-8">
+                                <div class="d-inline-block mr-2">
+                                    <reactive-dropdown-field
+                                        [showError]="showEntryAgainstRequired"
+                                        class="text-left multi-select entry-against"
+                                        [name]="'depositAccountUniqueName'"
+                                        [options]="entryAgainstObject.dropDownOption"
+                                        [(ngModel)]="entryAgainstObject.model"
+                                        (selectedOption)="onSelectEntryAgainstAccount($event)"
+                                        (onClear)="onClearEntryAgainstAccount()"
+                                        [label]="entryAgainstObject.base"
+                                        [required]="true"
+                                        [placeholder]="commonLocaleData?.app_select_account"
+                                        [enableDynamicSearch]="true"
+                                        [isPaginationEnabled]="true"
+                                        (scrollEnd)="handleAccountScrollEnd()"
+                                        (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
+                                        [labelValue]="entryAgainstObject?.name"
+                                    >
+                                    </reactive-dropdown-field>
+                                </div>
+                            </div>
+
+                            <div
+                                class="col-4 text-right"
+                                (click)="toggleEntryAgainst()"
+                                *ngIf="entryAgainstObject.against"
+                            >
+                                <a href="javascript:void(0)" class="d-inline-block pt-3 font-size-15">
+                                    {{ entryAgainstObject.against }}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="expense-ledger" *ngIf="accountEntryPettyCash">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <update-ledger-entry-panel
+                                    [isPettyCash]="true"
+                                    [pettyCashEntry]="accountEntryPettyCash"
+                                    [pettyCashBaseAccountTypeString]="entryAgainstObject.base"
+                                    [pettyCashBaseAccountUniqueName]="this.accountEntryPettyCash.particular?.uniqueName"
+                                    (toggleOtherTaxesAsideMenu)="toggleOtherTaxesAsidePane()"
+                                    (showQuickAccountModalFromUpdateLedger)="openLedgerAsidePaneDialog()"
+                                ></update-ledger-entry-panel>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- modal start -->
+<ng-template #rejectionReason>
+    <petty-cash-reject-confirm-dialog
+        [selectedItem]="selectedItem"
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+        (rejectEntry)="processNextRecord($event)"
+    ></petty-cash-reject-confirm-dialog>
+</ng-template>
+<!-- modal end -->
+
+<!-- region approve entry confirm -->
+<ng-template #approveConfirm>
+    <petty-cash-approve-confirm-dialog
+        [selectedEntryForApprove]="selectedEntryForApprove"
+        [approveEntryRequestInProcess]="approveEntryRequestInProcess"
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+        [pettyCashEntry]="accountEntryPettyCash"
+        [entryAgainstObject]="entryAgainstObject"
+        (approveEntry)="hideApproveConfirmPopup($event)"
+    >
+    </petty-cash-approve-confirm-dialog>
+</ng-template>
+<!-- endregion -->
+
+<!-- region other taxes aside menu -->
+<ng-template #asideMenuStateForOtherTaxes>    
+    <app-aside-menu-sales-other-taxes
+        [class]="asideMenuStateForOtherTaxes"
+        [taxes]="companyTaxesList"
+        [otherTaxesModal]="updateLedgerComponentInstance.vm.selectedLedger.otherTaxModal"
+        [commonLocaleData]="commonLocaleData"
+        (closeModal)="asideMenuStateForOtherTaxesDialogRef.close()"
+        (applyTaxes)="updateLedgerComponentInstance.vm.calculateOtherTaxes($event); asideMenuStateForOtherTaxesDialogRef.close()"
+    >
+    </app-aside-menu-sales-other-taxes>
+</ng-template>
+<!-- endregion -->
+
+<!-- region ledger aside pane -->
+<ng-template #ledgerAsidePane>
+    <ledger-aside-pane
+        [keyboardShortcut]="'esc'"
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+        (onShortcutPress)="ledgerAsidePaneDialogRef?.close()"
+        (closeAsideEvent)="ledgerAsidePaneDialogRef?.close()"
+    >
+    </ledger-aside-pane>
+</ng-template>

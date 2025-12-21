@@ -1,0 +1,1 @@
+export const SALES_BIFURCATION_API = 'company/:companyUniqueName/new-old-sales/details?value=:value&type=:type&dataType=:dataType&page=:page&count=:count&q=:q&sort=:sort&sortBy=:sortBy&fromDate=:fromDate&toDate=:toDate&salesFrom=:salesFrom';

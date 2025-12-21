@@ -1,0 +1,40 @@
+.app-container {
+    background: var(--color-white);
+    padding: 16px;
+    height: calc(100vh - 0px);
+    overflow-y: auto;
+
+    .wrapper {
+        max-width: 1140px;
+        width: 100%;
+        padding-right: 15px;
+        padding-left: 15px;
+        margin-right: auto;
+        margin-left: auto;
+
+        .domain-setting-card {
+            border-radius: var(--mat-border-radius-8) !important;
+        }
+
+        .portal-body {
+            table {
+                background: var(--color-transparent-backgrounds);
+
+                .status {
+                    border-radius: var(--mat-border-radius-16);
+                    padding: 6px 12px;
+                }
+
+                .verified {
+                    color: var(--color-green);
+                    background: var(--color-success-light);
+                }
+
+                .unverified {
+                    color: var(--color-red);
+                    background: var(--color-danger-light);
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,70 @@
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { LaddaModule } from 'angular2-ladda';
+import { SharedModule } from '../shared/shared.module';
+import { NewVsOldInvoicesComponent } from './new-vs-old-Invoices.component';
+import { NewVsOldInvoicesRoutingModule } from './new-vs-old-Invoices.routing.module';
+import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
+import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
+import { SalesBifurcationDetailsComponent } from './sales-bifurcation-details/sales-bifurcation-details.component';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
+import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
+import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatSortModule } from '@angular/material/sort';
+import { AttachmentsModule } from '../theme/attachments/attachments.module';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
+import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
+import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
+import { ActionMenuModule } from '../shared/action-menu/action-menu.module';
+
+
+@NgModule({
+    declarations: [
+        NewVsOldInvoicesComponent,
+        SalesBifurcationDetailsComponent
+    ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        ElementViewChildModule,
+        NewVsOldInvoicesRoutingModule,
+        LaddaModule.forRoot({
+            style: 'slide-left',
+            spinnerSize: 30
+        }),
+        SharedModule,
+        GiddhNumberFormatModule,
+        FormFieldsModule,
+        MatButtonModule,
+        MatDialogModule,
+        MatTableModule,
+        MatPaginatorModule,
+        KeyboardShortutModule,
+        TranslateDirectiveModule,
+        GiddhPageLoaderModule,
+        MatMenuModule,
+        MatSortModule,
+        AttachmentsModule,
+        FroalaTemplateEditorModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatIconModule,
+        HamburgerMenuModule,
+        // ActionMenuModule // COMMENTED OUT - Template errors with mat-menu
+    ],
+    providers: []
+})
+
+export class NewVsOldInvoicesModule {
+
+}

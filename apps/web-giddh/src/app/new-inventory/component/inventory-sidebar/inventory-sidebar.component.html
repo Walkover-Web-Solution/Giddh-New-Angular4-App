@@ -1,0 +1,69 @@
+<div
+    appTranslate
+    [file]="'inventory'"
+    (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event"
+    (translationComplete)="translationComplete($event)"
+>
+    <div class="aside-pane mat-app-background inventory-aside-pane" asideInventorySidebarMenuState>
+        <div class="help-aside-body">
+            <div class="back-to-main-slider">
+                <a [routerLink]="['/pages/giddh-all-items']" href="javascript:void(0);" aria-label="home icon">
+                    <span>
+                        <img src="{{ imgPath }}home-icon-black.svg" alt="home-icon" class="icon-pull-top image-as-icon-color">
+                    </span>
+                </a>
+                <p class="heading">{{ localeData?.sidebar?.inventory }}</p>
+            </div>
+            <div class="inventory-items">
+                <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+                    <mat-tree-node
+                        *matTreeNodeDef="let node"
+                        matTreeNodePadding
+                        class="sub-option cursor-pointer"
+                        [routerLink]="node?.link"
+                        routerLinkActive="active"
+                        [ngClass]="{
+                            'd-none': node.onlyBranchMode && (isCompany || isConsolidatedBranch),
+                            'active': !node?.link && node.hiddenLink.includes(currentUrl),
+                        }"
+                    >
+                        <span
+                            class="w-100 d-inline-flex"
+                            [ngClass]="node.name == localeData?.sidebar?.warehouse_balance ? 'align-items-start' : 'align-items-center'"
+                            *ngIf="!(node.onlyBranchMode && (isCompany || isConsolidatedBranch))"
+                            (click)="openAsidePaneDialog(node)"
+                        >
+                            <img src="{{ imgPath }}{{ node.icons }}" class="sidebar-menu-icons" alt="icon" />
+                            <p>{{ node.name }}</p>
+                        </span>
+                    </mat-tree-node>
+                    <mat-tree-node
+                        *matTreeNodeDef="let node; when: hasChild"
+                        matTreeNodePadding
+                        matTreeNodeToggle
+                        class="list"
+                    >
+                        <button mat-icon-button disableRipple matTreeNodeToggle class="arrow-btn" aria-label="sidebar icon">
+                            <span class="sidebar-list-icon">
+                                <i *ngIf="treeControl.isExpanded(node)" class="icon-up ml-2 font-size-15 sidebar-icon"></i>
+                                <i
+                                    *ngIf="!treeControl.isExpanded(node)"
+                                    class="icon-down-new ml-2 font-size-15 sidebar-icon"
+                                ></i>
+                            </span>
+                        </button>
+                        <img src="{{ imgPath }}{{ node.icons }}" class="sidebar-menu-icons" alt="menu icon" />
+                        <p>{{ node.name }}</p>
+                    </mat-tree-node>
+                </mat-tree>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #asideMenuStateForCreateNewInventoryTemplate>
+    <aside-create-new-inventory
+        (closeAsideEvent)="asideMenuStateForCreateNewInventoryDialogRef.close()"
+        [moduleType]="moduleType"
+    ></aside-create-new-inventory>
+</ng-template>

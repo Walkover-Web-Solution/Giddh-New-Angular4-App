@@ -1,0 +1,44 @@
+.create-custom-field-page {
+    .back-to-page {
+        position: absolute;
+        right: 23px;
+        top: 0;
+        z-index: 10;
+        padding: 0px 10px;
+        align-items: center;
+        i {
+            font-size: 20px;
+            float: left;
+        }
+    }
+    .custom-field-wrapper {
+        min-height: 73vh;
+        .add-icon-delete {
+            position: relative;
+            i {
+                position: absolute;
+                right: -40px;
+                top: 0px;
+                cursor: pointer;
+                padding: 10px;
+                &.icon-plus {
+                    color: var(--text-primary-color);
+                }
+                &.icon-trash {
+                    color: var(--color-medium-gray);
+                }
+            }
+        }
+
+        .minMaxField-wrapper {
+            .minMaxField {
+                display: flex;
+                align-items: center;
+                column-gap: 15px;
+                input-field{
+                    min-width: 120px;
+                }
+            }
+        }
+    }
+}

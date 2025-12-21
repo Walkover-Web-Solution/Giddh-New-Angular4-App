@@ -8,10 +8,9 @@ import { catchError, map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { ImportsRequest, ImportsResponse, ImportsSheetDownloadRequest } from '../models/api-models/imports';
 import { IMPORTS_API } from './apiurls/imports.api';
+import { concat, get } from '../lodash-optimized';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class ImportsService {
     /** This will hold the company uniquename */
     private companyUniqueName: string;

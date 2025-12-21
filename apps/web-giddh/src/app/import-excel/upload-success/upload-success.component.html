@@ -1,0 +1,17 @@
+<div class="imported-file-design">
+    <div class="imported-file-design-box">
+        <i class="fa fa-exclamation-circle mr-5"></i>
+        <div class="imported-file-design-content">
+            <div class="clear-both">
+                <p class="mt-0">{{ importedCountMessage }}</p>
+                <p>{{ failedReportMessage }}</p>
+            </div>
+            <div class="clear-both mt-4">
+                <button mat-raised-button color="primary" [routerLink]="['/pages/import/select-type']" type="button">
+                    {{ commonLocaleData?.app_continue }}
+                </button>
+                <a href="javascript:void(0);" (click)="downloadImportFile()">{{ commonLocaleData?.app_download_report }}</a>
+            </div>
+        </div>
+    </div>
+</div>

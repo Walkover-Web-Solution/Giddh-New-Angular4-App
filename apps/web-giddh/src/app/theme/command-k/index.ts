@@ -1,0 +1,1 @@
+export { CommandKComponent } from './command.k.component';

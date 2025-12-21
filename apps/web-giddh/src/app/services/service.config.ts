@@ -1,4 +1,5 @@
 import { InjectionToken } from '@angular/core';
+import { environment } from '../../environments/environment';
 
 export interface IServiceConfigArgs {
     apiUrl: string;

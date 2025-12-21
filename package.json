@@ -5,11 +5,11 @@
   "private": true,
   "scripts": {
     "ng": "ng",
-    "start": "npm run postinstall.web && ng serve web-giddh",
-    "build": "npm run postinstall.web && ng build web-giddh --configuration=local",
-    "build-prod": "npm run postinstall.web && ng build web-giddh --configuration=prod --output-hashing=all && node tools/web/postbuild --path=dist/apps/web-giddh && npm run rm_bak_files",
-    "build-stage": "npm run postinstall.web && ng build web-giddh --configuration=stage --output-hashing=all && node tools/web/postbuild --path=dist/apps/web-giddh && npm run rm_bak_files",
-    "build-test": "npm run postinstall.web && ng build web-giddh --configuration=test --output-hashing=all && node tools/web/postbuild --path=dist/apps/web-giddh && npm run rm_bak_files",
+    "start": "npm run postinstall.web && node scripts/build-env.js local && ng serve web-giddh --configuration=local",
+    "build": "npm run postinstall.web && node scripts/build-env.js local && ng build web-giddh --configuration=local",
+    "build-prod": "npm run postinstall.web && node scripts/build-env.js prod && ng build web-giddh --configuration=prod --output-hashing=all && node tools/web/postbuild --path=dist/apps/web-giddh && npm run rm_bak_files",
+    "build-stage": "npm run postinstall.web && node scripts/build-env.js stage && ng build web-giddh --configuration=stage --output-hashing=all && node tools/web/postbuild --path=dist/apps/web-giddh && npm run rm_bak_files",
+    "build-test": "npm run postinstall.web && node scripts/build-env.js test && ng build web-giddh --configuration=test --output-hashing=all && node tools/web/postbuild --path=dist/apps/web-giddh && npm run rm_bak_files",
     "bundle:report": "source-map-explorer dist/apps/web-giddh-prod/*.js",
     "rm_bak_files": "find dist -name '*.bak' -exec rm -Rf {} \\;",
     "test": "npm run postinstall.web && ng test",
@@ -78,7 +78,7 @@
     "rxjs": "^7.8.1",
     "tributejs": "^5.1.3",
     "tslib": "^2.6.2",
-    "zone.js": "^0.15.0"
+    "zone.js": "^0.15.1"
   },
   "devDependencies": {
     "@angular-builders/custom-webpack": "^20.0.0",
@@ -115,4 +115,3 @@
     "prefix": "foo"
   }
 }
-

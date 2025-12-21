@@ -8,9 +8,7 @@ import { OrganizationType } from '../models/user-login-state';
 import { AppState } from '../store';
 import { GeneralService } from './general.service';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class DbService {
     constructor(
         private store: Store<AppState>,

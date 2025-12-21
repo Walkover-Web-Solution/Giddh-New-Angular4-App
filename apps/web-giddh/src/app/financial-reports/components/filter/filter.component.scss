@@ -1,0 +1,59 @@
+.download-data-icon {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-top: 2px;
+    a {
+        display: flex;
+        width: 36px;
+        height: 36px;
+        justify-content: center;
+        align-items: center;
+        background-color: var(--color-white);
+        font-size: var(--font-size-15);
+        color: var(--text-primary-color) !important;
+        border: 1px solid var(--border-color);
+        border-radius: var(--mat-border-radius-4);
+    }
+}
+.glyphicon-triangle-bottom {
+    z-index: 1;
+    position: absolute;
+    left: 152px;
+    font-size: 9px;
+    color: var(--color-silver);
+    top: 14px;
+}
+.company-branch-dropdown {
+    width: 240px;
+}
+
+@media (max-width: 1099px) and (min-width: 1019px) {
+    .financial-select-year {
+        .company-branch-dropdown {
+            width: 158px;
+        }
+
+    }
+    .download-data-icon {
+        padding-right: 60px !important;
+    }
+}
+@media (max-width: 991px) {
+    .datepicker-field {
+        min-width: 220px !important;
+        width: 220px !important;
+    }
+    .download-data-icon {
+        a {
+            width: 36px;
+            height: 36px;
+        }
+    }
+    .form-inline.financial-select-year {
+        flex-flow: wrap;
+    }
+    .download-data-icon {
+        margin: 2px 0 2px;
+    }
+}

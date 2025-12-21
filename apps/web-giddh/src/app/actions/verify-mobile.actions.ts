@@ -35,26 +35,26 @@ export class VerifyMobileActions {
                 return { type: 'EmptyAction' };
             })));
 
-    // public verifyNumberCode$: Observable<Action> = createEffect(() => this.action$
-    //     .pipe(
-    //         ofType(VerifyMobileActions.VERIFY_MOBILE_CODE_REQUEST),
-    //         switchMap((action: CustomActions) => this._authService.VerifyNumberOTP(action?.payload)),
-    //         map(response => {
-    //             if (response?.status === 'success') {
-    //                 this._toasty.successToast(response?.body);
-    //                 let no: string = null;
-    //                 this.store.pipe(
-    //                     take(1))
-    //                     .subscribe(p => {
-    //                         no = p.verifyMobile.phoneNumber;
-    //                     });
-    //                 this.store.dispatch(this.companyActions.SetContactNumber(no));
-    //                 this.store.dispatch(this.action(VerifyMobileActions.VERIFY_MOBILE_CODE_RESPONSE, response));
-    //             } else {
-    //                 this._toasty.errorToast(response.message, response.code);
-    //             }
-    //             return { type: 'EmptyAction' };
-    //         })));
+    public verifyNumberCode$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(VerifyMobileActions.VERIFY_MOBILE_CODE_REQUEST),
+            switchMap((action: CustomActions) => this._authService.VerifyNumberOTP(action?.payload)),
+            map(response => {
+                if (response?.status === 'success') {
+                    this._toasty.successToast(response?.body);
+                    let no: string = null;
+                    this.store.pipe(
+                        take(1))
+                        .subscribe(p => {
+                            no = p.verifyMobile.phoneNumber;
+                        });
+                    this.store.dispatch(this.companyActions.SetContactNumber(no));
+                    this.store.dispatch(this.action(VerifyMobileActions.VERIFY_MOBILE_CODE_RESPONSE, response));
+                } else {
+                    this._toasty.errorToast(response.message, response.code);
+                }
+                return { type: 'EmptyAction' };
+            })));
 
     constructor(private action$: Actions,
         private _authService: AuthenticationService,

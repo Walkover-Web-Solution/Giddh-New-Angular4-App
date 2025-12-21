@@ -1,0 +1,56 @@
+.mat-table.basic td {
+    padding-right: 0;
+    padding-left: 0;
+    border-top: none;
+    border-bottom: 1px solid var(--border-color) !important;
+    padding-top: 20px;
+    padding-bottom: 3px;
+    font-size: var(--font-size-15);
+}
+.table thead th {
+    vertical-align: bottom;
+    border-bottom: 1px solid var(--border-color);
+    border-top: none;
+    padding-left: 0;
+    font-weight: 500;
+}
+.last-card {
+    min-height: auto !important;
+}
+.cr-dr-body {
+    padding: 15px;
+}
+.debtors-table {
+    margin-bottom: 50px;
+}
+span.this-week {
+    color: var(--color-dark-gray);
+    text-decoration: underline;
+    font-size: var(--font-size-15);
+}
+.top-five-cr-dr-table td {
+    white-space: normal;
+}
+thead th {
+    padding-bottom: 5px !important;
+}
+.no-entries {
+    border-top: 1px solid var(--border-color) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+    margin-top: 10px;
+    padding: 20px 0 !important;
+    text-align: center;
+    color: var(--color-black) !important;
+    font-size: var(--font-size-15);
+    &:hover {
+        background-color: var(--theme-primary-light);
+    }
+}
+.dashboard-datepicker {
+    min-width: 208px;
+    border-radius: 30px;
+    border: 1px solid var(--border-color);
+}
+.min-width-130 {
+    min-width: 130px !important;
+}

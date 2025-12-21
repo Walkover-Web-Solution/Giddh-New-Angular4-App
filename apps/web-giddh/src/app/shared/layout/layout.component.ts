@@ -1,10 +1,11 @@
 import { Component, Input } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
+import { includes } from '../../lodash-optimized';
 
 @Component({
-    selector: 'layout',
+    selector: 'layout-main',
     templateUrl: './layout.component.html',
-standalone: false,
+    standalone: false,
     styleUrls: ['./layout.component.scss']
 })
 

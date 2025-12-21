@@ -1,0 +1,20 @@
+ul.list-unstyled li a {
+    color: var(--color-black);
+}
+
+.account {
+    div {
+        -webkit-line-clamp: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+}
+
+.row.row-item {
+    height: 35px !important;
+}
+
+.trial-balance-viewport {
+    background-color: var(--color-silver);
+}

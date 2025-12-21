@@ -1,0 +1,31 @@
+#close {
+    position: absolute;
+    left: auto;
+    right: 10px;
+    z-index: 9999999;
+    background-color: transparent;
+    color: var(--color-white);
+    font-size: 17px;
+    top: 18px;
+    margin-right: 0;
+    border: 0;
+    border-radius: var(--mat-border-radius-0);
+}
+
+.aside-body {
+    padding: 15px;
+}
+
+.aside-pane-form {
+    .form-gap {
+        row-gap: 20px;
+    }
+    table{
+        .edit-delete-btn {
+            button{
+                min-width: 40px;
+                padding: 0 12px 0 12px;
+            }
+        }
+    }
+}

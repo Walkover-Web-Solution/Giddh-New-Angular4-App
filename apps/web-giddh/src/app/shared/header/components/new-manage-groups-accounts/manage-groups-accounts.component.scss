@@ -1,0 +1,18 @@
+.modal-body .grp-col {
+    max-width: 58.333%;
+}
+
+.height-in-vh {
+    height: calc(100vh - 70px);
+}
+
+.close {
+    color: var(--color-white) !important;
+    opacity: 1 !important;
+    text-shadow: none !important;
+    font-size: 30px !important;
+    line-height: 36px;
+    &:hover {
+        color: var(--color-white) !important;
+    }
+}

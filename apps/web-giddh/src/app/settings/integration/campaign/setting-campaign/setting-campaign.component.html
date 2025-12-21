@@ -1,4 +1,10 @@
-<div class="app-translate-container" appTranslate file="'settings/campaign'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
+<div
+    appTranslate
+    [file]="'settings/campaign'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
+>
     <div class="msg91-container" *ngIf="!showTriggerForm && !(editCommunicationPlatform === 'MSG91')">
         <div class="menu" *ngIf="communicationPlatforms?.MSG91?.isConnected">
             <button mat-icon-button disableRipple id="edit-model-basic" [matMenuTriggerFor]="beforeMenu" aria-label="vertical dot img">
@@ -51,7 +57,7 @@
         </button>
         <div class="d-flex align-items-center verify-form mt-3">
             <div class="input-field">
-                <!-- COMMENTED OUT - COMPILATION ERROR: <!-- COMMENTED OUT - COMPILATION ERROR: <input-field
+                <input-field
                     [label]="communicationPlatforms?.MSG91?.fields?.auth_key?.label"
                     [type]="'text'"
                     [cssClass]="'auth-key-input'"
@@ -59,7 +65,7 @@
                     [placeholder]="localeData?.communication?.auth_key"
                     [(ngModel)]="communicationPlatformAuthModel.authFields[0].value"
                     [required]="mandatoryFields.authKey"
-                > --> --><!-- COMMENTED OUT - COMPILATION ERROR: <!-- COMMENTED OUT - COMPILATION ERROR: </input-field> --> -->
+                ></input-field>
             </div>
             <button
                 mat-raised-button
@@ -206,7 +212,7 @@
             </div>
 
             <div class="trigger-input">
-                <!-- COMMENTED OUT - COMPILATION ERROR: <!-- COMMENTED OUT - COMPILATION ERROR: <input-field
+                <input-field
                     [label]="localeData?.communication?.title"
                     [type]="'text'"
                     [placeholder]="localeData?.communication?.name_trigger"
@@ -215,10 +221,10 @@
                     [ngClass]="{ 'fields-error': mandatoryFields.title }"
                     [allowValueReset]="true"
                     (onClear)="createTrigger.title = ''"
-                > --> --><!-- COMMENTED OUT - COMPILATION ERROR: <!-- COMMENTED OUT - COMPILATION ERROR: </input-field> --> -->
+                ></input-field>
             </div>
             <div class="trigger-input mt-3">
-                <!-- COMMENTED OUT - COMPILATION ERROR: <!-- COMMENTED OUT - COMPILATION ERROR: <reactive-dropdown-field
+                <reactive-dropdown-field
                     [label]="localeData?.communication?.condition"
                     [placeholder]="localeData?.communication?.select_condition"
                     [options]="triggerCondition"
@@ -226,10 +232,10 @@
                     [labelValue]="createTrigger.condition.action.length ? createTrigger.condition.action[0] : ''"
                     [ngClass]="{ 'fields-error': mandatoryFields.condition }"
                     (onClear)="createTrigger.condition.action[0] = ''"
-                > --> --><!-- COMMENTED OUT - COMPILATION ERROR: <!-- COMMENTED OUT - COMPILATION ERROR: </reactive-dropdown-field> --> -->
+                ></reactive-dropdown-field>
             </div>
             <div class="trigger-input mt-3">
-                <!-- COMMENTED OUT - COMPILATION ERROR: <!-- COMMENTED OUT - COMPILATION ERROR: <reactive-dropdown-field
+                <reactive-dropdown-field
                     [label]="localeData?.communication?.entity"
                     [placeholder]="localeData?.communication?.select_entity"
                     [options]="triggerEntity"
@@ -238,7 +244,7 @@
                     [ngClass]="{ 'fields-error': mandatoryFields.entity }"
                     (onClear)="createTrigger.condition.entity = ''"
                     [required]="true"
-                > --> --><!-- COMMENTED OUT - COMPILATION ERROR: <!-- COMMENTED OUT - COMPILATION ERROR: </reactive-dropdown-field> --> -->
+                ></reactive-dropdown-field>
             </div>
             <div class="trigger-input mt-3">
                 <mat-form-field appearance="outline" class="w-100">
@@ -266,7 +272,7 @@
                 </mat-form-field>
             </div>
             <div class="trigger-input mt-3">
-                <!-- COMMENTED OUT - COMPILATION ERROR: <!-- COMMENTED OUT - COMPILATION ERROR: <reactive-dropdown-field
+                <reactive-dropdown-field
                     [label]="localeData?.communication?.campaign"
                     [placeholder]="localeData?.communication?.select_campaign"
                     [options]="campaignList"
@@ -275,7 +281,7 @@
                     [ngClass]="{ 'fields-error': mandatoryFields.campaignSlug }"
                     (onClear)="createTrigger.campaignDetails.campaignName = ''"
                     [required]="true"
-                > --> --><!-- COMMENTED OUT - COMPILATION ERROR: <!-- COMMENTED OUT - COMPILATION ERROR: </reactive-dropdown-field> --> -->
+                ></reactive-dropdown-field>
             </div>
             <button
                 *ngIf="triggerMode === 'create' || triggerMode === 'copy'"
@@ -304,7 +310,7 @@
                     <div class="chiplist-wrapper">
                         <div class="pl-4 pr-4 border-bottom">
                             <span class="dropdown-heading pb-3 d-block">{{ localeData?.communication?.receiver }}</span>
-                            <!-- COMMENTED OUT - COMPILATION ERROR: <!-- COMMENTED OUT - COMPILATION ERROR: <select-multiple-fields
+                            <select-multiple-fields
                                 [placeholder]="localeData?.communication?.select_mobile"
                                 [options]="triggerMobileDropdown"
                                 (selectedOption)="createTrigger.campaignDetails.mobile = $event"
@@ -312,10 +318,10 @@
                                 [validations]="['mobile']"
                                 [name]="'mobile'"
                                 class="select-multiple-chiplist mobile-margin"
-                            > --> --><!-- COMMENTED OUT - COMPILATION ERROR: <!-- COMMENTED OUT - COMPILATION ERROR: </select-multiple-fields> --> -->
+                            ></select-multiple-fields>
                         </div>
                         <div class="border-left border-right chip-gap pl-4 pr-4 pt-4">
-                            <!-- COMMENTED OUT - COMPILATION ERROR: <!-- COMMENTED OUT - COMPILATION ERROR: <select-multiple-fields
+                            <select-multiple-fields
                                 [showError]="mandatoryFields.triggerToChiplist"
                                 [placeholder]="localeData?.communication?.select_to"
                                 [options]="triggerToDropdown"
@@ -324,8 +330,8 @@
                                 [validations]="['email']"
                                 [name]="'to'"
                                 class="select-multiple-chiplist border-bottom"
-                            > --> --><!-- COMMENTED OUT - COMPILATION ERROR: <!-- COMMENTED OUT - COMPILATION ERROR: </select-multiple-fields> --> -->
-                            <!-- COMMENTED OUT - COMPILATION ERROR: <!-- COMMENTED OUT - COMPILATION ERROR: <select-multiple-fields
+                            ></select-multiple-fields>
+                            <select-multiple-fields
                                 [placeholder]="localeData?.communication?.select_bcc"
                                 [options]="triggerBccDropdown"
                                 (selectedOption)="createTrigger.campaignDetails.bcc = $event"
@@ -333,8 +339,8 @@
                                 [validations]="['email']"
                                 [name]="'cc'"
                                 class="select-multiple-chiplist border-bottom"
-                            > --> --><!-- COMMENTED OUT - COMPILATION ERROR: <!-- COMMENTED OUT - COMPILATION ERROR: </select-multiple-fields> --> -->
-                            <!-- COMMENTED OUT - COMPILATION ERROR: <!-- COMMENTED OUT - COMPILATION ERROR: <select-multiple-fields
+                            ></select-multiple-fields>
+                            <select-multiple-fields
                                 [placeholder]="localeData?.communication?.select_cc"
                                 [options]="triggerCcDropdown"
                                 (selectedOption)="createTrigger.campaignDetails.cc = $event"
@@ -342,7 +348,7 @@
                                 [validations]="['email']"
                                 [name]="'bcc'"
                                 class="select-multiple-chiplist border-bottom"
-                            > --> --><!-- COMMENTED OUT - COMPILATION ERROR: <!-- COMMENTED OUT - COMPILATION ERROR: </select-multiple-fields> --> -->
+                            ></select-multiple-fields>
                         </div>
                         <mat-checkbox
                             class="font-size-15 pl-4 pr-4"
@@ -367,7 +373,7 @@
                     >
                         <div class="unit-value" [ngClass]="{ 'mt-2': i > 0 }">{{ variable.name }}</div>
                         <div class="map-unit-value border-bottom">
-                            <!-- COMMENTED OUT - COMPILATION ERROR: <!-- COMMENTED OUT - COMPILATION ERROR: <select-multiple-fields
+                            <select-multiple-fields
                                 [placeholder]="localeData?.communication?.select_suggestions"
                                 [options]="fieldsSuggestion"
                                 (selectedOption)="selectVariable($event, i)"
@@ -375,7 +381,7 @@
                                 [name]="'variable_' + i"
                                 class="select-multiple-chiplist"
                                 #variableComponent
-                            > --> --><!-- COMMENTED OUT - COMPILATION ERROR: <!-- COMMENTED OUT - COMPILATION ERROR: </select-multiple-fields> --> -->
+                            ></select-multiple-fields>
                         </div>
                     </div>
                 </div>
@@ -383,4 +389,3 @@
             <div class="dropdown-box-3"></div>
         </div>
     </div>
-</div>

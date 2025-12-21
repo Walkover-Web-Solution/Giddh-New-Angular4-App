@@ -91,3 +91,19 @@
 // These styles ensure the div containers behave like ng-container (minimal visual impact)
 .app-translate-container { // Make the container behave like ng-container - no visual impact display: contents;
 }
+/* CSS for translate-wrapper spans to minimize DOM impact */
+.translate-wrapper {
+    display: contents;
+    /* Makes the span behave like it's not there for layout */
+}
+
+/* Fallback for browsers that don't support display: contents */
+@supports not (display: contents) {
+    .translate-wrapper {
+        display: inline;
+        margin: 0;
+        padding: 0;
+        border: none;
+        background: none;
+    }
+}

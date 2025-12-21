@@ -1,0 +1,9 @@
+.dropdown-menu li {
+    display: flex;
+    align-content: center;
+    label {
+        padding: 5px 0;
+        display: block;
+        cursor: pointer;
+    }
+}

@@ -2,6 +2,7 @@ import { ElementRef, Inject, Injectable, Renderer2 } from '@angular/core';
 import { config, IConfig } from './config';
 import { DOCUMENT } from '@angular/common';
 import { MaskApplierService, Separators } from './mask-applier.service';
+import { filter, includes, indexOf, isArray, map, slice, startsWith } from '../../../../lodash-optimized';
 
 @Injectable()
 export class MaskService extends MaskApplierService {

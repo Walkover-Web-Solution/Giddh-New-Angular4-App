@@ -9,7 +9,7 @@
     <div class="w-100 container pt-3 pb-3">
         <div class="row">
             <div class="col-12 institution-list">
-                <!-- COMMENTED OUT - COMPILATION ERROR: <!-- COMMENTED OUT - COMPILATION ERROR: <input-field
+                <input-field
                     [autocomplete]="'off'"
                     [name]="'institutions'"
                     [placeholder]="localeData?.payment?.search_bank"
@@ -18,8 +18,8 @@
                     [label]="localeData?.payment?.banks"
                     (keydown.enter)="$event.preventDefault()"
                     [matPrefixIcon]="'icon-search'"
-                > --> -->
-                <!-- COMMENTED OUT - COMPILATION ERROR: <!-- COMMENTED OUT - COMPILATION ERROR: </input-field> --> -->
+                >
+                </input-field>
                 <div class="list-wrapper mt-2">
                     <mat-list class="p-0" *ngIf="filteredBanks?.length">
                         <ng-container *ngFor="let item of filteredBanks">

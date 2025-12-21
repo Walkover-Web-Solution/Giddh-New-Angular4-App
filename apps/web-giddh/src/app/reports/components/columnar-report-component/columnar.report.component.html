@@ -1,0 +1,132 @@
+<div
+    appTranslate
+    [file]="'reports/monthly-columnar'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
+    <div class="columnar-report-page mt-4">
+        <div class="container-fluid font-size-15">
+            <div class="row">
+                <div class="col-xl-3 col-md-8 col-sm-12 col-xs-12 mb-3">
+                    <reactive-dropdown-field
+                        [options]="selectYear"
+                        [labelValue]="activeFinancialYearLabel"
+                        [placeholder]="localeData?.select_year"
+                        [name]="'financialYear'"
+                        [forceClear]="forceClear"
+                        [(ngModel)]="financialYearSelected"
+                        (selectedOption)="selectFinancialYear($event)">
+                    </reactive-dropdown-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-3 col-md-8 col-sm-12 col-12">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-12 mb-3">
+                            <reactive-dropdown-field
+                                [options]="fromMonthNames"
+                                [placeholder]="localeData?.from_month"
+                                [name]="'fromMonth'"
+                                [(ngModel)]="fromMonth"
+                                (selectedOption)="selectFromMonth($event)">
+                            </reactive-dropdown-field>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-12 mb-3">
+                            <reactive-dropdown-field
+                                [options]="toMonthNames"
+                                [placeholder]="localeData?.to_month"
+                                [name]="'toMonth'"
+                                [(ngModel)]="toMonth"
+                                (selectedOption)="selectToMonth($event)">
+                            </reactive-dropdown-field>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-3 col-md-8 col-sm-12 col-12 mb-3 clear-both">
+                    <reactive-dropdown-field
+                        [options]="flatGroupsOptions"
+                        [placeholder]="localeData?.group"
+                        [name]="'group'"
+                        [forceClear]="forceClear"
+                        (selectedOption)="selectGroup($event)"
+                        [enableDynamicSearch]="true"
+                        [isPaginationEnabled]="true"
+                        (scrollEnd)="handleGroupScrollEnd()"
+                        (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)">
+                    </reactive-dropdown-field>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-3 col-md-8 col-sm-12 col-12 mb-3 clear-both">
+                    <mat-slide-toggle
+                        [(ngModel)]="exportRequest.showHideOpeningClosingBalance"
+                        name="showHideOpeningClosingBalance"
+                        id="showHideOpeningClosingBalance"
+                        color="primary"
+                        aria-label="closing balance"
+                    ></mat-slide-toggle>
+                    &nbsp;<label class="custom-mat-label" for="showHideOpeningClosingBalance">{{
+                        localeData?.opening_closing_balance
+                    }}</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xl-3 col-md-8 col-sm-12 col-12 mb-3 clear-both">
+                    <mat-slide-toggle
+                        [(ngModel)]="exportRequest.balanceTypeAsSign"
+                        name="balanceTypeAsSign"
+                        id="balanceTypeAsSign"
+                        color="primary"
+                        (change)="onBalanceTypeAsSignChanged($event)"
+                        aria-label="cr dr"
+                    ></mat-slide-toggle>
+                    &nbsp;<label class="custom-mat-label" for="balanceTypeAsSign">{{ localeData?.cr_dr }}</label>
+                </div>
+            </div>
+            <div class="d-flex column-gap-1 mt-3">
+                <button
+                    mat-raised-button color="primary"
+                    [disabled]="!isFormValid() || isLoading"
+                    (click)="exportReport(false)"
+                >
+                    {{ commonLocaleData?.app_export }}
+                </button>
+                <button
+                    mat-raised-button color="primary"
+                    [disabled]="!isFormValid() || isLoading"
+                    (click)="exportReport(true)"
+                >
+                    {{ commonLocaleData?.app_show }}
+                </button>
+                <button mat-stroked-button (click)="clearFilter()">{{ commonLocaleData?.app_reset }}</button>
+            </div>
+        </div>
+    </div>
+    <columnar-report-table-component
+        class="d-block mt-3"
+        [columnarReportResponse]="columnarReportResponse"
+        [isBalanceTypeAsSign]="isBalanceTypeAsSign"
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+    >
+    </columnar-report-table-component>
+    <div class="pl-3 pr-3">
+        <mat-paginator
+            *ngIf="columnarReportResponse?.totalItems > pageSizeOptions[0]"
+            [length]="columnarReportResponse.totalItems"
+            [pageSize]="getColumnarRequestModel.count"
+            [pageIndex]="getColumnarRequestModel.page - 1"
+            [pageSizeOptions]="pageSizeOptions"
+            [showFirstLastButtons]="true"
+            [hidePageSize]="false"
+            (page)="handlePageEvent($event)">
+        </mat-paginator>
+    </div>
+    <div *ngIf="isLoading && isShowColumnarReport">
+        <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
+    </div>
+    <section class="mb-custom-80"></section>
+</div>

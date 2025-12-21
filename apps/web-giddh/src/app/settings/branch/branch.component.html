@@ -6,47 +6,34 @@
                     {{ localeData?.create_branch }}
                 </button>
             </div>
-            <!-- COMMENTED OUT - COMPILATION ERROR: <mat-tab-group
-                mat-stretch-tabs="false"
-                [selectedIndex]="selectedTabIndex"
-                [disableRipple]="true"
-            > -->
-                <!-- COMMENTED OUT - COMPILATION ERROR: <mat-tab [label]="localeData?.flat_view"> -->
-                    <ng-container *ngIf="selectedTabIndex === 0">
-                        <div class="clear-both p-3 pb-0">
-                            <div class="date-advance-search row">
-                                <div class="col-sm-12 mb-3 d-flex justify-content-between">
-                                    <form class="form-inline input-group-date-range-picker position-relative d-flex flex-row mr-0">
-                                        <div class="mr-1 branch-header-content w-100">
-                                            <div class="search-field form-top-fields w-100">
-                                                <div class="search-branch-box">
-                                                    <!-- COMMENTED OUT - COMPILATION ERROR: <!-- COMMENTED OUT - COMPILATION ERROR: <input-field
-                                                        [type]="'text'"
-                                                        [name]="'searchBranch'"
-                                                        [formControl]="searchBranchQuery"
-                                                        #branchSearch
-                                                        [placeholder]="localeData?.search_branch"
-                                                    > --> -->
-                                                    <!-- COMMENTED OUT - COMPILATION ERROR: <!-- COMMENTED OUT - COMPILATION ERROR: </input-field> --> -->
-                                                </div>
-                                                <button
-                                                    *ngIf="searchBranchQuery.value"
-                                                    class="w-100 ml-2"
-                                                    mat-stroked-button
-                                                    (click)="resetFilter()"
-                                                    aria-label="cross icon"
-                                                    [matTooltip]="localeData?.reset_search"
-                                                >
-                                                    <i
-                                                        aria-hidden="true"
-                                                        class="icon-cross d-inline-block font-size-12 mr-1"
-                                                    ></i>
-                                                    <span>{{ commonLocaleData?.app_clear_filter }}</span>
-                                                </button>
+            <mat-tab-group (selectedTabChange)="onTabChanged($event)">
+                <mat-tab [label]="localeData?.flat_view">
+                    <div class="clear-both p-3 pb-0">
+                        <div class="date-advance-search row">
+                            <div class="col-sm-12 mb-3 d-flex justify-content-between">
+                                <form class="form-inline input-group-date-range-picker position-relative d-flex flex-row mr-0">
+                                    <div class="mr-1 branch-header-content w-100">
+                                        <div class="search-field form-top-fields w-100">
+                                            <div class="search-branch-box">
+                                                <!-- Search input commented out -->
                                             </div>
+                                            <button
+                                                *ngIf="searchBranchQuery.value"
+                                                class="w-100 ml-2"
+                                                mat-stroked-button
+                                                (click)="resetFilter()"
+                                                aria-label="cross icon"
+                                                [matTooltip]="localeData?.reset_search"
+                                            >
+                                                <i
+                                                    aria-hidden="true"
+                                                    class="icon-cross d-inline-block font-size-12 mr-1"
+                                                ></i>
+                                                <span>{{ commonLocaleData?.app_clear_filter }}</span>
+                                            </button>
                                         </div>
-                                    </form>
-                                </div>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                         <div *ngIf="(branches$ | async)?.length === 0 && !showLoader" class="no-data mt-4">
@@ -57,6 +44,26 @@
                         <div *ngIf="showLoader" class="spinner2">
                             <div class="cube1"></div>
                             <div class="cube2"></div>
+                        </div>
+                        <div *ngIf="(branches$ | async)?.length > 0 && !showLoader" class="p-3">
+                            <div class="branch-card-view">
+                                <div class="row">
+                                    <div class="col-12" *ngFor="let branch of branches$ | async">
+                                        <div class="branch-card">
+                                            <div class="card-basic-details">
+                                                <div class="clear-both">
+                                                    <div class="pull-left d-flex column-gap-05">
+                                                        <i class="cursor-pointer icon-branch-icon" [matTooltip]="commonLocaleData?.app_branch"></i>
+                                                        <div>
+                                                            <p>{{ branch.name }}</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <div *ngIf="(branches$ | async)?.length > 0 && !showLoader" class="p-3">
                             <div class="branch-card-view" *ngIf="branchViewType === 'card'">
@@ -291,13 +298,14 @@
                                 </div>
                             </ng-template>
                         </div>
-                    </ng-container>
-                </mat-tab>
-                <!-- COMMENTED OUT - COMPILATION ERROR: <mat-tab [label]="localeData?.hierarchy_view">
-                    <div class="pt-4 pb-4 h-100">
-                        <d3-tree-chart [data]="data" [localeData]="localeData"> </d3-tree-chart>
                     </div>
-                </mat-tab> -->
+                </mat-tab>
+                <mat-tab [label]="localeData?.hierarchy_view">
+                    <div class="pt-4 pb-4 h-100">
+                        <!-- <d3-tree-chart [data]="data" [localeData]="localeData"></d3-tree-chart> -->
+                        <p>Hierarchy view placeholder</p>
+                    </div>
+                </mat-tab>
             </mat-tab-group>
         </div>
     </div>

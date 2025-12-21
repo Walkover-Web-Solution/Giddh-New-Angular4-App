@@ -1,10 +1,11 @@
 import {Directive, ElementRef, Input, OnDestroy, OnInit, Output, EventEmitter, SimpleChanges, OnChanges } from '@angular/core';
 import Tribute from 'tributejs';
+import { endsWith } from '../../../../lodash-optimized';
 
 @Directive({
-  selector: '[appTributeMention]',
+    selector: '[appTributeMention]',
   standalone: false,
-  exportAs: 'appTributeMention'
+    exportAs: 'appTributeMention'
 })
 export class TributeMentionDirective implements OnInit, OnDestroy, OnChanges {
 

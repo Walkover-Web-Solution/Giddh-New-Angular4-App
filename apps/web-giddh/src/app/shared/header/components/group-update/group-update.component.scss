@@ -1,0 +1,30 @@
+.horizontal-form {
+    max-width: var(--aside-pane-width) !important;
+    width: 100% !important;
+}
+
+.move-group-form .list-item {
+    border-bottom: 1px solid var(--border-color);
+}
+
+.manage-group-account-form {
+    .form-group {
+        .ladda-button[type="submit"] {
+            border-color: var(--theme-primary-color) !important;
+            background-color: var(--bg-primary-color) !important;
+            color: var(--color-white) !important;
+            &:hover {
+                border-color: var(--theme-primary-color) !important;
+                background-color: var(--bg-primary-color) !important;
+            }
+        }
+    }
+}
+
+.width-select {
+    width: calc(100% - 112px);
+}
+
+.closing-balance-width {
+    min-width: 250px;
+}

@@ -1,4 +1,10 @@
-<div class="app-translate-container" appTranslate file="'settings/integration'" [requireCommonData]="false" (localeData)="localeData = $event" (translationComplete)="translationComplete($event)">
+<div
+    appTranslate
+    [file]="'settings/integration'"
+    [requireCommonData]="false"
+    (localeData)="localeData = $event"
+    (translationComplete)="translationComplete($event)"
+>
     <form
         autocomplete="off"
         novalidate
@@ -23,17 +29,17 @@
         <mat-dialog-content class="dialog-body icici-account-create-edit">
                 <ng-container *ngIf="!isLoading && localeData?.payment">
                     <div *ngIf="!activeBankAccount">
-                        <!-- COMMENTED OUT - COMPILATION ERROR: <!-- COMMENTED OUT - COMPILATION ERROR: <input-field
+                        <input-field
                             [label]="localeData?.payment?.icici_login_id"
                             [required]="true"
                             [name]="'loginId'"
                             formControlName="loginId"
                             [type]="'text'"
                             [placeholder]="localeData?.payment?.login_id_placeholder"
-                        > --> --><!-- COMMENTED OUT - COMPILATION ERROR: <!-- COMMENTED OUT - COMPILATION ERROR: </input-field> --> -->
+                        ></input-field>
                     </div>
                     <div class="mt-2">
-                        <!-- COMMENTED OUT - COMPILATION ERROR: <!-- COMMENTED OUT - COMPILATION ERROR: <input-field
+                        <input-field
                             [label]="localeData?.payment?.account_number_label"
                             [required]="true"
                             [name]="'accountNumber'"
@@ -46,27 +52,27 @@
                             }"
                             [placeholder]="localeData?.payment?.account_number_placeholder"
                             [maxlength]="18"
-                        > --> --><!-- COMMENTED OUT - COMPILATION ERROR: <!-- COMMENTED OUT - COMPILATION ERROR: </input-field> --> -->
+                        ></input-field>
                     </div>
                     <div class="mt-2">
-                        <!-- COMMENTED OUT - COMPILATION ERROR: <!-- COMMENTED OUT - COMPILATION ERROR: <reactive-dropdown-field
+                        <reactive-dropdown-field
                             [label]="localeData?.payment?.link_account_label"
                             [name]="'accountUniqueName'"
                             [placeholder]="localeData?.payment?.link_account_placeholder"
                             [options]="bankAccounts$ | async"
                             [required]="true"
                             (selectedOption)="accountForm?.get('accountUniqueName').patchValue($event.value)"
-                        > --> --><!-- COMMENTED OUT - COMPILATION ERROR: <!-- COMMENTED OUT - COMPILATION ERROR: </reactive-dropdown-field> --> -->
+                        ></reactive-dropdown-field>
                     </div>
                     <div class="mt-2" *ngIf="!activeBankAccount">
-                        <!-- COMMENTED OUT - COMPILATION ERROR: <!-- COMMENTED OUT - COMPILATION ERROR: <reactive-dropdown-field
+                        <reactive-dropdown-field
                             [label]="localeData?.payment?.user"
                             [name]="'userUniqueName'"
                             [placeholder]="localeData?.payment?.select_user"
                             [options]="usersList"
                             [required]="true"
                             (selectedOption)="accountForm?.get('userUniqueName').patchValue($event.value)"
-                        > --> --><!-- COMMENTED OUT - COMPILATION ERROR: <!-- COMMENTED OUT - COMPILATION ERROR: </reactive-dropdown-field> --> -->
+                        ></reactive-dropdown-field>
                     </div>
                     <div class="mt-2">
                         <mat-form-field class="initial-height w-100" appearance="outline">
@@ -100,4 +106,3 @@
             </div>
         </mat-dialog-content>
     </form>
-</div>

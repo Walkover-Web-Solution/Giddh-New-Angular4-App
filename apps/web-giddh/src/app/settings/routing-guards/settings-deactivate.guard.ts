@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 
-// COMMENTED OUT - COMPILATION ERROR: import { SettingsComponent } from '../settings.component';
+// import { SettingsComponent } from '../settings.component';
 
 /**
  * Deactivate guard to prevent browser navigation when modal is displayed
@@ -25,7 +25,7 @@ export class SettingsDeactivateGuard  {
      * @memberof SettingsDeactivateGuard
      */
     canDeactivate(
-        component: any, // COMMENTED OUT - COMPILATION ERROR: SettingsComponent,
+        // component: SettingsComponent,
         currentRoute: ActivatedRouteSnapshot,
         currentState: RouterStateSnapshot,
         nextState?: RouterStateSnapshot): boolean {

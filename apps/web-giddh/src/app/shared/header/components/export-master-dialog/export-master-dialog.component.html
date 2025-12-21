@@ -1,0 +1,24 @@
+<div
+    appTranslate
+    [file]="'accounts'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+  <div class="dialog-header">
+    <span>{{ localeData?.export_group_ledger }}</span>
+    <button mat-icon-button aria-label="close" mat-dialog-close>
+      <i class="icon-cross"></i>
+    </button>
+  </div>
+  <mat-dialog-content class="dialog-body">
+      <p class="pb-3">
+        {{ commonLocaleData?.app_note }} :
+        <span [innerHTML]="commonLocaleData.app_export_note">
+          {{ localeData?.export_note }}
+        </span>
+      </p>
+      <master-export-option
+        (exportFormMaster) = "exportFormValue = $event"
+      ></master-export-option>
+      <button mat-raised-button color="primary" (click)="exportMaster()">{{ commonLocaleData?.app_export }}</button>
+  </mat-dialog-content>

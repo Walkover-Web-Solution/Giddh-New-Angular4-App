@@ -19,6 +19,7 @@ import { ApplyDiscountRequestV2 } from '../models/api-models/ApplyDiscount';
 import { IUpdateDbRequest } from "../models/interfaces/ulist.interface";
 import { CommonActions } from './common.actions';
 import { LocaleService } from '../services/locale.service';
+import { forEach, set } from '../lodash-optimized';
 
 @Injectable()
 export class AccountsAction {
@@ -79,22 +80,22 @@ export class AccountsAction {
                 return this.applyAccountTaxResponse(response);
             })));
 
-    // public ApplyAccountTaxResponse$: Observable<Action> = createEffect(() => this.action$
-    //     .pipe(
-    //         ofType(AccountsAction.APPLY_GROUP_TAX_RESPONSE),
-    //         map((action: CustomActions) => {
-    //             if (action.payload?.status === 'error') {
-    //                 this._toasty.errorToast(action.payload.message, action.payload.code);
-    //                 return { type: 'EmptyAction' };
-    //             }
-    //             this._toasty.successToast(action.payload?.body, action.payload?.status);
-    //             this.store.pipe(take(1)).subscribe((s) => {
-    //                 if (s.groupwithaccounts && s.groupwithaccounts.activeGroup) {
-    //                     return this.getAccountDetails(s.groupwithaccounts.activeAccount?.uniqueName);
-    //                 }
-    //             });
-    //             return { type: 'EmptyAction' };
-    //         })));
+    public ApplyAccountTaxResponse$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(AccountsAction.APPLY_GROUP_TAX_RESPONSE),
+            map((action: CustomActions) => {
+                if (action.payload?.status === 'error') {
+                    this._toasty.errorToast(action.payload.message, action.payload.code);
+                    return { type: 'EmptyAction' };
+                }
+                this._toasty.successToast(action.payload?.body, action.payload?.status);
+                this.store.pipe(take(1)).subscribe((s) => {
+                    if (s.groupwithaccounts && s.groupwithaccounts.activeGroup) {
+                        return this.getAccountDetails(s.groupwithaccounts.activeAccount?.uniqueName);
+                    }
+                });
+                return { type: 'EmptyAction' };
+            })));
 
     public CreateAccountV2$: Observable<Action> = createEffect(() => this.action$
         .pipe(
@@ -173,31 +174,31 @@ export class AccountsAction {
                 return this.updateAccountResponse(response);
             })));
 
-    // public UpdateAccountResponse$: Observable<Action> = createEffect(() => this.action$
-    //     .pipe(
-    //         ofType(AccountsAction.UPDATE_ACCOUNT_RESPONSE),
-    //         map((action: CustomActions) => {
-    //             if (action.payload?.status === 'error') {
-    //                 this._toasty.clearAllToaster();
-    //                 this._toasty.errorToast(action.payload.message, action.payload.code);
-    //             } else {
-    //                 this._toasty.successToast(this.localeService.translate("app_messages.account_updated"));
-    //                 let groupSearchString: string;
-    //                 this.store.pipe(take(1)).subscribe(a => {
-    //                     groupSearchString = a.groupwithaccounts.groupAndAccountSearchString;
-    //                 });
-    //                 if (groupSearchString) {
-    //                     this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(groupSearchString));
-    //                 } else {
-    //                     this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
-    //                 }
-    //             }
-    //             return { type: 'EmptyAction' };
-    //         })));
+    public UpdateAccountResponse$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(AccountsAction.UPDATE_ACCOUNT_RESPONSE),
+            map((action: CustomActions) => {
+                if (action.payload?.status === 'error') {
+                    this._toasty.clearAllToaster();
+                    this._toasty.errorToast(action.payload.message, action.payload.code);
+                } else {
+                    this._toasty.successToast(this.localeService.translate("app_messages.account_updated"));
+                    let groupSearchString: string;
+                    this.store.pipe(take(1)).subscribe(a => {
+                        groupSearchString = a.groupwithaccounts.groupAndAccountSearchString;
+                    });
+                    if (groupSearchString) {
+                        this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(groupSearchString));
+                    } else {
+                        this.store.dispatch(this.groupWithAccountsAction.getGroupWithAccounts(''));
+                    }
+                }
+                return { type: 'EmptyAction' };
+            })));
 
     /**
      * Update Account V2 Patch
-     *
+     * 
      * @param {CustomActions} action
      * @return {Observable<Action>}
      * @memberof AccountsAction
@@ -211,7 +212,7 @@ export class AccountsAction {
                     this.store.dispatch(this.hasUnsavedChanges(false));
                     this.store.dispatch(this.commonActions.accountUpdated(true));
                     this.store.dispatch(this.groupWithAccountsAction.hideEditAccountForm());
-
+                    
                         const updateIndexDb: IUpdateDbRequest = {
                             newUniqueName: response.body.uniqueName,
                             oldUniqueName: response.queryString.accountUniqueName,
@@ -404,24 +405,24 @@ export class AccountsAction {
                 return this.unShareAccountResponse(response);
             })));
 
-    // public unShareAccountResponse$: Observable<Action> = createEffect(() => this.action$
-    //     .pipe(
-    //         ofType(AccountsAction.UNSHARE_ACCOUNT_RESPONSE),
-    //         map((action: CustomActions) => {
-    //             if (action.payload?.status === 'error') {
-    //                 this._toasty.errorToast(action.payload.message, action.payload.code);
-    //                 return {
-    //                     type: 'EmptyAction'
-    //                 };
-    //             } else {
-    //                 this._toasty.successToast(action.payload?.body, '');
-    //             }
-    //             let accountUniqueName = null;
-    //             this.store.pipe(take(1)).subscribe(s => {
-    //                 accountUniqueName = s.groupwithaccounts.activeAccount?.uniqueName;
-    //             });
-    //             return this.sharedAccountWith(accountUniqueName);
-    //         })));
+    public unShareAccountResponse$: Observable<Action> = createEffect(() => this.action$
+        .pipe(
+            ofType(AccountsAction.UNSHARE_ACCOUNT_RESPONSE),
+            map((action: CustomActions) => {
+                if (action.payload?.status === 'error') {
+                    this._toasty.errorToast(action.payload.message, action.payload.code);
+                    return {
+                        type: 'EmptyAction'
+                    };
+                } else {
+                    this._toasty.successToast(action.payload?.body, '');
+                }
+                let accountUniqueName = null;
+                this.store.pipe(take(1)).subscribe(s => {
+                    accountUniqueName = s.groupwithaccounts.activeAccount?.uniqueName;
+                });
+                return this.sharedAccountWith(accountUniqueName);
+            })));
 
     public sharedAccount$: Observable<Action> = createEffect(() => this.action$
         .pipe(

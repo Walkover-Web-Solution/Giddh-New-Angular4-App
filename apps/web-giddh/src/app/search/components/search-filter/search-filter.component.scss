@@ -1,0 +1,36 @@
+.query-list {
+    .condition_tag {
+        position: absolute;
+        top: 2px;
+        right: -48px;
+        background: var(--color-border-light);
+        border-radius: var(--mat-border-radius-circle);
+        padding: 7px 7px;
+        text-transform: uppercase;
+        font-size: var(--font-size-12);
+        line-height: 24px;
+
+        &::before {
+            content: " ";
+            position: absolute;
+            height: 63px;
+            width: 2px;
+            background: var(--color-border-light);
+            top: 29px;
+            left: 19px;
+        }
+    }
+    &:nth-last-child(3) {
+        .condition_tag {
+            &::after {
+                content: " ";
+                position: absolute;
+                height: 2px;
+                width: 30px;
+                background: var(--color-border-light);
+                top: 90px;
+                left: -10px;
+            }
+        }
+    }
+}

@@ -9,7 +9,7 @@ import { SalesService } from '../../services/sales.service';
 import { SettingsDiscountService } from '../../services/settings.discount.service';
 import { ToasterService } from '../../services/toaster.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { CreateDiscountComponent } from '../../theme/create-discount/create-discount.component';
+// import { CreateDiscountComponent } from '../../theme/create-discount/create-discount.component';
 import { ASIDE_PANE_CONFIG } from '../../app.constant';
 import { GeneralService } from '../../services/general.service';
 
@@ -104,10 +104,10 @@ export class DiscountComponent implements OnInit, OnDestroy {
      * @memberof DiscountComponent
      */
     public openCreateEditDiscountAsidePane(discountInfo?: CreateDiscountRequest): void {
-        this.createUpdateDiscountRef = this.dialog.open(CreateDiscountComponent, {
-            data: discountInfo ?? null,
-            ...ASIDE_PANE_CONFIG
-        });
+        // this.createUpdateDiscountRef = this.dialog.open(CreateDiscountComponent, {
+        //     data: discountInfo ?? null,
+        //     ...ASIDE_PANE_CONFIG
+        // });
 
         this.createUpdateDiscountRef.afterClosed().subscribe(response => {
             if (response) {

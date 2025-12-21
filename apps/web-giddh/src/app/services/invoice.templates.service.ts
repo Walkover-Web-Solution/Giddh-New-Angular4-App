@@ -8,10 +8,9 @@ import { BaseResponse } from '../models/api-models/BaseResponse';
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
+import { get } from '../lodash-optimized';
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class InvoiceTemplatesService {
     private companyUniqueName: string;
 

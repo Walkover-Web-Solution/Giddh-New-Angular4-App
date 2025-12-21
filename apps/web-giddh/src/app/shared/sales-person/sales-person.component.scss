@@ -1,0 +1,17 @@
+:host ::ng-deep .sales-person mat-accordion {
+    mat-expansion-panel {
+        z-index: 99;
+        .giddh-mobile-wrapper {
+            z-index: 5;
+            ul {
+                &.iti__country-list {
+                    position: absolute !important;
+                    top: unset !important;
+                    left: unset !important;
+                    transform: translate(-84px, 12px);
+                    max-width: 300px;
+                }
+            }
+        }
+    }
+}

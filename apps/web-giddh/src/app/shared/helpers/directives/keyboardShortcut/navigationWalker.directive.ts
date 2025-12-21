@@ -1,4 +1,5 @@
 import { Directive, ElementRef, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output, Renderer2 } from '@angular/core';
+import { remove, some } from '../../../../lodash-optimized';
 
 const keyMaps = {
     left: 37,
@@ -11,7 +12,7 @@ const keyMaps = {
  * Useful for Navigation using arrow keys
  */
 @Directive({
-    selector: '[appNavigationWalker]',
+    selector: '[navigationWalker]',
     exportAs: 'navigationWalker',
     standalone: false
 })

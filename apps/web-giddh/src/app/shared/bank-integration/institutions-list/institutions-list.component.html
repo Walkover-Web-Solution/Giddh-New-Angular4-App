@@ -1,0 +1,54 @@
+<div
+    appTranslate
+    [file]="'settings/integration'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <div class="dialog-header d-flex align-items-center">
+        <span>{{ localeData?.payment?.connect_bank }}</span>
+        <button mat-icon-button aria-label="close" mat-dialog-close>
+            <i class="icon-cross"></i>
+        </button>
+    </div>
+    <giddh-page-loader *ngIf="institutionsListInProgress$ | async"></giddh-page-loader>
+    <mat-dialog-content class="institutions-dialog-body dialog-body" *ngIf="!(institutionsListInProgress$ | async)">
+        <div class="w-100 container pt-3 pb-3">
+            <div class="row">
+                <div class="col-12 institution-list">
+                    <form [formGroup]="searchForm">
+                        <input-field
+                            [autocomplete]="'off'"
+                            [name]="'institutions'"
+                            [placeholder]="localeData?.payment?.search_bank || localeData?.search_bank"
+                            [type]="'text'"
+                            formControlName="search"
+                            [label]="localeData?.payment?.banks || localeData?.banks"
+                            (keydown.enter)="$event.preventDefault()"
+                            [matPrefixIcon]="'icon-search'"
+                        >
+                        </input-field>
+                    </form>
+                    <div class="list-wrapper mt-2">
+                        <mat-list class="p-0" *ngIf="filteredBanks?.length">
+                            <ng-container *ngFor="let item of filteredBanks">
+                                <div class="list-item px-2">
+                                    <mat-list-item class="p-0 border-bottom">
+                                        <span
+                                            class="list-item-underline-hover cursor-pointer"
+                                            (click)="openGocardlessDialog(item)"
+                                            >{{ item.name }}</span
+                                        >
+                                    </mat-list-item>
+                                </div>
+                            </ng-container>
+                        </mat-list>
+                        <mat-list class="p-0" *ngIf="!filteredBanks?.length">
+                            <mat-list-item class="list-item pr-2 pl-4">{{
+                                commonLocaleData?.app_no_data_found
+                            }}</mat-list-item>
+                        </mat-list>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-dialog-content>

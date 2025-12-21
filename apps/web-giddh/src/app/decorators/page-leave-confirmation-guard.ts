@@ -4,6 +4,7 @@ import { PageLeaveUtilityService } from '../services/page-leave-utility.service'
 import { AppState } from '../store';
 import { Store, select } from '@ngrx/store';
 import { CommonActions } from '../actions/common.actions';
+import { reject } from '../lodash-optimized';
 
 export interface ComponentCanDeactivate {
     canDeactivate: () => Promise<boolean> | boolean;

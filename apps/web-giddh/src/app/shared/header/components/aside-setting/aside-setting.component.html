@@ -1,0 +1,95 @@
+<cdk-virtual-scroll-viewport [itemSize]="100" class="h-100">
+    <div
+        appTranslate
+        [file]="'aside-setting'"
+        (localeData)="localeData = $event"
+        (commonLocaleData)="commonLocaleData = $event"
+        (translationComplete)="translationComplete($event)"
+    >
+        <div class="aside-pane mat-app-background mat-app-background" (clickOutside)="closeAsidePaneIfMobile($event)">
+            <div class="aside-help-header relative" *ngIf="showSettingHeading">
+                <p class="font-size-15">{{ localeData?.page_heading }}</p>
+                <div hidden class="cursor-pointer" (click)="closeAsidePane($event)">
+                    <i class="icon-cross"></i>
+                </div>
+            </div>
+            <div class="help-aside-body">
+                <div class="back-to-main-slider">
+                    <a href="javascript:;" aria-label="back icon">
+                        <span
+                            class="d-flex align-items-center"
+                            *ngIf="!showSettingHeading"
+                            (click)="goToPreviousPage()"
+                            aria-label="back"
+                            role="button"
+                        >
+                            <i class="icon-left font-22"></i>
+                            <span>{{ commonLocaleData?.app_back }}</span>
+                        </span>
+                    </a>
+                </div>
+                <div class="setting-items">
+                    <mat-list role="list" *ngFor="let section of filteredSettingsPageTabs">
+                        <ng-container *ngFor="let tab of section">
+                            <ng-container
+                                *ngIf="
+                                    tab?.link !== '/pages/settings/integration' ||
+                                    isGocardlessSupportedCountry ||
+                                    iciciAllowedCompanies?.includes(selectedCompany?.uniqueName)
+                                "
+                            >
+                                <ng-container *ngIf="(tab?.link === '/pages/vouchers/preview/sales/settings' && !isCompany && !isConsolidatedBranch) || tab?.link !== '/pages/vouchers/preview/sales/settings'">
+                                    <ng-container *ngIf="tab?.link !== '/pages/settings/tag'; else tagsListItem">
+                                        <mat-list-item
+                                            role="listitem"
+                                            [ngClass]="{
+                                                'active-link':
+                                                    (tab?.link === routerUrl || tab?.linked_pages?.includes(routerUrl)) &&
+                                                    !isTagMenuOpened
+                                            }"
+                                        >
+                                            <a
+                                                href="javascript:;"
+                                                aria-label="icon"
+                                                class="d-block clear-both"
+                                                [routerLink]="tab?.link"
+                                            >
+                                                <span [innerHTML]="tab?.icon"></span>
+                                                <span>{{ tab?.label }}</span>
+                                            </a>
+                                        </mat-list-item>
+                                    </ng-container>
+                                </ng-container>
+                            </ng-container>
+                            <ng-template #tagsListItem>
+                                <mat-list-item role="listitem" [ngClass]="{ 'active-link': isTagMenuOpened }">
+                                    <a
+                                        href="javascript:;"
+                                        aria-label="icon"
+                                        class="d-block clear-both"
+                                        [matMenuTriggerFor]="tagsMenu"
+                                        #tagsMenuTrigger="matMenuTrigger"
+                                        (menuOpened)="toggleTagMenu(true)"
+                                        (menuClosed)="toggleTagMenu(false)"
+                                    >
+                                        <span [innerHTML]="tab?.icon"></span>
+                                        <span>{{ tab?.label }}</span>
+                                    </a>
+                                </mat-list-item>
+                            </ng-template>
+                        </ng-container>
+                    </mat-list>
+                </div>
+            </div>
+        </div>
+    </div>
+</cdk-virtual-scroll-viewport>
+
+<!-- Show All Tags Menu  -->
+<!-- COMMENTED OUT - TagsModule removed to fix NG6002 errors
+<mat-menu #tagsMenu="matMenu" xPosition="before">
+    <div class="tags-menu-contianer" (click)="$event.stopPropagation()">
+        <setting-tags></setting-tags>
+    </div>
+</mat-menu>
+-->

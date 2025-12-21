@@ -1,0 +1,26 @@
+<div
+    appTranslate
+    [file]="'trial-profit-balance/export'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <a href="javascript:void(0);" aria-label="csv download" [matMenuTriggerFor]="csvDownloadMenu"
+        class="cursor-pointer new-icon-img">
+        <img [src]="imgPath" alt="csv img" />
+    </a>
+    <!-- Menu -->
+    <mat-menu #csvDownloadMenu="matMenu" xPosition="before" yPosition="below">
+        <button mat-menu-item (click)="downloadCSV('group-wise')" aria-label="group report">
+            {{ localeData?.csv?.group_wise_report }}
+        </button>
+        <button mat-menu-item (click)="downloadCSV('condensed')" aria-label="condensed report">
+            {{ localeData?.csv?.condensed_report }}
+        </button>
+        <button mat-menu-item (click)="downloadCSV('account-wise')" aria-label="account report">
+            {{ localeData?.csv?.account_wise_report }}
+        </button>
+        <button mat-menu-item (click)="exportFlatTrialBalanceReport()" aria-label="flat report">
+            {{ localeData?.csv?.flat_report }}
+        </button>
+    </mat-menu>
+</div>

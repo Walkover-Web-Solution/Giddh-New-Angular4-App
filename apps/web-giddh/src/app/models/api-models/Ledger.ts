@@ -4,7 +4,7 @@ import { SalesOtherTaxesCalculationMethodEnum, SalesOtherTaxesModal } from './Sa
 import { PettyCashEntryStatus } from './Expences';
 import { VoucherAdjustments } from './AdvanceReceiptsAdjust';
 import { PAGINATION_LIMIT } from '../../app.constant';
-// import { ReferenceVoucher } from '../../ledger/ledger.vm';
+// import { ReferenceVouche₹r } from '../../ledger/ledger.vm';
 
 /*
  * Model for ledger create api request
@@ -129,7 +129,7 @@ export class LedgerResponse {
     public unitRates?: Array<any>;
     public entryVoucherTotals?: any;
     public voucherUniqueName?: string;
-    public referenceVoucher?: any; // ReferenceVoucher interface - temporarily using any
+    // public referenceVoucher?: ReferenceVoucher;
     public gainLoss?: number;
     public generateEInvoice?: boolean = null;
     public salesPerson?: { name: string, uniqueName: string, email: string };

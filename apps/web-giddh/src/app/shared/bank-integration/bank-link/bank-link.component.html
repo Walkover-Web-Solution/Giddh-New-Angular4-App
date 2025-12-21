@@ -1,0 +1,45 @@
+<div
+    appTranslate
+    [file]="'settings/integration'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <div class="dialog-header">
+        <span>{{ localeData?.payment?.link_bank }}</span>
+        <button mat-icon-button aria-label="close" (click)="closeDialog()">
+            <i class="icon-cross"></i>
+        </button>
+    </div>
+    <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isLoading"></giddh-page-loader>
+    <mat-dialog-content class="banklink-dialog-body dialog-body" *ngIf="!isLoading">
+        <div class="w-100 container pt-3 pb-3">
+            <div class="row">
+                <div class="col-12 bank-link">
+                    <div class="col-8">
+                        <p *ngIf="bankLinks?.length === 0">{{ localeData?.payment?.all_bank_are_linked }}</p>
+                        <reactive-dropdown-field
+                            [name]="'banks'"
+                            [autocomplete]="'disabled'"
+                            [label]="localeData?.payment?.bank_list"
+                            [placeholder]="localeData?.payment?.banks"
+                            [options]="bankLinks"
+                            (selectedOption)="selectedOption($event)"
+                            [labelValue]="defaultSelectedBank"
+                        >
+                        </reactive-dropdown-field>
+                    </div>
+                    <div>
+                        <button
+                            mat-raised-button color="primary"
+                            class="m-3"
+                            type="submit"
+                            (click)="linkBankAccount()"
+                            [disabled]="!selectedBank"
+                        >
+                            {{ localeData?.payment?.link }}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-dialog-content>

@@ -3,23 +3,10 @@ import * as quarterOfYear from 'dayjs/plugin/quarterOfYear' // load on demand
 dayjs.extend(quarterOfYear) // use plugin
 import { CountryCodeService } from './services/country-code.service';
 import { MatDialogConfig } from '@angular/material/dialog';
+import { environment } from '../environments/environment';
 
-// ENVIRONMENT AND CORE CONSTANTS - Must be declared first
-export const PRODUCTION_ENV = false;
-export const STAGING_ENV = false;
-export const LOCAL_ENV = true;
-export const TEST_ENV = false;
-export const isElectron = false;
-export const AppUrl = '';
-export const APP_FOLDER = '/';
-export const ApiUrl = 'https://apitest.giddh.com/';
-export const UkApiUrl = 'https://ukapi.giddh.com/';
-export const PORTAL_URL = 'https://portal.giddh.com/';
-export const OTP_WIDGET_ID = '326a63733354393830313330';
-export const OTP_TOKEN_AUTH = '205968TmXguUAwoD633af103P1';
-export const GOOGLE_CLIENT_ID = '';
-export const GOOGLE_CLIENT_SECRET = '';
-export const RAZORPAY_KEY = '';
+// ENVIRONMENT AND CORE CONSTANTS - Now using webpack DefinePlugin and environment variables
+// These are injected at build time via webpack.partial.js
 
 /** Add Company business type*/
 export enum BusinessTypes {
@@ -97,14 +84,11 @@ export const DEFAULT_TOASTER_OPTIONS_WITH_HTML = {
 };
 
 export const DEFAULT_SERVER_ERROR_MSG = 'Something went wrong! Please try again.';
-export let IS_ELECTRON_WA = isElectron;
-export let APP_URL_WA = AppUrl;
-export let APP_FOLDER_WA = APP_FOLDER;
-if (typeof isElectron === 'undefined') {
-    IS_ELECTRON_WA = true;
-    APP_URL_WA = './';
-    APP_FOLDER_WA = '';
-}
+
+// Use Angular 21 standard environment approach
+export let IS_ELECTRON_WA = environment.isElectron;
+export let APP_URL_WA = environment.AppUrl;
+export let APP_FOLDER_WA = environment.APP_FOLDER;
 
 /**
  * Enum for type of on boarding
@@ -737,19 +721,19 @@ export enum GetBifurcationType {
     QUATER = 'quater',
     QUARTER = 'quarter'
 }
+
 /** Configuration */
 export const Configuration = {
-    'AppUrl': AppUrl,
-    'ApiUrl': ApiUrl,
-    'PORTAL_URL': PORTAL_URL,
-    'OTP_WIDGET_ID': OTP_WIDGET_ID,
-    'OTP_TOKEN_AUTH': OTP_TOKEN_AUTH,
-    'UkApiUrl': UkApiUrl,
-    'isElectron': isElectron,
-    'APP_FOLDER': APP_FOLDER,
-    'GOOGLE_CLIENT_ID': GOOGLE_CLIENT_ID,
-    'GOOGLE_CLIENT_SECRET': GOOGLE_CLIENT_SECRET,
-    'RAZORPAY_KEY': RAZORPAY_KEY
+    'AppUrl': environment.AppUrl,
+    'ApiUrl': environment.ApiUrl,
+    'PORTAL_URL': environment.PORTAL_URL,
+    'OTP_WIDGET_ID': environment.OTP_WIDGET_ID,
+    'OTP_TOKEN_AUTH': environment.OTP_TOKEN_AUTH,
+    'UkApiUrl': environment.UkApiUrl,
+    'isElectron': environment.isElectron,
+    'GOOGLE_CLIENT_ID': environment.GOOGLE_CLIENT_ID,
+    'GOOGLE_CLIENT_SECRET': environment.GOOGLE_CLIENT_SECRET,
+    'RAZORPAY_KEY': environment.RAZORPAY_KEY
 };
 
 /** Holds Dropdown label value interface */

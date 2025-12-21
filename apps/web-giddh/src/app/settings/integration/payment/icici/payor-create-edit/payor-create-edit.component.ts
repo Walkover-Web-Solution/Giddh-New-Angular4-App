@@ -4,18 +4,19 @@ import { select, Store } from "@ngrx/store";
 import { SettingsIntegrationService } from "apps/web-giddh/src/app/services/settings.integration.service";
 import { ToasterService } from "apps/web-giddh/src/app/services/toaster.service";
 import { AppState } from "apps/web-giddh/src/app/store";
-import { ReplaySubject } from "rxjs";
+import { ReplaySubject, Subscription } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
-import { SettingsAmountLimitDuration, UNLIMITED_LIMIT } from "../../../../constants/settings.constant";
+// import { SettingsAmountLimitDuration, 'UNLIMITED' } from "../../../../constants/settings.constant";
 import { PageLeaveUtilityService } from "apps/web-giddh/src/app/services/page-leave-utility.service";
 import { IOption } from "apps/web-giddh/src/app/app.constant";
+import { forEach, get } from '../../../../../lodash-optimized';
 
 @Component({
-    selector: 'payor-create-edit',
-standalone: false,
+    selector: 'icici-payor-account-create-edit',
     templateUrl: './payor-create-edit.component.html',
     styleUrls: ['./payor-create-edit.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class PayorCreateEditComponent implements OnInit, OnDestroy {
@@ -39,6 +40,10 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
     public usersList: any[] = [];
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
 
     constructor(
         private store: Store<AppState>,
@@ -57,9 +62,9 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.amountLimitDurations = [
-            { label: this.commonLocaleData?.app_amount_limit?.daily, value: SettingsAmountLimitDuration.Daily },
-            { label: this.commonLocaleData?.app_amount_limit?.weekly, value: SettingsAmountLimitDuration.Weekly },
-            { label: this.commonLocaleData?.app_amount_limit?.monthly, value: SettingsAmountLimitDuration.Monthly }
+            { label: this.commonLocaleData?.app_amount_limit?.daily, value: 'Daily' },
+            { label: this.commonLocaleData?.app_amount_limit?.weekly, value: 'Weekly' },
+            { label: this.commonLocaleData?.app_amount_limit?.monthly, value: 'Monthly' }
         ];
 
         this.loadUsersWithCompanyPermissions();
@@ -96,8 +101,29 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
      * @memberof PayorCreateEditComponent
      */
     public ngOnDestroy(): void {
-        this.destroyed$.next(true);
-        this.destroyed$.complete();
+        this.isDestroying = true;
+
+        // Clean up all tracked subscriptions first
+        this.subscriptions.forEach((subscription, index) => {
+            try {
+                if (subscription && !subscription.closed) {
+                    subscription.unsubscribe();
+                }
+            } catch (error) {
+                console.warn(`Error unsubscribing subscription ${index}:`, error);
+            }
+        });
+        this.subscriptions = [];
+
+        // Safely complete the destroyed$ subject
+        try {
+            if (this.destroyed$ && !this.destroyed$.closed) {
+                this.destroyed$.next(true);
+                this.destroyed$.complete();
+            }
+        } catch (error) {
+            console.warn('Error completing destroyed$ subject:', error);
+        }
     }
 
     /**
@@ -108,7 +134,7 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
     public saveNewAccountUser(): void {
         if (!this.accountUserForm?.invalid) {
             if (!this.accountUserForm.get('maxAmount')?.value) {
-                this.accountUserForm.get('duration')?.patchValue(UNLIMITED_LIMIT);
+                this.accountUserForm.get('duration')?.patchValue('UNLIMITED');
             }
 
             if (!this.validateAmountLimit()) {
@@ -140,7 +166,7 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
      * @memberof PayorCreateEditComponent
      */
     public validateAmountLimit(): boolean {
-        if ((!this.accountUserForm.get('duration')?.value || this.accountUserForm.get('duration')?.value === UNLIMITED_LIMIT) && this.accountUserForm.get('maxAmount')?.value) {
+        if ((!this.accountUserForm.get('duration')?.value || this.accountUserForm.get('duration')?.value === 'UNLIMITED') && this.accountUserForm.get('maxAmount')?.value) {
             this.toaster.clearAllToaster();
             this.toaster.errorToast(this.localeData?.payment?.duration_error);
             return false;
@@ -175,7 +201,7 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
      */
     private loadUsersWithCompanyPermissions(): void {
         this.store.pipe(select(state => state.settings.usersWithCompanyPermissions), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) { 
+            if (response) {
                 this.usersList = [];
                 let index = 0;
                 response.forEach(user => {
@@ -194,7 +220,7 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
     public updateAccountUser(): void {
         if (!this.accountUserForm?.invalid) {
             if (!this.accountUserForm.get('maxAmount')?.value) {
-                this.accountUserForm.get('duration')?.patchValue(UNLIMITED_LIMIT);
+                this.accountUserForm.get('duration')?.patchValue('UNLIMITED');
             }
 
             if (!this.validateAmountLimit()) {
@@ -233,4 +259,15 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
             this.saveNewAccountUser();
         }
     }
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
 }

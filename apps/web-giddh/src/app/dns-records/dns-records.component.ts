@@ -1,0 +1,174 @@
+import { ChangeDetectorRef, Component, Inject, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { ClipboardService } from 'ngx-clipboard';
+import { ReplaySubject, combineLatest, takeUntil, Subscription } from 'rxjs';
+import { SettingsProfileService } from '../services/settings.profile.service';
+import { ToasterService } from '../services/toaster.service';
+import { GeneralService } from '../services/general.service';
+import { ServiceConfig } from '../services/service.config';
+import { Configuration } from '../app.constant';
+import { environment } from '../../environments/environment';
+import { map } from '../lodash-optimized';
+export interface GetDomainList {
+    type: any;
+    hostName: any;
+    value: any;
+    status: any;
+    isCopiedHostName: boolean;
+    isCopiedValue: boolean;
+}
+/** Hold information of activity logs */
+const ELEMENT_DATA: GetDomainList[] = [];
+@Component({
+    selector: 'dns-records',
+    templateUrl: './dns-records.component.html',
+    styleUrls: ['./dns-records.component.scss'],
+    standalone: false
+})
+export class DnsRecordsComponent implements OnInit {
+    /** Observable to unsubscribe all the store listeners to avoid memory leaks */
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Track subscriptions manually for Angular 21 compatibility */
+    private subscriptions: Subscription[] = [];
+    /** Flag to track component destruction state */
+    private isDestroying = false;
+    /* it will store image path */
+    public imgPath: string = '';
+    /* This will hold common JSON data */
+    public commonLocaleData: any = {};
+    /** True if API is in progress */
+    public shouldShowLoader: boolean = false;
+    /** This will hold domain unique name */
+    public domain: any = {
+        uniqueName: '',
+        name: '',
+    };
+    /** Hold the data of activity logs */
+    public dataSource = ELEMENT_DATA;
+    /** This will use for table heading */
+    public displayedColumns: string[] = ['type', 'hostName', 'value', 'status'];
+    /* it will store company uniquename */
+    public companyUniqueName: string = '';
+    /* Hold giddh logo source */
+    public giddhLogoSrc: string = '';
+
+
+    constructor(private route: ActivatedRoute,
+        private settingsProfileService: SettingsProfileService,
+        private toaster: ToasterService,
+        private generalService: GeneralService,
+        private changeDetectorRef: ChangeDetectorRef,
+        @Inject(ServiceConfig) private serviceConfig,
+        private clipboardService: ClipboardService) {
+    }
+
+
+    /**
+   * Initializes the component
+   *
+   * @memberof DnsRecordsComponent
+   */
+    public ngOnInit(): void {
+        // this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        const whiteLabel = this.generalService.getDecodedWhiteLabel();
+        this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-text-primary-logo.svg';
+
+        combineLatest([
+            this.route.queryParams.pipe(takeUntil(this.destroyed$)),
+            this.route.params.pipe(takeUntil(this.destroyed$))
+        ]).subscribe(([queryParams, params]) => {
+            this.domain.uniqueName = queryParams.domainUniqueName;
+            this.companyUniqueName = params.companyUniqueName;
+            this.getDomainListData(this.domain.uniqueName);
+        });
+    }
+
+    /**
+     * This will be use for get domain information
+     *
+     * @param {string} uniqueName
+     * @memberof DnsRecordsComponent
+     */
+    public getDomainListData(uniqueName: string): void {
+        this.shouldShowLoader = true;
+        this.settingsProfileService.getDomainListTableData(uniqueName, this.companyUniqueName).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            if (response && response.status === 'success') {
+                this.shouldShowLoader = false;
+                this.domain.name = response.body[0]?.domainName
+                if (response?.body?.length) {
+                    this.dataSource = response.body?.map(portal => {
+                        return { type: 'CNAME', hostName: portal.domainName, value: 'environment.PORTAL_URL_PLACEHOLDER', status: portal.verified, isCopiedHostName: false, isCopiedValue: false };
+                    });
+                }
+            } else {
+                this.toaster.showSnackBar("error", response.message);
+                this.shouldShowLoader = false;
+            }
+        });
+        this.changeDetectorRef.detectChanges();
+    }
+
+
+    /**
+    *This will use for copy api url link and display copied
+    *
+    * @memberof DnsRecordsComponent
+    */
+    public copyUrl(value: any, host: any, type: any): void {
+        const urlToCopy = value;
+        this.clipboardService.copyFromContent(urlToCopy);
+        if (type === 'host') {
+            host.isCopiedHostName = true;
+        } else {
+            host.isCopiedValue = true;
+        }
+        setTimeout(() => {
+            host.isCopiedHostName = false;
+            host.isCopiedValue = false;
+        }, 3000);
+    }
+
+    /**
+     * Unsubscribes from listeners
+     *
+     * @memberof DnsRecordsComponent
+     */
+    public ngOnDestroy(): void {
+        this.isDestroying = true;
+
+        // Clean up all tracked subscriptions first
+        this.subscriptions.forEach((subscription, index) => {
+            try {
+                if (subscription && !subscription.closed) {
+                    subscription.unsubscribe();
+                }
+            } catch (error) {
+                console.warn(`Error unsubscribing subscription ${index}:`, error);
+            }
+        });
+        this.subscriptions = [];
+
+        // Safely complete the destroyed$ subject
+        try {
+            if (this.destroyed$ && !this.destroyed$.closed) {
+                this.destroyed$.next(true);
+                this.destroyed$.complete();
+            }
+        } catch (error) {
+            console.warn('Error completing destroyed$ subject:', error);
+        }
+    }
+
+
+    /**
+     * Helper method to track subscriptions for Angular 21 compatibility
+     */
+    protected addSubscription(subscription: Subscription): void {
+        if (subscription && !subscription.closed) {
+            this.subscriptions.push(subscription);
+        }
+    }
+
+
+
+}

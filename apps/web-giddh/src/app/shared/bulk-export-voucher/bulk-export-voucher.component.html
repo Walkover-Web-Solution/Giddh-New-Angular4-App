@@ -1,0 +1,65 @@
+<ng-container appTranslate [file]="'bulk-export-voucher'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
+
+    <div class="dialog-header">
+        <span>
+            {{ commonLocaleData?.app_bulk_export }} - {{ commonLocaleData?.app_total }} {{ totalItems }}
+        </span>
+        <button mat-icon-button aria-label="close" (click)="closeModal()">
+            <i class="icon-cross"></i>
+        </button>
+    </div>
+    <mat-dialog-content class="dialog-body">
+        <div class="export-modal-wrapper" *ngIf="isLoading">
+            <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
+        </div>
+        <div class="export-modal-wrapper" *ngIf="!isLoading">
+            <ng-container *ngIf="type === 'sales'">
+                <div class="row mb-2">
+                    <div class="col-sm-12">
+                        <reactive-dropdown-field 
+                            [options]="downloadCopyOptions" 
+                            [placeholder]="localeData?.select_order"
+                            [name]="'downloadCopy'" 
+                            [(ngModel)]="copyTypes" 
+                            [label]="localeData?.select_copy"
+                        >
+                        </reactive-dropdown-field>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-12">
+                        <button mat-raised-button color="primary"
+                            [disabled]="(type === 'sales' && (!copyTypes || copyTypes?.length === 0)) || isLoading"
+                            (click)="exportVouchers(false)">
+                            {{ commonLocaleData?.app_download }}
+                        </button>
+                    </div>
+                </div>
+
+                {{ commonLocaleData?.app_or }}
+                <br />
+                <br />
+            </ng-container>
+            <div class="row mb-3">
+                <div class="col-sm-12">
+                    <label class="mb-1">{{ localeData?.add_multiple_email }}</label>
+                </div>
+                <div class="col-sm-12">
+                    <!-- Email id could be mulitiple   -->
+                    <textarea type="text" [placeholder]="localeData?.recipients_email"
+                        class="form-control mb-3 multiple-email" name="recipients"
+                        [(ngModel)]="recipients"></textarea>
+                    <button mat-raised-button color="primary" [disabled]="
+                        !recipients || recipients?.length === 0 || (type === 'sales' && (!copyTypes || copyTypes?.length === 0)) || isLoading
+                    " (click)="exportVouchers(true)">
+                        {{ commonLocaleData?.app_send_email }}
+                    </button>
+
+                    <button *ngIf="type !== 'sales'" mat-raised-button color="primary" (click)="exportVouchers(false)">
+                        {{ commonLocaleData?.app_download }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </mat-dialog-content>

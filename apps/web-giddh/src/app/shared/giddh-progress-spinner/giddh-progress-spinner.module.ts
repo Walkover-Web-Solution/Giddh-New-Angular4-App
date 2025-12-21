@@ -4,15 +4,15 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { GiddhProgressSpinnerComponent } from './giddh-progress-spinner.component';
 
 @NgModule({
-  declarations: [
-    GiddhProgressSpinnerComponent
-  ],
-  imports: [
-    CommonModule,
-    MatProgressSpinnerModule
-  ],
-  exports: [
-    GiddhProgressSpinnerComponent
-  ]
+    declarations: [
+        GiddhProgressSpinnerComponent
+    ],
+    imports: [
+        CommonModule,
+        MatProgressSpinnerModule
+    ],
+    exports: [
+        GiddhProgressSpinnerComponent
+    ]
 })
 export class GiddhProgressSpinnerModule { }

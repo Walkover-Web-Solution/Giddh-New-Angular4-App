@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -13,10 +13,10 @@ import { MatDialogModule } from '@angular/material/dialog';
 @NgModule({
     declarations: [
         SettingsTagsComponent
-    
     ],
     imports: [
         CommonModule,
+        // SharedModule, // COMMENTED OUT - CAUSING CIRCULAR DEPENDENCY NG6002 ERRORS
         FormsModule,
         ReactiveFormsModule,
         NoDataModule,
@@ -24,13 +24,12 @@ import { MatDialogModule } from '@angular/material/dialog';
         MatInputModule,
         MatButtonModule,
         MatDialogModule,
-        MatChipsModule
-    
+        MatChipsModule,
     ],
     exports: [
         SettingsTagsComponent
-    
-    ]
+    ],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
 })
 
 export class TagsModule { }
