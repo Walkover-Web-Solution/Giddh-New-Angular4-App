@@ -36,7 +36,7 @@
             [attr.max]="max"
             *ngIf="!allowDecimalDigitsOnly && !useMask"
             #textField
-            (keydown.enter)="$event.preventDefault()"
+            (keydown.enter)="handleEnterKey($event)"
             [autocomplete]="autocomplete"
             (blur)="emitBlurEvent()"
             [ngClass]="{ 'error-box': showError }"
@@ -64,7 +64,7 @@
             [customDecimalPlaces]="customDecimalPlaces"
             decimalDigitsDirective
             #textField
-            (keydown.enter)="$event.preventDefault()"
+            (keydown.enter)="handleEnterKey($event)"
             [autocomplete]="autocomplete"
             (blur)="emitBlurEvent()"
             [ngClass]="{ 'error-box': showError }"
@@ -94,7 +94,7 @@
             *ngIf="useMask"
             [customDecimalPlaces]="customDecimalPlaces"
             #textField
-            (keydown.enter)="$event.preventDefault()"
+            (keydown.enter)="handleEnterKey($event)"
             [autocomplete]="autocomplete"
             (blur)="emitBlurEvent()"
             [ngClass]="{ 'error-box': showError }"

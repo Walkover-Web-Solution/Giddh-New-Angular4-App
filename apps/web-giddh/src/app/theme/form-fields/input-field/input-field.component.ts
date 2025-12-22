@@ -309,4 +309,21 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     public handleSuffixClick(): void {
         this.suffixClick.emit(true);
     }
+
+    /**
+     * Handles Enter key events conditionally to allow appEnterNext directive to work
+     *
+     * @param {KeyboardEvent} event - The keyboard event
+     * @memberof InputFieldComponent
+     */
+    public handleEnterKey(event: KeyboardEvent): void {
+        // Check if the input-field component has appEnterNext directive
+        const hostElement = this.elementRef.nativeElement;
+        const hasEnterNextDirective = hostElement.hasAttribute('appenternext');
+        
+        // If appEnterNext directive is present, don't prevent default to allow navigation
+        if (!hasEnterNextDirective) {
+            event.preventDefault();
+        }
+    }
 }
