@@ -1,5 +1,5 @@
 import { COMMA, ENTER } from "@angular/cdk/keycodes";
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, NgZone, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { MatMenuTrigger } from "@angular/material/menu";
 import { UntypedFormControl } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
@@ -27,9 +27,7 @@ import { cloneDeep, concat, filter, find, forEach, includes, indexOf, map, some 
 
     templateUrl: "./report-filters.component.html",
     standalone: false,
-    styleUrls: ["./report-filters.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [InventoryComponentStore]
+    styleUrls: ["./report-filters.component.scss"]
 })
 export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
     /** Instance of datepicker menu trigger */
@@ -164,7 +162,8 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         private toaster: ToasterService,
         private store: Store<AppState>,
         public router: Router,
-        private componentStore: InventoryComponentStore
+        private componentStore: InventoryComponentStore,
+        private ngZone: NgZone
     ) {
         this.universalDate$ = this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$));
     }
@@ -569,7 +568,20 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
         } else {
             mappedDynamicValues = this.displayedColumns;
         }
-        this.filters.emit({ stockReportRequest: this.stockReportRequest, balanceStockReportRequest: this.balanceStockReportRequest, displayedColumns: mappedDynamicValues, todaySelected: this.todaySelected, showClearFilter: this.showClearFilter, advanceSearchModalResponse: this.advanceSearchModalResponse, stockReportRequestExport: this.stockReportRequestExport });
+
+        // Force change detection in NgZone to ensure proper timing
+        this.ngZone.run(() => {
+            this.filters.emit({
+                stockReportRequest: this.stockReportRequest,
+                balanceStockReportRequest: this.balanceStockReportRequest,
+                displayedColumns: mappedDynamicValues,
+                todaySelected: this.todaySelected,
+                showClearFilter: this.showClearFilter,
+                advanceSearchModalResponse: this.advanceSearchModalResponse,
+                stockReportRequestExport: this.stockReportRequestExport
+            });
+            this.changeDetection.detectChanges();
+        });
     }
 
     /**
@@ -762,13 +774,18 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof ReportFiltersComponent
      */
     public toggleGiddhDatepicker(isOpen: boolean): void {
-        if (this.universalDatepickerTrigger) {
-            if (isOpen) {
-                this.universalDatepickerTrigger.openMenu();
-            } else {
-                this.universalDatepickerTrigger.closeMenu();
+        // Use NgZone to ensure mat-menu interactions work properly regardless of loading state
+        this.ngZone.run(() => {
+            if (this.universalDatepickerTrigger) {
+                if (isOpen) {
+                    this.universalDatepickerTrigger.openMenu();
+                } else {
+                    this.universalDatepickerTrigger.closeMenu();
+                }
+                // Force change detection to ensure menu renders properly
+                this.changeDetection.detectChanges();
             }
-        }
+        });
     }
 
     /**
@@ -930,42 +947,52 @@ export class ReportFiltersComponent implements OnInit, OnChanges, OnDestroy {
             if (this.autoSelectSearchOption) {
                 searchRequest.searchPage = searchRequest.searchPage === 'STOCK' ? 'GROUP' : searchRequest.searchPage === 'VARIANT' ? 'STOCK' : searchRequest.searchPage === 'TRANSACTION' ? 'VARIANT' : 'GROUP';
             }
-            this.inventoryService.searchStockTransactionReport(searchRequest).pipe(takeUntil(this.destroyed$)).subscribe(response => {
-                if (response && response.body && response.status === 'success') {
-                    let allOptions = [];
-                    if (loadMore) {
-                        allOptions = this.fieldFilteredOptions.concat(response.body.results);
-                    } else {
-                        allOptions = response.body.results;
-                    }
-                    // Filter out selected options to hide them from dropdown
-                    this.fieldFilteredOptions = this.getFilteredOptionsForHideSelected(allOptions);
-                    this.searchRequest.totalItems = response.body.totalItems;
-                    this.searchRequest.totalPages = response.body.totalPages;
-                    if (this.autoSelectSearchOption) {
-                        this.autoSelectSearchOption = false;
-                        let selectedOption = this.fieldFilteredOptions?.filter(option => option?.uniqueName === this.reportUniqueName);
-                        if (selectedOption?.length) {
-                            this.selectChiplistValue({ option: { value: selectedOption[0] } });
+            this.inventoryService.searchStockTransactionReport(searchRequest).pipe(takeUntil(this.destroyed$)).subscribe({
+                next: (response) => {
+                    if (response && response.body && response.status === 'success') {
+                        let allOptions = [];
+                        if (loadMore) {
+                            allOptions = this.fieldFilteredOptions.concat(response.body.results);
                         } else {
+                            allOptions = response.body.results;
+                        }
+                        // Filter out selected options to hide them from dropdown
+                        this.fieldFilteredOptions = this.getFilteredOptionsForHideSelected(allOptions);
+                        this.searchRequest.totalItems = response.body.totalItems;
+                        this.searchRequest.totalPages = response.body.totalPages;
+                        if (this.autoSelectSearchOption) {
+                            this.autoSelectSearchOption = false;
+                            let selectedOption = this.fieldFilteredOptions?.filter(option => option?.uniqueName === this.reportUniqueName);
+                            if (selectedOption?.length) {
+                                this.selectChiplistValue({ option: { value: selectedOption[0] } });
+                            } else {
+                                this.emitFilters();
+                            }
+                        } else if (autoSelectSearchOption) {
                             this.emitFilters();
                         }
-                    } else if (autoSelectSearchOption) {
-                        this.emitFilters();
+                        this.autoSelectSearchOption = false;
+                    } else {
+                        this.fieldFilteredOptions = [];
+                        this.searchRequest.totalItems = 0;
+                        if (this.autoSelectSearchOption) {
+                            this.autoSelectSearchOption = false;
+                            this.searchRequest.q = '';
+                            this.searchInventory(true);
+                        } else {
+                            this.toaster.showSnackBar("warning", response?.message || "Failed to load inventory data");
+                        }
                     }
-                    this.autoSelectSearchOption = false;
-                } else {
+                    this.changeDetection.detectChanges();
+                },
+                error: (error) => {
+                    console.error('Inventory search API error:', error);
                     this.fieldFilteredOptions = [];
                     this.searchRequest.totalItems = 0;
-                    if (this.autoSelectSearchOption) {
-                        this.autoSelectSearchOption = false;
-                        this.searchRequest.q = '';
-                        this.searchInventory(true);
-                    } else {
-                        this.toaster.showSnackBar("warning", response?.message);
-                    }
+                    this.autoSelectSearchOption = false;
+                    this.toaster.showSnackBar("error", "Failed to load inventory data. Please try again.");
+                    this.changeDetection.detectChanges();
                 }
-                this.changeDetection.detectChanges();
             });
         }
     }

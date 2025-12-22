@@ -38,7 +38,6 @@ import { cloneDeep, concat, filter, find, findIndex, forEach, includes, isEqual,
     selector: "stock-create-edit",
     templateUrl: "./stock-create-edit.component.html",
     styleUrls: ["./stock-create-edit.component.scss"],
-    providers: [InventoryComponentStore],
     standalone: false
 })
 export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -349,7 +348,6 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                 this.resetForm(this.stockCreateEditForm);
                 this.getStockGroups();
                 this.getUnitGroups();
-                this.changeDetection.detectChanges();
             }
             if (params?.stockUniqueName) {
                 this.queryParams = params;
@@ -379,7 +377,6 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
             if (params?.tab && this.activeTabIndex !== params?.tab) {
                 this.activeTabIndex = params?.tab;
-                this.changeDetection.detectChanges();
             }
         });
 
@@ -441,7 +438,6 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                         }, 100);
                     }
                 });
-                this.changeDetection.detectChanges();
             }
         }, 1000);
     }
@@ -472,8 +468,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                 this.stockForm.options[optionIndex].values[optionValueIndex + 1] = { index: optionValueIndex + 1, value: "" };
             }
 
-            this.changeDetection.detectChanges();
-        }
+            }
     }
 
     /**
@@ -544,7 +539,6 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                 this.stockGroupUniqueName = this.activeGroup?.uniqueName ? this.activeGroup?.uniqueName : this.stockGroups?.length ? this.stockGroups[0]?.value : '';
             }
         });
-        this.changeDetection.detectChanges();
     }
 
     /**
@@ -568,7 +562,6 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                 }
             }
         });
-        this.changeDetection.detectChanges();
     }
 
     /**
@@ -1005,8 +998,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             if (response?.length > 0 && !this.processedTaxes?.length) {
                 this.taxes = response || [];
             }
-            this.changeDetection.detectChanges();
-        });
+            });
     }
 
     /**
@@ -1031,14 +1023,12 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
     */
     public resetTaxes(): void {
         this.showTaxField = false;
-        this.changeDetection.detectChanges();
         this.taxes = this.taxes?.map(tax => {
             tax.isChecked = false;
             tax.isDisabled = false;
             return tax;
         });
         this.showTaxField = true;
-        this.changeDetection.detectChanges();
     }
 
     /**
@@ -1193,8 +1183,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                         this.queryParams = { stockUniqueName: response.body?.uniqueName };
                         this.getStockDetails(() => {
                             this.activeTabIndex = 2;
-                            this.changeDetection.detectChanges();
-                        });
+                                    });
                     } else {
                         this.router.navigate(['/pages/inventory/v2/stock/' + this.stockForm.type?.toLowerCase() + '/edit/' + response.body?.uniqueName], { queryParams: { tab: 2 } });
                     }
@@ -1436,7 +1425,6 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                     this.captureInitialFormValues();
                 }, 100);
 
-                this.changeDetection.detectChanges();
 
                 if (callback) {
                     callback();
@@ -1459,7 +1447,6 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         if (purchaseAccountName?.length > 0) {
             this.purchaseAccountName = purchaseAccountName[0]?.label;
         }
-        this.changeDetection.detectChanges();
     }
 
     /**
@@ -1473,7 +1460,6 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         if (fixedAssetsAccountName?.length > 0) {
             this.fixedAssetsAccountName = fixedAssetsAccountName[0]?.label;
         }
-        this.changeDetection.detectChanges();
     }
 
     /**
@@ -1487,7 +1473,6 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         if (salesAccountName?.length > 0) {
             this.salesAccountName = salesAccountName[0]?.label;
         }
-        this.changeDetection.detectChanges();
     }
 
     /**
@@ -1645,7 +1630,6 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             }
         }
         this.selectedTaxes = this.taxTempArray.map(tax => tax?.uniqueName);
-        this.changeDetection.detectChanges();
     }
 
     /**
@@ -1669,8 +1653,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             } else {
                 this.toaster.showSnackBar("error", response.message);
             }
-            this.changeDetection.detectChanges();
-        });
+            });
     }
 
     /**
@@ -1723,8 +1706,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             } else {
                 this.toaster.showSnackBar("error", response.message);
             }
-            this.changeDetection.detectChanges();
-        });
+            });
     }
 
 
@@ -1753,7 +1735,6 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      */
     private toggleLoader(showLoader: boolean): void {
         this.showLoader = showLoader;
-        this.changeDetection.detectChanges();
     }
 
     /**
@@ -1967,7 +1948,6 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                 this.clearPageLeaveConfirmation();
                 this.defaultStockGroupUniqueName = cloneDeep(this.stockGroupUniqueName);
                 this.toaster.showSnackBar("success", response?.body);
-                this.changeDetection.detectChanges();
             } else {
                 this.toaster.showSnackBar("error", response?.message);
             }
@@ -2331,8 +2311,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                 });
             });
 
-            this.changeDetection.detectChanges();
-        }
+            }
     }
 
     /**
@@ -2521,7 +2500,6 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         if (this.stockCreateEditForm && this.stockCreateEditForm.form) {
             this.initialFormValues = cloneDeep(this.stockCreateEditForm.form.value);
         }
-        this.changeDetection.detectChanges();
     }
 
     /**
@@ -2548,7 +2526,6 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      */
     private isStockFormCompletelyBlank(formValues: any): boolean {
         if (!formValues) return true;
-        this.changeDetection.detectChanges();
         return this.stockCreateEditForm.form.pristine;
     }
 }

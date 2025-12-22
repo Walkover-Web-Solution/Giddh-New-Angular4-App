@@ -44,7 +44,9 @@ export const DEFAULT_ADJUSTINVENTORY_STATE: AdjustInventoryState = {
     createReasonIsSuccess: null
 };
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class AdjustInventoryComponentStore extends ComponentStore<AdjustInventoryState> implements OnDestroy {
 
     constructor(

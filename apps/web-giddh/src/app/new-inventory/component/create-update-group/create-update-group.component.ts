@@ -25,12 +25,11 @@ import { cloneDeep, filter, find, findIndex, forEach, get, includes, isArray, is
 
 @Component({
     selector: 'create-update-group',
-    
+
     templateUrl: './create-update-group.component.html',
     standalone: false,
     styleUrls: ['./create-update-group.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [InventoryComponentStore]
 })
 export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     /** Holds group unique name if updating group  */
@@ -87,11 +86,11 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
     public showTaxField: boolean = true;
     /** Returns true if form has actual unsaved changes else false */
     public get showPageLeaveConfirmation(): boolean {
-        
+
         if (!this.groupForm || !this.initialFormValues || this.skipPageLeaveConfirmation) {
             return false;
         }
-        
+
         // Use lodash isEqual for deep comparison of form values
         const currentValues = this.groupForm.value;
         return !isEqual(currentValues, this.initialFormValues);
@@ -175,7 +174,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         this.groupForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(formValues => {
             // Check if all important form fields are blank/empty
             const isFormBlank = this.isFormCompletelyBlank(formValues);
-            
+
             if (isFormBlank) {
                 // Update initial values to current blank state to prevent popup
                 setTimeout(() => {
@@ -183,7 +182,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                 }, 100);
             }
         });
-        
+
         // Capture initial form values after component is fully initialized
         setTimeout(() => {
             this.captureInitialFormValues();
@@ -501,12 +500,12 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
         }
         this.selectedTaxes = [];
         this.processedTaxes = [];
-        
+
         // Capture initial form values for comparison after form is fully initialized
         setTimeout(() => {
             this.captureInitialFormValues();
         }, 500);
-        
+
         this.changeDetection.detectChanges();
     }
 
@@ -585,10 +584,10 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                 });
                 this.groupForm.get('discountLabel').patchValue(this.discountsList?.find(discount => discount.uniqueName === response.body.discounts[0])?.name);
                 this.groupForm.updateValueAndValidity();
-                
+
                 // Capture initial form values for comparison
                 this.captureInitialFormValues();
-                
+
                 this.changeDetection.detectChanges();
             } else {
                 this.toggleLoader(false);
@@ -710,7 +709,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
      */
     private isFormCompletelyBlank(formValues: any): boolean {
         if (!formValues) return true;
-        
+
         // Check important form fields that indicate user input
         const importantFields = [
             'name',
@@ -718,17 +717,17 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
             'hsnNumber',
             'sacNumber'
         ];
-        
+
         // Check if all important fields are empty/null/undefined
         const allImportantFieldsEmpty = importantFields.every(field => {
             const value = formValues[field];
             return !value || value.toString().trim() === '';
         });
-        
+
         // Also check if taxes and discounts arrays are empty
         const taxesEmpty = !formValues.taxes || formValues.taxes.length === 0;
         const discountsEmpty = !formValues.discounts || formValues.discounts.length === 0;
-        
+
         return allImportantFieldsEmpty && taxesEmpty && discountsEmpty;
     }
 

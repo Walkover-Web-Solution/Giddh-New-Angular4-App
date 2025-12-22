@@ -1,5 +1,5 @@
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Inject, OnDestroy, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { ApplicationRef, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Inject, NgZone, OnDestroy, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { PAGE_SIZE_OPTIONS } from '../../../app.constant';
@@ -143,6 +143,8 @@ export class ReportsComponent implements OnInit, OnDestroy {
         public route: ActivatedRoute,
         public router: Router,
         private changeDetection: ChangeDetectorRef,
+        private ngZone: NgZone,
+        private appRef: ApplicationRef,
         private inventoryService: InventoryService,
         private toaster: ToasterService,
         private generalService: GeneralService,
@@ -469,14 +471,13 @@ export class ReportsComponent implements OnInit, OnDestroy {
                 this.inventoryService.getGroupWiseReport(queryParams, stockReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
                     this.isLoading = false;
                     if (response && response.body && response.status === 'success') {
-                        this.isDataAvailable = (response.body.results?.length) ? true : false;
-                        this.dataSource = response.body.results;
-                        // Force immediate change detection for Angular 21
-                        this.changeDetection.detectChanges();
+                        // Force complete table re-render for Angular 21
+                        this.forceTableReRender(response.body.results || []);
                         this.stockReportRequest.page = response.body.page;
                         this.stockReportRequest.totalItems = response.body.totalItems;
                         this.stockReportRequest.totalPages = response.body.totalPages;
-                        this.stockReportRequest.count = response.body.count;
+                        // Set count to match data length to show all rows
+                        this.stockReportRequest.count = response.body.results?.length || response.body.count;
                         if (response?.body?.fromDate && response?.body?.toDate) {
                             this.stockReportRequest.from = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
                             this.stockReportRequest.to = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
@@ -515,14 +516,13 @@ export class ReportsComponent implements OnInit, OnDestroy {
                 this.inventoryService.getItemWiseReport(queryParams, stockReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
                     this.isLoading = false;
                     if (response && response.body && response.status === 'success') {
-                        this.isDataAvailable = (response.body.results?.length) ? true : false;
-                        this.dataSource = response.body.results;
-                        // Force immediate change detection for Angular 21
-                        this.changeDetection.detectChanges();
+                        // Force complete table re-render for Angular 21
+                        this.forceTableReRender(response.body.results || []);
                         this.stockReportRequest.page = response.body.page;
                         this.stockReportRequest.totalItems = response.body.totalItems;
                         this.stockReportRequest.totalPages = response.body.totalPages;
-                        this.stockReportRequest.count = response.body.count;
+                        // Set count to match data length to show all rows
+                        this.stockReportRequest.count = response.body.results?.length || response.body.count;
                         if (response?.body?.fromDate && response?.body?.toDate) {
                             this.stockReportRequest.from = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
                             this.stockReportRequest.to = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
@@ -559,14 +559,13 @@ export class ReportsComponent implements OnInit, OnDestroy {
                 this.inventoryService.getVariantWiseReport(queryParams, stockReportRequest).pipe(takeUntil(this.cancelApi$)).subscribe(response => {
                     this.isLoading = false;
                     if (response && response.body && response.status === 'success') {
-                        this.isDataAvailable = (response.body.results?.length) ? true : false;
-                        this.dataSource = response.body.results;
-                        // Force immediate change detection for Angular 21
-                        this.changeDetection.detectChanges();
+                        // Force complete table re-render for Angular 21
+                        this.forceTableReRender(response.body.results || []);
                         this.stockReportRequest.page = response.body.page;
                         this.stockReportRequest.totalItems = response.body.totalItems;
                         this.stockReportRequest.totalPages = response.body.totalPages;
-                        this.stockReportRequest.count = response.body.count;
+                        // Set count to match data length to show all rows
+                        this.stockReportRequest.count = response.body.results?.length || response.body.count;
                         if (response?.body?.fromDate && response?.body?.toDate) {
                             this.stockReportRequest.from = dayjs(response?.body?.fromDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
                             this.stockReportRequest.to = dayjs(response?.body?.toDate, GIDDH_DATE_FORMAT).format(GIDDH_DATE_FORMAT);
@@ -824,5 +823,53 @@ export class ReportsComponent implements OnInit, OnDestroy {
         }
     }
 
+    /**
+     * Track by function for mat-table performance and proper change detection
+     */
+    public trackByFn(index: number, item: any): any {
+        return item?.uniqueName || item?.stockGroup?.uniqueName || item?.stock?.uniqueName || item?.variant?.uniqueName || index;
+    }
 
+    /**
+     * Force complete table re-render for Angular 21 by clearing and restoring data
+     */
+    private forceTableReRender(data: any[]): void {
+        // Clear table
+        this.isDataAvailable = false;
+        this.dataSource = [];
+        this.changeDetection.detectChanges();
+        this.appRef.tick();
+
+        // Restore data with multiple detection cycles
+        setTimeout(() => {
+            this.isDataAvailable = data?.length > 0;
+            this.dataSource = [...data];
+
+            // Immediate detection
+            this.changeDetection.detectChanges();
+            this.appRef.tick();
+
+            // NgZone detection
+            this.ngZone.run(() => {
+                this.changeDetection.detectChanges();
+                this.appRef.tick();
+            });
+
+            // Delayed detection cycles
+            setTimeout(() => {
+                this.ngZone.run(() => {
+                    this.changeDetection.detectChanges();
+                    this.appRef.tick();
+                });
+            }, 100);
+
+            setTimeout(() => {
+                this.ngZone.run(() => {
+                    this.changeDetection.detectChanges();
+                    this.appRef.tick();
+                });
+            }, 500);
+
+        }, 0);
+    }
 }

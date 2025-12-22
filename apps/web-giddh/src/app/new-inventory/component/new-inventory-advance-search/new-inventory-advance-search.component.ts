@@ -16,7 +16,6 @@ import { cloneDeep } from '../../../lodash-optimized';
     templateUrl: './new-inventory-advance-search.component.html',
     standalone: false,
     styleUrls: ['./new-inventory-advance-search.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class NewInventoryAdvanceSearch implements OnInit, OnDestroy {

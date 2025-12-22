@@ -31,7 +31,6 @@ import { cloneDeep, filter, forEach, includes, set } from '../../../lodash-optim
     templateUrl: "./inventory-transaction-list.component.html",
     standalone: false,
     styleUrls: ["./inventory-transaction-list.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InventoryTransactionListComponent implements OnInit, OnDestroy {
     @ViewChild(ReportFiltersComponent, { read: ReportFiltersComponent, static: false }) public reportFiltersComponent: ReportFiltersComponent;

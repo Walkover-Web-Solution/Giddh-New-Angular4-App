@@ -30,8 +30,8 @@
                 (selectedDynamicColumns)="dynamicColumnsSubject$.next($event)"
             ></report-filters>
         </div>
-        <div class="inventory-transaction-list overflow-visible" *ngIf="!isLoading">
-            <div *ngIf="isDataAvailable" class="position-sticky mb-3">
+        <div class="inventory-transaction-list overflow-visible" *ngIf="!isLoading && isDataAvailable">
+            <div class="position-sticky mb-3">
                 <div class="row">
                     <div class="col-12">
                         <div class="top-content">
@@ -329,7 +329,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row overflow-visible" *ngIf="isDataAvailable">
+            <div class="row overflow-visible">
                 <div class="col-12 horizontal-padding overflow-visible">
                     <div
                         class="table-responsive inventory-report-table overflow-visible table-header-sticky pt-5"
@@ -338,6 +338,7 @@
                         <table
                             mat-table
                             [dataSource]="dataSource"
+                            [trackByFn]="trackByFn"
                             matSort
                             (matSortChange)="sortChange($event)"
                             [matSortActive]="stockReportRequest?.sortBy"
@@ -712,6 +713,8 @@
                             <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                         </table>
                     </div>
+                    <!-- Temporarily disabled mat-paginator to test table rendering -->
+                    <!--
                     <div
                         *ngIf="
                             stockReportRequest?.totalItems > pageSizeOptions[0] &&
@@ -730,6 +733,7 @@
                         ></mat-paginator>
                         <section class="mb-custom-80"></section>
                     </div>
+                    -->
                 </div>
             </div>
         </div>

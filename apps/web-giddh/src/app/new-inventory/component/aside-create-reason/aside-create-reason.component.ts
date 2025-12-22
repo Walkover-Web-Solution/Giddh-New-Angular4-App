@@ -6,11 +6,10 @@ import { set } from '../../../lodash-optimized';
 
 @Component({
     selector: 'aside-create-reason',
-    
+
     templateUrl: './aside-create-reason.component.html',
     standalone: false,
     styleUrls: ['./aside-create-reason.component.scss'],
-    providers: [AdjustInventoryComponentStore]
 })
 export class AsideCreateNewReasonComponent implements OnDestroy, OnInit {
     /* Aside pane state*/

@@ -27,7 +27,6 @@ import { cloneDeep, find, map, set } from '../../../lodash-optimized';
     templateUrl: './adjust-inventory-list.component.html',
     standalone: false,
     styleUrls: ['./adjust-inventory-list.component.scss'],
-    providers: [AdjustInventoryListComponentStore]
 })
 
 export class AdjustInventoryListComponent implements OnInit, OnDestroy {
@@ -475,7 +474,6 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
             this.adjustInventoryListRequest.to = this.toDate;
         }
         this.getAllAdjustReports(false);
-        this.changeDetection.detectChanges();
     }
 
 
@@ -511,8 +509,7 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
     public translationComplete(event: any): void {
         if (event) {
             this.translationLoaded = true;
-            this.changeDetection.detectChanges();
-        }
+            }
     }
 
     /**

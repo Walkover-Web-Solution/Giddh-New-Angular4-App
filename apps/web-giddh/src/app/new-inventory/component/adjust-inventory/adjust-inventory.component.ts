@@ -21,11 +21,10 @@ import { AdjustmentInventory, DROPDOWN_ITEMS_COUNT_LIMIT, ASIDE_PANE_CONFIG } fr
 import { cloneDeep, concat, filter, forEach, get, set } from '../../../lodash-optimized';
 @Component({
     selector: 'adjust-inventory',
-    
+
     templateUrl: './adjust-inventory.component.html',
     standalone: false,
     styleUrls: ['./adjust-inventory.component.scss'],
-    providers: [AdjustInventoryComponentStore]
 })
 
 export class AdjustInventoryComponent implements OnInit {
