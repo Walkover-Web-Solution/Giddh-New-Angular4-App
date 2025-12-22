@@ -44,6 +44,7 @@
                                                         (click)="accordionItem.toggle()"
                                                         (keydown.enter)="accordionItem.toggle()"
                                                         class="position-relative accordion-header"
+                                                        [ngClass]="{ 'opened': accordionItem.expanded }"
                                                     >
                                                         <i class="icon-arrow-down position-absolute"></i>
                                                         <mat-list-item
@@ -78,10 +79,9 @@
                                                         </mat-list-item>
                                                         <div
                                                             role="region"
-                                                            [style.display]="accordionItem.expanded ? '' : 'none'"
                                                             [attr.id]="'accordion-body-' + i"
                                                             [attr.aria-labelledby]="'accordion-header-' + i"
-                                                            *ngIf="(stockVariants[i] | async)?.length > 0"
+                                                            *ngIf="accordionItem.expanded && (stockVariants[i] | async)?.length > 0"
                                                         >
                                                             <ng-container
                                                                 *ngFor="let variant of stockVariants[i] | async"
