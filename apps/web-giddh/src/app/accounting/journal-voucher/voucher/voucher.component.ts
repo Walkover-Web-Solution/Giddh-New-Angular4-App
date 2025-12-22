@@ -306,6 +306,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     
     /** Display variable for HTML - separate from search logic */
     public displayAccountList: any[] = [];
+    /** Item size for virtual scroll */
+    public itemSize = 37;
 
     constructor(
         private _ledgerActions: LedgerActions,
@@ -2432,7 +2434,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         });
 
         if (hasIncompleteTransactions) {
-            this._toaster.errorToast(this.localeData?.select_account_or_remove_amount || 'Please select account or remove amount', this.commonLocaleData?.app_error);
+            this._toaster.errorToast(this.localeData?.select_account_or_remove_amount, this.commonLocaleData?.app_error);
             this.activeRowType = null;
             setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
             return null;
@@ -2994,11 +2996,15 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 this.closeDiscountSidebar();
                 this.closeTaxSidebar();
             } else if (key === this.KEYS.ENTER) {
-                const renderedRange = this.virtualScrollViewport.getRenderedRange();
-                const relativeIndex = this.selectedIndex - renderedRange.start;
-                const selectedElement = elements[relativeIndex];
-                const anchorElement = selectedElement?.firstChild as HTMLElement;
-                anchorElement?.click();
+                if (this.virtualScrollViewport){
+                    const renderedRange = this.virtualScrollViewport.getRenderedRange();
+                    const relativeIndex = this.selectedIndex - renderedRange.start;
+                    const selectedElement = elements[relativeIndex];
+                    const anchorElement = selectedElement?.firstChild as HTMLElement;
+                    anchorElement?.click();
+                } else if (this.showLedgerAccountList) {
+                    this.addNewAccount();
+                }
             } else if (key === this.KEYS.UP) {
                 event.preventDefault();
                 this.selectedIndex = Math.max(this.selectedIndex - 1, 0);
@@ -3199,7 +3205,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
         const viewport = this.virtualScrollViewport.getElementRef().nativeElement;
         const scrollTop = viewport.scrollTop;
-        const itemHeight = 37; // Same as itemSize in template
+        const itemHeight = this.itemSize; // Same as itemSize in template
         
         // Number of items currently hidden above the viewport
         const itemsAbove = Math.ceil(scrollTop / itemHeight);
