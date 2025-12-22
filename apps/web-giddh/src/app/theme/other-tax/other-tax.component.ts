@@ -73,7 +73,7 @@ export class OtherTaxComponent implements OnInit, OnDestroy {
      */
     private initOtherTaxForm(appliedOtherTax?: any): void {
         this.otherTaxForm = this.formBuilder.group({
-            tax: [appliedOtherTax, Validators.required],
+            tax: [appliedOtherTax],
             name: [appliedOtherTax?.name],
             calculationMethod: [appliedOtherTax?.calculationMethod || 'OnTaxableAmount', Validators.required],
             entryIndex: [this.inputData?.entryIndex]
@@ -106,13 +106,12 @@ export class OtherTaxComponent implements OnInit, OnDestroy {
      */
     public saveTax(): void {
         this.isFormSubmitted = false;
+        let model = {};
         const form = this.otherTaxForm.value;
-        if (!form?.tax?.uniqueName || !form?.calculationMethod) {
-            this.isFormSubmitted = true;
-            return;
+        if (form?.tax?.uniqueName && form?.calculationMethod) {
+              model = form;
         }
-
-        this.dialogRef.close(this.otherTaxForm?.value);
+        this.dialogRef.close(model);
     }
 
     /**
