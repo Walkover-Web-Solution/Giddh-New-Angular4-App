@@ -346,14 +346,14 @@ export class TallyModuleService {
             };
         } else if (voucherType.toLowerCase() === VOUCHERS.DEBIT_NOTE) {
             return {
-                group: selectedTransactionType?.toLowerCase() === 'by' ?
+                group: selectedTransactionType?.toLowerCase() === 'to' ?
                     encodeURIComponent('operatingcost, indirectexpenses, fixedassets') :
                     encodeURIComponent('bankaccounts, cash, loanandoverdraft, sundrycreditors, sundrydebtors'),
                 exceptGroups: encodeURIComponent('')
             };
         } else if (voucherType.toLowerCase() === VOUCHERS.CREDIT_NOTE) {
             return {
-                group: selectedTransactionType?.toLowerCase() === 'to' ?
+                group: selectedTransactionType?.toLowerCase() === 'by' ?
                     encodeURIComponent('revenuefromoperations, otherincome, fixedassets') :
                     encodeURIComponent('bankaccounts, cash, loanandoverdraft, sundrycreditors, sundrydebtors'),
                 exceptGroups: encodeURIComponent('')

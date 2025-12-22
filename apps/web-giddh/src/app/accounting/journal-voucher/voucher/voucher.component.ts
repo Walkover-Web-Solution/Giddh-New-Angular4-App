@@ -2092,7 +2092,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 let salesAmount;
                 data.transactions.forEach((element: any) => {
                     if (element) {
-                        if (element.type === 'to' && !element.isDiscountApplied && !element.isTaxApplied) {
+                        if (element.type === 'to' && !element.isDiscountApplied && !element.isTaxApplied && element.selectedAccount?.UniqueName) {
                             salesAmount = element.amount;
                         }
                         element.type = (element.type === 'by') ? 'credit' : 'debit';
