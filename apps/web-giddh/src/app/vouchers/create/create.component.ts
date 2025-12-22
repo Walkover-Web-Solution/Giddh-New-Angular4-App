@@ -3324,7 +3324,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
                         for (let taxIndex = 0; taxIndex < taxesFormArray.length; taxIndex++) {
                             const taxFormGroup = taxesFormArray.at(taxIndex) as FormGroup;
-
                             if (
                                 taxFormGroup.get("uniqueName")?.value ===
                                 entryFormGroup.get("otherTax.uniqueName")?.value
@@ -3332,8 +3331,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                                 taxesFormArray.removeAt(taxIndex);
                             }
                         }
-
                         entryFormGroup.get("otherTax").reset();
+                        entryFormGroup.get("otherTax.isChecked")?.setValue(false);
                         this.calculateReceiptPaymentAmount(entryFormGroup);
                     }
                 }
