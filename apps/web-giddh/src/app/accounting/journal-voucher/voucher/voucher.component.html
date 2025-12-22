@@ -317,7 +317,7 @@
             </li>
             <!-- Create New Account Option (only for accounts) -->
             <li *ngIf="showLedgerAccountList">
-                <a class="btn-link hilighted" (click)="addNewAccount()" href="javascript:void(0)">
+                <a class="btn-link highlighted" (click)="addNewAccount()" href="javascript:void(0)">
                     {{ commonLocaleData?.app_create_new }}
                 </a>
             </li>
@@ -337,7 +337,7 @@
                 >
                     <li
                         *cdkVirtualFor="let item of displayAccountList; let j = index; trackBy: trackByFn"
-                        [ngClass]="{ 'hilighted': j === (selectedIndex || 0) }"
+                        [ngClass]="{ 'highlighted': j === (selectedIndex || 0) }"
                         class="list-item text-overflow-ellipsis"
                     >
                         <a
