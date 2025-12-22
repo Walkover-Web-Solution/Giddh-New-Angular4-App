@@ -22,8 +22,8 @@ import { select, Store } from '@ngrx/store';
 import { TallyModuleService } from 'apps/web-giddh/src/app/accounting/tally-service';
 import { cloneDeep, isEqual, find, maxBy, findIndex } from 'apps/web-giddh/src/app/lodash-optimized';
 import * as dayjs from 'dayjs';
-import { combineLatest, Observable, ReplaySubject, of as observableOf, Subject, of } from 'rxjs';
-import { debounceTime, distinctUntilChanged, takeUntil, switchMap } from 'rxjs/operators';
+import { combineLatest, Observable, ReplaySubject, of as observableOf, Subject, timer } from 'rxjs';
+import { debounceTime, distinctUntilChanged, takeUntil, debounce } from 'rxjs/operators';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { SalesActions } from '../../../actions/sales/sales.action';
 import { AccountResponse, AddAccountRequest, UpdateAccountRequest } from '../../../models/api-models/Account';
@@ -392,7 +392,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                         this.dateField?.nativeElement?.focus();
                     }, 50);
                 } else {
-                    this.resetEntriesIfVoucherChanged();
                     this.tallyModuleService.requestData.next(this.journalVoucherForm.value);
                 }
 
@@ -499,25 +498,16 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         });
 
         this.searchedAccountQuery.pipe(
-            switchMap((event: any) => {
-                // Dynamic debounce based on whether all data is loaded
-                const transaction = event.transaction;
-                const accountType = transaction.get('type')?.value;
-                
-                let isDataLoaded = false;
-                if (accountType === 'by') {
-                    isDataLoaded = this.byAccountSearchData.isInitialLoaded;
-                } else if (accountType === 'to') {
-                    isDataLoaded = this.toAccountSearchData.isInitialLoaded;
-                }
-                
-                // Use 100ms debounce if data is loaded (fast local filtering), 700ms if not (API calls)
-                const debounceDelay = isDataLoaded ? 100 : 700;
-                return of(event).pipe(debounceTime(debounceDelay));
+            debounce(event => {
+                const type = event.transaction.get('type')?.value;
+                const loaded =
+                    type.toLowerCase() === 'by'
+                        ? this.byAccountSearchData.isInitialLoaded
+                        : this.toAccountSearchData.isInitialLoaded;
+                return timer(loaded ? 100 : 700);
             }),
             takeUntil(this.destroyed$)
         ).subscribe((event: any) => {
-                   
             const inputValue = event.event.target.value;
             const transaction = event.transaction;
             
@@ -1475,14 +1465,14 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 this._toaster.infoToast(this.localeData?.foreign_account_error);
                 // Reset transaction data in case of error
                 transactionAtIndex?.patchValue({
-                    amount: null,
-                    actualAmount: null,
+                    amount: 0,
+                    actualAmount: 0,
                     particular: '',
                     currentBalance: '',
                     applyApplicableTaxes: false,
                     isInclusiveTax: false,
                     taxes: [],
-                    total: null,
+                    total: 0,
                     discounts: [],
                     inventory: null,
                     selectedAccount: {
@@ -1570,7 +1560,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public loadAccountsForType(accountType: 'by' | 'to', query: string = '', page: number = 1, count: number = PAGINATION_LIMIT, isInitialLoad: boolean = false, callback?: (success: boolean) => void): void {
         const searchData = accountType === 'by' ? this.byAccountSearchData : this.toAccountSearchData;
-        if (searchData.isLoading || !(searchData.searchQuery === query && page == searchData.page + 1 || searchData.searchQuery !== query)) {
+        if (searchData.isLoading || !(searchData.searchQuery === query && page == searchData.page + 1 || searchData.searchQuery !== query) || (searchData.searchQuery === query && page == searchData.page)) {
             if (callback) {
                 callback(true);
             }
@@ -2102,7 +2092,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 let salesAmount;
                 data.transactions.forEach((element: any) => {
                     if (element) {
-                        if (element.type === 'to' && !element.isDiscountApplied && !element.isTaxApplied) {
+                        if (element.type === 'to' && !element.isDiscountApplied && !element.isTaxApplied && element.selectedAccount?.UniqueName) {
                             salesAmount = element.amount;
                         }
                         element.type = (element.type === 'by') ? 'credit' : 'debit';
