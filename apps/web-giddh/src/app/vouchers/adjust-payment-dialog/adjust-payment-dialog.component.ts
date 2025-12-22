@@ -13,6 +13,7 @@ import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { ToasterService } from '../../services/toaster.service';
 import { NgForm } from '@angular/forms';
 import { VoucherService } from '../../services/voucher.service';
+import { InputFieldComponent } from '../../theme/form-fields/input-field/input-field.component';
 
 const NO_ADVANCE_RECEIPT_FOUND = 'There is no advanced receipt for adjustment.';
 
@@ -22,6 +23,8 @@ const NO_ADVANCE_RECEIPT_FOUND = 'There is no advanced receipt for adjustment.';
     styleUrls: ['./adjust-payment-dialog.component.scss']
 })
 export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
+    /** Reference to the amount input field for focus management */
+    @ViewChild('amountInput') public amountInput: InputFieldComponent;
     public newAdjustVoucherOptions: IOption[] = [];
     public adjustVoucherOptions: IOption[];
     public allAdvanceReceiptResponse: Adjustment[] = [];
@@ -548,7 +551,12 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
                 this.adjustVoucherForm.adjustments[index] = new Adjustment();
             }
             this.checkValidations();
-        }
+            setTimeout(() => {
+                if (this.amountInput) {
+                    this.amountInput.inputFocus();
+                }
+            }, 200);
+        }   
     }
 
     /**

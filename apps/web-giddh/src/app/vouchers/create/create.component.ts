@@ -151,6 +151,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     @ViewChild('copyVoucherElement') copyVoucherElement!: ElementRef<HTMLDivElement>;
     /** Description textarea element for focusing */
     @ViewChild('inputDescription', { static: false }) inputDescription?: ElementRef<HTMLTextAreaElement>;
+    /** Reference to the "Add new row/line" span element for focusing */
+    @ViewChild('addNewParticular') addNewParticular!: ElementRef<HTMLSpanElement>;
+    /** Reference to the "Add new row/line" span element for focusing */
+    @ViewChild('addNewDeposit') addNewDeposit!: ElementRef<HTMLSpanElement>;
     /**  This will use for dayjs */
     public dayjs: any = dayjs;
     /** Holds current voucher type */
@@ -3654,14 +3658,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         this.rcmConfiguration = this.generalService.getRcmConfiguration(isChecked, this.commonLocaleData);
         
-        const dialogRef = this.openDialogWithFocusManagement(() =>
-            this.dialog.open(NewConfirmationModalComponent, {
-                width: "630px",
-                data: {
-                    configuration: this.rcmConfiguration,
-                },
-            })
-        );
+        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            width: "630px",
+            data: {
+                configuration: this.rcmConfiguration,
+            },
+        });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
             document.querySelector("body").classList.remove("fixed");
@@ -4110,7 +4112,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (deposits?.length === 1) {
             deposits.reset();
             this.calculateBalanceDue();
+            this.activeDepositIndex = null;
+            setTimeout(() => {
+                this.activeDepositIndex = 0;
+            }, 50);
             return;
+        } else if (deposits?.length > 1 && this.addNewDeposit.nativeElement) {
+            setTimeout(() => {
+                this.addNewDeposit.nativeElement.focus();
+            }, 100);
         }
         deposits.removeAt(entryIndex);
         this.calculateBalanceDue();
@@ -4131,6 +4141,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
         this.checkIfEntriesHasStock();
         this.calculateVoucherTotals();
+        if (entries.length >= 1 && this.addNewParticular.nativeElement) {
+            setTimeout(() => {
+                this.addNewParticular.nativeElement.focus();
+            }, 100);
+        }
     }
 
     /**

@@ -327,9 +327,8 @@ export class EnterNextDirective implements OnDestroy, AfterViewInit {
             if (focusableChild instanceof HTMLSelectElement || focusableChild instanceof HTMLButtonElement) {
                 return !focusableChild.disabled && this.isElementVisible(focusableChild);
             }
-            return !focusableChild.disabled && 
-                   !(focusableChild as HTMLInputElement | HTMLTextAreaElement).readOnly && 
-                   this.isElementVisible(focusableChild);
+            // Allow readonly fields to be focusable for navigation purposes
+            return !focusableChild.disabled && this.isElementVisible(focusableChild);
         }
 
         return true;

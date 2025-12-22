@@ -100,7 +100,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Handles arrow key navigation for list items
+     * Handles arrow key navigation for list items when focus is within the list area
      *
      * @param {KeyboardEvent} event - The keyboard event
      * @memberof AddBulkItemsComponent
@@ -108,11 +108,17 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
     @HostListener('keydown', ['$event'])
     public handleKeyboardNavigation(event: KeyboardEvent): void {
         if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
-            event.preventDefault();
-            event.stopPropagation();
+            // Check if the focus is within the list area
+            const target = event.target as HTMLElement;
+            const listContainer = target.closest('.list-viewport') || target.closest('mat-list-item');
             
-            const direction = event.key === 'ArrowDown' ? 1 : -1;
-            this.navigateList(direction);
+            if (listContainer) {
+                event.preventDefault();
+                event.stopPropagation();
+                
+                const direction = event.key === 'ArrowDown' ? 1 : -1;
+                this.navigateList(direction);
+            }
         }
     }
 
@@ -195,6 +201,18 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
             }
         }
         this.variantChanged(item, variant, index);
+    }
+
+    /**
+     * TrackBy function for stock items to improve virtual scrolling performance
+     *
+     * @param {number} index - The index of the item
+     * @param {OptionInterface} item - The stock item
+     * @returns {string} Unique identifier for the item
+     * @memberof AddBulkItemsComponent
+     */
+    public trackByStockItem(index: number, item: OptionInterface): string {
+        return item?.value || index.toString();
     }
 
     /**
