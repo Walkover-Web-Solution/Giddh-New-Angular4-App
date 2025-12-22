@@ -311,7 +311,7 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     }
 
     /**
-     * Handles Enter key events conditionally to allow appEnterNext directive to work
+     * Handles Enter key press events
      *
      * @param {KeyboardEvent} event - The keyboard event
      * @memberof InputFieldComponent
@@ -319,11 +319,16 @@ export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAc
     public handleEnterKey(event: KeyboardEvent): void {
         // Check if the input-field component has appEnterNext directive
         const hostElement = this.elementRef.nativeElement;
-        const hasEnterNextDirective = hostElement.hasAttribute('appenternext');
+        const hasEnterNextDirective = hostElement.hasAttribute('appEnterNext');
         
-        // If appEnterNext directive is present, don't prevent default to allow navigation
-        if (!hasEnterNextDirective) {
-            event.preventDefault();
+        // If appEnterNext directive is present, allow it to handle the event
+        if (hasEnterNextDirective) {
+            // Don't prevent default or stop propagation - let the directive handle it
+            return;
         }
+        
+        // If no appEnterNext directive, prevent default form submission
+        event.preventDefault();
     }
+
 }

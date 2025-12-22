@@ -20,7 +20,7 @@ export class EnterNextDirective implements OnDestroy, AfterViewInit {
      * @readonly
      * @memberof EnterNextDirective
      */
-    private readonly FOCUSABLE_SELECTOR = 'input:not([tabindex="-1"]):not([disabled]), select:not([tabindex="-1"]):not([disabled]), textarea:not([tabindex="-1"]):not([disabled]), button:not([tabindex="-1"]):not([disabled]), [tabindex]:not([tabindex="-1"])';
+    private readonly FOCUSABLE_SELECTOR = 'input:not([tabindex="-1"]):not([disabled]), input[readonly]:not([tabindex="-1"]):not([disabled]), select:not([tabindex="-1"]):not([disabled]), textarea:not([tabindex="-1"]):not([disabled]), button:not([tabindex="-1"]):not([disabled]), [tabindex]:not([tabindex="-1"])';
 
     /**
      * Cached focusable tags set for O(1) lookup performance
@@ -37,7 +37,7 @@ export class EnterNextDirective implements OnDestroy, AfterViewInit {
      * @private
      * @memberof EnterNextDirective
      */
-    private formElement: HTMLFormElement | null = null;
+    private formElement: HTMLElement | null = null;
 
     /**
      * Creates an instance of EnterNextDirective
@@ -152,12 +152,12 @@ export class EnterNextDirective implements OnDestroy, AfterViewInit {
      * @memberof EnterNextDirective
      */
     private focusNextElement(): void {
-        const form = this.getFormElement();
-        if (!form) {
+        const container = this.getFormElement();
+        if (!container) {
             return;
         }
 
-        const focusableElements = this.getFocusableElements(form);
+        const focusableElements = this.getFocusableElements(container);
         const currentInput = this.findCurrentInput();
         
         if (!currentInput) {
@@ -173,28 +173,38 @@ export class EnterNextDirective implements OnDestroy, AfterViewInit {
 
     /**
      * Gets the form element with caching for performance
+     * Falls back to dialog container if no form is found
      * 
      * @private
-     * @returns {HTMLFormElement | null} The form element or null
+     * @returns {HTMLElement | null} The form element or dialog container
      * @memberof EnterNextDirective
      */
-    private getFormElement(): HTMLFormElement | null {
+    private getFormElement(): HTMLElement | null {
         if (!this.formElement) {
+            // First try to find a form
             this.formElement = this.el.nativeElement.closest('form');
+            
+            // If no form found, try to find dialog container
+            if (!this.formElement) {
+                this.formElement = this.el.nativeElement.closest('[mat-dialog-content]') || 
+                                 this.el.nativeElement.closest('.dialog-body') ||
+                                 this.el.nativeElement.closest('mat-dialog-container') ||
+                                 document.body; // Fallback to body
+            }
         }
         return this.formElement;
     }
 
     /**
-     * Gets all focusable elements within the form with optimized selector
+     * Gets all focusable elements within the container with optimized selector
      * 
      * @private
-     * @param {HTMLFormElement} form - The form element
+     * @param {HTMLElement} container - The container element (form or dialog)
      * @returns {HTMLElement[]} Array of focusable elements
      * @memberof EnterNextDirective
      */
-    private getFocusableElements(form: HTMLFormElement): HTMLElement[] {
-        return Array.from(form.querySelectorAll(this.FOCUSABLE_SELECTOR)) as HTMLElement[];
+    private getFocusableElements(container: HTMLElement): HTMLElement[] {
+        return Array.from(container.querySelectorAll(this.FOCUSABLE_SELECTOR)) as HTMLElement[];
     }
 
     /**
@@ -212,8 +222,8 @@ export class EnterNextDirective implements OnDestroy, AfterViewInit {
             return hostElement;
         }
 
-        // Use more specific selector for better performance
-        const inputElement = hostElement.querySelector('input:not([disabled]), select:not([disabled]), textarea:not([disabled])') as HTMLElement;
+        // Use more specific selector for better performance, include readonly inputs
+        const inputElement = hostElement.querySelector('input:not([disabled]), input[readonly]:not([disabled]), select:not([disabled]), textarea:not([disabled])') as HTMLElement;
         
         return inputElement && this.isElementVisible(inputElement) ? inputElement : null;
     }
@@ -262,8 +272,8 @@ export class EnterNextDirective implements OnDestroy, AfterViewInit {
             return;
         }
 
-        // Handle custom Angular components
-        const focusableChild = element.querySelector('input:not([disabled]), select:not([disabled]), textarea:not([disabled])') as HTMLElement;
+        // Handle custom Angular components, include readonly inputs
+        const focusableChild = element.querySelector('input:not([disabled]), input[readonly]:not([disabled]), select:not([disabled]), textarea:not([disabled])') as HTMLElement;
         if (focusableChild && this.isElementVisible(focusableChild)) {
             focusableChild.focus();
         }

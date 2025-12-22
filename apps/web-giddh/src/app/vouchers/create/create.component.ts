@@ -3432,6 +3432,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public toggleAccountAsidePane(accountType: AccountType, createNewAccount: boolean = true, customFocusElement?: any): void {
+        if (this.accountAsideMenuRef) return;
+        
         this.createNewAccount = createNewAccount;
         if (accountType === this.accountType.customer) {
             this.getParentGroupForCreateAccount();
@@ -3477,6 +3479,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     });
                 }
                  this.openAccountDropdown = false;
+                 this.accountAsideMenuRef = null;
                 setTimeout(() => {
                     this.openAccountDropdown = true;
                 }, 50);
