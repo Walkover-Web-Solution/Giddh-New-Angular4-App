@@ -547,7 +547,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         });
 
         window.addEventListener('message', event => {
-            if ((this.router.url !== '/pages/user-details/subscription' && (this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId || this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId + '?trial=true' || this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId + '?renew=true' || this.router.url === '/pages/user-details/subscription/buy-plan'))) {
+            if ((this.router.url !== '/pages/user-details/subscription' && (this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId || this.router.url === '/pages/user-details/subscription/buy-plan/' + this.subscriptionId + '?trial=true' || this.router.url === '/pages/user-details/subscription/buy-plan'))) {
                 if ((event?.data && typeof event?.data === "string" && event?.data === PaymentProvider.GOCARDLESS)) {
                     if (this.upgradePlan && this.upgradeRegion === 'GBR') {
                         const reqObj = {
@@ -1350,7 +1350,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
         this.calculateDataInProgress$.pipe(take(1)).subscribe(inProgress => {
             isCalculating = inProgress;
         });
-
+        
         if (isCalculating) {
             return;
         }
@@ -1389,19 +1389,19 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                 this.filteredPaymentProviders = this.allPaymentProviders.filter(provider => [PaymentProvider.GOCARDLESS, PaymentProvider.PAYPAL].includes(provider.value));
             } else if (duration === 'YEARLY') {
                 // Only Razorpay for yearly GBR
-                filterProviders([PaymentProvider.RAZORPAY, PaymentProvider.PAYU]);
+                filterProviders([PaymentProvider.RAZORPAY]);
             }
         } else if (entityCode !== 'IND') {
             if (duration === 'MONTHLY' || duration === 'DAILY') {
                 // Only PayPal for non-IND countries with monthly duration
-                filterProviders([PaymentProvider.PAYPAL, PaymentProvider.PAYU]);
+                filterProviders([PaymentProvider.PAYPAL]);
             } else if (duration === 'YEARLY') {
                 // Only Razorpay for non-IND countries with yearly duration
-                filterProviders([PaymentProvider.RAZORPAY, PaymentProvider.PAYU]);
+                filterProviders([PaymentProvider.RAZORPAY]);
             }
         } else if (entityCode === 'IND' && (duration === 'MONTHLY' || duration === 'DAILY' || duration === 'YEARLY')) {
             // Only Razorpay for IND with MONTHLY duration and PAYU and RAZORPAY for YEARLY duration
-            filterProviders((duration === 'YEARLY' || duration === 'MONTHLY' || duration === 'DAILY') ? [PaymentProvider.RAZORPAY, PaymentProvider.PAYU] : [PaymentProvider.RAZORPAY, PaymentProvider.PAYU]);
+            filterProviders((duration === 'YEARLY' || duration === 'MONTHLY' || duration === 'DAILY') ? [PaymentProvider.RAZORPAY, PaymentProvider.PAYU] : [PaymentProvider.RAZORPAY]);
         }
 
         if (this.thirdStepForm.get('paymentProvider')?.value === PaymentProvider.RAZORPAY && (duration === 'MONTHLY' || duration === 'DAILY')) {
@@ -1791,9 +1791,9 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Open PayU HTML in new window and listen for PayU response
+     * Open PayU HTML in new window and listen for PayU response 
      * then update subscription
-     *
+     * 
      * @param {string} html - PayU HTML
      */
     private openPayUPayment(html: string): void {
