@@ -55,6 +55,7 @@ export class SettingsWarehouseService {
      * @memberof SettingsWarehouseService
      */
     public fetchAllWarehouse(params: any, branchUniqueName?: any): Observable<BaseResponse<any, any>> {
+        console.log(params)
         const companyUniqueName: string = this.generalService.companyUniqueName;
         let contextPath: string = `${this.config.apiUrl}${WAREHOUSE_API.FETCH
             ?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))

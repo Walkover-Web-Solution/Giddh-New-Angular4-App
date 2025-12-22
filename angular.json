@@ -16,7 +16,7 @@
                     "options": {
                         "index": "apps/web-giddh/src/index.html",
                         "main": "apps/web-giddh/src/main.electron.ts",
-                        "polyfills": "apps/web-giddh/src/polyfills.ts",
+                        "polyfills":[],
                         "tsConfig": "apps/web-giddh/tsconfig.app.json",
                         "assets": [
                             {
@@ -216,7 +216,7 @@
                         "outputPath": "dist/apps/web-giddh",
                         "index": "apps/web-giddh/src/index.html",
                         "main": "apps/web-giddh/src/main.ts",
-                        "polyfills": "apps/web-giddh/src/polyfills.ts",
+                        "polyfills":[],
                         "tsConfig": "apps/web-giddh/tsconfig.app.json",
                         "assets": [
                             {

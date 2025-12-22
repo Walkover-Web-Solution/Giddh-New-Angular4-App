@@ -4,14 +4,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
-// import { GiddhDateRangepickerModule } from '../theme/giddh-daterangepicker/giddh-daterangepicker.module';
+import { GiddhDateRangepickerModule } from '../theme/giddh-daterangepicker/giddh-daterangepicker.module';
 import { MatIconModule } from '@angular/material/icon';
 import { ProjectWiseAccountingRoutingModule } from './project-wise-accounting.routing.module';
 import { ProjectWiseAccountingListComponent } from './list/project-wise-accounting.component';
 import { RevenueExpenseListComponent } from './revenue-expense-list/revenue-expense-list.component';
 import { CreateProjectComponent } from './components/create-project/create-project.component';
 import { MainComponent } from './main.component';
-// import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -20,8 +20,8 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ProjectAccountingService } from './project-wise-accounting.service';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { MatSortModule } from '@angular/material/sort';
-// import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
-// import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
+import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
+import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
 import { MatInputModule } from '@angular/material/input';
 
 import { SharedModule } from '../shared/shared.module';
@@ -31,7 +31,7 @@ import { NoDataModule } from '../shared/no-data/no-data.module';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
 import { MatMenuModule } from '@angular/material/menu';
-// import { FinancialReportsModule } from '../financial-reports/financial-reports.module';
+import { FinancialReportsModule } from '../financial-reports/financial-reports.module';
 
 @NgModule({
     declarations: [
@@ -44,11 +44,11 @@ import { MatMenuModule } from '@angular/material/menu';
         CommonModule,
         FormsModule,
         RouterModule,
-        // FormFieldsModule,
+        FormFieldsModule,
         ProjectWiseAccountingRoutingModule,
         MatButtonModule,
         MatTableModule,
-        // GiddhDateRangepickerModule,
+        GiddhDateRangepickerModule,
         MatIconModule,
         TranslateDirectiveModule,
         MatPaginatorModule,
@@ -59,8 +59,8 @@ import { MatMenuModule } from '@angular/material/menu';
         ClickOutsideModule,
         NewConfirmationModalModule,
         MatSortModule,
-        // Daterangepicker,
-        // DatepickerWrapperModule,
+        Daterangepicker,
+        DatepickerWrapperModule,
         MatInputModule,
 
         SharedModule,
@@ -68,8 +68,8 @@ import { MatMenuModule } from '@angular/material/menu';
         NoDataModule,
         MatProgressSpinnerModule,
         HamburgerMenuModule,
-        MatMenuModule
-        // FinancialReportsModule
+        MatMenuModule,
+        FinancialReportsModule
     ],
     exports: [CreateProjectComponent],
     providers: [ProjectAccountingService],

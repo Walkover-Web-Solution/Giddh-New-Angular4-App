@@ -20,10 +20,9 @@ import { environment } from '../../../../environments/environment';
 import { cloneDeep, filter, forEach, includes, indexOf, map, remove } from '../../../lodash-optimized';
 @Component({
     selector: 'stock-balance',
-    
     templateUrl: './stock-balance.component.html',
-    standalone: false,
-    styleUrls: ['./stock-balance.component.scss']
+    styleUrls: ['./stock-balance.component.scss'],
+    standalone:false
 })
 
 
@@ -121,7 +120,6 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
             }
             this.warehouses = warehousesClone;
         });
-
         this.store.dispatch(this.warehouseActions.fetchAllWarehouses({ page: 1, count: 0 }));
         this.isLoading = true;
         this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
@@ -133,19 +131,19 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
         combineLatest([this.inventoryService.GetGroupsWithStocksFlatten(), this.store.pipe(select(state => state.warehouse.warehouses)), this.store.pipe(select(state => state.settings.financialYearLimits))]).pipe(takeUntil(this.destroyed$)).subscribe((resp: any[]) => {
             if (resp[0] && resp[1] && resp[2]) {
                 this.isLoading = false;
-                
+
                 // Handle stock groups data
                 if (resp[0]?.status === "success") {
                     let stockGroups: IOption[] = [];
                     this.arrangeStockGroups(resp[0].body?.results, stockGroups);
                     this.stockGroups = stockGroups;
                 }
-                
+
                 // Handle warehouses data
                 this.warehouses = resp[1]?.results;
                 this.allWarehouses = resp[1]?.results;
-                let stockGroupUniqueName = resp[0]?.body?.results[0]?.uniqueName;
-                let warehouseUniqueName = resp[1]?.results[0]?.uniqueName;
+                let stockGroupUniqueName = resp[0]?.body?.results && resp[0]?.body?.results[0] ? resp[0]?.body?.results[0]?.uniqueName : null;
+                let warehouseUniqueName = resp[1]?.results && resp[1]?.results[0] ? resp[1]?.results[0]?.uniqueName : null;
                 let financialYearLimits = resp[2]?.startDate;
                 if (stockGroupUniqueName && warehouseUniqueName && financialYearLimits && !this.GroupStockReportRequest.from) {
                     this.GroupStockReportRequest.warehouseUniqueName = warehouseUniqueName;
@@ -302,10 +300,10 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
                         if (warehouseStocksList?.length > 0) {
                             warehouseStocksList.forEach(warehouseStock => {
                                 const stockFound = this.stocksList?.filter(stock => stock?.stockUniqueName === warehouseStock?.stockUniqueName);
-                                if (stockFound?.length > 0) {
+                                if (stockFound?.length > 0 && stockFound[0]) {
                                     if (stockFound[0]?.warehouses?.length > 0) {
                                         const warehouseFound = stockFound[0]?.warehouses?.filter(warehouse => warehouse?.uniqueName === uniqueName);
-                                        if (warehouseFound?.length > 0) {
+                                        if (warehouseFound?.length > 0 && warehouseFound[0]) {
                                             warehouseFound[0].openingBalance = warehouseStock?.openingBalance;
                                         }
                                     }

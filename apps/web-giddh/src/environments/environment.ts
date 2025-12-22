@@ -28,12 +28,17 @@ export const environment: Environment = {
      */
     decorateModuleRef(modRef: NgModuleRef<any>) {
         const appRef = modRef.injector.get(ApplicationRef);
-        const cmpRef = appRef.components[0];
 
-        let _ng = (<any>window).ng;
-        enableDebugTools(cmpRef);
-        (<any>window).ng.probe = _ng.probe;
-        (<any>window).ng.coreTokens = _ng.coreTokens;
+        // Add null check for components array
+        if (appRef.components && appRef.components.length > 0) {
+            const cmpRef = appRef.components[0];
+
+            let _ng = (<any>window).ng;
+            enableDebugTools(cmpRef);
+            (<any>window).ng.probe = _ng.probe;
+            (<any>window).ng.coreTokens = _ng.coreTokens;
+        }
+
         return modRef;
     },
     ENV_PROVIDERS: []
