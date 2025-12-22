@@ -32,58 +32,70 @@
                                         class="list-viewport"
                                         [appendOnly]="true"
                                     >
-                                        <ng-container *cdkVirtualFor="let item of stockResults$ | async; let i = index">
+                                        <ng-container *cdkVirtualFor="let item of stockResults$ | async; let i = index; trackBy: trackByStockItem">
                                             <ng-container *ngIf="item?.additional?.hasVariants">
-                                                <mat-accordion>
-                                                    <mat-expansion-panel>
-                                                        <mat-expansion-panel-header tabindex="-1" class="pl-0">
-                                                            <mat-panel-title>
-                                                                <mat-list-item
-                                                                    class="list-item px-2"
-                                                                    [matTooltip]="item.name"
-                                                                    (click)="onItemClick(item, i)"
-                                                                    (keydown.enter)="
-                                                                        $event.preventDefault();
-                                                                        onItemClick(item, i);
-                                                                    "
-                                                                    (keydown.escape)="handleEscapeKey($event)"
-                                                                    [tabindex]="i === 0 ? 0 : -1"
-                                                                    #listElement
-                                                                    [attr.aria-label]="'Select item: ' + item.name"
-                                                                    role="button"
-                                                                    matTooltipPosition="left"
-                                                                    cdkMonitorElementFocus
-                                                                >
-                                                                    <span
-                                                                        class="d-inline-flex align-items-center column-gap-1"
-                                                                    >
-                                                                        <img
-                                                                            src="assets/images/item-wise.svg"
-                                                                            width="18"
-                                                                            height="18"
-                                                                            class="stock-icon"
-                                                                        />
-                                                                        <span>
-                                                                            {{ item.name }}
-                                                                        </span>
-                                                                    </span>
-                                                                </mat-list-item>
-                                                            </mat-panel-title>
-                                                        </mat-expansion-panel-header>
+                                                <cdk-accordion>
+                                                    <cdk-accordion-item
+                                                        #accordionItem="cdkAccordionItem"
+                                                        role="button"
+                                                        [attr.id]="'accordion-header-' + i"
+                                                        [attr.aria-expanded]="accordionItem.expanded"
+                                                        [attr.aria-controls]="'accordion-body-' + i"
+                                                        (click)="accordionItem.toggle()"
+                                                        (keydown.enter)="accordionItem.toggle()"
+                                                        class="position-relative accordion-header"
+                                                    >
+                                                        <i class="icon-arrow-down position-absolute"></i>
+                                                        <mat-list-item
+                                                            class="list-item px-2"
+                                                            [matTooltip]="item.name"
+                                                            (click)="onItemClick(item, i)"
+                                                            (keydown.enter)="
+                                                                $event.preventDefault();
+                                                                onItemClick(item, i);
+                                                            "
+                                                            (keydown.escape)="handleEscapeKey($event)"
+                                                            [tabindex]="i === 0 ? 0 : -1"
+                                                            #listElement
+                                                            [attr.aria-label]="'Select item: ' + item.name"
+                                                            role="button"
+                                                            matTooltipPosition="left"
+                                                            cdkMonitorElementFocus
+                                                        >
+                                                            <span
+                                                                class="d-inline-flex align-items-center column-gap-1"
+                                                            >
+                                                                <img
+                                                                    src="assets/images/item-wise.svg"
+                                                                    width="18"
+                                                                    height="18"
+                                                                    class="stock-icon"
+                                                                />
+                                                                <span>
+                                                                    {{ item.name }}
+                                                                </span>
+                                                            </span>
+                                                        </mat-list-item>
                                                         <div
+                                                            role="region"
+                                                            [style.display]="accordionItem.expanded ? '' : 'none'"
+                                                            [attr.id]="'accordion-body-' + i"
+                                                            [attr.aria-labelledby]="'accordion-header-' + i"
                                                             *ngIf="(stockVariants[i] | async)?.length > 0"
-                                                            class="variants-wrapper"
                                                         >
                                                             <ng-container
                                                                 *ngFor="let variant of stockVariants[i] | async"
                                                             >
                                                                 <mat-list-item
-                                                                    (click)="onVariantClick(item, variant, i)"
+                                                                    class="position-relative"
+                                                                    (click)="$event.stopPropagation(); onVariantClick(item, variant, i)"
                                                                     (keydown.enter)="
                                                                         $event.preventDefault();
+                                                                        $event.stopPropagation();
                                                                         onVariantClick(item, variant, i);
+
                                                                     "
-                                                                    (keydown.escape)="handleEscapeKey($event)"
+                                                                    (keydown.escape)="$event.stopPropagation(); handleEscapeKey($event)"
                                                                     #variantElement
                                                                     [tabindex]="i === 0 ? 0 : -1"
                                                                     [attr.aria-label]="
@@ -98,8 +110,8 @@
                                                                 >
                                                             </ng-container>
                                                         </div>
-                                                    </mat-expansion-panel>
-                                                </mat-accordion>
+                                                    </cdk-accordion-item>
+                                                </cdk-accordion>
                                             </ng-container>
                                             <ng-container *ngIf="!item?.additional?.hasVariants">
                                                 <mat-list-item
@@ -109,6 +121,7 @@
                                                     (keydown.enter)="
                                                         $event.preventDefault();
                                                         onItemClick(item, i);
+                                                        focusNextListItem(i);
                                                     "
                                                     (keydown.escape)="handleEscapeKey($event)"
                                                     [tabindex]="i === 0 ? 0 : -1"
