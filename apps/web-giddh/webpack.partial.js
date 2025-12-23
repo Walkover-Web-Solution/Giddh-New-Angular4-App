@@ -40,7 +40,7 @@ module.exports = {
             'process.env.errlyticsNeeded': JSON.stringify(false),
             'process.env.errlyticsKey': JSON.stringify(''),
             'process.env.AppUrl': JSON.stringify('http://localhost:3000/'),
-            'process.env.ApiUrl': JSON.stringify('https://api.giddh.com/'),
+            'process.env.ApiUrl': JSON.stringify('https://apitest.giddh.com/'),
             'process.env.UkApiUrl': JSON.stringify('https://gbapi.giddh.com/'),
             'process.PORTAL_URL': JSON.stringify('https://portal.giddh.com/'),
             'process.env.APP_FOLDER': JSON.stringify('')

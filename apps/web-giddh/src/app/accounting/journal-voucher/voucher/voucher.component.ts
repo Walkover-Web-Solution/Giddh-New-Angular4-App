@@ -2144,7 +2144,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     }
                 }
                 if (!data.transactions?.length) {
-                    this._toaster.errorToast(this.localeData?.blank_particular_error, this.commonLocaleData?.app_error);
+                     this._toaster.showSnackBar("error", this.localeData?.blank_particular_error);
                     return;
                 }
                 if (data.transactions.length > 1) {
@@ -2426,7 +2426,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
         // Show message if there are incomplete transactions or if no transactions have selected accounts
         if (hasAmountButNoAccount || transactions.length === 0) {
-            this._toaster.errorToast(this.localeData?.blank_particular_error, this.commonLocaleData?.app_error);
+            this._toaster.showSnackBar("error", this.localeData?.blank_particular_error);
             this.activeRowType = null;
             setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
             return [];
