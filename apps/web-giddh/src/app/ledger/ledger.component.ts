@@ -2589,12 +2589,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public openLedgerAsidePaneDialog(): void {
         this.ledgerAsidePaneDialogRef = this.dialog.open(this.ledgerAsidePane, ASIDE_PANE_CONFIG);
 
-        this.ledgerAsidePaneDialogRef.afterClosed().subscribe(response => {
+        this.ledgerAsidePaneDialogRef.afterClosed().subscribe(() => {
             setTimeout(() => {
                 if (this.showPageLeaveConfirmation) {
                     this.pageLeaveUtilityService.addBrowserConfirmationDialog();
                 }
                 this.ledgerAsidePaneDialogRef = undefined;
+                if (this.ledgerView === LedgerViewEnum.StatementView) {
+                    this.focusDebitCreditDropdowns(null);
+                }
             }, 100);
         });
 

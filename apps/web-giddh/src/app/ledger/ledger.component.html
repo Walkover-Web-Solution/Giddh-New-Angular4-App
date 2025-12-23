@@ -3141,10 +3141,8 @@
             <!-- aside menu section -->
             <ng-template #ledgerAsidePane>
                 <ledger-aside-pane
-                    [keyboardShortcut]="'esc'"
                     [localeData]="localeData"
                     [commonLocaleData]="commonLocaleData"
-                    (onShortcutPress)="ledgerAsidePaneDialogRef?.close()"
                     (closeAsideEvent)="ledgerAsidePaneDialogRef?.close()"
                 >
                 </ledger-aside-pane>
