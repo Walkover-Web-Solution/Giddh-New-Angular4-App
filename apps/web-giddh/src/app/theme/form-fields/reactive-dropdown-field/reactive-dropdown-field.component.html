@@ -41,42 +41,40 @@
                     [displayWith]="displayLabel"
                     #auto="matAutocomplete"
                 >
-                    <span class="position-relative">
-                        <mat-option
-                            *ngIf="showCreateNew && createNewText"
-                            class="create-new-option"
-                            (onSelectionChange)="handleCreateNewSelection($event)"
-                            [attr.aria-label]="createNewText"
-                        >
-                            <div class="theme-primary-color d-flex justify-content-between">
-                                <div class="item create-new">{{ createNewText }}</div>
-                                <div class="item create-new-command" *ngIf="showKeyboardCommand">
-                                    {{ showKeyboardCommand }}
-                                </div>
+                    <mat-option
+                        *ngIf="showCreateNew && createNewText"
+                        class="create-new-option"
+                        (onSelectionChange)="handleCreateNewSelection($event)"
+                        [attr.aria-label]="createNewText"
+                    >
+                        <div class="theme-primary-color d-flex justify-content-between">
+                            <div class="item create-new">{{ createNewText }}</div>
+                            <div class="item create-new-command" *ngIf="showKeyboardCommand">
+                                {{ showKeyboardCommand }}
                             </div>
+                        </div>
+                    </mat-option>
+                    <ng-container *ngFor="let option of fieldFilteredOptions$ | async">
+                        <mat-option
+                            [value]="option"
+                            [matTooltip]="option?.label"
+                            matTooltipPosition="right"
+                            (click)="$event.stopPropagation()"
+                            [disabled]="option?.additional?.disabled"
+                        >
+                            <ng-template
+                                [ngTemplateOutletContext]="{ option: option }"
+                                [ngTemplateOutlet]="optionTemplate"
+                            ></ng-template>
+                            <ng-container *ngIf="!optionTemplate">
+                                {{ option?.label }}
+                            </ng-container>
                         </mat-option>
-                        <ng-container *ngFor="let option of fieldFilteredOptions$ | async">
-                            <mat-option
-                                [value]="option"
-                                [matTooltip]="option?.label"
-                                matTooltipPosition="right"
-                                (click)="$event.stopPropagation()"
-                                [disabled]="option?.additional?.disabled"
-                            >
-                                <ng-template
-                                    [ngTemplateOutletContext]="{ option: option }"
-                                    [ngTemplateOutlet]="optionTemplate"
-                                ></ng-template>
-                                <ng-container *ngIf="!optionTemplate">
-                                    {{ option?.label }}
-                                </ng-container>
-                            </mat-option>
-                            <mat-divider *ngIf="showOptionDivider"></mat-divider>
-                        </ng-container>
-                        <mat-option disabled *ngIf="!(fieldFilteredOptions$ | async)?.length">
-                            {{ noResultsFoundMessage || commonLocaleData?.app_no_result_found }}
-                        </mat-option>
-                    </span>
+                        <mat-divider *ngIf="showOptionDivider"></mat-divider>
+                    </ng-container>
+                    <mat-option disabled *ngIf="!(fieldFilteredOptions$ | async)?.length">
+                        {{ noResultsFoundMessage || commonLocaleData?.app_no_result_found }}
+                    </mat-option>
                 </mat-autocomplete>
                 <div
                     *ngIf="showCaretIcon && !value"
