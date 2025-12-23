@@ -1342,14 +1342,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public setAccount(acc: any, dropdownIndex: number): void {
-        this.showLedgerAccountList = false;
         const idx = this.activeRowIndex
         let transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
         let transactionAtIndex = transactionsFormArray.at(idx) as FormGroup;
         const currentSelectedAccount = transactionAtIndex.get('selectedAccount')?.value;
         // If same account is selected again, skip setAccount to avoid unnecessary code execution
         if (currentSelectedAccount?.UniqueName === acc.uniqueName) {
-            this.changeTab("enter", "account")
+            this.changeTab("enter", "account");
             return;
         } else {
             dropdownIndex = dropdownIndex === null ? transactionAtIndex.get('type').value === 'by' ? this.byAccountSearchData.accounts.length - 1 : this.toAccountSearchData.accounts.length - 1 : dropdownIndex;
@@ -1484,6 +1483,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                         parentGroups: []
                     }
                 });
+                this.changeTab('enter', 'type');
             }
         });
     }
@@ -2057,7 +2057,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
 
         data.transactions = this.validateTransaction(data.transactions);
 
-        if (!data.transactions) {
+        if (!data.transactions.length) {
             return;
         }
 
@@ -2143,7 +2143,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                         data.transactions[0].isInclusiveTax = false;
                     }
                 }
-
+                if (!data.transactions?.length) {
+                     this._toaster.showSnackBar("error", this.localeData?.blank_particular_error);
+                    return;
+                }
                 if (data.transactions.length > 1) {
                     data.transactions.forEach((transaction, i) => {
                         delete data.transactions[i].actualAmount;
@@ -2408,30 +2411,28 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         if (!transactions?.length) {
             return [];
         }
-
-        // Check for transactions with amounts but no account selected (using FormArray)
-        const transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
-        const hasIncompleteTransactions = transactionsFormArray.controls.some(control => {
-            const particular = control.get('particular')?.value;
-            const selectedAccount = control.get('selectedAccount')?.value;
-            const amount = control.get('amount')?.value;
+        
+        let hasAmountButNoAccount = !transactions[0].selectedAccount.UniqueName;
+        // First filter transactions that have selected accounts
+        transactions = transactions.filter(control => {
+            const selectedAccount = control.selectedAccount;
+            const amount = control.amount;
             
-            // Check if account is not selected (both particular and selectedAccount should be empty)
-            const isAccountNotSelected = (!particular || particular === '') ||
-                                        (!selectedAccount || !selectedAccount.UniqueName);
-            
-            return isAccountNotSelected && amount && parseFloat(amount) > 0;
+            // Transaction has selected account if selectedAccount is valid
+            const hasSelectedAccount = (selectedAccount && selectedAccount.UniqueName);
+            hasAmountButNoAccount = hasAmountButNoAccount || (!hasSelectedAccount && amount && parseFloat(amount) > 0);
+            return hasSelectedAccount;
         });
 
-        if (hasIncompleteTransactions) {
-            this._toaster.errorToast(this.localeData?.select_account_or_remove_amount, this.commonLocaleData?.app_error);
+        // Show message if there are incomplete transactions or if no transactions have selected accounts
+        if (hasAmountButNoAccount || transactions.length === 0) {
+            this._toaster.showSnackBar("error", this.localeData?.blank_particular_error);
             this.activeRowType = null;
             setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
-            return null;
-        }
+            return [];
+        } 
 
         const validEntries = transactions;
-
         for (const obj of validEntries) {
             if (!obj.amount) {
                 obj.amount = 0;
@@ -2898,6 +2899,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         if (!transactionsFormArray) {
             return;
         }
+
+        this.showLedgerAccountList = false;
+        this.closeDiscountSidebar();
+        this.closeTaxSidebar();
         
         // Ensure activeRowIndex is within valid bounds
         const maxRowIndex = transactionsFormArray.length - 1;
@@ -2982,18 +2987,30 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         const elements = this.eleRef?.nativeElement?.querySelectorAll('.list-item');
         let key = event.which;
         if (this.showDiscountSidebar || this.showTaxSidebar || this.showLedgerAccountList) {
-            if (key === this.KEYS.ESC || key === this.KEYS.TAB || (key === this.KEYS.UP && event.altKey)) {
-                this.closeDiscountSidebar();
-                this.closeTaxSidebar();
-            } else if (key === this.KEYS.ENTER) {
-                if (this.virtualScrollViewport){
-                    const renderedRange = this.virtualScrollViewport.getRenderedRange();
-                    const relativeIndex = this.selectedIndex - renderedRange.start;
-                    const selectedElement = elements[relativeIndex];
-                    const anchorElement = selectedElement?.firstChild as HTMLElement;
-                    anchorElement?.click();
-                } else if (this.showLedgerAccountList) {
-                    this.addNewAccount();
+            if (key === this.KEYS.ENTER || key === this.KEYS.TAB) {
+                event.preventDefault();
+                const selectCurrentElement = () => {
+                    if (this.virtualScrollViewport) {
+                        const renderedRange = this.virtualScrollViewport.getRenderedRange();
+                        const relativeIndex = this.selectedIndex - renderedRange.start;
+                        const selectedElement = elements[relativeIndex];
+                        const anchorElement = selectedElement?.firstChild as HTMLElement;
+                        anchorElement?.click();
+                    }
+                };
+
+                if (key === this.KEYS.ENTER) {
+                    if (this.virtualScrollViewport) {
+                        selectCurrentElement();
+                    } else if (this.showLedgerAccountList) {
+                        this.addNewAccount();
+                    }
+                } else if (key === this.KEYS.TAB) {
+                    if (this.virtualScrollViewport && this.showLedgerAccountList) {
+                        selectCurrentElement();
+                    } else {
+                        this.changeTab('tab', this.activeRowType);
+                    }
                 }
             } else if (key === this.KEYS.UP) {
                 event.preventDefault();

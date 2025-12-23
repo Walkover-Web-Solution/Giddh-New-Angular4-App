@@ -102,11 +102,9 @@
                                                 [ngClass]="{ 'focus': activeRowIndex === i && activeRowType === 'account' }"
                                                 (keydown.Tab)="
                                                     validateAccount(transaction, $event, i);
-                                                    showLedgerAccountList = false;
-                                                    changeTab('tab', 'account')
                                                 "
                                                 (keydown.Shift.Tab)="
-                                                    showLedgerAccountList = false; changeTab('shift', 'account')
+                                                    changeTab('shift', 'account')
                                                 "
                                                 (keydown.Enter)="
                                                     showLedgerAccountList === false && showDiscountSidebar === false && showTaxSidebar === false && ($event.stopPropagation() || handleTransactionFocus(i))
