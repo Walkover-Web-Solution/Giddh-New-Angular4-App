@@ -150,15 +150,13 @@
                                     <div class="d-flex align-items-center">
                                         <div
                                             class="vouchers-form-fields w-100"
-                                            [cdkTrapFocus]="
-                                                !(invoiceType.isCashInvoice
-                                                    ? invoiceForm.controls['account'].get('customerName')?.value
-                                                    : invoiceForm.controls['account'].get('uniqueName')?.value)
-                                            "
+                                            [cdkTrapFocus]="!isCustomerVendorSelected()"
                                         >
                                             <reactive-dropdown-field
                                                 *ngIf="!invoiceType.isCashInvoice"
-                                                appEnterNext
+                                                #customerVendorDropdown
+                                                (keydown.enter)="!isCustomerVendorSelected() && customerVendorDropdown?.openDropdownPanel()"
+                                                (keydown.tab)="!isCustomerVendorSelected() && $event.preventDefault(); customerVendorDropdown?.openDropdownPanel()"
                                                 [label]="
                                                     invoiceType.isPurchaseOrder ||
                                                     invoiceType.isPurchaseInvoice ||

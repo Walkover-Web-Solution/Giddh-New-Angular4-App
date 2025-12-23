@@ -251,8 +251,16 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         if (!this.isDestroyed && this.trigger) {
             try {
                 if (operation === 'open') {
+                    // If dropdown is already open, do not reopen
+                    if (this.trigger.panelOpen) {
+                        return;
+                    }
                     this.trigger.openPanel();
                 } else {
+                    // If dropdown is already closed, do not reclose
+                    if (!this.trigger.panelOpen) {
+                        return;
+                    }
                     this.trigger.closePanel();
                 }
             } catch (error) {

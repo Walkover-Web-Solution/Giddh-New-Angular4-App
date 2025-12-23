@@ -7358,4 +7358,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                    element.tabIndex !== -1; // Can receive focus
         });
     }
+
+    /**
+     * Checks if customer/vendor is selected
+     * 
+     * @returns {boolean} True if customer/vendor is selected
+     * @memberof VoucherCreateComponent
+     */
+    public isCustomerVendorSelected(): boolean {
+        return this.invoiceType.isCashInvoice 
+        ? this.invoiceForm.controls['account'].get('customerName')?.value 
+        : this.invoiceForm.controls['account'].get('uniqueName')?.value;
+    }
 }
