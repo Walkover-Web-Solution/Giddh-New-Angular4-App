@@ -36,7 +36,9 @@ import { COUNTRY_REGION_MAP } from '../app.constant';
 import { ServiceConfig } from '../services/service.config';
 import { findIndex, get, sortBy, startsWith } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class LoginActions {
 
     public static RESET_SOCIAL_LOGOUT_ATTEMPT = 'RESET_SOCIAL_LOGOUT_ATTEMPT';

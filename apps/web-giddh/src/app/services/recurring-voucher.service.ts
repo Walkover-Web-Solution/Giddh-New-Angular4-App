@@ -10,7 +10,9 @@ import { RECURRING_VOUCHER_API } from './apiurls/recurring-voucher.api';
 import { get } from '../lodash-optimized';
 
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class RecurringVoucherService {
 
     constructor(private errorHandler: GiddhErrorHandler,

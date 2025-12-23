@@ -10,7 +10,9 @@ import { SETTINGS_TAG_API } from './apiurls/settings.tag.api';
 import { TagRequest } from '../models/api-models/settingsTags';
 import { get } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class SettingsTagService {
     private companyUniqueName: string;
 

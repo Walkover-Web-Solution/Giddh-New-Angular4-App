@@ -1,9 +1,4 @@
-<ng-container
-    appTranslate
-    [file]="'trial-profit-balance/balance-sheet/grid'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
+<div appTranslate [file]="'trial-profit-balance/balance-sheet/grid'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <div class="tb-wrapper mt-4 clear-both">
         <div class="table-container" *ngIf="!hideData">
             <div class="income mb-2">
@@ -168,4 +163,4 @@
             </div>
         </div>
     </div>
-</ng-container>
+</div>

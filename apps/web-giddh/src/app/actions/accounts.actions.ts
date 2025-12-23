@@ -21,7 +21,9 @@ import { CommonActions } from './common.actions';
 import { LocaleService } from '../services/locale.service';
 import { forEach, set } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class AccountsAction {
     public static CREATE_ACCOUNT = 'CreateAccount';
     public static CREATE_ACCOUNT_RESPONSE = 'CreateAccountResponse';

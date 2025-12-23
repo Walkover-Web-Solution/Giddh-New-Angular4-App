@@ -1,0 +1,54 @@
+:host {
+    display: block;
+}
+
+.input-wrapper {
+    &> * {
+        pointer-events: auto;
+    }
+}
+.flag {
+    font-size: 16px;
+    line-height: 1;
+    min-width: 20px;
+    text-align: center;
+}
+
+.flag-image {
+    width: 20px;
+    height: 15px;
+    object-fit: cover;
+    box-shadow: 0px 0px 1px 0px #888;
+    min-width: 20px;
+}
+
+.selected-country-trigger {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding-right: 5px;
+}
+
+.dial-code {
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.country-option {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 0;
+    width: 100%;
+
+    .country-name {
+        font-size: 14px;
+        font-weight: 500;
+    }
+
+    .native-name {
+        font-size: 12px;
+        font-style: italic;
+        margin-right: 8px;
+    }
+}

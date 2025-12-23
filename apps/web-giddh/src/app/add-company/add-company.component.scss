@@ -1,0 +1,91 @@
+.add-company-wrapper {
+    padding: 15px;
+    max-width: 600px;
+    margin: 0 auto;
+
+    ::ng-deep .mat-step-icon {
+        .mat-step-icon-content {
+            font-size: 14px !important;
+            font-weight: 500;
+            color: var(--color-white);
+        }
+    }
+
+    form {
+        p {
+            color: var(--color-dark-gray);
+        }
+
+        .mobile-number {
+            position: relative;
+            padding-right: 6px;
+
+            .flag-input {
+                z-index: 2 !important;
+            }
+
+            .country-flag {
+                position: absolute;
+                top: 50%;
+                left: 25px;
+                z-index: 1 !important;
+                transform: translateY(-50%);
+
+                img {
+                    height: 14px;
+                }
+            }
+
+            input {
+                height: 46px;
+                width: 100%;
+                border-radius: var(--mat-border-radius-8) !important;
+                border: 1px solid var(--border-color);
+            }
+        }
+
+        .country-space {
+            padding-right: 6px;
+            height: 49px !important;
+        }
+
+        .currency-space {
+            padding-left: 6px;
+        }
+
+        .mobile-no-action-buttons {
+            padding-left: 6px;
+            padding-top: 6.5px;
+        }
+
+        .otp-input {
+            padding-right: 6px;
+        }
+
+        .btn-min-width {
+            min-width: 84px;
+        }
+
+        .send-otp-btn {
+            min-width: 112px;
+        }
+    }
+
+    .inc-dec {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+
+        .plus-minus {
+            display: flex;
+            justify-content: center;
+
+            button {
+                min-width: 14px;
+                padding: 0 5px;
+            }
+        }
+    }
+}

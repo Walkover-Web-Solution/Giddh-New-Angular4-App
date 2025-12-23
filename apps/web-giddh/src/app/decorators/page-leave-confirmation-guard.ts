@@ -10,7 +10,9 @@ export interface ComponentCanDeactivate {
     canDeactivate: () => Promise<boolean> | boolean;
 }
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class PageLeaveConfirmationGuard  {
     /** Maintains if we can by pass all unsaved changes */
     private bypassAllUnsavedChanges: boolean = false;

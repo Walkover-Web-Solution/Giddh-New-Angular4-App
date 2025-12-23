@@ -10,7 +10,9 @@ import { Observable } from 'rxjs';
 import { DownloadsRequest, DownloadsResponse } from '../models/api-models/downloads';
 import { get } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class DownloadsService {
 
     /** This will hold the company uniquename */

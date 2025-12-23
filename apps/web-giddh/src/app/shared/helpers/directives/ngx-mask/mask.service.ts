@@ -4,7 +4,9 @@ import { DOCUMENT } from '@angular/common';
 import { MaskApplierService, Separators } from './mask-applier.service';
 import { filter, includes, indexOf, isArray, map, slice, startsWith } from '../../../../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class MaskService extends MaskApplierService {
     public validation: boolean = true;
     public maskExpression: string = '';

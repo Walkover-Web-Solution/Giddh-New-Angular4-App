@@ -18,7 +18,9 @@ import { GeneralService } from 'apps/web-giddh/src/app/services/general.service'
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 import { LocaleService } from '../services/locale.service';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class GroupWithAccountsAction {
     public static SHOW_ADD_NEW_FORM = 'SHOW_ADD_NEW_FORM';
     public static HIDE_ADD_NEW_FORM = 'HIDE_ADD_NEW_FORM';

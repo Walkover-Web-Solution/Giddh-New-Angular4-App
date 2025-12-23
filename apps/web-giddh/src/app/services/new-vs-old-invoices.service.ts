@@ -10,7 +10,9 @@ import { BaseResponse } from '../models/api-models/BaseResponse';
 import { NewVsOldInvoicesRequest, NewVsOldInvoicesResponse } from '../models/api-models/new-vs-old-invoices';
 import { get } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class NewVsOldInvoicesService {
     private companyUniqueName: string;
 

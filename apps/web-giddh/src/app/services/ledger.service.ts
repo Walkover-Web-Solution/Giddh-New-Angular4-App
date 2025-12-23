@@ -16,7 +16,9 @@ import { PAGINATION_LIMIT } from '../app.constant';
 import { HttpBackend, HttpClient } from '@angular/common/http';
 import { cloneDeep, concat, forEach, get } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class LedgerService {
     private companyUniqueName: string;
     private httpClient: HttpClient

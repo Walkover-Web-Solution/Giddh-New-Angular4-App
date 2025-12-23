@@ -1,0 +1,18 @@
+.onboarding {
+    .onboarding-steps {
+        $size: 120px;
+        height: $size;
+        width: $size;
+
+        .step-icon {
+            $stepSize: 56px;
+            height: $stepSize;
+            width: $stepSize;
+            line-height: $stepSize;
+        }
+    }
+
+    mat-divider {
+        width: 50px;
+    }
+}

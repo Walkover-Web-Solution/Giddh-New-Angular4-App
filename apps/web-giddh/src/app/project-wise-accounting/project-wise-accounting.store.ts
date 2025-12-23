@@ -50,7 +50,9 @@ export const DEFAULT_PROJECT_ACCOUNTING_STATE: ProjectAccountingState = {
     totalRevenueAndExpense: 0
 };
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class ProjectWiseAccountingComponentStore extends ComponentStore<ProjectAccountingState> implements OnDestroy {
 
     constructor(private toasterService: ToasterService,

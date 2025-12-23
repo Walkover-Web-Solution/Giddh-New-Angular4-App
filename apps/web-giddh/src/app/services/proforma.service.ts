@@ -11,7 +11,9 @@ import { ESTIMATES_API, PROFORMA_API } from './apiurls/proforma.api';
 import { VoucherClass } from '../models/api-models/Sales';
 import { get } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class ProformaService {
     private companyUniqueName: string;
 

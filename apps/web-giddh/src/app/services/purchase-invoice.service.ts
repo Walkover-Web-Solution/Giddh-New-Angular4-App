@@ -78,7 +78,9 @@ export class GeneratePurchaseInvoiceRequest {
     public taxes: ITaxResponse[];
 }
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class PurchaseInvoiceService {
     private companyUniqueName: string;
 

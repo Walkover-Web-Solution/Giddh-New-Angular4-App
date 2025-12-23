@@ -6,7 +6,9 @@ import { LoaderService } from "../loader/loader.service";
 import { GeneralService } from "./general.service";
 import { get, keys, map } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class HttpWrapperService {
     constructor(
         private http: HttpClient,

@@ -1,0 +1,48 @@
+.total-box {
+    padding: 5px 0;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+    margin: 10px 0;
+    font-size: var(--font-size-15);
+    border-color: var(--border-color);
+    margin-bottom: 3px;
+}
+
+.total-box > span {
+    margin: 0 8px;
+    display: inline-block;
+    min-width: 80px;
+}
+
+.sidebar-menu {
+    min-height: 100vh;
+    background: var(--color-black);
+    color: var(--color-white);
+    float: right;
+    position: relative;
+}
+
+.sidebar-list {
+    width: 300px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: calc(100vh - 61px);
+    overflow: hidden;
+    padding: 0 !important;
+    border: 0;
+    z-index: 0;
+    border-left: 1px solid var(--border-color);
+}
+
+.sidebar-list p {
+    background: var(--color-white);
+}
+
+:host ::ng-deep .menu {
+    box-shadow: none !important;
+}
+
+:host ::ng-deep .menu {
+    border-left: 0 !important;
+}

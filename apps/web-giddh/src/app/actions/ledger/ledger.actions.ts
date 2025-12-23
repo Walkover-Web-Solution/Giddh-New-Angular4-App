@@ -19,7 +19,9 @@ import { LocaleService } from '../../services/locale.service';
 import { GeneralService } from '../../services/general.service';
 import { forEach, isArray } from '../../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class LedgerActions {
 
     public GetTransactions$: Observable<Action> = createEffect(() => this.action$

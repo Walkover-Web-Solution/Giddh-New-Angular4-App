@@ -22,7 +22,9 @@ export const DEFAULT_CUSTOM_EMAIL_STATE: CustomEmailState = {
     accountGroupList: null
 };
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class CustomEmailComponentStore extends ComponentStore<CustomEmailState> implements OnDestroy {
 
     constructor(

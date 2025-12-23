@@ -17,7 +17,9 @@ interface IBankRefreshResponse {
     message: string;
 }
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class ContactService {
     private companyUniqueName: string;
 

@@ -6,7 +6,9 @@ import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 import { includes } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class NeedsAuthorization {
 
     constructor(public router: Router, /* private permissionDataService: PermissionDataService, */ private generalService: GeneralService) {

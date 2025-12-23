@@ -10,7 +10,9 @@ import { CreateDiscountRequest, IDiscountList } from '../models/api-models/Setti
 import { SETTINGS_DISCOUNT_API } from './apiurls/settings.discount';
 import { get } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class SettingsDiscountService {
     private companyUniqueName: string;
 

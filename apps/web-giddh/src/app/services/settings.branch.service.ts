@@ -11,7 +11,9 @@ import { BranchFilterRequest } from '../models/api-models/Company';
 import { COMPANY_API } from './apiurls/company.api';
 import { concat, get } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class SettingsBranchService {
     private companyUniqueName: string;
 

@@ -16,7 +16,9 @@ export const DEFAULT_STATE: SalesBifurcationDetailsState = {
     salesBifurcationDetailsListInProgress: false
 };
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class SalesBifurcationDetailsStore extends ComponentStore<SalesBifurcationDetailsState> implements OnDestroy {
     constructor(
         private toasterService: ToasterService,

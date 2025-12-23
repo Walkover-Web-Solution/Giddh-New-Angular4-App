@@ -1,0 +1,55 @@
+<div
+    appTranslate
+    [file]="'email-forwarding'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <hamburger-menu></hamburger-menu>
+    <div class="container-fluid h-100 onboarding p-3">
+        <!-- Loading State -->
+        <div *ngIf="isCheckingExistingData" class="row justify-content-center align-items-center h-100">
+            <div class="col-12 text-center">
+                <giddh-page-loader></giddh-page-loader>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div *ngIf="!isCheckingExistingData" class="row justify-content-center align-items-center h-100">
+            <div class="col-md-8 col-lg-6">
+                <h1 class="font-size-20 font-weight-bold mb-2 text-center">{{ localeData?.import_vouchers_title }}</h1>
+                <p class="text-light line-height-24 text-center">
+                    {{ localeData?.import_vouchers_description }}
+                </p>
+                <div class="d-flex align-items-center justify-content-center my-4 column-gap-2">
+                    <div
+                        class="onboarding-steps text-center d-flex align-items-center justify-content-center flex-column row-gap-1"
+                    >
+                        <span class="step-icon text-center theme-primary-light border-radius-circle">📨</span>
+                        <p class="font-size-14">{{ localeData?.create_custom_email }}</p>
+                    </div>
+                    <mat-divider></mat-divider>
+                    <div
+                        class="onboarding-steps text-center d-flex align-items-center justify-content-center flex-column row-gap-1"
+                    >
+                        <span class="step-icon text-center theme-primary-light border-radius-circle">🔀</span>
+                        <p class="font-size-14">
+                            {{ localeData?.email_forwarding }}
+                        </p>
+                    </div>
+                    <mat-divider></mat-divider>
+                    <div
+                        class="onboarding-steps text-center d-flex align-items-center justify-content-center flex-column row-gap-1"
+                    >
+                        <span class="step-icon text-center theme-primary-light border-radius-circle">✅</span>
+                        <p class="font-size-14">{{ localeData?.verify_start }}</p>
+                    </div>
+                </div>
+                <div class="text-center pt-1">
+                    <button mat-raised-button color="primary" (click)="getEmail()" class="width-80 mb-5">
+                        {{ commonLocaleData?.app_start }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

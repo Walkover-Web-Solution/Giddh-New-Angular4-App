@@ -7,7 +7,9 @@ import { AppState } from "../store";
 import { Store } from "@ngrx/store";
 import { remove } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class PageLeaveUtilityService {
     constructor(
         private dialog: MatDialog,

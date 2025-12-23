@@ -23,7 +23,9 @@ export class AuthServiceConfig {
     }
 }
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class AuthService {
 
     get authState(): Observable<SocialUser> {

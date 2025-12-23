@@ -23,7 +23,9 @@ export const DEFAULT_ADJUSTINVENTORYLIST_STATE: AdjustInventoryListState = {
     deleteAdjustInventoryIsSuccess: null
 };
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class AdjustInventoryListComponentStore extends ComponentStore<AdjustInventoryListState> implements OnDestroy {
 
     constructor(

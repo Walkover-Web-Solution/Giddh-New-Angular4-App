@@ -37,7 +37,9 @@ const DEFAULT_STATE: InventoryState = {
     updateInventoryVariantSuccess:null
 };
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class InventoryComponentStore extends ComponentStore<any> {
     constructor(
         private store: Store<AppState>,

@@ -1,0 +1,121 @@
+<div class="row mt-5">
+    <div class="col-xs-12 col-sm-12">
+        <div class="export-data-form">
+            <div class="d-flex flex-wrap">
+                <div
+                    class="file-type-label mr-3 linked-entities"
+                    *ngIf="currentCompanyBranches?.length > 1 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
+                >
+                    <label class="d-block">{{commonLocaleData?.app_entity}}</label>
+                    <div class="form-group">
+                        <reactive-dropdown-field
+                            [options]="currentCompanyBranches"
+                            [(ngModel)]="currentBranch.uniqueName"
+                            (selectedOption)="handleBranchChange($event)"
+                            [enableDynamicSearch]="true"
+                            [placeholder]="commonLocaleData?.app_select_entity"
+                            [labelValue]="currentBranch?.name"
+                        ></reactive-dropdown-field>
+                    </div>
+                </div>
+                <div class="mr-3 file-type-label">
+                    <label class="d-block">{{localeData?.file_type}}</label>
+                    <reactive-dropdown-field
+                        [placeholder]="'Select'"
+                        [name]="'file-type'"
+                        [(ngModel)]="fileType"
+                        [options]="fileTypes"
+                    ></reactive-dropdown-field>
+                </div>
+                <div class="mr-3" *ngIf="mode === 'export' && fileType === '0'">
+                    <label class="d-block">{{localeData?.data_range}}</label>
+                    <div class="custom-datepicker-wrapper">
+                        <div 
+                            class="custom-datepicker" 
+                            [matMenuTriggerFor]="universalDatepicker"
+                            #universalDatepickerTrigger="matMenuTrigger"
+                            role="button"
+                            aria-haspopup="true"
+                            aria-controls="universalDatepicker"
+                        >
+                            <input
+                                matInput
+                                type="text"
+                                name="selectedDateRange"
+                                [value]="(selectedDateRangeUi) ? selectedDateRangeUi : ''"
+                                class="giddh-datepicker date-range-picker"
+                                readonly
+                            />
+                        </div>
+                    </div>
+                </div>
+                <button
+                    mat-raised-button color="primary"
+                    *ngIf="mode === 'export'"
+                    (click)="save()"
+                    [ladda]="isExportInProcess$ | async"
+                    [disabled]="(!fileType || !from || !to)"
+                >
+                    {{commonLocaleData?.app_export}}
+                </button>
+                <div class="select-file-label mr-3" *ngIf="mode === 'import'">
+                    <label class="d-block">{{localeData?.select_file}}</label>
+
+                    <div class="form-group input-upload">
+                        <div class="input-file">
+                            <label for="fileUpload" class="form-control text-ellipsis">
+                                <span class="text-green" *ngIf="selectedFile"> {{ selectedFile?.name }} </span>
+                                <span *ngIf="!selectedFile"> {{localeData?.browse_file}} </span></label
+                            >
+                            <input
+                                type="file"
+                                id="fileUpload"
+                                accept="application/json"
+                                class="d-none"
+                                (change)="fileSelected($event.target.files)"
+                            />
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <button
+                        mat-raised-button color="primary"
+                        *ngIf="mode === 'import'"
+                        (click)="save()"
+                        [ladda]="isImportInProcess$ | async"
+                        [disabled]="(!fileType || !selectedFile)"
+                    >
+                        {{commonLocaleData?.app_import}}
+                    </button>
+                </div>
+            </div>
+            <div>
+                <label class="d-block">&nbsp;</label>
+                <button mat-stroked-button class="pull-right back-to-import" (click)="backButtonPressed()">
+                    {{commonLocaleData?.app_back}}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+    <ng-template matMenuContent>
+        <app-datepicker-wrapper
+            [inputStartDate]="selectedDateRange?.startDate"
+            [inputEndDate]="selectedDateRange?.endDate"
+            [alwaysShowCalendars]="true"
+            [ranges]="datePickerOptions"
+            [selectedRangeLabel]="selectedRangeLabel"
+            [showCustomRangeLabel]="true"
+            [showClearButton]="false"
+            [showCancel]="true"
+            [linkedCalendars]="true"
+            [showDropdowns]="true"
+            (rangeClicked)="dateSelectedCallback($event)"
+            (datesUpdated)="dateSelectedCallback($event)"
+            (closeCalender)="toggleGiddhDatepicker(false)"
+            [keepCalendarOpeningWithRange]="false"
+            [showRangeLabelOnInput]="false"
+        ></app-datepicker-wrapper>
+    </ng-template>
+</mat-menu>

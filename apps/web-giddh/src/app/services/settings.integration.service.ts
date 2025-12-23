@@ -11,7 +11,9 @@ import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { HttpMethod } from '../app.constant';
 import { get } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class SettingsIntegrationService {
     private companyUniqueName: string;
 

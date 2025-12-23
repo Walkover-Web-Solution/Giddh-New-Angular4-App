@@ -1,0 +1,64 @@
+.virtual-group-list {
+    height: 100%;
+    min-height: 500px;
+}
+
+.grp-list {
+    padding: 0 !important;
+
+    .account-list {
+        padding: 9px 12px !important;
+    }
+}
+
+.highlighted {
+    color: var(--text-primary-color) !important;
+    background-color: var(--color-border-light) !important;
+
+    & > a {
+        color: var(--text-primary-color) !important;
+    }
+}
+
+.account-list:hover {
+    color: var(--text-primary-color) !important;
+    background-color: var(--color-border-light) !important;
+}
+
+.text-overflow-ellipsis {
+    .list-item {
+        text-overflow: ellipsis;
+        width: 255px;
+    }
+}
+
+.voucher-heading {
+    padding: 10px;
+    font-weight: bolder;
+}
+
+.current-balance {
+    font-size: var(--font-size-15);
+    font-style: italic;
+    color: var(--color-black);
+    padding-left: 70px;
+}
+
+.new-account-form {
+    .check-clearance-date {
+        .form-control[readonly] {
+            background-color: var(--color-white) !important;
+        }
+    }
+}
+
+::ng-deep .account-wrapper {
+    .from-or-to-acc[type="text"],
+    .form-control.debit-credit[type="text"] {
+        border: 1px solid var(--border-color) !important;
+    }
+}
+
+.custom-height {
+    height: calc(100% - 35px);
+}

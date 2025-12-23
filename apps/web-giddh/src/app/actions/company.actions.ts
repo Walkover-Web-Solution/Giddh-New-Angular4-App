@@ -26,7 +26,9 @@ import { AppState } from '../store/roots';
 import { COMMON_ACTIONS } from './common.const';
 import { findIndex } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 
 export class CompanyActions {
     public static CREATE_COMPANY = 'CompanyCreate';

@@ -42,7 +42,9 @@ import { cloneDeep, concat, get } from '../lodash-optimized';
 
 declare var _: any;
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class InventoryService {
     private companyUniqueName: string;
     private _: any;

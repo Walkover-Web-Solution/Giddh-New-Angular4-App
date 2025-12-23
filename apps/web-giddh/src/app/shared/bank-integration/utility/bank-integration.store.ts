@@ -25,7 +25,9 @@ export const DEFAULT_BANK_INTEGRATION_STATE: BankIntegrationState = {
     deleteAccountSuccess: null
 };
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class BankIntegrationComponentStore extends ComponentStore<BankIntegrationState> implements OnDestroy {
 
     constructor(

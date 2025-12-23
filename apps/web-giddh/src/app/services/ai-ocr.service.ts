@@ -10,7 +10,9 @@ import { GeneralService } from "./general.service";
 import { AI_OCR_API } from "./apiurls/ai-ocr.api";
 import { forEach, get, keys } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class AiOcrService {
     /** Provides date manipulation utilities using the dayjs library. */
     public dayjs = dayjs;

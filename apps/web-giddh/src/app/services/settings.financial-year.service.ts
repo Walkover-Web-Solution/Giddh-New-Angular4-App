@@ -22,7 +22,9 @@ export interface IFinancialYearResponse {
     financialYearPeriod: string;
 }
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class SettingsFinancialYearService {
     private companyUniqueName: string;
 

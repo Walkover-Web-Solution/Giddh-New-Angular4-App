@@ -10,7 +10,9 @@ import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
  * @class SettingsDeactivateGuard
  * @implements {CanDeactivate<SettingsComponent>}
  */
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class SettingsDeactivateGuard  {
 
     /**

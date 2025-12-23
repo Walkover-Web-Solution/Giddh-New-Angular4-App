@@ -1,0 +1,40 @@
+<div
+    appTranslate
+    [file]="'journal-voucher'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
+    <div class="row mr-0 ml-0 full-viewport-height">
+        <account-as-voucher
+            class="col-md-12 col-lg-10 account-wrapper"
+            [currentDate]="currentDate"
+            [saveEntryOnCtrlA]="saveEntryInVoucher"
+            [openDatePicker]="openDatePicker"
+            [openCreateAccountPopup]="openCreateAccountPopupInVoucher"
+            [hidden]="gridType !== 'voucher'"
+            [isCompany]="isCompany"
+            [isConsolidatedBranch]="isConsolidatedBranch"
+            [localeData]="localeData"
+            [commonLocaleData]="commonLocaleData"
+            [showDiscount]="showDiscountEvent"
+            [showTax]="showTaxEvent"
+            (hideDiscountSidebar)="showDiscountEvent = false"
+            (hideTaxSidebar)="showTaxEvent = false"
+            (showDiscountAndTax)="getSalesEntryEvent($event)"
+        >
+        </account-as-voucher>
+
+        <input type="hidden" [attr.data-gridType]="gridType" id="get-grid-type" />
+
+        <div class="sidebar-menu col-md-12 col-lg-2 p-0">
+            <accounting-sidebar
+                (showDiscountEvent)="showDiscountEvent = $event"
+                (showTaxEvent)="showTaxEvent = $event"
+                [commonLocaleData]="commonLocaleData"
+                [localeData]="localeData"
+                [showDiscountAndTax]="showDiscountAndTax"
+            ></accounting-sidebar>
+        </div>
+    </div>
+</div>

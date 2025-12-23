@@ -8,7 +8,9 @@ import { ROUTES } from '../routes-array';
 import { ReplaySubject } from 'rxjs';
 import { findIndex, forEach, get, includes, startsWith } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class UserAuthenticated  {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     constructor(public router: Router, private store: Store<AppState>, private zone: NgZone) {

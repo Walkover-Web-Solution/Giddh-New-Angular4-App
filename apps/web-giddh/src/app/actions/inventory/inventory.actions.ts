@@ -15,7 +15,9 @@ import { BranchTransferResponse, LinkedStocksResponse, TransferDestinationReques
 import { SalesActions } from '../sales/sales.action';
 import { forEach } from '../../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class InventoryAction {
     /** Holds Get bulk list stock key name  */
     public static GET_BULK_STOCK_LIST = 'GetBulkStockList';

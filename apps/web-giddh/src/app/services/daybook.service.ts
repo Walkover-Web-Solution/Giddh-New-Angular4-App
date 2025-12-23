@@ -11,7 +11,9 @@ import { DayBookResponseModel } from '../models/api-models/Daybook';
 import { DAYBOOK_SEARCH_API } from './apiurls/daybook.api';
 import { concat, get } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class DaybookService {
     private companyUniqueName: string;
 

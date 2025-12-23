@@ -13,7 +13,9 @@ import { GeneralService } from './general.service';
 import { TaxSupportedCountries, TaxType } from '../vouchers/utility/vouchers.const';
 import { get } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class SubscriptionsService {
     public dayjs = dayjs;
 

@@ -30,7 +30,9 @@ export const DEFAULT_SETTING_INTEGRATION_STATE: SettingIntegrationState = {
     getAllBankAccountsList: null
 };
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class SettingIntegrationComponentStore extends ComponentStore<SettingIntegrationState> implements OnDestroy {
 
     constructor(

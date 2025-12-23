@@ -12,7 +12,9 @@ export class TemplateContentUISectionVisibility {
     public footer: boolean = false;
 }
 declare var _: any;
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 
 export class InvoiceUiDataService {
     /** Holds the current custom template data */

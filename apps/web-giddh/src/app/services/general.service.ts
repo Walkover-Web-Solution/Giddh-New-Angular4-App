@@ -25,7 +25,9 @@ import { PageLeaveUtilityService } from './page-leave-utility.service';
 import { Configuration } from '../app.constant';
 import { cloneDeep, concat, find, findIndex, forEach, includes, indexOf, keys, map, orderBy, remove, set, slice, some } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class GeneralService {
     invokeEvent: Subject<any> = new Subject();
     public isCurrencyPipeLoaded: boolean = false;

@@ -14,7 +14,9 @@ import { Store } from '@ngrx/store';
 import { LoginActions } from '../actions/login.action';
 import { clone, forEach, get, has, includes, keys, set } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class GiddhHttpInterceptor implements HttpInterceptor {
 
     private isOnline: boolean = true;

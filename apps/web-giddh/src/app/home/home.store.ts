@@ -19,7 +19,9 @@ const DEFAULT_STATE: HomeState = {
     isBankRefreshingError: false
 };
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class HomeComponentStore extends ComponentStore<HomeState> {
 
     constructor(

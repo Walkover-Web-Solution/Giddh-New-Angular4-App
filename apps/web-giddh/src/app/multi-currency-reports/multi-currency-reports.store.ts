@@ -18,7 +18,9 @@ const DEFAULT_STATE: MultiCurrencyReportsState = {
     filterRequestData: null
 };
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class MultiCurrencyReportsComponentStore extends ComponentStore<MultiCurrencyReportsState> {
 
     constructor(

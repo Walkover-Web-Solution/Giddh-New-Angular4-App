@@ -1,0 +1,94 @@
+<div
+    appTranslate
+    [file]="'email-forwarding'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <hamburger-menu></hamburger-menu>
+    <div class="container-fluid p-3">
+        <!-- Header Section -->
+        <div class="row mb-3">
+            <div class="col-12">
+                <button mat-raised-button color="primary" (click)="createNew()">
+                    <i class="icon-plus mr-2"></i>
+                    {{ localeData?.new_email_address }}
+                </button>
+            </div>
+        </div>
+
+        <!-- Data Table Section -->
+        <div class="row">
+            <div class="col-12">
+                <!-- Loading Spinner -->
+                <div *ngIf="isLoading" class="min-h-400 d-flex justify-content-center align-items-center">
+                    <giddh-page-loader></giddh-page-loader>
+                </div>
+
+                <!-- Data Table -->
+                <div *ngIf="!isLoading" class="table-responsive">
+                    <table mat-table [dataSource]="dataSource" class="w-100">
+                        <!-- Forwarded Mail Column -->
+                        <ng-container matColumnDef="forwardedMail">
+                            <th mat-header-cell *matHeaderCellDef class="w-25">{{ localeData?.forwarded_mail }}</th>
+                            <td mat-cell *matCellDef="let statement" class="w-25">
+                                <span class="font-weight-medium mr-1">{{ statement.forwardedMail }}</span>
+                                <button
+                                    mat-icon-button
+                                    (click)="onCopyForwardedMail($event)"
+                                    [matTooltip]="commonLocaleData?.app_copy"
+                                    matTooltipPosition="after"
+                                    ngxClipboard
+                                    [cbContent]="statement.forwardedMail"
+                                    class="p-0"
+                                >
+                                    <i class="icon-copy cursor-pointer font-size-14 mb-2 d-inline-block"></i>
+                                </button>
+                            </td>
+                        </ng-container>
+
+                        <!-- Bank Account Name Column -->
+                        <ng-container matColumnDef="bankAccountName">
+                            <th mat-header-cell *matHeaderCellDef>{{ localeData?.bank_account_name }}</th>
+                            <td mat-cell *matCellDef="let statement">
+                                {{ statement.account?.name || "-" }}
+                            </td>
+                        </ng-container>
+
+                        <!-- Original Email Column -->
+                        <ng-container matColumnDef="originalEmail">
+                            <th mat-header-cell *matHeaderCellDef>{{ localeData?.original_email }}</th>
+                            <td mat-cell *matCellDef="let statement">{{ statement.originalEmail || "-" }}</td>
+                        </ng-container>
+
+                        <!-- Actions Column -->
+                        <ng-container matColumnDef="actions">
+                            <th mat-header-cell *matHeaderCellDef class="text-center">
+                                {{ commonLocaleData?.app_actions }}
+                            </th>
+                            <td mat-cell *matCellDef="let statement" class="text-center">
+                                <button
+                                    mat-icon-button
+                                    [matTooltip]="commonLocaleData?.app_delete"
+                                    matTooltipPosition="after"
+                                    color="warn"
+                                    class="d-inline-flex justify-content-center align-items-center hover-target"
+                                    (click)="$event.stopPropagation(); deleteStatement(statement.uniqueName)"
+                                >
+                                    <i class="icon-trash font-size-16"></i>
+                                </button>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr
+                            mat-row
+                            *matRowDef="let row; columns: displayedColumns"
+                            class="cursor-pointer hover-trigger"
+                            (click)="editStatement(row)"
+                        ></tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

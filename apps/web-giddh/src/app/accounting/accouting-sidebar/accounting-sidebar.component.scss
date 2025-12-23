@@ -1,0 +1,20 @@
+.menu-list {
+    padding: 0;
+
+    li {
+        a {
+            color: var(--color-black);
+            padding: 7px 12px;
+            display: block;
+            font-size: var(--font-size-15);
+
+            &:hover {
+                background: var(--theme-primary-light);
+            }
+        }
+    }
+}
+
+.active-parent {
+    background: var(--theme-primary-light);
+}

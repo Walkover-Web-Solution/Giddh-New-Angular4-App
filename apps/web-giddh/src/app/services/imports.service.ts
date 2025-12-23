@@ -10,7 +10,9 @@ import { ImportsRequest, ImportsResponse, ImportsSheetDownloadRequest } from '..
 import { IMPORTS_API } from './apiurls/imports.api';
 import { concat, get } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class ImportsService {
     /** This will hold the company uniquename */
     private companyUniqueName: string;

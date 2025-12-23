@@ -2,8 +2,8 @@ import { Routes } from "@angular/router";
 import { DummyModule } from "./dummy/dummy.module";
 
 export const ROUTES: Routes = [
-    { path: 'company/:companyUniqueName/dns', loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./dns-records/dns-records.module') */ Promise.resolve(DummyModule) },
-    { path: 'download', loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./download/download.module') */ Promise.resolve(DummyModule) },
+    { path: 'company/:companyUniqueName/dns', loadChildren: () => import('./dns-records/dns-records.module').then(module => module.DnsRecordsModule) },
+    { path: 'download', loadChildren: () => import('./download/download.module').then(module => module.DownloadModule) },
     { path: '', redirectTo: 'login', pathMatch: 'full' },
     { path: '404', component: null }, // Add proper 404 component later
     { path: 'app-login-success', component: null }, // Add proper component later
@@ -26,8 +26,8 @@ export const ROUTES: Routes = [
     { path: 'dummy', loadChildren: () => import('./dummy/dummy.module').then(module => module.DummyModule) },
     { path: 'proforma-invoice', component: null }, // Add proper component later
     { path: 'user-details', loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./subscription/subscription.module') */ Promise.resolve(DummyModule) },
-    { path: 'new-company', loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./add-company/add-company-module') */ Promise.resolve(DummyModule) },
-    { path: 'new-company/:subscriptionId', loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./add-company/add-company-module') */ Promise.resolve(DummyModule) },
+    { path: 'new-company', loadChildren: () => import('./add-company/add-company-module').then(module => module.AddcompanyModule) },
+    { path: 'new-company/:subscriptionId', loadChildren: () => import('./add-company/add-company-module').then(module => module.AddcompanyModule) },
     { path: 'onboarding', loadChildren: () => import('./onboarding/onboarding.module').then(module => module.OnboardingModule) },
     { path: 'social-login-callback', component: null }, // Add proper component later
     { path: 'invoice', redirectTo: 'pages/invoice', pathMatch: 'full' },
@@ -54,16 +54,16 @@ export const ROUTES: Routes = [
         children: [
             { path: 'home', loadChildren: () => import('./home/home.module').then(module => module.HomeModule) },
             { path: 'invoice', loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./invoice/invoice.module') */ Promise.resolve(DummyModule) },
-            { path: 'daybook', loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./daybook/daybook.module') */ Promise.resolve(DummyModule) },
+            { path: 'daybook', loadChildren: () => import('./daybook/daybook.module').then(module => module.DaybookModule) },
             { path: 'purchase', loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./purchase/purchase.module') */ Promise.resolve(DummyModule) },
             { path: 'inventory', loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./inventory/inventory.module') */ Promise.resolve(DummyModule) },
-            { path: 'inventory/v2', loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./new-inventory/new-inventory.module') */ Promise.resolve(DummyModule) },
+            { path: 'inventory/v2', loadChildren: () => import('./new-inventory/new-inventory.module').then(module => module.NewInventoryModule) },
             {
                 path: 'inventory-in-out',
                 loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./inventory-in-out/inventory-in-out.module') */ Promise.resolve(DummyModule),
                 data: { preload: true }
             },
-            { path: 'search', loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./search/search.module') */ Promise.resolve(DummyModule) },
+            { path: 'search', loadChildren: () => import('./search/search.module').then(module => module.SearchModule) },
             {
                 path: 'trial-balance-and-profit-loss',
                 loadChildren: () => import('./financial-reports/financial-reports.module').then(module => module.FinancialReportsModule),
@@ -85,29 +85,29 @@ export const ROUTES: Routes = [
             },
             {
                 path: 'journal-voucher',
-                loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./accounting/accounting.module') */ Promise.resolve(DummyModule),
+                loadChildren: () => import('./accounting/accounting.module').then(module => module.AccountingModule),
                 data: { preload: true }
             },
             { path: 'contact', loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./contact/contact.module') */ Promise.resolve(DummyModule) },
             {path: 'new-vs-old-invoices',
                 loadChildren: () => import('./new-vs-old-Invoices/new-vs-old-Invoices.module').then(module => module.NewVsOldInvoicesModule)},
-            { path: 'import', loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./import-excel/import-excel.module') */ Promise.resolve(DummyModule) },
+            { path: 'import', loadChildren: () => import('./import-excel/import-excel.module').then(module => module.ImportExcelModule) },
             { path: 'gstfiling', loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./gst/gst.module') */ Promise.resolve(DummyModule) },
             {
                 path: 'company-import-export',
-                loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./company-import-export/company-import-export.module') */ Promise.resolve(DummyModule)
+                loadChildren: () => import('./company-import-export/company-import-export.module').then(module => module.CompanyImportExportModule)
             },
             { path: 'reports', loadChildren: () => import('./reports/reports.module').then(module => module.ReportsModule) },
             { path: 'purchase-management', loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./purchase/purchase.module') */ Promise.resolve(DummyModule) },
             { path: 'verify-email', loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./verify-email/verify-email.module') */ Promise.resolve(DummyModule) },
             { path: 'billing-detail' },
             { path: 'billing-detail/buy-plan' },
-            { path: 'downloads', loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./downloads/downloads.module') */ Promise.resolve(DummyModule) },
-            { path: 'custom-fields', loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./custom-fields/custom-fields.module') */ Promise.resolve(DummyModule) },
-            { path: 'new-company', loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./add-company/add-company-module') */ Promise.resolve(DummyModule) },
+            { path: 'downloads', loadChildren: () => import('./downloads/downloads.module').then(module => module.DownloadsModule) },
+            { path: 'custom-fields', loadChildren: () => import('./custom-fields/custom-fields.module').then(module => module.CustomFieldsModule) },
+            { path: 'new-company', loadChildren: () => import('./add-company/add-company-module').then(module => module.AddcompanyModule) },
             { path: 'user-details', loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./subscription/subscription.module') */ Promise.resolve(DummyModule) },
             { path: 'ai-ocr', loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./ai-ocr/ai-ocr.module') */ Promise.resolve(DummyModule) },
-            { path: 'new-company/:subscriptionId', loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./add-company/add-company-module') */ Promise.resolve(DummyModule) },
+            { path: 'new-company/:subscriptionId', loadChildren: () => import('./add-company/add-company-module').then(module => module.AddcompanyModule) },
             { path: 'vouchers', loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./vouchers/vouchers.module') */ Promise.resolve(DummyModule) },
             { path: 'group-name', loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./group-name/group-name.module') */ Promise.resolve(DummyModule) },
             { path: '**', redirectTo: 'home', pathMatch: 'full' }

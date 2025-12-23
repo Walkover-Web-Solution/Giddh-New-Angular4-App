@@ -11,7 +11,9 @@ import { ITaxAuthority } from '../models/interfaces/tax.interface';
 import { CreateTaxAuthority, SalesTaxReport, SalesTaxReportRequest } from '../theme/tax-authority/utility/tax-authority.const';
 import { get } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class SettingsTaxesService {
     private companyUniqueName: string;
 

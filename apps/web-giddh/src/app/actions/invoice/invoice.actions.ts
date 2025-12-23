@@ -37,7 +37,9 @@ import { GeneralService } from '../../services/general.service';
 import { PAGINATION_LIMIT } from '../../app.constant';
 import { forEach, isArray } from '../../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class InvoiceActions {
 
     // get all ledgers for invoice

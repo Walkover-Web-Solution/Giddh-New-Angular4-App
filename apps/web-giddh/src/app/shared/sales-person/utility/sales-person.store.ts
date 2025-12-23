@@ -32,7 +32,9 @@ export const DEFAULT_STATE: SalesPersonState = {
     openTransferAndArchiveDialog: false
 };
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> implements OnDestroy {
     constructor(
         private toasterService: ToasterService,

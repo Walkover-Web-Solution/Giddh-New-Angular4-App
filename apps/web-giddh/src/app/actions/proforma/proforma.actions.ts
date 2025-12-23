@@ -13,7 +13,9 @@ import { ProformaFilter, ProformaGetAllVersionRequest, ProformaGetAllVersionsRes
 import { LocaleService } from '../../services/locale.service';
 import { get } from '../../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class ProformaActions {
 
     public GENERATE_PROFORMA$: Observable<Action> =

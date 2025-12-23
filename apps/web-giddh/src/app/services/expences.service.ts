@@ -11,7 +11,9 @@ import { ActionPettycashRequest, PettyCashReportResponse, PettyCashResonse } fro
 import { EXPENSE_API } from './apiurls/expense.api';
 import { get } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class ExpenseService {
     private companyUniqueName: string;
 

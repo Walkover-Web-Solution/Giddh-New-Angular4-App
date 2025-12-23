@@ -60,7 +60,7 @@ import { ActionMenuModule } from '../shared/action-menu/action-menu.module';
         MatInputModule,
         MatIconModule,
         HamburgerMenuModule,
-        // ActionMenuModule // COMMENTED OUT - Template errors with mat-menu
+        ActionMenuModule // COMMENTED OUT - Template errors with mat-menu
     ],
     providers: []
 })

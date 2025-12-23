@@ -1,0 +1,437 @@
+<div *ngIf="isLoading">
+    <giddh-page-loader></giddh-page-loader>
+</div>
+<div class="journal-voucher" *ngIf="!isLoading">
+    <form autocomplete="off" novalidate [formGroup]="journalVoucherForm">
+        <div class="mat-app-background">
+            <div class="d-flex justify-content-between align-items-center w-100">
+                <div class="text-left mb-2" (clickOutside)="showFromDatePicker = false">
+                    <span class="voucher-heading font-size-16">{{
+                        journalVoucherForm.get("voucherType").value | uppercase
+                    }}</span>
+                </div>
+                <div
+                    class="d-flex justify-content-end align-items-baseline pull-right text-right mb-2 custom-entry-date"
+                    (clickOutside)="showFromDatePicker = false"
+                >
+                    <span>{{ displayDay }},</span>
+                    <div class="entry-date-container mat-form-field-clean">
+                        <giddh-datepicker
+                            [name]="'entryDate'"
+                            [placeholder]="giddhDateFormat"
+                            [cssClass]="'form-control text-right voucher-date-field min-width-100'"
+                            formControlName="entryDate"
+                            [showToggleIcon]="false"
+                            (datepickerState)="onDateFieldFocus()"
+                            (dateSelected)="handleVoucherDateChange(); dateEntered()"
+                            (keydown.enter)="dateEntered(); activeRowIndex = 0; activeRowType = 'type'"
+                        >
+                        </giddh-datepicker>
+                    </div>
+                </div>
+            </div>
+            <div class="clear-both" [style.min-height]="'calc(-262px + 100vh)'">
+                <div class="border-top">
+                    <table class="table entry-table">
+                        <thead>
+                            <tr>
+                                <th>&nbsp;</th>
+                                <th>{{ commonLocaleData?.app_particulars }}</th>
+                                <th [style.min-width.px]="140" [style.width.px]="140" class="text-right">
+                                    {{ commonLocaleData?.app_debit }}
+                                </th>
+                                <th [style.min-width.px]="140" [style.width.px]="140" class="text-right">
+                                    {{ commonLocaleData?.app_credit }}
+                                </th>
+                            </tr>
+                        </thead>
+                        <br />
+                        <tbody>
+                            <ng-container
+                                *ngFor="
+                                    let transaction of journalVoucherForm.get('transactions')?.controls;
+                                    let i = index;
+                                    let l = last
+                                "
+                                formArrayName="transactions"
+                            >
+                                <ng-container [formGroupName]="i">
+                                    <tr (click)="activeRow(i)">
+                                        <td
+                                            class="voucher-type"
+                                            [style.width.px]="55"
+                                        >
+                                            <text-field
+                                                [autoFocus]="activeRowIndex === i && activeRowType === 'type'"
+                                                [id]="'transactionType_' + i"
+                                                [type]="'text'"
+                                                [cssClass]="'form-control text-capitalize byTo'"
+                                                [readonly]="
+                                                    (i === 0 && !isFirstRowDeleted) ||
+                                                    transaction?.get('isDiscountApplied')?.value
+                                                "
+                                                formControlName="type"
+                                                (click)="selectRow('type', i)"
+                                                (input)="resetAccountOnTypeChange(transaction)"
+                                                [ngClass]="{ 'focus': activeRowIndex === i && activeRowType === 'type' }"
+                                                [value]="transaction.get('type')?.value | lowercase"
+                                                [maxlength]="'2'"
+                                                [autocomplete]="'off'"
+                                                (keydown.Enter)="$event.stopPropagation(); changeTab('enter', 'type')"
+                                                (keydown.Shift.Tab)="$event.stopPropagation(); changeTab('shift', 'type')"
+                                                (keydown.Tab)="$event.stopPropagation(); changeTab('tab', 'type')"
+                                            ></text-field>
+                                        </td>
+                                        <td
+                                            class="particular-account"
+                                            formGroupName="selectedAccount"
+                                        >
+                                            <text-field
+                                                [autoFocus]="activeRowIndex === i && activeRowType === 'account'"
+                                                [autocomplete]="'off'"
+                                                [id]="'transactionAccount_' + i"
+                                                [type]="'text'"
+                                                [cssClass]="'form-control from-or-to-acc'"
+                                                [required]="transaction.get('amount')?.value"
+                                                formControlName="account"
+                                                (click)="handleTransactionFocus(i)"
+                                                (input)="
+                                                    searchedAccountQuery.next({event: $event, transaction: transaction});
+                                                "
+                                                (blur)="onAccountBlur($event)"
+                                                [ngClass]="{ 'focus': activeRowIndex === i && activeRowType === 'account' }"
+                                                (keydown.Tab)="
+                                                    validateAccount(transaction, $event, i);
+                                                    showLedgerAccountList = false;
+                                                    changeTab('tab', 'account')
+                                                "
+                                                (keydown.Shift.Tab)="
+                                                    showLedgerAccountList = false; changeTab('shift', 'account')
+                                                "
+                                                (keydown.Enter)="
+                                                    showLedgerAccountList === false && showDiscountSidebar === false && showTaxSidebar === false && ($event.stopPropagation() || handleTransactionFocus(i))
+                                                "
+                                                (change)="removeAmountIfAccountRemoved(transaction, i)"
+                                            ></text-field>
+                                        </td>
+                                        <td
+                                            class="amount1"
+                                        >
+                                            <text-field
+                                                [readonly]="
+                                                    transaction?.get('isDiscountApplied')?.value ||
+                                                    transaction?.get('isTaxApplied')?.value
+                                                "
+                                                [id]="'transactionAmount_' + i"
+                                                (keydown.Tab)="
+                                                    updateTransactionActualAmount(transaction);
+                                                    changeTab('tab', 'amount')
+                                                "
+                                                (keydown.Shift.Tab)="
+                                                    $event.stopPropagation();
+                                                    updateTransactionActualAmount(transaction);
+                                                    changeTab('shift', 'amount')
+                                                "
+                                                *ngIf="transaction.get('type')?.value?.toLowerCase() === 'by'"
+                                                [autoFocus]="activeRowIndex === i && activeRowType === 'amount'"
+                                                [autocomplete]="'off'"
+                                                [type]="'text'"
+                                                [cssClass]="'form-control text-right debit-credit'"
+                                                decimalDigitsDirective
+                                                [mask]="inputMaskFormat"
+                                                formControlName="amount"
+                                                (click)="selectRow('amount', i)"
+                                                (input)="updateTotalCreditDebit()"
+                                                (change)="updateTransactionActualAmount(transaction)"
+                                                (keydown.Enter)="
+                                                    updateTransactionActualAmount(transaction);
+                                                    addNewEntry(transaction.get('amount')?.value, transaction, i);
+                                                    changeTab('enter', 'amount')
+                                                "
+                                                (blur)="addNewEntry(transaction.get('amount')?.value, transaction, i)"
+                                                [ngClass]="{ 'focus': activeRowIndex === i && activeRowType === 'amount' }"
+                                            ></text-field>
+                                        </td>
+                                        <td
+                                            class="amount2"
+                                        >
+                                            <text-field
+                                                [readonly]="
+                                                    transaction?.get('isDiscountApplied')?.value ||
+                                                    transaction?.get('isTaxApplied')?.value
+                                                "
+                                                *ngIf="transaction.get('type')?.value?.toLowerCase() === 'to'"
+                                                [autoFocus]="activeRowIndex === i && activeRowType === 'amount'"
+                                                [autocomplete]="'off'"
+                                                [type]="'text'"
+                                                [cssClass]="'form-control text-right debit-credit'"
+                                                #toAmountField
+                                                decimalDigitsDirective
+                                                [mask]="inputMaskFormat"
+                                                formControlName="amount"
+                                                (click)="selectRow('amount', i)"
+                                                (input)="updateTotalCreditDebit()"
+                                                (change)="updateTransactionActualAmount(transaction)"
+                                                (keydown.Enter)="
+                                                    updateTransactionActualAmount(transaction);
+                                                    addNewEntry(transaction.get('amount')?.value, transaction, i);
+                                                    changeTab('enter', 'amount')
+                                                "
+                                                (keydown.Tab)="
+                                                    updateTransactionActualAmount(transaction);
+                                                    changeTab('tab', 'amount')
+                                                "
+                                                (keydown.Shift.Tab)="
+                                                    $event.stopPropagation();
+                                                    updateTransactionActualAmount(transaction);
+                                                    changeTab('shift', 'amount')
+                                                "
+                                                (blur)="addNewEntry(transaction.get('amount')?.value, transaction, i)"
+                                                [ngClass]="{ 'focus': activeRowIndex === i && activeRowType === 'amount' }"
+                                            ></text-field>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="100%" formGroupName="selectedAccount">
+                                            <span
+                                                *ngIf="
+                                                    journalVoucherForm
+                                                        .get('transactions')
+                                                        .at(i)
+                                                        .get('selectedAccount.account')?.value &&
+                                                    transaction.get('currentBalance')?.value !== ''
+                                                "
+                                                class="current-balance d-block mb-1"
+                                            >
+                                                Current Balance:
+                                                {{ transaction.get("currentBalance")?.value | giddhNumberFormat }}
+                                                {{
+                                                    transaction.get("selectedAccount.type")?.value === "DEBIT"
+                                                        ? localeData?.dr
+                                                        : localeData?.cr
+                                                }}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                            </ng-container>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="clear-both row">
+                <div class="col-xs-9 col-sm-9">
+                    <div class="form-group">
+                        <mat-form-field appearance="outline" class="initial-height w-50" floatLabel="always">
+                            <mat-label>{{ localeData?.narration }}</mat-label>
+                            <textarea
+                                #narrationBox
+                                id="narration"
+                                formControlName="description"
+                                (keydown.Enter)="handleEnterAndTabKeyPress($event, submitButton)"
+                                (keydown.Tab)="handleEnterAndTabKeyPress($event, submitButton)"
+                                resize="false"
+                                rows="3"
+                                matInput
+                            ></textarea>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="col-xs-3 col-sm-3">
+                    <div [hidden]="!showConfirmationBox" class="confirmation-box border text-center p-2">
+                        <div>
+                            <p>{{ localeData?.accept }}</p>
+                            <div class="pt-4">
+                                <div class="d-flex column-gap-15 justify-content-center">
+                                    <button
+                                        mat-raised-button
+                                        color="primary"
+                                        [hidden]="isCompany || isConsolidatedBranch"
+                                        #submitButton
+                                        (keyup)="keyUpOnSubmitButton($event)"
+                                        (click)="saveEntry()"
+                                        type="button"
+                                        [keyboardShortcut]="'ctrl+a'"
+                                        (onShortcutPress)="openConfirmBoxFromShortcut(submitButton)"
+                                        [disabled]="voucherApiVersion === 1"
+                                    >
+                                        {{ commonLocaleData?.app_yes }}
+                                    </button>
+                                    <button
+                                        mat-stroked-button
+                                        #resetButton
+                                        (keyup)="keyUpOnResetButton($event)"
+                                        (click)="acceptCancel()"
+                                        type="button"
+                                    >
+                                        {{ commonLocaleData?.app_no }}
+                                    </button>
+                                </div>
+                                <br />
+                                <button type="button" mat-stroked-button class="mt-1" (click)="refreshEntry()">
+                                    {{ commonLocaleData?.app_reset }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-inline-block float-right min-150">
+                        <div class="d-flex flex-column">
+                            <div class="total-box text-right pull-right d-flex justify-content-end">
+                                <span
+                                    ><strong>{{ totalDebitAmount | giddhNumberFormat }}</strong></span
+                                >
+                                <span
+                                    ><strong>{{ totalCreditAmount | giddhNumberFormat }}</strong></span
+                                >
+                            </div>
+                            <span class="border-bottom custom-border float-right"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<!-- Unified Sidebar for Accounts, Discounts, and Taxes -->
+<div class="sidebar-list form-control" *ngIf="showLedgerAccountList || showDiscountSidebar || showTaxSidebar">
+    <!-- Dynamic Header -->
+    <div class="border-bottom d-flex justify-content-between align-items-center p-1 mat-app-background" *ngIf="showDiscountSidebar || showTaxSidebar">
+        <h3 class="text-primary">
+            {{ showDiscountSidebar ? localeData?.discount_list : (showTaxSidebar ? localeData?.tax_list : '') }}
+        </h3>
+        <i class="icon-cross cursor-pointer"
+           (click)="showDiscountSidebar ? closeDiscountSidebar() : closeTaxSidebar()"></i>
+    </div>
+    
+    <!-- Simple Header for Accounts -->
+    <p class="p-2 border-bottom text-black" *ngIf="showLedgerAccountList">
+        {{ localeData?.ledger_accounts_list }}
+    </p>
+    
+    <div class="mat-app-background custom-height">
+        <!-- No Data Found -->
+        <ul *ngIf="displayAccountList?.length === 0" class="grp-list group-list-no-found users-last-list">
+            <li class="list-item text-overflow-ellipsis">
+                <span class="account-list d-block w-100">{{ commonLocaleData?.app_no_data_found }}</span>
+            </li>
+            <!-- Create New Account Option (only for accounts) -->
+            <li *ngIf="showLedgerAccountList">
+                <a class="btn-link highlighted" (click)="addNewAccount()" href="javascript:void(0)">
+                    {{ commonLocaleData?.app_create_new }}
+                </a>
+            </li>
+        </ul>
+        
+        <!-- Data List -->
+        <ng-container *ngIf="displayAccountList?.length">
+            <ul class="grp-list users-last-list">
+                <cdk-virtual-scroll-viewport
+                    #virtualScrollViewport
+                    tabindex="0"
+                    class="virtual-group-list overflow-x-hidden"
+                    [itemSize]="itemSize"
+                    [minBufferPx]="400"
+                    [maxBufferPx]="800"
+                    (scrolledIndexChange)="showLedgerAccountList ? onAccountListScroll($event) : null"
+                >
+                    <li
+                        *cdkVirtualFor="let item of displayAccountList; let j = index; trackBy: trackByFn"
+                        [ngClass]="{ 'highlighted': j === (selectedIndex || 0) }"
+                        class="list-item text-overflow-ellipsis"
+                    >
+                        <a
+                            href="javascript:void(0);"
+                            class="account-list"
+                            [id]="'acc_' + item.label + '_' + j"
+                            [matTooltip]="item.label"
+                            [matTooltipPosition]="'left'"
+                            (click)="showLedgerAccountList ? onItemSelected(item) : 
+                                    (showDiscountSidebar ? toggleDiscountSelected(item) : toggleTaxSelected(item))"
+                            (keydown.enter)="showLedgerAccountList ? onItemSelected(item) : 
+                                           (showDiscountSidebar ? toggleDiscountSelected(item) : toggleTaxSelected(item))"
+                        >
+                            {{ item?.label }}
+                        </a>
+                    </li>
+                </cdk-virtual-scroll-viewport>
+            </ul>
+        </ng-container>
+    </div>
+</div>
+
+<ng-template #genericAsideMenuAccountTemplate>
+    <generic-aside-menu-account
+        [allGroups]="allGroups"
+        [keyboardShortcut]="'esc'"
+        (closeAsideEvent)="closeAccountAsidePane()"
+        [selectedGrpUniqueName]="categoryOfAccounts"
+        [selectedAccountUniqueName]="null"
+        [createAccountFromCommandK]="true"
+        (onShortcutPress)="closeAccountAsidePane()"
+        (addEvent)="addNewSidebarAccount($event)"
+        (updateEvent)="updateSidebarAccount($event)"
+        (updateViaPatchApi)="updateSidebarAccount($event, true)"
+    ></generic-aside-menu-account>
+</ng-template>
+
+<!--Modal for All Items -->
+<ng-template #chequeEntryModal>
+    <div class="dialog-header">
+        <span>{{ localeData?.cheque_details }}</span>
+    </div>
+    <mat-dialog-content class="dialog-body">
+        <form
+            *ngIf="chequeDetailForm"
+            autocomplete="off"
+            novalidate
+            name="chequeDetailForm"
+            [formGroup]="chequeDetailForm"
+            class="new-account-form"
+        >
+            <div class="clear-both mt-2">
+                <input-field
+                    [autocomplete]="'off'"
+                    [name]="'account1'"
+                    [placeholder]="localeData?.cheque_number"
+                    [type]="'text'"
+                    formControlName="chequeNumber"
+                    (keydown)="onCheckNumberFieldKeyDown($event, 'chqNumber')"
+                    [label]="localeData?.cheque_number"
+                    (keydown.enter)="$event.preventDefault()"
+                    #chequeNumberInput
+                    cdkFocusInitial
+                >
+                </input-field>
+            </div>
+            <div class="clear-both mt-2 check-clearance-date">
+                <giddh-datepicker
+                    [name]="'entryDate'"
+                    [placeholder]="giddhDateFormat"
+                    [cssClass]="'voucher-date-field'"
+                    formControlName="chequeClearanceDate"
+                    [showToggleIcon]="false"
+                    (keydown.enter)="$event.preventDefault()"
+                    (dateSelected)="selectDate($event)"
+                    [appearance]="'outline'"
+                    [cssClass]="'w-100'"
+                >
+                </giddh-datepicker>
+            </div>
+        </form>
+        <div class="d-flex float-end column-gap-15 mt-2">
+            <button
+                mat-raised-button
+                color="primary"
+                class="w-100"
+                (click)="onSubmitChequeDetail(); focusDebitCreditAmount()"
+                #chqFormSubmitBtn
+            >
+                {{ commonLocaleData?.app_create }}
+            </button>
+            <button mat-stroked-button class="w-100" (click)="closeChequeDetailForm()">
+                {{ commonLocaleData?.app_cancel }}
+            </button>
+        </div>
+    </mat-dialog-content>
+</ng-template>

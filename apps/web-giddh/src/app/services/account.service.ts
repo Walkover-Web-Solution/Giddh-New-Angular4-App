@@ -15,7 +15,9 @@ import { AssignDiscountRequestForAccount, ApplyDiscountRequestV2 } from '../mode
 import { APPLY_DISCOUNT_API } from './apiurls/apply-discount.api';
 import { get } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class AccountService {
     private companyUniqueName: string;
 

@@ -17,7 +17,9 @@ import { cloneDeep, concat, forEach, get, keys } from '../lodash-optimized';
 
 declare var _: any;
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class InvoiceService {
     public selectedInvoicesLists: any[] = [];
     private companyUniqueName: string;

@@ -7,7 +7,9 @@ import { get } from '../lodash-optimized';
 
 declare var _: any;
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class LocationService {
     private GoogleApiURL: string = 'cities?q=:q';
     private _: any;

@@ -10,7 +10,9 @@ import { HttpWrapperService } from "./http-wrapper.service";
 import { Observable } from "rxjs";
 import { concat, get } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class VatService {
     private companyUniqueName: string;
     constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService, private generalService: GeneralService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {

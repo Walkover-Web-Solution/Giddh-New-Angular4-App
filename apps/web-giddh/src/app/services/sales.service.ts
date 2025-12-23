@@ -13,7 +13,9 @@ import { ADVANCE_RECEIPTS_API } from './apiurls/advance-receipt-adjustment.api';
 import { PAGINATION_LIMIT } from '../app.constant';
 import { concat, forEach, get, keys } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class SalesService {
     private companyUniqueName: string;
 

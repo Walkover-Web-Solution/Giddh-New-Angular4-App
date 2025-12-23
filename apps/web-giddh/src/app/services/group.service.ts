@@ -15,7 +15,9 @@ import { concat, flatten, forEach, get, keys, omit, union } from '../lodash-opti
 
 declare var _: any;
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class GroupService {
     private companyUniqueName: string;
     private _: any;

@@ -26,7 +26,9 @@ import { IRegistration, GetOTPRequest, BulkPaymentResponse, BulkPaymentConfirmRe
 import { ReportsRequestModel, ReportsResponseModel } from "../models/api-models/Reports";
 import { concat, get } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class CompanyService {
     private companyUniqueName: string;
 

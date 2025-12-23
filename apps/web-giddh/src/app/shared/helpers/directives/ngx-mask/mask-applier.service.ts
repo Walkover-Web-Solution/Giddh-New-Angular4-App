@@ -13,7 +13,9 @@ export enum Separators {
     NOT_SEPARATED = 'not_separated'
 }
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class MaskApplierService {
     public dropSpecialCharacters: IConfig['dropSpecialCharacters'];
     public hiddenInput: IConfig['hiddenInput'];

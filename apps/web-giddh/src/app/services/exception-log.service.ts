@@ -11,7 +11,9 @@ import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { environment } from '../../environments/environment';
 import { get, includes } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class ExceptionLogService implements ErrorHandler {
     /** Company unique name for current session */
     private companyUniqueName: string;

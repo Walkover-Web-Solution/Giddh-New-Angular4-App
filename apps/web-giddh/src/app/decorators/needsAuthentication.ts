@@ -7,7 +7,9 @@ import { userLoginStateEnum } from '../models/user-login-state';
 import { ReplaySubject } from 'rxjs';
 import { includes, startsWith } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class NeedsAuthentication  {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     constructor(public router: Router, private store: Store<AppState>, private zone: NgZone) {

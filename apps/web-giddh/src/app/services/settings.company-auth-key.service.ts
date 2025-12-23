@@ -10,7 +10,9 @@ import { CreateCompanyAuthKeyRequest, UpdateCompanyAuthKeyRequest, ICompanyAuthK
 import { SETTINGS_COMPANY_AUTH_KEY_API } from './apiurls/settings.company-auth-key';
 import { get } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class CompanyAuthKeyService {
     private companyUniqueName: string;
 

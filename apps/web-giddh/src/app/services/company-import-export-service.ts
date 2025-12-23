@@ -9,7 +9,9 @@ import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { COMPANY_IMPORT_EXPORT_API } from './apiurls/company-import-export.api';
 import { concat, get } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class CompanyImportExportService {
     private companyUniqueName: string;
 

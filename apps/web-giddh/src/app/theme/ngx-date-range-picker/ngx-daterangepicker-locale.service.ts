@@ -1,7 +1,9 @@
 import { Injectable, Inject } from '@angular/core';
 import { LOCALE_CONFIG, DefaultLocaleConfig, LocaleConfig } from './ngx-daterangepicker.config';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class NgxDaterangepickerLocaleService {
     constructor(@Inject(LOCALE_CONFIG) private _config: LocaleConfig) { }
 

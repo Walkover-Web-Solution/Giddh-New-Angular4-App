@@ -21,7 +21,9 @@ export const DEFAULT_STATE: ReportsState = {
     salesPurchaseListInProgress: false
 };
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class ReportsComponentStore extends ComponentStore<ReportsState> implements OnDestroy {
 
     constructor(

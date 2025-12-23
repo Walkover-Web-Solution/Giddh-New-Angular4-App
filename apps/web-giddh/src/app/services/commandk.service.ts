@@ -9,7 +9,9 @@ import { Observable } from "rxjs";
 import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { get } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class CommandKService {
     constructor(private errorHandler: GiddhErrorHandler, private http: HttpWrapperService, @Optional() @Inject(ServiceConfig) private config: IServiceConfigArgs) {
 

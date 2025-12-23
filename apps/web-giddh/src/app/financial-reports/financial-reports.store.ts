@@ -16,7 +16,9 @@ export const DEFAULT_LEDGER_STATE: FinancialReportsState = {
     reconcileDateRange: null
 };
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class FinancialReportsComponentStore extends ComponentStore<FinancialReportsState> implements OnDestroy {
 
     constructor(

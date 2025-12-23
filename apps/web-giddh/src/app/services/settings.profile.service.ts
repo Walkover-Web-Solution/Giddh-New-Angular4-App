@@ -10,7 +10,9 @@ import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { concat, forEach, get, keys } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class SettingsProfileService {
     private companyUniqueName: string;
 

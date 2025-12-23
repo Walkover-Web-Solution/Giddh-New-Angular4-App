@@ -12,7 +12,9 @@ import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { ReportType } from '../multi-currency-reports/multi-currency.const';
 import { filter, get, keys } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class TlPlService {
     private companyUniqueName: string;
     public isReportTailed$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(null);

@@ -24,7 +24,9 @@ import { LEDGER_API } from "./apiurls/ledger.api";
 import { concat, forEach, get, includes, keys } from '../lodash-optimized';
 
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class VoucherService {
     private companyUniqueName: string;
 
