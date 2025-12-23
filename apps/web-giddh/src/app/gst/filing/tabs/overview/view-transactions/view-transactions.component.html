@@ -1,0 +1,275 @@
+<div class="fill scroll-y noscroll-x scrollbox">
+    <div class="filter-band px-0">
+        <button mat-stroked-button (click)="redirectToGstFilingReturn()">
+            <svg
+                style="top: 3px; position: relative"
+                version="1.1"
+                id="Layer_1"
+                xmlns="http://www.w3.org/2000/svg"
+                x="0"
+                y="0"
+                viewBox="0 0 512 512"
+                xml:space="preserve"
+                class="icon icon-sm text-top mr-1"
+            >
+                <path
+                    d="M367.5 433.7L189.8 256 367.5 78.3l22.6-22.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-223 223c-6 6-9.4 14.1-9.4 22.6 0 8.5 3.4 16.6 9.4 22.6l223 223c6.2 6.2 14.4 9.4 22.6 9.4s16.4-3.1 22.6-9.4c12.5-12.5 12.5-32.8 0-45.3l-22.5-22.6z"
+                ></path>
+            </svg>
+            {{ commonLocaleData?.app_back }}
+        </button>
+        <div
+            class="filter-row ml-2"
+            *ngIf="selectedGst === GstReport.Gstr1 && (filterParam.type === 'nil' || filterParam.type === 'b2cs')"
+        >
+            <div class="name">{{ localeData?.filing?.transaction_type }}:</div>
+            <div class="btn-group filter d-inline-block">
+                <button mat-stroked-button type="button" [matMenuTriggerFor]="entityTypeMenu">
+                    {{ selectedFilter?.entityType }} <span class="caret"></span>
+                </button>
+                <mat-menu #entityTypeMenu="matMenu">
+                    <ng-container *ngFor="let entity of gstr1entityType">
+                        <button
+                            mat-menu-item
+                            aria-label="download"
+                            (click)="viewFilteredTxn('entityType', entity?.value)"
+                        >
+                            {{ entity.label }}
+                        </button>
+                    </ng-container>
+                </mat-menu>
+            </div>
+        </div>
+        <div class="filter-row" *ngIf="selectedGst === GstReport.Gstr2 && filterParam.type === 'b2bur'">
+            <div class="name">{{ localeData?.filing?.transaction_type }}:</div>
+            <div class="btn-group filter d-inline-block">
+                <button mat-stroked-button type="button" [matMenuTriggerFor]="entityTypeMenu">
+                    {{ selectedFilter?.entityType }} <span class="caret"></span>
+                </button>
+                <mat-menu #entityTypeMenu="matMenu">
+                    <ng-container *ngFor="let entity of gstr2entityType">
+                        <button
+                            mat-menu-item
+                            aria-label="download"
+                            (click)="viewFilteredTxn('entityType', entity?.value)"
+                        >
+                            {{ entity.label }}
+                        </button>
+                    </ng-container>
+                </mat-menu>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class="table-responsive">
+            <table
+                mat-table
+                [dataSource]="(viewTransaction$ | async)?.results"
+                class="table transactions-table w-100 table-hover"
+                *ngIf="
+                    !(viewTransactionInProgress$ | async) &&
+                    (viewTransaction$ | async) &&
+                    (viewTransaction$ | async)?.totalItems
+                "
+            >
+                <!-- Invoice Date Column -->
+                <ng-container matColumnDef="invoiceDate">
+                    <th mat-header-cell *matHeaderCellDef class="date-width">{{ localeData?.filing?.invoice_date }}</th>
+                    <td mat-cell *matCellDef="let item" class="date-width">{{ item.voucherDate ?? "-" }}</td>
+                </ng-container>
+
+                <!-- Invoice # Column -->
+                <ng-container matColumnDef="invoiceNumber">
+                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.filing?.invoice_no }}</th>
+                    <td mat-cell *matCellDef="let item" class="no-wrap">
+                        <span
+                            [ngClass]="{ 'btn-link': item.voucherType !== voucherTypeEnum.purchase }"
+                            (click)="voucherApiVersion === 2 && onSelectInvoice(item)"
+                        >
+                            {{ item.voucherNumber ?? "-" }}
+                        </span>
+                    </td>
+                </ng-container>
+
+                <!-- Customer GSTIN Column -->
+                <ng-container matColumnDef="customerGSTIN">
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_customer_gstin }}</th>
+                    <td mat-cell *matCellDef="let item">{{ item.accountGstin ?? "-" }}</td>
+                </ng-container>
+
+                <!-- Customer Name Column -->
+                <ng-container matColumnDef="customerName">
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_customer_name }}</th>
+                    <td mat-cell *matCellDef="let item">{{ item.accountName ?? "-" }}</td>
+                </ng-container>
+
+                <!-- Voucher Type Column -->
+                <ng-container matColumnDef="voucherType">
+                    <th mat-header-cell *matHeaderCellDef>
+                        {{ true ? commonLocaleData?.app_voucher_type : commonLocaleData?.app_type }}
+                    </th>
+                    <td mat-cell *matCellDef="let item">
+                        {{
+                            filterParam.entityType === "unregistered-notes"
+                                ? item?.typ ?? "-"
+                                : (item?.voucherType | titlecase) ?? "-"
+                        }}
+                    </td>
+                </ng-container>
+
+                <!-- Status Column -->
+                <ng-container matColumnDef="status">
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_status }}</th>
+                    <td mat-cell *matCellDef="let item">{{ item?.status ?? "-" }}</td>
+                </ng-container>
+
+                <!-- Action on GSTN Column -->
+                <ng-container matColumnDef="actionOnGSTN">
+                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.filing?.gstn_action }}</th>
+                    <td mat-cell *matCellDef="let item">{{ item.actionOnGstin ?? "-" }}</td>
+                </ng-container>
+
+                <!-- Place of Supply Column -->
+                <ng-container matColumnDef="placeOfSupply">
+                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.filing?.place_supply }}</th>
+                    <td mat-cell *matCellDef="let item">{{ item.pos ?? "-" }}</td>
+                </ng-container>
+
+                <!-- Reverse Charge Column -->
+                <ng-container matColumnDef="reverseCharge">
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_reverse_charge }}</th>
+                    <td mat-cell *matCellDef="let item">{{ item.reverseCharge ?? "-" }}</td>
+                </ng-container>
+
+                <!-- Taxable Amount Column -->
+                <ng-container matColumnDef="taxableAmount">
+                    <th mat-header-cell *matHeaderCellDef class="text-right">
+                        {{ localeData?.filing?.taxable_amount }}
+                    </th>
+                    <td mat-cell *matCellDef="let item" class="text-right">
+                        <span class="d-inline-flex align-items-center">
+                            <i class="icon-rupees icon-font-11"></i>
+                            <amount-field
+                                [amount]="item?.taxableAmount"
+                                [currencySymbol]="false"
+                                [currencyCode]="false"
+                            >
+                            </amount-field>
+                        </span>
+                    </td>
+                </ng-container>
+
+                <!-- IGST Column -->
+                <ng-container matColumnDef="igst">
+                    <th mat-header-cell *matHeaderCellDef class="text-right">{{ localeData?.filing?.igst }}</th>
+                    <td mat-cell *matCellDef="let item" class="text-right">
+                        <span class="d-inline-flex align-items-center">
+                            <i class="icon-rupees icon-font-11"></i>
+                            <amount-field [amount]="item?.igstAmount" [currencySymbol]="false" [currencyCode]="false">
+                            </amount-field>
+                        </span>
+                    </td>
+                </ng-container>
+
+                <!-- CGST Column -->
+                <ng-container matColumnDef="cgst">
+                    <th mat-header-cell *matHeaderCellDef class="text-right">{{ localeData?.filing?.cgst }}</th>
+                    <td mat-cell *matCellDef="let item" class="text-right">
+                        <span class="d-inline-flex align-items-center">
+                            <i class="icon-rupees icon-font-11"></i>
+                            <amount-field [amount]="item?.cgstAmount" [currencySymbol]="false" [currencyCode]="false">
+                            </amount-field>
+                        </span>
+                    </td>
+                </ng-container>
+
+                <!-- SGST Column -->
+                <ng-container matColumnDef="sgst">
+                    <th mat-header-cell *matHeaderCellDef class="text-right">{{ localeData?.filing?.sgst }}</th>
+                    <td mat-cell *matCellDef="let item" class="text-right">
+                        <span class="d-inline-flex align-items-center">
+                            <i class="icon-rupees icon-font-11"></i>
+                            <amount-field [amount]="item?.sgstAmount" [currencySymbol]="false" [currencyCode]="false">
+                            </amount-field>
+                        </span>
+                    </td>
+                </ng-container>
+
+                <!-- CESS Column -->
+                <ng-container matColumnDef="cess">
+                    <th mat-header-cell *matHeaderCellDef class="text-right">{{ commonLocaleData?.app_cess }}</th>
+                    <td mat-cell *matCellDef="let item" class="text-right">
+                        <span class="d-inline-flex align-items-center">
+                            <i class="icon-rupees icon-font-11"></i>
+                            <amount-field [amount]="item?.cessAmount" [currencySymbol]="false" [currencyCode]="false">
+                            </amount-field>
+                        </span>
+                    </td>
+                </ng-container>
+
+                <!-- Total Invoice Value Column -->
+                <ng-container matColumnDef="totalInvoiceValue">
+                    <th mat-header-cell *matHeaderCellDef class="text-right">
+                        {{ localeData?.filing?.total_invoice_value }}
+                    </th>
+                    <td mat-cell *matCellDef="let item" class="text-right">
+                        <span class="d-inline-flex align-items-center">
+                            <i class="icon-rupees icon-font-11"></i>
+                            <amount-field [amount]="item?.totalAmount" [currencySymbol]="false" [currencyCode]="false">
+                            </amount-field>
+                        </span>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+            </table>
+        </div>
+        <mat-paginator
+            *ngIf="(viewTransaction$ | async)?.totalItems > pageSizeOptions[0]"
+            (page)="pageChanged($event)"
+            [length]="(viewTransaction$ | async)?.totalItems"
+            [pageSize]="filterParam?.count"
+            [showFirstLastButtons]="true"
+            [pageSizeOptions]="pageSizeOptions"
+            [hidePageSize]="false"
+            [pageIndex]="pageIndex"
+            class="mt-3"
+        >
+        </mat-paginator>
+        <section class="mb-custom-80"></section>
+        <!-- no records -->
+        <div
+            class="filings-empty-state"
+            *ngIf="!(viewTransactionInProgress$ | async) && !(viewTransaction$ | async)?.results?.length"
+        >
+            <img src="{{ imgPath }}nofound.svg" [style.max-width.px]="150" />
+            <div class="empty-msg">
+                <span> {{ commonLocaleData?.app_no_records_found }} </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- loader -->
+<div class="filings-empty-state" *ngIf="viewTransactionInProgress$ | async">
+    <giddh-page-loader></giddh-page-loader>
+    <div class="empty-msg">
+        <span> {{ localeData?.filing?.loading_data }} </span>
+    </div>
+</div>
+
+<!-- Download or Send Invoice on mail -->
+
+<!-- Download or Send Invoice on mail template -->
+<ng-template #downloadOrSendMailDialog>
+    <download-or-send-mail-invoice
+        [selectedVoucher]="selectedInvoice"
+        [base64Data]="base64Data"
+        [selectedInvoiceForDelete]="selectedInvoiceForDelete"
+        [currentVoucherFilter]="filterParam.entityType"
+        (closeModelEvent)="closeDownloadOrSendMailPopup($event)"
+        (downloadOrSendMailEvent)="onDownloadOrSendMailEvent($event)"
+        (downloadInvoiceEvent)="onDownloadInvoiceEvent($event)"
+    ></download-or-send-mail-invoice>
+</ng-template>

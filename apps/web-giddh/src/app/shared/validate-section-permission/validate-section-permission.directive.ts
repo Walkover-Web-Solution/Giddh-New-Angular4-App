@@ -3,7 +3,6 @@ import { select, Store } from "@ngrx/store";
 import { ReplaySubject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 import { AppState } from "../../store";
-import { remove } from '../../lodash-optimized';
 
 @Directive({
     selector: '[validateSectionPermission]',

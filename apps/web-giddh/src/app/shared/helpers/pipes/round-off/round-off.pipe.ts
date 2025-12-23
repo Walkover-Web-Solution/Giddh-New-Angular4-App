@@ -11,8 +11,8 @@ import { giddhRoundOff } from '../../helperFunctions';
  * @implements {PipeTransform}
  */
 @Pipe({
-  name: 'roundOff',
-  standalone: false,
+    name: 'giddhRoundOff',
+    standalone: false
 })
 export class GiddhRoundOffPipe implements PipeTransform {
 

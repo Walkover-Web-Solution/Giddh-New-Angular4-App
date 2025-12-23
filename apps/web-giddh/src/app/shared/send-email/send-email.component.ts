@@ -1,13 +1,12 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { VoucherTypeEnum } from '../../models/api-models/Sales';
-import { filter } from '../../lodash-optimized';
 
 @Component({
     selector: 'send-email',
     templateUrl: './send-email.component.html',
     styleUrls: ['./send-email.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone:false
+    standalone: false
 })
 export class SendEmailComponent implements OnInit {
     /** Holds voucher type */

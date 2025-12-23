@@ -58,8 +58,7 @@ import { SalesPersonService } from '../shared/sales-person/utility/sales-person.
         ColumnarReportTableComponent,
         CashFlowStatementComponent,
         SalesPurchaseRegisterExportComponent,
-        AdvanceReceiptReportComponent,
-        SerialNumberPipe
+        AdvanceReceiptReportComponent
     ],
     exports: [
         ReportsComponent,
@@ -87,6 +86,7 @@ import { SalesPersonService } from '../shared/sales-person/utility/sales-person.
         MatTooltipModule,
         // NewConfirmModalModule,
         MatDialogModule,
+        SerialNumberPipe,
         SendEmailModule,
         ConfirmModalModule,
         MatSlideToggleModule,

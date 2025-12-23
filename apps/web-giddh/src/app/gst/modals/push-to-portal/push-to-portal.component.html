@@ -1,0 +1,55 @@
+<div class="dialog-header">
+    <p class="modal-title">{{ localeData?.filing?.push_to_portal }}</p>
+    <i mat-dialog-close aria-label="close icon" class="icon-cross"></i>
+</div>
+<mat-dialog-content class="dialog-body">
+    <div class="container">
+        <p class="mb-2">
+            {{ commonLocaleData?.app_note }}: {{ commonLocaleData?.app_export_file_name_change_note }}
+        </p>
+        <div class="row main-container">
+            <div class="col-sm-6 p-0 left-side">
+                <div class="left-side-center">
+                    <button
+                        mat-raised-button
+                        color="primary"
+                        class="downloads-button"
+                        (click)="onDownloadExcel($event)"
+                    >
+                        {{ localeData?.filing?.download_excel }}
+                    </button>
+                </div>
+                <mat-list>
+                    <mat-list-item>
+                        <p class="summary-content font-size-15">{{ localeData?.filing?.excel_file_support }}</p>
+                    </mat-list-item>
+                    <mat-list-item>
+                        <p class="summary-content font-size-15 last-content">
+                            {{ localeData?.filing?.organised_accountant }}
+                        </p>
+                    </mat-list-item>
+                </mat-list>
+                <a class="mr-0 downloads-button json-button" target="_blank" [href]="gstUtilityDownloadLink">
+                    <span class="return-link font-size-15">{{ localeData?.filing?.gst_offline_utility }} </span>
+                </a>
+            </div>
+            <div class="col-sm-6 p-0 right-side">
+                <div class="right-side-center">
+                    <button
+                        mat-raised-button
+                        color="primary"
+                        class="downloads-button"
+                        (click)="onDownloadJson($event)"
+                    >
+                        {{ localeData?.filing?.download_json }}
+                    </button>
+                </div>
+                <mat-list>
+                    <mat-list-item>
+                        <p class="summary-content font-size-15">{{ localeData?.filing?.json_support }}</p>
+                    </mat-list-item>
+                </mat-list>
+            </div>
+        </div>
+    </div>
+</mat-dialog-content>

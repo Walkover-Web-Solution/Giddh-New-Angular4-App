@@ -3,20 +3,20 @@ import { BehaviorSubject, Observable, Subject, debounceTime, of, skip, Subscript
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
 import { IOption } from "../../../app.constant";
-import { find, forEach, indexOf, isEqual } from '../../../lodash-optimized';
+import { isEqual } from "../../../lodash-optimized";
 
 @Component({
     selector: "reactive-dropdown-field",
     templateUrl: "./reactive-dropdown-field.component.html",
     styleUrls: ["./reactive-dropdown-field.component.scss"],
-    standalone: false,
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,
             useExisting: forwardRef(() => ReactiveDropdownFieldComponent),
             multi: true
         }
-    ]
+    ],
+    standalone: false
 })
 export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnInit, AfterViewInit, OnChanges, OnDestroy {
     /** Holds template of options on the component itself */

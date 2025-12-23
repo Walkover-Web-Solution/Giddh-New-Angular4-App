@@ -129,7 +129,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.imgPath = (typeof Configuration.isElectron !== 'undefined' && Configuration.isElectron) ? 'assets/images/' : (environment.AppUrl || '') + (environment.APP_FOLDER || '') + 'assets/images/';
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : environment.AppUrl + environment.APP_FOLDER + 'assets/images/';
         this.giddhLogoSrc = this.imgPath + 'giddh-logo.png';
         this.generateRandomBanner();
 

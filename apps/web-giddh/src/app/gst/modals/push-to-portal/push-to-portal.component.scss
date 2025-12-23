@@ -1,0 +1,38 @@
+.main-container {
+    color: var(--color-black);
+    .left-side {
+        border-right: 1px solid var(--color-black);
+        padding-bottom: 15px;
+        .left-side-center {
+            text-align: center;
+        }
+    }
+    .right-side-center {
+        text-align: center;
+    }
+    .downloads-button {
+        margin-top: 40px;
+        margin-bottom: 20px;
+    }
+
+    .json-button {
+        margin-left: 6%;
+    }
+    .summary-content {
+        font-family: var(--font-family);
+    }
+    .last-content {
+        margin-bottom: 20px;
+    }
+    .return-link {
+        text-decoration: underline;
+    }
+}
+@media screen and (max-width: 997px) {
+   .left-side {
+        width: 450px;
+   }
+   .right-side {
+        width: 322px;
+   }
+}

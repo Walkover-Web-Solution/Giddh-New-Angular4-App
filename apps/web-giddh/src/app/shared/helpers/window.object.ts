@@ -5,9 +5,7 @@ function _window(): any {
     return window;
 }
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class WindowRef {
 
     get nativeWindow(): any {

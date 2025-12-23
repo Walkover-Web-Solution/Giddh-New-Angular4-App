@@ -1,0 +1,72 @@
+<section class="aside-dialog-wrapper">
+    <div class="dialog-header">
+        <span>
+            {{ isAddAccountOpen ? commonLocaleData?.app_create_account : commonLocaleData?.app_add }}
+            <span *ngIf="voucherApiVersion === 2 && !isAddAccountOpen">{{
+                stockType !== "fixed_assets" ? (stockType | titlecase) : "Fixed Assets"
+            }}</span>
+        </span>
+        <div class="d-flex align-items-center column-gap-15">
+            <button
+                mat-raised-button
+                aria-label="back"
+                (click)="backButtonPressed()"
+                *ngIf="hideFirstScreen"
+                class="d-flex align-items-center"
+            >
+                {{ commonLocaleData?.app_back }}
+            </button>
+            <button mat-icon-button aria-label="close" (click)="closeAsidePane()">
+                <i class="icon-cross"></i>
+            </button>
+        </div>
+    </div>
+    <mat-dialog-content class="dialog-body">
+        <div class="aside-panel-ledger" *ngIf="!hideFirstScreen">
+            <div class="buttons-wrapper column-gap-15">
+                <button mat-raised-button color="primary" class="mb-2" (click)="toggleAccountPane()">
+                    {{ commonLocaleData?.app_add_account }}
+                </button>
+                <button
+                    *ngIf="voucherApiVersion === 2"
+                    mat-raised-button
+                    color="primary"
+                    class="mb-2"
+                    (click)="toggleStockPane('product')"
+                >
+                    {{ commonLocaleData?.app_add_product }}
+                </button>
+                <button
+                    *ngIf="voucherApiVersion === 2"
+                    mat-raised-button
+                    color="primary"
+                    class="mb-2"
+                    (click)="toggleStockPane('service')"
+                >
+                    {{ commonLocaleData?.app_add_service }}
+                </button>
+                <button
+                    *ngIf="voucherApiVersion === 2"
+                    mat-raised-button
+                    color="primary"
+                    class="mb-2"
+                    (click)="toggleStockPane('fixed_assets')"
+                >
+                    {{ commonLocaleData?.app_add_fixedassets }}
+                </button>
+            </div>
+        </div>
+
+        <ng-container *ngIf="isAddAccountOpen">
+            <ledger-aside-pane-account [commonLocaleData]="commonLocaleData"></ledger-aside-pane-account>
+        </ng-container>
+
+        <ng-container *ngIf="isAddStockOpen && voucherApiVersion === 2">
+            <stock-create-edit
+                [addStock]="true"
+                [stockType]="stockType"
+                (closeAsideEvent)="backButtonPressed()"
+            ></stock-create-edit>
+        </ng-container>
+    </mat-dialog-content>
+</section>

@@ -1,5 +1,4 @@
 import { EMAIL_VALIDATION_REGEX } from '../../app.constant';
-import { includes } from '../../lodash-optimized';
 
 /**
  * invalid string replacer in uniqueName

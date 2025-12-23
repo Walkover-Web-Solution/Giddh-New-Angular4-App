@@ -30,7 +30,7 @@ import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
 import { AmountFieldComponentModule } from './amount-field/amount-field.module';
 import { AccountAddNewDetailsModule } from './header/components/account-add-new-details/account-add-new-details.module';
-// import { LedgerDiscountModule } from '../ledger/components/ledger-discount/ledger-discount.module'; // MISSING FILE
+import { LedgerDiscountModule } from '../ledger/components/ledger-discount/ledger-discount.module';
 import { ConfirmationModalModule } from '../theme/confirmation-modal/confirmation-modal.module';
 import { DatepickerWrapperModule } from './datepicker-wrapper/datepicker.wrapper.module';
 import { ValidateSectionPermissionDirectiveModule } from './validate-section-permission/validate-section-permission.module';
@@ -89,50 +89,50 @@ export function provideConfig() {
         MasterExportOptionComponent
     ],
     imports: [
-        // KeyboardShortutModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
+        KeyboardShortutModule,
         CommonModule,
         RouterModule,
         FormsModule,
         ReactiveFormsModule,
-        // SocialLoginModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
-        // ClickOutsideModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
+        SocialLoginModule,
+        ClickOutsideModule,
         ConfirmModalModule,
         LaddaModule.forRoot({
             style: 'slide-left',
             spinnerSize: 30
         }),
-        // ElementViewChildModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
+        ElementViewChildModule,
         DecimalDigitsModule,
-        // DigitsOnlyModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
+        DigitsOnlyModule,
         MatPaginatorModule,
-        // Daterangepicker, // COMMENTED OUT - CAUSING NG6002 ERRORS
-        // TextCaseChangeModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
-        // HighlightModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
-        // NgxMaskModule.forRoot(), // COMMENTED OUT - CAUSING NG6002 ERRORS
-        // CommandKModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
-        // NgxDaterangepickerMd.forRoot(), // COMMENTED OUT - CAUSING NG6002 ERRORS
+        Daterangepicker,
+        TextCaseChangeModule,
+        HighlightModule,
+        NgxMaskModule.forRoot(),
+        CommandKModule,
+        NgxDaterangepickerMd.forRoot(),
         ScrollingModule,
-        // GiddhNumberFormatModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
+        GiddhNumberFormatModule,
         TranslateDirectiveModule,
-        // AmountFieldComponentModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
+        AmountFieldComponentModule,
         AccountAddNewDetailsModule,
-        // LedgerDiscountModule,
+        LedgerDiscountModule,
         ConfirmationModalModule,
-        // DatepickerWrapperModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
-        // HamburgerMenuModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
-        // ValidateSectionPermissionDirectiveModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
-        // GiddhPageLoaderModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
-        // GiddhDatepickerModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
-        // MatSlideToggleModule, // COMMENTED OUT - MISSING IMPORT
-        // CheckPermissionModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
-        // AccountUpdateNewDetailsModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
+        DatepickerWrapperModule,
+        HamburgerMenuModule,
+        ValidateSectionPermissionDirectiveModule,
+        GiddhPageLoaderModule,
+        GiddhDatepickerModule,
+        MatSlideToggleModule,
+        CheckPermissionModule,
+        AccountUpdateNewDetailsModule,
+        MatRadioModule,
         MatButtonModule,
         MatDialogModule,
         MatTooltipModule,
-        MatRadioModule,
         CallBackPageComponent,
         SubscriptionUpgradeButtonModule,
-        FormFieldsModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
+        FormFieldsModule,
         MatMenuModule,
         MatListModule,
         MatExpansionModule,
@@ -153,18 +153,18 @@ export function provideConfig() {
         KeyboardShortutModule,
         MfReportComponent,
         ElementViewChildModule,
-        // NgxDaterangepickerMd, // COMMENTED OUT - CAUSING NG6002 ERRORS
-        // GiddhNumberFormatModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
+        NgxDaterangepickerMd,
+        GiddhNumberFormatModule,
         TranslateDirectiveModule,
-        // AmountFieldComponentModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
-        // AccountAddNewDetailsModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
-        // LedgerDiscountModule,
+        AmountFieldComponentModule,
+        AccountAddNewDetailsModule,
+        LedgerDiscountModule,
         ConfirmationModalModule,
-        // DatepickerWrapperModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
-        // HamburgerMenuModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
-        // ValidateSectionPermissionDirectiveModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
-        // GiddhPageLoaderModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
-        // GiddhDatepickerModule, // COMMENTED OUT - CAUSING NG6002 ERRORS
+        DatepickerWrapperModule,
+        HamburgerMenuModule,
+        ValidateSectionPermissionDirectiveModule,
+        GiddhPageLoaderModule,
+        GiddhDatepickerModule,
         GenericAsideMenuAccountModule,
         MasterComponent,
         MasterExportOptionComponent,
@@ -192,7 +192,7 @@ export function provideConfig() {
     ]
 })
 export class SharedModule {
-    constructor(private injector: Injector) { }
+    constructor(private injector: Injector){}
     public static forRoot(): ModuleWithProviders<SharedModule> {
         return {
             ngModule: SharedModule,

@@ -1,0 +1,86 @@
+.aside-pane {
+    position: fixed;
+    left: auto;
+    top: var(--top-distance);
+    right: 0;
+    bottom: 0;
+    max-width: 760px;
+    width: 100%;
+    z-index: 99999;
+
+    &.page-leave-confirmation-showing {
+        z-index: 9999 !important;
+    }
+}
+.aside-pane {
+    padding: 0 !important;
+}
+.aside-body {
+    padding: 0 15px;
+}
+.aside-pane-form {
+    background-color: var(--color-white);
+    box-shadow: 0px 3px 6px var(--color-shadow-light);
+    padding: 15px 15px;
+    height: calc(100vh - 90px);
+    overflow: auto;
+    scroll-behavior: smooth;
+    position: relative;
+    margin-top: 15px;
+}
+
+.linked-entities {
+    .list-item {
+        .entity-icon {
+            padding: 4px;
+        }
+        .entity-details {
+            margin-left: 6px;
+            flex: 1;
+            .item {
+                font-weight: var(--font-weight-semibold);
+            }
+        }
+        .default-entity {
+            align-items: center;
+            display: flex;
+            &:hover:after {
+                color: var(--text-primary-color);
+            }
+            .icon-favorite-selected {
+                color: var(--text-primary-color);
+            }
+        }
+    }
+}
+
+.giddh-table {
+    tr {
+        td {
+            vertical-align: top !important;
+            .action-icon {
+                display: flex;
+                align-items: center;
+                border: 1px solid var(--border-color);
+                a {
+                    width: 34px;
+                    font-size: var(--font-size-16);
+                    color: var(--color-dark-gray);
+                    border-right: 1px solid var(--border-color);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 0 5px;
+                    cursor: pointer;
+                    align-items: stretch;
+                    height: 34px;
+                    align-items: center;
+                    background-color: var(--color-white);
+                }
+                &:last-child {
+                    border-right: none !important;
+                }
+            }
+        }
+    }
+}

@@ -13,7 +13,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { MatGridListModule } from "@angular/material/grid-list";
-// import { FormFieldsModule } from "../../theme/form-fields/form-fields.module";
+import { FormFieldsModule } from "../../theme/form-fields/form-fields.module";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatInputModule } from "@angular/material/input";
 import { MatChipsModule } from "@angular/material/chips";
@@ -21,8 +21,8 @@ import { MatAutocompleteModule } from "@angular/material/autocomplete";
 import { MatRadioModule } from "@angular/material/radio";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatDatepickerModule } from "@angular/material/datepicker";
-// import { WatchVideoModule } from "../../theme/watch-video/watch-video.module";
-import { NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
+import { WatchVideoModule } from "../../theme/watch-video/watch-video.module";
+import { NgModule } from "@angular/core";
 import { TranslateDirectiveModule } from "../../theme/translate/translate.directive.module";
 import { SettingIntegrationPaymentModule } from "../../settings/integration/payment/setting.integration.payment.module";
 import { AccountNumberMaskModule } from "../helpers/pipes/accountNumberMaskPipe/accountNumberMask.module";
@@ -47,7 +47,7 @@ import { BankIntegrationDialogComponent } from "./bank-integration-popup/bank-in
         MatDialogModule,
         MatSlideToggleModule,
         MatGridListModule,
-        // FormFieldsModule,
+        FormFieldsModule,
         MatInputModule,
         MatCheckboxModule,
         MatChipsModule,
@@ -57,14 +57,13 @@ import { BankIntegrationDialogComponent } from "./bank-integration-popup/bank-in
         MatTooltipModule,
         MatMenuModule,
         MatDatepickerModule,
-        // WatchVideoModule,
+        WatchVideoModule,
         TranslateDirectiveModule,
-        // SettingIntegrationPaymentModule,
+        SettingIntegrationPaymentModule,
         AccountNumberMaskModule,
         GiddhPageLoaderModule
 
     ],
-    schemas: [NO_ERRORS_SCHEMA],
     exports: [BankIntegrationComponent, InstitutionsListComponent, BankLinkComponent, BankIntegrationDialogComponent]
 })
 export class BankIntegrationModule {}

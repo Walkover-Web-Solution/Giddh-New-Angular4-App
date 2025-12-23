@@ -3,8 +3,7 @@ import { UntypedFormControl } from '@angular/forms';
 
 @Directive({
     selector: '[textCaseChangeDirective]',
-
-  standalone: false,
+    standalone: false
 })
 export class TextCaseChangeDirective {
     @Input() public control: UntypedFormControl;

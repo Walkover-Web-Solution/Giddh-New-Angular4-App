@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { MATERIAL_VARIABLES_CSS_TEMPLATE } from './material-variables-template';
-import { map } from '../../lodash-optimized';
 
 /** White label configuration interface */
 export interface IWhiteLabelConfig {

@@ -1,0 +1,252 @@
+.ledger-panel {
+    background-color: var(--theme-background-color);
+    overflow: visible;
+    .more-details {
+        padding-bottom: 15px;
+        .cheque {
+            table {
+                td.remove-invoice {
+                    span:first-child {
+                        font-size: 16px;
+                        vertical-align: middle;
+                        color: var(--color-dark-gray);
+                    }
+                    .label {
+                        vertical-align: middle;
+                        color: var(--color-dark-gray);
+                        font-size: var(--font-size-15);
+                    }
+                }
+            }
+        }
+    }
+    .basic-detail {
+        .d-grid {
+            --field-width: minmax(200px, 1fr);
+            --label: 30px;
+            --small-field-division: 1.5;
+            --common-column: var(--field-width) var(--label) var(--field-width) var(--label) var(--field-width)
+                var(--label) var(--field-width);
+            --grid-column-with-stock: calc(var(--field-width) / var(--small-field-division))
+                calc(var(--field-width) / var(--small-field-division)) var(--label)
+                calc(var(--field-width) / var(--small-field-division)) var(--label) var(--common-column);
+
+            grid-gap: 5px;
+            grid-template-columns: var(--common-column);
+            &.stock-grid {
+                --field-width: 132px;
+                grid-template-columns: var(--grid-column-with-stock);
+            }
+
+            @media screen and (max-width: 1440px) {
+                --field-width: minmax(170px, 1fr);
+                &.stock-grid {
+                    --label: 20px;
+                    --field-width: 120px;
+                    grid-template-columns: var(--grid-column-with-stock);
+                }
+            }
+
+            @media screen and (max-width: 1280px) {
+                --field-width: minmax(150px, 1fr);
+                &.stock-grid {
+                    --small-field-division: 1;
+                    --field-width: 100px;
+                    grid-template-columns: var(--grid-column-with-stock);
+                }
+            }
+
+            @media screen and (max-width: 992px) {
+                --field-width: minmax(140px, 1fr);
+                &.stock-grid {
+                    --field-width: 90px;
+                    grid-template-columns: var(--grid-column-with-stock);
+                }
+            }
+        }
+    }
+    .more-details {
+        table {
+            tr {
+                td {
+                    padding-right: 10px;
+                    reactive-dropdown-field,
+                    input-field,
+                    ledger-discount,
+                    tax-control {
+                        display: block;
+                        width: 100%;
+                        max-width: 230px;
+
+                        @media screen and (max-width: 1520px) {
+                            max-width: 200px;
+                        }
+                        @media screen and (max-width: 1440px) {
+                            max-width: 160px;
+                        }
+                    }
+                }
+            }
+        }
+        .tag-wrapper {
+            max-width: 445px;
+        }
+    }
+    #ledger-description {
+        background-color: var(--color-transparent) !important;
+    }
+    .multi-currency-wrapper {
+        width: fit-content;
+    }
+
+    .adjust-label {
+        width: 158px !important;
+        min-width: 158px !important;
+    }
+}
+
+.ledger-panel table tbody tr td a {
+    color: var(--color-black);
+}
+
+.amount-total {
+    font-size: var(--font-size-12);
+    color: var(--color-medium-gray);
+    padding-left: 5px;
+}
+
+.table-minus label {
+    font-size: var(--font-size-32);
+    line-height: 23px;
+}
+.warehouse-field {
+    display: flex;
+    align-items: center;
+}
+
+.rcm-entry {
+    padding-left: 4px;
+}
+.taxable-amount-section {
+    display: inline-block;
+    margin-bottom: 12px;
+}
+.passport-no-width {
+    width: 150px;
+    font-size: var(--font-size-12);
+}
+.advance-receipt-edit {
+    i {
+        color: var(--text-primary-color);
+    }
+}
+.ledger-price {
+    width: 78px;
+}
+.disabled-item {
+    pointer-events: none;
+}
+
+.icon-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 10px 0 10px;
+    font-size: 12px;
+    label {
+        margin-top: 10px;
+    }
+}
+
+#saveLedger {
+    margin-right: 0 !important;
+}
+.delete-attachment {
+    a {
+        color: var(--color-dark-gray);
+        i {
+            font-size: var(--font-size-15);
+        }
+    }
+}
+.attachment-file-name {
+    max-width: 175px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+@media only screen and (max-width: 767px) {
+    .ledger-panel .btn {
+        margin-bottom: 13px;
+    }
+
+    .price {
+        width: 40%;
+    }
+
+    .amount {
+        width: 40%;
+    }
+
+    .qty-unit table tr td.text-right {
+        padding-right: 10px;
+    }
+
+    .warehouse-field {
+        display: flex;
+        flex-direction: column-reverse;
+    }
+    .xs-justify-content-start {
+        justify-content: start;
+    }
+}
+.sh-template {
+    border-bottom: 1px solid var(--border-color);
+}
+.min-width-auto {
+    min-width: auto !important;
+}
+
+span {
+    &.icon-info {
+        line-height: 40px;
+    }
+}
+
+.rotate {
+    -webkit-animation: spin 4s linear infinite;
+    -moz-animation: spin 4s linear infinite;
+    animation: spin 4s linear infinite;
+}
+@-moz-keyframes spin {
+    100% {
+        -moz-transform: rotate(360deg);
+    }
+}
+@-webkit-keyframes spin {
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+@keyframes spin {
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+@media (max-width: 1075px) {
+
+    .more-details {
+        .cheque-no-clear {
+
+            giddh-datepicker {
+                min-width: auto !important;
+            }
+        }
+    }
+}
+.map-txn-container {
+    table tr td {
+        width: 25%;
+    }
+}

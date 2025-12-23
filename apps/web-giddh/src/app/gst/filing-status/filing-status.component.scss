@@ -1,0 +1,15 @@
+.filing-status {
+    &-table {
+        .table-loader {
+            height: calc(100vh - 200px);
+        }
+        table {
+            background-color: var(--color-transparent);
+            tr {
+                &:hover {
+                    background-color: var(--theme-primary-light);
+                }
+            }
+        }
+    }
+}

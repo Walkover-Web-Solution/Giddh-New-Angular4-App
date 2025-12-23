@@ -5,6 +5,37 @@ import { AppModule } from './app/app.module';
 
 // Import environment.generated.ts early to ensure global constants are set
 import './environments/environment.generated';
+import { environment } from './environments/environment.generated';
+
+// Initialize global variables from environment to prevent runtime errors
+// Detect if running in Electron environment
+const detectElectron = () => {
+  return !!(window && (window as any).process && (window as any).process.type) ||
+         !!(window && (window as any).require && (window as any).require('electron')) ||
+         !!(navigator && navigator.userAgent && navigator.userAgent.toLowerCase().indexOf('electron') > -1);
+};
+
+(window as any).isElectron = environment.isElectron || detectElectron();
+(window as any).AppUrl = environment.AppUrl;
+(window as any).ApiUrl = environment.ApiUrl;
+(window as any).UkApiUrl = environment.UkApiUrl;
+(window as any).APP_FOLDER = environment.APP_FOLDER;
+(window as any).PORTAL_URL = environment.PORTAL_URL;
+(window as any).GOOGLE_CLIENT_ID = environment.GOOGLE_CLIENT_ID;
+(window as any).GOOGLE_CLIENT_SECRET = environment.GOOGLE_CLIENT_SECRET;
+(window as any).OTP_WIDGET_ID = environment.OTP_WIDGET_ID;
+(window as any).OTP_TOKEN_AUTH = environment.OTP_TOKEN_AUTH;
+(window as any).RAZORPAY_KEY = environment.RAZORPAY_KEY;
+(window as any).environment = environment;
+
+// Initialize other commonly used global variables to prevent undefined errors
+(window as any).PRODUCTION_ENV = environment.production;
+(window as any).STAGING_ENV = false;
+(window as any).TEST_ENV = false;
+(window as any).LOCAL_ENV = !environment.production;
+(window as any).errlyticsNeeded = false;
+(window as any).errlyticsKey = '';
+(window as any).enableVoucherAdjustmentMultiCurrency = false;
 
 // Angular 21 Compatibility Layer - Global Error Suppression
 (function setupAngular21Compatibility() {

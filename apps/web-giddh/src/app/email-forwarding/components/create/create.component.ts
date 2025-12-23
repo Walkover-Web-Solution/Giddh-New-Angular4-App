@@ -6,7 +6,8 @@ import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { ReplaySubject, interval, Subject, BehaviorSubject, Observable } from 'rxjs';
 import { filter, takeUntil, switchMap, debounceTime } from 'rxjs/operators';
 import { EmailForwardingResponse, YOU_ARE_NOT_ALLOWED } from '../../models/email-forwarding.model';
-import { API_BULK_FETCH_LIMIT, ASIDE_PANE_CONFIG, BANK_STATEMENT_HELP_DOC_URL, EMAIL_VALIDATION_REGEX } from '../../../app.constant';
+import { API_BULK_FETCH_LIMIT, ASIDE_PANE_CONFIG, BANK_STATEMENT_HELP_DOC_URL, EMAIL_VALIDATION_REGEX, Configuration } from '../../../app.constant';
+import { environment } from '../../../../environments/environment';
 import { EmailForwardingComponentStore } from '../../store/email-forwarding.store';
 import { GeneralService } from '../../../services/general.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -74,9 +75,9 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
     public bankStatementHelpDocUrl = BANK_STATEMENT_HELP_DOC_URL;
     /** Form submitted flag */
     public isFormSubmitted: boolean = false;
-    /** Company unique name */  
+    /** Company unique name */
     private companyUniqueName: string = '';
-    /** Branch unique name */  
+    /** Branch unique name */
     private branchUniqueName: string = '';
     /** Holds images folder path */
     public imgPath: string = "";
@@ -103,15 +104,15 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
 
     /**
      * Component initialization
-     * 
+     *
      * @memberof CreateComponent
      */
-    public ngOnInit(): void {       
+    public ngOnInit(): void {
         this.companyUniqueName = this.generalService.companyUniqueName;
         this.branchUniqueName = this.generalService.currentBranchUniqueName;
         this.setupAccountSearchSubscription();
         this.getEmailFromQueryParams();
-        this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
+        this.imgPath = Configuration.isElectron ? "assets/images/" : environment.AppUrl + environment.APP_FOLDER + "assets/images/";
 
         this.bankStatementStore.createUpdateEmailForwardingIsSuccess$.pipe(takeUntil(this.destroyed$)).subscribe((response: unknown) => {
             if (response && response['uniqueName']) {
@@ -119,8 +120,8 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
                 if (this.currentStep === 3) {
                     this.router.navigate(['pages/email-forwarding/list'], { queryParams: { companyUniqueName: this.companyUniqueName, branchUniqueName: this.branchUniqueName } });
                 } else if (this.currentStep === 1) {
-                    this.router.navigate(['pages/email-forwarding/create'], { 
-                        queryParams: { 
+                    this.router.navigate(['pages/email-forwarding/create'], {
+                        queryParams: {
                             companyUniqueName: this.companyUniqueName,
                             branchUniqueName: this.branchUniqueName,
                             forwardedMail: this.emailForwardingForm.value.forwardedMail + this.forwardedMailDomain,
@@ -143,7 +144,7 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
 
     /**
      * After view initialization - navigate to target step if set
-     * 
+     *
      * @memberof CreateComponent
      */
     public ngAfterViewInit(): void {
@@ -173,7 +174,7 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
 
     /**
      * Initializes all form groups
-     * 
+     *
      * @private
      * @memberof CreateComponent
      */
@@ -189,7 +190,7 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
 
     /**
      * Checks if component is in edit mode and loads data
-     * 
+     *
      * @private
      * @memberof CreateComponent
      */
@@ -212,7 +213,7 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
                         password: emailDetails.isPasswordSet ? YOU_ARE_NOT_ALLOWED : ""
                     });
                 });
-                
+
                 // In edit mode, ensure we stay on the correct step
                 if (this.currentStep > 0) {
                     setTimeout(() => {
@@ -227,7 +228,7 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
 
     /**
      * Gets email from query parameters
-     * 
+     *
      * @private
      * @memberof CreateComponent
      */
@@ -239,7 +240,7 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
                 if (!isNaN(stepNumber) && stepNumber >= 1) {
                     this.currentStep = stepNumber;
                     this.minAllowedStep = stepNumber === 3 ? 1 : stepNumber - 1; // Allow navigation between steps 2 and 3 when on step 3
-                    
+
                     // Convert 1-based to 0-based index
                     const targetStepIndex = stepNumber - 1;
                     this.checkEditMode();
@@ -247,7 +248,7 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
                     if (this.currentStep === 3) {
                         this.searchAccount();
                     }
-                    
+
                     // Navigate immediately if stepper is available, otherwise store for later
                     if (this.stepper) {
                         setTimeout(() => {
@@ -258,7 +259,7 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
                     }
                 }
             }
-            
+
             if (queryParams['forwardedMail']) {
                 const [emailWithoutDomain, domain] = queryParams['forwardedMail'].split('@');
                 this.forwardedMailDomain = `@${domain}`;
@@ -281,7 +282,7 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
 
     /**
      * Handles unique name for email forwarding
-     * 
+     *
      * @param {string} uniqueName - Unique name of the email forwarding
      * @memberof CreateComponent
      */
@@ -289,7 +290,7 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
         this.emailForwardingForm.patchValue({
             uniqueName: uniqueName
         });
-                
+
         if (this.currentStep === 2) {
             this.startConfirmationPolling(uniqueName);
         }
@@ -297,7 +298,7 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
 
     /**
      * Validates and proceeds to next step
-     * 
+     *
      * @param {MatStepper} stepper - Material stepper reference
      * @param {FormGroup} currentForm - Current step form
      * @param {number} stepNumber - Current step number
@@ -317,7 +318,7 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
 
     /**
      * Navigates to a specific step
-     * 
+     *
      * @param {number} stepIndex - Step index to navigate to (0-based)
      * @memberof CreateComponent
      */
@@ -331,7 +332,7 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
                     step.editable = i >= this.minAllowedStep;
                 }
             }
-            
+
             // Navigate to the target step
             this.stepper.selectedIndex = stepIndex;
         }
@@ -400,7 +401,7 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
 
     /**
      * Marks all form controls as touched to show validation errors
-     * 
+     *
      * @private
      * @param {FormGroup} formGroup - Form group to mark as touched
      * @memberof CreateComponent
@@ -414,7 +415,7 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
 
     /**
      * Submits the complete form
-     * 
+     *
      * @memberof CreateComponent
      */
     public submitForm(): void {
@@ -442,7 +443,7 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
 
     /**
      * Toggles email editing mode
-     * 
+     *
      * @memberof CreateComponent
      */
     public toggleEmailEdit(isCancel: boolean): void {
@@ -458,12 +459,12 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
 
     /**
      * Updates the forwardedMail query parameter while preserving all other query params and URL
-     * 
+     *
      * @memberof CreateComponent
      */
     public replaceUrlEmail(): void {
         const completeEmail = this.getCompleteEmail();
-        
+
         // Use Angular Router for proper URL handling
         this.generalService.updateActivatedRouteQueryParams({
             companyUniqueName: this.companyUniqueName,
@@ -476,7 +477,7 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
 
     /**
      * Copies the complete email to clipboard
-     * 
+     *
      * @memberof CreateComponent
      */
     public copyEmail(): void {
@@ -488,14 +489,14 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
 
     /**
      * Handles verify and next action - opens confirm link in new tab and navigates to step 3
-     * 
+     *
      * @memberof CreateComponent
      */
     public handleVerifyAndNext(): void {
         if (this.emailForwardingResponse?.confirmationData?.[0]?.confirmLink) {
             // Open verification link in new tab
             window.open(this.emailForwardingResponse.confirmationData[0].confirmLink, '_blank');
-            
+
             // Navigate to step 3
             setTimeout(() => {
                 this.generalService.updateActivatedRouteQueryParams({
@@ -504,24 +505,24 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
                     ...this.route.snapshot.queryParams,
                     step: 3
                 });
-                
+
                 // Navigate stepper to step 3 (index 2)
                 this.navigateToStep(2);
             }, 500);
-            
+
         }
     }
 
     /**
      * Handles cancel action - opens cancel link in new tab and redirects to onboarding
-     * 
+     *
      * @memberof CreateComponent
      */
     public handleCancel(): void {
         if (this.emailForwardingResponse?.confirmationData?.[0]?.cancelLink) {
             // Open cancel link in new tab
             window.open(this.emailForwardingResponse.confirmationData[0].cancelLink, '_blank');
-            
+
             // Redirect to onboarding page
             setTimeout(() => {
                 this.router.navigate(['/pages/email-forwarding/onboarding'], { queryParams: { companyUniqueName: this.companyUniqueName, branchUniqueName: this.branchUniqueName } });
@@ -534,7 +535,7 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
 
     /**
      * Gets the complete email (prefix + domain)
-     * 
+     *
      * @returns {string} Complete email address
      * @memberof CreateComponent
      */
@@ -545,13 +546,13 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
 
     /**
      * Sets up subscription for account search results
-     * 
+     *
      * @private
      * @memberof CreateComponent
      */
     private setupAccountSearchSubscription(): void {
         this.bankStatementStore.accountSearch$.pipe(
-            debounceTime(200), 
+            debounceTime(200),
             takeUntil(this.destroyed$)
         ).subscribe(accountSearchResponse => {
             if (accountSearchResponse && accountSearchResponse.results) {
@@ -565,7 +566,7 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
                         });
                     }
                 });
-                
+
                 // Set all results at once (no pagination)
                 this.accountSearchResponseSubject.next(formattedResults);
                 this.accountSearchRequest.isLoading = false;
@@ -585,28 +586,28 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
             return; // Prevent multiple calls
         }
         this.accountSearchCalled = true;
-        this.accountSearchRequest.isLoading = true;        
+        this.accountSearchRequest.isLoading = true;
         this.bankStatementStore.searchAccount(this.accountSearchRequest.group);
     }
 
     /**
      * Navigates back to the list page
-     * 
+     *
      * @memberof CreateComponent
      */
     public navigateBack(): void {
         this.router.navigate(['/pages/email-forwarding/list'], { queryParams: { companyUniqueName: this.companyUniqueName, branchUniqueName: this.branchUniqueName } });
     }
-    
+
     /**
      * Component cleanup
-     * 
+     *
      * @memberof CreateComponent
      */
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
-        
+
         // Clean up polling subject
         if (!this.stopPolling$.closed) {
             this.stopPolling$.next();

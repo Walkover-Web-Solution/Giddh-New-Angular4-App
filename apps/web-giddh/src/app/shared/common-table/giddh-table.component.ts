@@ -1,12 +1,11 @@
 import { Component, Input, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { ColumnDefinition } from './giddh-table.component.const';
-import { forEach, isArray, isNumber, keys } from '../../lodash-optimized';
 @Component({
     selector: 'giddh-table',
     templateUrl: './giddh-table.component.html',
     styleUrls: ['./giddh-table.component.scss'],
-    standalone:false
+    standalone: false
 })
 
 export class GiddhTableComponent implements OnInit, OnDestroy {
@@ -18,9 +17,9 @@ export class GiddhTableComponent implements OnInit, OnDestroy {
     @Input() tableDataSource: any[] = [];
     /**
      * Configuration for table columns.
-     *
+     * 
      * Each key represents a column, and its value is an array with the following structure:
-     *
+     * 
      * [0] Header Name (string): The label to be displayed in the table header, often tied to localization keys.
      * [1] Visibility (boolean): Determines if the column should be shown (true) or hidden (false).
      * [2] Give Class (string): This class is applied to the header, footer, and secondary header.

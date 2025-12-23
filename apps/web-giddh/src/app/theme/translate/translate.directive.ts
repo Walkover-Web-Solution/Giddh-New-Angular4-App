@@ -30,12 +30,8 @@ export class TranslateDirective implements OnInit, OnDestroy {
 
     constructor(private localeService: LocaleService, private store: Store<AppState>) {
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
-            this.currentLanguage = response?.value || 'en'; // Default to 'en' if undefined
-            this.localeService.language = response?.value || 'en';
-            // Re-trigger locale loading when language changes
-            if (this.currentLanguage) {
-                this.getLocale();
-            }
+            this.currentLanguage = response?.value;
+            this.localeService.language = response?.value;
         });
     }
 

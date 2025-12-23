@@ -1,10 +1,9 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { slice } from '../../../../lodash-optimized';
 
 @Pipe({
-  name: 'accountNumberMask',
-  standalone: false,
-    pure: true
+    name: 'accountNumberMask',
+    pure: true,
+    standalone: false
 })
 export class AccountNumberMaskPipe implements PipeTransform {
     public constructor() { }

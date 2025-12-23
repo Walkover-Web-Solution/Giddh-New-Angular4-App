@@ -1,0 +1,184 @@
+<div
+    appTranslate
+    [file]="'contact/preview'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <hamburger-menu class="hamburger-menu"></hamburger-menu>
+    <giddh-page-loader
+        *ngIf="!isSearching && !isLoadMore && (getAccountsInProgress$ | async)"
+        [cssClass]="'no-data'"
+    ></giddh-page-loader>
+    <div class="invoice-preview-wrapper d-flex full-viewport-height" *ngIf="isSearching || isLoadMore || !(getAccountsInProgress$ | async)">
+        <div class="preview-list pb-3">
+            <div class="d-flex align-items-center column-gap-05 p-3 w-100 list-responsive row-gap-1">
+                <div class="position-relative search-field flex-grow-1">
+                    <text-field
+                        class="width-inherit"
+                        [type]="'text'"
+                        [cssClass]="'form-control pl-3'"
+                        [placeholder]="commonLocaleData?.app_search"
+                        [formControl]="search"
+                    >
+                    </text-field>
+                    <i class="icon-search position-absolute"></i>
+                </div>
+            </div>
+            <div class="mat-grid-wrapper">
+                <div
+                    class="mat-list-wrap overflow-auto contact-list"
+                    *ngIf="(getAccountsInProgress$ | async) === false"
+                >
+                    <mat-list>
+                        <ng-container *ngFor="let item of contactList; let i = index; let lastItem = last">
+                            <mat-list-item
+                                class="single-invoice-detail cursor-pointer"
+                                [ngClass]="{
+                                    'active': item?.uniqueName === selectedContact?.uniqueName,
+                                    'border-bottom': !lastItem
+                                }"
+                                (click)="setSelectedContact(item?.uniqueName, true)"
+                            >
+                                <div class="d-flex justify-content-between align-items-center column-gap-05">
+                                    <div>
+                                        <span class="font-size-12 title-text">
+                                            {{ item?.uniqueName }}
+                                        </span>
+                                        <p class="text-light pr-5 text-wrap">
+                                            {{ item?.name }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </mat-list-item>
+                        </ng-container>
+                        <mat-list-item *ngIf="contactList?.length === 0">
+                            <p class="text-center light-gray">{{ commonLocaleData?.app_no_data_found }}</p>
+                        </mat-list-item>
+                    </mat-list>
+                </div>
+                <giddh-page-loader
+                    *ngIf="isSearching && !isLoadMore && (getAccountsInProgress$ | async)"
+                    [cssClass]="'no-data'"
+                ></giddh-page-loader>
+            </div>
+        </div>
+        <div class="preview-content">
+            <div class="position-relative overflow-visible">
+                <div class="clear-both overflow-visible">
+                    <div class="position-absolute back-button">
+                        <button mat-stroked-button (click)="redirectToGetAllPage()">
+                            {{ commonLocaleData?.app_back }}
+                        </button>
+                    </div>
+                    <mat-tab-group
+                        mat-stretch-tabs="false"
+                        animationDuration="0ms"
+                        [selectedIndex]="selectedTabIndex"
+                        (selectedTabChange)="tabChanged($event)"
+                        [disableRipple]="true"
+                        class="table-header-sticky"
+                    >
+                        <mat-tab [label]="localeData?.statement">
+                            <div class="wrapper-background bg-light-gray p-2 pt-1 pb-1 overflow-auto">
+                                <div class="account-statement-wrapper h-100">
+                                    <mat-card
+                                        class=" p-3 mat-card-wrapper"
+                                        *ngIf="selectedContact?.uniqueName && !isContactNotFound"
+                                    >
+                                        <account-statement
+                                            [activeAccountUniqueName]="selectedContact?.uniqueName"
+                                            [branchUniqueName]="queryParams.branchUniqueName"
+                                            [from]="queryParams.from"
+                                            [to]="queryParams.to"
+                                        ></account-statement>
+                                        <ng-container *ngIf="isContactNotFound">
+                                            <ng-container *ngTemplateOutlet="noContactFound"></ng-container>
+                                        </ng-container>
+                                    </mat-card>
+                                </div>
+                            </div>
+                        </mat-tab>
+                        <mat-tab [label]="localeData?.transaction">
+                            <div class="wrapper-background bg-light-gray p-2 overflow-auto">
+                                <div class="account-statement-wrapper">
+                                    <mat-card>
+                                        <ledger-statement
+                                            *ngIf="selectedContact?.uniqueName && !isContactNotFound"
+                                            [activeAccountUniqueName]="selectedContact?.uniqueName"
+                                            [branchUniqueName]="queryParams.branchUniqueName"
+                                            [from]="queryParams.from"
+                                            [to]="queryParams.to"
+                                        ></ledger-statement>
+                                        <ng-container *ngIf="isContactNotFound">
+                                            <ng-container *ngTemplateOutlet="noContactFound"></ng-container>
+                                        </ng-container>
+                                    </mat-card>
+                                </div>
+                            </div>
+                        </mat-tab>
+                        <mat-tab [label]="localeData?.account_details">
+                            <div class="wrapper-background bg-light-gray d-flex flex-column overflow-auto">
+                                <div
+                                    class="account-details-wrapper w-100 pt-3 pb-3 pl-1 pr-1 flex-grow-1 d-flex flex-column"
+                                >
+                                    <div class="no-data" *ngIf="updateAccountInProcess$ | async">
+                                        <giddh-page-loader></giddh-page-loader>
+                                    </div>
+                                    <mat-card *ngIf="!(updateAccountInProcess$ | async)">
+                                        <div
+                                            class=" p-3 flex-grow-1"
+                                            *ngIf="
+                                                !(updateAccountInProcess$ | async) &&
+                                                (activeAccount$ | async) &&
+                                                !isContactNotFound && !isMasterOpen
+                                            "
+                                        >
+                                            <account-update-new-details
+                                                [activeAccount$]="activeAccount$"
+                                                [activeGroupUniqueName]="parentGroupUniqueName"
+                                                [isGstEnabledAcc]="isGstEnabledAcc"
+                                                [isHsnSacEnabledAcc]="isHsnSacEnabledAcc"
+                                                [updateAccountInProcess$]="updateAccountInProcess$"
+                                                (isGroupSelected)="isGroupSelected($event)"
+                                                [accountDetails]="accountDetails"
+                                                [updateAccountIsSuccess$]="updateAccountIsSuccess$"
+                                                (deleteClicked)="showDeleteAccountModal()"
+                                                (submitClicked)="updateAccount($event)"
+                                                [showBankDetailPreview]="showBankDetailPreview"
+                                                [contactPreview]="true"
+                                                [showVirtualAccount]="showVirtualAccount"
+                                                [isDebtorCreditor]="isDebtorCreditor"
+                                                (updateViaPatchApi)="updateAccount($event, true)"
+                                            >
+                                            </account-update-new-details>
+                                        </div>
+                                        <ng-container *ngIf="isContactNotFound">
+                                            <ng-container *ngTemplateOutlet="noContactFound"></ng-container>
+                                        </ng-container>
+                                    </mat-card>
+                                </div>
+                            </div>
+                        </mat-tab>
+                    </mat-tab-group>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--delete Account modal  -->
+<ng-template #deleteAccountModal>
+    <confirm-modal
+        [title]="commonLocaleData?.app_delete_account_title"
+        [body]="commonLocaleData?.app_delete_account_message"
+        (cancelCallBack)="hideDeleteAccountModal()"
+        (successCallBack)="deleteAccount()"
+    >
+    </confirm-modal>
+</ng-template>
+
+<!-- Single template for user not found -->
+<ng-template #noContactFound>
+    <div class="text-center contact-no-data-message">
+        <p>{{ localeData?.user_not_found_message }}</p>
+    </div>
+</ng-template>

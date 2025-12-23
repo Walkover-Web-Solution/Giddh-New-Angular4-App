@@ -6,11 +6,11 @@ import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import { GeneralService } from '../../services/general.service';
 import { CommandKService } from '../../services/commandk.service';
 import { CommandKRequest } from '../../models/api-models/Common';
+import { remove } from '../../lodash-optimized';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
 import { GeneralActions } from '../../actions/general/general.actions';
-import { findIndex, indexOf, remove } from '../../lodash-optimized';
 
 const DIRECTIONAL_KEYS = [
     LEFT_ARROW, RIGHT_ARROW, UP_ARROW, DOWN_ARROW
@@ -20,10 +20,10 @@ const SPECIAL_KEYS = [...DIRECTIONAL_KEYS, CAPS_LOCK, TAB, SHIFT, CONTROL, ALT, 
 
 @Component({
     selector: 'command-k',
-    standalone: false,
     styleUrls: ['./command.k.component.scss'],
     templateUrl: './command.k.component.html',
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -58,7 +58,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
     @Input() public ItemWidth: number = 300;
     /** Number of items visible in the viewport. */
     @Input() public visibleItems: number = 10;
-
+    
     /** Emits the selected item. */
     @Output() public selectedItemEmitter: EventEmitter<any | any[]> = new EventEmitter<any | any[]>();
     /** Emits when the dialog is closed. */
@@ -124,7 +124,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
     public ngOnInit(): void {
         // listen on input for search
         this.searchSubject.pipe(
-            debounceTime(300),
+            debounceTime(300), 
             takeUntil(this.destroyed$)
         ).subscribe((term: string) => {
             this.commandKRequestParams.page = 1;
@@ -132,9 +132,9 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
             this.searchCommandK(true);
             this.changeDetection.markForCheck();
         });
-
+        
         document.querySelector("body")?.classList?.add("cmd-k");
-
+        
         // Initialize search only once
         if (!this.isInitialized) {
             this.isInitialized = true;
@@ -196,7 +196,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         if (this.setParentWidth && this.mainEle && this.parentEle) {
             const box = this.parentEle.getBoundingClientRect();
             this.ItemWidth = Math.max(box.width, this.ItemWidth);
-
+            
             if (this.mainEle?.nativeElement) {
                 this.mainEle.nativeElement.style.width = `${box.width}px`;
             }
@@ -215,7 +215,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
      * @param {*} item
      * @memberof CommandKComponent
      */
-    public itemSelected(item: any, event?:any): void {
+    public itemSelected(item: any, event?:any): void {              
         if (event && (event.ctrlKey || event.metaKey)){
             this.closeDailogEmitter.emit();
             return ;
@@ -226,7 +226,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         if (!item.type || (item.type && (item.type === 'MENU' || item.type === 'ACCOUNT'))) {
             if (item.type === 'MENU') {
                 item.uniqueName = item.route;
-            }
+            }           
             this.selectedItemEmitter.emit(item);
         } else {
             // emit value for save data in db
@@ -296,7 +296,7 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
 
                 // Create new array reference for proper change detection
                 this.searchedItems = [...(this.searchedItems || []), ...res.body.results];
-
+                
                 if (this.commandKRequestParams.page === 1) {
                     this.highlightedItem = 0;
                 }
@@ -304,11 +304,11 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.commandKRequestParams.totalPages = res.body.totalPages;
                 // Only allow load more if there are more pages available
                 this.allowLoadMore = this.commandKRequestParams.page < this.commandKRequestParams.totalPages;
-
+                
 
                 // Force change detection and viewport refresh
                 this.changeDetection.detectChanges();
-
+                
                 // Refresh virtual scroll viewport if available
                 setTimeout(() => {
                     // Preserve scroll position when loading more data (not initial search)
@@ -473,9 +473,9 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         if (this.isOpen && SPECIAL_KEYS?.indexOf(key) !== -1) {
             return;
         }
-
+        
         term = term ? term.trim() : "";
-
+        
         // Only emit if term is different from current query to prevent duplicates
         if (this.commandKRequestParams.q !== term) {
             this.searchSubject.next(term);
@@ -548,10 +548,10 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
     public onViewportScroll(event: Event): void {
         const element = event.target as HTMLElement;
         const threshold = 200; // Load more when 200px from bottom
-
+        
         // Track current scroll position
         this.lastScrollTop = element.scrollTop;
-
+        
         if (element.scrollTop + element.clientHeight >= element.scrollHeight - threshold && this.allowLoadMore && !this.isLoading) {
             this.loadMoreData();
         }
@@ -613,8 +613,8 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
         }
         const itemCount = Math.min(this.searchedItems.length, this.visibleItems);
         const height = itemCount * this.ItemHeight;
-
-
+        
+        
         return height;
     }
 
@@ -668,19 +668,19 @@ export class CommandKComponent implements OnInit, OnDestroy, AfterViewInit {
     private refreshVirtualScrollViewport(preserveScrollPosition: boolean = false): void {
         if (this.virtualScrollViewport) {
             // Use tracked scroll position or get current position
-            const currentScrollTop = preserveScrollPosition ?
+            const currentScrollTop = preserveScrollPosition ? 
                 (this.lastScrollTop || this.virtualScrollViewport.getElementRef().nativeElement.scrollTop) : 0;
-
+            
             this.virtualScrollViewport.checkViewportSize();
-
+            
             // Don't reset the rendered range when loading more data
             if (!preserveScrollPosition) {
                 const itemCount = Math.min(this.searchedItems?.length || 0, this.visibleItems);
                 this.virtualScrollViewport.setRenderedRange({ start: 0, end: itemCount });
             }
-
+            
             this.changeDetection.detectChanges();
-
+            
             // Restore scroll position if needed (with slight delay for DOM updates)
             if (preserveScrollPosition && currentScrollTop > 0) {
                 setTimeout(() => {

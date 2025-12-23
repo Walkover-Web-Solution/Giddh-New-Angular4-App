@@ -9,13 +9,12 @@ import { GroupCreateRequest } from '../../../../models/api-models/Group';
 import { uniqueNameInvalidStringReplace } from '../../../helpers/helperFunctions';
 import { digitsOnly } from '../../../helpers';
 import { AccountsAction } from 'apps/web-giddh/src/app/actions/accounts.actions';
-import { get, set } from '../../../../lodash-optimized';
 
 @Component({
     selector: 'group-add',
-    standalone: false,
     templateUrl: 'group-add.component.html',
-    styleUrls: ['group-add.component.scss']
+    styleUrls: ['group-add.component.scss'],
+    standalone: false
 })
 
 export class GroupAddComponent implements OnInit, OnDestroy {
@@ -97,7 +96,7 @@ export class GroupAddComponent implements OnInit, OnDestroy {
 
     /**
      * Initializes the reactive form group for adding or editing an account.
-     *
+     * 
      * @returns FormGroup
      * @memberof GroupAddComponent
      */

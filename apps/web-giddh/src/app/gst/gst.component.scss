@@ -1,0 +1,251 @@
+.return-body .main-wrapper {
+    padding: 0;
+    border-right: 1px solid transparent;
+}
+
+.btn {
+    display: inline-block;
+    padding: 5px 12px;
+    margin-bottom: 0;
+    cursor: pointer;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    -o-user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+svg.icon.icon-xxlg-md {
+    height: 40px;
+    width: 40px;
+}
+
+.return-content {
+    .return-top {
+        display: inline-block;
+        margin-left: 1%;
+        .font-size-16 {
+            margin: 3px auto;
+        }
+    }
+}
+
+.text-middle {
+    vertical-align: middle;
+}
+
+.return-content:not(:first-child) {
+    margin: 22px 0;
+}
+
+.text-uppercase {
+    text-transform: uppercase;
+}
+
+.text-muted {
+    color: var(--color-dark-gray);
+}
+
+.return-content .content-graph {
+    padding: 35px 0;
+}
+
+svg.icon.gstr-icon {
+    width: 42px;
+    height: 42px;
+}
+
+.return-content .sales-colm {
+    width: 32%;
+    display: inline-block;
+    vertical-align: text-top;
+}
+
+.return-body b {
+    font-weight: 500;
+}
+
+.return-content .line {
+    margin: 5px 18px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.return-content .line::before {
+    content: "";
+    display: block;
+    width: 9px;
+    height: 9px;
+    border-radius: var(--mat-border-radius-4);
+    background-color: var(--color-border-light);
+    position: relative;
+    top: 5px;
+    right: 19px;
+}
+
+.return-content .purchase-colm {
+    width: 24%;
+    display: inline-block;
+}
+
+svg.icon {
+    width: 16px;
+    height: 16px;
+    fill: currentColor;
+}
+
+.text-overdue {
+    margin: 20px 0px 0px;
+    i {
+        padding: 0 4%;
+    }
+}
+svg.icon.icon-xxlg-md {
+    height: 40px;
+    width: 40px;
+}
+
+.content-disabled {
+    opacity: 0.5;
+    position: relative;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.return-content:last-child {
+    margin-bottom: 0;
+}
+
+.filing-demo-video .video-thumbnail > svg {
+    width: 60px;
+    height: 40px;
+}
+
+hr {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+.return-body .notification .activity-graph .notify:not(:last-child)::before {
+    content: "";
+    position: absolute;
+    top: 14px;
+    left: 4px;
+    bottom: 5px;
+    height: 75%;
+    border-left: 1px solid var(--color-border-light);
+}
+
+.return-body .notification .activity-graph h4 {
+    line-height: 1.5;
+    margin-bottom: 2px;
+    margin-top: 10px;
+}
+
+.notify label.font-size-12.text-muted strong {
+    font-weight: 600;
+    color: var(--color-dark-gray) !important;
+}
+
+:focus {
+    outline: none !important;
+}
+
+.dropdown-menu > li > a:hover {
+    color: var(--text-primary-color);
+    background: var(--color-border-light);
+}
+
+.month-picker {
+    position: absolute;
+    top: 10px !important;
+    left: 160px !important;
+    z-index: 9 !important;
+    li {
+        a {
+            background-color: transparent !important;
+            border: none !important;
+        }
+    }
+}
+
+::ng-deep #monthPicker .btn-default.btn-info > .text-green {
+    color: inherit !important;
+}
+::ng-deep #monthPicker .btn-info:hover .text-green {
+    color: var(--color-white) !important;
+}
+::ng-deep #monthPicker .btn-default > .text-green {
+    color: inherit !important;
+}
+::ng-deep #monthPicker .btn-default:hover > .text-green {
+    color: var(--color-white) !important;
+}
+.parent {
+    position: relative;
+}
+
+.loader {
+    height: 4px;
+    width: 100%;
+    position: absolute;
+    overflow: hidden;
+    z-index: 1000000;
+    top: 0px;
+    left: 0px;
+}
+
+.loader:before {
+    display: block;
+    position: absolute;
+    z-index: 1000000;
+    content: "";
+    left: 0px;
+    top: 0px;
+    width: 200px;
+    height: 4px;
+    background-color: var(--bg-primary-color);
+    animation: loading 2s linear infinite;
+}
+
+.list-inline {
+    padding-left: 0;
+    margin-left: -5px;
+    > li {
+        display: inline-block;
+        padding-right: 5px;
+        padding-left: 5px;
+    }
+}
+@keyframes loading {
+    from {
+        left: 0px;
+        width: 30%;
+    }
+    50% {
+        width: 30%;
+    }
+    70% {
+        width: 70%;
+    }
+    80% {
+        left: 50%;
+    }
+    95% {
+        left: 120%;
+    }
+    to {
+        left: 100%;
+    }
+}
+.header-info ul#dropdown-nested li label {
+    padding-left: 0;
+    padding-bottom: 10px;
+    color: inherit;
+}
+.seperate-border {
+    background: var(--color-light-gray);
+    height: 10px;
+}

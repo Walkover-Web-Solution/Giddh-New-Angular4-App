@@ -11,9 +11,7 @@ export interface AddNewDetaileState {
 const DEFAULT_STATE: AddNewDetaileState = {
 };
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class AccountAddNewDetailsComponentStore extends ComponentStore<AddNewDetaileState> implements OnDestroy {
 
     constructor(

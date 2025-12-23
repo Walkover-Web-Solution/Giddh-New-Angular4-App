@@ -1,0 +1,22 @@
+.trigger {
+    height: calc(100vh - (var(--header-height) + 90px));
+    &-content {
+        width: 600px;
+
+        ::ng-deep mat-card {
+            transition: all 300ms ease;
+            mat-card-header {
+                min-height: 120px;
+                .mat-mdc-card-header-text {
+                    width: 100%;
+                }
+            }
+            &:hover {
+                background-color: var(--bg-primary-color) !important;
+                mat-card-title, mat-card-subtitle {
+                    color: var(--color-white) !important;
+                }
+            }
+        }
+    }
+}

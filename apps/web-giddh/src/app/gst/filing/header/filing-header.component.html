@@ -1,0 +1,202 @@
+<div class="list-filter">
+    <!-- GSTR1 -->
+    <div class="list-style d-flex justify-content-between align-items-center flex-wrap column-gap-1 row-gap-15" *ngIf="selectedGst === GstReport.Gstr1">
+        <div class="wrap-GSTR-1-title">
+            <a [routerLink]="['/gstfiling']" aria-label="back img"  class="ember-view">
+                <img src="{{ imgPath }}back.svg" class="icon image-as-icon-color icon-sm text-middle" alt="back img"  />
+            </a>
+            <img src="{{ imgPath }}cart.svg" class="icon gstr-icon image-as-icon-color text-middle" alt="cart img" />
+
+            <div class="text-vertical-align-middle nav-top">
+                <div class="text-vertical-align-middle head head-font-weight d-flex align-items-center column-gap-1">
+                    {{ localeData?.gstr1_label }}
+                     <div *ngIf="showDate">
+                        <ng-container *ngTemplateOutlet="monthSelectionDatePicker"></ng-container>
+                     </div>
+                </div>
+                <div class="font-size-12 text-vertical-align-middle font-weight-regular">{{ localeData?.outward_supplies_details }}</div>
+            </div>
+        </div>
+
+        <div class="flex-grow-1">
+            <ul class="list-inline d-flex column-gap-1 align-items-center justify-content-end w-100">
+                <li  *ngIf="!isTabScreen">  
+                    <ng-container *ngTemplateOutlet="watchVideoTemplateGSTR context: { $implicit: 'GSTR1' }"></ng-container>
+                </li>
+                <li class="d-flex column-gap-1 align-items-center">
+                    <button
+                        mat-raised-button
+                        color="primary"
+                        (click)="onDownloadSheetGSTR('error')"
+                    >
+                        {{ localeData?.filing?.errors }}
+                    </button>
+                    <button 
+                        mat-raised-button
+                        color="primary"
+                        (click)="openPushToPortalDialog()">
+                        <i class="icon-download"></i>
+                        {{ commonLocaleData?.app_download }}
+                    </button>
+                </li>
+
+                <li class="d-flex column-gap-1 align-items-center" *ngIf="(isCompany || isConsolidatedBranch) && showGstFiling">
+                    <button
+                        mat-raised-button
+                        color="primary"
+                        [disabled]="!gstAuthenticated"
+                        (click)="pullFromGstIn($event)"
+                        *ngIf="showTaxPro"
+                    >
+                        {{ localeData?.filing?.pull_from_gstn }}
+                    </button>
+                    <button
+                        mat-raised-button
+                        color="primary"
+                        [ngClass]="{ 'btn-success': gstAuthenticated }"
+                        (click)="openSettingAsidePane($event, taxServiceEnum.TAXPRO)"
+                        [disabled]="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.TaxFilling)"
+                    >
+                        {{
+                            gstAuthenticated ? localeData?.filing?.authenticated : localeData?.filing?.authenticate
+                        }}
+                    </button>
+                </li>
+            </ul>
+            <div *ngIf="isTabScreen" class="pull-right pr-0">
+                <ng-container *ngTemplateOutlet="watchVideoTemplateGSTR context: { $implicit: 'GSTR1' }"></ng-container>
+            </div>
+            <span class="pull-right filling-header-message" *ngIf="isCompany && showGstFiling">
+                <restricted-module-message [restrictedModule]="restrictedModules.TaxFilling"
+                    (onUpgradePlan)="buyPlan($event)">
+                </restricted-module-message>
+            </span>
+        </div>
+    </div>
+
+    <!-- GSTR2 -->
+    <div class="list-style d-flex justify-content-between align-items-center flex-wrap column-gap-1 row-gap-15" *ngIf="selectedGst === GstReport.Gstr2">
+        <div>
+            <a href="javascript:;" aria-label="back img"  id="ember1210" class="ember-view" [routerLink]="['/gstfiling']">
+                <img src="{{ imgPath }}back.svg" class="icon icon-sm image-as-icon-color text-middle" alt="back img"  />
+            </a>
+            <img src="{{ imgPath }}bag.svg" class="icon gstr-icon image-as-icon-color text-middle" alt="back img"  />
+            <div class="text-vertical-align-middle nav-top">
+                <div class="text-vertical-align-middle head-font-weight d-flex align-items-center column-gap-1">
+                    {{ localeData?.gstr2_label }}
+                    <div *ngIf="showDate">
+                        <ng-container *ngTemplateOutlet="monthSelectionDatePicker"></ng-container>
+                     </div>
+                </div>
+                <div class="font-size-12 text-vertical-align-middle font-weight-regular">{{ localeData?.inward_supplies_details }}</div>
+            </div>
+        </div>
+        <div class="flex-grow-1">
+            <div class="d-flex column-gap-1 justify-content-end align-items-center">
+                <div class="d-inline-flex align-items-center column-gap-1">
+                    <div *ngIf="!isTabScreen">
+                        <ng-container *ngTemplateOutlet="watchVideoTemplateGSTR context: { $implicit: 'GSTR2' }"></ng-container>
+                    </div>
+                    <button
+                        mat-raised-button
+                        color="primary"
+                        aria-labelledby="button-triggers-manual"
+                        [matMenuTriggerFor]="downloadMenu"
+                        class="download-menu"
+                    >
+                        <i class="icon-download"></i>
+                        {{ commonLocaleData?.app_download }}
+                    </button>
+                    <mat-menu #downloadMenu="matMenu">
+                        <button mat-menu-item aria-label="download"  (click)="onDownloadSheetGSTR('main')">
+                            {{ localeData?.filing?.download_sheet }}
+                        </button>
+                        <button mat-menu-item aria-label="download" (click)="onDownloadSheetGSTR('error')">
+                            {{ localeData?.filing?.download_error_sheet }}
+                        </button>
+                    </mat-menu>
+                </div>
+                <div *ngIf="(isCompany || isConsolidatedBranch) && showGstFiling" class="d-inline-flex column-gap-1 align-items-center">
+                    <button
+                        mat-raised-button
+                        color="primary"
+                        [ngClass]="{ 'btn-success': gstAuthenticated }"
+                        (click)="!gstAuthenticated ? openSettingAsidePane($event, taxServiceEnum.TAXPRO) : ''"
+                        [disabled]="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.TaxFilling)"               
+                    >
+                        {{ gstAuthenticated ? localeData?.filing?.authenticated : localeData?.filing?.authenticate }}
+                    </button>
+                    <button
+                        mat-raised-button
+                        color="primary"
+                        [disabled]="!gstAuthenticated"
+                        (click)="pullFromGstIn($event)"
+                        *ngIf="showTaxPro"
+                    >
+                        {{ localeData?.filing?.pull_from_gstn }}
+                    </button>
+                </div>
+            </div>
+            <div *ngIf="isTabScreen">
+                <ng-container *ngTemplateOutlet="watchVideoTemplateGSTR context: { $implicit: 'GSTR2' }"></ng-container>
+            </div>
+            <div class="d-flex justify-content-end filling-header-message">
+                <restricted-module-message [restrictedModule]="restrictedModules.TaxFilling"
+                    (onUpgradePlan)="buyPlan($event)">
+                </restricted-module-message>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Authentication Dialog -->
+<ng-template #asideAuthentication>
+    <gst-aside-menu
+        [selectedService]="selectedService"
+        [returnType]="selectedGst"
+        (fileGst)="fileGstReturnV2()"
+        (cancelConfirmationEvent)="openCancelConfirmationDialog()"
+        (closeAsideEvent)="asideAuthenticationDialogRef?.close()"
+        (fileGstComplete)="asideAuthenticationDialogRef?.close()"
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+    ></gst-aside-menu>
+</ng-template>
+
+<!-- Region Cancel Confirmation Dialog -->
+<ng-template #cancelConfirmationDialog>
+    <confirm-modal
+        [body]="localeData?.filing?.cancel_title"
+        [permanentlyDeleteMessage]="' '"
+        (successCallBack)="cancelConfirmationDialogRef?.close(); asideAuthenticationDialogRef?.close()"
+        (cancelCallBack)="cancelConfirmationDialogRef?.close()"
+    ></confirm-modal>
+</ng-template>
+
+<!-- Push to portal Dialog -->
+<ng-template #pushToPortalDialog>
+    <push-to-portal
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+        (downloadExcel)="onDownloadSheetGSTR('main')"
+        (downloadJson)="onDownloadJsonGSTR('main')"
+    ></push-to-portal>
+</ng-template>
+
+<!-- Define the ng-template -->
+<ng-template #monthSelectionDatePicker>
+    <giddh-datepicker
+        [monthYearMode]="true"
+        [startView]="'multi-year'"
+        [cssClass]="'text-center width-150'"
+        [startAt]="startAt"
+        [placeholder]="date?.value ?? '--'"
+        [appearance]="'outline'"
+        (monthYearSelected)="setMonthAndYear($event)"
+    >
+    </giddh-datepicker>
+</ng-template>
+
+<ng-template #watchVideoTemplateGSTR let-moduleName>
+    <watch-video [cssClass]="'text-primary'" [moduleName]="moduleName"></watch-video>
+</ng-template>

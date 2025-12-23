@@ -1,11 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import * as dayjs from 'dayjs';
-import { cloneDeep } from '../../lodash-optimized';
+type Dayjs = any;
 
 @Component({
     selector: 'app-datepicker-wrapper',
-    standalone: false,
-    templateUrl: './datepicker.wrapper.component.html'
+    templateUrl: './datepicker.wrapper.component.html',
+    standalone: false
 })
 
 export class DatepickerWrapperComponent implements OnInit, OnChanges {
@@ -17,10 +17,10 @@ export class DatepickerWrapperComponent implements OnInit, OnChanges {
     /** This will emit event when calender is closed */
     @Output() closeCalender: EventEmitter<void> = new EventEmitter();
 
-    @Input() public inputStartDate: any; // dayjs.Dayjs;
-    @Input() public inputEndDate: any; // dayjs.Dayjs;
-    @Input() public minDate: any; // dayjs.Dayjs;
-    @Input() public maxDate: any; // dayjs.Dayjs;
+    @Input() public inputStartDate: Dayjs;
+    @Input() public inputEndDate: Dayjs;
+    @Input() public minDate: Dayjs;
+    @Input() public maxDate: Dayjs;
     @Input() public autoApply: boolean;
     @Input() public alwaysShowCalendars: boolean;
     @Input() public showCustomRangeLabel: boolean;
@@ -66,9 +66,9 @@ export class DatepickerWrapperComponent implements OnInit, OnChanges {
             this.inputEndDate = dayjs().endOf('day');
         }
 
-        this.minDate = cloneDeep(this.inputStartDate);
+        this.minDate = _.cloneDeep(this.inputStartDate);
         this.minDate.subtract(1, 'year').startOf('month').month(0); // default min date of previous year first month
-        this.maxDate = cloneDeep(this.inputEndDate);
+        this.maxDate = _.cloneDeep(this.inputEndDate);
         this.maxDate.add(1, 'year').endOf('month').month(11); // default max date of next year last month
     }
 
@@ -82,12 +82,12 @@ export class DatepickerWrapperComponent implements OnInit, OnChanges {
         for (let change in changes) {
             if (change === "inputStartDate" && changes[change].currentValue) {
                 this.inputStartDate = changes[change].currentValue;
-                this.minDate = cloneDeep(this.inputStartDate);
+                this.minDate = _.cloneDeep(this.inputStartDate);
                 this.minDate.subtract(1, 'year').startOf('month').month(0); // default min date of previous year first month
             }
             if (change === "inputEndDate" && changes[change].currentValue) {
                 this.inputEndDate = changes[change].currentValue;
-                this.maxDate = cloneDeep(this.inputEndDate);
+                this.maxDate = _.cloneDeep(this.inputEndDate);
                 this.maxDate.add(1, 'year').endOf('month').month(11); // default max date of next year last month
             }
         }

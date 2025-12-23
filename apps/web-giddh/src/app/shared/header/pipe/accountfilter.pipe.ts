@@ -1,11 +1,11 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { cloneDeep, each, indexOf, isUndefined } from '../../../lodash-optimized';
+import { cloneDeep, each, isUndefined } from '../../../lodash-optimized';
 
 @Pipe({
     // tslint:disable-next-line:pipe-naming
     name: 'grpsrch',
     pure: true,
-    standalone:false
+    standalone: false
 })
 
 export class AccountFilterPipe implements PipeTransform {

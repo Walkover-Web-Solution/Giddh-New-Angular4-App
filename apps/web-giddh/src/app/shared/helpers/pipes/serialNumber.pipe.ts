@@ -2,7 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'serialNumber',
-  standalone: false
+  standalone: true
 })
 export class SerialNumberPipe implements PipeTransform {
 

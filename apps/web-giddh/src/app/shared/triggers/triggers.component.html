@@ -1,0 +1,35 @@
+<div
+    appTranslate
+    [file]="'triggers'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <hamburger-menu></hamburger-menu>
+    <section class="trigger d-grid place-content-center">
+        <div *ngIf="!isLoading; else showLoader" class="trigger-content d-flex column-gap-4">
+            <mat-card class="cursor-pointer w-100 flex-grow-1 text-center" role="link" (click)="openCreateTriggerDialog()">
+                <mat-card-content>
+                    <mat-card-header class="align-items-center">
+                        <mat-card-title>{{ localeData?.basic }}</mat-card-title>
+                        <mat-card-subtitle>
+                            <span class="d-inline-flex column-gap-1 align-items-center"><i class="icon-mail"></i>{{ commonLocaleData?.app_email }}</span> 
+                            &nbsp;&nbsp;
+                            <span class="d-inline-flex column-gap-1 align-items-center"><i class="icon-chat2"></i> {{ localeData?.whatsapp }}</span>
+                        </mat-card-subtitle>
+                    </mat-card-header>
+                </mat-card-content>
+            </mat-card>
+            <mat-card class="cursor-pointer w-100 flex-grow-1 text-center" role="link" routerLink="/pages/settings/trigger/advance">
+                <mat-card-content>
+                    <mat-card-header class="align-items-center">
+                        <mat-card-title>{{ localeData?.advance }}</mat-card-title>
+                    </mat-card-header>
+                </mat-card-content>
+            </mat-card>
+        </div>
+        <ng-template #showLoader>
+            <giddh-page-loader></giddh-page-loader>
+        </ng-template>
+    </section>
+
+</div>

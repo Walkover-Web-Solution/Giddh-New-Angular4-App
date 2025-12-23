@@ -3,12 +3,8 @@ import { TributeMentionDirective } from './tributeMention';
 
 @NgModule({
     imports: [],
-    exports: [
-        TributeMentionDirective
-    ],
-    declarations: [
-        TributeMentionDirective
-    ]
+    exports: [TributeMentionDirective],
+    declarations: [TributeMentionDirective]
 })
 export class TributeMentionModule {
 }

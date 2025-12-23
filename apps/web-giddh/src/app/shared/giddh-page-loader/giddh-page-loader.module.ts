@@ -4,11 +4,9 @@ import { GiddhPageLoaderComponent } from "./giddh-page-loader.component";
 @NgModule({
     declarations: [
         GiddhPageLoaderComponent
-    
     ],
     exports: [
         GiddhPageLoaderComponent
-    
     ]
 })
 

@@ -2,7 +2,6 @@ import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/scrolling';
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
-import { set } from '../../../lodash-optimized';
 
 @Component({
     selector: 'app-cdk-scroll',
@@ -15,7 +14,7 @@ export class CdkScrollComponent implements OnInit, OnDestroy {
     /** This will use for instance of cdk scrollable */
     @ViewChild(CdkScrollable) public scrollableWrapper: CdkScrollable | undefined;
     /** True if we need to scroll element by id */
-    @Input() public scrollableElementId: string = '';
+    @Input() public scrollableElementId: '';
     /** True if we need to scroll element by id */
     @Input() public scrollTriggerDistance: number = 30;
     /** This will use for emit next page query */

@@ -19,7 +19,7 @@
                     <span class="inner-span"></span>
                 </span>
                 <li class="company-name position-relative">
-                    <h3 class="font-size-15 d-flex flex-column cursor-pointer">
+                    <h3 class="font-size-15 d-flex flex-column cursor-pointer" [checkPermission]="['MENU', 'MANAGE']">
                         <div class="d-flex flex-column">
                             <div class="d-flex align-items-center">
                                 <span class="company-alice mr-1 text-uppercase">{{ companyInitials }}</span>

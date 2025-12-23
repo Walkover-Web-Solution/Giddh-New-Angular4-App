@@ -1,0 +1,234 @@
+a {
+    color: var(--text-primary-color);
+    text-decoration: none;
+}
+
+svg.icon.icon-lg {
+    height: 18px;
+    width: 12px;
+    filter: invert(0);
+    position: relative;
+    top: -1px;
+}
+
+.text-middle {
+    vertical-align: middle;
+}
+
+.tax-engine .gstr3b-sel input {
+    border: none;
+    width: 150px;
+    cursor: pointer;
+}
+
+.text-primary {
+    color: var(--text-primary-color);
+}
+
+.btn,
+.btn,
+.datepicker table {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.content-column .body {
+    padding: 0 20px 50px;
+}
+
+.content-disabled::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 999;
+    cursor: not-allowed;
+    display: block;
+}
+
+svg.icon.icon-xxlg {
+    height: 25px;
+    width: 25px;
+}
+
+.tax-engine .summary-content {
+    max-width: 1085px;
+    margin: 0 auto 30px;
+    font-family: var(--font-family);
+}
+
+.tax-engine .summary-content .gstr-3b-user {
+    border: none;
+}
+
+.font-medium {
+    font-size: var(--font-size-15);
+}
+
+.table,
+address {
+    margin-bottom: 20px;
+}
+
+.tax-engine .summary-content .gstr-3b-user.table > tbody > tr > td:first-child {
+    padding: 10px 0;
+    border: none;
+}
+
+.tax-engine .summary-content .gstr-3b-report.table > thead > tr > td:first-child {
+    padding-left: 14px;
+}
+
+.tax-engine .summary-content .gstr-3b-report.table > thead > tr > td {
+    border: 1px solid var(--border-color) !important;
+    padding: 6px;
+    font-size: var(--font-size-15);
+}
+
+.btn-link:focus,
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+.tax-engine .summary-content .gstr-3b-report.table > tbody > tr > td {
+    font-size: var(--font-size-15);
+    border: 1px solid var(--border-color) !important;
+    padding: 6px;
+}
+
+*,
+:after,
+:before {
+    box-sizing: border-box;
+}
+
+h4,
+h5,
+h6 {
+    margin-bottom: 10px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 5px 12px;
+    margin-bottom: 0;
+    cursor: pointer;
+    border: 1px solid transparent;
+    white-space: nowrap;
+    -o-user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.tax-engine .gstr3-points .point {
+    background-color: var(--bg-primary-color);
+    color: var(--color-white);
+    width: 22px;
+    height: 22px;
+    text-align: center;
+    display: inline-block;
+    border-radius: 50%;
+    margin: 0 23px 0 -53px;
+}
+
+tax-engine .caret-right {
+    display: inline-block;
+    margin-left: 2px;
+    border-left: 4px solid;
+    border-bottom: 4px solid transparent;
+    border-top: 4px solid transparent;
+}
+
+.tax-engine .gstr3-points a .caret-right {
+    color: var(--color-medium-gray);
+}
+
+.gstr3-filing-procedure > div {
+    width: 900px;
+    margin: 30px auto 0;
+    box-shadow: 1px 1px 11px var(--color-shadow-light);
+    border-radius: var(--mat-border-radius-4);
+    padding: 20px 50px 10px;
+}
+
+dropdown-menu-right {
+    right: 0;
+    left: auto;
+    top: 30px !important;
+}
+
+.btn-2:hover {
+    color: var(--color-white);
+    background: var(--bg-primary-color);
+}
+
+ul#dropdown-menu {
+    top: 30px !important;
+}
+
+.list-inline {
+    padding-left: 0;
+    margin-left: -5px;
+    > li {
+        display: inline-block;
+        padding-right: 5px;
+        padding-left: 5px;
+    }
+}
+.gstr-summary-head {
+    padding: 15px;
+    height: 65px;
+}
+
+.pointer-none {
+    pointer-events: none !important;
+}
+.summary-content {
+    table {
+        th,
+        td {
+            white-space: nowrap !important;
+            word-break: break-all !important;
+        }
+    }
+}
+.month-picker {
+    li {
+        a:hover {
+            background-color: transparent !important;
+            border: none !important;
+        }
+    }
+}
+@media (max-width: 991px) {
+    .gstr-summary-head {
+        height: auto;
+        .dropdown {
+            float: none;
+        }
+        .download-authenticate-btn {
+            text-align: right;
+            display: flex;
+            align-items: flex-end;
+            justify-content: flex-end;
+            width: 100%;
+            margin-bottom: 0;
+            padding-top: 15px;
+            float: none;
+        }
+    }
+    .gstr3b-header {
+        margin-top: 0 !important;
+    }
+}
+@media screen and (max-width: 1200px) {
+    .list-inline {
+        width: 130px;
+    }
+}

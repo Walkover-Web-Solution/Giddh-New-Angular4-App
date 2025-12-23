@@ -12,20 +12,17 @@
             <form [formGroup]="shareGroupForm" novalidate autocomplete="off">
                 <div class="row pb-4">
                     <div class="col-md-6">
-                        <!-- <input-field
+                        <input-field
                             formControlName="email"
                             [placeholder]="commonLocaleData?.app_email_id"
                             [name]="'userEmail'"
                             [required]="true"
                             [disabled]="isUserRestricted"
                             [pattern]="giddhEmailRegex"
-                        ></input-field> -->
-                        <input type="email" class="form-control" formControlName="email"
-                               [placeholder]="commonLocaleData?.app_email_id"
-                               [disabled]="isUserRestricted" required>
+                        ></input-field>
                     </div>
                     <div class="col-md-6 d-flex align-items-center justify-content-between">
-                        <!-- <reactive-dropdown-field
+                        <reactive-dropdown-field
                             class="pull-left w-75"
                             [label]="localeData?.permission_role_name"
                             [placeholder]="commonLocaleData?.app_select"
@@ -38,11 +35,7 @@
                             (selectedOption)="$event && (selectedPermission = $event.label)"
                             [labelValue]="selectedPermission"
                         >
-                        </reactive-dropdown-field> -->
-                        <select class="form-control pull-left w-75" formControlName="permission" [disabled]="isUserRestricted">
-                            <option value="">{{ commonLocaleData?.app_select }}</option>
-                            <option *ngFor="let permission of allPermissions" [value]="permission.value">{{ permission.label }}</option>
-                        </select>
+                        </reactive-dropdown-field>
                         <button
                             mat-raised-button
                             color="primary"
@@ -54,9 +47,9 @@
                 </div>
             </form>
         </div>
-        <!-- <restricted-module-message [restrictedModule]="restrictedModules.Users"
+        <restricted-module-message [restrictedModule]="restrictedModules.Users"
             [isUserRestricted]="isUserRestricted" (onUpgradePlan)="buyPlan($event)">
-        </restricted-module-message> -->
+        </restricted-module-message>
         <!--shared with array-->
         <div class="pt-2" *ngIf="(activeGroupSharedWith$ | async)?.length">
             <mat-list role="list" class="shared-list group-shared-list">
@@ -97,4 +90,3 @@
         </div>
     </mat-dialog-content>
 </div>
-

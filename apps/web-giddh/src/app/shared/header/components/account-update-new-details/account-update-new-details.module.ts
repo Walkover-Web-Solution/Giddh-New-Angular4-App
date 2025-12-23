@@ -1,18 +1,21 @@
 import { CommonModule } from "@angular/common";
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
+import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
-// import { ConfirmationModalModule } from "apps/web-giddh/src/app/theme/confirmation-modal/confirmation-modal.module";
-// import { ConfirmModalModule } from "apps/web-giddh/src/app/theme";
+import { ConfirmationModalModule } from "apps/web-giddh/src/app/theme/confirmation-modal/confirmation-modal.module";
+import { ConfirmModalModule } from "apps/web-giddh/src/app/theme";
 import { TranslateDirectiveModule } from "apps/web-giddh/src/app/theme/translate/translate.directive.module";
 import { AccountUpdateNewDetailsComponent } from "./account-update-new-details.component";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
+import { FormFieldsModule } from "apps/web-giddh/src/app/theme/form-fields/form-fields.module";
 import { MatButtonModule } from "@angular/material/button";
 import { MatRadioModule } from "@angular/material/radio";
 import { MatTabsModule } from "@angular/material/tabs";
+import { NewConfirmModalModule } from "apps/web-giddh/src/app/theme/new-confirm-modal";
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { SalesPersonService } from "../../../sales-person/utility/sales-person.service";
 import { OverlayModule } from "@angular/cdk/overlay";
-import { MatDialogModule } from "@angular/material/dialog";
+import { MobileNumberInputComponent } from "../../../mobile-number-input";
 
 @NgModule({
     declarations: [
@@ -20,31 +23,28 @@ import { MatDialogModule } from "@angular/material/dialog";
     ],
     imports: [
         CommonModule,
-        // FormFieldsModule,
+        FormFieldsModule,
         TranslateDirectiveModule,
         FormsModule,
         ReactiveFormsModule,
         MatSlideToggleModule,
         RouterModule,
-        // ConfirmModalModule,
-        // ConfirmationModalModule,
+        ConfirmModalModule,
+        ConfirmationModalModule,
         MatButtonModule,
         MatRadioModule,
         MatTabsModule,
-        // NewConfirmModalModule,
+        NewConfirmModalModule,
         MatTooltipModule,
         OverlayModule,
-        // MobileNumberInputComponent
+        MobileNumberInputComponent
     ],
     exports: [
         AccountUpdateNewDetailsComponent,
-        // ConfirmModalModule,
-        // ConfirmationModalModule
+        ConfirmModalModule,
+        ConfirmationModalModule
     ],
-    providers: [
-        // SalesPersonService
-    ],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    providers: [SalesPersonService]
 })
 
 export class AccountUpdateNewDetailsModule {

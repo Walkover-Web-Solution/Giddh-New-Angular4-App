@@ -24,7 +24,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
-import { ActionMenuModule } from '../shared/action-menu/action-menu.module';
 
 
 @NgModule({
@@ -59,8 +58,7 @@ import { ActionMenuModule } from '../shared/action-menu/action-menu.module';
         MatFormFieldModule,
         MatInputModule,
         MatIconModule,
-        HamburgerMenuModule,
-        ActionMenuModule // COMMENTED OUT - Template errors with mat-menu
+        HamburgerMenuModule
     ],
     providers: []
 })

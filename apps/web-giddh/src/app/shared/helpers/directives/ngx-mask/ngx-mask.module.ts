@@ -5,33 +5,28 @@ import { MaskPipe } from './mask.pipe';
 import { ModuleWithProviders, NgModule } from '@angular/core';
 
 @NgModule({
-    exports: [
-        MaskDirective,
-        MaskPipe
-    ],
-    declarations: [
-        MaskDirective,
-        MaskPipe
-    ],
+    exports: [MaskDirective, MaskPipe],
+    declarations: [MaskDirective, MaskPipe],
 })
 export class NgxMaskModule {
     public static forRoot(configValue?: optionsConfig | (() => optionsConfig)): ModuleWithProviders<NgxMaskModule> {
         return {
             ngModule: NgxMaskModule,
             providers: [
-        { provide: NEW_CONFIG,
-        useValue: configValue,
-        },
-        { provide: INITIAL_CONFIG,
-        useValue: initialConfig,
-        },
-        { provide: config,
-        useFactory: _configFactory,
-        deps: [INITIAL_CONFIG,
-        NEW_CONFIG
-    ],
+                {
+                    provide: NEW_CONFIG,
+                    useValue: configValue,
                 },
-                MaskApplierService
+                {
+                    provide: INITIAL_CONFIG,
+                    useValue: initialConfig,
+                },
+                {
+                    provide: config,
+                    useFactory: _configFactory,
+                    deps: [INITIAL_CONFIG, NEW_CONFIG],
+                },
+                MaskApplierService,
             ],
         };
     }

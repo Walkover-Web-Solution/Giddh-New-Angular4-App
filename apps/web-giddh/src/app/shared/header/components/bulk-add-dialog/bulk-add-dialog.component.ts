@@ -10,14 +10,13 @@ import { AccountsAction } from 'apps/web-giddh/src/app/actions/accounts.actions'
 import { AccountAddNewDetailsComponentStore } from '../account-add-new-details/utility/account-add-new-details.store';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { BranchHierarchyType } from 'apps/web-giddh/src/app/app.constant';
-import { filter, find, forEach, get } from '../../../../lodash-optimized';
 
 @Component({
     selector: 'bulk-add-dialog',
-    standalone: false,
     templateUrl: './bulk-add-dialog.component.html',
     styleUrls: ['./bulk-add-dialog.component.scss'],
-    providers: [AccountAddNewDetailsComponentStore]
+    providers: [AccountAddNewDetailsComponentStore],
+    standalone: false
 })
 export class BulkAddDialogComponent implements OnInit {
     /** This will hold local JSON data */

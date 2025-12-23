@@ -11,7 +11,7 @@ import { VoucherReportFilterModuleEnum } from "../../vouchers/utility/vouchers.c
     styleUrls: ["./select-table-column.component.scss"],
     templateUrl: "./select-table-column.component.html",
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone:false
+    standalone: false
 })
 export class SelectTableColumnComponent implements OnInit, OnChanges {
     /* This will hold local JSON data */

@@ -1,0 +1,49 @@
+.icon-download {
+    font-weight: 600;
+}
+
+.list-inline {
+    padding-left: 0;
+    > li {
+        display: inline-block;
+    }
+}
+
+.head-font-weight {
+    font-weight: 500 !important;
+}
+.month-picker {
+    li {
+        a:hover {
+            background-color: transparent !important;
+            border: none !important;
+        }
+    }
+}
+
+@media (max-width: 1050px) {
+        .list-filter{
+            min-height: 120px !important;
+        }
+}
+@media (max-width: 991px) {
+    .list-filter {
+        height: auto;
+    }
+
+    .list-inline {
+        > li {
+            margin-bottom: 10px;
+            .authenticate-btn {
+                margin-right: 0;
+            }
+        }
+    }
+    .download-menu {
+       width: 116px;
+    }
+}
+
+.filling-header-message {
+    font-weight: 400 !important;
+}

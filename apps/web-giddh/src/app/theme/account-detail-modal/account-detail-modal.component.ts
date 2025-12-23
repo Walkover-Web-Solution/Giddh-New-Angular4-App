@@ -11,14 +11,12 @@ import { ToasterService } from '../../services/toaster.service';
 import { GeneralService } from '../../services/general.service';
 import { Router } from '@angular/router';
 import { ASIDE_PANE_CONFIG } from '../../app.constant';
-import { Configuration } from '../../app.constant';
-import { includes } from '../../lodash-optimized';
 
 @Component({
     selector: '[account-detail-modal-component]',
     templateUrl: './account-detail-modal.component.html',
     styleUrls: ['./account-detail-modal.component.scss'],
-    standalone:false
+    standalone: false
 })
 
 export class AccountDetailModalComponent implements OnChanges, OnDestroy {
@@ -151,7 +149,7 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
             url = `${url}${additionalParams}`;
         }
 
-        if (Configuration.isElectron) {
+        if (isElectron) {
             let ipcRenderer = (window as any).require('electron').ipcRenderer;
             if (this.generalService.voucherApiVersion === 2) {
                 url = location.origin + location.pathname + `#./pages/${part}`;

@@ -11,13 +11,12 @@ import { AccountService } from '../../services/account.service';
 import { MatDialog } from '@angular/material/dialog';
 import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
 import { IOption } from '../../app.constant';
-import { flatten, map, omit, remove, some, union } from '../../lodash-optimized';
 
 @Component({
     selector: 'aside-menu-account',
     styleUrls: ['aside.menu.account.component.scss'],
     templateUrl: './aside.menu.account.component.html',
-    standalone:false
+    standalone: false
 })
 export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
@@ -194,7 +193,7 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
 
     public makeGroupListFlatwithLessDtl(rawList: any) {
         let obj;
-        obj = map(rawList, (item: any) => {
+        obj = _.map(rawList, (item: any) => {
             obj = {};
             obj.name = item?.name;
             obj.uniqueName = item?.uniqueName;
@@ -207,10 +206,10 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
 
     public flattenGroup(rawList: any[], parents: any[] = []) {
         let listofUN;
-        listofUN = map(rawList, (listItem) => {
+        listofUN = _.map(rawList, (listItem) => {
             let newParents;
             let result;
-            newParents = union([], parents);
+            newParents = _.union([], parents);
             newParents.push({
                 name: listItem?.name,
                 uniqueName: listItem?.uniqueName
@@ -221,13 +220,13 @@ export class AsideMenuAccountInContactComponent implements OnInit, OnDestroy {
             }
             if (listItem?.groups?.length > 0) {
                 result = this.flattenGroup(listItem.groups, newParents);
-                result.push(omit(listItem, 'groups'));
+                result.push(_.omit(listItem, 'groups'));
             } else {
-                result = omit(listItem, 'groups');
+                result = _.omit(listItem, 'groups');
             }
             return result;
         });
-        return flatten(listofUN);
+        return _.flatten(listofUN);
     }
 
     public ngOnDestroy() {

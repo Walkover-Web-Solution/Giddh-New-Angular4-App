@@ -5,7 +5,7 @@ import { OrgChart } from 'd3-org-chart';
     selector: 'd3-tree-chart',
     styleUrls: [`./d3-tree-chart.component.scss`],
     templateUrl: './d3-tree-chart.component.html',
-    standalone:false
+    standalone: false
 })
 export class D3TreeChartComponent implements OnDestroy, OnChanges {
     /** Holds Chart Container Reference */

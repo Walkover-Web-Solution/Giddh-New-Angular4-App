@@ -6,7 +6,7 @@ import { DecimalPipe } from '@angular/common';
     selector: 'amount-field',
     templateUrl: './amount-field.component.html',
     styleUrls: ['./amount-field.component.scss'],
-    standalone:false
+    standalone: false
 })
 
 export class AmountFieldComponent implements OnInit, OnChanges {

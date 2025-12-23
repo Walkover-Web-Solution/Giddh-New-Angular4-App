@@ -2,13 +2,12 @@ import { Component, EventEmitter, Input, Output, OnInit, OnDestroy } from '@angu
 import { AppState } from '../../store';
 import { Store, select } from '@ngrx/store';
 import { take } from 'rxjs/operators';
-import { remove } from '../../lodash-optimized';
 
 @Component({
     selector: 'confirm-modal',
     templateUrl: './confirm-modal.component.html',
     styleUrls: ['./confirm-modal.component.scss'],
-    standalone:false
+    standalone: false
 })
 export class ConfirmModalComponent implements OnInit, OnDestroy {
     @Input() public title: string = '';

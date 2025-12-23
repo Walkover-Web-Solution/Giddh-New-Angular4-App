@@ -5,6 +5,7 @@ import { ReplaySubject } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
 import { SettingsBranchActions } from "../../actions/settings/branch/settings.branch.action";
 import { BranchHierarchyType, FILE_ATTACHMENT_TYPE } from "../../app.constant";
+import { cloneDeep } from "../../lodash-optimized";
 import { CommonService } from "../../services/common.service";
 import { GeneralService } from "../../services/general.service";
 import { ToasterService } from "../../services/toaster.service";
@@ -20,16 +21,13 @@ import * as printJS from 'print-js';
 import { OrganizationType } from "../../models/user-login-state";
 import { VoucherTypeEnum } from "../../models/api-models/Sales";
 import { ServiceConfig } from "../../services/service.config";
-import { Configuration } from '../../app.constant';
-import { environment } from '../../../environments/environment';
-import { cloneDeep, filter, forEach, includes, map, remove } from '../../lodash-optimized';
 
 @Component({
     selector: "attachments",
     templateUrl: "./attachments.component.html",
     styleUrls: ["./attachments.component.scss"],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone:false
+    standalone: false
 })
 export class AttachmentsComponent implements OnInit, OnDestroy {
     /** Taking selected entry as input */
@@ -96,7 +94,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
         });
-        this.imgPath = Configuration.isElectron ? "assets/images/" : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + "assets/images/";
+        this.imgPath = isElectron ? "assets/images/" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + "assets/images/";
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.store.pipe(select(appStore => appStore.settings.branches), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {

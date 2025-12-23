@@ -15,14 +15,14 @@ const noop = () => { };
     selector: 'giddh-datepicker',
     styleUrls: ['./giddh-datepicker.component.scss'],
     templateUrl: './giddh-datepicker.component.html',
-    standalone: false,
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,
             useExisting: forwardRef(() => GiddhDatepickerComponent),
             multi: true
         }
-    ]
+    ],
+    standalone: false
 })
 
 export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, OnDestroy {

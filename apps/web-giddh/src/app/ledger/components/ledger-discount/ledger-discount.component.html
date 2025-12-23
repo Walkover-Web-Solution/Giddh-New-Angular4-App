@@ -1,0 +1,85 @@
+<div>
+    <input-field
+        (keydown.enter)="$event.preventDefault(); toggleDiscountMenu(true)"
+        id="ledger-discount"
+        [autocomplete]="'off'"
+        [prefix]="prefixInput"
+        [suffix]="suffixInput"
+        [mask]="maskInput"
+        [useMask]="true"
+        [type]="'text'"
+        [cssClass]="'cursor-pointer text-right pr-1'"
+        [name]="'discountTotal'"
+        [(ngModel)]="discountTotal"
+        [readonly]="readonly"
+        [label]="commonLocaleData?.app_discount"
+        [matMenuTriggerFor]="discountMenu"
+    ></input-field>
+
+    <mat-menu #discountMenu="matMenu" [hasBackdrop]="false">
+        <div (click)="$event.stopPropagation()" class="discount-wrapper p-2">
+            <div class="value-wrapper">
+                <div class="mb-2">
+                    <input-field
+                        [type]="'number'"
+                        [id]="'ledger-discount-percent'"
+                        [name]="'discountPercentageModal'"
+                        [label]="commonLocaleData?.app_percent"
+                        [disabled]="!discountFromPer"
+                        [allowDecimalDigitsOnly]="true"
+                        [customDecimalPlaces]="2"
+                        [min]="0"
+                        [cssClass]="'text-right'"
+                        [matSuffix]="'%'"
+                        [(ngModel)]="discountPercentageModal"
+                        (input)="discountFromInput('PERCENTAGE', $event.target?.value)"
+                    ></input-field>
+                </div>
+                <div class="mb-2">
+                    <input-field
+                        [type]="'number'"
+                        [id]="'ledger-discount-value'"
+                        [name]="'discountFixedValueModal'"
+                        [label]="commonLocaleData?.app_value"
+                        [disabled]="!discountFromVal"
+                        [allowDecimalDigitsOnly]="true"
+                        [customDecimalPlaces]="2"
+                        [min]="0"
+                        [cssClass]="'text-right'"
+                        [(ngModel)]="discountFixedValueModal"
+                        (input)="discountFromInput('FIX_AMOUNT', $event.target?.value)"
+                    ></input-field>
+                </div>
+            </div>
+            <div class="d-flex flex-col justify-content-center" *ngIf="discountAccountsDetails?.length > 1">
+                <span class="or-line">{{ commonLocaleData?.app_and }}</span>
+            </div>
+            <div *ngIf="discountAccountsDetails?.length > 1">
+                <ul class="discount-list">
+                    <ng-container *ngFor="let discount of discountAccountsDetails; trackBy: trackByFn; let idx = index">
+                        <li *ngIf="idx > 0" class="discount-item cursor-pointer">
+                            <label class="checkbox overflow-hidden w-100 p-0 m-0" (click)="$event.stopPropagation()">
+                                <mat-checkbox
+                                    color="primary"
+                                    [id]="'discount-checkbox-' + idx"
+                                    class="pull-left"
+                                    name="tax_{{ idx }}"
+                                    [checked]="discount.isActive"
+                                    [(ngModel)]="discount.isActive"
+                                    (change)="change($event, discount)"
+                                    (click)="$event.stopPropagation()"
+                                >
+                                    {{ discount?.name }}
+                                </mat-checkbox>
+                            </label>
+                        </li>
+                    </ng-container>
+                </ul>
+            </div>
+            <div class="create-new pt-2 mt-2 text-center cursor-pointer" (click)="createNew()">
+                <span class="text-primary">{{ commonLocaleData?.app_create_new }}</span>
+            </div>
+        </div>
+    </mat-menu>
+    <div tabindex="0" (focus)="onFocusLastDiv($event)"></div>
+</div>

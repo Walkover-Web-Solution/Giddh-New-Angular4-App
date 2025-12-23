@@ -1,39 +1,88 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit } from "@angular/core";
+import { MatSnackBarRef, MAT_SNACK_BAR_DATA } from "@angular/material/snack-bar";
 
 @Component({
-    selector: 'app-snackbar',
-    template: `
-        <div class="snackbar">
-            <span class="message">{{ message }}</span>
-            <button class="close-btn" (click)="close()">&times;</button>
-        </div>
-    `,
-    styles: [`
-        .snackbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 16px;
-            background-color: #323232;
-            color: white;
-            border-radius: 4px;
-        }
-        .close-btn {
-            background: none;
-            border: none;
-            color: white;
-            cursor: pointer;
-            font-size: 18px;
-        }
-    `],
+    selector: 'snackbar',
+    templateUrl: './snackbar.component.html',
+    styleUrls: ['./snackbar.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
-export class SnackbarComponent {
-    message: string = '';
+export class SnackBarComponent implements OnInit {
+    /** Instance of set timeout method */
+    public timeout: any;
+    /** Instance of set interval method */
+    public interval: any;
+    /** Width in percentage of snackbar */
+    public snackProgressBarWidthPercentage: number = 100;
+    /** Show/hide progress bar */
+    public showProgressBar: boolean = true;
+    /** Mat snackbar element */
+    public matSnackbarElement: any;
 
-    constructor() {}
+    constructor(
+        @Inject(MAT_SNACK_BAR_DATA) public data: any,
+        private matSnackBarRef: MatSnackBarRef<any>,
+        private changeDetection: ChangeDetectorRef
+    ) { 
+    }
 
-    close() {
-        // Close logic
+    /**
+     * Called on initialization of the component
+     *
+     * @memberof SnackBarComponent
+     */
+    public ngOnInit(): void {
+        this.matSnackbarElement = document.querySelector("mat-snack-bar-container").parentElement.parentElement;
+        this.matSnackbarElement.classList.add("mat-snack-bar-wrapper");
+        this.createTimeout();
+    }
+
+    /**
+     * It creates the snackbar dismissal timeout
+     *
+     * @memberof SnackBarComponent
+     */
+    public createTimeout(): void {
+        this.showProgressBar = true;
+        this.interval = setInterval(() => {
+            this.snackProgressBarWidthPercentage--;
+            if(this.snackProgressBarWidthPercentage === 0) {
+                clearInterval(this.interval);
+            }
+            this.changeDetection.detectChanges();
+        }, 30);
+
+        this.timeout = setTimeout(() => {
+            this.dismiss();
+        }, 3000);
+
+        this.changeDetection.detectChanges();
+    }
+
+    /**
+     * It resets the snackbar dismissal timeout
+     *
+     * @memberof SnackBarComponent
+     */
+    public resetTimeout(): void {
+        this.showProgressBar = false;
+        this.snackProgressBarWidthPercentage = 100;
+        clearInterval(this.interval);
+        clearTimeout(this.timeout);
+        this.changeDetection.detectChanges();
+    }
+
+    /**
+     * This will dismiss the snack bar
+     *
+     * @memberof SnackBarComponent
+     */
+    public dismiss(): void {
+        this.matSnackbarElement.classList.remove("mat-snack-bar-wrapper");
+        this.showProgressBar = false;
+        this.snackProgressBarWidthPercentage = 0;
+        this.matSnackBarRef.dismiss();
+        this.changeDetection.detectChanges();
     }
 }

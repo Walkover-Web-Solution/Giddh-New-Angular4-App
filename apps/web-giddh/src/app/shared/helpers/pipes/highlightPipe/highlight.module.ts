@@ -3,12 +3,8 @@ import { HighlightPipe } from './highlight.pipe';
 
 @NgModule({
     imports: [],
-    exports: [
-        HighlightPipe
-    ],
-    declarations: [
-        HighlightPipe
-    ],
+    exports: [HighlightPipe],
+    declarations: [HighlightPipe],
 })
 export class HighlightModule {
 }

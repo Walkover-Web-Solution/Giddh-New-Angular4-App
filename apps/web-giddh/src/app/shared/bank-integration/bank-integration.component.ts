@@ -10,17 +10,15 @@ import { BANK_STATEMENT_HELP_DOC_URL, BROADCAST_CHANNELS, ICICI_ALLOWED_COMPANIE
 import { SalesService } from "../../services/sales.service";
 import { CompanyActions } from "../../actions/company.actions";
 import { SettingsIntegrationService } from '../../services/settings.integration.service';
+import { cloneDeep, isEmpty } from '../../lodash-optimized';
 import { BankIntegrationComponentStore } from "./utility/bank-integration.store";
-// import { ACCOUNT_REGISTERED_STATUS } from "../../settings/constants/settings.constant";
+import { ACCOUNT_REGISTERED_STATUS } from "../../settings/constants/settings.constant";
 import { ToasterService } from "../../services/toaster.service";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { NgForm } from '@angular/forms';
 import { InstitutionsListComponent } from "./institutions-list/institutions-list.component";
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
 import { ServiceConfig } from "../../services/service.config";
-import { Configuration } from '../../app.constant';
-import { environment } from '../../../environments/environment';
-import { cloneDeep, forEach, includes, isEmpty, map, some } from '../../lodash-optimized';
 
 @Component({
     selector: 'bank-integration',
@@ -122,7 +120,7 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
         this.iciciAllowedCompanies = whiteLabel?.iciciSupportedCompanies || ICICI_ALLOWED_COMPANIES;
     }
-
+    
     /**
     * This function will use for get institutions details
     *
@@ -168,7 +166,7 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.loadPaymentData();
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.store.pipe(select(profileObj => profileObj.settings.profile), takeUntil(this.destroyed$)).subscribe((res) => {
             if (res && !isEmpty(res)) {
                 res.userEntityRoles.forEach(role => {
@@ -332,7 +330,7 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
             }
 
             this.settingsIntegrationService.getPayorRegistrationStatus(request).pipe(take(1)).subscribe(response => {
-                payor.isConnected = (response?.body?.status === 'REGISTERED'); // Placeholder for ACCOUNT_REGISTERED_STATUS
+                payor.isConnected = (response?.body?.status === ACCOUNT_REGISTERED_STATUS);
 
                 if (!payor.isConnected && response?.body?.message) {
                     this.toasty.errorToast(response?.body?.message);

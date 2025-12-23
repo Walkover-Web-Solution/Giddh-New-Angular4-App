@@ -1,0 +1,133 @@
+.group-select {
+    max-width: 202px;
+}
+
+.stock-balance-wrapper {
+    padding: 0px 20px 100px 20px;
+    float: left;
+    width: 100%;
+    overflow: hidden;
+
+    .no-data-found {
+        margin-top: 50px;
+    }
+    .stock-table {
+        white-space: nowrap;
+        border-bottom: 1px solid var(--border-color);
+        width: min-content;
+        grid-template-columns: 240px auto;
+
+        &:hover {
+            background-color: var(--color-light-gray);
+            .grid-title-left {
+                background-color: var(--color-light-gray);
+            }
+            .warehouse-list-wrapper {
+                .warehouse-list {
+                    &:nth-child(odd) {
+                        background-color: var(--theme-primary-light);
+                    }
+                }
+            }
+        }
+        .warehouse-list-wrapper {
+            min-height: 56px;
+            width: 97%;
+
+            .warehouse-list {
+                min-width: 290px;
+                left: 1px;
+                min-height: 56px;
+                &:nth-child(odd) {
+                    background-color: var(--color-light-gray);
+                }
+
+                .stock-list-body {
+
+                    .proper-spacing-list {
+                        color: var(--color-dark-gray);
+                    }
+                }
+            }
+        }
+        .stock-display-wrapper {
+            grid-column: 1/100;
+        }
+        .grid-list-div {
+            height: 56px;
+        }
+        .grid-title-left {
+            width: 240px;
+            min-height: 56px;
+            left: 0;
+            z-index: 1;
+            position: sticky;
+            padding-top: 0;
+            border-right: 1px solid var(--border-color);
+            word-break: break-word;
+            white-space: normal;
+            background-color: var(--theme-background-color);
+        }
+    }
+    .searching-stocks {
+        .list-head {
+            border-bottom: 1px solid var(--border-color);
+            height: 62px;
+            width: fit-content;
+            .account-name {
+                width: 240px;
+                border-right: 1px solid var(--border-color);
+                left: 0;
+                z-index: 18;
+                position: sticky;
+            }
+            .unique-name-wrapper {
+                min-width: 140px;
+            }
+        }
+        .stock-table-wrapper {
+            .stock-table {
+                .stock-list-unexpanded {
+                    width: fit-content;
+                    &.unique-name {
+                        min-width: 140px;
+                    }
+                    .unique-name-wrap {
+                        word-wrap: break-word;
+                        white-space: normal;
+                    }
+                }
+                .stock-warehouse-list-container {
+                    min-height: 56px;
+                }
+            }
+        }
+    }
+}
+
+.warehouse-list-head {
+    height: 60px;
+    width: 290px;
+
+    .warehouse-list-head-num {
+        color: var(--text-primary-color);
+    }
+}
+.stock-list-box {
+    .stock-list-unexpanded {
+        .stock-list-box-heading {
+            color: var(--color-dark-gray);
+        }
+    }
+}
+
+.input-group {
+
+    input {
+        border-left: 1px solid var(--border-color) !important;
+
+        &:focus {
+            border-left: 1px solid var(--theme-primary-color) !important;
+        }
+    }
+}

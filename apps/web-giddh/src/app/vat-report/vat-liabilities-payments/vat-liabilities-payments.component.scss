@@ -1,0 +1,22 @@
+.liabilities-payments {
+    min-height: calc(100vh - 90px);
+
+    .position-center {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    .custom-datepicker {
+        input {
+            max-width: unset !important;
+        }
+    }
+}
+
+:host ::ng-deep giddh-page-loader {
+    &.unset-loader-margin {
+        .loader-main {
+            margin: 0 !important;
+        }
+    }
+}

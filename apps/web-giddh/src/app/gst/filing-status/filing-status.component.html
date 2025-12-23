@@ -1,0 +1,92 @@
+<div appTranslate [file]="'gst'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event">
+    <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper mt-1"
+        *ngIf="asideGstSidebarMenuState">
+        <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
+            *ngIf="asideGstSidebarMenuState">
+            <tax-sidebar (navigateEvent)="handleNavigation()" [exclude]="'#primary-new-header'" class="gst-sidebar">
+            </tax-sidebar>
+        </div>
+
+        <div class="filing-status p-3">
+            <div class="py-2">
+                <div class="d-flex align-items-center">
+                    <div class="form-group date-picker-invoice invoice-lock-date mb-0 custom-input-field">
+                        <giddh-datepicker
+                            [monthYearMode]="true"
+                            [startView]="'multi-year'"
+                            [cssClass]="'text-center width-150'"
+                            [startAt]="startAt"
+                            [placeholder]="date?.value"
+                            [appearance]="'outline'"
+                            (monthYearSelected)="setMonthAndYear($event)"
+                        >
+                        </giddh-datepicker>
+                    </div>
+
+                    <button class="ml-5" mat-stroked-button (click)="initializeForm()" *ngIf="customMonthSelected">
+                        <i class="icon-cross"></i> {{ commonLocaleData?.app_clear_filter }}
+                    </button>
+                </div>
+            </div>
+
+            <div class="filing-status-table pt-3">
+                <div *ngIf="isLoading" class="table-loader d-flex justify-content-center align-items-center">
+                    <giddh-page-loader></giddh-page-loader>
+                </div>
+                <ng-container *ngIf="!isLoading && dataSource.length">
+                    <table mat-table [dataSource]="dataSource" class="mb-5 w-100">
+                        <!-- Date Column -->
+                        <ng-container matColumnDef="date">
+                            <th mat-header-cell *matHeaderCellDef width="90%"> {{ commonLocaleData?.app_date }}
+                            </th>
+                            <td mat-cell *matCellDef="let element" width="90%"> {{element.filingDateTime}} </td>
+                        </ng-container>
+
+                        <!-- Reference Id Column -->
+                        <ng-container matColumnDef="referenceId">
+                            <th mat-header-cell *matHeaderCellDef width="90%"> {{ localeData?.filing?.reference_id }}
+                            </th>
+                            <td mat-cell *matCellDef="let element" width="90%"> {{element.referenceId}} </td>
+                        </ng-container>
+
+                        <!-- Status Column -->
+                        <ng-container matColumnDef="status">
+                            <th mat-header-cell *matHeaderCellDef width="10%" class="text-center"> {{
+                                commonLocaleData?.app_status }} </th>
+                            <td mat-cell *matCellDef="let element" width="10%" class="text-center">
+                                <button
+                                    mat-raised-button
+                                    color="primary"
+                                    (click)="getGstFilingStatus(element.referenceId)"
+                                >
+                                    {{ localeData?.filing?.get_status }}
+                                </button>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+                    <mat-paginator
+                        *ngIf="pagination.totalItems > pageSizeOptions[0] && !isLoading"
+                        [showFirstLastButtons]="true"
+                        [pageSizeOptions]="pageSizeOptions"
+                        [pageIndex]="pageIndex"
+                        (page)="pageChanged($event)"
+                        [length]="pagination.totalItems"
+                        [pageSize]="pagination.count"
+                        [showFirstLastButtons]="true"
+                        [hidePageSize]="false"
+                    ></mat-paginator>
+                    <section class="mb-custom-80"></section>
+                </ng-container>
+                <ng-container *ngIf="!dataSource.length && !isLoading">
+                    <div class="no-data mb-5">
+                        <h2 class="mb-5">{{ commonLocaleData?.app_no_data_found }}</h2>
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>

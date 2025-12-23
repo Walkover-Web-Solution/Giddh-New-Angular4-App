@@ -3,7 +3,12 @@
         class="grp-wrapper d-flex"
         fxFlex
         [ngStyle]="{ 'width': masterColumnsData?.length * 255 + 'px' }"
+        [navigationWalker]="{ vertical: 'nav-vr-item', horizontal: 'nav-hr-item' }"
+        #navigation="navigationWalker"
         #root
+        (onReset)="initNavigator(navigation, root.children[0])"
+        (onRight)="onRightKey($event, navigation)"
+        (onLeft)="onLeftKey($event, navigation)"
     >
         <div
             class="col-wrapper left-account-operation"
@@ -25,7 +30,7 @@
 
                     <!-- Account Archive Status Filter Button -->
                      <ng-container *ngIf="i !== 1">
-                         <button
+                         <button 
                              class="h-auto p-0 btn-no-ripple"
                              mat-icon-button
                              [matTooltip]="commonLocaleData?.app_filter"
@@ -37,11 +42,11 @@
                          </button>
                          <mat-menu #archiveStatusMenu="matMenu">
                              <ng-container *ngFor="let option of archivedOptions">
-                                 <button
-                                    aria-label="{{ option.label }}"
-                                    mat-menu-item
-                                    class="width-150"
-                                    [ngClass]="{ 'active': selectedArchivedOption?.[items?.groupUniqueName] === option?.value }"
+                                 <button 
+                                    aria-label="{{ option.label }}" 
+                                    mat-menu-item 
+                                    class="width-150" 
+                                    [ngClass]="{ 'active': selectedArchivedOption?.[items?.groupUniqueName] === option?.value }" 
                                     (click)="onArchiveStatusFilter(items?.groupUniqueName, i, option?.value)"
                                 >
                                     {{ option.label }}

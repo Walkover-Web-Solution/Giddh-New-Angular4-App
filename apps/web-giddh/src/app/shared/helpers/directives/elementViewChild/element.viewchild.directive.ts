@@ -1,9 +1,9 @@
 import { Directive, ViewContainerRef } from '@angular/core';
 
 @Directive({
-     standalone: false,
     selector: '[element-view-container-ref]',
-    exportAs: 'elementviewcontainerref'
+    exportAs: 'elementviewcontainerref',
+    standalone: false
 })
 // tslint:disable-next-line:directive-class-suffix
 export class ElementViewContainerRef {

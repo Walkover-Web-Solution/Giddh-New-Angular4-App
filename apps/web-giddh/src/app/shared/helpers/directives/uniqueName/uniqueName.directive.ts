@@ -3,8 +3,7 @@ import { ToasterService } from '../../../../services/toaster.service';
 
 @Directive({
     selector: '[UniqueNameDirective]',
-
-  standalone: false,
+    standalone: false
 })
 export class UniqueNameDirective {
     public el: HTMLInputElement;

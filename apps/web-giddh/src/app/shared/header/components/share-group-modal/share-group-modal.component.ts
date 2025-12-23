@@ -2,24 +2,24 @@ import { first, takeUntil } from 'rxjs/operators';
 import { ShareRequestForm } from './../../../../models/api-models/Permission';
 import { GetAllPermissionResponse } from './../../../../permissions/permission.utility';
 import { AccountsAction } from '../../../../actions/accounts.actions';
-import { Component, EventEmitter, OnDestroy, OnInit, Output, Input, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, Input } from '@angular/core';
 import { GroupResponse } from '../../../../models/api-models/Group';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../../../store/roots';
 import { GroupWithAccountsAction } from '../../../../actions/groupwithaccounts.actions';
 import { Observable, ReplaySubject } from 'rxjs';
 import { GIDDH_EMAIL_REGEX } from '../../../helpers/defaultDateFormat';
+import { clone, cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { Router } from '@angular/router';
 import { SettingsProfileActions } from 'apps/web-giddh/src/app/actions/settings/profile/settings.profile.action';
 import { IOption, RestrictedModules } from 'apps/web-giddh/src/app/app.constant';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { clone, cloneDeep, find, get, map, remove, set } from '../../../../lodash-optimized';
 
 @Component({
     selector: 'share-group-modal',
-    standalone: false,
     templateUrl: './share-group-modal.component.html',
-    styleUrls: [`./share-group-modal.component.scss`]
+    styleUrls: [`./share-group-modal.component.scss`],
+    standalone: false
 })
 
 export class ShareGroupModalComponent implements OnInit, OnDestroy {
@@ -89,9 +89,9 @@ export class ShareGroupModalComponent implements OnInit, OnDestroy {
 
         this.allPermissions$.pipe(takeUntil(this.destroyed$)).subscribe((permissions) => {
             if (permissions?.length) {
-                this.allPermissions = permissions.map((permission: any) => ({
-                    label: permission.name || '',
-                    value: permission.uniqueName || ''
+                this.allPermissions = permissions.map((permission: GetAllPermissionResponse) => ({
+                    label: permission.name,
+                    value: permission.uniqueName
                 }));
             }
         });

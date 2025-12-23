@@ -1,0 +1,143 @@
+<div
+    appTranslate
+    [file]="'vat-report'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <div class="branch-transfer-report mt-2">
+        <hamburger-menu [pageHeading]="localeData?.tab_heading"></hamburger-menu>
+        <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper" *ngIf="asideGstSidebarMenuState">
+            <tax-sidebar
+                (navigateEvent)="handleNavigation()"
+                [exclude]="'#primary-new-header'"
+                class="gst-sidebar"
+            ></tax-sidebar>
+        </div>
+        <div class="container-fluid">
+            <div class="pt-3 d-flex justify-content-end align-items-center">
+                <div class="mr-auto" *ngIf="vatReportTransactions.results?.length">
+                    <ol class="breadcrumb">
+                        <li>
+                            <a href="javascript:;" class="text-underline" (click)="navigateToPreviousPage()"
+                                >VAT-Report</a
+                            >
+                        </li>
+                        <li>
+                            <span>{{ vatReportTransactions.results[0].description }}</span>
+                        </li>
+                    </ol>
+                </div>
+                <button mat-stroked-button (click)="navigateToPreviousPage()">
+                    <i class="fa fa-angle-left font-size-16 mr-1"></i>
+                    <span>{{ commonLocaleData?.app_back }}</span>
+                </button>
+            </div>
+
+            <div class="invoice-preview table-responsive">
+                <table
+                    mat-table
+                    [dataSource]="vatReportTransactions.results"
+                    class="table basic border mt-2 invoice-table desktop-table"
+                    *ngIf="vatReportTransactions?.results?.length && !isLoading"
+                >
+                    <ng-container matColumnDef="date">
+                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.invoice_date }}</th>
+                        <td mat-cell *matCellDef="let element">
+                            {{ element.voucherDate ? element.voucherDate : "-" }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="number">
+                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.invoice_number }}</th>
+                        <td mat-cell *matCellDef="let element">
+                            <a
+                                href="javascript:;"
+                                [ngClass]="
+                                    !element.voucherNumber && element.voucherType !== 'purchase'
+                                        ? 'noclick'
+                                        : 'btn-link'
+                                "
+                                (click)="voucherApiVersion === 2 && onSelectInvoice(element)"
+                                >{{ element.voucherNumber ? element.voucherNumber : "-" }}
+                            </a>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.customer_name }}</th>
+                        <td mat-cell *matCellDef="let element">
+                            {{ element.customerName ? element.customerName : "-" }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="taxamt">
+                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.taxable_amount }}</th>
+                        <td mat-cell *matCellDef="let element">
+                            <amount-field
+                                [amount]="element.taxableAmount"
+                                [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                [currencyCode]="activeCompany?.baseCurrency"
+                            ></amount-field>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="vat_amt">
+                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.vat_amount }}</th>
+                        <td mat-cell *matCellDef="let element">
+                            <amount-field
+                                [amount]="element.vatAmount"
+                                [currencySymbol]="activeCompany.baseCurrencySymbol"
+                                [currencyCode]="activeCompany?.baseCurrency"
+                            ></amount-field>
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="reverse_charge">
+                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.reverse_charge }}</th>
+                        <td mat-cell *matCellDef="let element">
+                            {{ element.reverseCharge ? element.reverseCharge : "-" }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="trn_number">
+                        <th mat-header-cell *matHeaderCellDef>
+                            {{
+                                vatReportTransactionsRequest.country === "GB"
+                                    ? localeData?.vat_number
+                                    : localeData?.trn_number
+                            }}
+                        </th>
+                        <td mat-cell *matCellDef="let element">{{ element.trnNumber ? element.trnNumber : "-" }}</td>
+                    </ng-container>
+                    <ng-container matColumnDef="place_supply">
+                        <th mat-header-cell *matHeaderCellDef>{{ localeData?.place_supply }}</th>
+                        <td mat-cell *matCellDef="let element">
+                            {{ element.placeOfSupply ? element.placeOfSupply : "-" }}
+                        </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                </table>
+                <section class="no-logs" *ngIf="!vatReportTransactions.results?.length && !isLoading">
+                    <div class="no-data">
+                        <h2>{{ localeData?.no_records_found }}</h2>
+                    </div>
+                </section>
+            </div>
+            <div *ngIf="vatReportTransactions.totalPages > 1">
+                <mat-paginator
+                    (page)="pageChanged($event)"
+                    [length]="vatReportTransactions?.totalPages"
+                    [pageSize]="vatReportTransactionsRequest.count"
+                    [showFirstLastButtons]="true"
+                    [pageSizeOptions]="pageSizeOptions"
+                    [hidePageSize]="false"
+                    [pageIndex]="vatReportTransactionsRequest.page - 1"
+                ></mat-paginator>
+                <section class="mb-custom-80"></section>
+            </div>
+        </div>
+        <ng-template #downloadOrSendMailModel>
+            <download-or-send-mail-invoice
+                [selectedVoucher]="selectedInvoice"
+                (downloadOrSendMailEvent)="onDownloadOrSendMailEvent($event)"
+                (downloadInvoiceEvent)="ondownloadInvoiceEvent($event)"
+                (closeModelEvent)="closeDownloadOrSendMailPopup($event)"
+            ></download-or-send-mail-invoice>
+        </ng-template>
+    </div>
+</div>

@@ -1,0 +1,30 @@
+<div appTranslate (commonLocaleData)="commonLocaleData = $event">
+    <section class="carousel d-grid position-relative heightVH-100 widthVW-100 place-content-center">
+        <button
+            mat-fab
+            color="primary"
+            class="navigation-icon navigation-icon-left position-absolute"
+            (click)="handleNavigatePrevious()"
+            [matTooltip]="commonLocaleData?.app_previous"
+            [disabled]="isPreviousDisabled"
+        >
+            <i class="icon-left slider-icon"></i>
+        </button>
+        <button
+            mat-fab
+            color="primary"
+            class="navigation-icon navigation-icon-right position-absolute"
+            (click)="handleNavigateNext()"
+            [matTooltip]="commonLocaleData?.app_next"
+            [disabled]="isNextDisabled"
+        >
+            <i class="icon-right slider-icon"></i>
+        </button>
+
+        <main class="carousel-content overflow-auto" tabindex="0">
+            <ng-container *ngIf="slideTemplate">
+                <ng-container *ngTemplateOutlet="slideTemplate"></ng-container>
+            </ng-container>
+        </main>
+    </section>
+</div>

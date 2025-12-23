@@ -1,0 +1,192 @@
+<div class="transactions-overview">
+    <div class="gstr-transactions-summary" *ngIf="isTransactionSummary">
+        <p class="clear-both gstr-summary-title">{{ localeData?.filing?.transaction_summary }}</p>
+        <p class="text-muted half pt-1">{{ localeData?.filing?.transaction_summary_filing }}</p>
+    </div>
+
+    <hr class="m-0" *ngIf="isTransactionSummary && selectedGst === GstReport.Gstr2" />
+
+    <div class="gstr-transactions-summary">
+        <div class="text-uppercase title" *ngIf="!isTransactionSummary">{{ localeData?.filing?.overall_summary }}</div>
+
+        <div *ngIf="gstrOverviewData.count" class="table-responsive">
+            <table
+                mat-table
+                [dataSource]="gstrOverviewData.summary"
+                class="table transactions-table transactions-summary-table w-100"
+            >
+                <!-- Description -->
+                <ng-container matColumnDef="description">
+                    <th mat-header-cell *matHeaderCellDef width="30%" class="text-uppercase">
+                        {{ localeData?.filing?.description }}
+                    </th>
+                    <td [ngSwitch]="true" mat-cell *matCellDef="let element" class="border-right-none">
+                        <ng-container
+                            *ngSwitchCase="element.gstReturnType === 'b2b' || element.gstReturnType === 'b2bur'"
+                        >
+                            <img src="{{ imgPath }}b2b.svg" class="icon image-as-icon-color text-bottom" alt="b2b img" />
+                        </ng-container>
+                        <ng-container
+                            *ngSwitchCase="element.gstReturnType === 'b2cs' || element.gstReturnType === 'b2cl'"
+                        >
+                            <img src="{{ imgPath }}b2cs.svg" class="icon image-as-icon-color text-bottom" alt="b2c img" />
+                        </ng-container>
+                        <ng-container *ngSwitchCase="element.gstReturnType === 'export'">
+                            <img src="{{ imgPath }}export.svg" class="icon image-as-icon-color text-bottom" alt="export img" />
+                        </ng-container>
+                        <ng-container *ngSwitchCase="element.gstReturnType === 'nil'">
+                            <img src="{{ imgPath }}nil.svg" class="icon image-as-icon-color text-bottom" alt="nil img" />
+                        </ng-container>
+                        <ng-container
+                            *ngSwitchCase="
+                                element.gstReturnType === 'CreditNote/DebitNote/RefundVouchers' ||
+                                element.gstReturnType === 'cdnUr' ||
+                                element.gstReturnType === 'cdnr' ||
+                                element.gstReturnType === 'imps'
+                            "
+                        >
+                            <img src="{{ imgPath }}cdn.svg" class="icon image-as-icon-color text-bottom" alt="cdn img" />
+                        </ng-container>
+                        <ng-container
+                            *ngSwitchCase="
+                                element.gstReturnType === 'advance-receipt' ||
+                                element.gstReturnType === 'advance-payments'
+                            "
+                        >
+                            <img src="{{ imgPath }}adv.svg" class="icon image-as-icon-color text-bottom" alt="adv img" />
+                        </ng-container>
+
+                        <ng-container *ngSwitchCase="element.gstReturnType === 'hsnsac'">
+                            <img src="{{ imgPath }}hsnsac.svg" class="icon image-as-icon-color text-bottom" alt="hsnsac img" />
+                        </ng-container>
+                        <ng-container *ngSwitchCase="element.gstReturnType === 'taxPaid'">
+                            <img src="{{ imgPath }}taxpaid.svg" class="icon image-as-icon-color text-bottom" alt="taxpaid img" />
+                        </ng-container>
+
+                        <ng-container *ngSwitchCase="element.gstReturnType === 'impg'">
+                            <img src="{{ imgPath }}impg.svg" class="icon image-as-icon-color text-bottom" alt="impg img" />
+                        </ng-container>
+                        {{ element?.name }}
+                    </td>
+                </ng-container>
+
+                <!-- Total Transactions -->
+                <ng-container matColumnDef="total_transactions">
+                    <th mat-header-cell *matHeaderCellDef class="text-center text-uppercase">
+                        {{ localeData?.filing?.total_transactions }}
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="text-center">
+                        <ng-container
+                            *ngIf="
+                                element.gstReturnType === 'CreditNote/DebitNote/RefundVouchers';
+                                else transactionBlock
+                            "
+                        >
+                            -
+                        </ng-container>
+                        <ng-template #transactionBlock>
+                            <a href="javascript:;" aria-label="transaction">
+                                {{ element?.totalTransactions }}
+                            </a>
+                        </ng-template>
+                    </td>
+                </ng-container>
+                <!-- Taxable     -->
+                <ng-container matColumnDef="taxable_amount">
+                    <th mat-header-cell *matHeaderCellDef width="15%" class="text-right text-uppercase">
+                        {{ localeData?.filing?.taxable_amount }}
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="text-right">
+                        <i class="icon-rupees icon-font-11"></i>
+                        <span class="d-inline-flex">
+                            <amount-field
+                                [amount]="element.taxableAmount"
+                                [currencySymbol]="false"
+                                [currencyCode]="false"
+                            >
+                            </amount-field>
+                        </span>
+                    </td>
+                </ng-container>
+
+                <!-- IGST -->
+                <ng-container matColumnDef="igst">
+                    <th mat-header-cell *matHeaderCellDef class="text-right text-uppercase">
+                        {{ localeData?.filing?.igst }}
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="text-right">
+                        <i class="icon-rupees icon-font-11"></i>
+                        <span class="d-inline-flex">
+                            <amount-field [amount]="element.igstAmount" [currencySymbol]="false" [currencyCode]="false">
+                            </amount-field>
+                        </span>
+                    </td>
+                </ng-container>
+
+                <!-- CGST -->
+                <ng-container matColumnDef="cgst">
+                    <th mat-header-cell *matHeaderCellDef class="text-right text-uppercase">
+                        {{ localeData?.filing?.cgst }}
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="text-right">
+                        <i class="icon-rupees icon-font-11"></i>
+                        <span class="d-inline-flex">
+                            <amount-field [amount]="element.cgstAmount" [currencySymbol]="false" [currencyCode]="false">
+                            </amount-field>
+                        </span>
+                    </td>
+                </ng-container>
+
+                <!-- SGST -->
+                <ng-container matColumnDef="sgst">
+                    <th mat-header-cell *matHeaderCellDef class="text-right text-uppercase">
+                        {{ localeData?.filing?.sgst }}
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="text-right">
+                        <i class="icon-rupees icon-font-11"></i>
+                        <span class="d-inline-flex">
+                            <amount-field [amount]="element.sgstAmount" [currencySymbol]="false" [currencyCode]="false">
+                            </amount-field>
+                        </span>
+                    </td>
+                </ng-container>
+
+                <!-- Cess -->
+                <ng-container matColumnDef="cess">
+                    <th mat-header-cell *matHeaderCellDef class="text-right text-uppercase">
+                        {{ localeData?.filing?.cess }}
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="text-right">
+                        <i class="icon-rupees icon-font-11"></i>
+                        <span class="d-inline-flex">
+                            <amount-field [amount]="element.cessAmount" [currencySymbol]="false" [currencyCode]="false">
+                            </amount-field>
+                        </span>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr
+                    (click)="viewTransactions(row)"
+                    class="row-hover"
+                    [ngClass]="{
+                        'cursor-default': row.transactions?.length,
+                        'cursor-pointer': !row.transactions?.length,
+                        'secondary-row': row?.hasOwnProperty('parentIndex')
+                    }"
+                    mat-row
+                    *matRowDef="let row; columns: displayedColumns"
+                ></tr>
+            </table>
+        </div>
+
+        <div *ngIf="!gstrOverviewData.count">
+            <div class="filings-empty-state">
+                <img src="{{ imgPath }}nofound.svg" [style.max-width.px]="110" alt="Image not found" />
+                <div class="empty-msg">
+                    <span> {{ localeData?.filing?.no_result_found }} </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

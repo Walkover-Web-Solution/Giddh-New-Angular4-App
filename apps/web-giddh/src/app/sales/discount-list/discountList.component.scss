@@ -1,0 +1,30 @@
+:host .dropdown-menu {
+    overflow: auto;
+}
+
+.dropdown-menu {
+    right: -110px;
+    left: auto;
+    top: 8px;
+}
+
+td {
+    vertical-align: middle !important;
+}
+
+.multi-select.adjust .caret {
+    right: -2px !important;
+    top: 14px !important;
+}
+
+:host {
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.fa-percent {
+    top: 9px;
+    right: 6px;
+    color: #acb0b9;
+}

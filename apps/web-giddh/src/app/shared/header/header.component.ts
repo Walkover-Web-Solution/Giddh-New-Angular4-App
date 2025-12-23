@@ -19,14 +19,15 @@ import { createSelector } from 'reselect';
 import * as dayjs from 'dayjs';
 import { AuthenticationService } from '../../services/authentication.service';
 import { ICompAidata, IUlist } from '../../models/interfaces/ulist.interface';
+import { clone, cloneDeep, find } from '../../lodash-optimized';
 import { CompAidataModel } from '../../models/db';
 import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Account';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
-import { environment } from '../../../environments/environment';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { NAVIGATION_ITEM_LIST, reassignNavigationalArray } from '../../models/default-menus';
 import { userLoginStateEnum, OrganizationType } from '../../models/user-login-state';
 import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
+import { environment } from 'apps/web-giddh/src/environments/environment';
 import { CurrentPage, OnboardingFormRequest } from '../../models/api-models/Common';
 import { ACCOUNTING_BREAKPOINTS, ASIDE_PANE_CONFIG, BranchHierarchyType, BREAKPOINT_SCREEN_SIZE, CALENDLY_URL, GIDDH_DATE_RANGE_PICKER_RANGES, ROUTES_WITH_HEADER_BACK_BUTTON } from '../../app.constant';
 import { CommonService } from '../../services/common.service';
@@ -43,8 +44,6 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { AuthService } from '../../theme/ng-social-login-module';
 import { ServiceConfig } from '../../services/service.config';
-import { Configuration } from '../../app.constant';
-import { clone, cloneDeep, filter, find, forEach, includes, indexOf, keys, orderBy, remove } from '../../lodash-optimized';
 
 interface SubscriptionErrorFlags {
     isObligationExpired: boolean;
@@ -56,9 +55,9 @@ interface SubscriptionErrorFlags {
 
 @Component({
     selector: 'app-header',
-    standalone:false,
     templateUrl: './header.component.html',
-    styleUrls: ['./header.component.scss']
+    styleUrls: ['./header.component.scss'],
+    standalone: false
 })
 
 export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterViewChecked {
@@ -120,7 +119,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public userIsCompanyUser: boolean = false;
     public userName: string;
     public userEmail: string;
-    public isElectron: boolean = Configuration.isElectron;
+    public isElectron: boolean = isElectron;
     public isTodaysDateSelected: boolean = false;
     public isDateRangeSelected: boolean = false;
     public userFullName: string;
@@ -230,7 +229,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     /** Hold broadcast event */
     public broadcast: any;
     /** Hold true in production environment */
-    public isProdMode: boolean = environment.production;
+    public isProdMode: boolean = PRODUCTION_ENV;
     /** Hold broadcast event for project wise accounting */
     public projectBroadcast: any;
     /** Hold broadcast event for AI OCR */
@@ -300,7 +299,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         private renderer: Renderer2
     ) {
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-white-logo.svg';
         const calendlyWhiteLabelUrl = whiteLabel?.calendlyUrl || CALENDLY_URL
         this.calendlyUrl = this.sanitizer.bypassSecurityTrustResourceUrl(calendlyWhiteLabelUrl);
@@ -361,7 +360,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
 
             setTimeout(() => {
-                if (Configuration.isElectron) {
+                if (this.isElectron) {
                     this.toggleSidebarPane(false, false);
                 }
             }, 100);
@@ -449,7 +448,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 return;
             }
 
-            let orderedCompanies = orderBy(companies, 'name');
+            let orderedCompanies = _.orderBy(companies, 'name');
             this.companyList = orderedCompanies;
             this.companyListForFilter = orderedCompanies;
             this.companies$ = observableOf(orderedCompanies);
@@ -805,7 +804,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
         this.session$.subscribe((s) => {
             if (s === userLoginStateEnum.notLoggedIn) {
-                if (Configuration.isElectron) {
+                if (isElectron) {
                     this.router.navigate(['/login']);
                 } else {
                     const whiteLabel = this.generalService.getDecodedWhiteLabel();
@@ -1044,7 +1043,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     /**
     * This function is used to open manage groups accounts dialog
-    *
+    * 
     * @returns {void}
     * @memberof HeaderComponent
     */
@@ -1524,7 +1523,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public toggleGiddhDatepicker(isOpen: boolean = true): void {
-        if (isOpen) {
+        if (isOpen) {            
             this.universalDatepickerTrigger?.openMenu();
         } else {
             this.universalDatepickerTrigger?.closeMenu();
@@ -1868,7 +1867,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         };
         this.setOrganizationDetails(OrganizationType.Company, details);
         localStorage.removeItem('isNewArchitecture');
-        if (Configuration.isElectron) {
+        if (isElectron) {
             this.store.dispatch(this.loginAction.ClearSession());
         } else {
             // check if logged in via social accounts

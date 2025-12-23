@@ -4,7 +4,6 @@ import { BehaviorSubject, ReplaySubject } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { IOption } from '../../../app.constant';
 import { SettingIntegrationComponentStore } from '../../../settings/integration/utility/setting.integration.store';
-import { filter, keys, map, slice } from '../../../lodash-optimized';
 
 @Component({
     selector: 'bank-link',

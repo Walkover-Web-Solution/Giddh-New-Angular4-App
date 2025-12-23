@@ -1,11 +1,10 @@
 import {Directive, ElementRef, Input, OnDestroy, OnInit, Output, EventEmitter, SimpleChanges, OnChanges } from '@angular/core';
 import Tribute from 'tributejs';
-import { endsWith } from '../../../../lodash-optimized';
 
 @Directive({
-    selector: '[appTributeMention]',
-  standalone: false,
-    exportAs: 'appTributeMention'
+  selector: '[appTributeMention]',
+  exportAs: 'appTributeMention',
+  standalone: false
 })
 export class TributeMentionDirective implements OnInit, OnDestroy, OnChanges {
 
@@ -75,9 +74,7 @@ export class TributeMentionDirective implements OnInit, OnDestroy, OnChanges {
       this.mentionSelected.emit(event?.detail?.item?.original ?? "");
     });
     this.hostElement.nativeElement.addEventListener('keyup', (event: any) => {
-      if (this.hostElement.nativeElement.value.endsWith(this.tributeConfig.trigger)) {
-        this.open(false);
-      }
+      this.open(false);
     });
   }
 

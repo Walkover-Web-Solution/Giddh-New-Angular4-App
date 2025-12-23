@@ -8,7 +8,6 @@ import { FormFieldsModule } from '../../../theme/form-fields/form-fields.module'
 import { SalesPersonComponentStore } from '../utility/sales-person.store';
 import { filter, ReplaySubject, takeUntil } from 'rxjs';
 import { API_BULK_FETCH_LIMIT, IOption } from '../../../app.constant';
-import { get } from '../../../lodash-optimized';
 
 @Component({
     selector: 'archive',

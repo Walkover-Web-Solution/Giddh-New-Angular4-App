@@ -1,11 +1,10 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { NgxDaterangepickerMd } from '../../theme/ngx-date-range-picker';
 import { DatepickerWrapperComponent } from './datepicker.wrapper.component';
 
 @NgModule({
     declarations: [DatepickerWrapperComponent],
-    imports: [CommonModule],
-    exports: [DatepickerWrapperComponent],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    imports: [NgxDaterangepickerMd.forRoot()],
+    exports: [DatepickerWrapperComponent]
 })
 export class DatepickerWrapperModule { }

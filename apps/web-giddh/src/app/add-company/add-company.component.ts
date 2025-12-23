@@ -8,7 +8,7 @@ import { CommonActions } from "../actions/common.actions";
 import { CompanyActions } from "../actions/company.actions";
 import { GeneralActions } from "../actions/general/general.actions";
 import { LoginActions } from "../actions/login.action";
-import { BusinessTypes, ELECTRON_OTP_PROVIDER_URL, OTP_PROVIDER_URL, OTP_WIDGET_ID_NEW, OTP_WIDGET_TOKEN_NEW, RestrictedModules, ZIP_CODE_SUPPORTED_COUNTRIES } from '../app.constant';
+import { BusinessTypes, Configuration, ELECTRON_OTP_PROVIDER_URL, OTP_PROVIDER_URL, OTP_WIDGET_ID_NEW, OTP_WIDGET_TOKEN_NEW, RestrictedModules, ZIP_CODE_SUPPORTED_COUNTRIES } from '../app.constant';
 import { CountryRequest, OnboardingFormRequest } from "../models/api-models/Common";
 import { Addresses, CompanyCreateRequest, CompanyResponse, SocketNewCompanyRequest, StatesRequest } from "../models/api-models/Company";
 import { UserDetails } from "../models/api-models/loginModels";
@@ -447,7 +447,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         /* OTP LOGIN */
         if (window['initSendOTP'] === undefined) {
             let scriptTag = document.createElement('script');
-            scriptTag.src = isElectron ? ELECTRON_OTP_PROVIDER_URL : OTP_PROVIDER_URL;
+            scriptTag.src = Configuration.isElectron ? ELECTRON_OTP_PROVIDER_URL : OTP_PROVIDER_URL;
             scriptTag.type = 'text/javascript';
             scriptTag.defer = true;
             scriptTag.onload = () => {
@@ -1323,7 +1323,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public logoutUser(): void {
         this.store.dispatch(this.verifyActions.hideVerifyBox());
         this.dialog?.closeAll();
-        if (isElectron) {
+        if (Configuration.isElectron) {
             this.store.dispatch(this.loginAction.ClearSession());
         } else {
             this.isLoggedInWithSocialAccount$.subscribe((val) => {

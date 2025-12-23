@@ -1,0 +1,330 @@
+.edit-icon-position {
+    top: -22px;
+    right: 0px;
+    z-index: 1;
+}
+
+.ledg-head.entry-popup table td.select2-ledger > sh-select {
+    position: initial;
+    margin-top: 1px;
+}
+
+table.width-100 {
+    position: relative;
+}
+
+.h32 {
+    height: 32px;
+}
+
+ng-select > div a.ng-star-inserted {
+    color: var(--color-white);
+    text-transform: uppercase;
+    font-size: var(--font-size-15);
+}
+
+ng-select > div {
+    background-color: transparent;
+    border: none;
+}
+
+.transaction-particular-name {
+    width: 100%;
+    background: transparent;
+    border: none !important;
+    padding: 5px;
+    color: var(--color-dark-gray);
+}
+
+.amount-total {
+    font-size: var(--font-size-12);
+    color: var(--color-medium-gray);
+}
+
+.other-tax {
+    justify-content: flex-end;
+    display: flex;
+    padding-left: 15px;
+}
+
+.total-col span.border-top {
+    width: 150px;
+    display: inline-flex;
+    padding: 2px 0;
+    justify-content: flex-end;
+}
+
+.ledger-main .form-control {
+    top: 0px !important;
+}
+
+.ledger-book {
+    position: relative;
+    width: 100%;
+    display: flex;
+}
+
+.left-col-new,
+.right-col-new {
+    width: 100%;
+    padding-bottom: 100px;
+    height: initial;
+}
+
+.ledg-head.entry-popup table td:last-child {
+    border-right: 0px;
+}
+
+.custom-tabs {
+    display: none !important;
+}
+
+.total-detail-table {
+    display: flex;
+}
+
+.total-detail-table .table-amount {
+    min-width: 0;
+}
+
+.icon-box {
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    height: 60px;
+    label {
+        margin-top: 10px;
+    }
+}
+
+.add-multicurrency .icon-box {
+    padding-bottom: 0px;
+    align-items: center;
+}
+
+.width-80 {
+    width: 80px !important;
+    min-width: 80px;
+}
+
+.download-invoice-ledger > i {
+    background-color: var(--color-white);
+    padding-left: 5px;
+}
+
+.taxable-amount-section {
+    display: inline-block;
+    margin-bottom: 12px;
+}
+
+.adjust-receipt {
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    margin-top: 10px;
+    position: relative;
+}
+
+.ledger-bottom {
+    display: flex;
+}
+
+.ledger-head th {
+    color: var(--theme-foreground-color);
+    padding-left: 0;
+    padding-bottom: 10px;
+}
+
+.update-ledger-account {
+    align-items: center;
+    span {
+        padding-left: 5px;
+        padding-top: 2px;
+    }
+    sh-select {
+        width: 100%;
+    }
+}
+.advanced {
+    table.xs-table-block {
+        tr {
+            td.remove-invoice {
+                span:first-child {
+                    font-size: 16px;
+                    vertical-align: middle;
+                    color: var(--color-dark-gray);
+                    padding-right: 8px;
+                }
+            }
+        }
+    }
+}
+#update-ledger-select-account {
+    width: 30%;
+}
+.edit-adjustment {
+    padding: 0 5px 0;
+    font-size: 10px;
+}
+.icon-info {
+    color: var(--color-dark-gray);
+    cursor: pointer;
+    padding: 8px 5px 0;
+}
+
+.left-col-new .row,
+.right-col-new .row,
+.ledger-head .row {
+    margin: 0;
+}
+
+.dropdown-container[disabled],
+.table-amount[disabled] {
+    pointer-events: none;
+}
+
+#update-ledger-assign-tag.disabled-ledger::ng-deep input,
+#update-ledger-select-warehouse.disabled-ledger::ng-deep input,
+#update-ledger-price-input.disabled-ledger,
+#update-ledger-invoice-voucher-number.disabled-ledger::ng-deep input,
+#update-ledger-invoice-number.disabled-ledger::ng-deep input,
+#update-ledger-select-variant.disabled-ledger::ng-deep input {
+    background-color: var(--color-border-light) !important;
+}
+.tourist-scheme-wrapper {
+    input[type="checkbox"] {
+        opacity: 0;
+    }
+}
+
+.amount-width {
+    width: 125px;
+}
+
+.delete-attachment {
+    margin-right: 14px;
+    margin-left: 7px;
+    float: right;
+    margin-top: 1px;
+    a {
+        color: var(--color-dark-gray);
+        font-size: var(--font-size-15);
+    }
+}
+
+.read-only {
+    background-color: var(--color-light-gray) !important;
+}
+
+.no-data-found {
+    background: var(--color-white);
+    text-align: center;
+    font-size: var(--font-size-32);
+    height: 600px;
+    width: 100%;
+    padding: 3rem;
+    color: var(--color-medium-gray);
+}
+.cross-button {
+    font-size: 32px;
+}
+@media only screen and (max-width: 1359px) {
+    .ledger-bottom {
+        display: flex;
+    }
+}
+
+@media only screen and (max-width: 1024px) {
+    .ledger-book {
+        display: block;
+    }
+    .left-col-new,
+    .right-col-new {
+        width: 100% !important;
+        float: left;
+        height: initial;
+    }
+    .custom-tabs {
+        display: block !important;
+    }
+    .left-col-new,
+    .right-col-new {
+        display: block !important;
+    }
+    .total-detail-table {
+        flex-wrap: wrap;
+    }
+    .total-detail-table .table-amount {
+        width: 100%;
+        flex: 0 0 30%;
+        white-space: initial;
+    }
+}
+
+.rotate {
+    -webkit-animation: spin 4s linear infinite;
+    -moz-animation: spin 4s linear infinite;
+    animation: spin 4s linear infinite;
+}
+.ledger-head th:first-child {
+    span {
+        position: relative;
+        right: 15px;
+    }
+}
+.list-inline > li {
+    display: inline-block;
+    padding-right: 5px;
+    padding-left: 5px;
+}
+@-moz-keyframes spin {
+    100% {
+        -moz-transform: rotate(360deg);
+    }
+}
+@-webkit-keyframes spin {
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+@keyframes spin {
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
+}
+
+@media screen and (max-width: 1653px) {
+    .width-datepicker {
+        width: 100px !important;
+    }
+}
+
+@media (max-width: 1075px) {
+    .icon-box {
+        padding: 10px 0px 0 0px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .ledger-head {
+        display: none !important;
+    }
+    .ledger-book {
+        padding-top: 15px;
+    }
+}
+@media (min-width: 1301px) and (max-width: 1386px) {
+    .reference-invoice {
+        width: 150px;
+    }
+}
+@media (min-width: 1024px) and (max-width: 1366px) {
+    .width-datepicker {
+        width: 78px !important;
+    }
+}
+.update-ledger-account {
+    .read-only {
+        background-color: var(--color-transparent) !important;
+    }
+}

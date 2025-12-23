@@ -3,14 +3,8 @@ import { NgModule } from "@angular/core";
 import { NoDataComponent } from "./no-data.component";
 
 @NgModule({
-    declarations: [
-        NoDataComponent
-    ],
-    imports: [
-        CommonModule
-    ],
-    exports: [
-        NoDataComponent
-    ]
+    declarations: [NoDataComponent],
+    imports: [CommonModule],
+    exports: [NoDataComponent]
 })
 export class NoDataModule {}

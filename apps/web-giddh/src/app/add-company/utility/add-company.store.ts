@@ -1,11 +1,8 @@
 
 import { Injectable, OnDestroy } from "@angular/core";
 import { ComponentStore } from "@ngrx/component-store";
-import { tapResponse } from "@ngrx/operators";
-import { Observable, switchMap, catchError, EMPTY } from "rxjs";
-import { Store } from "@ngrx/store";
+import { Observable, switchMap, catchError, EMPTY, tap } from "rxjs";
 import { ToasterService } from "../../services/toaster.service";
-import { AppState } from "../../store";
 import { BaseResponse } from "../../models/api-models/BaseResponse";
 import { PermissionService } from "../../services/permission.service";
 
@@ -42,7 +39,7 @@ export class AddCompanyComponentStore extends ComponentStore<AddCompanyListState
             switchMap(() => {
                 this.patchState({ permissionRolesInProgress: true });
                 return this.permissionService.GetAllRoles().pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 return this.patchState({

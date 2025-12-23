@@ -9,7 +9,6 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../../store';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
-import { filter, includes, indexOf, isArray, map, slice, startsWith } from '../../../../lodash-optimized';
 
 const unSupportedPrefixAndSuffix = [
     {
@@ -92,7 +91,6 @@ const unSupportedPrefixAndSuffix = [
 
 @Directive({
     selector: '[mask]',
-    standalone: false,
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,
@@ -106,6 +104,7 @@ const unSupportedPrefixAndSuffix = [
         },
         MaskService,
     ],
+    standalone: false
 })
 export class MaskDirective implements ControlValueAccessor, OnChanges, OnInit, OnDestroy {
     @Input('mask') public maskExpression: string = '';

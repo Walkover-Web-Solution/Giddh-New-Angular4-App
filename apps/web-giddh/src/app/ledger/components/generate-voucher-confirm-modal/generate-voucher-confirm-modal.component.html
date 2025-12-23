@@ -1,0 +1,27 @@
+<div>
+    <div class="dialog-header">
+        <span>{{ inputData?.title }}</span>
+        <button mat-icon-button aria-label="close" (click)="sendResponse(null)">
+            <i class="icon-cross"></i>
+        </button>
+    </div>
+    <mat-dialog-content class="dialog-body" id="export-body">
+        <form name="newRole" novalidate autocomplete="off">
+            <div class="modal-wrap mb-4 text-center">
+                <p>{{ inputData?.body }}</p>
+            </div>
+            <div class="row mt-4 ledger-btn">
+                <div class="col-xs-6 col-sm-6 pr-1 pl-1 text-right">
+                    <button type="submit" mat-raised-button color="primary" (click)="sendResponse(true)">
+                        {{ inputData?.button2Text }}
+                    </button>
+                </div>
+                <div class="col-xs-6 col-sm-6 pr-1 pl-1">
+                    <button type="submit" mat-raised-button color="primary" (click)="sendResponse(false)">
+                        {{ inputData?.button1Text }}
+                    </button>
+                </div>
+            </div>
+        </form>
+    </mat-dialog-content>
+</div>

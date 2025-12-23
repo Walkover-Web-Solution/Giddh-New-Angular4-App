@@ -1,0 +1,39 @@
+.account-statement {
+    .bordered {
+        border: 1px solid var(--theme-foreground-color);
+    }
+
+    table {
+        border-collapse: collapse;
+        tr {
+            td,
+            th {
+                padding: 8px;
+            }
+        }
+    }
+
+    .address-block {
+        font-style: normal;
+        line-height: 1.5;
+
+        p {
+            color: var(--color-text-light);
+            opacity: 0.8;
+        }
+    }
+
+    .spinner-container {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .font-30 {
+        font-size: 30px !important;
+    }
+
+    .font-18 {
+        font-size: 18px !important;
+    }
+}

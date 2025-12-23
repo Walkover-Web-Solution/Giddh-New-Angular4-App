@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit, ViewChild, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { filter, Observable, ReplaySubject, takeUntil, tap } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -21,8 +21,7 @@ import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../app.constant';
 import { MatMenuModule } from '@angular/material/menu';
 import { ArchiveSalesPersonComponent } from './archive/archive.component';
-import { includes, set } from '../../lodash-optimized';
-// import { MobileNumberInputComponent } from '../mobile-number-input';
+import { MobileNumberInputComponent } from '../mobile-number-input';
 
 @Component({
     selector: 'app-sales-person',
@@ -40,13 +39,12 @@ import { includes, set } from '../../lodash-optimized';
         TranslateDirectiveModule,
         GiddhPageLoaderModule,
         ElementViewChildModule,
-        MatMenuModule
-        // MobileNumberInputComponent
+        MatMenuModule,
+        MobileNumberInputComponent
     ],
     templateUrl: './sales-person.component.html',
     styleUrls: ['./sales-person.component.scss'],
-    providers: [SalesPersonService, SalesPersonComponentStore],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    providers: [SalesPersonService, SalesPersonComponentStore]
 })
 
 export class SalesPersonComponent implements OnInit, OnDestroy {
@@ -148,13 +146,13 @@ export class SalesPersonComponent implements OnInit, OnDestroy {
             }
         });
 
-        // Delete which liked with Account Only
+        // Delete which liked with Account Only 
         this.componentStore.openTransferAndDeleteDialog$.pipe(takeUntil(this.destroyed$), filter(Boolean), tap(() => {
             this.openTransferAndDeleteDialog(false, this.commonLocaleData?.app_delete, this.localeData?.delete_confirmation_message, this.localeData?.transfer_and_delete);
             this.componentStore.patchState({ openTransferAndDeleteDialog: false });
         })).subscribe();
 
-        // Delete which liked with Voucher/ Entry
+        // Delete which liked with Voucher/ Entry 
         this.componentStore.openTransferAndArchiveDialog$.pipe(takeUntil(this.destroyed$), filter(Boolean), tap(() => {
             const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
                 panelClass: ['mat-dialog-sm'],
@@ -248,7 +246,7 @@ export class SalesPersonComponent implements OnInit, OnDestroy {
                             this.componentStore.deleteSalesPerson(element?.uniqueName);
                         }
                     });
-                } else {
+                } else {    
                      if (element?.linkedEntities && element?.linkedEntities.includes(SalesPersonErrorDetailsEnum.ENTRY_VOUCHER)) {
                         this.salesPersonUniqueName = element?.uniqueName;
                         this.componentStore.patchState({
@@ -319,7 +317,7 @@ export class SalesPersonComponent implements OnInit, OnDestroy {
     public closeDialog(): void {
         let response = null;
         if (this.salesPersonListIsModified) {
-            response = {
+            response = { 
                 isTransfer: this.activeSalePersonIsTransfer
             };
         }

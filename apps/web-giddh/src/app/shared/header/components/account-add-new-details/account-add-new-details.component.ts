@@ -27,8 +27,9 @@ import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwit
 import { DROPDOWN_ITEMS_COUNT_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, EMAIL_VALIDATION_REGEX, IOption, ZIP_CODE_SUPPORTED_COUNTRIES, API_BULK_FETCH_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { clone, cloneDeep, isEqual, uniqBy } from 'apps/web-giddh/src/app/lodash-optimized';
 import { CustomFieldsService } from 'apps/web-giddh/src/app/services/custom-fields.service';
-// import { FieldTypes } from 'apps/web-giddh/src/app/custom-fields/custom-fields.constant';
+import { FieldTypes } from 'apps/web-giddh/src/app/custom-fields/custom-fields.constant';
 import { HttpClient } from '@angular/common/http';
 import { AccountsAction } from 'apps/web-giddh/src/app/actions/accounts.actions';
 import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
@@ -40,17 +41,16 @@ import { AccountAddNewDetailsComponentStore } from './utility/account-add-new-de
 import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { AccountingGroupEnum, CountryNames } from '../../../Enums/common.enum';
-import { clone, cloneDeep, concat, find, findIndex, forEach, get, has, includes, keys, map, remove, set, some, uniqBy, isEqual } from '../../../../lodash-optimized';
-// import { SalesPersonComponentStore } from '../../../sales-person/utility/sales-person.store';
-// import { SalesPersonComponent } from '../../../sales-person/sales-person.component';
-// import { ActionTypeEnum } from '../../../sales-person/utility/sales-person.constant';
+import { SalesPersonComponentStore } from '../../../sales-person/utility/sales-person.store';
+import { SalesPersonComponent } from '../../../sales-person/sales-person.component';
+import { ActionTypeEnum } from '../../../sales-person/utility/sales-person.constant';
 
 @Component({
     selector: 'account-add-new-details',
-    standalone: false,
     templateUrl: './account-add-new-details.component.html',
     styleUrls: ['./account-add-new-details.component.scss'],
-    providers: [AccountAddNewDetailsComponentStore]
+    providers: [AccountAddNewDetailsComponentStore, SalesPersonComponentStore],
+    standalone: false
 })
 
 export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
@@ -177,8 +177,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         moduleUniqueName: 'account'
     };
     /** Available field types list */
-    // public availableFieldTypes: any = FieldTypes;
-    public availableFieldTypes: any = {}; // Placeholder until FieldTypes is available
+    public availableFieldTypes: any = FieldTypes;
     /** This will hold isMobileNumberInvalid */
     public isMobileNumberInvalid: boolean = false;
     /** True if last duplicate email in portal  users */
@@ -228,8 +227,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     /** Enum representing the types of accounting group type */
     public accountingGroupEnum: typeof AccountingGroupEnum = AccountingGroupEnum;
     /** Sales Person List */
-    // public salesPersonList$: Observable<any> = this.salesPersonStore.salesPersonList$;
-    public salesPersonList$: Observable<any> = observableOf([]); // Placeholder until salesPersonStore is available
+    public salesPersonList$: Observable<any> = this.salesPersonStore.salesPersonList$;
     /** Holds transfer info if active sales person is transfer */
     private activeSalePersonIsTransfer: any;
     /** True if sales person is created */
@@ -253,7 +251,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         private commonService: CommonService,
         private readonly componentStore: AccountAddNewDetailsComponentStore,
         private settingsBranchAction: SettingsBranchActions,
-        // private salesPersonStore: SalesPersonComponentStore
+        private salesPersonStore: SalesPersonComponentStore
     ) {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
     }
@@ -418,7 +416,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
                 this.lastDuplicateEmailIndex = lastEmailOccurrenceIndex;
                 this.lastDuplicateContactIndex = lastContactOccurrenceIndex;
-
+                
                 // Update duplicate contact errors flag
                 this.hasDuplicateContactErrors = this.checkForDuplicateContactErrors();
             }
@@ -542,8 +540,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         this.salesPersonList$.pipe(takeUntil(this.destroyed$), filter(Boolean)).subscribe((salesPersonList: IOption[]) => {
             if (!this.isSalesPersonExists(this.addAccountForm.get('salesPersonUniqueName').value, salesPersonList)) {
                 let salesPersonUniqueName = null;
-                // if (this.activeSalePersonIsTransfer?.model?.action === ActionTypeEnum.TRANSFER) {
-                if (this.activeSalePersonIsTransfer?.model?.action === 'TRANSFER') { // Placeholder until ActionTypeEnum is available
+                if (this.activeSalePersonIsTransfer?.model?.action === ActionTypeEnum.TRANSFER) {
                     const salesPerson = salesPersonList?.find(item => item.value === this.activeSalePersonIsTransfer.model.uniqueName);
                     if (salesPerson) {
                         salesPersonUniqueName = salesPerson.value
@@ -665,7 +662,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     /**
      * Initializes the GST details form with default values and validators.
-     *
+     * 
      * @returns FormGroup
      * @memberof AccountAddNewDetailsComponent
      */
@@ -799,7 +796,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     /**
      * Validates and extracts the state code from the GST number entered in the given form.
-     *
+     * 
      * @param gstForm The `FormGroup` containing the GST-related form controls.
      * @memberof AccountAddNewDetailsComponent
      */
@@ -874,10 +871,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public submit() {
         // Check for duplicate contact errors
         this.hasDuplicateContactErrors = this.checkForDuplicateContactErrors();
-
+        
         if (this.addAccountForm.invalid || !this.isGstValid || this.isMobileNumberInvalid || this.hasDuplicateContactErrors) {
             this.isValidForm = false;
-
+            
             // If duplicate contact errors exist, navigate to portal tab
             if (this.hasDuplicateContactErrors) {
                 this.goToPortalTab();
@@ -1060,7 +1057,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     /**
      * Checks whether a given unique group name exists within the list of parent groups.
-     *
+     * 
      * @param parentGroups - Array of parent group objects, each having a `uniqueName` field.
      * @param uniqueName - The unique name to search for in the parent groups.
      * @returns `true` if any parent group matches the given unique name, otherwise `false`.
@@ -1072,7 +1069,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     /**
      * Handles the selection of a state from a dropdown or similar UI component.
-     *
+     * 
      * @param gstForm The `FormGroup` containing GST-related form controls.
      * @param event The event object containing the selected state's label and value.
      * @memberof AccountAddNewDetailsComponent
@@ -1088,7 +1085,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     /**
      * Updates the county information in the GST form based on the selected county event.
-     *
+     * 
      * @param gstForm The `FormGroup` containing GST-related form controls.
      * @param event The event object containing the selected county's label and value.
      * @memberof AccountAddNewDetailsComponent
@@ -1404,7 +1401,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     /**
      * Handles tab change
      *
-     * @param {MatTabChangeEvent} event
+     * @param {MatTabChangeEvent} event 
      * @memberof AccountAddNewDetailsComponent
      */
     public tabChanged(event: MatTabChangeEvent): void {
@@ -1412,7 +1409,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.selectedTabLabel = event.tab.textLabel;
             this.selectedTabIndex = event.index;
             this.isCustomSelectedTab = event.tab.textLabel === this.localeData?.tabs?.custom;
-
+            
             // Mark this tab as activated
             this.activatedTabs.add(event.tab.textLabel);
         }
@@ -1954,14 +1951,11 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     public openSalesPersonDialog(): void {
-        // const dialogRef = this.dialog.open(SalesPersonComponent, {
-        //     ...ASIDE_PANE_CONFIG,
-        //     data: { activeSalePersonUniqueName: this.addAccountForm.get('salesPersonUniqueName').value || "" }
-        // });
-        // dialogRef.afterClosed().pipe(filter(Boolean), take(1), tap((res) => { this.getSalesPersonList(); this.salesPersonCreated = true; this.activeSalePersonIsTransfer = res.isTransfer })).subscribe();
-
-        // Placeholder until SalesPersonComponent is available
-        console.log('SalesPersonComponent dialog would open here');
+        const dialogRef = this.dialog.open(SalesPersonComponent, {
+            ...ASIDE_PANE_CONFIG,
+            data: { activeSalePersonUniqueName: this.addAccountForm.get('salesPersonUniqueName').value || "" }
+        });
+        dialogRef.afterClosed().pipe(filter(Boolean), take(1), tap((res) => { this.getSalesPersonList(); this.salesPersonCreated = true; this.activeSalePersonIsTransfer = res.isTransfer })).subscribe();
     }
 
     /**
@@ -1970,9 +1964,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     public getSalesPersonList(): void {
-        // this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: API_BULK_FETCH_LIMIT } });
-        // Placeholder until salesPersonStore is available
-        console.log('getSalesPersonList would be called here');
+        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: API_BULK_FETCH_LIMIT } });
     }
 
     /**

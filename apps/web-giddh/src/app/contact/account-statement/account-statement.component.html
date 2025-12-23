@@ -1,0 +1,456 @@
+<div
+    appTranslate
+    [file]="'contact/preview'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <div class="no-data" *ngIf="getAccountStatementInProgress$ | async">
+        <giddh-page-loader></giddh-page-loader>
+    </div>
+    <div class="common-wrapper">
+        <div class="account-statement p-20 mt-4">
+            <table class="w-100">
+                <tr>
+                    <td width="65%" class="vertical-align-top">
+                        <address class="address-block font-size-18" *ngIf="responseAccountList.accountName">
+                            <p class="font-size-20">{{ responseAccountList.accountName }}</p>
+                            <ng-container *ngIf="responseAccountList.accountAddress">
+                                <p *ngIf="responseAccountList.accountAddress.address">
+                                    {{ commonLocaleData?.app_address }} :
+                                    {{ responseAccountList.accountAddress.address }}
+                                </p>
+                                <p *ngIf="responseAccountList.accountAddress.stateName">
+                                    {{ responseAccountList.accountAddress.stateName }}
+                                </p>
+                                <p *ngIf="responseAccountList.accountAddress.countryName">
+                                    {{ responseAccountList.accountAddress.countryName }}
+                                </p>
+                                <p *ngIf="responseAccountList.accountAddress.pinCode">
+                                    {{ responseAccountList.accountAddress.pinCode }}
+                                </p>
+                                <p *ngIf="responseAccountList.accountAddress.taxNumber">
+                                    {{ responseAccountList.accountAddress.taxType }} :
+                                    {{ responseAccountList.accountAddress.taxNumber }}
+                                </p>
+                                <p *ngIf="responseAccountList.accountAddress.email">
+                                    {{ commonLocaleData?.app_email }} : {{ responseAccountList.accountAddress.email }}
+                                </p>
+                                <p *ngIf="responseAccountList.accountAddress.mobileNo">
+                                    {{ commonLocaleData?.app_mobile_no }} :
+                                    {{ responseAccountList.accountAddress.mobileNo }}
+                                </p>
+                            </ng-container>
+                        </address>
+                    </td>
+                    <td width="35%" class="vertical-align-top">
+                        <address class="address-block font-size-18 text-right" *ngIf="responseAccountList.companyName">
+                            <p class="font-size-20">{{ responseAccountList.companyName }}</p>
+                            <ng-container *ngIf="responseAccountList.companyGstAddress">
+                                <p *ngIf="responseAccountList.companyGstAddress.address">
+                                    {{ commonLocaleData?.app_address }} :
+                                    {{ responseAccountList.companyGstAddress.address }}
+                                </p>
+                                <p *ngIf="responseAccountList.companyGstAddress.stateName">
+                                    {{ responseAccountList.companyGstAddress.stateName }}
+                                </p>
+                                <p *ngIf="responseAccountList.companyGstAddress.countryName">
+                                    {{ responseAccountList.companyGstAddress.countryName }}
+                                </p>
+                                <p *ngIf="responseAccountList.companyGstAddress.pinCode">
+                                    {{ responseAccountList.companyGstAddress.pinCode }}
+                                </p>
+                                <p *ngIf="responseAccountList.companyGstAddress.taxNumber">
+                                    {{ responseAccountList.companyGstAddress.taxType }} :
+                                    {{ responseAccountList.companyGstAddress.taxNumber }}
+                                </p>
+                                <p *ngIf="responseAccountList.companyGstAddress.email">
+                                    {{ commonLocaleData?.app_email }} :
+                                    {{ responseAccountList.companyGstAddress.email }}
+                                </p>
+                                <p *ngIf="responseAccountList.companyGstAddress.mobileNo">
+                                    {{ commonLocaleData?.app_mobile_no }} :
+                                    {{ responseAccountList.companyGstAddress.mobileNo }}
+                                </p>
+                            </ng-container>
+                        </address>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="65%"></td>
+                    <td width="35%"></td>
+                </tr>
+                <tr>
+                    <td width="65%"></td>
+                    <td width="35%">
+                        <div class="d-flex justify-content-end">
+                            <div>
+                                <p class="font-30 text-right">{{ localeData?.statement_of_accounts }}</p>
+                                <hr class="bordered m-0" />
+                                <p class="text-right text-light font-size-18 line-height-22">
+                                    {{ responseAccountList.fromDate }} <span> - </span> {{ responseAccountList.toDate }}
+                                </p>
+                                <hr class="bordered m-0" />
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td width="65%"></td>
+                    <td width="35%">
+                        <table
+                            class="w-100"
+                            *ngIf="responseAccountList.accountSummary && responseAccountList.accountAddress"
+                        >
+                            <thead>
+                                <tr>
+                                    <th colspan="2" class="bg-grey font-size-16 text-light account-Summary">
+                                        {{ localeData?.account_summary }}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="font-size-16 light-grey">{{ localeData?.opening_balance }}</td>
+                                    <td class="text-right pr-0">
+                                        <amount-field
+                                            [amount]="responseAccountList.accountSummary.openingBalance?.amount"
+                                            [currency]="responseAccountList.accountAddress.currency?.code"
+                                            [currencySymbol]="responseAccountList.accountAddress.currency?.symbol"
+                                            [isReadOnly]="true"
+                                            [isEditable]="false"
+                                            [isCurrencySymbolShown]="true"
+                                            [isCurrencySymbolShown]="true"
+                                        ></amount-field>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="font-size-16 light-grey">{{ localeData?.invoiced_amount }}</td>
+                                    <td class="text-right pr-0">
+                                        <amount-field
+                                            [amount]="responseAccountList.accountSummary.debitTotal"
+                                            [currency]="responseAccountList.accountAddress.currency?.code"
+                                            [currencySymbol]="responseAccountList.accountAddress.currency?.symbol"
+                                            [isReadOnly]="true"
+                                            [isEditable]="false"
+                                            [isCurrencySymbolShown]="true"
+                                        ></amount-field>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="font-size-16 light-grey">{{ localeData?.amount_paid }}</td>
+                                    <td class="text-right pr-0">
+                                        <amount-field
+                                            [amount]="responseAccountList.accountSummary.creditTotal"
+                                            [currency]="responseAccountList.accountAddress.currency?.code"
+                                            [currencySymbol]="responseAccountList.accountAddress.currency?.symbol"
+                                            [isReadOnly]="true"
+                                            [isEditable]="false"
+                                            [isCurrencySymbolShown]="true"
+                                        ></amount-field>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2" class="p-0"><hr class="bordered" /></td>
+                                </tr>
+                                <tr>
+                                    <td class="font-size-16 text-light">{{ localeData?.balance_due }}</td>
+                                    <td class="p-0 text-right">
+                                        {{ balanceDue }}
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+            <div class="inner-content">
+                <div class="w-100 d-flex align-items-center justify-content-between">
+                    <div class="custom-datepicker-wrapper">
+                        <div
+                            class="custom-datepicker"
+                            [matMenuTriggerFor]="universalDatepicker"
+                            #universalDatepickerTrigger="matMenuTrigger"
+                            role="button"
+                            aria-haspopup="true"
+                            aria-controls="universal-datepicker-menu"
+                        >
+                            <input
+                                matInput
+                                type="text"
+                                name="selectedDateRange"
+                                class="form-control"
+                                [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                readonly
+                            />
+                        </div>
+                    </div>
+                    <button
+                        mat-stroked-button
+                        (click)="setInitialAdvanceFilter()"
+                        class="mx-auto"
+                        *ngIf="(advanceFiltersApplied || clearFilter) && !isLoading"
+                    >
+                        <span class="d-inline-flex align-items-center column-gap-05">
+                            <span class="icon-cross font-size-12"></span>
+                            <span>{{ commonLocaleData?.app_clear_filter }}</span>
+                        </span>
+                    </button>
+                    <div class="d-flex justify-content-between">
+                        <button
+                            mat-stroked-button
+                            class="mr-2"
+                            [matTooltip]="commonLocaleData?.app_export"
+                            [matTooltipPosition]="'above'"
+                            (click)="exportAccountStatement()"
+                        >
+                            <i aria-label="export-account" class="icon-export-icon lh-0"></i>
+                        </button>
+                        <button
+                            aria-label="filter"
+                            mat-stroked-button
+                            (click)="onOpenAdvanceSearch()"
+                            class="d-flex advance-search-filter icon-button-width pointer mx-0 ml-auto"
+                            [matTooltip]="commonLocaleData?.app_advance_search"
+                            [matTooltipPosition]="'above'"
+                        >
+                            <i class="icon-advance-filter"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="invoice-table mt-3">
+                    <div class="table-responsive position-relative">
+                        <table
+                            mat-table
+                            [dataSource]="accountListData"
+                            matSort
+                            (matSortChange)="sortData($event)"
+                            [matSortDirection]="accountListRequest.sort"
+                            [matSortActive]="accountListRequest.sortBy"
+                            [ngClass]="{ 'account-table': isLoading }"
+                        >
+                            <ng-container matColumnDef="date">
+                                <th
+                                    mat-header-cell
+                                    *matHeaderCellDef
+                                    mat-sort-header
+                                    class="black-and-white-table font-size-16 font-weight-bold"
+                                >
+                                    {{ commonLocaleData?.app_date }}
+                                </th>
+                                <td
+                                    mat-cell
+                                    *matCellDef="let element; let i = index"
+                                    [ngClass]="{ 'bg-light-grey': i % 2 }"
+                                >
+                                    {{ element.date ?? "-" }}
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="transactions">
+                                <th
+                                    mat-header-cell
+                                    *matHeaderCellDef
+                                    class="font-size-16 font-weight-bold"
+                                    #transactions
+                                    (clickOutside)="handleClickOutside($event, transactions, 'transactions')"
+                                >
+                                    <div class="d-flex align-items-center column-gap-05">
+                                        <ng-container
+                                            *ngTemplateOutlet="
+                                                searchTemplate;
+                                                context: {
+                                                    $implicit: showTransactionInput,
+                                                    fieldName: 'transactionsField',
+                                                    formControl: transactionInput,
+                                                    title: localeData?.transactions
+                                                }
+                                            "
+                                        ></ng-container>
+                                    </div>
+                                </th>
+                                <td
+                                    mat-cell
+                                    *matCellDef="let element; let i = index"
+                                    [ngClass]="{ 'bg-light-grey': i % 2 }"
+                                >
+                                    {{ element?.voucherType ?? "-" }}
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="details">
+                                <th mat-header-cell *matHeaderCellDef class="font-size-16 font-weight-bold">
+                                    {{ localeData?.details }}
+                                </th>
+                                <td
+                                    mat-cell
+                                    *matCellDef="let element; let i = index"
+                                    [ngClass]="{ 'bg-light-grey': i % 2 }"
+                                    class="details-column word-break"
+                                >
+                                    {{ element?.voucherNumber ?? "-" }}
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="amount">
+                                <th
+                                    mat-header-cell
+                                    *matHeaderCellDef
+                                    class="sort-header-right text-right font-size-16 font-weight-bold"
+                                >
+                                    {{ commonLocaleData?.app_amount }}
+                                </th>
+                                <td
+                                    mat-cell
+                                    *matCellDef="let element; let i = index"
+                                    [ngClass]="{ 'bg-light-grey': i % 2 }"
+                                    class="sort-header-right text-right"
+                                >
+                                    <span
+                                        >{{
+                                            element?.voucherAmount.type === transactionType.Debit
+                                                ? (element?.voucherAmount?.amount | giddhNumberFormat)
+                                                : "-"
+                                        }}
+                                    </span>
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="payments">
+                                <th
+                                    mat-header-cell
+                                    *matHeaderCellDef
+                                    class="sort-header-right text-right font-size-16 font-weight-bold"
+                                >
+                                    {{ commonLocaleData?.app_payment }}
+                                </th>
+                                <td
+                                    mat-cell
+                                    *matCellDef="let element; let i = index"
+                                    [ngClass]="{ 'bg-light-grey': i % 2 }"
+                                    class="sort-header-right text-right"
+                                >
+                                    {{
+                                        element?.voucherAmount.type !== transactionType.Debit
+                                            ? (element?.voucherAmount?.amount | giddhNumberFormat)
+                                            : "-"
+                                    }}
+                                </td>
+                            </ng-container>
+                            <ng-container matColumnDef="balance">
+                                <th
+                                    mat-header-cell
+                                    *matHeaderCellDef
+                                    class="sort-header-right text-right font-size-16 font-weight-bold"
+                                >
+                                    {{ commonLocaleData?.app_balance }}
+                                </th>
+                                <td
+                                    mat-cell
+                                    *matCellDef="let element; let i = index"
+                                    [ngClass]="{ 'bg-light-grey': i % 2 }"
+                                    class="sort-header-right text-right"
+                                >
+                                    {{
+                                        element.closingBalance?.amount >= 0
+                                            ? (element.closingBalance?.type === transactionType.Credit ? "-" : "") +
+                                              (element.closingBalance.amount | giddhNumberFormat)
+                                            : ""
+                                    }}
+                                </td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                        </table>
+                        <hr class="border-grey" />
+                        <div class="d-flex justify-content-end">
+                            <span class="font-size-16 font-weight-bold p-2">{{ localeData?.balance_due }}</span>
+                            <span class="p-2">
+                                {{ balanceDue }}
+                            </span>
+                        </div>
+                        <div
+                            class="text-center pt-2 pb-2"
+                            *ngIf="isLoading || (!isLoading && !accountListData?.length)"
+                        >
+                            <div class="no-data" *ngIf="isLoading">
+                                <giddh-page-loader class="spinner-container position-absolute"></giddh-page-loader>
+                            </div>
+                            <div class="no-data" *ngIf="!isLoading && !accountListData?.length">
+                                <h2>
+                                    {{ localeData?.no_account_statements_found }}
+                                </h2>
+                            </div>
+                        </div>
+                        <mat-paginator
+                            *ngIf="!isLoading && totalRecords > pageSizeOptions[0]"
+                            (page)="handlePageChange($event)"
+                            [length]="totalRecords"
+                            [pageSize]="accountListRequest.count"
+                            [showFirstLastButtons]="true"
+                            [pageSizeOptions]="pageSizeOptions"
+                            [hidePageSize]="false"
+                            [pageIndex]="accountListRequest.page - 1"
+                        >
+                        </mat-paginator>
+                        <section class="mb-custom-80"></section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+    <ng-template matMenuContent>
+        <app-datepicker-wrapper
+            [inputStartDate]="selectedDateRange?.startDate"
+            [inputEndDate]="selectedDateRange?.endDate"
+            [alwaysShowCalendars]="true"
+            [ranges]="datePickerOptions"
+            [selectedRangeLabel]="selectedRangeLabel"
+            [showCustomRangeLabel]="true"
+            [showClearButton]="false"
+            [showCancel]="true"
+            [linkedCalendars]="true"
+            [showDropdowns]="true"
+            (rangeClicked)="dateSelectedCallback($event)"
+            (datesUpdated)="dateSelectedCallback($event)"
+            (closeCalender)="toggleGiddhDatepicker(false)"
+            [keepCalendarOpeningWithRange]="false"
+            [showRangeLabelOnInput]="false"
+        ></app-datepicker-wrapper>
+    </ng-template>
+</mat-menu>
+<!-- table-search -->
+<ng-template
+    #searchTemplate
+    let-show
+    let-title="title"
+    let-fieldName="fieldName"
+    let-voucherType="voucherType"
+    let-formControl="formControl"
+>
+    <div class="search-table">
+        <div class="d-flex align-items-center column-gap-1" [hidden]="show">
+            <span class="cursor-pointer" (click)="toggleSearch($event, fieldName)">
+                <i class="icon-search icon-font-size-16"></i>
+            </span>
+            <span>{{ title }}</span>
+        </div>
+        <div [hidden]="!show">
+            <text-field
+                (click)="activeSearchField = 'search' + fieldName; $event.stopPropagation()"
+                [id]="'search' + fieldName"
+                [type]="'text'"
+                [placeholder]="commonLocaleData?.app_search"
+                [cssClass]="'form-control border'"
+                [autoFocus]="show"
+                [formControl]="formControl"
+            ></text-field>
+        </div>
+    </div>
+</ng-template>
+<!-- update ledger entry popup -->
+<ng-template #advanceSearchModal>
+    <advance-search-model
+        [advanceSearchRequest]="advanceSearchRequest"
+        (closeModelEvent)="closeAdvanceSearchPopup($event)"
+    ></advance-search-model>
+</ng-template>

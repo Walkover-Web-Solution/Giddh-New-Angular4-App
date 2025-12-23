@@ -1,7 +1,7 @@
 import Dexie from 'dexie';
 import { ICompAidata, Igtbl, IUlist } from '../interfaces/ulist.interface';
+import { orderBy } from '../../lodash-optimized';
 import { DEFAULT_MENUS } from '../default-menus';
-import { filter, findIndex, get, map, orderBy, reject, slice } from '../../lodash-optimized';
 
 export class UlistDbModel implements IUlist {
     public id: number;

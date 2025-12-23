@@ -8,7 +8,7 @@ import { DomSanitizer } from '@angular/platform-browser';
     templateUrl: './watch-video.component.html',
     styleUrls: ['./watch-video.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone:false
+    standalone: false
 })
 export class WatchVideoComponent implements OnInit {
     /** Holds template reference for video  */

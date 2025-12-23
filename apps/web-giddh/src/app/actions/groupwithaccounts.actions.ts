@@ -164,7 +164,7 @@ export class GroupWithAccountsAction {
                 if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 } else {
-                    this._generalService.eventHandler.next({ name: eventsConst.groupAdded, payload: action.payload });
+                    this._generalService.eventHandler.next({ name: eventsConst.groupAdded.toString(), payload: action.payload });
                     this._toasty.successToast(this.localeService.translate("app_messages.subgroup_added"), this.localeService.translate("app_success"));
                 }
                 return {
@@ -281,7 +281,7 @@ export class GroupWithAccountsAction {
                 if (action.payload?.status === 'error') {
                     this._toasty.errorToast(action.payload.message, action.payload.code);
                 } else {
-                    this._generalService.eventHandler.next({ name: eventsConst.groupUpdated, payload: action.payload });
+                    this._generalService.eventHandler.next({ name: eventsConst.groupUpdated.toString(), payload: action.payload });
                     this._toasty.successToast(this.localeService.translate("app_messages.group_updated"));
                 }
 

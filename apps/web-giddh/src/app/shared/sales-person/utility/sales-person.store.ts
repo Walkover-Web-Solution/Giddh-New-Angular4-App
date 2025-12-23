@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from "@angular/core";
 import { ComponentStore } from "@ngrx/component-store";
-import { tapResponse } from "@ngrx/operators";
+import { tap } from "rxjs/operators";
 import { Observable, switchMap, catchError, EMPTY } from "rxjs";
 import { BaseResponse, CommonPaginatedResponse } from "../../../models/api-models/BaseResponse";
 import { ToasterService } from "../../../services/toaster.service";
@@ -8,7 +8,6 @@ import { LocaleService } from "../../../services/locale.service";
 import { SalesPersonService } from "./sales-person.service";
 import { HttpMethod, IOption } from "../../../app.constant";
 import { SalesPersonCreateUpdate, SalesPersonDeleteArchivedModel, SalesPersonErrorDetailsEnum } from "./sales-person.constant";
-import { includes, map } from '../../../lodash-optimized';
 
 export interface SalesPersonState {
     salesPersonSaveInProgress: boolean;
@@ -32,9 +31,7 @@ export const DEFAULT_STATE: SalesPersonState = {
     openTransferAndArchiveDialog: false
 };
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> implements OnDestroy {
     constructor(
         private toasterService: ToasterService,
@@ -73,36 +70,24 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
             switchMap(({ isDropdown, params }) => {
                 this.patchState({ salesPersonListInProgress: true });
                 return this.salesPersonService.salesPerson(HttpMethod.GET, isDropdown, null, params).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 let response = res?.body;
-                                if (isDropdown) {
-                                    response = res?.body?.results?.map((item: any) => ({
-                                        label: item.name,
-                                        value: item.uniqueName
-                                    }));
+                                if (response?.results) {
+                                    response = response?.results;
                                 }
                                 this.patchState({
                                     salesPersonList: response,
-                                    salesPersonListInProgress: false,
+                                    salesPersonListInProgress: false
                                 });
                             } else {
-                                if (res.message) {
-                                    this.toasterService.showSnackBar('error', res.message);
-                                }
-                                return this.patchState({
-                                    salesPersonList: null,
-                                    salesPersonListInProgress: false,
+                                this.toasterService.showSnackBar('error', res?.message);
+                                this.patchState({
+                                    salesPersonList: [],
+                                    salesPersonListInProgress: false
                                 });
                             }
-                        },
-                        (error: any) => {
-                            this.toasterService.showSnackBar('error', this.localeService.translate("app_something_went_wrong"));
-                            return this.patchState({
-                                salesPersonList: null,
-                                salesPersonListInProgress: false
-                            });
                         }
                     ),
                     catchError((err) => EMPTY)
@@ -121,34 +106,25 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
             switchMap((req) => {
                 this.patchState({ salesPersonSaveInProgress: true, createUpdateSalesPersonSuccess: false });
                 return this.salesPersonService.salesPerson(req.uniqueName ? HttpMethod.PUT : HttpMethod.POST, req.model, req.uniqueName).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 if (req.uniqueName) {
-                                    this.patchState({
-                                        salesPersonSaveInProgress: false,
-                                        createUpdateSalesPersonSuccess: true
-                                    });
+                                    this.toasterService.showSnackBar('success', this.localeService.translate("app_messages.sales_person_updated"));
                                 } else {
-                                    this.patchState({
-                                        salesPersonSaveInProgress: false,
-                                        createUpdateSalesPersonSuccess: true
-                                    });
+                                    this.toasterService.showSnackBar('success', this.localeService.translate("app_messages.sales_person_created"));
                                 }
-                            } else {
-                                if (res.message) {
-                                    this.toasterService.showSnackBar('error', res.message);
-                                }
-                                return this.patchState({
+                                this.patchState({
                                     salesPersonSaveInProgress: false,
+                                    createUpdateSalesPersonSuccess: true
+                                });
+                            } else {
+                                this.toasterService.showSnackBar('error', res?.message);
+                                this.patchState({
+                                    salesPersonSaveInProgress: false,
+                                    createUpdateSalesPersonSuccess: false
                                 });
                             }
-                        },
-                        (error: any) => {
-                            this.toasterService.showSnackBar('error', this.localeService.translate("app_something_went_wrong"));
-                            return this.patchState({
-                                salesPersonSaveInProgress: false
-                            });
                         }
                     ),
                     catchError((err) => EMPTY)
@@ -167,7 +143,7 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
             switchMap((uniqueName) => {
                 this.patchState({ deleteSalesPersonSuccess: false });
                 return this.salesPersonService.salesPerson(HttpMethod.DELETE, {}, uniqueName).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 typeof res.body === "string" && this.toasterService.showSnackBar('success', res.body);
@@ -192,12 +168,6 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
                                     deleteSalesPersonSuccess: false,
                                 });
                             }
-                        },
-                        (error: any) => {
-                            this.toasterService.showSnackBar('error', this.localeService.translate("app_something_went_wrong"));
-                            return this.patchState({
-                                deleteSalesPersonSuccess: false
-                            });
                         }
                     ),
                     catchError((err) => EMPTY)
@@ -216,25 +186,19 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
             switchMap((model) => {
                 this.patchState({ archiveSalesPersonSuccess: false });
                 return this.salesPersonService.salesPersonArchive(model.model, model.uniqueName).pipe(
-                    tapResponse(
+                    tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 typeof res.body === "string" && this.toasterService.showSnackBar('success', res.body);
                                 this.patchState({
-                                    archiveSalesPersonSuccess: model
+                                    deleteSalesPersonSuccess: true
                                 });
                             } else {
-                                res.message && this.toasterService.showSnackBar('error', res.message);
-                                return this.patchState({
-                                    archiveSalesPersonSuccess: false,
+                                this.toasterService.showSnackBar('error', res?.message);
+                                this.patchState({
+                                    deleteSalesPersonSuccess: false
                                 });
                             }
-                        },
-                        (error: any) => {
-                            this.toasterService.showSnackBar('error', this.localeService.translate("app_something_went_wrong"));
-                            return this.patchState({
-                                archiveSalesPersonSuccess: false
-                            });
                         }
                     ),
                     catchError((err) => EMPTY)

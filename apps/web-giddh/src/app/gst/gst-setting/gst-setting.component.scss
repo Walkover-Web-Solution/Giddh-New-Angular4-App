@@ -1,0 +1,43 @@
+thead {
+    border-bottom: 1px solid var(--border-color);
+}
+
+tr {
+    th,
+    td {
+        font-size: var(--font-size-15);
+    }
+    th {
+        padding: 10px 5px;
+    }
+    td {
+        padding: 5px 5px 25px 5px;
+    }
+
+    &.invalid-row {
+        td {
+            padding-bottom: 30px;
+        }
+    }
+}
+
+.option-value-field {
+    text-field {
+        input {
+            padding-top: 13px !important;
+            padding-bottom: 13px !important;
+        }
+    }
+}
+
+.lut-number-error-message {
+    left: 5px;
+    bottom: 0;
+}
+
+.payment-dropdown {
+    max-width: 400px;
+}
+.lut-form-wrapper {
+    max-width: 630px;
+}

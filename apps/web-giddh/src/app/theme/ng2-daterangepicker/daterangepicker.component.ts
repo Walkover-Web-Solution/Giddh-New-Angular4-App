@@ -14,11 +14,10 @@ import {
 } from '@angular/core';
 
 import { DaterangepickerConfig } from './config.service';
-import { find, keys, remove } from '../../lodash-optimized';
 
 @Directive({
     selector: "[daterangepicker]",
-    standalone:false
+    standalone: false
 })
 export class DaterangePickerComponent implements AfterViewInit, OnDestroy, OnChanges {
 

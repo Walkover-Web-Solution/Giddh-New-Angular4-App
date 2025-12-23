@@ -3,8 +3,7 @@ import { WindowRef } from '../../window.object';
 
 @Directive({
     selector: '[PageHeight]',
-
-  standalone: false,
+    standalone: false
 })
 export class FullPageHeight {
 

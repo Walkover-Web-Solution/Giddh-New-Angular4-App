@@ -1,0 +1,51 @@
+<span class="position-relative custom-dropdown-ledger">
+    <input-field
+        #taxInputElement
+        [label]="customHeading ? customHeading : commonLocaleData?.app_tax"
+        [matMenuTriggerFor]="taxControlMenu"
+        [type]="'text'"
+        [id]="'update-ledger-tax'"
+        [mask]="maskInput"
+        [useMask]="true"
+        [prefix]="prefixInput"
+        [suffix]="suffixInput"
+        name="formattedTotal"
+        [required]="isMandatory"
+        class="text-right total-tax-amount cursor-pointer"
+        [(ngModel)]="formattedTotal"
+        [readonly]="readonly"
+        [cssClass]="'text-right'"
+        (onFocus)="!readonly ? handleInputFocus() : ''"
+    ></input-field>
+    <mat-menu #taxControlMenu="matMenu">
+        <div class="px-3 pt-2 discount-wrapper" (click)="$event.stopPropagation()">
+            <div class="discount-checkbox-wrapper">
+                <ng-container *ngFor="let tax of taxRenderData; trackBy: trackByFn; let i = index">
+                    <p
+                        (click)="$event.stopPropagation()"
+                        class="d-flex align-items-center w-100 m-0 p-0"
+                        [ngClass]="{ 'disabled-label': tax.isDisabled }"
+                        #taxLabel
+                    >
+                        <mat-checkbox
+                            class="font-size-15"
+                            color="primary"
+                            [id]="'update-ledger-tax-checkbox-' + i"
+                            [(ngModel)]="tax.isChecked"
+                            [disabled]="tax.isDisabled"
+                            (change)="change()"
+                            (click)="$event.stopPropagation()"
+                            (focusin)="taxLabelFocusing(taxLabel)"
+                            (focusout)="taxLabelBluring(taxLabel)"
+                        ></mat-checkbox>
+                        <span class="pull-left text-ellipsis">{{ tax.name }}</span>
+                    </p>
+                </ng-container>
+            </div>
+        </div>
+        <div class="border-top pt-2 mt-2 text-center cursor-pointer" (click)="createNew()">
+            <span class="text-primary">{{ commonLocaleData?.app_create_new }}</span>
+        </div>
+        <div tabindex="0" (focus)="onFocusLastDiv($event)"></div>
+    </mat-menu>
+</span>

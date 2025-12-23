@@ -1,5 +1,4 @@
 import { IUlist } from './interfaces/ulist.interface';
-import { slice } from '../lodash-optimized';
 
 export let NAVIGATION_ITEM_LIST_ORIGINAL: IUlist[] = [
     { type: 'MENU', name: 'Dashboard', uniqueName: '/pages/home', hasTabs: false },

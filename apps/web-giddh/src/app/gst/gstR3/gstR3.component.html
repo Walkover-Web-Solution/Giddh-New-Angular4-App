@@ -1,0 +1,833 @@
+<div
+    appTranslate
+    [file]="'gst'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
+>
+    <div
+        class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
+        *ngIf="asideGstSidebarMenuState"
+    >
+        <tax-sidebar
+            (navigateEvent)="handleNavigation($event)"
+            [selectedGstModule]="selectedGstr"
+            [exclude]="'#primary-new-header'"
+            class="gst-sidebar"
+            [isMonthSelected]="isMonthSelected"
+            [isGstModule]="true"
+        ></tax-sidebar>
+    </div>
+    <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
+    <div class="column content-column gst-filing-container navs-list">
+        <div class="tax-engine">
+            <div
+                class="d-flex justify-content-between align-items-center flex-wrap column-gap-1 row-gap-15 mt-3"
+            >
+                <div class="d-flex column-gap-1 align-items-center">
+                    <span class="font-size-16">
+                        <a
+                            [routerLink]="['/gstfiling']"
+                            id="ember2007"
+                            class="ember-view cursor-pointer"
+                            aria-label="back svg"
+                        >
+                            <svg
+                                id="Layer_1"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 512 512"
+                                class="icon icon-lg text-middle"
+                            >
+                                <path
+                                    d="M367.5 433.7L189.8 256 367.5 78.3l22.6-22.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-223 223c-6 6-9.4 14.1-9.4 22.6 0 8.5 3.4 16.6 9.4 22.6l223 223c6.2 6.2 14.4 9.4 22.6 9.4s16.4-3.1 22.6-9.4c12.5-12.5 12.5-32.8 0-45.3l-22.5-22.6z"
+                                ></path>
+                            </svg>
+                            {{ localeData?.gstr3b_summary }}
+                        </a>
+                    </span>
+                    <div>
+                        <giddh-datepicker
+                            [monthYearMode]="true"
+                            [startView]="'multi-year'"
+                            (monthYearSelected)="setMonthAndYear($event)"
+                        >
+                        </giddh-datepicker>
+                        <!-- Commented out problematic properties:
+                            [cssClass]="'text-center width-150'"
+                            [startAt]="startAt"
+                            [placeholder]="date?.value ?? '--'"
+                            [appearance]="'outline'"
+                        -->
+                    </div>
+                </div>
+
+                <div class="flex-grow-1">
+                    <div class="d-flex column-gap-1 align-items-center justify-content-end">
+                        <span *ngIf="!isTabScreen">
+                            <ng-container *ngTemplateOutlet="watchVideoTemplateGSTR3"></ng-container>
+                        </span>
+                        <ul class="d-flex column-gap-1 align-items-center">
+                            <li>
+                                <div>
+                                    <button mat-raised-button color="primary" [matMenuTriggerFor]="menu">
+                                        <i class="icon-download"></i>
+                                        {{ commonLocaleData?.app_download }}
+                                    </button>
+                                    <mat-menu #menu="matMenu">
+                                        <div
+                                            class="d-flex flex-column row-gap-15 px-3 py-2"
+                                            role="menuitem"
+                                            (click)="$event.stopPropagation()"
+                                            (keydown)="$event.stopPropagation()"
+                                            [style.width.px]="300"
+                                        >
+                                            <input-field
+                                                [name]="'name'"
+                                                [(ngModel)]="userEmail"
+                                                [label]="commonLocaleData?.app_email_id"
+                                                [placeholder]="localeData?.gstr3b?.email_address"
+                                                [showLabelIcon]="true"
+                                                [labelIconClass]="'fa fa-info-circle'"
+                                                [labelIconTooltip]="localeData?.gstr3b?.email_tooltip"
+                                                [type]="'text'"
+                                                [required]="true"
+                                                [autocomplete]="'off'"
+                                            >
+                                            </input-field>
+                                            <div>
+                                                <button
+                                                    class="flex-grow-0"
+                                                    mat-raised-button
+                                                    color="primary"
+                                                    (click)="emailGSTR3bSheet(false)"
+                                                    [disabled]="!userEmail"
+                                                    aria-label="emailGST"
+                                                >
+                                                    {{ commonLocaleData?.app_email_sheet }}
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </mat-menu>
+                                </div>
+                            </li>
+                            <li>
+                                <div *ngIf="showTaxPro">
+                                    <button
+                                        *ngIf="isCompany && showGstFiling"
+                                        mat-raised-button
+                                        color="primary"
+                                        (click)="checkAuthenticationAndFileGstr3B()"
+                                        [disabled]="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.TaxFilling)"
+                                    >
+                                        {{ localeData?.filing?.push_to_portal }}
+                                    </button>
+                                </div>
+                            </li>
+                            <li>
+                                <div *ngIf="showTaxPro">
+                                    <button
+                                        *ngIf="isCompany && showGstFiling"
+                                        mat-raised-button
+                                        color="primary"
+                                        (click)="openSettingAsidePane()"
+                                        [disabled]="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.TaxFilling)"
+                                    >
+                                        {{
+                                            gstAuthenticated
+                                                ? localeData?.filing?.authenticated
+                                                : localeData?.filing?.authenticate
+                                        }}
+                                    </button>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="isTabScreen" class="pull-right pr-3 pt-2">
+                <ng-container *ngTemplateOutlet="watchVideoTemplateGSTR3"></ng-container>
+            </div>
+            <div *ngIf="isCompany && showGstFiling" class="px-1">
+                <span class="pull-right px-3">
+                    <restricted-module-message [restrictedModule]="restrictedModules.TaxFilling"
+                        (onUpgradePlan)="buyPlan($event)">
+                    </restricted-module-message>
+                </span>
+            </div>
+            <div class="scroll-y noscroll-x fill body scrollbox mt-3">
+                <div id="ember1220" class="ember-view" *ngIf="selectedGstr3BTab === 'pushGSTN'">
+                    <div class="summary-content">
+                        <div class="table-responsive">
+                            <table
+                                mat-table
+                                [dataSource]="gstrUserTableData"
+                                class="table gstr-3b-user font-medium w-100"
+                            >
+                                <!-- Number Column -->
+                                <ng-container matColumnDef="number">
+                                    <td mat-cell *matCellDef="let row" width="2%">
+                                        <b>{{ row.number }}</b>
+                                    </td>
+                                </ng-container>
+
+                                <!-- Label Column -->
+                                <ng-container matColumnDef="label">
+                                    <td mat-cell *matCellDef="let row" width="20%">
+                                        <b>{{ row.label }}</b>
+                                    </td>
+                                </ng-container>
+
+                                <!-- Value Column -->
+                                <ng-container matColumnDef="value">
+                                    <td mat-cell *matCellDef="let row">
+                                        <i>&nbsp;&nbsp;{{ row.value }}</i>
+                                    </td>
+                                </ng-container>
+
+                                <tr mat-row *matRowDef="let row; columns: gstrUserTableDataDisplayedColumns"></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="summary-content">
+                        <p>{{ localeData?.gstr3b?.outward_inward_supplies }}</p>
+                        <div class="table-responsive" tabindex="0">
+                            <table
+                                mat-table
+                                [dataSource]="gstr3bTableData"
+                                class="table gstr-3b-report border w-100"
+                            >
+                                <!-- Supply Nature Column -->
+                                <ng-container matColumnDef="supplyNature">
+                                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.gstr3b?.supply_nature }}</th>
+                                    <td mat-cell *matCellDef="let row">{{ row.supplyNature }}</td>
+                                    <td mat-footer-cell *matFooterCellDef class="font-weight-semibold">
+                                        {{ localeData?.gstr3b?.total_value }}
+                                    </td>
+                                </ng-container>
+                                <!-- Taxable Value Column -->
+                                <ng-container matColumnDef="taxableValue">
+                                    <th mat-header-cell *matHeaderCellDef class="text-right">
+                                        {{ commonLocaleData?.app_taxable_value }}
+                                    </th>
+                                    <td mat-cell *matCellDef="let row" class="text-right">
+                                        <i class="icon-rupees icon-font-11"></i>
+                                        <span class="d-inline-flex">
+                                            <amount-field
+                                                [amount]="row.taxableValue"
+                                                [currencySymbol]="false"
+                                                [currencyCode]="false"
+                                            >
+                                            </amount-field>
+                                        </span>
+                                    </td>
+                                    <td mat-footer-cell *matFooterCellDef class="text-right">
+                                        <i class="icon-rupees icon-font-11"></i>
+                                        <span class="d-inline-flex">
+                                            <amount-field
+                                                [amount]="gstr3BData?.sumTaxVal || 0"
+                                                [currencySymbol]="false"
+                                                [currencyCode]="false"
+                                            >
+                                            </amount-field>
+                                        </span>
+                                    </td>
+                                </ng-container>
+                                <!-- Integrated Tax Column -->
+                                <ng-container matColumnDef="integratedTax">
+                                    <th mat-header-cell *matHeaderCellDef class="text-right">
+                                        {{ localeData?.gstr3b?.integrated_tax }}
+                                    </th>
+                                    <td
+                                        mat-cell
+                                        *matCellDef="let row"
+                                        class="text-right"
+                                        [ngClass]="{ 'gstr3b-null': row.hideIntegratedTax }"
+                                    >
+                                        <ng-container *ngIf="!row.hideIntegratedTax">
+                                            <i class="icon-rupees icon-font-11"></i>
+                                            <span class="d-inline-flex">
+                                                <amount-field
+                                                    [amount]="row.integratedTax"
+                                                    [currencySymbol]="false"
+                                                    [currencyCode]="false"
+                                                >
+                                                </amount-field>
+                                            </span>
+                                        </ng-container>
+                                    </td>
+                                    <td mat-footer-cell *matFooterCellDef class="text-right">
+                                        <i class="icon-rupees icon-font-11"></i>
+                                        <span class="d-inline-flex">
+                                            <amount-field
+                                                [amount]="gstr3BData?.sumIamtVal || 0"
+                                                [currencySymbol]="false"
+                                                [currencyCode]="false"
+                                            >
+                                            </amount-field>
+                                        </span>
+                                    </td>
+                                </ng-container>
+                                <!-- Central Tax Column -->
+                                <ng-container matColumnDef="centralTax">
+                                    <th mat-header-cell *matHeaderCellDef class="text-right">
+                                        {{ localeData?.gstr3b?.central_tax }}
+                                    </th>
+                                    <td
+                                        mat-cell
+                                        *matCellDef="let row"
+                                        class="text-right"
+                                        [ngClass]="{ 'gstr3b-null': row.hideCentralTax }"
+                                    >
+                                        <ng-container *ngIf="!row.hideCentralTax">
+                                            <i class="icon-rupees icon-font-11"></i>
+                                            <span class="d-inline-flex">
+                                                <amount-field
+                                                    [amount]="row.centralTax"
+                                                    [currencySymbol]="false"
+                                                    [currencyCode]="false"
+                                                >
+                                                </amount-field>
+                                            </span>
+                                        </ng-container>
+                                    </td>
+                                    <td mat-footer-cell *matFooterCellDef class="text-right">
+                                        <i class="icon-rupees icon-font-11"></i>
+                                        <span class="d-inline-flex">
+                                            <amount-field
+                                                [amount]="gstr3BData?.sumCamtval || 0"
+                                                [currencySymbol]="false"
+                                                [currencyCode]="false"
+                                            >
+                                            </amount-field>
+                                        </span>
+                                    </td>
+                                </ng-container>
+                                <!-- State/UT Tax Column -->
+                                <ng-container matColumnDef="stateUtTax">
+                                    <th mat-header-cell *matHeaderCellDef class="text-right">
+                                        {{ localeData?.gstr3b?.state_ut_tax }}
+                                    </th>
+                                    <td
+                                        mat-cell
+                                        *matCellDef="let row"
+                                        class="text-right"
+                                        [ngClass]="{ 'gstr3b-null': row.hideStateUtTax }"
+                                    >
+                                        <ng-container *ngIf="!row.hideStateUtTax">
+                                            <i class="icon-rupees icon-font-11"></i>
+                                            <span class="d-inline-flex">
+                                                <amount-field
+                                                    [amount]="row.stateUtTax"
+                                                    [currencySymbol]="false"
+                                                    [currencyCode]="false"
+                                                >
+                                                </amount-field>
+                                            </span>
+                                        </ng-container>
+                                    </td>
+                                    <td mat-footer-cell *matFooterCellDef class="text-right">
+                                        <i class="icon-rupees icon-font-11"></i>
+                                        <span class="d-inline-flex">
+                                            <amount-field
+                                                [amount]="gstr3BData?.sumSamtval || 0"
+                                                [currencySymbol]="false"
+                                                [currencyCode]="false"
+                                            >
+                                            </amount-field>
+                                        </span>
+                                    </td>
+                                </ng-container>
+                                <!-- Cess Tax Column -->
+                                <ng-container matColumnDef="cessTax">
+                                    <th mat-header-cell *matHeaderCellDef class="text-right">
+                                        {{ localeData?.gstr3b?.cess_tax }}
+                                    </th>
+                                    <td
+                                        mat-cell
+                                        *matCellDef="let row"
+                                        class="text-right"
+                                        [ngClass]="{ 'gstr3b-null': row.hideCessTax }"
+                                    >
+                                        <ng-container *ngIf="!row.hideCessTax">
+                                            <i class="icon-rupees icon-font-11"></i>
+                                            <span class="d-inline-flex">
+                                                <amount-field
+                                                    [amount]="row.cessTax"
+                                                    [currencySymbol]="false"
+                                                    [currencyCode]="false"
+                                                >
+                                                </amount-field>
+                                            </span>
+                                        </ng-container>
+                                    </td>
+                                    <td mat-footer-cell *matFooterCellDef class="text-right">
+                                        <i class="icon-rupees icon-font-11"></i>
+                                        <span class="d-inline-flex">
+                                            <amount-field
+                                                [amount]="gstr3BData?.sumCsamtval || 0"
+                                                [currencySymbol]="false"
+                                                [currencyCode]="false"
+                                            >
+                                            </amount-field>
+                                        </span>
+                                    </td>
+                                </ng-container>
+                                <!-- Number Column 1 -->
+                                <ng-container matColumnDef="1">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center">
+                                        {{ commonLocaleData?.app_numbers?.one }}
+                                    </th>
+                                </ng-container>
+                                <!-- Number Column 2 -->
+                                <ng-container matColumnDef="2">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center">
+                                        {{ commonLocaleData?.app_numbers?.two }}
+                                    </th>
+                                </ng-container>
+                                <!-- Number Column 3 -->
+                                <ng-container matColumnDef="3">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center">
+                                        {{ commonLocaleData?.app_numbers?.three }}
+                                    </th>
+                                </ng-container>
+                                <!-- Number Column 4 -->
+                                <ng-container matColumnDef="4">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center">
+                                        {{ commonLocaleData?.app_numbers?.four }}
+                                    </th>
+                                </ng-container>
+                                <!-- Number Column 5 -->
+                                <ng-container matColumnDef="5">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center">
+                                        {{ commonLocaleData?.app_numbers?.five }}
+                                    </th>
+                                </ng-container>
+                                <!-- Number Column 6 -->
+                                <ng-container matColumnDef="6">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center">
+                                        {{ commonLocaleData?.app_numbers?.six }}
+                                    </th>
+                                </ng-container>
+
+                                <tr
+                                    mat-header-row
+                                    *matHeaderRowDef="gstr3bTableDataDisplayedColumns"
+                                ></tr>
+                                <tr
+                                    mat-header-row
+                                    *matHeaderRowDef="['1', '2', '3', '4', '5', '6']"
+                                ></tr>
+
+                                <tr
+                                    mat-row
+                                    *matRowDef="let row; columns: gstr3bTableDataDisplayedColumns"
+                                    class="cursor-pointer"
+                                ></tr>
+
+                                <tr mat-footer-row *matFooterRowDef="gstr3bTableDataDisplayedColumns"></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="summary-content">
+                        <p>{{ localeData?.gstr3b?.supplies_shown }}</p>
+                        <div class="table-responsive">
+                            <table mat-table [dataSource]="suppliesTableData" class="table gstr-3b-report w-100">
+                                <!-- Empty Column -->
+                                <ng-container matColumnDef="empty">
+                                    <th mat-header-cell *matHeaderCellDef width="250px"></th>
+                                    <td mat-cell *matCellDef="let row">
+                                        <ng-container *ngIf="row.isSubheading">
+                                            <span>{{ row.subheadingText }}</span>
+                                        </ng-container>
+                                        <ng-container *ngIf="!row.isSubheading">
+                                            <span class="text-right">&nbsp;</span>
+                                        </ng-container>
+                                    </td>
+                                </ng-container>
+                                <!-- Place of Supply Column -->
+                                <ng-container matColumnDef="placeOfSupply">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center">
+                                        {{ localeData?.filing?.place_supply }}
+                                    </th>
+                                    <td mat-cell *matCellDef="let row" class="text-center">
+                                        <ng-container *ngIf="!row.isSubheading">
+                                            <span class="d-inline-flex">
+                                                <amount-field
+                                                    [amount]="row.pos"
+                                                    [currencySymbol]="false"
+                                                    [currencyCode]="false"
+                                                >
+                                                </amount-field>
+                                            </span>
+                                        </ng-container>
+                                    </td>
+                                </ng-container>
+                                <!-- Taxable Value Column -->
+                                <ng-container matColumnDef="taxableValue">
+                                    <th mat-header-cell *matHeaderCellDef class="text-right">
+                                        {{ commonLocaleData?.app_taxable_value }}
+                                    </th>
+                                    <td mat-cell *matCellDef="let row" class="text-right">
+                                        <ng-container *ngIf="!row.isSubheading">
+                                            <span class="d-inline-flex">
+                                                <amount-field
+                                                    [amount]="row.txval"
+                                                    [currencySymbol]="false"
+                                                    [currencyCode]="false"
+                                                >
+                                                </amount-field>
+                                            </span>
+                                        </ng-container>
+                                    </td>
+                                </ng-container>
+                                <!-- Integrated Tax Column -->
+                                <ng-container matColumnDef="integratedTax">
+                                    <th mat-header-cell *matHeaderCellDef class="text-right">
+                                        {{ localeData?.gstr3b?.integrated_tax }}
+                                    </th>
+                                    <td mat-cell *matCellDef="let row" class="text-right">
+                                        <ng-container *ngIf="!row.isSubheading">
+                                            <span class="d-inline-flex">
+                                                <amount-field
+                                                    [amount]="row.iamt"
+                                                    [currencySymbol]="false"
+                                                    [currencyCode]="false"
+                                                >
+                                                </amount-field>
+                                            </span>
+                                        </ng-container>
+                                    </td>
+                                </ng-container>
+                                <!-- Number Column 1 -->
+                                <ng-container matColumnDef="1">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center">
+                                        {{ commonLocaleData?.app_numbers?.one }}
+                                    </th>
+                                </ng-container>
+                                <!-- Number Column 2 -->
+                                <ng-container matColumnDef="2">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center">
+                                        {{ commonLocaleData?.app_numbers?.two }}
+                                    </th>
+                                </ng-container>
+                                <!-- Number Column 3 -->
+                                <ng-container matColumnDef="3">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center">
+                                        {{ commonLocaleData?.app_numbers?.three }}
+                                    </th>
+                                </ng-container>
+                                <!-- Number Column 4 -->
+                                <ng-container matColumnDef="4">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center">
+                                        {{ commonLocaleData?.app_numbers?.four }}
+                                    </th>
+                                </ng-container>
+                                <!-- Header Row -->
+                                <tr
+                                    mat-header-row
+                                    *matHeaderRowDef="suppliesTableDataDisplayedColumns"
+                                ></tr>
+                                <tr mat-header-row *matHeaderRowDef="['1', '2', '3', '4']" class="bg-thead"></tr>
+                                <!-- Data Rows -->
+                                <tr
+                                    mat-row
+                                    *matRowDef="let row; columns: suppliesTableDataDisplayedColumns"
+                                    [ngClass]="{
+                                        'text-muted gstr3-subheading': row.isSubheading,
+                                        'pointer-none': !row.isSubheading
+                                    }"
+                                ></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="summary-content">
+                        <p>{{ localeData?.gstr3b?.eligible_itc }}</p>
+                        <div class="table-responsive">
+                            <table mat-table [dataSource]="itcTableData" class="table gstr-3b-report w-100">
+                                <!-- Details Column -->
+                                <ng-container matColumnDef="details">
+                                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_details }}</th>
+                                    <td
+                                        mat-cell
+                                        *matCellDef="let row"
+                                        [attr.colspan]="row.type === 'header' ? '100%' : null"
+                                    >
+                                        <ng-container [ngSwitch]="row.type">
+                                            <!-- Header rows -->
+                                            <ng-container *ngSwitchCase="'header'">
+                                                <span class="font-weight-semibold">{{ row.details }}</span>
+                                            </ng-container>
+                                            <!-- Data rows -->
+                                            <ng-container *ngSwitchCase="'data'">
+                                                <span class="pl-4">{{ row.details }}</span>
+                                            </ng-container>
+                                        </ng-container>
+                                    </td>
+                                </ng-container>
+                                <!-- Integrated Tax Column -->
+                                <ng-container matColumnDef="integratedTax">
+                                    <th mat-header-cell *matHeaderCellDef class="text-right">
+                                        {{ localeData?.gstr3b?.integrated_tax }}
+                                    </th>
+                                    <td
+                                        mat-cell
+                                        *matCellDef="let row"
+                                        class="text-right"
+                                        [hidden]="row.type === 'header'"
+                                        [ngClass]="{ 'gstr3b-null': row.hideIntegratedTax }"
+                                    >
+                                        <ng-container *ngIf="!row.hideIntegratedTax">
+                                            <i class="icon-rupees icon-font-11"></i>
+                                            <span class="d-inline-flex">
+                                                <amount-field
+                                                    [amount]="row.iamt"
+                                                    [currencySymbol]="false"
+                                                    [currencyCode]="false"
+                                                >
+                                                </amount-field>
+                                            </span>
+                                        </ng-container>
+                                    </td>
+                                </ng-container>
+                                <!-- Central Tax Column -->
+                                <ng-container matColumnDef="centralTax">
+                                    <th mat-header-cell *matHeaderCellDef class="text-right">
+                                        {{ localeData?.gstr3b?.central_tax }}
+                                    </th>
+                                    <td
+                                        mat-cell
+                                        *matCellDef="let row"
+                                        class="text-right"
+                                        [hidden]="row.type === 'header'"
+                                        [ngClass]="{ 'gstr3b-null': row.hideCentralTax }"
+                                    >
+                                        <ng-container *ngIf="!row.hideCentralTax">
+                                            <i class="icon-rupees icon-font-11"></i>
+                                            <span class="d-inline-flex">
+                                                <amount-field
+                                                    [amount]="row.camt"
+                                                    [currencySymbol]="false"
+                                                    [currencyCode]="false"
+                                                >
+                                                </amount-field>
+                                            </span>
+                                        </ng-container>
+                                    </td>
+                                </ng-container>
+                                <!-- State/UT Tax Column -->
+                                <ng-container matColumnDef="stateUtTax">
+                                    <th mat-header-cell *matHeaderCellDef class="text-right">
+                                        {{ localeData?.gstr3b?.state_ut_tax }}
+                                    </th>
+                                    <td
+                                        mat-cell
+                                        *matCellDef="let row"
+                                        class="text-right"
+                                        [hidden]="row.type === 'header'"
+                                        [ngClass]="{ 'gstr3b-null': row.hideStateUtTax }"
+                                    >
+                                        <ng-container *ngIf="!row.hideStateUtTax">
+                                            <i class="icon-rupees icon-font-11"></i>
+                                            <span class="d-inline-flex">
+                                                <amount-field
+                                                    [amount]="row.samt"
+                                                    [currencySymbol]="false"
+                                                    [currencyCode]="false"
+                                                >
+                                                </amount-field>
+                                            </span>
+                                        </ng-container>
+                                    </td>
+                                </ng-container>
+                                <!-- Cess Tax Column -->
+                                <ng-container matColumnDef="cessTax">
+                                    <th mat-header-cell *matHeaderCellDef class="text-right">
+                                        {{ localeData?.gstr3b?.cess_tax }}
+                                    </th>
+                                    <td
+                                        mat-cell
+                                        *matCellDef="let row"
+                                        class="text-right"
+                                        [hidden]="row.type === 'header'"
+                                        [ngClass]="{ 'gstr3b-null': row.hideCessTax }"
+                                    >
+                                        <ng-container *ngIf="!row.hideCessTax">
+                                            <i class="icon-rupees icon-font-11"></i>
+                                            <span class="d-inline-flex">
+                                                <amount-field
+                                                    [amount]="row.csamt"
+                                                    [currencySymbol]="false"
+                                                    [currencyCode]="false"
+                                                >
+                                                </amount-field>
+                                            </span>
+                                        </ng-container>
+                                    </td>
+                                </ng-container>
+                                <!-- Number Column 1 -->
+                                <ng-container matColumnDef="1">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center">
+                                        {{ commonLocaleData?.app_numbers?.one }}
+                                    </th>
+                                </ng-container>
+                                <!-- Number Column 2 -->
+                                <ng-container matColumnDef="2">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center">
+                                        {{ commonLocaleData?.app_numbers?.two }}
+                                    </th>
+                                </ng-container>
+                                <!-- Number Column 3 -->
+                                <ng-container matColumnDef="3">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center">
+                                        {{ commonLocaleData?.app_numbers?.three }}
+                                    </th>
+                                </ng-container>
+                                <!-- Number Column 4 -->
+                                <ng-container matColumnDef="4">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center">
+                                        {{ commonLocaleData?.app_numbers?.four }}
+                                    </th>
+                                </ng-container>
+                                <!-- Number Column 5 -->
+                                <ng-container matColumnDef="5">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center">
+                                        {{ commonLocaleData?.app_numbers?.five }}
+                                    </th>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="itcDisplayedColumns"></tr>
+                                <tr mat-header-row *matHeaderRowDef="['1', '2', '3', '4', '5']"></tr>
+                                <tr
+                                    mat-row
+                                    *matRowDef="let row; columns: itcDisplayedColumns"
+                                    [ngClass]="{
+                                        'cursor-pointer': row.type === 'data',
+                                        'font-weight-semibold': row.type === 'header'
+                                    }"
+                                ></tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="summary-content">
+                        <p>{{ localeData?.gstr3b?.exempt_values }}</p>
+                        <div class="table-responsive">
+                            <table mat-table [dataSource]="exemptValuesTableData" class="table gstr-3b-report w-100">
+                                <!-- Supply Nature Column -->
+                                <ng-container matColumnDef="supplyNature">
+                                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.gstr3b?.supply_nature }}</th>
+                                    <td mat-cell *matCellDef="let row">{{ row.supplyNature }}</td>
+                                </ng-container>
+                                <!-- Inter State Supplies Column -->
+                                <ng-container matColumnDef="interStateSupplies">
+                                    <th mat-header-cell *matHeaderCellDef class="text-right">
+                                        {{ localeData?.gstr3b?.inter_state_supplies }}
+                                    </th>
+                                    <td mat-cell *matCellDef="let row" class="text-right">
+                                        <i class="icon-rupees icon-font-11"></i>
+                                        <span class="d-inline-flex">
+                                            <amount-field
+                                                [amount]="row.inter"
+                                                [currencySymbol]="false"
+                                                [currencyCode]="false"
+                                            >
+                                            </amount-field>
+                                        </span>
+                                    </td>
+                                </ng-container>
+                                <!-- Intra State Supplies Column -->
+                                <ng-container matColumnDef="intraStateSupplies">
+                                    <th mat-header-cell *matHeaderCellDef class="text-right">
+                                        {{ localeData?.gstr3b?.intra_state_supplies }}
+                                    </th>
+                                    <td mat-cell *matCellDef="let row" class="text-right">
+                                        <i class="icon-rupees icon-font-11"></i>
+                                        <span class="d-inline-flex">
+                                            <amount-field
+                                                [amount]="row.intra"
+                                                [currencySymbol]="false"
+                                                [currencyCode]="false"
+                                            >
+                                            </amount-field>
+                                        </span>
+                                    </td>
+                                </ng-container>
+                                <!-- Number Column Headers -->
+                                <ng-container matColumnDef="1">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center pr-5">
+                                        {{ commonLocaleData?.app_numbers?.one }}
+                                    </th>
+                                </ng-container>
+                                <ng-container matColumnDef="2">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center">
+                                        {{ commonLocaleData?.app_numbers?.two }}
+                                    </th>
+                                </ng-container>
+                                <ng-container matColumnDef="3">
+                                    <th mat-header-cell *matHeaderCellDef class="text-center">
+                                        {{ commonLocaleData?.app_numbers?.three }}
+                                    </th>
+                                </ng-container>
+                                <!-- Header Rows -->
+                                <tr
+                                    mat-header-row
+                                    *matHeaderRowDef="exemptValuesDisplayedColumns"
+                                ></tr>
+                                <tr mat-header-row *matHeaderRowDef="['1', '2', '3']" class="bg-thead"></tr>
+                                <!-- Data Rows -->
+                                <tr mat-row *matRowDef="let row; columns: exemptValuesDisplayedColumns"></tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="transactions-overview" *ngIf="selectedGstr3BTab === 'filing'">
+                    <div class="gstr-transactions-summary mt-5 mb-5 text-center">
+                        <div class="gst-return-date">
+                            <img src="assets/images/return-date.svg" />
+                            <p>{{ localeData?.gstr3b?.click_proceed }}</p>
+                            <button mat-raised-button color="primary" (click)="returnGstr3B = { via: 'TAXPRO' }">
+                                {{ localeData?.gstr3b?.push_to_portal }}
+                            </button>
+                        </div>
+
+                        <p *ngIf="fileReturnSucces" class="mt-4">
+                            {{ getGstReturnFieldText() }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <filing-header
+        [isCompany]="isCompany"
+        [currentPeriod]="currentPeriod"
+        [fileGstr3b]="returnGstr3B"
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+    ></filing-header>
+</div>
+<ng-template #watchVideoTemplateGSTR3>
+    <watch-video [cssClass]="'text-primary'" [moduleName]="'GSTR3B'" class="pull-right pr-3"></watch-video>
+</ng-template>
+
+<!-- Authentication Dialog -->
+<ng-template #asideAuthentication>
+    <gst-aside-menu
+        [selectedService]="selectedService"
+        [returnType]="returnType"
+        (fileGst)="fileGstr3B()"
+        (cancelConfirmationEvent)="openCancelConfirmationDialog()"
+        (closeAsideEvent)="asideAuthenticationDialogRef?.close()"
+        (fileGstComplete)="asideAuthenticationDialogRef?.close()"
+        [localeData]="localeData"
+        [commonLocaleData]="commonLocaleData"
+    ></gst-aside-menu>
+</ng-template>
+
+<!-- Region Cancel Confirmation Dialog -->
+<ng-template #cancelConfirmationDialog>
+    <confirm-modal
+        [body]="localeData?.filing?.cancel_title"
+        [permanentlyDeleteMessage]="' '"
+        (successCallBack)="cancelConfirmationDialogRef?.close(); asideAuthenticationDialogRef?.close()"
+        (cancelCallBack)="cancelConfirmationDialogRef?.close()"
+    ></confirm-modal>
+</ng-template>

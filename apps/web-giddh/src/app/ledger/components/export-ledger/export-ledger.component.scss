@@ -1,0 +1,49 @@
+.radio-inline {
+    margin-left: 6px;
+}
+.export-type {
+    display: flex;
+}
+.show-columnar-button {
+    display: inline-block;
+}
+textarea
+
+.export-ledger-right {
+    &::after {
+        right: 25px !important;
+    }
+}
+
+.export-ledger-right-tview {
+    &::after {
+        right: 42px !important;
+    }
+}
+
+#exportModal {
+    #export-body {
+        .clear-both {
+            .radio-inline {
+                mat-slide-toggle {
+                    position: relative;
+                    top: 8px;
+                }
+            }
+        }
+    }
+}
+
+.export-border {
+    &::after {
+        content: "";
+        display: block;
+        position: absolute;
+        width: 1px;
+        height: 100%;
+        background-color: var(--theme-foreground-color);
+        top: 46%;
+        right: 50px;
+        transform: translateY(-50%);
+    }
+}

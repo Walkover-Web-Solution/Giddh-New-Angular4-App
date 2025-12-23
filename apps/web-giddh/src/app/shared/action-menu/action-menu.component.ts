@@ -1,17 +1,22 @@
 import { Component, Input, Output, EventEmitter, ViewChild, TemplateRef } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
 import { GeneralService } from '../../services/general.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { TemplateFroalaComponent } from '../template-froala/template-froala.component';
 import { take } from 'rxjs';
+import { AccountUpdateNewDetailsModule } from '../header/components/account-update-new-details/account-update-new-details.module';
+import { AsideMenuAccountModule } from '../aside-menu-account/aside.menu.account.module';
 import { OrganizationType } from '../../models/user-login-state';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store';
-import { ASIDE_PANE_CONFIG, Configuration } from '../../app.constant';
-import { includes, map } from '../../lodash-optimized';
+import { ASIDE_PANE_CONFIG } from '../../app.constant';
 
 @Component({
     selector: 'app-action-menu',
-    standalone: false,
+    standalone: true,
+    imports: [CommonModule, MatMenuModule, MatButtonModule, AccountUpdateNewDetailsModule, AsideMenuAccountModule],
     templateUrl: './action-menu.component.html',
     styleUrls: ['./action-menu.component.scss']
 })
@@ -143,7 +148,7 @@ export class ActionMenuComponent {
      */
     public goToRoute(part: string, additionalParams: string = "", accUniqueName: string): void {
         let url: string;
-
+        
         if (this.generalService.voucherApiVersion === 2) {
             // Construct direct page URL
             url = `/pages/${part}`;
@@ -162,8 +167,8 @@ export class ActionMenuComponent {
                 url = `${url}${additionalParams}`;
             }
         }
-
-        if (Configuration.isElectron) {
+        
+        if (isElectron) {
             const ipcRenderer = (window as any).require('electron').ipcRenderer;
             const electronUrl = `${location.origin}${location.pathname}#./pages/${part}${part?.includes('ledger') ? `/${accUniqueName}` : ""}`;
             ipcRenderer.send('open-url', electronUrl);

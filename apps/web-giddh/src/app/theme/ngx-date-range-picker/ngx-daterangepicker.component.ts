@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, TemplateRef, ElementRef, EventEmitter, forwardRef, HostListener, Input, OnInit, Output, ViewChild, ViewEncapsulation, OnDestroy, OnChanges, SimpleChanges, AfterViewInit, Inject } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as dayjs from 'dayjs';
+type Dayjs = any;
 import * as localeData from 'dayjs/plugin/localeData' // load on demand
 import * as isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 import * as isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
@@ -11,8 +12,6 @@ dayjs.extend(isSameOrBefore);
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isoWeek);
 dayjs.extend(isBetween);
-// import { Dayjs } from 'dayjs'; // Not available - use dayjs.Dayjs instead
-type Dayjs = ReturnType<typeof dayjs>;
 import { LocaleConfig } from './ngx-daterangepicker.config';
 import { NgxDaterangepickerLocaleService } from './ngx-daterangepicker-locale.service';
 import { takeUntil, debounceTime, take } from 'rxjs/operators';
@@ -28,9 +27,6 @@ import { ServiceConfig } from '../../services/service.config';
 import { MatDialog } from '@angular/material/dialog';
 import { NewConfirmationModalComponent } from '../new-confirmation-modal/confirmation-modal.component';
 import { GeneralService } from '../../services/general.service';
-import { Configuration } from '../../app.constant';
-import { environment } from '../../../environments/environment';
-import { clone, forEach, indexOf, keys, map, remove, set } from '../../lodash-optimized';
 
 export enum DateType {
     start = 'start',
@@ -104,7 +100,6 @@ export interface DateRangeClicked {
 
 @Component({
     selector: 'ngx-daterangepicker-material',
-    standalone:false,
     styleUrls: ['./ngx-daterangepicker.component.scss'],
     templateUrl: './ngx-daterangepicker.component.html',
     encapsulation: ViewEncapsulation.ShadowDom,
@@ -112,7 +107,8 @@ export interface DateRangeClicked {
         provide: NG_VALUE_ACCESSOR,
         useExisting: forwardRef(() => NgxDaterangepickerComponent),
         multi: true
-    }]
+    }],
+    standalone: false
 })
 
 export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
@@ -123,8 +119,8 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     renderedCalendarMonths: any[] = [];
     timepickerVariables: { start: any, end: any } = { start: {}, end: {} };
     applyBtn: { disabled: boolean } = { disabled: false };
-    startDate = dayjs().startOf('day');
-    endDate = dayjs().endOf('day');
+    startDate: Dayjs = dayjs().startOf('day');
+    endDate: Dayjs = dayjs().endOf('day');
     @Input()
     inputStartDate: Dayjs;
     @Input()
@@ -330,7 +326,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
 
     public ngOnInit(): void {
         this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
 
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany && activeCompany.activeFinancialYear) {
@@ -1469,7 +1465,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      * @param date the date to add time
      * @param side start or end
      */
-    private _getDateWithTime(date, side: DateType): Dayjs {
+    private _getDateWithTime(date, side: DateType): any {
         let hour = parseInt(this.timepickerVariables[side].selectedHour, 10);
         if (!this.timePicker24Hour) {
             const ampm = this.timepickerVariables[side].ampmModel;

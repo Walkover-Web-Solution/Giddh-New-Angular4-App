@@ -5,21 +5,21 @@ import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
 import { Observable, of, ReplaySubject, Subject } from "rxjs";
 import { debounceTime, takeUntil } from "rxjs/operators";
 import { EMAIL_VALIDATION_REGEX, IOption, MOBILE_REGEX_PATTERN } from "../../../app.constant";
-import { cloneDeep, filter, forEach, includes, indexOf, isArray } from '../../../lodash-optimized';
+import { cloneDeep } from "../../../lodash-optimized";
 
 @Component({
     selector: "select-multiple-fields",
     templateUrl: "./select-multiple-fields.component.html",
     styleUrls: ["./select-multiple-fields.component.scss"],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false,
     providers: [
         {
             provide: NG_VALUE_ACCESSOR,
             useExisting: forwardRef(() => SelectMultipleFieldsComponent),
             multi: true
         }
-    ]
+    ],
+    standalone: false
 })
 export class SelectMultipleFieldsComponent implements OnInit, OnDestroy, OnChanges {
     /** Trigger instance for auto complete */

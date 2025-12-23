@@ -1,0 +1,30 @@
+.checkbox{
+    .checkbox-label{
+        white-space: normal;
+        line-height: normal;
+    }
+}
+.display-block {
+    display: block;
+}
+.display-none {
+    display: none;
+}
+.custom-discount-menu{
+
+    ul{
+        &.discount-list{
+            max-height: 164px !important;
+        }
+    }
+
+    .or-line {
+        &::before {
+            width: 85px;
+        }
+        &::after {
+            width: 85px;
+        }
+    }
+
+}

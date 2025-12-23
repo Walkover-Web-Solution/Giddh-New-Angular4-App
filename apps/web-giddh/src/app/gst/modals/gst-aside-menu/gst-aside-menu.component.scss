@@ -1,0 +1,43 @@
+:host {
+    position: fixed;
+    left: auto;
+    top: var(--top-distance);
+    right: 0;
+    bottom: 0;
+    max-width: 760px;
+    width: 100%;
+    z-index: 99999;
+}
+
+#close {
+    display: none;
+}
+
+:host.in #close {
+    position: absolute;
+    left: auto;
+    right: 10px;
+    z-index: 9999999;
+    background-color: transparent;
+    color: var(--color-white);
+    font-size: 17px;
+    top: 18px;
+    margin-right: 0;
+    border: 0;
+    border-radius: var(--mat-border-radius-0);
+    display: block;
+}
+
+:host .aside-pane {
+    max-width: 760px;
+    width: 100%;
+    padding: 0;
+}
+.aside-pane-form {
+    box-shadow: 0px 3px 6px var(--color-shadow-light);
+    height: calc(100vh - 65px);
+    scroll-behavior: smooth;
+}
+.auth-state {
+    border-bottom: 1px solid var(--color-black);
+}

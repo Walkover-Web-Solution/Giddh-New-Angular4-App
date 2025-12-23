@@ -3,12 +3,8 @@ import { ElementViewContainerRef } from './element.viewchild.directive';
 
 @NgModule({
     imports: [],
-    exports: [
-        ElementViewContainerRef
-    ],
-    declarations: [
-        ElementViewContainerRef
-    ],
+    exports: [ElementViewContainerRef],
+    declarations: [ElementViewContainerRef],
 })
 export class ElementViewChildModule {
 }

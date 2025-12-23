@@ -6,12 +6,11 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { GeneralService } from '../../../services/general.service';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { BankIntegrationComponentStore } from '../utility/bank-integration.store';
-import { filter, get, includes } from '../../../lodash-optimized';
 
 @Component({
     selector: 'institutions-list',
-    templateUrl: './institutions-list.component.html',
     styleUrls: ['./institutions-list.component.scss'],
+    templateUrl: './institutions-list.component.html',
     providers: [BankIntegrationComponentStore],
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
@@ -41,7 +40,7 @@ export class InstitutionsListComponent implements OnInit, OnDestroy {
     public filteredBanks: any[] = [];
 
     constructor(
-        private componentStore: BankIntegrationComponentStore,
+        private componentStore: BankIntegrationComponentStore, 
         public dialogRef: MatDialogRef<InstitutionsListComponent>,
         private changeDetection: ChangeDetectorRef,
         private generalService: GeneralService,

@@ -1,0 +1,55 @@
+.list-icon-group {
+    margin-left: -10px;
+
+    li {
+        transition: 1ms all;
+
+        img {
+            margin-right: 7px;
+        }
+
+        label {
+            padding: 0 10px;
+        }
+    }
+
+    label {
+        padding: 10px;
+        margin-right: 15px;
+        border-radius: var(--mat-border-radius-4);
+        cursor: pointer;
+
+        input:checked+& {
+            background-color: var(--color-white);
+            box-shadow: 2px 2px 5px var(--color-shadow-light);
+        }
+    }
+}
+
+.bg-gray {
+    background: var(--color-light-gray);
+}
+
+.table-modal {
+    border: 1px solid var(--border-color) !important;
+
+    th {
+        border-right: 1px solid var(--border-color) !important;
+    }
+
+    td {
+        border-top: 0px solid !important;
+        border-right: 1px solid var(--border-color);
+        border-bottom: 1px solid var(--border-color) !important;
+
+        button {
+            background: none;
+            border: 0px;
+            color: var(--color-border-light);
+            font-size: var(--font-size-15);
+            padding: 2px;
+            margin-right: 3px;
+            cursor: pointer;
+        }
+    }
+}

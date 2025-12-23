@@ -1,4 +1,5 @@
 import { Inject, Injectable, Optional } from "@angular/core";
+// import { environment } from "src/environments/environment"; // TODO: Fix environment import path
 import { Observable, catchError, map } from "rxjs";
 import { HttpWrapperService } from "../../../services/http-wrapper.service";
 import { BaseResponse } from "../../../models/api-models/BaseResponse";
@@ -9,7 +10,9 @@ import { API_BULK_FETCH_LIMIT, HttpMethod, HttpMethodType } from "../../../app.c
 import { SALES_PERSON_API, SALES_PERSON_ARCHIVE_API } from "./sales.person.api";
 import { SalesPersonDeleteArchivedModel } from "./sales-person.constant";
 
-@Injectable({providedIn:'root'})
+@Injectable({
+    providedIn: 'root'
+})
 export class SalesPersonService {
     constructor(
         private http: HttpWrapperService,

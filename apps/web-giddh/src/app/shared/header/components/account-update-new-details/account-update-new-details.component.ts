@@ -47,9 +47,10 @@ import { DROPDOWN_ITEMS_COUNT_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, EMA
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { SearchService } from 'apps/web-giddh/src/app/services/search.service';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { clone, cloneDeep, differenceBy, flattenDeep, isEqual } from 'apps/web-giddh/src/app/lodash-optimized';
 import { SettingsDiscountService } from 'apps/web-giddh/src/app/services/settings.discount.service';
 import { CustomFieldsService } from 'apps/web-giddh/src/app/services/custom-fields.service';
-// import { FieldTypes } from 'apps/web-giddh/src/app/custom-fields/custom-fields.constant';
+import { FieldTypes } from 'apps/web-giddh/src/app/custom-fields/custom-fields.constant';
 import { HttpClient } from '@angular/common/http';
 import { BulkAddDialogComponent } from '../bulk-add-dialog/bulk-add-dialog.component';
 import { MatDialog } from '@angular/material/dialog';
@@ -58,17 +59,17 @@ import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/b
 import { AccountAddNewDetailsComponentStore } from '../account-add-new-details/utility/account-add-new-details.store';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { NewConfirmationModalComponent } from 'apps/web-giddh/src/app/theme/new-confirmation-modal/confirmation-modal.component';
-import { clone, cloneDeep, concat, differenceBy, find, findIndex, flattenDeep, forEach, get, has, indexOf, keys, map, remove, set, some, startsWith, isEqual } from '../../../../lodash-optimized';
-// import { SalesPersonComponentStore } from '../../../sales-person/utility/sales-person.store';
-// import { SalesPersonComponent } from '../../../sales-person/sales-person.component';
-// import { ActionTypeEnum } from '../../../sales-person/utility/sales-person.constant';
+import { AccountingGroupEnum, CountryNames } from '../../../Enums/common.enum';
+import { SalesPersonComponentStore } from '../../../sales-person/utility/sales-person.store';
+import { SalesPersonComponent } from '../../../sales-person/sales-person.component';
+import { ActionTypeEnum } from '../../../sales-person/utility/sales-person.constant';
 
 @Component({
     selector: 'account-update-new-details',
-    standalone: false,
     templateUrl: './account-update-new-details.component.html',
     styleUrls: ['./account-update-new-details.component.scss'],
-    providers: [AccountAddNewDetailsComponentStore]
+    providers: [AccountAddNewDetailsComponentStore, SalesPersonComponentStore],
+    standalone: false
 })
 
 export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
@@ -225,8 +226,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         moduleUniqueName: 'account'
     };
     /** Available field types list */
-    // public availableFieldTypes: any = FieldTypes;
-    public availableFieldTypes: any = {}; // Placeholder until FieldTypes is available
+    public availableFieldTypes: any = FieldTypes;
     /** This will hold isMobileNumberInvalid */
     public isMobileNumberInvalid: boolean = false;
     /** True if last duplicate email in portal  users */
@@ -278,15 +278,13 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     /** Flag to determine if the parent group is "bank accounts". */
     public isParentBankAccounts: boolean = false;
     /** Enum representing the types of accounting group type */
-    // public accountingGroupEnum: typeof AccountingGroupEnum = AccountingGroupEnum;
-    public accountingGroupEnum: any = {}; // Placeholder until AccountingGroupEnum is available
+    public accountingGroupEnum: typeof AccountingGroupEnum = AccountingGroupEnum;
     /** Stores the list of selected tax labels to display in the UI. */
     public defaultTaxLabel: string[] = [];
     /** Store active parent group */
     public parentGroups: any[] = [];
     /** Sales Person List */
-    // public salesPersonList$: Observable<any> = this.salesPersonStore.salesPersonList$;
-    public salesPersonList$: Observable<any> = observableOf([]); // Placeholder until salesPersonStore is available
+    public salesPersonList$: Observable<any> = this.salesPersonStore.salesPersonList$;
     /** Holds transfer info if active sales person is transfer */
     private activeSalePersonIsTransfer: any;
     /** True if sales person is created */
@@ -323,7 +321,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         public dialog: MatDialog,
         private settingsBranchAction: SettingsBranchActions,
         private readonly componentStore: AccountAddNewDetailsComponentStore,
-        // private salesPersonStore: SalesPersonComponentStore
+        private salesPersonStore: SalesPersonComponentStore
     ) {
 
     }
@@ -333,8 +331,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$)).subscribe(activeCompany => {
             if (activeCompany) {
                 this.activeCompany = activeCompany;
-                // this.isUKCompany = activeCompany.country === CountryNames.UNITED_KINGDOM;
-                this.isUKCompany = activeCompany.country === 'UNITED_KINGDOM'; // Placeholder until CountryNames is available
+                this.isUKCompany = activeCompany.country === CountryNames.UNITED_KINGDOM;
                 if (activeCompany.countryV2) {
                     this.selectedCompanyCountryName = activeCompany.countryV2.alpha2CountryCode + ' - ' + activeCompany.country;
                     this.companyCountry = activeCompany.countryV2.alpha2CountryCode;
@@ -423,7 +420,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     change.get('email')?.updateValueAndValidity();
                 }
                 // change.get('contactNo')?.setValue(mobileNo);
-
+                
                 // Email validation
                 let lastEmailOccurrenceIndex = -1;
                 let currentEmail = change.get('email')?.value;
@@ -468,7 +465,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
                 this.lastDuplicateEmailIndex = lastEmailOccurrenceIndex;
                 this.lastDuplicateContactIndex = lastContactOccurrenceIndex;
-
+                
                 // Update duplicate contact errors flag
                 this.hasDuplicateContactErrors = this.checkForDuplicateContactErrors();
                 if (this.lastDuplicateEmailIndex === -1 && this.lastDuplicateContactIndex === -1) {
@@ -569,8 +566,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             if (!this.isSalesPersonExists(this.addAccountForm.get('salesPersonUniqueName').value, salesPersonList)) {
                 let salesPersonName = "";
                 let salesPersonUniqueName = null;
-                // if (this.activeSalePersonIsTransfer?.model?.action === ActionTypeEnum.TRANSFER) {
-                if (this.activeSalePersonIsTransfer?.model?.action === 'TRANSFER') { // Placeholder until ActionTypeEnum is available
+                if (this.activeSalePersonIsTransfer?.model?.action === ActionTypeEnum.TRANSFER) {
                     const salesPerson = salesPersonList?.find(item => item.value === this.activeSalePersonIsTransfer.model.uniqueName);
                     if (salesPerson) {
                         salesPersonName = salesPerson.label
@@ -721,7 +717,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     /**
      * Handles tab change
      *
-     * @param {any} event
+     * @param {any} event 
      * @memberof AccountUpdateNewDetailsComponent
      */
     public tabChanged(event: MatTabChangeEvent): void {
@@ -734,7 +730,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             } else {
                 this.isOtherSelectedTab = false;
             }
-
+            
             // Mark this tab as activated
             this.activatedTabs.add(event.tab.textLabel);
             this.changeDetectorRef.detectChanges();
@@ -818,7 +814,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     /**
      * Initializes the GST details form with default values and validators.
-     *
+     * 
      * @returns FormGroup
      * @memberof AccountUpdateNewDetailsComponent
      */
@@ -993,7 +989,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     /**
      * Validates and extracts the state code from the GST number entered in the given form.
-     *
+     * 
      * @param gstForm The `FormGroup` containing the GST-related form controls.
      * @memberof AccountUpdateNewDetailsComponent
      */
@@ -1063,10 +1059,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public submit() {
         // Check for duplicate contact errors
         this.hasDuplicateContactErrors = this.checkForDuplicateContactErrors();
-
+        
         if (this.addAccountForm.invalid || !this.isGstValid || this.isMobileNumberInvalid || this.hasDuplicateContactErrors) {
             this.isValidForm = false;
-
+            
             // If duplicate contact errors exist, navigate to portal tab
             if (this.hasDuplicateContactErrors) {
                 this.goToPortalTab();
@@ -1261,7 +1257,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     /**
      * Handles the selection of a state from a dropdown or similar UI component.
-     *
+     * 
      * @param gstForm The `FormGroup` containing GST-related form controls.
      * @param event The event object containing the selected state's label and value.
      * @memberof AccountUpdateNewDetailsComponent
@@ -1277,7 +1273,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     /**
      * Updates the county information in the GST form based on the selected county event.
-     *
+     * 
      * @param gstForm The `FormGroup` containing GST-related form controls.
      * @param event The event object containing the selected county's label and value.
      * @memberof AccountUpdateNewDetailsComponent
@@ -2182,7 +2178,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     /**
      * Checks whether a given unique group name exists within the list of parent groups.
-     *
+     * 
      * @param parentGroups - Array of parent group objects, each having a `uniqueName` field.
      * @param uniqueName - The unique name to search for in the parent groups.
      * @returns `true` if any parent group matches the given unique name, otherwise `false`.
@@ -2534,7 +2530,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     /**
      * Handles toggling the archive status of an account
-     *
+     * 
      * @memberof AccountUpdateNewDetailsComponent
      */
     public accountArchiveUnarchive(): void {
@@ -2558,14 +2554,11 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     * @memberof AccountUpdateNewDetailsComponent
     */
     public openSalesPersonDialog(): void {
-        // const dialogRef = this.dialog.open(SalesPersonComponent, {
-        //     ...ASIDE_PANE_CONFIG,
-        //     data: { activeSalePersonUniqueName: this.addAccountForm.get('salesPersonUniqueName').value || "" }
-        // });
-        // dialogRef.afterClosed().pipe(filter(Boolean), take(1), tap((res) => { this.getSalesPersonList(); this.salesPersonCreated = true; this.activeSalePersonIsTransfer = res.isTransfer })).subscribe();
-
-        // Placeholder until SalesPersonComponent is available
-        console.log('SalesPersonComponent dialog would open here');
+        const dialogRef = this.dialog.open(SalesPersonComponent, {
+            ...ASIDE_PANE_CONFIG,
+            data: { activeSalePersonUniqueName: this.addAccountForm.get('salesPersonUniqueName').value || "" }
+        });
+        dialogRef.afterClosed().pipe(filter(Boolean), take(1), tap((res) => { this.getSalesPersonList(); this.salesPersonCreated = true; this.activeSalePersonIsTransfer = res.isTransfer })).subscribe();
     }
 
     /**
@@ -2574,9 +2567,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @memberof AccountUpdateNewDetailsComponent
      */
     public getSalesPersonList(): void {
-        // this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: API_BULK_FETCH_LIMIT } });
-        // Placeholder until salesPersonStore is available
-        console.log('getSalesPersonList would be called here');
+        this.salesPersonStore.getAllSalesPerson({ isDropdown: true, params: { page: 1, count: API_BULK_FETCH_LIMIT } });
     }
 
     /**

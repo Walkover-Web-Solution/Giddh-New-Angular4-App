@@ -1,6 +1,7 @@
 import { Injectable, OnDestroy } from "@angular/core";
 import { ComponentStore } from "@ngrx/component-store";
-import { Observable, switchMap, catchError, EMPTY, tap } from "rxjs";
+import { tap } from "rxjs/operators";
+import { Observable, switchMap, catchError, EMPTY } from "rxjs";
 import { ToasterService } from "apps/web-giddh/src/app/services/toaster.service";
 import { BaseResponse } from "apps/web-giddh/src/app/models/api-models/BaseResponse";
 import { InvoiceService } from "../../../services/invoice.service";
@@ -22,9 +23,7 @@ export const DEFAULT_CUSTOM_EMAIL_STATE: CustomEmailState = {
     accountGroupList: null
 };
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class CustomEmailComponentStore extends ComponentStore<CustomEmailState> implements OnDestroy {
 
     constructor(
@@ -48,23 +47,17 @@ export class CustomEmailComponentStore extends ComponentStore<CustomEmailState> 
                     tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
-                                return this.patchState({
+                                this.patchState({
                                     emailConditionSuggestions: res.body?.conditions ?? []
                                 });
                             } else {
                                 if (res.message) {
                                     this.toaster.showSnackBar('error', res.message);
                                 }
-                                return this.patchState({
+                                this.patchState({
                                     emailConditionSuggestions: []
                                 });
                             }
-                        },
-                        (error: any) => {
-                            this.toaster.showSnackBar("error", error);
-                            return this.patchState({
-                                emailConditionSuggestions: []
-                            });
                         }
                     ),
                     catchError((err) => EMPTY)
@@ -87,21 +80,17 @@ export class CustomEmailComponentStore extends ComponentStore<CustomEmailState> 
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 this.toaster.showSnackBar("success", res?.body);
-                                return this.patchState({
-                                    updateCustomEmailIsSuccess: res?.body ?? []
+                                this.patchState({
+                                    updateCustomEmailIsSuccess: true
                                 });
                             } else {
                                 if (res.message) {
                                     this.toaster.showSnackBar('error', res.message);
                                 }
-                                return this.patchState({
-                                    updateCustomEmailIsSuccess: []
+                                this.patchState({
+                                    updateCustomEmailIsSuccess: false
                                 });
                             }
-                        },
-                        (error: any) => {
-                            this.toaster.showSnackBar("error", error);
-                            return this.patchState({ updateCustomEmailIsSuccess: null });
                         }
                     ),
                     catchError((err) => EMPTY)
@@ -123,23 +112,17 @@ export class CustomEmailComponentStore extends ComponentStore<CustomEmailState> 
                     tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
-                                return this.patchState({
-                                    emailContentSuggestions: res.body ?? []
+                                this.patchState({
+                                    emailContentSuggestions: res.body?.suggestions ?? []
                                 });
                             } else {
                                 if (res.message) {
                                     this.toaster.showSnackBar('error', res.message);
                                 }
-                                return this.patchState({
+                                this.patchState({
                                     emailContentSuggestions: []
                                 });
                             }
-                        },
-                        (error: any) => {
-                            this.toaster.showSnackBar("error", error);
-                            return this.patchState({
-                                emailContentSuggestions: []
-                            });
                         }
                     ),
                     catchError((err) => EMPTY)
@@ -161,23 +144,17 @@ export class CustomEmailComponentStore extends ComponentStore<CustomEmailState> 
                     tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
-                                return this.patchState({
+                                this.patchState({
                                     emailTemplates: res.body ?? []
                                 });
                             } else {
                                 if (res.message) {
                                     this.toaster.showSnackBar('error', res.message);
                                 }
-                                return this.patchState({
+                                this.patchState({
                                     emailTemplates: []
                                 });
                             }
-                        },
-                        (error: any) => {
-                            this.toaster.showSnackBar("error", error);
-                            return this.patchState({
-                                emailTemplates: []
-                            });
                         }
                     ),
                     catchError((err) => EMPTY)
@@ -199,23 +176,17 @@ export class CustomEmailComponentStore extends ComponentStore<CustomEmailState> 
                     tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
-                                return this.patchState({
-                                    accountGroupList: res?.body?.results ?? []
+                                this.patchState({
+                                    accountGroupList: res.body?.results ?? []
                                 });
                             } else {
                                 if (res.message) {
                                     this.toaster.showSnackBar('error', res.message);
                                 }
-                                return this.patchState({
+                                this.patchState({
                                     accountGroupList: []
                                 });
                             }
-                        },
-                        (error: any) => {
-                            this.toaster.showSnackBar("error", error);
-                            return this.patchState({
-                                accountGroupList: []
-                            });
                         }
                     ),
                     catchError((err) => EMPTY)

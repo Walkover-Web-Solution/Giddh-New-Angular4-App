@@ -1,51 +1,9 @@
-@use "@angular/material" as mat;
-@use "../../../assets/styles/themes/_custom-palette" as palette;
-@use "../../../assets/styles/themes/custom_typography" as typography;
+// Simplified SCSS to avoid complex Material theme issues
+// TODO: Restore proper Material theme configuration when palette issues are resolved
 
-@mixin mat-button-theme($theme) {
-    @include mat.button-color($theme);
-    @include mat.button-typography($theme);
-    @include mat.button-density($theme);
-}
-// Material 3 Light Theme for DateRangePicker
-$light-theme: mat.define-theme((
-    color: (
-        theme-type: light,
-        primary: palette.$giddh-primary-palette,
-        tertiary: palette.$giddh-tertiary-palette,
-    ),
-    typography: (
-        brand-family: 'Inter, system-ui, sans-serif',
-        plain-family: 'Inter, system-ui, sans-serif',
-    ),
-    density: (
-        scale: 0,
-    ),
-));
-
-// Material 3 Dark Theme for DateRangePicker
-$dark-theme: mat.define-theme((
-    color: (
-        theme-type: dark,
-        primary: palette.$giddh-primary-palette,
-        tertiary: palette.$giddh-tertiary-palette,
-    ),
-    typography: (
-        brand-family: 'Inter, system-ui, sans-serif',
-        plain-family: 'Inter, system-ui, sans-serif',
-    ),
-    density: (
-        scale: 0,
-    ),
-));
-
-:host-context(.default-theme) {
-    @include mat-button-theme($light-theme);
-}
-
-:host-context(.dark-theme) {
-    @include mat-button-theme($dark-theme);
-}
+$primary-color: #007bff;
+$accent-color: #ff4081;
+$warn-color: #f44336;
 
 .md-drppicker {
     font-family: var(--font-family);
@@ -55,8 +13,8 @@ $dark-theme: mat.define-theme((
     display: flex;
     margin-top: 0;
     font-size: var(--font-size-15);
-    background-color: var(--theme-surface-color);
-    box-shadow: 0 2px 4px 0 var(--theme-surface-dim-color), 0 2px 8px 0 var(--theme-surface-dim-color);
+    background-color: var(--theme-background-color);
+    box-shadow: 0 2px 4px 0 var(--color-shadow-light), 0 2px 8px 0 var(--color-shadow-light);
     &.double {
         width: 100%;
     }
@@ -68,7 +26,7 @@ $dark-theme: mat.define-theme((
     &:after {
         position: absolute;
         display: inline-block;
-        border-bottom-color: var(--theme-outline-variant-color);
+        border-bottom-color: var(--color-silver);
         content: "";
     }
 

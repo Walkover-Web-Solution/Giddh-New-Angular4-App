@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { BulkVoucherExportService } from 'apps/web-giddh/src/app/services/bulkvoucherexport.service';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
@@ -8,7 +9,6 @@ import { ReplaySubject } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { saveAs } from 'file-saver';
-import { forEach } from '../../lodash-optimized';
 
 type bulkExportVoucherTypes = 'sales' | 'debit note' | 'credit note' | 'purchase' | 'payment' | 'receipt';
 
@@ -45,6 +45,16 @@ export class BulkExportVoucherComponent implements OnDestroy {
     public recipients: any = "";
     /** Will handle if api call is in process */
     public isLoading: boolean = false;
+    /** Export form for voucher and attachment options */
+    public exportForm: FormGroup;
+    /** Input data containing voucher type and other parameters */
+    public inputData: any = {};
+    /** Voucher types that only support Excel export */
+    public vouchersOnlySupportExcelExport: string[] = ['receipt', 'payment'];
+    /** Export type enum for template usage */
+    public exportTypeEnum = { excel: 'excel', csv: 'csv', pdf: 'pdf' };
+    /** Observable for bulk export voucher progress */
+    public bulkExportVoucherInProgress$ = this.store.pipe(select(state => state.invoice?.exportInvoiceInprogress));
 
     /** Subject to release subscription memory */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
@@ -53,8 +63,14 @@ export class BulkExportVoucherComponent implements OnDestroy {
         private bulkVoucherExportService: BulkVoucherExportService,
         private generalService: GeneralService,
         private toaster: ToasterService,
-        private store: Store<AppState>) {
+        private store: Store<AppState>,
+        private formBuilder: FormBuilder) {
 
+        this.exportForm = this.formBuilder.group({
+            voucherExport: [true],
+            attachmentExport: [false],
+            exportType: ['excel']
+        });
     }
 
     /**

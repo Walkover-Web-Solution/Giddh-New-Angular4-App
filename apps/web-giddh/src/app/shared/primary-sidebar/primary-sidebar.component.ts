@@ -6,6 +6,7 @@ import { take, takeUntil } from 'rxjs/operators';
 import { CompanyActions } from '../../actions/company.actions';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
+import { slice } from '../../lodash-optimized';
 import { CompanyResponse, Organization } from '../../models/api-models/Company';
 import { SalesActions } from '../../actions/sales/sales.action';
 import { AccountResponse, AccountResponseV2, AddAccountRequest } from '../../models/api-models/Account';
@@ -21,14 +22,13 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ArrayDataSource } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { ASIDE_PANE_CONFIG } from '../../app.constant';
-import { filter, find, forEach, includes, indexOf, orderBy, slice, some } from '../../lodash-optimized';
 
 @Component({
     selector: 'primary-sidebar',
-    standalone: false,
     templateUrl: './primary-sidebar.component.html',
     styleUrls: ['./primary-sidebar.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 
 export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
@@ -287,7 +287,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 return;
             }
 
-            let orderedCompanies = orderBy(companies, 'name');
+            let orderedCompanies = _.orderBy(companies, 'name');
             this.companyList = orderedCompanies;
         });
         this.updateIndexDbSuccess$.subscribe(res => {

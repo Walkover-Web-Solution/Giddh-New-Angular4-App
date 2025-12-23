@@ -2,6 +2,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from 'apps/web-giddh/src/
 import { Component, EventEmitter, OnInit, Output, ViewChild, Input } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { PermissionDataService } from 'apps/web-giddh/src/app/permissions/permission-data.service';
+import { some } from '../../../../lodash-optimized';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from 'apps/web-giddh/src/app/app.constant';
 import { Observable, ReplaySubject } from 'rxjs';
@@ -13,13 +14,12 @@ import { ExportBodyRequest } from 'apps/web-giddh/src/app/models/api-models/Dayb
 import { LedgerService } from 'apps/web-giddh/src/app/services/ledger.service';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
-import { cloneDeep, forEach, remove, some } from '../../../../lodash-optimized';
 
 @Component({
     selector: 'export-group-ledger',
-    standalone: false,
     templateUrl: './export-group-ledger.component.html',
-    styleUrls: ['./export-group-ledger.component.scss']
+    styleUrls: ['./export-group-ledger.component.scss'],
+    standalone: false
 })
 
 export class ExportGroupLedgerComponent implements OnInit {
@@ -112,7 +112,7 @@ export class ExportGroupLedgerComponent implements OnInit {
 
         this.universalDate$.subscribe(dateObj => {
             if (dateObj) {
-                let universalDate = cloneDeep(dateObj);
+                let universalDate = _.cloneDeep(dateObj);
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                 this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);

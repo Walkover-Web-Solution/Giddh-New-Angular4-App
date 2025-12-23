@@ -1,0 +1,75 @@
+.file-upload-label {
+    vertical-align: top;
+}
+.file-upload-field {
+    white-space: normal;
+    word-break: break-all;
+}
+.file-upload-label sup {
+    font-size: var(--font-size-15);
+    color: var(--color-red);
+    top: 0px;
+}
+
+.browse-file-btn {
+    display: flex;
+    align-items: flex-start;
+    .browse-file-label {
+        border: 1px solid var(--border-color);
+        display: inline-block;
+        padding: 1px 12px !important;
+        cursor: pointer;
+        width: 120px !important;
+        border-radius: var(--mat-border-radius-0);
+        text-align: center;
+        background-color: var(--theme-primary-light);
+        margin-left: -34px;
+    }
+    input[type="file"] {
+        display: none;
+    }
+    .path-name {
+        white-space: normal;
+        word-break: break-all;
+        float: right;
+        width: 58%;
+        padding-left: 5px;
+    }
+}
+
+.import-field-label {
+    width: 170px;
+}
+
+.sample-file-buttons {
+    margin-left: 50px;
+    width: auto;
+
+    a {
+        &:focus {
+            outline: none !important;
+            box-shadow: none !important;
+        }
+    }
+}
+
+.statement-card {
+    >div {
+        height: 230px;
+        p {
+            color: var(--theme-foreground-color);
+        }
+    }
+
+    &:hover {
+        >div {
+            background-color: var(--theme-primary-light);
+        }
+    }
+}
+
+:host ::ng-deep .password-label {
+    .mat-mdc-text-field-wrapper {
+        border-radius: var(--mat-border-radius-0) !important;
+    }
+}

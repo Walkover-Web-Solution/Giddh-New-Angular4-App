@@ -5,7 +5,6 @@ import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
 import { ReplaySubject } from "rxjs";
 import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
 import { IOption } from "../../../app.constant";
-import { filter, forEach, indexOf } from '../../../lodash-optimized';
 
 @Component({
     selector: "select-field",

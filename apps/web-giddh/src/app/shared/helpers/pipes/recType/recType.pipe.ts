@@ -2,8 +2,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { ClosingBalance } from '../../../../models/api-models/Search';
 
 @Pipe({
-  standalone: false,
-    name: 'recType'
+    // tslint:disable-next-line:pipe-naming
+    name: 'recType',
+    standalone: false
 })
 
 export class RecTypePipe implements PipeTransform {

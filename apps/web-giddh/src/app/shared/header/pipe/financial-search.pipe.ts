@@ -1,6 +1,6 @@
 import { NgZone, Pipe, PipeTransform } from '@angular/core';
+import { isUndefined } from '../../../lodash-optimized';
 import { ChildGroup } from '../../../models/api-models/Search';
-import { findIndex, includes, indexOf, isUndefined } from '../../../lodash-optimized';
 
 @Pipe({
     // tslint:disable-next-line:pipe-naming

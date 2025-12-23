@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, In
 import { select, Store } from "@ngrx/store";
 import { AccountsAction } from "apps/web-giddh/src/app/actions/accounts.actions";
 import { GroupWithAccountsAction } from "apps/web-giddh/src/app/actions/groupwithaccounts.actions";
+import { cloneDeep } from "apps/web-giddh/src/app/lodash-optimized";
 import { AccountResponseV2 } from "apps/web-giddh/src/app/models/api-models/Account";
 import { IGroupsWithAccounts } from "apps/web-giddh/src/app/models/interfaces/groups-with-accounts.interface";
 import { GeneralService } from "apps/web-giddh/src/app/services/general.service";
@@ -14,14 +15,13 @@ import { eventsConst } from "../eventsConst";
 import { PageLeaveUtilityService } from "apps/web-giddh/src/app/services/page-leave-utility.service";
 import { AccountArchivedStatusEnum } from "../../../Enums/common.enum";
 import { IOption } from "apps/web-giddh/src/app/app.constant";
-import { cloneDeep, concat, forEach, map, remove, set, slice } from '../../../../lodash-optimized';
 
 @Component({
     selector: "master",
-    standalone: false,
     templateUrl: "./master.component.html",
     styleUrls: ["./master.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class MasterComponent implements OnInit, OnChanges, OnDestroy {
     /** Instance of cdk virtual scroller */
@@ -211,7 +211,7 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
                 this.store.pipe(select(state => state.groupwithaccounts.activeAccount), take(1)).subscribe(acc => activeAccount = acc);
 
                 // reset search string when you're in search case for move group || move account || merge account
-                if (event.name === eventsConst[eventsConst.groupMoved] || event.name === eventsConst[eventsConst.accountMoved] || event.name === eventsConst[eventsConst.accountMerged]) {
+                if (event.name === eventsConst.groupMoved.toString() || event.name === eventsConst.accountMoved.toString() || event.name === eventsConst.accountMerged.toString()) {
                     this.isSearchingGroups = false;
                 }
 

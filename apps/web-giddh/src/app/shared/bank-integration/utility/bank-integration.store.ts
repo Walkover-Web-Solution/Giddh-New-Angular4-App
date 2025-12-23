@@ -25,9 +25,7 @@ export const DEFAULT_BANK_INTEGRATION_STATE: BankIntegrationState = {
     deleteAccountSuccess: null
 };
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class BankIntegrationComponentStore extends ComponentStore<BankIntegrationState> implements OnDestroy {
 
     constructor(
@@ -50,24 +48,17 @@ export class BankIntegrationComponentStore extends ComponentStore<BankIntegratio
                     tap(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
-                                return this.patchState({
-                                    institutionList: res?.body ?? [],
+                                this.patchState({
+                                    institutionList: res.body,
                                     institutionsListInProgress: false
                                 });
                             } else {
-                                res.message && this.toasterService.showSnackBar("error", res.message);
-                                return this.patchState({
-                                    institutionList: [],
+                                this.toasterService.showSnackBar("error", res.message);
+                                this.patchState({
+                                    institutionList: null,
                                     institutionsListInProgress: false
                                 });
                             }
-                        },
-                        (error: any) => {
-                            this.toasterService.showSnackBar("error", error);
-                            return this.patchState({
-                                institutionList: [],
-                                institutionsListInProgress: false
-                            });
                         }
                     ),
                     catchError((err) => EMPTY)
@@ -89,24 +80,17 @@ export class BankIntegrationComponentStore extends ComponentStore<BankIntegratio
                     tap(
                         (res: BaseResponse<any, any>) => {
                             if (res.status === "success") {
-                                return this.patchState({
-                                    requisitionList: res?.body ?? [],
+                                this.patchState({
+                                    requisitionList: res.body,
                                     requistionListInProgress: false
                                 });
                             } else {
-                                res.message && this.toasterService.showSnackBar("error", res.message);
-                                return this.patchState({
-                                    requisitionList: [],
+                                this.toasterService.showSnackBar("error", res.message);
+                                this.patchState({
+                                    requisitionList: null,
                                     requistionListInProgress: false
                                 });
                             }
-                        },
-                        (error: any) => {
-                            this.toasterService.showSnackBar("error", error);
-                            return this.patchState({
-                                requisitionList: [],
-                                requistionListInProgress: false
-                            });
                         }
                     ),
                     catchError((err) => EMPTY)
@@ -127,23 +111,15 @@ export class BankIntegrationComponentStore extends ComponentStore<BankIntegratio
                     tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
-                                return this.patchState({
-                                    createEndUserAgreementSuccess: res?.body ?? [],
+                                this.patchState({
+                                    createEndUserAgreementSuccess: true
                                 });
                             } else {
-                                if (res.message) {
-                                    this.toasterService.showSnackBar('error', res.message);
-                                }
-                                return this.patchState({
-                                    createEndUserAgreementSuccess: []
+                                this.toasterService.showSnackBar("error", res.message);
+                                this.patchState({
+                                    createEndUserAgreementSuccess: false
                                 });
                             }
-                        },
-                        (error: any) => {
-                            this.toasterService.showSnackBar("error", error);
-                            return this.patchState({
-                                createEndUserAgreementSuccess: []
-                            });
                         }
                     ),
                     catchError((err) => EMPTY)
@@ -165,23 +141,15 @@ export class BankIntegrationComponentStore extends ComponentStore<BankIntegratio
                     tap(
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
-                                return this.patchState({
+                                this.patchState({
                                     deleteAccountSuccess: true
                                 });
                             } else {
-                                if (res.message) {
-                                    this.toasterService.showSnackBar('error', res.message);
-                                }
-                                return this.patchState({
+                                this.toasterService.showSnackBar("error", res.message);
+                                this.patchState({
                                     deleteAccountSuccess: false
                                 });
                             }
-                        },
-                        (error: any) => {
-                            this.toasterService.showSnackBar("error", error);
-                            return this.patchState({
-                                deleteAccountSuccess: false
-                            });
                         }
                     ),
                     catchError((err) => EMPTY)

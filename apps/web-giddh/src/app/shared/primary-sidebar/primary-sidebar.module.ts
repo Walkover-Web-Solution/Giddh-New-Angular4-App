@@ -5,6 +5,7 @@ import { MatDialogModule } from "@angular/material/dialog";
 import { RouterModule } from "@angular/router";
 import { ClickOutsideModule } from "ng-click-outside";
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { CheckPermissionModule } from "../../permissions/check-permission.module";
 import { CommandKModule } from "../../theme/command-k/command.k.module";
 import { AuthServiceConfig, GoogleLoginProvider } from "../../theme/ng-social-login-module";
 import { SocialLoginModule } from "../../theme/ng-social-login-module/auth.module";
@@ -18,8 +19,6 @@ import { MatMenuModule } from "@angular/material/menu";
 import { MatButtonModule } from "@angular/material/button";
 import {CdkTreeModule} from '@angular/cdk/tree';
 import { MatInputModule } from "@angular/material/input";
-import { CheckPermissionModule } from "../../permissions/check-permission.module";
-import { get } from '../../lodash-optimized';
 
 
 @NgModule({
@@ -35,10 +34,10 @@ import { get } from '../../lodash-optimized';
         ClickOutsideModule,
         MatTooltipModule,
         RouterModule,
-        // CheckPermissionModule, // Commented out due to NG6002 errors
+        CheckPermissionModule,
         CommandKModule,
         SocialLoginModule,
-        // GenericAsideMenuAccountModule, // Commented out due to NG6002 errors
+        GenericAsideMenuAccountModule,
         MatDialogModule,
         MatTabsModule,
         MatMenuModule,

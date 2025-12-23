@@ -1,12 +1,12 @@
-import { ChangeDetectorRef, Directive, DoCheck, ElementRef, EventEmitter, forwardRef, HostListener, Input, KeyValueDiffer, KeyValueDiffers, OnChanges, OnInit, Output, Renderer2, SimpleChanges, ViewContainerRef } from '@angular/core';
+import { ChangeDetectorRef, ComponentFactoryResolver, Directive, DoCheck, ElementRef, EventEmitter, forwardRef, HostListener, Input, KeyValueDiffer, KeyValueDiffers, OnChanges, OnInit, Output, Renderer2, SimpleChanges, ViewContainerRef } from '@angular/core';
 import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import * as dayjs from 'dayjs';
+type Dayjs = any;
 import { NgxDaterangepickerComponent } from './ngx-daterangepicker.component';
 import { LocaleConfig } from './ngx-daterangepicker.config';
 import { NgxDaterangepickerLocaleService } from './ngx-daterangepicker-locale.service';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
-import { find, indexOf } from '../../lodash-optimized';
 
 @Directive({
     selector: 'input[ngxDaterangepickerMd]',
@@ -21,19 +21,18 @@ import { find, indexOf } from '../../lodash-optimized';
 
 export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
     public picker: NgxDaterangepickerComponent;
-    private componentRef: any;
     private _onChange = Function.prototype;
     private _onTouched = Function.prototype;
     private _value: any;
     private localeDiffer: KeyValueDiffer<string, any>;
     @Input()
-    inputStartDate: typeof dayjs.Dayjs;
+    inputStartDate: Dayjs;
     @Input()
-    inputEndDate: typeof dayjs.Dayjs;
+    inputEndDate: Dayjs;
     @Input()
-    minDate: typeof dayjs.Dayjs;
+    minDate: Dayjs;
     @Input()
-    maxDate: typeof dayjs.Dayjs;
+    maxDate: Dayjs;
     @Input()
     autoApply: boolean;
     @Input()
@@ -140,6 +139,7 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
     constructor(
         public viewContainerRef: ViewContainerRef,
         public _changeDetectorRef: ChangeDetectorRef,
+        private _componentFactoryResolver: ComponentFactoryResolver,
         private _el: ElementRef,
         private _renderer: Renderer2,
         private differs: KeyValueDiffers,
@@ -147,10 +147,10 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
     ) {
         this.drops = 'down';
         this.opens = 'right';
-        // Angular 21 compatible component creation - no ComponentFactoryResolver needed
+        const componentFactory = this._componentFactoryResolver.resolveComponentFactory(NgxDaterangepickerComponent);
         viewContainerRef.clear();
-        this.componentRef = viewContainerRef.createComponent(NgxDaterangepickerComponent);
-        this.picker = (<NgxDaterangepickerComponent>this.componentRef.instance);
+        const componentRef = viewContainerRef.createComponent(componentFactory);
+        this.picker = (<NgxDaterangepickerComponent>componentRef.instance);
         this.picker.inline = false; // set inline to false for all directive usage
     }
 
@@ -371,11 +371,5 @@ export class NgxDaterangepickerDirective implements OnInit, OnChanges, DoCheck {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
-
-        // Properly destroy the dynamically created component
-        if (this.componentRef) {
-            this.componentRef.destroy();
-            this.componentRef = null;
-        }
     }
 }

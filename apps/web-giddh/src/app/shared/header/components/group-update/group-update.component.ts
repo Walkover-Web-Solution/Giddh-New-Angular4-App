@@ -12,19 +12,19 @@ import { CompanyActions } from '../../../../actions/company.actions';
 import { AccountsAction } from '../../../../actions/accounts.actions';
 import { ApplyTaxRequest } from '../../../../models/api-models/ApplyTax';
 import { digitsOnly } from '../../../helpers';
-import { BlankLedgerVM } from '../../../../ledger/ledger.vm';
-// import { LedgerDiscountComponent } from '../../../../ledger/components/ledger-discount/ledger-discount.component';
-// import { TaxControlComponent } from '../../../../theme/tax-control/tax-control.component';
+import { BlankLedgerVM, TransactionVM } from '../../../../ledger/ledger.vm';
+import { cloneDeep, difference, differenceBy, flatten, flattenDeep, map, omit, union, uniq } from '../../../../lodash-optimized';
+import { LedgerDiscountComponent } from '../../../../ledger/components/ledger-discount/ledger-discount.component';
+import { TaxControlComponent } from '../../../../theme/tax-control/tax-control.component';
 import { ApplyDiscountRequestV2 } from 'apps/web-giddh/src/app/models/api-models/ApplyDiscount';
 import { GroupService } from 'apps/web-giddh/src/app/services/group.service';
 import { DROPDOWN_ITEMS_COUNT_LIMIT, IOption, TCS_TDS_TAXES_TYPES } from 'apps/web-giddh/src/app/app.constant';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
-import { cloneDeep, concat, difference, differenceBy, filter, find, flatten, flattenDeep, forEach, get, indexOf, map, omit, set, some, union } from '../../../../lodash-optimized';
 @Component({
     selector: 'group-update',
-    standalone: false,
     templateUrl: 'group-update.component.html',
-    styleUrls: ['group-update.component.scss']
+    styleUrls: ['group-update.component.scss'],
+    standalone: false
 })
 
 export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -35,14 +35,14 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
     public uniqueName: string = null;
     public totalForTax: number = 0;
     @Input() public blankLedger: BlankLedgerVM;
-    @Input() public currentTxn: any = null;
+    @Input() public currentTxn: TransactionVM = null;
     @Input() public needToReCalculate: BehaviorSubject<boolean>;
     /** Stores list of discount */
     @Input() public discountList: any[] = [];
     public isAmountFirst: boolean = false;
     public isTotalFirts: boolean = false;
-    @ViewChild('discount', { static: true }) public discountControl: any;
-    @ViewChild('tax', { static: true }) public taxControll: any;
+    @ViewChild('discount', { static: true }) public discountControl: LedgerDiscountComponent;
+    @ViewChild('tax', { static: true }) public taxControll: TaxControlComponent;
     @ViewChild('autoFocused', { static: true }) public autoFocus: ElementRef;
 
     public companyTaxDropDown: Array<IOption>;
@@ -596,7 +596,7 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         if (event) {
             this.discountGroupForm.get('discounts').patchValue(event);
             this.isDiscountSaveDisable$ = of(false);
-        }
+        } 
     }
 
     /**

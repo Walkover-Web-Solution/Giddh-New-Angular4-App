@@ -1,0 +1,26 @@
+.or-line::before {
+    content: " ";
+    border-bottom: 1px solid var(--border-color);
+    display: inline-block;
+    width: 81px;
+    margin-right: 13px;
+}
+
+.create-new {
+    border-top: 1px solid var(--border-color);
+}
+
+.or-line::after {
+    content: "";
+    border-bottom: 1px solid var(--border-color);
+    display: inline-block;
+    width: 81px;
+    margin-left: 13px;
+}
+
+.or-line {
+    display: flex;
+    align-items: center;
+    color: var(--color-silver);
+    margin-bottom: 10px;
+}

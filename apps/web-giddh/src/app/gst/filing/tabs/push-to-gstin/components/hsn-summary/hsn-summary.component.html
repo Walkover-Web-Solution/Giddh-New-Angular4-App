@@ -1,0 +1,94 @@
+<div class="gstr-transactions-summary">
+    <p class="clear-both gstr-summary-title">{{ localeData?.filing?.hsn_summary }}</p>
+    <p class="text-muted half pt-1">{{ localeData?.filing?.hsn_summary_description }}</p>
+
+    <div>
+        <div *ngIf="hsnSummary" class="table-responsive">
+            <table mat-table [dataSource]="hsnSummary.data" class="transactions-table table">
+                <!-- HSN/SAC Column -->
+                <ng-container matColumnDef="hsn_sc">
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_hsn_sac }}</th>
+                    <td mat-cell *matCellDef="let item">{{ item.hsn_sc || "-" }}</td>
+                </ng-container>
+                <!-- Description Column -->
+                <ng-container matColumnDef="desc">
+                    <th mat-header-cell *matHeaderCellDef>{{ localeData?.filing?.description }}</th>
+                    <td mat-cell *matCellDef="let item" 
+                        [matTooltip]="item.desc || '-'" 
+                        matTooltipPosition="above">
+                        {{ item.desc || "-" }}
+                    </td>
+                </ng-container>
+                <!-- Quantity Column -->
+                <ng-container matColumnDef="qty">
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_quantity }}</th>
+                    <td mat-cell *matCellDef="let item">{{ item.qty || "-" }}</td>
+                </ng-container>
+                <!-- Unit Column -->
+                <ng-container matColumnDef="uqc">
+                    <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_unit }}</th>
+                    <td mat-cell *matCellDef="let item">{{ item.uqc || "-" }}</td>
+                </ng-container>
+                <!-- Taxable Amount Column -->
+                <ng-container matColumnDef="txval">
+                    <th mat-header-cell *matHeaderCellDef class="text-right">{{ localeData?.filing?.taxable_amount }}</th>
+                    <td mat-cell *matCellDef="let item" class="text-right">
+                        <amount-field [amount]="item.txval" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                    </td>
+                </ng-container>
+                <!-- Rate Column -->
+                <ng-container matColumnDef="rt" *ngIf="selectedGst === GstReport.Gstr1">
+                    <th mat-header-cell *matHeaderCellDef class="text-right">{{ localeData?.filing?.rate }} (%)</th>
+                    <td mat-cell *matCellDef="let item" class="text-right">{{ item.rt || '-' }}</td>
+                </ng-container>
+                <!-- IGST Amount Column -->
+                <ng-container matColumnDef="iamt">
+                    <th mat-header-cell *matHeaderCellDef class="text-right">{{ localeData?.filing?.igst_amount }}</th>
+                    <td mat-cell *matCellDef="let item" class="text-right">
+                        <amount-field [amount]="item.iamt" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                    </td>
+                </ng-container>
+                <!-- CGST Amount Column -->
+                <ng-container matColumnDef="camt">
+                    <th mat-header-cell *matHeaderCellDef class="text-right">{{ localeData?.filing?.cgst_amount }}</th>
+                    <td mat-cell *matCellDef="let item" class="text-right">
+                        <amount-field [amount]="item.camt" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                    </td>
+                </ng-container>
+                <!-- SGST Amount Column -->
+                <ng-container matColumnDef="samt">
+                    <th mat-header-cell *matHeaderCellDef class="text-right">{{ localeData?.filing?.sgst_amount }}</th>
+                    <td mat-cell *matCellDef="let item" class="text-right">
+                        <amount-field [amount]="item.samt" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                    </td>
+                </ng-container>
+                <!-- Cess Column -->
+                <ng-container matColumnDef="csamt">
+                    <th mat-header-cell *matHeaderCellDef class="text-right">{{ commonLocaleData?.app_cess }}</th>
+                    <td mat-cell *matCellDef="let item" class="text-right">
+                        <amount-field [amount]="item.csamt" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                    </td>
+                </ng-container>
+                <!-- Total Amount Column -->
+                <ng-container matColumnDef="val">
+                    <th mat-header-cell *matHeaderCellDef class="text-right">{{ commonLocaleData?.app_total_amount }}</th>
+                    <td mat-cell *matCellDef="let item" class="text-right">
+                        <amount-field [amount]="item.val" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                    </td>
+                </ng-container>
+    
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+        </div>
+
+        <div *ngIf="!hsnSummary">
+            <div class="filings-empty-state">
+                <img src="{{ imgPath }}nofound.svg" [style.max-width.px]="110" />
+                <div class="empty-msg">
+                    <span> {{ localeData?.filing?.no_hsn_summary }} </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,40 @@
+:host .dropdown-menu {
+    width: 100%;
+    height: inherit;
+    padding: 0;
+    overflow: auto;
+    z-index: 9;
+}
+
+.disabled-label {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.multi-select input.form-control {
+    background-image: unset !important;
+}
+
+sup.mandatory-asterisk {
+    font-size: var(--font-size-15);
+    top: 0;
+    color: var(--color-red);
+}
+
+.dropdown-menu {
+    left: unset !important;
+    top: 0px;
+    li{
+        padding: 0 10px;
+        height: 40px;
+        &:hover{
+            background-color: var(--color-border-light) !important;
+        }
+    }
+}
+
+.tax-wrapper {
+    max-height: 156px;
+    min-width: 200px;
+    overflow-y: auto;
+}

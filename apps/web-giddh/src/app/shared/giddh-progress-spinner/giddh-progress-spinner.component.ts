@@ -1,12 +1,16 @@
 import { Component, Input } from '@angular/core';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 type ProgressSpinnerMode = 'determinate' | 'indeterminate';
-type ProgressSpinnerColor = 'primary' | 'accent' | 'warn' | false;
+type ProgressSpinnerColor = 'primary' | 'accent' | 'warn' | false; 
 
 @Component({
   selector: 'giddh-progress-spinner',
   templateUrl: './giddh-progress-spinner.component.html',
   styleUrls: ['./giddh-progress-spinner.component.scss'],
-  standalone: false
+  standalone: true,
+  imports: [
+    MatProgressSpinnerModule
+  ]
 })
 export class GiddhProgressSpinnerComponent  {
   /** The diameter of the spinner, in pixels. */

@@ -6,14 +6,12 @@ import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Configuration } from '../../../../app.constant';
-import { environment } from '../../../../../environments/environment';
 
 @Component({
     selector: 'aside-help-support',
-    standalone: false,
     templateUrl: './aside-help-support.component.html',
     styleUrls: [`./aside-help-support.component.scss`],
+    standalone: false
 })
 
 export class AsideHelpSupportComponent implements OnInit, OnDestroy {
@@ -48,7 +46,7 @@ export class AsideHelpSupportComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.getElectronAppVersion();
         this.getElectronMacAppVersion();
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
     }
 
     /**

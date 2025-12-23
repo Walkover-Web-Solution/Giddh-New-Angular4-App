@@ -6,10 +6,7 @@ import { distinctUntilKeyChanged, takeUntil } from 'rxjs/operators';
 import { giddhRoundOff } from '../../helperFunctions';
 import { NUMBER_FORMAT_LOCALE_MAP, DEFAULT_NUMBER_FORMAT_LOCALE, DEFAULT_NUMBER_DISPLAY_FORMAT } from '../../../../app.constant';
 
-@Pipe({
-    name: 'numberFormat',
-    standalone: false
-})
+@Pipe({ name: 'giddhNumberFormat', pure: true, standalone: false })
 
 export class GiddhNumberFormatPipe implements OnDestroy, PipeTransform {
     /** Subject to handle component destruction and unsubscribe from observables */

@@ -1,0 +1,28 @@
+.trigger {
+    min-height: calc(100vh - 90px);
+
+    .position-center {
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    .column-min-width {
+        min-width: 300px;
+    }
+    .max-width-80 {
+        max-width: 80px;
+    }
+    .nowrap {
+        .overflow-visible {
+            max-width: 100%;
+        }
+    }
+}
+
+:host ::ng-deep giddh-page-loader {
+    &.unset-loader-margin {
+        .loader-main {
+            margin: 0 !important;
+        }
+    }
+}

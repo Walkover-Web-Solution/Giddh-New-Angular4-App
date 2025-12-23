@@ -1,8 +1,8 @@
-import { Component, Input, Output, EventEmitter, forwardRef, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, forwardRef, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormControl, ControlValueAccessor, NG_VALUE_ACCESSOR, Validators, AbstractControl, ValidationErrors, NG_VALIDATORS, Validator } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule, MatSelect } from '@angular/material/select';
+import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { HttpClientModule } from '@angular/common/http';
@@ -11,8 +11,6 @@ import * as libphonenumber from 'google-libphonenumber';
 import { Country, COUNTRIES_DATA } from './countries-data';
 import { GeolocationService } from './geolocation.service';
 import { LocaleService } from '../../services/locale.service';
-import { A11yModule } from '@angular/cdk/a11y';
-// import { KeyboardNavigationModule } from '../helpers/directives/enter-next/keyboard-navigation.module'; // Module not found
 
 /** 
  * Enhanced mobile number validator using Google's libphonenumber library
@@ -146,9 +144,7 @@ function isSequential(number: string): boolean {
         MatSelectModule,
         MatInputModule,
         MatIconModule,
-        HttpClientModule,
-        A11yModule
-        // KeyboardNavigationModule // Module not found
+        HttpClientModule
     ],
     providers: [
         {
@@ -166,9 +162,6 @@ function isSequential(number: string): boolean {
     styleUrls: ['./mobile-number-input.component.scss']
 })
 export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlValueAccessor, Validator {
-    /** ViewChild reference to mobile input element */
-    @ViewChild('mobileInput', { static: false }) public mobileInput: ElementRef<HTMLInputElement>;
-    
     /** Label for the mobile input field */
     @Input() public label: string;
     
@@ -204,9 +197,6 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
     
     /** Event emitted when mobile number changes */
     @Output() public mobileChanged = new EventEmitter<string>();
-    
-    /** Reference to the country dropdown MatSelect */
-    @ViewChild('countrySelect', { static: false }) private countrySelect: MatSelect;
     
     /** Form controls */
     public countryControl = new FormControl<Country | null>(null);
@@ -548,19 +538,6 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
         
         this.countryChanged.emit(country);
     }
-    
-    /**
-     * Focuses the mobile input element
-     * 
-     * @memberof MobileNumberInputComponent
-     */
-    private focusMobileInput(): void {
-        if (this.mobileInput?.nativeElement) {
-            setTimeout(() => {
-                this.mobileInput.nativeElement.focus();
-            }, 100);
-        }
-    }
 
     /**
      * Handles keypress events to restrict input to numbers and plus sign only
@@ -639,18 +616,6 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
         
         this.onChange(this.getFullPhoneNumber());
         this.onTouched();
-    }
-
-    /**
-     * Handles focus event on mobile number input field
-     * Closes the country dropdown if it's open
-     * 
-     * @memberof MobileNumberInputComponent
-     */
-    public onMobileFocus(): void {
-        if (this.countrySelect && this.countrySelect.panelOpen) {
-            this.countrySelect.close();
-        }
     }
 
     /**
@@ -1499,19 +1464,6 @@ export class MobileNumberInputComponent implements OnInit, OnDestroy, ControlVal
                     }
                 }
             });
-        }
-    }
-
-    /**
-     * Handles the opened change event of the country select
-     * 
-     * @param {boolean} event - Whether the country select is opened
-     * @memberof MobileNumberInputComponent
-     */
-    public openedChange(event: boolean): void {
-        if (!event) {
-            // Focus the mobile input after country change
-            this.focusMobileInput();
         }
     }
 }

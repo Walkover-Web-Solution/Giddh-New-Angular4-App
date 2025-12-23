@@ -3,12 +3,8 @@ import { FullPageHeight } from './pageHeight.directive';
 
 @NgModule({
     imports: [],
-    exports: [
-        FullPageHeight
-    ],
-    declarations: [
-        FullPageHeight
-    ],
+    exports: [FullPageHeight],
+    declarations: [FullPageHeight],
 })
 export class PageHeightModule {
 }

@@ -5,9 +5,9 @@ import { Component, ViewEncapsulation } from '@angular/core';
  */
 @Component({
     selector: 'bottom-space',
-standalone: false,
-  templateUrl: './bottom-space.component.html',
-  styleUrls: ['./bottom-space.component.scss'],
-  encapsulation: ViewEncapsulation.None
+    templateUrl: './bottom-space.component.html',
+    styleUrls: ['./bottom-space.component.scss'],
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class BottomSpaceComponent {}

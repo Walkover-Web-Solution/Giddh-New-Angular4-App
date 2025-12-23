@@ -1,6 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
 import { config, IConfig } from './config';
-import { endsWith, filter, find, has, includes, indexOf, slice, startsWith } from '../../../../lodash-optimized';
 
 export enum Separators {
     SEPARATOR = 'separator',
@@ -13,9 +12,7 @@ export enum Separators {
     NOT_SEPARATED = 'not_separated'
 }
 
-@Injectable({
-    providedIn: 'root'
-})
+@Injectable()
 export class MaskApplierService {
     public dropSpecialCharacters: IConfig['dropSpecialCharacters'];
     public hiddenInput: IConfig['hiddenInput'];

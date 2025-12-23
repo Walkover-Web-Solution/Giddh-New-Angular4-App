@@ -3,7 +3,6 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../../store';
 import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { includes, indexOf } from '../../../../lodash-optimized';
 
 @Directive({
     selector: '[decimalDigitsDirective]',

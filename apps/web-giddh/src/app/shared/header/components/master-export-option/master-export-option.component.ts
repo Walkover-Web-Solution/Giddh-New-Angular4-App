@@ -3,10 +3,10 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ReplaySubject, takeUntil } from 'rxjs';
 
 @Component({
-  selector: 'master-export-option',
-  standalone: false,
-  templateUrl: './master-export-option.component.html',
-  styleUrls: ['./master-export-option.component.scss']
+    selector: 'master-export-option',
+    templateUrl: './master-export-option.component.html',
+    styleUrls: ['./master-export-option.component.scss'],
+    standalone: false
 })
 export class MasterExportOptionComponent implements OnInit {
   /** Form Group for export  form */
@@ -69,7 +69,7 @@ export class MasterExportOptionComponent implements OnInit {
 
   /**
    * This will use for destroy
-   *
+   * 
    * @memberof MasterExportOptionComponent
    */
   public ngOnDestroy(): void {

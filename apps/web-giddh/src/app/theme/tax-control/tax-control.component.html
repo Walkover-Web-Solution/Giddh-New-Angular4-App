@@ -1,0 +1,111 @@
+<span
+    class="position-relative tax-control-cmp"
+>
+    <ng-container *ngIf="!showMatFormField">
+        <label class="font-size-12" *ngIf="showHeading"
+            >{{ customHeading ? customHeading : commonLocaleData?.app_tax }}
+            <sup class="mandatory-asterisk" *ngIf="isMandatory">*</sup></label
+        >
+        <a id="tax" class="clear-both">
+            <div class="multi-select adjust position-relative " id="tax-control-multi-select">
+                <input
+                    (keydown.enter)="$event.preventDefault(); toggleTaxMenu(true)"
+                    matInput
+                    #taxInputElement
+                    type="text"
+                    id="tax-control-input"
+                    readonly
+                    name="sum"
+                    *ngIf="!maskInput"
+                    class="form-control cursor-pointer text-right tax-input pr-5"
+                    [(ngModel)]="taxTotalAmount"
+                    [ngClass]="{ 'field-disabled': readonly }"
+                    (focus)="!readonly ? handleInputFocus() : ''"
+                    [matMenuTriggerFor]="taxMenu"
+                />
+                <input
+                    (keydown.enter)="$event.preventDefault(); toggleTaxMenu(true)"
+                    matInput
+                    #taxInputElement
+                    type="text"
+                    id="tax-control-input-mask"
+                    readonly
+                    name="sum"
+                    *ngIf="maskInput"
+                    class="form-control cursor-pointer text-right tax-input pr-4"
+                    [(ngModel)]="taxTotalAmount"
+                    [mask]="maskInput"
+                    [prefix]="prefixInput"
+                    [suffix]="suffixInput"
+                    [ngClass]="{ 'field-disabled': readonly }"
+                    (focus)="!readonly ? handleInputFocus() : ''"
+                    [matMenuTriggerFor]="taxMenu"
+                />
+            </div>
+        </a>
+    </ng-container>
+    <ng-container *ngIf="showMatFormField">
+        <input-field
+            (keydown.enter)="$event.preventDefault(); toggleTaxMenu(true)"
+            [autocomplete]="'off'"
+            [prefix]="prefixInput"
+            [suffix]="suffixInput"
+            [mask]="maskInput"
+            [useMask]="maskInput"
+            [type]="'text'"
+            [showError]="showError"
+            [cssClass]="'cursor-pointer text-right pr-1'"
+            [name]="'sum'"
+            [(ngModel)]="taxTotalAmount"
+            [readonly]="readonly"
+            [label]="customHeading ? customHeading : commonLocaleData?.app_tax"
+            [matMenuTriggerFor]="taxMenu"
+        ></input-field>
+    </ng-container>
+
+    <mat-menu #taxMenu="matMenu" [hasBackdrop]="hasBackdrop">
+        <div (click)="$event.stopPropagation()" class="discount-wrapper pl-2 pr-2">
+            <div class="tax-wrapper">
+                <div *ngIf="taxRenderData.length === 0">
+                    <p class="lead p-1 font-size-14 text-center">{{ commonLocaleData?.app_no_tax_found }}</p>
+                </div>
+                <p *ngFor="let tax of taxRenderData; trackBy: trackByFn; let idx = index">
+                    <mat-checkbox
+                        (keydown.enter)="$event.preventDefault()"
+                        color="primary"
+                        *ngIf="taxRenderData.length - 1 !== idx"
+                        [ngClass]="{ 'disabled-label': tax.isDisabled }"
+                        class="pull-left w-100"
+                        id="{{ 'tax-control-checkbox-' + idx }}"
+                        name="tax_{{ idx }}"
+                        [(ngModel)]="tax.isChecked"
+                        (change)="change()"
+                        (click)="$event.stopPropagation()"
+                        [disabled]="tax.isDisabled"
+                    >
+                        {{ tax.name }}
+                    </mat-checkbox>
+                    <mat-checkbox
+                        (keydown.enter)="$event.preventDefault()"
+                        color="primary"
+                        *ngIf="taxRenderData.length - 1 === idx"
+                        (click)="$event.stopPropagation()"
+                        [ngClass]="{ 'disabled-label': tax.isDisabled }"
+                        class="pull-left w-100"
+                        id="{{ 'tax-checkbox-' + idx }}"
+                        name="tax_{{ idx }}"
+                        [(ngModel)]="tax.isChecked"
+                        (change)="change()"
+                        (click)="$event.stopPropagation()"
+                        [disabled]="tax.isDisabled"
+                    >
+                        {{ tax.name }}
+                    </mat-checkbox>
+                </p>
+            </div>
+            <div *ngIf="showCreateNew" class="create-new pt-2 mt-2 text-center cursor-pointer" (click)="createNew()">
+                <span class="text-primary">{{ commonLocaleData?.app_create_new }}</span>
+            </div>
+        </div>
+    </mat-menu>
+</span>

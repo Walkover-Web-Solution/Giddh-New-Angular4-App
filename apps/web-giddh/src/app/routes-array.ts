@@ -73,7 +73,7 @@ export const ROUTES: Routes = [
             { path: 'activity-logs', loadChildren: () =>  import('./activity-logs/activity-logs.module').then(module => module.ActivityLogsModule) },
             {
                 path: 'ledger/:accountUniqueName',
-                loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./ledger/ledger.module') */ Promise.resolve(DummyModule),
+                loadChildren: () => import('./ledger/ledger.module').then(module => module.LedgerModule),
                 data: { preload: true }
             },
             { path: 'permissions', loadChildren: () => import('./permissions/permission.module').then(module => module.PermissionModule) },
@@ -88,7 +88,7 @@ export const ROUTES: Routes = [
                 loadChildren: () => import('./accounting/accounting.module').then(module => module.AccountingModule),
                 data: { preload: true }
             },
-            { path: 'contact', loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./contact/contact.module') */ Promise.resolve(DummyModule) },
+            { path: 'contact', loadChildren: () =>import('./contact/contact.module').then(module => module.ContactModule)},
             {path: 'new-vs-old-invoices',
                 loadChildren: () => import('./new-vs-old-Invoices/new-vs-old-Invoices.module').then(module => module.NewVsOldInvoicesModule)},
             { path: 'import', loadChildren: () => import('./import-excel/import-excel.module').then(module => module.ImportExcelModule) },
