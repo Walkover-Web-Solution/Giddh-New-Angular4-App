@@ -8,7 +8,6 @@
             <mat-form-field
                 [appearance]="appearance"
                 [ngClass]="{ 'mat-form-field-invalid': showError }"
-                (click)="!readonly ? trigger?.openPanel() : trigger?.closePanel()"
             >
                 <mat-label *ngIf="showMatLabel">{{ label ? label : placeholder }}</mat-label>
                 <input
@@ -23,20 +22,12 @@
                     [name]="name"
                     [autocomplete]="autocomplete"
                     [required]="required"
-                    [attr.aria-expanded]="readonly ? false : true"
                     (input)="searchFormControl.next($event.target.value)"
                     (blur)="onBlur()"
                     #trigger="matAutocompleteTrigger"
                     [style.padding-right]="showCaretIcon ? '18px' : '0'"
                     #selectField
                     matAutocompletePosition="auto"
-                    (focusout)="
-                        closeOnFocusOut &&
-                        $event?.relatedTarget?.nodeName !== 'MAT-OPTION' &&
-                        $event?.relatedTarget?.nodeName !== 'A'
-                            ? trigger.closePanel()
-                            : null
-                    "
                     [value]="controlLabelValue ?? ''"
                 />
                 <mat-autocomplete
@@ -123,17 +114,9 @@
             [required]="required"
             [attr.aria-expanded]="readonly ? false : true"
             (input)="searchFormControl.next($event.target.value)"
-            (click)="!readonly ? trigger?.openPanel() : trigger?.closePanel()"
             #trigger="matAutocompleteTrigger"
             #selectField
             matAutocompletePosition="auto"
-            (focusout)="
-                closeOnFocusOut &&
-                $event?.relatedTarget?.nodeName !== 'MAT-OPTION' &&
-                $event?.relatedTarget?.nodeName !== 'A'
-                    ? trigger.closePanel()
-                    : null
-            "
             [value]="controlLabelValue ?? ''"
         />
         <mat-autocomplete
@@ -152,7 +135,7 @@
                 class="create-new-option"
                 (onSelectionChange)="handleCreateNewSelection($event)"
                 [attr.aria-label]="createNewText"
-                >\
+                >
                 <div class="theme-primary-color d-flex justify-content-between">
                     <div class="item create-new">{{ createNewText }}</div>
                     <div class="item create-new-command" *ngIf="showKeyboardCommand">
