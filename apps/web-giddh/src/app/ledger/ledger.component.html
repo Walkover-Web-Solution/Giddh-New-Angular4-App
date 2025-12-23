@@ -3256,7 +3256,7 @@
                                 <div class="font-size-15">
                                     {{ option?.label }}
                                 </div>
-                                <div class="font-size-15 text-light">
+                                <div *ngIf="ledgerView != ledgerViewEnum.StatementView" class="font-size-15 text-light">
                                     {{ option.additional?.uniqueName }}
                                 </div>
                             </a>
@@ -3266,11 +3266,11 @@
                                 <div class="font-size-15">
                                     {{ option?.label }}
                                 </div>
-                                <div class="font-size-15 text-light">
+                                <div *ngIf="ledgerView != ledgerViewEnum.StatementView" class="font-size-15 text-light">
                                     {{ option.additional?.uniqueName }}
                                 </div>
                                 <div class="text-light font-size-12">
-                                    {{ commonLocaleData?.app_stock }}: {{ option.additional?.stock?.name }}
+                                    {{ commonLocaleData?.app_stock }}: {{ option.additional?.stock?.uniqueName }}
                                 </div>
                             </a>
                         </ng-container>
