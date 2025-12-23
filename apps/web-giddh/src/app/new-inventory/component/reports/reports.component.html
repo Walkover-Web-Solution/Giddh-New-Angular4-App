@@ -30,8 +30,7 @@
                 (selectedDynamicColumns)="dynamicColumnsSubject$.next($event)"
             ></report-filters>
         </div>
-        @if(!isLoading){
-        <div class="inventory-transaction-list overflow-visible">
+        <div class="inventory-transaction-list overflow-visible" *ngIf="!isLoading">
             <div *ngIf="isDataAvailable" class="position-sticky mb-3">
                 <div class="row">
                     <div class="col-12">
@@ -329,11 +328,9 @@
                         </div>
                     </div>
                 </div>
-
-          </div>
+            </div>
             <div class="row overflow-visible" *ngIf="isDataAvailable">
                 <div class="col-12 horizontal-padding overflow-visible">
-                    {{displayedColumns?.length}}
                     <div
                         class="table-responsive inventory-report-table overflow-visible table-header-sticky pt-5"
                         *ngIf="displayedColumns?.length"
@@ -347,7 +344,7 @@
                             [matSortDirection]="stockReportRequest?.sort"
                             class="table giddh-table on-mobile-view"
                         >
-                            <div matColumnDef="group_name">
+                            <ng-container matColumnDef="group_name">
                                 <th class="report-th-column" mat-header-cell *matHeaderCellDef>
                                     {{ localeData?.reports?.group_name }}
                                 </th>
@@ -373,8 +370,8 @@
                                         </a>
                                     </div>
                                 </td>
-                            </div>
-                            <div matColumnDef="stock_name">
+                            </ng-container>
+                            <ng-container matColumnDef="stock_name">
                                 <th class="report-th-column" mat-header-cell *matHeaderCellDef>
                                     {{ localeData?.reports?.stock_name }}
                                 </th>
@@ -400,8 +397,8 @@
                                         </a>
                                     </div>
                                 </td>
-                            </div>
-                            <div matColumnDef="variant_name">
+                            </ng-container>
+                            <ng-container matColumnDef="variant_name">
                                 <th class="report-th-column" mat-header-cell *matHeaderCellDef>
                                     {{ localeData?.reports?.variant_name }}
                                 </th>
@@ -427,8 +424,8 @@
                                         </a>
                                     </div>
                                 </td>
-                            </div>
-                            <div matColumnDef="unit_name">
+                            </ng-container>
+                            <ng-container matColumnDef="unit_name">
                                 <th class="group-column text-right" mat-header-cell *matHeaderCellDef>
                                     {{ localeData?.reports?.unit_name }}
                                 </th>
@@ -440,8 +437,8 @@
                                 >
                                     <span class="report-quantity"> {{ element?.stockUnit?.code ?? "-" }}</span>
                                 </td>
-                            </div>
-                            <div matColumnDef="opening_quantity">
+                            </ng-container>
+                            <ng-container matColumnDef="opening_quantity">
                                 <th
                                     class="group-column text-right"
                                     [ngClass]="{ 'opening-column': !displayedColumns?.includes('opening_amount') }"
@@ -472,8 +469,8 @@
                                         </amount-field>
                                     </span>
                                 </td>
-                            </div>
-                            <div matColumnDef="opening_amount">
+                            </ng-container>
+                            <ng-container matColumnDef="opening_amount">
                                 <th
                                     class="group-column text-right opening-column"
                                     mat-header-cell
@@ -505,8 +502,8 @@
                                         </amount-field>
                                     </span>
                                 </td>
-                            </div>
-                            <div matColumnDef="inward_quantity">
+                            </ng-container>
+                            <ng-container matColumnDef="inward_quantity">
                                 <th
                                     class="inward-column text-right"
                                     [ngClass]="{ 'inward-column': !displayedColumns?.includes('inward_amount') }"
@@ -533,8 +530,8 @@
                                         </amount-field>
                                     </span>
                                 </td>
-                            </div>
-                            <div matColumnDef="inward_amount">
+                            </ng-container>
+                            <ng-container matColumnDef="inward_amount">
                                 <th
                                     class="group-column text-right inward-column"
                                     mat-header-cell
@@ -566,8 +563,8 @@
                                         </amount-field>
                                     </span>
                                 </td>
-                            </div>
-                            <div matColumnDef="outward_quantity">
+                            </ng-container>
+                            <ng-container matColumnDef="outward_quantity">
                                 <th
                                     class="group-column text-right"
                                     [ngClass]="{ 'outward-column': !displayedColumns?.includes('outward_amount') }"
@@ -594,8 +591,8 @@
                                         </amount-field>
                                     </span>
                                 </td>
-                            </div>
-                            <div matColumnDef="outward_amount">
+                            </ng-container>
+                            <ng-container matColumnDef="outward_amount">
                                 <th
                                     class="group-column text-right outward-column"
                                     mat-header-cell
@@ -627,8 +624,8 @@
                                         </amount-field>
                                     </span>
                                 </td>
-                            </div>
-                            <div matColumnDef="closing_quantity">
+                            </ng-container>
+                            <ng-container matColumnDef="closing_quantity">
                                 <th
                                     class="group-column text-right"
                                     [ngClass]="{ 'closing-column': !displayedColumns?.includes('closing_amount') }"
@@ -655,8 +652,8 @@
                                         </amount-field>
                                     </span>
                                 </td>
-                            </div>
-                            <div matColumnDef="closing_amount">
+                            </ng-container>
+                            <ng-container matColumnDef="closing_amount">
                                 <th
                                     class="group-column text-right closing-column"
                                     mat-header-cell
@@ -688,9 +685,9 @@
                                         </amount-field>
                                     </span>
                                 </td>
-                            </div>
-                            <div *ngIf="newCustomFieldsColumns?.length">
-                                <div
+                            </ng-container>
+                            <ng-container *ngIf="newCustomFieldsColumns?.length">
+                                <ng-container
                                     *ngFor="let column of newCustomFieldsColumns"
                                     [matColumnDef]="column?.value"
                                 >
@@ -705,8 +702,8 @@
                                     >
                                         {{ getCustomFieldValue(element, column?.value) }}
                                     </td>
-                                </div>
-                            </div>
+                                </ng-container>
+                            </ng-container>
                             <tr
                                 mat-header-row
                                 *matHeaderRowDef="displayedColumns; sticky: true"
@@ -736,7 +733,6 @@
                 </div>
             </div>
         </div>
-        }
         <div class="no-data" *ngIf="!isLoading && !dataSource?.length">
             <h2>{{ localeData?.reports?.no_entries_found_1 }}</h2>
             <h3>{{ localeData?.reports?.no_entries_found_2 }}</h3>

@@ -14,20 +14,19 @@ import { InventoryComponentStore } from '../inventory.store';
 import { SalesService } from '../../../services/sales.service';
 import { InventoryService } from '../../../services/inventory.service';
 import { CompanyActions } from '../../../actions/company.actions';
+import { cloneDeep, isEqual } from '../../../lodash-optimized';
 import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groups-with-stocks.interface';
 import { ManufacturingService } from '../../../services/manufacturing.service';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { FieldTypes } from '../../../custom-fields/custom-fields.constant';
 import { IDiscountList } from '../../../models/api-models/SettingsDiscount';
-import { cloneDeep, find, findIndex, forEach, get, has, includes, isEqual, keys, map, set, toArray } from '../../../lodash-optimized';
 
 @Component({
     selector: 'bulk-stock',
-    
     templateUrl: './bulk-stock-edit.component.html',
-    standalone: false,
     styleUrls: ['./bulk-stock-edit.component.scss'],
-    providers: [InventoryComponentStore]
+    providers: [InventoryComponentStore],
+    standalone:false
 })
 
 export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -259,7 +258,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
         // Add CSS class to body element
         this.renderer.addClass(document.body, 'bulk-stock-edit');
         this.searchInputObservableInitialize();
-        
+
         this.store.pipe(
             select(select => select.inventory.bulkStock),
             takeUntil(this.destroyed$)
@@ -276,9 +275,9 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.dropdownValues[index] = row;
                     this.dropdownValues[index].hsnNo = row?.hsnNo || "";
                     this.dropdownValues[index].sacNo = row?.sacNo || "";
-                    this.dropdownValues[index].purchaseUnits = [{code: row?.purchaseUnits?.[0]?.code ?? null, uniqueName: row?.purchaseUnits?.[0]?.uniqueName ?? null}];
-                    this.dropdownValues[index].salesUnits = [{code: row?.salesUnits?.[0]?.code ?? null, uniqueName: row?.salesUnits?.[0]?.uniqueName ?? null}];
-                    this.dropdownValues[index].fixedAssetUnits = [{code: row?.fixedAssetUnits?.[0]?.code ?? null, uniqueName: row?.fixedAssetUnits?.[0]?.uniqueName ?? null}];
+                    this.dropdownValues[index].purchaseUnits = [{ code: row?.purchaseUnits?.[0]?.code ?? null, uniqueName: row?.purchaseUnits?.[0]?.uniqueName ?? null }];
+                    this.dropdownValues[index].salesUnits = [{ code: row?.salesUnits?.[0]?.code ?? null, uniqueName: row?.salesUnits?.[0]?.uniqueName ?? null }];
+                    this.dropdownValues[index].fixedAssetUnits = [{ code: row?.fixedAssetUnits?.[0]?.code ?? null, uniqueName: row?.fixedAssetUnits?.[0]?.uniqueName ?? null }];
                     this.addRow(row);
                 });
             }
@@ -374,7 +373,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
 
     /**
      * This will use for get stock groups
-     * 
+     *
      * @memberof BulkStockEditComponent
      */
     public getStockGroups(): void {
@@ -413,7 +412,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
 
     /**
      * This will use for value changes on update
-     * 
+     *
      * @param {number} selectTableRowIndex
      * @memberof BulkStockEditComponent
      */
@@ -451,7 +450,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
 
     /**
      * This will use for hide table input
-     * 
+     *
      * @memberof BulkStockEditComponent
      */
     public hideTableInput(): void {
@@ -466,7 +465,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
 
     /**
      * This will use for show table input
-     * 
+     *
      * @param {any} $event
      * @param {number} index
      * @memberof BulkStockEditComponent
@@ -485,7 +484,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
 
     /**
      * This will use for get taxes
-     * 
+     *
      * @memberof BulkStockEditComponent
      */
     public getTaxes(): void {
@@ -538,10 +537,10 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
         }
 
         let isSelected = this.selectedTaxes[currentRowIndex]?.filter(selectedTax => selectedTax === taxSelected.uniqueName);
-        
+
         if (taxSelected.taxType !== 'gstcess') {
             let index = this.taxTempArray[currentRowIndex].findIndex((taxTemp) => taxTemp.taxType === taxSelected.taxType);
-            
+
             if (index > -1 && !isSelected?.length) {
                 rowTaxes.forEach((tax) => {
                     if (tax.taxType === taxSelected.taxType) {
@@ -656,7 +655,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
 
     /**
      * This will use for get stock units
-     * 
+     *
      * @param {number} index
      * @memberof BulkStockEditComponent
      */
@@ -742,7 +741,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
 
     /**
      * Creates FormArray for custom fields
-     * 
+     *
      * @param {any[]} customFields - Array of custom field objects
      * @returns {FormArray} FormArray containing FormGroups for each custom field
      * @memberof BulkStockEditComponent
@@ -810,11 +809,11 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
         }
     }
 
-    /** 
+    /**
      * This will use for update form data
-     * 
-     * @param {*} requestBody 
-     * @param {*} selectTableRowIndex 
+     *
+     * @param {*} requestBody
+     * @param {*} selectTableRowIndex
      * @memberof BulkStockEditComponent
      */
     public updateForm(requestBody: any, selectTableRowIndex: number): void {

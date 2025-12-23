@@ -1,10 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { Store, select } from '@ngrx/store';
 import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
 import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT, PAGE_SIZE_OPTIONS, IOption } from 'apps/web-giddh/src/app/app.constant';
 import { PageEvent } from '@angular/material/paginator';
+import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { NewBranchTransferDownloadRequest, NewBranchTransferListGetRequestParams } from 'apps/web-giddh/src/app/models/api-models/BranchTransfer';
 import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
@@ -13,7 +14,7 @@ import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from 'apps/web-giddh/src/
 import { AppState } from 'apps/web-giddh/src/app/store';
 import * as dayjs from 'dayjs';
 import { Observable, ReplaySubject } from 'rxjs';
-import { debounceTime, delay, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service';
 import { ConfirmationModalConfiguration } from 'apps/web-giddh/src/app/theme/confirmation-modal/confirmation-modal.interface';
 import { NewConfirmationModalComponent } from 'apps/web-giddh/src/app/theme/new-confirmation-modal/confirmation-modal.component';
@@ -21,31 +22,15 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { SelectFieldComponent } from 'apps/web-giddh/src/app/theme/form-fields/select-field/select-field.component';
 import { Router } from '@angular/router';
 import { saveAs } from 'file-saver';
-import { cloneDeep, find, map, remove, set } from '../../../../lodash-optimized';
-
-/** This will use for interface */
-export interface GetBranchTransfer {
-    date: any;
-    voucherType: any;
-    voucherNo: any;
-    sender: any;
-    receiver: any;
-    fromWarehouse: any;
-    toWarehouse: any;
-    totalAmount: any;
-}
-/** Hold information of branch transfer */
-const BRANCH_TRANSFER_DATA: GetBranchTransfer[] = [];
 
 @Component({
     selector: 'app-list-branch-transfer',
     templateUrl: './list-branch-transfer.component.html',
-    standalone: false,
     styleUrls: ['./list-branch-transfer.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    standalone:false
 })
 
-export class ListBranchTransferComponent implements OnInit, OnDestroy {
+export class ListBranchTransferComponent implements OnInit {
     /** Instance of Mat Dialog for Advance Filter */
     @ViewChild("advanceFilterDialog") public advanceFilterComponent: TemplateRef<any>;
     /** MatMenuTrigger directive for datepicker */
@@ -59,7 +44,7 @@ export class ListBranchTransferComponent implements OnInit, OnDestroy {
     /** Selected range label */
     public selectedRangeLabel: any = "";
     /** Material table elements */
-    public displayedColumns: string[] = ['s_no', 'date', 'voucher_type', 'voucher_no', 'sender_receiver', 'from_warehouse', 'to_warehouse', 'totalAmount', 'action'];
+    public displayedColumns: string[] = [];
     /** This will store selected date range to show on UI */
     public selectedDateRangeUi: any;
     /** Stores the current organization type */
@@ -116,7 +101,7 @@ export class ListBranchTransferComponent implements OnInit, OnDestroy {
         voucherType: null
     };
     /* Hold branch transfer table data source */
-    public branchTransferResponse = BRANCH_TRANSFER_DATA;
+    public branchTransferResponse: any[] = [];
     /* Hold branch voucher type in advance search */
     public voucherTypes: IOption[] = [];
     /* Hold branch amount operators in advance search */
@@ -170,15 +155,15 @@ export class ListBranchTransferComponent implements OnInit, OnDestroy {
     }
 
     constructor(
-        private store: Store<AppState>,
-        private inventoryService: InventoryService,
+        public dialog: MatDialog,
         private generalService: GeneralService,
+        private store: Store<AppState>,
+        private settingsBranchAction: SettingsBranchActions,
+        private inventoryService: InventoryService,
         private changeDetection: ChangeDetectorRef,
         private toaster: ToasterService,
-        public dialog: MatDialog,
         private formBuilder: FormBuilder,
-        private router: Router,
-        private settingsBranchAction: SettingsBranchActions
+        private router: Router
     ) {
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         if (this.currentOrganizationType === 'BRANCH') {
@@ -208,10 +193,9 @@ export class ListBranchTransferComponent implements OnInit, OnDestroy {
         });
         document.querySelector("body")?.classList?.add("new-branch-list-page");
         this.initAllForms();
-        this.changeDetection.markForCheck();
-        this.store.pipe(delay(100),select(stateStore => stateStore.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
+        this.store.pipe(select(stateStore => stateStore.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
             if (dateObj) {
-                let universalDate = cloneDeep(dateObj);
+                let universalDate = _.cloneDeep(dateObj);
                 this.datePicker = [dayjs(universalDate[0], GIDDH_DATE_FORMAT).toDate(), dayjs(universalDate[1], GIDDH_DATE_FORMAT).toDate()];
                 this.branchTransferGetRequestParams.from = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
                 this.branchTransferGetRequestParams.to = dayjs(universalDate[1]).format(GIDDH_DATE_FORMAT);
@@ -344,41 +328,29 @@ export class ListBranchTransferComponent implements OnInit, OnDestroy {
      */
     public getBranchTransferList(resetPage: boolean): void {
         this.isLoading = true;
-
         if (resetPage) {
             this.branchTransferPaginationObject.page = 1;
         }
-
-        this.changeDetection.markForCheck();
-
+        this.changeDetection.detectChanges();
         this.branchTransferGetRequestParams.page = this.branchTransferPaginationObject.page;
         this.branchTransferGetRequestParams.count = this.branchTransferPaginationObject.count;
-
-        this.inventoryService
-            .getBranchTransferList(this.branchTransferGetRequestParams, this.branchTransferForm.value)
-            .pipe(takeUntil(this.destroyed$))
-            .subscribe((response) => {
-                this.isLoading = false;
-
-                if (response?.status === 'success') {
-                    this.branchTransferPaginationObject.totalPages = response.body.totalPages;
-                    this.branchTransferPaginationObject.totalItems = response.body.totalItems;
-
-                    // 🔥 IMMUTABLE UPDATE (CORRECT)
-                    this.branchTransferResponse = [...response.body.items];
-                } else {
-                    this.branchTransferResponse = [];
-                    this.branchTransferPaginationObject.totalItems = 0;
+        this.inventoryService.getBranchTransferList(this.branchTransferGetRequestParams, this.branchTransferForm.value).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            this.isLoading = false;
+            if (response && response?.status === "success") {
+                if (this.branchTransferPaginationObject.totalItems > 0 && response.body?.items?.length === 0 && this.branchTransferPaginationObject.page > 1) {
+                    this.branchTransferPaginationObject.page = response.body.totalPages;
+                    this.getBranchTransferList(false);
+                    return;
                 }
-
-                // ✅ ONLY THIS
-                this.changeDetection.markForCheck();
-            });
-    }
-
-
-    public trackByFn(index: number, row: any): string {
-        return row?.uniqueName ?? index;
+                this.branchTransferPaginationObject.totalPages = response.body.totalPages;
+                this.branchTransferPaginationObject.totalItems = response.body.totalItems;
+                this.branchTransferResponse = response.body?.items;
+            } else {
+                this.branchTransferResponse = [];
+                this.branchTransferPaginationObject.totalItems = 0;
+            }
+            this.changeDetection.detectChanges();
+        });
     }
 
 
@@ -813,7 +785,6 @@ export class ListBranchTransferComponent implements OnInit, OnDestroy {
      * @param {*} event
      * @memberof ListBranchTransfer
      */
-
     public ngOnDestroy(): void {
         document.querySelector("body")?.classList?.remove("new-branch-list-page");
         this.destroyed$.next(true);

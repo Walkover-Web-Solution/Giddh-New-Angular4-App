@@ -1,0 +1,13 @@
+.move-company-modal-body {
+    p {
+        white-space: normal;
+        word-break: break-word;
+    }
+}
+:host ::ng-deep .move-select {
+    .menu {
+        position: fixed !important;
+        float: left !important;
+        width: 36% !important;
+    }
+}

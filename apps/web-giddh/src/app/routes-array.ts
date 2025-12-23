@@ -25,7 +25,7 @@ export const ROUTES: Routes = [
     { path: 'ledger/:accountUniqueName', redirectTo: 'pages/ledger/:accountUniqueName', pathMatch: 'full' },
     { path: 'dummy', loadChildren: () => import('./dummy/dummy.module').then(module => module.DummyModule) },
     { path: 'proforma-invoice', component: null }, // Add proper component later
-    { path: 'user-details', loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./subscription/subscription.module') */ Promise.resolve(DummyModule) },
+    { path: 'user-details', loadChildren: () => import('./subscription/subscription.module').then(module => module.SubscriptionModule) },
     { path: 'new-company', loadChildren: () => import('./add-company/add-company-module').then(module => module.AddcompanyModule) },
     { path: 'new-company/:subscriptionId', loadChildren: () => import('./add-company/add-company-module').then(module => module.AddcompanyModule) },
     { path: 'onboarding', loadChildren: () => import('./onboarding/onboarding.module').then(module => module.OnboardingModule) },

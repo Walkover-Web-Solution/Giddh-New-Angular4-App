@@ -1,0 +1,382 @@
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { Observable, ReplaySubject, take, takeUntil } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AppState } from '../store';
+import { select, Store } from '@ngrx/store';
+import { GeneralActions } from '../actions/general/general.actions';
+import { ToasterService } from '../services/toaster.service';
+import { CompanyResponse } from '../models/api-models/Company';
+import { SignupWithMobile, UserDetails, VerifyMobileModel } from '../models/api-models/loginModels';
+import { GIDDH_DATE_FORMAT_DD_MM_YYYY, GIDDH_DATE_FORMAT_UI } from '../shared/helpers/defaultDateFormat';
+import { ClipboardService } from 'ngx-clipboard';
+import { LoginActions } from '../actions/login.action';
+import { SessionActions } from '../actions/session.action';
+import { API_POSTMAN_DOC_URL } from '../app.constant';
+import { cloneDeep } from '../lodash-optimized';
+import { AuthenticationService } from '../services/authentication.service';
+import * as dayjs from 'dayjs';
+import * as duration from 'dayjs/plugin/duration';
+import { NewConfirmationModalComponent } from '../theme/new-confirmation-modal/confirmation-modal.component';
+import { MatDialog } from '@angular/material/dialog';
+import { GeneralService } from '../services/general.service';
+import { MatTabChangeEvent } from '@angular/material/tabs';
+
+dayjs.extend(duration)
+@Component({
+    selector: 'app-subscription',
+    templateUrl: './subscription.component.html',
+    styleUrls: ['./subscription.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone:false
+})
+export class SubscriptionComponent implements OnInit, OnDestroy {
+    /** True If Auth key copied and used toggle Copy text */
+    public isCopied: boolean = false;
+    public userAuthKey: string = '';
+    public twoWayAuth: boolean = false;
+    public phoneNumber: string = '';
+    public oneTimePassword: string = '';
+    public countryCode: string = '';
+    public showVerificationBox: boolean = false;
+    public amount: number = 0;
+    public discount: number = 0;
+    public payStep2: boolean = false;
+    public payStep3: boolean = false;
+    public isHaveCoupon: boolean = false;
+    public couponcode: string = '';
+    public payAlert: any[] = [];
+    public directPay: boolean = false;
+    public disableRazorPay: boolean = false;
+    public contactNo$: Observable<string>;
+    public subscriptions: any;
+    public transactions: any;
+    public companies: any;
+    public companyTransactions: any;
+    public countryCode$: Observable<string>;
+    public isAddNewMobileNoInProcess$: Observable<boolean>;
+    public isAddNewMobileNoSuccess$: Observable<boolean>;
+    public isVerifyAddNewMobileNoInProcess$: Observable<boolean>;
+    public isVerifyAddNewMobileNoSuccess$: Observable<boolean>;
+    public authenticateTwoWay$: Observable<boolean>;
+    public user: UserDetails = null;
+    public apiTabActivated: boolean = false;
+    public userSessionResponse$: Observable<any>;
+    public userSessionList: any[] = [];
+    public dayjs = dayjs;
+    public giddhDateFormatUI: string = GIDDH_DATE_FORMAT_UI;
+    public userSessionId: any = null;
+    public isUpdateCompanyInProgress$: Observable<boolean>;
+    public isCreateAndSwitchCompanyInProcess: boolean;
+    public apiPostmanDocUrl: String = API_POSTMAN_DOC_URL;
+    private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** This will hold local JSON data */
+    public localeData: any = {};
+    /** This will hold common JSON data */
+    public commonLocaleData: any = {};
+    /* Holds Mat Table Columns*/
+    public displayedColumns: string[] = ['ipaddress', 'signindate', 'signintime', 'duration', 'agent', 'action'];
+    /** Holds Active Tab Index */
+    public activeTabIndex: number = 0;
+    /** Holds Tab Name */
+    private tabName = ['auth-key', 'mobile-number', 'session', 'subscription'];
+    /** Holds True if API calling in progress in old subscription page */
+    public isSubscriptionLoading: boolean = false;
+    /** Holds subscription id */
+    public subscriptionId: string = '';
+    /** Holds profile data */
+    public profileData: any = null;
+
+
+    constructor(private store: Store<AppState>,
+        private toasty: ToasterService,
+        private loginService: AuthenticationService,
+        private loginAction: LoginActions,
+        private router: Router,
+        private sessionAction: SessionActions,
+        private route: ActivatedRoute,
+        private generalActions: GeneralActions,
+        private changeDetectionRef: ChangeDetectorRef,
+        private dialog: MatDialog,
+        private generalService: GeneralService,
+        private clipboardService: ClipboardService
+    ) {
+        this.contactNo$ = this.store.pipe(select(appState => {
+            if (appState.session.user) {
+                return appState.session.user.user.contactNo;
+            }
+        }), takeUntil(this.destroyed$));
+        this.countryCode$ = this.store.pipe(select(appState => {
+            if (appState.session.user) {
+                return appState.session.user.countryCode;
+            }
+        }), takeUntil(this.destroyed$));
+
+        this.isAddNewMobileNoInProcess$ = this.store.pipe(select(appState => appState.login.isAddNewMobileNoInProcess), takeUntil(this.destroyed$));
+        this.isAddNewMobileNoSuccess$ = this.store.pipe(select(appState => appState.login.isAddNewMobileNoSuccess), takeUntil(this.destroyed$));
+        this.isVerifyAddNewMobileNoInProcess$ = this.store.pipe(select(appState => appState.login.isVerifyAddNewMobileNoInProcess), takeUntil(this.destroyed$));
+        this.isVerifyAddNewMobileNoSuccess$ = this.store.pipe(select(appState => appState.login.isVerifyAddNewMobileNoSuccess), takeUntil(this.destroyed$));
+        this.userSessionResponse$ = this.store.pipe(select(appState => appState.userLoggedInSessions.Usersession), takeUntil(this.destroyed$));
+        this.isUpdateCompanyInProgress$ = this.store.pipe(select(appState => appState.settings.getProfileInProgress), takeUntil(this.destroyed$));
+
+        this.authenticateTwoWay$ = this.store.pipe(select(appState => {
+            if (appState.session.user) {
+                return appState.session.user.user.authenticateTwoWay;
+            }
+        }), takeUntil(this.destroyed$));
+    }
+
+    /**
+     * Copy Authkey to Clipboard
+     *
+     * @memberof SubscriptionComponent
+     */
+    public toggleIsCopied(): void {
+        this.isCopied = true;
+        this.clipboardService.copyFromContent(this.userAuthKey);
+        setTimeout(() => {
+            this.isCopied = false;
+        }, 3000);
+    }
+
+    public ngOnInit() {
+        document.querySelector('body').classList.add('setting-sidebar-open');
+
+
+        if (!this.isCreateAndSwitchCompanyInProcess) {
+            document.querySelector('body').classList.add('tabs-page');
+        } else {
+            document.querySelector('body').classList.remove('tabs-page');
+        }
+
+        this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            if (params['type'] && this.tabName[this.activeTabIndex] !== params['type']) {
+                this.activeTabIndex = this.tabName.indexOf(params['type']);
+            } else if (!params['type'] && !this.activeTabIndex) {
+                this.activeTabIndex = 0;
+            }
+        });
+
+        this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe(params => {
+            if (params && params.tabIndex) {
+                if (params && params.tabIndex == "0") {
+                    this.activeTabIndex = 0;
+                } else if (params && params.tabIndex == "1") {
+                    this.activeTabIndex = 1;
+                } else if (params && params.tabIndex == "2") {
+                    this.activeTabIndex = 2;
+                } else if (params && params.tabIndex == "3") {
+                    this.activeTabIndex = 3;
+                }
+                this.router.navigate(['pages/user-details/', this.tabName[this.activeTabIndex]], { replaceUrl: true });
+            }
+        });
+
+        this.contactNo$.subscribe(appState => this.phoneNumber = appState);
+        this.countryCode$.subscribe(appState => this.countryCode = appState);
+        this.isAddNewMobileNoSuccess$.subscribe(appState => this.showVerificationBox = appState);
+        this.isVerifyAddNewMobileNoSuccess$.subscribe(appState => {
+            if (appState) {
+                this.oneTimePassword = '';
+                this.showVerificationBox = false;
+            }
+        });
+        this.authenticateTwoWay$.subscribe(response => {
+            this.twoWayAuth = (response) ? true : false;
+        });
+        this.store.dispatch(this.loginAction.FetchUserDetails());
+        this.loginService.GetAuthKey().pipe(takeUntil(this.destroyed$)).subscribe(a => {
+            if (a?.status === 'success') {
+                this.userAuthKey = a?.body?.authKey;
+            } else {
+                this.toasty.errorToast(a?.message, a?.status);
+            }
+        });
+        this.store.pipe(select(appState => appState.subscriptions.companies), takeUntil(this.destroyed$))
+            .subscribe(appState => this.companies = appState);
+        this.store.pipe(select(appState => appState.subscriptions.companyTransactions), takeUntil(this.destroyed$))
+            .subscribe(appState => this.companyTransactions = appState);
+
+        this.store.pipe(select(appState => appState.session.user), takeUntil(this.destroyed$)).subscribe((user) => {
+            if (user) {
+                this.user = cloneDeep(user.user);
+                this.userSessionId = _.cloneDeep(user.session?.id);
+            }
+        });
+
+        this.store.pipe(select(profile => profile.settings.profile), takeUntil(this.destroyed$)).subscribe((response: any) => {
+            if (response) {
+                this.profileData = response;
+            }
+            this.changeDetectionRef.detectChanges();
+        });
+
+        this.store.dispatch(this.sessionAction.getAllSession());
+
+        this.userSessionResponse$.subscribe(appState => {
+            if (appState && appState.length) {
+                this.userSessionList = appState.map(session => {
+                    // Calculate sign in date
+                    session.signInDate = dayjs(session.createdAt).format(GIDDH_DATE_FORMAT_DD_MM_YYYY);
+                    // Calculate sign in time
+                    session.signInTime = dayjs(session.createdAt).format('LTS');
+                    // Calculate duration
+                    const duration = dayjs.duration(dayjs().diff(session.createdAt));
+                    session.sessionDuration = `${duration.days()}/${duration.hours()}/${duration.minutes()}/${duration.seconds()}`;
+                    return session;
+                });
+                this.changeDetectionRef.detectChanges();
+            }
+        });
+
+        this.isUpdateCompanyInProgress$.pipe(takeUntil(this.destroyed$)).subscribe(inProcess => {
+            this.isCreateAndSwitchCompanyInProcess = inProcess;
+            this.changeDetectionRef.detectChanges();
+        });
+
+    }
+
+    /**
+     * Lifecycle method that is triggered once all the view child are rendered
+     *
+     * @memberof SubscriptionComponent
+     */
+    public ngAfterViewInit(): void {
+        this.route.queryParams.pipe(takeUntil(this.destroyed$)).subscribe((val) => {
+            if (val && val.tab && val.tabIndex) {
+                this.activeTabIndex = val.tabIndex;
+                this.onTabChanged();
+            }
+        });
+    }
+
+    public addNumber(no: string) {
+        this.oneTimePassword = '';
+        const mobileRegex = /^[0-9]{1,10}$/;
+        if (mobileRegex.test(no) && (no?.length === 10)) {
+            const request: SignupWithMobile = new SignupWithMobile();
+            request.countryCode = Number(this.countryCode) || 91;
+            request.mobileNumber = this.phoneNumber;
+            this.store.dispatch(this.loginAction.AddNewMobileNo(request));
+        } else {
+            this.toasty.errorToast(this.localeData?.mobile_number?.mobile_number_validation_error);
+        }
+    }
+
+    public verifyNumber() {
+        const request: VerifyMobileModel = new VerifyMobileModel();
+        request.countryCode = Number(this.countryCode) || 91;
+        request.mobileNumber = this.phoneNumber;
+        request.oneTimePassword = this.oneTimePassword;
+        this.store.dispatch(this.loginAction.VerifyAddNewMobileNo(request));
+    }
+
+    public changeTwoWayAuth() {
+        this.loginService.SetSettings({ authenticateTwoWay: this.twoWayAuth }).pipe(takeUntil(this.destroyed$)).subscribe(res => {
+            if (res?.status === 'success') {
+                this.toasty.successToast(res.body);
+            } else {
+                this.toasty.errorToast(res?.message);
+            }
+        });
+    }
+
+    public regenerateKey() {
+        this.loginService.RegenerateAuthKey().pipe(takeUntil(this.destroyed$)).subscribe(a => {
+            if (a?.status === 'success') {
+                this.userAuthKey = a.body?.authKey;
+            } else {
+                this.toasty.errorToast(a?.message, a?.status);
+            }
+        });
+    }
+
+
+
+    public ngOnDestroy() {
+        this.destroyed$.next(true);
+        this.destroyed$.complete();
+        document.querySelector('body').classList.remove('setting-sidebar-open');
+        document.querySelector('body').classList.remove('tabs-page');
+    }
+
+    /**
+     * Deletes the session
+     *
+     * @param {string} sessionId Session ID
+     * @param {number} sessionIndex Index of session to be deleted required to delete the session from store
+     * @memberof SubscriptionComponent
+     */
+    public deleteSession(sessionId: string, sessionIndex: number): void {
+        const requestPayload = {
+            sessionId,
+            sessionIndex
+        };
+        let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            panelClass: ['mat-dialog-md'],
+            data: {
+                configuration: this.generalService.deleteConfiguration(this.localeData?.session?.delete_single_session, this.commonLocaleData)
+            }
+        });
+        dialogRef.afterClosed().subscribe(response => {
+            if (response === this.commonLocaleData?.app_yes) {
+                this.store.dispatch(this.sessionAction.deleteSession(requestPayload));
+                this.store.dispatch(this.sessionAction.getAllSession());
+            }
+        });
+    }
+
+    /**
+     * Deletes All sessions
+     *
+     * @memberof SubscriptionComponent
+     */
+    public clearAllSession(): void {
+        const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
+            panelClass: ['mat-dialog-md'],
+            data: {
+                configuration: this.generalService.deleteConfiguration(this.localeData?.session?.delete_all_sessions, this.commonLocaleData)
+            }
+        });
+        dialogRef.afterClosed().subscribe(response => {
+            if (response === this.commonLocaleData?.app_yes) {
+                this.store.dispatch(this.sessionAction.deleteAllSession());
+                this.router.navigate(['/login']);
+            }
+        });
+    }
+
+    /**
+     * Tab change handler, used to set the state for selected page
+     * which is used by header component, update menu panel and
+     * change the route URL as per selected tab
+     *
+     * @memberof SubscriptionComponent
+     */
+    public onTabChanged(): void {
+        this.store.dispatch(this.generalActions.setAppTitle(`pages/user-details/${this.tabName[this.activeTabIndex]}`));
+        this.router.navigate(['pages/user-details/', this.tabName[this.activeTabIndex]], { replaceUrl: true });
+    }
+
+    /**
+     * Select tab handler
+     *
+     * @param {MatTabChangeEvent} event
+     * @memberof SubscriptionComponent
+     */
+    public selectTab(event: MatTabChangeEvent): void {
+        this.activeTabIndex = event?.index;
+        this.onTabChanged();
+    }
+
+    /**
+     * Tracks by sessionId
+     *
+     * @param {number} index Index of current session
+     * @param {*} item Session ID instance
+     * @return {*} {string} Session's ID for unique identification
+     * @memberof SubscriptionComponent
+     */
+    public trackBySessionId(index: number, item: any): string {
+        return item.sessionId;
+    }
+}

@@ -28,12 +28,12 @@ import { cloneDeep, filter, find, map } from '../../../lodash-optimized';
 
 @Component({
     selector: 'app-reports',
-
     templateUrl: './reports.component.html',
-    standalone: false,
     styleUrls: ['./reports.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [InventoryComponentStore]
+    providers: [InventoryComponentStore],
+    standalone:false
+
 })
 export class ReportsComponent implements OnInit, OnDestroy {
     @ViewChild(ReportFiltersComponent, { read: ReportFiltersComponent, static: false }) public reportFiltersComponent: ReportFiltersComponent;

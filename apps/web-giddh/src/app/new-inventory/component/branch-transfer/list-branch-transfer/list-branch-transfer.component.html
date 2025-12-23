@@ -69,14 +69,6 @@
                 </form>
             </div>
         </div>
-        <!-- Debug info -->
-        <div style="background: #f0f0f0; padding: 10px; margin: 10px 0; border: 1px solid #ccc;">
-            <strong>🔍 Debug Info:</strong><br>
-            branchTransferResponse length: {{ branchTransferResponse?.length }}<br>
-            shouldShowElement: {{ shouldShowElement }}<br>
-            isLoading: {{ isLoading }}<br>
-            Total Items: {{ branchTransferPaginationObject?.totalItems }}
-        </div>
         <section *ngIf="branchTransferResponse?.length || shouldShowElement">
             <form
                 class="table-responsive"
@@ -86,10 +78,12 @@
                 autocomplete="off"
             >
                 <table
-
+                    matSort
+                    (matSortChange)="sortChange($event)"
+                    [matSortActive]="branchTransferGetRequestParams?.sortBy"
+                    [matSortDirection]="branchTransferGetRequestParams?.sort"
                     mat-table
                     [dataSource]="branchTransferResponse"
-
                     class="w-100"
                 >
                     <ng-container matColumnDef="s_no">
@@ -131,17 +125,17 @@
                             #searchSenderContainer
                             (clickOutside)="handleClickOutside($event, searchSenderContainer, 'Sender')"
                         >
-                            <div
+                            <ng-container
                                 *ngTemplateOutlet="
                                     searchTemplate;
                                     context: {
                                         $implicit: showSender,
                                         fieldName: localeData?.sender,
-                                        formControl: branchTransferForm?.controls?.['sender'],
+                                        formControl: branchTransferForm.controls['sender'],
                                         title: localeData?.sender
                                     }
                                 "
-                            ></div>
+                            ></ng-container>
                         </th>
                         <td mat-cell *matCellDef="let element">{{ element?.sender }}</td>
                     </ng-container>
@@ -153,17 +147,17 @@
                             #searchRecieverContainer
                             (clickOutside)="handleClickOutside($event, searchRecieverContainer, 'Receiver')"
                         >
-                            <div
+                            <ng-container
                                 *ngTemplateOutlet="
                                     searchTemplate;
                                     context: {
                                         $implicit: showReceiver,
                                         fieldName: localeData?.receiver,
-                                        formControl: branchTransferForm?.controls?.['receiver'],
+                                        formControl: branchTransferForm.controls['receiver'],
                                         title: localeData?.receiver
                                     }
                                 "
-                            ></div>
+                            ></ng-container>
                         </th>
                         <td mat-cell *matCellDef="let element">{{ element?.receiver }}</td>
                     </ng-container>
@@ -178,17 +172,17 @@
                                 handleClickOutside($event, searchSenderRecieverContainer, 'Sender/Reciever')
                             "
                         >
-                            <div
+                            <ng-container
                                 *ngTemplateOutlet="
                                     searchTemplate;
                                     context: {
                                         $implicit: showSenderReciever,
                                         fieldName: 'Sender/Reciever',
-                                        formControl: branchTransferForm?.controls?.['senderReceiver'],
+                                        formControl: branchTransferForm.controls['senderReceiver'],
                                         title: localeData?.sender + ' / ' + localeData?.receiver
                                     }
                                 "
-                            ></div>
+                            ></ng-container>
                         </th>
                         <td mat-cell *matCellDef="let element">{{ element?.senderReceiver }}</td>
                     </ng-container>
@@ -201,17 +195,17 @@
                             #searchFromWarehouseContainer
                             (clickOutside)="handleClickOutside($event, searchFromWarehouseContainer, 'From Warehouse')"
                         >
-                            <div
+                            <ng-container
                                 *ngTemplateOutlet="
                                     searchTemplate;
                                     context: {
                                         $implicit: showFromWarehouse,
                                         fieldName: localeData?.from_warehouse,
-                                        formControl: branchTransferForm?.controls?.['fromWarehouse'],
+                                        formControl: branchTransferForm.controls['fromWarehouse'],
                                         title: localeData?.from_warehouse
                                     }
                                 "
-                            ></div>
+                            ></ng-container>
                         </th>
                         <td mat-cell *matCellDef="let element">{{ element?.fromWarehouse }}</td>
                     </ng-container>
@@ -224,17 +218,17 @@
                             #searchToWarehouseContainer
                             (clickOutside)="handleClickOutside($event, searchToWarehouseContainer, 'To Warehouse')"
                         >
-                            <div
+                            <ng-container
                                 *ngTemplateOutlet="
                                     searchTemplate;
                                     context: {
                                         $implicit: showToWarehouse,
                                         fieldName: localeData?.to_warehouse,
-                                        formControl: branchTransferForm?.controls?.['toWarehouse'],
+                                        formControl: branchTransferForm.controls['toWarehouse'],
                                         title: localeData?.to_warehouse
                                     }
                                 "
-                            ></div>
+                            ></ng-container>
                         </th>
                         <td mat-cell *matCellDef="let element">{{ element?.toWarehouse }}</td>
                     </ng-container>
@@ -279,10 +273,7 @@
                         </td>
                     </ng-container>
                     <tr (clickOutside)="inlineSearch = null" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr
-    mat-row
-    *matRowDef="let row; columns: displayedColumns; trackBy: trackByFn">
-</tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                 </table>
             </form>
 

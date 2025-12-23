@@ -65,7 +65,7 @@
             </div>
             <div class="bulk-stock-body">
                 <div class="bulk-stock-table d-flex flex-column">
-                    <div *ngIf="(!noDataFound || searchString) && !isLoading">
+                    <ng-container *ngIf="(!noDataFound || searchString) && !isLoading">
                         <div class="table-responsive">
                             <form [formGroup]="bulkStockEditForm" (ngSubmit)="onFormSubmit()">
                                 <table class="table-bordered w-100">
@@ -87,12 +87,12 @@
                                                             class="border-line"
                                                             [ngClass]="{ 'active': tableHeadInput.variantName }"
                                                         >
-                                                            <div
+                                                            <ng-container
                                                                 *ngTemplateOutlet="
                                                                     searchTemplate;
                                                                     context: { formControl: thVariantName }
                                                                 "
-                                                            ></div>
+                                                            ></ng-container>
                                                         </div>
                                                     </div>
                                                     <button
@@ -123,12 +123,12 @@
                                                             class="border-line"
                                                             [ngClass]="{ 'active': tableHeadInput.variantUniqueName }"
                                                         >
-                                                            <div
+                                                            <ng-container
                                                                 *ngTemplateOutlet="
                                                                     searchTemplate;
                                                                     context: { formControl: thVariantUniqueName }
                                                                 "
-                                                            ></div>
+                                                            ></ng-container>
                                                         </div>
                                                     </div>
                                                     <button
@@ -157,12 +157,12 @@
                                                             class="border-line"
                                                             [ngClass]="{ 'active': tableHeadInput.stockName }"
                                                         >
-                                                            <div
+                                                            <ng-container
                                                                 *ngTemplateOutlet="
                                                                     searchTemplate;
                                                                     context: { formControl: thStockName }
                                                                 "
-                                                            ></div>
+                                                            ></ng-container>
                                                         </div>
                                                     </div>
                                                     <button
@@ -193,12 +193,12 @@
                                                             class="border-line"
                                                             [ngClass]="{ 'active': tableHeadInput.stockUniqueName }"
                                                         >
-                                                            <div
+                                                            <ng-container
                                                                 *ngTemplateOutlet="
                                                                     searchTemplate;
                                                                     context: { formControl: thStockUniqueName }
                                                                 "
-                                                            ></div>
+                                                            ></ng-container>
                                                         </div>
                                                     </div>
                                                     <button
@@ -232,12 +232,12 @@
                                                             class="border-line"
                                                             [ngClass]="{ 'active': tableHeadInput.stockGroupName }"
                                                         >
-                                                            <div
+                                                            <ng-container
                                                                 *ngTemplateOutlet="
                                                                     searchTemplate;
                                                                     context: { formControl: thStockGroupName }
                                                                 "
-                                                            ></div>
+                                                            ></ng-container>
                                                         </div>
                                                     </div>
                                                     <button
@@ -274,12 +274,12 @@
                                                         class="border-line"
                                                         [ngClass]="{ 'active': tableHeadInput.hsn }"
                                                     >
-                                                        <div
+                                                        <ng-container
                                                             *ngTemplateOutlet="
                                                                 searchTemplate;
                                                                 context: { formControl: thHsn }
                                                             "
-                                                        ></div>
+                                                        ></ng-container>
                                                     </div>
                                                 </div>
                                             </th>
@@ -299,12 +299,12 @@
                                                             class="border-line"
                                                             [ngClass]="{ 'active': tableHeadInput.sac }"
                                                         >
-                                                            <div
+                                                            <ng-container
                                                                 *ngTemplateOutlet="
                                                                     searchTemplate;
                                                                     context: { formControl: thSac }
                                                                 "
-                                                            ></div>
+                                                            ></ng-container>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -325,12 +325,12 @@
                                                         class="border-line"
                                                         [ngClass]="{ 'active': tableHeadInput.skuCode }"
                                                     >
-                                                        <div
+                                                        <ng-container
                                                             *ngTemplateOutlet="
                                                                 searchTemplate;
                                                                 context: { formControl: thSkuCode }
                                                             "
-                                                        ></div>
+                                                        ></ng-container>
                                                     </div>
                                                 </div>
                                             </th>
@@ -511,15 +511,15 @@
                                             <th *ngIf="tableHeaderShowHide.discountName">
                                                 <p>{{ localeData?.discount_name }}</p>
                                             </th>
-                                            <div *ngFor="let column of tableHeaderDynamicColumns">
+                                            <ng-container *ngFor="let column of tableHeaderDynamicColumns">
                                                 <th>
                                                     <p>{{ column?.label }}</p>
                                                 </th>
-                                            </div>
+                                            </ng-container>
                                         </tr>
                                     </thead>
                                     <tbody formArrayName="fields">
-                                        <div
+                                        <ng-container
                                             *ngFor="
                                                 let row of bulkStockEditForm.get('fields')['controls'];
                                                 let i = index
@@ -1367,7 +1367,7 @@
                                                     </div>
                                                 </td>
                                                 <!-- Custom Fileds (Menu)-->
-                                                <div
+                                                <ng-container
                                                     *ngIf="
                                                         tableHeaderDynamicColumns.length &&
                                                         row?.get('customFields')?.controls?.length
@@ -1382,8 +1382,8 @@
                                                         class="min-width-140"
                                                     >
                                                         <div class="border-line">
-                                                            <div formArrayName="customFields">
-                                                                <div [formGroupName]="j">
+                                                            <ng-container formArrayName="customFields">
+                                                                <ng-container [formGroupName]="j">
                                                                     <text-field
                                                                         *ngIf="
                                                                             customField.get('dataType')?.value ===
@@ -1437,13 +1437,13 @@
                                                                             }}</span>
                                                                         </mat-slide-toggle>
                                                                     </div>
-                                                                </div>
-                                                            </div>
+                                                                </ng-container>
+                                                            </ng-container>
                                                         </div>
                                                     </td>
-                                                </div>
+                                                </ng-container>
                                             </tr>
-                                        </div>
+                                        </ng-container>
                                         <tr *ngIf="noDataFound && !isLoading">
                                             <td colspan="100%">
                                                 <div class="no-data mb-5">
@@ -1465,7 +1465,7 @@
                                 (page)="handlePageEvent($event)"
                             ></mat-paginator>
                         </div>
-                    </div>
+                    </ng-container>
                     <div *ngIf="!(!noDataFound || searchString) && !isLoading" class="no-data mb-5">
                         <h2>{{ commonLocaleData?.app_no_entries_found }}</h2>
                     </div>
