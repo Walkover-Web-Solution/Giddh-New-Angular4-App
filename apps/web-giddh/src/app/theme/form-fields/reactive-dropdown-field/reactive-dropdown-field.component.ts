@@ -561,6 +561,13 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         this.activeOptionIndex = -1;
         this.isPaginationInProgress = false;
         this.previousOptionsCount = this.options?.length || 0;
+        
+        // Focus on second option (first filtered option) when showCreateNew is true
+        if (this.showCreateNew) {
+            setTimeout(() => {
+                this.focusSecondOption();
+            }, 100);
+        }
     }
 
     /**
@@ -604,6 +611,40 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             }
             if (this.showCreateNew && this.showKeyboardCommand === '') {
                 this.showKeyboardCommand = this.commonLocaleData?.app_alt_shift_n;
+            }
+        }
+    }
+
+    /**
+     * Focuses on the second option (first filtered option) when showCreateNew is true
+     * This ensures the first actual option gets focus instead of the "Create New" option
+     *
+     * @private
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    private focusSecondOption(): void {
+        if (this.matAutocomplete && (this.matAutocomplete as any)._keyManager) {
+            try {
+                const keyManager = (this.matAutocomplete as any)._keyManager;
+                const options = keyManager._items;
+                
+                // If we have options and showCreateNew is true, focus on index 1 (second option)
+                // Index 0 would be the "Create New" option, index 1 is the first filtered option
+                if (options && options.length > 1) {
+                    keyManager.setActiveItem(1);
+                    
+                    // Ensure the focused option is visible
+                    const activeOption = keyManager.activeItem;
+                    if (activeOption && (activeOption as any)._element) {
+                        (activeOption as any)._element.nativeElement.scrollIntoView({
+                            behavior: 'auto',
+                            block: 'nearest',
+                            inline: 'nearest'
+                        });
+                    }
+                }
+            } catch (error) {
+                console.warn('Could not focus on second option:', error);
             }
         }
     }
