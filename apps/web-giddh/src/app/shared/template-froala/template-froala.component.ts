@@ -271,8 +271,8 @@ export class TemplateFroalaComponent implements OnInit {
                 setTimeout(() => {
                     this.initializeTribute(tributeSuggestions);
                 }, 300);
-                response.emailSuggestions.filter(email => this.superAdminEmail.includes(email));
-                const mappedEmail = this.mapEmailSuggestions(response.emailSuggestions);
+                const emailSuggestionsList = response.emailSuggestions.filter(email => !this.superAdminEmail.includes(email));
+                const mappedEmail = this.mapEmailSuggestions(emailSuggestionsList);
                 this.toEmails = mappedEmail;
                 this.ccEmails = mappedEmail;
                 this.bccEmails = mappedEmail;
