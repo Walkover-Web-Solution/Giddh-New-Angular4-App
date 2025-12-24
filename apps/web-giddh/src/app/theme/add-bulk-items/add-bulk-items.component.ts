@@ -233,6 +233,54 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Handles global escape key press to close the dialog
+     *
+     * @memberof AddBulkItemsComponent
+     */
+    public handleGlobalEscape(): void {
+        this.dialogRef?.close();
+    }
+
+    /**
+     * Handles escape key press on individual list elements
+     *
+     * @param {KeyboardEvent} event - The keyboard event
+     * @memberof AddBulkItemsComponent
+     */
+    public handleEscapeKey(event: KeyboardEvent): void {
+        event.preventDefault();
+        event.stopPropagation();
+        // Remove focus from current element and close dialog
+        (event.target as HTMLElement)?.blur();
+        this.dialogRef?.close();
+    }
+
+    /**
+     * Focuses the next available element in the list after selection
+     *
+     * @param {HTMLElement} currentElement - The currently focused element
+     * @memberof AddBulkItemsComponent
+     */
+    public focusNextElement(currentElement: HTMLElement): void {
+        setTimeout(() => {
+            // Find the next focusable element in the list
+            const listContainer = currentElement.closest('.list-viewport');
+            if (listContainer) {
+                const focusableElements = listContainer.querySelectorAll('[tabindex="0"]');
+                const currentIndex = Array.from(focusableElements).indexOf(currentElement);
+                
+                if (currentIndex >= 0 && currentIndex < focusableElements.length - 1) {
+                    // Focus next element
+                    (focusableElements[currentIndex + 1] as HTMLElement)?.focus();
+                } else if (focusableElements.length > 0) {
+                    // If at the end, focus the first element
+                    (focusableElements[0] as HTMLElement)?.focus();
+                }
+            }
+        }, 100);
+    }
+
+    /**
      * Initializes add bulk form
      *
      * @private
