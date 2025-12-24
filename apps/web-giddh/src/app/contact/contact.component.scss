@@ -414,13 +414,19 @@ button.btn.btn-filter {
         background-color: var(--bg-primary-color);
     }
 }
-.select-all-checkbox-wrapper {
+
+:host ::ng-deep .select-all-checkbox-wrapper {
     align-items: center;
     margin-left: 36px;
     .mat-mdc-checkbox {
         left: 17px;
+
+        .mdc-checkbox__native-control {
+            display: none;
+        }
     }
 }
+
 .mat-chip-wrapper {
     border: unset;
     margin-top: 20px;
