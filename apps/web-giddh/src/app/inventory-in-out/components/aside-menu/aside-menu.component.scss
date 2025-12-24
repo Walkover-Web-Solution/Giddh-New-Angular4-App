@@ -1,0 +1,34 @@
+.buttons-container > * {
+    margin: 20px;
+}
+
+:host {
+    position: fixed;
+    left: auto;
+    top: var(--top-distance);
+    right: 0;
+    bottom: 0;
+    max-width: 480px;
+    width: 100%;
+    z-index: 99999;
+}
+
+#close {
+    display: none;
+}
+
+:host.in #close {
+    display: block;
+    position: fixed;
+    left: -41px;
+    top: var(--top-distance);
+    z-index: 5;
+    border: 0;
+    border-radius: var(--mat-border-radius-0);
+}
+
+:host .aside-pane {
+    max-width: 480px;
+    width: 100%;
+    padding: 0;
+}

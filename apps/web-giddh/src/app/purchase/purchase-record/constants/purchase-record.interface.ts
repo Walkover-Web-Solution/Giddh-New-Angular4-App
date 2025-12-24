@@ -1,108 +1,62 @@
-export interface PurchaseRecordRequest {
-    page?: number;
-    count?: number;
-    sort?: string;
-    sortBy?: string;
-    q?: string;
-    from?: string;
-    to?: string;
-}
+import { CommonPaginatedRequest } from '../../../models/api-models/Invoice';
 
-export interface PurchaseRecordResponse {
-    body?: any;
-    queryString?: any;
-    status?: string;
-}
-
-export interface PurchaseRecord {
-    uniqueName?: string;
-    voucherNumber?: string;
-    voucherDate?: string;
-    account?: any;
-    total?: number;
-    grandTotal?: number;
-}
-
+/** Purchase record model for update flow, model required to
+ * to show the updated invoice data on preview screen
+ */
 export interface PurchaseRecordUpdateModel {
-    uniqueName?: string;
-    voucherNumber?: string;
-    voucherDate?: string;
-    account?: any;
-    entries?: any[];
-    total?: number;
-    grandTotal?: number;
-    status?: string;
-    updateMode?: string;
-}
-
-export const PURCHASE_RECORD_DATE_OPERATION = {
-    EQUALS: 'equals',
-    GREATER_THAN: 'greater_than',
-    LESS_THAN: 'less_than',
-    BETWEEN: 'between',
-    AFTER: 'after',
-    BEFORE: 'before',
-    ON: 'on'
+    invoiceNumber: string,
+    purchaseRecordUniqueName: string,
+    mergedRecordUniqueName: string
 };
 
-export const PURCHASE_RECORD_DUE_DATE_OPERATION = {
-    EQUALS: 'equals',
-    GREATER_THAN: 'greater_than',
-    LESS_THAN: 'less_than',
-    BETWEEN: 'between',
-    ON: 'on',
-    AFTER: 'after',
-    BEFORE: 'before'
+/**
+ * Purchase record advance search request model
+ *
+ * @export
+ * @class PurchaseRecordAdvanceSearch
+ * @extends {CommonPaginatedRequest}
+ */
+export class PurchaseRecordAdvanceSearch extends CommonPaginatedRequest {
+    public purchaseDate?: string;
+    public purchaseDateOperation?: string;
+    public grandTotal?: string;
+    public grandTotalOperation?: string;
+    public dueDate?: string;
+    public dueDateOperation?: string;
+    public q?: any;
+    public purchaseOrderNumber?: any;
 };
 
+/** Purchase record grand total operation for advance search */
 export const PURCHASE_RECORD_GRAND_TOTAL_OPERATION = {
-    EQUALS: 'equals',
-    GREATER_THAN: 'greater_than',
-    LESS_THAN: 'less_than',
-    BETWEEN: 'between',
-    GREATER_THAN_OR_EQUALS: 'greater_than_or_equals',
-    LESS_THAN_OR_EQUALS: 'less_than_or_equals'
+    GREATER_THAN: 'GREATER_THAN',
+    GREATER_THAN_OR_EQUALS: 'GREATER_THAN_OR_EQUALS',
+    LESS_THAN: 'LESS_THAN',
+    LESS_THAN_OR_EQUALS: 'LESS_THAN_OR_EQUALS',
+    EQUALS: 'EQUALS',
+    NOT_EQUALS: 'NOT_EQUALS'
 };
 
-export interface IPurchaseRecordAdvanceSearch {
-    dateOperation?: string;
-    fromDate?: string;
-    toDate?: string;
-    dueDateOperation?: string;
-    dueFromDate?: string;
-    dueToDate?: string;
-    dueDate?: string;
-    purchaseDate?: string;
-    purchaseDateOperation?: string;
-    grandTotalOperation?: string;
-    grandTotalFrom?: number;
-    grandTotalTo?: number;
-    grandTotal?: string | number;
-    accountUniqueNames?: string[];
-    voucherNumbers?: string[];
-    purchaseOrderNumber?: string;
-}
+/** Purchase record date operation for advance search */
+export const PURCHASE_RECORD_DATE_OPERATION = {
+    ON: 'ON',
+    AFTER: 'AFTER',
+    BEFORE: 'BEFORE'
+};
 
-export class PurchaseRecordAdvanceSearch implements IPurchaseRecordAdvanceSearch {
-    dateOperation?: string;
-    fromDate?: string;
-    toDate?: string;
-    dueDateOperation?: string;
-    dueFromDate?: string;
-    dueToDate?: string;
-    dueDate?: string;
-    purchaseDate?: string;
-    purchaseDateOperation?: string;
-    grandTotalOperation?: string;
-    grandTotalFrom?: number;
-    grandTotalTo?: number;
-    grandTotal?: string | number;
-    accountUniqueNames?: string[];
-    voucherNumbers?: string[];
-    purchaseOrderNumber?: string;
+/** Purchase record due date operation for advance search */
+export const PURCHASE_RECORD_DUE_DATE_OPERATION = {
+    ON: 'ON',
+    AFTER: 'AFTER',
+    BEFORE: 'BEFORE'
+};
 
-    constructor() {
-        this.accountUniqueNames = [];
-        this.voucherNumbers = [];
-    }
-}
+/** Purchase record balance due operation for advance search */
+export const PURCHASE_RECORD_BALANCE_DUE_OPERATION = {
+    GREATER_THAN: 'GREATER_THAN',
+    GREATER_THAN_OR_EQUALS: 'GREATER_THAN_OR_EQUALS',
+    LESS_THAN: 'LESS_THAN',
+    LESS_THAN_OR_EQUALS: 'LESS_THAN_OR_EQUALS',
+    EQUALS: 'EQUALS',
+    NOT_EQUALS: 'NOT_EQUALS'
+};

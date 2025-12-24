@@ -1,0 +1,12 @@
+<div class="aside-pane mat-app-background mat-app-background">
+    <div class="aside-body flexy-child-1" *ngIf="isAddGroupOpen">
+        <inventory-add-group [addGroup]="addGroup" (closeAsideEvent)="closeAsidePane($event)"></inventory-add-group>
+    </div>
+    <div class="aside-body flexy-child-1" *ngIf="!isAddGroupOpen">
+        <inventory-add-stock
+            [autoFocusInChild]="autoFocusOnChild"
+            [addStock]="addStock"
+            (closeAsideEvent)="closeAsidePane($event)"
+        ></inventory-add-stock>
+    </div>
+</div>

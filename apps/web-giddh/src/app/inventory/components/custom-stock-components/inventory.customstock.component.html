@@ -1,0 +1,261 @@
+<section class="inventory-wrapper">
+    <div class="dialog-header">
+        <span>{{ editMode ? 'Modify Unit' : 'Create Unit' }}</span>
+        <button mat-icon-button aria-label="close" (click)="closeAsidePane()">
+            <i class="icon-cross"></i>
+        </button>
+    </div>
+    <mat-dialog-content class="dialog-body">
+        <div class="aside-pane-form">
+            <form #customUnitForm="ngForm" name="customUnitForm" class="form-body" novalidate>
+                <div class="clear-both">
+                    <div class="row">
+                        <div class="form-group col-xs-6 col-sm-6">
+                            <reactive-dropdown-field
+                                [options]="stockUnitsList"
+                                #unitName
+                                [name]="'name'"
+                                [(ngModel)]="customUnitObj.name"
+                                *ngIf="country == 'india'"
+                                [placeholder]="'Select unit'"
+                                (selectedOption)="setUnitName($event?.value); unitChange()"
+                                (onClear)="clearUnit()"
+                                (noOptionsFound)="noUnitFound(unitName)"
+                                [required]="true"
+                                [disabled]="editMode"
+                                (ngModelChange)="unitChange()"
+                                [label]="'Unit Name'"
+                            >
+                                <ng-template #optionTemplate let-option="option">
+                                    <a href="javascript:void(0)" class="list-item d-flex">
+                                        <span class="entity-details">
+                                            <div class="item giddh-limit single-line-clamp">
+                                                {{ option?.label || "-" }} ({{ option?.value || "-" }})
+                                            </div>
+                                        </span>
+                                    </a>
+                                </ng-template>
+                            </reactive-dropdown-field>
+                            <input-field
+                                [label]="'Unit Name'"
+                                [placeholder]="'Unit name'"
+                                [type]="'text'"
+                                [name]="'name'"
+                                [(ngModel)]="customUnitObj.name"
+                                (change)="handleUnitName(customUnitObj.name)"
+                                [required]="true"
+                                *ngIf="country != 'india'"
+                                [disabled]="editMode"
+                            />
+                        </div>
+
+                        <div class="form-group col-xs-6 col-sm-6">
+                            <input-field
+                                [label]="'Unit Code'"
+                                [placeholder]="'Unique name'"
+                                [type]="'text'"
+                                [name]="'code'"
+                                [pattern]="stockUnitCodeRegex"
+                                #unitCode="ngModel"
+                                [(ngModel)]="customUnitObj.code"
+                                (change)="handleUnitCodeValidation(unitCode?.errors)"
+                                [required]="true"
+                                [disabled]="editMode"
+                            >
+                            </input-field>
+                        </div>
+                        <ng-container *ngFor="let mappingField of customUnitObj.mappings; let i = index">
+                            <div class="inventory-section d-flex" *ngIf="customUnitObj.name && customUnitObj.code">
+                                <div class="form-group col-xs-4 col-sm-4">
+                                    <div class="d-flex">
+                                        <reactive-dropdown-field
+                                            [options]="allStockMappedUnits"
+                                            [name]="'stockUnitX' + i"
+                                            [placeholder]="'Choose unit'"
+                                            [(ngModel)]="mappingField.stockUnitX.code"
+                                            (selectedOption)="mappingField.stockUnitX.code = $event?.value"
+                                            [label]="'Unit Name'"
+                                            class="select-unit-x"
+                                            [ngClass]="{
+                                                'error-box': !mappingField.stockUnitX.code && !isValidForm
+                                            }"
+                                        >
+                                            <ng-template #optionTemplate let-option="option">
+                                                <a href="javascript:void(0)" class="list-item d-flex">
+                                                    <span class="entity-details">
+                                                        <div class="item giddh-limit single-line-clamp">
+                                                            {{ option?.label || "-" }} ({{
+                                                                option?.value || "-"
+                                                            }})
+                                                        </div>
+                                                    </span>
+                                                </a>
+                                            </ng-template>
+                                        </reactive-dropdown-field>
+                                    </div>
+                                </div>
+                                <span class="equal-sign">=</span>
+                                <div class="form-group col-xs-3 col-sm-3">
+                                    <label>Qty. per Unit <sup>*</sup></label>
+                                    <input
+                                        placeholder="Quantity"
+                                        type="text"
+                                        decimalDigitsDirective
+                                        [DecimalPlaces]="4"
+                                        [(ngModel)]="mappingField.quantity"
+                                        [name]="'quantityPerUnit' + i"
+                                        class="form-control"
+                                        #quantityPerUnit="ngModel"
+                                        [ngClass]="{ 'error-box': !mappingField.quantity && !isValidForm }"
+                                    />
+                                </div>
+                                <div class="form-group col-xs-4 col-sm-4">
+                                    <div class="d-flex">
+                                        <reactive-dropdown-field
+                                            [options]="allStockMappedUnits"
+                                            [name]="'stockUnitY' + i"
+                                            [placeholder]="'Choose unit'"
+                                            [(ngModel)]="mappingField.stockUnitY.code"
+                                            (selectedOption)="mappingField.stockUnitY.code = $event?.value"
+                                            [label]="'Mapped Unit'"
+                                            class="select-unit"
+                                            [ngClass]="{
+                                                'error-box': !mappingField.stockUnitY.code && !isValidForm
+                                            }"
+                                        >
+                                            <ng-template #optionTemplate let-option="option">
+                                                <a href="javascript:void(0)" class="list-item d-flex">
+                                                    <span class="entity-details">
+                                                        <div class="item giddh-limit single-line-clamp">
+                                                            {{ option?.label || "-" }} ({{
+                                                                option?.value || "-"
+                                                            }})
+                                                        </div>
+                                                    </span>
+                                                </a>
+                                            </ng-template>
+                                        </reactive-dropdown-field>
+                                        <div class="pull-right unit-add">
+                                            <button
+                                                mat-stroked-button class="mr-0"
+                                                (click)="addDefaultMapping(mappingField)"
+                                            >
+                                                <i class="icon-plus text-green"></i>
+                                            </button>
+                                            <button mat-stroked-button class="mr-0" (click)="removeMappedUnit(i)">
+                                                <i class="icon-cross text-red"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+                    <div class="row mt-2">
+                        <div class="col-xs-12 col-sm-12" *ngIf="!editMode">
+                            <button
+                                type="submit"
+                                mat-raised-button color="primary"
+                                (click)="saveUnit()"
+                                [disabled]="customUnitForm.invalid"
+                                [ladda]="createCustomStockInProcess$ | async"
+                            >
+                                Save
+                            </button>
+                            <button type="submit" mat-stroked-button (click)="clearFields()">
+                                Clear
+                            </button>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-12" *ngIf="editMode">
+                            <button
+                                type="submit"
+                                mat-raised-button color="primary"
+                                (click)="saveUnit()"
+                                [disabled]="customUnitForm.invalid"
+                            >
+                                Update
+                            </button>
+                            <button type="submit" mat-stroked-button (click)="clearFields()">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="mt-4 clear-both">
+                <table mat-table [dataSource]="stockMappedUnits$ | async" class="table basic mb-0">
+                    <!-- Unit Name Column -->
+                    <ng-container matColumnDef="unitName">
+                        <th mat-header-cell *matHeaderCellDef class="text-center">
+                            Name
+                        </th>
+                        <td mat-cell *matCellDef="let item">
+                            {{ item?.stockUnitX?.name }} ({{ item?.stockUnitX?.code }})
+                        </td>
+                    </ng-container>
+
+                    <!-- Mapped Unit Column -->
+                    <ng-container matColumnDef="mappedUnit">
+                        <th mat-header-cell *matHeaderCellDef class="text-center">
+                            Mapped
+                        </th>
+                        <td mat-cell *matCellDef="let item">
+                            {{ item?.quantity ? (item?.quantity | giddhRoundOff: giddhDecimalPlaces) : "-" }}
+                            <span *ngIf="item?.stockUnitY?.name">
+                                {{ item?.stockUnitY?.name }} ({{ item?.stockUnitY?.code }})
+                            </span>
+                            <span *ngIf="!item?.stockUnitY?.name">-</span>
+                        </td>
+                    </ng-container>
+
+                    <!-- Actions Column -->
+                    <ng-container matColumnDef="actions">
+                        <th mat-header-cell *matHeaderCellDef></th>
+                        <td mat-cell *matCellDef="let item" class="action ico-btn">
+                            <div class="icon-visibility">
+                                <button
+                                    mat-stroked-button
+                                    [disabled]="editMode"
+                                    (click)="editUnit(item)"
+                                >
+                                    <i class="icon-edit-pencil"></i>
+                                </button>
+                                <button
+                                    mat-stroked-button
+                                    class="delete-btn"
+                                    [disabled]="editMode"
+                                    [ladda]="
+                                        (deleteCustomStockInProcessCode$ | async)?.indexOf(
+                                            item?.stockUnitX?.code
+                                        ) > -1
+                                    "
+                                    (click)="deleteUnit(item?.stockUnitX?.uniqueName)"
+                                >
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </ng-container>
+
+                    <!-- Extra Header Row Columns -->
+                    <ng-container matColumnDef="customUnit">
+                        <th mat-header-cell *matHeaderCellDef>Custom Unit</th>
+                    </ng-container>
+
+                    <ng-container matColumnDef="empty1">
+                        <th mat-header-cell *matHeaderCellDef></th>
+                    </ng-container>
+
+                    <ng-container matColumnDef="empty2">
+                        <th mat-header-cell *matHeaderCellDef></th>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="['customUnit', 'empty1', 'empty2']" class="extra-header-row"></tr>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns" class="inventory-units-mapped"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="inventory-units-mapped"></tr>
+                </table>
+            </div>
+        </div>
+    </mat-dialog-content>
+</section>

@@ -1,0 +1,923 @@
+<section class="h-100">
+    <div class="d-flex justify-content-center align-items-center mb-2 mt-3">
+        <div class="d-flex justify-content-between w-100">
+            <div class="d-flex wrap-head-report">
+                <p class="mr-2 head-report" *ngIf="groupStockReport">
+                    <span>{{ groupStockReport.stockGroupName }}</span> (Group)
+                </p>
+                <div class="advance-icon cursor-pointer" matTooltip="Advance Search" (click)="onOpenAdvanceSearch()">
+                    <i class="icon-advance-filter"></i>
+                </div>
+            </div>
+            <div class="clear-filter" *ngIf="isFilterCorrect && productName?.value?.length > 0">
+                <button mat-stroked-button (click)="resetFilter()">
+                    <span class="icon-cross"></span> Clear Filter
+                </button>
+            </div>
+            <div class="clear-both right-inventory d-flex">
+                <div class="btn-group align-items-center">
+                    <!-- <button class="btn-link icon-btn mr-3" (click)="editGroup()" matTooltip="Edit group">
+                        <i class="icon-edit-pencil"></i>
+                    </button> -->
+                    <button
+                        type="button"
+                        class="btn-link cursor-pointer mr-3 icon-btn"
+                        [matMenuTriggerFor]="downloadMenu"
+                        matTooltip="Download"
+                    >
+                        <i class="icon-download-circle strong"></i>
+                    </button>
+                    <mat-menu #downloadMenu="matMenu" class="download-menu" xPosition="before" yPosition="below">
+                        <button mat-menu-item (click)="downloadAllInventoryReports('group', 'csv')">
+                            CSV
+                        </button>
+                        <button mat-menu-item (click)="downloadAllInventoryReports('group', 'xlsx')">
+                            XLS
+                        </button>
+                    </mat-menu>
+                </div>
+                <!-- <button
+                    mat-raised-button color="primary" class="transfer-btn mr-3"
+                    *ngIf="!(currentOrganizationType !== 'BRANCH' && branches?.length > 1)"
+                    matTooltip="Alt+N"
+                    (click)="openBranchTransferDialog()"
+                >
+                    New Transfer
+                </button> -->
+                <!-- <button mat-raised-button color="primary" class="mr-0" matTooltip="Alt+i" (click)="openAsidePaneDialog()">
+                    Create New
+                </button> -->
+            </div>
+        </div>
+    </div>
+
+    <section class="bottom-button-display">
+        <div class="mobile-card-wrapper">
+            <table
+                class="table basic table-border inventory-stock-table on-mobile-view table-responsive"
+                [ngClass]="{
+                    'mb-custom-100':
+                        groupStockReport && groupStockReport.stockReport && groupStockReport.stockReport.length > 6
+                }"
+            >
+                <thead>
+                    <tr>
+                        <!-- in case of all entity with group -->
+                        <th
+                            colspan="4"
+                            class="border-right p-0"
+                            width="30%"
+                            *ngIf="GroupStockReportRequest.branchDetails === 'allEntity'"
+                        >
+                            <!-- in case of all entity with group -->
+                        </th>
+
+                        <th
+                            colspan="2"
+                            class="border-right"
+                            width="17%"
+                            *ngIf="GroupStockReportRequest.branchDetails != 'allEntity'"
+                        >
+                            <div class="custom-datepicker-wrapper-group">
+                                <div class="custom-datepicker"
+                                [matMenuTriggerFor]="universalDatepicker"
+                                #universalDatepickerTrigger="matMenuTrigger"
+                                role="button"
+                                aria-haspopup="true"
+                                aria-controls="universalDatepicker"
+                            >
+                                    <input
+                                        matInput
+                                        type="text"
+                                        name="selectedDateRange"
+                                        [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                        class="giddh-datepicker date-range-picker"
+                                        readonly
+                                    />
+                                </div>
+                            </div>
+                        </th>
+                        <ng-container *ngIf="groupStockReport?.count">
+                            <th class="text-center border-right border-bottom" width="20%" colspan="2">Opening stock</th>
+                            <th class="text-center border-right border-bottom" width="20%" colspan="2">Inwards</th>
+                            <th class="text-center border-right border-bottom" width="20%" colspan="2">Outwards</th>
+                            <th class="text-center border-bottom" width="20%" colspan="2">Closing Stock</th>
+                        </ng-container>
+                    </tr>
+                    <tr class="border-top" [hidden]="!groupStockReport?.count">
+                        <th
+                            colspan="2"
+                            class="border-right td-search-box max-width-140"
+                            (clickOutside)="clickedOutside($event, null, 'product')"
+                        >
+                            <div [hidden]="showProductSearch">
+                                <span>Product Name</span>
+                                <i class="icon-search" (click)="showProductSearchBox()"></i>
+                            </div>
+
+                            <div class="input-container" [hidden]="!showProductSearch">
+                                <input
+                                    type="text"
+                                    placeholder="Search Product"
+                                    class="w100"
+                                    #productName
+                                    [formControl]="productUniqueNameInput"
+                                />
+                            </div>
+                        </th>
+                        <!-- in case of all entity with group -->
+                        <th
+                            colspan="2"
+                            class="border-right td-search-box max-width-140"
+                            *ngIf="GroupStockReportRequest.branchDetails === 'allEntity'"
+                            (clickOutside)="clickedOutside($event, null, 'source')"
+                        >
+                            <div [hidden]="showSourceSearch">
+                                <span>Source</span>
+                                <i class="icon-search" (click)="showSourceSearchBox()"></i>
+                            </div>
+
+                            <div class="input-container" [hidden]="!showSourceSearch">
+                                <input
+                                    type="text"
+                                    placeholder="Source"
+                                    class="w100"
+                                    #sourceName
+                                    [formControl]="sourceUniqueNameInput"
+                                />
+                                <i class="icon-search" (click)="showSourceSearch = false"></i>
+                            </div>
+                        </th>
+                        <!-- in case of all entity with group end -->
+                        <th class="text-right border-right-none">
+                            <div class="d-flex">
+                                <div class="flex-fill">Qty</div>
+                                <div class="icon-pointer">
+                                    <div
+                                        class="icon-sort-asc text-right"
+                                        *ngIf="GroupStockReportRequest.sortBy !== 'OPENING_STOCK_QTY'"
+                                        (click)="sortButtonClicked('asc', 'OPENING_STOCK_QTY')"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                GroupStockReportRequest.sortBy === 'OPENING_STOCK_QTY' &&
+                                                GroupStockReportRequest.sort === 'asc'
+                                        }"
+                                    ></div>
+
+                                    <div
+                                        class="icon-sort-asc text-right"
+                                        *ngIf="
+                                            GroupStockReportRequest.sortBy === 'OPENING_STOCK_QTY' &&
+                                            GroupStockReportRequest.sort === 'desc'
+                                        "
+                                        (click)="sortButtonClicked('asc', 'OPENING_STOCK_QTY')"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                GroupStockReportRequest.sortBy === 'OPENING_STOCK_QTY' &&
+                                                GroupStockReportRequest.sort === 'desc'
+                                        }"
+                                    ></div>
+                                    <div
+                                        class="icon-sort-asc text-right"
+                                        *ngIf="
+                                            GroupStockReportRequest.sortBy === 'OPENING_STOCK_QTY' &&
+                                            GroupStockReportRequest.sort === 'asc'
+                                        "
+                                        (click)="sortButtonClicked('desc', 'OPENING_STOCK_QTY')"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                GroupStockReportRequest.sortBy === 'OPENING_STOCK_QTY' &&
+                                                GroupStockReportRequest.sort === 'asc'
+                                        }"
+                                    ></div>
+                                </div>
+                            </div>
+                        </th>
+
+                        <th class="text-right">
+                            <div class="d-flex">
+                                <div class="flex-fill">Value</div>
+                                <div class="icon-pointer">
+                                    <!-- default -->
+                                    <div
+                                        class="icon-sort-asc text-right"
+                                        *ngIf="GroupStockReportRequest.sortBy !== 'OPENING_STOCK_VALUE'"
+                                        (click)="sortButtonClicked('asc', 'OPENING_STOCK_VALUE')"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                GroupStockReportRequest.sortBy === 'OPENING_STOCK_VALUE' &&
+                                                GroupStockReportRequest.sort === 'asc'
+                                        }"
+                                    ></div>
+                                    <!-- after sort click -->
+                                    <div
+                                        class="icon-sort-asc text-right"
+                                        *ngIf="
+                                            GroupStockReportRequest.sortBy === 'OPENING_STOCK_VALUE' &&
+                                            GroupStockReportRequest.sort === 'desc'
+                                        "
+                                        (click)="sortButtonClicked('asc', 'OPENING_STOCK_VALUE')"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                GroupStockReportRequest.sortBy === 'OPENING_STOCK_VALUE' &&
+                                                GroupStockReportRequest.sort === 'desc'
+                                        }"
+                                    ></div>
+                                    <div
+                                        class="icon-sort-asc text-right"
+                                        *ngIf="
+                                            GroupStockReportRequest.sortBy === 'OPENING_STOCK_VALUE' &&
+                                            GroupStockReportRequest.sort === 'asc'
+                                        "
+                                        (click)="sortButtonClicked('desc', 'OPENING_STOCK_VALUE')"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                GroupStockReportRequest.sortBy === 'OPENING_STOCK_VALUE' &&
+                                                GroupStockReportRequest.sort === 'asc'
+                                        }"
+                                    ></div>
+                                </div>
+                            </div>
+                        </th>
+                        <th class="text-right border-right-none">
+                            <div class="d-flex">
+                                <div class="flex-fill">Qty</div>
+                                <div class="icon-pointer">
+                                    <!-- default -->
+                                    <div
+                                        class="icon-sort-asc text-right"
+                                        *ngIf="GroupStockReportRequest.sortBy !== 'INWARDS_STOCK_QTY'"
+                                        (click)="sortButtonClicked('asc', 'INWARDS_STOCK_QTY')"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                GroupStockReportRequest.sortBy === 'INWARDS_STOCK_QTY' &&
+                                                GroupStockReportRequest.sort === 'asc'
+                                        }"
+                                    ></div>
+                                    <!-- after sort click -->
+                                    <div
+                                        class="icon-sort-asc text-right"
+                                        *ngIf="
+                                            GroupStockReportRequest.sortBy === 'INWARDS_STOCK_QTY' &&
+                                            GroupStockReportRequest.sort === 'desc'
+                                        "
+                                        (click)="sortButtonClicked('asc', 'INWARDS_STOCK_QTY')"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                GroupStockReportRequest.sortBy === 'INWARDS_STOCK_QTY' &&
+                                                GroupStockReportRequest.sort === 'desc'
+                                        }"
+                                    ></div>
+                                    <div
+                                        class="icon-sort-asc text-right"
+                                        *ngIf="
+                                            GroupStockReportRequest.sortBy === 'INWARDS_STOCK_QTY' &&
+                                            GroupStockReportRequest.sort === 'asc'
+                                        "
+                                        (click)="sortButtonClicked('desc', 'INWARDS_STOCK_QTY')"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                GroupStockReportRequest.sortBy === 'INWARDS_STOCK_QTY' &&
+                                                GroupStockReportRequest.sort === 'asc'
+                                        }"
+                                    ></div>
+                                </div>
+                            </div>
+                        </th>
+
+                        <th class="text-right">
+                            <div class="d-flex">
+                                <div class="flex-fill">Value</div>
+                                <div class="icon-pointer">
+                                    <!-- default -->
+                                    <div
+                                        class="icon-sort-asc text-right"
+                                        *ngIf="GroupStockReportRequest.sortBy !== 'INWARDS_STOCK_VALUE'"
+                                        (click)="sortButtonClicked('asc', 'INWARDS_STOCK_VALUE')"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                GroupStockReportRequest.sortBy === 'INWARDS_STOCK_VALUE' &&
+                                                GroupStockReportRequest.sort === 'asc'
+                                        }"
+                                    ></div>
+                                    <!-- after sort click -->
+                                    <div
+                                        class="icon-sort-asc text-right"
+                                        *ngIf="
+                                            GroupStockReportRequest.sortBy === 'INWARDS_STOCK_VALUE' &&
+                                            GroupStockReportRequest.sort === 'desc'
+                                        "
+                                        (click)="sortButtonClicked('asc', 'INWARDS_STOCK_VALUE')"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                GroupStockReportRequest.sortBy === 'INWARDS_STOCK_VALUE' &&
+                                                GroupStockReportRequest.sort === 'desc'
+                                        }"
+                                    ></div>
+                                    <div
+                                        class="icon-sort-asc text-right"
+                                        *ngIf="
+                                            GroupStockReportRequest.sortBy === 'INWARDS_STOCK_VALUE' &&
+                                            GroupStockReportRequest.sort === 'asc'
+                                        "
+                                        (click)="sortButtonClicked('desc', 'INWARDS_STOCK_VALUE')"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                GroupStockReportRequest.sortBy === 'INWARDS_STOCK_VALUE' &&
+                                                GroupStockReportRequest.sort === 'asc'
+                                        }"
+                                    ></div>
+                                </div>
+                            </div>
+                        </th>
+                        <th class="text-right border-right-none">
+                            <div class="d-flex">
+                                <div class="flex-fill">Qty</div>
+                                <div class="icon-pointer">
+                                    <!-- default -->
+                                    <div
+                                        class="icon-sort-asc text-right"
+                                        *ngIf="GroupStockReportRequest.sortBy !== 'OUTWARDS_STOCK_QTY'"
+                                        (click)="sortButtonClicked('asc', 'OUTWARDS_STOCK_QTY')"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                GroupStockReportRequest.sortBy === 'OUTWARDS_STOCK_QTY' &&
+                                                GroupStockReportRequest.sort === 'asc'
+                                        }"
+                                    ></div>
+                                    <!-- after sort click -->
+                                    <div
+                                        class="icon-sort-asc text-right"
+                                        *ngIf="
+                                            GroupStockReportRequest.sortBy === 'OUTWARDS_STOCK_QTY' &&
+                                            GroupStockReportRequest.sort === 'desc'
+                                        "
+                                        (click)="sortButtonClicked('asc', 'OUTWARDS_STOCK_QTY')"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                GroupStockReportRequest.sortBy === 'OUTWARDS_STOCK_QTY' &&
+                                                GroupStockReportRequest.sort === 'desc'
+                                        }"
+                                    ></div>
+                                    <div
+                                        class="icon-sort-asc text-right"
+                                        *ngIf="
+                                            GroupStockReportRequest.sortBy === 'OUTWARDS_STOCK_QTY' &&
+                                            GroupStockReportRequest.sort === 'asc'
+                                        "
+                                        (click)="sortButtonClicked('desc', 'OUTWARDS_STOCK_QTY')"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                GroupStockReportRequest.sortBy === 'OUTWARDS_STOCK_QTY' &&
+                                                GroupStockReportRequest.sort === 'asc'
+                                        }"
+                                    ></div>
+                                </div>
+                            </div>
+                        </th>
+
+                        <th class="text-right">
+                            <div class="d-flex">
+                                <div class="flex-fill">Value</div>
+                                <div class="icon-pointer">
+                                    <!-- default -->
+                                    <div
+                                        class="icon-sort-asc text-right"
+                                        *ngIf="GroupStockReportRequest.sortBy !== 'OUTWARDS_STOCK_VALUE'"
+                                        (click)="sortButtonClicked('asc', 'OUTWARDS_STOCK_VALUE')"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                GroupStockReportRequest.sortBy === 'OUTWARDS_STOCK_VALUE' &&
+                                                GroupStockReportRequest.sort === 'asc'
+                                        }"
+                                    ></div>
+                                    <!-- after sort click -->
+                                    <div
+                                        class="icon-sort-asc text-right"
+                                        *ngIf="
+                                            GroupStockReportRequest.sortBy === 'OUTWARDS_STOCK_VALUE' &&
+                                            GroupStockReportRequest.sort === 'desc'
+                                        "
+                                        (click)="sortButtonClicked('asc', 'OUTWARDS_STOCK_VALUE')"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                GroupStockReportRequest.sortBy === 'OUTWARDS_STOCK_VALUE' &&
+                                                GroupStockReportRequest.sort === 'desc'
+                                        }"
+                                    ></div>
+                                    <div
+                                        class="icon-sort-asc text-right"
+                                        *ngIf="
+                                            GroupStockReportRequest.sortBy === 'OUTWARDS_STOCK_VALUE' &&
+                                            GroupStockReportRequest.sort === 'asc'
+                                        "
+                                        (click)="sortButtonClicked('desc', 'OUTWARDS_STOCK_VALUE')"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                GroupStockReportRequest.sortBy === 'OUTWARDS_STOCK_VALUE' &&
+                                                GroupStockReportRequest.sort === 'asc'
+                                        }"
+                                    ></div>
+                                </div>
+                            </div>
+                        </th>
+                        <th class="text-right border-right-none">
+                            <div class="d-flex">
+                                <div class="flex-fill">Qty</div>
+                                <div class="icon-pointer">
+                                    <!-- default -->
+                                    <div
+                                        class="icon-sort-asc text-right"
+                                        *ngIf="GroupStockReportRequest.sortBy !== 'CLOSING_STOCK_QTY'"
+                                        (click)="sortButtonClicked('asc', 'CLOSING_STOCK_QTY')"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                GroupStockReportRequest.sortBy === 'CLOSING_STOCK_QTY' &&
+                                                GroupStockReportRequest.sort === 'asc'
+                                        }"
+                                    ></div>
+                                    <!-- after sort click -->
+                                    <div
+                                        class="icon-sort-asc text-right"
+                                        *ngIf="
+                                            GroupStockReportRequest.sortBy === 'CLOSING_STOCK_QTY' &&
+                                            GroupStockReportRequest.sort === 'desc'
+                                        "
+                                        (click)="sortButtonClicked('asc', 'CLOSING_STOCK_QTY')"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                GroupStockReportRequest.sortBy === 'CLOSING_STOCK_QTY' &&
+                                                GroupStockReportRequest.sort === 'desc'
+                                        }"
+                                    ></div>
+                                    <div
+                                        class="icon-sort-asc text-right"
+                                        *ngIf="
+                                            GroupStockReportRequest.sortBy === 'CLOSING_STOCK_QTY' &&
+                                            GroupStockReportRequest.sort === 'asc'
+                                        "
+                                        (click)="sortButtonClicked('desc', 'CLOSING_STOCK_QTY')"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                GroupStockReportRequest.sortBy === 'CLOSING_STOCK_QTY' &&
+                                                GroupStockReportRequest.sort === 'asc'
+                                        }"
+                                    ></div>
+                                </div>
+                            </div>
+                        </th>
+
+                        <th class="text-right">
+                            <div class="d-flex">
+                                <div class="flex-fill">Value</div>
+                                <div class="icon-pointer">
+                                    <!-- default -->
+                                    <div
+                                        class="icon-sort-asc text-right"
+                                        *ngIf="GroupStockReportRequest.sortBy !== 'CLOSING_STOCK_VALUE'"
+                                        (click)="sortButtonClicked('asc', 'CLOSING_STOCK_VALUE')"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                GroupStockReportRequest.sortBy === 'CLOSING_STOCK_VALUE' &&
+                                                GroupStockReportRequest.sort === 'asc'
+                                        }"
+                                    ></div>
+                                    <!-- after sort click -->
+                                    <div
+                                        class="icon-sort-asc text-right"
+                                        *ngIf="
+                                            GroupStockReportRequest.sortBy === 'CLOSING_STOCK_VALUE' &&
+                                            GroupStockReportRequest.sort === 'desc'
+                                        "
+                                        (click)="sortButtonClicked('asc', 'CLOSING_STOCK_VALUE')"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                GroupStockReportRequest.sortBy === 'CLOSING_STOCK_VALUE' &&
+                                                GroupStockReportRequest.sort === 'desc'
+                                        }"
+                                    ></div>
+                                    <div
+                                        class="icon-sort-asc text-right"
+                                        *ngIf="
+                                            GroupStockReportRequest.sortBy === 'CLOSING_STOCK_VALUE' &&
+                                            GroupStockReportRequest.sort === 'asc'
+                                        "
+                                        (click)="sortButtonClicked('desc', 'CLOSING_STOCK_VALUE')"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                GroupStockReportRequest.sortBy === 'CLOSING_STOCK_VALUE' &&
+                                                GroupStockReportRequest.sort === 'asc'
+                                        }"
+                                    ></div>
+                                </div>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="!groupStockReportInProcess && groupStockReport && groupStockReport.count > 0">
+                    <tr *ngFor="let txn of groupStockReport.stockReport">
+                        <ng-container *ngIf="txn.openingBalance || txn.inwards || txn.outwards || txn.closingBalance">
+                            <td class="border-bottom border-right" colspan="2" data-title="Product Name">
+                                <span class="justify-content-between d-flex align-items-start">
+                                    <span>{{ txn.stockName }}</span>
+                                    <span class="unit-badge pull-right text-light nowrap">{{
+                                        txn.openingBalance?.stockUnit
+                                    }}</span>
+                                </span>
+                            </td>
+                            <!-- in case of all entity with group -->
+                            <td
+                                colspan="2"
+                                class="border-bottom border-right max-width-140"
+                                data-title="Product Name"
+                                *ngIf="GroupStockReportRequest.branchDetails === 'allEntity'"
+                            >
+                                {{ txn.stockName }}
+                            </td>
+                            <!-- in case of all entity with group end -->
+                            <td data-title="Opening stock -" class="td-mobile-head"></td>
+
+                            <td class="border-bottom border-right text-right border-right-none mb-0" data-title="Qty">
+                                <span [ngClass]="{ 'text-danger': txn.openingBalance?.quantity < 0 }">{{
+                                    txn.openingBalance?.quantity | giddhNumberFormat
+                                }}</span>
+                            </td>
+                            <td class="border-bottom border-right text-right mb-0" data-title="Value">
+                                {{ txn.openingBalance?.amount | giddhNumberFormat }}
+                            </td>
+
+                            <td
+                                data-title="inwards -"
+                                class="td-mobile-head"
+                            ></td>
+
+                            <td
+                                class="border-bottom border-right text-right border-right-none mb-0"
+                                data-title="Qty"
+                            >
+                                <span [ngClass]="{ 'text-danger': txn.inwards?.quantity < 0 }">{{
+                                    txn.inwards?.quantity | giddhNumberFormat
+                                }}</span>
+                            </td>
+                            <td
+                                class="border-bottom border-right text-right mb-0"
+                                data-title="Value"
+                            >
+                                {{ txn.inwards?.amount | giddhNumberFormat }}
+                            </td>
+
+                            <td
+                                data-title="Outwards -"
+                                class="td-mobile-head"
+                            ></td>
+
+                            <td
+                                class="border-bottom border-right text-right border-right-none mb-0"
+                                data-title="Qty"
+                            >
+                                {{ txn.outwards?.quantity | giddhNumberFormat }}
+                            </td>
+                            <td
+                                class="border-bottom border-right text-right mb-0"
+                                data-title="Value"
+                            >
+                                {{ txn.outwards?.amount | giddhNumberFormat }}
+                            </td>
+
+                            <td data-title="Closing stock -" class="td-mobile-head"></td>
+
+                            <td class="border-bottom border-right text-right border-right-none mb-0" data-title="Qty">
+                                <span [ngClass]="{ 'text-danger': txn.closingBalance?.quantity < 0 }">{{
+                                    txn.closingBalance?.quantity | giddhNumberFormat
+                                }}</span>
+                            </td>
+                            <td class="border-bottom border-right text-right" data-title="Value">
+                                {{ txn.closingBalance?.amount | giddhNumberFormat }}
+                            </td>
+                        </ng-container>
+                    </tr>
+                </tbody>
+
+                <tbody *ngIf="groupStockReportInProcess">
+                    <!-- in case of all entity with group -->
+                    <tr>
+                        <td colspan="10" class="text-center empty-table">
+                            <giddh-page-loader></giddh-page-loader>
+                        </td>
+                    </tr>
+                </tbody>
+
+                <tfoot *ngIf="groupStockReport && groupStockReport.totalItems > pageSizeOptions[0]">
+                    <tr>
+                        <td colspan="10" class="text-center">
+                            <mat-paginator
+                                [length]="groupStockReport.totalPages"
+                                [pageSize]="GroupStockReportRequest.count"
+                                [pageIndex]="groupStockReport.page - 1"
+                                [pageSizeOptions]="pageSizeOptions"
+                                [showFirstLastButtons]="true"
+                                [hidePageSize]="false"
+                                (page)="handlePageEvent($event)"
+                            ></mat-paginator>
+                            <section class="mb-custom-80"></section>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+            <div
+                class="no-data"
+                *ngIf="
+                    (groupStockReport && groupStockReport.count < 1 && !groupStockReportInProcess) ||
+                    groupNotFoundMessage
+                "
+            >
+                <h2 [class.group-not-found]="groupNotFoundMessage">
+                    {{ groupNotFoundMessage ? groupNotFoundMessage : "No entries found within given criteria." }}
+                </h2>
+                <h2 class="p-0" [class.group-not-found]="groupNotFoundMessage">
+                    {{ groupNotFoundMessage ? groupNotFoundMessage : "Do search with some other dates" }}
+                </h2>
+            </div>
+        </div>
+
+        <!-- sticky Footer -->
+        <section
+            class="mt-5 footer-sticky"
+            *ngIf="groupStockReport && groupStockReport.stockReport && groupStockReport.stockReport.length > 0"
+        >
+            <div class="sticky-footer sticky-footer-sale-amount">
+                <div class="inner-content-footer">
+                    <div class="row">
+                        <div class="col-lg-5 col-md-12 pr-0">
+                            <div class="row">
+                                <div class="col-4 p-0 count-text">
+                                    <h4 class="text-light">
+                                        <div *ngIf="GroupStockReportRequest.branchDetails === 'allEntity'">
+                                            Transaction Count
+                                        </div>
+                                        <div *ngIf="GroupStockReportRequest.branchDetails !== 'allEntity'">
+                                            Product Count
+                                        </div>
+                                        <div class="mt-1">Profit/Loss</div>
+                                    </h4>
+                                </div>
+                                <div class="col-8 p-0">
+                                    <h4 class="text-primary text-left">
+                                        <div *ngIf="GroupStockReportRequest.branchDetails === 'allEntity'">
+                                            <span class="text-primary" *ngIf="groupStockReport.totalItems"
+                                                >&nbsp;{{ groupStockReport.totalItems | giddhNumberFormat }}</span
+                                            >
+                                        </div>
+                                        <div *ngIf="GroupStockReportRequest.branchDetails !== 'allEntity'">
+                                            <span class="text-primary" *ngIf="groupStockReport.totalItems"
+                                                >&nbsp;{{ groupStockReport.totalItems | giddhNumberFormat }}</span
+                                            >
+                                        </div>
+                                        <div class="mt-1">
+                                            <span class="text-primary d-block"
+                                                >{{ groupStockReport.profit | giddhNumberFormat }} ({{
+                                                    dateRangePickerCmp?.nativeElement?.value | replaceHyphens
+                                                }})</span
+                                            >
+                                        </div>
+                                    </h4>
+                                </div>
+                            </div>
+                            <div class="row" *ngIf="groupStockReport.openingBalance.transactionCount">
+                                <div class="col-10 p-0">
+                                    <h4>Inward</h4>
+                                </div>
+                                <div class="col-2 p-0">
+                                    <h4>
+                                        &nbsp;<span>{{
+                                            groupStockReport.InwardBalance.transactionCount | giddhNumberFormat
+                                        }}</span>
+                                    </h4>
+                                </div>
+                            </div>
+                            <div class="row" *ngIf="groupStockReport.outwardBalance.transactionCount">
+                                <div class="col-10 p-0">
+                                    <h4>Outward</h4>
+                                </div>
+                                <div class="col-2 p-0">
+                                    <h4>
+                                        &nbsp;<span>{{
+                                            groupStockReport.outwardBalance.transactionCount | giddhNumberFormat
+                                        }}</span>
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-7 col-md-12 opening-value">
+                            <div class="flex-col">
+                                <div class="cont">
+                                    <h4 class="text-light">Opening Value</h4>
+                                    <p>{{ groupStockReport.openingBalance.amount | giddhNumberFormat }}</p>
+                                    <h4 *ngIf="groupStockReport.openingBalance.quantity">
+                                        ({{ groupStockReport.openingBalance.quantity | giddhNumberFormat }}
+                                        {{ groupStockReport.openingBalance.stockUnit }})
+                                    </h4>
+                                </div>
+                            </div>
+                            <div class="flex-col"></div>
+                            <div class="flex-col">
+                                <div class="cont">
+                                    <h4 class="text-light">Inward Value</h4>
+                                    <p>{{ groupStockReport.inwardBalance.amount | giddhNumberFormat }}</p>
+                                    <h4 *ngIf="groupStockReport.inwardBalance.quantity">
+                                        ({{ groupStockReport.inwardBalance.quantity | giddhNumberFormat }}
+                                        {{ groupStockReport.inwardBalance.stockUnit }})
+                                    </h4>
+                                </div>
+                            </div>
+                            <div class="flex-col"></div>
+                            <div class="flex-col">
+                                <div class="cont">
+                                    <h4 class="text-light">Outward Value</h4>
+                                    <p>{{ groupStockReport.outwardBalance.amount | giddhNumberFormat }}</p>
+                                    <h4 *ngIf="groupStockReport.outwardBalance.quantity">
+                                        ({{ groupStockReport.outwardBalance.quantity | giddhNumberFormat }}
+                                        {{ groupStockReport.outwardBalance.stockUnit }})
+                                    </h4>
+                                </div>
+                            </div>
+                            <div class="flex-col"></div>
+                            <div class="flex-col">
+                                <div class="cont">
+                                    <h4 class="text-light">Closing Value</h4>
+                                    <p class="text-primary">
+                                        {{ groupStockReport.closingBalance.amount | giddhNumberFormat }}
+                                    </p>
+                                    <h4 class="text-primary" *ngIf="groupStockReport.closingBalance.quantity">
+                                        ({{ groupStockReport.closingBalance.quantity | giddhNumberFormat }}
+                                        {{ groupStockReport.closingBalance.stockUnit }})
+                                    </h4>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+</section>
+<!-- aside new stock/group/unit pane -->
+<ng-template #asidePaneTemplate>
+    <aside-pane (closeAsideEvent)="asidePaneDialogRef?.close()"></aside-pane>
+</ng-template>
+<!-- aside new stock/group/unit -->
+
+<!-- aside inwards/outwards/transfer pane -->
+<ng-template #asideBranchTransferPaneTemplate>
+    <aside-branch-transfer-pane
+        (transferType)="openBranchTransferPopup($event)"
+        (closeAsideEvent)="asideBranchTransferPaneDialogRef?.close()"
+    ></aside-branch-transfer-pane>
+</ng-template>
+<!-- aside inwards/outwards/transfer pane -->
+
+<!-- Advance search popup -->
+<ng-template #advanceSearchDialog>
+    <div class="dialog-header">
+        <span>Advance Search</span>
+        <button mat-icon-button aria-label="close" (click)="advanceSearchAction('cancel')">
+            <i class="icon-cross"></i>
+        </button>
+    </div>
+    <mat-dialog-content class="dialog-body">
+        <div class="clear-both" [hidden]="!showAdvanceSearchModal">
+            <form action="" [formGroup]="advanceSearchForm">
+                <div class="row">
+                    <div class="col-sm-4">Date Range</div>
+                    <div class="col-sm-8">
+                        <div class="custom-datepicker"
+                            [matMenuTriggerFor]="universalDatepicker"
+                            #universalDatepickerTrigger="matMenuTrigger"
+                            role="button"
+                            aria-haspopup="true"
+                            aria-controls="universalDatepicker"
+                        >
+                            <input
+                                matInput
+                                type="text"
+                                name="selectedDateRange"
+                                [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                class="giddh-datepicker date-range-picker"
+                                readonly
+                            />
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-sm-4">Select Category</div>
+                    <div class="col-sm-4">
+                        <div class="select-style vertical-align-middle ">
+                            <reactive-dropdown-field
+                                [options]="CategoryOptions"
+                                (onClear)="clearShSelect('filterCategory')"
+                                [placeholder]="'Select Category'"
+                                formControlName="filterCategory"
+                                (selectedOption)="onDDElementSelect($event, 'filterCategory')"
+                            ></reactive-dropdown-field>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="select-style vertical-align-middle ">
+                            <reactive-dropdown-field
+                                [options]="CategoryTypeOptions"
+                                (onClear)="clearShSelect('filterCategoryType')"
+                                [placeholder]="'Select Type'"
+                                formControlName="filterCategoryType"
+                                (selectedOption)="onDDElementSelect($event, 'filterCategoryType')"
+                            ></reactive-dropdown-field>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-sm-4">Value</div>
+                    <div class="col-sm-4">
+                        <div class="select-style vertical-align-middle ">
+                            <reactive-dropdown-field
+                                [options]="FilterValueCondition"
+                                (onClear)="clearShSelect('filterValueCondition')"
+                                [placeholder]="'Select Type'"
+                                formControlName="filterValueCondition"
+                                (selectedOption)="onDDElementSelect($event, 'filterValueCondition')"
+                            ></reactive-dropdown-field>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <input
+                            type="text"
+                            class="form-control"
+                            (keyup)="mapAdvFilters()"
+                            placeholder="Amount"
+                            maxlength="16"
+                            formControlName="filterAmount"
+                        />
+                        <small *ngIf="advanceSearchForm.controls['filterAmount'].invalid" class="text-danger"
+                            >input number only</small
+                        >
+                    </div>
+                </div>
+
+                <div class="row mt-5 mb-5">
+                    <div class="col-xs-12 col-sm-12 text-right">
+                        <button
+                            mat-raised-button
+                            color="primary"
+                            type="button"
+                            [disabled]="
+                                !isFilterCorrect ||
+                                !GroupStockReportRequest.condition ||
+                                !GroupStockReportRequest.entity ||
+                                !GroupStockReportRequest.value ||
+                                !GroupStockReportRequest.number
+                            "
+                            (click)="advanceSearchAction('search')"
+                        >
+                            Search
+                        </button>
+                        <button mat-stroked-button type="button" (click)="advanceSearchAction('clear')">
+                            Clear
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </mat-dialog-content>
+</ng-template>
+<!-- Advance search popup -->
+
+<!-- branch transfer modal -->
+<ng-template #template>
+    <div class="recept-modal">
+        <div class="dialog-body">
+            <new-branch-transfer (hideModal)="hideModal($event)" [branchTransferMode]="branchTransferMode">
+            </new-branch-transfer>
+        </div>
+    </div>
+</ng-template>
+
+<!-- Universal Date picker -->
+<mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+    <ng-template matMenuContent>
+        <app-datepicker-wrapper
+            [inputStartDate]="selectedDateRange?.startDate"
+            [inputEndDate]="selectedDateRange?.endDate"
+            [alwaysShowCalendars]="true"
+            [ranges]="datePickerOption"
+            [selectedRangeLabel]="selectedRangeLabel"
+            [showCustomRangeLabel]="true"
+            [showClearButton]="false"
+            [showCancel]="true"
+            [linkedCalendars]="true"
+            [showDropdowns]="true"
+            (rangeClicked)="dateSelectedCallback($event)"
+            (datesUpdated)="dateSelectedCallback($event)"
+            (closeCalender)="toggleGiddhDatepicker(false)"
+            [keepCalendarOpeningWithRange]="false"
+            [showRangeLabelOnInput]="false"
+        ></app-datepicker-wrapper>
+    </ng-template>
+</mat-menu>

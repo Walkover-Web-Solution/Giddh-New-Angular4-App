@@ -1,0 +1,179 @@
+<section>
+    <div class="dialog-header">
+        <span>{{ addGroup ? 'Create Group' : 'Update Group' }}</span>
+        <button mat-icon-button aria-label="close" (click)="closeAsidePane()">
+            <i class="icon-cross"></i>
+        </button>
+    </div>
+    <mat-dialog-content class="dialog-body">
+        <form name="updateStockGroup" class="form-body" [formGroup]="addGroupForm" novalidate="">
+            <div class="clear-both">
+                <div class="row">
+                    <div class="form-group col-xs-6 col-sm-6">
+                        <label>Name <sup>*</sup></label>
+                        <input
+                            type="text"
+                            name="name"
+                            (change)="generateUniqueName()"
+                            class="form-control"
+                            formControlName="name"
+                        />
+                    </div>
+                    <div class="form-group col-xs-6 col-sm-6">
+                        <label>Unique Name <sup>*</sup></label>
+                        <input
+                            type="text"
+                            name="uniqueName"
+                            UniqueNameDirective
+                            textCaseChangeDirective
+                            [control]="addGroupForm.get('uniqueName')"
+                            (blur)="validateUniqueName($event?.target?.value)"
+                            formControlName="uniqueName"
+                            class="form-control"
+                        />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-xs-6 col-sm-6">
+                        <mat-radio-group formControlName="showCodeType" class="d-flex mb-2">
+                            <mat-radio-button color="primary" value="hsn" class="mr-3">
+                                HSN Code
+                            </mat-radio-button>
+                            <mat-radio-button color="primary" value="sac">
+                                SAC Code
+                            </mat-radio-button>
+                        </mat-radio-group>
+                        <input
+                            type="number"
+                            class="form-control"
+                            maxlength="10"
+                            digitsOnlyDirective
+                            formControlName="hsnNumber"
+                            *ngIf="addGroupForm.get('showCodeType')?.value === 'hsn'"
+                        />
+                        <input
+                            type="number"
+                            class="form-control"
+                            maxlength="10"
+                            formControlName="sacNumber"
+                            digitsOnlyDirective
+                            *ngIf="addGroupForm.get('showCodeType')?.value === 'sac'"
+                        />
+                    </div>
+                </div>
+                <div class="pb-2" [hidden]="defaultGrpActive">
+                    <mat-slide-toggle
+                        formControlName="isSubGroup"
+                        id="isSelfParentUpdt"
+                        name="parentStockGroup"
+                        color="primary"
+                    >
+                    </mat-slide-toggle>
+                    <label class="is-subgroup-label" for="isSelfParentUpdt">Is it a sub group?</label>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6 col-sm-6">
+                        <div class="form-group">
+                            <label>Parent Group</label>
+                            <reactive-dropdown-field
+                                [options]="groupsData$ | async"
+                                formControlName="parentStockGroupUniqueName"
+                                [disabled]="!addGroupForm.get('isSubGroup')?.value"
+                                [placeholder]="'Select Parent Group'"
+                                (selectedOption)="groupSelected($event)"
+                                [labelValue]="selectedGroup?.label"
+                                [required]="true"
+                                [name]="'parentStockGroupUniqueName'"
+                            ></reactive-dropdown-field>
+                        </div>
+                    </div>
+                    <div class="form-group col-xs-6 col-sm-6">
+                        <label>Tax</label>
+                        <button
+                            type="button"
+                            class="form-control text-left"
+                            [matMenuTriggerFor]="taxMenu"
+                            mat-button
+                        >
+                            Selected ({{ taxTempArray?.length }})
+                            <span class="pull-right"><span class="caret"></span></span>
+                        </button>
+                        <mat-menu #taxMenu="matMenu">
+                            <div
+                                *ngFor="let tax of companyTaxesList$ | async"
+                                [ngClass]="{ 'opacity': tax.isDisabled }"
+                                mat-menu-item
+                                (click)="$event.stopPropagation()"
+                            >
+                                <mat-checkbox
+                                    [disabled]="tax.isDisabled"
+                                    [checked]="tax.isChecked"
+                                    (click)="selectTax($event, tax)"
+                                    color="primary"
+                                >
+                                    {{ tax.name }}
+                                </mat-checkbox>
+                            </div>
+                            <div *ngIf="(companyTaxesList$ | async)?.length < 1" mat-menu-item>
+                                No Tax Found
+                            </div>
+                        </mat-menu>
+                    </div>
+                </div>
+                <div class="clear-both text-left mt-2">
+                    <div *ngIf="addGroup">
+                        <button
+                            mat-raised-button
+                            color="primary"
+                            type="submit"
+                            [ladda]="isAddNewGroupInProcess$ | async"
+                            (click)="addNewGroup()"
+                            [disabled]="addGroupForm.invalid"
+                        >
+                            Save
+                        </button>
+                        <button mat-raised-button color="primary" type="reset">Cancel</button>
+                    </div>
+                    <div *ngIf="!addGroup">
+                        <button
+                            mat-raised-button
+                            color="primary"
+                            type="submit"
+                            [disabled]="addGroupForm.invalid || defaultGrpActive"
+                            [ladda]="isUpdateGroupInProcess$ | async"
+                            (click)="updateGroup()"
+                        >
+                            Update
+                        </button>
+                        <button
+                            mat-stroked-button
+                            type="submit"
+                            [ladda]="isDeleteGroupInProcess$ | async"
+                            (click)="openDialog(deleteGroupModalTemplate)"
+                        >
+                            Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </mat-dialog-content>
+</section>
+<!-- popup for the delete group -->
+<ng-template #deleteGroupModalTemplate>
+    <confirm-modal
+        [title]="'Confirmation'"
+        [body]="
+            'Deleting this group will delete & un-link all the stocks under it. Are you sure you want to delete the group?'
+        "
+        [permanentlyDeleteMessage]="
+            'It will be deleted permanently and will no longer be accessible from any other module.'
+        "
+        [ok]="'Yes'"
+        [cancel]="'No'"
+        (cancelCallBack)="hideModal()"
+        (successCallBack)="removeGroup(); hideModal()"
+    >
+    </confirm-modal>
+</ng-template>
+<!-- popup end -->

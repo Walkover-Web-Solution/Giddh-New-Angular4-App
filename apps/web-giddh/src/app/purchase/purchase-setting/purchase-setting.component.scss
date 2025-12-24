@@ -1,0 +1,141 @@
+#invoice-setting {
+    .single-tab-block {
+        box-shadow: 0px 3px 6px var(--color-shadow-light);
+        margin: 0 15px;
+        label {
+            font-size: var(--font-size-15);
+            line-height: 34px;
+            display: inline-block;
+        }
+        h4 {
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            span {
+                font-size: var(--font-size-12) !important;
+            }
+        }
+
+        .d-inline-flex {
+            display: inline-flex;
+        }
+
+        .custom-estimation label {
+            position: absolute;
+            top: -24px;
+            right: 15px;
+            font-size: var(--font-size-12);
+            color: var(--color-dark-gray);
+            text-align: left;
+        }
+
+        .initial-number {
+            width: 70px;
+            margin: 0 15px;
+        }
+
+        .r-0 {
+            right: 0px;
+        }
+    }
+    .input-group {
+        width: 100%;
+        .verified-icon {
+            position: absolute;
+            color: var(--color-green) !important;
+            right: 10px;
+            z-index: 2;
+            top: 10px;
+        }
+
+    }
+    .default-expiry {
+        input {
+            width: 100px;
+            display: inline-flex;
+        }
+        .expiry-days {
+            display: flex;
+            align-items: center;
+        }
+    }
+    .show-on-mobile {
+        display: none;
+    }
+    .bill-lock-date {
+        width: 152px;
+        position: relative;
+
+    }
+
+}
+.verified-text {
+    color: var(--color-green);
+    padding: 6px 10px;
+    margin-right: 10px;
+    margin-left: 0;
+}
+.delete-verified-icon {
+    padding: 6px 10px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--mat-border-radius-4);
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 36px;
+    height: 36px;
+    i.icon-trash {
+        font-size: var(--font-size-16);
+    }
+}
+.verify-tick-icon {
+    vertical-align: middle;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-medium-gray);
+}
+.input-group-addon{
+    border-radius: 0 5px 5px 0 !important;
+}
+@media (max-width: 991px) {
+    .custom-estimation {
+        margin-top: 10px;
+    }
+    .sms-textarea {
+        width: 100%;
+    }
+    #invoice-setting {
+        .show-on-mobile {
+            display: inline-block;
+            float: left;
+            width: 20px;
+            top: 4px;
+            + {
+                label {
+                    line-height: 26px;
+                    margin-left: 36px;
+                }
+            }
+        }
+        .integrated-email {
+            margin-left: 30px;
+        }
+
+        .hide-on-mobile {
+            display: none;
+        }
+        .bill-lock-date {
+            width: 180px !important;
+            position: relative;
+        }
+        .btn-wrapper {
+            padding: 0 15px;
+        }
+    }
+
+    .sales-order-tab {
+        .custom-purchase-order-input-fields {
+            margin-top: 8px;
+        }
+    }
+}

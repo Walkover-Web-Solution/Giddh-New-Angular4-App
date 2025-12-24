@@ -1,0 +1,88 @@
+<div
+    appTranslate
+    [file]="'subscription'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="verifyOwnershipInProgress$ | async"></giddh-page-loader>
+    <div class="flex-col" *ngIf="!(verifyOwnershipInProgress$ | async)">
+        <div class="inner">
+            <img src="{{ imgPath }}giddh-big-logo.svg" />
+            <div class="flex-column d-flex justify-content-center align-items-center" *ngIf="acceptedSubscription">
+                <p>{{ localeData?.request_accepted_successfully }}</p>
+                <a
+                    mat-raised-button
+                    color="primary"
+                    class="mr-0 min-width-160 d-flex align-items-center justify-content-center"
+                    [href]="loginUrl"
+                    target="_blank"
+                >
+                    {{ localeData?.login_to_giddh }}
+                </a>
+            </div>
+            <p *ngIf="!acceptedSubscription">{{ localeData?.request_declined_successfully }}</p>
+        </div>
+    </div>
+
+    <!--Modal for Transfer Ownership -->
+    <ng-template #transferConfirmation>
+        <div (click)="$event.stopPropagation()">
+            <div>
+                <div class="dialog-header">
+                    <span>{{ localeData?.subscription_transfer }}</span>
+                    <button mat-icon-button aria-label="close" (click)="closeAllDialogs($event)">
+                        <i class="icon-cross"></i>
+                    </button>
+                </div>
+                <mat-dialog-content class="dialog-body">
+                    <p class="font-size-15 mt-1 mb-1">{{ localeData?.invited_to_become_subscriber }}</p>
+                    <p class="font-size-15 mt-1">{{ localeData?.accepting_will_make_you_subscriber }}</p>
+                    <div class="d-flex justify-content-end column-gap-1 mt-3">
+                        <button aria-label="yes" mat-raised-button color="primary" (click)="onSubmit($event)">
+                            {{ localeData?.accept_subscription }}
+                        </button>
+                        <button aria-label="no" mat-stroked-button (click)="onReject($event)">
+                            {{ localeData?.decline_subscription }}
+                        </button>
+                    </div>
+                </mat-dialog-content>
+            </div>
+        </div>
+    </ng-template>
+
+    <!--Modal for Transfer Ownership -->
+    <ng-template #rejectConfirmation>
+        <div (click)="$event.stopPropagation()">
+            <div>
+                <div class="dialog-header">
+                    <span>{{ localeData?.reject }}</span>
+                    <button mat-icon-button aria-label="close" (click)="closeReject($event)">
+                        <i class="icon-cross"></i>
+                    </button>
+                </div>
+                <mat-dialog-content class="dialog-body">
+                    <form [formGroup]="rejectForm">
+                        <div class="w-50">
+                            <input-field
+                                [name]="'reason'"
+                                [label]="localeData?.enter_reason"
+                                [placeholder]="localeData?.enter_reason"
+                                [type]="'text'"
+                                formControlName="reason"
+                            >
+                            </input-field>
+                        </div>
+                    </form>
+                    <div class="d-flex justify-content-end column-gap-1 mt-3">
+                        <button aria-label="yes" mat-raised-button color="primary" (click)="onSubmit($event, true)">
+                            {{ localeData?.submit }}
+                        </button>
+                        <button aria-label="no" mat-stroked-button (click)="closeReject($event)">
+                            {{ localeData?.cancel }}
+                        </button>
+                    </div>
+                </mat-dialog-content>
+            </div>
+        </div>
+    </ng-template>
+</div>

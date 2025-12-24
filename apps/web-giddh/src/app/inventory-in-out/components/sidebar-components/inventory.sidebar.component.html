@@ -1,0 +1,26 @@
+<section id="inventory-sidebar" class="sidebar pull-left" #sidebar>
+    <div class="h-100 clear-both">
+        <div class="w-100 p-2 pt-0">
+            <input class="form-control" type="search" placeholder="Search Stock" #search />
+        </div>
+        <div>
+            <mat-tab-group
+                mat-stretch-tabs="false"
+                mat-align-tabs="start"
+                [selectedIndex]="selectedTabIndex"
+                (selectedTabChange)="tabChanged($event)"
+            >
+                <mat-tab label="Stocks">
+                    <div class="pt-3 pb-3">
+                        <inout-stock-list [stockList]="stocksList$ | async"></inout-stock-list>
+                    </div>
+                </mat-tab>
+                <mat-tab label="Persons">
+                    <div class="pt-3 pb-3">
+                        <person-list [personList]="inventoryUsers$ | async"></person-list>
+                    </div>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+    </div>
+</section>

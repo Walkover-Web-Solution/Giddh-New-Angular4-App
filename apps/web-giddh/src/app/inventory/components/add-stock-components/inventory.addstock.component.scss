@@ -1,0 +1,114 @@
+:host {
+    position: fixed;
+    width: 760px;
+    padding: 0 15px;
+    right: 0;
+    top: var(--top-distance);
+}
+.output-row > td {
+    padding: 12px 10px 12px 0 !important;
+}
+
+.table-label {
+    border-color: var(--border-color);
+    td {
+        padding-top: 12px !important;
+        padding-bottom: 5px;
+    }
+}
+
+.sku-row {
+    label {
+        width: 100%;
+    }
+    position: relative;
+    .label-input {
+        background: none;
+        border: none;
+        max-width: 108px;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .item-label:first-child {
+        max-width: 108px;
+    }
+    .item-label:last-child {
+        text-align: right;
+    }
+    i {
+        margin-left: 10px;
+        padding-bottom: 3px;
+        border-bottom: 1px solid var(--border-color);
+    }
+    .new-custom-btn {
+        font-size: var(--font-size-12);
+        color: var(--text-primary-color);
+        padding-top: 30px;
+        cursor: pointer;
+    }
+    .text-danger {
+        color: var(--color-red);
+    }
+}
+
+.opacity {
+    opacity: 0.5;
+}
+.fsstock td {
+    padding-right: 10px;
+}
+tr.fsstock td {
+    padding-bottom: 15px;
+}
+.table-label strong {
+    color: var(--color-black);
+    font-weight: normal !important;
+    font-size: var(--font-size-15);
+    font-family: var(--font-family);
+}
+.input-label-stock {
+    display: none;
+}
+
+#close {
+    position: absolute;
+    left: auto;
+    right: 18px;
+    z-index: 9999999;
+    background-color: transparent;
+    color: var(--color-white);
+    font-size: 17px;
+    top: 18px;
+    margin-right: 0;
+    border: 0;
+}
+.aside-pane-form {
+    background-color: var(--color-white);
+    box-shadow: 0 3px 6px var(--color-shadow-light);
+    padding: 15px;
+    height: calc(100vh - 90px);
+    overflow: auto;
+    scroll-behavior: smooth;
+    position: relative;
+    margin-top: 15px;
+}
+
+.output-row sh-select,
+.output-row .form-group input {
+    min-width: 140px;
+}
+.section-head.border-bottom,
+.output-row span {
+    white-space: normal;
+    word-break: break-word;
+}
+::ng-deep {
+    .ng-untouched {
+        .pull-right {
+            button {
+                padding-right: 10px !important;
+                min-width: auto !important;
+            }
+        }
+    }
+}

@@ -1,0 +1,26 @@
+.stock-items .active {
+    background-color: var(--color-border-light);
+}
+.stock-items .active a .span {
+    color: var(--text-primary-color) !important;
+}
+.span {
+    color: var(--color-black);
+    font-size: var(--font-size-15);
+}
+.in-list {
+    display: flex;
+    align-items: center;
+    a {
+        white-space: normal;
+        word-break: break-word;
+        padding-right: 8px;
+    }
+}
+
+.stock-items > li .in-list:hover {
+    background-color: var(--color-border-light);
+}
+.stock-items > li .in-list:hover a > span {
+    color: var(--text-primary-color) !important;
+}

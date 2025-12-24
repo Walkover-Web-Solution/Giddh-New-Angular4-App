@@ -1,0 +1,65 @@
+.inventory-main {
+    min-height: 100%;
+}
+
+.inventory-control ::ng-deep.nav-tabs > li > a:hover {
+    border-color: transparent !important;
+    color: var(--text-primary-color) !important;
+}
+.inventory-control ::ng-deep.nav-tabs > ::ng-deep li.active > a,
+.inventory-control .nav-tabs > ::ng-deep li.active > a:focus,
+.inventory-control ::ng-deep.nav-tabs > li.active > a:hover {
+    color: var(--text-primary-color) !important;
+    border-bottom: 4px solid var(--theme-primary-color) !important;
+    cursor: pointer !important;
+    background-color: unset !important;
+    border-top: transparent !important;
+    border-right: transparent !important;
+    border-left: transparent !important;
+}
+.inventory-control .nav-tabs > li > a:hover {
+    color: var(--text-primary-color) !important;
+    border-bottom: 4px solid var(--theme-primary-color) !important;
+}
+
+.inventory-control ::ng-deep.nav > li > a:focus,
+.inventory-control ::ng-deep.nav > li > a:hover {
+    background-color: unset !important;
+}
+
+.right-bar {
+    width: calc(100% - 260px);
+}
+.right-bar.welcome-inventory-page {
+    width: 100%;
+}
+
+.inventory-control .container-fluid {
+    .branch-warehouse-filter {
+        width: 100%;
+        sh-select {
+            min-width: 175px;
+        }
+    }
+    .branch-filter {
+        margin-right: 15px;
+        min-width: 217px;
+        width: 240px;
+    }
+    .warehouse-filter {
+        min-width: 217px;
+        width: 240px;
+    }
+    .warehouse-filter {
+        max-width: 250px;
+        width: 100%;
+    }
+}
+.inventory-head {
+    padding-top: 55px;
+}
+@media (max-width: 1024px) {
+    .wrap-top-inventory {
+        display: flex;
+    }
+}

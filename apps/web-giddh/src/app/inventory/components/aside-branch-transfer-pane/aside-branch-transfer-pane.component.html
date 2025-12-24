@@ -1,0 +1,20 @@
+<div class="aside-pane mat-app-background mat-app-background">
+    <div class="branch-modal-wrap">
+        <div class="dialog-header">
+            <span>Transfer</span>
+            <button mat-icon-button aria-label="close" (click)="closeAsidePane($event)">
+                <i class="icon-cross"></i>
+            </button>
+        </div>
+        <div class="form-body clear-both margin-child-label modal-height">
+            <div class="branch-transfer">
+                <button mat-raised-button color="primary" (click)="openBranchTransferPopup('receiptnote')">
+                    Receipt Note
+                </button>
+                <button mat-raised-button color="primary" (click)="openBranchTransferPopup('deliverynote')">
+                    Delivery Challan
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

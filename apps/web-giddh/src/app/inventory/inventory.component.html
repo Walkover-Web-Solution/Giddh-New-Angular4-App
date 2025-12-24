@@ -1,0 +1,117 @@
+<div class="inventory-main">
+    <div class="relative">
+        <hamburger-menu></hamburger-menu>
+        <div class="inventory-control">
+            <mat-tab-group 
+                #inventoryStaticTabs
+                class="table-header-sticky"
+                mat-stretch-tabs="false" 
+                mat-align-tabs="start"
+                [selectedIndex]="activeTabIndex"
+                (selectedTabChange)="redirectUrlToActiveTab($event)">
+                <mat-tab
+                    label="Inventory"
+                >
+                    <!--sidebar-->
+                    <ng-container *ngIf="activeTabIndex === 0 && activeView !== 'receipt'">
+                        <inventory-sidebar *ngIf="!isTabletScreen || (isTabletScreen && activeView !== 'group')">
+                        </inventory-sidebar>
+                        <!--/sidebar-->
+
+                        <section
+                            class="right-bar"
+                            *ngIf="!isTabletScreen || (isTabletScreen && activeView === 'group')"
+                            [ngClass]="{ 'welcome-inventory-page': !activeView }"
+                        >
+                            <!-- uiView: inventory-detail -->
+                            <section class="container-fluid clear-both inventory-head">
+                                <div *ngIf="shouldShowInventoryReport$ | async" class="wrap-top-inventory">
+                                    <div *ngIf="isTabletScreen && activeView === 'group'" class="mb-3">
+                                        <button
+                                            mat-raised-button color="primary"
+                                            [routerLink]="['/pages/inventory/']"
+                                            (click)="activeView = null"
+                                        >
+                                            Back
+                                        </button>
+                                    </div>
+                                    <div *ngIf="activeView" class="d-flex mb-2 branch-warehouse-filter">
+                                        <reactive-dropdown-field
+                                            *ngIf="
+                                                (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
+                                                branches &&
+                                                branches.length > 2
+                                            "
+                                            class="multi-select branch-filter"
+                                            (ngModelChange)="loadReportByBranch($event)"
+                                            [options]="branches"
+                                            [placeholder]="'Select Branch'"
+                                            [(ngModel)]="currentBranchAndWarehouseFilterValues.branch"
+                                            [name]="'branchFilter'"
+                                        ></reactive-dropdown-field>
+                                        <reactive-dropdown-field
+                                            *ngIf="warehouses && warehouses.length > 1"
+                                            class="multi-select warehouse-filter"
+                                            (ngModelChange)="loadReportByWarehouse($event)"
+                                            [options]="warehouses"
+                                            [placeholder]="'Select Warehouse'"
+                                            [(ngModel)]="currentBranchAndWarehouseFilterValues.warehouse"
+                                            [name]="'warehouseFilter'"
+                                        ></reactive-dropdown-field>
+                                    </div>
+                                </div>
+                                <div *ngIf="(shouldShowInventoryReport$ | async) && activeView === 'stock'">
+                                    <invetory-stock-report
+                                        [currentBranchAndWarehouse]="currentBranchAndWarehouseFilterValues"
+                                    >
+                                    </invetory-stock-report>
+                                </div>
+                                <div *ngIf="(shouldShowInventoryReport$ | async) && activeView === 'group'">
+                                    <invetory-group-stock-report
+                                        [currentBranchAndWarehouse]="currentBranchAndWarehouseFilterValues"
+                                    >
+                                    </invetory-group-stock-report>
+                                </div>
+                                <div *ngIf="!activeView">
+                                    <welcome-inventory></welcome-inventory>
+                                </div>
+                                <inventory-header> </inventory-header>
+                            </section>
+                        </section>
+                    </ng-container>
+                </mat-tab>
+
+                <mat-tab
+                    label="Job Work"
+                >
+                    <ng-container *ngIf="activeTabIndex === 1">
+                        <jobwork></jobwork>
+                    </ng-container>
+                </mat-tab>
+
+                <mat-tab
+                    label="Manufacturing"
+                >
+                    <ng-container *ngIf="activeTabIndex === 2">
+                        <manufacturing></manufacturing>
+                    </ng-container>
+                </mat-tab>
+
+                <mat-tab
+                    label="Report"
+                >
+                    <ng-container *ngIf="activeTabIndex === 3">
+                        <new-branch-transfer-list> </new-branch-transfer-list>
+                    </ng-container>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+    </div>
+</div>
+
+<!-- branch transfer modal -->
+<ng-template #branchtransfertemplate>
+    <div class="modal-body radius-none pr-0 pl-0 pt-0 p-0">
+        <new-branch-transfer (hideModal)="hideModal()" [branchTransferMode]="branchTransferMode"> </new-branch-transfer>
+    </div>
+</ng-template>

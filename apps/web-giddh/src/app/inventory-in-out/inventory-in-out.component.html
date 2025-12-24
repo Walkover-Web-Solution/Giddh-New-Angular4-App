@@ -1,0 +1,21 @@
+<div class="height100">
+    <!--sidebar-->
+    <invetory-sidebar></invetory-sidebar>
+    <!--/sidebar-->
+    <section class="right-bar ng-scope">
+        <section class="container-fluid clear-both border-bottom">
+            <div class="top-bar clear-both">
+                <p class="section-title inline">
+                    <strong>Transaction Log</strong>
+                </p>
+                <!-- top row-->
+                <inventory-inout-header></inventory-inout-header>
+                <!-- /top row-->
+            </div>
+        </section>
+        <!-- uiView: inventory-detail -->
+        <section class="container-fluid clear-both pt-4">
+            <router-outlet></router-outlet>
+        </section>
+    </section>
+</div>

@@ -1,0 +1,21 @@
+.btn-lg:hover {
+    background: var(--color-border-light);
+    color: var(--text-primary-color);
+    box-shadow: 0px 4px 4px -3px var(--color-shadow-light);
+    border-radius: var(--mat-border-radius-0);
+    border-color: var(--theme-primary-color);
+}
+
+.branch-transfer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    min-height: 600px;
+}
+
+.branch-modal-wrap,
+.modal-height{
+    height: 100%;
+}

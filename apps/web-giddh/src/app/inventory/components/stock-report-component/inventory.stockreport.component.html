@@ -1,0 +1,746 @@
+<section class="h-100">
+    <form [formGroup]="entityAndInventoryTypeForm" class="form-inline mb-2">
+        <div class="position-relative d-flex mb-2 inventory-branch-dropdown justify-content-between">
+            <!-- enable branch selection after implimentation from api-->
+            <div class="d-flex">
+                <div class="mr-3 sh-select-dropdown">
+                    <div class="select-style vertical-align-middle ">
+                        <reactive-dropdown-field
+                            [placeholder]="'Select Branch'"
+                            formControlName="selectedEntity"
+                            (selectedOption)="selectEntity($event)"
+                            [(ngModel)]="selectedEntity"
+                            [options]="entities$ | async"
+                        ></reactive-dropdown-field>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex w-100 justify-content-between">
+            <div class="d-flex wrap-head-report">
+                <p class="head-report" *ngIf="stockReport && stockReport.stockUnit">
+                    <span> {{ stockReport.stockName }}</span> (Stock)
+                </p>
+
+                <div class="advance-icon cursor-pointer" (click)="onOpenAdvanceSearch()" matTooltip="Advance Search">
+                    <span class="icon-advance-filter"></span>
+                </div>
+            </div>
+            <div class="clear-filter">
+                <button mat-stroked-button *ngIf="isFilterCorrect" (click)="resetFilter()">
+                    <span class="icon-cross"></span> Clear Filter
+                </button>
+            </div>
+
+            <div class="right-inventory">
+                <div class="btn-group">
+                    <button
+                        type="button"
+                        class="cursor-pointer mr-3 icon-btn icon-btn"
+                        [matMenuTriggerFor]="downloadMenu"
+                        matTooltip="Download"
+                    >
+                        <i class="icon-download-circle strong"></i>
+                    </button>
+                    <mat-menu #downloadMenu="matMenu" class="dropdown-menu-right dropdown-menu-download">
+                        <button mat-menu-item (click)="downloadAllInventoryReports('stock', 'csv')">
+                            CSV
+                        </button>
+                        <button mat-menu-item (click)="downloadAllInventoryReports('stock', 'xlsx')">
+                            XLS
+                        </button>
+                    </mat-menu>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <section>
+        <div class="mobile-card-wrapper">
+            <table
+                class="table basic on-mobile-view table-responsive"
+                [ngClass]="{
+                    'mb-custom-100': stockReport && stockReport.transactions && stockReport.transactions.length > 6
+                }"
+            >
+                <thead>
+                    <tr>
+                        <th colspan="3" width="40%">
+                            <div class="d-flex">
+                                <div class="custom-datepicker"
+                                     [matMenuTriggerFor]="universalDatepicker"
+                                     #universalDatepickerTrigger="matMenuTrigger"
+                                     role="button"
+                                     aria-haspopup="true"
+                                     aria-controls="universalDatepicker">
+                                    <input
+                                        matInput
+                                        type="text"
+                                        name="selectedDateRange"
+                                        [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                                        class="giddh-datepicker date-range-picker"
+                                        readonly
+                                    />
+                                </div>
+                                <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+                                    <ng-template matMenuContent>
+                                        <app-datepicker-wrapper
+                                            [inputStartDate]="selectedDateRange?.startDate"
+                                            [inputEndDate]="selectedDateRange?.endDate"
+                                            [alwaysShowCalendars]="true"
+                                            [ranges]="datePickerOption"
+                                            [selectedRangeLabel]="selectedRangeLabel"
+                                            [showCustomRangeLabel]="true"
+                                            [showClearButton]="false"
+                                            [showCancel]="true"
+                                            [linkedCalendars]="true"
+                                            [showDropdowns]="true"
+                                            (rangeClicked)="dateSelectedCallback($event)"
+                                            (datesUpdated)="dateSelectedCallback($event)"
+                                            (closeCalender)="toggleGiddhDatepicker(false)"
+                                            [keepCalendarOpeningWithRange]="false"
+                                            [showRangeLabelOnInput]="false"
+                                        ></app-datepicker-wrapper>
+                                    </ng-template>
+                                </mat-menu>
+                            </div>
+                        </th>
+                        <th
+                            [hidden]="
+                                !stockReport?.transactions?.length &&
+                                !stockReportRequest?.accountName &&
+                                stockReportRequest?.voucherTypes?.length !== VOUCHER_TYPES.length
+                            "
+                            colspan="4"
+                            width="40%"
+                            class="text-center border-right border-bottom"
+                        >
+                            Transactions
+                        </th>
+                        <th
+                            [hidden]="
+                                !stockReport?.transactions?.length &&
+                                !stockReportRequest?.accountName &&
+                                stockReportRequest?.voucherTypes?.length !== VOUCHER_TYPES.length
+                            "
+                            colspan="1"
+                            width="10%"
+                            class="border-left text-center"
+                        >
+                            Closing Stock
+                        </th>
+                    </tr>
+                    <tr
+                        class="border-top"
+                        [hidden]="
+                            !stockReport?.transactions?.length &&
+                            !stockReportRequest?.accountName &&
+                            !stockReportRequest?.voucherTypes?.length
+                        "
+                    >
+                        <th width="100">
+                            <div class="d-flex">
+                                <div >Date</div>
+                                <div class="icon-pointer">
+                                    <!-- default -->
+                                    <div
+                                        class="icon-sort-asc text-right"
+                                        *ngIf="stockReportRequest.sortBy !== 'entry_date'"
+                                        (click)="sortButtonClicked('asc', 'entry_date')"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                stockReportRequest.sortBy === 'entry_date' &&
+                                                stockReportRequest.sort === 'asc'
+                                        }"
+                                    ></div>
+                                    <!-- after sort click -->
+                                    <div
+                                        class="icon-sort-asc text-right"
+                                        *ngIf="
+                                            stockReportRequest.sortBy === 'entry_date' &&
+                                            stockReportRequest.sort === 'desc'
+                                        "
+                                        (click)="sortButtonClicked('asc', 'entry_date')"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                stockReportRequest.sortBy === 'entry_date' &&
+                                                stockReportRequest.sort === 'desc'
+                                        }"
+                                    ></div>
+                                    <div
+                                        class="icon-sort-asc text-right"
+                                        *ngIf="
+                                            stockReportRequest.sortBy === 'entry_date' &&
+                                            stockReportRequest.sort === 'asc'
+                                        "
+                                        (click)="sortButtonClicked('desc', 'entry_date')"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                stockReportRequest.sortBy === 'entry_date' &&
+                                                stockReportRequest.sort === 'asc'
+                                        }"
+                                    ></div>
+                                </div>
+                            </div>
+                        </th>
+
+                        <th class="border-right border-bottom" width="14%">
+                            <div
+                                class="btn-group btn-group-voucher-type"
+                            >
+                                <button
+                                    type="button"
+                                    [matMenuTriggerFor]="voucherTypeMenu"
+                                    mat-raised-button color="primary" class="cursor-pointer c-3"
+                                >
+                                    Voucher Type
+                                    <i class="fa fa-ellipsis-v pull-right text-light" aria-hidden="true"></i>
+                                </button>
+                                <mat-menu #voucherTypeMenu="matMenu" class="dropdown-menu-right voucher-type">
+                                    <div *ngFor="let item of VOUCHER_TYPES" class="mat-menu-item">
+                                        <mat-checkbox
+                                            [(ngModel)]="item.checked"
+                                            (click)="filterByCheck(item.value, $event.target?.checked)"
+                                            color="primary"
+                                        >
+                                            {{ item.label }}
+                                        </mat-checkbox>
+                                    </div>
+                                </mat-menu>
+                            </div>
+                        </th>
+                        <th class="td-search-box" width="15%" (clickOutside)="clickedOutside($event, null, 'account')">
+                            <div [hidden]="showAccountSearch">
+                                <span>Account Name</span>
+                                <i class="icon-search" (click)="showAccountSearchBox()"></i>
+                            </div>
+                            <div class="input-container" [hidden]="!showAccountSearch">
+                                <input
+                                    type="text"
+                                    placeholder="Search Account"
+                                    class="w100"
+                                    #accountName
+                                    [formControl]="accountUniqueNameInput"
+                                />
+                            </div>
+                        </th>
+
+                        <th class="border-right">
+                            <div class="d-flex">
+                                <div class="flex-fill text-right">Inwards</div>
+                                <div class="icon-pointer text-right">
+                                    <!-- default -->
+                                    <div
+                                        class="icon-sort-asc"
+                                        *ngIf="stockReportRequest.sortBy !== 'inward_quantity'"
+                                        (click)="sortButtonClicked('asc', 'inward_quantity')"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                stockReportRequest.sortBy === 'inward_quantity' &&
+                                                stockReportRequest.sort === 'asc'
+                                        }"
+                                    ></div>
+                                    <!-- after sort click -->
+                                    <div
+                                        class="icon-sort-asc"
+                                        *ngIf="
+                                            stockReportRequest.sortBy === 'inward_quantity' &&
+                                            stockReportRequest.sort === 'desc'
+                                        "
+                                        (click)="sortButtonClicked('asc', 'inward_quantity')"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                stockReportRequest.sortBy === 'inward_quantity' &&
+                                                stockReportRequest.sort === 'desc'
+                                        }"
+                                    ></div>
+                                    <div
+                                        class="icon-sort-asc"
+                                        *ngIf="
+                                            stockReportRequest.sortBy === 'inward_quantity' &&
+                                            stockReportRequest.sort === 'asc'
+                                        "
+                                        (click)="sortButtonClicked('desc', 'inward_quantity')"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                stockReportRequest.sortBy === 'inward_quantity' &&
+                                                stockReportRequest.sort === 'asc'
+                                        }"
+                                    ></div>
+                                </div>
+                            </div>
+                        </th>
+
+                        <th class="border-right">
+                            <div class="d-flex">
+                                <div class="flex-fill text-right">Outwards</div>
+                                <div class="icon-pointer text-right">
+                                    <!-- default -->
+                                    <div
+                                        class="icon-sort-asc"
+                                        *ngIf="stockReportRequest.sortBy !== 'outward_quantity'"
+                                        (click)="sortButtonClicked('asc', 'outward_quantity')"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                stockReportRequest.sortBy === 'outward_quantity' &&
+                                                stockReportRequest.sort === 'asc'
+                                        }"
+                                    ></div>
+                                    <!-- after sort click -->
+                                    <div
+                                        class="icon-sort-asc"
+                                        *ngIf="
+                                            stockReportRequest.sortBy === 'outward_quantity' &&
+                                            stockReportRequest.sort === 'desc'
+                                        "
+                                        (click)="sortButtonClicked('asc', 'outward_quantity')"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                stockReportRequest.sortBy === 'outward_quantity' &&
+                                                stockReportRequest.sort === 'desc'
+                                        }"
+                                    ></div>
+                                    <div
+                                        class="icon-sort-asc"
+                                        *ngIf="
+                                            stockReportRequest.sortBy === 'outward_quantity' &&
+                                            stockReportRequest.sort === 'asc'
+                                        "
+                                        (click)="sortButtonClicked('desc', 'outward_quantity')"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                stockReportRequest.sortBy === 'outward_quantity' &&
+                                                stockReportRequest.sort === 'asc'
+                                        }"
+                                    ></div>
+                                </div>
+                            </div>
+                        </th>
+
+                        <th class="border-right">
+                            <div class="d-flex">
+                                <div class="flex-fill text-right">Rate</div>
+                                <div class="icon-pointer text-right">
+                                    <!-- default -->
+                                    <div
+                                        class="icon-sort-asc"
+                                        *ngIf="stockReportRequest.sortBy !== 'rate'"
+                                        (click)="sortButtonClicked('asc', 'rate')"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                stockReportRequest.sortBy === 'rate' &&
+                                                stockReportRequest.sort === 'asc'
+                                        }"
+                                    ></div>
+                                    <!-- after sort click -->
+                                    <div
+                                        class="icon-sort-asc"
+                                        *ngIf="
+                                            stockReportRequest.sortBy === 'rate' && stockReportRequest.sort === 'desc'
+                                        "
+                                        (click)="sortButtonClicked('asc', 'rate')"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                stockReportRequest.sortBy === 'rate' &&
+                                                stockReportRequest.sort === 'desc'
+                                        }"
+                                    ></div>
+                                    <div
+                                        class="icon-sort-asc"
+                                        *ngIf="
+                                            stockReportRequest.sortBy === 'rate' && stockReportRequest.sort === 'asc'
+                                        "
+                                        (click)="sortButtonClicked('desc', 'rate')"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                stockReportRequest.sortBy === 'rate' &&
+                                                stockReportRequest.sort === 'asc'
+                                        }"
+                                    ></div>
+                                </div>
+                            </div>
+                        </th>
+
+                        <th class="border-right">
+                            <div class="d-flex">
+                                <div class="flex-fill text-right">Value</div>
+                                <div class="icon-pointer text-right">
+                                    <!-- default -->
+                                    <div
+                                        class="icon-sort-asc"
+                                        *ngIf="stockReportRequest.sortBy !== 'transaction_val'"
+                                        (click)="sortButtonClicked('asc', 'transaction_val')"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                stockReportRequest.sortBy === 'transaction_val' &&
+                                                stockReportRequest.sort === 'asc'
+                                        }"
+                                    ></div>
+                                    <!-- after sort click -->
+                                    <div
+                                        class="icon-sort-asc"
+                                        *ngIf="
+                                            stockReportRequest.sortBy === 'transaction_val' &&
+                                            stockReportRequest.sort === 'desc'
+                                        "
+                                        (click)="sortButtonClicked('asc', 'transaction_val')"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                stockReportRequest.sortBy === 'transaction_val' &&
+                                                stockReportRequest.sort === 'desc'
+                                        }"
+                                    ></div>
+                                    <div
+                                        class="icon-sort-asc"
+                                        *ngIf="
+                                            stockReportRequest.sortBy === 'transaction_val' &&
+                                            stockReportRequest.sort === 'asc'
+                                        "
+                                        (click)="sortButtonClicked('desc', 'transaction_val')"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                stockReportRequest.sortBy === 'transaction_val' &&
+                                                stockReportRequest.sort === 'asc'
+                                        }"
+                                    ></div>
+                                </div>
+                            </div>
+                        </th>
+
+                        <th class="border-right text-center">
+                            <div class="d-flex">
+                                <div class="flex-fill text-right">Qty</div>
+                                <div class="icon-pointer text-right">
+                                    <!-- default -->
+                                    <div
+                                        class="icon-sort-asc"
+                                        *ngIf="stockReportRequest.sortBy !== 'closing_quantity'"
+                                        (click)="sortButtonClicked('asc', 'closing_quantity')"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                stockReportRequest.sortBy === 'closing_quantity' &&
+                                                stockReportRequest.sort === 'asc'
+                                        }"
+                                    ></div>
+                                    <!-- after sort click -->
+                                    <div
+                                        class="icon-sort-asc"
+                                        *ngIf="
+                                            stockReportRequest.sortBy === 'closing_quantity' &&
+                                            stockReportRequest.sort === 'desc'
+                                        "
+                                        (click)="sortButtonClicked('asc', 'closing_quantity')"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                stockReportRequest.sortBy === 'closing_quantity' &&
+                                                stockReportRequest.sort === 'desc'
+                                        }"
+                                    ></div>
+                                    <div
+                                        class="icon-sort-asc"
+                                        *ngIf="
+                                            stockReportRequest.sortBy === 'closing_quantity' &&
+                                            stockReportRequest.sort === 'asc'
+                                        "
+                                        (click)="sortButtonClicked('desc', 'closing_quantity')"
+                                        [ngClass]="{
+                                            'active-text-color':
+                                                stockReportRequest.sortBy === 'closing_quantity' &&
+                                                stockReportRequest.sort === 'asc'
+                                        }"
+                                    ></div>
+                                </div>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="!stockReportInProcess && stockReport">
+                    <tr *ngFor="let txn of stockReport.transactions">
+                        <td class="border-right" data-title="Date">{{ txn.entryDate }}</td>
+                        <td class="border-right {{ txn.voucherType }}" data-title="Voucher Type">{{ txn.voucherType }}</td>
+                        <td class="border-right" data-title="Account Name">{{ txn.account?.name }}</td>
+                        <td data-title="Transactions -" class="td-mobile-head"></td>
+                        <td class="text-right border-right" data-title="Inwards">
+                            <span *ngIf="txn.type == 'dr'">
+                                {{ txn.quantity | giddhNumberFormat }}
+                            </span>
+                            <span *ngIf="txn.type == 'dr'" class="unit-badge">
+                                {{ txn.stockUnit?.code }}
+                            </span>
+                            <span *ngIf="txn.type == 'cr'">-</span>
+                        </td>
+
+                        <td class="text-right border-right" data-title="Outwards">
+                            <span *ngIf="txn.type == 'cr'">
+                                {{ txn.quantity | giddhNumberFormat }}
+                            </span>
+                            <span *ngIf="txn.type == 'cr'" class="unit-badge">
+                                {{ txn.stockUnit?.code }}
+                            </span>
+                            <span *ngIf="txn.type == 'dr'">-</span>
+                        </td>
+
+                        <td class="text-right border-right" data-title="Rate" [ngClass]="txn.type === 'cr' ? 'cr' : 'dr'">
+                            {{ txn.rate | giddhNumberFormat }}
+                        </td>
+
+                        <td data-title="Closing Stock -" class="td-mobile-head"></td>
+
+                        <td class="text-right border-right" data-title="Value" [ngClass]="txn.type === 'cr' ? 'cr' : 'dr'">
+                            {{ txn.amount | giddhNumberFormat }}
+                        </td>
+                        <td class="text-right border-right" data-title="Quantity">
+                            {{ txn.closingQuantity | giddhNumberFormat
+                            }}<span class="unit-badge">{{ stockReport.stockUnit }}</span>
+                        </td>
+                    </tr>
+                </tbody>
+
+                <tbody *ngIf="stockReportInProcess">
+                    <tr>
+                        <td colspan="10" class="text-center empty-table">
+                            <giddh-page-loader></giddh-page-loader>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot *ngIf="stockReport && stockReport.totalItems > pageSizeOptions[0]">
+                    <tr>
+                        <td colspan="10" class="text-center">
+                            <mat-paginator
+                                [length]="stockReport.totalPages"
+                                [pageSize]="stockReportRequest.count"
+                                [pageIndex]="stockReport.page - 1"
+                                [pageSizeOptions]="pageSizeOptions"
+                                [showFirstLastButtons]="true"
+                                [hidePageSize]="false"
+                                (page)="handlePageEvent($event)"
+                            ></mat-paginator>
+                            <section class="mb-custom-80"></section>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+            <div
+                class="no-data"
+                *ngIf="(stockReport && stockReport.count < 1 && !stockReportInProcess) || stockNotFoundMessage"
+            >
+                <h2 [class.stock-not-found]="stockNotFoundMessage">
+                    {{ stockNotFoundMessage ? stockNotFoundMessage : "No entries found within given criteria." }}
+                </h2>
+                <h2 class="p-0" [class.stock-not-found]="stockNotFoundMessage">
+                    {{ stockNotFoundMessage ? stockNotFoundMessage : "Do search with some other dates" }}
+                </h2>
+            </div>
+        </div>
+    </section>
+
+    <!-- sticky Footer -->
+    <section class="mt-5" *ngIf="stockReport && stockReport.transactions && stockReport.transactions.length > 0">
+        <div class="sticky-footer sticky-footer-sale-amount">
+            <div class="inner-content-footer">
+                <div class="row">
+                    <div class="col-sm-3 pr-0">
+                        <div class="row">
+                            <div class="col-6">
+                                <p class="text-light text-left">Profit/Loss</p>
+                            </div>
+                            <div class="col-12">
+                                <p class="text-primary text-left">
+                                    &nbsp;{{ stockReport.profit | giddhNumberFormat }} ({{
+                                        selectedDateRangeUi | replaceHyphens
+                                    }})
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 pr-0">
+                        <div class="row">
+                            <div class="col-10 p-0">
+                                <p class="text-light">Transaction Count</p>
+                            </div>
+                            <div class="col-2 p-0">
+                                <p class="text-primary text-left">
+                                    {{
+                                        stockReport.inwardBalance.transactionCount +
+                                            stockReport.outwardBalance.transactionCount | giddhNumberFormat
+                                    }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-10 p-0">
+                                <p>Inward</p>
+                            </div>
+                            <div class="col-2 p-0">
+                                <p class="text-left">
+                                    &nbsp;<span *ngIf="stockReport.inwardBalance.transactionCount">{{
+                                        stockReport.inwardBalance.transactionCount | giddhNumberFormat
+                                    }}</span
+                                    ><span *ngIf="!stockReport.inwardBalance.transactionCount">0</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-10 p-0">
+                                <p>Outward</p>
+                            </div>
+                            <div class="col-2 p-0">
+                                <p class="text-left">
+                                    &nbsp;<span *ngIf="stockReport.outwardBalance.transactionCount">{{
+                                        stockReport.outwardBalance.transactionCount | giddhNumberFormat
+                                    }}</span
+                                    ><span *ngIf="!stockReport.outwardBalance.transactionCount">0</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-7">
+                        <div class="flex-col">
+                            <div class="cont">
+                                <p class="text-light">Opening</p>
+                                <p>{{ stockReport.openingBalance.amount | giddhNumberFormat }}</p>
+                                <p>
+                                    ({{ stockReport.openingBalance.quantity | giddhNumberFormat }}
+                                    {{ stockReport.openingBalance.stockUnit }})
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex-col">
+                            <div class="cont">
+                                <p class="text-light">Inward</p>
+                                <p>{{ stockReport.inwardBalance.amount | giddhNumberFormat }}</p>
+                                <p>
+                                    ({{ stockReport.inwardBalance.quantity | giddhNumberFormat }}
+                                    {{ stockReport.inwardBalance.stockUnit }})
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex-col">
+                            <div class="cont">
+                                <p class="text-light">Outward</p>
+                                <p>{{ stockReport.outwardBalance.amount | giddhNumberFormat }}</p>
+                                <p>
+                                    ({{ stockReport.outwardBalance.quantity | giddhNumberFormat }}
+                                    {{ stockReport.outwardBalance.stockUnit }})
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex-col">
+                            <div class="cont">
+                                <p class="text-light">Closing Stock</p>
+                                <p class="text-primary">{{ stockReport.closingBalance.amount | giddhNumberFormat }}</p>
+                                <p>
+                                    ({{ stockReport.closingBalance.quantity | giddhNumberFormat }}
+                                    {{ stockReport.closingBalance.stockUnit }})
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</section>
+<!-- aside menu section -->
+<ng-template #asideMenuTemplate>
+    <aside-pane (closeAsideEvent)="asideMenuDialogRef?.close()"></aside-pane>
+</ng-template>
+<!-- aside menu section -->
+
+<!-- Advance search popup -->
+<ng-template #advanceSearchTemplate>
+    <div class="dialog-header">
+        <span>Advance Search</span>
+        <button mat-icon-button aria-label="close" (click)="advanceSearchAction('cancel')">
+            <i class="icon-cross"></i>
+        </button>
+    </div>
+    <mat-dialog-content class="advance-search theme-foreground-color clear-both dialog-body" *ngIf="advanceSearchModalShow">
+        <form action="" [formGroup]="advanceSearchForm">
+            <div class="row">
+                <div class="col-sm-4">Date Range</div>
+                <div class="col-sm-8">
+                    <div
+                        class="custom-datepicker"
+                        [matMenuTriggerFor]="universalDatepicker"
+                        #universalDatepickerTrigger="matMenuTrigger"
+                        role="button"
+                        aria-haspopup="true"
+                        aria-controls="universalDatepicker"
+                    >
+                        <input
+                            matInput
+                            type="text"
+                            name="selectedDateRange"
+                            [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
+                            class="giddh-datepicker date-range-picker"
+                            readonly
+                        />
+                    </div>
+                    <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+                        <ng-template matMenuContent>
+                            <app-datepicker-wrapper
+                                [inputStartDate]="selectedDateRange?.startDate"
+                                [inputEndDate]="selectedDateRange?.endDate"
+                                [alwaysShowCalendars]="true"
+                                [ranges]="datePickerOption"
+                                [selectedRangeLabel]="selectedRangeLabel"
+                                [showCustomRangeLabel]="true"
+                                [showClearButton]="false"
+                                [showCancel]="true"
+                                [linkedCalendars]="true"
+                                [showDropdowns]="true"
+                                (rangeClicked)="dateSelectedCallback($event)"
+                                (datesUpdated)="dateSelectedCallback($event)"
+                                (closeCalender)="toggleGiddhDatepicker(false)"
+                                [keepCalendarOpeningWithRange]="false"
+                                [showRangeLabelOnInput]="false"
+                            ></app-datepicker-wrapper>
+                        </ng-template>
+                    </mat-menu>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-sm-4">Select Category</div>
+                <div class="col-sm-4">
+                    <div class="select-style vertical-align-middle ">
+                        <reactive-dropdown-field
+                            [options]="CategoryOptions"
+                            (onClear)="clearShSelect('filterCategory')"
+                            [placeholder]="'Select Category'"
+                            formControlName="filterCategory"
+                            (selectedOption)="onDDElementSelect($event, 'filterCategory')"
+                        ></reactive-dropdown-field>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="select-style vertical-align-middle " *ngIf="stockReportRequest.param !== 'qty_closing'">
+                        <reactive-dropdown-field
+                            [options]="CategoryTypeOptions"
+                            (onClear)="clearShSelect('filterCategoryType')"
+                            [placeholder]="'Select Type'"
+                            formControlName="filterCategoryType"
+                            (selectedOption)="onDDElementSelect($event, 'filterCategoryType')"
+                        ></reactive-dropdown-field>
+                    </div>
+                    <input
+                        *ngIf="stockReportRequest.param === 'qty_closing'"
+                        readonly
+                        type="text"
+                        class="form-control"
+                        value="Quantity"
+                    />
+                </div>
+            </div>
+
+<!-- branch transfer modal -->
+<ng-template #template>
+    <div class="recept-modal">
+        <div class="dialog-body">
+            <new-branch-transfer (hideModal)="hideModal($event)" [branchTransferMode]="branchTransferMode">
+            </new-branch-transfer>
+        </div>
+    </div>
+</ng-template>

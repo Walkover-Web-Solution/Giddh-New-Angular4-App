@@ -1,0 +1,300 @@
+<div class="form-header">
+    <div>
+        <p >
+            <span>Inward Note</span>
+            <span class="pull-right font-size-15"
+                >Multiple
+                <a
+                    href="javascript:void(0)"
+                    [ngClass]="{ 'text-link': mode === 'sender' }"
+                    (click)="modeChanged('sender')"
+                    >Senders</a
+                >
+                /
+                <a
+                    href="javascript:void(0)"
+                    [ngClass]="{ 'text-link': mode === 'product' }"
+                    (click)="modeChanged('product')"
+                    >Products</a
+                >
+            </span>
+        </p>
+    </div>
+</div>
+<div class="form-body clear-both margin-child-label">
+    <div class="clear-both">
+        <form [formGroup]="form" class="form-group">
+            <div class="row">
+                <div class="col-6 form-group">
+                    <label>Date <sup>*</sup></label>
+                    <giddh-datepicker
+                        name="entryDate"
+                        formControlName="inventoryEntryDate"
+                        [appearance]="'outline'"
+                        [required]="true"
+                    ></giddh-datepicker>
+                    <span
+                        *ngIf="inventoryEntryDate.invalid && (inventoryEntryDate.dirty || inventoryEntryDate.touched)"
+                    >
+                        <span
+                            *ngIf="inventoryEntryDate?.errors && inventoryEntryDate?.errors['required']"
+                            class="text-danger"
+                            >Please select Date.</span
+                        >
+                    </span>
+                </div>
+
+                <div class="col-6 form-group" *ngIf="mode === 'sender'">
+                    <label>Product Name <sup>*</sup></label>
+                    <reactive-dropdown-field
+                        [options]="stockListOptions"
+                        [placeholder]="'Select Product'"
+                        [disabled]="stock?.disabled"
+                        formControlName="stock"
+                        (selectedOption)="stockChanged($event)"
+                        [required]="true"
+                    >
+                    </reactive-dropdown-field>
+                </div>
+
+                <div class="col-6 form-group" *ngIf="mode === 'product'">
+                    <label>Sender <sup>*</sup></label>
+                    <reactive-dropdown-field
+                        [options]="userListOptions"
+                        [placeholder]="'Select Sender'"
+                        formControlName="inventoryUser"
+                        (selectedOption)="userChanged($event)"
+                        [required]="true"
+                    >
+                    </reactive-dropdown-field>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-4" *ngIf="mode === 'sender'">
+                    <label class="font-size-15">Sender <sup>*</sup></label>
+                </div>
+                <div class="col-4" *ngIf="mode === 'product'">
+                    <label class="font-size-15">Product Name <sup>*</sup></label>
+                </div>
+
+                <div class="col-4">
+                    <label class="font-size-15">Unit<sup>*</sup></label>
+                </div>
+
+                <div class="col-4">
+                    <label class="font-size-15">Quantity <sup>*</sup></label>
+                </div>
+            </div>
+
+            <div
+                formArrayName="transactions"
+                *ngFor="let item of transactions.controls; let i = index; let first = first; let last = last"
+            >
+                <div [formGroupName]="i">
+                    <div class="col-4 form-group" *ngIf="mode === 'sender'">
+                        <reactive-dropdown-field
+                            [options]="userListOptions"
+                            [placeholder]="'Select Sender'"
+                            (selectedOption)="userChanged($event, i)"
+                            formControlName="inventoryUser"
+                        >
+                        </reactive-dropdown-field>
+                    </div>
+                    <div class="col-4 form-group" *ngIf="mode === 'product'">
+                        <reactive-dropdown-field
+                            [options]="stockListOptions"
+                            [placeholder]="'Select Product'"
+                            (selectedOption)="stockChanged($event, i)"
+                            formControlName="stock"
+                        ></reactive-dropdown-field>
+                    </div>
+
+                    <div class="col-4 form-group">
+                        <reactive-dropdown-field
+                            [options]="stockUnitsOptions"
+                            [placeholder]="'Choose unit'"
+                            formControlName="stockUnit"
+                        >
+                        </reactive-dropdown-field>
+                    </div>
+
+                    <div class="col-4 form-group">
+                        <div class="row">
+                            <div class="col-10">
+                                <input name="" type="text" formControlName="quantity" class="form-control" />
+                            </div>
+
+                            <div class="pull-right mt-1 unit-add">
+                                <button
+                                    mat-stroked-button
+                                    (click)="addTransactionItem(transactions.controls[i])"
+                                    *ngIf="last"
+                                >
+                                    <i class="icon-plus text-green"></i>
+                                </button>
+                                <button mat-stroked-button (click)="deleteTransactionItem(i)" *ngIf="!last">
+                                    <i class="icon-cross text-red"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <ng-container *ngIf="mode === 'sender'">
+                <div class="row">
+                    <div class="mt-2 pl-1 pr-1">
+                        <div class="col-12">
+                            <div class="checkbox">
+                                <mat-checkbox
+                                    formControlName="isManufactured"
+                                    color="primary"
+                                >
+                                    Is it a finished stock? (Manufacturing/Combo)
+                                </mat-checkbox>
+                            </div>
+                        </div>
+                    </div>
+
+                    <section class="col-md-12" *ngIf="form?.value.isManufactured">
+                        <div>
+                            <p class="section-head border-bottom">
+                                <strong>{{ form.controls["stock"]?.value }} (Made with)</strong>
+                            </p>
+
+                            <div formGroupName="manufacturingDetails">
+                                <div class="row pt-1">
+                                    <div class="col-4">
+                                        <label class="font-size-15">Output Qty <sup>*</sup></label>
+                                    </div>
+                                    <div class="col-5">
+                                        <label class="font-size-15">Stock Unit <sup>*</sup></label>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-4 form-group">
+                                        <input
+                                            type="text"
+                                            class="form-control"
+                                            decimalDigitsDirective
+                                            [DecimalPlaces]="4"
+                                            name="manufacturingQuantity"
+                                            placeholder="Quantity"
+                                            formControlName="manufacturingQuantity"
+                                        />
+                                    </div>
+
+                                    <div class="col-5 form-group">
+                                        <reactive-dropdown-field
+                                            [options]="stockUnitsOptions"
+                                            formControlName="manufacturingUnitCode"
+                                            [placeholder]="'Select Unit'"
+                                        ></reactive-dropdown-field>
+                                    </div>
+
+                                    <div
+                                        class="col-3 d-flex align-items-center height-30"
+                                        *ngIf="manufacturingDetails.controls['manufacturingQuantity']?.value"
+                                    >
+                                        <label>&nbsp;</label>
+                                        <span class="d-block"
+                                            ><strong
+                                                >= (
+                                                {{ manufacturingDetails.controls["manufacturingQuantity"]?.value }}
+                                                {{ manufacturingDetails.controls["manufacturingUnitCode"]?.value }}
+                                                {{ stock?.value }} )</strong
+                                            ></span
+                                        >
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-4">
+                                        <strong>Input Stock Name</strong>
+                                    </div>
+                                    <div class="col-3">
+                                        <strong>Stock Qty</strong>
+                                    </div>
+                                    <div class="col-4">
+                                        <strong>Stock Unit</strong>
+                                    </div>
+                                </div>
+
+                                <ng-container formArrayName="linkedStocks">
+                                    <div
+                                        class="row"
+                                        *ngFor="
+                                            let list of manufacturingDetails['controls']['linkedStocks'].controls;
+                                            let i = index;
+                                            let l = last
+                                        "
+                                        [formGroupName]="i"
+                                    >
+                                        <div class="col-4 form-group">
+                                            <reactive-dropdown-field
+                                                [options]="stockListOptions"
+                                                formControlName="stockUniqueName"
+                                                [placeholder]="'Select Stock Name'"
+                                                (selectedOption)="findAddedStock($event?.value, i)"
+                                            ></reactive-dropdown-field>
+                                        </div>
+                                        <div class="col-3 form-group">
+                                            <input
+                                                type="text"
+                                                formControlName="quantity"
+                                                decimalDigitsDirective
+                                                [DecimalPlaces]="4"
+                                                name="quantity"
+                                                placeholder="Enter Quantity"
+                                                class="form-control"
+                                            />
+                                        </div>
+                                        <div class="col-4 form-group">
+                                            <reactive-dropdown-field
+                                                [options]="stockUnitsOptions"
+                                                formControlName="stockUnitCode"
+                                                [placeholder]="'Select Unit'"
+                                            >
+                                            </reactive-dropdown-field>
+                                        </div>
+                                        <div class="pull-right mt-1 unit-add">
+                                            <button
+                                                mat-stroked-button
+                                                (click)="addItemInLinkedStocks(list, i, i)"
+                                                *ngIf="l"
+                                                [disabled]="disableStockButton"
+                                            >
+                                                <i class="icon-plus text-green"></i>
+                                            </button>
+                                            <button mat-stroked-button (click)="removeItemInLinkedStocks(i)" *ngIf="!l">
+                                                <i class="icon-cross text-red"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-12 form-group">
+                        <label>Description</label>
+                        <textarea formControlName="description" type="text" class="form-control"></textarea>
+                    </div>
+                </div>
+            </ng-container>
+
+            <div class="row">
+                <div class="col-12 text-left mt-2">
+                    <button mat-stroked-button (click)="onCancel.emit($event)">Cancel</button>
+                    <button mat-stroked-button [ladda]="isLoading" [disabled]="form.invalid" (click)="save()">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

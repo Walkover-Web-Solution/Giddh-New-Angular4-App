@@ -1,0 +1,111 @@
+<div class="form-header">
+    <p >Transfer Note</p>
+</div>
+<div class="form-body clear-both margin-child-label">
+    <div class="clear-both">
+        <form [formGroup]="form" class="form-group">
+            <div class="row">
+                <div class="col-xs-6 form-group">
+                    <label>Date <sup>*</sup></label>
+                    <giddh-datepicker
+                        name="entryDate"
+                        formControlName="inventoryEntryDate"
+                        [minDate]="today"
+                        [appearance]="'outline'"
+                        [required]="true"
+                    ></giddh-datepicker>
+                    <span
+                        *ngIf="inventoryEntryDate.invalid && (inventoryEntryDate.dirty || inventoryEntryDate.touched)"
+                    >
+                        <span
+                            *ngIf="inventoryEntryDate?.errors && inventoryEntryDate?.errors['required']"
+                            class="text-danger"
+                            >Please select Date.</span
+                        >
+                    </span>
+                </div>
+
+                <div class="col-xs-6 form-group">
+                    <label>Product Name <sup>*</sup></label>
+                    <reactive-dropdown-field
+                        [options]="stockListOptions"
+                        [placeholder]="'Select Product'"
+                        (selectedOption)="stockChanged($event)"
+                        formControlName="stock"
+                        [required]="true"
+                        [name]="'stock'"
+                        [required]="true"
+                    ></reactive-dropdown-field>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-6 form-group">
+                    <label>Sender's Name <sup>*</sup></label>
+                    <reactive-dropdown-field
+                        [options]="userListOptions"
+                        [placeholder]="'Select Sender'"
+                        formControlName="inventoryUser"
+                        [name]="'inventoryUser'"
+                        [required]="true"
+                    ></reactive-dropdown-field>
+                </div>
+
+                <div class="col-xs-6 form-group">
+                    <label>Receiver's Name <sup>*</sup></label>
+                    <reactive-dropdown-field
+                        [options]="userListOptions"
+                        [placeholder]="'Select Receiver'"
+                        [required]="true"
+                        [name]="'senderReceiver'"
+                        (selectedOption)="recieverUniqueName = $event?.value"
+                        [required]="true"
+                    >
+                    </reactive-dropdown-field>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-6 form-group">
+                    <label>Quantity <sup>*</sup></label>
+                    <input
+                        name="dateRange"
+                        type="text"
+                        class="form-control"
+                        formControlName="quantity"
+                        [placeholder]="'Enter Quantity'"
+                        [required]="true"
+                    />
+                </div>
+
+                <div class="col-xs-6 form-group">
+                    <label>Unit <sup>*</sup></label>
+                    <reactive-dropdown-field
+                        [options]="stockUnitsOptions"
+                        [placeholder]="'Choose unit'"
+                        formControlName="stockUnit"
+                        [required]="true"
+                        [name]="'stockUnit'"
+                        [required]="true"
+                    ></reactive-dropdown-field>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8 form-group">
+                    <label class="mb-2">Description</label>
+                    <input name="dateRange" formControlName="description" type="text" class="form-control" />
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12 text-left mt-2">
+                    <button mat-stroked-button (click)="onCancel.emit($event)">Cancel</button>
+                    <button mat-raised-button color="primary" [ladda]="isLoading" [disabled]="form.invalid" (click)="save()">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
