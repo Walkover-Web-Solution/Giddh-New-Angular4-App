@@ -49,22 +49,17 @@
                         <tbody>
                             <ng-container
                                 *ngFor="
-                                    let transaction of journalVoucherForm.get('transactions').controls;
+                                    let transaction of journalVoucherForm.get('transactions')?.controls;
                                     let i = index;
                                     let l = last
                                 "
                                 formArrayName="transactions"
                             >
                                 <ng-container [formGroupName]="i">
-                                    <tr (click)="activeRow(true, i)">
+                                    <tr (click)="activeRow(i)">
                                         <td
                                             class="voucher-type"
                                             [style.width.px]="55"
-                                            [ngClass]="{
-                                                'active-row':
-                                                    (isSelectedRow && selectedIdx === i) ||
-                                                    (!selectedIdx && !isSelectedRow && i == 0)
-                                            }"
                                         >
                                             <text-field
                                                 [autoFocus]="activeRowIndex === i && activeRowType === 'type'"
@@ -76,23 +71,19 @@
                                                     transaction?.get('isDiscountApplied')?.value
                                                 "
                                                 formControlName="type"
-                                                (input)="selectRow(true, i, transaction)"
-                                                [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
+                                                (click)="selectRow('type', i)"
+                                                (input)="resetAccountOnTypeChange(transaction)"
+                                                [ngClass]="{ 'focus': activeRowIndex === i && activeRowType === 'type' }"
                                                 [value]="transaction.get('type')?.value | lowercase"
                                                 [maxlength]="'2'"
                                                 [autocomplete]="'off'"
-                                                (keydown.Enter)="changeTab('enter', 'type')"
-                                                (keydown.Shift.Tab)="changeTab('shift', 'type')"
-                                                (keydown.Tab)="changeTab('tab', 'type')"
+                                                (keydown.Enter)="$event.stopPropagation(); changeTab('enter', 'type')"
+                                                (keydown.Shift.Tab)="$event.stopPropagation(); changeTab('shift', 'type')"
+                                                (keydown.Tab)="$event.stopPropagation(); changeTab('tab', 'type')"
                                             ></text-field>
                                         </td>
                                         <td
                                             class="particular-account"
-                                            [ngClass]="{
-                                                'active-row':
-                                                    (isSelectedRow && selectedIdx === i) ||
-                                                    (!selectedIdx && !isSelectedRow && i == 0)
-                                            }"
                                             formGroupName="selectedAccount"
                                         >
                                             <text-field
@@ -103,43 +94,27 @@
                                                 [cssClass]="'form-control from-or-to-acc'"
                                                 [required]="transaction.get('amount')?.value"
                                                 formControlName="account"
+                                                (click)="handleTransactionFocus(i)"
                                                 (input)="
-                                                    onAccountFocus(
-                                                        $event,
-                                                        transaction.get('type')?.value?.toLowerCase() === 'by'
-                                                            ? byAmountField
-                                                            : toAmountField,
-                                                        transaction.get('type')?.value,
-                                                        i
-                                                    );
-                                                    searchedAccountQuery.next($event);
-                                                    selectedInputFieldIndex = i
+                                                    searchedAccountQuery.next({event: $event, transaction: transaction});
                                                 "
                                                 (blur)="onAccountBlur($event)"
-                                                [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
+                                                [ngClass]="{ 'focus': activeRowIndex === i && activeRowType === 'account' }"
                                                 (keydown.Tab)="
                                                     validateAccount(transaction, $event, i);
-                                                    showLedgerAccountList = false;
-                                                    changeTab('tab', 'account')
-                                                "
-                                                (keydown.Enter)="
-                                                    showLedgerAccountList
-                                                        ? event?.preventDefault()
-                                                        : changeTab('enter', 'account')
+                                                    !(this.showDiscountSidebar || this.showTaxSidebar || this.showLedgerAccountList) && changeTab('tab', 'account')
                                                 "
                                                 (keydown.Shift.Tab)="
-                                                    showLedgerAccountList = false; changeTab('shift', 'account')
+                                                    changeTab('shift', 'account')
+                                                "
+                                                (keydown.Enter)="
+                                                    showLedgerAccountList === false && showDiscountSidebar === false && showTaxSidebar === false && ($event.stopPropagation() || handleTransactionFocus(i))
                                                 "
                                                 (change)="removeAmountIfAccountRemoved(transaction, i)"
                                             ></text-field>
                                         </td>
                                         <td
                                             class="amount1"
-                                            [ngClass]="{
-                                                'active-row':
-                                                    (isSelectedRow && selectedIdx === i) ||
-                                                    (!selectedIdx && !isSelectedRow && i == 0)
-                                            }"
                                         >
                                             <text-field
                                                 [readonly]="
@@ -152,6 +127,7 @@
                                                     changeTab('tab', 'amount')
                                                 "
                                                 (keydown.Shift.Tab)="
+                                                    $event.stopPropagation();
                                                     updateTransactionActualAmount(transaction);
                                                     changeTab('shift', 'amount')
                                                 "
@@ -163,7 +139,8 @@
                                                 decimalDigitsDirective
                                                 [mask]="inputMaskFormat"
                                                 formControlName="amount"
-                                                (input)="selectRow(true, i); updateTotalCreditDebit()"
+                                                (click)="selectRow('amount', i)"
+                                                (input)="updateTotalCreditDebit()"
                                                 (change)="updateTransactionActualAmount(transaction)"
                                                 (keydown.Enter)="
                                                     updateTransactionActualAmount(transaction);
@@ -171,16 +148,11 @@
                                                     changeTab('enter', 'amount')
                                                 "
                                                 (blur)="addNewEntry(transaction.get('amount')?.value, transaction, i)"
-                                                [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
+                                                [ngClass]="{ 'focus': activeRowIndex === i && activeRowType === 'amount' }"
                                             ></text-field>
                                         </td>
                                         <td
                                             class="amount2"
-                                            [ngClass]="{
-                                                'active-row':
-                                                    (isSelectedRow && selectedIdx === i) ||
-                                                    (!selectedIdx && !isSelectedRow && i == 0)
-                                            }"
                                         >
                                             <text-field
                                                 [readonly]="
@@ -196,7 +168,8 @@
                                                 decimalDigitsDirective
                                                 [mask]="inputMaskFormat"
                                                 formControlName="amount"
-                                                (input)="selectRow(true, i); updateTotalCreditDebit()"
+                                                (click)="selectRow('amount', i)"
+                                                (input)="updateTotalCreditDebit()"
                                                 (change)="updateTransactionActualAmount(transaction)"
                                                 (keydown.Enter)="
                                                     updateTransactionActualAmount(transaction);
@@ -208,22 +181,18 @@
                                                     changeTab('tab', 'amount')
                                                 "
                                                 (keydown.Shift.Tab)="
+                                                    $event.stopPropagation();
                                                     updateTransactionActualAmount(transaction);
                                                     changeTab('shift', 'amount')
                                                 "
                                                 (blur)="addNewEntry(transaction.get('amount')?.value, transaction, i)"
-                                                [ngClass]="{ 'focus': isSelectedRow && selectedIdx === i }"
+                                                [ngClass]="{ 'focus': activeRowIndex === i && activeRowType === 'amount' }"
                                             ></text-field>
                                         </td>
                                     </tr>
                                     <tr>
                                         <td colspan="100%" formGroupName="selectedAccount">
                                             <span
-                                                [ngClass]="{
-                                                    'active-row-transparent':
-                                                        (isSelectedRow && selectedIdx === i) ||
-                                                        (!selectedIdx && !isSelectedRow && i == 0)
-                                                }"
                                                 *ngIf="
                                                     journalVoucherForm
                                                         .get('transactions')
@@ -322,163 +291,71 @@
             </div>
         </div>
     </form>
-    <div class="sidebar-list form-control" *ngIf="showLedgerAccountList">
-        <p class="p-2 border-bottom text-black" *ngIf="selectedField === 'account'">
-            {{ localeData?.ledger_accounts_list }}
-        </p>
-        <p class="p-2 border-bottom text-black" *ngIf="selectedField === 'stock'">{{ localeData?.stock_items_list }}</p>
-        <div class="h-100 mat-app-background">
-            <ul *ngIf="inputForList?.length === 0" class="grp-list group-list-no-found users-last-list">
-                <li>
-                    <a href="javascript:void(0)"> {{ commonLocaleData?.app_no_result_found }}</a>
-                </li>
-                <li>
-                    <a class="btn-link" (click)="addNewAccount()" href="javascript:void(0)">{{
-                        commonLocaleData?.app_create_new
-                    }}</a>
-                </li>
-            </ul>
-            <ng-container *ngIf="inputForList?.length">
-                <ul class="grp-list users-last-list">
-                    <cdk-virtual-scroll-viewport
-                        class="virtual-group-list overflow-x-hidden"
-                        [itemSize]="37"
-                        [minBufferPx]="400"
-                        [maxBufferPx]="800"
-                        #cdkMenu
+</div>
+<!-- Unified Sidebar for Accounts, Discounts, and Taxes -->
+<div class="sidebar-list form-control" *ngIf="showLedgerAccountList || showDiscountSidebar || showTaxSidebar">
+    <!-- Dynamic Header -->
+    <div class="border-bottom d-flex justify-content-between align-items-center p-1 mat-app-background" *ngIf="showDiscountSidebar || showTaxSidebar">
+        <h3 class="text-primary">
+            {{ showDiscountSidebar ? localeData?.discount_list : (showTaxSidebar ? localeData?.tax_list : '') }}
+        </h3>
+        <i class="icon-cross cursor-pointer"
+           (click)="showDiscountSidebar ? closeDiscountSidebar() : closeTaxSidebar()"></i>
+    </div>
+    
+    <!-- Simple Header for Accounts -->
+    <p class="p-2 border-bottom text-black" *ngIf="showLedgerAccountList">
+        {{ localeData?.ledger_accounts_list }}
+    </p>
+    
+    <div class="mat-app-background custom-height">
+        <!-- No Data Found -->
+        <ul *ngIf="displayAccountList?.length === 0" class="grp-list group-list-no-found users-last-list">
+            <li class="list-item text-overflow-ellipsis">
+                <span class="account-list d-block w-100">{{ commonLocaleData?.app_no_data_found }}</span>
+            </li>
+            <!-- Create New Account Option (only for accounts) -->
+            <li *ngIf="showLedgerAccountList">
+                <a class="btn-link highlighted" (click)="addNewAccount()" href="javascript:void(0)">
+                    {{ commonLocaleData?.app_create_new }}
+                </a>
+            </li>
+        </ul>
+        
+        <!-- Data List -->
+        <ng-container *ngIf="displayAccountList?.length">
+            <ul class="grp-list users-last-list">
+                <cdk-virtual-scroll-viewport
+                    #virtualScrollViewport
+                    tabindex="0"
+                    class="virtual-group-list overflow-x-hidden"
+                    [itemSize]="itemSize"
+                    [minBufferPx]="400"
+                    [maxBufferPx]="800"
+                    (scrolledIndexChange)="showLedgerAccountList ? onAccountListScroll($event) : null"
+                >
+                    <li
+                        *cdkVirtualFor="let item of displayAccountList; let j = index; trackBy: trackByFn"
+                        [ngClass]="{ 'highlighted': j === (selectedIndex || 0) }"
+                        class="list-item text-overflow-ellipsis"
                     >
-                        <li
-                            *cdkVirtualFor="let row of inputForList; let j = index; trackBy: trackByFn"
-                            [ngClass]="{ 'hilighted': j === selectedIndex }"
-                            class="list-item sidebarTooltip text-overflow-ellipsis"
+                        <a
+                            href="javascript:void(0);"
+                            class="account-list"
+                            [id]="'acc_' + item.label + '_' + j"
+                            [matTooltip]="item.label"
+                            [matTooltipPosition]="'left'"
+                            (click)="showLedgerAccountList ? onItemSelected(item) : 
+                                    (showDiscountSidebar ? toggleDiscountSelected(item) : toggleTaxSelected(item))"
+                            (keydown.enter)="showLedgerAccountList ? onItemSelected(item) : 
+                                           (showDiscountSidebar ? toggleDiscountSelected(item) : toggleTaxSelected(item))"
                         >
-                            <a
-                                #focusElement
-                                href="javascript:void(0);"
-                                class="account-list"
-                                id="acc_{{ row.label }}"
-                                matTooltip="{{ row.label }}"
-                                matTooltipPosition="below"
-                                (click)="onItemSelected(row)"
-                                (keydown.enter)="onItemSelected(row)"
-                            >
-                                {{ row?.label }}
-                            </a>
-                        </li>
-                    </cdk-virtual-scroll-viewport>
-                </ul>
-            </ng-container>
-        </div>
-    </div>
-    <div class="sidebar-list form-control" *ngIf="showDiscountSidebar">
-        <div class="border-bottom d-flex justify-content-between align-items-center p-1 mat-app-background">
-            <h3 class="text-primary">{{ localeData?.discount_list }}</h3>
-            <i class="fa fa-close pdR-5 cursor-pointer" (click)="closeDiscountSidebar()"></i>
-        </div>
-        <div [style.width]="width" class="h-100 mat-app-background">
-            <div #dd class="menu box-shadow-none border-left-none" *ngIf="showDiscountSidebar" class="h-100">
-                <div class="h-100">
-                    <ul
-                        role="discount-list"
-                        *ngIf="discountsList?.length === 0"
-                        class="grp-list group-list-no-found users-last-list"
-                    >
-                        <li role="items" class="list-item sidebarTooltip text-overflow-ellipsis">
-                            <span class="account-list d-block w-100"> {{ commonLocaleData?.app_no_data_found }}</span>
-                        </li>
-                    </ul>
-                    <ng-container *ngIf="discountsList?.length">
-                        <ul role="discount-list-items" class="grp-list users-last-list">
-                            <cdk-virtual-scroll-viewport
-                                tabindex="0"
-                                class="virtual-group-list overflow-x-hidden"
-                                [itemSize]="37"
-                                [minBufferPx]="400"
-                                [maxBufferPx]="800"
-                                #cdkMenu
-                            >
-                                <li
-                                    role="discount-items"
-                                    *cdkVirtualFor="let discount of discountsList; let j = index; trackBy: trackByFn"
-                                    class="list-item sidebarTooltip text-overflow-ellipsis"
-                                    [ngClass]="{ 'hilighted': j === selectedIndex }"
-                                >
-                                    <a
-                                        aria-label="discount"
-                                        #focusElement
-                                        href="javascript:void(0);"
-                                        class="account-list"
-                                        id="acc_{{ discount.label }}"
-                                        matTooltip="{{ discount.label }}"
-                                        matTooltipPosition="below"
-                                        (click)="toggleDiscountSelected(discount)"
-                                        (keydown.enter)="toggleDiscountSelected(discount)"
-                                        cdkFocusInitial
-                                    >
-                                        {{ discount?.label }}
-                                    </a>
-                                </li>
-                            </cdk-virtual-scroll-viewport>
-                        </ul>
-                    </ng-container>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="sidebar-list form-control" *ngIf="showTaxSidebar">
-        <div class="border-bottom d-flex justify-content-between align-items-center p-1 mat-app-background">
-            <h3 class="text-primary">{{ localeData?.tax_list }}</h3>
-            <i class="fa fa-close pdR-5 cursor-pointer" (click)="closeTaxSidebar()"></i>
-        </div>
-        <div [style.width]="width" class="h-100 mat-app-background">
-            <div #dd class="menu box-shadow-none border-left-none" *ngIf="showTaxSidebar" class="h-100">
-                <div class="h-100">
-                    <ul
-                        role="tax-list"
-                        *ngIf="companyTaxesList?.length === 0"
-                        class="grp-list group-list-no-found users-last-list"
-                    >
-                        <li role="tax-list-items" class="list-item sidebarTooltip text-overflow-ellipsis">
-                            <span class="account-list d-block w-100"> {{ commonLocaleData?.app_no_data_found }}</span>
-                        </li>
-                    </ul>
-                    <ng-container *ngIf="companyTaxesList?.length">
-                        <ul role="user-list" class="grp-list users-last-list">
-                            <cdk-virtual-scroll-viewport
-                                tabindex="0"
-                                class="virtual-group-list overflow-x-hidden"
-                                [itemSize]="37"
-                                [minBufferPx]="400"
-                                [maxBufferPx]="800"
-                                #cdkMenu
-                            >
-                                <li
-                                    role="tax-items"
-                                    *cdkVirtualFor="let tax of companyTaxesList; let j = index; trackBy: trackByFn"
-                                    class="list-item sidebarTooltip text-overflow-ellipsis"
-                                    [ngClass]="{ 'hilighted': j === selectedIndex }"
-                                >
-                                    <a
-                                        aria-label="account"
-                                        #focusElement
-                                        href="javascript:void(0);"
-                                        class="account-list"
-                                        id="acc_{{ tax.label }}"
-                                        matTooltip="{{ tax.label }}"
-                                        matTooltipPosition="below"
-                                        (click)="toggleTaxSelected(tax)"
-                                        (keydown.enter)="toggleTaxSelected(tax)"
-                                        cdkFocusInitial
-                                    >
-                                        {{ tax?.label }}
-                                    </a>
-                                </li>
-                            </cdk-virtual-scroll-viewport>
-                        </ul>
-                    </ng-container>
-                </div>
-            </div>
-        </div>
+                            {{ item?.label }}
+                        </a>
+                    </li>
+                </cdk-virtual-scroll-viewport>
+            </ul>
+        </ng-container>
     </div>
 </div>
 
