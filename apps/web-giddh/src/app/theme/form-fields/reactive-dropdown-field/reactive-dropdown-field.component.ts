@@ -491,7 +491,17 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         }
     }
 
-    
+    /**
+     * Handles keydown events on the input field
+     *
+     * @param {KeyboardEvent} event - The keyboard event
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    public onInputKeyDown(event: KeyboardEvent): void {
+        if (event.key === 'Enter' && this.trigger?.panelOpen) {
+            this.closeDropdownPanel();
+        }
+    }
 
     /**
      * This will use for open dropdown panel

@@ -378,6 +378,11 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
         });
         if (this.adjustVoucherForm?.adjustments?.length > 1 || this.adjustVoucherForm?.adjustments.every(adjustment => adjustment?.uniqueName !== '')) {
             this.adjustVoucherForm.adjustments.splice(index, 1);
+            
+            if (this.adjustVoucherForm.adjustments.length === 0) {
+                this.onClear(true);
+                this.addNewBlankAdjustVoucherRow();
+            }
         } else {
             this.onClear();
         }
