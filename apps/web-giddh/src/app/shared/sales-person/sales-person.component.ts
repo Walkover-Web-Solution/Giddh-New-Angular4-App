@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { filter, Observable, ReplaySubject, takeUntil, tap } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -49,7 +49,7 @@ import { KeyboardNavigationModule } from '../helpers/directives/enter-next/keybo
     providers: [SalesPersonService, SalesPersonComponentStore]
 })
 
-export class SalesPersonComponent implements OnInit, OnDestroy {
+export class SalesPersonComponent implements OnInit, OnDestroy, AfterViewInit {
     /** ViewChild reference for name field */
     @ViewChild('nameField') nameField: InputFieldComponent;
     /** Subject to release subscription memory */
@@ -186,6 +186,15 @@ export class SalesPersonComponent implements OnInit, OnDestroy {
             }
             this.salesPersonAction(SalesPersonActionEnum.GET_ALL);
         })).subscribe();
+    }
+
+    /**
+     * Lifecycle hook runs after component view initialization
+     * 
+     * @memberof SalesPersonComponent
+     */
+    public ngAfterViewInit(): void {
+        this.focusInputField();
     }
 
     /**
