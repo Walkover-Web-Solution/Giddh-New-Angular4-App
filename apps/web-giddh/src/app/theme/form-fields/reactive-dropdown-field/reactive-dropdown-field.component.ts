@@ -2,6 +2,7 @@ import { AfterViewInit, ChangeDetectorRef, Component, ContentChild, ElementRef, 
 import { BehaviorSubject, Observable, Subject, debounceTime, of, skip, Subscription, ReplaySubject, takeUntil } from "rxjs";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
+import { MatAutocomplete } from "@angular/material/autocomplete";
 import { IOption } from "../../../app.constant";
 import { isEqual } from "../../../lodash-optimized";
 
@@ -22,6 +23,8 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     @ContentChild('optionTemplate', { static: false }) public optionTemplate: TemplateRef<any>;
     /** Trigger instance for auto complete */
     @ViewChild('trigger', { static: false, read: MatAutocompleteTrigger }) trigger: MatAutocompleteTrigger;
+    /** Autocomplete instance for focus management */
+    @ViewChild('auto', { static: false }) matAutocomplete: MatAutocomplete;
     /** Select Field instance for auto focus */
     @ViewChild('selectField', { static: false }) public selectField: ElementRef;
     /** CSS class name to add on the field */
@@ -116,6 +119,12 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     private onTouched: () => void = () => { };
     /** Next observable */
     private next$: Subject<any> = new Subject();
+    /** Tracks the currently active option index for focus preservation */
+    private activeOptionIndex: number = -1;
+    /** Flag to indicate if pagination is in progress */
+    private isPaginationInProgress: boolean = false;
+    /** Previous options count for pagination detection */
+    private previousOptionsCount: number = 0;
 
     constructor(
         private changeDetection: ChangeDetectorRef
@@ -197,7 +206,20 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      */
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes?.options) {
+            // Detect if this is pagination (new options added to existing list)
+            const currentOptionsCount = this.options?.length || 0;
+            this.isPaginationInProgress = this.previousOptionsCount > 0 && currentOptionsCount > this.previousOptionsCount;
+            this.previousOptionsCount = currentOptionsCount;
+            
             this.fieldFilteredOptions$ = of(this.options);
+            
+            // Preserve focus during pagination
+            if (this.isPaginationInProgress && this.activeOptionIndex >= 0) {
+                setTimeout(() => {
+                    this.restoreFocusAfterPagination();
+                }, 100);
+            }
+            
             // Always try to set label value when options change, regardless of previous value
             if (changes?.options) {
                 // Use setTimeout to ensure the value is properly set before trying to find the label
@@ -300,8 +322,52 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      * @memberof ReactiveDropdownFieldComponent
      */
     public onScroll(): void {
+        // Store current active option index before pagination
+        this.storeActiveOptionIndex();
         this.next$.next(true);
         this.scrollEnd.emit();
+    }
+
+    /**
+     * Stores the currently active option index for focus preservation
+     *
+     * @private
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    private storeActiveOptionIndex(): void {
+        if (this.matAutocomplete && (this.matAutocomplete as any)._keyManager) {
+            this.activeOptionIndex = (this.matAutocomplete as any)._keyManager.activeItemIndex || -1;
+        }
+    }
+
+    /**
+     * Restores focus to the previously active option after pagination
+     *
+     * @private
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    private restoreFocusAfterPagination(): void {
+        if (this.matAutocomplete && (this.matAutocomplete as any)._keyManager && this.activeOptionIndex >= 0) {
+            try {
+                // Set the active item to maintain focus position
+                (this.matAutocomplete as any)._keyManager.setActiveItem(this.activeOptionIndex);
+                
+                // Ensure the active option is visible in the viewport
+                const activeOption = (this.matAutocomplete as any)._keyManager.activeItem;
+                if (activeOption && (activeOption as any)._element) {
+                    (activeOption as any)._element.nativeElement.scrollIntoView({
+                        behavior: 'auto',
+                        block: 'nearest',
+                        inline: 'nearest'
+                    });
+                }
+            } catch (error) {
+                console.warn('Could not restore focus after pagination:', error);
+            }
+        }
+        
+        // Reset pagination flag
+        this.isPaginationInProgress = false;
     }
 
     /**
@@ -480,6 +546,11 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         if (!this.enableDynamicSearch) {
             this.fieldFilteredOptions$ = this.filterOptions("");
         }
+        
+        // Reset pagination tracking when panel opens
+        this.activeOptionIndex = -1;
+        this.isPaginationInProgress = false;
+        this.previousOptionsCount = this.options?.length || 0;
     }
 
     /**
@@ -525,5 +596,17 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
                 this.showKeyboardCommand = this.commonLocaleData?.app_alt_shift_n;
             }
         }
+    }
+
+    /**
+     * TrackBy function for ngFor to improve performance
+     *
+     * @param {number} index
+     * @param {IOption} option
+     * @returns {any}
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    public trackByOption(index: number, option: IOption): any {
+        return option?.value || option?.label || index;
     }
 }

@@ -3141,10 +3141,8 @@
             <!-- aside menu section -->
             <ng-template #ledgerAsidePane>
                 <ledger-aside-pane
-                    [keyboardShortcut]="'esc'"
                     [localeData]="localeData"
                     [commonLocaleData]="commonLocaleData"
-                    (onShortcutPress)="ledgerAsidePaneDialogRef?.close()"
                     (closeAsideEvent)="ledgerAsidePaneDialogRef?.close()"
                 >
                 </ledger-aside-pane>
@@ -3250,6 +3248,7 @@
                     [showCaretIcon]="false"
                     [appearance]="'fill'"
                     [openDropdown]="openDropdown"
+                    [forceClear]="forceClear$ | async"
                     [sidebarListView]="ledgerView == ledgerViewEnum.StatementView"
                 >
                     <ng-template #optionTemplate let-option="option">
@@ -3258,7 +3257,7 @@
                                 <div class="font-size-15">
                                     {{ option?.label }}
                                 </div>
-                                <div class="font-size-15 text-light">
+                                <div *ngIf="ledgerView != ledgerViewEnum.StatementView" class="font-size-15 text-light">
                                     {{ option.additional?.uniqueName }}
                                 </div>
                             </a>
@@ -3268,11 +3267,11 @@
                                 <div class="font-size-15">
                                     {{ option?.label }}
                                 </div>
-                                <div class="font-size-15 text-light">
+                                <div *ngIf="ledgerView != ledgerViewEnum.StatementView" class="font-size-15 text-light">
                                     {{ option.additional?.uniqueName }}
                                 </div>
                                 <div class="text-light font-size-12">
-                                    {{ commonLocaleData?.app_stock }}: {{ option.additional?.stock?.name }}
+                                    {{ commonLocaleData?.app_stock }}: {{ option.additional?.stock?.uniqueName }}
                                 </div>
                             </a>
                         </ng-container>

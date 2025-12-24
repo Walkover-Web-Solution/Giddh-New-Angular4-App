@@ -405,6 +405,8 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public updateAccountDialogRef: MatDialogRef<any>;
     /** True if particular currency differs from account currency, even when account and company currencies are same. */
     public particularMultiCurrency: boolean = false;
+    /** To clear the dropdown list */
+    public forceClear$: BehaviorSubject<boolean | null> = new BehaviorSubject(null);
 
     constructor(
         private store: Store<AppState>,
@@ -1751,6 +1753,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
         this.resetPreviousSearchResults();
         this.needToReCalculate.next(false);
+        this.forceClear$.next(true);
+        setTimeout(() => {
+            this.forceClear$.next(false);
+        }, 100);
     }
 
     public showNewLedgerEntryPopup(trx: TransactionVM) {
@@ -2083,6 +2089,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
         document.querySelector('body').classList.remove('ledger-body');
         this.store.dispatch(this.ledgerActions.ResetLedger());
+        this.forceClear$.next(null);
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -2589,12 +2596,15 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public openLedgerAsidePaneDialog(): void {
         this.ledgerAsidePaneDialogRef = this.dialog.open(this.ledgerAsidePane, ASIDE_PANE_CONFIG);
 
-        this.ledgerAsidePaneDialogRef.afterClosed().subscribe(response => {
+        this.ledgerAsidePaneDialogRef.afterClosed().subscribe(() => {
             setTimeout(() => {
                 if (this.showPageLeaveConfirmation) {
                     this.pageLeaveUtilityService.addBrowserConfirmationDialog();
                 }
                 this.ledgerAsidePaneDialogRef = undefined;
+                if (this.ledgerView === LedgerViewEnum.StatementView) {
+                    this.focusDebitCreditDropdowns(null);
+                }
             }, 100);
         });
 

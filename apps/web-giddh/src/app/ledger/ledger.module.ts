@@ -66,6 +66,7 @@ import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { TributeMentionModule } from '../shared/helpers/directives/tributeMention/tributeMention.module';
 import { MatDividerModule } from '@angular/material/divider';
 import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
+import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
 
 @NgModule({
     declarations: [
@@ -149,7 +150,8 @@ import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/n
         NgxMatSelectSearchModule,
         TributeMentionModule,
         MatDividerModule,
-        GiddhNumberFormatModule
+        GiddhNumberFormatModule,
+        KeyboardShortutModule
     ]
 })
 export class LedgerModule {
