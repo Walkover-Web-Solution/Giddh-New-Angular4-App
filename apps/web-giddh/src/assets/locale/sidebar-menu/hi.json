@@ -636,7 +636,7 @@
                     "description": "अतिदेय, पी एंड एल, बैंक खाता, अनुपात विश्लेषण"
                 },
                 {
-                    "label": "जर्नल प्रविष्टियां *",
+                    "label": "जर्नल प्रविष्टियां",
                     "link": "/pages/journal-voucher",
                     "icon": "icon-journal-voucher-new",
                     "description": "जर्नल वाउचर की प्रविष्टियाँ"
