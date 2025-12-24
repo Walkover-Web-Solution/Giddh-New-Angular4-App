@@ -1,0 +1,273 @@
+.webook-list li {
+    margin-bottom: 7px;
+    position: relative;
+}
+
+.webook-list li > div > label {
+    position: absolute;
+    bottom: 7px;
+}
+
+.lh-34 {
+    line-height: 34px;
+}
+
+.lh-49 {
+    line-height: 49px;
+}
+
+.icon-estimate .path1:before {
+    content: "\e900";
+    color: var(--color-red-light);
+}
+
+.general-tab h4,
+.email-tab h4,
+.estimate-tab h4 {
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.general-tab,
+.email-tab,
+.estimate-tab {
+    box-shadow: 0px 3px 6px var(--color-shadow-light);
+    margin: 0 15px;
+    label {
+        font-size: var(--font-size-15);
+    }
+}
+
+.flex-initial {
+    flex: initial !important;
+}
+
+.estimate-proforma {
+    width: 100%;
+    max-width: 270px;
+    display: inline-flex;
+}
+
+.heading-name input[type="checkbox"] {
+    left: 10px;
+}
+
+.default-expiry input {
+    width: 100px;
+    display: inline-flex;
+    text-align: right;
+}
+
+.default-expiry span,
+.send-alert span {
+    vertical-align: middle;
+    padding-left: 5px;
+    line-height: 2.4;
+    padding-right: 10px;
+}
+
+input.form-control.send-alert {
+    width: 100px;
+    display: inline;
+}
+
+.send-alert .form-control {
+    position: static;
+    float: none;
+    width: auto;
+}
+
+.send-alert .send-alert {
+    width: 100px;
+    text-align: right;
+}
+
+.send-alert a {
+    padding-left: 5px;
+    color: var(--text-primary-color);
+}
+
+.p-0 {
+    padding: 0px !important;
+}
+
+.next-step-estimate {
+    margin-bottom: 10px;
+}
+
+.custom-estimation,
+.user-authenticate {
+    label {
+        position: absolute;
+        top: -24px;
+        left: 0;
+        right: 15px;
+        font-size: var(--font-size-12);
+        color: var(--color-dark-gray);
+        text-align: left;
+    }
+    div {
+        margin-left: 12px;
+    }
+}
+
+.initial-number {
+    width: 70px;
+    margin: 0 15px;
+}
+
+.select-estimate {
+    line-height: 2.2;
+}
+
+.estimation-check {
+    top: 7px;
+}
+
+span.viasocket {
+    position: absolute;
+    bottom: -26px;
+    right: 0;
+    font-size: var(--font-size-12);
+    text-decoration: underline;
+}
+
+span.viasocket a {
+    color: var(--color-medium-gray);
+}
+
+.invoice-lock-date {
+    width: 152px;
+    position: relative;
+}
+
+.show-on-mobile {
+    display: none;
+}
+
+.invoice-lock-date .icon-calender {
+    position: absolute;
+    right: 10px;
+    top: 25%;
+    color: var(--color-dark-gray);
+    font-size: 16px;
+}
+
+.sms-textarea {
+    margin-top: 0px;
+    margin-bottom: 20px !important;
+    margin-left: 10px !important;
+    width: 260px;
+}
+
+.lock-date-label {
+    vertical-align: middle;
+}
+
+.prefix-label {
+    right: 0px;
+}
+.verify-tick-icon {
+    vertical-align: middle;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-medium-gray);
+}
+.verified-text {
+    color: var(--color-green);
+    padding: 6px 10px;
+    margin-right: 10px;
+    margin-left: 10px;
+}
+.delete-verified-icon {
+    padding: 6px 10px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--mat-border-radius-4);
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 36px;
+    height: 36px;
+    i.icon-trash {
+        font-size: var(--font-size-16);
+    }
+}
+
+.btn-group {
+    .btn {
+        border-radius: var(--mat-border-radius-4) !important;
+    }
+}
+.input-group-addon{
+    border-radius: 0 5px 5px 0 !important;
+}
+@media (max-width: 991px) {
+    .left-gap {
+        margin-left: 25px;
+    }
+
+    #invoice-setting .show-on-mobile {
+        display: inline-block;
+        float: left;
+        width: 20px;
+        top: 4px;
+    }
+    .hide-on-mobile {
+        display: none;
+    }
+    .custom-estimation,
+    .user-authenticate {
+        margin-top: 30px;
+    }
+    .single-tab-block .col-sm-3 {
+        width: 100% !important;
+    }
+
+    .payment-gateway {
+        margin-left: 15px;
+        margin-top: 5px;
+    }
+
+    #invoice-setting {
+        ngx-switch + label {
+            margin-left: 39px;
+        }
+        label {
+            float: left;
+            width: 88%;
+        }
+        .flex-container {
+            display: flex;
+        }
+    }
+
+    .form-group.clear-both.max-width-150 {
+        margin-top: 5px;
+    }
+    .btn-wrapper {
+        padding: 0 15px;
+    }
+
+    .integrated-email {
+        margin-left: 30px;
+    }
+    .btn-wrapper {
+        padding: 0 15px;
+    }
+
+    .sms-textarea {
+        margin-top: 5px;
+        margin-bottom: 0px !important;
+        margin-left: 0px !important;
+        width: 100%;
+    }
+
+    .invoice-lock-date {
+        width: 180px !important;
+        position: relative;
+    }
+    .select-estimate {
+        margin-right: 0;
+    }
+}

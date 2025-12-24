@@ -1,0 +1,155 @@
+<div class="dialog-header">
+    <span class="font-size-16">{{ localeData?.perform_payment_action }}</span>
+</div>
+<div mat-dialog-content class="dialog-body" [formGroup]="paymentForm">
+    <div class="d-flex column-gap-1 mb-3">
+        <giddh-datepicker
+            (keydown.enter)="$event.preventDefault()"
+            [label]="localeData?.payment_date"
+            [placeholder]="localeData?.payment_date"
+            name="voucherDate"
+            [showToggleIcon]="false"
+            [appearance]="'outline'"
+            class="w-50"
+            [required]="true"
+            formControlName="date"
+        >
+        </giddh-datepicker>
+        <reactive-dropdown-field
+            [name]="'tag'"
+            [label]="commonLocaleData?.app_tag"
+            [placeholder]="commonLocaleData?.app_select_tag"
+            class="w-50"
+            [options]="tags"
+            formControlName="tagUniqueName"
+        >
+        </reactive-dropdown-field>
+    </div>
+
+    <div class="px-0 pt-1 deposit-wrapper overflow-x-hidden overflow-y-auto" [formArrayName]="'deposits'">
+        <ng-container *ngFor="let deposit of paymentForm?.get('deposits')['controls']; let depositIndex = index">
+            <div class="d-flex column-gap-1 mb-3" [formGroupName]="depositIndex">
+                <reactive-dropdown-field
+                    [label]="commonLocaleData?.app_payment_mode"
+                    [labelValue]="(briefAccounts$ | async)?.length === 1 ? (briefAccounts$ | async)[0].label : ''"
+                    [required]="depositIndex === 0 ? true : false"
+                    [showError]="showError && getEmptyDepositAccountError(true, depositIndex)"
+                    [placeholder]="commonLocaleData?.app_select_account"
+                    class="w-50"
+                    [options]="briefAccounts$ | async"
+                    formControlName="accountUniqueName"
+                    (selectedOption)="onSelectPaymentMode($event, true, depositIndex)"
+                    (onClear)="onSelectPaymentMode($event, false, depositIndex)"
+                >
+                </reactive-dropdown-field>
+                <div class="d-flex align-items-center w-50">
+                    <input-field
+                        [name]="'amount'"
+                        [type]="'text'"
+                        [label]="commonLocaleData?.app_amount"
+                        [required]="depositIndex === 0 ? true : false"
+                        [showError]="showError && getEmptyDepositAccountError(false, depositIndex)"
+                        [placeholder]="localeData?.enter_amount"
+                        class="w-100"
+                        [mask]="company?.inputMaskFormat"
+                        [useMask]="true"
+                        [prefix]="amountCurrency"
+                        [allowUnsupportedPrefix]="true"
+                        formControlName="amount"
+                    >
+                    </input-field>
+                    <i
+                        class="icon-trash font-size-16 cursor-pointer ml-4 mr-2"
+                        (click)="deleteDepositRow(depositIndex)"
+                    ></i>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+    <div class="text-primary mt-2 align-items-center">
+        <span class="cursor-pointer" (click)="addNewDepositRow()">+ {{ commonLocaleData?.app_add_new_line }}</span>
+    </div>
+
+    <div class="d-flex column-gap-1 mb-3" *ngIf="isBankSelected">
+        <input-field
+            [type]="'tel'"
+            [label]="localeData?.cheque_no"
+            [placeholder]="localeData?.cheque_no_placeholder"
+            class="w-50"
+            formControlName="chequeNumber"
+        >
+        </input-field>
+        <giddh-datepicker
+            (keydown.enter)="$event.preventDefault()"
+            [label]="commonLocaleData?.app_cheque_clearance_date"
+            [placeholder]="commonLocaleData?.app_cheque_clearance_date"
+            name="chequeClearanceDate"
+            [showToggleIcon]="false"
+            [appearance]="'outline'"
+            class="w-50"
+            formControlName="chequeClearanceDate"
+        >
+        </giddh-datepicker>
+    </div>
+    <div class="d-flex column-gap-1" *ngIf="isMulticurrencyAccount">
+        <div class="currency-change mb-3 w-50">
+            <span class="text-light d-inline-block">Base Currency</span>
+            <span class="mx-1"
+                >{{ commonLocaleData?.app_numbers?.one }}
+                <ng-container *ngIf="currencySwitched">{{ company?.baseCurrency }}</ng-container
+                ><ng-container *ngIf="!currencySwitched">{{
+                    voucherDetails?.account?.currency?.code
+                }}</ng-container></span
+            >
+            <span>
+                <img
+                    class="switch-icon vertical-align-middle mr-1 ml-1"
+                    src="assets/images/switch-icon.svg"
+                    alt="switch-icon"
+                    (click)="switchCurrency()"
+                />
+            </span>
+            <span class="mx-1">
+                <img
+                    src="assets/images/edit-pencilicon.svg"
+                    class="cursor-pointer mr-1"
+                    (click)="showExchangeRateEditField = true"
+                    *ngIf="!showExchangeRateEditField"
+                />
+                <img
+                    src=" assets/images/autosave.svg"
+                    class="cursor-pointer mr-1"
+                    (click)="showExchangeRateEditField = false"
+                    *ngIf="showExchangeRateEditField"
+                />
+            </span>
+            <span class="mr-1" *ngIf="!showExchangeRateEditField">{{
+                paymentForm.get("exchangeRate")?.value | giddhNumberFormat
+            }}</span>
+            <span
+                ><ng-container *ngIf="currencySwitched">{{ voucherDetails?.account?.currency?.code }}</ng-container
+                ><ng-container *ngIf="!currencySwitched">{{ company?.baseCurrency }}</ng-container></span
+            >
+            <div class="mt-3 option-value-field" *ngIf="showExchangeRateEditField">
+                <text-field [cssClass]="'form-control'" [type]="'number'" formControlName="exchangeRate"></text-field>
+            </div>
+        </div>
+    </div>
+    <mat-form-field appearance="outline" class="initial-height w-100 mb-3 mt-3">
+        <mat-label>{{ commonLocaleData?.app_description }}</mat-label>
+        <textarea
+            matInput
+            rows="3"
+            [placeholder]="commonLocaleData?.app_description"
+            formControlName="description"
+        ></textarea>
+    </mat-form-field>
+    <div class="d-flex column-gap-1 justify-content-end">
+        <button mat-raised-button color="primary" (click)="savePayment()" [disabled]="saveInProgress">
+            {{ commonLocaleData?.app_save }}
+        </button>
+        <button cdkFocusInitial mat-stroked-button mat-dialog-close (click)="closeModelEvent.emit()">
+            {{ commonLocaleData?.app_cancel }}
+        </button>
+    </div>
+</div>

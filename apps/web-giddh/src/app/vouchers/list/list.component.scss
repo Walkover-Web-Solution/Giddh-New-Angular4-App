@@ -1,0 +1,152 @@
+.vouchers-wrapper {
+    .total-wrapper {
+        .total-sale {
+            border-radius: var(--mat-border-radius-4);
+
+            &.opening-box {
+                span {
+                    color: var(--color-green);
+                }
+            }
+
+            &.due-box {
+                span {
+                    color: var(--color-red);
+                }
+            }
+
+        }
+    }
+
+    table {
+        tr {
+            td {
+                amount-field {
+                    display: inline-block;
+                }
+
+                .action-btn {
+                    visibility: hidden;
+                }
+            }
+
+            &:hover {
+                td {
+                    .action-btn {
+                        visibility: visible;
+                    }
+                }
+            }
+        }
+    }
+
+    .template-design {
+        max-width: 258px;
+    }
+
+}
+
+table {
+    tr {
+
+        th,
+        td {
+            max-width: 240px;
+        }
+    }
+
+    .checkbox-show {
+        .checkbox-hide {
+            display: none;
+        }
+
+        .invoice-number {
+            min-width: 25px;
+        }
+
+        &:hover {
+            .checkbox-hide {
+                display: block;
+            }
+
+            .invoice-number {
+                display: none;
+            }
+        }
+    }
+}
+
+.account-detail-wrapper {
+    max-width: 250px;
+    margin-block: 6px;
+
+    .account-header {
+        background-color: var(--color-border-light);
+        border-top-right-radius: var(--mat-border-radius-4);
+        border-top-left-radius: var(--mat-border-radius-4);
+    }
+}
+
+.video-link {
+    top: 15px;
+    right: 15px;
+    z-index: 10;
+}
+
+.tabs-box-content {
+    .settings-field {
+        width: 290px;
+    }
+}
+
+.template-wrapper {
+    display: grid;
+    grid-gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+
+    .default-wrap {
+        background: var(--color-border-light);
+        border-radius: 50px;
+        color: var(--color-black);
+
+        &.active {
+            background-color: var(--bg-primary-color) !important;
+            color: var(--color-white);
+        }
+    }
+
+    .template-box-gap {
+        row-gap: 20px;
+    }
+
+    .template-content {
+        width: 200px;
+    }
+}
+
+.ontime-delivery {
+    color: var(--color-green);
+}
+
+@media screen and (max-width: 1199px) {
+    .vouchers-wrapper {
+        .invoice-video {
+            display: block;
+        }
+    }
+
+    .video-link {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 1024px) {
+    .invoice-list{
+        .video-link {
+            display: none;
+        }
+    }
+    .new-cr-width {
+        width: 190px !important;
+    }
+}

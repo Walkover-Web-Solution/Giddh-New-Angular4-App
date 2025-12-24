@@ -1,0 +1,135 @@
+<div *ngIf="organizationType === 'BRANCH'" class="row">
+    <div class="col-md-12">
+        <div class="border-bottom font-size-15 pt-5">
+            <p class="pb-3" [innerHTML]="getInformationSaveText(profileData?.companyName)"></p>
+            <!-- branch profile element start -->
+            <div class="other-detail-section">
+                <div class="mb-3">
+                    <label>{{ localeData?.number_system_label }}</label> <span>{{ numberSystem }}</span>
+                </div>
+                <div class="mb-3">
+                    <label>{{ localeData?.inventory_type }}</label>
+                    <span>{{
+                        profileData?.manageInventory ? commonLocaleData?.app_product : commonLocaleData?.app_service
+                    }}</span>
+                </div>
+                <div class="mb-3">
+                    <label>{{ localeData?.ledger_default_view }}</label>
+                    <span>{{
+                        profileData?.ledgerView === ledgerViewEnum.TView
+                            ? commonLocaleData?.app_ledger_view?.t_view
+                            : commonLocaleData?.app_ledger_view?.statement_view
+                    }}</span>
+                </div>
+            </div>
+            <!-- branch profile element end -->
+        </div>
+    </div>
+</div>
+<div *ngIf="organizationType === 'COMPANY'" class="mr-0 mt-3">
+    <div class="row">
+        <div class="col-md-4 col-lg-4 col-xl-3 pr-1">
+            <div class="form-group">
+                <reactive-dropdown-field
+                    [label]="localeData?.digits_after_decimal"
+                    [options]="decimalDigitSource"
+                    [placeholder]="commonLocaleData?.app_select_type"
+                    (selectedOption)="
+                        profileData.balanceDecimalPlaces = $event.value; profileUpdated('balanceDecimalPlaces')
+                    "
+                    [(ngModel)]="profileData.balanceDecimalPlaces"
+                    [labelValue]="getDropdownLabel(decimalDigitSource, profileData.balanceDecimalPlaces)"
+                    [isFilterEnabled]="true"
+                    [name]="'balanceDecimalPlaces'"
+                ></reactive-dropdown-field>
+            </div>
+        </div>
+        <div class="col-md-4 col-lg-4 col-xl-3 pl-1">
+            <div class="form-group">
+                <reactive-dropdown-field
+                    [label]="localeData?.number_system_label"
+                    [options]="numberSystemSource"
+                    [placeholder]="commonLocaleData?.app_select_type"
+                    (selectedOption)="
+                        profileData.balanceDisplayFormat = $event.value; profileUpdated('balanceDisplayFormat')
+                    "
+                    [(ngModel)]="profileData.balanceDisplayFormat"
+                    [labelValue]="getDropdownLabel(numberSystemSource, profileData.balanceDisplayFormat)"
+                    [isFilterEnabled]="true"
+                    [name]="'balanceDisplayFormat'"
+                ></reactive-dropdown-field>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 col-lg-4 col-xl-3 pr-1">
+            <div class="form-group">
+                <reactive-dropdown-field
+                    [label]="localeData?.language"
+                    [cssClass]="'language-selection'"
+                    [options]="translationLocales"
+                    [placeholder]="localeData?.select_language"
+                    (selectedOption)="activeLocale = $event.value; selectLocale($event)"
+                    [(ngModel)]="activeLocale"
+                    [labelValue]="getDropdownLabel(translationLocales, activeLocale)"
+                    [isFilterEnabled]="true"
+                    [name]="'activeLocale'"
+                ></reactive-dropdown-field>
+            </div>
+        </div>
+        <div class="col-md-4 col-lg-4 col-xl-3 pl-1">
+            <div class="form-group">
+                <reactive-dropdown-field
+                    [label]="localeData?.theme"
+                    [cssClass]="'theme-selection'"
+                    [options]="availableThemes"
+                    [labelValue]="currentThemeLabel"
+                    [placeholder]="localeData?.select_theme"
+                    [isFilterEnabled]="true"
+                    [name]="'activeTheme'"
+                    [(ngModel)]="activeTheme"
+                    (selectedOption)="setActiveTheme($event)"
+                ></reactive-dropdown-field>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 col-lg-4 col-xl-3 pr-1">
+            <div class="form-group">
+                <reactive-dropdown-field
+                    [label]="localeData?.ledger_default_view"
+                    [options]="availableLedgerView"
+                    [labelValue]="getDropdownLabel(availableLedgerView, profileData.ledgerView)"
+                    [placeholder]="localeData?.select_view"
+                    [name]="'activeLedgerView'"
+                    [(ngModel)]="profileData.ledgerView"
+                    (selectedOption)="profileData.ledgerView = $event.value; profileUpdated('ledgerView')"
+                ></reactive-dropdown-field>
+            </div>
+        </div>
+        <div class="col-md-4 col-lg-4 col-xl-3 pl-1" *ngIf="voucherApiVersion === 1">
+            <div class="form-group">
+                <label>{{ localeData?.inventory_type }}</label>
+                <div>
+                    <mat-radio-group name="radio-group" formControlName="creatorSuperAdmin">
+                        <mat-radio-button
+                            color="primary"
+                            value="true"
+                            [checked]="profileData?.manageInventory"
+                            (change)="inventoryTypeUpdated(true)"
+                            >{{ commonLocaleData?.app_product }}
+                        </mat-radio-button>
+                        <mat-radio-button
+                            color="primary"
+                            value="false"
+                            [checked]="!profileData?.manageInventory"
+                            (change)="inventoryTypeUpdated(false)"
+                        >
+                            {{ commonLocaleData?.app_service }}
+                        </mat-radio-button>
+                    </mat-radio-group>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

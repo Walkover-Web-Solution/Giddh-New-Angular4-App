@@ -6,12 +6,11 @@ import { SettingIntegrationComponentStore } from '../utility/setting.integration
 import { FormBuilder, FormControl } from '@angular/forms';
 import { GeneralService } from '../../../services/general.service';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { filter, includes } from '../../../lodash-optimized';
 
 @Component({
     selector: 'institutions-list',
-    templateUrl: './institutions-list.component.html',
     styleUrls: ['./institutions-list.component.scss'],
+    templateUrl: './institutions-list.component.html',
     providers: [SettingIntegrationComponentStore],
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false

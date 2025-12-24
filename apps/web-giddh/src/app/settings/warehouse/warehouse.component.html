@@ -1,0 +1,210 @@
+<div
+    appTranslate
+    [file]="'settings/warehouse'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <ng-container *ngIf="warehouses">
+        <div class="warehouse-card-view p-3">
+            <div class="row">
+                <div class="mb-3 col-sm-12 mr-0 d-flex justify-content-between warehouse-header">
+                    <div class="d-flex align-items-center">
+                        <div class="search-warehouse-box">
+                            <input-field
+                                #searchWarehouse
+                                [type]="'text'"
+                                [(ngModel)]="searchWarehouseQuery"
+                                [placeholder]="localeData?.search_warehouse"
+                            ></input-field>
+                        </div>
+                        <button
+                            *ngIf="searchWarehouseQuery"
+                            class="ml-2"
+                            mat-stroked-button
+                            (click)="resetFilter()"
+                            aria-label="cross icon"
+                            [matTooltip]="localeData?.reset_search"
+                        >
+                            <i aria-hidden="true" class="icon-cross d-inline-block font-size-12 mr-1"></i>
+                            <span>{{ commonLocaleData?.app_clear_filter }}</span>
+                        </button>
+                    </div>
+                    <button
+                        *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
+                        aria-label="create warehouse"
+                        mat-raised-button
+                        color="primary"
+                        class="btn mr-0"
+                        [routerLink]="['/pages/settings/create-warehouse']"
+                    >
+                        {{ localeData?.create_warehouse }}
+                    </button>
+                </div>
+            </div>
+            <div class="create-warehouse" *ngIf="showLoader">
+                <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
+            </div>
+            <div class="no-data" *ngIf="!warehouses?.length && !showLoader">
+                <h2>{{ localeData?.no_warehouse_found }}</h2>
+            </div>
+            <div *ngIf="!showLoader" class="row warehouse-box">
+                <div
+                    *ngFor="let warehouse of warehouses; index as warehouseIndex"
+                    class="col-lg-12 col-md-12 col-sm-12"
+                >
+                    <div class="warehouse-card">
+                        <div class="d-flex">
+                            <p>{{ warehouse.name }}</p>
+                            <div class="warehouse-options">
+                                <span
+                                    class="warehouse-status font-size-15"
+                                    [ngClass]="{
+                                        'warehouse-archived': warehouse.isArchived,
+                                        'warehouse-active': !warehouse.isArchived
+                                    }"
+                                    ><span>&nbsp;</span>
+                                    {{
+                                        warehouse.isArchived
+                                            ? commonLocaleData?.app_archived
+                                            : commonLocaleData?.app_unarchived
+                                    }}</span
+                                >
+                                <div class="btn-group" dropdown>
+                                    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="vertical dots">
+                                        <span class="icon-dots-three-vertical mr-0 font-size-14 d-block"></span>
+                                    </button>
+                                    <mat-menu #menu="matMenu">
+                                        <button mat-menu-item (click)="editWarehouse(warehouse)" *ngIf="voucherApiVersion === 2">
+                                            {{ commonLocaleData?.app_edit }}
+                                        </button>
+                                        <button mat-menu-item (click)="confirmStatusUpdate(warehouse)">
+                                            {{
+                                                warehouse?.isArchived
+                                                    ? commonLocaleData?.app_unarchive
+                                                    : commonLocaleData?.app_archive
+                                            }}
+                                        </button>
+                                    </mat-menu>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="warehouse-details">
+                            <div class="clear-both about-warehouse">
+                                <!-- <div class="col-xl-3 col-lg-4 col-md-6"> -->
+                                <div class="parent-branch pt-2 pb-2">{{ localeData?.linked_address }}:</div>
+                                <div>
+                                    <div *ngFor="let address of warehouse?.addresses" class="linked-add">
+                                        <ng-container *ngIf="address">
+                                            <span
+                                                class="cursor-pointer"
+                                                cdkOverlayOrigin
+                                                #addressTemplate="cdkOverlayOrigin"
+                                                (mouseenter)="openAddressInfo(true, address?.uniqueName + warehouse.uniqueName)"
+                                                (mouseleave)="openAddressInfo(false)"
+                                            >
+                                                {{ address?.name }}
+                                            </span>
+
+                                            <ng-template
+                                                cdkConnectedOverlay
+                                                [cdkConnectedOverlayOrigin]="addressTemplate"
+                                                [cdkConnectedOverlayOpen]="isAddressInfoOpen === (address?.uniqueName + warehouse.uniqueName)"
+                                                [cdkConnectedOverlayPositions]="[
+                                                    {
+                                                        originX: 'end',
+                                                        originY: 'center',
+                                                        overlayX: 'start',
+                                                        overlayY: 'center',
+                                                        offsetX: 8
+                                                    }
+                                                ]"
+                                            >
+                                                <div class="tax-tooltip font-size-14 custom-cdk-overlay-wrapper" (mouseenter)="openAddressInfo(true, address?.uniqueName + warehouse.uniqueName)"
+                                                (mouseleave)="openAddressInfo(false)">
+                                                    {{ address?.address }} {{ address?.stateCode }}
+                                                    <p *ngIf="address?.taxType && address?.taxNumber">
+                                                        {{ address?.taxType }} : {{ address?.taxNumber }}
+                                                    </p>
+                                                </div>
+                                            </ng-template>
+                                        </ng-container>
+                                        <!-- static pin code  -->
+                                        <div *ngIf="address?.pincode">
+                                            <div>
+                                                <label class="pin-label">{{ commonLocaleData?.app_pin }}:</label
+                                                >&nbsp;<span>{{ address?.pincode }}</span>
+                                            </div>
+                                        </div>
+                                        <!-- static pin code end-->
+                                    </div>
+                                </div>
+                                <!-- </div> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="warehouse-pagination">
+            <mat-paginator
+                *ngIf="warehouses?.length && paginationConfig?.totalItems > pageSizeOptions[0]"
+                [length]="paginationConfig?.totalItems"
+                [pageSize]="paginationConfig?.count"
+                [pageSizeOptions]="pageSizeOptions"
+                [pageIndex]="currentPage - 1"
+                [showFirstLastButtons]="true"
+                [hidePageSize]="false"
+                (page)="handlePageEvent($event)"
+                aria-label="Select page of warehouses"
+            ></mat-paginator>
+            <section class="mb-custom-80"></section>
+        </div>
+        <br />
+        <br />
+        <br />
+        <br />
+        <div class="branch-vector">
+            <img src="{{ imgPath2 }}" [alt]="localeData?.branch_image" />
+        </div>
+    </ng-container>
+
+    <ng-template #asideAccountAsidePane>
+        <ng-container
+            appTranslate
+            [file]="'settings/profile'"
+            (localeData)="profileLocaleData = $event"
+            [requireCommonData]="false"
+        >
+            <create-address
+                [currentOrganizationUniqueName]="currentOrganizationUniqueName"
+                [warehouseToUpdate]="warehouseToUpdate"
+                [showLoader]="isWarehouseUpdateInProgress"
+                (updateAddress)="updateWarehouseInfo($event)"
+                [addressConfiguration]="addressConfiguration"
+                [localeData]="profileLocaleData"
+                [commonLocaleData]="commonLocaleData"
+                (closeAsideEvent)="closeAsidePane($event)"
+            >
+            </create-address>
+        </ng-container>
+    </ng-template>
+
+    <ng-template #statusModal>
+        <div class="modal-md">
+            <div class="modal-content">
+                <confirm-modal
+                    [title]="commonLocaleData?.app_confirmation"
+                    [body]="
+                        warehouseStatusToUpdate?.isArchived
+                            ? localeData?.confirm_unarchive_title
+                            : localeData?.confirm_archive_title
+                    "
+                    [permanentlyDeleteMessage]="' '"
+                    (cancelCallBack)="warehouseStatusToUpdate = ''; statusModalRef?.close()"
+                    (successCallBack)="updateWarehouseStatus()"
+                >
+                </confirm-modal>
+            </div>
+        </div>
+    </ng-template>
+</div>

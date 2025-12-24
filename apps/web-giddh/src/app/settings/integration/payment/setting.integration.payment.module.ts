@@ -8,7 +8,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
 import { GiddhPageLoaderModule } from "../../../shared/giddh-page-loader/giddh-page-loader.module";
 import { DecimalDigitsModule } from "../../../shared/helpers/directives/decimalDigits/decimalDigits.module";
 import { DigitsOnlyModule } from "../../../shared/helpers/directives/digitsOnly/digitsOnly.module";
-// import { FormFieldsModule } from "../../../theme/form-fields/form-fields.module";
+import { FormFieldsModule } from "../../../theme/form-fields/form-fields.module";
 import { TranslateDirectiveModule } from "../../../theme/translate/translate.directive.module";
 import { AccountCreateEditComponent } from "./icici/account-create-edit/account-create-edit.component";
 import { PayorCreateEditComponent } from "./icici/payor-create-edit/payor-create-edit.component";
@@ -27,7 +27,7 @@ import { PayorCreateEditComponent } from "./icici/payor-create-edit/payor-create
         GiddhPageLoaderModule,
         MatDialogModule,
         MatTooltipModule,
-        // FormFieldsModule,
+        FormFieldsModule,
         MatSelectModule,
         MatButtonModule
     ],
@@ -38,5 +38,5 @@ import { PayorCreateEditComponent } from "./icici/payor-create-edit/payor-create
 })
 
 export class SettingIntegrationPaymentModule {
-
+    
 }

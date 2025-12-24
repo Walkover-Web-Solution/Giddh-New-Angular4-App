@@ -1,0 +1,25 @@
+.form-control,
+.linked-account {
+    width: 100% !important;
+}
+
+.linked-account {
+    width: calc(100% - 42px);
+}
+
+.portal-url {
+    font-size: 14px;
+    word-break: break-all;
+}
+
+.input-group-btn {
+    font-size: var(--font-size-24);
+    color: var(--text-primary-color) !important;
+}
+
+.copy-text-position {
+    position: absolute;
+    top: 5px;
+    right: 0;
+    transform: translateX(90%);
+}

@@ -1,0 +1,45 @@
+.portal {
+    position: relative;
+    min-height: calc(100vh - 284px);
+
+    .portal-header {
+        .dropdown-wrapper {
+            width: 300px;
+        }
+
+        .position-center {
+            position: absolute;
+            top: 40%;
+            left: 50%;
+        }
+    }
+
+    .portal-body {
+        table {
+            background: var(--color-transparent-backgrounds);
+
+            .status {
+                border-radius: var(--mat-border-radius-16);
+                padding: 6px 12px;
+            }
+
+            .verified {
+                color: var(--color-green);
+                background: var(--color-success-light);
+            }
+
+            .unverified {
+                color: var(--color-red);
+                background: var(--color-danger-light);
+            }
+        }
+    }
+}
+
+.default-status {
+    color: var(--color-white);
+}
+
+.fill-status {
+    color: var(--text-primary-color);
+}

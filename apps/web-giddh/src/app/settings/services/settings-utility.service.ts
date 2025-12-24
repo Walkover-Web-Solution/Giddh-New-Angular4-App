@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { forEach, map } from '../../lodash-optimized';
 
 @Injectable({
     providedIn: 'root'

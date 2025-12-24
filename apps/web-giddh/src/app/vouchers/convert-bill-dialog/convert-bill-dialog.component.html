@@ -1,0 +1,26 @@
+<form [formGroup]="convertToBillForm" autocomplete="off" novalidate (ngSubmit)="onFormSubmit()">
+    <div class="dialog-header">
+        <span>{{ localeData?.convert_to_bill }}</span>
+    </div>
+    <mat-dialog-content class="dialog-body custom-height">
+        <ng-container
+            formArrayName="purchaseOrders"
+            *ngFor="let voucher of convertToBillForm?.get('purchaseOrders')?.controls; let i = index"
+        >
+            <div [formGroupName]="i">
+                <input-field
+                    [type]="'tel'"
+                    [label]="localeData?.purchase_bill_number"
+                    class="w-50"
+                    formControlName="purchaseNumber"
+                >
+                </input-field>
+                <p class="ml-1 mb-2">{{ convertToBillForm?.get("purchaseOrders")?.value[i]?.orderNumber }}</p>
+            </div>
+        </ng-container>
+        <div class="d-flex column-gap-1 justify-content-end">
+            <button mat-raised-button color="primary" type="submit">{{ commonLocaleData?.app_save }}</button>
+            <button mat-stroked-button mat-dialog-close type="button">{{ commonLocaleData?.app_cancel }}</button>
+        </div>
+    </mat-dialog-content>
+</form>

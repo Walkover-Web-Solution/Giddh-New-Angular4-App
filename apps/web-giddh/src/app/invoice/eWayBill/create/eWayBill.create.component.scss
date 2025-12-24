@@ -1,0 +1,104 @@
+.right-panel {
+    border-left: 1px solid var(--color-medium-gray);
+    width: 280px;
+    mat-card {
+        h2 {
+            font-size: var(--font-size-15);
+            color: var(--text-primary-color);
+        }
+        label {
+            font-size: var(--font-size-12);
+            width: 20%;
+            font-weight: 800;
+        }
+        span {
+            font-size: var(--font-size-12);
+        }
+    }
+}
+
+.eway-bill-height {
+    min-height: calc(100vh - (var(--header-height) + 20px));
+}
+
+.list-icon-group {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    margin-left: -10px;
+
+    li {
+        display: flex;
+        align-items: center;
+        -moz-transition: 1ms all;
+        cursor: pointer;
+        img {
+            margin-right: 7px;
+        }
+        label {
+            padding: 0 10px;
+        }
+    }
+}
+
+.list-icon-group {
+    input {
+        display: none;
+    }
+}
+
+.list-icon-group input:checked + label {
+    background-color: var(--color-white);
+    box-shadow: 2px 2px 5px var(--color-shadow-light);
+}
+
+.select-style select {
+    padding: 6px !important;
+    border-radius: var(--mat-border-radius-0);
+}
+
+.aside-pane.aside-right.out button#close {
+    right: -60px;
+}
+
+.aside-right .list-icon-group label {
+    margin: 0px !important;
+    vertical-align: middle;
+}
+
+.aside-right .list-icon-group label {
+    padding: 5px 10px;
+    border: 1px solid transparent;
+}
+
+.aside-right .list-icon-group input:checked + label {
+    border-radius: var(--mat-border-radius-0);
+}
+
+.aside-pane.aside-right.in {
+    right: 0;
+    z-index: 9999;
+}
+
+.table-modal tbody td {
+    border-top: 0px solid !important;
+    border-right: 1px solid var(--border-color);
+}
+
+.table-modal thead th {
+    border-right: 1px solid var(--border-color) !important;
+}
+
+.table-modal tbody tr td button {
+    background: none;
+    border: 0px;
+    color: var(--color-border-light);
+    font-size: var(--font-size-15);
+    padding: 2px;
+    margin-right: 3px;
+    cursor: pointer;
+}
+
+.table-modal tbody tr td .icon-edit {
+    border-bottom: 2px solid var(--border-color);
+}

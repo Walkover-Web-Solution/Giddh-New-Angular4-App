@@ -1,0 +1,16 @@
+.upload-logo {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--mat-border-radius-4);
+    min-height: 100px;
+    margin-bottom: 19px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.signature-image {
+    display: block;
+    overflow: hidden;
+}

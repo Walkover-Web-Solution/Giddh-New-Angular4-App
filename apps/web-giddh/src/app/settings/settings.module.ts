@@ -1,34 +1,33 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
-// import { ContactModule } from '../contact/contact.module';
-// import { AsideMenuCreateTaxModule } from '../shared/aside-menu-create-tax/aside-menu-create-tax.module';
+import { NgModule } from '@angular/core';
+import { ContactModule } from '../contact/contact.module';
+import { AsideMenuCreateTaxModule } from '../shared/aside-menu-create-tax/aside-menu-create-tax.module';
 import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
 import { SharedModule } from '../shared/shared.module';
-// import { BranchComponent } from './branch/branch.component';
-// import { DiscountComponent } from './discount/discount.component';
-// import { FinancialYearComponent } from './financial-year/financial-year.component';
+import { BranchComponent } from './branch/branch.component';
+import { DiscountComponent } from './discount/discount.component';
+import { FinancialYearComponent } from './financial-year/financial-year.component';
 import { SettingIntegrationComponent } from './integration/setting.integration.component';
-import { SettingCampaignComponent } from './integration/campaign/setting-campaign/setting-campaign.component';
-// import { SettingLinkedAccountsConfirmationModalComponent } from './linked-accounts/confirmation-modal/confirmation.modal.component';
-// import { ConnectBankModalComponent } from './linked-accounts/connect-bank-modal/connect.bank.modal.component';
-// import { SettingLinkedAccountsComponent } from './linked-accounts/setting.linked.accounts.component';
-// import { SettingPermissionFormComponent } from './permissions/form/form.component';
-// import { SettingPermissionComponent } from './permissions/setting.permission.component';
-// import { SettingProfileComponent } from './profile/setting.profile.component';
-// import { SettingsComponent } from './settings.component';
-// import { SettingRountingModule } from './settings.routing.module';
-// import { DeleteTaxConfirmationModelComponent } from './taxes/confirmation/confirmation.model.component';
-// import { SettingTaxesComponent } from './taxes/setting.taxes.component';
-// import { SettingTriggerComponent } from './trigger/setting.trigger.component';
-// import { CreateWarehouseComponent } from './warehouse/create-warehouse/create-warehouse.component';
-// import { WarehouseComponent } from './warehouse/warehouse.component';
+import { SettingLinkedAccountsConfirmationModalComponent } from './linked-accounts/confirmation-modal/confirmation.modal.component';
+import { ConnectBankModalComponent } from './linked-accounts/connect-bank-modal/connect.bank.modal.component';
+import { SettingLinkedAccountsComponent } from './linked-accounts/setting.linked.accounts.component';
+import { SettingPermissionFormComponent } from './permissions/form/form.component';
+import { SettingPermissionComponent } from './permissions/setting.permission.component';
+import { SettingProfileComponent } from './profile/setting.profile.component';
+import { SettingsComponent } from './settings.component';
+import { SettingRountingModule } from './settings.routing.module';
+import { DeleteTaxConfirmationModelComponent } from './taxes/confirmation/confirmation.model.component';
+import { SettingTaxesComponent } from './taxes/setting.taxes.component';
+import { SettingTriggerComponent } from './trigger/setting.trigger.component';
+import { CreateWarehouseComponent } from './warehouse/create-warehouse/create-warehouse.component';
+import { WarehouseComponent } from './warehouse/warehouse.component';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { DigitsOnlyModule } from '../shared/helpers/directives/digitsOnly/digitsOnly.module';
-// import { PersonalInformationComponent } from './personal-information/personal-information.component';
-// import { AddressSettingsComponent } from './address-settings/address-settings.component';
-// import { OtherSettingsComponent } from './other-settings/other-settings.component';
+import { PersonalInformationComponent } from './personal-information/personal-information.component';
+import { AddressSettingsComponent } from './address-settings/address-settings.component';
+import { OtherSettingsComponent } from './other-settings/other-settings.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-// import { CreateBranchComponent } from './branch/create-branch/create-branch.component';
-// import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
+import { CreateBranchComponent } from './branch/create-branch/create-branch.component';
+import { TaxSidebarModule } from '../shared/tax-sidebar/tax-sidebar.module';
 import { ReplacePipeModule } from '../shared/helpers/pipes/replace/replace.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
 import { SettingIntegrationPaymentModule } from './integration/payment/setting.integration.payment.module';
@@ -42,7 +41,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ConfirmModalModule } from '../theme/confirm-modal/confirm-modal.module';
 import { MatGridListModule } from '@angular/material/grid-list';
-// import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatInputModule } from '@angular/material/input';
 import { ClipboardModule } from 'ngx-clipboard';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -53,79 +52,80 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { NgxPlaidLinkModule } from "ngx-plaid-link";
-// import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
+import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
 import { AccountNumberMaskModule } from '../shared/helpers/pipes/accountNumberMaskPipe/accountNumberMask.module';
-// import { PortalWhiteLabelComponent } from './portal-white-label/portal-white-label.component';
-// import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
-// import { CreateAddressModule } from '../shared/create-address/create-address.module';
+import { PortalWhiteLabelComponent } from './portal-white-label/portal-white-label.component';
+import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
+import { CreateAddressModule } from '../shared/create-address/create-address.module';
 import { CommonModule, TitleCasePipe } from '@angular/common';
 import { TagsModule } from './tags/tags.module';
-// import { TaxAuthorityModule } from '../theme/tax-authority/tax-authority.module';
+import { TaxAuthorityModule } from '../theme/tax-authority/tax-authority.module';
 import { InstitutionsListComponent } from './integration/institutions-list/institutions-list.component';
 import { MatListModule } from '@angular/material/list';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
-// import { D3TreeChartModule } from '../shared/d3-tree-chart/d3-tree-chart.module';
+import { D3TreeChartModule } from '../shared/d3-tree-chart/d3-tree-chart.module';
 import { BankIntegrationModule } from '../shared/bank-integration/bank-integration.module';
 import { SerialNumberPipe } from '../shared/helpers/pipes/serialNumber.pipe';
-// import { NewConfirmModalModule } from '../theme/new-confirm-modal';
-// import { ShopifyIntegrationComponent } from './shopify-integration/shopify.intergation.component';
-// import { TallyIntegrationComponent } from './tally-integration/tally.intergation.component';
-// import { CustomerPortalComponent } from './customer-portal/customer.portal.component';
+import { NewConfirmModalModule } from '../theme/new-confirm-modal';
+import { ShopifyIntegrationComponent } from './shopify-integration/shopify.intergation.component';
+import { TallyIntegrationComponent } from './tally-integration/tally.intergation.component';
+import { CustomerPortalComponent } from './customer-portal/customer.portal.component';
 import { MatDividerModule } from '@angular/material/divider';
 import { OverlayModule } from '@angular/cdk/overlay';
-// import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
-// import { ExportFileNameComponent } from './export-file-name/export-file-name.component';
+import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
+import { ExportFileNameComponent } from './export-file-name/export-file-name.component';
 import { TributeMentionModule } from '../shared/helpers/directives/tributeMention/tributeMention.module';
 import { ReplaceAllPipeModule } from '../shared/helpers/pipes/replaceAll/replaceAll.module';
 import { MatPaginatorModule } from '@angular/material/paginator';
-// import { CompanyAuthKeyComponent } from './company-auth-key/company-auth-key.component';
-// import { CreateCompanyAuthKeyComponent } from './company-auth-key/create-company-auth-key/create-company-auth-key.component';
+import { CompanyAuthKeyComponent } from './company-auth-key/company-auth-key.component';
+import { CreateCompanyAuthKeyComponent } from './company-auth-key/create-company-auth-key/create-company-auth-key.component';
+import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
 
 @NgModule({
     declarations: [
-        // SettingsComponent,
+        SettingsComponent,
         SettingIntegrationComponent,
-        SettingCampaignComponent,
-        // SettingProfileComponent,
-        // SettingTaxesComponent,
-        // DeleteTaxConfirmationModelComponent,
-        // SettingLinkedAccountsComponent,
-        // ConnectBankModalComponent,
-        // SettingLinkedAccountsConfirmationModalComponent,
-        // FinancialYearComponent,
-        // SettingPermissionComponent,
-        // SettingPermissionFormComponent,
-        // BranchComponent,
-        // DiscountComponent,
-        // CompanyAuthKeyComponent,
-        // CreateCompanyAuthKeyComponent,
-        // ShopifyIntegrationComponent,
-        // CustomerPortalComponent,
-        // TallyIntegrationComponent,
-        // SettingTriggerComponent,
-        // WarehouseComponent,
-        // CreateWarehouseComponent,
-        // PersonalInformationComponent,
-        // PortalWhiteLabelComponent,
-        // AddressSettingsComponent,
-        // OtherSettingsComponent,
-        // CreateBranchComponent,
+        SettingProfileComponent,
+        SettingTaxesComponent,
+        DeleteTaxConfirmationModelComponent,
+        SettingLinkedAccountsComponent,
+        ConnectBankModalComponent,
+        SettingLinkedAccountsConfirmationModalComponent,
+        FinancialYearComponent,
+        SettingPermissionComponent,
+        SettingPermissionFormComponent,
+        BranchComponent,
+        DiscountComponent,
+        CompanyAuthKeyComponent,
+        CreateCompanyAuthKeyComponent,
+        ShopifyIntegrationComponent,
+        CustomerPortalComponent,
+        TallyIntegrationComponent,
+        SettingTriggerComponent,
+        WarehouseComponent,
+        CreateWarehouseComponent,
+        PersonalInformationComponent,
+        PortalWhiteLabelComponent,
+        AddressSettingsComponent,
+        OtherSettingsComponent,
+        CreateBranchComponent,
         InstitutionsListComponent,
-        // ExportFileNameComponent
+        ExportFileNameComponent
     ],
     imports: [
         CommonModule,
         SharedModule,
         MatListModule,
-        // SettingRountingModule,
-        // AsideMenuCreateTaxModule,
-        // ContactModule,
+        SettingRountingModule,
+        AsideMenuCreateTaxModule,
+        ContactModule,
         FormsModule,
         ReactiveFormsModule,
         GiddhNumberFormatModule,
         NgxMaskModule.forRoot(),
         DigitsOnlyModule,
-        // TaxSidebarModule,
+        DecimalDigitsModule,
+        TaxSidebarModule,
         ReplacePipeModule,
         NoDataModule,
         SettingIntegrationPaymentModule,
@@ -140,7 +140,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
         ConfirmModalModule,
         MatSlideToggleModule,
         MatGridListModule,
-        // FormFieldsModule,
+        FormFieldsModule,
         MatInputModule,
         ClipboardModule,
         MatCheckboxModule,
@@ -153,25 +153,24 @@ import { MatPaginatorModule } from '@angular/material/paginator';
         MatMenuModule,
         MatDatepickerModule,
         NgxPlaidLinkModule,
-        // AsideMenuAccountModule,
+        AsideMenuAccountModule,
         AccountNumberMaskModule,
-        // WatchVideoModule,
-        // CreateAddressModule,
+        WatchVideoModule,
+        CreateAddressModule,
         TagsModule,
-        // TaxAuthorityModule,
+        TaxAuthorityModule,
         NgxMatSelectSearchModule,
-        // D3TreeChartModule,
+        D3TreeChartModule,
         BankIntegrationModule,
-        // SerialNumberPipe,
-        // NewConfirmModalModule,
+        SerialNumberPipe,
+        NewConfirmModalModule,
         OverlayModule,
-        // GiddhDatepickerModule,
+        GiddhDatepickerModule,
         TributeMentionModule,
         ReplaceAllPipeModule,
         TitleCasePipe,
         MatPaginatorModule
     ],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
 })
 
 export class SettingsModule {

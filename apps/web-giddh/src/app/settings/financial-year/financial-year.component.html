@@ -1,0 +1,131 @@
+<div
+    appTranslate
+    [file]="'settings/financial-year'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
+>
+    <div class="section-center p-3 clear-both overflow-visible">
+        <form class="overflow-visible">
+            <div class="row overflow-visible">
+                <div class="col-sm-12 overflow-visible">
+                    <div class="financial-year-header d-flex align-items-start align-items-lg-center column-gap-4 flex-lg-row flex-column row-gap-1">
+                        <div class="d-flex align-items-center column-gap-2">
+                            <a
+                                href="javascript:void(0);"
+                                aria-label="add financial year"
+                                class="d-inline-block select-financial-year text-primary underline"
+                                (click)="fyAddNewDropdownIsOpen = true"
+                                *ngIf="!fyAddNewDropdownIsOpen; else fyDropdown"
+                            >
+                                {{ localeData?.select_financial_year }}
+                            </a>
+                            <ng-template #fyDropdown>
+                                <reactive-dropdown-field
+                                    [openDropdown]="true"
+                                    [showLabel]="false"
+                                    [appearance]="'fill'"
+                                    class="select-financial-year"
+                                    [cssClass]="'w-100 p-1 border-color-transparent bg-transparent'"
+                                    [label]="localeData?.add_financial_year"
+                                    [placeholder]="localeData?.select_financial_year"
+                                    [options]="yearOptions"
+                                    (selectedOption)="selectYear($event)"
+                                >
+                                </reactive-dropdown-field>
+                            </ng-template>
+                            <button mat-raised-button color="primary" (click)="addFY()">
+                                {{ localeData?.add_financial_year }}
+                            </button>
+                        </div>
+
+                        <div class="d-flex align-items-center column-gap-2 border-left pl-5">
+                            <a
+                                href="javascript:void(0);"
+                                aria-label="update financial year period"
+                                class="d-inline-block width-150 text-primary underline"
+                                (click)="fyPeriodDropdownIsOpen = true"
+                                *ngIf="!fyPeriodDropdownIsOpen; else fyPeriodDropdown"
+                            >
+                                {{ selectedFYPeriod }}
+                            </a>
+                            <ng-template #fyPeriodDropdown>
+                                <reactive-dropdown-field
+                                    [openDropdown]="true"
+                                    [showLabel]="false"
+                                    [appearance]="'fill'"
+                                    class="width-150"
+                                    [cssClass]="'w-100 p-1 border-color-transparent bg-transparent'"
+                                    [label]="localeData?.financial_year_period"
+                                    [name]="'selectedFYPeriod'"
+                                    [labelValue]="selectedFYPeriod"
+                                    [placeholder]="localeData?.financial_year_period"
+                                    (selectedOption)="selectedFYPeriod = $event.value; selectFYPeriod($event)"
+                                    [options]="FYPeriodOptions"
+                                >
+                                </reactive-dropdown-field>
+                            </ng-template>
+                            <button mat-raised-button color="primary" (click)="updateFYPeriod()">
+                                {{ localeData?.update_financial_year_period }}
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="row overflow-visible mt-3">
+                        <div class="col-xl-12 col-md-12 col-xs-12 overflow-visible">
+                            <div
+                                class="table-responsive overflow-visible table-header-sticky"
+                                *ngIf="financialYearObj?.financialYears"
+                            >
+                                <table mat-table [dataSource]="financialYearObj.financialYears" class="financial-year">
+                                    <ng-container matColumnDef="number">
+                                        <th mat-header-cell *matHeaderCellDef width="10%">{{ localeData?.sr_no }}</th>
+                                        <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="from">
+                                        <th mat-header-cell *matHeaderCellDef width="30%">
+                                            {{ commonLocaleData?.app_from }}
+                                        </th>
+                                        <td mat-cell *matCellDef="let element">{{ element?.financialYearStarts }}</td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="to">
+                                        <th mat-header-cell *matHeaderCellDef width="30%">
+                                            {{ commonLocaleData?.app_to }}
+                                        </th>
+                                        <td mat-cell *matCellDef="let element">{{ element?.financialYearEnds }}</td>
+                                    </ng-container>
+                                    <ng-container matColumnDef="status">
+                                        <th mat-header-cell *matHeaderCellDef width="30%" class="text-right">
+                                            {{ localeData?.lock_status }}
+                                        </th>
+                                        <td mat-cell *matCellDef="let element" class="text-right">
+                                            <span class="d-inline-block w125">
+                                                <mat-slide-toggle
+                                                    color="primary"
+                                                    name="lockedUnlockedFinancial"
+                                                    [checked]="element.isLocked"
+                                                    (change)="lockUnlockFinancialYear(element)"
+                                                >
+                                                    <span class="d-inline-block">{{ element.isLocked ? localeData?.locked : localeData?.unlocked }}</span>
+                                                </mat-slide-toggle>
+                                            </span>
+                                    </td>
+                                    </ng-container>
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true;"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+                                </table>
+                            </div>
+                            <div class="no-data" *ngIf="!financialYearObj || !financialYearObj?.financialYears?.length">
+                                <no-data
+                                    [primaryMessage]="commonLocaleData?.app_no_entries_found"
+                                    [secondaryMessage]="commonLocaleData?.app_search_suggestion"
+                                    [secondaryMessageClass]="'p-0'"
+                                ></no-data>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

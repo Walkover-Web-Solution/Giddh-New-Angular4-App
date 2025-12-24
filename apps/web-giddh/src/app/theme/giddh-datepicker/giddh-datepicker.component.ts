@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, forwardRef, OnDestroy, ChangeDetectorRef , ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, forwardRef, OnDestroy, ChangeDetectorRef, ViewChild } from '@angular/core';
 import * as dayjs from 'dayjs';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { MatDatepicker, MatDatepickerInputEvent } from '@angular/material/datepicker';
@@ -22,7 +22,7 @@ const noop = () => { };
             multi: true
         }
     ],
-    standalone: false
+    standalone:false
 })
 
 export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, OnDestroy {

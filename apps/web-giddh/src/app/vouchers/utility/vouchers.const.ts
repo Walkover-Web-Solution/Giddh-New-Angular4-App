@@ -37,7 +37,7 @@ export enum VoucherTypeEnum {
     purchase_order = 'purchase_order',
     estimates = 'estimates',
     proformas = 'proformas',
-    bill = 'bill'
+    bill ='bill'
 };
 
 export const SearchType = {
@@ -103,8 +103,8 @@ export enum EstimateTableColumnsEnum {
 
 /** Enum for Proforma Table Columns */
 export enum ProformaTableColumnsEnum {
-    ProformaNo = 'proforma_no',
-    ProformaDate = 'proformaDate',
+    ProformaNo ='proforma_no',
+    ProformaDate ='proformaDate',
     Customer = 'customer',
     TotalAmount = 'grandTotal',
     ExpiryDate = 'expireDate',

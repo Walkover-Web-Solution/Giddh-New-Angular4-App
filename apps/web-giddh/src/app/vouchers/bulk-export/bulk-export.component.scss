@@ -1,0 +1,31 @@
+.column-setting {
+    grid-template-columns: repeat(3, 1fr);
+    @media screen and (max-width: 1280px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    > .setting {
+        padding: 15px 20px;
+        align-self: stretch;
+
+        &:last-child {
+            text-align: right;
+        }
+
+        label {
+            margin-right: 15px;
+        }
+
+        @media screen and (min-width: 1280px) {
+            &:nth-child(3n + 2) {
+                border-left: 1px solid var(--border-color);
+                border-right: 1px solid var(--border-color);
+            }
+        }
+
+        @media screen and (max-width: 1280px) {
+            &:nth-child(2n + 2) {
+                border-left: 1px solid var(--border-color);
+            }
+        }
+    }
+}

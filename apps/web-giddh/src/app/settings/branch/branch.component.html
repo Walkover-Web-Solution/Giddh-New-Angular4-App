@@ -1,0 +1,377 @@
+<div
+    appTranslate
+    [file]="'settings/branch'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
+>
+    <div class="relative">
+        <div class="clear-both">
+            <div class="col-sm-12 mt-2 text-right">
+                <button mat-raised-button color="primary" class="mr-0" (click)="openAddBranchModal()">
+                    {{ localeData?.create_branch }}
+                </button>
+            </div>
+            <mat-tab-group
+                mat-stretch-tabs="false"
+                animationDuration="0ms"
+                [selectedIndex]="selectedTabIndex"
+                [disableRipple]="true"
+            >
+                <mat-tab [label]="localeData?.flat_view">
+                    <ng-container *ngIf="selectedTabIndex === 0">
+                        <div class="clear-both p-3 pb-0">
+                            <div class="date-advance-search row">
+                                <div class="col-sm-12 mb-3 d-flex justify-content-between">
+                                    <form
+                                        class="form-inline input-group-date-range-picker position-relative d-flex flex-row mr-0"
+                                    >
+                                        <div class="mr-1 branch-header-content w-100">
+                                            <div class="search-field form-top-fields w-100">
+                                                <div class="search-branch-box">
+                                                    <input-field
+                                                        [type]="'text'"
+                                                        [name]="'searchBranch'"
+                                                        [formControl]="searchBranchQuery"
+                                                        #branchSearch
+                                                        [placeholder]="localeData?.search_branch"
+                                                    >
+                                                    </input-field>
+                                                </div>
+                                                <button
+                                                    *ngIf="searchBranchQuery.value"
+                                                    class="w-100 ml-2"
+                                                    mat-stroked-button
+                                                    (click)="resetFilter()"
+                                                    aria-label="cross icon"
+                                                    [matTooltip]="localeData?.reset_search"
+                                                >
+                                                    <i
+                                                        aria-hidden="true"
+                                                        class="icon-cross d-inline-block font-size-12 mr-1"
+                                                    ></i>
+                                                    <span>{{ commonLocaleData?.app_clear_filter }}</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div *ngIf="(branches$ | async)?.length === 0 && !showLoader" class="no-data mt-4">
+                            <div class="no-data">
+                                <h2>{{ localeData?.no_branch_found }}</h2>
+                            </div>
+                        </div>
+                        <div *ngIf="showLoader" class="spinner2">
+                            <div class="cube1"></div>
+                            <div class="cube2"></div>
+                        </div>
+                        <div *ngIf="(branches$ | async)?.length > 0 && !showLoader" class="p-3">
+                            <div class="branch-card-view" *ngIf="branchViewType === 'card'">
+                                <div class="row">
+                                    <div class="col-12" *ngFor="let branch of branches$ | async">
+                                        <div class="branch-card">
+                                            <div class="card-basic-details">
+                                                <div class="clear-both">
+                                                    <div class="pull-left d-flex column-gap-05">
+                                                        <i
+                                                            class="cursor-pointer icon-branch-icon"
+                                                            [matTooltip]="commonLocaleData?.app_branch"
+                                                        ></i>
+                                                        <div>
+                                                            <p>
+                                                                {{ branch.name }}
+                                                                {{
+                                                                    branch.consolidatedBranch
+                                                                        ? "(" + localeData?.consolidated + ")"
+                                                                        : ""
+                                                                }}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="pull-right right-card-section">
+                                                        <span
+                                                            class="branch-status"
+                                                            [ngClass]="{
+                                                                'branch-archived': branch.isArchived,
+                                                                'branch-active': !branch.isArchived
+                                                            }"
+                                                            ><span>&nbsp;</span>
+                                                            {{
+                                                                branch.isArchived
+                                                                    ? commonLocaleData?.app_archived
+                                                                    : commonLocaleData?.app_unarchived
+                                                            }}</span
+                                                        >
+                                                        <div class="btn-group align-items-center ml-1">
+                                                            <button
+                                                                mat-button
+                                                                [matMenuTriggerFor]="menu"
+                                                                class="cursor-pointer mr-0 min-width-unset"
+                                                                role="button"
+                                                                aria-label="dropdown button"
+                                                            >
+                                                                <span class="icon-dots-three-vertical"></span>
+                                                            </button>
+                                                            <mat-menu #menu="matMenu">
+                                                                <button mat-menu-item (click)="updateBranch(branch)">
+                                                                    {{ commonLocaleData?.app_edit }}
+                                                                </button>
+                                                                <button
+                                                                    mat-menu-item
+                                                                    (click)="confirmStatusUpdate(branch)"
+                                                                >
+                                                                    {{
+                                                                        branch?.isArchived
+                                                                            ? commonLocaleData?.app_unarchive
+                                                                            : commonLocaleData?.app_archive
+                                                                    }}
+                                                                </button>
+                                                            </mat-menu>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="clear-both">
+                                                    <div *ngIf="branch?.parentBranch?.name" class="pull-left">
+                                                        <span class="parent-branch"
+                                                            >{{ localeData?.parent_entity }}:</span
+                                                        >
+                                                        {{ branch?.parentBranch?.name }}
+                                                    </div>
+                                                </div>
+                                                <div class="clear-both row">
+                                                    <div class="col-xl-3 col-lg-4 col-md-6">
+                                                        <div class="parent-branch pt-1 pb-1">
+                                                            {{ localeData?.linked_address }}:
+                                                        </div>
+                                                        <div>
+                                                            <span
+                                                                class="text-light"
+                                                                *ngIf="!branch?.addresses?.length"
+                                                                >{{ localeData?.no_linked_address_present }}</span
+                                                            >
+                                                            <div
+                                                                *ngFor="let address of branch?.addresses"
+                                                                class="linked-add"
+                                                            >
+                                                                <ng-container *ngIf="address">
+                                                                    <span
+                                                                        class="cursor-pointer"
+                                                                        cdkOverlayOrigin
+                                                                        #addressTemplate="cdkOverlayOrigin"
+                                                                        (mouseenter)="
+                                                                            openAddressInfo(
+                                                                                true,
+                                                                                address?.uniqueName + branch.uniqueName
+                                                                            )
+                                                                        "
+                                                                        (mouseleave)="openAddressInfo(false)"
+                                                                    >
+                                                                        <i
+                                                                            (click)="
+                                                                                setDefault(address, branch, 'address')
+                                                                            "
+                                                                            *ngIf="!address?.isDefault"
+                                                                            class="cursor-pointer icon-no-selected mr-1"
+                                                                        ></i>
+                                                                        <i
+                                                                            (click)="
+                                                                                setDefault(address, branch, 'address')
+                                                                            "
+                                                                            *ngIf="address?.isDefault"
+                                                                            class="cursor-pointer icon-favorite-selected mr-1"
+                                                                        ></i>
+                                                                        {{ address?.name }}
+                                                                    </span>
+                                                                    <ng-template
+                                                                        cdkConnectedOverlay
+                                                                        [cdkConnectedOverlayOrigin]="addressTemplate"
+                                                                        [cdkConnectedOverlayOpen]="
+                                                                            isAddressInfoOpen ===
+                                                                            address?.uniqueName + branch.uniqueName
+                                                                        "
+                                                                        [cdkConnectedOverlayPositions]="[
+                                                                            {
+                                                                                originX: 'end',
+                                                                                originY: 'center',
+                                                                                overlayX: 'start',
+                                                                                overlayY: 'center',
+                                                                                offsetX: 8
+                                                                            }
+                                                                        ]"
+                                                                    >
+                                                                        <div
+                                                                            class="tax-tooltip font-size-14 custom-cdk-overlay-wrapper"
+                                                                            (mouseenter)="
+                                                                                openAddressInfo(
+                                                                                    true,
+                                                                                    address?.uniqueName +
+                                                                                        branch.uniqueName
+                                                                                )
+                                                                            "
+                                                                            (mouseleave)="openAddressInfo(false)"
+                                                                        >
+                                                                            {{ address?.address }}
+                                                                            {{ address?.stateCode }}
+                                                                            <p
+                                                                                *ngIf="
+                                                                                    address?.taxType &&
+                                                                                    address?.taxNumber
+                                                                                "
+                                                                            >
+                                                                                {{ address?.taxType }} :
+                                                                                {{ address?.taxNumber }}
+                                                                            </p>
+                                                                            <p *ngIf="address?.pincode">
+                                                                                {{ commonLocaleData?.app_pin }}:
+                                                                                {{ address?.pincode }}
+                                                                            </p>
+                                                                        </div>
+                                                                    </ng-template>
+                                                                </ng-container>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xl-3 col-lg-4 col-md-6">
+                                                        <div class="parent-branch pt-1 pb-1">
+                                                            {{ localeData?.linked_warehouse }}:
+                                                        </div>
+                                                        <div>
+                                                            <span
+                                                                class="text-light"
+                                                                *ngIf="!branch?.warehouseResource?.length"
+                                                                >{{ localeData?.no_linked_warehouse_present }}</span
+                                                            >
+                                                            <div
+                                                                *ngFor="let warehouse of branch?.warehouseResource"
+                                                                class="linked-add"
+                                                            >
+                                                                <ng-container *ngIf="warehouse">
+                                                                    <i
+                                                                        (click)="
+                                                                            setDefault(warehouse, branch, 'warehouse')
+                                                                        "
+                                                                        *ngIf="!warehouse?.isDefault"
+                                                                        class="cursor-pointer icon-no-selected mr-1"
+                                                                    ></i>
+                                                                    <i
+                                                                        (click)="
+                                                                            setDefault(warehouse, branch, 'warehouse')
+                                                                        "
+                                                                        *ngIf="warehouse?.isDefault"
+                                                                        class="cursor-pointer icon-favorite-selected mr-1"
+                                                                    ></i>
+                                                                    <label class="cursor-pointer">{{
+                                                                        warehouse?.name
+                                                                    }}</label>
+                                                                </ng-container>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-right pb-2 pr-5">
+                                <img [src]="imgPath" [alt]="localeData?.branch_image" />
+                            </div>
+
+                            <!--add company modal  -->
+                            <ng-template #addCompanyModal>
+                                <div class="modal-dialog modal-xl modal-width">
+                                    <div class="modal-content">
+                                        <ng-template element-view-container-ref #companyadd="elementviewcontainerref">
+                                        </ng-template>
+                                    </div>
+                                </div>
+                            </ng-template>
+
+                            <!-- add branch modal -->
+                            <ng-template #confirmationModal>
+                                <!-- not show content -->
+                                <div class="modal-dialog modal-md">
+                                    <div class="modal-content">
+                                        <div class="dialog-header clear-both">
+                                            <span>{{ commonLocaleData?.app_confirmation }}</span>
+                                        </div>
+                                        <mat-dialog-content class="dialog-body">
+                                            <div [innerHTML]="confirmationMessage"></div>
+                                            <div class="d-flex justify-content-end column-gap-1 mt-3">
+                                                <button
+                                                    mat-raised-button
+                                                    color="primary"
+                                                    (click)="onUserConfirmation(true)"
+                                                >
+                                                    {{ commonLocaleData?.app_yes }}
+                                                </button>
+                                                <button
+                                                    mat-stroked-button
+                                                    role="button"
+                                                    (click)="onUserConfirmation(false)"
+                                                >
+                                                    {{ commonLocaleData?.app_no }}
+                                                </button>
+                                            </div>
+                                        </mat-dialog-content>
+                                        <!-- modal footer -->
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </div>
+                    </ng-container>
+                </mat-tab>
+                <mat-tab [label]="localeData?.hierarchy_view">
+                    <div class="pt-4 pb-4 h-100">
+                        <d3-tree-chart [data]="data" [localeData]="localeData"> </d3-tree-chart>
+                    </div>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+    </div>
+    <ng-template #statusDialog>
+        <div class="modal-md">
+            <div class="modal-content">
+                <confirm-modal
+                    [title]="commonLocaleData?.app_confirmation"
+                    [body]="
+                        branchStatusToUpdate?.isArchived
+                            ? localeData?.confirm_unarchive_title
+                            : localeData?.confirm_archive_title
+                    "
+                    [permanentlyDeleteMessage]="' '"
+                    (cancelCallBack)="branchStatusToUpdate = ''; statusDialogRef?.close()"
+                    (successCallBack)="updateBranchStatus()"
+                >
+                </confirm-modal>
+            </div>
+        </div>
+    </ng-template>
+    <!-- Edit branch -->
+    <ng-template #addressAsidePane>
+        <div
+            appTranslate
+            [file]="'settings/profile'"
+            (localeData)="profileLocaleData = $event"
+            [requireCommonData]="false"
+        >
+            <create-address
+                [class]="addressAsidePane"
+                [keyboardShortcut]="'esc'"
+                (onShortcutPress)="addressAsidePaneRef?.close()"
+                [companyName]="currentBranch"
+                [branchToUpdate]="branchToUpdate"
+                [showLoader]="isBranchChangeInProgress"
+                (updateAddress)="updateBranchInfo($event)"
+                [addressConfiguration]="addressConfiguration"
+                [localeData]="profileLocaleData"
+                [commonLocaleData]="commonLocaleData"
+                (closeAsideEvent)="addressAsidePaneRef?.close()"
+            >
+            </create-address>
+        </div>
+    </ng-template>
+</div>

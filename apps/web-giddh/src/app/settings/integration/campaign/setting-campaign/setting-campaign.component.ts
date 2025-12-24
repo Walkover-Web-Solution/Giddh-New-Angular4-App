@@ -9,11 +9,9 @@ import { PageEvent } from '@angular/material/paginator';
 import { CampaignIntegrationService } from 'apps/web-giddh/src/app/services/campaign.integration.service';
 import { GIDDH_NEW_DATE_FORMAT_UI } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
-// import { SelectMultipleFieldsComponent } from 'apps/web-giddh/src/app/theme/form-fields/select-multiple-fields/select-multiple-fields.component';
+import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
+import { SelectMultipleFieldsComponent } from 'apps/web-giddh/src/app/theme/form-fields/select-multiple-fields/select-multiple-fields.component';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
-import { Configuration } from '../../../../app.constant';
-import { environment } from '../../../../../environments/environment';
-import { cloneDeep, filter, find, forEach, includes, map, toArray } from '../../../../lodash-optimized';
 
 export interface ActiveTriggers {
     title: string;
@@ -31,7 +29,7 @@ export interface ActiveTriggers {
 })
 export class SettingCampaignComponent implements OnInit {
     /* Selector for variableComponent type field */
-    // @ViewChildren('variableComponent') public variableComponent: QueryList<SelectMultipleFieldsComponent>;
+    @ViewChildren('variableComponent') public variableComponent: QueryList<SelectMultipleFieldsComponent>;
     /** Holds image path */
     public imgPath: string = '';
     /* This will hold local JSON data */
@@ -134,7 +132,7 @@ export class SettingCampaignComponent implements OnInit {
      * @memberof SettingCampaignComponent
      */
     public ngOnInit(): void {
-        this.imgPath = (Configuration.isElectron) ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = (isElectron) ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
         this.getCommunicationPlatforms();
     }
 
@@ -818,7 +816,7 @@ export class SettingCampaignComponent implements OnInit {
             let attachmentExists = selectedValues.filter(val => val === 'Attachment');
             if (selectedValues.includes(attachmentExists[0])) {
                 this.createTrigger.campaignDetails.argsMapping[index].value = attachmentExists[0];
-                // this.variableComponent.toArray()[index].chipList = attachmentExists;
+                this.variableComponent.toArray()[index].chipList = attachmentExists;
             } else {
                 this.createTrigger.campaignDetails.argsMapping[index].value = selectedValues?.join(",");
             }

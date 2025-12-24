@@ -1,0 +1,19 @@
+.create-template-aside {
+    .sticky-header {
+        z-index: 10;
+        box-shadow: 0 2px 4px var(--color-shadow-light);
+    }
+
+    .scrollable-content {
+        flex: 1;
+        height: calc(100vh - 80px);
+    }
+
+    .template-left-side {
+        width: 40%;
+    }
+
+    .template-right-side {
+        width: 60%;
+    }
+}

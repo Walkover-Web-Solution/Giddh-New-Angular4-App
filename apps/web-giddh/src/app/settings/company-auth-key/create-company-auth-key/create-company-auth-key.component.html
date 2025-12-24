@@ -1,0 +1,290 @@
+<div class="aside-dialog-wrapper">
+    <div class="dialog-header">
+        <span class="font-size-16">{{ isUpdateMode ? localeData?.update_heading : localeData?.tab_heading }}</span>
+    </div>
+    <div mat-dialog-content class="dialog-body">
+        <div *ngIf="isLoading">
+            <giddh-page-loader></giddh-page-loader>
+        </div>
+        <ng-container *ngIf="!isLoading">
+            <form autocomplete="off" novalidate name="createCompanyAuthKeyForm" [formGroup]="createCompanyAuthKeyForm">
+                <div class="row row-gap-15 mt-2">
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-6">
+                                <span class="custom-mat-form-field">
+                                    <input-field
+                                        [type]="'text'"
+                                        [showError]="
+                                            isFormSubmitted && !createCompanyAuthKeyForm.get('roleName')?.value
+                                        "
+                                        [name]="'role-name'"
+                                        formControlName="roleName"
+                                        [placeholder]="localeData?.user_role_name_placeholder"
+                                        [label]="localeData?.user_role_name_label"
+                                    ></input-field>
+                                </span>
+                            </div>
+                            <div class="col-6">
+                                <reactive-dropdown-field
+                                    [label]="localeData?.role_name_label"
+                                    [name]="'roles'"
+                                    [placeholder]="localeData?.role_name_placeholder"
+                                    [options]="allRoles"
+                                    formControlName="roleUniqueName"
+                                    [required]="true"
+                                    [showError]="
+                                        isFormSubmitted && !createCompanyAuthKeyForm?.get('roleUniqueName')?.value
+                                    "
+                                ></reactive-dropdown-field>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <!-- time span -->
+                        <div
+                            [exclude]="'.time-span-dropdown'"
+                            [attachOutsideOnClick]="true"
+                            (clickOutside)="methodForToggleSection('timeSpanSection')"
+                        >
+                            <button
+                                mat-button
+                                [matMenuTriggerFor]="menu"
+                                (click)="showTimeSpan = !showTimeSpan"
+                                type="button"
+                                class="mat-select-btn border border-radius-4 custom-mat-form-field-height justify-content-between p-3 text-left w-100"
+                            >
+                                <span class="d-flex w-100 font-weight-regular">
+                                    {{ selectedTimeSpan }}
+                                    <span class="ml-auto"
+                                        ><span class="fa fa-caret-down font-size-15 mr-2"></span
+                                    ></span>
+                                </span>
+                            </button>
+                            <mat-menu #menu="matMenu">
+                                <section class="mb-2 time-span-dropdown max-w-300" (click)="$event.stopPropagation()">
+                                    <div class="p-3">
+                                        <mat-radio-group formControlName="periodOptions" class="d-flex flex-column">
+                                            <mat-radio-button
+                                                [value]="DATE_RANGE"
+                                                id="dateRange"
+                                                color="primary"
+                                                (click)="handleTimeSpanChange(DATE_RANGE)"
+                                                class="w-100 mr-0 mb-1"
+                                            >
+                                                {{ commonLocaleData?.app_date_range }}
+                                            </mat-radio-button>
+                                            <mat-radio-button
+                                                [value]="PAST_PERIOD"
+                                                id="pastPeriod"
+                                                color="primary"
+                                                (click)="handleTimeSpanChange(PAST_PERIOD)"
+                                                class="w-100 mr-0 mt-2"
+                                            >
+                                                {{ localeData?.past_period }}
+                                            </mat-radio-button>
+                                        </mat-radio-group>
+                                    </div>
+                                    <section
+                                        class="periods container-fluid mb-2 mt-3"
+                                        *ngIf="createCompanyAuthKeyForm.get('periodOptions')?.value === DATE_RANGE"
+                                    >
+                                        <div>
+                                            <div>
+                                                <div class="date-range-wrapper">
+                                                    <mat-form-field
+                                                        [matDatepickerToggleIcon]="false"
+                                                        appearance="outline"
+                                                        (click)="picker?.open()"
+                                                        class="initial-height w-100"
+                                                    >
+                                                        <mat-label>{{ localeData?.from_to_label }}</mat-label>
+                                                        <mat-date-range-input [rangePicker]="picker">
+                                                            <input
+                                                                matStartDate
+                                                                [placeholder]="commonLocaleData?.app_start_date"
+                                                                formControlName="from"
+                                                            />
+                                                            <input
+                                                                matEndDate
+                                                                [placeholder]="commonLocaleData?.app_end_date"
+                                                                formControlName="to"
+                                                            />
+                                                        </mat-date-range-input>
+                                                        <mat-date-range-picker #picker></mat-date-range-picker>
+                                                    </mat-form-field>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+
+                                    <section
+                                        class="periods container-fluid mb-2 mt-2"
+                                        *ngIf="createCompanyAuthKeyForm.get('periodOptions')?.value === PAST_PERIOD"
+                                    >
+                                        <div>
+                                            <div>
+                                                <div class="date-range-wrapper">
+                                                    <input-field
+                                                        [label]="localeData?.select_past_period_label"
+                                                        [name]="'duration'"
+                                                        [allowDecimalDigitsOnly]="true"
+                                                        formControlName="duration"
+                                                        [type]="'number'"
+                                                        [placeholder]="localeData?.select_past_period_placeholder"
+                                                    ></input-field>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </section>
+                            </mat-menu>
+                        </div>
+                        <!-- time span end -->
+                    </div>
+                    <div class="col-6">
+                        <div
+                            [exclude]="'.ip-addresses-dropdown'"
+                            [attachOutsideOnClick]="true"
+                            (clickOutside)="methodForToggleSection('rangeSpanSection')"
+                        >
+                            <button
+                                mat-button
+                                [matMenuTriggerFor]="menurange"
+                                (click)="showIPWrap = !showIPWrap"
+                                type="button"
+                                class="mat-select-btn border border-radius-4 custom-mat-form-field-height justify-content-between p-3 text-left w-100"
+                                [disabled]="isUserRestricted"
+                            >
+                                <span class="font-weight-regular">{{ selectedIPRange }}</span>
+                                <span class="pull-right"><span class="fa fa-caret-down font-size-15 mr-2"></span></span>
+                            </button>
+                            <mat-menu #menurange="matMenu">
+                                <section class="max-w-300" role="menu" (click)="$event.stopPropagation()">
+                                    <div class="p-3">
+                                        <mat-radio-group formControlName="ipOptions" class="d-flex flex-column">
+                                            <mat-radio-button
+                                                [value]="CIDR_RANGE"
+                                                id="cidrRange"
+                                                color="primary"
+                                                (click)="isOpenedInModal ? handleIpAddressChange(CIDR_RANGE) : ''"
+                                                class="w-100 mr-0"
+                                            >
+                                                {{ localeData?.cidr_range }}
+                                            </mat-radio-button>
+                                            <mat-radio-button
+                                                [value]="IP_ADDRESS"
+                                                id="address"
+                                                color="primary"
+                                                (click)="isOpenedInModal ? handleIpAddressChange(IP_ADDRESS) : ''"
+                                                class="w-100 mr-0 mt-2"
+                                            >
+                                                {{ commonLocaleData?.app_address }}
+                                            </mat-radio-button>
+                                        </mat-radio-group>
+                                    </div>
+
+                                    <section
+                                        formArrayName="allowedCidrs"
+                                        class="ip-range container-fluid mt-2"
+                                        *ngIf="createCompanyAuthKeyForm.get('ipOptions')?.value === CIDR_RANGE"
+                                    >
+                                        <div
+                                            class="d-flex column-gap-1 align-items-center mb-2"
+                                            *ngFor="
+                                                let item of createCompanyAuthKeyForm.get('allowedCidrs')['controls'];
+                                                let i = index;
+                                                let l = last
+                                            "
+                                            [formGroupName]="i"
+                                        >
+                                            <div class="w-100">
+                                                <input
+                                                    class="form-control"
+                                                    name="item_{{ i }}"
+                                                    formControlName="range"
+                                                    type="text"
+                                                    [placeholder]="localeData?.cidr_example"
+                                                />
+                                            </div>
+                                            <div class="pull-left lh-34">
+                                                <i
+                                                    *ngIf="!l"
+                                                    (click)="delRow('allowedCidrs', i, $event)"
+                                                    class="icon-trash cursor-pointer"
+                                                ></i>
+                                                <i
+                                                    *ngIf="l"
+                                                    (click)="addNewRow('allowedCidrs', item, $event)"
+                                                    class="icon-plus cursor-pointer"
+                                                ></i>
+                                            </div>
+                                        </div>
+                                    </section>
+
+                                    <section
+                                        formArrayName="allowedIps"
+                                        class="ip-range container-fluid mt-2"
+                                        *ngIf="createCompanyAuthKeyForm.get('ipOptions')?.value === IP_ADDRESS"
+                                    >
+                                        <div
+                                            class="d-flex column-gap-1 align-items-center mb-2"
+                                            *ngFor="
+                                                let item of createCompanyAuthKeyForm.get('allowedIps')['controls'];
+                                                let i = index;
+                                                let l = last
+                                            "
+                                            [formGroupName]="i"
+                                        >
+                                            <div class="w-100">
+                                                <input
+                                                    class="form-control"
+                                                    (keypress)="allowOnlyNumbersAndDot($event)"
+                                                    name="item_{{ i }}"
+                                                    formControlName="range"
+                                                    type="text"
+                                                    [placeholder]="localeData?.ip_example"
+                                                />
+                                            </div>
+                                            <div class="pull-left lh-34">
+                                                <i
+                                                    *ngIf="!l"
+                                                    (click)="delRow('allowedIps', i, $event)"
+                                                    class="icon-trash cursor-pointer"
+                                                ></i>
+                                                <i
+                                                    *ngIf="l"
+                                                    (click)="addNewRow('allowedIps', item, $event)"
+                                                    class="icon-plus cursor-pointer"
+                                                ></i>
+                                            </div>
+                                        </div>
+                                    </section>
+                                </section>
+                            </mat-menu>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="row mt-4" *ngIf="voucherApiVersion === 2">
+                <div class="col-12 d-flex column-gap-1">
+                    <button
+                        *ngIf="!isUpdateMode"
+                        mat-raised-button
+                        color="primary"
+                        (click)="saveCompanyAuthKey()"
+                        [ladda]="createCompanyAuthKeyInProgress$ | async"
+                    >
+                        {{ commonLocaleData?.app_save }}
+                    </button>
+                    <button *ngIf="isUpdateMode" mat-raised-button color="primary" (click)="saveCompanyAuthKey()">
+                        {{ commonLocaleData?.app_update }}
+                    </button>
+                    <button mat-stroked-button (click)="cancel()">
+                        {{ commonLocaleData?.app_cancel }}
+                    </button>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+</div>

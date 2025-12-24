@@ -55,7 +55,7 @@ export const ROUTES: Routes = [
         path: 'pages', component: PageComponent, canActivate: [NeedsAuthentication],
         children: [
             { path: 'home', loadChildren: () => import('./home/home.module').then(module => module.HomeModule), canActivate: [NeedsAuthorization] },
-            // { path: 'invoice', loadChildren: () => import('./invoice/invoice.module').then(module => module.InvoiceModule), canActivate: [NeedsAuthorization] },
+            { path: 'invoice', loadChildren: () => import('./invoice/invoice.module').then(module => module.InvoiceModule), canActivate: [NeedsAuthorization] },
             {
                 path: 'daybook',
                 loadChildren: () => import('./daybook/daybook.module').then(module => module.DaybookModule),
@@ -80,7 +80,7 @@ export const ROUTES: Routes = [
             { path: 'contact', loadChildren: () => import('./contact/contact.module').then(module => module.ContactModule), canActivate: [NeedsAuthorization] },
             { path: 'new-vs-old-invoices', loadChildren: () => import('./new-vs-old-Invoices/new-vs-old-Invoices.module').then(module => module.NewVsOldInvoicesModule), canActivate: [NeedsAuthorization] },
             { path: 'import', loadChildren: () => import('./import-excel/import-excel.module').then(module => module.ImportExcelModule), canActivate: [NeedsAuthorization] },
-            // { path: 'gstfiling', loadChildren: () => import('./gst/gst.module').then(module => module.GstModule) },
+            { path: 'gstfiling', loadChildren: () => import('./gst/gst.module').then(module => module.GstModule) },
             { path: 'company-import-export', loadChildren: () => import('./company-import-export/company-import-export.module').then(module => module.CompanyImportExportModule) },
             { path: 'reports', loadChildren: () => import('./reports/reports.module').then(module => module.ReportsModule), canActivate: [NeedsAuthorization] },
             { path: 'user-details', loadChildren: () => import('./subscription/subscription.module').then(module => module.SubscriptionModule), canActivate: [NeedsAuthorization] },
@@ -98,7 +98,7 @@ export const ROUTES: Routes = [
             { path: 'new-company/:subscriptionId', loadChildren: () => import('./add-company/add-company-module').then(module => module.AddcompanyModule), canActivate: [NeedsAuthorization] },
             { path: 'user-details/subscription/buy-plan', loadChildren: () => import('./subscription/subscription.module').then(module => module.SubscriptionModule) },
             // { path: 'ai-ocr', loadChildren: () => import('./ai-ocr/ai-ocr.module').then(module => module.AiOcrModule) },
-            // { path: 'vouchers', loadChildren: () => import('./vouchers/vouchers.module').then(module => module.VouchersModule), canActivate: [NeedsAuthorization] },
+            { path: 'vouchers', loadChildren: () => import('./vouchers/vouchers.module').then(module => module.VouchersModule), canActivate: [NeedsAuthorization] },
             // { path: 'group-name', loadChildren: () => import('./group-name/group-name.module').then(module => module.GroupNameModule), canActivate: [NeedsAuthorization] },
             { path: 'auth-hmrc', loadChildren: () => import('./auth-hmrc/auth-hmrc.module').then(module => module.AuthHMRCModule), canActivate: [NeedsAuthorization] },
             { path: 'multi-currency-report', loadChildren: () => import('./multi-currency-reports/multi-currency-reports.module').then(module => module.MultiCurrencyReportsModule), canActivate: [NeedsAuthorization] },

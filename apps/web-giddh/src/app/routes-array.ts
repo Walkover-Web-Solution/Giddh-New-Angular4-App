@@ -53,7 +53,7 @@ export const ROUTES: Routes = [
         path: 'pages',
         children: [
             { path: 'home', loadChildren: () => import('./home/home.module').then(module => module.HomeModule) },
-            { path: 'invoice', loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./invoice/invoice.module') */ Promise.resolve(DummyModule) },
+            { path: 'invoice', loadChildren: () => import('./invoice/invoice.module').then(module => module.InvoiceModule) },
             { path: 'daybook', loadChildren: () => import('./daybook/daybook.module').then(module => module.DaybookModule) },
             { path: 'purchase', loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./purchase/purchase.module') */ Promise.resolve(DummyModule) },
             { path: 'inventory', loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./inventory/inventory.module') */ Promise.resolve(DummyModule) },
@@ -70,7 +70,7 @@ export const ROUTES: Routes = [
                 data: { preload: true }
             },
             { path: 'audit-logs', loadChildren: () => import('./audit-logs/audit-logs.module').then(module => module.AuditLogsModule) },
-            { path: 'activity-logs', loadChildren: () =>  import('./activity-logs/activity-logs.module').then(module => module.ActivityLogsModule) },
+            { path: 'activity-logs', loadChildren: () => import('./activity-logs/activity-logs.module').then(module => module.ActivityLogsModule) },
             {
                 path: 'ledger/:accountUniqueName',
                 loadChildren: () => import('./ledger/ledger.module').then(module => module.LedgerModule),
@@ -88,11 +88,13 @@ export const ROUTES: Routes = [
                 loadChildren: () => import('./accounting/accounting.module').then(module => module.AccountingModule),
                 data: { preload: true }
             },
-            { path: 'contact', loadChildren: () =>import('./contact/contact.module').then(module => module.ContactModule)},
-            {path: 'new-vs-old-invoices',
-                loadChildren: () => import('./new-vs-old-Invoices/new-vs-old-Invoices.module').then(module => module.NewVsOldInvoicesModule)},
+            { path: 'contact', loadChildren: () => import('./contact/contact.module').then(module => module.ContactModule) },
+            {
+                path: 'new-vs-old-invoices',
+                loadChildren: () => import('./new-vs-old-Invoices/new-vs-old-Invoices.module').then(module => module.NewVsOldInvoicesModule)
+            },
             { path: 'import', loadChildren: () => import('./import-excel/import-excel.module').then(module => module.ImportExcelModule) },
-            { path: 'gstfiling', loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./gst/gst.module') */ Promise.resolve(DummyModule) },
+            { path: 'gstfiling', loadChildren: () => import('./gst/gst.module').then(module => module.GstModule) },
             {
                 path: 'company-import-export',
                 loadChildren: () => import('./company-import-export/company-import-export.module').then(module => module.CompanyImportExportModule)
@@ -108,7 +110,7 @@ export const ROUTES: Routes = [
             { path: 'user-details', loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./subscription/subscription.module') */ Promise.resolve(DummyModule) },
             { path: 'ai-ocr', loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./ai-ocr/ai-ocr.module') */ Promise.resolve(DummyModule) },
             { path: 'new-company/:subscriptionId', loadChildren: () => import('./add-company/add-company-module').then(module => module.AddcompanyModule) },
-            { path: 'vouchers', loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./vouchers/vouchers.module') */ Promise.resolve(DummyModule) },
+            { path: 'vouchers', loadChildren: () => import('./vouchers/vouchers.module').then(module => module.VouchersModule) },
             { path: 'group-name', loadChildren: () => /* COMMENTED OUT - MISSING MODULE: import('./group-name/group-name.module') */ Promise.resolve(DummyModule) },
             { path: '**', redirectTo: 'home', pathMatch: 'full' }
         ]

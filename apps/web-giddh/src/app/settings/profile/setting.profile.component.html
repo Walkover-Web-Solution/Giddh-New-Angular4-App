@@ -1,0 +1,112 @@
+<div
+    appTranslate
+    [file]="'settings/profile'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
+>
+    <giddh-page-loader *ngIf="getCompanyProfileInProgress$ | async"></giddh-page-loader>
+    <ng-container *ngIf="!(getCompanyProfileInProgress$ | async)">
+        <!--Tabs of Company Profile-->
+        <div class="settings-profile-tabs p-3" *ngIf="!addressOnly">
+            <div class="row">
+                <div class="col-lg-12 px-3 w-fit-content">
+                    <mat-tab-group
+                        mat-stretch-tabs="false"
+                        mat-align-tabs="start"
+                        animationDuration="0ms"
+                        [selectedIndex]="activeTabIndex"
+                        (selectedTabChange)="onTabChange($event)"
+                        class="table-header-sticky"
+                    >
+                        <mat-tab [label]="personalInformationTabHeading">
+                            <personal-information
+                                (saveProfile)="handleSaveProfile($event)"
+                                [profileData]="companyProfileObj"
+                                [organizationType]="currentOrganizationType"
+                                [localeData]="localeData"
+                                [commonLocaleData]="commonLocaleData"
+                            >
+                            </personal-information>
+                        </mat-tab>
+                        <mat-tab
+                            *ngIf="!isConsolidatedBranch"
+                            [label]="
+                                companyProfileObj?.taxType
+                                    ? localeData?.address + companyProfileObj?.taxType
+                                    : localeData?.addresses
+                            "
+                        >
+                            <address-settings
+                                [addresses]="addresses"
+                                [(isAddressChangeInProgress)]="isAddressChangeInProgress"
+                                [(closeSidePane)]="closeAddressSidePane"
+                                [currentOrganizationUniqueName]="currentOrganizationUniqueName"
+                                (searchAddress)="handleSearchInAddress($event)"
+                                (pageChanged)="handlePageChanged($event)"
+                                [addressConfiguration]="addressConfiguration"
+                                (saveNewAddress)="createNewAddress($event)"
+                                (updatedAddress)="updateAddress($event)"
+                                (deleteAddress)="handleDeleteAddress($event)"
+                                (unLinkAddress)="handleAddressUnlinking($event)"
+                                (setDefaultAddress)="handleDefaultAddress($event)"
+                                [profileData]="companyProfileObj"
+                                [shouldShowLoader]="shouldShowAddressLoader"
+                                [paginationConfig]="addressTabPaginationData"
+                                [paginationLimit]="20"
+                                [organizationType]="currentOrganizationType"
+                                [localeData]="localeData"
+                                [commonLocaleData]="commonLocaleData"
+                                [taxType]="taxType"
+                                [showTaxColumn]="showTaxColumn"
+                            ></address-settings>
+                        </mat-tab>
+                        <mat-tab [label]="commonLocaleData?.app_export" *ngIf="currentOrganizationType !== 'BRANCH'">
+                            <export-file-name
+                                #exportFileNameComponent
+                                [organizationType]="currentOrganizationType"
+                                [localeData]="localeData"
+                                [commonLocaleData]="commonLocaleData"
+                            ></export-file-name>
+                        </mat-tab>
+                    </mat-tab-group>
+                </div>
+            </div>
+        </div>
+        <div class="settings-profile-tabs p-3" *ngIf="addressOnly && !isConsolidatedBranch">
+            <div class="profile-tab-container" *ngIf="!(getCompanyProfileInProgress$ | async)">
+                <address-settings
+                    [addresses]="addresses"
+                    [(isAddressChangeInProgress)]="isAddressChangeInProgress"
+                    [(closeSidePane)]="closeAddressSidePane"
+                    [currentOrganizationUniqueName]="currentOrganizationUniqueName"
+                    (searchAddress)="handleSearchInAddress($event)"
+                    (pageChanged)="handlePageChanged($event)"
+                    [addressConfiguration]="addressConfiguration"
+                    (saveNewAddress)="createNewAddress($event)"
+                    (updatedAddress)="updateAddress($event)"
+                    (deleteAddress)="handleDeleteAddress($event)"
+                    (unLinkAddress)="handleAddressUnlinking($event)"
+                    (setDefaultAddress)="handleDefaultAddress($event)"
+                    [profileData]="companyProfileObj"
+                    [shouldShowLoader]="shouldShowAddressLoader"
+                    [paginationConfig]="addressTabPaginationData"
+                    [paginationLimit]="20"
+                    [organizationType]="currentOrganizationType"
+                    [localeData]="localeData"
+                    [commonLocaleData]="commonLocaleData"
+                    [addressOnly]="true"
+                    [taxType]="taxType"
+                    [showTaxColumn]="showTaxColumn"
+                ></address-settings>
+            </div>
+        </div>
+        <br />
+        <br />
+        <br />
+        <br />
+        <div class="branch-vector">
+            <img src="{{ imgPath }}" alt="branch-image" />
+        </div>
+    </ng-container>
+</div>

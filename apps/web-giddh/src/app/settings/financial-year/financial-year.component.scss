@@ -1,0 +1,37 @@
+table {
+    &.financial-year {
+        border-block: 1px solid var(--border-color) !important;
+
+        tr {
+            th,
+            td {
+                width: unset !important;
+
+                $table-padding-inline: 15px;
+                &:first-child {
+                    padding-left: $table-padding-inline !important;
+                }
+                &:last-child {
+                    padding-right: $table-padding-inline !important;
+                }
+            }
+        }
+    }
+}
+.select-financial-year {
+    width: 210px;
+}
+
+@media screen and (max-width: 992px) {
+    .financial-year-header {
+        .border-left {
+            border-left: unset !important;
+        }
+
+        > div {
+            > :first-child {
+                min-width: 210px !important;
+            }
+        }
+    }
+}

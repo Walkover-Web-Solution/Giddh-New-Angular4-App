@@ -1,0 +1,208 @@
+<div
+    appTranslate
+    [file]="'settings/branch'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+>
+    <hamburger-menu></hamburger-menu>
+    <div class="container-fluid setting-data">
+        <div class="create-branch-page mb-3">
+            <div class="create-branch-under mb-3">
+                <div class="row">
+                    <div class="col-lg-10 col-sm-10">
+                        <div class="branch-under-company">
+                            <p class="heading mt-3 mb-3">{{ localeData?.create_branch_under }}:</p>
+                            <div class="branch-company-name">
+                                <div class="label-wrapper mb-3">
+                                    <label>{{ commonLocaleData?.app_company }}:</label>
+                                    <span>{{ companyDetails?.name }} ({{ companyDetails?.businessType }})</span>
+                                </div>
+                                <div class="label-wrapper mb-3">
+                                    <label>{{ localeData?.country_currency }}:</label>
+                                    <span
+                                        ><img
+                                            *ngIf="companyDetails?.country?.countryCode"
+                                            src="https://cdn.jsdelivr.net/gh/hjnilsson/country-flags@master/svg/{{
+                                                companyDetails?.country?.countryCode
+                                            }}.svg"
+                                        />
+                                        {{ companyDetails?.country?.countryName }} -
+                                        {{ companyDetails?.country?.currencyCode }}
+                                        {{ companyDetails?.country?.currencyName }}</span
+                                    >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-sm-2">
+                        <div class="branch-image">
+                            <img class="branch-image m-15" src="{{ imgPath }}" [alt]="localeData?.branch_image" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <form [formGroup]="branchForm" novalidate (ngSubmit)="handleFormSubmit()">
+                <div class="branch-form">
+                    <div
+                        class="filter-dropdown-branch mb-3"
+                        *ngIf="allBranches?.length > 1 && (isCompany || isConsolidatedBranch)"
+                    >
+                        <reactive-dropdown-field
+                            [label]="localeData?.parent_branch"
+                            [placeholder]="localeData?.select_parent_branch"
+                            [options]="branches"
+                            formControlName="parentBranchUniqueName"
+                        >
+                        </reactive-dropdown-field>
+                    </div>
+                    <div class="branch-form-field">
+                        <div class="address-dropdown">
+                            <input-field
+                                [label]="commonLocaleData?.app_branch_name"
+                                [maxlength]="50"
+                                [showError]="branchForm?.get('name')?.touched && branchForm?.get('name')?.invalid"
+                                [type]="'text'"
+                                formControlName="name"
+                                [placeholder]="localeData?.enter_name"
+                                [required]="true"
+                            ></input-field>
+                            <span
+                                class="danger pl-1"
+                                *ngIf="branchForm?.get('name')?.touched && branchForm?.get('name')?.errors?.maxlength"
+                            >
+                                {{ commonLocaleData?.app_max_50_characters_allowed_limit }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- This field is kept hidden, DO NOT REMOVE -->
+                    <div hidden class="branch-form-field">
+                        <div class="address-dropdown">
+                            <input-field
+                                [label]="commonLocaleData?.app_branch_name"
+                                [type]="'text'"
+                                formControlName="alias"
+                                [placeholder]="localeData?.enter_name"
+                            ></input-field>
+                        </div>
+                    </div>
+                    <div class="branch-form-field">
+                        <div
+                            class="address-dropdown form-group mb-0"
+                        >
+                            <mat-form-field appearance="outline" class="initial-height w-100" [ngClass]="{ 'hide-select-arrow': !branchForm?.get('address')?.value?.length }" (click)="trigger.open()">
+                                <mat-label>{{ localeData?.addresses }}</mat-label>
+                                <mat-chip-grid #chipGrid class="d-flex flex-wrap column-gap-05 row-gap-1">
+                                    <ng-container *ngFor="let chipItem of branchForm?.get('address')?.value">
+                                        <mat-chip-row (removed)="removeItem(chipItem)" role="option">
+                                            <span>{{ chipItem?.label }}</span>
+                                            <span matChipRemove><i class="icon-cross font-size-14"></i></span>
+                                        </mat-chip-row>
+                                    </ng-container>
+                                    <input
+                                        type="text"
+                                        autocomplete="off"
+                                        (focus)="trigger.open()"
+                                        [formControl]="addressQuery"
+                                        matInput
+                                        [placeholder]="localeData?.select_addresses"
+                                        [matChipInputFor]="chipGrid"
+                                    />
+                                </mat-chip-grid>
+                                <mat-select-trigger> </mat-select-trigger>
+                                <mat-select
+                                    formControlName="address"
+                                    panelClass="linked-entities-options"
+                                    name="particulars"
+                                    multiple
+                                    #trigger
+                                >
+                                    <div class="bg-grey-on-hover">
+                                        <a
+                                            href="javascript:;"
+                                            [keyboardShortcut]="'alt+c'"
+                                            (onShortcutPress)="handleShortcutPress()"
+                                            (click)="handleShortcutPress(); trigger.close()"
+                                            class="px-2 py-3 d-flex justify-content-between w-100"
+                                        >
+                                            <div class="item">{{ localeData?.add_address }}</div>
+                                            <div class="item">{{ commonLocaleData?.app_alt_c }}</div>
+                                        </a>
+                                    </div>
+                                    <ng-container *ngFor="let option of filteredAddresses">
+                                        <mat-option
+                                            [value]="option"
+                                            (click)="selectAddress(option)"
+                                            class="align-items-center"
+                                        >
+                                            <div class="d-flex justify-content-between">
+                                                <span>
+                                                    <div>
+                                                        {{ option.label || "-" }}
+                                                    </div>
+                                                    <div>
+                                                        <p *ngIf="option.taxType && option.taxNumber">
+                                                            {{ option.taxType }} : {{ option.taxNumber }}
+                                                        </p>
+                                                    </div>
+                                                </span>
+                                                <span class="default-entity">
+                                                    <i
+                                                        (click)="setDefault(option, $event)"
+                                                        *ngIf="!option.isDefault"
+                                                        class="icon-no-selected mr-1"
+                                                    ></i>
+                                                    <i
+                                                        (click)="setDefault(option, $event)"
+                                                        *ngIf="option.isDefault"
+                                                        class="icon-favorite-selected mr-1"
+                                                    ></i>
+                                                </span>
+                                            </div>
+                                        </mat-option>
+                                    </ng-container>
+                                    <div class="px-2" *ngIf="filteredAddresses?.length === 0">
+                                        {{ commonLocaleData?.app_no_result_found }}
+                                    </div>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+                <div class="pl-3 pr-3">
+                    <div class="row">
+                        <div class="button-group">
+                            <button mat-stroked-button type="reset" (click)="handleFormClear()" class="btn custom-btn">
+                                {{ commonLocaleData?.app_clear }}
+                            </button>
+                            <button mat-raised-button color="primary" type="submit" [disabled]="branchForm?.invalid">
+                                {{ localeData?.create_branch }}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <ng-template #asideAccountAsidePane>
+        <ng-container
+            appTranslate
+            [file]="'settings/profile'"
+            (localeData)="profileLocaleData = $event"
+            [requireCommonData]="false"
+        >
+            <create-address
+                [keyboardShortcut]="'esc'"
+                (onShortcutPress)="closeAddressAsidePane()"
+                [currentOrganizationUniqueName]="currentOrganizationUniqueName"
+                [showLoader]="isAddressChangeInProgress"
+                (saveAddress)="createNewAddress($event)"
+                [addressConfiguration]="addressConfiguration"
+                (closeAsideEvent)="closeAddressAsidePane($event)"
+                [localeData]="profileLocaleData"
+                [commonLocaleData]="commonLocaleData"
+                [hideLinkEntity]="addresses?.length <= 0 && hideLinkEntity"
+            ></create-address>
+        </ng-container>
+    </ng-template>
+</div>

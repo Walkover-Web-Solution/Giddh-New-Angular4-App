@@ -6,10 +6,9 @@ import { ToasterService } from "apps/web-giddh/src/app/services/toaster.service"
 import { AppState } from "apps/web-giddh/src/app/store";
 import { ReplaySubject } from "rxjs";
 import { take, takeUntil } from "rxjs/operators";
-// import { SettingsAmountLimitDuration, 'UNLIMITED' } from "../../../../constants/settings.constant";
+import { SettingsAmountLimitDuration, UNLIMITED_LIMIT } from "../../../../constants/settings.constant";
 import { PageLeaveUtilityService } from "apps/web-giddh/src/app/services/page-leave-utility.service";
 import { IOption } from "apps/web-giddh/src/app/app.constant";
-import { forEach, get } from '../../../../../lodash-optimized';
 
 @Component({
     selector: 'icici-payor-account-create-edit',
@@ -58,9 +57,9 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         this.amountLimitDurations = [
-            { label: this.commonLocaleData?.app_amount_limit?.daily, value: 'Daily' },
-            { label: this.commonLocaleData?.app_amount_limit?.weekly, value: 'Weekly' },
-            { label: this.commonLocaleData?.app_amount_limit?.monthly, value: 'Monthly' }
+            { label: this.commonLocaleData?.app_amount_limit?.daily, value: SettingsAmountLimitDuration.Daily },
+            { label: this.commonLocaleData?.app_amount_limit?.weekly, value: SettingsAmountLimitDuration.Weekly },
+            { label: this.commonLocaleData?.app_amount_limit?.monthly, value: SettingsAmountLimitDuration.Monthly }
         ];
 
         this.loadUsersWithCompanyPermissions();
@@ -109,7 +108,7 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
     public saveNewAccountUser(): void {
         if (!this.accountUserForm?.invalid) {
             if (!this.accountUserForm.get('maxAmount')?.value) {
-                this.accountUserForm.get('duration')?.patchValue('UNLIMITED');
+                this.accountUserForm.get('duration')?.patchValue(UNLIMITED_LIMIT);
             }
 
             if (!this.validateAmountLimit()) {
@@ -141,7 +140,7 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
      * @memberof PayorCreateEditComponent
      */
     public validateAmountLimit(): boolean {
-        if ((!this.accountUserForm.get('duration')?.value || this.accountUserForm.get('duration')?.value === 'UNLIMITED') && this.accountUserForm.get('maxAmount')?.value) {
+        if ((!this.accountUserForm.get('duration')?.value || this.accountUserForm.get('duration')?.value === UNLIMITED_LIMIT) && this.accountUserForm.get('maxAmount')?.value) {
             this.toaster.clearAllToaster();
             this.toaster.errorToast(this.localeData?.payment?.duration_error);
             return false;
@@ -176,7 +175,7 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
      */
     private loadUsersWithCompanyPermissions(): void {
         this.store.pipe(select(state => state.settings.usersWithCompanyPermissions), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response) {
+            if (response) { 
                 this.usersList = [];
                 let index = 0;
                 response.forEach(user => {
@@ -195,7 +194,7 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
     public updateAccountUser(): void {
         if (!this.accountUserForm?.invalid) {
             if (!this.accountUserForm.get('maxAmount')?.value) {
-                this.accountUserForm.get('duration')?.patchValue('UNLIMITED');
+                this.accountUserForm.get('duration')?.patchValue(UNLIMITED_LIMIT);
             }
 
             if (!this.validateAmountLimit()) {

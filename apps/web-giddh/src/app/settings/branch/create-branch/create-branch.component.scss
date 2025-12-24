@@ -1,0 +1,112 @@
+.create-branch-page {
+    .create-branch-under {
+        border-bottom: 1px solid var(--border-color);
+        .branch-under-company {
+            .heading {
+                font-size: var(--font-size-15);
+            }
+            p {
+                color: var(--color-black);
+            }
+            .branch-company-name {
+                .label-wrapper {
+                    display: flex;
+                    font-size: var(--font-size-15);
+                    img {
+                        margin-right: 4px;
+                        width: 24px;
+                    }
+                    label {
+                        color: var(--color-dark-gray);
+                        min-width: 200px;
+                    }
+                    span {
+                        color: var(--color-dark-gray);
+                        display: block;
+                    }
+                }
+            }
+        }
+        .branch-image {
+            text-align: right;
+            img {
+                width: 100%;
+            }
+            img.branch-image {
+                max-width: 140px;
+                height: 100px;
+            }
+        }
+    }
+    .branch-form {
+
+        .branch-form-field {
+            font-size: var(--font-size-15);
+            display: flex;
+            align-items: center;
+            color: var(--color-black);
+            margin-bottom: 15px;
+            label {
+                min-width: 200px;
+            }
+            input,
+            .address-dropdown {
+                width: 100%;
+                max-width: 350px;
+            }
+            .address-dropdown {
+                .list-item {
+
+                    .default-entity {
+                        align-items: center;
+                        display: flex;
+                        &:hover:after {
+                            color: var(--text-primary-color);
+                        }
+                        .icon-favorite-selected {
+                            color: var(--text-primary-color);
+                        }
+                    }
+                }
+            }
+            input[type="checkbox"] {
+                width: auto;
+                max-width: auto;
+                margin-right: 15px;
+            }
+            .sub-location-input {
+                max-width: 350px;
+                width: 350px;
+                div {
+                    i {
+                        padding: 5px;
+                        cursor: pointer;
+
+                    }
+                }
+            }
+            mat-form-field {
+                max-width: 350px;
+            }
+        }
+    }
+}
+.address-dropdown sales-sh-select::ng-deep .menu {
+    max-height: inherit !important;
+}
+
+@media (max-width: 1023px) {
+    .create-branch-page {
+        .create-branch-under {
+            .branch-image {
+                display: none;
+            }
+        }
+    }
+}
+
+.bg-grey-on-hover {
+    &:hover {
+        background: var(--color-border-light) !important;
+    }
+}

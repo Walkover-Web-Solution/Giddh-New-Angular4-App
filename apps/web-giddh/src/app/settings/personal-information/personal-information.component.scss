@@ -1,0 +1,41 @@
+.custom-file-label {
+    border: none;
+    padding: 30px;
+    background: var(--color-white);
+    height: 100%;
+
+    &::after {
+        height: 0 !important;
+        padding: 0 !important;
+    }
+
+}
+
+.unique-name,
+.country-name,
+.parent-name {
+    color: var(--color-dark-gray);
+
+    .country-info {
+        .country-flag {
+            display: inline-block;
+            margin-right: 8px;
+            width: 24px;
+        }
+    }
+}
+
+.personal-other-details {
+    label {
+        line-height: var(--line-height-36);
+    }
+
+    .form-group {
+        margin-bottom: 0;
+    }
+}
+
+.view-txt {
+    display: flex;
+    justify-content: flex-end;
+}

@@ -1,0 +1,86 @@
+.td-search-box.nowrap {
+    width: 15%;
+}
+.td-search-box div {
+    display: flex;
+}
+
+.td-search-box div span {
+    padding-left: 8px;
+}
+
+.td-search-box .input-container i {
+    position: absolute;
+    right: 10px;
+    top: 12px;
+}
+
+.basic > thead > tr > th {
+    border-right: 1px solid var(--border-color);
+}
+
+.dropdown-menu > li > a:hover {
+    color: var(--text-primary-color);
+    background: var(--color-border-light);
+}
+
+.download-arrow {
+    .icon-download1 {
+        visibility: hidden;
+        opacity: 0;
+        font-size: 17px;
+        transition: 0.5s all ease;
+    }
+}
+.download-arrow:hover .icon-download1 {
+    visibility: visible;
+    opacity: 1;
+}
+label {
+    font-size: var(--font-size-15);
+}
+
+.input-group {
+    position: relative;
+    span {
+        &::before {
+            position: absolute;
+            content: "";
+            display: block;
+            height: 36px;
+            width: 1px;
+            background-color: var(--color-silver);
+            left: 37px !important;
+            z-index: 100;
+            top: 0;
+        }
+        .form-control {
+            padding-left: 45px !important;
+            position: relative;
+            z-index: 99;
+            cursor: default;
+            width: 100%;
+        }
+    }
+}
+
+.custom-tabs {
+    .table-wrapper {
+        height: calc(100vh - 295px);
+        overflow-y: auto;
+
+        table {
+            margin-top: 15px;
+        }
+    }
+}
+.no-data {
+    padding-bottom: 20px;
+    padding-top: 20px;
+}
+
+@media screen and (max-width: 1340px) {
+    .table-responsive {
+        height: auto !important;
+    }
+}
