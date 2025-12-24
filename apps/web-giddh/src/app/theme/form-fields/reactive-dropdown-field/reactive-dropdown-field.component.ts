@@ -212,6 +212,12 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             this.previousOptionsCount = currentOptionsCount;
             
             this.fieldFilteredOptions$ = of(this.options);
+
+            if (this.showCreateNew) {
+                setTimeout(() => {
+                    this.focusSecondOption();
+                }, 100);
+            }
             
             // Preserve focus during pagination
             if (this.isPaginationInProgress && this.activeOptionIndex >= 0) {
@@ -222,10 +228,10 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             
             // Always try to set label value when options change, regardless of previous value
             if (changes?.options) {
-                // Use setTimeout to ensure the value is properly set before trying to find the label
-                setTimeout(() => {
-                    this.setLabelValue(null);
-                }, 0);
+            // Use setTimeout to ensure the value is properly set before trying to find the label
+            setTimeout(() => {
+                this.setLabelValue(null);
+            }, 0);
             }
         }
         if (changes?.forceClear && !changes.forceClear.firstChange && changes.forceClear.currentValue !== changes.forceClear.previousValue) {
