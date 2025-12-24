@@ -479,7 +479,7 @@
                         (click)="setEmailFocus(emailType.ReplyTo)"
                     >
                         <div class="d-flex border-bottom">
-                            <label class="mr-2">{{ localeData?.reply_to || 'Reply To' }}</label>
+                            <label class="mr-2 width-80">{{ localeData?.reply_to }}</label>
                             <div
                                 class="d-flex w-100 mat-form-field-clean"
                                 [ngClass]="{ 'flex-column': selectedReplyToEmails.length }"
