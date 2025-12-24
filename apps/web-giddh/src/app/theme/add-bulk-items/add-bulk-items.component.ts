@@ -233,29 +233,6 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Handles global escape key press to close the dialog
-     *
-     * @memberof AddBulkItemsComponent
-     */
-    public handleGlobalEscape(): void {
-        this.dialogRef?.close();
-    }
-
-    /**
-     * Handles escape key press on individual list elements
-     *
-     * @param {KeyboardEvent} event - The keyboard event
-     * @memberof AddBulkItemsComponent
-     */
-    public handleEscapeKey(event: KeyboardEvent): void {
-        event.preventDefault();
-        event.stopPropagation();
-        // Remove focus from current element and close dialog
-        (event.target as HTMLElement)?.blur();
-        this.dialogRef?.close();
-    }
-
-    /**
      * Focuses the next available element in the list after selection
      *
      * @param {HTMLElement} currentElement - The currently focused element

@@ -155,8 +155,7 @@
                                             <reactive-dropdown-field
                                                 *ngIf="!invoiceType.isCashInvoice"
                                                 #customerVendorDropdown
-                                                (keydown.enter)="!isCustomerVendorSelected() && customerVendorDropdown?.openDropdownPanel()"
-                                                (keydown.tab)="!isCustomerVendorSelected() && $event.preventDefault(); customerVendorDropdown?.openDropdownPanel()"
+                                                (keydown.enter)="isCustomerVendorSelected() && focusNextElement($event); customerVendorDropdown?.closeDropdownPanel()"
                                                 [label]="
                                                     invoiceType.isPurchaseOrder ||
                                                     invoiceType.isPurchaseInvoice ||
@@ -197,6 +196,7 @@
                                                 (dynamicSearchedQuery)="searchAccount($event, 1)"
                                                 (onClear)="selectAccount($event, true)"
                                                 (createOption)="toggleAccountAsidePane(accountType.customer)"
+                                                [forceClear]="forceClear"
                                             >
                                             </reactive-dropdown-field>
                                             <input-field
@@ -600,6 +600,7 @@
                                                                 selectState('account', 'billingDetails', $event);
                                                                 copyAccountBillingAddressToShippingAddress()
                                                             "
+                                                            [forceClear]="forceClear"
                                                         ></reactive-dropdown-field>
                                                     </div>
                                                 </div>
@@ -909,6 +910,7 @@
                                             "
                                             [showCreateNew]="true"
                                             (createOption)="openSalesPersonDialog()"
+                                            [forceClear]="forceClear"
                                         ></reactive-dropdown-field>
                                     </div>
 
@@ -927,6 +929,7 @@
                                             [placeholder]="commonLocaleData?.app_select"
                                             [options]="warehouses"
                                             [labelValue]="invoiceForm.controls['warehouse']?.get('name')?.value"
+                                            [forceClear]="forceClear"
                                         ></reactive-dropdown-field>
                                     </div>
 
@@ -1489,6 +1492,7 @@
                                             [scrollableElementId]="'referenceVoucher'"
                                             [readonly]="isEinvoiceGenerated"
                                             [labelValue]="invoiceForm.get('referenceVoucher.number')?.value"
+                                            [forceClear]="forceClear"
                                         >
                                             <ng-template #optionTemplate let-option="option">
                                                 <a
@@ -1857,6 +1861,7 @@
                                                                         [showMatLabel]="false"
                                                                         [showCaretIcon]="false"
                                                                         [appearance]="'fill'"
+                                                                        [forceClear]="forceClear"
                                                                     >
                                                                         <ng-template
                                                                             #optionTemplate

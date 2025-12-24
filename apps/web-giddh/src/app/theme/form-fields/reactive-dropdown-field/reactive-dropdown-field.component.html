@@ -24,6 +24,7 @@
                     [required]="required"
                     (input)="searchFormControl.next($event.target.value)"
                     (blur)="onBlur()"
+                    (keydown)="onInputKeyDown($event)"
                     #trigger="matAutocompleteTrigger"
                     [style.padding-right]="showCaretIcon ? '18px' : '0'"
                     #selectField
@@ -112,6 +113,7 @@
             [required]="required"
             [attr.aria-expanded]="readonly ? false : true"
             (input)="searchFormControl.next($event.target.value)"
+            (keydown)="onInputKeyDown($event)"
             #trigger="matAutocompleteTrigger"
             #selectField
             matAutocompletePosition="auto"
