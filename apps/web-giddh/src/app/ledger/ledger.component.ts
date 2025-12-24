@@ -1760,7 +1760,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public showNewLedgerEntryPopup(trx: TransactionVM) {
-        if (!trx.selectedAccount) return;
         this.selectBlankTxn(trx);
         if (trx.particular) {
             this.lc.showNewLedgerPanel = true;

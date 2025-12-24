@@ -212,6 +212,12 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             this.previousOptionsCount = currentOptionsCount;
             
             this.fieldFilteredOptions$ = of(this.options);
+
+            if (this.showCreateNew) {
+                setTimeout(() => {
+                    this.focusSecondOption();
+                }, 100);
+            }
             
             // Preserve focus during pagination
             if (this.isPaginationInProgress && this.activeOptionIndex >= 0) {
@@ -222,10 +228,10 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             
             // Always try to set label value when options change, regardless of previous value
             if (changes?.options) {
-                // Use setTimeout to ensure the value is properly set before trying to find the label
-                setTimeout(() => {
-                    this.setLabelValue(null);
-                }, 0);
+            // Use setTimeout to ensure the value is properly set before trying to find the label
+            setTimeout(() => {
+                this.setLabelValue(null);
+            }, 0);
             }
         }
         if (changes?.forceClear && !changes.forceClear.firstChange && changes.forceClear.currentValue !== changes.forceClear.previousValue) {
@@ -561,6 +567,13 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         this.activeOptionIndex = -1;
         this.isPaginationInProgress = false;
         this.previousOptionsCount = this.options?.length || 0;
+        
+        // Focus on second option (first filtered option) when showCreateNew is true
+        if (this.showCreateNew) {
+            setTimeout(() => {
+                this.focusSecondOption();
+            }, 100);
+        }
     }
 
     /**
@@ -604,6 +617,40 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             }
             if (this.showCreateNew && this.showKeyboardCommand === '') {
                 this.showKeyboardCommand = this.commonLocaleData?.app_alt_shift_n;
+            }
+        }
+    }
+
+    /**
+     * Focuses on the second option (first filtered option) when showCreateNew is true
+     * This ensures the first actual option gets focus instead of the "Create New" option
+     *
+     * @private
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    private focusSecondOption(): void {
+        if (this.matAutocomplete && (this.matAutocomplete as any)._keyManager) {
+            try {
+                const keyManager = (this.matAutocomplete as any)._keyManager;
+                const options = keyManager._items;
+                
+                // If we have options and showCreateNew is true, focus on index 1 (second option)
+                // Index 0 would be the "Create New" option, index 1 is the first filtered option
+                if (options && options.length > 1) {
+                    keyManager.setActiveItem(1);
+                    
+                    // Ensure the focused option is visible
+                    const activeOption = keyManager.activeItem;
+                    if (activeOption && (activeOption as any)._element) {
+                        (activeOption as any)._element.nativeElement.scrollIntoView({
+                            behavior: 'auto',
+                            block: 'nearest',
+                            inline: 'nearest'
+                        });
+                    }
+                }
+            } catch (error) {
+                console.warn('Could not focus on second option:', error);
             }
         }
     }
