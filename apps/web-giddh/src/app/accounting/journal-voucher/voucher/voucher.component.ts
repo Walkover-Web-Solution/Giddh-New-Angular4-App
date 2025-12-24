@@ -353,7 +353,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             return true;
         }), takeUntil(this.destroyed$)).subscribe((data) => {
             if (data) {
-                this.currentVoucher = data.page.toLowerCase();           
+                this.currentVoucher = data.page.toLowerCase();
                 switch (this.currentVoucher) {
                     case VOUCHERS.CONTRA:
                         // Contra allows cash or bank so selecting default category as currentassets
@@ -1560,7 +1560,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public loadAccountsForType(accountType: 'by' | 'to', query: string = '', page: number = 1, count: number = PAGINATION_LIMIT, isInitialLoad: boolean = false, callback?: (success: boolean) => void): void {
         const searchData = accountType === 'by' ? this.byAccountSearchData : this.toAccountSearchData;
-        if (searchData.isLoading || !(searchData.searchQuery === query && page == searchData.page + 1 || searchData.searchQuery !== query) || (searchData.searchQuery === query && page == searchData.page)) {
+        if (searchData.isLoading || !(searchData.searchQuery === query && page == searchData.page + 1 || searchData.searchQuery !== query)) {
             if (callback) {
                 callback(true);
             }
@@ -2368,6 +2368,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             this.dialog.closeAll();
         }
         this.store.dispatch(this.salesAction.resetAccountDetailsForSales());
+        this.tallyModuleService.selectedPageInfo.next(null);
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -2914,9 +2915,6 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         if (mode === 'enter') {
             if (type === 'amount') {
                 if (this.totalCreditAmount === this.totalDebitAmount) {
-                    if (this.showLedgerAccountList) {
-                        // this.handleKeyboardNavigationAfterTimeout();
-                    }
                     if (this.activeRowIndex === maxRowIndex) {
                         this.activeRowType = '';
                         this.showLedgerAccountList = false;
