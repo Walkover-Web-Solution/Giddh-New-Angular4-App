@@ -27,7 +27,7 @@ export interface CustomerVendorDiscountBasic {
 
 @Component({
     selector: "customer-wise",
-    
+
     templateUrl: "./customer-wise.component.html",
     standalone: false,
     styleUrls: ["./customer-wise.component.scss"]
@@ -155,9 +155,10 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         });
 
         this.getDiscounts();
-        
+
         this.scrollDispatcher.scrolled().pipe(takeUntil(this.destroyed$)).subscribe((event: any) => {
-            if (event && (event?.getDataLength() - event?.getRenderedRange().end) < 10 && !this.isLoading && (this.pagination.user.totalPages > this.pagination.user.page)) {
+            const dataLength = event?.getDataLength ? event.getDataLength() : event?.dataLength || 0;
+            if (event && (dataLength - event?.getRenderedRange().end) < 10 && !this.isLoading && (this.pagination.user.totalPages > this.pagination.user.page)) {
                 this.pagination.user.page++;
                 this.getCustomerVendorDiscountUserList(true);
             }

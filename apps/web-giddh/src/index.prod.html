@@ -21,7 +21,7 @@
                 let whiteLabelConfig = JSON.parse(localStorage.getItem("whiteLabel"));
                 const logoUrl = "./assets/images/giddh-big-logo.svg";
                 const apiDomain = whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain || "https://api.giddh.com";
-                
+
                 if (whiteLabelConfig) {
                     // Remove the h1 tag containing the image
                     const logoContainer = document.querySelector("#main-giddh-loader h1");
@@ -41,15 +41,9 @@
                 document.head.appendChild(preconnectLink);
             };
         </script>
+         <!-- Removed duplicate window.onerror handler to prevent duplicate error logging -->
         <script defer src="./assets/js/lodash.min.js"></script>
         <script defer src="./assets/js/jquery.min.js"></script>
-        <script type="text/javascript">
-            window.onerror = function (msg, url, line, col, error) {
-                var extra = !col ? "" : "\ncolumn: " + col;
-                extra += !error ? "" : "\nerror: " + error;
-                console.error("Error: " + msg + "\nurl: " + url + "\nline: " + line + extra);
-            };
-        </script>
         <script type="text/javascript">
             if (window.location.hostname.indexOf("www") == 0) {
                 window.location = window.location.href.replace("www.", "");
@@ -66,14 +60,14 @@
         <title>Giddh ~ Accounting at its Rough! Bookkeeping and Accounting Software</title>
         <meta name="description" content="Giddh ~ Accounting at its Rough! Bookkeeping and Accounting Software" />
         <link rel="icon" href="assets/images/favicons.png" type="image/png" sizes="16x16" />
-        
+
         <!-- Preload Inter fonts for better performance -->
         <link rel="preload" as="font" href="./assets/fonts/Inter/Inter_Regular.ttf" type="font/ttf" crossorigin="anonymous" />
         <link rel="preload" as="font" href="./assets/fonts/Inter/Inter_RegularItalic.ttf" type="font/ttf" crossorigin="anonymous" />
         <link rel="preload" as="font" href="./assets/fonts/Inter/Inter_Medium.ttf" type="font/ttf" crossorigin="anonymous" />
         <link rel="preload" as="font" href="./assets/fonts/Inter/Inter_SemiBold.ttf" type="font/ttf" crossorigin="anonymous" />
         <link rel="preload" as="font" href="./assets/fonts/Inter/Inter_Bold.ttf" type="font/ttf" crossorigin="anonymous" />
-        
+
         <link rel="stylesheet" href="./assets/styles/default.css" crossorigin="anonymous" />
         <script type="text/javascript">
             try {

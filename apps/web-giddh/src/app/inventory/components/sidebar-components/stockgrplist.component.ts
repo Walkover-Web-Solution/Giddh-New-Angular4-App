@@ -61,7 +61,9 @@ export class StockgrpListComponent implements OnInit, OnDestroy {
         this.store.pipe(select(state => state.inventory.getStocksInProgress)).subscribe(response => this.getStocksInProgress = response);
 
         this.scrollDispatcher.scrolled().pipe(takeUntil(this.destroyed$)).subscribe((event: any) => {
-            if (event?.getDataLength() - event?.getRenderedRange().end < 50) {
+            if (event?.getDataLength && event?.getDataLength() - event?.getRenderedRange().end < 50) {
+                this.loadMore.emit(true);
+            } else if (event?.dataLength && event?.dataLength - event?.getRenderedRange().end < 50) {
                 this.loadMore.emit(true);
             }
         });

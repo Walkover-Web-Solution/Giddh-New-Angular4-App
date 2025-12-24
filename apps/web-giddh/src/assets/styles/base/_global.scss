@@ -5940,18 +5940,18 @@ hamburger-menu {
 }
 
 .mat-dialog-sm {
-    width: 500px;
-    max-width: 90vw;
+    width: 500px !important;
+    max-width: 90vw !important;
 }
 
 .mat-dialog-md {
-    width: 760px;
-    max-width: 90vw;
+    width: 760px !important;
+    max-width: 90vw !important;
 }
 
 .mat-dialog-lg {
-    width: 1024px;
-    max-width: 80vw;
+    width: 1024px !important;
+    max-width: 80vw !important;
 }
 
 .custom-cdk-overlay-wrapper {
@@ -5959,6 +5959,27 @@ hamburger-menu {
     border-radius: var(--mat-border-radius-4);
     box-shadow: var(--mat-menu-box-shadow);
     background-color: var(--color-border-light);
+}
+
+/* Snackbar styling for different message types */
+.snackbar-success {
+    background-color: #4caf50 !important;
+    color: white !important;
+}
+
+.snackbar-error {
+    background-color: #f44336 !important;
+    color: white !important;
+}
+
+.snackbar-warning {
+    background-color: #ff9800 !important;
+    color: white !important;
+}
+
+.snackbar-info {
+    background-color: #2196f3 !important;
+    color: white !important;
 }
 
 .json-sidebar,

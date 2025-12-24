@@ -687,6 +687,7 @@ export type HttpMethodType = 'post' | 'get' | 'put' | 'delete' | 'patch';
 export const ASIDE_PANE_CONFIG: MatDialogConfig = {
     height: 'calc(100vh - var(--top-distance, 0px))',
     width: 'var(--aside-pane-width)',
+    maxWidth: 'var(--aside-pane-width)',
     position: {
         right: '0',
         bottom: '0',

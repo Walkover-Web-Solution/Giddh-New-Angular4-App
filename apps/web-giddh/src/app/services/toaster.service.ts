@@ -64,12 +64,20 @@ export class ToasterService {
      * @memberof ToasterService
      */
     public showSnackBar(type: string, message: string, title: string = APP_DEFAULT_TITLE): void {
-        // this.snackBar.openFromComponent(SnackbarComponent, {
-        //     data: { title: title, message: message },
-        //     horizontalPosition: "center",
-        //     verticalPosition: "top",
-        //     panelClass: type
-        // });
+        // Use Material Snack Bar as fallback since SnackbarComponent is commented out
+        const config = {
+            duration: 5000,
+            horizontalPosition: 'center' as const,
+            verticalPosition: 'top' as const,
+            panelClass: [`snackbar-${type}`]
+        };
+
+        // Show message with title if provided
+        const displayMessage = title && title !== APP_DEFAULT_TITLE ? `${title}: ${message}` : message;
+
+        this.snackBar.open(displayMessage, 'Close', config);
+
+        // Keep console log for debugging
         console.log(`${type}: ${title} - ${message}`);
     }
 }

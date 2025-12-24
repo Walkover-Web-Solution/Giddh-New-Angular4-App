@@ -1,7 +1,6 @@
 import { Injectable, OnDestroy } from "@angular/core";
 import { ComponentStore } from "@ngrx/component-store";
-import { tap } from "rxjs/operators";
-import { Observable, switchMap, catchError, EMPTY } from "rxjs";
+import { Observable, switchMap, catchError, EMPTY, tap } from "rxjs";
 import { BaseResponse, CommonPaginatedResponse } from "../../../models/api-models/BaseResponse";
 import { ToasterService } from "../../../services/toaster.service";
 import { LocaleService } from "../../../services/locale.service";
@@ -74,20 +73,32 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 let response = res?.body;
-                                if (response?.results) {
-                                    response = response?.results;
+                                if (isDropdown) {
+                                    response = res?.body?.results?.map((item: any) => ({
+                                        label: item.name,
+                                        value: item.uniqueName
+                                    }));
                                 }
                                 this.patchState({
                                     salesPersonList: response,
-                                    salesPersonListInProgress: false
+                                    salesPersonListInProgress: false,
                                 });
                             } else {
-                                this.toasterService.showSnackBar('error', res?.message);
-                                this.patchState({
-                                    salesPersonList: [],
-                                    salesPersonListInProgress: false
+                                if (res.message) {
+                                    this.toasterService.showSnackBar('error', res.message);
+                                }
+                                return this.patchState({
+                                    salesPersonList: null,
+                                    salesPersonListInProgress: false,
                                 });
                             }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar('error', this.localeService.translate("app_something_went_wrong"));
+                            return this.patchState({
+                                salesPersonList: null,
+                                salesPersonListInProgress: false
+                            });
                         }
                     ),
                     catchError((err) => EMPTY)
@@ -110,21 +121,30 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 if (req.uniqueName) {
-                                    this.toasterService.showSnackBar('success', this.localeService.translate("app_messages.sales_person_updated"));
+                                    this.patchState({
+                                        salesPersonSaveInProgress: false,
+                                        createUpdateSalesPersonSuccess: true
+                                    });
                                 } else {
-                                    this.toasterService.showSnackBar('success', this.localeService.translate("app_messages.sales_person_created"));
+                                    this.patchState({
+                                        salesPersonSaveInProgress: false,
+                                        createUpdateSalesPersonSuccess: true
+                                    });
                                 }
-                                this.patchState({
-                                    salesPersonSaveInProgress: false,
-                                    createUpdateSalesPersonSuccess: true
-                                });
                             } else {
-                                this.toasterService.showSnackBar('error', res?.message);
-                                this.patchState({
+                                if (res.message) {
+                                    this.toasterService.showSnackBar('error', res.message);
+                                }
+                                return this.patchState({
                                     salesPersonSaveInProgress: false,
-                                    createUpdateSalesPersonSuccess: false
                                 });
                             }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar('error', this.localeService.translate("app_something_went_wrong"));
+                            return this.patchState({
+                                salesPersonSaveInProgress: false
+                            });
                         }
                     ),
                     catchError((err) => EMPTY)
@@ -168,6 +188,12 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
                                     deleteSalesPersonSuccess: false,
                                 });
                             }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar('error', this.localeService.translate("app_something_went_wrong"));
+                            return this.patchState({
+                                deleteSalesPersonSuccess: false
+                            });
                         }
                     ),
                     catchError((err) => EMPTY)
@@ -191,14 +217,20 @@ export class SalesPersonComponentStore extends ComponentStore<SalesPersonState> 
                             if (res?.status === 'success') {
                                 typeof res.body === "string" && this.toasterService.showSnackBar('success', res.body);
                                 this.patchState({
-                                    deleteSalesPersonSuccess: true
+                                    archiveSalesPersonSuccess: model
                                 });
                             } else {
-                                this.toasterService.showSnackBar('error', res?.message);
-                                this.patchState({
-                                    deleteSalesPersonSuccess: false
+                                res.message && this.toasterService.showSnackBar('error', res.message);
+                                return this.patchState({
+                                    archiveSalesPersonSuccess: false,
                                 });
                             }
+                        },
+                        (error: any) => {
+                            this.toasterService.showSnackBar('error', this.localeService.translate("app_something_went_wrong"));
+                            return this.patchState({
+                                archiveSalesPersonSuccess: false
+                            });
                         }
                     ),
                     catchError((err) => EMPTY)

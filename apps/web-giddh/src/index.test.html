@@ -13,7 +13,6 @@
         <title>Giddh ~ Accounting at its Rough! Bookkeeping and Accounting Software</title>
         <meta name="description" content="Giddh ~ Accounting at its Rough! Bookkeeping and Accounting Software" />
         <link rel="icon" href="assets/images/favicons.png" type="image/png" sizes="16x16" />
-
         <!-- Preload Inter fonts for better performance -->
         <link rel="preload" as="font" href="./assets/fonts/Inter/Inter_Regular.ttf" type="font/ttf" crossorigin="anonymous" />
         <link rel="preload" as="font" href="./assets/fonts/Inter/Inter_RegularItalic.ttf" type="font/ttf" crossorigin="anonymous" />
@@ -67,13 +66,7 @@
         <!-- End Google Tag Manager -->
         <script defer src="./assets/js/lodash.min.js"></script>
         <script defer src="./assets/js/jquery.min.js"></script>
-        <script type="text/javascript">
-            window.onerror = function (msg, url, line, col, error) {
-                var extra = !col ? "" : "\ncolumn: " + col;
-                extra += !error ? "" : "\nerror: " + error;
-                console.error("Error: " + msg + "\nurl: " + url + "\nline: " + line + extra);
-            };
-        </script>
+        <!-- Removed duplicate window.onerror handler to prevent duplicate error logging -->
         <script type="text/javascript">
             try {
                 var HW_config = { selector: ".notification", account: "7eB4aJ" };

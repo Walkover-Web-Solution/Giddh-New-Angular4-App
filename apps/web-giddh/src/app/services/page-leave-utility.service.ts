@@ -38,6 +38,7 @@ export class PageLeaveUtilityService {
             panelClass: 'page-leave-confirmation-modal',
             backdropClass: ['page-leave-confirmation-modal-backdrop', 'cdk-overlay-dark-backdrop'],
             width: '585px',
+            maxWidth:'585px',
             disableClose: false
         });
 
@@ -112,6 +113,7 @@ export class PageLeaveUtilityService {
             panelClass: 'page-leave-confirmation-modal',
             backdropClass: ['page-leave-confirmation-modal-backdrop', 'cdk-overlay-dark-backdrop'],
             width: '585px',
+            maxWidth: '585px',
             disableClose: false
         });
 

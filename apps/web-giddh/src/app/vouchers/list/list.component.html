@@ -957,12 +957,12 @@
                                 color="primary"
                                 [matMenuTriggerFor]="createNewVoucher"
                                 *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
-                                class="width-150"
+                                class="width-200"
                             >
                                 <span>{{ localeData?.new_invoice }}</span>
                                 <i class="icon-arrow-down icon-font-11 ml-2"></i>
                             </button>
-                            <mat-menu #createNewVoucher="matMenu" class="width-150">
+                            <mat-menu #createNewVoucher="matMenu" class="width-200">
                                 <button mat-menu-item [routerLink]="['/pages/vouchers/cash/create']">
                                     {{ localeData?.cash_invoice }}
                                 </button>

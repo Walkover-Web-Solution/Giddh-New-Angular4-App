@@ -50,7 +50,7 @@ import { ActionTypeEnum } from '../../../sales-person/utility/sales-person.const
     templateUrl: './account-add-new-details.component.html',
     styleUrls: ['./account-add-new-details.component.scss'],
     providers: [AccountAddNewDetailsComponentStore, SalesPersonComponentStore],
-    standalone: false
+    standalone:false
 })
 
 export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
@@ -416,7 +416,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
                 this.lastDuplicateEmailIndex = lastEmailOccurrenceIndex;
                 this.lastDuplicateContactIndex = lastContactOccurrenceIndex;
-                
+
                 // Update duplicate contact errors flag
                 this.hasDuplicateContactErrors = this.checkForDuplicateContactErrors();
             }
@@ -662,7 +662,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     /**
      * Initializes the GST details form with default values and validators.
-     * 
+     *
      * @returns FormGroup
      * @memberof AccountAddNewDetailsComponent
      */
@@ -796,7 +796,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     /**
      * Validates and extracts the state code from the GST number entered in the given form.
-     * 
+     *
      * @param gstForm The `FormGroup` containing the GST-related form controls.
      * @memberof AccountAddNewDetailsComponent
      */
@@ -871,10 +871,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public submit() {
         // Check for duplicate contact errors
         this.hasDuplicateContactErrors = this.checkForDuplicateContactErrors();
-        
+
         if (this.addAccountForm.invalid || !this.isGstValid || this.isMobileNumberInvalid || this.hasDuplicateContactErrors) {
             this.isValidForm = false;
-            
+
             // If duplicate contact errors exist, navigate to portal tab
             if (this.hasDuplicateContactErrors) {
                 this.goToPortalTab();
@@ -1057,7 +1057,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     /**
      * Checks whether a given unique group name exists within the list of parent groups.
-     * 
+     *
      * @param parentGroups - Array of parent group objects, each having a `uniqueName` field.
      * @param uniqueName - The unique name to search for in the parent groups.
      * @returns `true` if any parent group matches the given unique name, otherwise `false`.
@@ -1069,7 +1069,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     /**
      * Handles the selection of a state from a dropdown or similar UI component.
-     * 
+     *
      * @param gstForm The `FormGroup` containing GST-related form controls.
      * @param event The event object containing the selected state's label and value.
      * @memberof AccountAddNewDetailsComponent
@@ -1085,7 +1085,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
 
     /**
      * Updates the county information in the GST form based on the selected county event.
-     * 
+     *
      * @param gstForm The `FormGroup` containing GST-related form controls.
      * @param event The event object containing the selected county's label and value.
      * @memberof AccountAddNewDetailsComponent
@@ -1401,7 +1401,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     /**
      * Handles tab change
      *
-     * @param {MatTabChangeEvent} event 
+     * @param {MatTabChangeEvent} event
      * @memberof AccountAddNewDetailsComponent
      */
     public tabChanged(event: MatTabChangeEvent): void {
@@ -1409,7 +1409,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.selectedTabLabel = event.tab.textLabel;
             this.selectedTabIndex = event.index;
             this.isCustomSelectedTab = event.tab.textLabel === this.localeData?.tabs?.custom;
-            
+
             // Mark this tab as activated
             this.activatedTabs.add(event.tab.textLabel);
         }
@@ -1959,7 +1959,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     /**
-     * Get sales person list as label value
+     * Get Sales Person List
      *
      * @memberof AccountAddNewDetailsComponent
      */
