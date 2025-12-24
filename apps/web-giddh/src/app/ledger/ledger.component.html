@@ -3248,6 +3248,7 @@
                     [showCaretIcon]="false"
                     [appearance]="'fill'"
                     [openDropdown]="openDropdown"
+                    [forceClear]="forceClear$ | async"
                     [sidebarListView]="ledgerView == ledgerViewEnum.StatementView"
                 >
                     <ng-template #optionTemplate let-option="option">
