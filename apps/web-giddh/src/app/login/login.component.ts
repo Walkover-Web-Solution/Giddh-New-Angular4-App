@@ -119,7 +119,6 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.giddhDomainUrl = this.serviceConfig.AppUrl || 'https://giddh.com';
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
         this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-white-logo.svg';
-        console.log('whiteLabel', this.imgPath, this.giddhLogoSrc);
         this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
             return state.login.isLoginWithEmailInProcess;
         }), takeUntil(this.destroyed$));
@@ -170,7 +169,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     // tslint:disable-next-line:no-empty
     public ngOnInit() {
-        console.log("login");
         this.store.dispatch(this.commonAction.setActiveTheme(null));
         this.generateRandomBanner();
         this.mobileVerifyForm = this._fb.group({
@@ -402,7 +400,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     public async signInWithProviders(provider: string) {
-        console.log(environment.GOOGLE_CLIENT_ID)
         if (Configuration.isElectron) {
             // electronOauth2
             const { ipcRenderer } = (window as any).require("electron");

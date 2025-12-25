@@ -17,17 +17,12 @@ export class UserAuthenticated  {
     }
 
     public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        console.log('🔍 DEBUG: UserAuthenticated Guard - canActivate called');
-        console.log('🔍 DEBUG: Route:', route.routeConfig?.path);
-        console.log('🔍 DEBUG: State URL:', state.url);
-
         return this.store.pipe(
             select(state => state.session),
             map(s => ({ userLoginState: s.userLoginState, lastState: s.lastState })),
             distinctUntilChanged((a, b) => a.userLoginState === b.userLoginState && a.lastState === b.lastState),
             take(1),
             map(p => {
-                console.log('🔍 DEBUG: UserAuthenticated Guard - Session state:', p);
                 if (p.userLoginState === userLoginStateEnum.userLoggedIn) {
                     // If navigating to login/token-verify with a returnUrl, prioritize it
                     const qpMap = (route as any)?.queryParamMap;
