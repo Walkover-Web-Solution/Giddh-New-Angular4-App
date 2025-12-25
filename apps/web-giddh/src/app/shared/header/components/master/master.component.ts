@@ -1,5 +1,6 @@
 import { CdkVirtualScrollViewport, ScrollDispatcher } from "@angular/cdk/scrolling";
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChildren } from "@angular/core";
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, QueryList, SimpleChanges, ViewChildren, NgZone } from "@angular/core";
+import { Angular21ChangeDetectionService } from "../../../../services/angular21-change-detection.service";
 import { select, Store } from "@ngrx/store";
 import { AccountsAction } from "apps/web-giddh/src/app/actions/accounts.actions";
 import { GroupWithAccountsAction } from "apps/web-giddh/src/app/actions/groupwithaccounts.actions";
@@ -85,7 +86,9 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
         private scrollDispatcher: ScrollDispatcher,
         private changeDetectorRef: ChangeDetectorRef,
         private generalService: GeneralService,
-        private pageLeaveUtilityService: PageLeaveUtilityService
+        private pageLeaveUtilityService: PageLeaveUtilityService,
+        private ngZone: NgZone,
+        private changeDetectionService: Angular21ChangeDetectionService
     ) {
 
     }
@@ -299,7 +302,7 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
             this.archivedOptions = this.generalService.getAccountArchivedOptions(this.commonLocaleData);
         }
 
-        this.changeDetectorRef.detectChanges();
+        this.changeDetectionService.safeChangeDetection(this.changeDetectorRef, this.ngZone);
     }
 
     /**
@@ -338,7 +341,7 @@ export class MasterComponent implements OnInit, OnChanges, OnDestroy {
                 this.scrollToRight.emit(true);
             }
             this.loadMoreInProgress = false;
-            this.changeDetectorRef.detectChanges();
+            this.changeDetectionService.safeChangeDetection(this.changeDetectorRef, this.ngZone);
         });
     }
 

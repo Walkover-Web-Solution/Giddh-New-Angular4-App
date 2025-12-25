@@ -204,10 +204,10 @@
                                                             id="Variant Image"
                                                             (change)="uploadFile($event, 0)"
                                                         />
-                                                        <div *ngIf="uploadAttachmentInProgress$ | async">
+                                                        <ng-container *ngIf="uploadAttachmentInProgress$ | async">
                                                             <mat-spinner [diameter]="30"></mat-spinner>
-                                                        </div>
-                                                        <div *ngIf="!(uploadAttachmentInProgress$ | async)">
+                                                        </ng-container>
+                                                        <ng-container *ngIf="!(uploadAttachmentInProgress$ | async)">
                                                             <div
                                                                 class="attachment-add-icon font-size-12 text-center border-radius-circle"
                                                             >
@@ -216,7 +216,7 @@
                                                             <span class="attachment-placeholder text-ellipsis">{{
                                                                 localeData?.add_image
                                                             }}</span>
-                                                        </div>
+                                                        </ng-container>
                                                     </div>
                                                 </div>
                                                 <div *ngIf="stockForm.variants[0].attachmentUniqueName">
@@ -444,7 +444,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div *ngIf="stockForm.type !== 'FIXED_ASSETS'">
+                                                        <ng-container *ngIf="stockForm.type !== 'FIXED_ASSETS'">
                                                             <div class="col-xl-6 col-12">
                                                                 <div class="purchase-information account-tab-3">
                                                                     <div class="row align-items-center row-gap-15">
@@ -783,7 +783,7 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        </ng-container>
                                                     </div>
                                                 </div>
                                             </div>
@@ -812,10 +812,10 @@
                                                             cdkDropList
                                                             (cdkDropListDropped)="dropOptions($event)"
                                                         >
-                                                            <div
+                                                            <ng-container
                                                                 *ngFor="let option of stockForm.options; let i = index"
                                                             >
-                                                                <div *ngIf="option.isEdit">
+                                                                <ng-container *ngIf="option.isEdit">
                                                                     <div class="row color-field pt-3 pb-2">
                                                                         <div class="col-lg-4 option-delete pr-0 mt-2">
                                                                             <div class="w-100">
@@ -905,7 +905,7 @@
                                                                             {{ commonLocaleData?.app_done }}
                                                                         </button>
                                                                     </div>
-                                                                </div>
+                                                                </ng-container>
                                                                 <div
                                                                     class="product-option"
                                                                     cdkDrag
@@ -931,7 +931,7 @@
                                                                                             aria-label="variant chip list"
                                                                                             role="listbox"
                                                                                         >
-                                                                                            <div
+                                                                                            <ng-container
                                                                                                 *ngFor="
                                                                                                     let optionValue of option.values
                                                                                                 "
@@ -944,7 +944,7 @@
                                                                                                         optionValue?.value
                                                                                                     }}</mat-chip
                                                                                                 >
-                                                                                            </div>
+                                                                                            </ng-container>
                                                                                         </mat-chip-listbox>
                                                                                     </div>
                                                                                 </div>
@@ -966,7 +966,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
+                                                            </ng-container>
                                                         </div>
                                                     </div>
                                                     <div class="row px-3">
@@ -1033,7 +1033,7 @@
                                                                 >
                                                                     {{ localeData?.fixed_assets_unit }}
                                                                 </th>
-                                                                <div
+                                                                <ng-container
                                                                     *ngFor="let customField of variantCustomFields"
                                                                 >
                                                                     <th class="sales-purchase-info">
@@ -1044,12 +1044,12 @@
                                                                             >*</span
                                                                         >
                                                                     </th>
-                                                                </div>
+                                                                </ng-container>
                                                                 <th class="archive">
                                                                     {{ commonLocaleData?.app_archive }}
                                                                 </th>
                                                             </tr>
-                                                            <div
+                                                            <ng-container
                                                                 *ngFor="
                                                                     let variant of stockForm.variants
                                                                         | sortBy : ['archive'];
@@ -1087,7 +1087,7 @@
                                                                                     *ngIf="variant.isUploading"
                                                                                     [diameter]="30"
                                                                                 ></mat-spinner>
-                                                                                <div
+                                                                                <ng-container
                                                                                     *ngIf="!variant.isUploading"
                                                                                 >
                                                                                     <div
@@ -1101,7 +1101,7 @@
                                                                                             localeData?.add_image
                                                                                         }}</span
                                                                                     >
-                                                                                </div>
+                                                                                </ng-container>
                                                                             </div>
                                                                         </div>
                                                                         <div *ngIf="variant.attachmentUniqueName">
@@ -1206,7 +1206,7 @@
                                                                                 .accountUniqueName
                                                                         "
                                                                     >
-                                                                        <div
+                                                                        <ng-container
                                                                             *ngFor="
                                                                                 let variantPurchaseUnitRate of variant?.purchaseInformation;
                                                                                 let j = index
@@ -1264,7 +1264,7 @@
                                                                                 >
                                                                                 </select-field>
                                                                             </div>
-                                                                        </div>
+                                                                        </ng-container>
                                                                     </td>
                                                                     <td
                                                                         class="sales-purchase-info inventory-tab sales-information-enable"
@@ -1273,7 +1273,7 @@
                                                                                 .accountUniqueName
                                                                         "
                                                                     >
-                                                                        <div
+                                                                        <ng-container
                                                                             *ngFor="
                                                                                 let variantSalesUnitRate of variant?.salesInformation;
                                                                                 let j = index
@@ -1327,7 +1327,7 @@
                                                                                     "
                                                                                 ></select-field>
                                                                             </div>
-                                                                        </div>
+                                                                        </ng-container>
                                                                     </td>
                                                                     <td
                                                                         class="sales-purchase-info fixed-assets-unit-rates inventory-tab"
@@ -1336,7 +1336,7 @@
                                                                                 .accountUniqueName
                                                                         "
                                                                     >
-                                                                        <div
+                                                                        <ng-container
                                                                             *ngFor="
                                                                                 let variantFixedAssetsUnitRate of variant?.fixedAssetsInformation;
                                                                                 let j = index
@@ -1393,9 +1393,9 @@
                                                                                     "
                                                                                 ></select-field>
                                                                             </div>
-                                                                        </div>
+                                                                        </ng-container>
                                                                     </td>
-                                                                    <div
+                                                                    <ng-container
                                                                         *ngFor="
                                                                             let customField of variant?.customFields;
                                                                             let k = index
@@ -1488,7 +1488,7 @@
                                                                                 </mat-radio-group>
                                                                             </div>
                                                                         </td>
-                                                                    </div>
+                                                                    </ng-container>
                                                                     <td class="text-center archive">
                                                                         <mat-slide-toggle
                                                                             class="mt-1"
@@ -1500,7 +1500,7 @@
                                                                         </mat-slide-toggle>
                                                                     </td>
                                                                 </tr>
-                                                            </div>
+                                                            </ng-container>
                                                         </table>
                                                     </div>
                                                 </div>
@@ -1637,7 +1637,7 @@
                                                 </div>
                                             </div>
                                             <div class="row mt-4 align-items-center">
-                                                <div *ngIf="!isVariantAvailable">
+                                                <ng-container *ngIf="!isVariantAvailable">
                                                     <div class="col-sm-6 col-lg-3">
                                                         <input-field
                                                             [name]="'openingQuantity'"
@@ -1664,7 +1664,7 @@
                                                         >
                                                         </input-field>
                                                     </div>
-                                                </div>
+                                                </ng-container>
                                                 <div class="col-sm-6 col-lg-3" *ngIf="isVariantAvailable">
                                                     <input-field
                                                         [name]="'skuCode'"
@@ -1723,7 +1723,7 @@
                                                 </div>
                                             </div>
                                             <div class="row mt-4 align-items-center" *ngIf="!isVariantAvailable">
-                                                <div
+                                                <ng-container
                                                     *ngFor="
                                                         let customField of stockForm.variants[0]?.customFields;
                                                         let k = index
@@ -1806,7 +1806,7 @@
                                                             </mat-radio-button>
                                                         </mat-radio-group>
                                                     </div>
-                                                </div>
+                                                </ng-container>
                                             </div>
                                         </div>
                                     </div>

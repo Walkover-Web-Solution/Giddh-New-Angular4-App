@@ -2,7 +2,8 @@ import { combineLatest, Observable, of as observableOf, ReplaySubject } from 'rx
 import { take, takeUntil } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT } from './../../shared/helpers/defaultDateFormat';
 import { select, Store } from '@ngrx/store';
-import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnDestroy, OnInit, TemplateRef, ViewChild, ChangeDetectorRef, NgZone, ChangeDetectionStrategy } from '@angular/core';
+import { Angular21ChangeDetectionService } from '../../services/angular21-change-detection.service';
 import { AppState } from '../../store';
 import * as dayjs from 'dayjs';
 import { CompanyActions } from '../../actions/company.actions';
@@ -12,7 +13,7 @@ import { IOption } from '../../app.constant';
 import { IForceClear } from '../../models/api-models/Sales';
 import { cloneDeep, each, map } from '../../lodash-optimized';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatTableDataSource, MatTable } from '@angular/material/table';
 import { ConfirmModalComponent } from '../../theme/new-confirm-modal/confirm-modal.component';
 import { ASIDE_PANE_CONFIG } from '../../app.constant';
 import { GeneralService } from '../../services/general.service';
@@ -21,7 +22,8 @@ import { GeneralService } from '../../services/general.service';
     selector: 'setting-taxes',
     templateUrl: './setting.taxes.component.html',
     styleUrls: ['./setting.taxes.component.scss'],
-    standalone: false
+    standalone: false,
+    changeDetection: ChangeDetectionStrategy.Default
 })
 export class SettingTaxesComponent implements OnInit, OnDestroy {
     /** Holds template reference for create/update tax dialog */
@@ -54,6 +56,8 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** Holds table data */
     public dataSource: MatTableDataSource<any> = new MatTableDataSource();
+    /** Reference to MatTable for manual refresh */
+    @ViewChild(MatTable) table: MatTable<any>;
     /** Holds table display columns */
     public displayedColumns: string[] = ['index', 'taxNumber', 'name', 'taxAuthority', 'linkedAccount', 'appliedFrom', 'taxPercentage', 'fileDate', 'duration', 'taxType', 'actions'];
     /** Holds create update dialog reference */
@@ -68,7 +72,10 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
         private _companyActions: CompanyActions,
         private _settingsTaxesActions: SettingsTaxesActions,
         public dialog: MatDialog,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private cdRef: ChangeDetectorRef,
+        private ngZone: NgZone,
+        private changeDetectionService: Angular21ChangeDetectionService
     ) { }
 
     public ngOnInit() {
@@ -88,7 +95,10 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
                 });
                 this.availableTaxes = cloneDeep(o.taxes);
                 this.toggleTaxAuthority();
-                this.dataSource.data = this.availableTaxes;
+                this.changeDetectionService.updateDataSourceWithChangeDetection(
+                    this.dataSource, this.availableTaxes,
+                    this.cdRef, this.ngZone, this.table
+                );
                 this.onCancel();
             }
 
@@ -108,9 +118,9 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
     }
     /**
      * Delete the tax and open the confirmation dialog
-     * 
-     * @param taxToDelete 
-     * @returns 
+     *
+     * @param taxToDelete
+     * @returns
      */
     public deleteTax(taxToDelete: any): void {
         this.selectedTax = this.availableTaxes.find((tax) => tax?.uniqueName === taxToDelete?.uniqueName);
@@ -246,6 +256,11 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
             ];
         }
     }
+
+    /**
+     * TrackBy function for table performance optimization
+     */
+    public trackByFn = this.changeDetectionService.trackByFn;
 
     /**
      * Toggle Tax Authority columns

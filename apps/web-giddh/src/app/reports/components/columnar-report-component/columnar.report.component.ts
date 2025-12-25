@@ -1,4 +1,5 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone, ChangeDetectionStrategy } from '@angular/core';
+import { Angular21ChangeDetectionService } from '../../../services/angular21-change-detection.service';
 import { SettingsFinancialYearService } from '../../../services/settings.financial-year.service';
 import { select, Store } from '@ngrx/store';
 import { takeUntil } from 'rxjs/operators';
@@ -22,7 +23,8 @@ import { concat, forEach, map } from '../../../lodash-optimized';
     selector: 'columnar-report-component',
     templateUrl: './columnar.report.component.html',
     styleUrls: ['./columnar.report.component.scss'],
-    standalone: false
+    standalone: false,
+    changeDetection: ChangeDetectionStrategy.Default
 })
 
 export class ColumnarReportComponent implements OnInit, OnDestroy {
@@ -80,7 +82,10 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
         private toaster: ToasterService,
         private ledgerService: LedgerService,
         private generalService: GeneralService,
-        private groupService: GroupService
+        private groupService: GroupService,
+        private changeDetectorRef: ChangeDetectorRef,
+        private ngZone: NgZone,
+        private changeDetectionService: Angular21ChangeDetectionService
     ) {
         this.exportRequest.fileType = 'xls';
         this.exportRequest.balanceTypeAsSign = false;
@@ -100,6 +105,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
                     this.activeFinancialYear = activeCompany.activeFinancialYear.uniqueName;
                     this.selectActiveFinancialYear();
                 }
+                this.changeDetectionService.triggerChangeDetection(this.changeDetectorRef, this.ngZone);
             }
         });
 
@@ -127,6 +133,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
                 });
                 this.selectYear = selectYear;
                 this.selectActiveFinancialYear();
+                this.changeDetectionService.triggerChangeDetection(this.changeDetectorRef, this.ngZone);
             }
         });
     }
@@ -187,6 +194,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
                 if (res?.status === "success") {
                     if (isShowReport) {
                         this.columnarReportResponse = res?.body;
+                        this.changeDetectionService.triggerChangeDetection(this.changeDetectorRef, this.ngZone);
                     } else {
                         let blob = this.generalService.base64ToBlob(res.body.data, 'application/xls', 512);
                         return saveAs(blob, res.body.name);
@@ -194,6 +202,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
                 } else {
                     this.toaster.clearAllToaster();
                     this.toaster.errorToast(res?.message);
+                    this.changeDetectionService.safeChangeDetection(this.changeDetectorRef, this.ngZone);
                 }
             });
         }
@@ -249,6 +258,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
                 this.fromMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate() });
                 this.toMonthNames.push({ label: dayjs(startDate.toDate()).format("MMM-YYYY"), value: startDate.toDate() });
             }
+            this.changeDetectionService.triggerChangeDetection(this.changeDetectorRef, this.ngZone);
         }
     }
 
@@ -393,6 +403,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
         this.exportRequest.balanceTypeAsSign = false;
         this.exportRequest.showHideOpeningClosingBalance = false;
         this.isBalanceTypeAsSign = false;
+        this.changeDetectionService.triggerChangeDetection(this.changeDetectorRef, this.ngZone);
     }
 
     /**
@@ -439,6 +450,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
                         this.defaultGroupPaginationData.page = this.groupsSearchResultsPaginationData.page;
                         this.defaultGroupPaginationData.totalPages = this.groupsSearchResultsPaginationData.totalPages;
                     }
+                    this.changeDetectionService.triggerChangeDetection(this.changeDetectorRef, this.ngZone);
                 }
             });
         } else {

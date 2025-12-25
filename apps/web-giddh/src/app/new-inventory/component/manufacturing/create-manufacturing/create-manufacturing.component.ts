@@ -4,6 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
 import { BranchHierarchyType, IOption } from 'apps/web-giddh/src/app/app.constant';
+import { isEqual } from 'apps/web-giddh/src/app/lodash-optimized';
+import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { CreateManufacturing } from 'apps/web-giddh/src/app/models/api-models/Manufacturing';
 import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
@@ -20,15 +22,13 @@ import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-
 import * as dayjs from 'dayjs';
 import { ReplaySubject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-import { cloneDeep, concat, filter, find, forEach, isEqual, map } from '../../../../lodash-optimized';
 
 @Component({
     selector: 'create-manufacturing',
-    
     templateUrl: './create-manufacturing.component.html',
-    standalone: false,
     styleUrls: ['./create-manufacturing.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone:false
 })
 export class CreateManufacturingComponent implements OnInit, OnDestroy {
     /**  This will use for universal date */
@@ -1054,7 +1054,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
             stocksPageNumber: prevDetails?.stocksPageNumber,
             stocksTotalPages: prevDetails?.stocksTotalPages
         };
-        
+
         this.manufacturingObject = new CreateManufacturing(preserveFields);
         this.initializeOtherExpenseObj();
         this.manufacturingObject.manufacturingDetails[0].date = cloneDeep(this.universalDate);

@@ -17,7 +17,6 @@ import { InventoryService } from '../../services/inventory.service';
 import { MatAccordion } from '@angular/material/expansion';
 import { SettingsTagService } from '../../services/settings.tag.service';
 import { SalesPersonComponentStore } from '../../shared/sales-person/utility/sales-person.store';
-import { cloneDeep, concat, forEach, get, includes, map } from '../../lodash-optimized';
 
 @Component({
     selector: 'daybook-advance-search-model',
@@ -41,7 +40,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
     @Output() public closeModelEvent: EventEmitter<any> = new EventEmitter();
     /** Instance of universal datepicker menu trigger */
     @ViewChild('universalDatepickerTrigger', { read: MatMenuTrigger }) public universalDatepickerTrigger: MatMenuTrigger;
-public advanceSearchObject: DayBookRequestModel = null;
+    public advanceSearchObject: DayBookRequestModel = null;
     public advanceSearchForm: UntypedFormGroup;
     public showChequeDatePicker: boolean = false;
     public accounts$: Observable<IOption[]>;
@@ -274,7 +273,7 @@ public advanceSearchObject: DayBookRequestModel = null;
      * @memberof DaybookAdvanceSearchModelComponent
      */
     public emitAdvanceSearchParams(): void {
-        let dataToSend = cloneDeep(this.advanceSearchForm?.value) as DayBookRequestModel;
+        let dataToSend = _.cloneDeep(this.advanceSearchForm?.value) as DayBookRequestModel;
         if (dataToSend.dateOnCheque) {
             if (typeof dataToSend.dateOnCheque === "object") {
                 dataToSend.dateOnCheque = dayjs(dataToSend.dateOnCheque).format(GIDDH_DATE_FORMAT);

@@ -1,5 +1,6 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Store, select } from '@ngrx/store';
+import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import * as dayjs from 'dayjs';
 import { MatMenuTrigger } from '@angular/material/menu';
@@ -16,9 +17,9 @@ import { GeneralService } from '../services/general.service';
 import { SettingsBranchActions } from '../actions/settings/branch/settings.branch.action';
 import { OrganizationType } from '../models/user-login-state';
 import { LedgerActions } from '../actions/ledger/ledger.actions';
-// import { LedgerVM } from '../ledger/ledger.vm';
+import { LedgerVM } from '../ledger/ledger.vm';
 import { SalesOtherTaxesModal } from '../models/api-models/Sales';
-// import { UpdateLedgerEntryPanelComponent } from '../ledger/components/update-ledger-entry-panel/update-ledger-entry-panel.component';
+import { UpdateLedgerEntryPanelComponent } from '../ledger/components/update-ledger-entry-panel/update-ledger-entry-panel.component';
 import { DaybookService } from '../services/daybook.service';
 import { ToasterService } from '../services/toaster.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -26,13 +27,12 @@ import { LedgerService } from '../services/ledger.service';
 import { Router } from '@angular/router';
 import { saveAs } from 'file-saver';
 import { PageLeaveUtilityService } from '../services/page-leave-utility.service';
-import { cloneDeep, filter, find, map, remove, some } from '../lodash-optimized';
 
 @Component({
     selector: 'daybook',
     templateUrl: './daybook.component.html',
     styleUrls: [`./daybook.component.scss`],
-    standalone : false
+    standalone:false
 })
 
 export class DaybookComponent implements OnInit, OnDestroy {
@@ -54,7 +54,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
     /** Update ledger modal reference */
     @ViewChild('updateLedgerModal', { static: false }) public updateLedgerModal: any;
     /** Update ledger component reference */
-    // @ViewChild(UpdateLedgerEntryPanelComponent, { static: false }) public updateLedgerComponent: UpdateLedgerEntryPanelComponent;
+    @ViewChild(UpdateLedgerEntryPanelComponent, { static: false }) public updateLedgerComponent: UpdateLedgerEntryPanelComponent;
     /** Instance of Aside Menu State For Other Taxes dialog */
     @ViewChild("asideMenuStateForOtherTaxes") public asideMenuStateForOtherTaxes: TemplateRef<any>;
     /** True, if entry expanded (at least one entry) */
@@ -98,7 +98,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
     /** Stores the current organization type */
     public currentOrganizationType: OrganizationType;
     /** Ledger object */
-    // public lc: LedgerVM;
+    public lc: LedgerVM;
     /** Company taxes list */
     public companyTaxesList: TaxResponse[] = [];
     /** True if initial api got called */
@@ -125,9 +125,8 @@ export class DaybookComponent implements OnInit, OnDestroy {
     @ViewChild("ledgerAsidePane") public ledgerAsidePane: TemplateRef<any>;
     /** Returns true if account is selected else false */
     public get showPageLeaveConfirmation(): boolean {
-        // let hasParticularSelected = this.lc.blankLedger.transactions?.filter(txn => txn?.particular);
-        // return (hasParticularSelected?.length) ? true : false;
-          return true;
+        let hasParticularSelected = this.lc.blankLedger.transactions?.filter(txn => txn?.particular);
+        return (hasParticularSelected?.length) ? true : false;
     }
     /** This will hold the file type extension for expand */
     public fileTypeExtension: string = 'base64';
@@ -160,7 +159,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
         });
-        // this.lc = new LedgerVM();
+        this.lc = new LedgerVM();
         this.currentOrganizationType = this.generalService.currentOrganizationType;
 
         this.store.pipe(
@@ -191,7 +190,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
                     // branches are loaded
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
+                        this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany?.uniqueName : '';
                         this.currentBranch = {
@@ -328,7 +327,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
 
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
             if (dateObj) {
-                let universalDate = cloneDeep(dateObj);
+                let universalDate = _.cloneDeep(dateObj);
 
                 this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
                     this.todaySelected = response;
@@ -587,7 +586,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
         }
         this.store.dispatch(this.ledgerActions.setAccountForEdit(txn?.otherTransactions[0]?.particular?.uniqueName));
         this.store.dispatch(this.ledgerActions.setTxnForEdit(txn?.uniqueName));
-        // this.lc.selectedTxnUniqueName = txn?.uniqueName;
+        this.lc.selectedTxnUniqueName = txn?.uniqueName;
         this.modalDialogRef = this.dialog.open(this.updateLedgerModal, {
             width: '70%',
             height: '650px',
@@ -595,7 +594,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
         });
 
         this.modalDialogRef.afterOpened().subscribe(response => {
-            // this.updateLedgerComponent?.loadDefaultSearchSuggestions();
+            this.updateLedgerComponent?.loadDefaultSearchSuggestions();
         });
 
         this.modalDialogRef.afterClosed().subscribe(response => {
@@ -631,7 +630,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
      * @memberof DaybookComponent
      */
     public calculateOtherTaxes(modal: SalesOtherTaxesModal): void {
-        // this.updateLedgerComponent.vm.calculateOtherTaxes(modal);
+        this.updateLedgerComponent.vm.calculateOtherTaxes(modal);
     }
 
     /**

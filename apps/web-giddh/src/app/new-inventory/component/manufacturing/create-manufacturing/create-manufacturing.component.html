@@ -10,9 +10,9 @@
             <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="isLoadingManufacturing"></giddh-page-loader>
             <form autocomplete="off" novalidate #manufacturingForm="ngForm" *ngIf="!isLoadingManufacturing">
                 <div class="row">
-                    <div *ngIf="isCompany || isConsolidatedBranch">
+                    <ng-container *ngIf="isCompany || isConsolidatedBranch">
                         <div class="font-size-16 branch-msg">{{ localeData?.info_message }}</div>
-                    </div>
+                    </ng-container>
                     <div class="form-fields w-100 d-flex">
                         <div>
                             <div class="d-inline-flex align-items-end">
@@ -249,7 +249,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody (mouseleave)="activeLinkedStockIndex = null">
-                                                <div
+                                                <ng-container
                                                     *ngFor="
                                                         let linkedStock of manufacturingObject.manufacturingDetails[0]
                                                             .linkedStocks;
@@ -419,7 +419,7 @@
                                                             ></i>
                                                         </td>
                                                     </tr>
-                                                </div>
+                                                </ng-container>
                                                 <tr *ngIf="!isCompany && !isConsolidatedBranch">
                                                     <td colspan="7">
                                                         <a
@@ -477,7 +477,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody (mouseleave)="activeOtherExpenseIndex = null">
-                                                    <div
+                                                    <ng-container
                                                         *ngFor="
                                                             let expense of manufacturingObject.manufacturingDetails[0]
                                                                 .otherExpenses;
@@ -607,7 +607,7 @@
                                                                 ></i>
                                                             </td>
                                                         </tr>
-                                                    </div>
+                                                    </ng-container>
                                                     <tr *ngIf="!isCompany && !isConsolidatedBranch">
                                                         <td colspan="7">
                                                             <a class="mb-2" (click)="addExpense()" href="javascript:;">
@@ -642,7 +642,7 @@
                                                 </thead>
 
                                                 <tbody (mouseleave)="activeByProductLinkedStockIndex = null">
-                                                    <div
+                                                    <ng-container
                                                         *ngFor="
                                                             let byProductLinkedStock of manufacturingObject
                                                                 .manufacturingDetails[0].byProducts;
@@ -816,7 +816,7 @@
                                                                 ></i>
                                                             </td>
                                                         </tr>
-                                                    </div>
+                                                    </ng-container>
                                                     <tr *ngIf="!isCompany && !isConsolidatedBranch">
                                                         <td colspan="7">
                                                             <a

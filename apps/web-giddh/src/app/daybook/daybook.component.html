@@ -6,7 +6,7 @@
 >
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
-    <div *ngIf="!showLoader">
+    <ng-container *ngIf="!showLoader">
         <div class="transactions-page position-relative clear-both">
             <div class="d-flex align-items-center column-gap-1 p-3">
                 <div
@@ -640,7 +640,7 @@
                 <no-data></no-data>
             </div>
         </div>
-    </div>
+    </ng-container>
 
     <!-- Advance search popup -->
     <ng-template #advanceSearchModal>

@@ -11,10 +11,10 @@ import { ExportDaybookComponent } from './export-daybook/export-daybook.componen
 import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
 import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
 import { SharedModule } from '../shared/shared.module';
-// import { SalesModule } from '../sales/sales.module';
+import { SalesModule } from '../sales/sales.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
-// import { UpdateLedgerEntryPanelModule } from '../ledger/components/update-ledger-entry-panel/update-ledger-entry-panel.module';
-// import { AsideMenuSalesOtherTaxesModule } from '../sales/aside-menu-sales-other-taxes/aside-menu-sales-other-taxes.module';
+import { UpdateLedgerEntryPanelModule } from '../ledger/components/update-ledger-entry-panel/update-ledger-entry-panel.module';
+import { AsideMenuSalesOtherTaxesModule } from '../sales/aside-menu-sales-other-taxes/aside-menu-sales-other-taxes.module';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -25,18 +25,16 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-// import { LedgerModule } from '../ledger/ledger.module';
+import { LedgerModule } from '../ledger/ledger.module';
 import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { MatSelectModule } from '@angular/material/select';
 import { MatMenuModule } from '@angular/material/menu';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
-import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
 
 @NgModule({
     declarations: [DaybookComponent, ExportDaybookComponent, DaybookAdvanceSearchModelComponent],
     providers: [],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
     imports: [
         CommonModule,
         ReactiveFormsModule,
@@ -48,10 +46,10 @@ import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
         GiddhNumberFormatModule,
         SharedModule,
         NgxMaskModule.forRoot(),
-        // AsideMenuSalesOtherTaxesModule,
-        // SalesModule,
+        AsideMenuSalesOtherTaxesModule,
+        SalesModule,
         NoDataModule,
-        // UpdateLedgerEntryPanelModule,
+        UpdateLedgerEntryPanelModule,
         MatInputModule,
         MatTooltipModule,
         MatButtonModule,
@@ -62,12 +60,12 @@ import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
         MatRadioModule,
         MatExpansionModule,
         MatSlideToggleModule,
-        // LedgerModule,
+        LedgerModule,
         WatchVideoModule,
         NgxMatSelectSearchModule,
         MatSelectModule,
         MatMenuModule,
-        // FormFieldsModule
+        FormFieldsModule
     ]
 })
 export class DaybookModule {

@@ -1,5 +1,7 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild, NgZone, ChangeDetectionStrategy } from '@angular/core';
+import { Angular21ChangeDetectionService } from '../../../services/angular21-change-detection.service';
 import { MatMenuTrigger } from '@angular/material/menu';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
 import { ReverseChargeReportGetRequest, ReverseChargeReportPostRequest } from '../../../models/api-models/ReverseCharge';
 import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
 import { Observable, ReplaySubject } from 'rxjs';
@@ -21,7 +23,8 @@ import { cloneDeep, find, map, remove } from '../../../lodash-optimized';
     selector: 'reverse-charge-report',
     templateUrl: './reverse-charge-report.component.html',
     styleUrls: ['./reverse-charge-report.component.scss'],
-    standalone: false
+    standalone: false,
+    changeDetection: ChangeDetectionStrategy.Default
 })
 
 export class ReverseChargeReport implements OnInit, OnDestroy {
@@ -48,6 +51,10 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
     };
     public isLoading: boolean = false;
     public reverseChargeReportResults: any = {};
+    /** MatTableDataSource for proper Angular Material integration */
+    public dataSource = new MatTableDataSource([]);
+    /** Reference to MatTable for manual refresh */
+    @ViewChild(MatTable) table: MatTable<any>;
     public timeout: any;
     public universalDate: any[] = [];
     /** Date format type */
@@ -117,7 +124,9 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         private reverseChargeService: ReverseChargeService,
         private settingsBranchAction: SettingsBranchActions,
         private generalService: GeneralService,
-        private router: Router
+        private router: Router,
+        private ngZone: NgZone,
+        private changeDetectionService: Angular21ChangeDetectionService
     ) {
     }
 
@@ -217,6 +226,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
                 this.isSearching = true;
                 this.isSearchApplied();
                 this.getReverseChargeReport(true);
+                this.changeDetectionService.triggerChangeDetection(this.cdRef, this.ngZone);
             }
         });
 
@@ -226,6 +236,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
                 this.isSearching = true;
                 this.isSearchApplied();
                 this.getReverseChargeReport(true);
+                this.changeDetectionService.triggerChangeDetection(this.cdRef, this.ngZone);
             }
         });
 
@@ -235,6 +246,7 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
                 this.isSearching = true;
                 this.isSearchApplied();
                 this.getReverseChargeReport(true);
+                this.changeDetectionService.triggerChangeDetection(this.cdRef, this.ngZone);
             }
         });
     }
@@ -250,6 +262,11 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
         document.querySelector('body').classList.remove('gst-sidebar-open');
         this.asideGstSidebarMenuState = false;
     }
+
+    /**
+     * TrackBy function for table performance optimization
+     */
+    public trackByFn = this.changeDetectionService.trackByFn;
 
 
 
@@ -272,15 +289,25 @@ export class ReverseChargeReport implements OnInit, OnDestroy {
             this.reverseChargeService.getReverseChargeReport(this.activeCompany.uniqueName, this.reverseChargeReportGetRequest, this.reverseChargeReportPostRequest).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                 if (res?.status === 'success') {
                     this.reverseChargeReportResults = res.body;
+                    // Update MatTableDataSource for proper Angular Material integration
+                    this.dataSource.data = res.body?.results || [];
                     if (this.todaySelected) {
                         this.selectedDateRange = { startDate: dayjs(this.reverseChargeReportResults?.from, GIDDH_DATE_FORMAT), endDate: dayjs(this.reverseChargeReportResults?.to, GIDDH_DATE_FORMAT) };
                         this.selectedDateRangeUi = dayjs(this.reverseChargeReportResults?.from, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(this.reverseChargeReportResults?.to, GIDDH_DATE_FORMAT).format(GIDDH_NEW_DATE_FORMAT_UI);
                     }
-                    this.cdRef.detectChanges();
+                    this.changeDetectionService.updateDataSourceWithChangeDetection(
+                        this.dataSource, this.reverseChargeReportResults?.results || [],
+                        this.cdRef, this.ngZone, this.table
+                    );
                 } else {
                     this.toasty.errorToast(res.message);
+                    this.changeDetectionService.safeChangeDetection(this.cdRef, this.ngZone);
                 }
                 this.isLoading = false;
+            }, error => {
+                this.isLoading = false;
+                this.toasty.errorToast('Error loading reverse charge report');
+                this.changeDetectionService.safeChangeDetection(this.cdRef, this.ngZone);
             });
         }
     }

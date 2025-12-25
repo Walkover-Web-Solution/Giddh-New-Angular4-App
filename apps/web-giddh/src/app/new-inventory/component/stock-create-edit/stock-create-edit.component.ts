@@ -9,8 +9,9 @@ import { select, Store } from "@ngrx/store";
 import { AppState } from "../../../store";
 import { WarehouseActions } from "../../../settings/warehouse/action/warehouse.action";
 import { ActivatedRoute, Router } from "@angular/router";
+import { cloneDeep, findIndex, forEach, isEqual } from "../../../lodash-optimized";
 import { NgForm } from "@angular/forms";
-import { INVALID_STOCK_ERROR_MESSAGE, IOption } from "../../../app.constant";
+import { Configuration, INVALID_STOCK_ERROR_MESSAGE, IOption } from "../../../app.constant";
 import { CustomFieldsService } from "../../../services/custom-fields.service";
 import { CompanyActions } from "../../../actions/company.actions";
 import { MatDialog } from "@angular/material/dialog";
@@ -25,21 +26,19 @@ import { InventoryComponentStore } from "../inventory.store";
 import { IDiscountList } from "../../../models/api-models/SettingsDiscount";
 import { CommonService } from "../../../services/common.service";
 import { NewConfirmationModalComponent } from "../../../theme/new-confirmation-modal/confirmation-modal.component";
-// import { VoucherComponentStore } from "../../../vouchers/utility/vouchers.store";
+import { VoucherComponentStore } from "../../../vouchers/utility/vouchers.store";
 import { PreviewVariantImageComponent } from "../preview-variant-image/preview-variant-image.component";
 import { ServiceConfig } from "../../../services/service.config";
 import { MatTabChangeEvent } from "@angular/material/tabs";
 import { PageLeaveUtilityService } from "../../../services/page-leave-utility.service";
-import { Configuration } from '../../../app.constant';
-import { environment } from '../../../../environments/environment';
-import { cloneDeep, concat, filter, find, findIndex, forEach, includes, isEqual, keys, map, remove } from '../../../lodash-optimized';
+import { environment } from "apps/web-giddh/src/environments/environment";
 
 @Component({
     selector: "stock-create-edit",
     templateUrl: "./stock-create-edit.component.html",
     styleUrls: ["./stock-create-edit.component.scss"],
-    providers: [InventoryComponentStore],
-    standalone: false
+    providers: [InventoryComponentStore, VoucherComponentStore],
+    standalone:false
 })
 export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Instance of stock create/edit form */
@@ -308,7 +307,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
         private manufacturingService: ManufacturingService,
         private componentStore: InventoryComponentStore,
         private commonService: CommonService,
-        // private voucherComponentStore: VoucherComponentStore,
+        private voucherComponentStore: VoucherComponentStore,
         private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
     }
@@ -406,13 +405,13 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                 }
             });
 
-        // this.voucherComponentStore.deleteAttachmentIsSuccess$
-        //     .pipe(takeUntil(this.destroyed$))
-        //     .subscribe(response => {
-        //         if (this.variantIndex >= 0) {
-        //             this.handleAttachmentDeletion(response);
-        //         }
-        //     });
+        this.voucherComponentStore.deleteAttachmentIsSuccess$
+            .pipe(takeUntil(this.destroyed$))
+            .subscribe(response => {
+                if (this.variantIndex >= 0) {
+                    this.handleAttachmentDeletion(response);
+                }
+            });
 
     }
 
@@ -2402,7 +2401,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                 .subscribe(response => {
                     variant.isUploading = response === this.commonLocaleData?.app_yes;
                     if (variant.isUploading) {
-                        // this.voucherComponentStore.deleteAttachment(variant.attachmentUniqueName);
+                        this.voucherComponentStore.deleteAttachment(variant.attachmentUniqueName);
                     } else {
                         this.dialog.closeAll();
                     }
@@ -2490,7 +2489,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             this.selectedFileName = "";
             variant.isUploading = false;
             variant.attachmentUniqueName = null;
-            // this.voucherComponentStore.resetAttachmentState();
+            this.voucherComponentStore.resetAttachmentState();
         } else {
             this.resetVariantAttachmentState();
             this.componentStore.resetUploadAttachmentState();

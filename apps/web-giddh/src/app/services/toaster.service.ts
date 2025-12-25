@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { APP_DEFAULT_TITLE, DEFAULT_TOASTER_OPTIONS, DEFAULT_TOASTER_OPTIONS_WITH_HTML } from '../app.constant';
 import { ToastrService } from 'ngx-toastr';
 import { MatSnackBar } from '@angular/material/snack-bar';
-// import { SnackbarComponent } from '../theme/snackbar/snackbar.component';
+import { SnackBarComponent } from '../theme/snackbar/snackbar.component';
 
 @Injectable({
     providedIn: 'root'
@@ -64,20 +64,11 @@ export class ToasterService {
      * @memberof ToasterService
      */
     public showSnackBar(type: string, message: string, title: string = APP_DEFAULT_TITLE): void {
-        // Use Material Snack Bar as fallback since SnackbarComponent is commented out
-        const config = {
-            duration: 5000,
-            horizontalPosition: 'center' as const,
-            verticalPosition: 'top' as const,
-            panelClass: [`snackbar-${type}`]
-        };
-
-        // Show message with title if provided
-        const displayMessage = title && title !== APP_DEFAULT_TITLE ? `${title}: ${message}` : message;
-
-        this.snackBar.open(displayMessage, 'Close', config);
-
-        // Keep console log for debugging
-        console.log(`${type}: ${title} - ${message}`);
+        this.snackBar.openFromComponent(SnackBarComponent, {
+            data: { title: title, message: message },
+            horizontalPosition: "center",
+            verticalPosition: "top",
+            panelClass: type
+        });
     }
 }

@@ -89,7 +89,7 @@
                 <table
                     mat-table
                     matSort
-                    [dataSource]="reverseChargeReportResults?.items"
+                    [dataSource]="dataSource"
                     (matSortChange)="sortChange($event)"
                     [matSortActive]="reverseChargeReportGetRequest.sortBy"
                     [matSortDirection]="reverseChargeReportGetRequest.sort"
@@ -304,7 +304,8 @@
                     !isLoading &&
                     (!reverseChargeReportResults ||
                         !reverseChargeReportResults.items ||
-                        reverseChargeReportResults.items?.length === 0)
+                        reverseChargeReportResults.items?.length === 0 ||
+                        dataSource.data?.length === 0)
                 "
                 [secondaryMessageClass]="'p-0'"
             >

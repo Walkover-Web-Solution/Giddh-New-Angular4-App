@@ -1,12 +1,14 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ChangeDetectorRef, NgZone, ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { ReplaySubject, takeUntil } from 'rxjs';
+import { Angular21ChangeDetectionService } from '../../../../services/angular21-change-detection.service';
 
 @Component({
     selector: 'master-export-option',
     templateUrl: './master-export-option.component.html',
     styleUrls: ['./master-export-option.component.scss'],
-    standalone: false
+    standalone: false,
+    changeDetection: ChangeDetectionStrategy.Default
 })
 export class MasterExportOptionComponent implements OnInit {
   /** Form Group for export  form */
@@ -20,7 +22,10 @@ export class MasterExportOptionComponent implements OnInit {
   /* This will hold common JSON data */
   public commonLocaleData: any = {};
   constructor(
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private changeDetectorRef: ChangeDetectorRef,
+    private ngZone: NgZone,
+    private changeDetectionService: Angular21ChangeDetectionService
   ) { }
 
   /**
@@ -34,6 +39,7 @@ export class MasterExportOptionComponent implements OnInit {
     this.exportForm.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(value => {
       if (value) {
         this.exportFormMaster.emit(this.exportForm.value);
+        this.changeDetectionService.triggerChangeDetection(this.changeDetectorRef, this.ngZone);
       }
     });
   }
@@ -69,7 +75,7 @@ export class MasterExportOptionComponent implements OnInit {
 
   /**
    * This will use for destroy
-   * 
+   *
    * @memberof MasterExportOptionComponent
    */
   public ngOnDestroy(): void {

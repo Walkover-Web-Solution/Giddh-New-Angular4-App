@@ -29,7 +29,7 @@ import { userLoginStateEnum, OrganizationType } from '../../models/user-login-st
 import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
 import { environment } from 'apps/web-giddh/src/environments/environment';
 import { CurrentPage, OnboardingFormRequest } from '../../models/api-models/Common';
-import { ACCOUNTING_BREAKPOINTS, ASIDE_PANE_CONFIG, BranchHierarchyType, BREAKPOINT_SCREEN_SIZE, CALENDLY_URL, GIDDH_DATE_RANGE_PICKER_RANGES, ROUTES_WITH_HEADER_BACK_BUTTON } from '../../app.constant';
+import { ACCOUNTING_BREAKPOINTS, ASIDE_PANE_CONFIG, BranchHierarchyType, BREAKPOINT_SCREEN_SIZE, CALENDLY_URL, Configuration, GIDDH_DATE_RANGE_PICKER_RANGES, ROUTES_WITH_HEADER_BACK_BUTTON } from '../../app.constant';
 import { CommonService } from '../../services/common.service';
 import { Location } from '@angular/common';
 import { SettingsProfileService } from '../../services/settings.profile.service';
@@ -57,7 +57,7 @@ interface SubscriptionErrorFlags {
     selector: 'app-header',
     templateUrl: './header.component.html',
     styleUrls: ['./header.component.scss'],
-    standalone: false
+    standalone:false
 })
 
 export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterViewChecked {
@@ -119,7 +119,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public userIsCompanyUser: boolean = false;
     public userName: string;
     public userEmail: string;
-    public isElectron: boolean = isElectron;
+    public isElectron: boolean = Configuration.isElectron;
     public isTodaysDateSelected: boolean = false;
     public isDateRangeSelected: boolean = false;
     public userFullName: string;
@@ -254,7 +254,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public isUKCompany: boolean = false;
     /** Holds true if lister is added on error message */
     public isErrorMessageListenerAdded: boolean = false;
-/** True if command dialog is open */
+    /** True if command dialog is open */
     public showCommandDialog: boolean = false;
 
     /**
@@ -1043,7 +1043,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     /**
     * This function is used to open manage groups accounts dialog
-    * 
+    *
     * @returns {void}
     * @memberof HeaderComponent
     */
@@ -1199,13 +1199,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     }
 
     public openExpiredPlanModel(template: TemplateRef<any>) { // show expired plan
-        this.dialogRefExpirePlanRef = this.dialog.open(template,{
+        this.dialogRefExpirePlanRef = this.dialog.open(template, {
             panelClass: 'mat-dialog-md'
         });
     }
 
     public openCrossedTxLimitModel(template: TemplateRef<any>) {  // show if Tx limit over
-        this.dialogRefCrossLimitRef = this.dialog.open(template,{
+        this.dialogRefCrossLimitRef = this.dialog.open(template, {
             panelClass: 'mat-dialog-md'
         });
     }
@@ -1523,7 +1523,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public toggleGiddhDatepicker(isOpen: boolean = true): void {
-        if (isOpen) {            
+        if (isOpen) {
             this.universalDatepickerTrigger?.openMenu();
         } else {
             this.universalDatepickerTrigger?.closeMenu();
