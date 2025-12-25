@@ -9,7 +9,7 @@
     ],
     "directories": {
         "buildResources": "resources",
-        "output": "./../electrongiddh-packages"
+        "output": "../electrongiddh-packages"
     },
     "afterSign": "./../../../electron-sign/notarize.js",
     "mac": {
@@ -50,12 +50,10 @@
             "nsis-web",
             "zip"
         ],
-        "icon": "icon.ico",
-        "signingHashAlgorithms": [
-            "sha256"
-        ],
-        "publisherName": "Walkover Technologies Pvt Ltd",
-        "legalTrademarks": "Walkover Technologies Pvt Ltd"
+        "icon": "./resources/icon.ico",
+        "publisherName": "",
+        "legalTrademarks": "",
+        "signAndEditExecutable": false
     },
     "nsis": {
         "oneClick": true,
