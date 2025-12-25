@@ -1613,9 +1613,10 @@
                                     class="text-center icon-box"
                                     *ngIf="
                                         (vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields) &&
-                                        (!vm.isPaymentReceipt ||
-                                            (vm.isPaymentReceipt &&
-                                                vm.selectedLedger.voucher.shortCode === 'advance-receipt'))
+                                        (vm.companyTaxesList$ | async)?.length &&
+                                        (!vm.isPaymentReceipt || 
+                                        (vm.isPaymentReceipt && 
+                                        vm.selectedLedger.voucher.shortCode === 'advance-receipt'))
                                     "
                                 >
                                     <label class="icon-plus"></label>
@@ -1623,7 +1624,7 @@
 
                                 <div
                                     class="text-center icon-box"
-                                    *ngIf="vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields"
+                                    *ngIf="!(vm.companyTaxesList$ | async)?.length &&(vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields)"
                                 >
                                     <label class="font-size-16 mt-1">=</label>
                                 </div>
