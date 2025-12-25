@@ -1631,8 +1631,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public onAccountListScroll(scrolledIndex: number): void {
         const totalItems = this.displayAccountList?.length || 0;
         const remainingItems = totalItems - scrolledIndex;
-        // Trigger load more when near the end (within 20 items)
-        if (remainingItems < 20) {
+        // Trigger load more when near the end (within PAGINATION_LIMIT)
+        if (remainingItems < PAGINATION_LIMIT) {
             this.handleScrollEnd();
             this.changeDetectionRef.detectChanges();
         }
