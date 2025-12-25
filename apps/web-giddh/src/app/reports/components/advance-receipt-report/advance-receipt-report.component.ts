@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ComponentFactoryResolver, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { select, Store } from '@ngrx/store';
 import * as dayjs from 'dayjs';
@@ -193,7 +193,6 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
     /** @ignore */
     constructor(
         private changeDetectorRef: ChangeDetectorRef,
-        private componentFactoryResolver: ComponentFactoryResolver,
         private generalAction: GeneralActions,
         private receiptService: ReceiptService,
         private store: Store<AppState>,

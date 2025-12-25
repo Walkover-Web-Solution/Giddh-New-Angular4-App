@@ -741,6 +741,18 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         document.body?.classList?.remove("activity-log-page");
     }
     /**
+     * TrackBy function for selectedFields ngFor to improve Angular 21 performance
+     *
+     * @param index - Index of the item
+     * @param item - The item being tracked
+     * @returns Unique identifier for the item
+     * @memberof ActivityLogsComponent
+     */
+    public trackBySelectedField(index: number, item: any): any {
+        return item?.value || index;
+    }
+
+    /**
      * Adds Z-index class to cdk-overlay element
      *
      * @memberof ActivityLogsComponent

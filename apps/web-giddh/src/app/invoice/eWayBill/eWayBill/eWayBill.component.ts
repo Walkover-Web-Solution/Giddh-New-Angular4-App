@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, ElementRef, ChangeDetectorRef, OnDestroy, Renderer2 } from '@angular/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { InvoiceActions } from '../../../actions/invoice/invoice.actions';
 import { InvoiceService } from '../../../services/invoice.service';
@@ -172,7 +172,8 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         public dialog: MatDialog,
         private invoiceReceiptActions: InvoiceReceiptActions,
         private voucherComponentStore: VoucherComponentStore,
-        private componentStore: EwayBillComponentStore
+        private componentStore: EwayBillComponentStore,
+        private renderer: Renderer2
     ) {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.EwayBillfilterRequest.count = PAGINATION_LIMIT;
@@ -220,7 +221,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
         });
-        document.querySelector('body').classList.add('gst-sidebar-open');
+        this.renderer.addClass(document.body, 'gst-sidebar-open');
         this.loadTaxDetails();
         this.cancelEwaySuccess$.subscribe(p => {
             if (p) {
@@ -654,7 +655,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     public ngOnDestroy(): void {
         this.destroyed$.next(true);
         this.destroyed$.complete();
-        document.querySelector('body').classList.remove('gst-sidebar-open');
+        this.renderer.removeClass(document.body, 'gst-sidebar-open');
         this.asideGstSidebarMenuState = false;
     }
 

@@ -8,7 +8,7 @@
     <hamburger-menu class="hamburger-menu"></hamburger-menu>
     <div class="activity-container p-3">
         <div class="activity-filter-wrap mb-2">
-            <div *ngFor="let selectedField of selectedFields; let i = index" class="filter-wrapper">
+            <div *ngFor="let selectedField of selectedFields; let i = index; trackBy: trackBySelectedField" class="filter-wrapper">
                 <div class="ml-1">
                     <select-field
                         [cssClass]="'form-control border bg-white'"
