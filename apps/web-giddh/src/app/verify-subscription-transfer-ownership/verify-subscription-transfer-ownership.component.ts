@@ -4,9 +4,10 @@ import { ActivatedRoute } from '@angular/router';
 import { combineLatest, Observable, ReplaySubject, takeUntil } from 'rxjs';
 import { SubscriptionComponentStore } from '../subscription/utility/subscription.store';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { COUNTRY_REGION_MAP } from '../app.constant';
+import { COUNTRY_REGION_MAP, Configuration } from '../app.constant';
 import { GeneralService } from '../services/general.service';
 import { ServiceConfig } from '../services/service.config';
+import { environment } from '../../environments/environment';
 
 @Component({
     selector: 'verify-subscription-transfer-ownership',
@@ -65,7 +66,7 @@ export class VerifySubscriptionTransferOwnershipComponent implements OnInit {
    * @memberof VerifySubscriptionTransferOwnershipComponent
    */
     public ngOnInit(): void {
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && response.requestId) {

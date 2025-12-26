@@ -731,7 +731,7 @@ export const Configuration = {
     'OTP_WIDGET_ID': environment.OTP_WIDGET_ID,
     'OTP_TOKEN_AUTH': environment.OTP_TOKEN_AUTH,
     'UkApiUrl': environment.UkApiUrl,
-    'isElectron': environment.isElectron,
+    'isElectron': (typeof window !== 'undefined' && (window as any).isElectron) || environment.isElectron,
     'GOOGLE_CLIENT_ID': environment.GOOGLE_CLIENT_ID,
     'GOOGLE_CLIENT_SECRET': environment.GOOGLE_CLIENT_SECRET,
     'RAZORPAY_KEY': environment.RAZORPAY_KEY
