@@ -24,7 +24,7 @@ import { debounceTime, map, take, takeUntil, filter as rxjsFilter, tap } from 'r
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { ConfirmationModalConfiguration } from '../../../theme/confirmation-modal/confirmation-modal.interface';
 import { LoaderService } from '../../../loader/loader.service';
-import { cloneDeep, filter, last, orderBy, uniqBy } from '../../../lodash-optimized';
+import { cloneDeep, filter as lodashFilter, last, map as lodashMap, orderBy, uniqBy } from '../../../lodash-optimized';
 import { AccountResponse } from '../../../models/api-models/Account';
 import { AdjustAdvancePaymentModal, VoucherAdjustments } from '../../../models/api-models/AdvanceReceiptsAdjust';
 import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
@@ -416,11 +416,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
         this.settingsTagService.GetAllTags().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body?.length > 0) {
-                _.map(response?.body, (tag) => {
+                lodashMap(response?.body, (tag) => {
                     tag.label = tag.name;
                     tag.value = tag.name;
                 });
-                this.tags = _.orderBy(response?.body, 'name');
+                this.tags = orderBy(response?.body, 'name');
             }
         });
 
@@ -633,7 +633,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             if (Number(txn.amount) === 0) {
                 txn.amount = undefined;
             }
-            let lastTxn = last(filter(this.vm.selectedLedger.transactions, p => p.type === type));
+            let lastTxn = last(lodashFilter(this.vm.selectedLedger.transactions, p => p.type === type));
             if (txn?.particular?.uniqueName && lastTxn?.particular?.uniqueName) {
                 let blankTrxnRow = this.vm.blankTransactionItem(type);
                 this.vm.selectedLedger.transactions.push(blankTrxnRow);
@@ -2435,7 +2435,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (this.vm.stockTrxEntry) {
             this.vm.inventoryPriceChanged(this.vm.stockTrxEntry.inventory.rate);
         }
-        this.existingTaxTxn = _.filter(this.vm.selectedLedger.transactions, (o) => o.isTax);
+        this.existingTaxTxn = lodashFilter(this.vm.selectedLedger.transactions, (o) => o.isTax);
         //#endregion
         if (!this.vm.showNewEntryPanel || this.isAdvanceReceipt) {
             // Calculate entry total for credit and debit transactions when UI panel at the bottom to update

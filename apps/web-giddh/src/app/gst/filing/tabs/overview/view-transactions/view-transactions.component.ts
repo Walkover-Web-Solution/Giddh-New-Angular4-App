@@ -21,6 +21,7 @@ import { VoucherTypeEnum } from 'apps/web-giddh/src/app/vouchers/utility/voucher
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { PageEvent } from '@angular/material/paginator';
 import { environment } from 'apps/web-giddh/src/environments/environment';
+import { cloneDeep, find } from '../../../../../lodash-optimized';
 
 export const filterTransaction = {
     entityType: '',
@@ -227,15 +228,15 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
     }
 
     public mapFilters() {
-        let filters = _.cloneDeep(this.filterParam);
+        let filters = cloneDeep(this.filterParam);
         if (this.selectedGst === GstReport.Gstr1) {
             this.displayedColumns.splice(4, 0, 'voucherType');
-            let selected = _.find(this.gstr1entityType, o => o?.value === filters.entityType);
+            let selected = find(this.gstr1entityType, o => o?.value === filters.entityType);
             if (selected) {
                 this.selectedFilter.entityType = selected.label;
             }
         } else {
-            let selected = _.find(this.gstr2entityType, o => o?.value === filters.entityType);
+            let selected = find(this.gstr2entityType, o => o?.value === filters.entityType);
             if (selected) {
                 this.selectedFilter.entityType = selected.label;
             }
@@ -245,18 +246,18 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
             let selected;
             if (this.selectedGst === GstReport.Gstr1) {
                 if (this.filterParam.entityType === 'advance-receipt') {
-                    selected = _.find(this.otherEntityType, o => o?.value === filters.type)
+                    selected = find(this.otherEntityType, o => o?.value === filters.type)
                 } else {
-                    selected = _.find(this.invoiceType, o => o?.value === filters.type);
+                    selected = find(this.invoiceType, o => o?.value === filters.type);
                 }
             } else {
-                selected = _.find(this.gstr2InvoiceType, o => o?.value === filters.type);
+                selected = find(this.gstr2InvoiceType, o => o?.value === filters.type);
             }
             if (selected) {
                 this.selectedFilter.type = selected.label;
             }
         }
-        return this.filterParam = _.cloneDeep(filters);
+        return this.filterParam = cloneDeep(filters);
 
     }
 

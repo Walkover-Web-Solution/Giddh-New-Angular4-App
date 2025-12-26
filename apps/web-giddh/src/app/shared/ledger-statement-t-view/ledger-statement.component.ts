@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input, OnDestroy, OnInit, SimpleChanges, TemplateRef } from "@angular/core";
 import { Store, select } from '@ngrx/store';
+import { ActivatedRoute } from '@angular/router';
 import { AppState } from '../../store';
 import { shareReplay, take, takeUntil } from 'rxjs/operators';
 import { GeneralService } from '../../services/general.service';
@@ -19,7 +20,7 @@ import { cloneDeep, uniq } from "../../lodash-optimized";
 import { LedgerComponentStore } from "../../ledger/ledger.store";
 import { LedgerActions } from "../../actions/ledger/ledger.actions";
 import { MatDialog } from "@angular/material/dialog";
-import { ActivatedRoute } from "@angular/router";
+import { MatMenuTrigger } from '@angular/material/menu';
 import { SettingIntegrationComponentStore } from "../../settings/integration/utility/setting.integration.store";
 import { ICurrencyResponse } from "../../models/api-models/Company";
 import { AccountResponse, AccountResponseV2 } from "../../models/api-models/Account";
@@ -247,7 +248,7 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
                         // branches are loaded
                         if (this.currentOrganizationType === OrganizationType.Branch) {
                             currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                            this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
+                            this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                         } else {
                             currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : '';
                             this.currentBranch = {

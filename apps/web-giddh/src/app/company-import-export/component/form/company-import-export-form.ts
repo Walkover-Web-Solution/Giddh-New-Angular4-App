@@ -18,6 +18,7 @@ import { OrganizationType } from '../../../models/user-login-state';
 import { CompanyImportExportService } from '../../../services/company-import-export-service';
 import { ToasterService } from '../../../services/toaster.service';
 import { saveAs } from 'file-saver';
+import { cloneDeep } from '../../../lodash-optimized';
 
 @Component({
     selector: 'company-import-export-form-component',
@@ -108,7 +109,7 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
 
         this.universalDate$.subscribe((dateObj) => {
             if (dateObj) {
-                let universalDate = _.cloneDeep(dateObj);
+                let universalDate = cloneDeep(dateObj);
                 this.selectedDateRange = { startDate: dayjs(universalDate[0]), endDate: dayjs(universalDate[1]) };
                 this.selectedDateRangeUi = dayjs(universalDate[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(universalDate[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                 this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
@@ -139,7 +140,7 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
                     // Assign the current branch only when it is not selected. This check is necessary as
                     // opening the branch switcher would reset the current selected branch as this subscription is run everytime
                     // branches are loaded
-                    this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
+                    this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
                 }
             } else {
                 if (this.generalService.companyUniqueName) {

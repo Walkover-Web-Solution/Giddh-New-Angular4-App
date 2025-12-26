@@ -199,7 +199,7 @@ export class SubscriptionComponent implements OnInit, OnDestroy {
         this.store.pipe(select(appState => appState.session.user), takeUntil(this.destroyed$)).subscribe((user) => {
             if (user) {
                 this.user = cloneDeep(user.user);
-                this.userSessionId = _.cloneDeep(user.session?.id);
+                this.userSessionId = cloneDeep(user.session?.id);
             }
         });
 

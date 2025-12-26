@@ -15,7 +15,6 @@ import { InstitutionsListComponent } from '../../../shared/bank-integration/inst
 import { GeneralService } from '../../../services/general.service';
 import { BankIntegrationComponentStore } from '../../../shared/bank-integration/utility/bank-integration.store';
 import { BankLinkComponent } from '../../../shared/bank-integration/bank-link/bank-link.component';
-import * as _ from 'lodash';
 import { SettingIntegrationComponentStore } from '../../../settings/integration/utility/setting.integration.store';
 import { BankIntegrationDialogComponent } from '../../../shared/bank-integration/bank-integration-popup/bank-integration-popup.component';
 import { Router } from '@angular/router';

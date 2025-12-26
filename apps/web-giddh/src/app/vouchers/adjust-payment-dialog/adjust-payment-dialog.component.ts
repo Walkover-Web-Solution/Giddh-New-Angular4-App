@@ -1,4 +1,5 @@
 import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { VoucherComponentStore } from '../utility/vouchers.store';
 import { Observable, ReplaySubject, of, takeUntil } from 'rxjs';
 import * as dayjs from 'dayjs';
@@ -370,7 +371,7 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
         if (selectedItem && selectedItem?.value && selectedItem.label && selectedItem.additional) {
             this.adjustVoucherOptions.push({ value: selectedItem?.value, label: selectedItem.label, additional: selectedItem.additional });
         }
-        this.adjustVoucherOptions = _.uniqBy(this.adjustVoucherOptions, (item) => {
+        this.adjustVoucherOptions = uniqBy(this.adjustVoucherOptions, (item) => {
             if (item.label === '-') {
                 return item?.value;
             } else {
@@ -557,7 +558,7 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
                     this.amountInput.inputFocus();
                 }
             }, 200);
-        }   
+        }
     }
 
     /**
@@ -620,7 +621,7 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
             }
         });
 
-        options = _.uniqBy(options, (item) => {
+        options = uniqBy(options, (item) => {
             if (item.label === '-' || item.label === this.commonLocaleData?.app_not_available) {
                 return item.value;
             } else {

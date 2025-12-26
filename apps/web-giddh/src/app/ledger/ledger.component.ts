@@ -15,7 +15,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { CompanyActions } from '../actions/company.actions';
 import { LedgerActions } from '../actions/ledger/ledger.actions';
 import { LoaderService } from '../loader/loader.service';
-import { cloneDeep, filter, find, uniq } from '../lodash-optimized';
+import { cloneDeep, filter, find, uniq, map as lodashMap, uniqBy } from '../lodash-optimized';
 import { AccountResponse, AccountResponseV2 } from '../models/api-models/Account';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ICurrencyResponse, TaxResponse } from '../models/api-models/Company';
@@ -2698,10 +2698,10 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public getInvoiceLists(request) {
         this.invoiceList = [];
         this.ledgerService.GetInvoiceList(request).pipe(takeUntil(this.destroyed$)).subscribe((res: any) => {
-            _.map(res?.body?.invoiceList, (o) => {
+            lodashMap(res?.body?.invoiceList, (o) => {
                 this.invoiceList.push({ label: o.invoiceNumber, value: o.invoiceNumber, isSelected: false });
             });
-            _.uniqBy(this.invoiceList, 'value');
+            uniqBy(this.invoiceList, 'value');
         });
     }
 

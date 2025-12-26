@@ -336,7 +336,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
                     // branches are loaded
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
+                        this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName)) || this.currentBranch;
                     } else {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany?.uniqueName : '';
                         this.currentBranch = {
@@ -380,7 +380,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
         this.showAdvanceSearchIcon = false;
         this.store.pipe(select(state => state.session.applicationDate), takeUntil(this.destroyed$)).subscribe((dateObj) => {
             if (dateObj) {
-                let universalDate = _.cloneDeep(dateObj);
+                let universalDate = cloneDeep(dateObj);
 
                 this.store.pipe(select(state => state.session.todaySelected), take(1)).subscribe(response => {
                     this.todaySelected = response;
@@ -441,7 +441,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     }
 
     public onSelectEwayDownload(eway: Result) {
-        this.selectedEway = _.cloneDeep(eway);
+        this.selectedEway = cloneDeep(eway);
         this.invoiceService.DownloadEwayBills(this.selectedEway.ewbNo).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === 'success') {
                 let blob = this.generalService.base64ToBlob(response.body.data, 'application/pdf', 512);
@@ -453,7 +453,7 @@ export class EWayBillComponent implements OnInit, OnDestroy {
     }
 
     public onSelectEwayDetailedDownload(ewayItem: Result) {
-        this.selectedEway = _.cloneDeep(ewayItem);
+        this.selectedEway = cloneDeep(ewayItem);
         this.invoiceService.DownloadDetailedEwayBills(this.selectedEway.ewbNo).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === 'success') {
                 let blob = this.generalService.base64ToBlob(response.body.data, 'application/pdf', 512);

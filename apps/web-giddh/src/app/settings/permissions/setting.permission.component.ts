@@ -8,7 +8,7 @@ import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/c
 import { AppState } from '../../store';
 import { ReplaySubject } from 'rxjs';
 import { ShareRequestForm } from '../../models/api-models/Permission';
-import { forIn } from 'apps/web-giddh/src/app/lodash-optimized';
+import { forIn, sortBy, cloneDeep, groupBy } from 'apps/web-giddh/src/app/lodash-optimized';
 import { MatDialog } from '@angular/material/dialog';
 import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
@@ -61,8 +61,8 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         this.store.pipe(select(state => state.settings.usersWithCompanyPermissions), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                let data = _.cloneDeep(response);
-                let sortedArr = _.groupBy(this.prepareDataForUI(data), 'emailId');
+                let data = cloneDeep(response);
+                let sortedArr = groupBy(this.prepareDataForUI(data), 'emailId');
                 let arr = [];
                 forIn(sortedArr, (value) => {
                     if (value[0].emailId === this.loggedInUserEmail) {
@@ -70,7 +70,7 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
                     }
                     arr.push({ name: value[0].userName, rows: value });
                 });
-                this.usersList = _.sortBy(arr, ['name']);
+                this.usersList = sortBy(arr, ['name']);
             }
         });
     }

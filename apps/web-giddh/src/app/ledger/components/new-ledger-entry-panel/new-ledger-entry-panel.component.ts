@@ -7,7 +7,7 @@ import { filter, map, take, takeUntil, tap } from 'rxjs/operators';
 import * as dayjs from 'dayjs';
 import { ConfirmationModalConfiguration } from '../../../theme/confirmation-modal/confirmation-modal.interface';
 import { LoaderService } from '../../../loader/loader.service';
-import { cloneDeep, forEach, sumBy } from '../../../lodash-optimized';
+import { cloneDeep, forEach, map as lodashMap, orderBy, sumBy } from '../../../lodash-optimized';
 import { AdjustAdvancePaymentModal, VoucherAdjustments } from '../../../models/api-models/AdvanceReceiptsAdjust';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
@@ -392,11 +392,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
         this.settingsTagService.GetAllTags().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body?.length > 0) {
-                _.map(response?.body, (tag) => {
+                lodashMap(response?.body, (tag) => {
                     tag.label = tag.name;
                     tag.value = tag.name;
                 });
-                this.tags = _.orderBy(response?.body, 'name');
+                this.tags = orderBy(response?.body, 'name');
             }
         });
 

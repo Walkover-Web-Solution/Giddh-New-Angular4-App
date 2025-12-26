@@ -6,7 +6,7 @@ import { take, takeUntil } from 'rxjs/operators';
 import { CompanyActions } from '../../actions/company.actions';
 import { GeneralActions } from '../../actions/general/general.actions';
 import { GroupWithAccountsAction } from '../../actions/groupwithaccounts.actions';
-import { slice } from '../../lodash-optimized';
+import { clone, cloneDeep, each, filter, find, forEach, includes, isEmpty, isEqual, isNull, isUndefined, map, orderBy, remove, slice, some, sortBy, uniq } from '../../lodash-optimized';
 import { CompanyResponse, Organization } from '../../models/api-models/Company';
 import { SalesActions } from '../../actions/sales/sales.action';
 import { AccountResponse, AccountResponseV2, AddAccountRequest } from '../../models/api-models/Account';
@@ -287,7 +287,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 return;
             }
 
-            let orderedCompanies = _.orderBy(companies, 'name');
+            let orderedCompanies = orderBy(companies, 'name');
             this.companyList = orderedCompanies;
         });
         this.updateIndexDbSuccess$.subscribe(res => {

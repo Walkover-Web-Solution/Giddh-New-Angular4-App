@@ -487,7 +487,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                     // branches are loaded
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
+                        this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
                     } else {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : "";
                         this.currentBranch = {
@@ -496,7 +496,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                             uniqueName: this.activeCompany ? this.activeCompany.uniqueName : "",
                         };
                     }
-                    this.currentBranchData = _.cloneDeep(this.currentBranch);
+                    this.currentBranchData = cloneDeep(this.currentBranch);
                 }
             } else {
                 if (this.generalService.companyUniqueName) {

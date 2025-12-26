@@ -19,7 +19,7 @@ import { createSelector } from 'reselect';
 import * as dayjs from 'dayjs';
 import { AuthenticationService } from '../../services/authentication.service';
 import { ICompAidata, IUlist } from '../../models/interfaces/ulist.interface';
-import { clone, cloneDeep, find } from '../../lodash-optimized';
+import { clone, cloneDeep, find, orderBy } from '../../lodash-optimized';
 import { CompAidataModel } from '../../models/db';
 import { AccountResponse } from 'apps/web-giddh/src/app/models/api-models/Account';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
@@ -448,7 +448,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 return;
             }
 
-            let orderedCompanies = _.orderBy(companies, 'name');
+            let orderedCompanies = orderBy(companies, 'name');
             this.companyList = orderedCompanies;
             this.companyListForFilter = orderedCompanies;
             this.companies$ = observableOf(orderedCompanies);
