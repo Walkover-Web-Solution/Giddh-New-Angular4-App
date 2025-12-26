@@ -53,6 +53,7 @@ import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 import {
     AccountType,
     BriedAccountsGroup,
+    InteractionType,
     OtherTaxTypeEnum,
     OtherTaxTypes,
     SearchType,
@@ -156,6 +157,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     @ViewChild('addNewParticular') addNewParticular!: ElementRef<HTMLSpanElement>;
     /** Reference to the "Add new row/line" span element for focusing */
     @ViewChild('addNewDeposit') addNewDeposit!: ElementRef<HTMLSpanElement>;
+    /** Reference to the "Add new row/line" span element for focusing */
+    @ViewChild('customerVendorDropdown') customerVendorDropdown!: ReactiveDropdownFieldComponent;
     /**  This will use for dayjs */
     public dayjs: any = dayjs;
     /** Holds current voucher type */
@@ -447,6 +450,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public startTime: number = 0;
     /**Hold barcode scan end time */
     public endTime: number = 0;
+    /** Tracks the last interaction type for conditional focus behavior */
+    public lastInteraction: InteractionType | null = null;
+    /** Timestamp of last interaction to prevent rapid overrides */
+    private lastInteractionTimestamp: number = 0;
+    /** Global event listeners for cleanup */
+    private globalKeydownListener?: (event: KeyboardEvent) => void;
+    private globalMousedownListener?: () => void;
+    private globalClickListener?: () => void;
     /**Hold barcode scan total time */
     public totalTime: number = 0;
     /** This will hold barcode value*/
@@ -670,6 +681,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public ngOnInit(): void {
+        // Set up global interaction tracking
+        this.setupGlobalInteractionTracking();
+        
         // Close side menu on voucher create/update page
         this.store.dispatch(this.generalActions.openSideMenu(false));
         this.getVoucherVersion();
@@ -1355,6 +1369,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     if (voucherDetails.isCopyVoucher) {
                         setTimeout(() => {
                             this.copyVoucherElement?.nativeElement?.focus();
+                        }, 100);
+                    } else if (this.isUpdateMode) {
+                         setTimeout(() => {
+                            this.customerVendorDropdown.focusInputField();
                         }, 100);
                     } else {
                         this.openAccountDropdown = false;
@@ -3946,11 +3964,31 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
+     * Sets interaction type with timestamp protection
+     *
+     * @private
+     * @param {InteractionType} type - Interaction type
+     * @param {string} source - Source of the interaction for debugging
+     * @memberof VoucherCreateComponent
+     */
+    private setInteractionType(type: InteractionType, source: string): void {
+        const now = Date.now();
+        const timeSinceLastInteraction = now - this.lastInteractionTimestamp;
+        
+        // If this is a keyboard interaction, always accept it (keyboard has priority)
+        // If this is a mouse interaction, only accept it if enough time has passed or if the last interaction wasn't keyboard
+        if (type === InteractionType.KEYBOARD || (type === InteractionType.MOUSE && (this.lastInteraction !== InteractionType.KEYBOARD || timeSinceLastInteraction > 500))) {
+            this.lastInteraction = type;
+            this.lastInteractionTimestamp = now;
+        }
+    }
+
+    /**
      * Voucher date change callback
      *
      * @memberof VoucherCreateComponent
      */
-    public onChangeVoucherDate(): void {
+    public onChangeVoucherDate(): void {        
         if (this.isMultiCurrencyVoucher) {
             this.getExchangeRate(
                 this.account.baseCurrency,
@@ -3985,27 +4023,33 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             });
             dialogRef.afterClosed().subscribe((response) => {
                 this.handleDateChangeConfirmation(response);
-                // Use NgZone for optimal Angular performance
+                // Conditional focus based on last interaction type
                 this.ngZone.runOutsideAngular(() => {
                     setTimeout(() => {
                         this.ngZone.run(() => {
                             if (this.voucherDatePicker) {
-                                this.voucherDatePicker.focus();
-                                
-                                setTimeout(() => {
-                                    const datePickerInput = this.voucherDatePicker.dateInput?.nativeElement;
-                                    if (datePickerInput) {
-                                        const enterEvent = new KeyboardEvent('keydown', {
-                                            key: 'Enter',
-                                            code: 'Enter',
-                                            keyCode: 13,
-                                            which: 13,
-                                            bubbles: true,
-                                            cancelable: true
-                                        });
-                                        datePickerInput.dispatchEvent(enterEvent);
-                                    }
-                                }, 100);
+                                if (this.lastInteraction === InteractionType.KEYBOARD) {
+                                    // Keyboard interaction - move to next element
+                                    this.voucherDatePicker.focus();
+                                    
+                                    setTimeout(() => {
+                                        const datePickerInput = this.voucherDatePicker.dateInput?.nativeElement;
+                                        if (datePickerInput) {
+                                            const enterEvent = new KeyboardEvent('keydown', {
+                                                key: 'Enter',
+                                                code: 'Enter',
+                                                keyCode: 13,
+                                                which: 13,
+                                                bubbles: true,
+                                                cancelable: true
+                                            });
+                                            datePickerInput.dispatchEvent(enterEvent);
+                                        }
+                                    }, 100);
+                                } else {
+                                    // Mouse or programmatic interaction - stay on datepicker
+                                    this.voucherDatePicker.focus();
+                                }
                             }
                         });
                     });
@@ -4084,7 +4128,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public handleHsnSacMenuClosed(reason: MenuCloseReason, entry: FormGroup): void {
         // Focus to description field after closing HSN/SAC menu
         setTimeout(() => {
-            if (this.inputDescription?.nativeElement) {
+            if (this.lastInteraction === InteractionType.KEYBOARD && this.inputDescription?.nativeElement) {
                 this.inputDescription.nativeElement.focus();
             }
         }, 150);
@@ -4140,7 +4184,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.activeDepositIndex = 0;
             }, 50);
             return;
-        } else if (deposits?.length > 1 && this.addNewDeposit.nativeElement) {
+        } else if (this.lastInteraction === InteractionType.KEYBOARD && deposits?.length > 1 && this.addNewDeposit.nativeElement) {
             setTimeout(() => {
                 this.addNewDeposit.nativeElement.focus();
             }, 100);
@@ -4164,7 +4208,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
         this.checkIfEntriesHasStock();
         this.calculateVoucherTotals();
-        if (entries.length >= 1 && this.addNewParticular.nativeElement) {
+        if (this.lastInteraction === InteractionType.KEYBOARD && entries.length >= 1 && this.addNewParticular.nativeElement) {
             setTimeout(() => {
                 this.addNewParticular.nativeElement.focus();
             }, 100);
@@ -7219,6 +7263,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private openDialogWithFocusManagement<T>(dialogOpener: () => MatDialogRef<T>): MatDialogRef<T> {
+        if (this.lastInteraction !== InteractionType.KEYBOARD) {
+            return dialogOpener();
+        }
         // Store current focus
         this.lastFocusedElement = document.activeElement as HTMLElement;
         
@@ -7408,5 +7455,33 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             value: template?.uniqueName || template?.templateType,
             label: template?.name || template?.templateType
         }));
+    }
+
+    /**
+     * Sets up global interaction tracking for the entire page
+     *
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private setupGlobalInteractionTracking(): void {
+        // Create event listeners with proper binding
+        this.globalKeydownListener = (event: KeyboardEvent) => {
+            if (['Enter', ' ', 'ArrowDown', 'ArrowUp', 'Tab', 'Escape'].includes(event.key)) {
+                this.setInteractionType(InteractionType.KEYBOARD, 'Global keydown');
+            }
+        };
+
+        this.globalMousedownListener = () => {
+            this.setInteractionType(InteractionType.MOUSE, 'Global mousedown');
+        };
+
+        this.globalClickListener = () => {
+            this.setInteractionType(InteractionType.MOUSE, 'Global click');
+        };
+
+        // Add event listeners to document
+        document.addEventListener('keydown', this.globalKeydownListener);
+        document.addEventListener('mousedown', this.globalMousedownListener);
+        document.addEventListener('click', this.globalClickListener);
     }
 }
