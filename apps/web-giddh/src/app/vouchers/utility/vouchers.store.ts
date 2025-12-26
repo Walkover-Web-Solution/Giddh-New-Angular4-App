@@ -32,7 +32,7 @@ export interface VoucherState {
     invoiceSettings: InvoiceSetting;
     lastVouchers: LastVouchersResponse;
     createdTemplates: CustomTemplateResponse[];
-    createdTemplatesIsLoading: boolean;
+    createdTemplatesIsLoading: boolean | null;
     stockVariants: any;
     barcodeData: any;
     exchangeRate: number;
