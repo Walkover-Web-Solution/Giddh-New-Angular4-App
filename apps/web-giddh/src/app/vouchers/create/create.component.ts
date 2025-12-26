@@ -7405,17 +7405,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         
         return templates.map(template => ({
             value: template?.uniqueName || template?.templateType,
-            label: template?.name || template?.templateType,
-            additional: {
-                templateType: template?.templateType,
-                uniqueName: template?.uniqueName,
-                name: template?.name,
-                sections: template?.sections,
-                templateColor: template?.templateColor,
-                tableColor: template?.tableColor,
-                font: template?.font,
-                fontSize: template?.fontSize
-            }
+            label: template?.name || template?.templateType
         }));
     }
 }
