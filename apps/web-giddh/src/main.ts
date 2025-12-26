@@ -6,6 +6,7 @@ import { AppModule } from './app/app.module';
 // Import environment.generated.ts early to ensure global constants are set
 import './environments/environment.generated';
 import { environment } from './environments/environment.generated';
+import { EnvironmentValidatorService } from './app/services/environment-validator.service';
 
 // Initialize global variables from environment to prevent runtime errors
 // Detect if running in Electron environment
@@ -123,6 +124,19 @@ if ((window as any).environment?.production) {
 }
 
 platformBrowserDynamic().bootstrapModule(AppModule)
+  .then(moduleRef => {
+    // Initialize environment validation after app bootstrap
+    const validator = moduleRef.injector.get(EnvironmentValidatorService);
+    const status = validator.getValidationStatus();
+
+    if (status.status === 'error') {
+      console.error('🚨 Environment validation failed:', status.message);
+    } else if (status.status === 'warning') {
+      console.warn('⚠️ Environment validation warnings:', status.message);
+    }
+
+    return moduleRef;
+  })
   .catch(err => {
     // Only log non-Angular 21 compatibility errors
     if (!err.message ||

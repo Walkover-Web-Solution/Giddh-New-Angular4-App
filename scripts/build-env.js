@@ -124,6 +124,10 @@ export const environment: Environment = {
     OTP_WIDGET_ID: '${envConfig.OTP_WIDGET_ID}',
     OTP_TOKEN_AUTH: '${envConfig.OTP_TOKEN_AUTH}',
     RAZORPAY_KEY: '${envConfig.RAZORPAY_KEY}',
+    PRODUCTION_ENV: ${envConfig.PRODUCTION_ENV},
+    STAGING_ENV: ${envConfig.STAGING_ENV},
+    LOCAL_ENV: ${envConfig.LOCAL_ENV},
+    TEST_ENV: ${envConfig.TEST_ENV},
     /** Angular debug tools in the dev console
      * https://github.com/angular/angular/blob/86405345b781a9dc2438c0fbe3e9409245647019/TOOLS_JS.md
      * @param modRef
@@ -137,6 +141,15 @@ export const environment: Environment = {
     },
     ENV_PROVIDERS: []
 };
+
+// Set global variables for backward compatibility
+(window as any).PRODUCTION_ENV = environment.production;
+(window as any).STAGING_ENV = ${envConfig.STAGING_ENV};
+(window as any).LOCAL_ENV = ${envConfig.LOCAL_ENV};
+(window as any).TEST_ENV = ${envConfig.TEST_ENV};
+(window as any).AppUrl = environment.AppUrl;
+(window as any).ApiUrl = environment.ApiUrl;
+(window as any).isElectron = environment.isElectron;
 `;
 
 // Write the generated environment file

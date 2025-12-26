@@ -8,10 +8,14 @@ import ElectronGoogleOAuth2 from '@getstation/electron-google-oauth2';
 let windowManager: WindowManager = null;
 let STAGING_ENV = false;
 let TEST_ENV = false;
-let LOCAL_ENV = false;
+let LOCAL_ENV = true;
 let PRODUCTION_ENV = false;
-let APP_URL = '';
+let APP_URL = 'http://localhost:4200/';  // Use port 4200 for Electron dev
 let APP_FOLDER = '';
+
+// Electron-specific configuration
+process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = 'true';
+process.env.NODE_ENV = 'development';
 
 app.on("ready", () => {
     ipcMain.on("log.error", (event: any, arg: any) => {

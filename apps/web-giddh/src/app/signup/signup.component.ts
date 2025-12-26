@@ -28,7 +28,8 @@ import { ToasterService } from "../services/toaster.service";
 import { AuthenticationService } from "../services/authentication.service";
 import { GeneralService } from "../services/general.service";
 import { ServiceConfig } from "../services/service.config";
-import { environment } from "../../environments/environment";
+import { environment } from "../../environments/environment.generated";
+import { EnvironmentService } from "../services/environment.service";
 
 declare var initSendOTP: any;
 
@@ -89,7 +90,7 @@ export class SignupComponent implements OnInit, OnDestroy {
     public imgPath: string = "";
 
     // tslint:disable-next-line:no-empty
-    constructor(private fb: UntypedFormBuilder,
+    constructor(private _fb: UntypedFormBuilder,
         private store: Store<AppState>,
         private loginAction: LoginActions,
         private authService: AuthService,
@@ -98,11 +99,12 @@ export class SignupComponent implements OnInit, OnDestroy {
         private toaster: ToasterService,
         private authenticationService: AuthenticationService,
         private ngZone: NgZone,
-        @Inject(ServiceConfig) private serviceConfig,
         private generalService: GeneralService,
-        private dialog: MatDialog
+        @Inject(ServiceConfig) private serviceConfig,
+        private dialog: MatDialog,
+        private environmentService: EnvironmentService
     ) {
-        this.urlPath = isElectron ? "" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER;
+        this.urlPath = this.environmentService.isElectron ? "" : (this.serviceConfig.AppUrl || this.environmentService.appUrl) + this.environmentService.appFolder;
         this.giddhDomainUrl = this.serviceConfig.AppUrl || 'https://giddh.com';
         this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {
             return state.login.isLoginWithEmailInProcess;
@@ -149,28 +151,31 @@ export class SignupComponent implements OnInit, OnDestroy {
 
     // tslint:disable-next-line:no-empty
     public ngOnInit() {
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        // Use EnvironmentService for consistent asset path handling
+        this.imgPath = this.environmentService.getImagePath('');
+        this.urlPath = this.environmentService.isElectron ? "" : "";
+        this.giddhDomainUrl = this.serviceConfig.AppUrl || this.environmentService.appUrl || 'https://giddh.com';
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
-        this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-white-logo.svg';
+        this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.environmentService.getImagePath('giddh-white-logo.svg');
         this.generateRandomBanner();
-        this.mobileVerifyForm = this.fb.group({
+        this.mobileVerifyForm = this._fb.group({
             country: ["India", [Validators.required]],
             mobileNumber: ["", [Validators.required]],
             otp: ["", [Validators.required]]
         });
 
-        this.emailVerifyForm = this.fb.group({
+        this.emailVerifyForm = this._fb.group({
             email: ["", [Validators.required, Validators.email]],
             token: ["", Validators.required]
         });
-        this.twoWayOthForm = this.fb.group({
+        this.twoWayOthForm = this._fb.group({
             otp: ["", [Validators.required]]
         });
-        this.signUpWithPasswdForm = this.fb.group({
+        this.signUpWithPasswdForm = this._fb.group({
             email: ["", [Validators.required, Validators.email]],
             password: ["", [Validators.required, Validators.minLength(8), Validators.maxLength(20), Validators.pattern("^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$^+=!*()@%&]).{8,20}$")]]
         });
-        this.signupVerifyForm = this.fb.group({
+        this.signupVerifyForm = this._fb.group({
             email: ["", [Validators.required, Validators.email]],
             verificationCode: ["", Validators.required]
         });

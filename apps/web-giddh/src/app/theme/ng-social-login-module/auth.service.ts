@@ -67,6 +67,11 @@ export class AuthService {
                         resolve(user);
                         this._user = user;
                         this._authState.next(user);
+                        this.loadingService.hide();
+                    }).catch((error) => {
+                        console.error('Google login error:', error);
+                        reject(error);
+                        this.loadingService.hide();
                     });
                 } else {
                     providerObject.initialize().then(() => {
@@ -77,10 +82,20 @@ export class AuthService {
                                 resolve(u);
                                 this._user = u;
                                 this._authState.next(u);
+                                this.loadingService.hide();
+                            }).catch((error) => {
+                                console.error('Google login error after initialization:', error);
+                                reject(error);
+                                this.loadingService.hide();
                             });
                         } else {
-                            reject('something went wrong');
+                            reject('Google Auth initialization failed');
+                            this.loadingService.hide();
                         }
+                    }).catch((initError) => {
+                        console.error('Google Auth initialization error:', initError);
+                        reject(initError);
+                        this.loadingService.hide();
                     });
                 }
             } else {

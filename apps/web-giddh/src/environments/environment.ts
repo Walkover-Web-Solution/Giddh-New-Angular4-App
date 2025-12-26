@@ -9,9 +9,9 @@ Error.stackTraceLimit = Infinity;
 
 export const environment: Environment = {
     production: false,
-    AppUrl: 'http://localhost:3000/',
-    ApiUrl: 'https://apitest.giddh.com/',
-    UkApiUrl: 'https://gbapi.giddh.com/',
+    AppUrl: '',
+    ApiUrl: '',
+    UkApiUrl: '',
     isElectron: false,
     APP_FOLDER: '',
     showDevModule: true,
@@ -21,6 +21,10 @@ export const environment: Environment = {
     OTP_WIDGET_ID: '',
     OTP_TOKEN_AUTH: '',
     RAZORPAY_KEY: '',
+    PRODUCTION_ENV: false,
+    STAGING_ENV: false,
+    LOCAL_ENV: true,
+    TEST_ENV: false,
     /** Angular debug tools in the dev console
      * https://github.com/angular/angular/blob/86405345b781a9dc2438c0fbe3e9409245647019/TOOLS_JS.md
      * @param modRef

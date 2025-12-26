@@ -24,7 +24,9 @@ export class GoogleLoginProvider extends BaseLoginProvider {
                     this.auth2 = gapi.auth2.init({
                         client_id: this.clientId,
                         scope: 'email',
-                        prompt: 'select_account'
+                        prompt: 'select_account',
+                        cookiepolicy: 'single_host_origin',
+                        ux_mode: 'popup'
                     });
 
                     this.auth2.then(() => {
@@ -51,10 +53,21 @@ export class GoogleLoginProvider extends BaseLoginProvider {
 
     public signIn(): Promise<SocialUser> {
         return new Promise((resolve, reject) => {
-            const promise = this.auth2.signIn();
-            promise.then(() => {
-                resolve(this.drawUser());
-            });
+            if (!this.auth2) {
+                reject(new Error('Google Auth2 not initialized. Please try again.'));
+                return;
+            }
+
+            try {
+                const promise = this.auth2.signIn();
+                promise.then(() => {
+                    resolve(this.drawUser());
+                }).catch((error: any) => {
+                    reject(error);
+                });
+            } catch (error) {
+                reject(error);
+            }
         });
     }
 

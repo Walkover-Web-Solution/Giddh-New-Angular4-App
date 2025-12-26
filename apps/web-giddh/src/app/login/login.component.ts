@@ -114,9 +114,10 @@ export class LoginComponent implements OnInit, OnDestroy {
         @Inject(ServiceConfig) private serviceConfig,
         private dialog: MatDialog
     ) {
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
-        this.urlPath = Configuration.isElectron ? "" : (this.serviceConfig.AppUrl || (this.serviceConfig.AppUrl || environment.AppUrl)) + environment.APP_FOLDER;
-        this.giddhDomainUrl = this.serviceConfig.AppUrl || 'https://giddh.com';
+        // Use relative paths for assets to avoid port/domain issues
+        this.imgPath = 'assets/images/';
+        this.urlPath = Configuration.isElectron ? "" : "";
+        this.giddhDomainUrl = this.serviceConfig.AppUrl || environment.AppUrl || 'https://giddh.com';
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
         this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-white-logo.svg';
         this.isLoginWithEmailInProcess$ = this.store.pipe(select(state => {

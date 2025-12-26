@@ -43,6 +43,8 @@ import { IS_ELECTRON_WA, APP_FOLDER_WA, APP_URL_WA } from './app.constant';
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { ROUTES } from './app.routes';
 import { DynamicThemeService } from './shared/services/dynamic-theme.service';
+import { WhiteLabelService } from './services/white-label.service';
+import { EnvironmentService } from './services/environment.service';
 import { DecoratorsModule } from './decorators/decorators.module';
 import { ExceptionLogService } from './services/exception-log.service';
 import { GiddhHttpInterceptor } from './services/http.interceptor';
@@ -562,31 +564,25 @@ if (giddhRegion === "UK") {
     localStorage.setItem("Country-Region", "GL");
 }
 
-// GetServiceConfig returns a configuration object with API URLs, app URLs, and various authentication tokens, using whiteLabelConfig or default Configuration values.
+// GetServiceConfig returns a configuration object with API URLs, app URLs, and various authentication tokens, using whiteLabelConfig or EnvironmentService fallback values.
 export function getServiceConfig(): any {
+    // Create service instances
+    const environmentService = new EnvironmentService();
+    const whiteLabelService = new WhiteLabelService(environmentService);
+
+    // Set the white label configuration if it exists
+    if (whiteLabelConfig) {
+        whiteLabelService.setWhiteLabelConfig(whiteLabelConfig);
+    }
+
     // Apply dynamic theme if white label configuration exists
     if (whiteLabelConfig?.body?.giddhWhiteLabel?.theme) {
         const dynamicThemeService = new DynamicThemeService();
         dynamicThemeService.applyThemeFromWhiteLabel(whiteLabelConfig);
     }
 
-    return {
-        apiUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain ? `${whiteLabelConfig.body.giddhWhiteLabel.apiDomain}/` :
-            (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
-        ApiUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain ? `${whiteLabelConfig.body.giddhWhiteLabel.apiDomain}/` :
-            (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
-        appUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.domainName ? `${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` : Configuration.AppUrl,
-        AppUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.domainName ? `${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` : Configuration.AppUrl,
-        PORTAL_URL: whiteLabelConfig?.body?.giddhWhiteLabel?.portalDomain || Configuration.PORTAL_URL,
-        OTP_WIDGET_ID: whiteLabelConfig?.body?.otpWidgetIdWeb || Configuration.OTP_WIDGET_ID,
-        OTP_TOKEN_AUTH: whiteLabelConfig?.body?.otpWidgetTokenWeb || Configuration.OTP_TOKEN_AUTH,
-        GOOGLE_CLIENT_ID: whiteLabelConfig?.body?.googleClientId || Configuration.GOOGLE_CLIENT_ID,
-        GOOGLE_CLIENT_SECRET: whiteLabelConfig?.body?.googleClientSecret || Configuration.GOOGLE_CLIENT_SECRET,
-        OTP_WIDGET_ID_NEW: whiteLabelConfig?.body?.otpWidgetIdElectron || '33686b716134333831313239',
-        OTP_TOKEN_AUTH_NEW: whiteLabelConfig?.body?.otpWidgetTokenElectron || '205968TmXguUAwoD633af103P1',
-        RAZORPAY_KEY: whiteLabelConfig?.body?.razorpayPaymentDetails?.keyId || Configuration.RAZORPAY_KEY,
-        _
-    };
+    // Use WhiteLabelService to get configuration with proper fallbacks
+    return whiteLabelService.getServiceConfig();
 }
 
 // GetServiceConfigAfterInit returns an async function that first fetches white-label data and then retrieves the service configuration.
