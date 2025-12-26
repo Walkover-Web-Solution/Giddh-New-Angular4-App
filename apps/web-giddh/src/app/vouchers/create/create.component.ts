@@ -246,8 +246,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public warehouses: Array<any>;
     /** Holds company branches */
     public branches: Array<any>;
-    /** Tracks the last template type sent to getCreatedTemplates API */
-    private lastTemplateType: string = "";
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Holds invoice type */
@@ -2195,7 +2193,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private getCreatedTemplates(): void {
-        this.componentStore.createdTemplates$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+        this.componentStore.createdTemplates$.pipe(distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe((response) => {
             let templateType = VoucherTypeEnum.invoice;
             if (this.voucherType === VoucherTypeEnum.purchase) {
                 templateType = VoucherTypeEnum.purchase_bill;
@@ -2203,9 +2201,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 templateType = VoucherTypeEnum.voucher;
             }
             
-            if (!response || this.lastTemplateType !== templateType) {
-                this.lastTemplateType = templateType;
-                this.componentStore.getCreatedTemplates(templateType);
+            if (!response) {
+                this.componentStore.createdTemplatesIsLoading$.pipe(take(1)).subscribe((isLoading) => {
+                    if (!isLoading) {
+                        this.componentStore.getCreatedTemplates(templateType);
+                    }
+                });
             } else {
                 // Convert templates to IOption format for dropdown
                 const templateOptions = this.convertTemplatesToOptions(response);

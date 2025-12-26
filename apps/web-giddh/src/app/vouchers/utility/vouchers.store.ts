@@ -32,6 +32,7 @@ export interface VoucherState {
     invoiceSettings: InvoiceSetting;
     lastVouchers: LastVouchersResponse;
     createdTemplates: CustomTemplateResponse[];
+    createdTemplatesIsLoading: boolean;
     stockVariants: any;
     barcodeData: any;
     exchangeRate: number;
@@ -93,6 +94,7 @@ const DEFAULT_STATE: VoucherState = {
     invoiceSettings: null,
     lastVouchers: null,
     createdTemplates: null,
+    createdTemplatesIsLoading: null,
     stockVariants: null,
     barcodeData: null,
     exchangeRate: null,
@@ -167,6 +169,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     public discountsList$ = this.select((state) => state.discountsList);
     public voucherSettings$ = this.select((state) => state.invoiceSettings);
     public createdTemplates$ = this.select((state) => state.createdTemplates);
+    public createdTemplatesIsLoading$ = this.select((state) => state.createdTemplatesIsLoading);
     public lastVouchers$ = this.select((state) => state.lastVouchers);
     public stockVariants$ = this.select((state) => state.stockVariants);
     public exchangeRate$ = this.select((state) => state.exchangeRate);
@@ -352,17 +355,20 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
     readonly getCreatedTemplates = this.effect((data: Observable<string>) => {
         return data.pipe(
             switchMap((req) => {
+                this.patchState({ createdTemplatesIsLoading: true });
                 return this.voucherService.getAllCreatedTemplates(req).pipe(
                     tapResponse(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
-                                createdTemplates: res?.body ?? []
+                                createdTemplates: res?.body ?? [],
+                                createdTemplatesIsLoading: false
                             });
                         },
                         (error: any) => {
                             this.toaster.showSnackBar("error", error);
                             return this.patchState({
-                                createdTemplates: []
+                                createdTemplates: [],
+                                createdTemplatesIsLoading: false
                             });
                         }
                     ),
@@ -1278,7 +1284,8 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                     vouchersForAdjustment: null,
                     voucherListForCreditDebitNote: null,
                     pendingPurchaseOrders: null,
-                    exchangeRate: null
+                    exchangeRate: null,
+                    createdTemplates: null
                 });
                 return of(null);
             })
