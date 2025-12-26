@@ -16,6 +16,10 @@
         </script>
         <!-- End Google Tag Manager -->
         <script type="text/javascript">
+            // Electron production environment configuration
+            window.isElectron = true;
+        </script>
+        <script type="text/javascript">
             // Add preconnect for domainName extracted from cookie
             window.onload = function () {
                 let whiteLabelConfig = JSON.parse(localStorage.getItem("whiteLabel"));

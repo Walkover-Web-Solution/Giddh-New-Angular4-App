@@ -114,8 +114,8 @@ export class LoginComponent implements OnInit, OnDestroy {
         @Inject(ServiceConfig) private serviceConfig,
         private dialog: MatDialog
     ) {
-        // Use relative paths for assets to avoid port/domain issues
-        this.imgPath = 'assets/images/';
+        // Use relative paths for assets to avoid port/domain issues in Electron
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         this.urlPath = Configuration.isElectron ? "" : "";
         this.giddhDomainUrl = this.serviceConfig.AppUrl || environment.AppUrl || 'https://giddh.com';
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
@@ -420,10 +420,10 @@ export class LoginComponent implements OnInit, OnDestroy {
             //  web social authentication
             this.store.dispatch(this.loginAction.resetSocialLogoutAttempt());
             if (provider === "google") {
-
-                this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
-
+                // Only call authService.signIn for web (non-Electron) environments
                 if (!Configuration.isElectron) {
+                    this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
+
                     setTimeout(() => {
                         this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
                     }, 500);

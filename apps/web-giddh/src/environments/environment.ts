@@ -12,7 +12,7 @@ export const environment: Environment = {
     AppUrl: '',
     ApiUrl: '',
     UkApiUrl: '',
-    isElectron: false,
+    isElectron: (typeof window !== 'undefined' && (window as any).isElectron) || false,
     APP_FOLDER: '',
     showDevModule: true,
     PORTAL_URL: '',

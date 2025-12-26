@@ -14,10 +14,10 @@
                 "build": {
                     "builder": "@angular-devkit/build-angular:browser",
                     "options": {
-                        "index": "apps/web-giddh/src/index.html",
+                        "index": "apps/web-giddh/src/index.electron.html",
                         "main": "apps/web-giddh/src/main.electron.ts",
                         "polyfills":[],
-                        "tsConfig": "apps/web-giddh/tsconfig.app.json",
+                        "tsConfig": "apps/web-giddh/tsconfig.electron.json",
                         "fileReplacements": [
                             {
                                 "replace": "apps/web-giddh/src/environments/environment.ts",
