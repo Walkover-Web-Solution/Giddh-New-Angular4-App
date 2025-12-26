@@ -30,7 +30,10 @@
                     }
                 } else {
                     // If no whiteLabel object, set the logo as usual
-                    document.getElementById("dynamic-logo").src = logoUrl;
+                    const logoElement = document.getElementById("dynamic-logo");
+                    if (logoElement) {
+                        logoElement.src = logoUrl;
+                    }
                 }
                 // Create a new preconnect link element
                 const preconnectLink = document.createElement("link");
@@ -102,7 +105,7 @@
         <!-- End Google Tag Manager (noscript) -->
         <div id="main-giddh-loader">
             <h1>
-                <img src="./assets/images/giddh-big-logo.svg" width="150" />
+                <img id="dynamic-logo" width="150" alt="Giddh Logo" />
             </h1>
             <div class="loading-dots">
                 <div class="loading-dots-dot"></div>
