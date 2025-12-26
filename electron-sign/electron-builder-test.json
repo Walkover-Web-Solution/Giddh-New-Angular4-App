@@ -1,12 +1,6 @@
 {
     "appId": "com.giddh.prod",
     "electronVersion": "11.2.3",
-    "publish": [
-        {
-            "provider": "s3",
-            "bucket": "giddh-app-builds-test"
-        }
-    ],
     "directories": {
         "buildResources": "resources",
         "output": "../electrongiddh-packages"
@@ -51,7 +45,6 @@
             "zip"
         ],
         "icon": "./resources/icon.ico",
-        "publisherName": "",
         "legalTrademarks": "",
         "signAndEditExecutable": false
     },

@@ -1,0 +1,32 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "outDir": "../../dist/out-tsc/apps/web-giddh",
+        "target": "ES2015",
+        "module": "ES2015",
+        "lib": [
+            "ES2015",
+            "dom"
+        ],
+        "types": [],
+        "typeRoots": [
+            "./src/customTypes"
+        ],
+        "useDefineForClassFields": false,
+        "moduleResolution": "node"
+    },
+    "exclude": [
+        "src/test.ts",
+        "**/*.spec.ts"
+    ],
+    "include": [
+        "src/**/*.ts",
+        "src/**/*.d.ts",
+        "src/environments/globals.d.ts"
+    ],
+    "files": [
+        "src/main.ts",
+        "src/main.electron.ts",
+        "src/polyfills.ts"
+    ]
+}

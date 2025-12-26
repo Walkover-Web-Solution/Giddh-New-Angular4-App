@@ -376,6 +376,7 @@
                             "outputHashing": "none",
                             "sourceMap": false,
                             "vendorChunk": false,
+                            "tsConfig": "apps/web-giddh/tsconfig.electron.json",
                             "budgets": [
                                 {
                                     "type": "initial",
