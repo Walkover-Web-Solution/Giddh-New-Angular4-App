@@ -1175,7 +1175,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                     if (!this.stockGroups?.length) {
                         this.getStockGroups();
                     }
-                    this.toaster.showSnackBar("success", this.localeData?.stock_create_succesfully);
+                    this.toaster.showSnackBar("success", this.localeData?.stock_create_successfully);
                     if (this.addStock) {
                         this.closeAsideEvent.emit(false);
                     } else {
@@ -1507,7 +1507,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             this.toggleLoader(false);
             if (response?.status === "success") {
                 this.clearPageLeaveConfirmation();
-                this.toaster.showSnackBar("success", this.localeData?.stock_update_succesfully);
+                this.toaster.showSnackBar("success", this.localeData?.stock_update_successfully);
                 if (this.createRecipe && this.createRecipe.hasRecipeForStock()) {
                     this.createRecipe.saveRecipeFromStock();
                 }
@@ -1939,7 +1939,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                     this.toggleLoader(false);
                     if (response?.status === "success") {
                         this.clearPageLeaveConfirmation();
-                        this.toaster.showSnackBar("success", this.localeData?.stock_delete_succesfully);
+                        this.toaster.showSnackBar("success", this.localeData?.stock_delete_successfully);
                         if (this.addStock) {
                             this.closeAsideEvent.emit();
                         } else {

@@ -121,7 +121,7 @@
     "variant": "Variant",
     "account_missing_in_stock": "account is not linked with stock",
     "add_new_address": "+ Add new address",
-    "po_created": "Purchase order created succesfully with voucher number - [PO_NUMBER]",
+    "po_created": "Purchase order created successfully with voucher number - [PO_NUMBER]",
     "deliver_from": "Deliver From",
     "enter_name": "Enter name",
     "enter_email": "Enter email",
@@ -156,7 +156,7 @@
     "payment_mode": "Payment Mode",
     "sales_as_receipt_voucher": "Sales as Receipt Voucher",
     "purchase_as_payment_voucher": "Purchase as Payment Voucher",
-    "po_updated": "Purchase order updated succesfully",
+    "po_updated": "Purchase order updated successfully",
     "template": "Template",
     "template_placeholder": "Select template"
 }
