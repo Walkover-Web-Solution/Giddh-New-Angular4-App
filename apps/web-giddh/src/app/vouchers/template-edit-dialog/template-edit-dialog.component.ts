@@ -102,7 +102,6 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
       return;
     }
 
-    data = this.newLineToBR(data);
     if (data?.sections?.footer?.data?.['grandTotal']) {
       data.sections['footer'].data['grandTotal'].field = 'grandTotal';
     }
@@ -225,7 +224,6 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
     this.setFontSizesUpdate(data);
     this.ensureMessage1(data);
     this.ensureTextUnderSlogan(data);
-    data = this.newLineToBR(data);
     this.invoiceTemplatesService.updateTemplate(data?.uniqueName, data).pipe(takeUntil(this.destroyed$)).subscribe((res) => {
       if (res?.status === 'success') {
         this.toasty.successToast(this.localeData?.template_updated_successfully);
@@ -268,31 +266,6 @@ export class TemplateEditDialogComponent implements OnInit, OnDestroy {
       msg1.display = false;
       msg1.label = '';
     }
-  }
-
-  /**
-   * newLineToBR method
-   *
-   * @param {*} template
-   * @returns
-   * @memberof TemplateEditDialogComponent
-   */
-  public newLineToBR(template: any): any {
-    const footerData = template?.sections?.['footer']?.data;
-    if (footerData?.['message1'] && typeof footerData['message1']?.label === 'string') {
-      footerData['message1'].label = footerData['message1'].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
-    } else if (footerData?.['message1']) {
-      footerData['message1'].label = '';
-    }
-    if (footerData?.['companyAddress'] && typeof footerData['companyAddress']?.label === 'string') {
-      footerData['companyAddress'].label = footerData['companyAddress'].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
-    } else if (footerData?.['companyAddress']) {
-      footerData['companyAddress'].label = '';
-    }
-    if (footerData?.['slogan'] && typeof footerData['slogan']?.label === 'string') {
-      footerData['slogan'].label = footerData['slogan'].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
-    }
-    return template;
   }
 
   /**
