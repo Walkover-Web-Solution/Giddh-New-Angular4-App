@@ -16,6 +16,7 @@ import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
 import { Store } from "@ngrx/store";
 import {
+    BehaviorSubject,
     Observable,
     ReplaySubject,
     combineLatest,
@@ -111,7 +112,6 @@ import { AiOcrService } from "../../services/ai-ocr.service";
 import { EWayBillCreateComponent } from "../../shared/eWayBill/create/e-way-bill-create-component";
 import { ReactiveDropdownFieldComponent } from "../../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component";
 import { ActionTypeEnum } from "../../shared/sales-person/utility/sales-person.constant";
-import { Country } from "../../shared/mobile-number-input/countries-data";
 import { GiddhDatepickerComponent } from "../../theme/giddh-datepicker/giddh-datepicker.component";
 import { FocusMonitor } from "@angular/cdk/a11y";
 import { Platform } from "@angular/cdk/platform";
@@ -246,6 +246,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public warehouses: Array<any>;
     /** Holds company branches */
     public branches: Array<any>;
+    /** Tracks the last template type sent to getCreatedTemplates API */
+    private lastTemplateType: string = "";
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Holds invoice type */
@@ -523,6 +525,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public forceClear: boolean = false;
     /** Holds active deposit index */
     public activeDepositIndex: number | null = null;
+    /** Invoice templates */
+    public sampleTemplates$: BehaviorSubject<IOption[]> = new BehaviorSubject<IOption[]>([]);
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -2192,11 +2196,21 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     private getCreatedTemplates(): void {
         this.componentStore.createdTemplates$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
-            if (!response) {
-                this.componentStore.getCreatedTemplates(
-                    this.invoiceType.isDebitNote || this.invoiceType.isCreditNote ? "voucher" : "invoice"
-                );
+            let templateType = VoucherTypeEnum.invoice;
+            if (this.voucherType === VoucherTypeEnum.purchase) {
+                templateType = VoucherTypeEnum.purchase_bill;
+            } else if (this.voucherType === VoucherTypeEnum.debitNote || this.voucherType === VoucherTypeEnum.creditNote) {
+                templateType = VoucherTypeEnum.voucher;
+            }
+            
+            if (!response || this.lastTemplateType !== templateType) {
+                this.lastTemplateType = templateType;
+                this.componentStore.getCreatedTemplates(templateType);
             } else {
+                // Convert templates to IOption format for dropdown
+                const templateOptions = this.convertTemplatesToOptions(response);
+                this.sampleTemplates$.next(templateOptions);
+
                 const defaultTemplate = response.find((template) => template.isDefault || template.isDefaultForVoucher);
                 if (defaultTemplate && defaultTemplate.sections) {
                     const sections = defaultTemplate.sections;
@@ -2870,7 +2884,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             attachedFiles: [],
             salesPurchaseAsReceiptPayment: [null], //temp
             salesPersonName: [''],
-            salesPersonUniqueName: ['']
+            salesPersonUniqueName: [''],
+            templateUniqueName: ['']
         });
     }
     /**
@@ -7374,5 +7389,33 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         return this.invoiceType.isCashInvoice 
         ? this.invoiceForm.controls['account'].get('customerName')?.value 
         : this.invoiceForm.controls['account'].get('uniqueName')?.value;
+    }
+
+    /**
+     * Converts sample templates to IOption format for dropdown usage
+     *
+     * @param {any[]} templates - Array of template objects
+     * @returns {IOption[]} Converted templates in IOption format
+     * @memberof VoucherCreateComponent
+     */
+    public convertTemplatesToOptions(templates: any[]): IOption[] {
+        if (!templates || !Array.isArray(templates)) {
+            return [];
+        }
+        
+        return templates.map(template => ({
+            value: template?.uniqueName || template?.templateType,
+            label: template?.name || template?.templateType,
+            additional: {
+                templateType: template?.templateType,
+                uniqueName: template?.uniqueName,
+                name: template?.name,
+                sections: template?.sections,
+                templateColor: template?.templateColor,
+                tableColor: template?.tableColor,
+                font: template?.font,
+                fontSize: template?.fontSize
+            }
+        }));
     }
 }

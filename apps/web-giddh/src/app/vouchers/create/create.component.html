@@ -3569,6 +3569,16 @@
                                                             </mat-expansion-panel>
                                                         </mat-accordion>
                                                     </div>
+                                                    <div class="col-6 mt-3">
+                                                        <reactive-dropdown-field
+                                                            appEnterNext
+                                                            [label]="localeData?.template"
+                                                            [placeholder]="localeData?.template_placeholder"
+                                                            [options]="sampleTemplates$ | async"
+                                                            formControlName="templateUniqueName"
+                                                        >
+                                                        </reactive-dropdown-field>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
