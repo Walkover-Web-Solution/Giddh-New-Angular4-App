@@ -1,6 +1,6 @@
 {
   "name": "giddh-workspaces",
-  "version": "8.2.39",
+  "version": "8.2.40",
   "license": "MIT",
   "private": true,
   "scripts": {
@@ -44,10 +44,10 @@
     "prepare.electron.giddh": "npm run postinstall.electron && tsc -p apps/electron-giddh/tsconfig.json",
     "release": "npm run build.electron.giddh && cd dist/apps/web-giddh && cross-env AWS_ACCESS_KEY_ID=key_id  AWS_SECRET_ACCESS_KEY=access_key npx electron-builder build --config ./../../../electron-sign/electron-builder.json -mwl --x64 --publish always",
     "package": "npm run build.electron.giddh && cd dist/apps/web-giddh && npx  electron-builder build --config ./../../../electron-sign/electron-builder.json  -mw --x64",
-    "package:linux": "npm run build.electron.giddh && cd dist/apps/web-giddh && npx electron-builder  build --config ./../../../electron-sign/electron-builder.json  --linux --x64",
-    "package:mac": "npm run build.electron.giddh && cd dist/apps/web-giddh && npx  electron-builder build --config ./../../../electron-sign/electron-builder.json  --macos --x64",
-    "package:windows": "npm run build.electron.giddh && cd dist/apps/web-giddh && npx electron-builder build --config ./../../../electron-sign/electron-builder.json --win --ia32 --x64 ",
-    "package:windows:test": "npm run build.electron.giddh.test && cd dist/apps/web-giddh && npx electron-builder build --config ./../../../electron-sign/electron-builder-test.json --win --ia32 --x64 --publish always",
+    "package:linux": "npm run build.electron.giddh && cd dist/apps/web-giddh && npx electron-builder  build --config ./../../../electron-sign/electron-builder.json  --linux --x64 && node ../../../scripts/build-success-message.js prod",
+    "package:mac": "npm run build.electron.giddh && cd dist/apps/web-giddh && npx  electron-builder build --config ./../../../electron-sign/electron-builder.json  --macos --x64 && node ../../../scripts/build-success-message.js prod",
+    "package:windows": "npm run build.electron.giddh && cd dist/apps/web-giddh && npx electron-builder build --config ./../../../electron-sign/electron-builder.json --win --ia32 --x64 && node ../../../scripts/build-success-message.js prod",
+    "package:windows:test": "npm run build.electron.giddh.test && cd dist/apps/web-giddh && npx electron-builder build --config ./../../../electron-sign/electron-builder-test.json --win --ia32 --x64 --publish always && node ../../../scripts/build-success-message.js test",
     "electron:auto": "node scripts/build-electron-env.js",
     "electron:auto:dry-run": "node scripts/build-electron-env.js --dry-run",
     "electron:force-local": "node scripts/build-electron-env.js --force-env=local",
@@ -57,7 +57,7 @@
     "electron:build": "npm run prepare.electron.giddh",
     "electron:fix": "node scripts/fix-electron-build.js",
     "electron:build-complete": "npm run build:electron && npm run electron:fix && npm run electron:build",
-    "package:mac:test": "npm run build.electron.giddh.test && cd dist/apps/web-giddh && npx electron-builder build --config ./../../../electron-sign/electron-builder-test.json --macos --x64 --publish always",
+    "package:mac:test": "npm run build.electron.giddh.test && cd dist/apps/web-giddh && npx electron-builder build --config ./../../../electron-sign/electron-builder-test.json --macos --x64 --publish always && node ../../../scripts/build-success-message.js test",
     "release:windows:ci": "npm run build.electron.giddh && cd dist/apps/web-giddh && npx electron-builder build --config ./../../../electron-sign/electron-builder-ci.json --win --ia32 --x64 --publish always",
     "release:mac:ci": "npm run build.electron.giddh && cd dist/apps/web-giddh && npx electron-builder build --config ./../../../electron-sign/electron-builder-ci.json --macos --x64 --publish always"
   },

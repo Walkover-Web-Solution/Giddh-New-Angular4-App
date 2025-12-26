@@ -10,7 +10,7 @@ let STAGING_ENV = false;
 let TEST_ENV = false;
 let LOCAL_ENV = true;
 let PRODUCTION_ENV = false;
-let APP_URL = 'http://localhost:4200/';  // Use port 4200 for Electron dev
+let APP_URL = 'http://localhost:3000/';  // Use port 4200 for Electron dev
 let APP_FOLDER = '';
 
 // Electron-specific configuration
