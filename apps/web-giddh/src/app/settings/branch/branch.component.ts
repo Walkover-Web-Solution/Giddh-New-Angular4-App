@@ -235,9 +235,10 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public openCreateCompanyDialog(): void {
         this.dialog.open(this.addCompanyModal, {
-            panelClass: 'modal-dialog',
-            width: '1000px'
-        });
+                    panelClass: 'modal-dialog',
+                    width: '1000px',
+                    maxWidth: '1000px'
+                });
     }
 
     /**
@@ -558,9 +559,10 @@ export class BranchComponent implements OnInit, AfterViewInit, OnDestroy {
         if (unarchivedBranches?.length > 1 || branch?.isArchived) {
             this.branchStatusToUpdate = branch;
             this.statusDialogRef = this.dialog.open(this.statusDialog, {
-                panelClass: 'modal-dialog',
-                width: '1000px'
-            });
+                        panelClass: 'modal-dialog',
+                        width: '1000px',
+                        maxWidth: '1000px'
+                    });
         } else {
             this.toasterService.warningToast(this.localeData?.archive_notallowed);
         }

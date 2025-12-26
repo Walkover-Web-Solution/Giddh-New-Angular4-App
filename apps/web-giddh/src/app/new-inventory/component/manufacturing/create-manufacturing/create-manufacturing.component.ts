@@ -718,13 +718,14 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         if (this.recipeExists) {
             if (!isEqual(this.existingRecipe, recipeObject)) {
                 let dialogRef = this.dialog.open(ConfirmModalComponent, {
-                    width: '585px',
-                    data: {
+                            width: '585px',
+                            maxWidth: '585px',
+                            data: {
                         title: this.commonLocaleData?.app_confirmation,
-                        body: this.localeData?.confirm_update_recipe,
-                        ok: this.commonLocaleData?.app_yes,
-                        cancel: this.commonLocaleData?.app_no
-                    }
+                            body: this.localeData?.confirm_update_recipe,
+                            ok: this.commonLocaleData?.app_yes,
+                            cancel: this.commonLocaleData?.app_no
+                        }
                 });
 
                 dialogRef.afterClosed().subscribe(response => {
@@ -735,13 +736,14 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
             }
         } else {
             let dialogRef = this.dialog.open(ConfirmModalComponent, {
-                width: '585px',
-                data: {
+                        width: '585px',
+                        maxWidth: '585px',
+                        data: {
                     title: this.commonLocaleData?.app_confirmation,
-                    body: this.localeData?.confirm_save_recipe,
-                    ok: this.commonLocaleData?.app_yes,
-                    cancel: this.commonLocaleData?.app_no
-                }
+                        body: this.localeData?.confirm_save_recipe,
+                        ok: this.commonLocaleData?.app_yes,
+                        cancel: this.commonLocaleData?.app_no
+                    }
             });
 
             dialogRef.afterClosed().subscribe(response => {
@@ -1552,13 +1554,14 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         if (this.recipeExists) {
             if (!isEqual(this.existingRecipe, recipeObject)) {
                 let dialogRef = this.dialog.open(ConfirmModalComponent, {
-                    width: '585px',
-                    data: {
+                            width: '585px',
+                            maxWidth: '585px',
+                            data: {
                         title: this.commonLocaleData?.app_confirmation,
-                        body: this.localeData?.confirm_update_recipe,
-                        ok: this.commonLocaleData?.app_yes,
-                        cancel: this.commonLocaleData?.app_no
-                    }
+                            body: this.localeData?.confirm_update_recipe,
+                            ok: this.commonLocaleData?.app_yes,
+                            cancel: this.commonLocaleData?.app_no
+                        }
                 });
 
                 dialogRef.afterClosed().subscribe(response => {
@@ -1573,13 +1576,14 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
             }
         } else {
             let dialogRef = this.dialog.open(ConfirmModalComponent, {
-                width: '585px',
-                data: {
+                        width: '585px',
+                        maxWidth: '585px',
+                        data: {
                     title: this.commonLocaleData?.app_confirmation,
-                    body: this.localeData?.confirm_save_recipe,
-                    ok: this.commonLocaleData?.app_yes,
-                    cancel: this.commonLocaleData?.app_no
-                }
+                        body: this.localeData?.confirm_save_recipe,
+                        ok: this.commonLocaleData?.app_yes,
+                        cancel: this.commonLocaleData?.app_no
+                    }
             });
 
             dialogRef.afterClosed().subscribe(response => {

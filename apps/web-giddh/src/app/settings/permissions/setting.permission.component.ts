@@ -133,9 +133,9 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
     public showModalForEdit(user?: any): void {
         this.selectedUser = user ? user : '';
         this.editDialogRef = this.dialog.open(this.editUserModal, {
-            width: '1200px',
-            maxWidth: '90vw'
-        });
+                    width: '1200px',
+                    maxWidth: '90vw'
+                });
     }
     public closeEditUserModal(event?: any): void {
         if (event && this.hasUnsavedChanges) {

@@ -160,12 +160,12 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
             this.selectedInvoice = invoice;
             this.selectedInvoice.uniqueName = uniqueName;
             this.dialog.open(this.downloadOrSendMailModel, {
-                height: '80vh',
-                width: '80vw',
-                maxWidth: '800px',
-                disableClose: true,
-                autoFocus: false
-            });
+                        height: '80vh',
+                        width: '80vw',
+                        maxWidth: '800px',
+                        disableClose: true,
+                        autoFocus: false
+                    });
         }
     }
 

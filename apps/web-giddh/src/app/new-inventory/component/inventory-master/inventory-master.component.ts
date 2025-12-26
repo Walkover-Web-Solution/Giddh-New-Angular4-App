@@ -722,8 +722,9 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         }
 
         this.dialog.open(ExportInventoryMasterComponent, {
-            width: "750px",
-            data: exportData
-        })
+                    width: "750px",
+                    maxWidth: '750px',
+                    data: exportData
+                })
     }
 }

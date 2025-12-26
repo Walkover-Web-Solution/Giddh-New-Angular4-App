@@ -395,8 +395,9 @@ export class PortalWhiteLabelComponent implements OnInit {
      */
     public openShareDomainDialog(): void {
         this.dialog.open(this.shareDomain, {
-            width: '500px'
-        });
+                    width: '500px',
+                    maxWidth: '500px'
+                });
     }
 
     /**
@@ -406,8 +407,9 @@ export class PortalWhiteLabelComponent implements OnInit {
      */
     public openAddDomainDialog(): void {
         this.dialog.open(this.addDomain, {
-            width: '550px'
-        });
+                    width: '550px',
+                    maxWidth: '550px'
+                });
     }
 
     /**

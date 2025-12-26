@@ -4180,16 +4180,18 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             case ActionTypeAfterVoucherGenerateOrUpdate.generateAndPrint: {
                 this.startLoader(false);
                 this.dialog.open(this.printVoucherModal, {
-                    width: '100%',
-                    maxHeight: '80vh'
-                });
+                            width: '100%',
+                            maxWidth: '100%',
+                            maxHeight: '80vh'
+                        });
                 break;
             }
             case ActionTypeAfterVoucherGenerateOrUpdate.generateAndSend: {
                 this.startLoader(false);
                 this.dialog.open(this.sendEmailModal, {
-                    width: '650px'
-                });
+                            width: '650px',
+                            maxWidth: '650px'
+                        });
                 break;
             }
             case ActionTypeAfterVoucherGenerateOrUpdate.updateSuccess: {
@@ -5911,8 +5913,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.dateChangeType = "voucher";
             this.dateChangeConfiguration = this.generalService.getDateChangeConfiguration(this.localeData, this.commonLocaleData, true);
             this.dialog.open(this.dateChangeConfirmationModel, {
-                width: '650px',
-            });
+                        width: '650px',
+                        maxWidth: '650px'
+                    });
         }
 
         if (this.voucherDateBeforeUpdate) {
@@ -6479,8 +6482,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         this.matchingPurchaseRecord.entries.forEach((entry => delete entry?.uniqueName));
                     }
                     this.dialog.open(this.purchaseRecordConfirmationPopup, {
-                        width: 'auto'
-                    });
+                                width: 'auto',
+                                maxWidth: 'auto'
+                            });
                 } else {
                     this.matchingPurchaseRecord = null;
                     if (this.isUpdateMode) {
@@ -6774,8 +6778,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.isAdjustAmount = true;
         this.invFormData.voucherDetails.exchangeRate = this.exchangeRate;
         this.dialog.open(this.adjustPaymentModal, {
-            width: '1000px'
-        });
+                    width: '1000px',
+                    maxWidth: '1000px'
+                });
     }
 
     /**
@@ -8048,8 +8053,9 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.updatedEntryIndex = entryIdx;
             this.dateChangeConfiguration = this.generalService.getDateChangeConfiguration(this.localeData, this.commonLocaleData, false);
             this.dialog.open(this.dateChangeConfirmationModel, {
-                width: '650px',
-            });
+                        width: '650px',
+                        maxWidth: '650px'
+                    });
         }
     }
 
@@ -8805,10 +8811,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
         this.rcmConfiguration = this.generalService.getRcmConfiguration(isChecked, this.commonLocaleData);
         let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
-            width: '630px',
-            data: {
+                    width: '630px',
+                    maxWidth: '630px',
+                    data: {
                 configuration: this.rcmConfiguration
-            }
+                }
         });
 
         dialogRef.afterClosed().subscribe(response => {
@@ -8911,10 +8918,11 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public deleteAttachementConfirmation(): void {
         this.attachmentDeleteConfiguration = this.generalService.getAttachmentDeleteConfiguration(this.localeData, this.commonLocaleData);
         let dialogRef = this.dialog.open(this.attachmentDeleteConfirmationModel, {
-            width: '630px',
-            data: {
+                    width: '630px',
+                    maxWidth: '630px',
+                    data: {
                 configuration: this.attachmentDeleteConfiguration
-            }
+                }
         });
 
         dialogRef.afterClosed().subscribe(response => {

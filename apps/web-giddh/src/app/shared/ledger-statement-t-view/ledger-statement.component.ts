@@ -393,13 +393,14 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
     public openAttachmentsDialog(templateRef: TemplateRef<any>, transaction: any): void {
         this.selectedItem = transaction;
         let dialogRef = this.dialog.open(templateRef, {
-            width: '70%',
-            height: '790px',
-            maxHeight: '90vh',
-            role: 'alertdialog',
-            ariaLabel: 'template',
-            autoFocus: false
-        });
+                    width: '70%',
+                    maxWidth: '70%',
+                    height: '790px',
+                    maxHeight: '90vh',
+                    role: 'alertdialog',
+                    ariaLabel: 'template',
+                    autoFocus: false
+                });
 
         dialogRef.afterClosed().subscribe(response => {
             this.getTransactionData();

@@ -479,10 +479,11 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
             localeData: this.localeData
         }
         this.dialog.open(SalesPurchaseRegisterExportComponent, {
-            width: '630px',
-            panelClass: 'export-container',
-            data: exportData
-        });
+                    width: '630px',
+                    maxWidth: '630px',
+                    panelClass: 'export-container',
+                    data: exportData
+                });
     }
 
     /**

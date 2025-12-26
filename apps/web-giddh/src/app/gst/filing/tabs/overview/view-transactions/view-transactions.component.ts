@@ -373,12 +373,12 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
      */
     public openDownloadOrSendMailDialog(): void {
         this.downloadOrSendMailDialogRef = this.dialog.open(this.downloadOrSendMailDialog, {
-            height: '80vh',
-            width: '80vw',
-            maxWidth: '800px',
-            disableClose: true,
-            autoFocus: false
-        });
+                    height: '80vh',
+                    width: '80vw',
+                    maxWidth: '800px',
+                    disableClose: true,
+                    autoFocus: false
+                });
     }
 
     /**

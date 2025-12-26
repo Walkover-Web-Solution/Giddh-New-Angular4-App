@@ -915,13 +915,14 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 this.asideHelpSupportDialogRef?.close();
             } else {
                 this.asideHelpSupportDialogRef = this.dialog.open(this.asideHelpSupportMenuStateRef, {
-                    width: '1000px',
-                    panelClass: 'aside-help-panel',
-                    hasBackdrop: false,
-                    position: {
+                            width: '1000px',
+                            maxWidth: '1000px',
+                            panelClass: 'aside-help-panel',
+                            hasBackdrop: false,
+                            position: {
                         right: '0',
-                        top: '0'
-                    }
+                            top: '0'
+                        }
                 });
             }
         } else {
@@ -1049,12 +1050,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     */
     public openDialogManageGroupsAccounts(): void {
         this.manageGroupsAccountsDialogRef = this.dialog.open(ManageGroupsAccountsComponent, {
-            width: '100%',
-            height: '100%',
-            maxWidth: '100vw',
-            maxHeight: '100vh',
-            disableClose: true
-        });
+                    width: '100%',
+                    height: '100%',
+                    maxWidth: '100vw',
+                    maxHeight: '100vh',
+                    disableClose: true
+                });
 
         this.manageGroupsAccountsDialogRef.afterOpened().subscribe(() => {
             const instance = this.manageGroupsAccountsDialogRef.componentInstance;

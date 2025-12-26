@@ -1918,9 +1918,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         }
 
         this.ewayBillDialogRef = this.dialog.open(this.ewayBill, {
-            width: '600px',
-            disableClose: true
-        });
+                    width: '600px',
+                    maxWidth: '600px',
+                    disableClose: true
+                });
     }
 
     /**
@@ -2392,11 +2393,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public convertBillDialog(voucher?: any): void {
         const vouchers = voucher ? [voucher] : this.selectedVouchers;
         this.dialog.open(this.convertBill, {
-            data: vouchers,
-            width: '600px',
-            maxHeight: '80vh',
-            disableClose: true
-        });
+                    data: vouchers,
+                    width: '600px',
+                    maxWidth: '600px',
+                    maxHeight: '80vh',
+                    disableClose: true
+                });
     }
 
     /**
@@ -3475,13 +3477,13 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             commonLocaleData: this.commonLocaleData
         };
         const dialogRef = this.dialog.open(TemplateEditDialogComponent, {
-            width: '100%',
-            height: '95vh',
-            maxHeight: '95vh',
-            maxWidth: '90vw',
-            data: dataToSend,
-            disableClose: true
-        });
+                    width: '100%',
+                    height: '95vh',
+                    maxHeight: '95vh',
+                    maxWidth: '90vw',
+                    data: dataToSend,
+                    disableClose: true
+                });
 
         dialogRef.afterClosed().subscribe(response => {
             if (response) {

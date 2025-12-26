@@ -250,7 +250,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
             } else {
                 if (changes.selectedAccountsForBulkPayment && changes.selectedAccountsForBulkPayment.currentValue) {
                     this.totalSelectedLength = changes.selectedAccountsForBulkPayment.currentValue.length;
-                    this.selectedAccForBulkPayment = _.cloneDeep(this.selectedAccountsForBulkPayment);
+                    this.selectedAccForBulkPayment = cloneDeep(this.selectedAccountsForBulkPayment);
                     this.selectedAccForBulkPayment = this.selectedAccForBulkPayment?.filter(item => {
                         return item.accountBankDetails && item.accountBankDetails.bankAccountNo !== '' && item.accountBankDetails.bankName !== '' && item.accountBankDetails.ifsc !== '';
                     });

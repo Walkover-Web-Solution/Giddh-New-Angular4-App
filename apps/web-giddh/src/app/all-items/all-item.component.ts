@@ -240,8 +240,9 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
                 this.createNewModalTitle = subitem.label
                 this.subMenuItems = subitem.submenu;
                 this.dialog.open(this.dialogBox, {
-                    width: '630px'
-                });
+                            width: '630px',
+                            maxWidth: '630px'
+                        });
             } else {
                 if ((subitem?.additional?.queryParams?.tabIndex >= 0) && subitem?.additional?.queryParams?.tab) {
                     this.router.navigate([subitem.link], { queryParams: subitem?.additional?.queryParams });

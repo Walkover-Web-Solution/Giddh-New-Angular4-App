@@ -402,11 +402,12 @@ export class ListManufacturingComponent implements OnInit {
      */
     public openAdvanceFilterDialog(): void {
         this.dialog.open(this.advanceFilterComponent, {
-            width: '500px',
-            autoFocus: false,
-            role: 'alertdialog',
-            ariaLabel: 'Advance filter Dialog'
-        });
+                    width: '500px',
+                    maxWidth: '500px',
+                    autoFocus: false,
+                    role: 'alertdialog',
+                    ariaLabel: 'Advance filter Dialog'
+                });
     }
 
     /**

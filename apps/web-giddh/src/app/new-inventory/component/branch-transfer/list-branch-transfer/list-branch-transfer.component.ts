@@ -495,10 +495,11 @@ export class ListBranchTransferComponent implements OnInit {
         this.branchTransferConfirmationConfiguration = this.generalService.getDeleteBranchTransferConfiguration(this.localeData, this.commonLocaleData, this.selectedBranchTransferType,);
 
         let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
-            width: '630px',
-            data: {
+                    width: '630px',
+                    maxWidth: '630px',
+                    data: {
                 configuration: this.branchTransferConfirmationConfiguration
-            }
+                }
         });
 
         dialogRef.afterClosed().subscribe(response => {
@@ -573,11 +574,12 @@ export class ListBranchTransferComponent implements OnInit {
     public openAdvanceFilterDialog(): void {
         this.voucherTypeDropdown?.closeDropdownPanel();
         this.dialog.open(this.advanceFilterComponent, {
-            width: '500px',
-            autoFocus: false,
-            role: 'alertdialog',
-            ariaLabel: 'Advance filter Dialog',
-        })
+                    width: '500px',
+                    maxWidth: '500px',
+                    autoFocus: false,
+                    role: 'alertdialog',
+                    ariaLabel: 'Advance filter Dialog'
+                })
     }
 
     /**

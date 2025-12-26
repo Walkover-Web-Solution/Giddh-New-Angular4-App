@@ -635,10 +635,11 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
         this.inventoryAdjustConfirmationConfiguration = this.generalService.deleteInventoryAdjustAdjustConfiguration(this.localeData, this.commonLocaleData);
 
         let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
-            width: '630px',
-            data: {
+                    width: '630px',
+                    maxWidth: '630px',
+                    data: {
                 configuration: this.inventoryAdjustConfirmationConfiguration
-            }
+                }
         });
 
         dialogRef.afterClosed().subscribe(response => {

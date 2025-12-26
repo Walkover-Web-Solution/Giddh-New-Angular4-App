@@ -337,9 +337,10 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         this.messageBody.btn.set = this.messageBody.btn.email;
         this.messageBody.header.set = this.messageBody.header.email;
         this.mailSmsDialogRef = this.dialog.open(this.mailSmsDialog, {
-            width: '630px',
-            height: '515px'
-        })
+                    width: '630px',
+                    maxWidth: '630px',
+                    height: '515px'
+                })
     }
 
     /**
@@ -353,9 +354,10 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         this.messageBody.btn.set = this.messageBody.btn.sms;
         this.messageBody.header.set = this.messageBody.header.sms;
         this.mailSmsDialogRef = this.dialog.open(this.mailSmsDialog, {
-            width: '630px',
-            height: '515px'
-        })
+                    width: '630px',
+                    maxWidth: '630px',
+                    height: '515px'
+                })
     }
 
     /**

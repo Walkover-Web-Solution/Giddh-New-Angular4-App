@@ -832,10 +832,11 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             count: PAGINATION_LIMIT
         }
         this.dialogRef = this.dialog.open(this.addSearchModal, {
-            width: '580px',
-            role: 'alertdialog',
-            ariaLabel: 'Add search Dialog'
-        });
+                    width: '580px',
+                    maxWidth: '580px',
+                    role: 'alertdialog',
+                    ariaLabel: 'Add search Dialog'
+                });
     }
 
     /**

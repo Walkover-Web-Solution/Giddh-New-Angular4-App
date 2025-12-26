@@ -9,6 +9,7 @@ import { LedgerService } from '../../../services/ledger.service';
 import { ExportLedgerRequest } from '../../../models/api-models/Ledger';
 import { ReportsDetailedRequestFilter, ColumnarResponseResult } from '../../../models/api-models/Reports';
 import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../../app.constant';
+import { cloneDeep } from '../../../lodash-optimized';
 import { PageEvent } from '@angular/material/paginator';
 
 @Component({
@@ -61,7 +62,7 @@ export class LedgerColumnarReportTableComponent implements OnInit, OnDestroy, On
         this.tableHeadingColumns = this.getDefaultColumns();
         this.store.pipe(takeUntil(this.destroyed$)).subscribe(state => {
             if (state && state.session && state.session.companyUniqueName) {
-                this.companyUniqueName = _.cloneDeep(state.session.companyUniqueName);
+                this.companyUniqueName = cloneDeep(state.session.companyUniqueName);
             }
         });
     }

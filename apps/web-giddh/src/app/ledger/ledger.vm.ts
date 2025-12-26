@@ -215,9 +215,9 @@ export class LedgerVM {
             let underStandingTextData = localeData?.text_data;
 
             if (isReverseChargeAccount) {
-                data = _.cloneDeep(underStandingTextData?.find(p => p.accountType === "ReverseCharge"));
+                data = cloneDeep(underStandingTextData?.find(p => p.accountType === "ReverseCharge"));
             } else {
-                data = _.cloneDeep(underStandingTextData?.find(p => p.accountType === selectedLedgerAccountType));
+                data = cloneDeep(underStandingTextData?.find(p => p.accountType === selectedLedgerAccountType));
             }
 
             if (data) {
@@ -235,7 +235,7 @@ export class LedgerVM {
                     data.text.cr = data.text.cr?.replace('<accountName>', accountName);
                 }
                 data['accountName'] = accountName;
-                this.ledgerUnderStandingObj = _.cloneDeep(data);
+                this.ledgerUnderStandingObj = cloneDeep(data);
             }
         }
     }

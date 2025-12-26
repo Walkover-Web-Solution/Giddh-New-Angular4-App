@@ -104,10 +104,11 @@ export class FileReturnComponent implements OnInit, OnDestroy {
 
         this.fileReturnConfirmationConfiguration = this.generalService.fileReturnConfiguration(this.localeData, this.commonLocaleData);
         let confirnationDialogRef = this.dialog.open(NewConfirmationModalComponent, {
-            width: '630px',
-            data: {
+                    width: '630px',
+                    maxWidth: '630px',
+                    data: {
                 configuration: this.fileReturnConfirmationConfiguration
-            },
+                },
             disableClose: true
         });
 

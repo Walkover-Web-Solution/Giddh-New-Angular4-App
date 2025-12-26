@@ -142,9 +142,10 @@ export class PendingListComponent implements OnInit, OnChanges {
         this.accountEntryPettyCash = { particular: { name: item?.baseAccount?.name } };
         this.prepareEntryAgainstObject(item);
         this.approveEntryModalRef = this.dialog.open(ref, {
-            width: '500px',
-            disableClose: true
-        });
+                    width: '500px',
+                    maxWidth: '500px',
+                    disableClose: true
+                });
         this.selectedEntryForApprove = item;
     }
 
@@ -396,9 +397,10 @@ export class PendingListComponent implements OnInit, OnChanges {
     public showRejectConfirmPopup(ref: TemplateRef<any>, item: ExpenseResults): void {
         this.selectedEntryForApprove = item;
         this.approveEntryModalRef = this.dialog.open(ref, {
-            width: '500px',
-            disableClose: true
-        });
+                    width: '500px',
+                    maxWidth: '500px',
+                    disableClose: true
+                });
     }
 
     /**

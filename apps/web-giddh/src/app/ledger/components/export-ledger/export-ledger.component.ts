@@ -18,6 +18,7 @@ import { Router } from '@angular/router';
 import { ExportBodyRequest } from '../../../models/api-models/DaybookRequest';
 // import { VoucherComponentStore } from '../../../vouchers/utility/vouchers.store';
 import { saveAs } from 'file-saver';
+import { cloneDeep } from '../../../lodash-optimized';
 import { IOption } from '../../../app.constant';
 import { CopyType } from '../../../shared/Enums/common.enum';
 import { TributeConfig } from '../../../shared/helpers/directives/tributeMention/tributeType';
@@ -164,7 +165,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
 
         if (this.inputData?.advanceSearchRequest?.dataToSend?.bsRangeValue) {
             let dateObj = this.inputData?.advanceSearchRequest?.dataToSend?.bsRangeValue;
-            let universalDate = _.cloneDeep(dateObj);
+            let universalDate = cloneDeep(dateObj);
             this.selectedDateRange = { startDate: dateObj[0], endDate: dateObj[1] };
             this.selectedDateRangeUi = dateObj[0].format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dateObj[1].format(GIDDH_NEW_DATE_FORMAT_UI);
             this.fromDate = universalDate[0].format(GIDDH_DATE_FORMAT);
@@ -172,7 +173,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         } else {
             this.universalDate$.pipe(take(1)).subscribe(dateObj => {
                 if (dateObj) {
-                    let universalDate = _.cloneDeep(dateObj);
+                    let universalDate = cloneDeep(dateObj);
                     this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                     this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                     this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
@@ -209,7 +210,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         exportRequest.from = this.fromDate;
         exportRequest.to = this.toDate;
 
-        let body = _.cloneDeep(this.inputData?.advanceSearchRequest);
+        let body = cloneDeep(this.inputData?.advanceSearchRequest);
         if (body && body.dataToSend) {
             body.dataToSend.type = this.emailTypeSelected;
             body.dataToSend.balanceTypeAsSign = this.balanceTypeAsSign;

@@ -304,10 +304,11 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
             });
         }
         this.advanceSearchDialogRef = this.dialog.open(this.advanceSearchModal, {
-            width: '980px',
-            role: 'alertdialog',
-            ariaLabel: 'advance'
-        });
+                    width: '980px',
+                    maxWidth: '980px',
+                    role: 'alertdialog',
+                    ariaLabel: 'advance'
+                });
     }
 
     /**

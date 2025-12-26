@@ -3666,10 +3666,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.rcmConfiguration = this.generalService.getRcmConfiguration(isChecked, this.commonLocaleData);
 
         const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
-            width: "630px",
-            data: {
-                configuration: this.rcmConfiguration,
-            },
+                    width: "630px",
+                    maxWidth: '630px',
+                    data: {
+                configuration: this.rcmConfiguration
+                },
         });
 
         dialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
@@ -3834,10 +3835,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.commonLocaleData
         );
         let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
-            width: "630px",
-            data: {
-                configuration: attachmentDeleteConfiguration,
-            },
+                    width: "630px",
+                    maxWidth: '630px',
+                    data: {
+                configuration: attachmentDeleteConfiguration
+                },
         });
 
         dialogRef
@@ -3862,8 +3864,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.saveVoucher((voucher) => {
             this.voucherDetails = voucher?.body;
             this.emailDialogRef = this.dialog.open(this.sendEmailModal, {
-                width: "650px",
-            });
+                        width: "650px",
+                        maxWidth: '650px'
+                    });
             this.emailDialogRef.afterClosed().subscribe(() => {
                 this.openAccountDropdown = true;
             });
@@ -3880,9 +3883,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.saveVoucher((voucher) => {
             this.voucherDetails = voucher?.body;
             const dialogRef = this.dialog.open(this.printVoucherModal, {
-                width: "60vw",
-                height: "80vh",
-            });
+                        width: "60vw",
+                        maxWidth: '60vw',
+                        height: "80vh"
+                    });
             dialogRef.afterClosed().subscribe(() => {
                 this.openAccountDropdown = true;
             });
@@ -5656,8 +5660,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.calculateAdjustedVoucherTotal(this.originalVoucherAdjustments?.adjustments);
             }
             this.dialog.open(this.adjustmentModal, {
-                width: "800px",
-            });
+                        width: "800px",
+                        maxWidth: '800px'
+                    });
         } else {
             this.isAdjustAmount = false;
             this.adjustPaymentBalanceDueData = 0;
@@ -6750,8 +6755,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.purchaseOrderPreviewAccountUniqueName = accountUniqueName;
 
         this.dialog.open(template, {
-            width: "980px",
-        });
+                    width: "980px",
+                    maxWidth: '980px'
+                });
     }
 
     /**

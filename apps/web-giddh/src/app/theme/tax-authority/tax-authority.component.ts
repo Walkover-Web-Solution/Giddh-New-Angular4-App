@@ -97,13 +97,14 @@ export class TaxAuthorityComponent implements OnInit {
      */
     private openConfirmationDialog(taxAuthorityName: string, uniqueName: string): void {
         const dialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '540px',
-            data: {
-                title: this.commonLocaleData?.app_confirmation,
-                body: this.localeData?.confirm_delete_tax_authority?.replace("[NAME]", taxAuthorityName),
-                ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no
-            }
+                    width: '540px',
+                    maxWidth: '540px',
+                    data: {
+                        title: this.commonLocaleData?.app_confirmation,
+                        body: this.localeData?.confirm_delete_tax_authority?.replace("[NAME]", taxAuthorityName),
+                        ok: this.commonLocaleData?.app_yes,
+                        cancel: this.commonLocaleData?.app_no
+                    }
         });
         dialogRef.afterClosed().subscribe(response => {
             if (response) {

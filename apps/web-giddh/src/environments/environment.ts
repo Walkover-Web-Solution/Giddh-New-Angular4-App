@@ -13,7 +13,7 @@ export const environment: Environment = {
     ApiUrl: '',
     UkApiUrl: '',
     isElectron: false,
-    APP_FOLDER: '/',
+    APP_FOLDER: '',
     showDevModule: true,
     PORTAL_URL: '',
     GOOGLE_CLIENT_ID: '',

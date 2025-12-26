@@ -386,9 +386,10 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     */
     public showNavigationModal(): void {
         this.commandkDialogRef = this.dialog.open(this.navigationModal, {
-            width: '630px',
-            height: '600'
-        });
+                    width: '630px',
+                    maxWidth: '630px',
+                    height: '600'
+                });
     }
 
     /**

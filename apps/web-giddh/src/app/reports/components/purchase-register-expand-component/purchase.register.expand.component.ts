@@ -511,10 +511,11 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
             localeData: this.localeData,
         };
         this.dialog.open(SalesPurchaseRegisterExportComponent, {
-            width: "630px",
-            panelClass: 'export-container',
-            data: exportData,
-        });
+                    width: "630px",
+                    maxWidth: '630px',
+                    panelClass: 'export-container',
+                    data: exportData
+                });
     }
 
     /**

@@ -219,13 +219,14 @@ export class AsideManageTransportComponent implements OnInit {
      */
     public deleteTransporter(transporter: any): void {
         this.confirmModalDialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '585px',
-            data: {
+                    width: '585px',
+                    maxWidth: '585px',
+                    data: {
                 title: this.commonLocaleData?.app_confirmation,
-                body: 'Are you sure you want to delete the transporter?',
-                ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no
-            }
+                    body: 'Are you sure you want to delete the transporter?',
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no
+                }
         });
 
         this.confirmModalDialogRef.afterClosed().subscribe(response => {

@@ -864,8 +864,9 @@ export class AccountOperationsComponent implements OnInit, AfterViewInit, OnDest
             exportType: "MASTER_EXPORT"
         }
         this.dialog.open(ExportMasterDialogComponent, {
-            width: '750px',
-            data: exportData
-        });
+                    width: '750px',
+                    maxWidth: '750px',
+                    data: exportData
+                });
     }
 }

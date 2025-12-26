@@ -135,9 +135,10 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
     public deleteRole(role: IRoleCommonResponseAndRequest): void {
         this.selectedRoleForDelete = role;
         this.permissionConfirmationDialogRef = this.dialog.open(this.permissionConfirmationDialog, {
-            panelClass: 'modal-dialog',
-            width: '600px'
-        });
+                    panelClass: 'modal-dialog',
+                    width: '600px',
+                    maxWidth: '600px'
+                });
     }
 
 
@@ -162,8 +163,9 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
      */
     public openPermissionDialog(): void {
         this.permissionDialogRef = this.dialog.open(this.permissiomDialog, {
-            panelClass: 'modal-dialog',
-            width: '650px'
-        });
+                    panelClass: 'modal-dialog',
+                    width: '650px',
+                    maxWidth: '650px'
+                });
     }
 }

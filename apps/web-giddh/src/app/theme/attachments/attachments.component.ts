@@ -318,13 +318,14 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
      */
     public showDeleteAttachedFileModal(index: number): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '40%',
-            data: {
+                    width: '40%',
+                    maxWidth: '40%',
+                    data: {
                 title: this.commonLocaleData?.app_delete,
-                body: this.localeData?.confirm_delete_file,
-                ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no
-            }
+                    body: this.localeData?.confirm_delete_file,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no
+                }
         });
 
         dialogRef.afterClosed().subscribe(response => {
@@ -362,14 +363,15 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
         }
 
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '40%',
-            data: {
+                    width: '40%',
+                    maxWidth: '40%',
+                    data: {
                 title: this.commonLocaleData?.app_delete,
-                body: messageBody,
-                ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no,
-                permanentlyDeleteMessage: this.localeData?.delete_entries_content
-            }
+                    body: messageBody,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no,
+                    permanentlyDeleteMessage: this.localeData?.delete_entries_content
+                }
         });
 
         dialogRef.afterClosed().subscribe(response => {

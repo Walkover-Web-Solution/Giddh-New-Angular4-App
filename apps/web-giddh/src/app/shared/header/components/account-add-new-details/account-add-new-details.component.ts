@@ -1798,14 +1798,15 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             this.commonService.getGstInformationDetails(addresses.get('gstNumber')?.value).pipe(takeUntil(this.destroyed$)).subscribe(result => {
                 if (result?.body) {
                     let dialogRef = this.dialog.open(ConfirmModalComponent, {
-                        width: '40%',
-                        data: {
+                                width: '40%',
+                                maxWidth: '40%',
+                                data: {
                             title: this.commonLocaleData?.app_confirmation,
-                            body: this.commonLocaleData?.app_gst_confirm_message1,
-                            ok: this.commonLocaleData?.app_yes,
-                            cancel: this.commonLocaleData?.app_no,
-                            permanentlyDeleteMessage: this.commonLocaleData?.app_gst_confirm_message2
-                        }
+                                body: this.commonLocaleData?.app_gst_confirm_message1,
+                                ok: this.commonLocaleData?.app_yes,
+                                cancel: this.commonLocaleData?.app_no,
+                                permanentlyDeleteMessage: this.commonLocaleData?.app_gst_confirm_message2
+                            }
                     });
                     dialogRef.afterClosed().subscribe(response => {
                         if (response) {

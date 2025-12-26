@@ -205,9 +205,10 @@ export class SettingsTagsComponent implements OnInit {
         message = message?.replace("[TAG_NAME]", tag.name);
         this.confirmationMessage = message;
         this.dialog.open(this.confirmationModal, {
-            panelClass: 'modal-dialog',
-            width: '1000px'
-        });
+                    panelClass: 'modal-dialog',
+                    width: '1000px',
+                    maxWidth: '1000px'
+                });
     }
 
     /**

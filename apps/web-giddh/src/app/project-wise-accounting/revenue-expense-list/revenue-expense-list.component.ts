@@ -541,10 +541,11 @@ export class RevenueExpenseListComponent implements OnInit, OnDestroy {
     public openDeleteEntryDialog(index: number): void {
         const entryName = this.entryList.at(index).value.entry;
         const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
-            width: '630px',
-            data: {
-                configuration: this.generalService.deleteConfiguration(this.localeData?.entry_delete_confirmation_message?.replace('[ENTRY_NAME]', entryName), this.commonLocaleData)
-            }
+                    width: '630px',
+                    maxWidth: '630px',
+                    data: {
+                        configuration: this.generalService.deleteConfiguration(this.localeData?.entry_delete_confirmation_message?.replace('[ENTRY_NAME]', entryName), this.commonLocaleData)
+                    }
         });
 
         dialogRef.afterClosed().subscribe((response) => {

@@ -28,6 +28,18 @@ build/Release
 # Users Environment Variables
 .lock-wscript
 
+# Environment files with sensitive credentials
+.env.local
+.env.prod
+.env.stage
+.env.test
+.env.electron
+# Keep .env.example for reference
+!.env.example
+
+# Generated environment files (may contain sensitive data)
+apps/web-giddh/src/environments/environment.generated.ts
+
 # OS generated files #
 .DS_Store
 ehthumbs.db

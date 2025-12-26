@@ -782,14 +782,15 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             this.commonService.getGstInformationDetails(this.secondStepForm.get('gstin')?.value).pipe(takeUntil(this.destroyed$)).subscribe(result => {
                 if (result?.body) {
                     let dialogRef = this.dialog.open(ConfirmModalComponent, {
-                        width: '40%',
-                        data: {
+                                width: '40%',
+                                maxWidth: '40%',
+                                data: {
                             title: this.commonLocaleData?.app_confirmation,
-                            body: this.commonLocaleData?.app_gst_confirm_message1,
-                            ok: this.commonLocaleData?.app_yes,
-                            cancel: this.commonLocaleData?.app_no,
-                            permanentlyDeleteMessage: this.commonLocaleData?.app_gst_confirm_message2
-                        }
+                                body: this.commonLocaleData?.app_gst_confirm_message1,
+                                ok: this.commonLocaleData?.app_yes,
+                                cancel: this.commonLocaleData?.app_no,
+                                permanentlyDeleteMessage: this.commonLocaleData?.app_gst_confirm_message2
+                            }
                     });
                     dialogRef.afterClosed().subscribe(response => {
                         if (response) {
@@ -1285,13 +1286,14 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public openLogoutConfirmationDialog(): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '40%',
-            data: {
+                    width: '40%',
+                    maxWidth: '40%',
+                    data: {
                 title: this.localeData?.logout,
-                body: this.localeData?.create_company_close,
-                ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no
-            }
+                    body: this.localeData?.create_company_close,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no
+                }
         });
 
         dialogRef.afterClosed().subscribe(response => {

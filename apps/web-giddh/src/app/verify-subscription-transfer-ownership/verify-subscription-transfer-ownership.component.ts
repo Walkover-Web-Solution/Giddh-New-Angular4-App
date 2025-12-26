@@ -99,9 +99,10 @@ export class VerifySubscriptionTransferOwnershipComponent implements OnInit {
      */
     public dialogOpen(): void {
         this.modalDialogRef = this.dialog.open(this.dialogBox, {
-            width: '850px',
-            disableClose: true
-        });
+                    width: '850px',
+                    maxWidth: '850px',
+                    disableClose: true
+                });
     }
 
     /**
@@ -129,9 +130,10 @@ export class VerifySubscriptionTransferOwnershipComponent implements OnInit {
    */
     public onReject(): void {
         this.rejectModalDialogRef = this.dialog.open(this.rejectDialog, {
-            width: '850px',
-            disableClose: true
-        });
+                    width: '850px',
+                    maxWidth: '850px',
+                    disableClose: true
+                });
     }
 
     /**

@@ -793,13 +793,14 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
     public showDeleteAttachedFileModal() {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '630px',
-            data: {
+                    width: '630px',
+                    maxWidth: '630px',
+                    data: {
                 title: this.commonLocaleData?.app_delete,
-                body: this.localeData?.confirm_delete_file,
-                ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no
-            }
+                    body: this.localeData?.confirm_delete_file,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no
+                }
         });
 
         dialogRef.afterClosed().subscribe(response => {
@@ -811,14 +812,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
     public showDeleteEntryModal() {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '630px',
-            data: {
+                    width: '630px',
+                    maxWidth: '630px',
+                    data: {
                 title: this.commonLocaleData?.app_delete,
-                body: this.localeData?.confirm_delete_entry,
-                ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no,
-                permanentlyDeleteMessage: this.localeData?.delete_entries_content
-            }
+                    body: this.localeData?.confirm_delete_entry,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no,
+                    permanentlyDeleteMessage: this.localeData?.delete_entries_content
+                }
         });
 
         dialogRef.afterClosed().subscribe(response => {
@@ -1410,10 +1412,11 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.rcmConfiguration = this.generalService.getRcmConfiguration(isChecked, this.commonLocaleData);
 
         let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
-            width: '630px',
-            data: {
+                    width: '630px',
+                    maxWidth: '630px',
+                    data: {
                 configuration: this.rcmConfiguration
-            }
+                }
         });
 
         dialogRef.afterClosed().subscribe(response => {
@@ -1454,14 +1457,15 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (!this.isAdvanceReceipt && !restrictPopup) {
             if (this.isAdjustedInvoicesWithAdvanceReceipt && this.vm.selectedLedger && this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.receipt) {
                 this.advanceReceiptRemoveDialogRef = this.dialog.open(ConfirmModalComponent, {
-                    width: '630px',
-                    data: {
+                            width: '630px',
+                            maxWidth: '630px',
+                            data: {
                         title: this.commonLocaleData?.app_confirmation,
-                        body: this.localeData?.confirm_proceed,
-                        permanentlyDeleteMessage: this.localeData?.remove_advance_receipt,
-                        ok: this.commonLocaleData?.app_yes,
-                        cancel: this.commonLocaleData?.app_no
-                    }
+                            body: this.localeData?.confirm_proceed,
+                            permanentlyDeleteMessage: this.localeData?.remove_advance_receipt,
+                            ok: this.commonLocaleData?.app_yes,
+                            cancel: this.commonLocaleData?.app_no
+                        }
                 });
 
                 this.advanceReceiptRemoveDialogRef.afterClosed().subscribe(response => {
@@ -1987,9 +1991,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             this.invoiceListRequestParams = { particularAccount: particularAccount, voucherType: this.vm.selectedLedger?.voucher?.name, ledgerAccount: this.activeAccount };
         }
         this.adjustmentDialogRef = this.dialog.open(this.adjustPaymentModal, {
-            width: '980px',
-            panelClass: 'container-modal-class'
-        });
+                    width: '980px',
+                    maxWidth: '980px',
+                    panelClass: 'container-modal-class'
+                });
     }
 
     /**
@@ -2510,9 +2515,10 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.selectedItem = this.vm.selectedLedger;
         this.selectedItem['isAttachment'] = isAttachment;
         let dialogRef = this.dialog.open(templateRef, {
-            width: '70%',
-            height: '650px'
-        });
+                    width: '70%',
+                    maxWidth: '70%',
+                    height: '650px'
+                });
 
         dialogRef.afterClosed().subscribe(() => {
             document.querySelector(".cdk-global-overlay-wrapper")?.classList?.remove("double-popup-zindex");

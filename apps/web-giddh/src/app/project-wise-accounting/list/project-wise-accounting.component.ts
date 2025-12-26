@@ -413,11 +413,11 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
                 projectUniqueName: project.uniqueName
             };
             const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
-                width: '630px',
+                        width: '630px',
+                        maxWidth: '630px',
                 data: {
                     configuration: this.generalService.deleteConfiguration(this.localeData?.project_delete_confirmation_message?.replace('[PROJECT_NAME]', project.name), this.commonLocaleData)
                 }
-
             });
 
             dialogRef.afterClosed().subscribe((response) => {

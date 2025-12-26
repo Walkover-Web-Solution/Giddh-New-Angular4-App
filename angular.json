@@ -18,6 +18,12 @@
                         "main": "apps/web-giddh/src/main.electron.ts",
                         "polyfills":[],
                         "tsConfig": "apps/web-giddh/tsconfig.app.json",
+                        "fileReplacements": [
+                            {
+                                "replace": "apps/web-giddh/src/environments/environment.ts",
+                                "with": "apps/web-giddh/src/environments/environment.generated.ts"
+                            }
+                        ],
                         "assets": [
                             {
                                 "glob": "**/*",

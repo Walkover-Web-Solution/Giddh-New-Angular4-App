@@ -615,14 +615,15 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
      */
     public deleteGroup(): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '40%',
-            data: {
+                    width: '40%',
+                    maxWidth: '40%',
+                    data: {
                 title: this.commonLocaleData?.app_confirmation,
-                body: this.localeData?.delete_message,
-                permanentlyDeleteMessage: this.localeData?.delete_message1,
-                ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no
-            }
+                    body: this.localeData?.delete_message,
+                    permanentlyDeleteMessage: this.localeData?.delete_message1,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no
+                }
         });
 
         dialogRef.afterClosed().subscribe(response => {

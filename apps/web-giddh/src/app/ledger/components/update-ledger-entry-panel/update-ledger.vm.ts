@@ -1,7 +1,7 @@
 import { Observable, BehaviorSubject } from 'rxjs';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
 import { LedgerResponse } from '../../../models/api-models/Ledger';
-import { cloneDeep, filter, find, sumBy } from '../../../lodash-optimized';
+import { cloneDeep, forEach, remove, find, filter, sumBy } from '../../../lodash-optimized';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flatten-accounts-result-item.interface';
 import { UpdateLedgerTaxData } from '../update-ledger-tax-control/update-ledger-tax-control.component';
 import { UpdateLedgerDiscountComponent } from '../update-ledger-discount/update-ledger-discount.component';
@@ -685,7 +685,7 @@ export class UpdateLedgerVm {
     public getUnderstandingText(selectedLedgerAccountType, accountName, localeData?: any) {
         let underStandingTextData = localeData?.text_data;
         if (underStandingTextData) {
-            let data = _.cloneDeep(underStandingTextData?.find(p => p.accountType === selectedLedgerAccountType));
+            let data = cloneDeep(underStandingTextData?.find(p => p.accountType === selectedLedgerAccountType));
             if (data) {
                 if (data.balanceText && data.balanceText.cr) {
                     data.balanceText.cr = data.balanceText.cr?.replace('<accountName>', accountName);
@@ -700,7 +700,7 @@ export class UpdateLedgerVm {
                 if (data.text && data.text.cr) {
                     data.text.cr = data.text.cr?.replace('<accountName>', accountName);
                 }
-                this.ledgerUnderStandingObj = _.cloneDeep(data);
+                this.ledgerUnderStandingObj = cloneDeep(data);
             }
         }
     }

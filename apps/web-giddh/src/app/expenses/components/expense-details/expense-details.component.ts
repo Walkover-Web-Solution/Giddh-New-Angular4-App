@@ -181,9 +181,10 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      */
     public openModal(rejectionReason: TemplateRef<any>): void {
         this.dialogRef = this.dialog.open(rejectionReason, {
-            width: '630px',
-            disableClose: true
-        });
+                    width: '630px',
+                    maxWidth: '630px',
+                    disableClose: true
+                });
     }
 
     /**

@@ -340,14 +340,15 @@ export class CreateNewUnitComponent implements OnInit, OnDestroy {
      */
     public deleteUnit(): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '40%',
-            data: {
+                    width: '40%',
+                    maxWidth: '40%',
+                    data: {
                 title: this.commonLocaleData?.app_confirmation,
-                body: this.localeData?.delete_unit_message,
-                permanentlyDeleteMessage: this.commonLocaleData?.app_permanently_delete_message,
-                ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no
-            }
+                    body: this.localeData?.delete_unit_message,
+                    permanentlyDeleteMessage: this.commonLocaleData?.app_permanently_delete_message,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no
+                }
         });
 
         dialogRef.afterClosed().subscribe(response => {

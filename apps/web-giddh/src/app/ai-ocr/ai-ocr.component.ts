@@ -10,6 +10,7 @@ import { AiOcrService } from "../services/ai-ocr.service";
 import { GeneralService } from "../services/general.service";
 import { OrganizationType } from "../models/user-login-state";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../shared/helpers/defaultDateFormat";
+import { cloneDeep } from "../lodash-optimized";
 import { ActivatedRoute, Router } from "@angular/router";
 import { environment } from "../../environments/environment";
 import { ServiceConfig } from "../services/service.config";
@@ -307,7 +308,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                     /** Universal date observer */
                     this.aiOcrStore.universalDate$.pipe(takeUntil(this.routeScope$)).subscribe((dateObj) => {
                         if (dateObj) {
-                            this.universalDate = _.cloneDeep(dateObj);
+                            this.universalDate = cloneDeep(dateObj);
                             this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                             this.selectedDateRangeUi =
                                 dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) +
@@ -620,7 +621,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
             take(1)
         ).subscribe((dateObj) => {
             if (dateObj) {
-                this.universalDate = _.cloneDeep(dateObj);
+                this.universalDate = cloneDeep(dateObj);
                 this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                 this.selectedDateRangeUi =
                     dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) +

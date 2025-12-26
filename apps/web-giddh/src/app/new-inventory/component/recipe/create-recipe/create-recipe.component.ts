@@ -683,14 +683,15 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
      */
     public removeLinkedStock(recipeIndex: number, index: number): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '585px',
-            data: {
+                    width: '585px',
+                    maxWidth: '585px',
+                    data: {
                 title: this.commonLocaleData?.app_confirmation,
-                body: this.localeData?.confirm_delete_recipe_linked_stock,
-                ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no,
-                permanentlyDeleteMessage: ' '
-            }
+                    body: this.localeData?.confirm_delete_recipe_linked_stock,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no,
+                    permanentlyDeleteMessage: ' '
+                }
         });
 
         dialogRef.afterClosed().subscribe(response => {
@@ -710,14 +711,15 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
     */
     public removeByProductLinkedStock(recipeIndex: number, index: number): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '585px',
-            data: {
+                    width: '585px',
+                    maxWidth: '585px',
+                    data: {
                 title: this.commonLocaleData?.app_confirmation,
-                body: this.localeData?.confirm_delete_recipe_byproduct_stock,
-                ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no,
-                permanentlyDeleteMessage: ' '
-            }
+                    body: this.localeData?.confirm_delete_recipe_byproduct_stock,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no,
+                    permanentlyDeleteMessage: ' '
+                }
         });
 
         dialogRef.afterClosed().subscribe(response => {
@@ -752,14 +754,15 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
      */
     public removeRecipe(index: number): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '585px',
-            data: {
+                    width: '585px',
+                    maxWidth: '585px',
+                    data: {
                 title: this.commonLocaleData?.app_confirmation,
-                body: this.localeData?.confirm_delete_recipe,
-                ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no,
-                permanentlyDeleteMessage: ' '
-            }
+                    body: this.localeData?.confirm_delete_recipe,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no,
+                    permanentlyDeleteMessage: ' '
+                }
         });
 
         dialogRef.afterClosed().subscribe(response => {

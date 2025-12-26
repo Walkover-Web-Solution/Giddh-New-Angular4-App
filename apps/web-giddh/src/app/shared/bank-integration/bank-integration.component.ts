@@ -154,9 +154,10 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
      */
     public openCreateNewAccountModal(): void {
         this.createNewAccountDialogRef = this.dialog.open(this.createNewAccountModal, {
-            width: '630px',
-            disableClose: true
-        });
+                    width: '630px',
+                    maxWidth: '630px',
+                    disableClose: true
+                });
     }
 
     /**
@@ -348,9 +349,10 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
     public openEditAccountModal(bankAccount: any): void {
         this.activeBankAccount = bankAccount;
         this.editAccountModalRef = this.dialog.open(this.editAccountModal, {
-            panelClass: 'modal-dialog',
-            width: '1000px'
-        });
+                    panelClass: 'modal-dialog',
+                    width: '1000px',
+                    maxWidth: '1000px'
+                });
     }
 
     /**
@@ -362,9 +364,10 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
     public openCreateNewAccountUserModal(bankAccount: any): void {
         this.activeBankAccount = bankAccount;
         this.createNewAccountUserModalRef = this.dialog.open(this.createNewAccountUserModal, {
-            panelClass: 'modal-dialog',
-            width: '1000px'
-        });
+                    panelClass: 'modal-dialog',
+                    width: '1000px',
+                    maxWidth: '1000px'
+                });
     }
 
     /**
@@ -378,9 +381,10 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
         this.activeBankAccount = bankAccount;
         this.activePayorAccount = payor;
         this.editAccountUserModalRef = this.dialog.open(this.editAccountUserModal, {
-            panelClass: 'modal-dialog',
-            width: '1000px'
-        });
+                    panelClass: 'modal-dialog',
+                    width: '1000px',
+                    maxWidth: '1000px'
+                });
     }
     /**
     * This will show the delete bank account login confirmation modal
@@ -396,9 +400,10 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
             this.activeBankAccount = { uniqueName: bankAccount?.bankResource?.uniqueName, bankUserId: payor?.bankUserId, loginId: payor?.loginId };
         }
         this.confirmationModalRef = this.dialog.open(this.confirmationModal, {
-            panelClass: 'modal-dialog',
-            width: '1000px'
-        });
+                    panelClass: 'modal-dialog',
+                    width: '1000px',
+                    maxWidth: '1000px'
+                });
     }
 
     /**
@@ -458,13 +463,14 @@ export class BankIntegrationComponent implements OnInit, OnDestroy {
    */
     public deleteBankAccount(bank: any): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '540px',
-            data: {
+                    width: '540px',
+                    maxWidth: '540px',
+                    data: {
                 title: this.commonLocaleData?.app_confirmation,
-                body: this.localeData?.payment?.confirm_bank_delete_message,
-                ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no
-            }
+                    body: this.localeData?.payment?.confirm_bank_delete_message,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no
+                }
         });
 
         dialogRef.afterClosed().subscribe(response => {

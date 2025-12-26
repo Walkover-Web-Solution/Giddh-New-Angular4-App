@@ -677,14 +677,15 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      */
     public deleteVariantOption(index: number): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '585px',
-            data: {
+                    width: '585px',
+                    maxWidth: '585px',
+                    data: {
                 title: this.commonLocaleData?.app_confirmation,
-                body: this.localeData?.confirm_delete_option,
-                ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no,
-                permanentlyDeleteMessage: ' '
-            }
+                    body: this.localeData?.confirm_delete_option,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no,
+                    permanentlyDeleteMessage: ' '
+                }
         });
 
         dialogRef.afterClosed().subscribe(response => {
@@ -1920,16 +1921,17 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
      */
     public deleteStock(): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '40%',
-            role: 'alertdialog',
-            ariaLabel: 'Confirm Delete Dialog',
-            data: {
+                    width: '40%',
+                    maxWidth: '40%',
+                    role: 'alertdialog',
+                    ariaLabel: 'Confirm Delete Dialog',
+                    data: {
                 title: this.commonLocaleData?.app_confirmation,
-                body: this.localeData?.delete_stock,
-                permanentlyDeleteMessage: this.localeData?.permanently_delete,
-                ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no
-            }
+                    body: this.localeData?.delete_stock,
+                    permanentlyDeleteMessage: this.localeData?.permanently_delete,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no
+                }
         });
 
         dialogRef.afterClosed().subscribe(response => {

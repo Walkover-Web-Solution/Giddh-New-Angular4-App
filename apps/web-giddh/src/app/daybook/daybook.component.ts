@@ -366,8 +366,9 @@ export class DaybookComponent implements OnInit, OnDestroy {
     public exportDaybook() {
         this.daybookExportRequestType = 'post';
         this.modalDialogRef = this.dialog.open(this.exportDaybookModal, {
-            width: '630px'
-        });
+                    width: '630px',
+                    maxWidth: '630px'
+                });
     }
 
     public hideExportDaybookModal(response: any) {
@@ -588,10 +589,11 @@ export class DaybookComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.ledgerActions.setTxnForEdit(txn?.uniqueName));
         this.lc.selectedTxnUniqueName = txn?.uniqueName;
         this.modalDialogRef = this.dialog.open(this.updateLedgerModal, {
-            width: '70%',
-            height: '650px',
-            disableClose: true
-        });
+                    width: '70%',
+                    maxWidth: '70%',
+                    height: '650px',
+                    disableClose: true
+                });
 
         this.modalDialogRef.afterOpened().subscribe(response => {
             this.updateLedgerComponent?.loadDefaultSearchSuggestions();
