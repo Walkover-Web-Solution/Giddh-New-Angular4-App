@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, NgZone, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ElementRef, Inject, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import FroalaEditor from 'froala-editor';
 import { debounceTime, distinctUntilChanged, filter, Observable, pipe, ReplaySubject, skip, take, takeUntil } from 'rxjs';
@@ -171,8 +171,7 @@ export class TemplateFroalaComponent implements OnInit {
         public dialogRef: MatDialogRef<any>,
         private generalService: GeneralService,
         private titleCasePipe: TitleCasePipe,
-        private pageLeaveUtilityService: PageLeaveUtilityService,
-        private ngZone: NgZone
+        private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
         // Initialize Froala options after environment detection
         this.froalaOptions = this.getFroalaOptions();
@@ -412,56 +411,38 @@ export class TemplateFroalaComponent implements OnInit {
             htmlAllowedAttrs: ['.*'],
             events: {
                 initialized: (event) => {
-                    this.ngZone.runOutsideAngular(() => {
-                        this.froalaEditor = event.getEditor();
+                    this.froalaEditor = event.getEditor();
+                    
+                    // Add additional delay for Electron environment
+                    const setupDelay = this.isElectron ? 200 : 0;
+                    setTimeout(() => {
+                        this.setupFroalaEventHandlers();
                         
-                        // Add additional delay for Electron environment
-                        const setupDelay = this.isElectron ? 200 : 0;
+                        // Set initial content from form control with additional delay for Electron
+                        const contentDelay = this.isElectron ? 300 : 0;
                         setTimeout(() => {
-                            this.ngZone.run(() => {
-                                this.setupFroalaEventHandlers();
-                            });
-                            
-                            // Set initial content from form control with additional delay for Electron
-                            const contentDelay = this.isElectron ? 300 : 0;
-                            setTimeout(() => {
-                                const currentForm = this.isTrigger ? this.customTriggerForm : this.emailForm;
-                                const htmlValue = currentForm?.get('html')?.value;
-                                if (htmlValue) {
-                                    this.froalaEditor.html.set(htmlValue);
-                                }
-                            }, contentDelay);
-                        }, setupDelay);
-                    });
+                            const currentForm = this.isTrigger ? this.customTriggerForm : this.emailForm;
+                            const htmlValue = currentForm?.get('html')?.value;
+                            if (htmlValue) {
+                                this.froalaEditor.html.set(htmlValue);
+                            }
+                        }, contentDelay);
+                    }, setupDelay);
                 },
-                blur: () => {
-                    this.ngZone.runOutsideAngular(() => {
-                        // Handles changes made in the code view when focus is lost
-                        if (this.froalaEditor?.codeView?.isActive()) {
-                            this.froalaEditor?.html?.set(this.froalaEditor?.codeView?.get());
-                            this.ngZone.run(() => {
-                                this.updateFormControl();
-                            });
-                        }
-                    });
+                blur: () => { // Handles changes made in the code view when focus is lost
+                    if (this.froalaEditor?.codeView?.isActive()) {
+                        this.froalaEditor?.html?.set(this.froalaEditor?.codeView?.get());
+                        this.updateFormControl();
+                    }
                 },
                 'contentChanged': () => {
-                    this.ngZone.runOutsideAngular(() => {
-                        // Run form update inside Angular zone since it affects form state
-                        this.ngZone.run(() => {
-                            this.updateFormControl();
-                        });
-                    });
+                    this.updateFormControl();
                 },
                 // Add error handling for Electron
                 'error': (error) => {
-                    this.ngZone.runOutsideAngular(() => {
-                        if (this.isElectron && this.froalaInitRetryCount < this.maxFroalaInitRetries) {
-                            this.ngZone.run(() => {
-                                this.retryFroalaInitialization();
-                            });
-                        }
-                    });
+                    if (this.isElectron && this.froalaInitRetryCount < this.maxFroalaInitRetries) {
+                        this.retryFroalaInitialization();
+                    }
                 }
             }
         }
