@@ -14,7 +14,7 @@ import {
 import { ActivatedRoute, Router } from "@angular/router";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
-import { Store } from "@ngrx/store";
+import { select, Store } from "@ngrx/store";
 import {
     Observable,
     ReplaySubject,
@@ -523,6 +523,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public forceClear: boolean = false;
     /** Holds active deposit index */
     public activeDepositIndex: number | null = null;
+    /** Tracks if sidebar was previously open to restore it on component destroy */
+    private wasSidebarOpen = false;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -669,7 +671,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public ngOnInit(): void {
         // Close side menu on voucher create/update page
-        this.store.dispatch(this.generalActions.openSideMenu(false));
+        this.store.pipe(select(state => state.general.openSideMenu), take(1)).subscribe(response => {
+            if (response) {
+                this.wasSidebarOpen = true;
+                this.store.dispatch(this.generalActions.openSideMenu(false));
+            }
+        });
         this.getVoucherVersion();
         this.initVoucherForm();
         this.getCountryList();
@@ -5613,7 +5620,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public ngOnDestroy(): void {
         this.componentStore.resetAll();
-        this.store.dispatch(this.generalActions.openSideMenu(true));
+        if (this.wasSidebarOpen) {
+            this.store.dispatch(this.generalActions.openSideMenu(true));
+        }
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
