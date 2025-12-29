@@ -325,7 +325,7 @@ export class PortalWhiteLabelComponent implements OnInit {
         let requestData = [urlWithoutProtocol, this.generatedString];
         this.settingsProfileService.addPortalDomain(requestData).pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response && response.status === 'success') {
-                this.toaster.showSnackBar("success", this.localeData?.add_domain_succesfully);
+                this.toaster.showSnackBar("success", this.localeData?.add_domain_successfully);
                 this.portalWhilteLabelForm.reset();
                 this.getDomainList(false);
                 let event = {
