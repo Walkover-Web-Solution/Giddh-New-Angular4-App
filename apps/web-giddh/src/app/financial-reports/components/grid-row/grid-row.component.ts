@@ -113,9 +113,43 @@ export class GridRowComponent implements OnInit, OnChanges, OnDestroy {
         url = url + `${separator}redirectUrl=${encodeURIComponent(this.currentUrl)}`;
 
         if (Configuration.isElectron) {
-            const ipcRenderer = (window as any).require('electron').ipcRenderer;
-            const electronUrl = `${location.origin}${location.pathname}#./pages/ledger/${acc.uniqueName}/${this.from}/${this.to}`;
-            ipcRenderer.send('open-url', electronUrl);
+            try {
+                let electronIpcAvailable = false;
+
+                // Try electronAPI first (secure context)
+                if ((window as any).electronAPI && (window as any).electronAPI.send) {
+                    try {
+                        const electronUrl = `${location.origin}${location.pathname}#./pages/ledger/${acc.uniqueName}/${this.from}/${this.to}`;
+                        (window as any).electronAPI.send('open-url', electronUrl);
+                        electronIpcAvailable = true;
+                    } catch (ipcError) {
+                        console.warn('ElectronAPI send failed:', ipcError);
+                    }
+                }
+
+                // Try legacy electron require (fallback)
+                if (!electronIpcAvailable && (window as any).require) {
+                    try {
+                        const electron = (window as any).require('electron');
+                        if (electron && electron.ipcRenderer && electron.ipcRenderer.send) {
+                            const electronUrl = `${location.origin}${location.pathname}#./pages/ledger/${acc.uniqueName}/${this.from}/${this.to}`;
+                            electron.ipcRenderer.send('open-url', electronUrl);
+                            electronIpcAvailable = true;
+                        }
+                    } catch (requireError) {
+                        console.warn('Electron require failed:', requireError);
+                    }
+                }
+
+                // Fallback to regular window.open if IPC not available
+                if (!electronIpcAvailable) {
+                    console.warn('Electron IPC not available for page leave utility, opening in new tab');
+                    (window as any).open(url, '_blank');
+                }
+            } catch (error) {
+                console.warn('Electron navigation failed, opening in new tab:', error);
+                (window as any).open(url, '_blank');
+            }
         } else {
             (window as any).open(url, '_blank');
         }

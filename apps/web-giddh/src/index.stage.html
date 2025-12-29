@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <script type="text/javascript">
+            // Web environment configuration - STAGE
+            window.isElectron = false;
+            window.webEnvironment = {
+                type: 'stage',
+                appUrl: 'https://stage.giddh.com/',
+                apiUrl: 'https://apistage.giddh.com/'
+            };
+        </script>
         <!-- Google Tag Manager -->
         <script>
             (function (w, d, s, l, i) {
@@ -42,11 +51,6 @@
         <script type="text/javascript">
             try {
                 var HW_config = { selector: ".notification", account: "7eB4aJ" };
-                window.onload = function () {
-                    if (window["isElectron"]) {
-                        var jQuery = ($ = window.$ = window.jQuery = require("jquery"));
-                    }
-                };
             } catch (error) {
                 console.error(error);
             }

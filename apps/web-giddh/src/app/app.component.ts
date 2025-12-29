@@ -140,22 +140,52 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         });
 
         if (Configuration.isElectron) {
-            // electronOauth2
-            const { ipcRenderer } = (window as any).require("electron");
-            // google
-            const t = ipcRenderer.send("take-server-environment", {
-                'production': environment.production,
-                'isLocalEnv': !environment.production,
-                'AppUrl': (this.serviceConfig.AppUrl || Configuration.AppUrl),
-                'APP_FOLDER': environment.APP_FOLDER
-            });
-            ipcRenderer.on('app-close-requested', () => {
-                this.pageLeaveUtilityService.confirmPageLeave((confirmed: boolean) => {
-                    if (confirmed) {
-                        ipcRenderer.send('force-close');
+            // electronOauth2 - Use secure Electron API
+            try {
+                const electron = (window as any).require("electron");
+                if (electron && electron.ipcRenderer) {
+                    const { ipcRenderer } = electron;
+                    // Send server environment to main process
+                    ipcRenderer.send("take-server-environment", {
+                        'production': environment.production,
+                        'isLocalEnv': !environment.production,
+                        'AppUrl': (this.serviceConfig.AppUrl || Configuration.AppUrl),
+                        'APP_FOLDER': environment.APP_FOLDER
+                    });
+                    // Handle app close requests
+                    ipcRenderer.on('app-close-requested', () => {
+                        this.pageLeaveUtilityService.confirmPageLeave((confirmed: boolean) => {
+                            if (confirmed) {
+                                ipcRenderer.send('force-close');
+                            }
+                        });
+                    });
+                } else if ((window as any).electronAPI) {
+                    // Fallback: Use secure electronAPI if available
+                    const electronAPI = (window as any).electronAPI;
+                    // Send server environment to main process
+                    electronAPI.send("take-server-environment", {
+                        'production': environment.production,
+                        'isLocalEnv': !environment.production,
+                        'AppUrl': (this.serviceConfig.AppUrl || Configuration.AppUrl),
+                        'APP_FOLDER': environment.APP_FOLDER
+                    });
+                    // Handle app close requests (note: electronAPI.on might not support this channel)
+                    if (electronAPI.on) {
+                        electronAPI.on('app-close-requested', () => {
+                            this.pageLeaveUtilityService.confirmPageLeave((confirmed: boolean) => {
+                                if (confirmed) {
+                                    electronAPI.send('force-close');
+                                }
+                            });
+                        });
                     }
-                });
-            });
+                } else {
+                    console.warn('Electron IPC not available - some Electron features may not work');
+                }
+            } catch (error) {
+                console.warn('Electron require failed - running in fallback mode:', error);
+            }
         }
 
         /** This will be use for dialog close on route event */

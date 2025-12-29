@@ -184,7 +184,9 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
                     });
                     if (this.voucherNumberInput?.value) {
                         setTimeout(() => {
-                            this.invoiceSearch?.nativeElement.focus();
+                            if (this.invoiceSearch && this.invoiceSearch.nativeElement) {
+                                this.invoiceSearch.nativeElement.focus();
+                            }
                         }, 200);
                     }
                 }
@@ -411,7 +413,9 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         if (fieldName === "invoiceNumber") {
             this.showSearchInvoiceNo = true;
             setTimeout(() => {
-                this.invoiceSearch?.nativeElement.focus();
+                if (this.invoiceSearch && this.invoiceSearch.nativeElement) {
+                    this.invoiceSearch.nativeElement.focus();
+                }
             }, 200);
         } else {
             this.showSearchInvoiceNo = false;

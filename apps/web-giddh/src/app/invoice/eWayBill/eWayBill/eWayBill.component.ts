@@ -528,13 +528,17 @@ export class EWayBillComponent implements OnInit, OnDestroy {
             this.showSearchCustomer = false;
 
             setTimeout(() => {
-                this.invoiceSearch?.nativeElement.focus();
+                if (this.invoiceSearch && this.invoiceSearch.nativeElement) {
+                    this.invoiceSearch.nativeElement.focus();
+                }
             }, 200);
         } else if (fieldName === 'customerUniqueName') {
             this.showSearchCustomer = true;
             this.showSearchInvoiceNo = false;
             setTimeout(() => {
-                this.customerSearch?.nativeElement.focus();
+                if (this.customerSearch && this.customerSearch.nativeElement) {
+                    this.customerSearch.nativeElement.focus();
+                }
             }, 200);
         } else {
             this.showSearchInvoiceNo = false;

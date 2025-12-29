@@ -336,20 +336,26 @@ export class JobworkComponent implements OnInit, OnDestroy {
         if (type === 'sender') {
             this.showSenderSearch = !this.showSenderSearch;
             setTimeout(() => {
-                this.senderName.nativeElement.focus();
-                this.senderName.nativeElement.value = null;
+                if (this.senderName && this.senderName.nativeElement) {
+                    this.senderName.nativeElement.focus();
+                    this.senderName.nativeElement.value = null;
+                }
             }, 100);
         } else if (type === 'receiver') {
             this.showReceiverSearch = !this.showReceiverSearch;
             setTimeout(() => {
-                this.receiverName.nativeElement.focus();
-                this.receiverName.nativeElement.value = null;
+                if (this.receiverName && this.receiverName.nativeElement) {
+                    this.receiverName.nativeElement.focus();
+                    this.receiverName.nativeElement.value = null;
+                }
             }, 100);
         } else if (type === 'product') {
             this.showProductSearch = !this.showProductSearch;
             setTimeout(() => {
-                this.receiverName.nativeElement.focus();
-                this.receiverName.nativeElement.value = null;
+                if (this.receiverName && this.receiverName.nativeElement) {
+                    this.receiverName.nativeElement.focus();
+                    this.receiverName.nativeElement.value = null;
+                }
             }, 100);
         }
     }
@@ -456,9 +462,13 @@ export class JobworkComponent implements OnInit, OnDestroy {
         this.showSenderSearch = false;
         this.showReceiverSearch = false;
         this.showProductSearch = false;
-        this.senderName.nativeElement.value = null;
-        this.receiverName.nativeElement.value = null;
-        if (this.productName) {
+        if (this.senderName && this.senderName.nativeElement) {
+            this.senderName.nativeElement.value = null;
+        }
+        if (this.receiverName && this.receiverName.nativeElement) {
+            this.receiverName.nativeElement.value = null;
+        }
+        if (this.productName && this.productName.nativeElement) {
             this.productName.nativeElement.value = null;
         }
 
@@ -503,7 +513,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
     public advanceSearchAction(type: string) {
         if (type === 'clear') {
             this.advanceSearchForm.controls['filterAmount'].setValue(null);
-            if (this.filter.senderName || this.filter.receiverName || this.senderName.nativeElement.value || this.receiverName.nativeElement.value
+            if (this.filter.senderName || this.filter.receiverName || (this.senderName && this.senderName.nativeElement && this.senderName.nativeElement.value) || (this.receiverName && this.receiverName.nativeElement && this.receiverName.nativeElement.value)
                 || this.filter.sortBy || this.filter.sort || this.filter.quantityGreaterThan || this.filter.quantityEqualTo || this.filter.quantityLessThan) {
                 // do something...
             } else {
@@ -511,7 +521,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
             }
             return;
         } else if (type === 'cancel') {
-            if (this.filter.senderName || this.filter.receiverName || this.senderName.nativeElement.value || this.receiverName.nativeElement.value
+            if (this.filter.senderName || this.filter.receiverName || (this.senderName && this.senderName.nativeElement && this.senderName.nativeElement.value) || (this.receiverName && this.receiverName.nativeElement && this.receiverName.nativeElement.value)
                 || this.filter.sortBy || this.filter.sort || this.filter.quantityGreaterThan || this.filter.quantityEqualTo || this.filter.quantityLessThan) {
                 // do something...
             } else {

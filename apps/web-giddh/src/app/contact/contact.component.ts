@@ -578,9 +578,51 @@ export class ContactComponent implements OnInit, OnDestroy {
             url = `${url}${additionalParams}`;
         }
         if (Configuration.isElectron) {
-            const ipcRenderer = (window as any).require('electron').ipcRenderer;
-            url = `${location.origin}${location.pathname}#./pages/${part}${part?.includes('ledger') ? `/${accUniqueName}` : ""}`;
-            ipcRenderer.send('open-url', url);
+            try {
+                let electronIpcAvailable = false;
+
+                // Try electronAPI first (secure context)
+                if ((window as any).electronAPI && (window as any).electronAPI.send) {
+                    try {
+                        url = `${location.origin}${location.pathname}#./pages/${part}${part?.includes('ledger') ? `/${accUniqueName}` : ""}`;
+                        (window as any).electronAPI.send('open-url', url);
+                        electronIpcAvailable = true;
+                    } catch (ipcError) {
+                        console.warn('ElectronAPI send failed:', ipcError);
+                    }
+                }
+
+                // Try legacy electron require (fallback)
+                if (!electronIpcAvailable && (window as any).require) {
+                    try {
+                        const electron = (window as any).require('electron');
+                        if (electron && electron.ipcRenderer && electron.ipcRenderer.send) {
+                            url = `${location.origin}${location.pathname}#./pages/${part}${part?.includes('ledger') ? `/${accUniqueName}` : ""}`;
+                            electron.ipcRenderer.send('open-url', url);
+                            electronIpcAvailable = true;
+                        }
+                    } catch (requireError) {
+                        console.warn('Electron require failed:', requireError);
+                    }
+                }
+
+                // Fallback to regular window.open if IPC not available
+                if (!electronIpcAvailable) {
+                    console.warn('Electron IPC not available, using window.open fallback');
+                    if (part === 'ledger') {
+                        const separator = url.includes('?') ? '&' : '?';
+                        url = url + `${separator}redirectUrl=${encodeURIComponent(this.currentUrl)}`;
+                    }
+                    (window as any).open(url);
+                }
+            } catch (error) {
+                console.warn('Electron navigation failed, using window.open:', error);
+                if (part === 'ledger') {
+                    const separator = url.includes('?') ? '&' : '?';
+                    url = url + `${separator}redirectUrl=${encodeURIComponent(this.currentUrl)}`;
+                }
+                (window as any).open(url);
+            }
         } else {
             if (part === 'ledger') {
                 const separator = url.includes('?') ? '&' : '?';

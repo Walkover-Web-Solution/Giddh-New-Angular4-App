@@ -10,7 +10,7 @@ let STAGING_ENV = false;
 let TEST_ENV = false;
 let LOCAL_ENV = true;
 let PRODUCTION_ENV = false;
-let APP_URL = '';  // Dynamic configuration via IPC
+let APP_URL = 'file://' + __dirname + '/index.html';  // Direct path to packaged Angular app
 let APP_FOLDER = '';
 
 // Electron-specific configuration

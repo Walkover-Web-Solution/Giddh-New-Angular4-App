@@ -1,15 +1,29 @@
-// Enhanced lodash loading for Electron with comprehensive fallbacks
-console.log('🔧 Loading lodash-optimized for Electron environment');
+// Enhanced lodash loading with comprehensive fallbacks for all environments
 
 let lodash: any;
 
 try {
-    // Try to get lodash from window (web environment)
-    lodash = (window as any)._;
+    // First try to get lodash from window (web environment)
+    if (typeof window !== 'undefined' && (window as any)._) {
+        lodash = (window as any)._;
+    }
 
-    // If lodash is not available on window, try to require it (Electron environment)
-    if (!lodash && typeof (window as any).require !== 'undefined') {
-        lodash = (window as any).require('lodash');
+    // Try secure Electron API if available
+    else if (typeof window !== 'undefined' && (window as any).electronAPI && (window as any).electronAPI.require) {
+        try {
+            lodash = (window as any).electronAPI.require('lodash');
+        } catch (e) {
+            console.log('Secure Electron lodash loading failed, using fallbacks');
+        }
+    }
+
+    // Try legacy require if available (fallback)
+    else if (typeof window !== 'undefined' && (window as any).require) {
+        try {
+            lodash = (window as any).require('lodash');
+        } catch (e) {
+            console.log('Legacy lodash loading failed, using fallbacks');
+        }
     }
 
     // If still not available, provide comprehensive fallback implementations
@@ -17,7 +31,9 @@ try {
         console.warn('Lodash not available, using fallback implementations');
         lodash = {
             orderBy: (collection: any[], iteratees: any, orders?: any) => {
-                console.log('🔧 Using ELECTRON orderBy fallback implementation');
+                if (typeof window !== 'undefined' && (window as any).isElectron) {
+                    console.log('🔧 Using ELECTRON orderBy fallback implementation');
+                }
                 const iterateesArray = Array.isArray(iteratees) ? iteratees : [iteratees];
                 const ordersArray = Array.isArray(orders) ? orders : [orders || 'asc'];
 
@@ -114,7 +130,9 @@ const {
         return result;
     },
     orderBy = (collection: any[], iteratees: any, orders?: any) => {
-        console.log('🔧 Using ELECTRON orderBy fallback implementation');
+        if (typeof window !== 'undefined' && (window as any).isElectron) {
+            console.log('🔧 Using ELECTRON orderBy fallback implementation');
+        }
         const iterateesArray = Array.isArray(iteratees) ? iteratees : [iteratees];
         const ordersArray = Array.isArray(orders) ? orders : [orders || 'asc'];
 

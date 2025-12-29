@@ -2224,9 +2224,43 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      */
     private openUrl(url: string): void {
         if (isElectron) {
-            let ipcRenderer = (window as any).require('electron').ipcRenderer;
-            url = location.origin + location.pathname + `#.${url}`;
-            ipcRenderer.send('open-url', url);
+            try {
+                let electronIpcAvailable = false;
+
+                // Try electronAPI first (secure context)
+                if ((window as any).electronAPI && (window as any).electronAPI.send) {
+                    try {
+                        const electronUrl = location.origin + location.pathname + `#.${url}`;
+                        (window as any).electronAPI.send('open-url', electronUrl);
+                        electronIpcAvailable = true;
+                    } catch (ipcError) {
+                        console.warn('ElectronAPI send failed:', ipcError);
+                    }
+                }
+
+                // Try legacy electron require (fallback)
+                if (!electronIpcAvailable && (window as any).require) {
+                    try {
+                        const electron = (window as any).require('electron');
+                        if (electron && electron.ipcRenderer && electron.ipcRenderer.send) {
+                            const electronUrl = location.origin + location.pathname + `#.${url}`;
+                            electron.ipcRenderer.send('open-url', electronUrl);
+                            electronIpcAvailable = true;
+                        }
+                    } catch (requireError) {
+                        console.warn('Electron require failed:', requireError);
+                    }
+                }
+
+                // Fallback to regular window.open if IPC not available
+                if (!electronIpcAvailable) {
+                    console.warn('Electron IPC not available for page leave utility, using window.open');
+                    (window as any).open(url);
+                }
+            } catch (error) {
+                console.warn('Electron navigation failed, using window.open:', error);
+                (window as any).open(url);
+            }
         } else {
             (window as any).open(url);
         }

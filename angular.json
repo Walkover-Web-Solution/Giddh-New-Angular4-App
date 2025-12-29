@@ -144,7 +144,7 @@
                                 }
                             ],
                             "index": {
-                                "input": "apps/web-giddh/src/index.test.html",
+                                "input": "apps/web-giddh/src/index.electron.html",
                                 "output": "/index.html"
                             },
                             "optimization": true,
@@ -362,32 +362,6 @@
                                     "type": "initial",
                                     "maximumWarning": "2mb",
                                     "maximumError": "10mb"
-                                }
-                            ]
-                        },
-                        "electron": {
-                            "outputPath": "dist/apps/web-giddh",
-                            "baseHref": "./",
-                            "fileReplacements": [
-                                {
-                                    "replace": "apps/web-giddh/src/environments/environment.ts",
-                                    "with": "apps/web-giddh/src/environments/environment.generated.ts"
-                                }
-                            ],
-                            "index": {
-                                "input": "apps/web-giddh/src/index.electron.html",
-                                "output": "/index.html"
-                            },
-                            "optimization": true,
-                            "outputHashing": "none",
-                            "sourceMap": false,
-                            "vendorChunk": false,
-                            "tsConfig": "apps/web-giddh/tsconfig.electron.json",
-                            "budgets": [
-                                {
-                                    "type": "initial",
-                                    "maximumWarning": "25mb",
-                                    "maximumError": "25mb"
                                 }
                             ]
                         }

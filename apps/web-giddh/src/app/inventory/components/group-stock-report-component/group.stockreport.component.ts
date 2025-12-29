@@ -599,16 +599,20 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
     public showProductSearchBox() {
         this.showProductSearch = !this.showProductSearch;
         setTimeout(() => {
-            this.productName?.nativeElement.focus();
-            this.productName.nativeElement.value = null;
+            if (this.productName && this.productName.nativeElement) {
+                this.productName.nativeElement.focus();
+                this.productName.nativeElement.value = null;
+            }
         }, 200);
     }
 
     public showSourceSearchBox() {
         this.showSourceSearch = !this.showSourceSearch;
         setTimeout(() => {
-            this.sourceName?.nativeElement.focus();
-            this.sourceName.nativeElement.value = null;
+            if (this.sourceName && this.sourceName.nativeElement) {
+                this.sourceName.nativeElement.focus();
+                this.sourceName.nativeElement.value = null;
+            }
         }, 200);
     }
 
@@ -628,8 +632,10 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         this.showProductSearch = false;
         this.GroupStockReportRequest.stockName = null;
         this.GroupStockReportRequest.source = null;
-        this.productName.nativeElement.value = null;
-        if (this.sourceName) {
+        if (this.productName && this.productName.nativeElement) {
+            this.productName.nativeElement.value = null;
+        }
+        if (this.sourceName && this.sourceName.nativeElement) {
             this.sourceName.nativeElement.value = null;
         }
         //Reset Date with universal date
@@ -787,7 +793,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
         } else {
             this.GroupStockReportRequest.number = null;
         }
-        if (this.GroupStockReportRequest.source || this.GroupStockReportRequest.sortBy || this.productName?.nativeElement.value || this.GroupStockReportRequest.entity || this.GroupStockReportRequest.condition || this.GroupStockReportRequest.value || this.GroupStockReportRequest.number) {
+        if (this.GroupStockReportRequest.source || this.GroupStockReportRequest.sortBy || (this.productName && this.productName.nativeElement && this.productName.nativeElement.value) || this.GroupStockReportRequest.entity || this.GroupStockReportRequest.condition || this.GroupStockReportRequest.value || this.GroupStockReportRequest.number) {
             this.isFilterCorrect = true;
         } else {
             this.isFilterCorrect = false;

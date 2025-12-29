@@ -1,57 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <script type="text/javascript">
-            // Electron development environment configuration
-            window.isElectron = true;
-            window.electronEnvironment = {
-                isDevelopment: true,
-                appUrl: 'http://localhost:4200/',
-                apiUrl: 'https://apitest.giddh.com/'
-            };
-        </script>
-        <script type="text/javascript">
-            // Add preconnect for domainName extracted from cookie
-            window.onload = function () {
-                let whiteLabelConfig = JSON.parse(localStorage.getItem("whiteLabel"));
-                const logoUrl = "./assets/images/giddh-big-logo.svg";
-                const apiDomain = whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain || "https://apitest.giddh.com";
+        <!-- Electron-specific CSP: Allow all sources for Electron environment -->
+        <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob: file:; script-src * 'unsafe-inline' 'unsafe-eval' data: blob: file:; style-src * 'unsafe-inline' data: blob: file:; img-src * data: blob: file:; font-src * data: blob: file:; connect-src * data: blob: file:;">
 
-                if (whiteLabelConfig) {
-                    // Remove the h1 tag containing the image
-                    const logoContainer = document.querySelector("#main-giddh-loader h1");
-                    if (logoContainer) {
-                        logoContainer.remove();
-                    }
-                } else {
-                    // If no whiteLabel object, set the logo as usual
-                    const logoElement = document.getElementById("dynamic-logo");
-                    if (logoElement) {
-                        logoElement.src = logoUrl;
-                    }
-                }
-                // Create a new preconnect link element
-                const preconnectLink = document.createElement("link");
-                preconnectLink.rel = "preconnect";
-                preconnectLink.href = apiDomain;
-
-                // Append the preconnect link to the head
-                document.head.appendChild(preconnectLink);
-            };
-        </script>
+        <!-- External scripts loaded first -->
         <script defer src="./assets/js/lodash.min.js"></script>
         <script defer src="./assets/js/jquery.min.js"></script>
-        <script type="text/javascript">
-            window.onerror = function (msg, url, line, col, error) {
-                var extra = !col ? "" : "\ncolumn: " + col;
-                extra += !error ? "" : "\nerror: " + error;
-                console.error("Error: " + msg + "\nurl: " + url + "\nline: " + line + extra);
-            };
-        </script>
+
+        <!-- Move all inline scripts to external file for CSP compliance -->
+        <script defer src="./assets/js/electron-init.js"></script>
         <meta charset="utf-8" />
         <meta http-equiv="x-ua-compatible" content="ie=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' 'unsafe-eval' data: https:; img-src 'self' data: https:;">
         <title>Giddh ~ Accounting at its Rough! Bookkeeping and Accounting Software</title>
         <meta name="description" content="Giddh ~ Accounting at its Rough! Bookkeeping and Accounting Software" />
         <link rel="icon" href="assets/images/favicons.png" type="image/png" sizes="16x16" />
@@ -65,18 +26,9 @@
 
         <link rel="stylesheet" href="./assets/styles/default.css" crossorigin="anonymous" />
         <script type="text/javascript">
-            try {
-                // Electron-specific jQuery setup - use window.require if available
-                if (typeof window.require !== 'undefined') {
-                    var jQuery = ($ = window.$ = window.jQuery = window.require("jquery"));
-                } else if (typeof require !== 'undefined') {
-                    var jQuery = ($ = window.$ = window.jQuery = require("jquery"));
-                }
-            } catch (error) {
-                console.warn('jQuery require failed in Electron:', error);
-                // Fallback for cases where require is not available
-                // jQuery will be loaded from the bundled assets instead
-            }
+            // Electron secure context - jQuery will be loaded from bundled assets
+            // No require() available due to contextIsolation: true and nodeIntegration: false
+            console.log('Electron secure context - jQuery loaded from assets');
         </script>
         <link rel="preconnect" href="https://s3-ap-south-1.amazonaws.com" />
     </head>

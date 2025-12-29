@@ -1,4 +1,5 @@
 import { app, BrowserWindow as BrowserWindowElectron, ipcMain } from 'electron';
+import * as path from 'path';
 import AppUpdaterV1 from './AppUpdater';
 import { autoUpdater } from 'electron-updater';
 import { WebContentsSignal, WindowEvent } from './electronEventSignals';
@@ -78,7 +79,9 @@ export default class WindowManager {
                 webPreferences: {
                     nodeIntegration: false,
                     contextIsolation: true,
-                    sandbox: false
+                    sandbox: false,
+                    webSecurity: false,
+                    preload: path.join(__dirname, 'preload.js')
                 },
                 tabbingIdentifier: 'giddh'
             };

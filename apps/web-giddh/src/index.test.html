@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <script type="text/javascript">
+            // Web environment configuration - TEST
+            window.isElectron = false;
+            window.webEnvironment = {
+                type: 'test',
+                appUrl: 'https://test.giddh.com/',
+                apiUrl: 'https://apitest.giddh.com/'
+            };
+        </script>
         <meta charset="utf-8" />
         <meta http-equiv="x-ua-compatible" content="ie=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3" />
@@ -70,11 +79,6 @@
         <script type="text/javascript">
             try {
                 var HW_config = { selector: ".notification", account: "7eB4aJ" };
-                window.onload = function () {
-                    if (window["isElectron"]) {
-                        var jQuery = ($ = window.$ = window.jQuery = require("jquery"));
-                    }
-                };
             } catch (error) {
                 console.error(error);
             }

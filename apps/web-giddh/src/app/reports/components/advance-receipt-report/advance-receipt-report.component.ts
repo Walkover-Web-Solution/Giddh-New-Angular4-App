@@ -501,10 +501,10 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
      */
     private subscribeToEvents(): void {
         merge(
-            fromEvent(this.customerName?.nativeElement, 'input'),
-            fromEvent(this.receiptNumber?.nativeElement, 'input'),
-            fromEvent(this.paymentMode?.nativeElement, 'input'),
-            fromEvent(this.invoiceNumber?.nativeElement, 'input')).pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((value) => {
+            this.customerName?.nativeElement ? fromEvent(this.customerName.nativeElement, 'input') : of(),
+            this.receiptNumber?.nativeElement ? fromEvent(this.receiptNumber.nativeElement, 'input') : of(),
+            this.paymentMode?.nativeElement ? fromEvent(this.paymentMode.nativeElement, 'input') : of(),
+            this.invoiceNumber?.nativeElement ? fromEvent(this.invoiceNumber.nativeElement, 'input') : of()).pipe(debounceTime(700), takeUntil(this.destroyed$)).subscribe((value) => {
                 this.showClearFilter = true;
                 this.fetchAllReceipts(this.searchQueryParams).pipe(takeUntil(this.destroyed$)).subscribe((response) => this.handleFetchAllReceiptResponse(response));
             });
