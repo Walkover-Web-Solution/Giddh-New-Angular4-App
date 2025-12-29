@@ -259,26 +259,26 @@ export class VouchersUtilityService {
         };
 
         entries?.forEach(entry => {
-            voucherTotals.totalAmount += (Number(entry.transactions[0]?.amount?.amountForAccount));
-            voucherTotals.totalDiscount += (Number(entry.totalDiscount));
+            voucherTotals.totalAmount += (Number(entry.transactions[0]?.amount?.amountForAccount) || 0);
+            voucherTotals.totalDiscount += (Number(entry.totalDiscount) || 0);
             if (entry.transactions[0]?.taxableValue) {
-                voucherTotals.totalTaxableValue += Number(entry.transactions[0]?.taxableValue?.amountForAccount);
+                voucherTotals.totalTaxableValue += Number(entry.transactions[0]?.taxableValue?.amountForAccount) || 0;
             } else {
-                voucherTotals.totalTaxableValue += (Number(entry.transactions[0]?.amount?.amountForAccount)) - (Number(entry.totalDiscount));
+                voucherTotals.totalTaxableValue += ((Number(entry.transactions[0]?.amount?.amountForAccount) || 0) - (Number(entry.totalDiscount) || 0));
             }
-            voucherTotals.totalTaxWithoutCess += Number(entry.totalTaxWithoutCess);
-            voucherTotals.totalCess += Number(entry.totalCess);
+            voucherTotals.totalTaxWithoutCess += (Number(entry.totalTaxWithoutCess) || 0);
+            voucherTotals.totalCess += (Number(entry.totalCess) || 0);
 
             if (entry.grandTotal) {
-                voucherTotals.grandTotal += Number(entry.grandTotal?.amountForAccount);
+                voucherTotals.grandTotal += (Number(entry.grandTotal?.amountForAccount) || 0);
             } else {
-                voucherTotals.grandTotal += Number(entry.total?.amountForAccount);
+                voucherTotals.grandTotal += (Number(entry.total?.amountForAccount) || 0);
             }
 
             if (entry.otherTax?.type === OtherTaxTypeEnum.TCS) {
-                voucherTotals.tcsTotal += entry.otherTax?.amount;
+                voucherTotals.tcsTotal += (Number(entry.otherTax?.amount) || 0);
             } else if (entry.otherTax?.type === OtherTaxTypeEnum.TDS) {
-                voucherTotals.tdsTotal += entry.otherTax?.amount;
+                voucherTotals.tdsTotal += (Number(entry.otherTax?.amount) || 0);
             }
         });
 
@@ -286,9 +286,9 @@ export class VouchersUtilityService {
         voucherTotals.totalDiscount = giddhRoundOff(voucherTotals.totalDiscount, balanceDecimalPlaces);
         voucherTotals.totalTaxableValue = giddhRoundOff(voucherTotals.totalTaxableValue, balanceDecimalPlaces);
         voucherTotals.totalTaxWithoutCess = giddhRoundOff(voucherTotals.totalTaxWithoutCess, balanceDecimalPlaces);
-        voucherTotals.totalCess = giddhRoundOff(voucherTotals.totalCess, balanceDecimalPlaces);
+        voucherTotals.totalCess = giddhRoundOff(voucherTotals.totalCess, balanceDecimalPlaces); 
         voucherTotals.grandTotal = giddhRoundOff(voucherTotals.grandTotal, balanceDecimalPlaces);
-        voucherTotals.grandTotalMultiCurrency = giddhRoundOff(voucherTotals.grandTotal * exchangeRate, balanceDecimalPlaces);
+        voucherTotals.grandTotalMultiCurrency = giddhRoundOff(voucherTotals.grandTotal * exchangeRate, balanceDecimalPlaces); 
         voucherTotals.roundOff = (applyRoundOff) ? Number((Math.round(voucherTotals.grandTotal) - voucherTotals.grandTotal).toFixed(balanceDecimalPlaces)) : Number((0).toFixed(balanceDecimalPlaces));
 
         return voucherTotals;

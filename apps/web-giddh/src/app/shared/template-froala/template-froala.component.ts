@@ -58,6 +58,8 @@ export class TemplateFroalaComponent implements OnInit {
     public showCc: boolean = false;
     /** True if show bcc */
     public showBcc: boolean = false;
+    /** True if show replyTo */
+    public showReplyTo: boolean = false;
     /** Hold froala editor instance */
     public froalaEditor: any;
     /** Hold froala editor text trigger */
@@ -88,6 +90,10 @@ export class TemplateFroalaComponent implements OnInit {
     public bccEmails: any[] = [];
     /** Hold selected bcc email options */
     public selectedBccEmails: any[] = [];
+    /** Hold replyTo email options */
+    public replyToEmails: any[] = [];
+    /** Hold selected replyTo email options */
+    public selectedReplyToEmails: any[] = [];
     /** Holds field options */
     public entityOptions: IOption[] = [];
     /** Holds entity account group options */
@@ -124,15 +130,16 @@ export class TemplateFroalaComponent implements OnInit {
     public noOfMaximumEmailsShow: number = 2;
     /** Holds email type */
     public emailType: any = EmailType;
-    /** This variable maintains the focus state for email types: "to", "cc", and "bcc". */
+    /** This variable maintains the focus state for email types: "to", "cc", "bcc", and "replyTo". */
     public emailFocusStates: any = {
         isTo: true,
         isCc: true,
-        isBcc: true
+        isBcc: true,
+        isReplyTo: true
     };
-    /** Calculates the total number of email addresses across To, Cc, and Bcc fields. */
+    /** Calculates the total number of email addresses across To, Cc, Bcc, and ReplyTo fields. */
     public get getTotalEmailsCount(): number {
-        return this.selectedToEmails.length + this.selectedCcEmails.length + this.selectedBccEmails.length;
+        return this.selectedToEmails.length + this.selectedCcEmails.length + this.selectedBccEmails.length + this.selectedReplyToEmails.length;
     };
     /** Holds width of select-multiple-fields */
     public optionClass: string = '';
@@ -152,6 +159,8 @@ export class TemplateFroalaComponent implements OnInit {
     public isTrigger: boolean;
     /** Holds true if form has unsaved changes */
     public hasUnsavedChanges: boolean = false;
+    /** Holds super admin email */
+    public superAdminEmail: string[] = ['COMPANY_SUPER_ADMINS_EMAIL'];
 
     constructor(
         @Inject(MAT_DIALOG_DATA) public inputData,
@@ -208,6 +217,7 @@ export class TemplateFroalaComponent implements OnInit {
                     this.selectedToEmails = this.customTriggerForm.get(EmailType.To)?.value;
                     this.selectedBccEmails = this.customTriggerForm.get(EmailType.Bcc)?.value;
                     this.selectedCcEmails = this.customTriggerForm.get(EmailType.Cc)?.value;
+                    this.selectedReplyToEmails = this.customTriggerForm.get(EmailType.ReplyTo)?.value;
                     this.showDayOfWeek = Boolean(triggerDetails.executionTime.dayOfWeek);
                     this.onEntityChange({ value: triggerDetails.entity, label: triggerDetails.entity }, true);
                     this.clickedOutsideEmail();
@@ -261,11 +271,12 @@ export class TemplateFroalaComponent implements OnInit {
                 setTimeout(() => {
                     this.initializeTribute(tributeSuggestions);
                 }, 300);
-
-                const mappedEmail = this.mapEmailSuggestions(response.emailSuggestions);
+                const emailSuggestionsList = response.emailSuggestions.filter(email => !this.superAdminEmail.includes(email));
+                const mappedEmail = this.mapEmailSuggestions(emailSuggestionsList);
                 this.toEmails = mappedEmail;
                 this.ccEmails = mappedEmail;
                 this.bccEmails = mappedEmail;
+                this.replyToEmails = this.mapEmailSuggestions(this.superAdminEmail);
 
                 if (this.isTrigger) {
                     this.voucherList = this.generalService.getVoucherTypeList(this.commonLocaleData, response?.voucherNames);
@@ -284,6 +295,10 @@ export class TemplateFroalaComponent implements OnInit {
                     this.showCc = true;
                     this.selectedCcEmails = response.cc;
                 }
+                if (response?.replyTo?.length) {
+                    this.showReplyTo = true;
+                    this.selectedReplyToEmails = response.replyTo;
+                }
                 if (response.to?.length) {
                     this.selectedToEmails = response.to;
                 }
@@ -294,6 +309,7 @@ export class TemplateFroalaComponent implements OnInit {
                     to: response.to ?? [],
                     cc: response.cc ?? [],
                     bcc: response.bcc ?? [],
+                    replyTo: response.replyTo ?? [],
                     emailSubject: response.emailSubject ?? null,
                     html: response.html ?? null
                 }, { emitEvent: false });
@@ -433,7 +449,7 @@ export class TemplateFroalaComponent implements OnInit {
     }
 
     /**
-     * Updates the focus state for the email types ('to', 'cc', 'bcc').
+     * Updates the focus state for the email types ('to', 'cc', 'bcc', 'replyTo').
      * @returns {void}
      * @param {string} emailType
      * @memberof TemplateFroalaComponent
@@ -442,6 +458,7 @@ export class TemplateFroalaComponent implements OnInit {
         this.emailFocusStates.isTo = emailType === EmailType.To;
         this.emailFocusStates.isCc = emailType === EmailType.Cc;
         this.emailFocusStates.isBcc = emailType === EmailType.Bcc;
+        this.emailFocusStates.isReplyTo = emailType === EmailType.ReplyTo;
     }
 
     /**
@@ -609,6 +626,7 @@ export class TemplateFroalaComponent implements OnInit {
                 to: [[]],
                 cc: [[]],
                 bcc: [[]],
+                replyTo: [[]],
                 executionTime: this.getExecutionTimeFormGroup(),
                 actions: [[TriggerActionEnum.AttachVoucherPdf]],
                 html: [DEFAULT_TRIGGER_TEMPLATE, [Validators.required]],
@@ -619,6 +637,7 @@ export class TemplateFroalaComponent implements OnInit {
                 to: [template?.to ?? []],
                 cc: [template?.cc ?? []],
                 bcc: [template?.bcc ?? []],
+                replyTo: [template?.replyTo ?? []],
                 voucherTypes: [[this.inputData]],
                 emailSubject: [template?.emailSubject ?? null],
                 html: [template?.html ?? null]
@@ -817,7 +836,7 @@ export class TemplateFroalaComponent implements OnInit {
     }
 
     /**
-     * Sets the values of the form fields for To, Bcc, and Cc.
+     * Sets the values of the form fields for To, Bcc, Cc, and ReplyTo.
      *
      * @param {FormGroup} form - The form group to update.
      * @memberof TemplateFroalaComponent
@@ -826,6 +845,7 @@ export class TemplateFroalaComponent implements OnInit {
         form.get(EmailType.To)?.patchValue(this.selectedToEmails, { emitEvent: false });
         form.get(EmailType.Bcc)?.patchValue(this.selectedBccEmails, { emitEvent: false });
         form.get(EmailType.Cc)?.patchValue(this.selectedCcEmails, { emitEvent: false });
+        form.get(EmailType.ReplyTo)?.patchValue(this.selectedReplyToEmails, { emitEvent: false });
     }
 
     /**
@@ -861,7 +881,7 @@ export class TemplateFroalaComponent implements OnInit {
     }
 
     /**
-     * Show/Hide bcc/cc field
+     * Show/Hide bcc/cc/replyTo field
      * @returns {void}
      * @param {string} emailType
      * @memberof TemplateFroalaComponent
@@ -875,6 +895,7 @@ export class TemplateFroalaComponent implements OnInit {
         }
         this.showBcc = emailType === EmailType.Bcc ? true : this.showBcc;
         this.showCc = emailType === EmailType.Cc ? true : this.showCc;
+        this.showReplyTo = emailType === EmailType.ReplyTo ? true : this.showReplyTo;
     }
 
     /**
@@ -950,7 +971,7 @@ export class TemplateFroalaComponent implements OnInit {
 
         // Calculate hidden emails
         const totalEmails = this.getTotalEmailsCount;
-        const visibleEmails = this.selectedToEmails.length + this.selectedCcEmails.length;
+        const visibleEmails = this.selectedToEmails.length + this.selectedCcEmails.length + this.selectedReplyToEmails.length;
         const hiddenEmailsCount = totalEmails - this.noOfMaximumEmailsShow;
 
         if (hiddenEmailsCount > 0) {
