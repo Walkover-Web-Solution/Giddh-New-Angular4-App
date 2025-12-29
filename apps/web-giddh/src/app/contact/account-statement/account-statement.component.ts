@@ -133,8 +133,7 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
                         : "") +
                     (this.responseAccountList.accountAddress?.currency?.symbol ?? "") +
                     this.giddhNumberFormatPipe.transform(this.responseAccountList.accountSummary.closingBalance.amount)
-                    : ""
-                console.log('this.responseAccountList', this.responseAccountList, this.balanceDue);
+                    : "";
             }
         });
 

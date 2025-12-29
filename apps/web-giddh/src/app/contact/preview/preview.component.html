@@ -9,7 +9,15 @@
         *ngIf="!isSearching && !isLoadMore && (getAccountsInProgress$ | async)"
         [cssClass]="'no-data'"
     ></giddh-page-loader>
-    <div class="invoice-preview-wrapper d-flex full-viewport-height" *ngIf="isSearching || isLoadMore || !(getAccountsInProgress$ | async)">
+    <div
+        appResizable
+        resizableTarget=".preview-list"
+        [minWidth]="300"
+        [maxWidthRatio]="0.5"
+        [defaultWidthRatio]="0.3"
+        [moduleName]="contact-preview"
+        class="invoice-preview-wrapper d-flex full-viewport-height"
+        *ngIf="isSearching || isLoadMore || !(getAccountsInProgress$ | async)">
         <div class="preview-list pb-3">
             <div class="d-flex align-items-center column-gap-05 p-3 w-100 list-responsive row-gap-1">
                 <div class="position-relative search-field flex-grow-1">
@@ -40,11 +48,11 @@
                                 (click)="setSelectedContact(item?.uniqueName, true)"
                             >
                                 <div class="d-flex justify-content-between align-items-center column-gap-05">
-                                    <div>
-                                        <span class="font-size-12 title-text mt-1 text-wrap word-wrap-anywhere d-block line-height-16">
+                                    <div class="flex-grow-1 min-width-0">
+                                        <span class="font-size-12 title-text mt-1 text-ellipsis d-block line-height-16 w-100">
                                             {{ item?.uniqueName }}
                                         </span>
-                                        <p class="text-light pr-5 mt-1 text-wrap word-wrap-anywhere">
+                                        <p class="text-light mt-1 text-ellipsis w-100">
                                             {{ item?.name }}
                                         </p>
                                     </div>
@@ -62,7 +70,7 @@
                 ></giddh-page-loader>
             </div>
         </div>
-        <div class="preview-content">
+        <div class="preview-content flex-grow-1">
             <div class="position-relative overflow-visible">
                 <div class="clear-both overflow-visible">
                     <div class="position-absolute back-button">

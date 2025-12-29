@@ -21,7 +21,6 @@
     height: calc(100vh - (var(--header-height) + 30px));
 
     .preview-list {
-        width: 35%;
         .list-viewport {
             height: calc(100vh - 185px);
         }
@@ -36,7 +35,6 @@
     }
 
     .preview-content {
-        width: 65%;
         overflow-y: auto;
 
         .preview-header {
