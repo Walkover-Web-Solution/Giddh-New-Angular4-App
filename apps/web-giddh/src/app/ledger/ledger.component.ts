@@ -1753,6 +1753,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         }
         this.resetPreviousSearchResults();
         this.needToReCalculate.next(false);
+        this.closeAllAccountDropdown();
         this.forceClear$.next(true);
         setTimeout(() => {
             this.forceClear$.next(false);
