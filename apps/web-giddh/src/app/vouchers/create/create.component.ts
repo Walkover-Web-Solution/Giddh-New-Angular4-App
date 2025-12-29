@@ -1244,6 +1244,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.invoiceForm
                             .get("templateDetails.other.trackingNumber")
                             ?.patchValue(voucherDetails.templateDetails?.other?.trackingNumber);
+                        this.invoiceForm
+                            .get("templateDetails.templateUniqueName")
+                            ?.patchValue(voucherDetails.templateDetails?.templateUniqueName);
 
                         if (voucherDetails.attachedFiles) {
                             this.invoiceForm.get("attachedFiles")?.patchValue(voucherDetails.attachedFiles);
@@ -1284,7 +1287,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.invoiceForm
                             .get("templateDetails.other.trackingNumber")
                             ?.patchValue(voucherDetails.templateDetails?.other?.trackingNumber);
-
+                        this.invoiceForm
+                            .get("templateDetails.templateUniqueName")
+                            ?.patchValue(voucherDetails.templateDetails?.templateUniqueName);
+                        
                         if (voucherDetails.attachedFiles) {
                             this.invoiceForm.get("attachedFiles")?.patchValue(voucherDetails.attachedFiles);
                             this.selectedFileName = voucherDetails.attachedFileName;
@@ -2887,6 +2893,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     shippingDate: [""],
                     trackingNumber: [""],
                 }),
+                templateUniqueName: [""]
             }),
             entries: this.formBuilder.array([this.getEntriesFormGroup()]),
             uniqueName: [""],
@@ -2910,8 +2917,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             attachedFiles: [],
             salesPurchaseAsReceiptPayment: [null], //temp
             salesPersonName: [''],
-            salesPersonUniqueName: [''],
-            templateUniqueName: ['']
+            salesPersonUniqueName: ['']
         });
     }
     /**
