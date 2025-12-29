@@ -1,5 +1,5 @@
 <section class="aside-dialog-wrapper">
-    <div class="dialog-header">
+    <div class="dialog-header" [keyboardShortcut]="'esc'" (onShortcutPress)="closeAsidePane()">
         <span>
             {{ isAddAccountOpen ? commonLocaleData?.app_create_account : commonLocaleData?.app_add }}
             <span *ngIf="voucherApiVersion === 2 && !isAddAccountOpen">{{

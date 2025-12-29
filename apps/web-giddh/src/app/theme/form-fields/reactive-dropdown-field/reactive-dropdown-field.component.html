@@ -8,7 +8,6 @@
             <mat-form-field
                 [appearance]="appearance"
                 [ngClass]="{ 'mat-form-field-invalid': showError }"
-                (click)="!readonly ? trigger?.openPanel() : trigger?.closePanel()"
             >
                 <mat-label *ngIf="showMatLabel">{{ label ? label : placeholder }}</mat-label>
                 <input
@@ -23,69 +22,59 @@
                     [name]="name"
                     [autocomplete]="autocomplete"
                     [required]="required"
-                    [attr.aria-expanded]="readonly ? false : true"
                     (input)="searchFormControl.next($event.target.value)"
                     (blur)="onBlur()"
                     #trigger="matAutocompleteTrigger"
                     [style.padding-right]="showCaretIcon ? '18px' : '0'"
                     #selectField
                     matAutocompletePosition="auto"
-                    (focusout)="
-                        closeOnFocusOut &&
-                        $event?.relatedTarget?.nodeName !== 'MAT-OPTION' &&
-                        $event?.relatedTarget?.nodeName !== 'A'
-                            ? trigger.closePanel()
-                            : null
-                    "
                     [value]="controlLabelValue ?? ''"
                 />
                 <mat-autocomplete
                     (opened)="panelOpened()"
                     (optionSelected)="optionSelected($event)"
                     optionsScroll
-                    class="py-0"
+                    [class]="'py-0' + (sidebarListView ? ' sidebar-list-view' : '')"
                     [enableDynamicSearch]="enableDynamicSearch"
                     (optionsScroll)="onScroll()"
                     [autoActiveFirstOption]="!showCreateNew"
                     [displayWith]="displayLabel"
                     #auto="matAutocomplete"
                 >
-                    <span class="position-relative">
-                        <mat-option
-                            *ngIf="showCreateNew && createNewText"
-                            class="create-new-option"
-                            (onSelectionChange)="handleCreateNewSelection($event)"
-                            [attr.aria-label]="createNewText"
-                        >
-                            <div class="theme-primary-color d-flex justify-content-between">
-                                <div class="item create-new">{{ createNewText }}</div>
-                                <div class="item create-new-command" *ngIf="showKeyboardCommand">
-                                    {{ showKeyboardCommand }}
-                                </div>
+                    <mat-option
+                        *ngIf="showCreateNew && createNewText"
+                        class="create-new-option"
+                        (onSelectionChange)="handleCreateNewSelection($event)"
+                        [attr.aria-label]="createNewText"
+                    >
+                        <div class="theme-primary-color d-flex justify-content-between">
+                            <div class="item create-new">{{ createNewText }}</div>
+                            <div class="item create-new-command" *ngIf="showKeyboardCommand">
+                                {{ showKeyboardCommand }}
                             </div>
+                        </div>
+                    </mat-option>
+                    <ng-container *ngFor="let option of fieldFilteredOptions$ | async; trackBy: trackByOption">
+                        <mat-option
+                            [value]="option"
+                            [matTooltip]="option?.label"
+                            matTooltipPosition="right"
+                            (click)="$event.stopPropagation()"
+                            [disabled]="option?.additional?.disabled"
+                        >
+                            <ng-template
+                                [ngTemplateOutletContext]="{ option: option }"
+                                [ngTemplateOutlet]="optionTemplate"
+                            ></ng-template>
+                            <ng-container *ngIf="!optionTemplate">
+                                {{ option?.label }}
+                            </ng-container>
                         </mat-option>
-                        <ng-container *ngFor="let option of fieldFilteredOptions$ | async">
-                            <mat-option
-                                [value]="option"
-                                [matTooltip]="option?.label"
-                                matTooltipPosition="right"
-                                (click)="$event.stopPropagation()"
-                                [disabled]="option?.additional?.disabled"
-                            >
-                                <ng-template
-                                    [ngTemplateOutletContext]="{ option: option }"
-                                    [ngTemplateOutlet]="optionTemplate"
-                                ></ng-template>
-                                <ng-container *ngIf="!optionTemplate">
-                                    {{ option?.label }}
-                                </ng-container>
-                            </mat-option>
-                            <mat-divider *ngIf="showOptionDivider"></mat-divider>
-                        </ng-container>
-                        <mat-option disabled *ngIf="!(fieldFilteredOptions$ | async)?.length">
-                            {{ noResultsFoundMessage || commonLocaleData?.app_no_result_found }}
-                        </mat-option>
-                    </span>
+                        <mat-divider *ngIf="showOptionDivider"></mat-divider>
+                    </ng-container>
+                    <mat-option disabled *ngIf="!(fieldFilteredOptions$ | async)?.length">
+                        {{ noResultsFoundMessage || commonLocaleData?.app_no_result_found }}
+                    </mat-option>
                 </mat-autocomplete>
                 <div
                     *ngIf="showCaretIcon && !value"
@@ -123,22 +112,16 @@
             [required]="required"
             [attr.aria-expanded]="readonly ? false : true"
             (input)="searchFormControl.next($event.target.value)"
-            (click)="!readonly ? trigger?.openPanel() : trigger?.closePanel()"
             #trigger="matAutocompleteTrigger"
             #selectField
             matAutocompletePosition="auto"
-            (focusout)="
-                closeOnFocusOut &&
-                $event?.relatedTarget?.nodeName !== 'MAT-OPTION' &&
-                $event?.relatedTarget?.nodeName !== 'A'
-                    ? trigger.closePanel()
-                    : null
-            "
             [value]="controlLabelValue ?? ''"
         />
         <mat-autocomplete
             (optionSelected)="optionSelected($event)"
             optionsScroll
+            class="py-0"
+            [ngClass]="{ 'sidebar-list-view': sidebarListView }"
             [enableDynamicSearch]="enableDynamicSearch"
             (optionsScroll)="onScroll()"
             [autoActiveFirstOption]="false"
@@ -150,7 +133,7 @@
                 class="create-new-option"
                 (onSelectionChange)="handleCreateNewSelection($event)"
                 [attr.aria-label]="createNewText"
-                >\
+                >
                 <div class="theme-primary-color d-flex justify-content-between">
                     <div class="item create-new">{{ createNewText }}</div>
                     <div class="item create-new-command" *ngIf="showKeyboardCommand">
@@ -159,7 +142,7 @@
                 </div>
             </mat-option>
             <mat-option
-                *ngFor="let option of fieldFilteredOptions$ | async"
+                *ngFor="let option of fieldFilteredOptions$ | async; trackBy: trackByOption"
                 [value]="option"
                 [matTooltip]="option?.label"
                 matTooltipPosition="right"
