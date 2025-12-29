@@ -121,7 +121,6 @@
                                                     (keydown.enter)="
                                                         $event.preventDefault();
                                                         onItemClick(item, i);
-                                                        focusNextListItem(i);
                                                     "
                                                     (keydown.escape)="handleEscapeKey($event)"
                                                     [tabindex]="i === 0 ? 0 : -1"
