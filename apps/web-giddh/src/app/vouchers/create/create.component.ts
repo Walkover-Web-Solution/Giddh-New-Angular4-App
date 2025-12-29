@@ -5575,6 +5575,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             totalAdjustedAmount: 0,
             convertedTotalAdjustedAmount: 0,
         };
+        this.totalDepositAmount = 0;
+        this.advanceReceiptAdjustmentData = null;
+        this.vouchersForAdjustment = [];
 
         this.invoiceForm.get("type").patchValue(this.voucherType);
         this.invoiceForm.get("date")?.patchValue(this.universalDate);
