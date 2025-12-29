@@ -94,6 +94,7 @@ import { TemplateEditFilterComponent } from "./template/template-edit-filter/tem
 import { MobileNumberInputComponent } from "../shared/mobile-number-input/mobile-number-input.component";
 import { GiddhNumberFormatModule } from "../shared/helpers/pipes/number-format/number-format.module";
 import { KeyboardNavigationModule } from "../shared/helpers/directives/enter-next/keyboard-navigation.module";
+import { ResizableModule } from "../shared/directives/resizable.module";
 
 @NgModule({
     declarations: [
@@ -191,7 +192,8 @@ import { KeyboardNavigationModule } from "../shared/helpers/directives/enter-nex
         MatButtonToggleModule,
         TributeMentionModule,
         MobileNumberInputComponent,
-        KeyboardNavigationModule
+        KeyboardNavigationModule,
+        ResizableModule
     ],
     exports: [
         VoucherCreateComponent,

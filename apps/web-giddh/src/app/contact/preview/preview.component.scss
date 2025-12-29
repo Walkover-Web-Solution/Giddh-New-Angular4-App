@@ -30,7 +30,6 @@
 :host ::ng-deep .invoice-preview-wrapper {
 
     .preview-list {
-        width: 25%;
         overflow-y: auto;
 
         .single-invoice-detail {
@@ -46,7 +45,6 @@
     }
 
     .preview-content {
-        width: 100%;
         overflow-y: auto;
 
         .back-button {

@@ -10,7 +10,16 @@
         *ngIf="!isSearching && !isLoadMore && (getVouchersInProgress$ | async)"
         [cssClass]="'no-data'"
     ></giddh-page-loader>
-    <div class="invoice-preview-wrapper" *ngIf="isSearching || isLoadMore || !(getVouchersInProgress$ | async)">
+    <div 
+        class="invoice-preview-wrapper" 
+        *ngIf="isSearching || isLoadMore || !(getVouchersInProgress$ | async)"
+        appResizable
+        resizableTarget=".preview-list"
+        [minWidth]="300"
+        [maxWidthRatio]="0.5"
+        [defaultWidthRatio]="0.4"
+        [voucherType]="voucherType"
+    >
         <div class="preview-list h-100 pb-3">
             <div class="d-flex align-items-center column-gap-05 p-3 w-100 list-responsive row-gap-1">
                 <div class="position-relative search-field flex-grow-1">
@@ -80,16 +89,18 @@
                                         (click)="setSelectedInvoice(item?.uniqueName, true)"
                                     >
                                         <div class="d-flex justify-content-between align-items-center column-gap-05">
-                                            <div class="max-width-list">
-                                                <span class="font-size-12 text-primary">
-                                                    {{
-                                                        item.voucherNumber
-                                                            ? item.voucherNumber
-                                                            : commonLocaleData?.app_not_available
-                                                    }}
-                                                </span>
-                                                <span class="font-size-12 light-gray"> | {{ item?.voucherDate }} </span>
-                                                <p class="pr-5 text-ellipsis"
+                                            <div class="flex-grow-1 min-width-0">
+                                                <div class="text-ellipsis w-100">
+                                                    <span class="font-size-12 text-primary">
+                                                        {{
+                                                            item.voucherNumber
+                                                                ? item.voucherNumber
+                                                                : commonLocaleData?.app_not_available
+                                                        }}
+                                                    </span>
+                                                    <span class="font-size-12 light-gray"> | {{ item?.voucherDate }} </span>
+                                                </div>
+                                                <p class="text-ellipsis w-100"
                                                     [matTooltip]="
                                                         item?.account?.customerName ||
                                                             item?.account?.name ||
@@ -130,7 +141,7 @@
                 ></giddh-page-loader>
             </div>
         </div>
-        <div class="preview-content">
+        <div class="preview-content flex-grow-1">
             <section class="preview-header p-3">
                 <div class="d-flex justify-content-between pt-3 mb-5 flex-wrap row-gap-2 flex-row-reverse">
                     <div class="order-1 mr-auto">

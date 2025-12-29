@@ -47,6 +47,7 @@ import { FroalaTemplateEditorModule } from '../shared/template-froala/template-f
 import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
 import { GiddhNumberFormatPipe } from '../shared/helpers/pipes/number-format/number-format.pipe';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
+import { ResizableModule } from '../shared/directives/resizable.module';
 @NgModule({
     declarations: [
         ContactComponent,
@@ -104,7 +105,8 @@ import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/
         MatSortModule,
         MatPaginatorModule,
         LedgerModule,
-        MatCardModule
+        MatCardModule,
+        ResizableModule
     ],
     providers: [
         GiddhNumberFormatPipe
