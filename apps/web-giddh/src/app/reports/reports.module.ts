@@ -1,11 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
 import { SharedModule } from '../shared/shared.module';
-// import { AccountDetailModalModule } from '../theme/account-detail-modal/account-detail-modal.module';
+import { AccountDetailModalModule } from '../theme/account-detail-modal/account-detail-modal.module';
 import { Daterangepicker } from '../theme/ng2-daterangepicker/daterangepicker.module';
 import { CashFlowStatementComponent } from './components/cash-flow-statement-component/cash.flow.statement.component';
 import { ColumnarReportComponent } from './components/columnar-report-component/columnar.report.component';
@@ -24,15 +24,14 @@ import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
-// import { NewConfirmModalModule } from '../theme/new-confirm-modal';
+import { NewConfirmModalModule } from '../theme/new-confirm-modal';
 import { MatDialogModule } from '@angular/material/dialog';
 import { SendEmailModule } from '../shared/send-email/send-email.module';
 import { ConfirmModalModule } from '../theme/confirm-modal/confirm-modal.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { SelectTableColumnModule } from '../shared/select-table-column/select-table-column.module';
 import { SalesPurchaseRegisterExportComponent } from './sales-purchase-register-export/sales-purchase-register-export.component';
-import { AdvanceReceiptReportComponent } from './components/advance-receipt-report/advance-receipt-report.component';
-// import { BulkExportVoucherModule } from '../shared/bulk-export-voucher/bulk-export-voucher.module';
+import { BulkExportVoucherModule } from '../shared/bulk-export-voucher/bulk-export-voucher.module';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatInputModule } from '@angular/material/input';
@@ -42,8 +41,7 @@ import { GiddhTableModule } from '../shared/common-table/giddh.table.module';
 import { MatSelectModule } from '@angular/material/select';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule, MatOptionModule } from '@angular/material/core';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatNativeDateModule } from '@angular/material/core';
 import { SalesPersonService } from '../shared/sales-person/utility/sales-person.service';
 
 @NgModule({
@@ -57,8 +55,7 @@ import { SalesPersonService } from '../shared/sales-person/utility/sales-person.
         ColumnarReportComponent,
         ColumnarReportTableComponent,
         CashFlowStatementComponent,
-        SalesPurchaseRegisterExportComponent,
-        AdvanceReceiptReportComponent
+        SalesPurchaseRegisterExportComponent
     ],
     exports: [
         ReportsComponent,
@@ -72,7 +69,7 @@ import { SalesPersonService } from '../shared/sales-person/utility/sales-person.
         Daterangepicker,
         FormsModule,
         GiddhNumberFormatModule,
-        // AccountDetailModalModule,
+        AccountDetailModalModule,
         ReactiveFormsModule,
         ClickOutsideModule,
         ElementViewChildModule,
@@ -84,27 +81,24 @@ import { SalesPersonService } from '../shared/sales-person/utility/sales-person.
         MatMenuModule,
         MatButtonModule,
         MatTooltipModule,
-        // NewConfirmModalModule,
+        NewConfirmModalModule,
         MatDialogModule,
-        SerialNumberPipe,
         SendEmailModule,
         ConfirmModalModule,
         MatSlideToggleModule,
         SelectTableColumnModule,
-        // BulkExportVoucherModule,
+        BulkExportVoucherModule,
         MatTableModule,
         MatPaginatorModule,
         MatInputModule,
+        SerialNumberPipe,
         MatSortModule,
         GiddhTableModule,
         MatSelectModule,
         NgxMatSelectSearchModule,
         MatDatepickerModule,
-        MatNativeDateModule,
-        MatFormFieldModule,
-        MatOptionModule
-    ],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA]
+        MatNativeDateModule
+    ]
 })
 
 export class ReportsModule {

@@ -4,8 +4,8 @@ import { map } from '../../../lodash-optimized';
 
 @Component({
     selector: 'app-filter-list',
-    
-      standalone: false,templateUrl: './filter-list.component.html',
+    standalone: false,
+    templateUrl: './filter-list.component.html',
     styleUrls: ['./filter-list.component.scss'],
 })
 

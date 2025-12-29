@@ -53,7 +53,7 @@ ipcMain.on("authenticate", (event, arg) => {
             GoogleLoginElectronConfig.clientSecret,
             ['email'],
             {
-                successRedirectURL: PRODUCTION_ENV ? 'https://app.giddh.com/app-login-success' : 'https://stage.giddh.com/app-login-success',
+                successRedirectURL: PRODUCTION_ENV ? 'https://app.giddh.com/app-login-success' : 'https://test.giddh.com/app-login-success',
                 loopbackInterfaceRedirectionPort: 45587,
                 refocusAfterSuccess: true,
             }
@@ -61,13 +61,66 @@ ipcMain.on("authenticate", (event, arg) => {
 
         myApiOauth.openAuthWindowAndGetTokens()
             .then(token => {
-                event.returnValue = token;
-                if (event.reply) {
-                    event.reply('take-your-gmail-token', token);
-                } else if (event.sender.send) {
-                    event.sender.send('take-your-gmail-token', token);
+                console.log('Main: Google OAuth raw response:', JSON.stringify(token, null, 2));
+
+                // Validate token structure
+                if (!token) {
+                    console.error('Main: Token is null or undefined');
+                    const errorResponse = { error: 'No token received from Google OAuth' };
+                    event.returnValue = errorResponse;
+                    if (event.reply) {
+                        event.reply('take-your-gmail-token', errorResponse);
+                    } else if (event.sender.send) {
+                        event.sender.send('take-your-gmail-token', errorResponse);
+                    }
+                    return;
                 }
-                // use your token.access_token
+
+                // Check if token has access_token property
+                const tokenAny = token as any;
+                if (!token.access_token && !tokenAny.accessToken) {
+                    console.error('Main: Token missing access_token property. Available properties:', Object.keys(token));
+                    const errorResponse = { error: 'Invalid token format - missing access_token' };
+                    event.returnValue = errorResponse;
+                    if (event.reply) {
+                        event.reply('take-your-gmail-token', errorResponse);
+                    } else if (event.sender.send) {
+                        event.sender.send('take-your-gmail-token', errorResponse);
+                    }
+                    return;
+                }
+
+                // Normalize token format
+                const normalizedToken = {
+                    access_token: token.access_token || tokenAny.accessToken,
+                    refresh_token: token.refresh_token || tokenAny.refreshToken,
+                    token_type: token.token_type || tokenAny.tokenType || 'Bearer',
+                    expires_in: tokenAny.expires_in || tokenAny.expiresIn,
+                    scope: tokenAny.scope || token.scope
+                };
+
+                console.log('Main: Google OAuth success, sending normalized token to renderer');
+                event.returnValue = normalizedToken;
+                if (event.reply) {
+                    event.reply('take-your-gmail-token', normalizedToken);
+                } else if (event.sender.send) {
+                    event.sender.send('take-your-gmail-token', normalizedToken);
+                }
+            })
+            .catch(error => {
+                console.error('Main: Google OAuth failed:', error);
+                console.error('Main: Error details:', {
+                    message: error.message,
+                    stack: error.stack,
+                    name: error.name
+                });
+                const errorResponse = { error: error.message || 'Google authentication failed' };
+                event.returnValue = errorResponse;
+                if (event.reply) {
+                    event.reply('take-your-gmail-token', errorResponse);
+                } else if (event.sender.send) {
+                    event.sender.send('take-your-gmail-token', errorResponse);
+                }
             });
     }
 });
@@ -77,13 +130,14 @@ ipcMain.on("authenticate-send-email", (event, arg) => {
             GoogleLoginElectronConfig.clientSecret,
             ['https://www.googleapis.com/auth/gmail.send'],
             {
-                successRedirectURL: PRODUCTION_ENV ? 'https://app.giddh.com/app-login-success' : 'https://stage.giddh.com/app-login-success',
+                successRedirectURL: PRODUCTION_ENV ? 'https://app.giddh.com/app-login-success' : 'https://test.giddh.com/app-login-success',
                 loopbackInterfaceRedirectionPort: 45587,
                 refocusAfterSuccess: true,
             }
         );
         myApiOauth.openAuthWindowAndGetTokens()
             .then(token => {
+                console.log('Main: Google email OAuth success, sending token to renderer');
                 event.returnValue = token;
                 if (event.reply) {
                     event.reply('take-your-gmail-token', token);
@@ -91,6 +145,16 @@ ipcMain.on("authenticate-send-email", (event, arg) => {
                     event.sender.send('take-your-gmail-token', token);
                 }
                 // use your token.access_token
+            })
+            .catch(error => {
+                console.error('Main: Google email OAuth failed:', error);
+                const errorResponse = { error: error.message || 'Google email authentication failed' };
+                event.returnValue = errorResponse;
+                if (event.reply) {
+                    event.reply('take-your-gmail-token', errorResponse);
+                } else if (event.sender.send) {
+                    event.sender.send('take-your-gmail-token', errorResponse);
+                }
             });
     }
 });

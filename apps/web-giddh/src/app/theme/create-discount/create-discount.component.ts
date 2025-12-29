@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
+import { Component, Inject, OnDestroy, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from "@angular/core";
 import { Observable, ReplaySubject, takeUntil, of as observableOf } from "rxjs";
 import { CreateDiscountComponentStore } from "./utility/create-discount.store";
 import { UntypedFormBuilder, FormGroup, Validators } from "@angular/forms";
@@ -10,6 +10,7 @@ import { GeneralService } from "../../services/general.service";
     templateUrl: "./create-discount.component.html",
     styleUrls: ["./create-discount.component.scss"],
     providers: [CreateDiscountComponentStore],
+    changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
 export class CreateDiscountComponent implements OnInit, OnDestroy {
@@ -43,7 +44,8 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
         private componentStore: CreateDiscountComponentStore,
         private formBuilder: UntypedFormBuilder,
         public dialogRef: MatDialogRef<any>,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private changeDetectorRef: ChangeDetectorRef
     ) { }
 
     /**
@@ -109,6 +111,7 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
                     this.createDiscountForm.get('accountUniqueName')?.patchValue(discountsAccountList[0]?.value);
                 }
                 this.isLoading = false;
+                this.changeDetectorRef.markForCheck();
             }
         });
     }
@@ -123,7 +126,7 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will be use for save discount 
+     * This will be use for save discount
      *
      * @return {*}  {void}
      * @memberof CreateDiscountComponent
@@ -145,7 +148,7 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * This will be use for update discount 
+     * This will be use for update discount
      *
      * @return {*}  {void}
      * @memberof CreateDiscountComponent

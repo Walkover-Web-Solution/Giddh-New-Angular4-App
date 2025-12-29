@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, forwardRef, OnDestroy, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, forwardRef, OnDestroy, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import * as dayjs from 'dayjs';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { MatDatepicker, MatDatepickerInputEvent } from '@angular/material/datepicker';
@@ -28,6 +28,8 @@ const noop = () => { };
 export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, OnDestroy {
     /** Instance of picker from datepicker */
     @ViewChild('picker') picker!: MatDatepicker<any>;
+    /** Reference to input element */
+    @ViewChild('dateInput') dateInput!: ElementRef;
     /** Taking placeholder as input */
     @Input() public placeholder: any = "";
     /** Min date */
@@ -265,6 +267,17 @@ export class GiddhDatepickerComponent implements ControlValueAccessor, OnInit, O
         } else {
             this.emitDatepickerState(true);
             this.picker?.open();
+        }
+    }
+
+    /**
+     * Sets focus on the datepicker input
+     *
+     * @memberof GiddhDatepickerComponent
+     */
+    public focus(): void {
+        if (this.dateInput?.nativeElement) {
+            this.dateInput.nativeElement.focus();
         }
     }
 }

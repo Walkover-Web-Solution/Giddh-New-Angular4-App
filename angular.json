@@ -113,7 +113,7 @@
                         "prod": {
                             "outputPath": "dist/apps/web-giddh",
                             "index": {
-                                "input": "apps/web-giddh/src/index.electron.prod.html",
+                                "input": "apps/web-giddh/src/index.electron.html",
                                 "output": "/index.html"
                             },
                             "fileReplacements": [

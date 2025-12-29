@@ -3,10 +3,10 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatMenuModule } from '@angular/material/menu';
-// import { UpdateLedgerEntryPanelModule } from '../ledger/components/update-ledger-entry-panel/update-ledger-entry-panel.module';
-// import { LedgerModule } from '../ledger/ledger.module';
-// import { AsideMenuSalesOtherTaxesModule } from '../sales/aside-menu-sales-other-taxes/aside-menu-sales-other-taxes.module';
-// import { SalesModule } from '../sales/sales.module';
+import { UpdateLedgerEntryPanelModule } from '../ledger/components/update-ledger-entry-panel/update-ledger-entry-panel.module';
+import { LedgerModule } from '../ledger/ledger.module';
+import { AsideMenuSalesOtherTaxesModule } from '../sales/aside-menu-sales-other-taxes/aside-menu-sales-other-taxes.module';
+import { SalesModule } from '../sales/sales.module';
 import { ElementViewChildModule } from '../shared/helpers/directives/elementViewChild/elementViewChild.module';
 import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
 import { NoDataModule } from '../shared/no-data/no-data.module';
@@ -31,7 +31,6 @@ import { LightboxModule } from 'ngx-lightbox';
 import { RejectPettyCashEntryConfirmDialogComponent } from './components/reject-petty-cash-entry-confirm-dialog/reject-petty-cash-entry-confirm-dialog.component';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 @NgModule({
     declarations: [
@@ -49,15 +48,15 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
         FormsModule,
         Daterangepicker,
         ExpensesRoutingModule,
-        // LedgerModule,
+        LedgerModule,
         GiddhNumberFormatModule,
         MatPaginatorModule,
         SharedModule,
         ElementViewChildModule,
-        // SalesModule,
-        // UpdateLedgerEntryPanelModule,
+        SalesModule,
+        UpdateLedgerEntryPanelModule,
         NoDataModule,
-        // AsideMenuSalesOtherTaxesModule,
+        AsideMenuSalesOtherTaxesModule,
         MatTabsModule,
         MatTableModule,
         MatSortModule,
@@ -74,8 +73,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
     exports: [
         ExpensesComponent,
         GiddhNumberFormatModule
-    ],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    ]
 })
 export class ExpensesModule {
 }

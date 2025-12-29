@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from "@angular/core";
+import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
 import { MatCheckboxModule } from "@angular/material/checkbox";
@@ -26,9 +26,11 @@ import { RecipeModule } from "../recipe/recipe.module";
 import { DragDropModule } from "@angular/cdk/drag-drop";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { SortByModule } from "../../../shared/helpers/pipes/sort-by/sort-by.module";
-// import { WatchVideoModule } from "../../../theme/watch-video/watch-video.module";
+import { WatchVideoModule } from "../../../theme/watch-video/watch-video.module";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { PageLeaveConfirmationGuard } from "../../../decorators/page-leave-confirmation-guard";
+import { A11yModule } from "@angular/cdk/a11y";
+import { KeyboardNavigationModule } from "../../../shared/helpers/directives/enter-next/keyboard-navigation.module";
 
 @NgModule({
     declarations: [
@@ -62,16 +64,17 @@ import { PageLeaveConfirmationGuard } from "../../../decorators/page-leave-confi
         DragDropModule,
         MatSlideToggleModule,
         SortByModule,
-        // WatchVideoModule,
-        MatProgressSpinnerModule
+        WatchVideoModule,
+        MatProgressSpinnerModule,
+        A11yModule,
+        KeyboardNavigationModule
     ],
     exports: [
         StockCreateEditComponent
     ],
     providers: [
         PageLeaveConfirmationGuard
-    ],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
+    ]
 })
 export class StockCreateEditModule {
 

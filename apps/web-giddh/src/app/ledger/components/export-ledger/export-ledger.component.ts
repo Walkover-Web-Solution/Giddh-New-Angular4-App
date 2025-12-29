@@ -16,9 +16,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GIDDH_DATE_RANGE_PICKER_RANGES } from '../../../app.constant';
 import { Router } from '@angular/router';
 import { ExportBodyRequest } from '../../../models/api-models/DaybookRequest';
-// import { VoucherComponentStore } from '../../../vouchers/utility/vouchers.store';
+import { VoucherComponentStore } from '../../../vouchers/utility/vouchers.store';
 import { saveAs } from 'file-saver';
-import { cloneDeep } from '../../../lodash-optimized';
 import { IOption } from '../../../app.constant';
 import { CopyType } from '../../../shared/Enums/common.enum';
 import { TributeConfig } from '../../../shared/helpers/directives/tributeMention/tributeType';
@@ -27,8 +26,8 @@ import { TributeConfig } from '../../../shared/helpers/directives/tributeMention
     templateUrl: './export-ledger.component.html',
     styleUrls: ['./export-ledger.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    // providers: [VoucherComponentStore],
-    standalone: false
+    providers: [VoucherComponentStore],
+    standalone:false
 })
 
 export class ExportLedgerComponent implements OnInit, OnDestroy {
@@ -129,7 +128,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         public dialogRef: MatDialogRef<any>,
         private changeDetectorRef: ChangeDetectorRef,
         private router: Router,
-        // private componentStore: VoucherComponentStore
+        private componentStore: VoucherComponentStore
     ) {
         this.universalDate$ = this.store.pipe(select(p => p.session.applicationDate), takeUntil(this.destroyed$));
     }
@@ -165,7 +164,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
 
         if (this.inputData?.advanceSearchRequest?.dataToSend?.bsRangeValue) {
             let dateObj = this.inputData?.advanceSearchRequest?.dataToSend?.bsRangeValue;
-            let universalDate = cloneDeep(dateObj);
+            let universalDate = _.cloneDeep(dateObj);
             this.selectedDateRange = { startDate: dateObj[0], endDate: dateObj[1] };
             this.selectedDateRangeUi = dateObj[0].format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dateObj[1].format(GIDDH_NEW_DATE_FORMAT_UI);
             this.fromDate = universalDate[0].format(GIDDH_DATE_FORMAT);
@@ -173,7 +172,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         } else {
             this.universalDate$.pipe(take(1)).subscribe(dateObj => {
                 if (dateObj) {
-                    let universalDate = cloneDeep(dateObj);
+                    let universalDate = _.cloneDeep(dateObj);
                     this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                     this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                     this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
@@ -182,15 +181,15 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
             });
         }
 
-        // this.componentStore.bulkExportVoucherResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-        //     this.isLoading = false;
-        //     if (response?.status === "success" && response?.body) {
-        //         if (response.body.type === "base64") {
-        //             let blob = this.generalService.base64ToBlob(response.body.file, 'application/zip', 512);
-        //             saveAs(blob, this.inputData?.voucherType + `.zip`);
-        //         }
-        //     }
-        // });
+        this.componentStore.bulkExportVoucherResponse$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            this.isLoading = false;
+            if (response?.status === "success" && response?.body) {
+                if (response.body.type === "base64") {
+                    let blob = this.generalService.base64ToBlob(response.body.file, 'application/zip', 512);
+                    saveAs(blob, this.inputData?.voucherType + `.zip`);
+                }
+            }
+        });
     }
 
     /**
@@ -210,7 +209,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         exportRequest.from = this.fromDate;
         exportRequest.to = this.toDate;
 
-        let body = cloneDeep(this.inputData?.advanceSearchRequest);
+        let body = _.cloneDeep(this.inputData?.advanceSearchRequest);
         if (body && body.dataToSend) {
             body.dataToSend.type = this.emailTypeSelected;
             body.dataToSend.balanceTypeAsSign = this.balanceTypeAsSign;
@@ -282,7 +281,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                     from: this.fromDate,
                     to: this.toDate
                 };
-                // this.componentStore.bulkExportVoucher({ getRequest: getRequest, postRequest: postRequest });
+                this.componentStore.bulkExportVoucher({ getRequest: getRequest, postRequest: postRequest });
                 return;
             }
             this.ledgerService.ExportLedger(exportRequest, this.inputData?.accountUniqueName, body?.dataToSend, exportByInvoiceNumber).pipe(takeUntil(this.destroyed$)).subscribe(response => {

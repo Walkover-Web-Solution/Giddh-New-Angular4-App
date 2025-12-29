@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { GiddhDateRangepickerModule } from '../theme/giddh-daterangepicker/giddh-daterangepicker.module';
@@ -16,7 +15,7 @@ import { TranslateDirectiveModule } from '../theme/translate/translate.directive
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatDialogModule } from '@angular/material/dialog';
-// import { DiscountDropdownModule } from '../theme/discount-dropdown/discount-dropdown.module';
+import { DiscountDropdownModule } from '../theme/discount-dropdown/discount-dropdown.module';
 import { ProjectAccountingService } from './project-wise-accounting.service';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { MatSortModule } from '@angular/material/sort';
@@ -43,7 +42,6 @@ import { FinancialReportsModule } from '../financial-reports/financial-reports.m
     imports: [
         CommonModule,
         FormsModule,
-        RouterModule,
         FormFieldsModule,
         ProjectWiseAccountingRoutingModule,
         MatButtonModule,
@@ -54,7 +52,7 @@ import { FinancialReportsModule } from '../financial-reports/financial-reports.m
         MatPaginatorModule,
         MatTabsModule,
         MatDialogModule,
-        // DiscountDropdownModule,
+        DiscountDropdownModule,
         ReactiveFormsModule,
         ClickOutsideModule,
         NewConfirmationModalModule,
@@ -72,7 +70,6 @@ import { FinancialReportsModule } from '../financial-reports/financial-reports.m
         FinancialReportsModule
     ],
     exports: [CreateProjectComponent],
-    providers: [ProjectAccountingService],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
+    providers: [ProjectAccountingService]
 })
 export class ProjectWiseAccountingModule { }

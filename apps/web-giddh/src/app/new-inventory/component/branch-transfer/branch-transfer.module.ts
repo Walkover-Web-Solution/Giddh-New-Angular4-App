@@ -1,4 +1,4 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MainComponent } from './main.component';
 import { InventorySidebarModule } from '../inventory-sidebar/inventory-sidebar.module';
@@ -23,7 +23,7 @@ import { GiddhPageLoaderModule } from '../../../shared/giddh-page-loader/giddh-p
 import { MatSortModule } from '@angular/material/sort';
 import { TranslateDirectiveModule } from '../../../theme/translate/translate.directive.module';
 import { AsideManageTransportComponent } from './aside-manage-transport/aside-manage-transport.component';
-// import { AsideMenuProductServiceModule } from '../../../shared/aside-menu-product-service/aside-menu-product-service.module';
+import { AsideMenuProductServiceModule } from '../../../shared/aside-menu-product-service/aside-menu-product-service.module';
 import { CreateBranchTransferComponent } from './create-branch-transfer/create-branch-transfer.component';
 import { ListBranchTransferComponent } from './list-branch-transfer/list-branch-transfer.component';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -52,13 +52,12 @@ import { GiddhNumberFormatModule } from '../../../shared/helpers/pipes/number-fo
         MatSortModule,
         ReactiveFormsModule,
         TranslateDirectiveModule,
-        // AsideMenuProductServiceModule,
+        AsideMenuProductServiceModule,
         MatPaginatorModule
     ],
     exports: [
         AsideManageTransportComponent, CreateBranchTransferComponent, ListBranchTransferComponent
     ],
-    declarations: [MainComponent, AsideManageTransportComponent, CreateBranchTransferComponent, ListBranchTransferComponent],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
+    declarations: [MainComponent, AsideManageTransportComponent, CreateBranchTransferComponent, ListBranchTransferComponent]
 })
 export class BranchTransferModule { }

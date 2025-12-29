@@ -16,6 +16,7 @@ import { ActionModule } from './actions/action.module';
 import { AppLoginSuccessComponent } from './app-login-success/app-login-success';
 import { AppComponent } from './app.component';
 import { IS_ELECTRON_WA, APP_FOLDER_WA, APP_URL_WA } from './app.constant';
+import { Angular21CompatibilityErrorHandler } from './angular21-compatibility';
 
 // Debug: Log all environment variables to verify they're loaded correctly
 // console.log('=== ENVIRONMENT VARIABLES DEBUG ===');
@@ -55,7 +56,7 @@ import { reducers } from './store';
 import { QuicklinkModule, QuicklinkStrategy } from 'ngx-quicklink';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 // import { SnackBarModule } from './theme/snackbar/snackbar.module';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule, MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 import { MobileRestrictedComponent } from './mobile-restricted/mobile-restricted.component';
 import { LoaderModule } from './loader/loader.module';
 import { PageModule } from './page/page.module';
@@ -653,7 +654,13 @@ export function getServiceConfigAfterInit(): () => Promise<any> {
         },
         {
             provide: ErrorHandler,
-            useClass: ExceptionLogService
+            useClass: Angular21CompatibilityErrorHandler
+        },
+        {
+            provide: MAT_DIALOG_DEFAULT_OPTIONS,
+            useValue: {
+                maxWidth: '100%'
+            }
         },
         CustomPreloadingStrategy
     ]

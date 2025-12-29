@@ -20,6 +20,8 @@ import { GeneralService } from '../../../services/general.service';
 import { LedgerService } from '../../../services/ledger.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { SettingsUtilityService } from '../../../settings/services/settings-utility.service';
+import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
+import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
 import { AppState } from '../../../store';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { TaxControlComponent } from '../../../theme/tax-control/tax-control.component';
@@ -40,13 +42,11 @@ import { SelectMultipleFieldsComponent } from '../../../theme/form-fields/select
 import { CreateDiscountComponent } from '../../../theme/create-discount/create-discount.component';
 import { SettingsTaxesActions } from '../../../actions/settings/taxes/settings.taxes.action';
 import { CompanyActions } from '../../../actions/company.actions';
-import { LedgerDropdownTypeEnum } from '../../../models/api-models/Ledger';
-import { GIDDH_DATE_FORMAT } from '../../../shared/helpers/defaultDateFormat';
-import { giddhRoundOff } from '../../../shared/helpers/helperFunctions';
-import { SalesPersonComponent } from '../../../shared/sales-person/sales-person.component';
-import { ActionTypeEnum } from '../../../shared/sales-person/utility/sales-person.constant';
 import { SalesPersonComponentStore } from '../../../shared/sales-person/utility/sales-person.store';
+import { SalesPersonComponent } from '../../../shared/sales-person/sales-person.component';
 import { ReactiveDropdownFieldComponent } from '../../../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component';
+import { ActionTypeEnum } from '../../../shared/sales-person/utility/sales-person.constant';
+import { LedgerDropdownTypeEnum } from '../../../models/api-models/Ledger';
 
 /** New ledger entries */
 const NEW_LEDGER_ENTRIES = [
@@ -62,7 +62,7 @@ const NEW_LEDGER_ENTRIES = [
     styleUrls: ['./new-ledger-entry-panel.component.scss'],
     providers: [SalesPersonComponentStore],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false
+    standalone:false
 })
 
 export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
@@ -146,7 +146,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     /** Holds voucher dropdown component reference */
     @ViewChild('voucherDropdownRef', { static: false }) public voucherDropdownRef: ReactiveDropdownFieldComponent;
     /** Holds select tax control component reference */
-    // @ViewChild('tax', { static: false }) public taxControl: TaxControlComponent;
+    @ViewChild('tax', { static: false }) public taxControl: TaxControlComponent;
     /** Instance of Aside Menu State For Other Taxes dialog */
     @ViewChild("asideMenuStateForOtherTaxes") public asideMenuStateForOtherTaxes: TemplateRef<any>;
     /** Sales Person List */
@@ -312,7 +312,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         private toaster: ToasterService,
         public dialog: MatDialog,
         private settingsTagService: SettingsTagService,
-        // private adjustmentUtilityService: AdjustmentUtilityService,
+        private adjustmentUtilityService: AdjustmentUtilityService,
         private settingsDiscountService: SettingsDiscountService,
         private ledgerUtilityService: LedgerUtilityService,
         private commonService: CommonService,
@@ -761,9 +761,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.discountControl.change();
             }
 
-            // if (this.taxControl) {
-            //     this.taxControl.change();
-            // }
+            if (this.taxControl) {
+                this.taxControl.change();
+            }
             if (this.currentTxn.inventory) {
                 this.currentTxn.convertedAmount = this.currentTxn.inventory.quantity * this.currentTxn.convertedRate;
             } else {
@@ -856,10 +856,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.discountControl.change();
         }
 
-        // if (this.taxControl) {
-        //     this.taxControl.taxTotalAmount = this.currentTxn.amount;
-        //     this.taxControl.change();
-        // }
+        if (this.taxControl) {
+            this.taxControl.taxTotalAmount = this.currentTxn.amount;
+            this.taxControl.change();
+        }
 
         if (this.currentTxn?.selectedAccount) {
             if (this.currentTxn.selectedAccount.stock) {
@@ -958,11 +958,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     maxWidth: '630px',
                     data: {
                 title: this.commonLocaleData?.app_delete,
-                    body: this.localeData?.confirm_delete_file,
-                    ok: this.commonLocaleData?.app_yes,
-                    cancel: this.commonLocaleData?.app_no,
-                    permanentlyDeleteMessage: this.localeData?.delete_entries_content
-                }
+                body: this.localeData?.confirm_delete_file,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no,
+                permanentlyDeleteMessage: this.localeData?.delete_entries_content
+            }
         });
 
         this.deleteAttachedFileDialogRef.afterClosed().subscribe(response => {
@@ -1059,10 +1059,10 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     maxWidth: '630px',
                     data: {
                 title: this.commonLocaleData?.map_bank_entry,
-                    body: this.mapBodyContent,
-                    ok: this.commonLocaleData?.app_yes,
-                    cancel: this.commonLocaleData?.app_no
-                }
+                body: this.mapBodyContent,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no
+            }
         });
 
         dialogRef.afterClosed().subscribe(response => {
@@ -1216,9 +1216,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     * @memberof NewLedgerEntryPanelComponent
     */
     public closeTaxDropdown(): void {
-        // if (this.taxControl) {
-        //     this.taxControl.toggleTaxMenu(false);
-        // }
+        if (this.taxControl) {
+            this.taxControl.toggleTaxMenu(false);
+        }
     }
 
     /**
@@ -1582,9 +1582,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (this.discountControl) {
             this.discountControl.discountTotal = this.currentTxn.discount;
         }
-        // if (this.taxControl) {
-        //     this.taxControl.taxTotalAmount = this.currentTxn.tax;
-        // }
+        if (this.taxControl) {
+            this.taxControl.taxTotalAmount = this.currentTxn.tax;
+        }
         setTimeout(() => {
             // Set it to false after some time, done as (ngModelChange) is triggered twice for amount field
             this.isExchangeRateSwapped = false;
@@ -1627,7 +1627,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                     maxWidth: '630px',
                     data: {
                 configuration: this.rcmConfiguration
-                }
+            }
         });
 
         dialogRef.afterClosed().subscribe(response => {
@@ -2033,7 +2033,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.activeAccount$.pipe(take(1)).subscribe(account => activeAccount = account);
 
             if (this.voucherApiVersion === 2) {
-                // request = this.adjustmentUtilityService.getInvoiceListRequest({ particularAccount: this.currentTxn?.selectedAccount, voucherType: voucherType, ledgerAccount: activeAccount });
+                request = this.adjustmentUtilityService.getInvoiceListRequest({ particularAccount: this.currentTxn?.selectedAccount, voucherType: voucherType, ledgerAccount: activeAccount });
             } else {
                 request = {
                     accountUniqueNames: [this.currentTxn?.selectedAccount?.uniqueName, this.activeAccount?.uniqueName],
@@ -2222,12 +2222,12 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 }, 0) || 0;
         }
         let taxTotal = 0;
-        // if (this.taxControl) {
-        //     taxTotal = this.taxControl.taxRenderData?.filter(f => f.isChecked)
-        //         .reduce((pv, cv) => {
-        //             return Number(pv) + Number(cv.amount);
-        //         }, 0) || 0;
-        // }
+        if (this.taxControl) {
+            taxTotal = this.taxControl.taxRenderData?.filter(f => f.isChecked)
+                .reduce((pv, cv) => {
+                    return Number(pv) + Number(cv.amount);
+                }, 0) || 0;
+        }
 
         return giddhRoundOff(((Number(total) + fixDiscount + 0.01 * fixDiscount * Number(taxTotal)) /
             (1 - 0.01 * percentageDiscount + 0.01 * Number(taxTotal) - 0.0001 * percentageDiscount * Number(taxTotal))), this.giddhBalanceDecimalPlaces);
@@ -2253,11 +2253,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.discountControl.change(null, null, true);
             this.calculateTaxValue();
         }
-        // if (this.taxControl) {
-        //     this.taxControl.totalForTax = this.currentTxn.total;
-        //     this.taxControl.change(true);
-        //     this.calculateTotal();
-        // }
+        if (this.taxControl) {
+            this.taxControl.totalForTax = this.currentTxn.total;
+            this.taxControl.change(true);
+            this.calculateTotal();
+        }
         if (this.currentTxn?.selectedAccount) {
             if (this.currentTxn.selectedAccount.stock) {
                 this.currentTxn.inventory.unit.rate = giddhRoundOff((this.currentTxn.amount / this.currentTxn.inventory.quantity), this.ratePrecision);
@@ -2336,14 +2336,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
     * @memberof NewLedgerEntryPanelComponent
     */
     public showCreateDiscountDialog(): void {
-        // this.discountDialogRef = this.dialog.open(CreateDiscountComponent, ASIDE_PANE_CONFIG);
+        this.discountDialogRef = this.dialog.open(CreateDiscountComponent, ASIDE_PANE_CONFIG);
 
-        // this.discountDialogRef.afterClosed().subscribe(response => {
-        //     if (response) {
-        //         this.getAllDiscounts();
-        //     }
-        //     this.discountDialogRef = undefined;
-        // });
+        this.discountDialogRef.afterClosed().subscribe(response => {
+            if (response) {
+                this.getAllDiscounts();
+            }
+            this.discountDialogRef = undefined;
+        });
     }
 
     /**

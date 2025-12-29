@@ -13,7 +13,7 @@ import { SelectMultipleFieldsComponent } from '../../theme/form-fields/select-mu
 import { GeneralService } from '../../services/general.service';
 import { TitleCasePipe } from '@angular/common';
 import { TriggerComponentStore } from '../triggers/uitilty/trigger.store';
-import { IOption, PAGINATION_LIMIT, WeekdaysEnum } from '../../app.constant';
+import { Configuration, IOption, PAGINATION_LIMIT, WeekdaysEnum } from '../../app.constant';
 import { AccountingGroupEnum } from '../Enums/common.enum';
 import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
 
@@ -68,7 +68,7 @@ export class TemplateFroalaComponent implements OnInit {
     /** Hold email suggestion suffix */
     public emailSuggestionSuffix: string = '}';
     /** Instance of is electron variable */
-    public isElectron: any = isElectron;
+    public isElectron: any = Configuration.isElectron;
     /** Hold froala editor options */
     public froalaOptions: any;
     /** Retry counter for Froala initialization */

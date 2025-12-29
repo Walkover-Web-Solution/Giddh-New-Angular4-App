@@ -1,6 +1,6 @@
 
 import { Observable, of as observableOf, ReplaySubject, Subject, Subscription } from 'rxjs';
-import { distinctUntilChanged, take, takeUntil, tap } from 'rxjs/operators';
+import { distinctUntilChanged, filter, take, takeUntil, tap } from 'rxjs/operators';
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from './../helpers/defaultDateFormat';
 import { ManageGroupsAccountsComponent } from './components';
 import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, Inject, NgZone, OnDestroy, OnInit, Output, Renderer2, TemplateRef, ViewChild } from '@angular/core';
@@ -553,7 +553,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.store.pipe(select(appStore => appStore.general.menuItems), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 let branches = [];
-                this.store.pipe(select(appStore => appStore.settings.branches), take(1)).subscribe(data => {
+                this.store.pipe(filter(Boolean), select(appStore => appStore.settings.branches), take(1)).subscribe(data => {
                     branches = data || [];
                 });
                 reassignNavigationalArray(this.isMobileSite, this.generalService.currentOrganizationType === OrganizationType.Company && branches?.length > 1, response);
@@ -784,15 +784,35 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     public ngAfterViewInit() {
         /* TO SHOW NOTIFICATIONS */
-        if (window['Headway'] === undefined) {
-            let scriptTag = document.createElement('script');
-            scriptTag.src = './assets/js/headway-widget.js';
-            scriptTag.type = 'text/javascript';
-            scriptTag.defer = true;
-            scriptTag.async = true;
-            document.body.appendChild(scriptTag);
-        } else {
-            window['Headway']?.init();
+        // Only initialize Headway widget in web environment, not in Electron
+        if (!Configuration.isElectron) {
+            // Ensure HW_config is properly set for web environment
+            if (!window['HW_config']) {
+                window['HW_config'] = {
+                    selector: ".notification",
+                    account: "7eB4aJ",
+                    enabled: true
+                };
+            }
+
+            if (window['Headway'] === undefined) {
+                let scriptTag = document.createElement('script');
+                scriptTag.src = './assets/js/headway-widget.js';
+                scriptTag.type = 'text/javascript';
+                scriptTag.defer = true;
+                scriptTag.async = true;
+                scriptTag.onload = () => {
+                    // Initialize Headway after script loads
+                    setTimeout(() => {
+                        if (window['Headway']) {
+                            window['Headway'].init();
+                        }
+                    }, 100);
+                };
+                document.body.appendChild(scriptTag);
+            } else {
+                window['Headway']?.init();
+            }
         }
         /* TO SHOW NOTIFICATIONS */
 
@@ -921,8 +941,8 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                             hasBackdrop: false,
                             position: {
                         right: '0',
-                            top: '0'
-                        }
+                        top: '0'
+                    }
                 });
             }
         } else {
@@ -1050,12 +1070,12 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     */
     public openDialogManageGroupsAccounts(): void {
         this.manageGroupsAccountsDialogRef = this.dialog.open(ManageGroupsAccountsComponent, {
-                    width: '100%',
-                    height: '100%',
-                    maxWidth: '100vw',
-                    maxHeight: '100vh',
-                    disableClose: true
-                });
+            width: '100%',
+            height: '100%',
+            maxWidth: '100vw',
+            maxHeight: '100vh',
+            disableClose: true
+        });
 
         this.manageGroupsAccountsDialogRef.afterOpened().subscribe(() => {
             const instance = this.manageGroupsAccountsDialogRef.componentInstance;
@@ -1914,6 +1934,17 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
     public removeDepreciationMessage(): void {
         document.body?.classList?.remove("depreciation-message");
         this.showDepreciationMessage = false;
+    }
+
+    /**
+     * Opens notifications widget
+     *
+     * @memberof HeaderComponent
+     */
+    public openNotifications(): void {
+        if (!Configuration.isElectron && window['Headway']) {
+            window['Headway'].show();
+        }
     }
 
     /**

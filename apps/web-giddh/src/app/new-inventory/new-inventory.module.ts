@@ -1,5 +1,4 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from "@angular/core";
-import { RouterModule } from "@angular/router";
+import { NgModule } from "@angular/core";
 import { NewInventoryComponent } from "./new-inventory.component";
 import { NewInventoryRoutingModule } from "./new-inventory.routing.module";
 import { SharedModule } from "../shared/shared.module";
@@ -52,7 +51,7 @@ import { CdkScrollModule } from "../theme/form-fields/cdk-scroll/cdk-scroll.modu
 import { CustomPriceModule } from "./component/custom-price/custom-price.module";
 import { BulkStockEditComponent } from "./component/bulk-stock-edit/bulk-stock-edit.component";
 import { BulkStockAdvanceFilterComponent } from "./component/bulk-stock-advance-filter/bulk-stock-advance-filter.component";
-// import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
+import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
 import { ExportInventoryMasterComponent } from "./component/export-inventory-master/export-inventory-master.component";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { AdjustInventoryComponent } from "./component/adjust-inventory/adjust-inventory.component";
@@ -62,7 +61,6 @@ import { MatPaginatorModule } from "@angular/material/paginator";
 import { AsideCreateNewReasonComponent } from "./component/aside-create-reason/aside-create-reason.component";
 import { PreviewVariantImageComponent } from "./component/preview-variant-image/preview-variant-image.component";
 import { AmountFieldComponentModule } from "../shared/amount-field/amount-field.module";
-import { HamburgerMenuModule } from "../shared/header/components/hamburger-menu/hamburger-menu.module";
 
 @NgModule({
     declarations: [
@@ -93,7 +91,6 @@ import { HamburgerMenuModule } from "../shared/header/components/hamburger-menu/
         NewInventoryRoutingModule,
         SharedModule,
         CommonModule,
-        RouterModule,
         FormFieldsModule,
         TranslateDirectiveModule,
         DecimalDigitsModule,
@@ -126,15 +123,13 @@ import { HamburgerMenuModule } from "../shared/header/components/hamburger-menu/
         NoDataModule,
         DragDropModule,
         CustomPriceModule,
-        // WatchVideoModule,
+        WatchVideoModule,
         MatSlideToggleModule,
         MatExpansionModule,
         MatPaginatorModule,
         ReactiveFormsModule,
-        AmountFieldComponentModule,
-        HamburgerMenuModule
+        AmountFieldComponentModule
     ],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
     exports: [
         NewInventoryComponent,
         CreateNewUnitComponent,

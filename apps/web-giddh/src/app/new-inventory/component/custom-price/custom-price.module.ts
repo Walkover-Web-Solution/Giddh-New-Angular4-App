@@ -1,4 +1,4 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MainComponent } from './main.component';
 import { InventorySidebarModule } from '../inventory-sidebar/inventory-sidebar.module';
@@ -17,11 +17,11 @@ import { CommandKModule } from '../../../theme/command-k/command.k.module';
 import { GiddhPageLoaderModule } from '../../../shared/giddh-page-loader/giddh-page-loader.module';
 import { AdvanceListItemsPopupComponent } from './advance-list-items-popup/advance-list-items-popup.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-// import { NewConfirmModalModule } from '../../../theme/new-confirm-modal';
-// import { DiscountControlModule } from '../../../theme/discount-control/discount-control.module';
+import { NewConfirmModalModule } from '../../../theme/new-confirm-modal';
+import { DiscountControlModule } from '../../../theme/discount-control/discount-control.module';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatRadioModule } from '@angular/material/radio';
-// import { WatchVideoModule } from '../../../theme/watch-video/watch-video.module';
+import { WatchVideoModule } from '../../../theme/watch-video/watch-video.module';
 import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
@@ -41,18 +41,17 @@ import { MatPaginatorModule } from '@angular/material/paginator';
         GiddhPageLoaderModule,
         ScrollingModule,
         ReactiveFormsModule,
-        // NewConfirmModalModule,
-        // DiscountControlModule,
+        NewConfirmModalModule,
+        DiscountControlModule,
         MatTooltipModule,
         MatRadioModule,
-        // WatchVideoModule,
+        WatchVideoModule,
         MatPaginatorModule
     ],
     exports: [
         CustomerWiseComponent,
         AdvanceListItemsPopupComponent
     ],
-    declarations: [MainComponent, CustomerWiseComponent, AdvanceListItemsPopupComponent],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
+    declarations: [MainComponent, CustomerWiseComponent, AdvanceListItemsPopupComponent]
 })
 export class CustomPriceModule { }

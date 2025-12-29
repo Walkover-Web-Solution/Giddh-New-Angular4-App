@@ -91,6 +91,7 @@
     "angular2-ladda": "^5.0.0",
     "bootstrap-daterangepicker": "^3.1.0",
     "chart.js": "^4.3.3",
+    "configstore": "^5.0.1",
     "core-js": "^3.32.0",
     "d3": "^7.9.0",
     "d3-org-chart": "^3.1.1",

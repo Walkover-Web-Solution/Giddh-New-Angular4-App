@@ -2,11 +2,14 @@ import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { AppModule } from './app/app.module';
-import './app/angular21-compatibility';
+import { applyAngular21Patches } from './app/angular21-compatibility';
 // Only import electron-compatibility in Electron environment
 if (typeof window !== 'undefined' && (window as any).isElectron) {
   import('./app/electron-compatibility');
 }
+
+// Apply Angular 21 compatibility patches immediately
+applyAngular21Patches();
 
 // Import environment.generated.ts early to ensure global constants are set
 import './environments/environment.generated';

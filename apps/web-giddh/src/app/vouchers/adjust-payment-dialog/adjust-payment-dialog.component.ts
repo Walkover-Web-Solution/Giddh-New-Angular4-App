@@ -220,7 +220,7 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
                 });
             }
         });
-        this.enableVoucherAdjustmentMultiCurrency = enableVoucherAdjustmentMultiCurrency;
+        this.enableVoucherAdjustmentMultiCurrency = (window as any).enableVoucherAdjustmentMultiCurrency || false;
     }
 
     /**

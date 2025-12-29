@@ -10,7 +10,8 @@ import { IForceClear } from '../../../models/api-models/Sales';
 import { DownloadLedgerAttachmentResponse } from '../../../models/api-models/Ledger';
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { TaxResponse } from '../../../models/api-models/Company';
-// import { UpdateLedgerEntryPanelComponent } from '../../../ledger/components/update-ledger-entry-panel/update-ledger-entry-panel.component';
+import { UpdateLedgerEntryPanelComponent } from '../../../ledger/components/update-ledger-entry-panel/update-ledger-entry-panel.component';
+import { cloneDeep } from '../../../lodash-optimized';
 import { SearchService } from '../../../services/search.service';
 import { MatDialog } from '@angular/material/dialog';
 import { CompanyActions } from '../../../actions/company.actions';
@@ -19,13 +20,12 @@ import { GeneralService } from '../../../services/general.service';
 import { CommonService } from '../../../services/common.service';
 import { ServiceConfig } from '../../../services/service.config';
 import { ASIDE_PANE_CONFIG, IOption } from '../../../app.constant';
-import { cloneDeep, concat, forEach, map, some } from '../../../lodash-optimized';
 
 @Component({
     selector: 'app-expense-details',
-    standalone: false,
     templateUrl: './expense-details.component.html',
-    styleUrls: ['./expense-details.component.scss']
+    styleUrls: ['./expense-details.component.scss'],
+    standalone:false
 })
 
 export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
@@ -37,7 +37,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
     @ViewChild("rejectionReason") public rejectionReason;
     /** Instance of ledger aside pane modal */
     @ViewChild("ledgerAsidePane") public ledgerAsidePane: TemplateRef<any>;
-    // @ViewChild(UpdateLedgerEntryPanelComponent, { static: false }) public updateLedgerComponentInstance: UpdateLedgerEntryPanelComponent;
+    @ViewChild(UpdateLedgerEntryPanelComponent, { static: false }) public updateLedgerComponentInstance: UpdateLedgerEntryPanelComponent;
     @Output() public toggleDetailsMode: EventEmitter<boolean> = new EventEmitter();
     @Output() public selectedDetailedRowInput: EventEmitter<ExpenseResults> = new EventEmitter();
     /** This will emit true if we need to show next record in preview */
@@ -181,10 +181,9 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
      */
     public openModal(rejectionReason: TemplateRef<any>): void {
         this.dialogRef = this.dialog.open(rejectionReason, {
-                    width: '630px',
-                    maxWidth: '630px',
-                    disableClose: true
-                });
+            width: '630px',
+            disableClose: true
+        });
     }
 
     /**
@@ -290,8 +289,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
             disableClose: true
         });
         this.selectedEntryForApprove = cloneDeep(this.selectedItem);
-        // this.selectedEntryForApprove.amount = this.updateLedgerComponentInstance.vm.compoundTotal;
-        this.selectedEntryForApprove.amount = 0; // Placeholder value
+        this.selectedEntryForApprove.amount = this.updateLedgerComponentInstance.vm.compoundTotal;
     }
 
     /**
@@ -329,8 +327,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
             accountUniqueName: this.accountEntryPettyCash.particular?.uniqueName
         };
 
-        // let ledgerRequest = cloneDeep(this.updateLedgerComponentInstance.saveLedgerTransaction());
-        let ledgerRequest = null; // Placeholder value
+        let ledgerRequest = cloneDeep(this.updateLedgerComponentInstance.saveLedgerTransaction());
         // check if there any validation error occurs from ledger component then don't do any thing just return
         if (!ledgerRequest) {
             this.approveEntryRequestInProcess = false;

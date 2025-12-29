@@ -64,7 +64,8 @@ import { TranslateDirectiveModule } from '../theme/translate/translate.directive
         MatIconModule,
         MatDialogModule,
         BankIntegrationModule,
-        MatTooltipModule
+        MatTooltipModule,
+        TranslateDirectiveModule
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
 })

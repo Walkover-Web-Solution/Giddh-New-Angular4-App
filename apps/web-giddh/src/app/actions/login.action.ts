@@ -350,8 +350,17 @@ export class LoginActions {
                 if (environment.production && !Configuration.isElectron) {
                     window.location.href = this._generalService.getGiddhRegionUrl();
                 } else if (Configuration.isElectron) {
-                    this._router.navigate(['/login']);
-                    window.location.reload();
+                    this._router.navigate(['/login']).then(() => {
+                        // Wait for navigation to complete before reloading
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 500);
+                    }).catch(() => {
+                        // Fallback if navigation fails
+                        setTimeout(() => {
+                            window.location.href = '/login';
+                        }, 100);
+                    });
                 } else {
                     window.location.href = (this.serviceConfig.AppUrl || environment.AppUrl) + 'login/';
                 }

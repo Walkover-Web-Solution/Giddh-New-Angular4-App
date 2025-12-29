@@ -1,8 +1,8 @@
-// import { PurchaseModule } from '../purchase/purchase.module';
+import { PurchaseModule } from '../purchase/purchase.module';
 import { PushToGstInComponent } from './filing/tabs/push-to-gstin/push-to-gstin.component';
 import { TransactionSummaryComponent } from './filing/tabs/push-to-gstin/components/transaction-summary/transaction-summary.component';
 import { FilingComponent } from './filing/filing.component';
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { OverviewSummaryComponent } from './filing/tabs/overview/summary/summary.component';
 import { HighlightModule } from '../shared/helpers/pipes/highlightPipe/highlight.module';
 import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
@@ -19,7 +19,7 @@ import { LaddaModule } from 'angular2-ladda';
 import { FailedTransactionsComponent } from './filing/tabs/push-to-gstin/components/failed-transactions/failed-transactions.component';
 import { DocumentIssuedComponent } from './filing/tabs/push-to-gstin/components/document-issued/document-issued.component';
 import { ReconcileComponent } from './filing/tabs/reconcilation/reconcilation.component';
-// import { InvoiceModule } from '../invoice/invoice.module';
+import { InvoiceModule } from '../invoice/invoice.module';
 import { FileGstR3Component } from './gstR3/gstR3.component';
 import { GstComponent } from './gst.component';
 import { FilingOverviewComponent } from './filing/tabs/overview/overview.component';
@@ -58,7 +58,7 @@ import { MatListModule } from '@angular/material/list';
         ReconcileComponent, PushToGstInComponent, ViewTransactionsComponent,
         OverviewSummaryComponent, TransactionSummaryComponent,
         PushToGstInComponent, NilSummaryComponent, HsnSummaryComponent, B2csSummaryComponent,
-        DocumentIssuedComponent, FailedTransactionsComponent, GstAsideMenuComponent, UnitMappingComponent, PushToPortalComponent,FilingStatusComponent, GstSettingComponent],
+        DocumentIssuedComponent, FailedTransactionsComponent, GstAsideMenuComponent, UnitMappingComponent, PushToPortalComponent, FilingStatusComponent, GstSettingComponent],
     imports: [
         GstRoutingModule,
         Daterangepicker,
@@ -71,8 +71,8 @@ import { MatListModule } from '@angular/material/list';
         ElementViewChildModule,
         DecimalDigitsModule,
         TranslateDirectiveModule,
-        // PurchaseModule,
-        // InvoiceModule,
+        PurchaseModule,
+        InvoiceModule,
         GiddhNumberFormatModule,
         ConfirmModalModule,
         SharedModule,
@@ -96,7 +96,6 @@ import { MatListModule } from '@angular/material/list';
         MatMenuModule,
         MatListModule
     ],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA],
     providers: [],
     exports: [ViewTransactionsComponent]
 })

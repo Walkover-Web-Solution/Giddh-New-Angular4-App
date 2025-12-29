@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
+import { NgModule } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
 import { MatTableModule } from "@angular/material/table";
 import { RouterModule } from "@angular/router";
@@ -10,7 +10,6 @@ import { CustomFieldsListComponent } from "./list/list.component";
 import { MainComponent } from "./main.component";
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-// import { MatCommonModule } from '@angular/material/core'; // Deprecated in Angular 21
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
@@ -21,7 +20,7 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { GiddhPageLoaderModule } from "../shared/giddh-page-loader/giddh-page-loader.module";
 import { NoDataModule } from "../shared/no-data/no-data.module";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
-// import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
+import { WatchVideoModule } from "../theme/watch-video/watch-video.module";
 
 @NgModule({
     declarations: [
@@ -38,7 +37,6 @@ import { MatSlideToggleModule } from "@angular/material/slide-toggle";
         MatTableModule,
         MatFormFieldModule,
         MatInputModule,
-        // MatCommonModule, // Deprecated in Angular 21
         MatRadioModule,
         MatSelectModule,
         FormFieldsModule,
@@ -49,10 +47,9 @@ import { MatSlideToggleModule } from "@angular/material/slide-toggle";
         GiddhPageLoaderModule,
         NoDataModule,
         MatSlideToggleModule,
-        // WatchVideoModule, // Module not found
+        WatchVideoModule,
         ReactiveFormsModule
-    ],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    ]
 })
 export class CustomFieldsModule {
 

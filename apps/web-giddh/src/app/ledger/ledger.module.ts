@@ -1,14 +1,22 @@
 import { CommonModule } from '@angular/common';
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LaddaModule } from 'angular2-ladda';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { ClipboardModule } from 'ngx-clipboard';
-// import { InventoryAddStockModule } from '../inventory/components/add-stock-components/inventory.addstock.module';
+import { InventoryAddStockModule } from '../inventory/components/add-stock-components/inventory.addstock.module';
 import { AsideMenuSalesOtherTaxesModule } from '../sales/aside-menu-sales-other-taxes/aside-menu-sales-other-taxes.module';
 import { AdvanceReceiptAdjustmentModule } from '../shared/advance-receipt-adjustment/advance-receipt-adjustment.module';
-
+import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
+import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
+import { AccountAddNewDetailsModule } from '../shared/header/components/account-add-new-details/account-add-new-details.module';
+import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
+import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
+import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
+import { NumberToWordsModule } from '../shared/helpers/pipes/numberToWords/numberToWords.module';
+import { ReplacePipeModule } from '../shared/helpers/pipes/replace/replace.module';
+import { ValidateSectionPermissionDirectiveModule } from '../shared/validate-section-permission/validate-section-permission.module';
 import { ConfirmModalModule } from '../theme/confirm-modal';
 import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
 import { TaxControlModule } from '../theme/tax-control/tax-control.module';
@@ -26,7 +34,9 @@ import { UpdateLedgerEntryPanelModule } from './components/update-ledger-entry-p
 import { LedgerComponent } from './ledger.component';
 import { LedgerRoutingModule } from './ledger.routing.module';
 import { ParticularPipeModule } from './pipes/particular/particular.module';
+import { NoDataModule } from '../shared/no-data/no-data.module';
 import { GiddhDatepickerModule } from '../theme/giddh-datepicker/giddh-datepicker.module';
+import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
 import { NewConfirmModalModule } from '../theme/new-confirm-modal';
 import { GenerateVoucherConfirmationModalComponent } from './components/generate-voucher-confirm-modal/generate-voucher-confirm-modal.component';
 import { MatInputModule } from '@angular/material/input';
@@ -46,27 +56,17 @@ import { AttachmentsModule } from '../theme/attachments/attachments.module';
 import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { StockCreateEditModule } from '../new-inventory/component/stock-create-edit/stock-create-edit.module';
 import { MatIconModule } from '@angular/material/icon';
-import { AsideMenuCreateTaxModule } from '../shared/aside-menu-create-tax/aside-menu-create-tax.module';
-import { MatDividerModule } from '@angular/material/divider';
-import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
-import { AmountFieldComponentModule } from '../shared/amount-field/amount-field.module';
-import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
-import { BankIntegrationModule } from '../shared/bank-integration/bank-integration.module';
-import { DatepickerWrapperModule } from '../shared/datepicker-wrapper/datepicker.wrapper.module';
-import { GiddhPageLoaderModule } from '../shared/giddh-page-loader/giddh-page-loader.module';
-import { AccountAddNewDetailsModule } from '../shared/header/components/account-add-new-details/account-add-new-details.module';
-import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
-import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
-import { NgxMaskModule } from '../shared/helpers/directives/ngx-mask';
-import { NumberToWordsModule } from '../shared/helpers/pipes/numberToWords/numberToWords.module';
-import { ReplacePipeModule } from '../shared/helpers/pipes/replace/replace.module';
-import { NoDataModule } from '../shared/no-data/no-data.module';
-import { SalesPersonService } from '../shared/sales-person/utility/sales-person.service';
-import { ValidateSectionPermissionDirectiveModule } from '../shared/validate-section-permission/validate-section-permission.module';
-import { TributeMentionModule } from '../shared/helpers/directives/tributeMention/tributeMention.module';
-import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
-import { CarouselComponent } from '../shared/carousel/carousel.component';
 import { GiddhLedgerPaginatorModule } from '../shared/giddh-ledger-paginator/giddh-ledger-paginator.module';
+import { BankIntegrationModule } from '../shared/bank-integration/bank-integration.module';
+import { CarouselComponent } from '../shared/carousel/carousel.component';
+import { AsideMenuCreateTaxModule } from '../shared/aside-menu-create-tax/aside-menu-create-tax.module';
+import { SalesPersonService } from '../shared/sales-person/utility/sales-person.service';
+import { AsideMenuAccountModule } from '../shared/aside-menu-account/aside.menu.account.module';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { TributeMentionModule } from '../shared/helpers/directives/tributeMention/tributeMention.module';
+import { MatDividerModule } from '@angular/material/divider';
+import { GiddhNumberFormatModule } from '../shared/helpers/pipes/number-format/number-format.module';
+import { KeyboardShortutModule } from '../shared/helpers/directives/keyboardShortcut/keyboardShortut.module';
 
 @NgModule({
     declarations: [
@@ -115,7 +115,7 @@ import { GiddhLedgerPaginatorModule } from '../shared/giddh-ledger-paginator/gid
         LedgerDiscountModule,
         UpdateLedgerEntryPanelModule,
         DatepickerWrapperModule,
-        // InventoryAddStockModule,
+        InventoryAddStockModule,
         ParticularPipeModule,
         ReplacePipeModule,
         HamburgerMenuModule,
@@ -150,9 +150,9 @@ import { GiddhLedgerPaginatorModule } from '../shared/giddh-ledger-paginator/gid
         NgxMatSelectSearchModule,
         TributeMentionModule,
         MatDividerModule,
-        GiddhNumberFormatModule
-    ],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA]
+        GiddhNumberFormatModule,
+        KeyboardShortutModule
+    ]
 })
 export class LedgerModule {
 }

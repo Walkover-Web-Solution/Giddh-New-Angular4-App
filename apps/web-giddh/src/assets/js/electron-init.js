@@ -32,7 +32,11 @@ window.addEventListener('error', function(e) {
         // Suppress common undefined property errors in Electron
         if (e.error.message.includes('Cannot read properties of undefined') ||
             e.error.message.includes('Cannot read property') ||
-            e.error.message.includes('undefined is not an object')) {
+            e.error.message.includes('undefined is not an object') ||
+            e.error.message.includes('HW_config is not defined') ||
+            e.error.message.includes('ReferenceError: HW_config is not defined') ||
+            e.error.message.includes("Cannot read properties of undefined (reading 'nativeElement')") ||
+            e.error.message.includes("Cannot read property 'nativeElement' of undefined")) {
             console.warn('Suppressed undefined property error (common in Electron startup):', e.error.message);
             e.preventDefault();
             return false;
@@ -45,6 +49,14 @@ window.addEventListener('error', function(e) {
             e.error.message.includes('setupNavigationListener') ||
             e.error.message.includes('ipcRenderer')) {
             console.warn('Suppressed Electron IPC error (fallback handling active):', e.error.message);
+            e.preventDefault();
+            return false;
+        }
+        // Suppress Angular chunk loading errors in Electron file:// protocol
+        if (e.error.message.includes('ChunkLoadError') ||
+            e.error.message.includes('Loading chunk') && e.error.message.includes('failed') ||
+            e.error.message.includes('ChunkLoadError: Loading chunk')) {
+            console.warn('Suppressed Angular chunk loading error (Electron file:// protocol):', e.error.message);
             e.preventDefault();
             return false;
         }
@@ -90,7 +102,11 @@ window.onerror = function(message, source, lineno, colno, error) {
         // Suppress common undefined property errors
         if (message.includes('Cannot read properties of undefined') ||
             message.includes('Cannot read property') ||
-            message.includes('undefined is not an object')) {
+            message.includes('undefined is not an object') ||
+            message.includes('HW_config is not defined') ||
+            message.includes('ReferenceError: HW_config is not defined') ||
+            message.includes("Cannot read properties of undefined (reading 'nativeElement')") ||
+            message.includes("Cannot read property 'nativeElement' of undefined")) {
             console.warn('Suppressed undefined property error:', message);
             return true; // Prevent default error handling
         }
@@ -102,6 +118,13 @@ window.onerror = function(message, source, lineno, colno, error) {
             message.includes('setupNavigationListener') ||
             message.includes('ipcRenderer')) {
             console.warn('Suppressed Electron IPC error:', message);
+            return true; // Prevent default error handling
+        }
+        // Suppress Angular chunk loading errors in Electron file:// protocol
+        if (message.includes('ChunkLoadError') ||
+            message.includes('Loading chunk') && message.includes('failed') ||
+            message.includes('ChunkLoadError: Loading chunk')) {
+            console.warn('Suppressed Angular chunk loading error (window.onerror):', message);
             return true; // Prevent default error handling
         }
         // Suppress third-party widget errors
@@ -116,17 +139,26 @@ window.onerror = function(message, source, lineno, colno, error) {
     return false; // Allow other errors to be handled normally
 };
 
-// Electron development environment configuration
+// Electron environment configuration (change manually as needed)
 window.isElectron = true;
 window.electronEnvironment = {
-    isDevelopment: true,
+    isDevelopment: false,
     appUrl: './',
-    apiUrl: 'https://apitest.giddh.com/'
+    apiUrl: 'https://api.giddh.com/'
 };
 
-// Logo and preconnect initialization
-window.addEventListener('DOMContentLoaded', function() {
-    // Add preconnect for domainName extracted from cookie
+// Override Angular environment ApiUrl for production
+window.ApiUrl = 'https://api.giddh.com/';
+
+// Define HW_config for Headway notification widget
+window.HW_config = window.HW_config || {
+    selector: ".notification",
+    account: "7eB4aJ",
+    enabled: !window.isElectron // Disable in Electron, enable in web
+};
+
+// Enhanced logo and preconnect initialization with retry mechanism
+function initializeLogo() {
     try {
         let whiteLabelConfig = JSON.parse(localStorage.getItem("whiteLabel") || "null");
         const logoUrl = "./assets/images/giddh-big-logo.svg";
@@ -139,10 +171,33 @@ window.addEventListener('DOMContentLoaded', function() {
                 logoContainer.remove();
             }
         } else {
-            // If no whiteLabel object, set the logo as usual
+            // Enhanced logo loading with retry mechanism
             const logoElement = document.getElementById("dynamic-logo");
             if (logoElement) {
+                // Set logo source with error handling
+                logoElement.onerror = function() {
+                    console.warn('Logo failed to load, retrying...');
+                    setTimeout(() => {
+                        logoElement.src = logoUrl + '?retry=' + Date.now();
+                    }, 1000);
+                };
+
+                logoElement.onload = function() {
+                    console.log('Logo loaded successfully');
+                };
+
                 logoElement.src = logoUrl;
+
+                // Fallback: ensure logo is set after a delay
+                setTimeout(() => {
+                    if (!logoElement.complete || logoElement.naturalWidth === 0) {
+                        console.warn('Logo not loaded after timeout, forcing reload');
+                        logoElement.src = logoUrl + '?fallback=' + Date.now();
+                    }
+                }, 2000);
+            } else {
+                console.warn('Logo element not found, retrying...');
+                setTimeout(initializeLogo, 500);
             }
         }
 
@@ -155,11 +210,25 @@ window.addEventListener('DOMContentLoaded', function() {
         document.head.appendChild(preconnectLink);
     } catch (error) {
         console.warn('Error in logo/preconnect initialization:', error);
-        // Fallback: set default logo
-        const logoElement = document.getElementById("dynamic-logo");
-        if (logoElement) {
-            logoElement.src = "./assets/images/giddh-big-logo.svg";
-        }
+        // Fallback: set default logo with retry
+        setTimeout(() => {
+            const logoElement = document.getElementById("dynamic-logo");
+            if (logoElement) {
+                logoElement.src = "./assets/images/giddh-big-logo.svg?error=" + Date.now();
+            }
+        }, 1000);
+    }
+}
+
+// Initialize logo on DOMContentLoaded
+window.addEventListener('DOMContentLoaded', initializeLogo);
+
+// Also initialize on window load as backup
+window.addEventListener('load', function() {
+    const logoElement = document.getElementById("dynamic-logo");
+    if (logoElement && (!logoElement.src || logoElement.src === window.location.href)) {
+        console.warn('Logo not set on window load, initializing...');
+        initializeLogo();
     }
 });
 
@@ -195,6 +264,13 @@ console.error = function(...args) {
         message.includes('setupNavigationListener') ||
         message.includes('goToRoute') ||
         message.includes('performActions') ||
+        message.includes('ChunkLoadError') ||
+        message.includes('Loading chunk') && message.includes('failed') ||
+        message.includes('ChunkLoadError: Loading chunk') ||
+        message.includes('HW_config is not defined') ||
+        message.includes('ReferenceError: HW_config is not defined') ||
+        message.includes("Cannot read properties of undefined (reading 'nativeElement')") ||
+        message.includes("Cannot read property 'nativeElement' of undefined") ||
         message.includes('Headway Error') ||
         message.includes('Element provided by selector does not exist') ||
         message.includes('frame-ancestors') ||

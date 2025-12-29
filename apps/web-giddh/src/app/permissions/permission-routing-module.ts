@@ -1,4 +1,4 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -11,7 +11,7 @@ import { NeedsAuthentication } from '../decorators/needsAuthentication';
 import { CapitalizePipe } from './capitalize.pipe';
 import { SharedModule } from '../shared/shared.module';
 import { SortByModule } from '../shared/helpers/pipes/sort-by/sort-by.module';
-// import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
+import { FormFieldsModule } from '../theme/form-fields/form-fields.module';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
@@ -57,7 +57,7 @@ const PERMISSION_ROUTES: Routes = [
         RouterModule.forChild(PERMISSION_ROUTES),
         SharedModule,
         SortByModule,
-        // FormFieldsModule,
+        FormFieldsModule,
         MatButtonModule,
         MatCardModule,
         MatListModule,
@@ -71,7 +71,6 @@ const PERMISSION_ROUTES: Routes = [
         RouterModule,
         CapitalizePipe
     ],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
     providers: []
 })
 export class PermissionRoutingModule {

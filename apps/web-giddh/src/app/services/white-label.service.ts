@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { EnvironmentService } from './environment.service';
+import { Configuration } from '../app.constant';
 
 export interface WhiteLabelConfig {
     body?: {

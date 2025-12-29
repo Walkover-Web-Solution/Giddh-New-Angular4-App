@@ -849,7 +849,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     ) {
         this.advanceReceiptAdjustmentData = new VoucherAdjustments();
         this.advanceReceiptAdjustmentData.adjustments = [];
-        this.enableVoucherAdjustmentMultiCurrency = enableVoucherAdjustmentMultiCurrency;
+        this.enableVoucherAdjustmentMultiCurrency = (window as any).enableVoucherAdjustmentMultiCurrency || false;
         this.invFormData = new VoucherClass();
         this.activeAccount$ = this.store.pipe(select(p => p.groupwithaccounts.activeAccount), takeUntil(this.destroyed$));
         this.newlyCreatedAc$ = this.store.pipe(select(p => p.groupwithaccounts.newlyCreatedAccount), takeUntil(this.destroyed$));

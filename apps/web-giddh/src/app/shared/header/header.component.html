@@ -450,7 +450,7 @@
                             [matTooltip]="localeData?.notifications"
                             [matTooltipPosition]="'below'"
                         >
-                            <button mat-icon-button aria-label="notification" class="icon-circle">
+                            <button mat-icon-button aria-label="notification" class="icon-circle notification" (click)="openNotifications()">
                                 <i class="icon-bell-new"></i>
                             </button>
                         </li>
