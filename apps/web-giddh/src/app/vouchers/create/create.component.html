@@ -3569,7 +3569,8 @@
                                                             </mat-expansion-panel>
                                                         </mat-accordion>
                                                     </div>
-                                                    <div class="col-6 mt-3">
+                                                    <!-- Sample Templates not visible when there is only one sample template -->
+                                                    <div class="col-6 mt-3" formGroupName="templateDetails" *ngIf="(sampleTemplates$ | async)?.length > 1">
                                                         <reactive-dropdown-field
                                                             appEnterNext
                                                             [label]="localeData?.template"
