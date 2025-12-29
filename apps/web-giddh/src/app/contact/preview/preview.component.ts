@@ -40,8 +40,6 @@ export class ContactPreviewComponent implements OnInit, OnDestroy {
     public localeData: any = {};
     /** Holds common localized text used across the app */
     public commonLocaleData: any = {};
-    /** Voucher type for resizable directive */
-    public voucherType: string = 'contact-preview';
     /** Reference to the dayjs library for date manipulation */
     public dayjs: any = dayjs;
     /** Index of the currently selected tab */

@@ -7,7 +7,7 @@ import { Directive, ElementRef, Input, OnDestroy, OnInit, Renderer2 } from '@ang
  * Features:
  * - Drag to resize with min/max constraints and 3px drag threshold
  * - Click to toggle between current and default width
- * - Per-page persistence using voucherType identifier
+ * - Per-page persistence using moduleName identifier
  * - Responsive behavior that adapts to window size changes
  * - Performance optimized with requestAnimationFrame and pointer capture
  * 
@@ -18,7 +18,7 @@ import { Directive, ElementRef, Input, OnDestroy, OnInit, Renderer2 } from '@ang
  *      [minWidth]="300"
  *      [maxWidthRatio]="0.5"
  *      [defaultWidthRatio]="0.4"
- *      [voucherType]="'contact-preview'"
+ *      [moduleName]="'contact-preview'"
  *      class="container">
  *   <div class="left-panel">Resizable content</div>
  *   <div class="right-panel flex-grow-1">Fixed content</div>
@@ -44,11 +44,11 @@ export class ResizableDirective implements OnInit, OnDestroy {
   /** Width of the resizer handle in pixels */
   @Input() resizerWidth: number = 6;
   
-  /** localStorage key for storing width preferences object */
-  @Input() storageKey: string = 'resizable-width';
+  /** localStorage key for storing UI preferences object */
+  @Input() storageKey: string = 'giddh-ui-settings';
   
   /** Unique identifier for per-page width storage */
-  @Input() voucherType: string = 'voucherType';
+  @Input() moduleName: string = 'default';
 
   private isResizing = false;
   private startX = 0;
@@ -374,23 +374,28 @@ export class ResizableDirective implements OnInit, OnDestroy {
    */
   private saveWidthRatio(widthRatio: number): void {
     try {
-      // Get existing object or create new one
-      let widthPreferences: any = {};
+      // Get existing UI preferences or create new one
+      let uiPreferences: any = {};
       const existingData = localStorage.getItem(this.storageKey);
       if (existingData) {
         try {
-          widthPreferences = JSON.parse(existingData);
+          uiPreferences = JSON.parse(existingData);
         } catch (parseError) {
           console.error('ResizableDirective: Failed to parse existing localStorage data, creating new object:', parseError);
-          widthPreferences = {};
+          uiPreferences = {};
         }
       }
       
-      // Update the specific voucher type
-      widthPreferences[this.voucherType] = widthRatio;
+      // Ensure resizable-width section exists
+      if (!uiPreferences['resizable-width']) {
+        uiPreferences['resizable-width'] = {};
+      }
+      
+      // Update the specific voucher type width
+      uiPreferences['resizable-width'][this.moduleName] = widthRatio;
       
       // Save back to localStorage
-      localStorage.setItem(this.storageKey, JSON.stringify(widthPreferences));
+      localStorage.setItem(this.storageKey, JSON.stringify(uiPreferences));
     } catch (error) {
       console.error('ResizableDirective: Failed to save width ratio to localStorage:', error);
     }
@@ -404,21 +409,24 @@ export class ResizableDirective implements OnInit, OnDestroy {
       const savedData = localStorage.getItem(this.storageKey);
       
       if (savedData) {
-        let widthPreferences: any = {};
+        let uiPreferences: any = {};
         try {
-          widthPreferences = JSON.parse(savedData);
+          uiPreferences = JSON.parse(savedData);
         } catch (parseError) {
           console.error('ResizableDirective: Failed to parse localStorage data:', parseError);
           return null;
         }
         
-        const ratio = widthPreferences[this.voucherType];
-        if (ratio !== undefined) {
-          // Validate the saved ratio is within acceptable bounds
-          const minRatio = this.minWidth / window.innerWidth;
-          
-          if (ratio >= minRatio && ratio <= this.maxWidthRatio) {
-            return ratio;
+        // Check if resizable-width section exists
+        if (uiPreferences['resizable-width']) {
+          const ratio = uiPreferences['resizable-width'][this.moduleName];
+          if (ratio !== undefined) {
+            // Validate the saved ratio is within acceptable bounds
+            const minRatio = this.minWidth / window.innerWidth;
+            
+            if (ratio >= minRatio && ratio <= this.maxWidthRatio) {
+              return ratio;
+            }
           }
         }
       }
