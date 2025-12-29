@@ -504,23 +504,6 @@ export class TemplateEditFilterComponent implements OnInit {
     }
 
     /**
-     * Replaces new line characters with <br /> tags in specific template fields.
-     *
-     * @param {*} template The template object to update
-     * @returns {*} The updated template object
-     * @memberof TemplateEditFilterComponent
-     */
-    public newLineToBR(template: any): any {
-        const footerData = template.sections?.footer?.data;
-        if (footerData) {
-            if (footerData['message1']?.label) footerData['message1'].label = footerData['message1'].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
-            if (footerData['companyAddress']?.label) footerData['companyAddress'].label = footerData['companyAddress'].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
-            if (footerData['slogan']?.label) footerData['slogan'].label = footerData['slogan'].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
-        }
-        return template;
-    }
-
-    /**
      * Previews the selected logo file and updates the preview image in the UI.
      *
      * @param {*} file The file object to preview
