@@ -3528,11 +3528,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         group: BriedAccountsGroup,
                     });
                 }
-                 this.openAccountDropdown = false;
-                 this.accountAsideMenuRef = null;
-                setTimeout(() => {
-                    this.openAccountDropdown = true;
-                }, 50);
+                this.accountAsideMenuRef = null;
+                if (this.lastInteraction === InteractionType.KEYBOARD) {
+                    this.openAccountDropdown = false;
+                    setTimeout(() => {
+                        this.openAccountDropdown = true;
+                    }, 50);
+                }
             });
     }
 
@@ -7303,6 +7305,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private restoreFocus(): void {
+        if (this.lastInteraction !== InteractionType.KEYBOARD) {
+           return;
+        }
         if (!this.lastFocusedElement) return;
         
         setTimeout(() => {
@@ -7391,10 +7396,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public focusNextElement(event: Event): void {
+        if (this.lastInteraction !== InteractionType.KEYBOARD) {
+            return;
+        }
         if (!this.platform.isBrowser) {
             return;
         }
-
         const currentElement = event.target as HTMLElement;
         if (!currentElement) {
             return;
