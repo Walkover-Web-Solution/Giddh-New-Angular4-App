@@ -115,6 +115,7 @@ import { Country } from "../../shared/mobile-number-input/countries-data";
 import { GiddhDatepickerComponent } from "../../theme/giddh-datepicker/giddh-datepicker.component";
 import { FocusMonitor } from "@angular/cdk/a11y";
 import { Platform } from "@angular/cdk/platform";
+import { GeneralActions } from "../../actions/general/general.actions";
 
 @Component({
     selector: "create",
@@ -651,7 +652,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         private salesPersonStore: SalesPersonComponentStore,
         private focusMonitor: FocusMonitor,
         private platform: Platform,
-        private ngZone: NgZone
+        private ngZone: NgZone,
+        private generalActions: GeneralActions,
     ) {
         this.imgPath = isElectron ? "assets/images/" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + "assets/images/";
     }
