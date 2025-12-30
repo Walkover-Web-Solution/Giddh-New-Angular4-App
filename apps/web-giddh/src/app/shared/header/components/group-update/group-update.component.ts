@@ -500,8 +500,8 @@ export class GroupUpdateComponent implements OnInit, OnDestroy, AfterViewInit {
         data.taxes = [];
         this.activeGroupTaxHierarchy$.pipe(take(1)).subscribe((t) => {
             if (t) {
-                t.inheritedTaxes.forEach(tt => {
-                    tt.applicableTaxes.forEach(ttt => {
+                (Array.isArray(t.inheritedTaxes) ? t.inheritedTaxes : []).forEach(tt => {
+                    (Array.isArray(tt.applicableTaxes) ? tt.applicableTaxes : []).forEach(ttt => {
                         data.taxes.push(ttt?.uniqueName);
                     });
                 });

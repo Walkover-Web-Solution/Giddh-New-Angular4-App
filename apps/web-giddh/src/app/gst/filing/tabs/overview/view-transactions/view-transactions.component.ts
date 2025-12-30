@@ -375,7 +375,6 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
         this.downloadOrSendMailDialogRef = this.dialog.open(this.downloadOrSendMailDialog, {
                     height: '80vh',
                     width: '80vw',
-                    maxWidth: '800px',
                     disableClose: true,
                     autoFocus: false
                 });

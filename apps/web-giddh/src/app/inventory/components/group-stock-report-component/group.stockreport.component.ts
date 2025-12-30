@@ -246,7 +246,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
                 const stockGroup = cloneDeep(a);
                 const stockList = [];
                 this.activeGroupName = stockGroup.name;
-                stockGroup.stocks.forEach((stock) => {
+                (Array.isArray(stockGroup.stocks) ? stockGroup.stocks : []).forEach((stock) => {
                     stockList.push({ label: `${stock.name} (${stock?.uniqueName})`, value: stock?.uniqueName });
                 });
                 this.stockList$ = observableOf(stockList);
@@ -441,7 +441,7 @@ export class InventoryGroupStockReportComponent implements OnChanges, OnInit, On
                         this.selectedCmp['label'] = this.selectedCmp.name;
                         newEntities.push(this.selectedCmp);
                     }
-                    newEntities.forEach(element => {
+                    (Array.isArray(newEntities) ? newEntities : []).forEach(element => {
                         element['label'] = element.name;
                     });
                     this.entities$ = observableOf(orderBy(newEntities, 'name'));

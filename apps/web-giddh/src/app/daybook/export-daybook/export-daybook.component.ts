@@ -39,7 +39,7 @@ export class ExportDaybookComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.permissionDataService.getData.forEach(f => {
+        (Array.isArray(this.permissionDataService.getData) ? this.permissionDataService.getData : []).forEach(f => {
             if (f.name === 'LEDGER') {
                 let isAdmin = some(f.permissions, (prm) => prm.code === 'UPDT');
                 this.emailTypeSelected = isAdmin ? 'admin-detailed' : 'view-detailed';

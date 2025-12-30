@@ -271,7 +271,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.setPaginationData(res);
                 this.noDataFound = res.totalItems === 0;
                 this.totalInventoryCount = res?.totalItems;
-                res.results.forEach((row: any, index: number) => {
+                (Array.isArray(res.results) ? res.results : []).forEach((row: any, index: number) => {
                     this.dropdownValues[index] = row;
                     this.dropdownValues[index].hsnNo = row?.hsnNo || "";
                     this.dropdownValues[index].sacNo = row?.sacNo || "";
@@ -542,7 +542,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
             let index = this.taxTempArray[currentRowIndex].findIndex((taxTemp) => taxTemp.taxType === taxSelected.taxType);
 
             if (index > -1 && !isSelected?.length) {
-                rowTaxes.forEach((tax) => {
+                (Array.isArray(rowTaxes) ? rowTaxes : []).forEach((tax) => {
                     if (tax.taxType === taxSelected.taxType) {
                         tax.isChecked = false;
                         tax.isDisabled = true;
@@ -556,7 +556,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
             }
 
             if (index < 0 && !isSelected?.length) {
-                rowTaxes.forEach((tax) => {
+                (Array.isArray(rowTaxes) ? rowTaxes : []).forEach((tax) => {
                     if (tax.taxType === taxSelected.taxType) {
                         tax.isChecked = false;
                         tax.isDisabled = true;
@@ -592,7 +592,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
                 if (rowTax) {
                     rowTax.isChecked = false;
                 }
-                rowTaxes.forEach((tax) => {
+                (Array.isArray(rowTaxes) ? rowTaxes : []).forEach((tax) => {
                     if (tax.taxType === taxSelected.taxType) {
                         tax.isDisabled = false;
                     }
@@ -750,7 +750,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
         const formArray = this.formBuilder.array([]);
 
         if (customFields && customFields.length > 0) {
-            customFields.forEach(field => {
+            (Array.isArray(customFields) ? customFields : []).forEach(field => {
                 formArray.push(this.formBuilder.group({
                     key: [field.key || ''],
                     value: [field.value || ''],

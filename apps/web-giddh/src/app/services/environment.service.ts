@@ -195,7 +195,7 @@ export class EnvironmentService {
             { name: 'UkApiUrl', value: this.ukApiUrl }
         ];
 
-        urls.forEach(({ name, value }) => {
+        (Array.isArray(urls) ? urls : []).forEach(({ name, value }) => {
             if (value && !this.isValidUrl(value)) {
                 console.warn(`⚠️ Invalid URL format for ${name}: ${value}`);
             }

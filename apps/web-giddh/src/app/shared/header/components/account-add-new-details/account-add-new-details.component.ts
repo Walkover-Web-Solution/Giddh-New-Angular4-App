@@ -27,7 +27,7 @@ import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwit
 import { DROPDOWN_ITEMS_COUNT_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, EMAIL_VALIDATION_REGEX, IOption, ZIP_CODE_SUPPORTED_COUNTRIES, API_BULK_FETCH_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
-import { clone, cloneDeep, isEqual, uniqBy } from 'apps/web-giddh/src/app/lodash-optimized';
+import { clone, cloneDeep, isEqual, uniqBy } from '../../../../lodash-optimized';
 import { CustomFieldsService } from 'apps/web-giddh/src/app/services/custom-fields.service';
 import { FieldTypes } from 'apps/web-giddh/src/app/custom-fields/custom-fields.constant';
 import { HttpClient } from '@angular/common/http';
@@ -376,7 +376,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 let currentEmail = change.get('email')?.value;
                 let emailDuplicateFound = false;
                 if (currentEmail !== "") {
-                    mappings.controls.forEach((control, i) => {
+                    (Array.isArray(mappings.controls) ? mappings.controls : []).forEach((control, i) => {
                         if (lastEmailOccurrenceIndex === -1 && index !== i && control.get('email')?.value === currentEmail) {
                             lastEmailOccurrenceIndex = index;
                             change.get('email').setErrors({ duplicate: true });
@@ -397,7 +397,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 let currentContactNo = change.get('contactNo')?.value;
                 let contactDuplicateFound = false;
                 if (currentContactNo !== "" && currentContactNo) {
-                    mappings.controls.forEach((control, i) => {
+                    (Array.isArray(mappings.controls) ? mappings.controls : []).forEach((control, i) => {
                         if (lastContactOccurrenceIndex === -1 && index !== i && control.get('contactNo')?.value === currentContactNo) {
                             lastContactOccurrenceIndex = index;
                             change.get('contactNo').setErrors({ duplicate: true });
@@ -708,7 +708,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         });
         mappings.push(mappingForm);
         if (user) {
-            mappings.controls.forEach(control => {
+            (Array.isArray(mappings.controls) ? mappings.controls : []).forEach(control => {
                 if (!control?.get('name').value && !control?.get('email').value && !control?.get('contactNo').value) {
                     control?.get('name').setValue(user.name);
                     control?.get('email').setValue(user.email);
@@ -936,7 +936,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             if (accountRequest.addresses && accountRequest.addresses.length > 0) {
                 let addressExists = false;
 
-                accountRequest.addresses.forEach(address => {
+                (Array.isArray(accountRequest.addresses) ? accountRequest.addresses : []).forEach(address => {
                     if (address?.address?.trim() || address?.gstNumber?.trim() || address?.stateCode?.trim() || address?.countyCode?.trim() || address?.pincode?.trim()) {
                         addressExists = true;
                     }
@@ -974,7 +974,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         accountRequest['sacNumber'] = (accountRequest["hsnOrSac"] === "sac") ? accountRequest['sacNumber'] : "";
 
         if (accountRequest.addresses && accountRequest.addresses.length > 0) {
-            accountRequest.addresses.forEach(address => {
+            (Array.isArray(accountRequest.addresses) ? accountRequest.addresses : []).forEach(address => {
                 if (this.countyList?.length) {
                     delete address['state'];
                     delete address['stateCode'];
@@ -1799,7 +1799,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 if (result?.body) {
                     let dialogRef = this.dialog.open(ConfirmModalComponent, {
                                 width: '40%',
-                                maxWidth: '40%',
                                 data: {
                             title: this.commonLocaleData?.app_confirmation,
                                 body: this.commonLocaleData?.app_gst_confirm_message1,

@@ -551,7 +551,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                             let vendorPurchaseOrders = [];
                             let linkedPoOrders = [];
 
-                            res.body.forEach(item => {
+                            (Array.isArray(res.body) ? res.body : []).forEach(item => {
                                 let pending = [];
                                 let totalPending = 0;
 

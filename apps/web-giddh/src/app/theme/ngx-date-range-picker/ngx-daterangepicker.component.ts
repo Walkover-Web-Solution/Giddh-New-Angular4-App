@@ -884,7 +884,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
             const flattenRanges = [];
             this.flattenRanges(this.ranges, flattenRanges);
 
-            flattenRanges.forEach(range => {
+            (Array.isArray(flattenRanges) ? flattenRanges : []).forEach(range => {
                 if (this.timePicker) {
                     const format = this.timePickerSeconds ? 'YYYY-MM-DD HH:mm:ss' : 'YYYY-MM-DD HH:mm';
 
@@ -1622,7 +1622,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     private selectRange(ranges: DateRangesInterface[], rangeName: string): boolean {
         let isSelected = false;
         if (ranges && ranges.length) {
-            ranges.forEach(range => {
+            (Array.isArray(ranges) ? ranges : []).forEach(range => {
                 if (range.name === rangeName) {
                     range.isSelected = true;
                     isSelected = true;
@@ -1674,7 +1674,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
      */
     private flattenRanges(ranges, flattenRanges = []): void {
         if (ranges && ranges.length) {
-            ranges.forEach(range => {
+            (Array.isArray(ranges) ? ranges : []).forEach(range => {
                 if (range.ranges && range.ranges.length) {
                     this.flattenRanges(range.ranges, flattenRanges);
                     flattenRanges.push(range);
@@ -1723,7 +1723,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
 
                 const currentDate = dayjs().format(GIDDH_DATE_FORMAT);
                 this.financialYears = [];
-                res.body.financialYears.forEach(key => {
+                (Array.isArray(res.body.financialYears) ? res.body.financialYears : []).forEach(key => {
                     let financialYearStarts = dayjs(key.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
                     let financialYearEnds = dayjs(key.financialYearEnds, GIDDH_DATE_FORMAT).format("MMM-YYYY");
                     this.financialYears.push({ label: financialYearStarts + " - " + financialYearEnds, value: key });
@@ -1748,7 +1748,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                 if (this.ranges && this.ranges.length > 0) {
                     let loop = 0;
                     let ranges = [];
-                    this.ranges.forEach(key => {
+                    (Array.isArray(this.ranges) ? this.ranges : []).forEach(key => {
                         if (key.name === DatePickerDefaultRangeEnum.AllTime) {
                             ranges[loop] = key;
                             ranges[loop].value = [
@@ -1779,7 +1779,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                         }
                     });
 
-                    this.ranges.forEach(key => {
+                    (Array.isArray(this.ranges) ? this.ranges : []).forEach(key => {
                         key.name = this.commonLocaleData?.app_datepicker?.ranges[key.key];
                     });
 
@@ -2080,7 +2080,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public checkIfSubRangeSelected(range: any): boolean {
         let isSelected = false;
         if (this.selectedRangeLabel && range.ranges && range.ranges.length > 0) {
-            range.ranges.forEach(subRange => {
+            (Array.isArray(range.ranges) ? range.ranges : []).forEach(subRange => {
                 if (!isSelected && subRange.name === this.selectedRangeLabel) {
                     isSelected = true;
                 }
@@ -2100,7 +2100,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
     public checkIfFinancialYearSelected(financialYears: any): boolean {
         let isSelected = false;
         if (this.selectedRangeLabel && financialYears && financialYears.length > 0) {
-            financialYears.forEach(year => {
+            (Array.isArray(financialYears) ? financialYears : []).forEach(year => {
                 if (!isSelected && year.label === this.selectedRangeLabel) {
                     isSelected = true;
                 }

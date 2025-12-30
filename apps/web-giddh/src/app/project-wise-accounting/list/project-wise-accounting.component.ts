@@ -146,7 +146,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
 
         this.componentStore.projectProfitDetails$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
-                this.dataSource.forEach((project) => {
+                (Array.isArray(this.dataSource) ? this.dataSource : []).forEach((project) => {
                     if (project.uniqueName === response.uniqueName)
                         project.profitAndLoss = response.profitAndLoss;
                 })
@@ -198,7 +198,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
                     this.displayedColumns = this.displayedColumns?.filter(column => column !== "action");
                 }
                 this.branches = [];
-                branchList.forEach((branch) => {
+                (Array.isArray(branchList) ? branchList : []).forEach((branch) => {
                     this.branches.push({
                         label: branch?.name,
                         value: branch?.uniqueName
@@ -279,7 +279,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
             this.totalResults += 1;
             this.dataSource = [response.body, ...this.dataSource];
         } else {
-            this.dataSource.forEach((project) => {
+            (Array.isArray(this.dataSource) ? this.dataSource : []).forEach((project) => {
                 if (project.uniqueName === response.body.uniqueName) {
                     project.name = response.body.name;
                     project.status = response.body.status;
@@ -414,7 +414,6 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
             };
             const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
                         width: '630px',
-                        maxWidth: '630px',
                 data: {
                     configuration: this.generalService.deleteConfiguration(this.localeData?.project_delete_confirmation_message?.replace('[PROJECT_NAME]', project.name), this.commonLocaleData)
                 }
@@ -484,7 +483,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
             this.selectedDateRangeUi = dayjs(value.startDate).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(value.endDate).format(GIDDH_NEW_DATE_FORMAT_UI);
             this.fromDate = dayjs(value.startDate).format(GIDDH_DATE_FORMAT);
             this.toDate = dayjs(value.endDate).format(GIDDH_DATE_FORMAT);
-            this.dataSource.forEach((data) => {
+            (Array.isArray(this.dataSource) ? this.dataSource : []).forEach((data) => {
                 data.profitAndLoss = null;
             });
         }

@@ -299,7 +299,7 @@ export class DaybookAdvanceSearchModelComponent implements OnInit, OnChanges, On
      */
     public onDDElementSelect(type: string, data: any[]) {
         let values = [];
-        data.forEach(element => {
+        (Array.isArray(data) ? data : []).forEach(element => {
             values.push(element?.value);
         });
         switch (type) {

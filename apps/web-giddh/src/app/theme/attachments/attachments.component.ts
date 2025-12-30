@@ -320,7 +320,6 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
     public showDeleteAttachedFileModal(index: number): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
                     width: '40%',
-                    maxWidth: '40%',
                     data: {
                 title: this.commonLocaleData?.app_delete,
                     body: this.localeData?.confirm_delete_file,
@@ -365,7 +364,6 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
 
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
                     width: '40%',
-                    maxWidth: '40%',
                     data: {
                 title: this.commonLocaleData?.app_delete,
                     body: messageBody,
@@ -440,7 +438,7 @@ export class AttachmentsComponent implements OnInit, OnDestroy {
         }
 
         if (isAttachmentSelected?.length > 0) {
-            isAttachmentSelected.forEach(attachment => {
+            (Array.isArray(isAttachmentSelected) ? isAttachmentSelected : []).forEach(attachment => {
                 if (attachment?.type !== "unsupported") {
                     if (attachment?.type === "image") {
                         filesToPrint.push({ file: `data:image/${attachment?.type};base64,` + attachment?.encodedData, type: attachment?.type });

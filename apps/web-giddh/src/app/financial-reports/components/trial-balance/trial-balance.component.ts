@@ -76,7 +76,7 @@ export class TrialBalanceComponent implements OnInit, AfterViewInit, OnDestroy {
                     }, 100);
                 }
                 this.InitData(d.groupDetails);
-                d.groupDetails.forEach(g => {
+                (Array.isArray(d.groupDetails) ? d.groupDetails : []).forEach(g => {
                     g.isVisible = true;
                     g.isCreated = true;
                 });

@@ -94,7 +94,7 @@ export class ExportFileNameComponent implements OnInit, OnDestroy {
         this.settingsProfileService.getModuleExportSetting().pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response.status === 'success') {
                 this.moduleExportSettingArray.clear();
-                response.body.forEach((item: ExportSettingType) => {
+                (Array.isArray(response.body) ? response.body : []).forEach((item: ExportSettingType) => {
                     item.supportedVariableList = Object.keys(item.supportedVariableMap).map((key) => {
                         return {
                             label: key,

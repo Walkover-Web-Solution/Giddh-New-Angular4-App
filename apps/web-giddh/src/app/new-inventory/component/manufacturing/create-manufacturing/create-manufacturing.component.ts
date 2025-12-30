@@ -4,8 +4,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store, select } from '@ngrx/store';
 import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
 import { BranchHierarchyType, IOption } from 'apps/web-giddh/src/app/app.constant';
-import { isEqual } from 'apps/web-giddh/src/app/lodash-optimized';
-import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
+import { isEqual } from '../../../../lodash-optimized';
+import { cloneDeep } from '../../../../lodash-optimized';
 import { CreateManufacturing } from 'apps/web-giddh/src/app/models/api-models/Manufacturing';
 import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
@@ -719,7 +719,6 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
             if (!isEqual(this.existingRecipe, recipeObject)) {
                 let dialogRef = this.dialog.open(ConfirmModalComponent, {
                             width: '585px',
-                            maxWidth: '585px',
                             data: {
                         title: this.commonLocaleData?.app_confirmation,
                             body: this.localeData?.confirm_update_recipe,
@@ -737,7 +736,6 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         } else {
             let dialogRef = this.dialog.open(ConfirmModalComponent, {
                         width: '585px',
-                        maxWidth: '585px',
                         data: {
                     title: this.commonLocaleData?.app_confirmation,
                         body: this.localeData?.confirm_save_recipe,
@@ -1018,7 +1016,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         });
 
         this.manufacturingObject.manufacturingDetails[0].otherExpenses?.forEach(expense => {
-            expense.transactions.forEach(res => {
+            (Array.isArray(expense.transactions) ? expense.transactions : []).forEach(res => {
                 expenseAmount += Number(res.amount) || 0;
             });
         });
@@ -1170,7 +1168,7 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
             isValidForm = false;
         }
         if (this.manufacturingObject.manufacturingDetails[0].linkedStocks?.length) {
-            this.manufacturingObject.manufacturingDetails[0].linkedStocks.forEach(linkedStock => {
+            (Array.isArray(this.manufacturingObject.manufacturingDetails[0].linkedStocks) ? this.manufacturingObject.manufacturingDetails[0].linkedStocks : []).forEach(linkedStock => {
                 if (!linkedStock?.selectedStock?.value) {
                     linkedStock.stockNameError = true;
                     isValidForm = false;
@@ -1555,7 +1553,6 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
             if (!isEqual(this.existingRecipe, recipeObject)) {
                 let dialogRef = this.dialog.open(ConfirmModalComponent, {
                             width: '585px',
-                            maxWidth: '585px',
                             data: {
                         title: this.commonLocaleData?.app_confirmation,
                             body: this.localeData?.confirm_update_recipe,
@@ -1577,7 +1574,6 @@ export class CreateManufacturingComponent implements OnInit, OnDestroy {
         } else {
             let dialogRef = this.dialog.open(ConfirmModalComponent, {
                         width: '585px',
-                        maxWidth: '585px',
                         data: {
                     title: this.commonLocaleData?.app_confirmation,
                         body: this.localeData?.confirm_save_recipe,

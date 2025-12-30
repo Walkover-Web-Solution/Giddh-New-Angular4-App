@@ -673,7 +673,7 @@ export class TemplateFroalaComponent implements OnInit {
         const dynamicControls = new FormGroup({});
         const requiredFields: string[] = [];
 
-        conditions.forEach((condition: any) => {
+        (Array.isArray(conditions) ? conditions : []).forEach((condition: any) => {
             Object.entries(condition).forEach(([conditionData, conditionKey]) => {
                 if (conditionData === 'variable') {
                     const fieldName = conditionKey as string;
@@ -870,7 +870,7 @@ export class TemplateFroalaComponent implements OnInit {
     public toggleBccCc(emailType: string): void {
         this.setEmailFocus(emailType);
         if (this.childComponents.length > 0) {
-            this.childComponents.forEach(result => {
+            (Array.isArray(this.childComponents) ? this.childComponents : []).forEach(result => {
                 result?.trigger?.closePanel();
             });
         }

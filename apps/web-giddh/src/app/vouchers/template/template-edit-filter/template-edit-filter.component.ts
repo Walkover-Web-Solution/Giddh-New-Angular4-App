@@ -607,13 +607,13 @@ export class TemplateEditFilterComponent implements OnInit {
             } else {
                 this.presetFonts = this.templateFonts;
             }
-            this.templateFonts.forEach(font => {
+            (Array.isArray(this.templateFonts) ? this.templateFonts : []).forEach(font => {
                 if (font?.value === this.customTemplate?.font) this.selectedFont = font?.label;
             });
         }
         if (this.customTemplate?.fontSize) {
             this.customTemplate.fontSize = this.customTemplate?.fontSize.toString();
-            this.templateFontsSize.forEach(fontSize => {
+            (Array.isArray(this.templateFontsSize) ? this.templateFontsSize : []).forEach(fontSize => {
                 if (fontSize?.value == this.customTemplate?.fontSize) this.selectedFontSize = fontSize?.label;
             });
         }

@@ -254,7 +254,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
      * @memberof CreateBranchComponent
      */
     public handleFinalSelection(selectedAddresses: Array<any>): void {
-        this.addresses.forEach(address => {
+        (Array.isArray(this.addresses) ? this.addresses : []).forEach(address => {
             if (!selectedAddresses?.includes(address?.uniqueName)) {
                 address.isDefault = false;
             }
@@ -286,7 +286,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
         event.stopPropagation();
         event.preventDefault();
         if (!option.isDefault) {
-            this.addresses.forEach(address => {
+            (Array.isArray(this.addresses) ? this.addresses : []).forEach(address => {
                 if (address?.value !== option?.value) {
                     address.isDefault = false;
                 }
@@ -339,7 +339,7 @@ export class CreateBranchComponent implements OnInit, OnDestroy {
      * @memberof CreateBranchComponent
      */
     public handleFormClear(): void {
-        this.addresses.forEach(address => {
+        (Array.isArray(this.addresses) ? this.addresses : []).forEach(address => {
             if (address) {
                 address.isDefault = false;
             }

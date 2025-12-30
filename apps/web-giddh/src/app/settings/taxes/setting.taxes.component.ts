@@ -143,7 +143,6 @@ export class SettingTaxesComponent implements OnInit, OnDestroy {
     private openTaxDeleteUpdateConfirmationDialog(): void {
         const dialogRef = this.dialog.open(ConfirmModalComponent, {
                     width: '540px',
-                    maxWidth: '540px',
                     data: {
                 title: this.commonLocaleData?.app_confirmation,
                     body: this.confirmationMessage,

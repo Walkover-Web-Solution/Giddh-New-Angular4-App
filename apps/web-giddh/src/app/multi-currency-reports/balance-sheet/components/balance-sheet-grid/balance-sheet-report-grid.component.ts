@@ -91,10 +91,10 @@ export class BalanceSheetReportGridComponent implements OnInit, OnChanges, OnDes
                         this.toggleVisibility(this.bsData.liabilities, changes.expandAll.currentValue);
                         // always make first level visible ....
                         if (this.bsData.liabilities) {
-                            this.bsData.liabilities.forEach((childGroup: any) => {
+                            (Array.isArray(this.bsData.liabilities) ? this.bsData.liabilities : []).forEach((childGroup: any) => {
                                 if (childGroup.isIncludedInSearch) {
                                     childGroup.isVisible = true;
-                                    childGroup.accounts.forEach((account: any) => {
+                                    (Array.isArray(childGroup.accounts) ? childGroup.accounts : []).forEach((account: any) => {
                                         if (account.isIncludedInSearch) {
                                             account.isVisible = true;
                                         }
@@ -103,10 +103,10 @@ export class BalanceSheetReportGridComponent implements OnInit, OnChanges, OnDes
                             });
                         }
                         if (this.bsData.assets) {
-                            this.bsData.assets.forEach((childGroup: any) => {
+                            (Array.isArray(this.bsData.assets) ? this.bsData.assets : []).forEach((childGroup: any) => {
                                 if (childGroup.isIncludedInSearch) {
                                     childGroup.isVisible = true;
-                                    childGroup.accounts.forEach((account: any) => {
+                                    (Array.isArray(childGroup.accounts) ? childGroup.accounts : []).forEach((account: any) => {
                                         if (account.isIncludedInSearch) {
                                             account.isVisible = true;
                                         }
@@ -187,12 +187,12 @@ export class BalanceSheetReportGridComponent implements OnInit, OnChanges, OnDes
      * @memberof BalanceSheetReportGridComponent
      */
     private toggleVisibility(data: ChildGroup[], isVisible: boolean): void {
-        data.forEach((childGroup: ChildGroup) => {
+        (Array.isArray(data) ? data : []).forEach((childGroup: ChildGroup) => {
             if (childGroup.isIncludedInSearch) {
                 childGroup.isCreated = true;
                 childGroup.isVisible = isVisible;
                 childGroup.isOpen = isVisible;
-                childGroup.accounts.forEach((account: Account) => {
+                (Array.isArray(childGroup.accounts) ? childGroup.accounts : []).forEach((account: Account) => {
                     if (account.isIncludedInSearch) {
                         account.isCreated = true;
                         account.isVisible = isVisible;

@@ -21,7 +21,7 @@ import { AdjustmentInventory, DROPDOWN_ITEMS_COUNT_LIMIT, ASIDE_PANE_CONFIG } fr
 import { cloneDeep, concat, filter, forEach, get, set } from '../../../lodash-optimized';
 @Component({
     selector: 'adjust-inventory',
-    
+
     templateUrl: './adjust-inventory.component.html',
     standalone: false,
     styleUrls: ['./adjust-inventory.component.scss'],
@@ -723,7 +723,7 @@ export class AdjustInventoryComponent implements OnInit {
             const inventoryMap = new Map(this.inventoryData.map(item => [item.variant.uniqueName, item]));
             const mainResult = [];
             const variantWiseOnly = [];
-            this.dataSource.data.forEach(result => {
+            (Array.isArray(this.dataSource.data) ? this.dataSource.data : []).forEach(result => {
                 const updatedVariant = inventoryMap.get(result.variant.uniqueName);
                 if (updatedVariant) {
                     mainResult.push(updatedVariant);
@@ -925,7 +925,7 @@ export class AdjustInventoryComponent implements OnInit {
      */
     public masterToggle(): void {
         if (this.isEntityStockGroup) {
-            this.dataSource?.filteredData.forEach(row => this.selection.select(row));
+            (Array.isArray(this.dataSource?.filteredData) ? this.dataSource?.filteredData : []).forEach(row => this.selection.select(row));
         } else {
             if (this.isAllSelected()) {
                 this.selection.clear();
@@ -934,7 +934,7 @@ export class AdjustInventoryComponent implements OnInit {
                     ? this.dataSource.filteredData.filter(data => data?.closingAfterAdjustment)
                     : this.dataSource.filteredData;
 
-                data.forEach(row => this.selection.select(row));
+                (Array.isArray(data) ? data : []).forEach(row => this.selection.select(row));
             }
         }
     }

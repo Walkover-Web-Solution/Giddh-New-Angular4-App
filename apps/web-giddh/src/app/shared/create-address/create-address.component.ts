@@ -71,7 +71,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
     /** True, if aside pane needs to be closed */
     @Input() public closeSidePane: boolean;
     /** Indicates the addresses available.*/
-    @Input() public isAddress: boolean = false; 
+    @Input() public isAddress: boolean = false;
     /** List of entities which can be archived */
     public entityArchived: string[] = ["BRANCH", "WAREHOUSE"];
     /** Holds Selected Entity */
@@ -152,7 +152,6 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
                 if (result?.body) {
                     let dialogRef = this.dialog.open(ConfirmModalComponent, {
                                 width: '40%',
-                                maxWidth: '40%',
                                 data: {
                             title: this.commonLocaleData?.app_confirmation,
                                 body: this.commonLocaleData?.app_gst_confirm_message1,
@@ -438,7 +437,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
         event.stopPropagation();
         event.preventDefault();
         if (!option.isDefault) {
-            this.addressConfiguration.linkedEntities.forEach(entity => {
+            (Array.isArray(this.addressConfiguration.linkedEntities) ? this.addressConfiguration.linkedEntities : []).forEach(entity => {
                 if (entity?.value !== option?.value) {
                     entity.isDefault = false;
                 }
@@ -480,7 +479,7 @@ export class CreateAddressComponent implements OnInit, OnDestroy {
      * @memberof CreateAddressComponent
      */
     public handleFinalSelection(selectedEntities: Array<any>): void {
-        this.addressConfiguration.linkedEntities.forEach(entity => {
+        (Array.isArray(this.addressConfiguration.linkedEntities) ? this.addressConfiguration.linkedEntities : []).forEach(entity => {
             if (!selectedEntities?.includes(entity?.uniqueName)) {
                 entity.isDefault = false;
             }

@@ -214,7 +214,7 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
                     this.auditLogFilterForm = response.body;
                     this.auditLogFormVM.filters = [];
                     this.auditLogFormVM.entities = [];
-                    this.auditLogFilterForm.forEach(element => {
+                    (Array.isArray(this.auditLogFilterForm) ? this.auditLogFilterForm : []).forEach(element => {
                         this.auditLogFormVM.entities.push(element.entity);
                     });
                 }

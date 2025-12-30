@@ -188,7 +188,7 @@ export class InvoiceUiDataService {
     public bRToNewLine(template: any): any {
         const fields = ['message1', 'companyAddress', 'slogan'];
         if (template?.sections?.footer?.data) {
-            fields.forEach(field => {
+            (Array.isArray(fields) ? fields : []).forEach(field => {
                 if (template.sections.footer.data[field]) {
                     const label = template.sections.footer.data[field]?.label;
                     template.sections.footer.data[field].label = label ? label.replace(/<br\s*[\/]?>/gi, '\n') : '';

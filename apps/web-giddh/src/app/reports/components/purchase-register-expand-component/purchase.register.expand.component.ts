@@ -374,7 +374,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
             let idx = this.from.split("-");
             this.monthYear = [];
             if (currentYearFrom === currentYearTo) {
-                this.monthNames.forEach((element) => {
+                (Array.isArray(this.monthNames) ? this.monthNames : []).forEach((element) => {
                     this.monthYear.push(element + " " + currentYearFrom);
                 });
             }
@@ -516,7 +516,6 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
         };
         this.dialog.open(SalesPurchaseRegisterExportComponent, {
                     width: "630px",
-                    maxWidth: '630px',
                     panelClass: 'export-container',
                     data: exportData
                 });

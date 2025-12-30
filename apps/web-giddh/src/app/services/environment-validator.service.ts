@@ -110,7 +110,7 @@ export class EnvironmentValidatorService {
         const warnings: string[] = [];
 
         // Basic validation
-        this.validationRules.forEach(rule => {
+        (Array.isArray(this.validationRules) ? this.validationRules : []).forEach(rule => {
             const value = environment[rule.key as keyof typeof environment];
 
             // Check required fields
@@ -159,13 +159,13 @@ export class EnvironmentValidatorService {
 
         if (result.errors.length > 0) {
             console.group('🚨 Environment Validation Errors');
-            result.errors.forEach(error => console.error(`❌ ${error}`));
+            (Array.isArray(result.errors) ? result.errors : []).forEach(error => console.error(`❌ ${error}`));
             console.groupEnd();
         }
 
         if (result.warnings.length > 0) {
             console.group('⚠️ Environment Validation Warnings');
-            result.warnings.forEach(warning => console.warn(`⚠️ ${warning}`));
+            (Array.isArray(result.warnings) ? result.warnings : []).forEach(warning => console.warn(`⚠️ ${warning}`));
             console.groupEnd();
         }
 
@@ -191,7 +191,7 @@ export class EnvironmentValidatorService {
             'OTP_TOKEN_AUTH'
         ];
 
-        productionRequired.forEach(key => {
+        (Array.isArray(productionRequired) ? productionRequired : []).forEach(key => {
             const value = environment[key as keyof typeof environment];
             if (this.isEmpty(value)) {
                 errors.push(`Production environment missing: ${key}`);

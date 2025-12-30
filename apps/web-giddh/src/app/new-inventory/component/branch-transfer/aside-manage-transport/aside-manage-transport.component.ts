@@ -19,7 +19,7 @@ export interface transporterDetails {
 const ELEMENT_DATA: transporterDetails[] = [];
 @Component({
     selector: 'aside-manage-transport',
-    
+
     templateUrl: './aside-manage-transport.component.html',
     standalone: false,
     styleUrls: ['./aside-manage-transport.component.scss']
@@ -220,7 +220,6 @@ export class AsideManageTransportComponent implements OnInit {
     public deleteTransporter(transporter: any): void {
         this.confirmModalDialogRef = this.dialog.open(ConfirmModalComponent, {
                     width: '585px',
-                    maxWidth: '585px',
                     data: {
                 title: this.commonLocaleData?.app_confirmation,
                     body: 'Are you sure you want to delete the transporter?',

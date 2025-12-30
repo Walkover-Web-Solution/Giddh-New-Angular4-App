@@ -26,7 +26,7 @@ import { cloneDeep, find, forEach, map } from '../../../../lodash-optimized';
 
 @Component({
     selector: 'list-manufacturing',
-    
+
     templateUrl: './list-manufacturing.component.html',
     standalone: false,
     styleUrls: ['./list-manufacturing.component.scss'],
@@ -373,7 +373,7 @@ export class ListManufacturingComponent implements OnInit {
                 this.totalItems = response.body.totalItems;
                 this.totalPages = response.body.totalPages;
 
-                response.body.results.forEach(item => {
+                (Array.isArray(response.body.results) ? response.body.results : []).forEach(item => {
                     reportData.push({
                         date: dayjs(item.date, GIDDH_DATE_FORMAT).format("DD MMM YY"),
                         voucher_no: item.voucherNumber,
@@ -403,7 +403,6 @@ export class ListManufacturingComponent implements OnInit {
     public openAdvanceFilterDialog(): void {
         this.dialog.open(this.advanceFilterComponent, {
                     width: '500px',
-                    maxWidth: '500px',
                     autoFocus: false,
                     role: 'alertdialog',
                     ariaLabel: 'Advance filter Dialog'
@@ -477,13 +476,13 @@ export class ListManufacturingComponent implements OnInit {
             if (branches) {
                 if (branches.results?.length) {
                     this.allWarehouses = [];
-                    branches.results.forEach(branch => {
+                    (Array.isArray(branches.results) ? branches.results : []).forEach(branch => {
                         if (!this.allWarehouses[branch?.uniqueName]) {
                             this.allWarehouses[branch?.uniqueName] = [];
                         }
 
                         if (branch?.warehouses?.length > 0) {
-                            branch?.warehouses.forEach(warehouse => {
+                            (Array.isArray(branch?.warehouses) ? branch?.warehouses : []).forEach(warehouse => {
                                 this.allWarehouses[branch?.uniqueName].push({ label: warehouse?.name, value: warehouse?.uniqueName, additional: warehouse?.taxNumber });
                             });
                         }

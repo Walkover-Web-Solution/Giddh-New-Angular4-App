@@ -195,10 +195,9 @@ export class SalesBifurcationDetailsComponent implements OnInit, OnDestroy {
         transaction['voucherNumber'] = transaction?.invoiceNumber;
         transaction['salesBifurcation'] = true;
         this.selectedItem = transaction;
-        
+
         this.dialog.open(templateRef, {
                     width: '70%',
-                    maxWidth: '70%',
                     height: '790px',
                     maxHeight: '90vh',
                     role: 'alertdialog',

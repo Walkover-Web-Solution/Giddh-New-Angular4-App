@@ -63,7 +63,7 @@ import { PageModule } from './page/page.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatButtonModule } from '@angular/material/button';
 import { FormFieldsModule } from './theme/form-fields/form-fields.module';
-import { filter, find, forEach, get, includes, keys, startsWith } from './lodash-optimized';
+import { filter, find, forEach, get, includes, keys, startsWith  } from './lodash-optimized';
 // import { VerifySubscriptionTransferOwnershipModule } from './verify-subscription-transfer-ownership/verify-subscription-transfer-ownership.module';
 // Get white label configuration from localStorage
 const whiteLabelString = localStorage.getItem('whiteLabel');
@@ -250,7 +250,7 @@ const createHybridStorage = () => {
                             // Extract tab-specific data and store in sessionStorage for this tab
                             // Note: currentBranchUniqueName should NOT be inherited directly, but use lastActiveBranchUniqueName as fallback
                             const tabSpecificData: any = {};
-                            config.tabSpecific.session.forEach(tabKey => {
+                            (Array.isArray(config.tabSpecific.session) ? config.tabSpecific.session : []).forEach(tabKey => {
                                 if (localObj.hasOwnProperty(tabKey)) {
                                     // Skip currentBranchUniqueName - will be set from fallback below
                                     if (tabKey !== 'currentBranchUniqueName') {
@@ -341,7 +341,7 @@ const createHybridStorage = () => {
                         const merged = { ...localObj };
 
                         // Override with tab-specific data from sessionStorage
-                        config.tabSpecific.session.forEach(tabKey => {
+                        (Array.isArray(config.tabSpecific.session) ? config.tabSpecific.session : []).forEach(tabKey => {
                             if (sessionObj.hasOwnProperty(tabKey)) {
                                 merged[tabKey] = sessionObj[tabKey];
                             }
@@ -508,7 +508,7 @@ function migrateExistingData(): void {
 
             // Keep tab-specific data in current tab's sessionStorage
             const tabSpecificData: any = {};
-            tabSpecificKeys.forEach(key => {
+            (Array.isArray(tabSpecificKeys) ? tabSpecificKeys : []).forEach(key => {
                 if (sessionData.hasOwnProperty(key)) {
                     tabSpecificData[key] = sessionData[key];
                 }

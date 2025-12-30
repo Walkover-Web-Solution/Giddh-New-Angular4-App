@@ -8,7 +8,7 @@ import { Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/c
 import { AppState } from '../../store';
 import { ReplaySubject } from 'rxjs';
 import { ShareRequestForm } from '../../models/api-models/Permission';
-import { forIn, sortBy, cloneDeep, groupBy } from 'apps/web-giddh/src/app/lodash-optimized';
+import { forIn, sortBy, cloneDeep, groupBy } from '../../lodash-optimized';
 import { MatDialog } from '@angular/material/dialog';
 import { PageLeaveUtilityService } from '../../services/page-leave-utility.service';
 import { SettingsProfileActions } from '../../actions/settings/profile/settings.profile.action';
@@ -134,7 +134,6 @@ export class SettingPermissionComponent implements OnInit, OnDestroy {
         this.selectedUser = user ? user : '';
         this.editDialogRef = this.dialog.open(this.editUserModal, {
                     width: '1200px',
-                    maxWidth: '90vw'
                 });
     }
     public closeEditUserModal(event?: any): void {

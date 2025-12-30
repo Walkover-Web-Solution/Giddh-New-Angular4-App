@@ -739,7 +739,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
                 let tcsSum: number = 0;
                 let tdsSum: number = 0;
-                response.body?.entries.forEach(entry => {
+                (Array.isArray(response.body?.entries) ? response.body?.entries : []).forEach(entry => {
                     entry.taxes?.forEach(tax => {
                         if (['tcsrc', 'tcspay'].includes(tax?.taxType)) {
                             tcsSum += tax.amount?.amountForAccount;
@@ -1919,7 +1919,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
 
         this.ewayBillDialogRef = this.dialog.open(this.ewayBill, {
                     width: '600px',
-                    maxWidth: '600px',
                     disableClose: true
                 });
     }
@@ -1993,7 +1992,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.advanceFilters.count = advanceFilters.count;
         this.advanceFilters.q = advanceFilters.q;
 
-        tempKeysInAdvanceFiltersForm.forEach(keys => {
+        (Array.isArray(tempKeysInAdvanceFiltersForm) ? tempKeysInAdvanceFiltersForm : []).forEach(keys => {
             this.advanceSearchTempKeyObj = { ...this.advanceSearchTempKeyObj, [keys]: this.advanceFilters[keys] };
             delete this.advanceFilters[keys];
         });
@@ -2429,7 +2428,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.dialog.open(this.convertBill, {
                     data: vouchers,
                     width: '600px',
-                    maxWidth: '600px',
                     maxHeight: '80vh',
                     disableClose: true
                 });
@@ -2691,7 +2689,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     private flattenGroupedVouchers(groupedVoucher: Record<string, GenBulkInvoiceGroupByObj[]>): string[] {
         const model: string[] = [];
         forEach(groupedVoucher, items => {
-            items.forEach(obj => model.push(obj?.uniqueName));
+            (Array.isArray(items) ? items : []).forEach(obj => model.push(obj?.uniqueName));
         });
         return model;
     }
@@ -3419,7 +3417,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             if (res?.status === 'success') {
                 this.toasterService.showSnackBar('success', this.localeData?.template_set_as_default_successfully);
                 // Update the UI immediately
-                this.createdTemplatesList.forEach(template => {
+                (Array.isArray(this.createdTemplatesList) ? this.createdTemplatesList : []).forEach(template => {
                     if (this.voucherType === 'credit note' || this.voucherType === 'debit note') {
                         template.isDefaultForVoucher = (template.uniqueName === templateUniqueName);
                     } else {
@@ -3514,7 +3512,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                     width: '100%',
                     height: '95vh',
                     maxHeight: '95vh',
-                    maxWidth: '90vw',
                     data: dataToSend,
                     disableClose: true
                 });

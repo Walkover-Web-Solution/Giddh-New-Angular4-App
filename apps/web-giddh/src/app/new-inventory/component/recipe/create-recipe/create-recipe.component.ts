@@ -11,7 +11,7 @@ import { cloneDeep, filter, forEach, isEqual } from '../../../../lodash-optimize
 
 @Component({
     selector: 'create-recipe',
-    
+
     templateUrl: './create-recipe.component.html',
     standalone: false,
     styleUrls: ['./create-recipe.component.scss'],
@@ -150,7 +150,7 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
             });
         }
 
-        this.recipeObject.manufacturingDetails.forEach(data => {
+        (Array.isArray(this.recipeObject.manufacturingDetails) ? this.recipeObject.manufacturingDetails : []).forEach(data => {
             if (data?.linkedStocks[0]
                 ?.variant.uniqueName || data?.byProducts[0]
                     ?.variant.uniqueName) {
@@ -684,7 +684,6 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
     public removeLinkedStock(recipeIndex: number, index: number): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
                     width: '585px',
-                    maxWidth: '585px',
                     data: {
                 title: this.commonLocaleData?.app_confirmation,
                     body: this.localeData?.confirm_delete_recipe_linked_stock,
@@ -712,7 +711,6 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
     public removeByProductLinkedStock(recipeIndex: number, index: number): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
                     width: '585px',
-                    maxWidth: '585px',
                     data: {
                 title: this.commonLocaleData?.app_confirmation,
                     body: this.localeData?.confirm_delete_recipe_byproduct_stock,
@@ -755,7 +753,6 @@ export class CreateRecipeComponent implements OnChanges, OnDestroy {
     public removeRecipe(index: number): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
                     width: '585px',
-                    maxWidth: '585px',
                     data: {
                 title: this.commonLocaleData?.app_confirmation,
                     body: this.localeData?.confirm_delete_recipe,

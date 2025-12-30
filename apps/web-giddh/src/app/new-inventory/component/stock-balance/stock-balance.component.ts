@@ -196,8 +196,8 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
                 if (response && response?.status === "success") {
                     stock.stock = response?.body;
                     stock.stockOriginal = cloneDeep(response?.body);
-                    stock?.stock?.variants.forEach(variant => {
-                        this.warehouses.forEach(warehouse => {
+                    (Array.isArray(stock?.stock?.variants) ? stock?.stock?.variants : []).forEach(variant => {
+                        (Array.isArray(this.warehouses) ? this.warehouses : []).forEach(warehouse => {
                             const warehouseFound = variant?.warehouseBalance?.filter(balance => balance?.warehouse?.uniqueName === warehouse?.uniqueName);
                             if (!warehouseFound?.length) {
                                 variant.warehouseBalance.push({
@@ -256,7 +256,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
                         });
                     });
 
-                    this.allSelectedWarehouse.forEach(warehouse => {
+                    (Array.isArray(this.allSelectedWarehouse) ? this.allSelectedWarehouse : []).forEach(warehouse => {
                         this.calculationWarehouse(warehouse);
                     });
                     this.GroupStockReportRequest.page = response.body?.page;
@@ -298,7 +298,7 @@ export class StockBalanceComponent implements OnInit, OnDestroy {
                     if (response && response?.status === "success") {
                         let warehouseStocksList = response?.body?.stockReport;
                         if (warehouseStocksList?.length > 0) {
-                            warehouseStocksList.forEach(warehouseStock => {
+                            (Array.isArray(warehouseStocksList) ? warehouseStocksList : []).forEach(warehouseStock => {
                                 const stockFound = this.stocksList?.filter(stock => stock?.stockUniqueName === warehouseStock?.stockUniqueName);
                                 if (stockFound?.length > 0 && stockFound[0]) {
                                     if (stockFound[0]?.warehouses?.length > 0) {

@@ -110,13 +110,13 @@ export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDest
 
     public handleShareSituation(roleObj: NewRoleClass) {
         let shareScopes = ['SHRALL', 'SHRLWR', 'SHRSM'];
-        roleObj?.scopes.forEach((role) => {
+        (Array.isArray(roleObj?.scopes) ? roleObj?.scopes : []).forEach((role) => {
             if (role.name === 'SHARE') {
                 role.permissions = role.permissions?.filter((p) => {
                     return shareScopes?.indexOf(p.code) > -1;
                 });
                 if (role.permissions?.length < 3) {
-                    shareScopes.forEach((s: string) => {
+                    (Array.isArray(shareScopes) ? shareScopes : []).forEach((s: string) => {
                         let indexOfAbsentScope = role.permissions.findIndex((p) => p.code === s);
                         if (indexOfAbsentScope === -1) {
                             role.permissions.push(new NewPermissionObj(s, false));
@@ -203,7 +203,7 @@ export class PermissionDetailsComponent implements OnInit, AfterViewInit, OnDest
         }
 
         if (response) {
-            response.forEach(item => {
+            (Array.isArray(response) ? response : []).forEach(item => {
                 let count = 0;
                 item?.permissions?.forEach(item => {
                     if (item.code !== 'SELECT-ALL' && item.isSelected) {

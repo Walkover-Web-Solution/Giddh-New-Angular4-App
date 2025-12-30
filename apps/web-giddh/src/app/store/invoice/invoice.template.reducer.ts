@@ -53,10 +53,10 @@ export function InvoiceTemplateReducer(state = initialState, action: CustomActio
                 let indx = nextState.customCreatedTemplates?.findIndex((template) => template?.uniqueName === uniqName);
                 if (indx > -1) {
                     if (res.body?.type === 'voucher') {
-                        nextState.customCreatedTemplates.forEach((tem) => tem.isDefaultForVoucher = false);
+                        (Array.isArray(nextState.customCreatedTemplates) ? nextState.customCreatedTemplates : []).forEach((tem) => tem.isDefaultForVoucher = false);
                         nextState.customCreatedTemplates[indx].isDefaultForVoucher = true;
                     } else {
-                        nextState.customCreatedTemplates.forEach((tem) => tem.isDefault = false);
+                        (Array.isArray(nextState.customCreatedTemplates) ? nextState.customCreatedTemplates : []).forEach((tem) => tem.isDefault = false);
                         nextState.customCreatedTemplates[indx].isDefault = true;
                     }
                 }

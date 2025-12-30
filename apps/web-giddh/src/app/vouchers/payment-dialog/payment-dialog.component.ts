@@ -123,7 +123,7 @@ export class PaymentDialogComponent implements OnInit, OnDestroy {
         this.settingsTagService.GetAllTags().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body?.length > 0) {
                 let arr: any[] = [];
-                response?.body.forEach(tag => {
+                (Array.isArray(response?.body) ? response?.body : []).forEach(tag => {
                     arr.push({ value: tag.name, label: tag.name });
                 });
                 this.tags = orderBy(arr, 'name');

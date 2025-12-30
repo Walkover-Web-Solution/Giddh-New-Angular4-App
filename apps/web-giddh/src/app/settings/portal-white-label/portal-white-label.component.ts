@@ -182,7 +182,7 @@ export class PortalWhiteLabelComponent implements OnInit {
             let validEmails = [];
             let uniqueArray = [];
             if (recipients && recipients.length > 0) {
-                recipients.forEach(email => {
+                (Array.isArray(recipients) ? recipients : []).forEach(email => {
                     if (validRecipients && email.trim() && !EMAIL_VALIDATION_REGEX.test(email.trim())) {
                         this.toaster.clearAllToaster();
                         let invalidEmail = this.localeData?.invalid_email;
@@ -396,7 +396,6 @@ export class PortalWhiteLabelComponent implements OnInit {
     public openShareDomainDialog(): void {
         this.dialog.open(this.shareDomain, {
                     width: '500px',
-                    maxWidth: '500px'
                 });
     }
 
@@ -408,7 +407,6 @@ export class PortalWhiteLabelComponent implements OnInit {
     public openAddDomainDialog(): void {
         this.dialog.open(this.addDomain, {
                     width: '550px',
-                    maxWidth: '550px'
                 });
     }
 

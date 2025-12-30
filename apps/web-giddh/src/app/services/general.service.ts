@@ -546,7 +546,7 @@ export class GeneralService {
     public addValueInArray(array: Array<string>, value: any): Array<string> {
         let exists = false;
         if (array && array.length > 0) {
-            array.forEach(item => {
+            (Array.isArray(array) ? array : []).forEach(item => {
                 if (item === value) {
                     exists = true;
                 }
@@ -572,7 +572,7 @@ export class GeneralService {
         let exists = false;
 
         if (array && array.length > 0) {
-            array.forEach(item => {
+            (Array.isArray(array) ? array : []).forEach(item => {
                 if (item === value) {
                     exists = true;
                 }
@@ -594,7 +594,7 @@ export class GeneralService {
         let index = -1;
         if (array && array.length > 0) {
             let loop = 0;
-            array.forEach(item => {
+            (Array.isArray(array) ? array : []).forEach(item => {
                 if (item === value) {
                     index = loop;
                 }
@@ -864,7 +864,7 @@ export class GeneralService {
                 // Check if "" is not present at 0th and 1st index
                 let count = 0;
                 let initials = '';
-                nameArray.forEach(word => {
+                (Array.isArray(nameArray) ? nameArray : []).forEach(word => {
                     if (word && count < 2) {
                         initials += ` ${word[0]}`;
                         count++;
@@ -1345,7 +1345,7 @@ export class GeneralService {
     public addObjectInArray(array: any[], value: any): Array<string> {
         let exists = false;
         if (array && array.length > 0) {
-            array.forEach(item => {
+            (Array.isArray(array) ? array : []).forEach(item => {
                 if (item?.poUniqueName === value?.poUniqueName) {
                     exists = true;
                 }
@@ -1371,7 +1371,7 @@ export class GeneralService {
         let exists = false;
 
         if (array && array.length > 0) {
-            array.forEach(item => {
+            (Array.isArray(array) ? array : []).forEach(item => {
                 if (item?.poUniqueName === value?.poUniqueName) {
                     exists = true;
                 }
@@ -1393,7 +1393,7 @@ export class GeneralService {
         let index = -1;
         if (array && array.length > 0) {
             let loop = 0;
-            array.forEach(item => {
+            (Array.isArray(array) ? array : []).forEach(item => {
                 if (item?.poUniqueName === value?.poUniqueName) {
                     index = loop;
                 }
@@ -1556,7 +1556,7 @@ export class GeneralService {
             discountsList,
             discountAccountsDetails
         } = requestObj;
-        discountsList.forEach(acc => {
+        (Array.isArray(discountsList) ? discountsList : []).forEach(acc => {
             if (discountAccountsDetails) {
                 let hasItem = discountAccountsDetails.some(s => s.discountUniqueName === acc?.uniqueName || s.uniqueName === acc?.uniqueName);
                 if (!hasItem) {
@@ -2623,7 +2623,7 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public markAllFormsAsPristine(): void {
-        this.markFormsAsPristineCallbacks.forEach(callback => {
+        (Array.isArray(this.markFormsAsPristineCallbacks) ? this.markFormsAsPristineCallbacks : []).forEach(callback => {
             try {
                 callback();
             } catch (error) {

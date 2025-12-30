@@ -126,7 +126,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
         this.settingsFinancialYearService.GetAllFinancialYears().pipe(takeUntil(this.destroyed$)).subscribe(res => {
             if (res && res.body && res.body.financialYears) {
                 let selectYear = [];
-                res.body.financialYears.forEach(key => {
+                (Array.isArray(res.body.financialYears) ? res.body.financialYears : []).forEach(key => {
                     let financialYearStarts = dayjs(key?.financialYearStarts, GIDDH_DATE_FORMAT).format("MMM-YYYY");
                     let financialYearEnds = dayjs(key?.financialYearEnds, GIDDH_DATE_FORMAT).format("MMM-YYYY");
                     selectYear.push({ label: financialYearStarts + " - " + financialYearEnds, value: key });
@@ -359,7 +359,7 @@ export class ColumnarReportComponent implements OnInit, OnDestroy {
      */
     public selectActiveFinancialYear(): void {
         if (this.selectYear && this.selectYear.length > 0 && this.activeFinancialYear) {
-            this.selectYear.forEach(key => {
+            (Array.isArray(this.selectYear) ? this.selectYear : []).forEach(key => {
                 if (key?.value?.uniqueName === this.activeFinancialYear) {
                     this.selectFinancialYear(key);
 

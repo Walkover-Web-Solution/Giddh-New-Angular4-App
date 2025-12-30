@@ -21,7 +21,7 @@ export class FinancialAccordionDirective {
             return;
         }
         if (this.data.accounts) {
-            this.data.accounts.forEach((p: Account) => {
+            (Array.isArray(this.data.accounts) ? this.data.accounts : []).forEach((p: Account) => {
                 if (p.isIncludedInSearch) {
                     p.isVisible = !p.isVisible;
                     isChildVisible = p.isVisible;
@@ -29,7 +29,7 @@ export class FinancialAccordionDirective {
             });
         }
         if (this.data.childGroups) {
-            this.data.childGroups.forEach((p: ChildGroup) => {
+            (Array.isArray(this.data.childGroups) ? this.data.childGroups : []).forEach((p: ChildGroup) => {
                 if (p.isIncludedInSearch) {
                     p.isVisible = !p.isVisible;
                     isChildVisible = p.isVisible;

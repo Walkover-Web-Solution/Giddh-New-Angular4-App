@@ -282,7 +282,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                                 this.ocrDocumentsRequestParams.branchUniqueName = this.generalService.currentBranchUniqueName ?? '';
                             }
                             this.branches = [];
-                            branchList.forEach((branch) => {
+                            (Array.isArray(branchList) ? branchList : []).forEach((branch) => {
                                 this.branches.push({
                                     label: branch?.name,
                                     value: branch?.uniqueName

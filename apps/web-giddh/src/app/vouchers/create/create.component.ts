@@ -1355,6 +1355,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
                     this.startLoader(false);
                     this.changeDetection.detectChanges();
+                    this.changeDetection.detectChanges();
                 }
             });
 
@@ -1505,7 +1506,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     if (response) {
                         response = response as ProformaResponse;
                         if (response?.items?.length) {
-                            response.items.forEach((item) => {
+                            (Array.isArray(response.items) ? response.items : []).forEach((item) => {
                                 lastVouchers.push({
                                     voucherNumber: this.invoiceType.isProformaInvoice
                                         ? item.proformaNumber
@@ -3086,7 +3087,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     private getStockMaxQuantity(entryData: any): number | undefined {
         let maxQuantity = undefined;
         if (this.invoiceType.isPurchaseInvoice && entryData?.purchaseOrderLinkSummaries?.length > 0) {
-            entryData.purchaseOrderLinkSummaries.forEach((summary) => {
+            (Array.isArray(entryData.purchaseOrderLinkSummaries) ? entryData.purchaseOrderLinkSummaries : []).forEach((summary) => {
                 if (!isNaN(Number(summary.unUsedQuantity))) {
                     if (entryData?.transactions[0]?.stock) {
                         maxQuantity = summary.unUsedQuantity + entryData?.transactions[0]?.stock?.quantity;
@@ -3115,7 +3116,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 },
                 disableClose: true,
                 width: '1203px',
-                maxWidth:'1203px'
             })
         );
 
@@ -3657,7 +3657,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
             width: "630px",
-            maxWidth: '630px',
             data: {
                 configuration: this.rcmConfiguration
             },
@@ -3820,7 +3819,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         );
         let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
                     width: "630px",
-                    maxWidth: '630px',
                     data: {
                 configuration: attachmentDeleteConfiguration
                 },
@@ -3849,7 +3847,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.voucherDetails = voucher?.body;
             this.emailDialogRef = this.dialog.open(this.sendEmailModal, {
                         width: "650px",
-                        maxWidth: '650px'
                     });
             this.emailDialogRef.afterClosed().subscribe(() => {
                 this.openAccountDropdown = true;
@@ -3868,7 +3865,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.voucherDetails = voucher?.body;
             const dialogRef = this.dialog.open(this.printVoucherModal, {
                         width: "60vw",
-                        maxWidth: '60vw',
                         height: "80vh"
                     });
             dialogRef.afterClosed().subscribe(() => {
@@ -4139,7 +4135,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         const discountsFormArray = entryFormGroup.get("discounts") as FormArray;
         discountsFormArray.clear();
         if (discounts?.length) {
-            discounts.forEach((discount) => {
+            (Array.isArray(discounts) ? discounts : []).forEach((discount) => {
                 discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
             });
         }
@@ -4872,6 +4868,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         if (!this.isFormValid(invoiceForm)) {
             this.startLoader(false);
+            this.changeDetection.detectChanges();
             return;
         }
 
@@ -4905,7 +4902,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             if (this.advanceReceiptAdjustmentData.adjustments.length && !this.invoiceForm.get('voucherUniqueName')?.value) {
                 const adjustments = cloneDeep(this.advanceReceiptAdjustmentData.adjustments);
                 if (adjustments) {
-                    adjustments.forEach((adjustment) => {
+                    (Array.isArray(adjustments) ? adjustments : []).forEach((adjustment) => {
                         if (adjustment.balanceDue !== undefined) {
                             delete adjustment.balanceDue;
                         }
@@ -5012,6 +5009,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     .pipe(takeUntil(this.destroyed$))
                     .subscribe((response) => {
                         this.startLoader(false);
+                        this.changeDetection.detectChanges();
                         if (response && response.status === "success") {
                             this.toasterService.showSnackBar("success", this.localeData?.po_updated);
                             if (callback) {
@@ -5029,6 +5027,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     .pipe(takeUntil(this.destroyed$))
                     .subscribe((response) => {
                         this.startLoader(false);
+                        this.changeDetection.detectChanges();
                         if (response && response.status === "success") {
                             this.aiOcrService.saveAndNextSuccess$.next({
                                 token: this.aiOcrToken,
@@ -5085,6 +5084,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     .pipe(takeUntil(this.destroyed$))
                     .subscribe((response) => {
                         this.startLoader(false);
+                        this.changeDetection.detectChanges();
                         if (response?.status === "success") {
                             this.toasterService.showSnackBar("success", this.localeData?.voucher_updated);
                             if (callback) {
@@ -5103,6 +5103,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     .pipe(takeUntil(this.destroyed$))
                     .subscribe((response) => {
                         this.startLoader(false);
+                        this.changeDetection.detectChanges();
                         if (response?.status === "success") {
                             this.aiOcrService.saveAndNextSuccess$.next({
                                 token: this.aiOcrToken,
@@ -5215,6 +5216,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     .pipe(takeUntil(this.destroyed$))
                     .subscribe((response) => {
                         this.startLoader(false);
+                        this.changeDetection.detectChanges();
                         if (response?.status === "success") {
                             this.toasterService.showSnackBar("success", this.localeData?.voucher_updated);
                             if (callback) {
@@ -5236,6 +5238,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     .pipe(takeUntil(this.destroyed$))
                     .subscribe((response) => {
                         this.startLoader(false);
+                        this.changeDetection.detectChanges();
                         if (response?.status === "success") {
                             this.aiOcrService.saveAndNextSuccess$.next({
                                 token: this.aiOcrToken,
@@ -5605,7 +5608,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             }
             this.dialog.open(this.adjustmentModal, {
                         width: "800px",
-                        maxWidth: '800px'
                     });
         } else {
             this.isAdjustAmount = false;
@@ -5670,7 +5672,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             let adjustments = cloneDeep(voucherObjectArray);
             let totalAmount = 0;
             if (adjustments) {
-                adjustments.forEach((item) => {
+                (Array.isArray(adjustments) ? adjustments : []).forEach((item) => {
                     if (
                         (this.voucherType === AdjustedVoucherType.SalesInvoice &&
                             item?.voucherType === AdjustedVoucherType.DebitNote) ||
@@ -6114,7 +6116,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         let voucherEntries = this.getEntries();
 
                         if (entries && entries.length > 0 && voucherEntries?.length > 0) {
-                            entries.forEach((entry) => {
+                            (Array.isArray(entries) ? entries : []).forEach((entry) => {
                                 entry.transactions?.forEach((item) => {
                                     let entryLoop = 0;
                                     let remainingQuantity =
@@ -6700,7 +6702,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         this.dialog.open(template, {
                     width: "980px",
-                    maxWidth: '980px'
                 });
     }
 

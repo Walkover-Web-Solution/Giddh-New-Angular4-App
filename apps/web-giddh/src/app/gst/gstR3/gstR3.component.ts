@@ -401,7 +401,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
                 details: this.localeData?.gstr3b?.itc_available
             });
 
-            this.gstr3BData.itc_elg.itc_avl.forEach(item => {
+            (Array.isArray(this.gstr3BData.itc_elg.itc_avl) ? this.gstr3BData.itc_elg.itc_avl : []).forEach(item => {
                 switch (item.ty) {
                     case 'IMPG':
                         tableData.push({
@@ -481,7 +481,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
                 details: this.localeData?.gstr3b?.itc_reversed
             });
 
-            this.gstr3BData.itc_elg.itc_rev.forEach(item => {
+            (Array.isArray(this.gstr3BData.itc_elg.itc_rev) ? this.gstr3BData.itc_elg.itc_rev : []).forEach(item => {
                 switch (item.ty) {
                     case 'RUL':
                         tableData.push({
@@ -538,7 +538,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
                 details: this.localeData?.gstr3b?.ineligible_itc
             });
 
-            this.gstr3BData.itc_elg.itc_inelg.forEach(item => {
+            (Array.isArray(this.gstr3BData.itc_elg.itc_inelg) ? this.gstr3BData.itc_elg.itc_inelg : []).forEach(item => {
                 switch (item.ty) {
                     case 'RUL':
                         tableData.push({

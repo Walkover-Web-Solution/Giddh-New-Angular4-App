@@ -170,13 +170,13 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
 
         if (data && data.expArr) {
             this.initData(data.expArr, "expenses");
-            data.expArr.forEach(group => {
+            (Array.isArray(data.expArr) ? data.expArr : []).forEach(group => {
                 group.category = "expenses";
                 group.isVisible = true;
                 group.isCreated = true;
                 group.isIncludedInSearch = true;
                 group.isOpen = true;
-                group.childGroups.forEach(childGroups => {
+                (Array.isArray(group.childGroups) ? group.childGroups : []).forEach(childGroups => {
                     childGroups.category = "expenses";
                     childGroups.isVisible = true;
                     childGroups.isCreated = true;
@@ -186,13 +186,13 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
         }
         if (data && data.incArr) {
             this.initData(data.incArr, "income");
-            data.incArr.forEach(group => {
+            (Array.isArray(data.incArr) ? data.incArr : []).forEach(group => {
                 group.category = "income";
                 group.isVisible = true;
                 group.isCreated = true;
                 group.isIncludedInSearch = true;
                 group.isOpen = true;
-                group.childGroups.forEach(childGroups => {
+                (Array.isArray(group.childGroups) ? group.childGroups : []).forEach(childGroups => {
                     childGroups.category = "income";
                     childGroups.isVisible = true;
                     childGroups.isCreated = true;
@@ -220,12 +220,12 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof ProfitLossComponent
      */
     public initData(groupList: ChildGroup[], category: string): void {
-        groupList.forEach((childGroup: ChildGroup) => {
+        (Array.isArray(groupList) ? groupList : []).forEach((childGroup: ChildGroup) => {
             childGroup.category = category;
             childGroup.isVisible = false;
             childGroup.isCreated = false;
             childGroup.isIncludedInSearch = true;
-            childGroup.accounts.forEach((account: Account) => {
+            (Array.isArray(childGroup.accounts) ? childGroup.accounts : []).forEach((account: Account) => {
                 account.isIncludedInSearch = true;
                 account.isCreated = false;
                 account.isVisible = false;

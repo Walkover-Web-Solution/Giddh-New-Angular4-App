@@ -20,7 +20,7 @@ import { FormArray, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators 
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { TallyModuleService } from 'apps/web-giddh/src/app/accounting/tally-service';
-import { cloneDeep, isEqual, find, maxBy, findIndex } from 'apps/web-giddh/src/app/lodash-optimized';
+import { cloneDeep, isEqual, find, maxBy, findIndex } from '../../../lodash-optimized';
 import * as dayjs from 'dayjs';
 import { combineLatest, Observable, ReplaySubject, of as observableOf, Subject, timer } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil, debounce } from 'rxjs/operators';
@@ -1415,7 +1415,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     this.calculateAmount(Number(transactionAtIndex?.get('amount').value), transactionAtIndex, idx);
 
                     if (response.body.applicableDiscounts?.length) {
-                        response.body.applicableDiscounts.forEach(discount => {
+                        (Array.isArray(response.body.applicableDiscounts) ? response.body.applicableDiscounts : []).forEach(discount => {
                             let discountArray = this.discountsList?.filter(response => response?.additional?.uniqueName === discount?.uniqueName);
                             this.newEntryObj('by', discountArray[0], 'discount');
                         });
@@ -1423,7 +1423,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     if (response.body.applicableTaxes?.length) {
                         let index = transactionsFormArray?.value?.findIndex(obj => obj.particular === '');
                         transactionAtIndex = transactionsFormArray.at(index) as FormGroup;
-                        response.body.applicableTaxes.forEach(tax => {
+                        (Array.isArray(response.body.applicableTaxes) ? response.body.applicableTaxes : []).forEach(tax => {
                             if (index !== -1) {
                                 let filteredTaxData = this.companyTaxesList?.filter((item) => {
                                     return item.additional.uniqueName === tax.uniqueName;
@@ -1964,7 +1964,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         const debitControls: FormGroup[] = [];
 
         // Find all debit (BY) controls that are not discount applied
-        transactionsFormArray.controls.forEach((control: FormGroup) => {
+        (Array.isArray(transactionsFormArray.controls) ? transactionsFormArray.controls : []).forEach((control: FormGroup) => {
             if (control.get('type').value.toLowerCase() === 'by' && !control.get('isDiscountApplied')?.value) {
                 debitControls.push(control);
             }
@@ -1974,7 +1974,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             // Distribute the new total debit amount equally among all debit entries
             const amountPerEntry = this.generalService.roundOffValueByCompanyDecimalPlace(newTotalDebit / debitControls.length);
 
-            debitControls.forEach((control, index) => {
+            (Array.isArray(debitControls) ? debitControls : []).forEach((control, index) => {
                 // For the last entry, adjust for any rounding differences
                 if (index === debitControls.length - 1) {
                     const remainingAmount = newTotalDebit - (amountPerEntry * (debitControls.length - 1));
@@ -2001,7 +2001,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         const creditControls: FormGroup[] = [];
 
         // Find all credit (TO) controls that are not discount applied
-        transactionsFormArray.controls.forEach((control: FormGroup) => {
+        (Array.isArray(transactionsFormArray.controls) ? transactionsFormArray.controls : []).forEach((control: FormGroup) => {
             if (control.get('type').value.toLowerCase() === 'to' && !control.get('isDiscountApplied')?.value) {
                 creditControls.push(control);
             }
@@ -2011,7 +2011,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             // Distribute the new total credit amount equally among all credit entries
             const amountPerEntry = this.generalService.roundOffValueByCompanyDecimalPlace(newTotalCredit / creditControls.length);
 
-            creditControls.forEach((control, index) => {
+            (Array.isArray(creditControls) ? creditControls : []).forEach((control, index) => {
                 // For the last entry, adjust for any rounding differences
                 if (index === creditControls.length - 1) {
                     const remainingAmount = newTotalCredit - (amountPerEntry * (creditControls.length - 1));
@@ -2091,7 +2091,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     }
                 }
                 let salesAmount;
-                data.transactions.forEach((element: any) => {
+                (Array.isArray(data.transactions) ? data.transactions : []).forEach((element: any) => {
                     if (element) {
                         if (element.type === 'to' && !element.isDiscountApplied && !element.isTaxApplied && element.selectedAccount?.UniqueName) {
                             salesAmount = element.amount;
@@ -2146,7 +2146,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 }
 
                 if (data.transactions.length > 1) {
-                    data.transactions.forEach((transaction, i) => {
+                    (Array.isArray(data.transactions) ? data.transactions : []).forEach((transaction, i) => {
                         delete data.transactions[i].actualAmount;
                     });
                 } else {
@@ -2837,7 +2837,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         let invoiceAmountError = false;
 
         if (this.receiptEntries?.length > 0) {
-            this.receiptEntries.forEach(receipt => {
+            (Array.isArray(this.receiptEntries) ? this.receiptEntries : []).forEach(receipt => {
                 if (isValid) {
                     if (isNaN(parseFloat(receipt.amount))) {
                         isValid = false;

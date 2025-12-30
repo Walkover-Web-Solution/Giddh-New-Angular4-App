@@ -107,7 +107,7 @@ export class GstSettingComponent implements OnInit, OnDestroy {
                 let mappings = this.gstSettingForm.get('gstData') as FormArray;
                 mappings.clear();
                 this.lutItemList = response;
-                response.forEach((item) => {
+                (Array.isArray(response) ? response : []).forEach((item) => {
                     this.addNewLutItem(item);
                 });
             }
@@ -263,7 +263,6 @@ export class GstSettingComponent implements OnInit, OnDestroy {
         } else {
             const dialogRef = this.dialog.open(ConfirmModalComponent, {
                         width: '540px',
-                        maxWidth: '540px',
                         data: {
                     title: this.commonLocaleData?.app_confirmation,
                         body: this.localeData?.confirm_delete_message,

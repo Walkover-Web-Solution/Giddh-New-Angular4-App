@@ -44,7 +44,7 @@ export class UserAuthenticated  {
                             let tempParams = p.lastState.substr(p.lastState.lastIndexOf('?'));
                             let urlParams = new URLSearchParams(tempParams);
                             let queryParams = {};
-                            urlParams.forEach((val, key) => {
+                            (Array.isArray(urlParams) ? urlParams : []).forEach((val, key) => {
                                 queryParams[key] = val;
                             });
                             this.router.navigate([p.lastState?.replace(tempParams, '')], { queryParams });

@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
+import { cloneDeep } from '../lodash-optimized';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import * as dayjs from 'dayjs';
 import { MatMenuTrigger } from '@angular/material/menu';
@@ -367,7 +367,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
         this.daybookExportRequestType = 'post';
         this.modalDialogRef = this.dialog.open(this.exportDaybookModal, {
                     width: '630px',
-                    maxWidth: '630px'
                 });
     }
 
@@ -590,8 +589,6 @@ export class DaybookComponent implements OnInit, OnDestroy {
         this.lc.selectedTxnUniqueName = txn?.uniqueName;
         this.modalDialogRef = this.dialog.open(this.updateLedgerModal, {
                     width: '70%',
-                    maxWidth: '70%',
-                    height: '650px',
                     disableClose: true
                 });
 

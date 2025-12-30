@@ -56,11 +56,11 @@ export class HistoryDialogComponent implements OnInit, OnDestroy {
                         delete versions.results;
                     }
                     if (versions.items && versions.items.length > 0) {
-                        versions.items.forEach(result => {
+                        (Array.isArray(versions.items) ? versions.items : []).forEach(result => {
                             result.versionTime = new Date(result.versionTime);
                             result['userName'] =  this.getByUserText(result.user?.name);
                             if (result.changes && result.changes.length > 0) {
-                                result.changes.forEach(change => {
+                                (Array.isArray(result.changes) ? result.changes : []).forEach(change => {
                                     change.message = this.getVersionMessage(this.inputData.model?.voucherType === VoucherTypeEnum.purchaseOrder, change);
                                 });
                             }

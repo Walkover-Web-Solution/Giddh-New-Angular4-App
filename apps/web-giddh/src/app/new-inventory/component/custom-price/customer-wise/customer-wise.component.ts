@@ -397,7 +397,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
 
         const discounts = this.discountForm.get('discountInfo') as UntypedFormArray;
 
-        responseData?.body?.results.forEach((res, index) => {
+        (Array.isArray(responseData?.body?.results) ? responseData?.body?.results : []).forEach((res, index) => {
             this.variantsWithoutDiscount.push([]);
             if (res?.hasVariants) {
                 this.variantsWithoutDiscount[index] = res.dropDownVariants?.map(variant => {
@@ -415,12 +415,12 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
 
             let variants = (this.discountForm.get('discountInfo') as UntypedFormArray).at(index).get('variants') as UntypedFormArray;
 
-            res?.variants.forEach((variant, variantIndex) => {
+            (Array.isArray(res?.variants) ? res?.variants : []).forEach((variant, variantIndex) => {
                 if (Object.keys(variant).length > 2) {
                     let variantUnitCode = null;
                     if (variant?.stockUnitUniqueName) {
                         if (variantUnitCode === null) {
-                            res?.units.forEach(element => {
+                            (Array.isArray(res?.units) ? res?.units : []).forEach(element => {
                                 if (element?.uniqueName === variant?.stockUnitUniqueName) {
                                     variantUnitCode = element?.code;
                                 }
@@ -713,7 +713,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             return false;
         });
         let checkMandatory: boolean = false;
-        filteredArray.forEach((stock) => {
+        (Array.isArray(filteredArray) ? filteredArray : []).forEach((stock) => {
             checkMandatory = stock.variants.some(item => (item.discounts !== null || item.price !== null));
             stock.variants = stock.variants?.map(variant => {
                 if (variant.discounts === null) {
@@ -726,7 +726,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             this.toaster.warningToast(this.localeData?.invalid_form_msg);
             return;
         } else {
-            filteredArray.forEach((stock) => {
+            (Array.isArray(filteredArray) ? filteredArray : []).forEach((stock) => {
                 let reqObj = {
                     customerVendorAccountUniqueName: this.discountForm.value.customerVendorAccountUniqueName,
                     customerVendorGroupUniqueName: this.discountForm.value.customerVendorGroupUniqueName,
@@ -810,7 +810,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
      */
     private filterKeys(obj: any, keysToKeep: any[]): any {
         const filteredObject = {};
-        keysToKeep.forEach(key => {
+        (Array.isArray(keysToKeep) ? keysToKeep : []).forEach(key => {
             if (obj.hasOwnProperty(key)) {
                 filteredObject[key] = obj[key];
             }
@@ -833,7 +833,6 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         }
         this.dialogRef = this.dialog.open(this.addSearchModal, {
                     width: '580px',
-                    maxWidth: '580px',
                     role: 'alertdialog',
                     ariaLabel: 'Add search Dialog'
                 });
@@ -889,7 +888,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                             hasVariants: response?.body?.variants.length > 1
                         }));
                         let variants = (this.discountForm.get('discountInfo') as UntypedFormArray).at(stockIndex).get('variants') as UntypedFormArray;
-                        response.body?.variants.forEach(variant => {
+                        (Array.isArray(response.body?.variants) ? response.body?.variants : []).forEach(variant => {
                             variants.push(this.initVariantForm({ name: variant?.name, uniqueName: variant?.uniqueName, isTemproraryVariant: true, stockUnitUniqueName: variant?.units[0].uniqueName, variantUnitCode: variant?.units[0].code }));
                         });
                         this.currentUserStocks.push(event);

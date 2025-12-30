@@ -42,10 +42,10 @@ export class AuthService {
     ) {
         this.providers = config.providers;
         if (config.autoLogin) {
-            this.providers.forEach((provider: LoginProvider, key: string) => {
+            (Array.isArray(this.providers) ? this.providers : []).forEach((provider: LoginProvider, key: number) => {
                 if (provider) {
                     provider.initialize().then((user: SocialUser) => {
-                        user.provider = key;
+                        user.provider = key.toString();
                         this._user = user;
                         this._authState.next(user);
                     }).catch((err) => {

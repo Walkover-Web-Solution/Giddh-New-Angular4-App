@@ -10,7 +10,7 @@ import { get, set } from '../../../lodash-optimized';
 
 @Component({
     selector: 'create-unit-group',
-    
+
     templateUrl: './create-unit-group.component.html',
     standalone: false,
     styleUrls: ['./create-unit-group.component.scss']
@@ -148,7 +148,6 @@ export class CreateUnitGroupComponent implements OnInit, OnChanges, OnDestroy {
     public deleteUnitGroup(): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
                     width: '40%',
-                    maxWidth: '40%',
                     role: 'alertdialog',
                     ariaLabel: 'Confirm Dialog',
                     data: {

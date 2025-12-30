@@ -44,7 +44,7 @@ export function PermissionReducer(state = initialState, action: CustomActions): 
                 newState.roles = sortBy(newState.roles, [(o) => o.name]);
                 newState.roles = sortBy(newState.roles, [(o) => !o.isFixed]);
                 let sortedRoles = cloneDeep(newState);
-                sortedRoles.roles.forEach((role) => {
+                (Array.isArray(sortedRoles.roles) ? sortedRoles.roles : []).forEach((role) => {
                     role.scopes = sortBy(role.scopes, [(o) => o.name]);
                 });
 

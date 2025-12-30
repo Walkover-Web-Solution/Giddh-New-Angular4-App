@@ -69,7 +69,7 @@ export class TallyModuleService {
         let taxAccounts = [];
         let expenseAccounts = [];
         let salesAccounts = [];
-        accounts.forEach((acc) => {
+        (Array.isArray(accounts) ? accounts : []).forEach((acc) => {
             let cashAccount = acc?.parentGroups.find((pg) => pg?.uniqueName === 'cash');
             if (cashAccount) {
                 cashAccounts.push(acc);

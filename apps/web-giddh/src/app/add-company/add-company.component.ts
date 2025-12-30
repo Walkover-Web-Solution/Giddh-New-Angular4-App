@@ -783,7 +783,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
                 if (result?.body) {
                     let dialogRef = this.dialog.open(ConfirmModalComponent, {
                                 width: '40%',
-                                maxWidth: '40%',
                                 data: {
                             title: this.commonLocaleData?.app_confirmation,
                                 body: this.commonLocaleData?.app_gst_confirm_message1,
@@ -1287,7 +1286,6 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
     public openLogoutConfirmationDialog(): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
                     width: '40%',
-                    maxWidth: '40%',
                     data: {
                 title: this.localeData?.logout,
                     body: this.localeData?.create_company_close,
@@ -1375,7 +1373,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         this.thirdStepForm.get('creatorSuperAdmin').setValue(event?.value);
 
         const permissionRolesArray = this.thirdStepForm.get('permissionRoles') as FormArray;
-        permissionRolesArray?.controls.forEach((permissionGroup: FormGroup) => {
+        (Array.isArray(permissionRolesArray?.controls) ? permissionRolesArray?.controls : []).forEach((permissionGroup: FormGroup) => {
             const roleUniqueNameControl = permissionGroup.get('roleUniqueName');
             if (isSuperAdmin) {
                 roleUniqueNameControl.clearValidators();

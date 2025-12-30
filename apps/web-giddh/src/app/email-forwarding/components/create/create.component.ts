@@ -557,7 +557,7 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
         ).subscribe(accountSearchResponse => {
             if (accountSearchResponse && accountSearchResponse.results) {
                 const formattedResults: any[] = [];
-                accountSearchResponse.results.forEach(result => {
+                (Array.isArray(accountSearchResponse.results) ? accountSearchResponse.results : []).forEach(result => {
                     if (result?.uniqueName) {
                         formattedResults.push({
                             value: result.uniqueName,

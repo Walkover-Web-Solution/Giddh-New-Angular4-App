@@ -203,7 +203,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         this.imageURL = [];
 
         if (imgs) {
-            imgs.forEach(imgUniqueName => {
+            (Array.isArray(imgs) ? imgs : []).forEach(imgUniqueName => {
                 const image = {
                     src: imgPrefix + imgUniqueName
                 };

@@ -12,7 +12,7 @@ import { InventoryAction } from '../../../actions/inventory/inventory.actions';
 import { IGroupsWithStocksHierarchyMinItem } from '../../../models/interfaces/groups-with-stocks.interface';
 import { uniqueNameInvalidStringReplace } from '../../../shared/helpers/helperFunctions';
 import { IForceClear } from '../../../models/api-models/Sales';
-import { isObject, cloneDeep, forEach, filter as lodashFilter, find, findIndex } from 'apps/web-giddh/src/app/lodash-optimized';
+import { isObject, cloneDeep, forEach, filter as lodashFilter, find, findIndex } from '../../../lodash-optimized';
 import { TaxResponse } from '../../../models/api-models/Company';
 import { InvoiceService } from '../../../services/invoice.service';
 import { IOption } from '../../../app.constant';

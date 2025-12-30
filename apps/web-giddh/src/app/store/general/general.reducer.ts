@@ -199,7 +199,7 @@ export function GeneRalReducer(state: GeneralState = initialState, action: Custo
             if (dd?.status === 'success') {
                 let groupArray: GroupsWithAccountsResponse[] = cloneDeep(state.groupswithaccounts);
                 if (groupArray) {
-                    dd.request.forEach(f => {
+                    (Array.isArray(dd.request) ? dd.request : []).forEach(f => {
                         findAndRemoveAccountFunc(groupArray, f?.uniqueName, false);
                     });
 
@@ -537,7 +537,7 @@ const provideStrings = (arr: any[]) => {
     let o = { nameStr: [], uNameStr: [] };
     let b = { nameStr: '', uNameStr: '' };
     try {
-        arr.forEach((item: INameUniqueName) => {
+        (Array.isArray(arr) ? arr : []).forEach((item: INameUniqueName) => {
             o.nameStr.push(item.name);
             o.uNameStr.push(item?.uniqueName);
         });

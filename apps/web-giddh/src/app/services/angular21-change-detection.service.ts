@@ -119,7 +119,7 @@ export class Angular21ChangeDetectionService {
         operations: (() => void)[]
     ): void {
         // Execute all operations first
-        operations.forEach(operation => {
+        (Array.isArray(operations) ? operations : []).forEach(operation => {
             try {
                 operation();
             } catch (error) {

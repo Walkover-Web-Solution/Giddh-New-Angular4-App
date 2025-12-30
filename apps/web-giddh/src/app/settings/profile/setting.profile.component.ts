@@ -491,7 +491,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         if (this.companyProfileObj && this.companyProfileObj.addresses) {
             let profileObj = this.companyProfileObj;
             let defaultGstObjIndx;
-            profileObj.addresses.forEach((obj, indx) => {
+            (Array.isArray(profileObj.addresses) ? profileObj.addresses : []).forEach((obj, indx) => {
                 if (profileObj.addresses[indx] && profileObj.addresses[indx].isDefault) {
                     defaultGstObjIndx = indx;
                 }
@@ -1103,7 +1103,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      * @memberof SettingProfileComponent
      */
     public handleDefaultAddress(addressDetails: any): void {
-        this.addresses.forEach(add => {
+        (Array.isArray(this.addresses) ? this.addresses : []).forEach(add => {
             if (add?.uniqueName !== addressDetails?.uniqueName) {
                 add.isDefault = false;
             }

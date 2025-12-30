@@ -18,7 +18,7 @@ export class LogsUtilityService {
     public prepareAuditLogFilters(filterData: any): any {
         const formattedFilterData = {};
         if (filterData) {
-            filterData.forEach(data => {
+            (Array.isArray(filterData) ? filterData : []).forEach(data => {
                 formattedFilterData[data.entity] = data.operations;
             });
         }

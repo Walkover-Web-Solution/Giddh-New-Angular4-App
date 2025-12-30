@@ -142,7 +142,7 @@ export class BulkExportVoucherComponent implements OnDestroy {
             let recipients = this.recipients.split(",");
             let validEmails = [];
             if (recipients && recipients.length > 0) {
-                recipients.forEach(email => {
+                (Array.isArray(recipients) ? recipients : []).forEach(email => {
                     if (validRecipients && email.trim() && !EMAIL_VALIDATION_REGEX.test(email.trim())) {
                         this.toaster.clearAllToaster();
 

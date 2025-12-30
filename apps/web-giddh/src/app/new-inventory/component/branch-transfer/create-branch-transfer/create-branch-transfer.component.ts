@@ -1322,7 +1322,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
         this.allWarehouses = [];
 
         if (data && data.length > 0) {
-            data.forEach(res => {
+            (Array.isArray(data) ? data : []).forEach(res => {
                 if (res && !res.isCompany && !res.isConsolidatedBranch) {
                     res.warehouses?.forEach(warehouse => {
                         warehouse.taxNumber = warehouse.taxNumber || '';
@@ -1985,7 +1985,7 @@ export class CreateBranchTransferComponent implements OnInit, OnDestroy {
                     if (productFormGroup.get('uniqueName')?.value) {
                         const variantsFormGroup = productFormGroup?.get('variant') as UntypedFormGroup;
                         this.stockVariants[index] = [];
-                        response?.body?.variants.forEach(item => {
+                        (Array.isArray(response?.body?.variants) ? response?.body?.variants : []).forEach(item => {
                             if (!item.archive) {
                                 this.stockVariants[index].push({
                                     label: item.name,

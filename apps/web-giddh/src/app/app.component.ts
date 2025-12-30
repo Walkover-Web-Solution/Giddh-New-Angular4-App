@@ -22,7 +22,7 @@ import { InvoiceActions } from './actions/invoice/invoice.actions';
 import { WarehouseActions } from './settings/warehouse/action/warehouse.action';
 import { CompanyService } from './services/company.service';
 import { environment } from '../environments/environment';
-import { clone, get, includes, pick, remove, startsWith } from './lodash-optimized';
+import { clone, get, includes, pick, remove, startsWith  } from './lodash-optimized';
 
 /**
  * App Component

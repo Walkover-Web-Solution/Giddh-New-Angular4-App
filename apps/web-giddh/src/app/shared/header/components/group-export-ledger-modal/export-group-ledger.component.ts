@@ -100,7 +100,7 @@ export class ExportGroupLedgerComponent implements OnInit {
         this.dateRange.to = dayjs(dayjs()).format(GIDDH_DATE_FORMAT);
 
         if (this._permissionDataService.getData && this._permissionDataService.getData.length > 0) {
-            this._permissionDataService.getData.forEach(f => {
+            (Array.isArray(this._permissionDataService.getData) ? this._permissionDataService.getData : []).forEach(f => {
                 if (f.name === 'LEDGER') {
                     let isAdmin = some(f.permissions, (prm) => prm.code === 'UPDT');
                     this.emailTypeSelected = isAdmin ? 'admin-detailed' : 'view-detailed';

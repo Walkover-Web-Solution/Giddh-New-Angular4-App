@@ -21,7 +21,7 @@ import { cloneDeep, forEach, isArray, map, some } from '../../../lodash-optimize
 
 @Component({
     selector: 'app-pending-list',
-    
+
       standalone: false,templateUrl: './pending-list.component.html',
     styleUrls: ['./pending-list.component.scss'],
 })
@@ -143,7 +143,6 @@ export class PendingListComponent implements OnInit, OnChanges {
         this.prepareEntryAgainstObject(item);
         this.approveEntryModalRef = this.dialog.open(ref, {
                     width: '500px',
-                    maxWidth: '500px',
                     disableClose: true
                 });
         this.selectedEntryForApprove = item;
@@ -398,7 +397,6 @@ export class PendingListComponent implements OnInit, OnChanges {
         this.selectedEntryForApprove = item;
         this.approveEntryModalRef = this.dialog.open(ref, {
                     width: '500px',
-                    maxWidth: '500px',
                     disableClose: true
                 });
     }

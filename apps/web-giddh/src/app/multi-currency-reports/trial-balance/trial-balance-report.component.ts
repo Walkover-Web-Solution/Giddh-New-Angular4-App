@@ -53,7 +53,7 @@ export class TrialBalanceReportComponent implements OnInit, AfterViewInit, OnDes
         this.reportDataList$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 this.initData(response?.groupDetails);
-                response?.groupDetails.forEach(groupDetail => {
+                (Array.isArray(response?.groupDetails) ? response?.groupDetails : []).forEach(groupDetail => {
                     groupDetail['isVisible'] = true;
                     groupDetail['isCreated'] = true;
                 });
@@ -70,11 +70,11 @@ export class TrialBalanceReportComponent implements OnInit, AfterViewInit, OnDes
      * @memberof TrialBalanceReportComponent
      */
     public initData(groups: ChildGroup[]): void {
-        groups.forEach((childGroup: ChildGroup) => {
+        (Array.isArray(groups) ? groups : []).forEach((childGroup: ChildGroup) => {
             childGroup['isVisible'] = false;
             childGroup['isCreated'] = false;
             childGroup['isIncludedInSearch'] = true;
-            childGroup.accounts.forEach((account: Account) => {
+            (Array.isArray(childGroup.accounts) ? childGroup.accounts : []).forEach((account: Account) => {
                 account['isIncludedInSearch'] = true;
                 account['isCreated'] = false;
                 account['isVisible'] = false;

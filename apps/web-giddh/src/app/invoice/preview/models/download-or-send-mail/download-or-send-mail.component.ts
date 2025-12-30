@@ -9,7 +9,7 @@ import { Observable, of, ReplaySubject } from 'rxjs';
 import { InvoiceActions } from 'apps/web-giddh/src/app/actions/invoice/invoice.actions';
 import { InvoiceReceiptActions } from 'apps/web-giddh/src/app/actions/invoice/receipt/receipt.actions';
 import { Router } from '@angular/router';
-import { findIndex, isEmpty } from 'apps/web-giddh/src/app/lodash-optimized';
+import { findIndex, isEmpty } from '../../../../lodash-optimized';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { VoucherTypeEnum } from 'apps/web-giddh/src/app/models/api-models/Sales';
 import { CommonService } from 'apps/web-giddh/src/app/services/common.service';

@@ -178,7 +178,7 @@ export class PayorCreateEditComponent implements OnInit, OnDestroy {
             if (response) { 
                 this.usersList = [];
                 let index = 0;
-                response.forEach(user => {
+                (Array.isArray(response) ? response : []).forEach(user => {
                     this.usersList.push({ index: index, label: user.userName, value: user.userUniqueName });
                     index++;
                 });

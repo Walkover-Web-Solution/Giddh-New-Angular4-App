@@ -8,7 +8,7 @@ import { AppState } from '../../../../../store';
 import { takeUntil } from 'rxjs/operators';
 import { GstReport } from '../../../../constants/gst.constant';
 import { GstReconcileActions } from 'apps/web-giddh/src/app/actions/gst-reconcile/gst-reconcile.actions';
-import { cloneDeep, sortBy } from 'apps/web-giddh/src/app/lodash-optimized';
+import { cloneDeep, sortBy } from '../../../../../lodash-optimized';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { Configuration } from 'apps/web-giddh/src/app/app.constant';
 import { environment } from 'apps/web-giddh/src/environments/environment';

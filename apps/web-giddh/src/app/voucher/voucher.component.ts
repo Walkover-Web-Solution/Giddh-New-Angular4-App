@@ -26,7 +26,7 @@ import { cloneDeep, find, forEach, isEqual, isUndefined, omit, orderBy, uniqBy }
 import { InvoiceSetting } from '../models/interfaces/invoice.setting.interface';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
-import { SubVoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION, SearchResultText, TCS_TDS_TAXES_TYPES, ENTRY_DESCRIPTION_LENGTH, EMAIL_REGEX_PATTERN, AdjustedVoucherType, API_BULK_FETCH_LIMIT, BranchHierarchyType, IOption, ASIDE_PANE_CONFIG, BREAKPOINT_SCREEN_SIZE, Configuration } from '../app.constant';
+import { SubVoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION, SearchResultText, TCS_TDS_TAXES_TYPES, ENTRY_DESCRIPTION_LENGTH, EMAIL_REGEX_PATTERN, AdjustedVoucherType, API_BULK_FETCH_LIMIT, BranchHierarchyType, IOption, ASIDE_PANE_CONFIG, BREAKPOINT_SCREEN_SIZE } from '../app.constant';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { ProformaActions } from '../actions/proforma/proforma.actions';
 import { PreviousInvoicesVm, ProformaFilter, ProformaGetRequest, ProformaResponse } from '../models/api-models/proforma';
@@ -86,6 +86,7 @@ declare var window;
     selector: 'voucher-component',
     templateUrl: './voucher.component.html',
     styleUrls: [`./voucher.component.scss`],
+    standalone:false,
     animations: [
         trigger('slideInOut', [
             state('in', style({
@@ -98,8 +99,7 @@ declare var window;
             transition('out => in', animate('400ms ease-in-out'))
         ]),
     ],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone:false
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
     /** True if it is purchase invoice */
@@ -889,7 +889,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
         });
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = isElectron ? "assets/images/" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + "assets/images/";
         /** This will use for filter link purchase orders  */
         this.linkPoDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
             this.filterPurchaseOrder(search);
@@ -4180,18 +4180,16 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             case ActionTypeAfterVoucherGenerateOrUpdate.generateAndPrint: {
                 this.startLoader(false);
                 this.dialog.open(this.printVoucherModal, {
-                            width: '100%',
-                            maxWidth: '100%',
-                            maxHeight: '80vh'
-                        });
+                    width: '100%',
+                    maxHeight: '80vh'
+                });
                 break;
             }
             case ActionTypeAfterVoucherGenerateOrUpdate.generateAndSend: {
                 this.startLoader(false);
                 this.dialog.open(this.sendEmailModal, {
-                            width: '650px',
-                            maxWidth: '650px'
-                        });
+                    width: '650px'
+                });
                 break;
             }
             case ActionTypeAfterVoucherGenerateOrUpdate.updateSuccess: {
@@ -4849,12 +4847,12 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.doAction(ActionTypeAfterVoucherGenerateOrUpdate.updateSuccess);
             this.postResponseAction(this.invoiceNo);
             if (this.isPurchaseInvoice) {
-                // this.store.dispatch(this.purchaseRecordAction.getUpdatePurchaseRecordSuccessAction(
-                //     {
-                //         invoiceNumber: response.body?.number,
-                //         purchaseRecordUniqueName: response.body?.uniqueName,
-                //         mergedRecordUniqueName: (this.matchingPurchaseRecord) ? this.matchingPurchaseRecord.uniqueName : ''
-                //     }));
+                this.store.dispatch(this.purchaseRecordAction.getUpdatePurchaseRecordSuccessAction(
+                    {
+                        invoiceNumber: response.body?.number,
+                        purchaseRecordUniqueName: response.body?.uniqueName,
+                        mergedRecordUniqueName: (this.matchingPurchaseRecord) ? this.matchingPurchaseRecord.uniqueName : ''
+                    }));
             }
             this.depositAccountUniqueName = '';
             this.depositAmount = 0;
@@ -5913,9 +5911,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.dateChangeType = "voucher";
             this.dateChangeConfiguration = this.generalService.getDateChangeConfiguration(this.localeData, this.commonLocaleData, true);
             this.dialog.open(this.dateChangeConfirmationModel, {
-                        width: '650px',
-                        maxWidth: '650px'
-                    });
+                width: '650px',
+            });
         }
 
         if (this.voucherDateBeforeUpdate) {
@@ -6482,9 +6479,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                         this.matchingPurchaseRecord.entries.forEach((entry => delete entry?.uniqueName));
                     }
                     this.dialog.open(this.purchaseRecordConfirmationPopup, {
-                                width: 'auto',
-                                maxWidth: 'auto'
-                            });
+                        width: 'auto'
+                    });
                 } else {
                     this.matchingPurchaseRecord = null;
                     if (this.isUpdateMode) {
@@ -6778,9 +6774,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.isAdjustAmount = true;
         this.invFormData.voucherDetails.exchangeRate = this.exchangeRate;
         this.dialog.open(this.adjustPaymentModal, {
-                    width: '1000px',
-                    maxWidth: '1000px'
-                });
+            width: '1000px'
+        });
     }
 
     /**
@@ -8053,9 +8048,8 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
             this.updatedEntryIndex = entryIdx;
             this.dateChangeConfiguration = this.generalService.getDateChangeConfiguration(this.localeData, this.commonLocaleData, false);
             this.dialog.open(this.dateChangeConfirmationModel, {
-                        width: '650px',
-                        maxWidth: '650px'
-                    });
+                width: '650px',
+            });
         }
     }
 
@@ -8811,11 +8805,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         }
         this.rcmConfiguration = this.generalService.getRcmConfiguration(isChecked, this.commonLocaleData);
         let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
-                    width: '630px',
-                    maxWidth: '630px',
-                    data: {
+            width: '630px',
+            data: {
                 configuration: this.rcmConfiguration
-                }
+            }
         });
 
         dialogRef.afterClosed().subscribe(response => {
@@ -8918,11 +8911,10 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
     public deleteAttachementConfirmation(): void {
         this.attachmentDeleteConfiguration = this.generalService.getAttachmentDeleteConfiguration(this.localeData, this.commonLocaleData);
         let dialogRef = this.dialog.open(this.attachmentDeleteConfirmationModel, {
-                    width: '630px',
-                    maxWidth: '630px',
-                    data: {
+            width: '630px',
+            data: {
                 configuration: this.attachmentDeleteConfiguration
-                }
+            }
         });
 
         dialogRef.afterClosed().subscribe(response => {

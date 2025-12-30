@@ -595,7 +595,7 @@ export class InventoryAction {
     public getBulkStockListResponse(value: BaseResponse<any, any>): CustomActions {
         const data = value.status === 'error' ? value : value.body;
         if (data?.results && data?.results.length > 0) {
-            data.results.forEach((result: any) => {
+            (Array.isArray(data.results) ? data.results : []).forEach((result: any) => {
                 result.variantName = result?.variantName ? result.variantName : null,
                     result.variantUniqueName = result?.variantUniqueName ? result.variantUniqueName : null,
                     result.stockName = result?.stockName ? result.stockName : null,

@@ -678,7 +678,6 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
     public deleteVariantOption(index: number): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
                     width: '585px',
-                    maxWidth: '585px',
                     data: {
                 title: this.commonLocaleData?.app_confirmation,
                     body: this.localeData?.confirm_delete_option,
@@ -1087,7 +1086,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
                     isMandatory: obj.isMandatory
                 }
             });
-            updatedCustomFieldArray.forEach(field => {
+            (Array.isArray(updatedCustomFieldArray) ? updatedCustomFieldArray : []).forEach(field => {
                 if (field.isMandatory && (field.value === undefined || field.value === null)) {
                     this.isFormSubmitted = true;
                 }
@@ -1659,7 +1658,7 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
             if (response && response.status === 'success') {
                 this.companyCustomFields = response.body?.results;
                 if (!this.queryParams?.stockUniqueName) {
-                    this.stockForm.variants.forEach(variant => {
+                    (Array.isArray(this.stockForm.variants) ? this.stockForm.variants : []).forEach(variant => {
                         if (this.companyCustomFields?.length > 0) {
                             variant.customFields = cloneDeep(this.companyCustomFields);
                         }
@@ -1922,7 +1921,6 @@ export class StockCreateEditComponent implements OnInit, AfterViewInit, OnDestro
     public deleteStock(): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
                     width: '40%',
-                    maxWidth: '40%',
                     role: 'alertdialog',
                     ariaLabel: 'Confirm Delete Dialog',
                     data: {

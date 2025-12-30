@@ -456,7 +456,6 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
             this.statusModalRef = this.dialog.open(this.statusModal, {
                         panelClass: 'modal-dialog',
                         width: '1000px',
-                        maxWidth: '1000px'
                     });
         } else {
             this.toasterService.warningToast(this.localeData?.archive_notallowed);

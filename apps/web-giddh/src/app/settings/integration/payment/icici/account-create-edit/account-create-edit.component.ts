@@ -152,7 +152,7 @@ export class AccountCreateEditComponent implements OnInit, OnDestroy {
                     this.paymentAlertsUsersList.push({ index: index, label: this.commonLocaleData?.app_select_all, value: this.selectAllRecords });
                     index++;
 
-                    response.forEach(user => {
+                    (Array.isArray(response) ? response : []).forEach(user => {
                         this.paymentAlertsUsersList.push({ index: index, label: user.userName, value: user.userUniqueName });
                         this.usersList.push({ index: index, label: user.userName, value: user.userUniqueName });
                         index++;

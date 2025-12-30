@@ -15,7 +15,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 import { CompanyActions } from '../actions/company.actions';
 import { LedgerActions } from '../actions/ledger/ledger.actions';
 import { LoaderService } from '../loader/loader.service';
-import { cloneDeep, clone, filter, find, uniq, map as lodashMap, uniqBy } from '../lodash-optimized';
+import { clone, cloneDeep, filter, find, map as lodashMap, uniq, uniqBy } from '../lodash-optimized';
 import { AccountResponse, AccountResponseV2 } from '../models/api-models/Account';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { ICurrencyResponse, TaxResponse } from '../models/api-models/Company';
@@ -507,7 +507,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         if (this.isAdvanceSearchImplemented) {
             this.createLedgerBalance();
-            this.store.dispatch(this.ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName, this.trxRequest.from, this.trxRequest.to, this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q, this.advanceSearchRequest.branchUniqueName));
+            this.store.dispatch(this.ledgerActions.doAdvanceSearch(cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName, this.trxRequest.from, this.trxRequest.to, this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q, this.advanceSearchRequest.branchUniqueName));
         } else {
             this.getTransactionData();
         }
@@ -928,7 +928,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 }
 
                 if (checkedEntriesName && checkedEntriesName.length) {
-                    checkedEntriesName.forEach(f => {
+                    (Array.isArray(checkedEntriesName) ? checkedEntriesName : []).forEach(f => {
                         let duplicate = this.checkedTrxWhileHovering.some(s => s?.uniqueName === f?.uniqueName);
                         if (!duplicate) {
                             this.checkedTrxWhileHovering.push(f);
@@ -1315,7 +1315,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         if (bankTransactions?.length > 0) {
             let requestModel = [];
 
-            bankTransactions.forEach(transaction => {
+            (Array.isArray(bankTransactions) ? bankTransactions : []).forEach(transaction => {
                 if (transaction?.transactionId && transaction?.description) {
                     requestModel.push({
                         uniqueName: transaction.transactionId,
@@ -2108,7 +2108,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.entryTransactionData = { transaction, index, transactionsList }
         this.updateLedgerModalDialogRef = this.dialog.open(this.carousel, {
             panelClass: 'dialog-bg-transparent',
-            maxWidth: '100vw',
             role: 'alertdialog',
             ariaLabel: 'update'
         })
@@ -2228,7 +2227,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         this.advanceSearchDialogRef = this.dialog.open(this.advanceSearchModal, {
                     width: '980px',
-                    maxWidth: '980px',
                     role: 'alertdialog',
                     ariaLabel: 'advance'
                 });
@@ -2519,7 +2517,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
     }
 
     public onConfirmationBulkActionConfirmation() {
-        this.store.dispatch(this.ledgerActions.DeleteMultipleLedgerEntries(this.lc.accountUnq, _.cloneDeep(this.entryUniqueNamesForBulkAction)));
+        this.store.dispatch(this.ledgerActions.DeleteMultipleLedgerEntries(this.lc.accountUnq, cloneDeep(this.entryUniqueNamesForBulkAction)));
         this.entryUniqueNamesForBulkAction = [];
     }
 
@@ -2557,7 +2555,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                 this.isFileUploading = true;
                 this.loaderService.show();
 
-                this.commonService.uploadFile({ file: blob, fileName: file.name, entries: _.cloneDeep(this.entryUniqueNamesForBulkAction).join() }, true).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+                this.commonService.uploadFile({ file: blob, fileName: file.name, entries: cloneDeep(this.entryUniqueNamesForBulkAction).join() }, true).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.isFileUploading = false;
                     this.loaderService.hide();
                     if (response?.status === 'success') {
@@ -2574,12 +2572,12 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
     public onSelectInvoiceGenerateOption(isCombined: boolean, generateEInvoice?: boolean) {
         this.isCombined = isCombined;
-        this.entryUniqueNamesForBulkAction = _.uniq(this.entryUniqueNamesForBulkAction);
+        this.entryUniqueNamesForBulkAction = uniq(this.entryUniqueNamesForBulkAction);
         this.entryUniqueNamesForBulkActionDuplicateCopy = cloneDeep(this.entryUniqueNamesForBulkAction);
         if (this.voucherApiVersion === 2) {
-            this.store.dispatch(this.ledgerActions.GenerateBulkLedgerInvoice({ combined: isCombined }, { entryUniqueNames: _.cloneDeep(this.entryUniqueNamesForBulkAction), generateEInvoice: generateEInvoice }, 'ledger'));
+            this.store.dispatch(this.ledgerActions.GenerateBulkLedgerInvoice({ combined: isCombined }, { entryUniqueNames: cloneDeep(this.entryUniqueNamesForBulkAction), generateEInvoice: generateEInvoice }, 'ledger'));
         } else {
-            this.store.dispatch(this.ledgerActions.GenerateBulkLedgerInvoice({ combined: isCombined }, [{ accountUniqueName: this.lc.accountUnq, entries: _.cloneDeep(this.entryUniqueNamesForBulkAction), generateEInvoice: generateEInvoice }], 'ledger'));
+            this.store.dispatch(this.ledgerActions.GenerateBulkLedgerInvoice({ combined: isCombined }, [{ accountUniqueName: this.lc.accountUnq, entries: cloneDeep(this.entryUniqueNamesForBulkAction), generateEInvoice: generateEInvoice }], 'ledger'));
         }
     }
 
@@ -2692,13 +2690,13 @@ export class LedgerComponent implements OnInit, OnDestroy {
     public getAdvanceSearchTxn() {
         this.isAdvanceSearchImplemented = true;
         if (!this.todaySelected) {
-            this.store.dispatch(this.ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName,
+            this.store.dispatch(this.ledgerActions.doAdvanceSearch(cloneDeep(this.advanceSearchRequest.dataToSend), this.advanceSearchRequest.accountUniqueName,
                 dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT), dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT),
                 this.advanceSearchRequest.page, this.advanceSearchRequest.count, this.advanceSearchRequest.q, this.currentBranch?.uniqueName, this.advanceSearchRequest.paginationToken));
         } else {
             let from = this.advanceSearchRequest.dataToSend.bsRangeValue && this.advanceSearchRequest.dataToSend.bsRangeValue[0] ? dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[0]).format(GIDDH_DATE_FORMAT) : '';
             let to = this.advanceSearchRequest.dataToSend.bsRangeValue && this.advanceSearchRequest.dataToSend.bsRangeValue[1] ? dayjs(this.advanceSearchRequest.dataToSend.bsRangeValue[1]).format(GIDDH_DATE_FORMAT) : '';
-            this.store.dispatch(this.ledgerActions.doAdvanceSearch(_.cloneDeep(this.advanceSearchRequest.dataToSend),
+            this.store.dispatch(this.ledgerActions.doAdvanceSearch(cloneDeep(this.advanceSearchRequest.dataToSend),
                 this.advanceSearchRequest.accountUniqueName, from, to, this.advanceSearchRequest.page, this.advanceSearchRequest.count, null, this.currentBranch?.uniqueName, this.advanceSearchRequest.paginationToken)
             );
         }
@@ -3422,7 +3420,6 @@ export class LedgerComponent implements OnInit, OnDestroy {
         this.selectedItem = transaction;
         let dialogRef = this.dialog.open(templateRef, {
                     width: '70%',
-                    maxWidth: '70%',
                     height: '790px',
                     maxHeight: '90vh',
                     role: 'alertdialog',
@@ -3521,7 +3518,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     data.body.taxes ?? [],
                     data.body.groupTaxes ?? []);
                 if (txn?.taxesVm?.length) {
-                    txn?.taxesVm.forEach(tax => {
+                    (Array.isArray(txn?.taxesVm) ? txn?.taxesVm : []).forEach(tax => {
                         tax.isChecked = txn?.taxes?.includes(tax?.uniqueName);
                         tax.isDisabled = false;
                     });
@@ -3856,7 +3853,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
      * @memberof LedgerComponent
      */
     public closeAllAccountDropdown(): void {
-        this.dropdowns.forEach((alertInstance, i) => alertInstance?.closeDropdownPanel());
+        (Array.isArray(this.dropdowns) ? this.dropdowns : []).forEach((alertInstance, i) => alertInstance?.closeDropdownPanel());
     }
 
     /**
@@ -3963,7 +3960,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         let transactionsParticular: any;
         let sumOfTax = 0;
         if (res.transactions?.length) {
-            res.transactions.forEach(item => {
+            (Array.isArray(res.transactions) ? res.transactions : []).forEach(item => {
                 if (Object.hasOwn(item.particular, 'category') && (['income', 'expenses', 'assets'].includes(item.particular.category) || isJournalVoucher) && item.particular.uniqueName !== "roundoff") {
                     transactionsParticular = item.particular;
                     if (item.inventory) {
@@ -4013,7 +4010,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
 
         let discounts: LedgerDiscountClass[] = [this.lc.staticDefaultDiscount()]; // Default discount use for fixed value and percentage by pnput
         if (res?.discounts?.length) {
-            res.discounts.forEach(discount => {
+            (Array.isArray(res.discounts) ? res.discounts : []).forEach(discount => {
 
                 if (!discount?.discount?.uniqueName) {
                     discounts[0].isActive = true;
@@ -4177,7 +4174,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
         txn.showTaxationDiscountBox = false;
         // Take taxes of parent group and stock's own taxes
         if (txn?.taxesVm?.length) {
-            txn.taxesVm.forEach(tax => {
+            (Array.isArray(txn.taxesVm) ? txn.taxesVm : []).forEach(tax => {
                 tax.isChecked = txn?.taxes?.includes(tax?.uniqueName);
                 tax.isDisabled = false;
             });

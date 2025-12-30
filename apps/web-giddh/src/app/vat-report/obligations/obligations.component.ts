@@ -323,7 +323,6 @@ export class ObligationsComponent implements OnInit, OnDestroy {
         const dialogRef = this.dialog.open(FileReturnComponent, {
                     data: dataToSend,
                     width: '60vw',
-                    maxWidth: '60vw',
                     height: '80vh',
                     disableClose: true
                 });
@@ -354,7 +353,6 @@ export class ObligationsComponent implements OnInit, OnDestroy {
         this.dialog.open(ViewReturnComponent, {
                     data: dataToSend,
                     width: '60vw',
-                    maxWidth: '60vw',
                     height: '80vh',
                     disableClose: true
                 });

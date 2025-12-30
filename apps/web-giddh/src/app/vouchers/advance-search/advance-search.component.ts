@@ -386,13 +386,13 @@ export class AdvanceSearchComponent implements OnInit, OnDestroy {
 
         // Helper function to clear specific date fields
         const clearDateFields = (controlNames: string[]): void => {
-            controlNames.forEach(controlName => {
+            (Array.isArray(controlNames) ? controlNames : []).forEach(controlName => {
                 this.searchForm.get(controlName)?.patchValue(null);
             });
         };
 
         // Process each date control based on the type
-        allDateControlNames.forEach(controlName => {
+        (Array.isArray(allDateControlNames) ? allDateControlNames : []).forEach(controlName => {
             switch (this.type) {
                 case 'drcr':
                 case 'invoice':

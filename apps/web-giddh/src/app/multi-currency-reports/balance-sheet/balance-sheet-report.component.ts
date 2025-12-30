@@ -54,7 +54,7 @@ export class BalanceSheetReportComponent implements AfterViewInit, OnDestroy {
                 let data = prepareBalanceSheetData(cloneDeep(response));
                 if (data && data.liabilities) {
                     this.initData(data.liabilities);
-                    data.liabilities.forEach(childGroup => {
+                    (Array.isArray(data.liabilities) ? data.liabilities : []).forEach(childGroup => {
                         childGroup['isVisible'] = true;
                         childGroup['isCreated'] = true;
                         childGroup['isIncludedInSearch'] = true;
@@ -62,7 +62,7 @@ export class BalanceSheetReportComponent implements AfterViewInit, OnDestroy {
                 }
                 if (data && data.assets) {
                     this.initData(data.assets);
-                    data.assets.forEach(childGroup => {
+                    (Array.isArray(data.assets) ? data.assets : []).forEach(childGroup => {
                         childGroup['isVisible'] = true;
                         childGroup['isCreated'] = true;
                         childGroup['isIncludedInSearch'] = true;
@@ -83,11 +83,11 @@ export class BalanceSheetReportComponent implements AfterViewInit, OnDestroy {
      * @memberof BalanceSheetReportComponent
      */
     public initData(groupList: ChildGroup[]): void {
-        groupList.forEach((childGroup: ChildGroup) => {
+        (Array.isArray(groupList) ? groupList : []).forEach((childGroup: ChildGroup) => {
             childGroup['isVisible'] = false;
             childGroup['isCreated'] = false;
             childGroup['isIncludedInSearch'] = true;
-            childGroup.accounts.forEach((account: Account) => {
+            (Array.isArray(childGroup.accounts) ? childGroup.accounts : []).forEach((account: Account) => {
                 account['isIncludedInSearch'] = true;
                 account['isCreated'] = false;
                 account['isVisible'] = false;

@@ -142,7 +142,7 @@ export class BankAccountsComponent implements OnInit, OnDestroy {
 
         this.homeComponentStore.profile$.pipe(takeUntil(this.destroyed$)).subscribe((profile) => {
             if (profile?.userEntityRoles) {
-                profile.userEntityRoles.forEach(role => {
+                (Array.isArray(profile.userEntityRoles) ? profile.userEntityRoles : []).forEach(role => {
                     const scopes = role.role.scopes;
                     if (scopes && scopes.some(scope => scope.name === 'INTEGRATION')) {
                         this.hasIntegrationScope = true;

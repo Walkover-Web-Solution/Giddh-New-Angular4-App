@@ -620,7 +620,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                 let tempParams = lastState.substr(lastState.lastIndexOf('?'));
                 let urlParams = new URLSearchParams(tempParams);
                 let queryParams: any = {};
-                urlParams.forEach((val, key) => {
+                (Array.isArray(urlParams) ? urlParams : []).forEach((val, key) => {
                     queryParams[key] = val;
                 });
 
@@ -768,13 +768,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         if (!this.isErrorMessageListenerAdded) {
             this.isErrorMessageListenerAdded = true;
             const liabilities = this.elementRef.nativeElement.querySelectorAll('.liabilities');
-            liabilities.forEach((link: HTMLElement) => {
+            (Array.isArray(liabilities) ? liabilities : []).forEach((link: HTMLElement) => {
                 this.renderer.listen(link, 'click', () => {
                     this.goToLiabilities();
                 });
             });
             const obligation = this.elementRef.nativeElement.querySelectorAll('.obligations');
-            obligation.forEach((link: HTMLElement) => {
+            (Array.isArray(obligation) ? obligation : []).forEach((link: HTMLElement) => {
                 this.renderer.listen(link, 'click', () => {
                     this.goToObligation();
                 });
@@ -896,7 +896,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
                         };
 
                         if (!this.isTodaysDateSelected) {
-                            response.financialYears.forEach(key => {
+                            (Array.isArray(response.financialYears) ? response.financialYears : []).forEach(key => {
                                 if (this.selectedDateRange?.endDate >= dayjs(key.financialYearStarts, GIDDH_DATE_FORMAT) && this.selectedDateRange?.endDate <= dayjs(key.financialYearEnds, GIDDH_DATE_FORMAT)) {
                                     activeFinancialYear = {
                                         uniqueName: key?.uniqueName,
@@ -936,7 +936,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             } else {
                 this.asideHelpSupportDialogRef = this.dialog.open(this.asideHelpSupportMenuStateRef, {
                             width: '1000px',
-                            maxWidth: '1000px',
                             panelClass: 'aside-help-panel',
                             hasBackdrop: false,
                             position: {
@@ -1072,7 +1071,6 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         this.manageGroupsAccountsDialogRef = this.dialog.open(ManageGroupsAccountsComponent, {
             width: '100%',
             height: '100%',
-            maxWidth: '100vw',
             maxHeight: '100vh',
             disableClose: true
         });
@@ -1118,7 +1116,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
         let elementClass = e?.target?.className?.toString();
         let validElement = true;
 
-        excludeElements.forEach(className => {
+        (Array.isArray(excludeElements) ? excludeElements : []).forEach(className => {
             if (elementClass?.indexOf(className) > -1) {
                 validElement = false;
             }

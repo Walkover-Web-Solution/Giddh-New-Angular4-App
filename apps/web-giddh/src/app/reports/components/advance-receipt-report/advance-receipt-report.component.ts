@@ -670,7 +670,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                 this.pageConfiguration.totalItems = response.body.totalItems;
                 this.allReceipts = (this.voucherApiVersion === 2) ? response.body.items : response.body.results;
 
-                this.allReceipts.forEach(receipt => {
+                (Array.isArray(this.allReceipts) ? this.allReceipts : []).forEach(receipt => {
                     let isSeleted = this.selectedReceipts?.some(selectedReceipt => selectedReceipt === receipt?.uniqueName);
                     if (isSeleted) {
                         receipt.isSelected = true;
@@ -834,7 +834,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                 return receipt;
             });
         } else {
-            this.allReceipts.forEach(receipt => {
+            (Array.isArray(this.allReceipts) ? this.allReceipts : []).forEach(receipt => {
                 receipt.isSelected = true;
                 this.selectedReceipts.push(receipt?.uniqueName);
             });
@@ -924,7 +924,7 @@ export class AdvanceReceiptReportComponent implements AfterViewInit, OnDestroy, 
                 if (response.status === 'success') {
                     this.selectedReceipts = [];
                     this.allReceiptsSelected = false;
-                    this.allReceipts.forEach((item) => {
+                    (Array.isArray(this.allReceipts) ? this.allReceipts : []).forEach((item) => {
                         item.isSelected = false;
                     });
                     let blob = this.generalService.base64ToBlob(response.body.data, 'application/xls', 512);

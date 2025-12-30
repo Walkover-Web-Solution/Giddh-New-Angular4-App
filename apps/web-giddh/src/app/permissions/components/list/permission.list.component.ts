@@ -137,7 +137,6 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
         this.permissionConfirmationDialogRef = this.dialog.open(this.permissionConfirmationDialog, {
                     panelClass: 'modal-dialog',
                     width: '600px',
-                    maxWidth: '600px'
                 });
     }
 
@@ -165,7 +164,6 @@ export class PermissionListComponent implements OnInit, AfterViewInit, OnDestroy
         this.permissionDialogRef = this.dialog.open(this.permissiomDialog, {
                     panelClass: 'modal-dialog',
                     width: '650px',
-                    maxWidth: '650px'
                 });
     }
 }

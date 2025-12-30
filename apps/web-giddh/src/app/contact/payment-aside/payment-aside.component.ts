@@ -196,7 +196,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.integratedBankList$.pipe(takeUntil(this.destroyed$)).subscribe((bankList: IntegratedBankList[]) => {
             this.selectIntegratedBankList = [];
             if (bankList && bankList.length) {
-                bankList.forEach(item => {
+                (Array.isArray(bankList) ? bankList : []).forEach(item => {
                     if (item && !item.errorMessage) {
                         item.bankName = item.bankName ? item.bankName : "";
                         this.selectIntegratedBankList.push({ label: item.bankName, value: item.uniqueName, additional: item });
@@ -212,7 +212,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         this.selectedAccForBulkPayment = this.selectedAccForBulkPayment?.filter((data, index) => {
             return this.selectedAccForBulkPayment?.indexOf(data) === index;
         });
-        this.selectedAccForBulkPayment.forEach(item => {
+        (Array.isArray(this.selectedAccForBulkPayment) ? this.selectedAccForBulkPayment : []).forEach(item => {
             this.addAccountTransactionsFormObject(item);
         });
         this.selectedAccForBulkPayment.map(item => {
@@ -530,7 +530,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public prepareRequestObject(): void {
         this.requestObjectToGetOTP.bankPaymentTransactions = [];
         this.requestObjectToGetOTP.totalAmount = String(this.totalSelectedAccountAmount);
-        this.selectedAccForBulkPayment.forEach(item => {
+        (Array.isArray(this.selectedAccForBulkPayment) ? this.selectedAccForBulkPayment : []).forEach(item => {
             let transaction: BankTransactionForOTP = {
                 amount: '',
                 remarks: '',

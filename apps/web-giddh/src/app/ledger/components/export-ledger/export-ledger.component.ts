@@ -21,6 +21,7 @@ import { saveAs } from 'file-saver';
 import { IOption } from '../../../app.constant';
 import { CopyType } from '../../../shared/Enums/common.enum';
 import { TributeConfig } from '../../../shared/helpers/directives/tributeMention/tributeType';
+import { cloneDeep } from '../../../lodash-optimized';
 @Component({
     selector: 'export-ledger',
     templateUrl: './export-ledger.component.html',
@@ -150,7 +151,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         this.fileType = this.exportRequest.ledgerView ? 'XLSX' : 'CSV';
 
         if (this.permissionDataService.getData && this.permissionDataService.getData.length > 0) {
-            this.permissionDataService.getData.forEach(f => {
+            (Array.isArray(this.permissionDataService.getData) ? this.permissionDataService.getData : []).forEach(f => {
                 if (f.name === 'LEDGER') {
                     let isAdmin = f.permissions?.filter((prm) => prm.code === 'UPDT');
                     this.emailTypeSelected = isAdmin?.length ? 'admin-detailed' : 'view-detailed';
@@ -164,7 +165,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
 
         if (this.inputData?.advanceSearchRequest?.dataToSend?.bsRangeValue) {
             let dateObj = this.inputData?.advanceSearchRequest?.dataToSend?.bsRangeValue;
-            let universalDate = _.cloneDeep(dateObj);
+            let universalDate = cloneDeep(dateObj);
             this.selectedDateRange = { startDate: dateObj[0], endDate: dateObj[1] };
             this.selectedDateRangeUi = dateObj[0].format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dateObj[1].format(GIDDH_NEW_DATE_FORMAT_UI);
             this.fromDate = universalDate[0].format(GIDDH_DATE_FORMAT);
@@ -172,7 +173,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         } else {
             this.universalDate$.pipe(take(1)).subscribe(dateObj => {
                 if (dateObj) {
-                    let universalDate = _.cloneDeep(dateObj);
+                    let universalDate = cloneDeep(dateObj);
                     this.selectedDateRange = { startDate: dayjs(dateObj[0]), endDate: dayjs(dateObj[1]) };
                     this.selectedDateRangeUi = dayjs(dateObj[0]).format(GIDDH_NEW_DATE_FORMAT_UI) + " - " + dayjs(dateObj[1]).format(GIDDH_NEW_DATE_FORMAT_UI);
                     this.fromDate = dayjs(universalDate[0]).format(GIDDH_DATE_FORMAT);
@@ -209,7 +210,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
         exportRequest.from = this.fromDate;
         exportRequest.to = this.toDate;
 
-        let body = _.cloneDeep(this.inputData?.advanceSearchRequest);
+        let body = cloneDeep(this.inputData?.advanceSearchRequest);
         if (body && body.dataToSend) {
             body.dataToSend.type = this.emailTypeSelected;
             body.dataToSend.balanceTypeAsSign = this.balanceTypeAsSign;
@@ -263,7 +264,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
                 if (this.exportRequest.attachmentExport) {
                     let fileNameFormat = this.selectedFormatList?.trim();
                     if (fileNameFormat?.length) {
-                        this.fileFormatList.forEach(format => {
+                        (Array.isArray(this.fileFormatList) ? this.fileFormatList : []).forEach(format => {
                             const pattern = new RegExp(`\\{${format.value}\\}`, 'g');
                             fileNameFormat = fileNameFormat.replace(pattern, `\${${format.key}}`);
                         });
@@ -411,7 +412,7 @@ export class ExportLedgerComponent implements OnInit, OnDestroy {
      */
     public getFileFormat() {
         let fileNameFormat = this.selectedFormatList;
-        this.fileFormatList.forEach((format) => {
+        (Array.isArray(this.fileFormatList) ? this.fileFormatList : []).forEach((format) => {
             if (this.selectedFormatList.includes(`{${format.value}}`)) {
                 fileNameFormat = fileNameFormat.replaceAll(`{${format.value}}`, format.showValue);
             }

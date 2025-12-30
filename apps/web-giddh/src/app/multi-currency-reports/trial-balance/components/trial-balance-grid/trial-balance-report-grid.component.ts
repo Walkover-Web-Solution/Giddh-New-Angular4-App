@@ -82,7 +82,7 @@ export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDes
 
     /**
      * Initializes the component
-     * 
+     *
      * @returns {void}
      * @memberof TrialBalanceReportGridComponent
      */
@@ -114,12 +114,12 @@ export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDes
                     this.toggleGroupVisibility(this.data$.groupDetails, changes.expandAll.currentValue);
                     if (this.data$) {
                         // always make first level visible ....
-                        this.data$.groupDetails.forEach((group: ChildGroup) => {
+                        (Array.isArray(this.data$) ? this.data$ : []).forEach((group: ChildGroup) => {
                             if (group.isIncludedInSearch) {
                                 group.isVisible = true;
                                 group.isCreated = true;
                                 group.isOpen = false;
-                                group.accounts.forEach((account: Account) => {
+                                (Array.isArray(group.accounts) ? group.accounts : []).forEach((account: Account) => {
                                     if (account.isIncludedInSearch) {
                                         account.isVisible = false;
                                         account.isCreated = false;
@@ -145,7 +145,7 @@ export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDes
 
     /**
      * Triggers change detection for the component.
-     * 
+     *
      * @returns {void}
      * @memberof TrialBalanceReportComponent
      */
@@ -155,7 +155,7 @@ export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDes
 
     /**
      * Provides a unique identifier for each item in a list for efficient rendering in Angular.
-     * 
+     *
      * @param {number} index - The index of the current item
      * @param {ChildGroup} item - The current item in the list
      * @returns {string} The unique identifier of the item
@@ -181,7 +181,7 @@ export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDes
 
     /**
      * Handles clicks outside the search input and clears the search input if it's empty.
-     * 
+     *
      * @param {Event} event - The event triggered by the click action
      * @param {ElementRef} element - The reference element to check if the click occurred inside it
      * @returns {void}

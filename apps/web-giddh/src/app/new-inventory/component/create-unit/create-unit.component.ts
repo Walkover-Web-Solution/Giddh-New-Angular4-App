@@ -2,23 +2,18 @@ import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angu
 import { debounceTime, take, takeUntil } from 'rxjs/operators';
 import { InventoryService } from '../../../services/inventory.service';
 import { ReplaySubject } from 'rxjs';
-// import { StockUnits } from '../../../inventory/components/custom-stock-components/stock-unit';
-// Placeholder for missing StockUnits enum
-const StockUnits = {
-    // Add placeholder values as needed
-} as any;
+import { StockUnits } from '../../../inventory/components/custom-stock-components/stock-unit';
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { ToasterService } from '../../../services/toaster.service';
+import { cloneDeep } from '../../../lodash-optimized';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmModalComponent } from '../../../theme/new-confirm-modal/confirm-modal.component';
-import { cloneDeep, filter, forEach, get, includes, map, set } from '../../../lodash-optimized';
 
 @Component({
     selector: 'create-unit',
-
     templateUrl: './create-unit.component.html',
-    standalone: false,
-    styleUrls: ['./create-unit.component.scss']
+    styleUrls: ['./create-unit.component.scss'],
+    standalone:false
 })
 export class CreateNewUnitComponent implements OnInit, OnDestroy {
     /** Holds unit group details */
@@ -340,15 +335,14 @@ export class CreateNewUnitComponent implements OnInit, OnDestroy {
      */
     public deleteUnit(): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
-                    width: '40%',
-                    maxWidth: '40%',
-                    data: {
+            width: '40%',
+            data: {
                 title: this.commonLocaleData?.app_confirmation,
-                    body: this.localeData?.delete_unit_message,
-                    permanentlyDeleteMessage: this.commonLocaleData?.app_permanently_delete_message,
-                    ok: this.commonLocaleData?.app_yes,
-                    cancel: this.commonLocaleData?.app_no
-                }
+                body: this.localeData?.delete_unit_message,
+                permanentlyDeleteMessage: this.commonLocaleData?.app_permanently_delete_message,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no
+            }
         });
 
         dialogRef.afterClosed().subscribe(response => {

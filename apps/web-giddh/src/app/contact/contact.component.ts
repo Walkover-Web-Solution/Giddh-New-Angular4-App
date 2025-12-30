@@ -19,7 +19,7 @@ import { saveAs } from "file-saver";
 import * as dayjs from "dayjs";
 import { combineLatest, BehaviorSubject, Observable, of as observableOf, ReplaySubject, Subject } from "rxjs";
 import { debounceTime, distinctUntilChanged, filter, take, takeUntil } from "rxjs/operators";
-import { cloneDeep, find, map as lodashMap, uniq } from "../../app/lodash-optimized";
+import { cloneDeep, find, map as lodashMap, uniq  } from '../lodash-optimized';
 import { CommonActions } from "../actions/common.actions";
 import { CompanyActions } from "../actions/company.actions";
 import { GeneralActions } from "../actions/general/general.actions";
@@ -1614,7 +1614,6 @@ export class ContactComponent implements OnInit, OnDestroy {
         if (this.selectedAccountsList?.length || this.selectedAccForPayment) {
             this.dialog.open(this.bulkPaymentModalRef, {
                         width: '980px',
-                        maxWidth: '980px',
                         panelClass: 'contact-modal'
                     });
         }

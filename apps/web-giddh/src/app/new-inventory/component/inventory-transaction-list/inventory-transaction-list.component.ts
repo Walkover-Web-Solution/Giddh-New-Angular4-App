@@ -381,7 +381,7 @@ export class InventoryTransactionListComponent implements OnInit, OnDestroy {
      */
     public resetFilter(): void {
         this.showAccountSearchInput = false;
-        this.voucherTypes.forEach(response => {
+        (Array.isArray(this.voucherTypes) ? this.voucherTypes : []).forEach(response => {
             response.checked = false;
         });
         this.searchAccountName.reset();

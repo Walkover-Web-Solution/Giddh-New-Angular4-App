@@ -76,7 +76,7 @@ export class UnitMappingComponent implements OnInit, OnDestroy {
                 this.unitsArray = [];
                 let giddhUnits = resp[1];
                 let gstUnit = resp[0]?.body;
-                giddhUnits.forEach((res: any) => {
+                (Array.isArray(giddhUnits) ? giddhUnits : []).forEach((res: any) => {
                     this.unitsArray.push({ giddhUnit: res?.code, mappedGstUnit: gstUnit[res?.code], giddhUnitName: res?.name });
                 });
                 this.changeDetectionService.triggerChangeDetection(this.changeDetection, this.ngZone);

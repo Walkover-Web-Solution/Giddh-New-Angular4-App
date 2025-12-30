@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { get } from './lodash-optimized';
+import { get  } from './lodash-optimized';
 
 @Injectable({
     providedIn: 'root'

@@ -241,7 +241,6 @@ export class AllGiddhItemComponent implements OnInit, OnDestroy {
                 this.subMenuItems = subitem.submenu;
                 this.dialog.open(this.dialogBox, {
                             width: '630px',
-                            maxWidth: '630px'
                         });
             } else {
                 if ((subitem?.additional?.queryParams?.tabIndex >= 0) && subitem?.additional?.queryParams?.tab) {

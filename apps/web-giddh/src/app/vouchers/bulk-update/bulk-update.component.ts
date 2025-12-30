@@ -224,7 +224,7 @@ export class BulkUpdateComponent implements OnInit, OnDestroy {
                 this.checkDefaultTemplateSignature(this.defaultTemplates);
 
                 this.templatesList = [];
-                response.forEach(tmpl => {
+                (Array.isArray(response) ? response : []).forEach(tmpl => {
                     this.templatesList.push({ label: tmpl.name, value: tmpl?.uniqueName });
                 });
             }

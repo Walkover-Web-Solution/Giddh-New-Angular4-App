@@ -24,7 +24,7 @@ import { debounceTime, map, take, takeUntil, filter as rxjsFilter, tap } from 'r
 import { LedgerActions } from '../../../actions/ledger/ledger.actions';
 import { ConfirmationModalConfiguration } from '../../../theme/confirmation-modal/confirmation-modal.interface';
 import { LoaderService } from '../../../loader/loader.service';
-import { cloneDeep, filter as lodashFilter, last, map as lodashMap, orderBy, uniqBy } from '../../../lodash-optimized';
+import { cloneDeep, filter as lodashFilter, last, map as lodashMap, orderBy, union, uniqBy } from '../../../lodash-optimized';
 import { AccountResponse } from '../../../models/api-models/Account';
 import { AdjustAdvancePaymentModal, VoucherAdjustments } from '../../../models/api-models/AdvanceReceiptsAdjust';
 import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
@@ -459,7 +459,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
         this.vm.companyTaxesList$.pipe(take(1)).subscribe(taxes => {
             if (taxes) {
-                taxes.forEach((tax) => {
+                (Array.isArray(taxes) ? taxes : []).forEach((tax) => {
                     if (!this.allowedSelectionOfAType.type.includes(tax.taxType)) {
                         this.allowedSelectionOfAType.type.push(tax.taxType);
                     }
@@ -794,7 +794,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public showDeleteAttachedFileModal() {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
                     width: '630px',
-                    maxWidth: '630px',
                     data: {
                 title: this.commonLocaleData?.app_delete,
                     body: this.localeData?.confirm_delete_file,
@@ -813,7 +812,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public showDeleteEntryModal() {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
                     width: '630px',
-                    maxWidth: '630px',
                     data: {
                 title: this.commonLocaleData?.app_delete,
                     body: this.localeData?.confirm_delete_entry,
@@ -941,7 +939,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         });
 
         if (requestObj?.voucherAdjustments?.adjustments?.length > 0) {
-            requestObj.voucherAdjustments.adjustments.forEach((adjustment: any) => {
+            (Array.isArray(requestObj.voucherAdjustments.adjustments) ? requestObj.voucherAdjustments.adjustments : []).forEach((adjustment: any) => {
                 delete adjustment.balanceDue;
             });
         }
@@ -1227,7 +1225,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
                     }
                 }
-                this.invoiceList = _.uniqBy(this.invoiceList, 'value');
+                this.invoiceList = uniqBy(this.invoiceList, 'value');
                 this.invoiceList$ = observableOf(this.invoiceList);
                 this.selectedInvoice = (invoiceSelected) ? invoiceSelected.label : '';
             } else if (request.number) {
@@ -1413,7 +1411,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
         let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
                     width: '630px',
-                    maxWidth: '630px',
                     data: {
                 configuration: this.rcmConfiguration
                 }
@@ -1458,7 +1455,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             if (this.isAdjustedInvoicesWithAdvanceReceipt && this.vm.selectedLedger && this.vm.selectedLedger.voucherGeneratedType === VoucherTypeEnum.receipt) {
                 this.advanceReceiptRemoveDialogRef = this.dialog.open(ConfirmModalComponent, {
                             width: '630px',
-                            maxWidth: '630px',
                             data: {
                         title: this.commonLocaleData?.app_confirmation,
                             body: this.localeData?.confirm_proceed,
@@ -1750,7 +1746,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public adjustedInvoiceAmountChange(): void {
         if (this.vm.selectedLedger?.voucherAdjustments?.adjustments) {
             let totalAmount: number = 0;
-            this.vm.selectedLedger.voucherAdjustments.adjustments.forEach(item => {
+            (Array.isArray(this.vm.selectedLedger.voucherAdjustments.adjustments) ? this.vm.selectedLedger.voucherAdjustments.adjustments : []).forEach(item => {
                 totalAmount = Number(totalAmount) + (item.adjustmentAmount ? Number(item.adjustmentAmount.amountForAccount) : 0);
             });
             this.vm.selectedLedger.voucherAdjustments.totalAdjustmentAmount = totalAmount;
@@ -1780,7 +1776,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
     public adjustedReceiptsAmountChange(): void {
         if (this.vm.selectedLedger?.voucherAdjustments?.adjustments) {
             let totalAmount: number = 0;
-            this.vm.selectedLedger.voucherAdjustments.adjustments.forEach(item => {
+            (Array.isArray(this.vm.selectedLedger.voucherAdjustments.adjustments) ? this.vm.selectedLedger.voucherAdjustments.adjustments : []).forEach(item => {
                 totalAmount = Number(totalAmount) + (item.adjustmentAmount ? Number(item.adjustmentAmount.amountForAccount) : 0);
             });
             this.totalAdjustedAmount = totalAmount;
@@ -1864,7 +1860,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         if (event && event.adjustPaymentData && event.adjustVoucherData) {
             const adjustments = cloneDeep(event.adjustVoucherData.adjustments);
             if (adjustments) {
-                adjustments.forEach(adjustment => {
+                (Array.isArray(adjustments) ? adjustments : []).forEach(adjustment => {
                     adjustment.voucherNumber = this.generalService.getVoucherNumberLabel(adjustment?.voucherType, adjustment?.voucherNumber, this.commonLocaleData);
                 });
 
@@ -1936,7 +1932,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             this.vm.selectedLedger.voucherAdjustments = cloneDeep(this.originalVoucherAdjustments);
         }
         if (this.vm.selectedLedger?.voucherAdjustments?.adjustments) {
-            this.vm.selectedLedger.voucherAdjustments.adjustments.forEach(adjustment => {
+            (Array.isArray(this.vm.selectedLedger.voucherAdjustments.adjustments) ? this.vm.selectedLedger.voucherAdjustments.adjustments : []).forEach(adjustment => {
                 if (!adjustment.balanceDue) {
                     adjustment.balanceDue = cloneDeep(adjustment.adjustmentAmount);
                 } else if (!adjustment.adjustmentAmount) {
@@ -1945,7 +1941,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
             });
         }
         customerUniqueName.push(this.baseAcc);
-        customerUniqueName = _.union(customerUniqueName);
+        customerUniqueName = union(customerUniqueName);
 
         let tcsTotal = (this.vm.selectedLedger.otherTaxType === "tcs") ? this.vm.selectedLedger.otherTaxesSum : 0;
         let tdsTotal = (this.vm.selectedLedger.otherTaxType === "tds") ? this.vm.selectedLedger.otherTaxesSum : 0;
@@ -1992,7 +1988,6 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         }
         this.adjustmentDialogRef = this.dialog.open(this.adjustPaymentModal, {
                     width: '980px',
-                    maxWidth: '980px',
                     panelClass: 'container-modal-class'
                 });
     }
@@ -2053,7 +2048,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
      */
     private formatAdjustments(): void {
         if (this.vm.selectedLedger?.voucherAdjustments?.adjustments?.length) {
-            this.vm.selectedLedger.voucherAdjustments.adjustments.forEach(adjustment => {
+            (Array.isArray(this.vm.selectedLedger.voucherAdjustments.adjustments) ? this.vm.selectedLedger.voucherAdjustments.adjustments : []).forEach(adjustment => {
                 adjustment.voucherNumber = this.generalService.getVoucherNumberLabel(adjustment.voucherType, adjustment.voucherNumber, this.commonLocaleData);
                 adjustment.accountCurrency = adjustment.accountCurrency ?? adjustment.currency ?? { symbol: this.activeCompany?.baseCurrencySymbol, code: this.activeCompany?.baseCurrency };
             });
@@ -2357,7 +2352,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
 
                 const unitRates = cloneDeep(this.vm.selectedLedger.unitRates);
                 if (unitRates && unitRates.length) {
-                    unitRates.forEach(rate => rate.code = rate?.stockUnitCode);
+                    (Array.isArray(unitRates) ? unitRates : []).forEach(rate => rate.code = rate?.stockUnitCode);
                     t.unitRate = unitRates;
                 } else {
                     t.unitRate = [{
@@ -2515,9 +2510,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
         this.selectedItem = this.vm.selectedLedger;
         this.selectedItem['isAttachment'] = isAttachment;
         let dialogRef = this.dialog.open(templateRef, {
-                    width: '70%',
-                    maxWidth: '70%',
-                    height: '650px'
+                    width: '70%'
                 });
 
         dialogRef.afterClosed().subscribe(() => {
@@ -2699,7 +2692,7 @@ export class UpdateLedgerEntryPanelComponent implements OnInit, AfterViewInit, O
                         this.vm.discountArray = this.vm.discountArray?.map((item, index) => { if (index > 0) { item.isActive = false; } return item; });
 
                         if (this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length) {
-                            this.accountOtherApplicableDiscount.forEach(element => {
+                            (Array.isArray(this.accountOtherApplicableDiscount) ? this.accountOtherApplicableDiscount : []).forEach(element => {
                                 this.vm.discountArray = this.vm.discountArray?.map(item => {
                                     if (element?.uniqueName === item?.discountUniqueName) {
                                         item.isActive = true;

@@ -139,7 +139,7 @@ export class OutwardNoteComponent implements OnChanges {
                 inventoryUser
             });
         } else {
-            items.controls.forEach(c => c?.patchValue({ ...c.value, inventoryUser }));
+            (Array.isArray(items.controls) ? items.controls : []).forEach(c => c?.patchValue({ ...c.value, inventoryUser }));
         }
     }
 
@@ -152,7 +152,7 @@ export class OutwardNoteComponent implements OnChanges {
             const control = items.at(index);
             control?.patchValue({ ...control.value, stock, stockUnit });
         } else {
-            items.controls.forEach(c => c?.patchValue({ ...c.value, stock, stockUnit }));
+            (Array.isArray(items.controls) ? items.controls : []).forEach(c => c?.patchValue({ ...c.value, stock, stockUnit }));
         }
     }
 

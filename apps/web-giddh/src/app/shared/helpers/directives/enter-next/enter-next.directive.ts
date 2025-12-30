@@ -108,7 +108,7 @@ export class EnterNextDirective implements OnDestroy, AfterViewInit {
                 if (matAutocomplete) {
                     // Listen for option selection events on the autocomplete
                     const options = matAutocomplete.querySelectorAll('mat-option');
-                    options.forEach(option => {
+                    (Array.isArray(options) ? options : []).forEach(option => {
                         option.addEventListener('click', () => {
                             setTimeout(() => {
                                 this.focusNextElement();

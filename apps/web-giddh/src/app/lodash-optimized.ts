@@ -91,7 +91,7 @@ const {
     concat = (...arrays: any[]) => [].concat(...arrays),
     difference = (arr: any[], ...vals: any[]) => arr.filter(x => !vals.flat().includes(x)),
     differenceBy = (arr: any[], vals: any[], key: string) => arr.filter(x => !vals.some(v => v[key] === x[key])),
-    each = (arr: any[], fn: any) => arr.forEach(fn),
+    each = (arr: any[], fn: any) => (Array.isArray(arr) ? arr : []).forEach(fn),
     filter = (arr: any[], fn: any) => arr.filter(fn),
     find = (arr: any[], fn: any) => arr.find(fn),
     findIndex = (arr: any[], fn: any) => arr.findIndex(fn),
@@ -126,7 +126,7 @@ const {
     omit = (obj: any, keys: any) => {
         const result = { ...obj };
         const keysArray = Array.isArray(keys) ? keys : [keys];
-        keysArray.forEach(key => delete result[key]);
+        (Array.isArray(keysArray) ? keysArray : []).forEach(key => delete result[key]);
         return result;
     },
     orderBy = (collection: any[], iteratees: any, orders?: any) => {
@@ -234,7 +234,7 @@ const {
     },
     pick = (obj: any, keys: string[]) => {
         const result: any = {};
-        keys.forEach(key => {
+        (Array.isArray(keys) ? keys : []).forEach(key => {
             if (key in obj) result[key] = obj[key];
         });
         return result;

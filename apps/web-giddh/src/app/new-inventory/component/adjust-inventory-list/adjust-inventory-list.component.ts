@@ -636,7 +636,6 @@ export class AdjustInventoryListComponent implements OnInit, OnDestroy {
 
         let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
                     width: '630px',
-                    maxWidth: '630px',
                     data: {
                 configuration: this.inventoryAdjustConfirmationConfiguration
                 }

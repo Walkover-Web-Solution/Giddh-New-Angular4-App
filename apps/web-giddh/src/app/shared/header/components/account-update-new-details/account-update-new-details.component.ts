@@ -47,7 +47,7 @@ import { DROPDOWN_ITEMS_COUNT_LIMIT, ASIDE_PANE_CONFIG, BranchHierarchyType, EMA
 import { InvoiceService } from 'apps/web-giddh/src/app/services/invoice.service';
 import { SearchService } from 'apps/web-giddh/src/app/services/search.service';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
-import { clone, cloneDeep, differenceBy, flattenDeep, isEqual } from 'apps/web-giddh/src/app/lodash-optimized';
+import { clone, cloneDeep, differenceBy, flattenDeep, isEqual } from '../../../../lodash-optimized';
 import { SettingsDiscountService } from 'apps/web-giddh/src/app/services/settings.discount.service';
 import { CustomFieldsService } from 'apps/web-giddh/src/app/services/custom-fields.service';
 import { FieldTypes } from 'apps/web-giddh/src/app/custom-fields/custom-fields.constant';
@@ -426,7 +426,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 let currentEmail = change.get('email')?.value;
                 let emailDuplicateFound = false;
                 if (currentEmail !== "" && currentEmail) {
-                    mappings.controls.forEach((control, i) => {
+                    (Array.isArray(mappings.controls) ? mappings.controls : []).forEach((control, i) => {
                         if (lastEmailOccurrenceIndex === -1 && index !== i && control.get('email')?.value === currentEmail) {
                             lastEmailOccurrenceIndex = index;
                             change.get('email').setErrors({ duplicate: true });
@@ -446,7 +446,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 let currentContactNo = change.get('contactNo')?.value;
                 let contactDuplicateFound = false;
                 if (currentContactNo !== "" && currentContactNo) {
-                    mappings.controls.forEach((control, i) => {
+                    (Array.isArray(mappings.controls) ? mappings.controls : []).forEach((control, i) => {
                         if (lastContactOccurrenceIndex === -1 && index !== i && control.get('contactNo')?.value === currentContactNo) {
                             lastContactOccurrenceIndex = index;
                             change.get('contactNo').setErrors({ duplicate: true });
@@ -899,7 +899,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         });
         mappings.push(mappingForm);
         if (user) {
-            mappings.controls.forEach(control => {
+            (Array.isArray(mappings.controls) ? mappings.controls : []).forEach(control => {
                 if (!control?.get('name').value && !control?.get('email').value && !control?.get('contactNo').value) {
                     control?.get('name')?.patchValue(user.name ?? '');
                     control?.get('email')?.patchValue(user.email ?? '');
@@ -1165,7 +1165,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         accountRequest['sacNumber'] = (accountRequest["hsnOrSac"] === "sac") ? accountRequest['sacNumber'] : "";
 
         if (accountRequest.addresses && accountRequest.addresses.length > 0) {
-            accountRequest.addresses.forEach(address => {
+            (Array.isArray(accountRequest.addresses) ? accountRequest.addresses : []).forEach(address => {
                 if (this.countyList?.length) {
                     delete address['state'];
                     delete address['stateCode'];
@@ -1480,7 +1480,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         break;
                     default: this.partyTypeSource = res;
                 }
-                this.partyTypeSource.forEach(item => {
+                (Array.isArray(this.partyTypeSource) ? this.partyTypeSource : []).forEach(item => {
                     item.value = item.label;
                 });
             } else {
@@ -1569,7 +1569,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.activeAccount$.pipe(take(1)).subscribe(p => {
             if (!this.showBankDetail) {
                 if (p && p.parentGroups) {
-                    p.parentGroups.forEach(grp => {
+                    (Array.isArray(p.parentGroups) ? p.parentGroups : []).forEach(grp => {
                         this.showBankDetail = grp?.uniqueName === "sundrycreditors" ? true : false;
                         return;
                     });
@@ -1615,8 +1615,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             data.taxes = [];
             this.activeAccountTaxHierarchy$.pipe(take(1)).subscribe((t) => {
                 if (t) {
-                    t.inheritedTaxes.forEach(tt => {
-                        tt.applicableTaxes.forEach(ttt => {
+                    (Array.isArray(t.inheritedTaxes) ? t.inheritedTaxes : []).forEach(tt => {
+                        (Array.isArray(tt.applicableTaxes) ? tt.applicableTaxes : []).forEach(ttt => {
                             data.taxes.push(ttt?.uniqueName);
                         });
                     });
@@ -1849,7 +1849,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * @memberof AccountUpdateNewDetailsComponent
      */
     public createDynamicCustomFieldForm(customFieldForm: any): void {
-        customFieldForm.forEach(item => {
+        (Array.isArray(customFieldForm) ? customFieldForm : []).forEach(item => {
             this.renderCustomFieldDetails(item, customFieldForm?.length);
         });
     }
@@ -2264,7 +2264,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 if (accountDetails?.uniqueName) {
                     this.accountInheritedDiscounts = [];
                     if (accountDetails && accountDetails.inheritedDiscounts) {
-                        accountDetails.inheritedDiscounts.forEach(item => {
+                        (Array.isArray(accountDetails.inheritedDiscounts) ? accountDetails.inheritedDiscounts : []).forEach(item => {
                             this.accountInheritedDiscounts.push(...item.applicableDiscounts);
                         });
                     }
@@ -2307,7 +2307,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                         });
                 }
 
-                accountDetails.addresses.forEach(address => {
+                (Array.isArray(accountDetails.addresses) ? accountDetails.addresses : []).forEach(address => {
                     address.state = address.state ? address.state : { code: '', stateGstCode: '', name: '' };
                     address.stateCodeName = address.state.code + " - " + address.state.name;
 
@@ -2360,7 +2360,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 if (accountDetails.customFields?.length) {
                     const customField = this.addAccountForm.get('customFields') as FormArray;
                     if (customField.controls?.length) {
-                        accountDetails.customFields.forEach(item => {
+                        (Array.isArray(accountDetails.customFields) ? accountDetails.customFields : []).forEach(item => {
                             const fieldIndex = customField.controls?.findIndex(control => control?.value?.uniqueName === item?.uniqueName);
                             customField?.at(fieldIndex).get('value').patchValue(item?.value);
                         });

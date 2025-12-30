@@ -146,7 +146,6 @@ export class PaymentMethodDialogComponent implements OnInit {
     public deletePaymentMethod(payment: any): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
                     width: '540px',
-                    maxWidth: '540px',
                     data: {
                 title: this.commonLocaleData?.app_confirmation,
                     body: this.localeData?.confirm_payment_delete_message,

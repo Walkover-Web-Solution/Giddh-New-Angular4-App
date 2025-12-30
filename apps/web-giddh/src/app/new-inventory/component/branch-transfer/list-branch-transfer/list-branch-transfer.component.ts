@@ -4,7 +4,7 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { Store, select } from '@ngrx/store';
 import { SettingsBranchActions } from 'apps/web-giddh/src/app/actions/settings/branch/settings.branch.action';
 import { BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGINATION_LIMIT, PAGE_SIZE_OPTIONS, IOption } from 'apps/web-giddh/src/app/app.constant';
-import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
+import { cloneDeep } from '../../../../lodash-optimized';
 import { PageEvent } from '@angular/material/paginator';
 import { NewBranchTransferDownloadRequest, NewBranchTransferListGetRequestParams } from 'apps/web-giddh/src/app/models/api-models/BranchTransfer';
 import { OrganizationType } from 'apps/web-giddh/src/app/models/user-login-state';
@@ -496,7 +496,6 @@ export class ListBranchTransferComponent implements OnInit {
 
         let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
                     width: '630px',
-                    maxWidth: '630px',
                     data: {
                 configuration: this.branchTransferConfirmationConfiguration
                 }
@@ -575,7 +574,6 @@ export class ListBranchTransferComponent implements OnInit {
         this.voucherTypeDropdown?.closeDropdownPanel();
         this.dialog.open(this.advanceFilterComponent, {
                     width: '500px',
-                    maxWidth: '500px',
                     autoFocus: false,
                     role: 'alertdialog',
                     ariaLabel: 'Advance filter Dialog'

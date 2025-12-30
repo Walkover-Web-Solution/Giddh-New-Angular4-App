@@ -179,7 +179,7 @@ export class SelectTableColumnComponent implements OnInit, OnChanges {
                     this.dynamicCustomColumns = body.reportFilterColumns || [];
                 } else if (!isDynamic && body?.columns) {
                     const displayColumnsSet = new Set(body.columns);
-                    this.customiseColumns.forEach(column => {
+                    (Array.isArray(this.customiseColumns) ? this.customiseColumns : []).forEach(column => {
                         column.checked = displayColumnsSet.has(column.value);
                     });
                 }

@@ -148,7 +148,7 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
                     this.addDefaultMapping();
                 } else {
                     this.customUnitObj.mappings = [];
-                    res.mappings.forEach(mapping => {
+                    (Array.isArray(res.mappings) ? res.mappings : []).forEach(mapping => {
                         this.customUnitObj.mappings.push(mapping);
                     });
                 }
@@ -181,8 +181,8 @@ export class InventoryCustomStockComponent implements OnInit, OnDestroy, OnChang
      */
     public saveUnit(): any {
         this.isValidForm = true;
-        let customMapping = cloneDeep(this.customUnitObj)
-        customMapping.mappings.forEach((mapping) => {
+        let customMapping = cloneDeep(this.customUnitObj);
+        (Array.isArray(customMapping.mappings) ? customMapping.mappings : []).forEach((mapping) => {
             let checkValidation: boolean = false;
             if (mapping?.stockUnitY?.code || mapping?.quantity || mapping?.stockUnitX?.code) {
                 checkValidation = true;

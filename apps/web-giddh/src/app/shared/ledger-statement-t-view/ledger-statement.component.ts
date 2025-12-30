@@ -396,7 +396,6 @@ export class LedgerStatementComponent implements OnInit, OnDestroy {
         this.selectedItem = transaction;
         let dialogRef = this.dialog.open(templateRef, {
                     width: '70%',
-                    maxWidth: '70%',
                     height: '790px',
                     maxHeight: '90vh',
                     role: 'alertdialog',

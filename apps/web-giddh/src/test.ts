@@ -1,7 +1,7 @@
 // This file is required by karma.conf.js and loads recursively all the .spec and framework files
 
 import { getTestBed } from '@angular/core/testing';
-import { keys, map } from './app/lodash-optimized';
+import { keys, map  } from 'app/lodash-optimized';
 import {
     BrowserDynamicTestingModule,
     platformBrowserDynamicTesting

@@ -280,7 +280,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
     public initVoucherType() {
         // initialization for voucher type array inially all selected
         this.filter.jobWorkTransactionType = [];
-        this.VOUCHER_TYPES.forEach(element => {
+        (Array.isArray(this.VOUCHER_TYPES) ? this.VOUCHER_TYPES : []).forEach(element => {
             element.checked = true;
             this.filter.jobWorkTransactionType.push(element.value);
         });

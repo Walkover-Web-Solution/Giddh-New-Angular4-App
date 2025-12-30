@@ -250,7 +250,6 @@ export class CompanyListDialogComponent implements OnInit {
         text = text?.replace("[TYPE]", request.status.archiveStatus === 'UNARCHIVED' ? this.commonLocaleData?.app_unarchive : this.commonLocaleData?.app_archive);
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
                     width: '540px',
-                    maxWidth: '540px',
                     data: {
                 title: this.commonLocaleData?.app_confirmation,
                     body: text,

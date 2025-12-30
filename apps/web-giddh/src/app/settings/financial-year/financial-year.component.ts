@@ -101,7 +101,7 @@ export class FinancialYearComponent implements OnInit, OnDestroy {
                 this.fyAddNewDropdownIsOpen = false;
                 this.fyPeriodDropdownIsOpen = false;
                 let yearOptions = cloneDeep(this.yearOptions);
-                o.financialYears.forEach((fyear) => {
+                (Array.isArray(o.financialYears) ? o.financialYears : []).forEach((fyear) => {
                     let year = dayjs(fyear.financialYearStarts, GIDDH_DATE_FORMAT).year();
                     let yearIndx = yearOptions?.findIndex((y: any) => y?.value === year);
                     if (yearIndx !== -1) {

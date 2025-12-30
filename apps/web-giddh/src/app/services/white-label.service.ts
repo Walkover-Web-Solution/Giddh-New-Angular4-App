@@ -267,7 +267,7 @@ export class WhiteLabelService {
         // Log warnings
         if (warnings.length > 0) {
             console.group('⚠️ White Label Configuration Warnings');
-            warnings.forEach(warning => console.warn(`⚠️ ${warning}`));
+            (Array.isArray(warnings) ? warnings : []).forEach(warning => console.warn(`⚠️ ${warning}`));
             console.groupEnd();
         } else {
             console.log('✅ White label configuration validated successfully');

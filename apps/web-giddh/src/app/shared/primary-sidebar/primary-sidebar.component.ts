@@ -308,7 +308,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                 // Use the clean currentUrl for baseUrl instead of parsing router.url again
                 const baseUrl = this.currentUrl;
                 this.isActiveRoute = baseUrl;
-                this.allItems.forEach(item => item.isActive = (item.link === decodeURI(baseUrl) || item?.items?.some((subItem: AllItem) => {
+                (Array.isArray(this.allItems) ? this.allItems : []).forEach(item => item.isActive = (item.link === decodeURI(baseUrl) || item?.items?.some((subItem: AllItem) => {
                     if (subItem.link === decodeURI(baseUrl) || subItem?.additionalRoutes?.includes(decodeURI(baseUrl))) {
                         return true;
                     }
@@ -387,7 +387,6 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
     public showNavigationModal(): void {
         this.commandkDialogRef = this.dialog.open(this.navigationModal, {
                     width: '630px',
-                    maxWidth: '630px',
                     height: '600'
                 });
     }
@@ -759,7 +758,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
           if (node.isExpanded) {
             node.isExpanded = false;
           } else {
-            this.allItems.forEach(item => {
+            (Array.isArray(this.allItems) ? this.allItems : []).forEach(item => {
               if (item.level === 0 && item !== node) {
                 item.isExpanded = false;
               }

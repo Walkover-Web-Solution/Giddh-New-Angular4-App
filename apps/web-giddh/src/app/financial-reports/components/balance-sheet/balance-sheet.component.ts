@@ -89,7 +89,7 @@ export class BalanceSheetComponent implements AfterViewInit, OnDestroy {
                 }
                 if (data && data.liabilities) {
                     this.InitData(data.liabilities);
-                    data.liabilities.forEach(g => {
+                    (Array.isArray(data.liabilities) ? data.liabilities : []).forEach(g => {
                         g.isVisible = true;
                         g.isCreated = true;
                         g.isIncludedInSearch = true;
@@ -97,7 +97,7 @@ export class BalanceSheetComponent implements AfterViewInit, OnDestroy {
                 }
                 if (data && data.assets) {
                     this.InitData(data.assets);
-                    data.assets.forEach(g => {
+                    (Array.isArray(data.assets) ? data.assets : []).forEach(g => {
                         g.isVisible = true;
                         g.isCreated = true;
                         g.isIncludedInSearch = true;

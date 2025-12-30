@@ -4,7 +4,7 @@ import { Angular21ChangeDetectionService } from "../../../../services/angular21-
 import { select, Store } from "@ngrx/store";
 import { AccountsAction } from "apps/web-giddh/src/app/actions/accounts.actions";
 import { GroupWithAccountsAction } from "apps/web-giddh/src/app/actions/groupwithaccounts.actions";
-import { cloneDeep } from "apps/web-giddh/src/app/lodash-optimized";
+import { cloneDeep } from '../../../../lodash-optimized';
 import { AccountResponseV2 } from "apps/web-giddh/src/app/models/api-models/Account";
 import { IGroupsWithAccounts } from "apps/web-giddh/src/app/models/interfaces/groups-with-accounts.interface";
 import { GeneralService } from "apps/web-giddh/src/app/services/general.service";

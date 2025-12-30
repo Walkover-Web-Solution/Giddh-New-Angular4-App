@@ -110,7 +110,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
             .subscribe(taxes => {
                 if (taxes && taxes.length) {
                     let arr: IOption[] = [];
-                    taxes.forEach(tax => {
+                    (Array.isArray(taxes) ? taxes : []).forEach(tax => {
                         arr.push({ label: tax.name, value: tax?.uniqueName });
                     });
                     this.allTaxes = arr;
@@ -171,7 +171,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
         this.componentStore.taxAuthorityList$.pipe(skip(1),take(1)).subscribe(taxAuthorities => {
             if (taxAuthorities?.length) {
                 let arr: IOption[] = [];
-                taxAuthorities.forEach(tax => {
+                (Array.isArray(taxAuthorities) ? taxAuthorities : []).forEach(tax => {
                     arr.push({ label: tax.name, value: tax?.uniqueName });
                 });
                 this.taxAuthorityList = arr;
@@ -273,7 +273,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
             if (!dataToSave.accounts) {
                 dataToSave.accounts = [];
             }
-            this.linkedAccountsOption.forEach((obj) => {
+            (Array.isArray(this.linkedAccountsOption) ? this.linkedAccountsOption : []).forEach((obj) => {
                 if (obj?.value === dataToSave.account) {
                     let accountObj = obj.label.split(' - ');
                     dataToSave.accounts.push({ name: accountObj[0], uniqueName: obj?.value });
@@ -386,7 +386,7 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
             { label: this.commonLocaleData?.app_tax_subtypes?.payable, value: 'pay' }
         ];
         if (this.subType) {
-            this.tdsTcsTaxSubTypes.forEach(key => {
+            (Array.isArray(this.tdsTcsTaxSubTypes) ? this.tdsTcsTaxSubTypes : []).forEach(key => {
                 if (key?.value === this.subType) {
                     this.selectedTaxType = key.label;
                 }

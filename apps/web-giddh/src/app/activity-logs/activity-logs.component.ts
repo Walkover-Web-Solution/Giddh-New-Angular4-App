@@ -395,7 +395,7 @@ export class ActivityLogsComponent implements OnInit, OnDestroy {
         this.activityFieldsObj.voucherFromDate = undefined;
         this.activityFieldsObj.voucherToDate = undefined;
 
-        this.selectedFields.forEach(field => {
+        (Array.isArray(this.selectedFields) ? this.selectedFields : []).forEach(field => {
             if (field?.value === "LOG_DATE") {
                 this.activityFieldsObj.fromDate = this.activityObj.fromDate;
                 this.activityFieldsObj.toDate = this.activityObj.toDate;

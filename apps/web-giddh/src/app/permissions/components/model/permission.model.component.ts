@@ -78,7 +78,7 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
             this.newRoleObj.isSelectedAllPages = false;
             this.newRoleObj.pageList = [];
             if (p.pages && p.pages.length) {
-                p.pages.forEach((page: IPageStr) => {
+                (Array.isArray(p.pages) ? p.pages : []).forEach((page: IPageStr) => {
                     this.newRoleObj.pageList.push({ name: page, isSelected: false });
                 });
             }
@@ -130,14 +130,14 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
     public selectAllPages(event): void {
         if (event.checked) {
             this.selectedValues = [];
-            this.newRoleObj.pageList.forEach((item: IPage) => {
+            (Array.isArray(this.newRoleObj.pageList) ? this.newRoleObj.pageList : []).forEach((item: IPage) => {
                 item.isSelected = true;
                 this.selectedValues.push(item);
             });
             this.newRoleObj.isSelectedAllPages = true;
         } else {
             this.selectedValues = [];
-            this.newRoleObj.pageList.forEach((item: IPage) => item.isSelected = false);
+            (Array.isArray(this.newRoleObj.pageList) ? this.newRoleObj.pageList : []).forEach((item: IPage) => item.isSelected = false);
             this.newRoleObj.isSelectedAllPages = false;
         }
     }
@@ -175,7 +175,7 @@ export class PermissionModelComponent implements OnInit, OnDestroy {
             const role = this.allRoles.find(r => r.uniqueName === selectedRole.value);
             if (role) {
                 // Reset all roles selection state
-                this.allRoles.forEach(r => (r as any).isSelected = false);
+                (Array.isArray(this.allRoles) ? this.allRoles : []).forEach(r => (r as any).isSelected = false);
                 // Set selected role
                 (role as any).isSelected = true;
                 this.enableDisableSelectAll();

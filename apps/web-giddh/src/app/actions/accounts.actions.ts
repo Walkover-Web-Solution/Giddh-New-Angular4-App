@@ -500,7 +500,7 @@ export class AccountsAction {
                     let data: BaseResponse<string, AccountMergeRequest[]> = action.payload;
                     this._generalServices.eventHandler.next({ name: eventsConst.accountMerged.toString(), payload: data });
                     if (data.request && data.request.length) {
-                        data.request.forEach(uniqueAccountName => {
+                        (Array.isArray(data.request) ? data.request : []).forEach(uniqueAccountName => {
                             const request: IUpdateDbRequest = {
                                 uniqueName: this._generalServices.currentBranchUniqueName,
                                 deleteUniqueName: uniqueAccountName?.uniqueName,

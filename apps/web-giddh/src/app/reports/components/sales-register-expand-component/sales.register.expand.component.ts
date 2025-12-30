@@ -352,7 +352,7 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
             let idx = this.from.split('-');
             this.monthYear = [];
             if (currentYearFrom === currentYearTo) {
-                this.monthNames.forEach(element => {
+                (Array.isArray(this.monthNames) ? this.monthNames : []).forEach(element => {
                     this.monthYear.push(element + ' ' + currentYearFrom);
                 });
             }
@@ -480,7 +480,6 @@ public voucherNumberInput: UntypedFormControl = new UntypedFormControl();
         }
         this.dialog.open(SalesPurchaseRegisterExportComponent, {
                     width: '630px',
-                    maxWidth: '630px',
                     panelClass: 'export-container',
                     data: exportData
                 });

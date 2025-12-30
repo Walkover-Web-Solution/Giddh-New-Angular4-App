@@ -34,7 +34,7 @@ export class ConvertBillDialogComponent implements OnInit {
     public ngOnInit(): void {
         if (this.vouchers?.length) {
             let formArray = this.convertToBillForm.get('purchaseOrders') as FormArray;
-            this.vouchers.forEach(voucher => {
+            (Array.isArray(this.vouchers) ? this.vouchers : []).forEach(voucher => {
                 formArray.push(this.getPurchaseOrderFormGroup(voucher));
             });  
         }

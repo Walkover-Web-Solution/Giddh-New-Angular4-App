@@ -245,7 +245,7 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
             this.componentStore.taxAuthorityList$.pipe(takeUntil(this.destroyed$)).subscribe(taxAuthorities => {
                 if (taxAuthorities?.length) {
                     let arr: IOption[] = [];
-                    taxAuthorities.forEach(taxAuthority => {
+                    (Array.isArray(taxAuthorities) ? taxAuthorities : []).forEach(taxAuthority => {
                         arr.push({ label: taxAuthority.name, value: taxAuthority?.uniqueName });
                     });
                     this.taxAuthorityList = arr;
@@ -259,7 +259,7 @@ export class VatReportFiltersComponent implements OnInit, OnChanges {
             this.store.pipe(select(state => state.company && state.company.taxes), takeUntil(this.destroyed$)).subscribe(taxes => {
                 if (taxes) {
                     let arr: IOption[] = [];
-                    taxes.forEach(tax => {
+                    (Array.isArray(taxes) ? taxes : []).forEach(tax => {
                         arr.push({ label: tax?.name, value: tax?.uniqueName });
                     });
                     this.taxList = arr;

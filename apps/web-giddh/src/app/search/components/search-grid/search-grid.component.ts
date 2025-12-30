@@ -29,7 +29,7 @@ export interface SearchTable {
 const ELEMENT_DATA: SearchTable[] = [];
 @Component({
     selector: 'search-grid',
-    
+
     standalone: false,templateUrl: './search-grid.component.html'
 })
 export class SearchGridComponent implements OnInit, OnDestroy {
@@ -338,7 +338,6 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         this.messageBody.header.set = this.messageBody.header.email;
         this.mailSmsDialogRef = this.dialog.open(this.mailSmsDialog, {
                     width: '630px',
-                    maxWidth: '630px',
                     height: '515px'
                 })
     }
@@ -355,7 +354,6 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         this.messageBody.header.set = this.messageBody.header.sms;
         this.mailSmsDialogRef = this.dialog.open(this.mailSmsDialog, {
                     width: '630px',
-                    maxWidth: '630px',
                     height: '515px'
                 })
     }
@@ -370,7 +368,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
 
         await this.searchResponseFiltered$.pipe(take(1)).subscribe(p => {
             accountsUnqList = [];
-            p.forEach((item: AccountFlat) => {
+            (Array.isArray(p) ? p : []).forEach((item: AccountFlat) => {
                 if (item.isSelected) {
                     accountsUnqList.push(item?.uniqueName);
                 }
@@ -430,18 +428,18 @@ export class SearchGridComponent implements OnInit, OnDestroy {
         // because each "page" is a complete set of results
         const newPage = event.pageIndex + 1;
         this.checkboxInfo.selectedPage = newPage;
-        
+
         // Create an event object compatible with the legacy pageChanged event
         const legacyEvent = {
             page: newPage,
             itemsPerPage: 1,
             count: this.countPerPage
         };
-        
+
         this.pageChangeEvent.emit(legacyEvent);
         this.isAllChecked = this.checkboxInfo[this.checkboxInfo.selectedPage] ? true : false;
     }
-    
+
 
 
     private createSearchQueryReqObj() {
@@ -468,7 +466,7 @@ export class SearchGridComponent implements OnInit, OnDestroy {
     }
 
     private formatQuery(queryForApi, searchQuery) {
-        searchQuery.forEach((query: SearchDataSet) => {
+        (Array.isArray(searchQuery) ? searchQuery : []).forEach((query: SearchDataSet) => {
             switch (query.queryType) {
                 case 'openingBalance':
                     queryForApi['openingBalance'] = query.amount,

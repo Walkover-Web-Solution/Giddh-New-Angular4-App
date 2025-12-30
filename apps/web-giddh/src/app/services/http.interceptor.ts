@@ -125,7 +125,7 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
                     const tabSpecificKeys = ['companyUniqueName', 'activeCompany', 'companyUser', 'applicationDate', 'todaySelected', 'currentBranchUniqueName'];
                     const tabSpecificData: any = {};
                     
-                    tabSpecificKeys.forEach(tabKey => {
+                    (Array.isArray(tabSpecificKeys) ? tabSpecificKeys : []).forEach(tabKey => {
                         if (localObj.hasOwnProperty(tabKey)) {
                             tabSpecificData[tabKey] = localObj[tabKey];
                         }
@@ -203,7 +203,7 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
                 const tabSpecificKeys = ['companyUniqueName', 'activeCompany', 'companyUser', 'applicationDate', 'todaySelected', 'currentBranchUniqueName'];
                 
                 // Override with tab-specific data from sessionStorage
-                tabSpecificKeys.forEach(tabKey => {
+                (Array.isArray(tabSpecificKeys) ? tabSpecificKeys : []).forEach(tabKey => {
                     if (sessionObj.hasOwnProperty(tabKey)) {
                         merged[tabKey] = sessionObj[tabKey];
                     }

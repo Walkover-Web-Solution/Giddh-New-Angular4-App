@@ -2,7 +2,7 @@ import { distinctUntilChanged, take, takeUntil } from 'rxjs/operators';
 import { IPageInfo, TallyModuleService } from './../tally-service';
 import { ReplaySubject } from 'rxjs';
 import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output } from '@angular/core';
-import { isEqual } from 'apps/web-giddh/src/app/lodash-optimized';
+import { isEqual } from '../../lodash-optimized';
 import { VOUCHERS } from '../constants/accounting.constant';
 
 @Component({

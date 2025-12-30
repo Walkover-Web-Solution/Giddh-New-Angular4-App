@@ -45,13 +45,13 @@ class FormatCsv implements IFormatable {
 
     public setRowData(data: any[], padding: number) {
         this.body += ' '.repeat(padding);
-        data.forEach(value => this.body += `${value},`);
+        (Array.isArray(data) ? data : []).forEach(value => this.body += `${value},`);
         this.body += `\r\n`;
     }
 
     public setFooter(data: any[]) {
         this.footer += this.localeData?.csv.trial_balance.total;
-        data.forEach(value => this.footer += `${value},`);
+        (Array.isArray(data) ? data : []).forEach(value => this.footer += `${value},`);
         this.footer += `\r\n`;
     }
 }

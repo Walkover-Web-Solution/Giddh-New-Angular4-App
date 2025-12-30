@@ -187,7 +187,7 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
             } else {
                 if (this.voucherForAdjustment && this.voucherForAdjustment.length) {
                     this.adjustVoucherOptions = [];
-                    this.voucherForAdjustment.forEach(item => {
+                    (Array.isArray(this.voucherForAdjustment) ? this.voucherForAdjustment : []).forEach(item => {
                         if (item) {
                             if (!item?.adjustmentAmount) {
                                 item.adjustmentAmount = cloneDeep(item.balanceDue);
@@ -213,7 +213,7 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
         this.componentStore.company$.pipe(takeUntil(this.destroyed$)).subscribe((obj) => {
             if (obj && obj.taxes) {
                 this.availableTdsTaxes = [];
-                obj.taxes.forEach(item => {
+                (Array.isArray(obj.taxes) ? obj.taxes : []).forEach(item => {
                     if (item && (item.taxType === 'tdsrc' || item.taxType === 'tdspay')) {
                         this.availableTdsTaxes.push({ value: item.uniqueName, label: item.name, additional: item })
                     }
@@ -339,7 +339,7 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
         if (this.getBalanceDue() >= 0) {
             let isAnyBlankEntry: boolean;
             if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments) {
-                this.adjustVoucherForm.adjustments.forEach(item => {
+                (Array.isArray(this.adjustVoucherForm.adjustments) ? this.adjustVoucherForm.adjustments : []).forEach(item => {
                     if (!item?.uniqueName || !item.voucherNumber) {
                         isAnyBlankEntry = true;
                     }
@@ -493,7 +493,7 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
                 }
             });
 
-            this.adjustVoucherForm.adjustments.forEach((item, key) => {
+            (Array.isArray(this.adjustVoucherForm.adjustments) ? this.adjustVoucherForm.adjustments : []).forEach((item, key) => {
                 if (!item?.voucherNumber && item?.adjustmentAmount?.amountForAccount) {
                     isValid = false;
                     if (form.controls[`voucherName${key}`]) {
@@ -600,7 +600,7 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
     public getAdvanceReceiptUnselectedVoucher(): IOption[] {
         let options: IOption[] = [];
         let adjustVoucherAdjustment = [];
-        this.newAdjustVoucherOptions.forEach(item => {
+        (Array.isArray(this.newAdjustVoucherOptions) ? this.newAdjustVoucherOptions : []).forEach(item => {
             options.push(item);
         });
         adjustVoucherAdjustment = cloneDeep(this.adjustVoucherForm.adjustments);
@@ -615,7 +615,7 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
                 }
             }
         }
-        options.forEach(item => {
+        (Array.isArray(options) ? options : []).forEach(item => {
             if (item) {
                 delete item['isHilighted'];
             }
@@ -712,7 +712,7 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
         let convertedTotalAmount: number = 0;
         if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments && this.adjustVoucherForm.adjustments.length) {
             this.adjustPayment.balanceDue = this.voucherTotals?.balanceDue;
-            this.adjustVoucherForm.adjustments.forEach(item => {
+            (Array.isArray(this.adjustVoucherForm.adjustments) ? this.adjustVoucherForm.adjustments : []).forEach(item => {
                 if (item && item.adjustmentAmount && item.adjustmentAmount.amountForAccount) {
                     if (
                         ((this.adjustedVoucherType === AdjustedVoucherType.SalesInvoice || this.adjustedVoucherType === AdjustedVoucherType.Sales) && item.voucherType === AdjustedVoucherType.DebitNote) ||
@@ -778,7 +778,7 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
     public checkValidations(): void {
         this.isInvalidForm = false;
         if (this.adjustVoucherForm && this.adjustVoucherForm.adjustments && this.adjustVoucherForm.adjustments.length > 0) {
-            this.adjustVoucherForm.adjustments.forEach((item, key) => {
+            (Array.isArray(this.adjustVoucherForm.adjustments) ? this.adjustVoucherForm.adjustments : []).forEach((item, key) => {
                 if ((!item?.voucherNumber && item?.adjustmentAmount?.amountForAccount) || (item?.voucherNumber && !item?.adjustmentAmount?.amountForAccount) || (!item?.voucherNumber && !item?.adjustmentAmount?.amountForAccount && this.adjustVoucherForm.adjustments.length > 0)) {
                     this.isInvalidForm = true;
                 }
@@ -937,7 +937,7 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
     private pushExistingAdjustments(): void {
         if (this.adjustVoucherForm.adjustments[this.currentAdjustmentRowIndex]?.uniqueName) {
             if (this.advanceReceiptAdjustmentUpdatedData?.adjustments?.length) {
-                this.advanceReceiptAdjustmentUpdatedData.adjustments.forEach(item => {
+                (Array.isArray(this.advanceReceiptAdjustmentUpdatedData.adjustments) ? this.advanceReceiptAdjustmentUpdatedData.adjustments : []).forEach(item => {
                     if (this.adjustVoucherForm.adjustments[this.currentAdjustmentRowIndex]?.uniqueName === item?.uniqueName) {
                         item.voucherNumber = this.generalService.getVoucherNumberLabel(item.voucherType, item.voucherNumber, this.commonLocaleData);
                         const itemPresentInVoucherOptions = this.adjustVoucherOptions.find(voucher => voucher?.value === item?.uniqueName);
@@ -1098,7 +1098,7 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
                 }
 
                 if (this.allAdvanceReceiptResponse && this.allAdvanceReceiptResponse.length) {
-                    this.allAdvanceReceiptResponse.forEach(item => {
+                    (Array.isArray(this.allAdvanceReceiptResponse) ? this.allAdvanceReceiptResponse : []).forEach(item => {
                         this.handlePartiallyAdjustedVoucher(item);
                         if (item && item.voucherDate) {
                             item.voucherDate = item.voucherDate?.replace(/-/g, '/');

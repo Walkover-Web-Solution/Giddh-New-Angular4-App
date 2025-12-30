@@ -105,7 +105,6 @@ export class FileReturnComponent implements OnInit, OnDestroy {
         this.fileReturnConfirmationConfiguration = this.generalService.fileReturnConfiguration(this.localeData, this.commonLocaleData);
         let confirnationDialogRef = this.dialog.open(NewConfirmationModalComponent, {
                     width: '630px',
-                    maxWidth: '630px',
                     data: {
                 configuration: this.fileReturnConfirmationConfiguration
                 },
@@ -122,7 +121,7 @@ export class FileReturnComponent implements OnInit, OnDestroy {
                     } else {
                         if (res?.errors) {
                             let errorMessage = '';
-                            res.errors.forEach(error => errorMessage += error.message + '\n');
+                            (Array.isArray(res.errors) ? res.errors : []).forEach(error => errorMessage += error.message + '\n');
                             this.toaster.showSnackBar('error', errorMessage);
                         } else if (res?.message) {
                             this.toaster.showSnackBar('error', res.message);

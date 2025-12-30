@@ -470,7 +470,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
                         this.selectedCmp['label'] = this.selectedCmp.name;
                         branches.push(this.selectedCmp);
                     }
-                    branches.forEach(element => {
+                    (Array.isArray(branches) ? branches : []).forEach(element => {
                         element['label'] = element.name;
                     });
                     this.entities$ = observableOf(orderBy(branches, 'name'));
@@ -485,7 +485,7 @@ export class InventoryStockReportComponent implements OnChanges, OnInit, OnDestr
     public initVoucherType() {
         // initialization for voucher type array inially all selected
         this.stockReportRequest.voucherTypes = [];
-        this.VOUCHER_TYPES.forEach(element => {
+        (Array.isArray(this.VOUCHER_TYPES) ? this.VOUCHER_TYPES : []).forEach(element => {
             element.checked = true;
             this.stockReportRequest.voucherTypes.push(element.value);
         });

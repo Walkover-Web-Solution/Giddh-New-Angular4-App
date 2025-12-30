@@ -601,7 +601,6 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
     public deleteRazorPayDetails() {
         let confirmModalDialogRef = this.dialog.open(ConfirmModalComponent, {
                     width: '585px',
-                    maxWidth: '585px',
                     data: {
                 title: this.commonLocaleData?.app_confirmation,
                     body: this.localeData?.collection?.delete_credentials_message,
@@ -678,7 +677,6 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
     public deletePaypalDetails(): void {
         let confirmModalDialogRef = this.dialog.open(ConfirmModalComponent, {
                     width: '585px',
-                    maxWidth: '585px',
                     data: {
                 title: this.commonLocaleData?.app_confirmation,
                     body: this.localeData?.collection?.delete_credentials_message,
@@ -955,7 +953,6 @@ export class CustomerPortalComponent implements OnInit, AfterViewInit {
     public deletePayuDetails(): void {
         let confirmModalDialogRef = this.dialog.open(ConfirmModalComponent, {
                     width: '585px',
-                    maxWidth: '585px',
                     data: {
                 title: this.commonLocaleData?.app_confirmation,
                     body: this.localeData?.collection?.delete_credentials_message,
