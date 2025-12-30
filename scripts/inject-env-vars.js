@@ -66,13 +66,13 @@ function loadEnvironmentVariables() {
 function generateEnvScript(envVars) {
     const isElectron = process.argv.includes('--electron') || process.env.ELECTRON_ENV;
 
-    // Set default values
+    // Set default values with Electron-specific handling
     const config = {
         PRODUCTION_ENV: envVars.PRODUCTION_ENV === 'true' || false,
         STAGING_ENV: envVars.STAGING_ENV === 'true' || false,
         LOCAL_ENV: envVars.LOCAL_ENV === 'true' || true,
         TEST_ENV: envVars.TEST_ENV === 'true' || false,
-        AppUrl: envVars.APP_URL || 'http://localhost:3000/',
+        AppUrl: isElectron ? './' : (envVars.APP_URL || 'http://localhost:3000/'),
         ApiUrl: envVars.API_URL || 'https://apitest.giddh.com/',
         UkApiUrl: envVars.UK_API_URL || 'https://gbapi.giddh.com/',
         PORTAL_URL: envVars.PORTAL_URL || 'https://master.d2n1i21e52r793.amplifyapp.com/',

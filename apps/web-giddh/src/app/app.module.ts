@@ -619,7 +619,7 @@ export function getServiceConfigAfterInit(): () => Promise<any> {
         StoreModule.forRoot(reducers, { metaReducers, runtimeChecks: { strictStateImmutability: false, strictActionImmutability: false } }),
         ScrollingModule,
         RouterModule.forRoot(ROUTES, {
-            useHash: false,
+            useHash: IS_ELECTRON_WA,
             onSameUrlNavigation: 'reload',
             preloadingStrategy: QuicklinkStrategy
         }),
