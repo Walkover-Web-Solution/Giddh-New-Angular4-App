@@ -1743,6 +1743,7 @@ export class NgxDaterangepickerComponent implements OnInit, OnDestroy, OnChanges
                     }
 
                 });
+                this.financialYears.reverse();
                 if (this.ranges && this.ranges.length > 0) {
                     let loop = 0;
                     let ranges = [];
