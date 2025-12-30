@@ -3,6 +3,7 @@ import { InventoryUser } from '../../../models/api-models/Inventory-in-out';
 
 @Component({
     selector: 'person-list',
+    standalone: false,
     styles: [`
     .active > a {
       color: #d35f29 !important;

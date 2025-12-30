@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'inventory/branch-transfer'"
     (commonLocaleData)="commonLocaleData = $event"
@@ -83,24 +83,18 @@
                     <div class="table-responsive manage-table mt-3" *ngIf="!isLoading">
                         <table mat-table [dataSource]="transporterListDetails">
                             <!-- Name Column -->
-                            <ng-container matColumnDef="name">
-                                <th mat-header-cell *matHeaderCellDef class="mat-table-name">
-                                    {{ commonLocaleData?.app_name }}
-                                </th>
+                            <ng-container  matColumnDef="name">
+                                <th mat-header-cell *matHeaderCellDef class="mat-table-name">{{commonLocaleData?.app_name}}</th>
                                 <td mat-cell *matCellDef="let element">{{ element.transporterName }}</td>
                             </ng-container>
                             <!-- Weight Column -->
-                            <ng-container matColumnDef="transporterId">
-                                <th mat-header-cell *matHeaderCellDef class="mat-table-id">
-                                    {{ commonLocaleData?.app_transporter_id }}
-                                </th>
+                            <div matColumnDef="transporterId">
+                                <th mat-header-cell *matHeaderCellDef class="mat-table-id">{{commonLocaleData?.app_transporter_id}}</th>
                                 <td mat-cell *matCellDef="let element">{{ element.transporterId }}</td>
-                            </ng-container>
+                            </div>
                             <!-- Symbol Column -->
                             <ng-container matColumnDef="action">
-                                <th mat-header-cell *matHeaderCellDef class="text-right mat-table-action">
-                                    {{ commonLocaleData?.app_actions }}
-                                </th>
+                                <th mat-header-cell *matHeaderCellDef class="text-right mat-table-action">{{commonLocaleData?.app_actions}}</th>
                                 <td mat-cell *matCellDef="let element">
                                     <div class="d-flex column-gap-05 justify-content-end edit-delete-btn">
                                         <button mat-stroked-button (click)="editTransporter(element)">
@@ -132,4 +126,4 @@
             </div>
         </mat-dialog-content>
     </section>
-</ng-container>
+</div>

@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     (commonLocaleData)="commonLocaleData = $event"
     [keyboardShortcut]="'esc'"
@@ -218,7 +218,7 @@
             {{ commonLocaleData?.app_no_result_found }}
         </div>
     </mat-dialog-content>
-</ng-container>
+</div>
 <ng-template #attachments>
     <attachments [selectedItem]="selectedItem" (isDeletedAccount)="isDeletedAccount($event)"></attachments>
 </ng-template>

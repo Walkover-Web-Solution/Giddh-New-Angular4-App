@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'reports/monthly-columnar'"
     (localeData)="localeData = $event"
@@ -38,7 +38,7 @@
                                 [placeholder]="localeData?.to_month"
                                 [name]="'toMonth'"
                                 [(ngModel)]="toMonth"
-                                (selectedOption)="selectToMonth($event)">                           
+                                (selectedOption)="selectToMonth($event)">
                             </reactive-dropdown-field>
                         </div>
                     </div>
@@ -129,4 +129,4 @@
         <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
     </div>
     <section class="mb-custom-80"></section>
-</ng-container>
+</div>

@@ -1,3 +1,11 @@
+@use "sass:meta";
+@use "sass:list";
+
+// ==========================================================================
+// ANGULAR 21 MATERIAL 3 SCSS MIXINS
+// ==========================================================================
+// Modern utility mixins compatible with Angular 21 Material 3 theming system
+
 /**
  * Cross-browser text-transform mixin for individual use
  * Apply text-transform with all vendor prefixes

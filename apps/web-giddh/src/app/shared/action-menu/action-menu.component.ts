@@ -148,7 +148,7 @@ export class ActionMenuComponent {
      */
     public goToRoute(part: string, additionalParams: string = "", accUniqueName: string): void {
         let url: string;
-        
+
         if (this.generalService.voucherApiVersion === 2) {
             // Construct direct page URL
             url = `/pages/${part}`;
@@ -167,11 +167,45 @@ export class ActionMenuComponent {
                 url = `${url}${additionalParams}`;
             }
         }
-        
+
         if (isElectron) {
-            const ipcRenderer = (window as any).require('electron').ipcRenderer;
-            const electronUrl = `${location.origin}${location.pathname}#./pages/${part}${part?.includes('ledger') ? `/${accUniqueName}` : ""}`;
-            ipcRenderer.send('open-url', electronUrl);
+            try {
+                let electronIpcAvailable = false;
+
+                // Try electronAPI first (secure context)
+                if ((window as any).electronAPI && (window as any).electronAPI.send) {
+                    try {
+                        const electronUrl = `${location.origin}${location.pathname}#./pages/${part}${part?.includes('ledger') ? `/${accUniqueName}` : ""}`;
+                        (window as any).electronAPI.send('open-url', electronUrl);
+                        electronIpcAvailable = true;
+                    } catch (ipcError) {
+                        console.warn('ElectronAPI send failed:', ipcError);
+                    }
+                }
+
+                // Try legacy electron require (fallback)
+                if (!electronIpcAvailable && (window as any).require) {
+                    try {
+                        const electron = (window as any).require('electron');
+                        if (electron && electron.ipcRenderer && electron.ipcRenderer.send) {
+                            const electronUrl = `${location.origin}${location.pathname}#./pages/${part}${part?.includes('ledger') ? `/${accUniqueName}` : ""}`;
+                            electron.ipcRenderer.send('open-url', electronUrl);
+                            electronIpcAvailable = true;
+                        }
+                    } catch (requireError) {
+                        console.warn('Electron require failed:', requireError);
+                    }
+                }
+
+                // Fallback to regular window.open if IPC not available
+                if (!electronIpcAvailable) {
+                    console.warn('Electron IPC not available, using window.open fallback');
+                    (window as any).open(url);
+                }
+            } catch (error) {
+                console.warn('Electron navigation failed, using window.open:', error);
+                (window as any).open(url);
+            }
         } else {
             (window as any).open(url);
         }

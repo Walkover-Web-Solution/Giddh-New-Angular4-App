@@ -1,9 +1,5 @@
-<ng-container
-    appTranslate
-    [file]="'inventory'"
-    (commonLocaleData)="commonLocaleData = $event"
-    (localeData)="localeData = $event"
->
+<div appTranslate [file]="'inventory'" (commonLocaleData)="commonLocaleData = $event"
+    (localeData)="localeData = $event">
     <div class="inventory-advance-search">
         <div class="dialog-header">
             <span>{{ localeData?.advance_search_filter?.advance_search }}</span>
@@ -99,4 +95,4 @@
             </form>
         </mat-dialog-content>
     </div>
-</ng-container>
+</div>

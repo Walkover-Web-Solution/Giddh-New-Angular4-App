@@ -4,11 +4,14 @@ import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { GeneralService } from '../services/general.service';
 import { ServiceConfig } from '../services/service.config';
+import { Configuration } from '../app.constant';
+import { environment } from '../../environments/environment';
 
 @Component({
-    selector: 'download',
+selector: 'download',
     templateUrl: './download.component.html',
     styleUrls: ['./download.component.scss'],
+    standalone: false
 })
 
 export class DownloadComponent implements OnInit, OnDestroy {
@@ -34,7 +37,7 @@ export class DownloadComponent implements OnInit, OnDestroy {
      * @memberof DownloadBulkInvoiceComponent
      */
     public ngOnInit(): void {
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         const whiteLabel = this.generalService.getDecodedWhiteLabel();
         this.giddhLogoSrc = whiteLabel?.giddhWhiteLabel?.logo || this.imgPath + 'giddh-white-logo.svg';
         this.giddhDomainUrl = this.serviceConfig.AppUrl ||  'https://books.giddh.com/';

@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'purchase-order/settings'"
     (localeData)="localeData = $event"
@@ -6,7 +6,7 @@
 >
     <section class="setting-tab-data">
         <div class="invoice-control">
-            <mat-tab-group 
+            <mat-tab-group
                 class="tab-integration"
                 mat-stretch-tabs="false"
                 mat-align-tabs="start"
@@ -397,7 +397,7 @@
                                             </mat-slide-toggle>
                                         </div>
                                     </div>
-                                    <div class="clear-both pt-2 row"> 
+                                    <div class="clear-both pt-2 row">
                                         <div class="col-sm-12 col-md-12 col-lg-3">
                                             <mat-slide-toggle
                                                 [(ngModel)]="invoiceSettings.invoiceSettings.autoWhatsAppPayment"
@@ -420,7 +420,7 @@
                                             </mat-slide-toggle>
                                         </div>
                                     </div>
-                                    <div class="clear-both pt-2 row"> 
+                                    <div class="clear-both pt-2 row">
                                         <div class="col-sm-12 col-md-12 col-lg-3">
                                             <mat-slide-toggle
                                                 [(ngModel)]="invoiceSettings.purchaseBillSettings.autoWhatsApp"
@@ -488,7 +488,7 @@
                                             >
                                             </mat-slide-toggle>
                                         </div>
-                                        
+
                                     </div>
                                     <div class="clear-both pt-2 row">
                                         <div class="col-sm-12 col-md-12 col-lg-3 flex-container">
@@ -523,4 +523,4 @@
             </button>
         </div>
     </ng-template>
-</ng-container>
+</div>

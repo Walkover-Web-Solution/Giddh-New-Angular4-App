@@ -12,7 +12,9 @@ import { Observable } from 'rxjs';
 import { InventoryService } from '../../services/inventory.service';
 import { CustomActions } from '../../store/custom-actions';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class SidebarAction {
 
     public GetInventoryGroup$: Observable<Action> = createEffect(() => this.action$

@@ -11,7 +11,9 @@ import { ActiveFinancialYear } from '../../../models/api-models/Company';
 import { ToasterService } from '../../../services/toaster.service';
 import { LocaleService } from '../../../services/locale.service';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class SettingsFinancialYearActions {
 
     public GetAllFinancialYears$: Observable<Action> = createEffect(() => this.action$

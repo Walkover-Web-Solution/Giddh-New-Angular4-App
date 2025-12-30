@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'vat-report'"
     (localeData)="localeData = $event"
@@ -17,7 +17,7 @@
         <div class="container-fluid section-center ml-0">
             <div class="row align-items-center row-gap-15">
                 <div class="col flex-grow-0">
-                    <div class="custom-datepicker" 
+                    <div class="custom-datepicker"
                          [matMenuTriggerFor]="universalDatepicker"
                          #universalDatepickerTrigger="matMenuTrigger"
                          role="button"
@@ -177,7 +177,7 @@
             </div>
         </div>
     </div>
-</ng-container>
+</div>
 
 <!-- Universal Date Picker  -->
 <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">

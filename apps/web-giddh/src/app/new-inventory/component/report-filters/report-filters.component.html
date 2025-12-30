@@ -91,15 +91,15 @@
             </span>
         </div>
         <!-- Video Links -->
-        <ng-container *ngIf="moduleName === 'GROUP_WISE_REPORT'">
+        <div *ngIf="moduleName === 'GROUP_WISE_REPORT'">
             <watch-video [cssClass]="'text-primary pr-3'" [moduleName]="'INVENTORY_REPORT_GROUPWISE'"></watch-video>
-        </ng-container>
-        <ng-container *ngIf="moduleName === 'ITEM_WISE_REPORT'">
+        </div>
+        <div *ngIf="moduleName === 'ITEM_WISE_REPORT'">
             <watch-video [cssClass]="'text-primary pr-3'" [moduleName]="'INVENTORY_REPORT_ITEMWISE'"></watch-video>
-        </ng-container>
-        <ng-container *ngIf="moduleName === 'VARIANT_WISE_REPORT'">
+        </div>
+        <div *ngIf="moduleName === 'VARIANT_WISE_REPORT'">
             <watch-video [cssClass]="'text-primary pr-3'" [moduleName]="'INVENTORY_REPORT_VARIANTWISE'"></watch-video>
-        </ng-container>
+        </div>
     </div>
 
 </div>
@@ -142,14 +142,14 @@
                     #auto="matAutocomplete"
                     (optionSelected)="selectChiplistValue($event); selectField.value = ''"
                 >
-                    <ng-container *ngIf="fieldFilteredOptions?.length <= 5; else searchedData">
+                    <div *ngIf="fieldFilteredOptions?.length <= 5; else searchedData">
                         <mat-option *ngFor="let option of fieldFilteredOptions" [value]="option">
                             {{ option?.name }} ( {{ option?.type }} )
                         </mat-option>
                         <mat-option disabled *ngIf="fieldFilteredOptions?.length === 0">{{
                             localeData?.header?.no_result_found
                         }}</mat-option>
-                    </ng-container>
+                    </div>
                     <ng-template #searchedData>
                         <app-cdk-scroll
                             (fetchNextPage)="searchInventory(false, true)"

@@ -8,8 +8,10 @@ import { AppState } from '../../../../../store';
 import { takeUntil } from 'rxjs/operators';
 import { GstReport } from '../../../../constants/gst.constant';
 import { GstReconcileActions } from 'apps/web-giddh/src/app/actions/gst-reconcile/gst-reconcile.actions';
-import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
+import { cloneDeep, sortBy } from '../../../../../lodash-optimized';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
+import { Configuration } from 'apps/web-giddh/src/app/app.constant';
+import { environment } from 'apps/web-giddh/src/environments/environment';
 
 interface SequenceConfig {
     name: string;
@@ -21,7 +23,8 @@ interface SequenceConfig {
     // tslint:disable-next-line:component-selector
     selector: 'overview-summary',
     templateUrl: './summary.component.html',
-    styleUrls: ['summary.component.scss']
+    styleUrls: ['summary.component.scss'],
+    standalone: false
 })
 export class OverviewSummaryComponent implements OnInit, OnDestroy {
     @Input() public currentPeriod: any = null;
@@ -65,7 +68,7 @@ export class OverviewSummaryComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.imgPath = isElectron ? 'assets/images/gst/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/gst/';
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : environment.AppUrl + environment.APP_FOLDER + 'assets/images/gst/';
         this.gstr1OverviewData$.pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data && this.selectedGst === GstReport.Gstr1) {
                 this.gstrOverviewData = this.transformedSummaryData(data);
@@ -140,9 +143,9 @@ export class OverviewSummaryComponent implements OnInit, OnDestroy {
     }
 
     public mapResponseData(data: GstOverViewSummary[], sequencingList: SequenceConfig[]): GstOverViewSummary[] {
-        let manipulatedData: GstOverViewSummary[] = _.cloneDeep(data);
+        let manipulatedData: GstOverViewSummary[] = cloneDeep(data);
 
-        manipulatedData = _.sortBy(manipulatedData, (o: GstOverViewSummary) => {
+        manipulatedData = sortBy(manipulatedData, (o: GstOverViewSummary) => {
             let index = sequencingList?.findIndex(f => f.gstReturnType === o.gstReturnType);
             o.name = sequencingList[index].name;
             return index;

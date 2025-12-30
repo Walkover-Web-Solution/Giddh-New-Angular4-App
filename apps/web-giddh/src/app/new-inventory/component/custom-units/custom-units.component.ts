@@ -5,10 +5,13 @@ import { ReplaySubject } from "rxjs";
 import { MatDialog } from "@angular/material/dialog";
 import { ToasterService } from "../../../services/toaster.service";
 import { ASIDE_PANE_CONFIG } from "../../../app.constant";
+import { remove } from '../../../lodash-optimized';
 
 @Component({
     selector: "custom-units",
+    
     templateUrl: "./custom-units.component.html",
+    standalone: false,
     styleUrls: ["./custom-units.component.scss"]
 })
 export class CustomUnitsComponent implements OnInit, OnDestroy {

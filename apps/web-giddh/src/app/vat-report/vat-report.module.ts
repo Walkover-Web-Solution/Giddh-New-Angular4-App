@@ -16,7 +16,7 @@ import { ClickOutsideModule } from "ng-click-outside";
 import { FormsModule } from "@angular/forms";
 import { Daterangepicker } from "../theme/ng2-daterangepicker/daterangepicker.module";
 import { ElementViewChildModule } from "../shared/helpers/directives/elementViewChild/elementViewChild.module";
-import { InvoiceModule } from "../invoice/invoice.module";
+// import { InvoiceModule } from "../invoice/invoice.module";
 import { SharedModule } from "../shared/shared.module";
 import { TaxSidebarModule } from "../shared/tax-sidebar/tax-sidebar.module";
 import { FormFieldsModule } from "../theme/form-fields/form-fields.module";
@@ -54,7 +54,7 @@ import { GiddhNumberFormatModule } from "../shared/helpers/pipes/number-format/n
         FormsModule,
         Daterangepicker,
         ElementViewChildModule,
-        InvoiceModule,
+        // InvoiceModule,
         SharedModule,
         TaxSidebarModule,
         FormFieldsModule,

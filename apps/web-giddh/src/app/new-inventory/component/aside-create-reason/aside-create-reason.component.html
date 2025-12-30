@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'inventory/adjustment'"
     (commonLocaleData)="commonLocaleData = $event"
@@ -9,7 +9,7 @@
     </div>
     <mat-dialog-content class="dialog-body">
         <giddh-page-loader *ngIf="createReasonInProgress$ | async"></giddh-page-loader>
-        <ng-container *ngIf="!(createReasonInProgress$ | async)">
+        <div *ngIf="!(createReasonInProgress$ | async)">
             <form autocomplete="off" novalidate name="reasonForm" [formGroup]="reasonForm">
                 <div class="row mb-3">
                     <div class="col-xl-5 col-lg-5 col-sm-5">
@@ -56,6 +56,6 @@
                     </div>
                 </div>
             </form>
-        </ng-container>
+        </div>
     </mat-dialog-content>
-</ng-container>
+</div>

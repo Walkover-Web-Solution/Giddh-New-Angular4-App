@@ -1,25 +1,25 @@
-<ng-container
+<div
     appTranslate
     [file]="'import-data'"
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
-    <ng-container *ngIf="entity === 'stock'">
+    <div *ngIf="entity === 'stock'">
         <span class="pull-right mt-2">
             <watch-video [cssClass]="'text-primary pr-3'" [moduleName]="'IMPORT_INVENTORY'"></watch-video>
         </span>
-    </ng-container>
-    <ng-container *ngIf="entity === 'master'">
+    </div>
+    <div *ngIf="entity === 'master'">
         <span class="pull-right mt-2">
             <watch-video [cssClass]="'text-primary pr-3'" [moduleName]="'IMPORT_MASTER'"></watch-video>
         </span>
-    </ng-container>
-    <ng-container *ngIf="entity === 'entries'">
+    </div>
+    <div *ngIf="entity === 'entries'">
         <span class="pull-right mt-2">
             <watch-video [cssClass]="'text-primary pr-3'" [moduleName]="'IMPORT_ENTRIES'"></watch-video>
         </span>
-    </ng-container>
+    </div>
     <div class="container-fluid clear-both">
         <div class="top-bar" *ngIf="step <= 3">
             <p class="section-title" *ngIf="step === 1"></p>
@@ -32,7 +32,7 @@
         <div class="col-xs-12 col-sm-12 p-0">       
             <div class="clear-both">
                 <div [ngSwitch]="step">
-                    <ng-container *ngSwitchCase="1">
+                    <div *ngSwitchCase="1">
                         <upload-file
                             [isLoading]="isUploadInProgress"
                             [entity]="entity"
@@ -41,10 +41,10 @@
                             (onFileUpload)="onFileUpload($event)"
                         >
                         </upload-file>
-                    </ng-container>
+                    </div>
 
 
-                    <ng-container *ngSwitchCase="2">
+                    <div *ngSwitchCase="2">
                         <import-process
                             [entity]="entity"
                             [isLoading]="excelState?.requestState === 4"
@@ -54,9 +54,9 @@
                             (onSubmit)="onSubmit($event)"
                             (onBack)="onBack()"
                         ></import-process>
-                    </ng-container>
+                    </div>
 
-                    <ng-container *ngSwitchCase="4">
+                    <div *ngSwitchCase="4">
                         <upload-success
                             [localeData]="localeData"
                             [commonLocaleData]="commonLocaleData"
@@ -64,9 +64,9 @@
                             (onShowReport)="showReport()"
                             [UploadExceltableResponse]="UploadExceltableResponse"
                         ></upload-success>
-                    </ng-container>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</ng-container>
+</div>

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input, ElementRef, SimpleChanges } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, ElementRef, SimpleChanges, Inject } from '@angular/core';
 import { CustomTemplateResponse } from '../../../models/api-models/Invoice';
 import { ReplaySubject, take, takeUntil } from 'rxjs';
 import { TemplateContentUISectionVisibility, InvoiceUiDataService } from '../../../services/invoice.ui.data.service';
@@ -8,19 +8,21 @@ import { CommonService } from '../../../services/common.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store';
-import { API_BULK_FETCH_LIMIT, IOption } from '../../../app.constant';
+import { API_BULK_FETCH_LIMIT, Configuration, IOption } from '../../../app.constant';
 import { InvoiceService } from '../../../services/invoice.service';
 import { NgForm } from '@angular/forms';
 import { CountryNames } from '../../../shared/Enums/common.enum';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { TemplateModeEnum, TemplateTypeEnum, VoucherTypeEnum } from '../../../models/api-models/Sales';
+import { environment } from 'apps/web-giddh/src/environments/environment';
+import { ServiceConfig } from '../../../services/service.config';
 import { CustomFieldsService } from '../../../services/custom-fields.service';
 
 @Component({
     selector: 'template-edit-filter',
     templateUrl: './template-edit-filter.component.html',
     styleUrls: ['./template-edit-filter.component.scss'],
-
+    standalone: false
 })
 export class TemplateEditFilterComponent implements OnInit {
     /** Ng form instance of content filter component */
@@ -167,6 +169,7 @@ export class TemplateEditFilterComponent implements OnInit {
         private commonService: CommonService,
         private store: Store<AppState>,
         private invoiceService: InvoiceService,
+        @Inject(ServiceConfig) private serviceConfig,
         private templateService: InvoiceUiDataService,
         private customFieldsService: CustomFieldsService
     ) {
@@ -216,7 +219,7 @@ export class TemplateEditFilterComponent implements OnInit {
      * @memberof TemplateEditFilterComponent
      */
     public ngOnInit(): void {
-        this.imgPath = isElectron ? "assets/images/" : AppUrl + APP_FOLDER + "assets/images/";
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         // Initialize dialog data
         const { templateType, voucherType, templateList, mode, localeData, commonLocaleData } = this.dialogData || {};
         this.templateType = templateType;
@@ -592,13 +595,13 @@ export class TemplateEditFilterComponent implements OnInit {
             } else {
                 this.presetFonts = this.templateFonts;
             }
-            this.templateFonts.forEach(font => {
+            (Array.isArray(this.templateFonts) ? this.templateFonts : []).forEach(font => {
                 if (font?.value === this.customTemplate?.font) this.selectedFont = font?.label;
             });
         }
         if (this.customTemplate?.fontSize) {
             this.customTemplate.fontSize = this.customTemplate?.fontSize.toString();
-            this.templateFontsSize.forEach(fontSize => {
+            (Array.isArray(this.templateFontsSize) ? this.templateFontsSize : []).forEach(fontSize => {
                 if (fontSize?.value == this.customTemplate?.fontSize) this.selectedFontSize = fontSize?.label;
             });
         }
@@ -991,7 +994,7 @@ export class TemplateEditFilterComponent implements OnInit {
 
     /**
      * Get custom fields API call
-     * 
+     *
      * @private
      * @memberof TemplateEditFilterComponent
      */

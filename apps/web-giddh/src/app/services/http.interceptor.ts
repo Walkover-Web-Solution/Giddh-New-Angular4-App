@@ -12,8 +12,11 @@ import * as dayjs from 'dayjs';
 import { AppState } from '../store';
 import { Store } from '@ngrx/store';
 import { LoginActions } from '../actions/login.action';
+import { clone, forEach, get, has, includes, keys, set } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class GiddhHttpInterceptor implements HttpInterceptor {
 
     private isOnline: boolean = true;
@@ -122,7 +125,7 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
                     const tabSpecificKeys = ['companyUniqueName', 'activeCompany', 'companyUser', 'applicationDate', 'todaySelected', 'currentBranchUniqueName'];
                     const tabSpecificData: any = {};
                     
-                    tabSpecificKeys.forEach(tabKey => {
+                    (Array.isArray(tabSpecificKeys) ? tabSpecificKeys : []).forEach(tabKey => {
                         if (localObj.hasOwnProperty(tabKey)) {
                             tabSpecificData[tabKey] = localObj[tabKey];
                         }
@@ -200,7 +203,7 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
                 const tabSpecificKeys = ['companyUniqueName', 'activeCompany', 'companyUser', 'applicationDate', 'todaySelected', 'currentBranchUniqueName'];
                 
                 // Override with tab-specific data from sessionStorage
-                tabSpecificKeys.forEach(tabKey => {
+                (Array.isArray(tabSpecificKeys) ? tabSpecificKeys : []).forEach(tabKey => {
                     if (sessionObj.hasOwnProperty(tabKey)) {
                         merged[tabKey] = sessionObj[tabKey];
                     }

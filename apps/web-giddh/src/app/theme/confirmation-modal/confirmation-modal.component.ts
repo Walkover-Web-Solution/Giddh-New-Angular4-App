@@ -4,7 +4,8 @@ import { ConfirmationModalConfiguration } from './confirmation-modal.interface';
 @Component({
     selector: 'confirmation-modal',
     styleUrls: ['./confirmation-modal.component.scss'],
-    templateUrl: './confirmation-modal.component.html'
+    templateUrl: './confirmation-modal.component.html',
+    standalone: false
 })
 export class ConfirmationModalComponent {
 

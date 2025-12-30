@@ -1,6 +1,6 @@
 <div class="filter-list">
     <mat-list class="inner-filter-list">
-        <ng-container *ngFor="let filterItem of expensesDetailedItems">
+        <div *ngFor="let filterItem of expensesDetailedItems">
             <mat-list-item
                 class="cursor-pointer"
                 (click)="editExpense(filterItem)"
@@ -29,6 +29,6 @@
                 </div>
             </mat-list-item>
             <mat-divider></mat-divider>
-        </ng-container>
+        </div>
     </mat-list>
 </div>

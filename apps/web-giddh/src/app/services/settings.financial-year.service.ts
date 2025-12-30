@@ -8,6 +8,7 @@ import { SETTINGS_FINANCIAL_YEAR_API } from './apiurls/settings.financial-year.a
 import { ActiveFinancialYear } from '../models/api-models/Company';
 import { GeneralService } from './general.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
+import { get } from '../lodash-optimized';
 
 export interface ILockFinancialYearRequest {
     lockAll: boolean;
@@ -21,7 +22,9 @@ export interface IFinancialYearResponse {
     financialYearPeriod: string;
 }
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class SettingsFinancialYearService {
     private companyUniqueName: string;
 

@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'gst'"
     (localeData)="localeData = $event"
@@ -49,13 +49,12 @@
                         <giddh-datepicker
                             [monthYearMode]="true"
                             [startView]="'multi-year'"
+                            (monthYearSelected)="setMonthAndYear($event)"
                             [cssClass]="'text-center width-150'"
                             [startAt]="startAt"
                             [placeholder]="date?.value ?? '--'"
                             [appearance]="'outline'"
-                            (monthYearSelected)="setMonthAndYear($event)"
-                        >
-                        </giddh-datepicker>
+                        ></giddh-datepicker>
                     </div>
                 </div>
 
@@ -115,7 +114,7 @@
                                         mat-raised-button
                                         color="primary"
                                         (click)="checkAuthenticationAndFileGstr3B()"
-                                        [disabled]="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.TaxFilling)"        
+                                        [disabled]="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.TaxFilling)"
                                     >
                                         {{ localeData?.filing?.push_to_portal }}
                                     </button>
@@ -128,7 +127,7 @@
                                         mat-raised-button
                                         color="primary"
                                         (click)="openSettingAsidePane()"
-                                        [disabled]="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.TaxFilling)"        
+                                        [disabled]="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.TaxFilling)"
                                     >
                                         {{
                                             gstAuthenticated
@@ -801,7 +800,7 @@
         [localeData]="localeData"
         [commonLocaleData]="commonLocaleData"
     ></filing-header>
-</ng-container>
+</div>
 <ng-template #watchVideoTemplateGSTR3>
     <watch-video [cssClass]="'text-primary'" [moduleName]="'GSTR3B'" class="pull-right pr-3"></watch-video>
 </ng-template>

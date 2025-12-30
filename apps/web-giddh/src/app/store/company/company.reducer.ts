@@ -6,6 +6,7 @@ import { CustomActions } from '../custom-actions';
 import * as dayjs from 'dayjs';
 import { IntegratedBankList, IRegistration } from "../../models/interfaces/registration.interface";
 import { DEFAULT_DATE_RANGE_PICKER_RANGES, UNAUTHORISED } from '../../app.constant';
+import { cloneDeep, findIndex, map } from '../../lodash-optimized';
 
 /**
  * Keeping Track of the CompanyState
@@ -150,7 +151,7 @@ export function CompanyReducer(state: CurrentCompanyState = initialState, action
         case SETTINGS_TAXES_ACTIONS.DELETE_TAX_RESPONSE: {
             let res: BaseResponse<TaxResponse, string> = action.payload;
             if (res?.status === 'success') {
-                let newState = _.cloneDeep(state);
+                let newState = cloneDeep(state);
                 let taxIndx = newState.taxes?.findIndex((tax) => tax.uniqueName === res.request);
                 if (taxIndx > -1) {
                     newState.taxes.splice(taxIndx, 1);

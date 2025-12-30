@@ -15,7 +15,7 @@ import { AddCompanyRoutingModule } from "./add-company.routing.module";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { ClickOutsideModule } from "ng-click-outside";
 import { MatRadioModule } from "@angular/material/radio";
-import { MobileNumberInputComponent } from "../shared/mobile-number-input";
+// import { MobileNumberInputComponent } from "../shared/mobile-number-input";
 
 @NgModule({
     declarations: [
@@ -38,7 +38,7 @@ import { MobileNumberInputComponent } from "../shared/mobile-number-input";
         MatProgressSpinnerModule,
         ClickOutsideModule,
         MatRadioModule,
-        MobileNumberInputComponent
+        // MobileNumberInputComponent
     ],
     providers: [
 

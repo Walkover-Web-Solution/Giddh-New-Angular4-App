@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'inventory/group'"
     (commonLocaleData)="commonLocaleData = $event"
@@ -9,7 +9,7 @@
         <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
         <hamburger-menu *ngIf="!addGroup"></hamburger-menu>
 
-        <ng-container *ngIf="!showLoader">
+        <div *ngIf="!showLoader">
             <form autocomplete="off" novalidate name="groupForm" [formGroup]="groupForm" class="new-account-form">
                 <div class="container-fluid">
                     <div class="row mt-3">
@@ -244,6 +244,6 @@
                     </div>
                 </div>
             </form>
-        </ng-container>
+        </div>
     </div>
-</ng-container>
+</div>

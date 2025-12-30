@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'ledger'"
     (localeData)="localeData = $event"
@@ -2323,22 +2323,15 @@
                                                     id="update-ledger-generate-voucher"
                                                     class="pull-left"
                                                     name="generateInvoice"
-                                                    [(ngModel)]="
-                                                        vm.isInvoiceGeneratedAlready
-                                                            ? vm.isInvoiceGeneratedAlready
-                                                            : vm.selectedLedger.generateInvoice
-                                                    "
+                                                    [ngModel]="vm.isInvoiceGeneratedAlready || vm.selectedLedger?.generateInvoice"
+                                                    (ngModelChange)="vm.selectedLedger && !vm.isInvoiceGeneratedAlready ? vm.selectedLedger.generateInvoice = $event : null"
                                                     [disabled]="
                                                         vm.isInvoiceGeneratedAlready ||
                                                         (voucherApiVersion === 2 && isAdvanceReceipt) ||
                                                         isAdjustReceiptSelected ||
                                                         isAdjustVoucherSelected ||
                                                         vm.selectedLedger?.voucherAdjustments?.adjustments?.length ||
-                                                        vm.selectedLedger?.invoiceLinkingRequest?.linkedInvoices
-                                                            ?.length ||
-                                                        vm.selectedLedger?.referenceVoucher?.uniqueName
-                                                            ? 'disabled'
-                                                            : null
+                                                        vm.selectedLedger?.invoiceLinkingRequest?.linkedInvoices?.length
                                                     "
                                                     (change)="manualGenerateVoucherChecked = $event?.checked"
                                                 >
@@ -2585,7 +2578,7 @@
             (closeEvent)="closeTaxModal()"
         ></aside-menu-create-tax-component>
     </ng-template>
-</ng-container>
+</div>
 
 <!-- Sales person dropdown template reference -->
 <ng-template #salesPersonDropdown>

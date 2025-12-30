@@ -2,12 +2,15 @@ import { Component, Inject, Input, OnChanges, OnDestroy, OnInit, SimpleChanges }
 import { ReplaySubject } from 'rxjs';
 import { DocIssueSummary, DocIssueSummaryDetailsDocs } from '../../../../../../models/api-models/GstReconcile';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
+import { environment } from 'apps/web-giddh/src/environments/environment';
+import { Configuration } from 'apps/web-giddh/src/app/app.constant';
 
 @Component({
     // tslint:disable-next-line:component-selector
     selector: 'document-issued',
     templateUrl: './document-issued.component.html',
     styleUrls: ['./document-issued.component.css'],
+    standalone: false
 })
 export class DocumentIssuedComponent implements OnInit, OnChanges, OnDestroy {
     // tslint:disable:variable-name
@@ -24,7 +27,7 @@ export class DocumentIssuedComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnInit() {
-        this.imgPath = isElectron ? 'assets/images/gst/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/gst/';
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : environment.AppUrl + environment.APP_FOLDER + 'assets/images/gst/';
     }
 
     /**
@@ -32,7 +35,7 @@ export class DocumentIssuedComponent implements OnInit, OnChanges, OnDestroy {
      */
     public ngOnChanges(s: SimpleChanges) {
         if (s['doc_issues']?.currentValue && s['doc_issues']?.currentValue !== s['doc_issues']?.previousValue) {
-            this.doc_issues.doc_det.forEach(f => {
+            (Array.isArray(this.doc_issues.doc_det) ? this.doc_issues.doc_det : []).forEach(f => {
                 this.doc_issuesVM.push(...f.docs);
             });
         }

@@ -1,3 +1,4 @@
+import { environment } from './../../environments/environment.generated';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
@@ -6,7 +7,6 @@ import { ConfirmationModalButton, ConfirmationModalConfiguration } from '../them
 import { CompanyCreateRequest } from '../models/api-models/Company';
 import { UserDetails } from '../models/api-models/loginModels';
 import { IUlist } from '../models/interfaces/ulist.interface';
-import { cloneDeep, find, orderBy } from '../lodash-optimized';
 import { OrganizationType } from '../models/user-login-state';
 import { AllItems } from '../shared/helpers/allItems';
 import { ActivatedRoute, NavigationStart, Params, QueryParamsHandling, Router } from '@angular/router';
@@ -22,8 +22,12 @@ import { LedgerViewEnum } from '../models/api-models/Ledger';
 import { giddhRoundOff } from '../shared/helpers/helperFunctions';
 import { AccountArchivedStatusEnum } from '../shared/Enums/common.enum';
 import { PageLeaveUtilityService } from './page-leave-utility.service';
+import { Configuration } from '../app.constant';
+import { cloneDeep, concat, find, findIndex, forEach, includes, indexOf, keys, map, orderBy, remove, set, slice, some } from '../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class GeneralService {
     invokeEvent: Subject<any> = new Subject();
     public isCurrencyPipeLoaded: boolean = false;
@@ -79,7 +83,7 @@ export class GeneralService {
         this._createNewCompany = newCompanyRequest;
     }
 
-    public eventHandler: Subject<{ name: eventsConst, payload: any }> = new Subject();
+    public eventHandler: Subject<{ name: string, payload: any }> = new Subject();
     public IAmLoaded: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
     private _user: UserDetails;
@@ -542,7 +546,7 @@ export class GeneralService {
     public addValueInArray(array: Array<string>, value: any): Array<string> {
         let exists = false;
         if (array && array.length > 0) {
-            array.forEach(item => {
+            (Array.isArray(array) ? array : []).forEach(item => {
                 if (item === value) {
                     exists = true;
                 }
@@ -568,7 +572,7 @@ export class GeneralService {
         let exists = false;
 
         if (array && array.length > 0) {
-            array.forEach(item => {
+            (Array.isArray(array) ? array : []).forEach(item => {
                 if (item === value) {
                     exists = true;
                 }
@@ -590,7 +594,7 @@ export class GeneralService {
         let index = -1;
         if (array && array.length > 0) {
             let loop = 0;
-            array.forEach(item => {
+            (Array.isArray(array) ? array : []).forEach(item => {
                 if (item === value) {
                     index = loop;
                 }
@@ -645,7 +649,12 @@ export class GeneralService {
     public getGiddhRegionUrl(): string {
         const countryRegion = localStorage.getItem('Country-Region');
         const region = COUNTRY_REGION_MAP[countryRegion] || null;
-        return region === 'gl' ? 'https://giddh.com/login' : `https://giddh.com/${region}/login`;
+
+        // Use environment-specific AppUrl instead of hardcoded giddh.com
+        const baseUrl = environment.AppUrl || 'https://giddh.com';
+        const loginPath = '/login';
+
+        return region === 'gl' ? `${baseUrl}${loginPath}` : `${baseUrl}/${region}${loginPath}`;
     }
 
     /**
@@ -855,7 +864,7 @@ export class GeneralService {
                 // Check if "" is not present at 0th and 1st index
                 let count = 0;
                 let initials = '';
-                nameArray.forEach(word => {
+                (Array.isArray(nameArray) ? nameArray : []).forEach(word => {
                     if (word && count < 2) {
                         initials += ` ${word[0]}`;
                         count++;
@@ -954,7 +963,7 @@ export class GeneralService {
         } else {
             this.router.navigate([route], parameter);
         }
-        if (isElectron && isSocialLogin) {
+        if (Configuration.isElectron && isSocialLogin) {
             setTimeout(() => {
                 window.location.reload();
             }, 200);
@@ -1333,7 +1342,7 @@ export class GeneralService {
     public addObjectInArray(array: any[], value: any): Array<string> {
         let exists = false;
         if (array && array.length > 0) {
-            array.forEach(item => {
+            (Array.isArray(array) ? array : []).forEach(item => {
                 if (item?.poUniqueName === value?.poUniqueName) {
                     exists = true;
                 }
@@ -1359,7 +1368,7 @@ export class GeneralService {
         let exists = false;
 
         if (array && array.length > 0) {
-            array.forEach(item => {
+            (Array.isArray(array) ? array : []).forEach(item => {
                 if (item?.poUniqueName === value?.poUniqueName) {
                     exists = true;
                 }
@@ -1381,7 +1390,7 @@ export class GeneralService {
         let index = -1;
         if (array && array.length > 0) {
             let loop = 0;
-            array.forEach(item => {
+            (Array.isArray(array) ? array : []).forEach(item => {
                 if (item?.poUniqueName === value?.poUniqueName) {
                     index = loop;
                 }
@@ -1544,7 +1553,7 @@ export class GeneralService {
             discountsList,
             discountAccountsDetails
         } = requestObj;
-        discountsList.forEach(acc => {
+        (Array.isArray(discountsList) ? discountsList : []).forEach(acc => {
             if (discountAccountsDetails) {
                 let hasItem = discountAccountsDetails.some(s => s.discountUniqueName === acc?.uniqueName || s.uniqueName === acc?.uniqueName);
                 if (!hasItem) {
@@ -2611,7 +2620,7 @@ export class GeneralService {
      * @memberof GeneralService
      */
     public markAllFormsAsPristine(): void {
-        this.markFormsAsPristineCallbacks.forEach(callback => {
+        (Array.isArray(this.markFormsAsPristineCallbacks) ? this.markFormsAsPristineCallbacks : []).forEach(callback => {
             try {
                 callback();
             } catch (error) {

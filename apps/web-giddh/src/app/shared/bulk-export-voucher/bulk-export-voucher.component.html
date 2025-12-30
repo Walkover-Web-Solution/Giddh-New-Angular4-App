@@ -1,65 +1,394 @@
-<ng-container appTranslate [file]="'bulk-export-voucher'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
-
-    <div class="dialog-header">
-        <span>
-            {{ commonLocaleData?.app_bulk_export }} - {{ commonLocaleData?.app_total }} {{ totalItems }}
-        </span>
-        <button mat-icon-button aria-label="close" (click)="closeModal()">
-            <i class="icon-cross"></i>
-        </button>
-    </div>
-    <mat-dialog-content class="dialog-body">
-        <div class="export-modal-wrapper" *ngIf="isLoading">
-            <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
+<div
+    appTranslate
+    [file]="'bulk-export-voucher'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
+>
+    <section [ngClass]="exportForm.get('exportType').value === exportTypeEnum.excel || exportForm.get('exportType').value === exportTypeEnum.csv ? 'mat-dialog-lg' : 'mat-dialog-md'">
+        <div class="dialog-header d-flex justify-content-between align-items-center">
+            <span class="font-size-16 px-0"
+                >{{ commonLocaleData?.app_bulk_export }} - {{ commonLocaleData?.app_total }}
+                {{ inputData?.totalItems }}</span
+            >
+            <i mat-dialog-close class="icon-cross icon-font-size-16"></i>
         </div>
-        <div class="export-modal-wrapper" *ngIf="!isLoading">
-            <ng-container *ngIf="type === 'sales'">
-                <div class="row mb-2">
-                    <div class="col-sm-12">
-                        <reactive-dropdown-field 
-                            [options]="downloadCopyOptions" 
-                            [placeholder]="localeData?.select_order"
-                            [name]="'downloadCopy'" 
-                            [(ngModel)]="copyTypes" 
-                            [label]="localeData?.select_copy"
-                        >
-                        </reactive-dropdown-field>
+        <div mat-dialog-content>
+            <giddh-page-loader *ngIf="bulkExportVoucherInProgress$ | async"></giddh-page-loader>
+            <form [formGroup]="exportForm" [hidden]="bulkExportVoucherInProgress$ | async" class=" p-3 ">
+                <p class="mb-2">
+                    {{ commonLocaleData?.app_note }}: {{ commonLocaleData?.app_export_file_name_change_note }}
+                </p>
+                <!-- Export attachment -->
+                <ng-container *ngIf="!vouchersOnlySupportExcelExport.includes(inputData?.voucherType)">
+                    <div class="pb-2 clear-both export-type d-flex column-gap-15">
+                        <div class="d-flex align-items-center">
+                            <label class="width-150">{{ localeData?.attachment }}:</label>
+                            <mat-slide-toggle color="primary" name="attachmentExport" formControlName="attachmentExport">
+                                <span>{{
+                                    exportForm.get("attachmentExport").value ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                                }}</span>
+                            </mat-slide-toggle>
+                        </div>
+                        <i class="icon-info1 cursor-pointer d-flex align-items-center"  [matTooltip]="localeData?.export_attachment_info" matTooltipPosition="above"></i>
                     </div>
+                    <div
+                        class="d-flex align-items-center"
+                        [hidden]="!exportForm.get('attachmentExport').value"
+                    >
+                        <div class="width-150 mb-2">
+                            {{ commonLocaleData?.app_file_format }}
+                        </div>
+                        <div class="d-flex flex-column w-50">
+                            <input
+                                matInput
+                                #tribute="appTributeMention"
+                                (click)="tribute?.open()"
+                                formControlName="selectedFormatList"
+                                [placeholder]="commonLocaleData?.app_variable_search_hint"
+                                class="form-control radius-none border-none border-bottom"
+                                (ngModelChange)="getFileFormat()"
+                                [appTributeMention]="tributeConfig"
+                                [appTributeMentionValues]="fileFormatList"
+                            />
+                            <div class="font-size-12 word-break pt-1 pb-1" *ngIf="exportForm.get('selectedFormatList').value?.length">
+                                {{ exportForm.get("fileNameFormat").value }}
+                            </div>
+                        </div>
+                    </div>
+                    <mat-divider [ngClass]="{'mt-2': !exportForm.get('selectedFormatList').value?.length}"></mat-divider>
+                </ng-container>
+
+                <!-- Export voucher -->
+                <div class="pb-4 pt-2 clear-both export-type" *ngIf="!vouchersOnlySupportExcelExport.includes(inputData?.voucherType)">
+                    <label class="width-150">{{ commonLocaleData?.app_voucher }}:</label>
+                    <mat-slide-toggle color="primary" name="voucherExport" formControlName="voucherExport" (change)="onVoucherExportChange($event)">
+                        <span>{{
+                            exportForm.get("voucherExport").value ? commonLocaleData?.app_yes : commonLocaleData?.app_no
+                        }}</span>
+                    </mat-slide-toggle>
                 </div>
-                <div class="row mb-3">
-                    <div class="col-sm-12">
-                        <button mat-raised-button color="primary"
-                            [disabled]="(type === 'sales' && (!copyTypes || copyTypes?.length === 0)) || isLoading"
-                            (click)="exportVouchers(false)">
-                            {{ commonLocaleData?.app_download }}
-                        </button>
+                <ng-container *ngIf="exportForm.get('voucherExport').value">
+                    <div class="d-flex align-items-center mb-3">
+                        <label class="width-150">{{ commonLocaleData?.app_type }}:</label>
+                        <mat-radio-group name="mergePdf" formControlName="exportType" (change)="onExportTypeChange($event)">
+                            <ng-container *ngIf="!vouchersOnlySupportExcelExport.includes(inputData?.voucherType)">
+                                <mat-radio-button
+                                    color="primary"
+                                    [value]="exportTypeEnum.multiplePdf"
+                                    (change)="exportForm?.get('mergePdf')?.setValue($event.value === exportTypeEnum.multiplePdf)"
+                                    aria-label="Export as multiple PDFs in single zip file"
+                                >
+                                    {{ localeData?.multiple_pdf }}
+                                </mat-radio-button>
+                                <mat-radio-button
+                                    color="primary"
+                                    [value]="exportTypeEnum.singlePdf"
+                                    (change)="exportForm?.get('mergePdf')?.setValue($event.value === exportTypeEnum.singlePdf)"
+                                    aria-label="Export as single PDF"
+                                >
+                                    {{ localeData?.single_pdf }}
+                                </mat-radio-button>
+                            </ng-container>
+                            <mat-radio-button color="primary" [value]="exportTypeEnum.excel" aria-label="Export as Excel">
+                                {{ commonLocaleData?.app_excel }}
+                            </mat-radio-button>
+                            <mat-radio-button color="primary" [value]="exportTypeEnum.csv" aria-label="Export as CSV">
+                                {{ localeData?.csv }}
+                            </mat-radio-button>
+                        </mat-radio-group>
                     </div>
+
+                    <!-- Select copy -->
+                <div
+                    [ngClass]="{
+                        'border-bottom':
+                            inputData?.voucherType === 'receipt' ||
+                            inputData?.voucherType === 'payment' ||
+                            inputData?.voucherType === 'credit note' ||
+                            inputData?.voucherType === 'debit note',
+                        'mat-form-field-invalid': !exportForm.get('copyTypes').value?.length && !isValidForm
+                    }"
+                    *ngIf="
+                        (
+                            exportForm.get('exportType').value === exportTypeEnum.multiplePdf ||
+                            exportForm.get('exportType').value === exportTypeEnum.singlePdf
+                        ) &&
+                        inputData?.voucherType === 'sales' &&
+                        exportForm.get('voucherExport').value
+                    "
+                >
+                    <mat-form-field appearance="outline" class="initial-height w-100 mb-2 mt-3">
+                        <mat-label>{{ localeData?.select_copy }}</mat-label>
+                        <mat-select multiple [placeholder]="localeData?.select_copy" formControlName="copyTypes">
+                            <mat-option *ngFor="let copyType of copyTypes" [value]="copyType.value">
+                                {{ copyType.label }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
                 </div>
 
-                {{ commonLocaleData?.app_or }}
-                <br />
-                <br />
-            </ng-container>
-            <div class="row mb-3">
-                <div class="col-sm-12">
-                    <label class="mb-1">{{ localeData?.add_multiple_email }}</label>
-                </div>
-                <div class="col-sm-12">
-                    <!-- Email id could be mulitiple   -->
-                    <textarea type="text" [placeholder]="localeData?.recipients_email"
-                        class="form-control mb-3 multiple-email" name="recipients"
-                        [(ngModel)]="recipients"></textarea>
-                    <button mat-raised-button color="primary" [disabled]="
-                        !recipients || recipients?.length === 0 || (type === 'sales' && (!copyTypes || copyTypes?.length === 0)) || isLoading
-                    " (click)="exportVouchers(true)">
-                        {{ commonLocaleData?.app_send_email }}
-                    </button>
+                    <!-- Export Excel Columns -->
+                    <ng-container *ngIf="exportForm.get('exportType').value === exportTypeEnum.excel || exportForm.get('exportType').value === exportTypeEnum.csv">
+                        <div class="font-size-15 mb-4">
+                            {{ localeData?.export_note }}
+                        </div>
+                        <mat-divider></mat-divider>
+                        <div class="d-grid column-setting">
+                                <!-- Billing Address -->
+                                <div class="setting">
+                                    <div class="d-flex justify-content-between align-items-center h-100">
+                                        <label>{{ localeData?.billing_address }}:</label>
+                                        <mat-slide-toggle
+                                            color="primary"
+                                            name="showBillingAddress"
+                                            formControlName="showBillingAddress"
+                                        >
+                                            <span>{{
+                                                exportForm.get("showBillingAddress").value
+                                                    ? commonLocaleData?.app_yes
+                                                    : commonLocaleData?.app_no
+                                            }}</span>
+                                        </mat-slide-toggle>
+                                    </div>
+                                </div>
+                                <!-- Shipping Address -->
+                                <div class="setting">
+                                    <div class="d-flex justify-content-between align-items-center h-100">
+                                        <label>{{ localeData?.shipping_address }}:</label>
+                                        <mat-slide-toggle
+                                            color="primary"
+                                            name="showShippingAddress"
+                                            formControlName="showShippingAddress"
+                                        >
+                                            <span>{{
+                                                exportForm.get("showShippingAddress").value
+                                                    ? commonLocaleData?.app_yes
+                                                    : commonLocaleData?.app_no
+                                            }}</span>
+                                        </mat-slide-toggle>
+                                    </div>
+                                </div>
+                                <!-- Attention To -->
+                                <div class="setting">
+                                    <div class="d-flex justify-content-between align-items-center h-100">
+                                        <label>{{ localeData?.attention_to }}:</label>
+                                        <mat-slide-toggle
+                                            color="primary"
+                                            name="showAttentionTo"
+                                            formControlName="showAttentionTo"
+                                        >
+                                            <span>{{
+                                                exportForm.get("showAttentionTo").value
+                                                    ? commonLocaleData?.app_yes
+                                                    : commonLocaleData?.app_no
+                                            }}</span>
+                                        </mat-slide-toggle>
+                                    </div>
+                                </div>
+                                <!-- Mobile Number -->
+                                <div class="setting">
+                                    <div class="d-flex justify-content-between align-items-center h-100">
+                                        <label>{{ localeData?.mobile_number }}:</label>
+                                        <mat-slide-toggle
+                                            color="primary"
+                                            name="showMobileNumber"
+                                            formControlName="showMobileNumber"
+                                        >
+                                            <span>{{
+                                                exportForm.get("showMobileNumber").value
+                                                    ? commonLocaleData?.app_yes
+                                                    : commonLocaleData?.app_no
+                                            }}</span>
+                                        </mat-slide-toggle>
+                                    </div>
+                                </div>
+                                <!-- Email -->
+                                <div class="setting">
+                                    <div class="d-flex justify-content-between align-items-center h-100">
+                                        <label>{{ commonLocaleData?.app_email }}:</label>
+                                        <mat-slide-toggle
+                                            color="primary"
+                                            name="showEmail"
+                                            formControlName="showEmail"
+                                        >
+                                            <span>{{
+                                                exportForm.get("showEmail").value
+                                                    ? commonLocaleData?.app_yes
+                                                    : commonLocaleData?.app_no
+                                            }}</span>
+                                        </mat-slide-toggle>
+                                    </div>
+                                </div>
+                                <!-- Tax Value -->
+                                <div class="setting">
+                                    <div class="d-flex justify-content-between align-items-center h-100">
+                                        <label>{{ localeData?.tax_value }}:</label>
+                                        <mat-slide-toggle
+                                            color="primary"
+                                            name="showTaxValue"
+                                            formControlName="showTaxValue"
+                                        >
+                                            <span>{{
+                                                exportForm.get("showTaxValue").value
+                                                    ? commonLocaleData?.app_yes
+                                                    : commonLocaleData?.app_no
+                                            }}</span>
+                                        </mat-slide-toggle>
+                                    </div>
+                                </div>
+                                <!-- Taxable Value Before Discount -->
+                                <div class="setting">
+                                    <div class="d-flex justify-content-between align-items-center h-100">
+                                        <label>{{ localeData?.taxable_value_before_discount }}:</label>
+                                        <mat-slide-toggle
+                                            color="primary"
+                                            name="showTaxableValueBeforeDiscount"
+                                            formControlName="showTaxableValueBeforeDiscount"
+                                        >
+                                            <span>{{
+                                                exportForm.get("showTaxableValueBeforeDiscount").value
+                                                    ? commonLocaleData?.app_yes
+                                                    : commonLocaleData?.app_no
+                                            }}</span>
+                                        </mat-slide-toggle>
+                                    </div>
+                                </div>
+                                <!-- Other TaxValue -->
+                                <div class="setting">
+                                    <div class="d-flex justify-content-between align-items-center h-100">
+                                        <label>{{ localeData?.other_tax_value }}:</label>
+                                        <mat-slide-toggle
+                                            color="primary"
+                                            name="showOtherTaxValue"
+                                            formControlName="showOtherTaxValue"
+                                        >
+                                            <span>{{
+                                                exportForm.get("showOtherTaxValue").value
+                                                    ? commonLocaleData?.app_yes
+                                                    : commonLocaleData?.app_no
+                                            }}</span>
+                                        </mat-slide-toggle>
+                                    </div>
+                                </div>
+                                <!-- Discount Value -->
+                                <div class="setting">
+                                    <div class="d-flex justify-content-between align-items-center h-100">
+                                        <label>{{ localeData?.discount_value }}:</label>
+                                        <mat-slide-toggle
+                                            color="primary"
+                                            name="showDiscountValue"
+                                            formControlName="showDiscountValue"
+                                        >
+                                            <span>{{
+                                                exportForm.get("showDiscountValue").value
+                                                    ? commonLocaleData?.app_yes
+                                                    : commonLocaleData?.app_no
+                                            }}</span>
+                                        </mat-slide-toggle>
+                                    </div>
+                                </div>
+                                <!-- Voucher Note -->
+                                <div class="setting">
+                                    <div class="d-flex justify-content-between align-items-center h-100">
+                                        <label>{{ localeData?.voucher_note }}:</label>
+                                        <mat-slide-toggle
+                                            color="primary"
+                                            name="xxxx"
+                                            formControlName="showVoucherNote"
+                                        >
+                                            <span>{{
+                                                exportForm.get("showVoucherNote").value
+                                                    ? commonLocaleData?.app_yes
+                                                    : commonLocaleData?.app_no
+                                            }}</span>
+                                        </mat-slide-toggle>
+                                    </div>
+                                </div>
+                                <!-- EInvoice Details -->
+                                <div class="setting">
+                                    <div class="d-flex justify-content-between align-items-center h-100">
+                                        <label>{{ localeData?.e_invoice_details }}:</label>
+                                        <mat-slide-toggle
+                                            color="primary"
+                                            name="showEInvoiceDetails"
+                                            formControlName="showEInvoiceDetails"
+                                        >
+                                            <span>{{
+                                                exportForm.get("showEInvoiceDetails").value
+                                                    ? commonLocaleData?.app_yes
+                                                    : commonLocaleData?.app_no
+                                            }}</span>
+                                        </mat-slide-toggle>
+                                    </div>
+                                </div>
+                                <!-- Account CustomFields -->
+                                <div class="setting">
+                                    <div class="d-flex justify-content-between align-items-center h-100">
+                                        <label>{{ localeData?.account_custom_fields }}:</label>
+                                        <mat-slide-toggle
+                                            color="primary"
+                                            name="showAccountCustomFields"
+                                            formControlName="showAccountCustomFields"
+                                        >
+                                            <span>{{
+                                                exportForm.get("showAccountCustomFields").value
+                                                    ? commonLocaleData?.app_yes
+                                                    : commonLocaleData?.app_no
+                                            }}</span>
+                                        </mat-slide-toggle>
+                                    </div>
+                                </div>
+                                <!-- Voucher CustomFields -->
+                                <div class="setting">
+                                    <div class="d-flex justify-content-between align-items-center h-100">
+                                        <label>{{ localeData?.voucher_custom_fields }}:</label>
+                                        <mat-slide-toggle
+                                            color="primary"
+                                            name="showVoucherCustomFields"
+                                            formControlName="showVoucherCustomFields"
+                                        >
+                                            <span>{{
+                                                exportForm.get("showVoucherCustomFields").value
+                                                    ? commonLocaleData?.app_yes
+                                                    : commonLocaleData?.app_no
+                                            }}</span>
+                                        </mat-slide-toggle>
+                                    </div>
+                                </div>
+                                <!-- Shipping Details -->
+                                <div class="setting">
+                                    <div class="d-flex justify-content-between align-items-center h-100">
+                                        <label>{{ localeData?.shipping_details }}:</label>
+                                        <mat-slide-toggle
+                                            color="primary"
+                                            name="showShippingDetails"
+                                            formControlName="showShippingDetails"
+                                        >
+                                            <span>{{
+                                                exportForm.get("showShippingDetails").value
+                                                    ? commonLocaleData?.app_yes
+                                                    : commonLocaleData?.app_no
+                                            }}</span>
+                                        </mat-slide-toggle>
+                                    </div>
+                                </div>
+                            </div>
+                        <mat-divider></mat-divider>
+                    </ng-container>
+                </ng-container>
 
-                    <button *ngIf="type !== 'sales'" mat-raised-button color="primary" (click)="exportVouchers(false)">
+                <div class="text-right mt-4 w-100">
+                    <button
+                        mat-raised-button
+                        color="primary"
+                        (click)="exportVouchers(false)"
+                        [disabled]="!exportForm.get('attachmentExport').value && !exportForm.get('voucherExport').value"
+                    >
                         {{ commonLocaleData?.app_download }}
                     </button>
                 </div>
-            </div>
+            </form>
         </div>
-    </mat-dialog-content>
+    </section>
+</div>

@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'ledger'"
     (localeData)="localeData = $event"
@@ -143,7 +143,7 @@
                                     'compound-entry': txn.entryUniqueName === lc.selectedTxnUniqueName
                                 }"
                                 [matTooltip]="txn.description"
-                                [matTooltipPosition]="'above'" 
+                                [matTooltipPosition]="'above'"
                             >
                                 <mat-grid-tile
                                     [attr.data-title]="commonLocaleData?.app_date"
@@ -825,7 +825,7 @@
                                                     ledgerTxnBalance?.closingBalance?.type === 'DEBIT'
                                                         ? lc.ledgerUnderStandingObj.balanceText.dr
                                                         : lc.ledgerUnderStandingObj.balanceText.cr
-                                                "         
+                                                "
                                             >
                                                 <amount-field
                                                     [amount]="ledgerTxnBalance?.convertedClosingBalance?.amount"
@@ -854,4 +854,4 @@
         <ng-template #attachments>
             <attachments [selectedItem]="selectedItem"></attachments>
         </ng-template></div
-></ng-container>
+></div>

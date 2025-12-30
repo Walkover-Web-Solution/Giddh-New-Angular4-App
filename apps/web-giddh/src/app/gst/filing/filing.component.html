@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'gst'"
     (localeData)="localeData = $event"
@@ -87,7 +87,7 @@
                                                 {{ localeData?.filing?.push_to_portal }}
                                             </button>
                                         </div>
-            
+
                                         <p *ngIf="fileReturnSucces" class="mt-4">
                                             {{ getGstReturnFieldText() }}
                                         </p>
@@ -109,4 +109,4 @@
             </div>
         </div>
     </div>
-</ng-container>
+</div>

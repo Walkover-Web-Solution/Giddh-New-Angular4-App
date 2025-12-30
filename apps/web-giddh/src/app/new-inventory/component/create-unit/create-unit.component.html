@@ -1,11 +1,11 @@
-<ng-container
+<div
     appTranslate
     [file]="'inventory/unit'"
     (commonLocaleData)="commonLocaleData = $event"
     (localeData)="localeData = $event"
 >
     <giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
-    <ng-container *ngIf="!isLoading">
+    <div *ngIf="!isLoading">
         <form autocomplete="off" novalidate name="unitForm" [formGroup]="unitForm" class="container p-0">
             <div class="row mb-3">
                 <div class="col-xl-5 col-lg-5 col-sm-5">
@@ -216,5 +216,5 @@
                 </div>
             </div>
         </form>
-    </ng-container>
-</ng-container>
+    </div>
+</div>

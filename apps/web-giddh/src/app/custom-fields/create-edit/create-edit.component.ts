@@ -3,18 +3,19 @@ import { FormControl, NgForm } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ReplaySubject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
-import { cloneDeep } from "../../lodash-optimized";
 import { CustomFieldsService } from "../../services/custom-fields.service";
 import { ToasterService } from "../../services/toaster.service";
 import { FieldModules, FieldTypes } from "../custom-fields.constant";
 import { GeneralService } from "../../services/general.service";
 import { IOption } from "../../app.constant";
+import { cloneDeep, find, forEach, get, map, set } from '../../lodash-optimized';
 
 @Component({
     selector: "create-edit",
     templateUrl: "./create-edit.component.html",
     styleUrls: ["./create-edit.component.scss"],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class CustomFieldsCreateEditComponent implements OnInit, OnDestroy {
     /** Instance of custom field create/edit form */
@@ -43,7 +44,7 @@ export class CustomFieldsCreateEditComponent implements OnInit, OnDestroy {
     /** List custom row data type  */
     public fieldTypes: any[] = [];
     /** Available field modules list */
-    public fieldModules: any[] = [];
+    public fieldModules: IOption[] = [];
     /** Conditionally visible fields in form */
     public visibleFields: any = {
         fieldInfo: true,
@@ -89,8 +90,8 @@ export class CustomFieldsCreateEditComponent implements OnInit, OnDestroy {
         this.selectedModules.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(selectedModules => {
             if (selectedModules) {
                 let modules: any[] = [];
-                this.selectedModules.value.forEach(uniqueName => {
-                    modules.push(this.fieldModules?.find(module => module.uniqueName === uniqueName));
+                (Array.isArray(this.selectedModules.value) ? this.selectedModules.value : []).forEach(uniqueName => {
+                    modules.push(this.fieldModules?.find(module => module.value === uniqueName));
                 });
                 this.customFieldRequest.modules = modules;
             }
@@ -151,12 +152,12 @@ export class CustomFieldsCreateEditComponent implements OnInit, OnDestroy {
             ];
             if (this.voucherApiVersion === 2) {
                 this.fieldModules = [
-                    { name: this.localeData?.modules?.account, uniqueName: FieldModules.Account },
-                    { name: this.commonLocaleData?.app_variant, uniqueName: FieldModules.Variant }
+                    { label: this.localeData?.modules?.account, value: FieldModules.Account },
+                    { label: this.commonLocaleData?.app_variant, value: FieldModules.Variant }
                 ];
             } else {
                 this.fieldModules = [
-                    { name: this.localeData?.modules?.account, uniqueName: FieldModules.Account }
+                    { label: this.localeData?.modules?.account, value: FieldModules.Account }
                 ];
             }
         }
@@ -198,6 +199,7 @@ export class CustomFieldsCreateEditComponent implements OnInit, OnDestroy {
             return;
         }
         this.toggleLoader(true);
+
         this.customFieldsService.create([this.customFieldRequest]).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success") {
                 this.toasterService.showSnackBar("success", this.localeData?.custom_field_created);

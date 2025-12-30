@@ -1,4 +1,4 @@
-<ng-container appTranslate [file]="'settings/tax-authority'" (localeData)="localeData = $event"
+<div appTranslate [file]="'settings/tax-authority'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event">
     <hamburger-menu></hamburger-menu>
     <!-- Tax Sidebar code  -->
@@ -15,7 +15,7 @@
             <div class="mb-5">
                 <img src="assets/images/create-discounts.png" alt="create discount banner image" width="500px" height="auto">
             </div>
-            <button mat-raised-button color="primary" (click)="openCreateUpdateTaxAuthorityDialog()" class="font-size-20"> 
+            <button mat-raised-button color="primary" (click)="openCreateUpdateTaxAuthorityDialog()" class="font-size-20">
                 {{ commonLocaleData?.app_create + ' ' + commonLocaleData?.app_tax_authority }}
             </button>
         </div>
@@ -23,7 +23,7 @@
             <div class="row">
                 <div class="col-12 px-0 text-right">
                     <!-- Create Tax Authority Button When Tax authorities is present  -->
-                    <button mat-raised-button color="primary" 
+                    <button mat-raised-button color="primary"
                         (click)="openCreateUpdateTaxAuthorityDialog()">
                         {{ commonLocaleData?.app_create + ' ' + commonLocaleData?.app_tax_authority }}
                     </button>
@@ -96,4 +96,4 @@
             </div>
         </div>
     </div>
-</ng-container>
+</div>

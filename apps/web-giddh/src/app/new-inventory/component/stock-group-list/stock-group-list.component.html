@@ -20,52 +20,52 @@
         <!-- Mat Table -->
         <table mat-table [dataSource]="dataSource" class="table giddh-table on-mobile-view">
             <!-- Date Column -->
-            <ng-container matColumnDef="date">
+            <div matColumnDef="date">
                 <th mat-header-cell *matHeaderCellDef>Date</th>
                 <td mat-cell *matCellDef="let element" data-title="Date">{{ element.date }}</td>
-            </ng-container>
+            </div>
 
             <!-- Voucher Type Column -->
-            <ng-container matColumnDef="voucherType">
+            <div matColumnDef="voucherType">
                 <th mat-header-cell *matHeaderCellDef>Voucher Type</th>
                 <td mat-cell *matCellDef="let element" data-title="Voucher Type">{{ element.voucherType }}</td>
-            </ng-container>
+            </div>
 
             <!-- Account Name Column -->
-            <ng-container matColumnDef="accountName">
+            <div matColumnDef="accountName">
                 <th mat-header-cell *matHeaderCellDef>Account Name</th>
                 <td mat-cell *matCellDef="let element" data-title="Account Name">{{ element.accountName }}</td>
-            </ng-container>
+            </div>
 
             <!-- Inwards Column -->
-            <ng-container matColumnDef="inwards">
+            <div matColumnDef="inwards">
                 <th mat-header-cell *matHeaderCellDef class="text-right">Inwards</th>
                 <td mat-cell *matCellDef="let element" data-title="Inwards" class="text-right">{{ element.inwards }}</td>
-            </ng-container>
+            </div>
 
             <!-- Outwards Column -->
-            <ng-container matColumnDef="outwards">
+            <div matColumnDef="outwards">
                 <th mat-header-cell *matHeaderCellDef class="text-right">Outwards</th>
                 <td mat-cell *matCellDef="let element" data-title="Outwards" class="text-right">{{ element.outwards }}</td>
-            </ng-container>
+            </div>
 
             <!-- Rate Column -->
-            <ng-container matColumnDef="rate">
+            <div matColumnDef="rate">
                 <th mat-header-cell *matHeaderCellDef class="text-right">Rate</th>
                 <td mat-cell *matCellDef="let element" data-title="Rate" class="text-right">{{ element.rate }}</td>
-            </ng-container>
+            </div>
 
             <!-- Value Column -->
-            <ng-container matColumnDef="value">
+            <div matColumnDef="value">
                 <th mat-header-cell *matHeaderCellDef class="text-right">Value</th>
                 <td mat-cell *matCellDef="let element" data-title="Value" class="text-right">{{ element.value }}</td>
-            </ng-container>
+            </div>
 
             <!-- Qty Column -->
-            <ng-container matColumnDef="qty">
+            <div matColumnDef="qty">
                 <th mat-header-cell *matHeaderCellDef class="text-right">Qty</th>
                 <td mat-cell *matCellDef="let element" data-title="Qty" class="text-right">{{ element.qty }}</td>
-            </ng-container>
+            </div>
 
             <!-- Header and Row Definitions -->
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

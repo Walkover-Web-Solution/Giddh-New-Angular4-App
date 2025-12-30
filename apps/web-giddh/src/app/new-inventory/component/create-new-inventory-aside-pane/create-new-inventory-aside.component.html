@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'inventory'"
     (commonLocaleData)="commonLocaleData = $event"
@@ -13,7 +13,7 @@
             </button>
         </div>
         <mat-dialog-content class="dialog-body d-flex flex-column justify-content-center align-items-center">
-            <ng-container *ngIf="moduleType === 'branch-transfer'">
+            <div *ngIf="moduleType === 'branch-transfer'">
                 <div class="pb-3">
                     <button mat-raised-button color="primary" (click)="openCreateBranchTransfer('receipt-note')">
                         {{commonLocaleData?.app_receipt_note}}
@@ -24,8 +24,8 @@
                         {{commonLocaleData?.app_delivery_challan}}
                     </button>
                 </div>
-            </ng-container>
-            <ng-container *ngIf="moduleType !== 'branch-transfer' && moduleType !== 'inventory-adjustment'">
+            </div>
+            <div *ngIf="moduleType !== 'branch-transfer' && moduleType !== 'inventory-adjustment'">
                 <div class="pb-3">
                     <button mat-raised-button color="primary" (click)="createNewByAsidePanel('stock')">
                         {{ commonLocaleData?.app_create_stock }}
@@ -36,8 +36,8 @@
                         {{ commonLocaleData?.app_create_group }}
                     </button>
                 </div>
-            </ng-container>
-            <ng-container *ngIf="moduleType === 'inventory-adjustment'">
+            </div>
+            <div *ngIf="moduleType === 'inventory-adjustment'">
                 <div class="pb-3">
                     <button mat-raised-button color="primary" (click)="closeAsidePane()" [routerLink]="['/pages/inventory/v2/adjust-product-and-service']" >
                         Adjust Group
@@ -48,7 +48,7 @@
                         Adjust Stock
                     </button>
                 </div>
-            </ng-container>
+            </div>
         </mat-dialog-content>
     </div>
-</ng-container>
+</div>

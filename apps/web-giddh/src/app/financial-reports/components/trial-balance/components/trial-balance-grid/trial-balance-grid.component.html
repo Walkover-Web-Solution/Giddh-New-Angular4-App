@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'trial-profit-balance/trial-balance/grid'"
     (localeData)="localeData = $event"
@@ -55,8 +55,8 @@
                                     (click)="openConfirmDialog()"
                                     aria-label="clear selection"
                                 >
-                                    <img src="{{ imgPath }}deselect-all.svg" class="uncheck-all-icon" aria-label="clear selection icon" /> 
-                                </span> 
+                                    <img src="{{ imgPath }}deselect-all.svg" class="uncheck-all-icon" aria-label="clear selection icon" />
+                                </span>
                                 <span class="ml-1 mr-1"
                                     ><strong>{{ localeData?.particular }}</strong></span
                                 >
@@ -227,7 +227,7 @@
             <!-- end main content -->
         </div>
     </div>
-</ng-container>
+</div>
 
 <ng-template #accountAsideMenuTemplate>
     <aside-menu-account

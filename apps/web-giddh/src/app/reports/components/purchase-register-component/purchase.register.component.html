@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'reports/purchase-register'"
     (localeData)="localeData = $event"
@@ -40,7 +40,7 @@
                     >
                     </reactive-dropdown-field>
                 </div>
-                <div> 
+                <div>
                     <reactive-dropdown-field
                         [name]="'groupBy'"
                         [label]="localeData?.group_by"
@@ -94,9 +94,9 @@
                         </mat-form-field>
                         <mat-menu #monthMenu="matMenu" xPosition="after" yPosition="below">
                             <div class="grid-columns-3 d-grid column-gap-05 p-2">
-                            <button 
-                                mat-menu-item 
-                                *ngFor="let month of monthNames" 
+                            <button
+                                mat-menu-item
+                                *ngFor="let month of monthNames"
                                 (click)="durationMatSelect.close(); populateRecords(durationEnum.Weekly, month)"
                                 aria-label="Select month"
                             >
@@ -134,8 +134,8 @@
                         </mat-form-field>
                     </div>
                     <div class="custom-datepicker-wrapper">
-                        <div 
-                            class="custom-datepicker" 
+                        <div
+                            class="custom-datepicker"
                             [matMenuTriggerFor]="universalDatepicker"
                             #universalDatepickerTrigger="matMenuTrigger"
                             aria-label="Date range picker"
@@ -165,7 +165,7 @@
                         >
                             <mat-option class="mt-0">
                                 <ngx-mat-select-search
-                                    [placeholderLabel]="commonLocaleData?.app_select"  
+                                    [placeholderLabel]="commonLocaleData?.app_select"
                                     [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
                                     [formControl]="account"
                                     [clearSearchInput]="false"
@@ -180,8 +180,8 @@
                     </mat-form-field>
                 </div>
             </div>
-            <button 
-                mat-raised-button  
+            <button
+                mat-raised-button
                 (click)="export()"
                 color="primary"
                 [matTooltip]="commonLocaleData?.app_export"
@@ -201,7 +201,7 @@
         >
         </giddh-table>
     </div>
-</ng-container>
+</div>
 
 
 <!-- Universal Datepicker Menu -->

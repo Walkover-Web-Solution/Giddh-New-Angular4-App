@@ -13,7 +13,8 @@ import { NewConfirmationModalComponent } from '../../theme/new-confirmation-moda
 @Component({
     selector: 'setting-company-auth-key',
     templateUrl: './company-auth-key.component.html',
-    styleUrls: ['./company-auth-key.component.scss']
+    styleUrls: ['./company-auth-key.component.scss'],
+    standalone: false
 })
 
 export class CompanyAuthKeyComponent implements OnInit, OnDestroy {

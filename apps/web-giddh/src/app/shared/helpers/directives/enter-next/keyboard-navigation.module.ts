@@ -4,8 +4,7 @@ import { EnterNextDirective } from "./enter-next.directive";
 import { FocusableClickDirective } from "./focusable-click.directive";
 
 @NgModule({
-    imports: [A11yModule],
-    declarations: [EnterNextDirective, FocusableClickDirective],
+    imports: [A11yModule, EnterNextDirective, FocusableClickDirective],
     exports: [EnterNextDirective, FocusableClickDirective]
 })
 export class KeyboardNavigationModule { }

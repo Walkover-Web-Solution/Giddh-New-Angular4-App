@@ -13,7 +13,8 @@ import { InvViewService } from '../../inv.view.service';
 @Component({
     selector: 'jobwork-sidebar',
     templateUrl: './jobwork.sidebar.component.html',
-    styleUrls: ['./jobwork.sidebar.component.scss']
+    styleUrls: ['./jobwork.sidebar.component.scss'],
+    standalone: false
 })
 export class JobworkSidebarComponent implements OnInit, OnDestroy, AfterViewInit {
     public stocksList$: Observable<IStocksItem[]>;

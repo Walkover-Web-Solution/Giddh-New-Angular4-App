@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
-import { ComponentStore, tapResponse } from "@ngrx/component-store";
+import { ComponentStore } from "@ngrx/component-store";
+import { tap } from "rxjs/operators";
 import { ToasterService } from "../../../services/toaster.service";
 import { catchError, EMPTY, Observable, switchMap } from "rxjs";
 import { InvoiceService } from "../../../services/invoice.service";
@@ -51,19 +52,15 @@ export class TriggerComponentStore extends ComponentStore<TriggerState> {
             switchMap((model) => {
                 this.patchState({ createUpdateTriggerIsSuccess: false });
                 return this.invoiceService.createTrigger(model).pipe(
-                    tapResponse(
+                    tap(
                         (res: any) => {
                             if (res?.status === "success") {
                                 res?.body && this.toaster.showSnackBar("success", res.body);
-                                return this.patchState({ createUpdateTriggerIsSuccess: true });
+                                this.patchState({ createUpdateTriggerIsSuccess: true });
                             } else {
                                 res?.message && this.toaster.showSnackBar("error", res.message);
-                                return this.patchState({ createUpdateTriggerIsSuccess: false });
+                                this.patchState({ createUpdateTriggerIsSuccess: false });
                             }
-                        },
-                        (error: any) => {
-                            this.toaster.showSnackBar("error", error);
-                            return this.patchState({ createUpdateTriggerIsSuccess: false });
                         }
                     ),
                     catchError((err) => EMPTY)
@@ -83,19 +80,15 @@ export class TriggerComponentStore extends ComponentStore<TriggerState> {
             switchMap((req) => {
                 this.patchState({ createUpdateTriggerIsSuccess: false });
                 return this.invoiceService.updateTrigger(req.model, req.uniqueName).pipe(
-                    tapResponse(
+                    tap(
                         (res: any) => {
                             if (res?.status === "success") {
                                 res?.body && this.toaster.showSnackBar("success", res.body);
-                                return this.patchState({ createUpdateTriggerIsSuccess: true });
+                                this.patchState({ createUpdateTriggerIsSuccess: true });
                             } else {
                                 res?.message && this.toaster.showSnackBar("error", res.message);
-                                return this.patchState({ createUpdateTriggerIsSuccess: false });
+                                this.patchState({ createUpdateTriggerIsSuccess: false });
                             }
-                        },
-                        (error: any) => {
-                            this.toaster.showSnackBar("error", error);
-                            return this.patchState({ createUpdateTriggerIsSuccess: false });
                         }
                     ),
                     catchError((err) => EMPTY)
@@ -114,18 +107,14 @@ export class TriggerComponentStore extends ComponentStore<TriggerState> {
             switchMap((request) => {
                 this.patchState({ triggerList: null, isLoading: true });
                 return this.invoiceService.getTriggerList(request).pipe(
-                    tapResponse(
+                    tap(
                         (res: any) => {
                             if (res?.status === "success" && res?.body) {
-                                return this.patchState({ triggerList: res.body, isLoading: false });
+                                this.patchState({ triggerList: res.body, isLoading: false });
                             } else {
                                 res?.message && this.toaster.showSnackBar("error", res.message);
-                                return this.patchState({ triggerList: null, isLoading: false });
+                                this.patchState({ triggerList: null, isLoading: false });
                             }
-                        },
-                        (error: any) => {
-                            this.toaster.showSnackBar("error", error);
-                            return this.patchState({ triggerList: null, isLoading: false });
                         }
                     ),
                     catchError((err) => EMPTY)
@@ -144,18 +133,14 @@ export class TriggerComponentStore extends ComponentStore<TriggerState> {
             switchMap((request) => {
                 this.patchState({ triggerAdvanceList: null, isLoading: true });
                 return this.campaignIntegrationService.getTriggersList(request).pipe(
-                    tapResponse(
+                    tap(
                         (res: any) => {
                             if (res?.status === "success" && res?.body) {
-                                return this.patchState({ triggerAdvanceList: res.body, isLoading: false });
+                                this.patchState({ triggerAdvanceList: res.body, isLoading: false });
                             } else {
                                 res?.message && this.toaster.showSnackBar("error", res.message);
-                                return this.patchState({ triggerAdvanceList: null, isLoading: false });
+                                this.patchState({ triggerAdvanceList: null, isLoading: false });
                             }
-                        },
-                        (error: any) => {
-                            this.toaster.showSnackBar("error", error);
-                            return this.patchState({ triggerAdvanceList: null, isLoading: false });
                         }
                     ),
                     catchError((err) => EMPTY)
@@ -176,18 +161,14 @@ export class TriggerComponentStore extends ComponentStore<TriggerState> {
             switchMap((uniqueName) => {
                 this.patchState({ triggerDetails: null, isTriggerDetailsLoading: true });
                 return this.invoiceService.getTriggerDetails(uniqueName).pipe(
-                    tapResponse(
+                    tap(
                         (res: any) => {
                             if (res?.status === "success" && res?.body) {
-                                return this.patchState({ triggerDetails: res.body, isTriggerDetailsLoading: false });
+                                this.patchState({ triggerDetails: res.body, isTriggerDetailsLoading: false });
                             } else {
                                 res?.message && this.toaster.showSnackBar("error", res.message);
-                                return this.patchState({ triggerDetails: null, isTriggerDetailsLoading: false });
+                                this.patchState({ triggerDetails: null, isTriggerDetailsLoading: false });
                             }
-                        },
-                        (error: any) => {
-                            this.toaster.showSnackBar("error", error);
-                            return this.patchState({ triggerDetails: null, isTriggerDetailsLoading: false });
                         }
                     ),
                     catchError((err) => EMPTY)
@@ -205,10 +186,11 @@ export class TriggerComponentStore extends ComponentStore<TriggerState> {
         return data.pipe(
             switchMap((uniqueName) => {
                 return this.invoiceService.deleteTrigger(uniqueName).pipe(
-                    tapResponse(
+                    tap(
                         (res: any) => {
                             if (res?.status === "success" && res?.body) {
                                 this.getTriggerList({page: 1, count: this.get().triggerList?.count});
+                                this.toaster.showSnackBar("success", res.body);
                             } else {
                                 res?.message && this.toaster.showSnackBar("error", res.message);
                             }

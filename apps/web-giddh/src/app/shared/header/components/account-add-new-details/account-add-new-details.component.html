@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'accounts'"
     (localeData)="localeData = $event"
@@ -1045,7 +1045,7 @@
             <ng-container *ngTemplateOutlet="templateForSaveButton"></ng-container>
         </ng-container>
     </form>
-</ng-container>
+</div>
 <ng-template #templateForSaveButton>
     <div class="row pt-4" *ngIf="voucherApiVersion === 2">
         <div class="col-sm-12">

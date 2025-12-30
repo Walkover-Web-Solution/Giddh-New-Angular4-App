@@ -4,18 +4,19 @@ import { Directive, HostListener, ElementRef, OnDestroy, AfterViewInit } from '@
  * Directive that enables Enter key navigation to move focus to the next focusable element within a form.
  * Optimized for Angular production environments with enhanced performance and accessibility.
  * Also handles dropdown selection events to move focus after option selection.
- * 
+ *
  * @export
  * @class EnterNextDirective
  */
 @Directive({
-    selector: '[appEnterNext]'
+    selector: '[appEnterNext]',
+    standalone: true
 })
 export class EnterNextDirective implements OnDestroy, AfterViewInit {
-    
+
     /**
      * Cached focusable selector for performance optimization
-     * 
+     *
      * @private
      * @readonly
      * @memberof EnterNextDirective
@@ -24,7 +25,7 @@ export class EnterNextDirective implements OnDestroy, AfterViewInit {
 
     /**
      * Cached focusable tags set for O(1) lookup performance
-     * 
+     *
      * @private
      * @readonly
      * @memberof EnterNextDirective
@@ -33,7 +34,7 @@ export class EnterNextDirective implements OnDestroy, AfterViewInit {
 
     /**
      * Cached form element reference for performance
-     * 
+     *
      * @private
      * @memberof EnterNextDirective
      */
@@ -41,7 +42,7 @@ export class EnterNextDirective implements OnDestroy, AfterViewInit {
 
     /**
      * Creates an instance of EnterNextDirective
-     * 
+     *
      * @param {ElementRef<HTMLElement>} el - Reference to the host element
      * @memberof EnterNextDirective
      */
@@ -50,7 +51,7 @@ export class EnterNextDirective implements OnDestroy, AfterViewInit {
     /**
      * Handles keydown events on the host element.
      * When Enter key is pressed, prevents default behavior and moves focus to next focusable element.
-     * 
+     *
      * @param {KeyboardEvent} event - The keyboard event
      * @memberof EnterNextDirective
      */
@@ -67,14 +68,14 @@ export class EnterNextDirective implements OnDestroy, AfterViewInit {
 
         event.preventDefault();
         event.stopPropagation();
-        
+
         this.focusNextElement();
     }
 
     /**
      * Lifecycle hook runs after component view initialization
      * Sets up dropdown selection event listeners
-     * 
+     *
      * @memberof EnterNextDirective
      */
     public ngAfterViewInit(): void {
@@ -83,7 +84,7 @@ export class EnterNextDirective implements OnDestroy, AfterViewInit {
 
     /**
      * Cleanup method for OnDestroy lifecycle
-     * 
+     *
      * @memberof EnterNextDirective
      */
     public ngOnDestroy(): void {
@@ -92,13 +93,13 @@ export class EnterNextDirective implements OnDestroy, AfterViewInit {
 
     /**
      * Sets up event listener for dropdown option selection
-     * 
+     *
      * @private
      * @memberof EnterNextDirective
      */
     private setupDropdownSelectionListener(): void {
         const element = this.el.nativeElement;
-        
+
         // For reactive-dropdown-field components, listen for autocomplete option selection
         if (element.tagName === 'REACTIVE-DROPDOWN-FIELD') {
             // Use a more direct approach - listen for the autocomplete panel closing
@@ -121,19 +122,19 @@ export class EnterNextDirective implements OnDestroy, AfterViewInit {
 
     /**
      * Checks if the current element is a closed mat-select dropdown
-     * 
+     *
      * @private
      * @returns {boolean} True if mat-select is closed, false otherwise
      * @memberof EnterNextDirective
      */
     private isMatSelectClosed(): boolean {
         const element = this.el.nativeElement;
-        
+
         // Check if element is mat-select or contains mat-select
-        const matSelect = element.tagName === 'MAT-SELECT' ? element : 
+        const matSelect = element.tagName === 'MAT-SELECT' ? element :
                          element.querySelector('mat-select') ||
                          element.closest('mat-select');
-        
+
         if (!matSelect) {
             return false;
         }
@@ -141,13 +142,13 @@ export class EnterNextDirective implements OnDestroy, AfterViewInit {
         // Check if dropdown is closed (no mat-select-open class and no overlay)
         const hasOpenClass = matSelect.classList.contains('mat-select-open') ||
                             document.querySelector('.cdk-overlay-pane mat-select-panel');
-        
+
         return !hasOpenClass;
     }
 
     /**
      * Finds and focuses the next focusable element in the form with optimized performance
-     * 
+     *
      * @private
      * @memberof EnterNextDirective
      */
@@ -159,7 +160,7 @@ export class EnterNextDirective implements OnDestroy, AfterViewInit {
 
         const focusableElements = this.getFocusableElements(container);
         const currentInput = this.findCurrentInput();
-        
+
         if (!currentInput) {
             this.focusFirstAvailableElement(focusableElements);
             return;
@@ -174,7 +175,7 @@ export class EnterNextDirective implements OnDestroy, AfterViewInit {
     /**
      * Gets the form element with caching for performance
      * Falls back to dialog container if no form is found
-     * 
+     *
      * @private
      * @returns {HTMLElement | null} The form element or dialog container
      * @memberof EnterNextDirective
@@ -183,10 +184,10 @@ export class EnterNextDirective implements OnDestroy, AfterViewInit {
         if (!this.formElement) {
             // First try to find a form
             this.formElement = this.el.nativeElement.closest('form');
-            
+
             // If no form found, try to find dialog container
             if (!this.formElement) {
-                this.formElement = this.el.nativeElement.closest('[mat-dialog-content]') || 
+                this.formElement = this.el.nativeElement.closest('[mat-dialog-content]') ||
                                  this.el.nativeElement.closest('.dialog-body') ||
                                  this.el.nativeElement.closest('mat-dialog-container') ||
                                  document.body; // Fallback to body
@@ -197,7 +198,7 @@ export class EnterNextDirective implements OnDestroy, AfterViewInit {
 
     /**
      * Gets all focusable elements within the container with optimized selector
-     * 
+     *
      * @private
      * @param {HTMLElement} container - The container element (form or dialog)
      * @returns {HTMLElement[]} Array of focusable elements
@@ -210,27 +211,27 @@ export class EnterNextDirective implements OnDestroy, AfterViewInit {
     /**
      * Finds the actual input element that should be considered as current.
      * Optimized for custom Angular components.
-     * 
+     *
      * @private
      * @returns {HTMLElement | null} The current input element or null
      * @memberof EnterNextDirective
      */
     private findCurrentInput(): HTMLElement | null {
         const hostElement = this.el.nativeElement;
-        
+
         if (this.isFocusableElement(hostElement)) {
             return hostElement;
         }
 
         // Use more specific selector for better performance, include readonly inputs
         const inputElement = hostElement.querySelector('input:not([disabled]), input[readonly]:not([disabled]), select:not([disabled]), textarea:not([disabled])') as HTMLElement;
-        
+
         return inputElement && this.isElementVisible(inputElement) ? inputElement : null;
     }
 
     /**
      * Focuses the first available element from the list
-     * 
+     *
      * @private
      * @param {HTMLElement[]} elements - Array of focusable elements
      * @memberof EnterNextDirective
@@ -244,7 +245,7 @@ export class EnterNextDirective implements OnDestroy, AfterViewInit {
 
     /**
      * Focuses the next available element after the current index
-     * 
+     *
      * @private
      * @param {HTMLElement[]} elements - Array of focusable elements
      * @param {number} currentIndex - Current element index
@@ -261,7 +262,7 @@ export class EnterNextDirective implements OnDestroy, AfterViewInit {
 
     /**
      * Focuses an element with enhanced custom component support
-     * 
+     *
      * @private
      * @param {HTMLElement} element - Element to focus
      * @memberof EnterNextDirective
@@ -281,7 +282,7 @@ export class EnterNextDirective implements OnDestroy, AfterViewInit {
 
     /**
      * Checks if an element is focusable with optimized Set lookup
-     * 
+     *
      * @private
      * @param {HTMLElement} element - Element to check
      * @returns {boolean} True if element is focusable
@@ -293,7 +294,7 @@ export class EnterNextDirective implements OnDestroy, AfterViewInit {
 
     /**
      * Checks if an element is visible with optimized computation
-     * 
+     *
      * @private
      * @param {HTMLElement} element - Element to check
      * @returns {boolean} True if element is visible
@@ -304,14 +305,14 @@ export class EnterNextDirective implements OnDestroy, AfterViewInit {
         if (element.offsetParent === null) {
             return false;
         }
-        
+
         const style = window.getComputedStyle(element);
         return style.display !== 'none' && style.visibility !== 'hidden';
     }
 
     /**
      * Checks if an element is available for focus with optimized type checking
-     * 
+     *
      * @private
      * @param {HTMLElement} element - Element to check
      * @returns {boolean} True if element is available for focus
@@ -326,7 +327,7 @@ export class EnterNextDirective implements OnDestroy, AfterViewInit {
         if (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement) {
             return !element.disabled;
         }
-        
+
         if (element instanceof HTMLSelectElement || element instanceof HTMLButtonElement) {
             return !element.disabled;
         }

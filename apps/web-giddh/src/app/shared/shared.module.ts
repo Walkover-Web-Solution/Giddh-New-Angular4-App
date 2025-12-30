@@ -24,6 +24,8 @@ import { DecimalDigitsModule } from './helpers/directives/decimalDigits/decimalD
 import { ElementViewChildModule } from './helpers/directives/elementViewChild/elementViewChild.module';
 import { KeyboardShortutModule } from './helpers/directives/keyboardShortcut/keyboardShortut.module';
 import { NgxMaskModule } from './helpers/directives/ngx-mask';
+import { Configuration } from '../app.constant';
+import { environment } from '../../environments/environment';
 import { TextCaseChangeModule } from './helpers/directives/textCaseChange/textCaseChange.module';
 import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';
@@ -58,11 +60,13 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { GiddhNumberFormatModule } from './helpers/pipes/number-format/number-format.module';
+import { get } from '../lodash-optimized';
 
-const SOCIAL_CONFIG = isElectron ? null : new AuthServiceConfig([
+
+const SOCIAL_CONFIG = Configuration.isElectron ? null : new AuthServiceConfig([
     {
         id: GoogleLoginProvider.PROVIDER_ID,
-        provider: new GoogleLoginProvider(GOOGLE_CLIENT_ID)
+        provider: new GoogleLoginProvider(environment.GOOGLE_CLIENT_ID)
     }
 ], false);
 

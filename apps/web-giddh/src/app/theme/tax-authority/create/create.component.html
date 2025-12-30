@@ -1,9 +1,5 @@
-<ng-container
-    appTranslate
-    [file]="'settings/tax-authority'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
+<div appTranslate [file]="'settings/tax-authority'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event">
     <div class="tax-authority h-100">
         <div class="dialog-header">
             <span class="font-size-16">
@@ -54,4 +50,4 @@
             </form>
         </div>
     </div>
-</ng-container>
+</div>

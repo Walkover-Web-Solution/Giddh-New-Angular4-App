@@ -15,7 +15,8 @@ import { InvViewService } from '../../inv.view.service';
 @Component({
     selector: 'inventory-sidebar',
     templateUrl: './inventory.sidebar.component.html',
-    styleUrls: ['inventory.sidebar.component.scss']
+    styleUrls: ['inventory.sidebar.component.scss'],
+    standalone: false
 })
 export class InventorySidebarComponent implements OnInit, OnDestroy, AfterViewInit {
     public groupsWithStocks$: Observable<IGroupsWithStocksHierarchyMinItem[]>;

@@ -3,6 +3,10 @@ import * as quarterOfYear from 'dayjs/plugin/quarterOfYear' // load on demand
 dayjs.extend(quarterOfYear) // use plugin
 import { CountryCodeService } from './services/country-code.service';
 import { MatDialogConfig } from '@angular/material/dialog';
+import { environment } from '../environments/environment';
+
+// ENVIRONMENT AND CORE CONSTANTS - Now using webpack DefinePlugin and environment variables
+// These are injected at build time via webpack.partial.js
 
 /** Add Company business type*/
 export enum BusinessTypes {
@@ -80,14 +84,11 @@ export const DEFAULT_TOASTER_OPTIONS_WITH_HTML = {
 };
 
 export const DEFAULT_SERVER_ERROR_MSG = 'Something went wrong! Please try again.';
-export let IS_ELECTRON_WA = isElectron;
-export let APP_URL_WA = AppUrl;
-export let APP_FOLDER_WA = APP_FOLDER;
-if (typeof isElectron === 'undefined') {
-    IS_ELECTRON_WA = true;
-    APP_URL_WA = './';
-    APP_FOLDER_WA = '';
-}
+
+// Use Angular 21 standard environment approach
+export let IS_ELECTRON_WA = environment.isElectron;
+export let APP_URL_WA = environment.AppUrl;
+export let APP_FOLDER_WA = environment.APP_FOLDER;
 
 /**
  * Enum for type of on boarding
@@ -584,7 +585,6 @@ export const OTP_PROVIDER_URL = `https://verify.msg91.com/otp-provider.js?time=$
 export const ELECTRON_OTP_PROVIDER_URL = `https://control.msg91.com/app/assets/otp-provider/otp-provider.js?time=${new Date().getTime()}`;
 export const RESTRICTED_VOUCHERS_FOR_DOWNLOAD = ['journal'];
 export const SAMPLE_FILES_URL = 'https://giddh-import-sample-files.s3.ap-south-1.amazonaws.com/sample-file-';
-export const OTP_WIDGET_ID = '326a63733354393830313330';
 export const OTP_WIDGET_TOKEN = '205968TmXguUAwoD633af103P1';
 export const OTP_WIDGET_ID_NEW = '33686b716134333831313239';
 export const OTP_WIDGET_TOKEN_NEW = '205968TmXguUAwoD633af103P1';
@@ -687,6 +687,7 @@ export type HttpMethodType = 'post' | 'get' | 'put' | 'delete' | 'patch';
 export const ASIDE_PANE_CONFIG: MatDialogConfig = {
     height: 'calc(100vh - var(--top-distance, 0px))',
     width: 'var(--aside-pane-width)',
+    maxWidth: 'var(--aside-pane-width)',
     position: {
         right: '0',
         bottom: '0',
@@ -721,19 +722,19 @@ export enum GetBifurcationType {
     QUATER = 'quater',
     QUARTER = 'quarter'
 }
+
 /** Configuration */
 export const Configuration = {
-    'AppUrl': AppUrl,
-    'ApiUrl': ApiUrl,
-    'PORTAL_URL': PORTAL_URL,
-    'OTP_WIDGET_ID': OTP_WIDGET_ID,
-    'OTP_TOKEN_AUTH': OTP_TOKEN_AUTH,
-    'UkApiUrl': UkApiUrl,
-    'isElectron': isElectron,
-    'APP_FOLDER': APP_FOLDER,
-    'GOOGLE_CLIENT_ID': GOOGLE_CLIENT_ID,
-    'GOOGLE_CLIENT_SECRET': GOOGLE_CLIENT_SECRET,
-    'RAZORPAY_KEY': RAZORPAY_KEY
+    'AppUrl': environment.AppUrl,
+    'ApiUrl': environment.ApiUrl,
+    'PORTAL_URL': environment.PORTAL_URL,
+    'OTP_WIDGET_ID': environment.OTP_WIDGET_ID,
+    'OTP_TOKEN_AUTH': environment.OTP_TOKEN_AUTH,
+    'UkApiUrl': environment.UkApiUrl,
+    'isElectron': (typeof window !== 'undefined' && (window as any).isElectron) || environment.isElectron,
+    'GOOGLE_CLIENT_ID': environment.GOOGLE_CLIENT_ID,
+    'GOOGLE_CLIENT_SECRET': environment.GOOGLE_CLIENT_SECRET,
+    'RAZORPAY_KEY': environment.RAZORPAY_KEY
 };
 
 /** Holds Dropdown label value interface */
@@ -994,3 +995,4 @@ export const DEFAULT_NUMBER_FORMAT_LOCALE = 'en-IN';
 
 /** Default display format for number formatting */
 export const DEFAULT_NUMBER_DISPLAY_FORMAT = 'IND_COMMA_SEPARATED';
+

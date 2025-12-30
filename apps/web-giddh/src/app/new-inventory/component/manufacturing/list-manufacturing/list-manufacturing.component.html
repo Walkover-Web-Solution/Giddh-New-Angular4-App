@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'inventory/manufacturing'"
     (commonLocaleData)="commonLocaleData = $event"
@@ -111,11 +111,11 @@
             *ngIf="!isReportLoading && dataSource?.length > 0"
         >
             <table mat-table [dataSource]="dataSource" class="w-100 manufacturing-table on-mobile-view">
-                <ng-container matColumnDef="date">
+                <div matColumnDef="date">
                     <th mat-header-cell *matHeaderCellDef width="10%">{{ commonLocaleData?.app_date }}</th>
                     <td mat-cell *matCellDef="let element">{{ element.date }}</td>
-                </ng-container>
-                <ng-container matColumnDef="voucher_no">
+                </div>
+                <div matColumnDef="voucher_no">
                     <th mat-header-cell *matHeaderCellDef width="10%">{{ commonLocaleData?.app_voucher_no }}</th>
                     <td
                         mat-cell
@@ -125,24 +125,24 @@
                     >
                         {{ element.voucher_no }}
                     </td>
-                </ng-container>
-                <ng-container matColumnDef="stock">
+                </div>
+                <div matColumnDef="stock">
                     <th mat-header-cell *matHeaderCellDef width="10%">{{ localeData?.finished_stock }}</th>
                     <td mat-cell *matCellDef="let element" class="content-table">{{ element.stock }}</td>
-                </ng-container>
-                <ng-container matColumnDef="finished_variant">
+                </div>
+                <div matColumnDef="finished_variant">
                     <th mat-header-cell *matHeaderCellDef width="10%">{{ localeData?.finished_variant }}</th>
                     <td mat-cell *matCellDef="let element" class="content-table">{{ element.variant }}</td>
-                </ng-container>
-                <ng-container matColumnDef="qty_outwards">
+                </div>
+                <div matColumnDef="qty_outwards">
                     <th mat-header-cell *matHeaderCellDef width="10%">{{ localeData?.qty_outwards }}</th>
                     <td mat-cell *matCellDef="let element" class="content-table">{{ element.qty_outwards }}</td>
-                </ng-container>
-                <ng-container matColumnDef="qty_outwards_unit">
+                </div>
+                <div matColumnDef="qty_outwards_unit">
                     <th mat-header-cell *matHeaderCellDef width="10%">{{ commonLocaleData?.app_unit }}</th>
                     <td mat-cell *matCellDef="let element" class="content-table">{{ element.qty_outwards_unit }}</td>
-                </ng-container>
-                <ng-container matColumnDef="raw_stock">
+                </div>
+                <div matColumnDef="raw_stock">
                     <th mat-header-cell *matHeaderCellDef width="10%">{{ localeData?.raw_stock }}</th>
                     <td mat-cell *matCellDef="let element" class="content-table">
                         <div class="d-flex flex-md-row flex-column nested-div" *ngFor="let row of element.linkedStocks">
@@ -151,8 +151,8 @@
                             </div>
                         </div>
                     </td>
-                </ng-container>
-                <ng-container matColumnDef="raw_variant">
+                </div>
+                <div matColumnDef="raw_variant">
                     <th mat-header-cell *matHeaderCellDef width="10%">{{ localeData?.raw_variant }}</th>
                     <td mat-cell *matCellDef="let element" class="content-table">
                         <div class="d-flex flex-md-row flex-column nested-div" *ngFor="let row of element.linkedStocks">
@@ -161,8 +161,8 @@
                             </div>
                         </div>
                     </td>
-                </ng-container>
-                <ng-container matColumnDef="qty_inwards">
+                </div>
+                <div matColumnDef="qty_inwards">
                     <th mat-header-cell *matHeaderCellDef width="10%">{{ localeData?.qty_inwards }}</th>
                     <td mat-cell *matCellDef="let element">
                         <div class="d-flex flex-md-row flex-column nested-div" *ngFor="let row of element.linkedStocks">
@@ -171,8 +171,8 @@
                             </div>
                         </div>
                     </td>
-                </ng-container>
-                <ng-container matColumnDef="qty_inwards_unit">
+                </div>
+                <div matColumnDef="qty_inwards_unit">
                     <th mat-header-cell *matHeaderCellDef width="10%">{{ commonLocaleData?.app_unit }}</th>
                     <td mat-cell *matCellDef="let element">
                         <div class="d-flex flex-md-row flex-column nested-div" *ngFor="let row of element.linkedStocks">
@@ -181,11 +181,11 @@
                             </div>
                         </div>
                     </td>
-                </ng-container>
-                <ng-container matColumnDef="warehouse">
+                </div>
+                <div matColumnDef="warehouse">
                     <th mat-header-cell *matHeaderCellDef width="10%">{{ commonLocaleData?.app_warehouse }}</th>
                     <td mat-cell *matCellDef="let element">{{ element.warehouse }}</td>
-                </ng-container>
+                </div>
                 <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
             </table>
@@ -357,4 +357,4 @@
             </app-datepicker-wrapper>
         </ng-template>
     </mat-menu>
-</ng-container>
+</div>

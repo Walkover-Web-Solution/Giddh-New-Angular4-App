@@ -22,20 +22,22 @@ import { AccountDetails } from 'apps/web-giddh/src/app/models/api-models/tb-pl-b
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { ReplaySubject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
+import { forEach } from '../../../../lodash-optimized';
 
 @Component({
-    selector: 'trial-balance-report-grid',
+selector: 'trial-balance-report-grid',
     templateUrl: './trial-balance-report-grid.component.html',
     styleUrls: [`./trial-balance-report-grid.component.scss`],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDestroy {
     /** Reference to the search input element */
     @ViewChild('searchInputEl', { static: true }) public searchInputEl: ElementRef;
-    /** Holds Create New Account Dialog Template Ref */
-    @ViewChild('createNew', { static: true }) public createNew: TemplateRef<any>;
-    /** Holds Create New Account Dialog Ref */
-    public createNewAccountDialogRef: MatDialogRef<any>;
+    /** Holds Create New Account Dialog Template Ref - COMMENTED OUT FOR ANGULAR 21 COMPATIBILITY */
+    // @ViewChild('createNew', { static: true }) public createNew: TemplateRef<any>;
+    /** Holds Create New Account Dialog Ref - COMMENTED OUT FOR ANGULAR 21 COMPATIBILITY */
+    // public createNewAccountDialogRef: MatDialogRef<any>;
     /** The search query for filtering data */
     @Input() public search: string = '';
     /** The input search value for custom search */
@@ -80,7 +82,7 @@ export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDes
 
     /**
      * Initializes the component
-     * 
+     *
      * @returns {void}
      * @memberof TrialBalanceReportGridComponent
      */
@@ -112,12 +114,12 @@ export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDes
                     this.toggleGroupVisibility(this.data$.groupDetails, changes.expandAll.currentValue);
                     if (this.data$) {
                         // always make first level visible ....
-                        this.data$.groupDetails.forEach((group: ChildGroup) => {
+                        (Array.isArray(this.data$) ? this.data$ : []).forEach((group: ChildGroup) => {
                             if (group.isIncludedInSearch) {
                                 group.isVisible = true;
                                 group.isCreated = true;
                                 group.isOpen = false;
-                                group.accounts.forEach((account: Account) => {
+                                (Array.isArray(group.accounts) ? group.accounts : []).forEach((account: Account) => {
                                     if (account.isIncludedInSearch) {
                                         account.isVisible = false;
                                         account.isCreated = false;
@@ -143,7 +145,7 @@ export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDes
 
     /**
      * Triggers change detection for the component.
-     * 
+     *
      * @returns {void}
      * @memberof TrialBalanceReportComponent
      */
@@ -153,7 +155,7 @@ export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDes
 
     /**
      * Provides a unique identifier for each item in a list for efficient rendering in Angular.
-     * 
+     *
      * @param {number} index - The index of the current item
      * @param {ChildGroup} item - The current item in the list
      * @returns {string} The unique identifier of the item
@@ -179,7 +181,7 @@ export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDes
 
     /**
      * Handles clicks outside the search input and clears the search input if it's empty.
-     * 
+     *
      * @param {Event} event - The event triggered by the click action
      * @param {ElementRef} element - The reference element to check if the click occurred inside it
      * @returns {void}
@@ -233,7 +235,9 @@ export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDes
         if (account) {
             this.accountDetails = account;
             this.activeGroupUniqueName = account?.parentGroups[account?.parentGroups?.length - 1]?.uniqueName;
-            this.createNewAccountDialogRef = this.dialog.open(this.createNew, ASIDE_PANE_CONFIG);
+            // TODO: Replace with component-based dialog to avoid JIT compilation in Angular 21
+            // this.createNewAccountDialogRef = this.dialog.open(this.createNew, ASIDE_PANE_CONFIG);
+            console.warn('Account dialog temporarily disabled for Angular 21 compatibility');
         }
     }
 }

@@ -4,10 +4,13 @@ import { TBPlBsActions } from 'apps/web-giddh/src/app/actions/tl-pl.actions';
 import { TrialBalanceExportExcelRequest, TrialBalanceRequest } from 'apps/web-giddh/src/app/models/api-models/tb-pl-bs';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { AppState } from 'apps/web-giddh/src/app/store';
+import { Configuration } from '../../../../../app.constant';
+import { environment } from '../../../../../../environments/environment';
 
 @Component({
-    selector: 'trial-balance-export-xls',
-    templateUrl: './export-xls.component.html'
+selector: 'trial-balance-export-xls',
+    templateUrl: './export-xls.component.html',
+    standalone: false
 })
 export class TrialBalanceExportXlsComponent implements OnInit {
     @Input() public trialBalanceRequest: TrialBalanceRequest;
@@ -32,6 +35,6 @@ export class TrialBalanceExportXlsComponent implements OnInit {
     }
 
     public ngOnInit() {
-        this.imgPath = isElectron ? 'assets/images/xls-icon.svg' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/xls-icon.svg';
+        this.imgPath = Configuration.isElectron ? 'assets/images/xls-icon.svg' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/xls-icon.svg';
     }
 }

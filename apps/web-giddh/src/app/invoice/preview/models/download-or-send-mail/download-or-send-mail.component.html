@@ -1,9 +1,11 @@
-<ng-container
+<div
+    class="h-100"
     appTranslate
     [file]="'invoice/download-or-send-mail'"
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
 >
+<div class="h-100">
     <div class="dialog-header">
         <span>
             <ng-container *ngIf="showPdfWrap">
@@ -131,7 +133,8 @@
             ></iframe>
         </div>
     </mat-dialog-content>
-</ng-container>
+    </div>
+</div>
 
 <!-- Invoice Copy Options (checkbox) -->
 <ng-template #invoiceCopyOptions>

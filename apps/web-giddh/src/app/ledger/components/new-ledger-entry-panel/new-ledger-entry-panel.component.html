@@ -77,7 +77,8 @@
                             [cssClass]="'text-right'"
                             [disabled]="shouldShowAdvanceReceiptMandatoryFields || isReadOnly ? 'disabled' : null"
                             (change)="changeQuantity($event.target?.value)"
-                            [(ngModel)]="currentTxn?.inventory.quantity"
+                            [ngModel]="currentTxn?.inventory?.quantity"
+                            (ngModelChange)="currentTxn && currentTxn.inventory ? currentTxn.inventory.quantity = $event : null"
                             [allowDecimalDigitsOnly]="true"
                             [customDecimalPlaces]="4"
                         >

@@ -1,12 +1,12 @@
-<ng-container appTranslate [file]="'vat-report'" (localeData)="localeData = $event"
+<div appTranslate [file]="'vat-report'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event">
     <hamburger-menu></hamburger-menu>
     <div class="position-relative w-100">
         <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
             *ngIf="asideGstSidebarMenuState">
-            <tax-sidebar 
+            <tax-sidebar
                 (navigateEvent)="handleNavigation()"
-                [exclude]="'#primary-new-header'" 
+                [exclude]="'#primary-new-header'"
                 class="gst-sidebar"
             ></tax-sidebar>
         </div>
@@ -15,15 +15,15 @@
         <div class="container-fluid ml-0">
             <div class="row align-items-center row-gap-15">
                 <div class="w-100">
-                    <vat-report-filters 
-                        [localeData]="localeData" 
+                    <vat-report-filters
+                        [localeData]="localeData"
                         [commonLocaleData]="commonLocaleData"
                         [activeCompany]="activeCompany"
                         [moduleType]="'LIABILITY_REPORT'"
-                        [isZimbabweCompany]="true" 
+                        [isZimbabweCompany]="true"
                         [localeData]="localeData"
                         [vatReportCurrencyCode]="getFormControl('currencyCode')?.value"
-                        (getReport)="getVatLiabilityReport()" 
+                        (getReport)="getVatLiabilityReport()"
                         (exportReport)="downloadVatLiabilityReport()"
                         (isTaxApiInProgress)="isTaxApiInProgress = $event"
                         (currentCurrencyCode)="getFormControl('currencyCode')?.patchValue($event)"
@@ -46,16 +46,16 @@
                                     {{ vatReport?.section }}
                                 </span>
                                 <ng-template #clickableItem>
-                                    <a href="javascript:;" (click)="viewDetailedReport(vatReport)"> 
+                                    <a href="javascript:;" (click)="viewDetailedReport(vatReport)">
                                         {{vatReport?.section }}
                                     </a>
                                 </ng-template>
                             </td>
                             <td width="20%" class="text-right">
                                 <amount-field
-                                    class="d-inline-block" 
+                                    class="d-inline-block"
                                     [amount]="vatReport?.vatTotal"
-                                    [currencySymbol]="vatReportCurrencySymbol" 
+                                    [currencySymbol]="vatReportCurrencySymbol"
                                     [currencyCode]="false"
                                 >
                                 </amount-field>
@@ -69,4 +69,4 @@
             </div>
         </div>
     </div>
-</ng-container>
+</div>

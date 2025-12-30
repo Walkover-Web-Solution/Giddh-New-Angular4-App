@@ -1,5 +1,5 @@
 import { APP_BASE_HREF } from '@angular/common';
-import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { APP_INITIALIZER, ErrorHandler, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
@@ -15,10 +15,37 @@ import { environment } from '../environments/environment';
 import { ActionModule } from './actions/action.module';
 import { AppLoginSuccessComponent } from './app-login-success/app-login-success';
 import { AppComponent } from './app.component';
-import { IS_ELECTRON_WA } from './app.constant';
+import { IS_ELECTRON_WA, APP_FOLDER_WA, APP_URL_WA } from './app.constant';
+import { Angular21CompatibilityErrorHandler } from './angular21-compatibility';
+
+// Debug: Log all environment variables to verify they're loaded correctly
+// console.log('=== ENVIRONMENT VARIABLES DEBUG ===');
+// console.log('🌍 Core Environment:');
+// console.log('  production:', environment.production);
+// console.log('  showDevModule:', environment.showDevModule);
+// console.log('  isElectron:', environment.isElectron);
+// console.log('');
+// console.log('🔗 URLs & Endpoints:');
+// console.log('  AppUrl:', environment.AppUrl);
+// console.log('  ApiUrl:', environment.ApiUrl);
+// console.log('  UkApiUrl:', environment.UkApiUrl);
+// console.log('  PORTAL_URL:', environment.PORTAL_URL);
+// console.log('  APP_FOLDER:', environment.APP_FOLDER);
+// console.log('');
+// console.log('🔑 Authentication & Services:');
+// console.log('  GOOGLE_CLIENT_ID:', environment.GOOGLE_CLIENT_ID);
+// console.log('  GOOGLE_CLIENT_SECRET:', environment.GOOGLE_CLIENT_SECRET ? '***HIDDEN***' : 'NOT SET');
+// console.log('  OTP_WIDGET_ID:', environment.OTP_WIDGET_ID);
+// console.log('  OTP_TOKEN_AUTH:', environment.OTP_TOKEN_AUTH ? '***HIDDEN***' : 'NOT SET');
+// console.log('  RAZORPAY_KEY:', environment.RAZORPAY_KEY);
+// console.log('');
+// console.log('📊 Environment Object Keys:', Object.keys(environment).filter(key => typeof environment[key] !== 'function'));
+// console.log('=== END ENVIRONMENT DEBUG ===');
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { ROUTES } from './app.routes';
 import { DynamicThemeService } from './shared/services/dynamic-theme.service';
+import { WhiteLabelService } from './services/white-label.service';
+import { EnvironmentService } from './services/environment.service';
 import { DecoratorsModule } from './decorators/decorators.module';
 import { ExceptionLogService } from './services/exception-log.service';
 import { GiddhHttpInterceptor } from './services/http.interceptor';
@@ -28,15 +55,16 @@ import { WindowRef } from './shared/helpers/window.object';
 import { reducers } from './store';
 import { QuicklinkModule, QuicklinkStrategy } from 'ngx-quicklink';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { SnackBarModule } from './theme/snackbar/snackbar.module';
-import { MatDialogModule } from '@angular/material/dialog';
+// import { SnackBarModule } from './theme/snackbar/snackbar.module';
+import { MatDialogModule, MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 import { MobileRestrictedComponent } from './mobile-restricted/mobile-restricted.component';
 import { LoaderModule } from './loader/loader.module';
 import { PageModule } from './page/page.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatButtonModule } from '@angular/material/button';
 import { FormFieldsModule } from './theme/form-fields/form-fields.module';
-import { VerifySubscriptionTransferOwnershipModule } from './verify-subscription-transfer-ownership/verify-subscription-transfer-ownership.module';
+import { filter, find, forEach, get, includes, keys, startsWith  } from './lodash-optimized';
+// import { VerifySubscriptionTransferOwnershipModule } from './verify-subscription-transfer-ownership/verify-subscription-transfer-ownership.module';
 // Get white label configuration from localStorage
 const whiteLabelString = localStorage.getItem('whiteLabel');
 let whiteLabelConfig = whiteLabelString ? JSON.parse(whiteLabelString) : null;
@@ -63,9 +91,7 @@ const APP_PROVIDERS = [
         provide: APP_BASE_HREF,
         useValue: IS_ELECTRON_WA
             ? './'
-            : whiteLabelConfig?.body?.giddhWhiteLabel?.domainName
-                ? `${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` + APP_FOLDER
-                : AppUrl + APP_FOLDER
+            : '/'
     }
 ];
 
@@ -106,15 +132,15 @@ const createHybridStorage = () => {
                     const urlParams = new URLSearchParams(window.location.search);
                     const queryCompanyUniqueName = urlParams.get('companyUniqueName');
                     const queryBranchUniqueName = urlParams.get('branchUniqueName');
-                    
+
                     if (queryCompanyUniqueName && localData) {
                         const localObj = JSON.parse(localData);
-                        
+
                         // Find the company from available companies
-                        const targetCompany = localObj.companies?.find((company: any) => 
+                        const targetCompany = localObj.companies?.find((company: any) =>
                             company.uniqueName === queryCompanyUniqueName
                         );
-                        
+
                         if (targetCompany) {
                             // Debug: Log the company structure to understand how branches are stored
                             console.log('Target company structure:', {
@@ -124,15 +150,15 @@ const createHybridStorage = () => {
                                 branchCount: targetCompany.branchCount,
                                 allKeys: Object.keys(targetCompany)
                             });
-                            
+
                             // Validate that the branch belongs to the specified company
                             let validatedBranchUniqueName = '';
                             if (queryBranchUniqueName) {
                                 // Check if the branch exists in the target company's branches
-                                const targetBranch = targetCompany.branches?.find((branch: any) => 
+                                const targetBranch = targetCompany.branches?.find((branch: any) =>
                                     branch.uniqueName === queryBranchUniqueName
                                 );
-                                
+
                                 if (targetBranch) {
                                     validatedBranchUniqueName = queryBranchUniqueName;
                                     console.log('✅ Branch validation successful:', queryBranchUniqueName, 'belongs to company:', queryCompanyUniqueName);
@@ -142,7 +168,7 @@ const createHybridStorage = () => {
                                     console.log('Branch count:', targetCompany.branchCount);
                                 }
                             }
-                            
+
                             // Create tab-specific data with validated query params
                             const queryTabData = {
                                 applicationDate: null,
@@ -152,7 +178,7 @@ const createHybridStorage = () => {
                                 companyUser: null, // Will be set by the app when company is selected
                                 currentBranchUniqueName: validatedBranchUniqueName
                             };
-                            
+
                             // Debug logging to check query params
                             console.log('Query params detected:', {
                                 companyUniqueName: queryCompanyUniqueName,
@@ -160,14 +186,14 @@ const createHybridStorage = () => {
                                 targetCompany: targetCompany,
                                 queryTabData: queryTabData
                             });
-                            
+
                             // Store query-based data in sessionStorage
                             sessionStorage.setItem('session', JSON.stringify(queryTabData));
-                            
+
                             // Update localStorage with the query company info and mark as latest selection
                             // Note: currentBranchUniqueName stays tab-specific (sessionStorage only)
-                            const updatedLocalData = { 
-                                ...localObj, 
+                            const updatedLocalData = {
+                                ...localObj,
                                 companyUniqueName: queryCompanyUniqueName,
                                 activeCompany: targetCompany,
                                 lastAccessedAt: Date.now() // Mark as recently selected
@@ -179,7 +205,7 @@ const createHybridStorage = () => {
                             // Ensure currentBranchUniqueName is not stored in localStorage (stays tab-specific)
                             delete updatedLocalData.currentBranchUniqueName;
                             localStorage.setItem('session', JSON.stringify(updatedLocalData));
-                            
+
                             // Trigger company/branch switch APIs similar to switchCompany/switchBranch
                             setTimeout(() => {
                                 try {
@@ -188,7 +214,7 @@ const createHybridStorage = () => {
                                         branchUniqueName: validatedBranchUniqueName,
                                         company: targetCompany
                                     });
-                                    
+
                                     // Dispatch actions to trigger API calls (similar to switchCompany/switchBranch)
                                     const event = new CustomEvent('giddh-query-params-company-switch', {
                                         detail: {
@@ -203,28 +229,28 @@ const createHybridStorage = () => {
                                     console.warn('Error dispatching query params company switch event:', error);
                                 }
                             }, 100);
-                            
+
                             return JSON.stringify(updatedLocalData);
                         } else {
                             console.warn(`Company with uniqueName '${queryCompanyUniqueName}' not found in available companies`);
                         }
                     }
-                    
+
                     // Handle new tab scenario: only localStorage data exists
                     if (!sessionData && localData) {
                         // New tab - initialize with localStorage data
                         const localObj = JSON.parse(localData);
-                        
+
                         // Check if localStorage has valid company data
-                        const hasValidCompanyData = localObj.activeCompany && 
-                                                  localObj.activeCompany.uniqueName && 
-                                                  localObj.companyUniqueName;
-                        
+                        const hasValidCompanyData = localObj.activeCompany &&
+                            localObj.activeCompany.uniqueName &&
+                            localObj.companyUniqueName;
+
                         if (hasValidCompanyData) {
                             // Extract tab-specific data and store in sessionStorage for this tab
                             // Note: currentBranchUniqueName should NOT be inherited directly, but use lastActiveBranchUniqueName as fallback
                             const tabSpecificData: any = {};
-                            config.tabSpecific.session.forEach(tabKey => {
+                            (Array.isArray(config.tabSpecific.session) ? config.tabSpecific.session : []).forEach(tabKey => {
                                 if (localObj.hasOwnProperty(tabKey)) {
                                     // Skip currentBranchUniqueName - will be set from fallback below
                                     if (tabKey !== 'currentBranchUniqueName') {
@@ -232,15 +258,15 @@ const createHybridStorage = () => {
                                     }
                                 }
                             });
-                            
+
                             // Use lastActiveBranchUniqueName as fallback for new tabs (when no query params)
                             tabSpecificData.currentBranchUniqueName = localObj.lastActiveBranchUniqueName || '';
-                            
+
                             // Store tab-specific data in sessionStorage for future use
                             if (Object.keys(tabSpecificData).length > 0) {
                                 sessionStorage.setItem('session', JSON.stringify(tabSpecificData));
                             }
-                            
+
                             // Update localStorage timestamp to mark this company as recently accessed
                             // This helps maintain the "latest company selection" behavior
                             // Note: currentBranchUniqueName stays tab-specific (sessionStorage only)
@@ -248,16 +274,16 @@ const createHybridStorage = () => {
                             // Ensure currentBranchUniqueName is not stored in localStorage (stays tab-specific)
                             delete updatedLocalData.currentBranchUniqueName;
                             localStorage.setItem('session', JSON.stringify(updatedLocalData));
-                            
+
                             return JSON.stringify(updatedLocalData); // Return updated localStorage data
                         } else {
                             // No valid company data in localStorage - check if user has companies available
                             console.warn('No valid company data found in localStorage for new tab. Checking available companies...');
-                            
+
                             // If user has companies available, try to use the first one as fallback
                             if (localObj.companies && localObj.companies.length > 0) {
                                 const firstCompany = localObj.companies[0];
-                                
+
                                 const fallbackTabData = {
                                     applicationDate: null,
                                     companyUniqueName: firstCompany.uniqueName,
@@ -265,18 +291,18 @@ const createHybridStorage = () => {
                                     activeCompany: firstCompany,
                                     companyUser: null, // Will be set by the app when company is selected
                                     // Use lastActiveBranchUniqueName as fallback if available for this company
-                                    currentBranchUniqueName: (localObj.companyUniqueName === firstCompany.uniqueName) 
-                                        ? (localObj.lastActiveBranchUniqueName || '') 
+                                    currentBranchUniqueName: (localObj.companyUniqueName === firstCompany.uniqueName)
+                                        ? (localObj.lastActiveBranchUniqueName || '')
                                         : '' // Reset branch when company changes
                                 };
-                                
+
                                 // Store fallback data in sessionStorage
                                 sessionStorage.setItem('session', JSON.stringify(fallbackTabData));
-                                
+
                                 // Update localStorage with the fallback company info and mark as latest selection
                                 // Note: currentBranchUniqueName stays tab-specific (sessionStorage only)
-                                const updatedLocalData = { 
-                                    ...localObj, 
+                                const updatedLocalData = {
+                                    ...localObj,
                                     companyUniqueName: firstCompany.uniqueName,
                                     activeCompany: firstCompany,
                                     lastAccessedAt: Date.now() // Mark as recently selected
@@ -284,12 +310,12 @@ const createHybridStorage = () => {
                                 // Ensure currentBranchUniqueName is not stored in localStorage (stays tab-specific)
                                 delete updatedLocalData.currentBranchUniqueName;
                                 localStorage.setItem('session', JSON.stringify(updatedLocalData));
-                                
+
                                 return JSON.stringify(updatedLocalData);
                             } else {
                                 // No companies available - initialize with empty defaults
                                 console.warn('No companies available. User may need to create a company or re-authenticate.');
-                                
+
                                 const defaultTabData = {
                                     applicationDate: null,
                                     companyUniqueName: '',
@@ -298,16 +324,16 @@ const createHybridStorage = () => {
                                     companyUser: null,
                                     currentBranchUniqueName: ''
                                 };
-                                
+
                                 // Store default data in sessionStorage
                                 sessionStorage.setItem('session', JSON.stringify(defaultTabData));
-                                
+
                                 // Return the full localStorage data (which contains user auth info)
                                 return localData;
                             }
                         }
                     }
-                    
+
                     // Normal scenario: merge sessionStorage and localStorage
                     if (sessionData && localData) {
                         const sessionObj = JSON.parse(sessionData);
@@ -315,7 +341,7 @@ const createHybridStorage = () => {
                         const merged = { ...localObj };
 
                         // Override with tab-specific data from sessionStorage
-                        config.tabSpecific.session.forEach(tabKey => {
+                        (Array.isArray(config.tabSpecific.session) ? config.tabSpecific.session : []).forEach(tabKey => {
                             if (sessionObj.hasOwnProperty(tabKey)) {
                                 merged[tabKey] = sessionObj[tabKey];
                             }
@@ -323,7 +349,7 @@ const createHybridStorage = () => {
 
                         return JSON.stringify(merged);
                     }
-                    
+
                     // Fallback: return whatever data is available
                     return sessionData || localData;
                 }
@@ -332,7 +358,7 @@ const createHybridStorage = () => {
                 if (key === 'permission') {
                     return localData;
                 }
-                
+
                 // For branchConsolidated (prefer sessionStorage, fallback to localStorage)
                 if (key === 'branchConsolidated') {
                     return sessionData || localData;
@@ -377,7 +403,7 @@ const createHybridStorage = () => {
                             }
                         })();
                         sessionStorage.setItem('session', JSON.stringify({ ...existingSessionData, ...tabSpecificData }));
-                        
+
                         // IMPORTANT: Also update localStorage with latest company selection for new tabs
                         // When company changes, update localStorage so new tabs inherit the latest company
                         if (tabSpecificData.companyUniqueName || tabSpecificData.activeCompany) {
@@ -389,7 +415,7 @@ const createHybridStorage = () => {
                                     return {};
                                 }
                             })();
-                            
+
                             // Update localStorage with latest company info and last active branch as fallback
                             const updatedLocalData = { ...existingLocalData };
                             if (tabSpecificData.companyUniqueName) {
@@ -410,7 +436,7 @@ const createHybridStorage = () => {
                             // Note: currentBranchUniqueName stays tab-specific, but lastActiveBranchUniqueName is stored as fallback
                             // Ensure currentBranchUniqueName is not stored in localStorage (stays tab-specific)
                             delete updatedLocalData.currentBranchUniqueName;
-                            
+
                             localStorage.setItem('session', JSON.stringify(updatedLocalData));
                         }
                     }
@@ -468,7 +494,7 @@ const createHybridStorage = () => {
 function migrateExistingData(): void {
     try {
         const migrationKey = 'giddh_hybrid_migration_completed';
-        
+
         // Check if migration already completed
         if (localStorage.getItem(migrationKey)) {
             return;
@@ -479,15 +505,15 @@ function migrateExistingData(): void {
         if (existingSession) {
             const sessionData = JSON.parse(existingSession);
             const tabSpecificKeys = ['companyUniqueName', 'activeCompany', 'companyUser', 'applicationDate', 'todaySelected', 'currentBranchUniqueName'];
-            
+
             // Keep tab-specific data in current tab's sessionStorage
             const tabSpecificData: any = {};
-            tabSpecificKeys.forEach(key => {
+            (Array.isArray(tabSpecificKeys) ? tabSpecificKeys : []).forEach(key => {
                 if (sessionData.hasOwnProperty(key)) {
                     tabSpecificData[key] = sessionData[key];
                 }
             });
-            
+
             if (Object.keys(tabSpecificData).length > 0) {
                 sessionStorage.setItem('session', JSON.stringify(tabSpecificData));
             }
@@ -509,10 +535,10 @@ function migrateExistingData(): void {
 export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
     // Run migration on first load
     migrateExistingData();
-    
-    return localStorageSync({ 
-        keys: ['session', 'permission', 'branchConsolidated'], 
-        rehydrate: true, 
+
+    return localStorageSync({
+        keys: ['session', 'permission', 'branchConsolidated'],
+        rehydrate: true,
         storage: createHybridStorage()
     })(reducer);
 }
@@ -529,41 +555,35 @@ let giddhRegion = document.cookie
     .find(cookie => cookie.startsWith('giddh_region='))
     ?.split('=')[1];
 giddhRegion = giddhRegion?.toUpperCase();
-    if (giddhRegion === "UK") {
-        localStorage.setItem("Country-Region", "GB");
-    } else if (giddhRegion === "AE") {
-        localStorage.setItem("Country-Region", "AE");
-    } else if (giddhRegion === "IN") {
-        localStorage.setItem("Country-Region", "IN");
-    } else {
-        localStorage.setItem("Country-Region", "GL");
+if (giddhRegion === "UK") {
+    localStorage.setItem("Country-Region", "GB");
+} else if (giddhRegion === "AE") {
+    localStorage.setItem("Country-Region", "AE");
+} else if (giddhRegion === "IN") {
+    localStorage.setItem("Country-Region", "IN");
+} else {
+    localStorage.setItem("Country-Region", "GL");
+}
+
+// GetServiceConfig returns a configuration object with API URLs, app URLs, and various authentication tokens, using whiteLabelConfig or EnvironmentService fallback values.
+export function getServiceConfig(): any {
+    // Create service instances
+    const environmentService = new EnvironmentService();
+    const whiteLabelService = new WhiteLabelService(environmentService);
+
+    // Set the white label configuration if it exists
+    if (whiteLabelConfig) {
+        whiteLabelService.setWhiteLabelConfig(whiteLabelConfig);
     }
 
-// GetServiceConfig returns a configuration object with API URLs, app URLs, and various authentication tokens, using whiteLabelConfig or default Configuration values.
-export function getServiceConfig(): any {
     // Apply dynamic theme if white label configuration exists
     if (whiteLabelConfig?.body?.giddhWhiteLabel?.theme) {
         const dynamicThemeService = new DynamicThemeService();
         dynamicThemeService.applyThemeFromWhiteLabel(whiteLabelConfig);
     }
 
-    return {
-        apiUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain ? `${whiteLabelConfig.body.giddhWhiteLabel.apiDomain}/` :
-        (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
-        ApiUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain ? `${whiteLabelConfig.body.giddhWhiteLabel.apiDomain}/` :
-        (localStorage.getItem('Country-Region') === 'GB' ? Configuration.UkApiUrl : Configuration.ApiUrl),
-        appUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.domainName ? `${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` : Configuration.AppUrl,
-        AppUrl: whiteLabelConfig?.body?.giddhWhiteLabel?.domainName ? `${whiteLabelConfig.body.giddhWhiteLabel.domainName}/` : Configuration.AppUrl,
-        PORTAL_URL: whiteLabelConfig?.body?.giddhWhiteLabel?.portalDomain || Configuration.PORTAL_URL,
-        OTP_WIDGET_ID: whiteLabelConfig?.body?.otpWidgetIdWeb || Configuration.OTP_WIDGET_ID,
-        OTP_TOKEN_AUTH: whiteLabelConfig?.body?.otpWidgetTokenWeb || Configuration.OTP_TOKEN_AUTH,
-        GOOGLE_CLIENT_ID: whiteLabelConfig?.body?.googleClientId || Configuration.GOOGLE_CLIENT_ID,
-        GOOGLE_CLIENT_SECRET: whiteLabelConfig?.body?.googleClientSecret || Configuration.GOOGLE_CLIENT_SECRET,
-        OTP_WIDGET_ID_NEW: whiteLabelConfig?.body?.otpWidgetIdElectron || '33686b716134333831313239',
-        OTP_TOKEN_AUTH_NEW: whiteLabelConfig?.body?.otpWidgetTokenElectron || '205968TmXguUAwoD633af103P1',
-        RAZORPAY_KEY: whiteLabelConfig?.body?.razorpayPaymentDetails?.keyId || Configuration.RAZORPAY_KEY,
-        _
-    };
+    // Use WhiteLabelService to get configuration with proper fallbacks
+    return whiteLabelService.getServiceConfig();
 }
 
 // GetServiceConfigAfterInit returns an async function that first fetches white-label data and then retrieves the service configuration.
@@ -579,20 +599,19 @@ export function getServiceConfigAfterInit(): () => Promise<any> {
  * `AppModule` is the main entry point into Angular2's bootstraping process
  */
 @NgModule({
-    bootstrap: [AppComponent],
     declarations: [
         AppComponent,
         AppLoginSuccessComponent,
         MobileRestrictedComponent,
     ],
+    bootstrap: [AppComponent],
     imports: [
         BrowserModule,
-        isElectron ? NoopAnimationsModule : BrowserAnimationsModule,
+        BrowserAnimationsModule,
         FormsModule,
         ReactiveFormsModule,
         FormFieldsModule,
-        VerifySubscriptionTransferOwnershipModule,
-        HttpClientModule,
+        // VerifySubscriptionTransferOwnershipModule,
         ServiceModule.forRoot(),
         ActionModule.forRoot(),
         DecoratorsModule.forRoot(),
@@ -606,7 +625,7 @@ export function getServiceConfigAfterInit(): () => Promise<any> {
         }),
         QuicklinkModule,
         MatSnackBarModule,
-        SnackBarModule,
+        // SnackBarModule,
         MatDialogModule,
         MatButtonModule,
         LoaderModule,
@@ -614,6 +633,7 @@ export function getServiceConfigAfterInit(): () => Promise<any> {
         ...CONDITIONAL_IMPORTS
     ],
     providers: [
+        provideHttpClient(withInterceptorsFromDi()),
         {
             provide: APP_INITIALIZER,
             useFactory: getServiceConfigAfterInit,
@@ -634,7 +654,13 @@ export function getServiceConfigAfterInit(): () => Promise<any> {
         },
         {
             provide: ErrorHandler,
-            useClass: ExceptionLogService
+            useClass: Angular21CompatibilityErrorHandler
+        },
+        {
+            provide: MAT_DIALOG_DEFAULT_OPTIONS,
+            useValue: {
+                maxWidth: '100%'
+            }
         },
         CustomPreloadingStrategy
     ]

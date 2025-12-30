@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <script type="text/javascript">
+            // Web environment configuration - DEFAULT
+            window.isElectron = false;
+            window.webEnvironment = {
+                type: 'default',
+                appUrl: 'http://localhost:3000/',
+                apiUrl: 'https://apitest.giddh.com/'
+            };
+        </script>
         <!-- Google Tag Manager -->
         <script>
             (function (w, d, s, l, i) {
@@ -17,13 +26,7 @@
         <!-- End Google Tag Manager -->
         <script defer src="./assets/js/lodash.min.js"></script>
         <script defer src="./assets/js/jquery.min.js"></script>
-        <script type="text/javascript">
-            window.onerror = function (msg, url, line, col, error) {
-                var extra = !col ? "" : "\ncolumn: " + col;
-                extra += !error ? "" : "\nerror: " + error;
-                console.error("Error: " + msg + "\nurl: " + url + "\nline: " + line + extra);
-            };
-        </script>
+        <!-- Removed duplicate window.onerror handler to prevent duplicate error logging -->
         <meta charset="utf-8" />
         <meta http-equiv="x-ua-compatible" content="ie=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3" />
@@ -35,24 +38,19 @@
         <title>Giddh ~ Accounting at its Rough! Bookkeeping and Accounting Software</title>
         <meta name="description" content="Giddh ~ Accounting at its Rough! Bookkeeping and Accounting Software" />
         <link rel="icon" href="./assets/images/favicons.png" type="image/png" sizes="16x16" />
-        
+
         <!-- Preload Inter fonts for better performance -->
         <link rel="preload" as="font" href="./assets/fonts/Inter/Inter_Regular.ttf" type="font/ttf" crossorigin="anonymous" />
         <link rel="preload" as="font" href="./assets/fonts/Inter/Inter_RegularItalic.ttf" type="font/ttf" crossorigin="anonymous" />
         <link rel="preload" as="font" href="./assets/fonts/Inter/Inter_Medium.ttf" type="font/ttf" crossorigin="anonymous" />
         <link rel="preload" as="font" href="./assets/fonts/Inter/Inter_SemiBold.ttf" type="font/ttf" crossorigin="anonymous" />
         <link rel="preload" as="font" href="./assets/fonts/Inter/Inter_Bold.ttf" type="font/ttf" crossorigin="anonymous" />
-        
+
         <link rel="stylesheet" href="./assets/styles/default.css" crossorigin="anonymous" />
 
         <script type="text/javascript">
             try {
                 var HW_config = { selector: ".notification", account: "7eB4aJ" };
-                window.onload = function () {
-                    if (window["isElectron"]) {
-                        var jQuery = ($ = window.$ = window.jQuery = require("jquery"));
-                    }
-                };
             } catch (error) {
                 console.error(error);
             }
@@ -61,7 +59,7 @@
                 let whiteLabelConfig = JSON.parse(localStorage.getItem("whiteLabel"));
                 const logoUrl = "./assets/images/giddh-big-logo.svg";
                 const apiDomain = whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain || "https://apitest.giddh.com";
-                
+
                 if (whiteLabelConfig) {
                     // Remove the h1 tag containing the image
                     const logoContainer = document.querySelector("#main-giddh-loader h1");
@@ -70,7 +68,10 @@
                     }
                 } else {
                     // If no whiteLabel object, set the logo as usual
-                    document.getElementById("dynamic-logo").src = logoUrl;
+                    const logoElement = document.getElementById("dynamic-logo");
+                    if (logoElement) {
+                        logoElement.src = logoUrl;
+                    }
                 }
                 // Create a new preconnect link element
                 const preconnectLink = document.createElement("link");
@@ -95,10 +96,11 @@
                 style="display: none; visibility: hidden"
             ></iframe
         ></noscript>
+
         <!-- End Google Tag Manager (noscript) -->
         <div id="main-giddh-loader">
             <h1>
-                <img id="dynamic-logo" width="150" />
+                <img id="dynamic-logo" width="150" alt="Giddh Logo" />
             </h1>
             <div class="loading-dots">
                 <span class="loading-dots-dot"></span>

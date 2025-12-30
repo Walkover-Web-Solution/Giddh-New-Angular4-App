@@ -21,10 +21,11 @@ import { GeneralService } from '../../services/general.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { LocaleService } from '../../services/locale.service';
 import { cloneDeep, uniqBy, without } from '../../lodash-optimized';
-import { IOption, PAGINATION_LIMIT, SALES_TAX_SUPPORTED_COUNTRIES, TAX_SUPPORTED_COUNTRIES, TRN_SUPPORTED_COUNTRIES, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
+import { Configuration, IOption, PAGINATION_LIMIT, SALES_TAX_SUPPORTED_COUNTRIES, TAX_SUPPORTED_COUNTRIES, TRN_SUPPORTED_COUNTRIES, VAT_SUPPORTED_COUNTRIES } from '../../app.constant';
 import { ServiceConfig } from '../../services/service.config';
 import { LedgerViewEnum } from '../../models/api-models/Ledger';
 import { ExportFileNameComponent } from '../export-file-name/export-file-name.component';
+import { environment } from 'apps/web-giddh/src/environments/environment';
 export interface IGstObj {
     newGstNumber: string;
     newstateCode: number;
@@ -36,7 +37,8 @@ export interface IGstObj {
     selector: 'setting-profile',
     templateUrl: './setting.profile.component.html',
     styleUrls: ['./setting.profile.component.scss'],
-    host: { 'class': 'settings-profile' }
+    host: { 'class': 'settings-profile' },
+    standalone:false
 })
 export class SettingProfileComponent implements OnInit, OnDestroy {
     /** True if we need to hide tab and show manage address section only */
@@ -272,8 +274,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 this.activeTabIndex = 2;
             }
         });
-
-        this.imgPath = isElectron ? 'assets/images/warehouse-vector.svg' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/warehouse-vector.svg';
+          this.imgPath = Configuration.isElectron ? 'assets/images/warehouse-vector.svg' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/warehouse-vector.svg';
 
         this.store.pipe(select(state => state.session.currentLocale), takeUntil(this.destroyed$)).subscribe(response => {
             if (this.activeLocale && this.activeLocale !== response?.value) {
@@ -490,7 +491,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
         if (this.companyProfileObj && this.companyProfileObj.addresses) {
             let profileObj = this.companyProfileObj;
             let defaultGstObjIndx;
-            profileObj.addresses.forEach((obj, indx) => {
+            (Array.isArray(profileObj.addresses) ? profileObj.addresses : []).forEach((obj, indx) => {
                 if (profileObj.addresses[indx] && profileObj.addresses[indx].isDefault) {
                     defaultGstObjIndx = indx;
                 }
@@ -1102,7 +1103,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
      * @memberof SettingProfileComponent
      */
     public handleDefaultAddress(addressDetails: any): void {
-        this.addresses.forEach(add => {
+        (Array.isArray(this.addresses) ? this.addresses : []).forEach(add => {
             if (add?.uniqueName !== addressDetails?.uniqueName) {
                 add.isDefault = false;
             }

@@ -1,4 +1,4 @@
-<ng-container appTranslate (commonLocaleData)="commonLocaleData = $event">
+<div appTranslate (commonLocaleData)="commonLocaleData = $event">
     <section
         class="aside-dialog-wrapper"
         [keyboardShortcut]="'esc'"
@@ -67,7 +67,7 @@
             ></stock-create-edit>
         </mat-dialog-content>
     </section>
-</ng-container>
+</div>
 
 <ng-template #accountTemplate>
     <generic-aside-menu-account

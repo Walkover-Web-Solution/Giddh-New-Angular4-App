@@ -20,7 +20,7 @@ import { FormArray, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators 
 import { Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { TallyModuleService } from 'apps/web-giddh/src/app/accounting/tally-service';
-import { cloneDeep, isEqual, find, maxBy, findIndex } from 'apps/web-giddh/src/app/lodash-optimized';
+import { cloneDeep, isEqual, find, maxBy, findIndex } from '../../../lodash-optimized';
 import * as dayjs from 'dayjs';
 import { combineLatest, Observable, ReplaySubject, of as observableOf, Subject, timer } from 'rxjs';
 import { debounceTime, distinctUntilChanged, takeUntil, debounce } from 'rxjs/operators';
@@ -52,7 +52,8 @@ const CustomShortcode = [
 @Component({
     selector: 'account-as-voucher',
     templateUrl: './voucher.component.html',
-    styleUrls: ['../../accounting.component.scss', './voucher.component.scss']
+    styleUrls: ['../../accounting.component.scss', './voucher.component.scss'],
+    standalone:false
 })
 
 export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnChanges {
@@ -283,7 +284,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public loadMoreInProgress: boolean = false;
     /** Holds voucher api version */
     public voucherApiVersion: number;
-    
+
     /** Global account search data for 'by' accounts */
     public byAccountSearchData = {
         accounts: [],
@@ -293,7 +294,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         totalItems: 0,
         isLoading: false
     };
-    
+
     /** Global account search data for 'to' accounts */
     public toAccountSearchData = {
         accounts: [],
@@ -303,7 +304,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         totalItems: 0,
         isLoading: false
     };
-    
+
     /** Display variable for HTML - separate from search logic */
     public displayAccountList: any[] = [];
     /** Item size for virtual scroll */
@@ -510,7 +511,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         ).subscribe((event: any) => {
             const inputValue = event.event.target.value;
             const transaction = event.transaction;
-            
+
             // Check if transaction already has discount or tax applied
             const isDiscountApplied = transaction.get('isDiscountApplied')?.value;
             const isTaxApplied = transaction.get('isTaxApplied')?.value;
@@ -723,7 +724,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     /**
      * Helper function to find and add selected index to form control
-     * 
+     *
      * @param {FormGroup} formGroup - The form group to add the index control to
      * @param {any} typeData - The data containing index information
      * @param {'discount' | 'tax'} indexType - Type of index to add
@@ -731,20 +732,20 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     private addSelectedIndex(formGroup: FormGroup, typeData: any, indexType: 'discount' | 'tax'): void {
         let selectedIndex = typeData?.index;
-        
+
         // Search in respective list if index not provided
         if (selectedIndex === undefined) {
             if (indexType === 'discount') {
-                selectedIndex = this.discountsList?.findIndex(item => 
+                selectedIndex = this.discountsList?.findIndex(item =>
                     item?.value === (formGroup.get('selectedAccount')?.value?.UniqueName)
                 );
             } else if (indexType === 'tax') {
-                selectedIndex = this.companyTaxesList?.findIndex(item => 
+                selectedIndex = this.companyTaxesList?.findIndex(item =>
                     item.value === (formGroup.get('selectedAccount')?.value?.UniqueName)
                 );
             }
         }
-        
+
         // Add index to form control if found
         if (selectedIndex !== undefined && selectedIndex !== -1) {
             const controlName = indexType === 'discount' ? 'selectedDiscountIndex' : 'selectedTaxIndex';
@@ -1062,13 +1063,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             discountValue: null,
             selectedAccountIndex: 0
         });
-        
+
         // Recalculate totals
         this.updateTotalCreditDebit();
-        
+
         // Trigger change detection
         this.changeDetectionRef.detectChanges();
-        
+
     }
 
     /**
@@ -1096,7 +1097,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public activeRow(index: number): void {
-        this.activeRowIndex = index; 
+        this.activeRowIndex = index;
     }
 
     /**
@@ -1132,8 +1133,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             this.displayAccountList = this.discountsList
             return;
         }
-        
-        const filteredDiscounts = this.discountsList.filter(discount => 
+
+        const filteredDiscounts = this.discountsList.filter(discount =>
             discount.label?.toLowerCase().includes(searchValue.toLowerCase()) ||
             discount.value?.toLowerCase().includes(searchValue.toLowerCase())
         );
@@ -1141,7 +1142,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.displayAccountList = filteredDiscounts;
         this.handleKeyboardNavigationAfterTimeout();
     }
-    
+
     /**
      * Search in tax list based on input value
      *
@@ -1156,12 +1157,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             this.displayAccountList = this.companyTaxesList;
             return;
         }
-        
-        const filteredTaxes = this.companyTaxesList.filter(tax => 
+
+        const filteredTaxes = this.companyTaxesList.filter(tax =>
             tax.label?.toLowerCase().includes(searchValue.toLowerCase()) ||
             tax.value?.toLowerCase().includes(searchValue.toLowerCase())
         );
-        
+
         // Update the tax list display
         this.displayAccountList = filteredTaxes;
         this.handleKeyboardNavigationAfterTimeout();
@@ -1174,21 +1175,21 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public handleTransactionFocus(index: number): void {
-        
+
         const transactionsFormArray = this.journalVoucherForm.get('transactions') as FormArray;
         const transaction = transactionsFormArray.at(index) as FormGroup;
-        
+
         if (!transaction) {
             return;
         }
-        
+
         // Get stored selected account index from form for this row
         const storedIndex = transaction.get('selectedAccountIndex')?.value;
-        
+
         // Set selectedIndex from form if available, otherwise default to 0
         this.selectedIndex = storedIndex ? storedIndex : 0;
         this.activeRowType = "account";
-        
+
         // Check flags to determine what to open
         if (transaction.get('isDiscountApplied')?.value || this.showDiscountSidebar) {
             // Get stored selected discount index from form
@@ -1204,10 +1205,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             // Default to account selection
             this.onAccountFocus(transaction);
         }
-        
+
         this.changeDetectionRef.detectChanges();
     }
-    
+
 
     /**
      * Handles the focus event on an account input field.
@@ -1225,7 +1226,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.closeDiscountSidebar();
         this.closeTaxSidebar();
         this.showLedgerAccountList = true;
-            
+
         // Determine account type based on actual form field value
         const accountType = currentAccountType?.toLowerCase() === 'by' ? 'by' : 'to';
         this.selectedInput = accountType;
@@ -1359,7 +1360,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                 transactionAtIndex.addControl('selectedAccountIndex', this.formBuilder.control(dropdownIndex));
             }
         }
-        
+
         this.searchService.loadDetails(acc?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
             let transaction;
             if (response?.body && (response?.body?.currency?.code || this.activeCompany?.baseCurrency) === this.activeCompany?.baseCurrency) {
@@ -1413,7 +1414,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     this.calculateAmount(Number(transactionAtIndex?.get('amount').value), transactionAtIndex, idx);
 
                     if (response.body.applicableDiscounts?.length) {
-                        response.body.applicableDiscounts.forEach(discount => {
+                        (Array.isArray(response.body.applicableDiscounts) ? response.body.applicableDiscounts : []).forEach(discount => {
                             let discountArray = this.discountsList?.filter(response => response?.additional?.uniqueName === discount?.uniqueName);
                             this.newEntryObj('by', discountArray[0], 'discount');
                         });
@@ -1421,7 +1422,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     if (response.body.applicableTaxes?.length) {
                         let index = transactionsFormArray?.value?.findIndex(obj => obj.particular === '');
                         transactionAtIndex = transactionsFormArray.at(index) as FormGroup;
-                        response.body.applicableTaxes.forEach(tax => {
+                        (Array.isArray(response.body.applicableTaxes) ? response.body.applicableTaxes : []).forEach(tax => {
                             if (index !== -1) {
                                 let filteredTaxData = this.companyTaxesList?.filter((item) => {
                                     return item.additional.uniqueName === tax.uniqueName;
@@ -1517,7 +1518,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             totalItems: 0,
             isLoading: false
         };
-        
+
         // Reset 'to' account search data
         this.toAccountSearchData = {
             accounts: [],
@@ -1527,7 +1528,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             totalItems: 0,
             isLoading: false
         };
-        
+
         // Reset display variable
         this.displayAccountList = [];
     }
@@ -1540,11 +1541,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     public initializeAccountSearchData(): void {
         // Reset existing data first
         this.resetAccountSearchData();
-        
+
         // Load initial accounts for 'by' type
         this.loadAccountsForType('by', '', 1, API_BULK_FETCH_LIMIT, true);
-        
-        // Load initial accounts for 'to' type  
+
+        // Load initial accounts for 'to' type
         this.loadAccountsForType('to', '', 1, API_BULK_FETCH_LIMIT, true);
     }
 
@@ -1567,12 +1568,12 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             return;
         }
         const voucherTypeControl = this.journalVoucherForm.get('voucherType');
-        
+
         searchData.isLoading = true;
         searchData.searchQuery = query;
-        
+
         const { group, exceptGroups } = this.tallyModuleService.getGroupByVoucher(voucherTypeControl.value, accountType);
-        
+
         const requestObject: any = {
             q: encodeURIComponent(query),
             page,
@@ -1580,7 +1581,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             exceptGroups,
             count
         };
-        
+
         this.searchService.searchAccountV2(requestObject).subscribe(data => {
             if (data && data.body && data.body.results) {
                 const searchResults = data.body.results.map((result, i) => {
@@ -1591,7 +1592,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                         index: i
                     }
                 }) || [];
-                
+
                 if (page === 1) {
                     searchData.accounts = searchResults;
                 } else {
@@ -1600,7 +1601,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                         ...searchResults
                     ];
                 }
-                
+
                 searchData.page = isInitialLoad ? 4 : (data.body.page || 1);
                 searchData.totalItems = data.body.totalItems;
             }
@@ -1650,9 +1651,9 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         if (!query || !accounts?.length) {
             return accounts || [];
         }
-        
+
         const searchTerm = query.toLowerCase();
-        return accounts.filter(account => 
+        return accounts.filter(account =>
             account.label?.toLowerCase().includes(searchTerm) ||
             account.value?.toLowerCase().includes(searchTerm)
         );
@@ -1963,7 +1964,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         const debitControls: FormGroup[] = [];
 
         // Find all debit (BY) controls that are not discount applied
-        transactionsFormArray.controls.forEach((control: FormGroup) => {
+        (Array.isArray(transactionsFormArray.controls) ? transactionsFormArray.controls : []).forEach((control: FormGroup) => {
             if (control.get('type').value.toLowerCase() === 'by' && !control.get('isDiscountApplied')?.value) {
                 debitControls.push(control);
             }
@@ -1973,7 +1974,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             // Distribute the new total debit amount equally among all debit entries
             const amountPerEntry = this.generalService.roundOffValueByCompanyDecimalPlace(newTotalDebit / debitControls.length);
 
-            debitControls.forEach((control, index) => {
+            (Array.isArray(debitControls) ? debitControls : []).forEach((control, index) => {
                 // For the last entry, adjust for any rounding differences
                 if (index === debitControls.length - 1) {
                     const remainingAmount = newTotalDebit - (amountPerEntry * (debitControls.length - 1));
@@ -2000,7 +2001,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         const creditControls: FormGroup[] = [];
 
         // Find all credit (TO) controls that are not discount applied
-        transactionsFormArray.controls.forEach((control: FormGroup) => {
+        (Array.isArray(transactionsFormArray.controls) ? transactionsFormArray.controls : []).forEach((control: FormGroup) => {
             if (control.get('type').value.toLowerCase() === 'to' && !control.get('isDiscountApplied')?.value) {
                 creditControls.push(control);
             }
@@ -2010,7 +2011,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             // Distribute the new total credit amount equally among all credit entries
             const amountPerEntry = this.generalService.roundOffValueByCompanyDecimalPlace(newTotalCredit / creditControls.length);
 
-            creditControls.forEach((control, index) => {
+            (Array.isArray(creditControls) ? creditControls : []).forEach((control, index) => {
                 // For the last entry, adjust for any rounding differences
                 if (index === creditControls.length - 1) {
                     const remainingAmount = newTotalCredit - (amountPerEntry * (creditControls.length - 1));
@@ -2090,7 +2091,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     }
                 }
                 let salesAmount;
-                data.transactions.forEach((element: any) => {
+                (Array.isArray(data.transactions) ? data.transactions : []).forEach((element: any) => {
                     if (element) {
                         if (element.type === 'to' && !element.isDiscountApplied && !element.isTaxApplied && element.selectedAccount?.UniqueName) {
                             salesAmount = element.amount;
@@ -2148,7 +2149,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
                     return;
                 }
                 if (data.transactions.length > 1) {
-                    data.transactions.forEach((transaction, i) => {
+                    (Array.isArray(data.transactions) ? data.transactions : []).forEach((transaction, i) => {
                         delete data.transactions[i].actualAmount;
                     });
                 } else {
@@ -2412,13 +2413,13 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         if (!transactions?.length) {
             return [];
         }
-        
+
         let hasAmountButNoAccount = !transactions[0].selectedAccount.UniqueName;
         // First filter transactions that have selected accounts
         transactions = transactions.filter(control => {
             const selectedAccount = control.selectedAccount;
             const amount = control.amount;
-            
+
             // Transaction has selected account if selectedAccount is valid
             const hasSelectedAccount = (selectedAccount && selectedAccount.UniqueName);
             hasAmountButNoAccount = hasAmountButNoAccount || (!hasSelectedAccount && amount && parseFloat(amount) > 0);
@@ -2431,7 +2432,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             this.activeRowType = null;
             setTimeout(() => this.narrationBox?.nativeElement?.focus(), 500);
             return [];
-        } 
+        }
 
         const validEntries = transactions;
         for (const obj of validEntries) {
@@ -2519,11 +2520,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public onItemSelected(event: any): void {
         this.showLedgerAccountList = false;
-            
+
         if (event?.value === 'createnewitem') {
             return this.addNewAccount();
         }
-        
+
         this.setAccount(event.additional, event.index);
 
         this.changeDetectionRef.detectChanges();
@@ -2629,11 +2630,11 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     private addNewAccountToDropdown(accountDetails: any): void {
-        
+
         if (!accountDetails) {
             return;
         }
-        
+
         // Create the account item in the same format as search results
         const newAccountItem = {
             value: accountDetails.uniqueName,
@@ -2641,18 +2642,18 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             additional: accountDetails,
             index: 0
         };
-        
+
         // Determine which account type list to add to based on current selectedInput
         const targetAccountType = this.selectedInput || 'by'; // Default to 'by' if not set
         const searchData = targetAccountType === 'by' ? this.byAccountSearchData : this.toAccountSearchData;
-        
+
         // Add to the end of the accounts list
         newAccountItem.index = searchData.accounts.length;
         searchData.accounts.push(newAccountItem);
-        
+
         // Update display list
         this.displayAccountList = [...searchData.accounts];
-        
+
     }
 
     /**
@@ -2838,7 +2839,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         let invoiceAmountError = false;
 
         if (this.receiptEntries?.length > 0) {
-            this.receiptEntries.forEach(receipt => {
+            (Array.isArray(this.receiptEntries) ? this.receiptEntries : []).forEach(receipt => {
                 if (isValid) {
                     if (isNaN(parseFloat(receipt.amount))) {
                         isValid = false;
@@ -2904,7 +2905,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         this.showLedgerAccountList = false;
         this.closeDiscountSidebar();
         this.closeTaxSidebar();
-        
+
         // Ensure activeRowIndex is within valid bounds
         const maxRowIndex = transactionsFormArray.length - 1;
         if (this.activeRowIndex < 0) {
@@ -3038,8 +3039,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             }
             if (discountTransactionIndex !== -1) {
                 let transactionAtIndex = transactionsFormArray.at(discountTransactionIndex) as FormGroup;
-                
-                
+
+
                 transactionAtIndex.patchValue({
                     amount: 0,
                     particular: discountObj?.additional?.uniqueName ? discountObj?.additional?.uniqueName : discountObj?.value,
@@ -3091,8 +3092,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             }
             if (taxTransactionIndex !== -1) {
                 let transactionAtIndex = transactionsFormArray.at(taxTransactionIndex) as FormGroup;
-                
-                
+
+
                 transactionAtIndex.patchValue({
                     amount: tax?.additional?.taxDetail[0]?.taxValue,
                     particular: tax?.additional?.uniqueName,
@@ -3178,7 +3179,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     /**
      * Handles keyboard navigation with a timeout delay to ensure DOM updates are complete
      * Scrolls the selected element to the top of the viewport after a 50ms delay
-     * 
+     *
      * @memberof AccountAsVoucherComponent
      */
     public handleKeyboardNavigationAfterTimeout(): void {
@@ -3211,7 +3212,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         const viewport = this.virtualScrollViewport.getElementRef().nativeElement;
         const scrollTop = viewport.scrollTop;
         const itemHeight = this.itemSize; // Same as itemSize in template
-        
+
         // Number of items currently hidden above the viewport
         const itemsAbove = Math.ceil(scrollTop / itemHeight);
         const visibleItems = Math.ceil(viewport.clientHeight / itemHeight);

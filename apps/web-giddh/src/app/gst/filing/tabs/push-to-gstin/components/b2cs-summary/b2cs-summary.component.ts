@@ -2,12 +2,15 @@ import { Component, Inject, Input, OnDestroy, OnInit } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { B2CSSummary } from '../../../../../../models/api-models/GstReconcile';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
+import { Configuration } from 'apps/web-giddh/src/app/app.constant';
+import { environment } from 'apps/web-giddh/src/environments/environment';
 
 @Component({
     // tslint:disable-next-line:component-selector
     selector: 'b2cs-summary',
     templateUrl: './b2cs-summary.component.html',
     styleUrls: ['./b2cs-summary.component.css'],
+    standalone: false
 })
 export class B2csSummaryComponent implements OnInit, OnDestroy {
     @Input() public brcsSummary: B2CSSummary[] = [];
@@ -22,7 +25,7 @@ export class B2csSummaryComponent implements OnInit, OnDestroy {
     constructor(@Inject(ServiceConfig) private serviceConfig) { }
 
     public ngOnInit() {
-        this.imgPath = isElectron ? 'assets/images/gst/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/gst/';
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : environment.AppUrl + environment.APP_FOLDER + 'assets/images/gst/';
     }
 
     public ngOnDestroy() {

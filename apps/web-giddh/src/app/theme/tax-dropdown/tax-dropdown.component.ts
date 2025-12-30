@@ -12,7 +12,8 @@ import { isEqual } from "../../lodash-optimized";
 @Component({
     selector: "tax-dropdown",
     templateUrl: "./tax-dropdown.component.html",
-    styleUrls: ["./tax-dropdown.component.scss"]
+    styleUrls: ["./tax-dropdown.component.scss"],
+    standalone: false
 })
 export class TaxDropdownComponent implements OnChanges {
     @Input() public taxesList: any[] = [];

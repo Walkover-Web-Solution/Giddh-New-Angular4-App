@@ -7,7 +7,7 @@ import { filter, map, take, takeUntil, tap } from 'rxjs/operators';
 import * as dayjs from 'dayjs';
 import { ConfirmationModalConfiguration } from '../../../theme/confirmation-modal/confirmation-modal.interface';
 import { LoaderService } from '../../../loader/loader.service';
-import { cloneDeep, forEach, sumBy } from '../../../lodash-optimized';
+import { cloneDeep, forEach, map as lodashMap, orderBy, sumBy } from '../../../lodash-optimized';
 import { AdjustAdvancePaymentModal, VoucherAdjustments } from '../../../models/api-models/AdvanceReceiptsAdjust';
 import { BaseResponse } from '../../../models/api-models/BaseResponse';
 import { ICurrencyResponse, TaxResponse } from '../../../models/api-models/Company';
@@ -61,7 +61,8 @@ const NEW_LEDGER_ENTRIES = [
     templateUrl: 'new-ledger-entry-panel.component.html',
     styleUrls: ['./new-ledger-entry-panel.component.scss'],
     providers: [SalesPersonComponentStore],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone:false
 })
 
 export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChanges, AfterViewInit {
@@ -391,11 +392,11 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
         this.settingsTagService.GetAllTags().pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response?.status === "success" && response?.body?.length > 0) {
-                _.map(response?.body, (tag) => {
+                lodashMap(response?.body, (tag) => {
                     tag.label = tag.name;
                     tag.value = tag.name;
                 });
-                this.tags = _.orderBy(response?.body, 'name');
+                this.tags = orderBy(response?.body, 'name');
             }
         });
 
@@ -409,7 +410,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.store.pipe(select(s => s.company && s.company.taxes), takeUntil(this.destroyed$)).subscribe(res => {
             this.companyTaxesList = res || [];
             if (this.companyTaxesList && this.companyTaxesList.length > 0) {
-                this.companyTaxesList.forEach((tax) => {
+                (Array.isArray(this.companyTaxesList) ? this.companyTaxesList : []).forEach((tax) => {
                     if (!this.allowedSelectionOfAType.type.includes(tax.taxType)) {
                         this.allowedSelectionOfAType.type.push(tax.taxType);
                     }
@@ -587,7 +588,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
 
         if (this.taxListForStock && this.taxListForStock.length > 0) {
-            this.taxListForStock.forEach(tl => {
+            (Array.isArray(this.taxListForStock) ? this.taxListForStock : []).forEach(tl => {
                 let tax = (companyTaxes && companyTaxes.length > 0) ? companyTaxes.find(f => f?.uniqueName === tl) : undefined;
                 if (tax) {
                     switch (tax.taxType) {
@@ -672,14 +673,14 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             this.currentTxn.isMrpDiscountApplied = true;
         } else {
             if (this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length > 0) {
-                this.accountOtherApplicableDiscount.forEach(item => {
+                (Array.isArray(this.accountOtherApplicableDiscount) ? this.accountOtherApplicableDiscount : []).forEach(item => {
                     if (item && event.discount && item?.uniqueName === event.discount.discountUniqueName) {
                         item.isActive = event.isActive.target?.checked;
                     }
                 });
             }
             if (this.currentTxn?.selectedAccount?.accountApplicableDiscounts) {
-                this.currentTxn.selectedAccount.accountApplicableDiscounts.forEach(item => {
+                (Array.isArray(this.currentTxn.selectedAccount.accountApplicableDiscounts) ? this.currentTxn.selectedAccount.accountApplicableDiscounts : []).forEach(item => {
                     if (item && event.discount && item?.uniqueName === event.discount.discountUniqueName) {
                         item.isActive = event.isActive.target?.checked;
                     }
@@ -931,7 +932,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 transaction.inventory.warehouse = { name: '', uniqueName: this.selectedWarehouse };
             }
             if (transaction?.voucherAdjustments?.adjustments?.length > 0) {
-                transaction?.voucherAdjustments.adjustments.forEach((adjustment: any) => {
+                (Array.isArray(transaction?.voucherAdjustments.adjustments) ? transaction?.voucherAdjustments.adjustments : []).forEach((adjustment: any) => {
                     if (adjustment.balanceDue !== undefined) {
                         delete adjustment.balanceDue;
                     }
@@ -953,8 +954,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
     public showDeleteAttachedFileModal() {
         this.deleteAttachedFileDialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '630px',
-            data: {
+                    width: '630px',
+                    data: {
                 title: this.commonLocaleData?.app_delete,
                 body: this.localeData?.confirm_delete_file,
                 ok: this.commonLocaleData?.app_yes,
@@ -1053,8 +1054,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.mapBodyContent = this.mapBodyContent?.replace("[CHEQUE_NUMBER]", item.chequeNumber);
 
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '630px',
-            data: {
+                    width: '630px',
+                    data: {
                 title: this.commonLocaleData?.map_bank_entry,
                 body: this.mapBodyContent,
                 ok: this.commonLocaleData?.app_yes,
@@ -1570,7 +1571,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
 
         // Swap the provided key value pairs
         if (entryKeys && entryKeys.length > 0) {
-            entryKeys.forEach((entry: any) => {
+            (Array.isArray(entryKeys) ? entryKeys : []).forEach((entry: any) => {
                 let value = this.currentTxn[entry[0]];
                 this.currentTxn[entry[0]] = this.currentTxn[entry[1]];
                 this.currentTxn[entry[1]] = value;
@@ -1620,8 +1621,8 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         this.isRcmPopupOpen = true;
 
         let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
-            width: '630px',
-            data: {
+                    width: '630px',
+                    data: {
                 configuration: this.rcmConfiguration
             }
         });
@@ -1707,7 +1708,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (event && event.adjustPaymentData && event.adjustVoucherData) {
             const adjustments = cloneDeep(event.adjustVoucherData.adjustments);
             if (adjustments && adjustments.length > 0) {
-                adjustments.forEach(adjustment => {
+                (Array.isArray(adjustments) ? adjustments : []).forEach(adjustment => {
                     adjustment.voucherNumber = this.generalService.getVoucherNumberLabel(adjustment?.voucherType, adjustment?.voucherNumber, this.commonLocaleData);
                 });
             }
@@ -1867,9 +1868,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         }
 
         this.adjustmentDialogRef = this.dialog.open(this.adjustPaymentModal, {
-            width: '980px',
-            panelClass: 'container-modal-class'
-        });
+                    width: '980px',
+                    panelClass: 'container-modal-class'
+                });
 
         this.adjustmentDialogRef.afterClosed().subscribe(response => {
             this.isAdjustmentPopupOpen = false;
@@ -1893,7 +1894,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
         if (incomeAndExpensesAccArray?.indexOf(parentAcc) > -1) {
             let appTaxes = [];
             if (accountDetails && accountDetails.applicableTaxes && accountDetails.applicableTaxes.length > 0) {
-                accountDetails.applicableTaxes.forEach(app => appTaxes.push(app?.uniqueName));
+                (Array.isArray(accountDetails.applicableTaxes) ? accountDetails.applicableTaxes : []).forEach(app => appTaxes.push(app?.uniqueName));
             }
             this.currentAccountApplicableTaxes = appTaxes;
         }
@@ -1937,7 +1938,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 this.currentTxn?.discounts?.map(item => { item.isActive = false; return item; });
                 if (this.currentTxn?.discounts && this.currentTxn?.discounts?.length === 1) {
                     setTimeout(() => {
-                        this.currentTxn?.selectedAccount.accountApplicableDiscounts.forEach(element => {
+                        (Array.isArray(this.currentTxn?.selectedAccount.accountApplicableDiscounts) ? this.currentTxn?.selectedAccount.accountApplicableDiscounts : []).forEach(element => {
                             this.currentTxn?.discounts?.map(item => {
                                 if (element?.uniqueName === item?.discountUniqueName) {
                                     item.isActive = true;
@@ -1947,7 +1948,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                         });
                     }, 300);
                 } else {
-                    this.currentTxn.selectedAccount.accountApplicableDiscounts.forEach(element => {
+                    (Array.isArray(this.currentTxn.selectedAccount.accountApplicableDiscounts) ? this.currentTxn.selectedAccount.accountApplicableDiscounts : []).forEach(element => {
                         this.currentTxn?.discounts?.map(item => {
                             if (element?.uniqueName === item?.discountUniqueName) {
                                 item.isActive = true;
@@ -1958,7 +1959,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
                 }
             } else if (this.accountOtherApplicableDiscount && this.accountOtherApplicableDiscount.length) {
                 this.currentTxn?.discounts?.map(item => { item.isActive = false });
-                this.accountOtherApplicableDiscount.forEach(element => {
+                (Array.isArray(this.accountOtherApplicableDiscount) ? this.accountOtherApplicableDiscount : []).forEach(element => {
                     this.currentTxn?.discounts?.map(item => {
                         if (element?.uniqueName === item?.discountUniqueName) {
                             item.isActive = true;

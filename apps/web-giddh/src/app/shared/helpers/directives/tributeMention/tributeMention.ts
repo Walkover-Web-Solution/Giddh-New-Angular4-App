@@ -3,7 +3,8 @@ import Tribute from 'tributejs';
 
 @Directive({
   selector: '[appTributeMention]',
-  exportAs: 'appTributeMention'
+  exportAs: 'appTributeMention',
+  standalone: false
 })
 export class TributeMentionDirective implements OnInit, OnDestroy, OnChanges {
 
@@ -20,7 +21,7 @@ export class TributeMentionDirective implements OnInit, OnDestroy, OnChanges {
 
   /**
    * Lifecycle hook: called when the directive is initialized.
-   * 
+   *
    * @returns {void}
    * @memberof TributeMentionDirective
    */
@@ -30,7 +31,7 @@ export class TributeMentionDirective implements OnInit, OnDestroy, OnChanges {
 
   /**
    * Reinitializes Tribute when config or values change.
-   * 
+   *
    * @returns {void}
    * @memberof TributeMentionDirective
    */
@@ -45,7 +46,7 @@ export class TributeMentionDirective implements OnInit, OnDestroy, OnChanges {
 
   /**
    * Initializes the Tribute.js instance and attaches it to the host element.
-   * 
+   *
    * @returns {void}
    * @memberof TributeMentionDirective
    */
@@ -73,15 +74,13 @@ export class TributeMentionDirective implements OnInit, OnDestroy, OnChanges {
       this.mentionSelected.emit(event?.detail?.item?.original ?? "");
     });
     this.hostElement.nativeElement.addEventListener('keyup', (event: any) => {
-      if (this.hostElement.nativeElement.value.endsWith(this.tributeConfig.trigger)) {
-        this.open(false);
-      }
+      this.open(false);
     });
   }
 
   /**
    * Cleans up the Tribute.js instance when directive is destroyed or reinitialized.
-   * 
+   *
    * @returns {void}
    * @memberof TributeMentionDirective
    */
@@ -93,7 +92,7 @@ export class TributeMentionDirective implements OnInit, OnDestroy, OnChanges {
 
   /**
    * Lifecycle hook: called when the directive is destroyed.
-   * 
+   *
    * @returns {void}
    * @memberof TributeMentionDirective
    */
@@ -103,7 +102,7 @@ export class TributeMentionDirective implements OnInit, OnDestroy, OnChanges {
 
   /**
    * Opens the tribute menu programmatically.
-   * 
+   *
    * @returns {void}
    * @memberof TributeMentionDirective
    */
@@ -114,7 +113,7 @@ export class TributeMentionDirective implements OnInit, OnDestroy, OnChanges {
     if (!this.hostElement.nativeElement.value?.trim() && openByFocus) {
       this.hostElement.nativeElement.value = this.tributeConfig.trigger;
     }
-    
+
     this.hostElement.nativeElement.dispatchEvent(new InputEvent('input', { bubbles: true }));
 
     setTimeout(() => {

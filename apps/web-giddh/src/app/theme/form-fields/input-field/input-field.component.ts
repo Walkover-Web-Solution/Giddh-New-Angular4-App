@@ -18,6 +18,7 @@ const noop = () => {
         }
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class InputFieldComponent implements OnChanges, OnDestroy, ControlValueAccessor {
     /** Instance of input field */

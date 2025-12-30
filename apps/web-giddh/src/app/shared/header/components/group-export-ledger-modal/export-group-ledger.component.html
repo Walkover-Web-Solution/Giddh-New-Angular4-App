@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'ledger/export-ledger'"
     (localeData)="localeData = $event"
@@ -181,7 +181,7 @@
             </form>
         </mat-dialog-content>
     </div>
-</ng-container>
+</div>
 <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
     <ng-template matMenuContent>
         <app-datepicker-wrapper

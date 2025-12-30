@@ -27,7 +27,8 @@ import { ServiceConfig } from '../../services/service.config';
     selector: 'app-invoice-setting',
     templateUrl: './invoice.settings.component.html',
     styleUrls: ['./invoice.setting.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class InvoiceSettingComponent implements OnInit, OnDestroy {
     /** Selected tab index for Material tabs */

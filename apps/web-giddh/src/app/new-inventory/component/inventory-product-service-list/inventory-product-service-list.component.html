@@ -23,7 +23,7 @@
     </div>
     <div class="table-responsive">
         <table mat-table [dataSource]="dataSource" class="table giddh-table on-mobile-view">
-            <ng-container matColumnDef="select">
+            <div matColumnDef="select">
                 <th mat-header-cell *matHeaderCellDef>
                     <mat-checkbox
                         color="primary"
@@ -46,9 +46,9 @@
                     >
                     </mat-checkbox>
                 </td>
-            </ng-container>
+            </div>
 
-            <ng-container matColumnDef="name">
+            <div matColumnDef="name">
                 <th mat-header-cell *matHeaderCellDef>Name</th>
                 <td data-title="Name" mat-cell *matCellDef="let element">
                     <div class="product-name-image d-flex">
@@ -60,29 +60,29 @@
                         </div>
                     </div>
                 </td>
-            </ng-container>
+            </div>
 
-            <ng-container matColumnDef="type">
+            <div matColumnDef="type">
                 <th mat-header-cell *matHeaderCellDef>Type</th>
                 <td data-title="Type" mat-cell *matCellDef="let element">{{ element.type }}</td>
-            </ng-container>
+            </div>
 
-            <ng-container matColumnDef="group">
+            <div matColumnDef="group">
                 <th mat-header-cell *matHeaderCellDef>Group</th>
                 <td data-title="Group" mat-cell *matCellDef="let element">{{ element.group }}</td>
-            </ng-container>
+            </div>
 
-            <ng-container matColumnDef="SKU">
+            <div matColumnDef="SKU">
                 <th mat-header-cell *matHeaderCellDef>SKU</th>
                 <td data-title="SKU" mat-cell *matCellDef="let element">{{ element.SKU }}</td>
-            </ng-container>
+            </div>
 
-            <ng-container matColumnDef="HSN_SAC">
+            <div matColumnDef="HSN_SAC">
                 <th mat-header-cell *matHeaderCellDef>HSN/SAC</th>
                 <td data-title="Closing Value" mat-cell *matCellDef="let element">{{ element.HSN_SAC }}</td>
-            </ng-container>
+            </div>
 
-            <ng-container matColumnDef="accounts">
+            <div matColumnDef="accounts">
                 <th mat-header-cell *matHeaderCellDef>Account/s</th>
                 <td data-title="Account/s" mat-cell *matCellDef="let element">
                     {{ element.accounts }}
@@ -90,22 +90,22 @@
                         <small> {{ element.sales }}</small>
                     </div>
                 </td>
-            </ng-container>
+            </div>
 
-            <ng-container matColumnDef="purRate">
+            <div matColumnDef="purRate">
                 <th mat-header-cell *matHeaderCellDef>Pur Rate</th>
                 <td data-title="Pur Rate" mat-cell *matCellDef="let element">{{ element.purRate }}</td>
-            </ng-container>
+            </div>
 
-            <ng-container matColumnDef="saleRate">
+            <div matColumnDef="saleRate">
                 <th mat-header-cell *matHeaderCellDef>Sale Rate</th>
                 <td data-title="Sale Rate" mat-cell *matCellDef="let element">{{ element.saleRate }}</td>
-            </ng-container>
+            </div>
 
-            <ng-container matColumnDef="closingQty">
+            <div matColumnDef="closingQty">
                 <th mat-header-cell *matHeaderCellDef>Closing Qty</th>
                 <td data-title="Closing Qty" mat-cell *matCellDef="let element">{{ element.closingQty }}</td>
-            </ng-container>
+            </div>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="selection.toggle(row)"></tr>

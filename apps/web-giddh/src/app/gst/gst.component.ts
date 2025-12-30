@@ -14,13 +14,15 @@ import { GstReconcileService } from '../services/gst-reconcile.service';
 import { ToasterService } from '../services/toaster.service';
 import { GIDDH_DATE_FORMAT, GIDDH_DATE_FORMAT_MONTH_YEAR, GIDDH_DATE_FORMAT_WITH_SPACE } from '../shared/helpers/defaultDateFormat';
 import { AppState } from '../store';
-import { IOption } from '../app.constant';
+import { Configuration, IOption } from '../app.constant';
 import { GstReport } from './constants/gst.constant';
 import { FormControl } from '@angular/forms';
 import { ServiceConfig } from '../services/service.config';
+import { environment } from '../../environments/environment';
 @Component({
     templateUrl: './gst.component.html',
-    styleUrls: ['./gst.component.scss']
+    styleUrls: ['./gst.component.scss'],
+    standalone:false
 })
 export class GstComponent implements OnInit, OnDestroy {
     /** This will hold the boolean value to open/close setting sidebar popup */
@@ -146,7 +148,7 @@ export class GstComponent implements OnInit, OnDestroy {
                 this.store.dispatch(this.gstAction.SetSelectedPeriod(this.currentPeriod));
             }
         });
-        this.imgPath = isElectron ? 'assets/images/gst/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/gst/';
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : environment.AppUrl + environment.APP_FOLDER + 'assets/images/gst/';
     }
     /**
      * Unsubscribes from subscription

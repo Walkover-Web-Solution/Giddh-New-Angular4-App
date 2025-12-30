@@ -21,7 +21,8 @@ import { PageEvent } from '@angular/material/paginator';
 @Component({
     selector: 'app-vat-report-transactions',
     styleUrls: ['./vat-report-transactions.component.scss'],
-    templateUrl: './vat-report-transactions.component.html'
+    templateUrl: './vat-report-transactions.component.html',
+    standalone:false
 })
 
 export class VatReportTransactionsComponent implements OnInit, OnDestroy {
@@ -159,12 +160,11 @@ export class VatReportTransactionsComponent implements OnInit, OnDestroy {
             this.selectedInvoice = invoice;
             this.selectedInvoice.uniqueName = uniqueName;
             this.dialog.open(this.downloadOrSendMailModel, {
-                height: '80vh',
-                width: '80vw',
-                maxWidth: '800px',
-                disableClose: true,
-                autoFocus: false
-            });
+                        height: '80vh',
+                        width: '80vw',
+                        disableClose: true,
+                        autoFocus: false
+                    });
         }
     }
 

@@ -1,7 +1,7 @@
 import { debounceTime, takeUntil } from 'rxjs/operators';
 import { Component, OnInit } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
-import { cloneDeep } from 'apps/web-giddh/src/app/lodash-optimized';
+import { cloneDeep } from '../../../lodash-optimized';
 import { CustomTemplateResponse } from '../../../models/api-models/Invoice';
 import { InvoiceUiDataService } from '../../../services/invoice.ui.data.service';
 import { InvoiceTemplatesService } from '../../../services/invoice.templates.service';
@@ -13,7 +13,8 @@ import { ToasterService } from '../../../services/toaster.service';
 @Component({
     selector: 'all-templates',
     templateUrl: './all-templates.component.html',
-    styleUrls: ['./all-templates.component.scss']
+    styleUrls: ['./all-templates.component.scss'],
+    standalone: false
 })
 export class AllTemplatesComponent implements OnInit {
     /** Input template */

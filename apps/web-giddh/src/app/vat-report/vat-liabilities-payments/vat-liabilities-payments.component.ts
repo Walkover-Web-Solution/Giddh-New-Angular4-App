@@ -18,7 +18,8 @@ import { AppState } from '../../store';
     selector: 'vat-liabilities-payments',
     templateUrl: './vat-liabilities-payments.component.html',
     styleUrls: ['./vat-liabilities-payments.component.scss'],
-    providers: [VatReportComponentStore]
+    providers: [VatReportComponentStore],
+    standalone:false
 })
 
 export class VatLiabilitiesPayments implements OnInit, OnDestroy {

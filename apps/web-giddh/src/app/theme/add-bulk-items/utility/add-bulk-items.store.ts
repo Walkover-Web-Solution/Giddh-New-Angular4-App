@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
-import { ComponentStore, tapResponse } from "@ngrx/component-store";
-import { Observable, switchMap, catchError, EMPTY } from "rxjs";
+import { ComponentStore } from "@ngrx/component-store";
+import { Observable, switchMap, catchError, EMPTY, tap } from "rxjs";
 import { ToasterService } from "../../../services/toaster.service";
 import { LedgerService } from "../../../services/ledger.service";
 import { IVariant } from "../../../models/api-models/Ledger";
@@ -39,7 +39,7 @@ export class AddBulkItemsComponentStore extends ComponentStore<AddBulkItemsState
         return data.pipe(
             switchMap((req) => {
                 return this.ledgerService.loadStockVariants(req.q).pipe(
-                    tapResponse(
+                    tap(
                         (res: Array<IVariant>) => {
                             return this.patchState({
                                 stockVariants: { results: res?.map(res => { return { label: res.name, value: res.uniqueName } }) ?? [], entryIndex: req.index }

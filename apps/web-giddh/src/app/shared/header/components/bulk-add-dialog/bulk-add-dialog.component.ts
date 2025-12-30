@@ -14,7 +14,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
     selector: 'bulk-add-dialog',
     templateUrl: './bulk-add-dialog.component.html',
     styleUrls: ['./bulk-add-dialog.component.scss'],
-    providers: [AccountAddNewDetailsComponentStore]
+    providers: [AccountAddNewDetailsComponentStore],
+    standalone: false
 })
 export class BulkAddDialogComponent implements OnInit {
     /** This will hold local JSON data */
@@ -53,7 +54,7 @@ export class BulkAddDialogComponent implements OnInit {
                 this.branches = response?.filter(branch => !branch.consolidatedBranch);
                 const formArray = this.bulkAddAccountForm.get('customFields') as FormArray;
                 formArray?.clear();
-                this.branches.forEach((item) => {
+                (Array.isArray(this.branches) ? this.branches : []).forEach((item) => {
                     if (item?.name) {
                         formArray?.push(this.openingBulkGet(
                             {
@@ -87,7 +88,7 @@ export class BulkAddDialogComponent implements OnInit {
      */
     public mergeFormArrayWithData(branchData: any[]): void {
         const branchFormArray = this.bulkAddAccountForm.get('customFields') as FormArray;
-        branchFormArray.controls.forEach((formGroup) => {
+        (Array.isArray(branchFormArray.controls) ? branchFormArray.controls : []).forEach((formGroup) => {
             const formArrayBranch = formGroup.get('branch')?.value;
             const matchingBranch = branchData.find(branch => branch.branch.uniqueName === formArrayBranch.uniqueName);
 

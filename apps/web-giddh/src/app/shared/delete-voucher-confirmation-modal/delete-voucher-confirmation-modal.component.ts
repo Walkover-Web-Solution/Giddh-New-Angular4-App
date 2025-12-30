@@ -3,7 +3,8 @@ import { ILedgersInvoiceResult } from '../../models/api-models/Invoice';
 
 @Component({
     selector: 'delete-voucher-confirmation-modal',
-    templateUrl: './delete-voucher-confirmation-modal.component.html'
+    templateUrl: './delete-voucher-confirmation-modal.component.html',
+    standalone: false
 })
 export class DeleteVoucherConfirmationModalComponent {
     /* Taking module name as input to show confirmation message based on module */

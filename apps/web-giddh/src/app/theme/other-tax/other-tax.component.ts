@@ -14,6 +14,7 @@ import { ASIDE_PANE_CONFIG } from "../../app.constant";
     templateUrl: "./other-tax.component.html",
     styleUrls: ["./other-tax.component.scss"],
     providers: [OtherTaxComponentStore],
+    standalone: false
 })
 export class OtherTaxComponent implements OnInit, OnDestroy {
     /** Template Reference for Create Tax aside menu */

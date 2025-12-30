@@ -6,11 +6,13 @@ import { ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { CompanyResponse } from '../models/api-models/Company';
 import { AppState } from '../store';
+import { environment } from '../../environments/environment';
 
 @Component({
     selector: 'financial-reports',
     templateUrl: './financial-reports.component.html',
     styleUrls: ['./financial-reports.component.scss'],
+    standalone: false,
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FinancialReportsComponent implements OnInit, OnDestroy {
@@ -50,7 +52,7 @@ export class FinancialReportsComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        if (TEST_ENV) {
+        if (!environment.production) {
             this.CanNewTBLoadOnThisEnv = true;
         } else {
             this.CanNewTBLoadOnThisEnv = false;
@@ -114,16 +116,16 @@ export class FinancialReportsComponent implements OnInit, OnDestroy {
     public onTabChanged(event: MatTabChangeEvent): void {
         const tabNames = ['trial-balance', 'profit-loss', 'balance-sheet'];
         const tabName = tabNames[event.index];
-        
+
         if (tabName) {
             this.preventTabChangeWithRoute = false;
             this.selectedTabIndex = event.index;
-            
+
             // Update the loading flags based on selected tab
             this.CanTBLoad = (event.index === 0);
             this.CanPLLoad = (event.index === 1);
             this.CanBSLoad = (event.index === 2);
-            
+
             this.tabChanged(tabName, event.index);
         }
     }

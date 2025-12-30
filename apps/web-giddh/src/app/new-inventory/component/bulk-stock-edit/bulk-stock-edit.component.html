@@ -1,7 +1,7 @@
 <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
     <text-field [type]="'text'" [formControl]="formControl" [autoFocus]="true" [cssClass]="'font-size-15'"></text-field>
 </ng-template>
-<ng-container
+<div
     appTranslate
     [file]="'inventory/bulk-stock-edit'"
     (commonLocaleData)="commonLocaleData = $event"
@@ -1480,7 +1480,7 @@
         </div>
         <section class="mb-custom-80"></section>
     </div>
-</ng-container>
+</div>
 
 <ng-template #bulkStockAdvanceFilter>
     <bulk-stock-advance-filter

@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'downloads/imports'"
     (commonLocaleData)="commonLocaleData = $event"
@@ -77,22 +77,22 @@
         <div class="table-responsive table-content overflow-visible" *ngIf="!isLoading && dataSource?.length">
             <table mat-table [dataSource]="dataSource" class="import-table">
                 <!-- Requested importDate Column -->
-                <ng-container matColumnDef="importDate">
+                <div matColumnDef="importDate">
                     <th mat-header-cell *matHeaderCellDef>{{ localeData?.import_date }}</th>
                     <td mat-cell *matCellDef="let element">{{ element.date }}</td>
-                </ng-container>
+                </div>
                 <!-- Requested by Column -->
-                <ng-container matColumnDef="by">
+                <div matColumnDef="by">
                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_by }}</th>
                     <td mat-cell *matCellDef="let element">{{ element.user.name }}</td>
-                </ng-container>
+                </div>
                 <!-- Requested module Column -->
-                <ng-container matColumnDef="module">
+                <div matColumnDef="module">
                     <th mat-header-cell *matHeaderCellDef>{{ localeData?.module }}</th>
                     <td mat-cell *matCellDef="let element">{{ element.type }}</td>
-                </ng-container>
+                </div>
                 <!-- Requested importFile Column -->
-                <ng-container matColumnDef="importFile">
+                <div matColumnDef="importFile">
                     <th mat-header-cell *matHeaderCellDef>{{ localeData?.import_file }}</th>
                     <td mat-cell *matCellDef="let element">
                         <a
@@ -115,21 +115,21 @@
                             {{ commonLocaleData?.app_download }}</a
                         >
                     </td>
-                </ng-container>
+                </div>
                 <!-- Count Column -->
-                <ng-container matColumnDef="count">
+                <div matColumnDef="count">
                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_count }}</th>
                     <td mat-cell *matCellDef="let element">
-                        <ng-container *ngIf="element?.status !== 'SUBMITTED'">
+                        <div *ngIf="element?.status !== 'SUBMITTED'">
                             <span>{{ localeData?.success }} : {{ element.count.success }}</span
                             ><br /><span>{{ localeData?.failed }} : {{ element.count.failed }}</span
                             ><br /><span>{{ localeData?.total }} : {{ element.count.total }}</span>
-                        </ng-container>
-                        <ng-container *ngIf="element?.status === 'SUBMITTED'"> - </ng-container>
+                        </div>
+                        <div *ngIf="element?.status === 'SUBMITTED'"> - </div>
                     </td>
-                </ng-container>
+                </div>
                 <!-- Error Sheet Column -->
-                <ng-container matColumnDef="errorSheet">
+                <div matColumnDef="errorSheet">
                     <th mat-header-cell *matHeaderCellDef>{{ localeData?.error_sheet }}</th>
                     <td mat-cell *matCellDef="let element">
                         <div
@@ -150,9 +150,9 @@
                             {{ commonLocaleData?.app_download }}
                         </a>
                     </td>
-                </ng-container>
+                </div>
                 <!-- Succes Sheet  Column -->
-                <ng-container matColumnDef="succesSheet">
+                <div matColumnDef="succesSheet">
                     <th mat-header-cell *matHeaderCellDef>{{ localeData?.succes_sheet }}</th>
                     <td mat-cell *matCellDef="let element">
                         <div
@@ -173,12 +173,12 @@
                             {{ commonLocaleData?.app_download }}
                         </a>
                     </td>
-                </ng-container>
+                </div>
                 <!-- Expiry Date Column -->
-                <ng-container matColumnDef="expiry">
+                <div matColumnDef="expiry">
                     <th mat-header-cell *matHeaderCellDef>{{ localeData?.expiry }}</th>
                     <td mat-cell *matCellDef="let element">{{ element.expireAt }}</td>
-                </ng-container>
+                </div>
 
                 <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
@@ -223,4 +223,4 @@
             ></app-datepicker-wrapper>
         </ng-template>
     </mat-menu>
-</ng-container>
+</div>

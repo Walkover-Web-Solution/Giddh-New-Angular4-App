@@ -5,8 +5,12 @@ import { LocaleService } from "./locale.service";
 import { CommonActions } from "../actions/common.actions";
 import { AppState } from "../store";
 import { Store } from "@ngrx/store";
+import { remove } from '../lodash-optimized';
+import { Configuration } from '../app.constant';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class PageLeaveUtilityService {
     constructor(
         private dialog: MatDialog,
@@ -61,9 +65,42 @@ export class PageLeaveUtilityService {
      */
     public removeBrowserConfirmationDialog(): void {
         this.store.dispatch(this.commonAction.hasUnsavedChanges(false));
-        if ((window as any).require) {
-            const { ipcRenderer } = (window as any).require('electron');
-            ipcRenderer.send('has-unsaved-changes', false);
+        if (Configuration.isElectron) {
+            try {
+                let electronIpcAvailable = false;
+
+                // Try electronAPI first (secure context)
+                if ((window as any).electronAPI && (window as any).electronAPI.send) {
+                    try {
+                        (window as any).electronAPI.send('has-unsaved-changes', false);
+                        electronIpcAvailable = true;
+                    } catch (ipcError) {
+                        console.warn('ElectronAPI send failed:', ipcError);
+                    }
+                }
+
+                // Try legacy electron require (fallback)
+                if (!electronIpcAvailable && (window as any).require) {
+                    try {
+                        const electron = (window as any).require('electron');
+                        if (electron && electron.ipcRenderer && electron.ipcRenderer.send) {
+                            electron.ipcRenderer.send('has-unsaved-changes', false);
+                            electronIpcAvailable = true;
+                        }
+                    } catch (requireError) {
+                        console.warn('Electron require failed:', requireError);
+                    }
+                }
+
+                // Fallback to regular browser behavior if IPC not available
+                if (!electronIpcAvailable) {
+                    console.warn('Electron IPC not available for page leave utility, using browser fallback');
+                    window.onbeforeunload = null;
+                }
+            } catch (error) {
+                console.warn('Electron page leave utility failed, using browser fallback:', error);
+                window.onbeforeunload = null;
+            }
         } else {
             window.onbeforeunload = null;
         }
@@ -80,10 +117,42 @@ export class PageLeaveUtilityService {
             this.store.dispatch(this.commonAction.hasUnsavedChanges(true));
         }
 
-        if ((window as any).require) {
-            // Running in Electron
-            const { ipcRenderer } = (window as any).require('electron');
-            ipcRenderer.send('has-unsaved-changes', true);
+        if (Configuration.isElectron) {
+            try {
+                let electronIpcAvailable = false;
+
+                // Try electronAPI first (secure context)
+                if ((window as any).electronAPI && (window as any).electronAPI.send) {
+                    try {
+                        (window as any).electronAPI.send('has-unsaved-changes', true);
+                        electronIpcAvailable = true;
+                    } catch (ipcError) {
+                        console.warn('ElectronAPI send failed:', ipcError);
+                    }
+                }
+
+                // Try legacy electron require (fallback)
+                if (!electronIpcAvailable && (window as any).require) {
+                    try {
+                        const electron = (window as any).require('electron');
+                        if (electron && electron.ipcRenderer && electron.ipcRenderer.send) {
+                            electron.ipcRenderer.send('has-unsaved-changes', true);
+                            electronIpcAvailable = true;
+                        }
+                    } catch (requireError) {
+                        console.warn('Electron require failed:', requireError);
+                    }
+                }
+
+                // Fallback to regular browser behavior if IPC not available
+                if (!electronIpcAvailable) {
+                    console.warn('Electron IPC not available for page leave utility, using browser fallback');
+                    window.onbeforeunload = () => 'true';
+                }
+            } catch (error) {
+                console.warn('Electron page leave utility failed, using browser fallback:', error);
+                window.onbeforeunload = () => 'true';
+            }
         } else {
             window.onbeforeunload = () => 'true';
         }

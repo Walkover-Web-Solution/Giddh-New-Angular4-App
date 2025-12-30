@@ -9,6 +9,7 @@ import { ToasterService } from 'apps/web-giddh/src/app/services/toaster.service'
 import { ConfirmModalComponent } from 'apps/web-giddh/src/app/theme/new-confirm-modal/confirm-modal.component';
 import { ReplaySubject, take, takeUntil } from 'rxjs';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { get, set } from '../../../../lodash-optimized';
 
 export interface transporterDetails {
     name: string;
@@ -18,7 +19,9 @@ export interface transporterDetails {
 const ELEMENT_DATA: transporterDetails[] = [];
 @Component({
     selector: 'aside-manage-transport',
+
     templateUrl: './aside-manage-transport.component.html',
+    standalone: false,
     styleUrls: ['./aside-manage-transport.component.scss']
 })
 export class AsideManageTransportComponent implements OnInit {
@@ -216,13 +219,13 @@ export class AsideManageTransportComponent implements OnInit {
      */
     public deleteTransporter(transporter: any): void {
         this.confirmModalDialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '585px',
-            data: {
+                    width: '585px',
+                    data: {
                 title: this.commonLocaleData?.app_confirmation,
-                body: 'Are you sure you want to delete the transporter?',
-                ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no
-            }
+                    body: 'Are you sure you want to delete the transporter?',
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no
+                }
         });
 
         this.confirmModalDialogRef.afterClosed().subscribe(response => {

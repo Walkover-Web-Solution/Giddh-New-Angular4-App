@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'inventory/manufacturing'"
     (commonLocaleData)="commonLocaleData = $event"
@@ -23,7 +23,7 @@
                     </div>
                 </div>
             </div> -->
-            <ng-container *ngFor="let recipe of recipeObject.manufacturingDetails; let i = index">
+            <div *ngFor="let recipe of recipeObject.manufacturingDetails; let i = index">
                 <div class="row py-4 manufacturing-border" *ngIf="recipe.isEdit">
                     <div class="col-3">
                         <div class="row">
@@ -479,7 +479,7 @@
                         </div>
                     </div>
                 </div>
-            </ng-container>
+            </div>
             <div class="row mt-2 add-recipe" *ngIf="recipeObject.manufacturingDetails?.length < variantsList?.length">
                 <button mat-button class="mb-2 ml-2" color="primary" (click)="addNewRecipe()" aria-label="add recipe">
                     <span>+</span> {{ localeData?.add_recipe }}
@@ -488,4 +488,4 @@
         </div>
     </section>
 
-</ng-container>
+</div>

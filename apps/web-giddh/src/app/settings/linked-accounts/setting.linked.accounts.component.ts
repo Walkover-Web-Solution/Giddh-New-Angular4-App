@@ -22,7 +22,8 @@ import { IOption } from '../../app.constant';
 @Component({
     selector: 'setting-linked-accounts',
     templateUrl: './setting.linked.accounts.component.html',
-    styleUrls: ['./setting.linked.accounts.component.scss']
+    styleUrls: ['./setting.linked.accounts.component.scss'],
+    standalone: false
 })
 export class SettingLinkedAccountsComponent implements OnInit, OnDestroy {
 

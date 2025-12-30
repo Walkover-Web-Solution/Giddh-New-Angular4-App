@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'project-wise-account'"
     (localeData)="localeData = $event"
@@ -15,10 +15,10 @@
             (selectedTabChange)="tabChanged($event)"
         >
             <mat-tab [label]="localeData?.revenue">
-                <ng-container *ngTemplateOutlet="commonTemplateForIncomeAndExpense"></ng-container>
+                <div *ngTemplateOutlet="commonTemplateForIncomeAndExpense"></div>
             </mat-tab>
             <mat-tab [label]="localeData?.expense">
-                <ng-container *ngTemplateOutlet="commonTemplateForIncomeAndExpense"></ng-container>
+                <div *ngTemplateOutlet="commonTemplateForIncomeAndExpense"></div>
             </mat-tab>
             <mat-tab [label]="localeData?.profit_and_loss">
                 <div class=" p-3 " *ngIf="defaultParamsValue?.projectUniqueName && selectedTabIndex === 2">
@@ -27,7 +27,7 @@
             </mat-tab>
         </mat-tab-group>
     </div>
-</ng-container>
+</div>
 
 <ng-template #commonTemplateForIncomeAndExpense>
     <div class="section-center p-3">
@@ -179,9 +179,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <ng-container *ngIf="totalResults" [formGroup]="accountEntryListForm" >
-                        <ng-container formArrayName="entryList">
-                            <ng-container
+                    <div *ngIf="totalResults" [formGroup]="accountEntryListForm" >
+                        <div formArrayName="entryList">
+                            <div
                                 *ngFor="let entry of accountEntryListForm?.get('entryList')['controls']; let i = index">
                                 <tr [formGroupName]="i" [ngClass]="{'active-row' : activeRowIndex === i || entry?.invalid}" (mouseenter)="activeRowIndex = i" (mouseleave)="activeRowIndex = -1">
                                     <td>
@@ -292,9 +292,9 @@
                                         </span>
                                     </td>
                                 </tr>
-                            </ng-container>
-                        </ng-container>
-                    </ng-container>
+                            </div>
+                        </div>
+                    </div>
                     <tr>
                         <td colspan="100%">
                             <div class="no-data" *ngIf="!totalResults">

@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'expenses'"
     (localeData)="localeData = $event"
@@ -75,7 +75,7 @@
                             </div>
                         </div>
                         <div class="expense-head">
-                            <ng-container *ngIf="currentSelectedTab === EExpenseTabName.PENDING">
+                            <div *ngIf="currentSelectedTab === EExpenseTabName.PENDING">
                                 <app-pending-list
                                     #pendingListComponent
                                     *ngIf="!isSelectedRow"
@@ -112,12 +112,12 @@
                                         ></app-expense-details>
                                     </div>
                                 </div>
-                            </ng-container>
+                            </div>
                         </div>
                     </ng-container>
                 </mat-tab>
                 <mat-tab [label]="localeData?.rejected">
-                    <ng-container *ngIf="currentSelectedTab === EExpenseTabName.REJECTED">
+                    <div *ngIf="currentSelectedTab === EExpenseTabName.REJECTED">
                         <div class="container-fluid mb-3 p-3">
                             <div class="row">
                                 <div class="col-sm-6">
@@ -177,7 +177,7 @@
                             </div>
                         </div>
                         <div class="expense-head overflow-visible">
-                            <ng-container *ngIf="currentSelectedTab === EExpenseTabName.REJECTED">
+                            <div *ngIf="currentSelectedTab === EExpenseTabName.REJECTED">
                                 <app-rejected-list
                                     #rejectedListComponent
                                     (isFilteredSelected)="isFilteredSelected($event)"
@@ -190,12 +190,12 @@
                                     (reloadReportList)="getPettyCashRejectedReports($event)"
                                     (reloadPendingReportList)="getPettyCashPendingReports($event)"
                                 ></app-rejected-list>
-                            </ng-container>
+                            </div>
                         </div>
-                    </ng-container>
+                    </div>
                 </mat-tab>
             </mat-tab-group>
         </div>
     </div>
 
-</ng-container>
+</div>

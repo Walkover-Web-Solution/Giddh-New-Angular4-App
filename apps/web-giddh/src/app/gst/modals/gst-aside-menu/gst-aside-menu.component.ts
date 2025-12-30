@@ -15,7 +15,8 @@ import { IOption } from '../../../app.constant';
     // tslint:disable-next-line:component-selector
     selector: 'gst-aside-menu',
     styleUrls: [`./gst-aside-menu.component.scss`],
-    templateUrl: './gst-aside-menu.component.html'
+    templateUrl: './gst-aside-menu.component.html',
+    standalone: false
 })
 export class GstAsideMenuComponent implements OnInit, OnDestroy {
     @Input() public selectedService: TaxServiceType;

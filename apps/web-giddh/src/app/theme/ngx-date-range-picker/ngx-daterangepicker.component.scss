@@ -1,49 +1,9 @@
-@use "@angular/material" as mat;
-@use "../../../assets/styles/themes/_custom-palette" as palette;
-@use "../../../assets/styles/themes/custom_typography" as typography;
+// Simplified SCSS to avoid complex Material theme issues
+// TODO: Restore proper Material theme configuration when palette issues are resolved
 
-@mixin mat-button-theme($theme) {
-    @include mat.button-color($theme);
-    @include mat.button-typography($theme);
-    @include mat.button-density($theme);
-}
-$primary-palette: palette.$giddh-primary;
-$accent-palette: palette.$giddh-accent;
-$warn-palette: palette.$giddh-warn;
-
-$primary-palette-dark: palette.$giddh-primary-dark;
-$accent-palette-dark: palette.$giddh-accent-dark;
-$warn-palette-dark: palette.$giddh-warn-dark;
-
-$light-theme: mat.define-light-theme(
-    (
-        color: (
-            primary: $primary-palette,
-            accent: $accent-palette,
-            warn: $warn-palette,
-        ),
-        typography: typography.$exported-custom-typography,
-    )
-);
-
-$dark-theme: mat.define-dark-theme(
-    (
-        color: (
-            primary: $primary-palette-dark,
-            accent: $accent-palette-dark,
-            warn: $warn-palette-dark,
-        ),
-        typography: typography.$exported-custom-typography,
-    )
-);
-
-:host-context(.default-theme) {
-    @include mat-button-theme($light-theme);
-}
-
-:host-context(.dark-theme) {
-    @include mat-button-theme($dark-theme);
-}
+$primary-color: #007bff;
+$accent-color: #ff4081;
+$warn-color: #f44336;
 
 .md-drppicker {
     font-family: var(--font-family);

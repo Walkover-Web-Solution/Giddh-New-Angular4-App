@@ -21,7 +21,8 @@ import { GiddhNumberFormatPipe } from "../../shared/helpers/pipes/number-format/
     selector: "account-statement",
     templateUrl: "account-statement.component.html",
     styleUrls: ["account-statement.component.scss"],
-    providers: [ContactComponentStore]
+    providers: [ContactComponentStore],
+    standalone:false
 })
 export class AccountStatementComponent implements OnInit, OnDestroy {
     /** Angular Material menu trigger for datepicker */
@@ -303,10 +304,10 @@ export class AccountStatementComponent implements OnInit, OnDestroy {
             });
         }
         this.advanceSearchDialogRef = this.dialog.open(this.advanceSearchModal, {
-            width: '980px',
-            role: 'alertdialog',
-            ariaLabel: 'advance'
-        });
+                    width: '980px',
+                    role: 'alertdialog',
+                    ariaLabel: 'advance'
+                });
     }
 
     /**

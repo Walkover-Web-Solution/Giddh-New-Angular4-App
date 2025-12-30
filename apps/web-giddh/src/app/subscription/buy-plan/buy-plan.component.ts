@@ -29,7 +29,8 @@ import { ServiceConfig } from '../../services/service.config';
     selector: 'buy-plan',
     templateUrl: './buy-plan.component.html',
     styleUrls: ['./buy-plan.component.scss'],
-    providers: [BuyPlanComponentStore, ChangeBillingComponentStore, ViewSubscriptionComponentStore, SubscriptionComponentStore]
+    providers: [BuyPlanComponentStore, ChangeBillingComponentStore, ViewSubscriptionComponentStore, SubscriptionComponentStore],
+    standalone:false
 })
 
 export class BuyPlanComponent implements OnInit, OnDestroy {

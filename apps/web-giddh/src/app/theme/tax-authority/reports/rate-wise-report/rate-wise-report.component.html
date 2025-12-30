@@ -1,4 +1,4 @@
-<ng-container appTranslate [file]="'settings/tax-authority'" (localeData)="localeData = $event"
+<div appTranslate [file]="'settings/tax-authority'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event">
     <hamburger-menu></hamburger-menu>
 
@@ -9,7 +9,7 @@
             <tax-sidebar [exclude]="'#primary-new-header'" class="gst-sidebar"></tax-sidebar>
         </div>
     </div>
-    
+
     <!-- Tax Authority code  -->
     <div class="tax-authority-report section-center pt-3">
         <div class="container-fluid ml-0">
@@ -160,4 +160,4 @@
             </div>
         </div>
     </div>
-</ng-container>
+</div>

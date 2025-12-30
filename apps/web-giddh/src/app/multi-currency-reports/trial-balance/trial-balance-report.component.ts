@@ -6,11 +6,13 @@ import { TrialBalanceRequest } from '../../models/api-models/tb-pl-bs';
 import { Account, ChildGroup } from '../../models/api-models/Search';
 import { ReportType } from '../multi-currency.const';
 import { TrialBalanceReportGridComponent } from './components/trial-balance-grid/trial-balance-report-grid.component';
+import { forEach } from '../../lodash-optimized';
 
 @Component({
-    selector: 'trial-balance-report',
+selector: 'trial-balance-report',
     templateUrl: './trial-balance-report.component.html',
-    providers: [MultiCurrencyReportsComponentStore]
+    providers: [MultiCurrencyReportsComponentStore],
+    standalone: false
 })
 export class TrialBalanceReportComponent implements OnInit, AfterViewInit, OnDestroy {
     /** Reference to the TrialBalanceReportGridComponent */
@@ -51,7 +53,7 @@ export class TrialBalanceReportComponent implements OnInit, AfterViewInit, OnDes
         this.reportDataList$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
             if (response) {
                 this.initData(response?.groupDetails);
-                response?.groupDetails.forEach(groupDetail => {
+                (Array.isArray(response?.groupDetails) ? response?.groupDetails : []).forEach(groupDetail => {
                     groupDetail['isVisible'] = true;
                     groupDetail['isCreated'] = true;
                 });
@@ -68,11 +70,11 @@ export class TrialBalanceReportComponent implements OnInit, AfterViewInit, OnDes
      * @memberof TrialBalanceReportComponent
      */
     public initData(groups: ChildGroup[]): void {
-        groups.forEach((childGroup: ChildGroup) => {
+        (Array.isArray(groups) ? groups : []).forEach((childGroup: ChildGroup) => {
             childGroup['isVisible'] = false;
             childGroup['isCreated'] = false;
             childGroup['isIncludedInSearch'] = true;
-            childGroup.accounts.forEach((account: Account) => {
+            (Array.isArray(childGroup.accounts) ? childGroup.accounts : []).forEach((account: Account) => {
                 account['isIncludedInSearch'] = true;
                 account['isCreated'] = false;
                 account['isVisible'] = false;
@@ -101,7 +103,7 @@ export class TrialBalanceReportComponent implements OnInit, AfterViewInit, OnDes
      * @memberof TrialBalanceReportComponent
      */
     public filterData(): void {
-        this.componentStore.getMultiCurrencyReport(ReportType.TrialBalance);
+        this.componentStore.getMultiCurrencyReport(ReportType.TRIAL_BALANCE);
     }
 
     /**
@@ -111,7 +113,7 @@ export class TrialBalanceReportComponent implements OnInit, AfterViewInit, OnDes
      * @memberof TrialBalanceReportComponent
      */
     public getTrialBalanceReport(): void {
-        this.componentStore.getMultiCurrencyReport(ReportType.TrialBalance);
+        this.componentStore.getMultiCurrencyReport(ReportType.TRIAL_BALANCE);
     }
 
 
@@ -123,7 +125,7 @@ export class TrialBalanceReportComponent implements OnInit, AfterViewInit, OnDes
      * @memberof TrialBalanceReportComponent
      */
     public searchData(event: any): void {
-        this.componentStore.createMultiCurrencyReport({ reportType: ReportType.TrialBalance, payload: event });
+        this.componentStore.createMultiCurrencyReport({ reportType: ReportType.TRIAL_BALANCE, payload: event });
     }
 
     /**

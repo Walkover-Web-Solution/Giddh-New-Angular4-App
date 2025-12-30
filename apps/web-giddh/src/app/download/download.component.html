@@ -1,4 +1,4 @@
-<ng-container appTranslate (commonLocaleData)="commonLocaleData = $event">
+<div appTranslate (commonLocaleData)="commonLocaleData = $event">
     <header class="header">
         <div class="brand-logo">
             <a [href]="giddhDomainUrl" target="_blank"><img [src]="giddhLogoSrc" alt="brand-logo" /></a>
@@ -18,4 +18,4 @@
             {{ commonLocaleData?.app_download }}</a
         >
     </div>
-</ng-container>
+</div>

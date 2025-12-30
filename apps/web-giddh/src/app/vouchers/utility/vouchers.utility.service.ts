@@ -8,7 +8,11 @@ import * as dayjs from "dayjs";
 import * as cleaner from 'fast-clean';
 import { ReceiptItem } from "../../models/api-models/recipt";
 
-@Injectable()
+@Injectable(
+    {
+        providedIn: 'root'
+    }
+)
 export class VouchersUtilityService {
     public voucherTypes: any[] = [VoucherTypeEnum.cashCreditNote, VoucherTypeEnum.cash, VoucherTypeEnum.cashDebitNote, VoucherTypeEnum.cashBill];
 

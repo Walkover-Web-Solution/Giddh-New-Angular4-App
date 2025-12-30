@@ -13,7 +13,8 @@ import { GeneralService } from '../../services/general.service';
     templateUrl: './payment-method-dialog.component.html',
     styleUrls: ['./payment-method-dialog.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [PaymentMethodDialogComponentStore]
+    providers: [PaymentMethodDialogComponentStore],
+    standalone: false
 })
 export class PaymentMethodDialogComponent implements OnInit {
     /** Instance of payment method */
@@ -144,13 +145,13 @@ export class PaymentMethodDialogComponent implements OnInit {
      */
     public deletePaymentMethod(payment: any): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
-            width: '540px',
-            data: {
+                    width: '540px',
+                    data: {
                 title: this.commonLocaleData?.app_confirmation,
-                body: this.localeData?.confirm_payment_delete_message,
-                ok: this.commonLocaleData?.app_yes,
-                cancel: this.commonLocaleData?.app_no
-            }
+                    body: this.localeData?.confirm_payment_delete_message,
+                    ok: this.commonLocaleData?.app_yes,
+                    cancel: this.commonLocaleData?.app_no
+                }
         });
 
         dialogRef.afterClosed().subscribe(response => {
@@ -207,7 +208,7 @@ export class PaymentMethodDialogComponent implements OnInit {
         this.paymentMethodForm.get('paymentProvider').setValue("");
         this.paymentProvideLabel = '';
         this.paymentMethodForm.reset();
-    } 
+    }
 
 
     /**

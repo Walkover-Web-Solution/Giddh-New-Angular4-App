@@ -14,7 +14,8 @@ import { SubscriptionComponentStore } from '../../../subscription/utility/subscr
 @Component({
     selector: 'move-company',
     styleUrls: ['./move-company.component.scss'],
-    templateUrl: './move-company.component.html'
+    templateUrl: './move-company.component.html',
+    standalone: false
 })
 
 export class MoveCompanyComponent implements OnInit, OnDestroy {
@@ -108,7 +109,7 @@ export class MoveCompanyComponent implements OnInit, OnDestroy {
                 this.moveSelectedCompany = response.body;
 
                 if (this.subscriptions && this.subscriptions.length > 0) {
-                    this.subscriptions.forEach(plan => {
+                    (Array.isArray(this.subscriptions) ? this.subscriptions : []).forEach(plan => {
                         if (plan.subscriptionId && plan.planDetails?.companiesLimit > plan.totalCompanies && this.moveSelectedCompany?.subscription?.subscriptionId !== plan.subscriptionId && this.availablePlans[plan.planDetails?.uniqueName] === undefined && plan.planDetails.countries.includes(this.moveSelectedCompany.country)) {
                             this.availablePlansOption.push({ label: plan.planDetails?.name, value: plan.planDetails?.uniqueName });
                             if (this.availablePlans[plan.planDetails?.uniqueName] === undefined) {

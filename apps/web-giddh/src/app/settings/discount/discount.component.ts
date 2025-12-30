@@ -16,7 +16,8 @@ import { GeneralService } from '../../services/general.service';
 @Component({
     selector: 'setting-discount',
     templateUrl: './discount.component.html',
-    styleUrls: ['./discount.component.scss']
+    styleUrls: ['./discount.component.scss'],
+    standalone: false
 })
 
 export class DiscountComponent implements OnInit, OnDestroy {

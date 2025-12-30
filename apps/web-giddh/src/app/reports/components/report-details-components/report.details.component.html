@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'reports/sales-register'"
     (localeData)="localeData = $event"
@@ -38,7 +38,7 @@
                     >
                     </reactive-dropdown-field>
                 </div>
-                <div> 
+                <div>
                     <reactive-dropdown-field
                         [name]="'groupBy'"
                         [label]="localeData?.group_by"
@@ -92,8 +92,8 @@
                         </mat-form-field>
                         <mat-menu #monthMenu="matMenu" xPosition="after" yPosition="below">
                             <div class="grid-columns-3 d-grid column-gap-05 p-2">
-                              <button 
-                                mat-menu-item 
+                              <button
+                                mat-menu-item
                                 *ngFor="let month of monthNames"
                                 (click)="durationMatSelect.close(); populateRecords(durationEnum.Weekly, month)"
                                 aria-label="Select month"
@@ -162,7 +162,7 @@
                         >
                             <mat-option class="mt-0">
                                 <ngx-mat-select-search
-                                    [placeholderLabel]="commonLocaleData?.app_select"  
+                                    [placeholderLabel]="commonLocaleData?.app_select"
                                     [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
                                     [formControl]="account"
                                     [clearSearchInput]="false"
@@ -197,7 +197,7 @@
             (handleClickEvent)="$event && goToDetailedSales($event.item)"
         ></giddh-table>
     </div>
-</ng-container>
+</div>
 
 
 <!-- Universal Datepicker Menu -->

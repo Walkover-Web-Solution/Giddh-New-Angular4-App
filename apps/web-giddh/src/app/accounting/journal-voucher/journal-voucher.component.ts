@@ -151,7 +151,8 @@ export const PAGES_WITH_CHILD = ['Purchase', 'Sales', 'Credit note', 'Debit note
 
 @Component({
     templateUrl: './journal-voucher.component.html',
-    styleUrls: ['./journal-voucher.component.scss']
+    styleUrls: ['./journal-voucher.component.scss'],
+    standalone:false
 })
 export class JournalVoucherComponent implements OnInit, OnDestroy {
 

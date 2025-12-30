@@ -3,7 +3,8 @@ import { ReplaySubject } from 'rxjs';
 
 @Component({
     selector: 'welcome-jobwork',
-    templateUrl: './welcome-jobwork.component.html'
+    templateUrl: './welcome-jobwork.component.html',
+    standalone: false
 })
 export class JobworkWelcomeComponent implements OnDestroy {
     /** Subject to destroy subscription */

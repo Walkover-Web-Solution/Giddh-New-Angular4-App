@@ -19,13 +19,13 @@ import { saveAs } from "file-saver";
 import * as dayjs from "dayjs";
 import { combineLatest, BehaviorSubject, Observable, of as observableOf, ReplaySubject, Subject } from "rxjs";
 import { debounceTime, distinctUntilChanged, filter, take, takeUntil } from "rxjs/operators";
-import { cloneDeep, find, map as lodashMap, uniq } from "../../app/lodash-optimized";
+import { cloneDeep, find, map as lodashMap, uniq  } from '../lodash-optimized';
 import { CommonActions } from "../actions/common.actions";
 import { CompanyActions } from "../actions/company.actions";
 import { GeneralActions } from "../actions/general/general.actions";
 import { SettingsProfileActions } from "../actions/settings/profile/settings.profile.action";
 import { SettingsIntegrationActions } from "../actions/settings/settings.integration.action";
-import { ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, IOption, PAGINATION_LIMIT, BREAKPOINT_SCREEN_SIZE } from "../app.constant";
+import { ASIDE_PANE_CONFIG, BranchHierarchyType, GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, IOption, PAGINATION_LIMIT, BREAKPOINT_SCREEN_SIZE, Configuration } from "../app.constant";
 import { OnboardingFormRequest } from "../models/api-models/Common";
 import {
     ContactAdvanceSearchCommonModal,
@@ -56,12 +56,14 @@ import { TemplateFroalaComponent } from '../shared/template-froala/template-froa
 import { ServiceConfig } from '../services/service.config';
 import { ContactsTab, ContactsColumn } from './contacts.enum';
 import { GiddhNumberFormatPipe } from '../shared/helpers/pipes/number-format/number-format.pipe';
+import { environment } from '../../environments/environment';
 
 @Component({
     selector: "contact-detail",
     templateUrl: "./contact.component.html",
     styleUrls: ["./contact.component.scss"],
-    providers: [ContactComponentStore]
+    providers: [ContactComponentStore],
+    standalone:false
 })
 export class ContactComponent implements OnInit, OnDestroy {
     /** Stores the current range of date picker */
@@ -294,7 +296,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         });
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.renderer.addClass(document.body, 'contact-body');
-        this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         this.store.dispatch(this.companyActions.getAllRegistrations());
         this.currentOrganizationType = this.generalService.currentOrganizationType;
         this.isAddAndManageOpenedFromOutside$ = this.store.pipe(select(appStore => appStore.groupwithaccounts.isAddAndManageOpenedFromOutside), takeUntil(this.destroyed$));
@@ -485,7 +487,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                     // branches are loaded
                     if (this.currentOrganizationType === OrganizationType.Branch) {
                         currentBranchUniqueName = this.generalService.currentBranchUniqueName;
-                        this.currentBranch = _.cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
+                        this.currentBranch = cloneDeep(response.find(branch => branch?.uniqueName === currentBranchUniqueName));
                     } else {
                         currentBranchUniqueName = this.activeCompany ? this.activeCompany.uniqueName : "";
                         this.currentBranch = {
@@ -494,7 +496,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                             uniqueName: this.activeCompany ? this.activeCompany.uniqueName : "",
                         };
                     }
-                    this.currentBranchData = _.cloneDeep(this.currentBranch);
+                    this.currentBranchData = cloneDeep(this.currentBranch);
                 }
             } else {
                 if (this.generalService.companyUniqueName) {
@@ -575,10 +577,52 @@ export class ContactComponent implements OnInit, OnDestroy {
         if (additionalParams) {
             url = `${url}${additionalParams}`;
         }
-        if (isElectron) {
-            const ipcRenderer = (window as any).require('electron').ipcRenderer;
-            url = `${location.origin}${location.pathname}#./pages/${part}${part?.includes('ledger') ? `/${accUniqueName}` : ""}`;
-            ipcRenderer.send('open-url', url);
+        if (Configuration.isElectron) {
+            try {
+                let electronIpcAvailable = false;
+
+                // Try electronAPI first (secure context)
+                if ((window as any).electronAPI && (window as any).electronAPI.send) {
+                    try {
+                        url = `${location.origin}${location.pathname}#./pages/${part}${part?.includes('ledger') ? `/${accUniqueName}` : ""}`;
+                        (window as any).electronAPI.send('open-url', url);
+                        electronIpcAvailable = true;
+                    } catch (ipcError) {
+                        console.warn('ElectronAPI send failed:', ipcError);
+                    }
+                }
+
+                // Try legacy electron require (fallback)
+                if (!electronIpcAvailable && (window as any).require) {
+                    try {
+                        const electron = (window as any).require('electron');
+                        if (electron && electron.ipcRenderer && electron.ipcRenderer.send) {
+                            url = `${location.origin}${location.pathname}#./pages/${part}${part?.includes('ledger') ? `/${accUniqueName}` : ""}`;
+                            electron.ipcRenderer.send('open-url', url);
+                            electronIpcAvailable = true;
+                        }
+                    } catch (requireError) {
+                        console.warn('Electron require failed:', requireError);
+                    }
+                }
+
+                // Fallback to regular window.open if IPC not available
+                if (!electronIpcAvailable) {
+                    console.warn('Electron IPC not available, using window.open fallback');
+                    if (part === 'ledger') {
+                        const separator = url.includes('?') ? '&' : '?';
+                        url = url + `${separator}redirectUrl=${encodeURIComponent(this.currentUrl)}`;
+                    }
+                    (window as any).open(url);
+                }
+            } catch (error) {
+                console.warn('Electron navigation failed, using window.open:', error);
+                if (part === 'ledger') {
+                    const separator = url.includes('?') ? '&' : '?';
+                    url = url + `${separator}redirectUrl=${encodeURIComponent(this.currentUrl)}`;
+                }
+                (window as any).open(url);
+            }
         } else {
             if (part === 'ledger') {
                 const separator = url.includes('?') ? '&' : '?';
@@ -1569,9 +1613,9 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
         if (this.selectedAccountsList?.length || this.selectedAccForPayment) {
             this.dialog.open(this.bulkPaymentModalRef, {
-                width: '980px',
-                panelClass: 'contact-modal'
-            });
+                        width: '980px',
+                        panelClass: 'contact-modal'
+                    });
         }
     }
 

@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'inventory'"
     (commonLocaleData)="commonLocaleData = $event"
@@ -39,7 +39,7 @@
                     <div class="col-lg-12">
                         <div class="row">
                             <div class="col-lg-6 col-sm-6 col-12 mb-3 pr-2">
-                                <ng-container *ngIf="reportType === 'TRANSACTION'">
+                                <div *ngIf="reportType === 'TRANSACTION'">
                                     <reactive-dropdown-field
                                         [placeholder]="localeData?.advance_search_filter?.select_category"
                                         [options]="advanceSearchCategoryTransaction"
@@ -49,8 +49,8 @@
                                         [label]="localeData?.advance_search_filter?.category"
                                     >
                                     </reactive-dropdown-field>
-                                </ng-container>
-                                <ng-container *ngIf="reportType !== 'TRANSACTION'">
+                                </div>
+                                <div *ngIf="reportType !== 'TRANSACTION'">
                                     <reactive-dropdown-field
                                         [placeholder]="localeData?.advance_search_filter?.select_category"
                                         [options]="advanceSearchCategory"
@@ -59,7 +59,7 @@
                                         (onClear)="advanceSearchFormObj.param1 = ''"
                                         [label]="localeData?.advance_search_filter?.category"
                                     ></reactive-dropdown-field>
-                                </ng-container>
+                                </div>
                             </div>
                             <div class="col-lg-6 col-sm-6 col-12 mb-3 pl-2">
                                 <reactive-dropdown-field
@@ -154,4 +154,4 @@
             ></app-datepicker-wrapper>
         </ng-template>
     </mat-menu>
-</ng-container>
+</div>

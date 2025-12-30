@@ -13,7 +13,8 @@ import { Router } from '@angular/router';
 @Component({
     selector: 'liability-report-component',
     templateUrl: './liability-report.component.html',
-    styleUrls: ['./liability-report.component.scss']
+    styleUrls: ['./liability-report.component.scss'],
+    standalone:false
 })
 
 export class LiabilityReportComponent implements OnInit, OnDestroy {

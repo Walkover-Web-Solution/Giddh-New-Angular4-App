@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'vouchers/preview'"
     (localeData)="localeData = $event"
@@ -10,8 +10,8 @@
         *ngIf="!isSearching && !isLoadMore && (getVouchersInProgress$ | async)"
         [cssClass]="'no-data'"
     ></giddh-page-loader>
-    <div 
-        class="invoice-preview-wrapper" 
+    <div
+        class="invoice-preview-wrapper"
         *ngIf="isSearching || isLoadMore || !(getVouchersInProgress$ | async)"
         appResizable
         resizableTarget=".preview-list"
@@ -499,7 +499,7 @@
             </ng-container>
         </div>
     </div>
-</ng-container>
+</div>
 
 <!-- adjust-payment-dialog -->
 <ng-template #adjustPaymentDialog>

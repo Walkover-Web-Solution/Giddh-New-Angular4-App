@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'all-items'"
     (localeData)="localeData = $event"
@@ -85,7 +85,7 @@
             </div>
         </div>
     </div>
-</ng-container>
+</div>
 <!--Modal for All Items -->
 <ng-template #allItemModal>
     <div (click)="$event.stopPropagation()">

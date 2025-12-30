@@ -1,6 +1,6 @@
-<ng-container
+<div
     appTranslate
-    [file]="'settings/campaign'"
+    file="triggers"
     (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
@@ -422,7 +422,7 @@
         </div>
     </div>
     </ng-template>
-</ng-container>
+</div>
 
 <!-- open trigger aside -->
 <ng-template #createNew>

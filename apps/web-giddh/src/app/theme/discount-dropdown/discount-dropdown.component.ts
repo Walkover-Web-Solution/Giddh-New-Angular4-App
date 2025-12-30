@@ -8,7 +8,8 @@ import { MatMenuTrigger, MenuCloseReason } from "@angular/material/menu";
 @Component({
     selector: "discount-dropdown",
     templateUrl: "./discount-dropdown.component.html",
-    styleUrls: ["./discount-dropdown.component.scss"]
+    styleUrls: ["./discount-dropdown.component.scss"],
+    standalone: false
 })
 export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
     /** Element ref for mat menu */

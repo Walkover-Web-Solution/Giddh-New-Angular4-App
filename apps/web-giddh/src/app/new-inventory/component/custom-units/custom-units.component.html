@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'inventory/unit'"
     (commonLocaleData)="commonLocaleData = $event"
@@ -11,22 +11,22 @@
                     <mat-list class="item-list group-list">
                         <strong class="pb-2 list-font pl-3">{{ commonLocaleData?.app_group }}</strong>
                         <giddh-page-loader *ngIf="isGroupListLoading"></giddh-page-loader>
-                        <ng-container *ngIf="!isGroupListLoading">
-                            <ng-container *ngIf="!unitGroups?.length">
+                        <div *ngIf="!isGroupListLoading">
+                            <div *ngIf="!unitGroups?.length">
                                 <mat-list role="list" class="list-head">
                                     <mat-list-item class="items mat-left">
                                         <strong>{{ commonLocaleData?.app_no_result_found }}</strong>
                                     </mat-list-item>
                                 </mat-list>
-                            </ng-container>
-                            <ng-container *ngIf="unitGroups?.length">
+                            </div>
+                            <div *ngIf="unitGroups?.length">
                                 <cdk-virtual-scroll-viewport
                                     class="virtual-group-list overflow-x-hidden"
                                     [itemSize]="38"
                                     [minBufferPx]="400"
                                     [maxBufferPx]="800"
                                 >
-                                    <ng-container
+                                    <div
                                         *cdkVirtualFor="let group of unitGroups; let i = index; trackBy: trackByGroup"
                                     >
                                         <mat-divider></mat-divider>
@@ -39,10 +39,10 @@
                                         >
                                             <span>{{ group?.name }}</span>
                                         </mat-list-item>
-                                    </ng-container>
+                                    </div>
                                 </cdk-virtual-scroll-viewport>
-                            </ng-container>
-                        </ng-container>
+                            </div>
+                        </div>
                     </mat-list>
                 </mat-grid-tile>
                 <mat-grid-tile [colspan]="3" class="border-grid">
@@ -50,15 +50,15 @@
                         <strong class="pb-2 list-font pl-3">{{ commonLocaleData?.app_unit }}</strong>
                         <mat-divider></mat-divider>
                         <giddh-page-loader *ngIf="isUnitListLoading"></giddh-page-loader>
-                        <ng-container *ngIf="!isUnitListLoading">
-                            <ng-container *ngIf="!unitMappings?.length">
+                        <div *ngIf="!isUnitListLoading">
+                            <div *ngIf="!unitMappings?.length">
                                 <mat-list role="list" class="list-head">
                                     <mat-list-item class="items mat-left">
                                         <strong>{{ commonLocaleData?.app_no_result_found }}</strong>
                                     </mat-list-item>
                                 </mat-list>
-                            </ng-container>
-                            <ng-container *ngIf="unitMappings?.length">
+                            </div>
+                            <div *ngIf="unitMappings?.length">
                                 <mat-list role="list" class="list-head pl-3">
                                     <mat-list-item role="listitem" class="items px-0">
                                         <strong>{{ commonLocaleData?.app_name }}</strong>
@@ -73,7 +73,7 @@
                                     [minBufferPx]="400"
                                     [maxBufferPx]="800"
                                 >
-                                    <ng-container *cdkVirtualFor="let mapping of unitMappings; let i = index">
+                                    <div *cdkVirtualFor="let mapping of unitMappings; let i = index">
                                         <mat-divider></mat-divider>
                                         <mat-list
                                             role="list"
@@ -115,10 +115,10 @@
                                                 </span>
                                             </mat-list-item>
                                         </mat-list>
-                                    </ng-container>
+                                    </div>
                                 </cdk-virtual-scroll-viewport>
-                            </ng-container>
-                        </ng-container>
+                            </div>
+                        </div>
                     </mat-list>
                 </mat-grid-tile>
                 <mat-grid-tile [colspan]="5" class="form-btn">
@@ -153,7 +153,7 @@
             </mat-grid-list>
         </div>
     </div>
-</ng-container>
+</div>
 <ng-template #createUnit>
     <aside-create-unit
         [unitGroupDetails]="selectedGroup"

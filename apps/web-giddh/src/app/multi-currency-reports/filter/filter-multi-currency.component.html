@@ -1,9 +1,4 @@
-<ng-container
-    appTranslate
-    [file]="'trial-profit-balance'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
+<div appTranslate [file]="'trial-profit-balance'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <div class="clear-both">
         <div class="row">
             <div class="col-xl-9 col-12">
@@ -122,4 +117,4 @@
             ></app-datepicker-wrapper>
         </ng-template>
     </mat-menu>
-</ng-container>
+</div>

@@ -1,9 +1,4 @@
-<ng-container
-    appTranslate
-    [file]="'trial-profit-balance/profit-loss'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
+<div appTranslate [file]="'trial-profit-balance/profit-loss'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <filter-multi-currency
         #filter
         (filterValue)="searchData($event)"
@@ -28,4 +23,4 @@
     <div *ngIf="!(showLoader | async) && !data" class="no-data">
         <h2>{{ localeData?.no_data_found }}</h2>
     </div>
-</ng-container>
+</div>

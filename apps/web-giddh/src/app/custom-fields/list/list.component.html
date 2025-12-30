@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'custom-fields'"
     (localeData)="localeData = $event"
@@ -39,25 +39,25 @@
         <div class="custom-field-list mt-3">
             <div>
                 <table mat-table [dataSource]="dataSource" class="giddh-table table" *ngIf="dataSource?.length">
-                    <ng-container matColumnDef="serialNo">
+                    <div matColumnDef="serialNo">
                         <th mat-header-cell *matHeaderCellDef>{{ localeData?.s_no }}</th>
                         <td mat-cell *matCellDef="let element">{{ element.index }}</td>
-                    </ng-container>
-                    <ng-container matColumnDef="fieldName">
+                    </div>
+                    <div matColumnDef="fieldName">
                         <th mat-header-cell *matHeaderCellDef>{{ localeData?.field_name }}</th>
                         <td mat-cell *matCellDef="let element">{{ element.fieldName }}</td>
-                    </ng-container>
-                    <ng-container matColumnDef="fieldType">
+                    </div>
+                    <div matColumnDef="fieldType">
                         <th mat-header-cell *matHeaderCellDef>{{ localeData?.field_type }}</th>
                         <td mat-cell *matCellDef="let element">{{ element.fieldType?.name | titlecase }}</td>
-                    </ng-container>
-                    <ng-container matColumnDef="isMandatory">
+                    </div>
+                    <div matColumnDef="isMandatory">
                         <th mat-header-cell *matHeaderCellDef>{{ localeData?.mandatory }}</th>
                         <td mat-cell *matCellDef="let element">
                             {{ element.isMandatory ? commonLocaleData?.app_yes : commonLocaleData?.app_no }}
                         </td>
-                    </ng-container>
-                    <ng-container matColumnDef="action">
+                    </div>
+                    <div matColumnDef="action">
                         <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_action }}</th>
                         <td mat-cell *matCellDef="let element">
                             <a
@@ -79,7 +79,7 @@
                                 ><i class="icon-trash"></i
                             ></a>
                         </td>
-                    </ng-container>
+                    </div>
                     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                 </table>
@@ -102,4 +102,4 @@
             <section class="mb-custom-80"></section>
         </div>
     </div>
-</ng-container>
+</div>

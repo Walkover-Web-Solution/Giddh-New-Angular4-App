@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'inventory'"
     (commonLocaleData)="commonLocaleData = $event"
@@ -10,7 +10,7 @@
     <div class="stock-balance-wrapper" *ngIf="!isLoading">
         <div class="stock-balance-top-bar">
             <div class="stock-balance-top-bar-left-side column-gap-15">
-                <ng-container *ngIf="voucherApiVersion == 2">
+                <div *ngIf="voucherApiVersion == 2">
                     <button aria-label="new stock" mat-raised-button color="primary" [matMenuTriggerFor]="newStock" class="stock-btn-height">
                         {{ localeData?.warehouse_opening_balance?.new_stock }}
                         <span class="caret"></span>
@@ -23,7 +23,7 @@
                             {{ commonLocaleData?.app_service }}
                         </button>
                     </mat-menu>
-                </ng-container>
+                </div>
                 <div class="col-xl-6 col-lg-10 col-md-10 pl-0">
                     <mat-select
                         name="selectedWarehouse"
@@ -100,7 +100,7 @@
                 </div>
                 <div class="wrapper-warehouse">
                     <div class="warehouse-list">
-                        <ng-container *ngFor="let warehouse of warehouses">
+                        <div *ngFor="let warehouse of warehouses">
                             <div
                                 class="warehouse-list-head odd-even-shade"
                                 *ngIf="selectedWarehouse?.indexOf(warehouse?.uniqueName) > -1"
@@ -121,7 +121,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </ng-container>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -178,7 +178,7 @@
                         </div>
 
                         <div class="warehouse-list-wrapper">
-                            <ng-container *ngFor="let stockWarehouse of stock?.warehouses">
+                            <div *ngFor="let stockWarehouse of stock?.warehouses">
                                 <div
                                     class="warehouse-list warehouse-even"
                                     *ngIf="selectedWarehouse?.indexOf(stockWarehouse?.uniqueName) > -1"
@@ -201,7 +201,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </ng-container>
+                            </div>
                         </div>
                     </div>
                     <div
@@ -226,7 +226,7 @@
                                 <span>{{ stockGroupName ?? "-" }}</span>
                             </div>
                             <div class="warehouse-expanded-box-wrapper">
-                                <ng-container
+                                <div
                                     *ngFor="
                                         let warehouseVariant of variant?.warehouseBalance;
                                         let warehouseIndex = index
@@ -307,7 +307,7 @@
                                             </span>
                                         </div>
                                     </div>
-                                </ng-container>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -333,4 +333,4 @@
             <section class="mb-custom-80"></section>
         </div>
     </div>
-</ng-container>
+</div>

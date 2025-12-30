@@ -11,7 +11,8 @@ import { GeneralService } from '../../../services/general.service';
 @Component({
     selector: 'ledger-aside-pane',
     templateUrl: './ledger-aside-pane.component.html',
-    styleUrls: ['./ledger-aside-pane.component.scss']
+    styleUrls: ['./ledger-aside-pane.component.scss'],
+    standalone: false
 })
 
 export class LedgerAsidePaneComponent implements OnInit, OnDestroy {
@@ -38,7 +39,7 @@ export class LedgerAsidePaneComponent implements OnInit, OnDestroy {
         private inventorySidebarAction: SidebarAction,
         private accountsAction: AccountsAction,
         private pageLeaveUtilityService: PageLeaveUtilityService,
-        private changeDetectionRef: ChangeDetectorRef, 
+        private changeDetectionRef: ChangeDetectorRef,
         private generalService: GeneralService
     ) {
         this.createStockSuccess$ = this.store.pipe(select(s => s.inventory.createStockSuccess), takeUntil(this.destroyed$));

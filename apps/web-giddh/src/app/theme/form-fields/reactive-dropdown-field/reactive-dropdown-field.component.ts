@@ -16,7 +16,8 @@ import { isEqual } from "../../../lodash-optimized";
             useExisting: forwardRef(() => ReactiveDropdownFieldComponent),
             multi: true
         }
-    ]
+    ],
+    standalone: false
 })
 export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnInit, AfterViewInit, OnChanges, OnDestroy {
     /** Holds template of options on the component itself */
@@ -138,8 +139,8 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     public ngOnInit(): void {
         if (this.enableDynamicSearch) {
             this.searchFormControl.pipe(
-                debounceTime(700), 
-                skip(1), 
+                debounceTime(700),
+                skip(1),
                 takeUntil(this.destroyed$)
             ).subscribe((search: string) => {
                 this.dynamicSearchedQuery.emit(search);
@@ -150,8 +151,8 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             });
         } else {
             this.searchFormControl.pipe(
-                debounceTime(700), 
-                skip(1), 
+                debounceTime(700),
+                skip(1),
                 takeUntil(this.destroyed$)
             ).subscribe((search: string) => {
                 if (!search) {
@@ -210,7 +211,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             const currentOptionsCount = this.options?.length || 0;
             this.isPaginationInProgress = this.previousOptionsCount > 0 && currentOptionsCount > this.previousOptionsCount;
             this.previousOptionsCount = currentOptionsCount;
-            
+
             this.fieldFilteredOptions$ = of(this.options);
 
             if (this.showCreateNew) {
@@ -218,14 +219,14 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
                     this.focusSecondOption();
                 }, 100);
             }
-            
+
             // Preserve focus during pagination
             if (this.isPaginationInProgress && this.activeOptionIndex >= 0) {
                 setTimeout(() => {
                     this.restoreFocusAfterPagination();
                 }, 100);
             }
-            
+
             // Always try to set label value when options change, regardless of previous value
             if (changes?.options) {
             // Use setTimeout to ensure the value is properly set before trying to find the label
@@ -254,7 +255,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
 
     /**
      * Handle force clear and reset dropdown list
-     * 
+     *
      * @private
      * @memberof ReactiveDropdownFieldComponent
      */
@@ -314,7 +315,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     public ngOnDestroy(): void {
         // Set destroyed flag first
         this.isDestroyed = true;
-        
+
         // Only complete the subject if it hasn't been completed already
         if (!this.destroyed$.closed) {
             this.destroyed$.next(true);
@@ -357,7 +358,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             try {
                 // Set the active item to maintain focus position
                 (this.matAutocomplete as any)._keyManager.setActiveItem(this.activeOptionIndex);
-                
+
                 // Ensure the active option is visible in the viewport
                 const activeOption = (this.matAutocomplete as any)._keyManager.activeItem;
                 if (activeOption && (activeOption as any)._element) {
@@ -371,7 +372,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
                 console.warn('Could not restore focus after pagination:', error);
             }
         }
-        
+
         // Reset pagination flag
         this.isPaginationInProgress = false;
     }
@@ -485,7 +486,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
 
         // Check for Alt+Shift+N combination (cross-platform)
         const isAltShiftN = event.altKey && event.shiftKey && event.code === 'KeyN';
-        
+
         // Check if dropdown is focused or open
         const isFocused = this.selectField?.nativeElement === document.activeElement || this.trigger?.panelOpen;
 
@@ -518,7 +519,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         if (this.isDestroyed) {
             return;
         }
-        
+
         this.focusInputField();
         setTimeout(() => {
             this.handleDropdownPanelOperation('open');
@@ -581,12 +582,12 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         if (!this.enableDynamicSearch) {
             this.fieldFilteredOptions$ = this.filterOptions("");
         }
-        
+
         // Reset pagination tracking when panel opens
         this.activeOptionIndex = -1;
         this.isPaginationInProgress = false;
         this.previousOptionsCount = this.options?.length || 0;
-        
+
         // Focus on second option (first filtered option) when showCreateNew is true
         if (this.showCreateNew) {
             setTimeout(() => {
@@ -615,7 +616,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             if (this.allowCustomDropdownValue && !this.searchFormControl?.value && !this.controlLabelValue) {
                 this.selectedOption.emit({ label: '', value: '' });
             }
-            
+
             if (this.allowCustomDropdownValue && this.searchFormControl?.value && typeof this.searchFormControl?.value !== "object") {
                 this.value = this.searchFormControl?.value;
                 this.selectedOption.emit({ label: this.value, value: this.value });
@@ -652,12 +653,12 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             try {
                 const keyManager = (this.matAutocomplete as any)._keyManager;
                 const options = keyManager._items;
-                
+
                 // If we have options and showCreateNew is true, focus on index 1 (second option)
                 // Index 0 would be the "Create New" option, index 1 is the first filtered option
                 if (options && options.length > 1) {
                     keyManager.setActiveItem(1);
-                    
+
                     // Ensure the focused option is visible
                     const activeOption = keyManager.activeItem;
                     if (activeOption && (activeOption as any)._element) {

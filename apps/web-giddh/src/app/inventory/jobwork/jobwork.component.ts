@@ -23,7 +23,8 @@ import { MatMenuTrigger } from '@angular/material/menu';
 @Component({
     selector: 'jobwork',
     templateUrl: './jobwork.component.html',
-    styleUrls: ['./jobwork.component.scss']
+    styleUrls: ['./jobwork.component.scss'],
+    standalone: false
 })
 export class JobworkComponent implements OnInit, OnDestroy {
     @ViewChild('advanceSearchTemplate', { static: true }) public advanceSearchTemplate: TemplateRef<any>;
@@ -76,7 +77,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
             "checked": true
         }
     ];
-    
+
     public inventoryReport: InventoryReport;
     public stocksList$: Observable<IStocksItem[]>;
     public inventoryUsers$: Observable<InventoryUser[]>;
@@ -140,7 +141,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
     public ngOnInit() {
         // Mark component as initialized
         this.isComponentInitialized = true;
-        
+
         // get view from sidebar while clicking on person/stock
 
         this.invViewService.getJobworkActiveView().pipe(takeUntil(this.destroyed$)).subscribe(v => {
@@ -279,7 +280,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
     public initVoucherType() {
         // initialization for voucher type array inially all selected
         this.filter.jobWorkTransactionType = [];
-        this.VOUCHER_TYPES.forEach(element => {
+        (Array.isArray(this.VOUCHER_TYPES) ? this.VOUCHER_TYPES : []).forEach(element => {
             element.checked = true;
             this.filter.jobWorkTransactionType.push(element.value);
         });
@@ -303,15 +304,15 @@ export class JobworkComponent implements OnInit, OnDestroy {
      */
     public getDisplayedColumns(): string[] {
         const baseColumns = ['date'];
-        
+
         if (this.type === 'person') {
             baseColumns.push('productName');
         } else if (this.type === 'stock') {
             baseColumns.push('voucherType');
         }
-        
+
         baseColumns.push('senderName', 'receiverName', 'description', 'tradingQty');
-        
+
         return baseColumns;
     }
 
@@ -335,20 +336,26 @@ export class JobworkComponent implements OnInit, OnDestroy {
         if (type === 'sender') {
             this.showSenderSearch = !this.showSenderSearch;
             setTimeout(() => {
-                this.senderName.nativeElement.focus();
-                this.senderName.nativeElement.value = null;
+                if (this.senderName && this.senderName.nativeElement) {
+                    this.senderName.nativeElement.focus();
+                    this.senderName.nativeElement.value = null;
+                }
             }, 100);
         } else if (type === 'receiver') {
             this.showReceiverSearch = !this.showReceiverSearch;
             setTimeout(() => {
-                this.receiverName.nativeElement.focus();
-                this.receiverName.nativeElement.value = null;
+                if (this.receiverName && this.receiverName.nativeElement) {
+                    this.receiverName.nativeElement.focus();
+                    this.receiverName.nativeElement.value = null;
+                }
             }, 100);
         } else if (type === 'product') {
             this.showProductSearch = !this.showProductSearch;
             setTimeout(() => {
-                this.receiverName.nativeElement.focus();
-                this.receiverName.nativeElement.value = null;
+                if (this.receiverName && this.receiverName.nativeElement) {
+                    this.receiverName.nativeElement.focus();
+                    this.receiverName.nativeElement.value = null;
+                }
             }, 100);
         }
     }
@@ -417,16 +424,16 @@ export class JobworkComponent implements OnInit, OnDestroy {
         if (!this.uniqueName) {
             return;
         }
-        
+
         let page: number;
         let pageSize: number = event.pageSize;
-        
+
         if (pageSize !== 6) { // Current itemsPerPage is 6
             page = 1;
         } else {
             page = event.pageIndex + 1;
         }
-        
+
         this.applyFilters(page, true);
     }
 
@@ -441,7 +448,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
         }
         this._store.dispatch(this.inventoryReportActions
             .genReport(this.uniqueName, this.startDate, this.endDate, page, 6, applyFilter ? this.filter : null));
-        
+
         // Only trigger change detection if component is initialized
         if (this.cdr) {
             this.cdr.detectChanges();
@@ -455,9 +462,13 @@ export class JobworkComponent implements OnInit, OnDestroy {
         this.showSenderSearch = false;
         this.showReceiverSearch = false;
         this.showProductSearch = false;
-        this.senderName.nativeElement.value = null;
-        this.receiverName.nativeElement.value = null;
-        if (this.productName) {
+        if (this.senderName && this.senderName.nativeElement) {
+            this.senderName.nativeElement.value = null;
+        }
+        if (this.receiverName && this.receiverName.nativeElement) {
+            this.receiverName.nativeElement.value = null;
+        }
+        if (this.productName && this.productName.nativeElement) {
             this.productName.nativeElement.value = null;
         }
 
@@ -502,7 +513,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
     public advanceSearchAction(type: string) {
         if (type === 'clear') {
             this.advanceSearchForm.controls['filterAmount'].setValue(null);
-            if (this.filter.senderName || this.filter.receiverName || this.senderName.nativeElement.value || this.receiverName.nativeElement.value
+            if (this.filter.senderName || this.filter.receiverName || (this.senderName && this.senderName.nativeElement && this.senderName.nativeElement.value) || (this.receiverName && this.receiverName.nativeElement && this.receiverName.nativeElement.value)
                 || this.filter.sortBy || this.filter.sort || this.filter.quantityGreaterThan || this.filter.quantityEqualTo || this.filter.quantityLessThan) {
                 // do something...
             } else {
@@ -510,7 +521,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
             }
             return;
         } else if (type === 'cancel') {
-            if (this.filter.senderName || this.filter.receiverName || this.senderName.nativeElement.value || this.receiverName.nativeElement.value
+            if (this.filter.senderName || this.filter.receiverName || (this.senderName && this.senderName.nativeElement && this.senderName.nativeElement.value) || (this.receiverName && this.receiverName.nativeElement && this.receiverName.nativeElement.value)
                 || this.filter.sortBy || this.filter.sort || this.filter.quantityGreaterThan || this.filter.quantityEqualTo || this.filter.quantityLessThan) {
                 // do something...
             } else {
@@ -656,7 +667,7 @@ export class JobworkComponent implements OnInit, OnDestroy {
     * @memberof JobworkComponent
     */
     public toggleGiddhDatepicker(isOpen: boolean = true): void {
-        if (isOpen) {            
+        if (isOpen) {
             this.universalDatepickerTrigger?.openMenu();
         } else {
             this.universalDatepickerTrigger?.closeMenu();

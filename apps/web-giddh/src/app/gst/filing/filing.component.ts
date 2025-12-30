@@ -19,7 +19,8 @@ import { RestrictedModules } from '../../app.constant';
     selector: 'filing',
     templateUrl: 'filing.component.html',
     styleUrls: ['filing.component.scss'],
-    encapsulation: ViewEncapsulation.Emulated
+    encapsulation: ViewEncapsulation.Emulated,
+    standalone:false
 })
 export class FilingComponent implements OnInit, OnDestroy {
     /** This will hold the boolean value to open/close setting sidebar popup */

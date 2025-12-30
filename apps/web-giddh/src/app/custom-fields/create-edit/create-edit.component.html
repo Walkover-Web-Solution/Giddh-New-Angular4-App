@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'custom-fields'"
     (localeData)="localeData = $event"
@@ -7,7 +7,7 @@
 >
     <hamburger-menu></hamburger-menu>
     <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
-    <ng-container *ngIf="!showLoader">
+    <div *ngIf="!showLoader">
         <div class="position-relative create-custom-field-page mt-4">
             <button mat-stroked-button [disableRipple]="true" class="back-to-page" (click)="redirectToGetAllPage()">
                 <i class="back-left icon-left"></i>
@@ -138,7 +138,7 @@
                                         class="d-flex align-items-center justify-content-between"
                                         *ngIf="voucherApiVersion === 2"
                                     >
-                                        <ng-container *ngIf="customFieldUniqueName">
+                                        <div *ngIf="customFieldUniqueName">
                                             <div class="d-flex column-gap-15">
                                                 <button
                                                     mat-raised-button
@@ -161,8 +161,8 @@
                                                     {{ commonLocaleData?.app_cancel }}
                                                 </button>
                                             </div>
-                                        </ng-container>
-                                        <ng-container *ngIf="!customFieldUniqueName">
+                                        </div>
+                                        <div *ngIf="!customFieldUniqueName">
                                             <div class="d-flex column-gap-15">
                                                 <button
                                                     mat-raised-button
@@ -185,7 +185,7 @@
                                                     {{ commonLocaleData?.app_clear }}
                                                 </button>
                                             </div>
-                                        </ng-container>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -194,5 +194,5 @@
                 </div>
             </div>
         </div>
-    </ng-container>
-</ng-container>
+    </div>
+</div>

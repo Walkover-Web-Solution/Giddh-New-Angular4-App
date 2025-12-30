@@ -3,11 +3,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { AdvanceReceiptAdjustmentModule } from '../../../shared/advance-receipt-adjustment/advance-receipt-adjustment.module';
-import { AmountFieldComponentModule } from '../../../shared/amount-field/amount-field.module';
-import { DecimalDigitsModule } from '../../../shared/helpers/directives/decimalDigits/decimalDigits.module';
-import { NgxMaskModule } from '../../../shared/helpers/directives/ngx-mask';
-import { NumberToWordsModule } from '../../../shared/helpers/pipes/numberToWords/numberToWords.module';
-import { ReplacePipeModule } from '../../../shared/helpers/pipes/replace/replace.module';
 import { ConfirmModalModule } from '../../../theme/confirm-modal/confirm-modal.module';
 import { TranslateDirectiveModule } from '../../../theme/translate/translate.directive.module';
 import { UpdateLedgerTaxControlComponent } from '../update-ledger-tax-control/update-ledger-tax-control.component';
@@ -29,6 +24,11 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatTabsModule } from '@angular/material/tabs';
 import { AsideMenuCreateTaxModule } from '../../../shared/aside-menu-create-tax/aside-menu-create-tax.module';
 import { OverlayModule } from '@angular/cdk/overlay';
+import { AmountFieldComponentModule } from '../../../shared/amount-field/amount-field.module';
+import { DecimalDigitsModule } from '../../../shared/helpers/directives/decimalDigits/decimalDigits.module';
+import { NgxMaskModule } from '../../../shared/helpers/directives/ngx-mask';
+import { NumberToWordsModule } from '../../../shared/helpers/pipes/numberToWords/numberToWords.module';
+import { ReplacePipeModule } from '../../../shared/helpers/pipes/replace/replace.module';
 
 @NgModule({
     declarations: [
@@ -71,4 +71,4 @@ import { OverlayModule } from '@angular/cdk/overlay';
     ],
     exports: [UpdateLedgerEntryPanelComponent, UpdateLedgerTaxControlComponent, UpdateLedgerDiscountComponent]
 })
-export class UpdateLedgerEntryPanelModule {}
+export class UpdateLedgerEntryPanelModule { }

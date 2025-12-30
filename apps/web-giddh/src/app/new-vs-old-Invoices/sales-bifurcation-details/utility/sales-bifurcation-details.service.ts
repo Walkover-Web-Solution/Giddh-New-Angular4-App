@@ -6,8 +6,11 @@ import { GiddhErrorHandler } from "../../../services/catchManager/catchmanger";
 import { IServiceConfigArgs, ServiceConfig } from "../../../services/service.config";
 import { GeneralService } from "../../../services/general.service";
 import { SALES_BIFURCATION_API } from "./sales-bifurcation-details.api";
+import { get } from '../../../lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class SalesBifurcationDetailsService {
     constructor(
         private http: HttpWrapperService,

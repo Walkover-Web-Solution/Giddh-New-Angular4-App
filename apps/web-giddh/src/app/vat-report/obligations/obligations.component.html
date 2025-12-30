@@ -1,12 +1,12 @@
-<ng-container appTranslate [file]="'vat-report'" (localeData)="localeData = $event"
+<div appTranslate [file]="'vat-report'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <hamburger-menu></hamburger-menu>
     <div class="position-relative w-100">
         <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
         *ngIf="asideGstSidebarMenuState">
-        <tax-sidebar 
+        <tax-sidebar
             (navigateEvent)="handleNavigation()"
-            [exclude]="'#primary-new-header'" 
+            [exclude]="'#primary-new-header'"
             class="gst-sidebar"
             ></tax-sidebar>
         </div>
@@ -15,15 +15,15 @@
         <div class="container-fluid ml-0">
             <div class="row align-items-center row-gap-15">
                 <div class="col flex-grow-0">
-                    <div class="custom-datepicker" 
+                    <div class="custom-datepicker"
                          [matMenuTriggerFor]="universalDatepicker"
                          #universalDatepickerTrigger="matMenuTrigger"
                          role="button"
                          aria-haspopup="true"
                          aria-controls="universalDatepicker">
-                        <input 
-                            matInput 
-                            type="text" 
+                        <input
+                            matInput
+                            type="text"
                             name="selectedDateRange"
                             [value]="selectedDateRangeUi ? selectedDateRangeUi : ''"
                             class="giddh-datepicker date-range-picker"
@@ -134,7 +134,7 @@
             </div>
         </div>
     </div>
-</ng-container>
+</div>
 
 <!-- Universal Date Picker  -->
 <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">

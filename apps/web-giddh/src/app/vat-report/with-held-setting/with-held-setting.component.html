@@ -1,4 +1,4 @@
-<ng-container appTranslate [file]="'vat-report'" (localeData)="localeData = $event"
+<div appTranslate [file]="'vat-report'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event">
     <hamburger-menu></hamburger-menu>
     <div class="position-relative w-100">
@@ -27,7 +27,7 @@
                         [matSuffix]="'%'"
                     >
                     </input-field>
-                    
+
                     <div class="col flex-grow-0">
                         <button mat-raised-button color="primary" type="submit" [disabled]="taxPercentage.invalid">{{
                             commonLocaleData?.app_submit }}</button>
@@ -36,4 +36,4 @@
             </div>
          </form>
     </div>
-</ng-container>
+</div>

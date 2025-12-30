@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'tax-sidebar'"
     (localeData)="localeData = $event"
@@ -9,7 +9,7 @@
         <div class="help-aside-body">
             <div class="gst-menu-items">
                 <mat-list role="list" *ngIf="showGstMenus">
-                    <mat-list-item 
+                    <mat-list-item
                         role="listitem"
                         routerLinkActive
                         #gstdashboard="routerLinkActive"
@@ -82,8 +82,8 @@
                     </mat-list-item>
                 </mat-list>
                 <mat-list>
-                    <mat-list-item 
-                        role="listitem" 
+                    <mat-list-item
+                        role="listitem"
                         *ngIf="showGstMenus"
                         [routerLink]="['/pages/invoice/ewaybill']"
                         routerLinkActive
@@ -95,7 +95,7 @@
                             <span>{{ localeData?.eway_bill }}</span>
                         </a>
                     </mat-list-item>
-                    <mat-list-item 
+                    <mat-list-item
                         role="listitem"
                         [routerLink]="['/pages/reports/reverse-charge']"
                         routerLinkActive
@@ -107,7 +107,7 @@
                             <span>{{ localeData?.reverse_charge }}</span>
                         </a>
                     </mat-list-item>
-                    <mat-list-item 
+                    <mat-list-item
                         role="listitem"
                         [routerLink]="['/pages/settings/taxes']"
                         routerLinkActive
@@ -119,8 +119,8 @@
                             <span>{{ localeData?.manage_tax }}</span>
                         </a>
                     </mat-list-item>
-                    <mat-list-item 
-                        role="listitem" 
+                    <mat-list-item
+                        role="listitem"
                         *ngIf="showGstMenus"
                         routerLinkActive
                         #unitMapping="routerLinkActive"
@@ -134,8 +134,8 @@
                             <span>{{ localeData?.unit_mapping }}</span>
                         </a>
                     </mat-list-item>
-                    <mat-list-item 
-                        role="listitem" 
+                    <mat-list-item
+                        role="listitem"
                         *ngIf="showTaxMenus"
                         routerLinkActive
                         #vatReport="routerLinkActive"
@@ -148,8 +148,8 @@
                             <span>{{ localeData?.vat_report }}</span>
                         </a>
                     </mat-list-item>
-                    <mat-list-item 
-                        role="listitem" 
+                    <mat-list-item
+                        role="listitem"
                         *ngIf="showTaxMenus && isZimbabweCompany"
                         routerLinkActive
                         #vatReportZimbabwe="routerLinkActive"
@@ -163,7 +163,7 @@
                         </a>
                     </mat-list-item>
                     <ng-container *ngIf="showTaxMenus && isUKCompany">
-                        <mat-list-item 
+                        <mat-list-item
                             role="listitem"
                             routerLinkActive
                             #vatLiability="routerLinkActive"
@@ -176,7 +176,7 @@
                                 <span>{{ localeData.vat_liabilities }}</span>
                             </a>
                         </mat-list-item>
-                        <mat-list-item 
+                        <mat-list-item
                             role="listitem"
                             routerLinkActive
                             #vatPayment="routerLinkActive"
@@ -189,7 +189,7 @@
                                 <span>{{ localeData.vat_payments }}</span>
                             </a>
                         </mat-list-item>
-                        <mat-list-item 
+                        <mat-list-item
                             role="listitem"
                             routerLinkActive
                             #vatObligations="routerLinkActive"
@@ -202,8 +202,8 @@
                             </a>
                         </mat-list-item>
                     </ng-container>
-                    <mat-list-item 
-                        role="listitem" 
+                    <mat-list-item
+                        role="listitem"
                         *ngIf="!isConsolidatedBranch"
                         [routerLink]="['/pages/settings/addresses']"
                         routerLinkActive
@@ -215,8 +215,8 @@
                             <span>{{ taxTypeSidebarLabel }}</span>
                         </a>
                     </mat-list-item>
-                    <mat-list-item 
-                        role="listitem" 
+                    <mat-list-item
+                        role="listitem"
                         *ngIf="showTaxMenus && (isZimbabweCompany || isKenyaCompany)"
                         routerLinkActive
                         #withHeld="routerLinkActive"
@@ -228,8 +228,8 @@
                             <span>{{ localeData?.with_held_setting }}</span>
                         </a>
                     </mat-list-item>
-                    <mat-list-item 
-                        role="listitem" 
+                    <mat-list-item
+                        role="listitem"
                         *ngIf="(isCompany || isConsolidatedBranch) && showGstMenus"
                         routerLinkActive
                         #gstSetting="routerLinkActive"
@@ -241,8 +241,8 @@
                             <span>{{ localeData?.gst_setting }}</span>
                         </a>
                     </mat-list-item>
-                    <mat-list-item 
-                        role="listitem" 
+                    <mat-list-item
+                        role="listitem"
                         *ngIf="showGstMenus"
                         [routerLink]="['/pages/gstfiling/filing-status']"
                         routerLinkActive
@@ -255,7 +255,7 @@
                         </a>
                     </mat-list-item>
                     <ng-container *ngIf="showSalesTaxMenus && isUSCompany">
-                        <mat-list-item 
+                        <mat-list-item
                             role="listitem"
                             [routerLink]="['/pages/settings/manage-tax-authority']"
                             routerLinkActive
@@ -267,7 +267,7 @@
                                 <span>{{ localeData?.manage_tax_authority }}</span>
                             </a>
                         </mat-list-item>
-                        <mat-list-item 
+                        <mat-list-item
                             role="listitem"
                             [routerLink]="['/pages/settings/reports/tax-authority']"
                             routerLinkActive
@@ -279,7 +279,7 @@
                                 <span>{{ commonLocaleData?.app_tax_authority }}</span>
                             </a>
                         </mat-list-item>
-                        <mat-list-item 
+                        <mat-list-item
                             role="listitem"
                             [routerLink]="['/pages/settings/reports/rate-wise']"
                             routerLinkActive
@@ -291,7 +291,7 @@
                                 <span>{{ localeData?.rate_wise }}</span>
                             </a>
                         </mat-list-item>
-                        <mat-list-item 
+                        <mat-list-item
                             role="listitem"
                             [routerLink]="['/pages/settings/reports/account-wise']"
                             routerLinkActive
@@ -308,4 +308,4 @@
             </div>
         </div>
     </div>
-</ng-container>
+</div>

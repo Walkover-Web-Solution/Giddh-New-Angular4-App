@@ -10,9 +10,7 @@ import { IOption } from 'apps/web-giddh/src/app/app.constant';
 @Component({
     selector: 'transfer-notes',
     templateUrl: './transfer-note.component.html',
-    styles: [`
-
-  `],
+    standalone: false
 })
 
 export class TransferNoteComponent implements OnChanges {

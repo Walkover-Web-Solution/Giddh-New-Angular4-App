@@ -18,6 +18,7 @@ const noop = () => {
         }
     ],
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, ControlValueAccessor {
     @ViewChild('textField', { static: false }) public textField: ElementRef;

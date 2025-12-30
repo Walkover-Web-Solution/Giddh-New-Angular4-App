@@ -1,10 +1,5 @@
-<ng-container
-    appTranslate
-    [file]="'ledger/export-ledger'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
-    (translationComplete)="translationComplete($event)"
->
+<div appTranslate [file]="'ledger/export-ledger'" (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <div id="exportModal">
         <div class="dialog-header">
             <span>{{ localeData?.page_heading }}</span>
@@ -341,12 +336,10 @@
                         </ng-container>
                     </div>
                     <div class="col">
-                        <ng-container
-                            *ngIf="
-                                !exportRequest.ledgerView &&
-                                !['columnar', 'billToBill', 'voucher'].includes(emailTypeSelected)
-                            "
-                        >
+                        <ng-container *ngIf="
+                            !exportRequest.ledgerView &&
+                            !['columnar', 'billToBill', 'voucher'].includes(emailTypeSelected)
+                        ">
                             <div class="pb-4">
                                 <label class="w125">{{ localeData?.voucher_total }}:</label>
                                 <label class="radio-inline p-0">
@@ -447,7 +440,7 @@
             </div>
         </mat-dialog-actions>
     </div>
-</ng-container>
+</div>
 <!-- Angular Material datepicker menu -->
 <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
     <ng-template matMenuContent>

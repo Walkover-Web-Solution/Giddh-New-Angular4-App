@@ -3,15 +3,16 @@
 import { ApplicationRef, NgModuleRef } from '@angular/core';
 import { enableDebugTools } from '@angular/platform-browser';
 import { Environment } from './model';
+import { get } from '../app/lodash-optimized';
 
 Error.stackTraceLimit = Infinity;
 
 export const environment: Environment = {
-    production: true,
-    AppUrl: 'http://localhost:3000/',
-    ApiUrl: 'https://apitest.giddh.com/',
-    UkApiUrl: 'https://gbapi.giddh.com/',
-    isElectron: false,
+    production: false,
+    AppUrl: '',
+    ApiUrl: '',
+    UkApiUrl: '',
+    isElectron: (typeof window !== 'undefined' && (window as any).isElectron) || false,
     APP_FOLDER: '',
     showDevModule: true,
     PORTAL_URL: '',
@@ -20,6 +21,10 @@ export const environment: Environment = {
     OTP_WIDGET_ID: '',
     OTP_TOKEN_AUTH: '',
     RAZORPAY_KEY: '',
+    PRODUCTION_ENV: false,
+    STAGING_ENV: false,
+    LOCAL_ENV: true,
+    TEST_ENV: false,
     /** Angular debug tools in the dev console
      * https://github.com/angular/angular/blob/86405345b781a9dc2438c0fbe3e9409245647019/TOOLS_JS.md
      * @param modRef
@@ -27,12 +32,17 @@ export const environment: Environment = {
      */
     decorateModuleRef(modRef: NgModuleRef<any>) {
         const appRef = modRef.injector.get(ApplicationRef);
-        const cmpRef = appRef.components[0];
 
-        let _ng = (<any>window).ng;
-        enableDebugTools(cmpRef);
-        (<any>window).ng.probe = _ng.probe;
-        (<any>window).ng.coreTokens = _ng.coreTokens;
+        // Add null check for components array
+        if (appRef.components && appRef.components.length > 0) {
+            const cmpRef = appRef.components[0];
+
+            let _ng = (<any>window).ng;
+            enableDebugTools(cmpRef);
+            (<any>window).ng.probe = _ng.probe;
+            (<any>window).ng.coreTokens = _ng.coreTokens;
+        }
+
         return modRef;
     },
     ENV_PROVIDERS: []

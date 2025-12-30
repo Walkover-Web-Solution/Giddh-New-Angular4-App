@@ -14,7 +14,9 @@ import { VoucherComponentStore } from '../utility/vouchers.store';
 @Component({
     selector: 'print-voucher',
     templateUrl: './print-voucher.component.html',
-    styleUrls: ['./print-voucher.component.scss']
+    styleUrls: ['./print-voucher.component.scss'],
+    providers: [VoucherComponentStore],
+    standalone: false
 })
 export class PrintVoucherComponent implements OnInit {
     /** Emit the cancel dialog event */

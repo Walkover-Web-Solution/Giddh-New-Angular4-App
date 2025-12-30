@@ -16,7 +16,8 @@ import { GiddhNumberFormatPipe } from "../../shared/helpers/pipes/number-format/
     selector: "add-bulk-items",
     templateUrl: "./add-bulk-items.component.html",
     styleUrls: ["./add-bulk-items.component.scss"],
-    providers: [AddBulkItemsComponentStore]
+    providers: [AddBulkItemsComponentStore],
+    standalone:false
 })
 export class AddBulkItemsComponent implements OnInit, OnDestroy {
     /** Stock search request */
@@ -111,11 +112,11 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
             // Check if the focus is within the list area
             const target = event.target as HTMLElement;
             const listContainer = target.closest('.list-viewport') || target.closest('mat-list-item');
-            
+
             if (listContainer) {
                 event.preventDefault();
                 event.stopPropagation();
-                
+
                 const direction = event.key === 'ArrowDown' ? 1 : -1;
                 this.navigateList(direction);
             }
@@ -193,7 +194,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
         const listContainer = document.querySelector('.list-viewport');
         if (listContainer) {
             const focusableElements = listContainer.querySelectorAll('mat-list-item[role="button"]');
-            const variantElement = Array.from(focusableElements).find(el => 
+            const variantElement = Array.from(focusableElements).find(el =>
                 el.textContent?.trim() === variant?.label
             );
             if (variantElement) {
@@ -245,7 +246,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
             if (listContainer) {
                 const focusableElements = listContainer.querySelectorAll('[tabindex="0"]');
                 const currentIndex = Array.from(focusableElements).indexOf(currentElement);
-                
+
                 if (currentIndex >= 0 && currentIndex < focusableElements.length - 1) {
                     // Focus next element
                     (focusableElements[currentIndex + 1] as HTMLElement)?.focus();
@@ -256,6 +257,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
             }
         }, 100);
     }
+
 
     /**
      * Initializes add bulk form
@@ -501,15 +503,15 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
         this.dialogRef.close(this.addBulkForm.value?.data);
     }
 
-     /**
-     * Get rate by unit
-     *
-     * @param {string} stockUnitUniqueName
-     * @param {any[]} unitRates
-     * @returns {number}
-     * @memberof AddBulkItemsComponent
-     */
-     private getRateByUnit(stockUnitUniqueName: string, unitRates: any[]): number {
+    /**
+    * Get rate by unit
+    *
+    * @param {string} stockUnitUniqueName
+    * @param {any[]} unitRates
+    * @returns {number}
+    * @memberof AddBulkItemsComponent
+    */
+    private getRateByUnit(stockUnitUniqueName: string, unitRates: any[]): number {
         return unitRates.find((unitRate) => unitRate.stockUnitUniqueName === stockUnitUniqueName || unitRate.stockUnitCode === stockUnitUniqueName)?.rate;
     }
 }

@@ -1,8 +1,10 @@
 import { Component, EventEmitter, Inject, Input, OnInit, Output, ViewChildren } from '@angular/core';
 import { HeaderItem, ImportExcelResponseData, Mappings } from '../../models/api-models/import-excel';
 import { IOption } from '../../app.constant';
-import { cloneDeep } from '../../lodash-optimized';
 import { ServiceConfig } from '../../services/service.config';
+import { Configuration } from '../../app.constant';
+import { environment } from '../../../environments/environment';
+import { cloneDeep, filter, findIndex, indexOf, map } from '../../lodash-optimized';
 
 interface DataModel {
     field: HeaderItem;
@@ -12,7 +14,8 @@ interface DataModel {
 
 @Component({
     selector: 'map-excel-data',
-    styleUrls: ['./map-excel-data.component.scss'],
+    
+    standalone: false,styleUrls: ['./map-excel-data.component.scss'],
     templateUrl: './map-excel-data.component.html'
 })
 export class MapExcelDataComponent implements OnInit {
@@ -45,7 +48,7 @@ export class MapExcelDataComponent implements OnInit {
     }
 
     public ngOnInit() {
-        this.imgPath = isElectron ? 'assets/icon/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/icon/';
+        this.imgPath = Configuration.isElectron ? 'assets/icon/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/icon/';
     }
 
     public mapExcelData() {

@@ -2,8 +2,11 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { get  } from './lodash-optimized';
 
-@Injectable()
+@Injectable({
+    providedIn: 'root'
+})
 export class VersionCheckService {
 
     public onVersionChange$: BehaviorSubject<boolean> = new BehaviorSubject(false);
@@ -19,7 +22,7 @@ export class VersionCheckService {
      * @param url
      * @param {number} frequency - in milliseconds, defaults to 30 minutes
      */
-    public initVersionCheck(url, frequency = 1000 * 60 * 1) { // will check in every 1 minutes
+    public initVersionCheck(url: string, frequency = 1000 * 60 * 1) { // will check in every 1 minutes
         this.checkVersion(url);
 
         setTimeout(() => {
@@ -35,7 +38,7 @@ export class VersionCheckService {
      * Will do the call and check if the hash has changed or not
      * @param url
      */
-    private checkVersion(url) {
+    private checkVersion(url: string) {
         // timestamp these requests to invalidate caches
         this.http.get(url).pipe(take(1))
             .subscribe(
@@ -67,7 +70,7 @@ export class VersionCheckService {
      * @param newHash
      * @returns {boolean}
      */
-    private hasHashChanged(currentHash, newHash) {
+    private hasHashChanged(currentHash: string, newHash: string) {
         if (!currentHash || currentHash === '{{POST_BUILD_ENTERS_HASH_HERE}}') {
             return false;
         }

@@ -1,4 +1,4 @@
-<ng-container appTranslate [file]="'activity-logs'" (localeData)="localeData = $event">
+<div appTranslate [file]="'activity-logs'" (localeData)="localeData = $event">
     <div class="dialog-header">
         <span>{{ localeData?.activity_logs }}</span>
         <button mat-icon-button aria-label="close" mat-dialog-close>
@@ -8,4 +8,4 @@
     <mat-dialog-content class="dialog-body">
         <div #activityLogs class="logs-content"></div>
     </mat-dialog-content>
-</ng-container>
+</div>

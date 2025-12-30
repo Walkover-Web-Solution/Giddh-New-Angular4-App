@@ -110,6 +110,9 @@
                                                 (keydown.Enter)="
                                                     showLedgerAccountList === false && showDiscountSidebar === false && showTaxSidebar === false && ($event.stopPropagation() || handleTransactionFocus(i))
                                                 "
+                                                (keydown.Enter)="
+                                                    showLedgerAccountList === false && showDiscountSidebar === false && showTaxSidebar === false && ($event.stopPropagation() || handleTransactionFocus(i))
+                                                "
                                                 (change)="removeAmountIfAccountRemoved(transaction, i)"
                                             ></text-field>
                                         </td>
@@ -302,12 +305,12 @@
         <i class="icon-cross cursor-pointer"
            (click)="showDiscountSidebar ? closeDiscountSidebar() : closeTaxSidebar()"></i>
     </div>
-    
+
     <!-- Simple Header for Accounts -->
     <p class="p-2 border-bottom text-black" *ngIf="showLedgerAccountList">
         {{ localeData?.ledger_accounts_list }}
     </p>
-    
+
     <div class="mat-app-background custom-height">
         <!-- No Data Found -->
         <ul *ngIf="displayAccountList?.length === 0" class="grp-list group-list-no-found users-last-list">
@@ -321,7 +324,7 @@
                 </a>
             </li>
         </ul>
-        
+
         <!-- Data List -->
         <ng-container *ngIf="displayAccountList?.length">
             <ul class="grp-list users-last-list">
@@ -345,9 +348,9 @@
                             [id]="'acc_' + item.label + '_' + j"
                             [matTooltip]="item.label"
                             [matTooltipPosition]="'left'"
-                            (click)="showLedgerAccountList ? onItemSelected(item) : 
+                            (click)="showLedgerAccountList ? onItemSelected(item) :
                                     (showDiscountSidebar ? toggleDiscountSelected(item) : toggleTaxSelected(item))"
-                            (keydown.enter)="showLedgerAccountList ? onItemSelected(item) : 
+                            (keydown.enter)="showLedgerAccountList ? onItemSelected(item) :
                                            (showDiscountSidebar ? toggleDiscountSelected(item) : toggleTaxSelected(item))"
                         >
                             {{ item?.label }}

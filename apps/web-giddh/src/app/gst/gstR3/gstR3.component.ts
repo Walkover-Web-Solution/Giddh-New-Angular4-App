@@ -26,7 +26,8 @@ import { GstComponentStore } from '../gst.store';
     selector: 'file-gstr3',
     templateUrl: './gstR3.component.html',
     styleUrls: ['gstR3.component.scss'],
-    providers: [GstComponentStore]
+    providers: [GstComponentStore],
+    standalone: false
 })
 export class FileGstR3Component implements OnInit, OnDestroy {
     /** Aside authentication dialog open */
@@ -152,7 +153,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
             this.store.dispatch(this.gstAction.SetSelectedPeriod(this.currentPeriod));
             this.selectedGstr = params['return_type'];
         });
-        
+
         this.gstAuthenticated$.subscribe((a) => this.gstAuthenticated = a);
         this.store.pipe(select(s => s.gstR.activeCompanyGst), takeUntil(this.destroyed$)).subscribe(result => {
             if (result) {
@@ -400,7 +401,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
                 details: this.localeData?.gstr3b?.itc_available
             });
 
-            this.gstr3BData.itc_elg.itc_avl.forEach(item => {
+            (Array.isArray(this.gstr3BData.itc_elg.itc_avl) ? this.gstr3BData.itc_elg.itc_avl : []).forEach(item => {
                 switch (item.ty) {
                     case 'IMPG':
                         tableData.push({
@@ -480,7 +481,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
                 details: this.localeData?.gstr3b?.itc_reversed
             });
 
-            this.gstr3BData.itc_elg.itc_rev.forEach(item => {
+            (Array.isArray(this.gstr3BData.itc_elg.itc_rev) ? this.gstr3BData.itc_elg.itc_rev : []).forEach(item => {
                 switch (item.ty) {
                     case 'RUL':
                         tableData.push({
@@ -537,7 +538,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
                 details: this.localeData?.gstr3b?.ineligible_itc
             });
 
-            this.gstr3BData.itc_elg.itc_inelg.forEach(item => {
+            (Array.isArray(this.gstr3BData.itc_elg.itc_inelg) ? this.gstr3BData.itc_elg.itc_inelg : []).forEach(item => {
                 switch (item.ty) {
                     case 'RUL':
                         tableData.push({
@@ -811,10 +812,10 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     public fileGstr3B(): void {
         const monthYear = dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT).format('MM-YYYY');
         const currentDateTime = this.generalService.getCurrentDateTime();
-        this.componentStore.fileGstr3B({ 
-            period: this.currentPeriod, 
-            gstNumber: this.activeCompanyGstNumber, 
-            via: TaxServiceEnum.TAXPRO, 
+        this.componentStore.fileGstr3B({
+            period: this.currentPeriod,
+            gstNumber: this.activeCompanyGstNumber,
+            via: TaxServiceEnum.TAXPRO,
             monthYear,
             currentDateTime
         });
@@ -835,7 +836,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
 
     /**
     * Navigates to the page for buy plan.
-    * 
+    *
     * @param subscriptionId
     * @memberof FileGstR3Component
     */

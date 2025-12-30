@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'project-wise-account'"
     (localeData)="localeData = $event"
@@ -99,13 +99,13 @@
                 class="giddh-table w-100"
             >
                 <!-- Position Column -->
-                <ng-container matColumnDef="sno">
+                <div matColumnDef="sno">
                     <th mat-header-cell *matHeaderCellDef class="serial-no-column">#</th>
                     <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}.</td>
-                </ng-container>
+                </div>
 
                 <!-- Name Column -->
-                <ng-container matColumnDef="name">
+                <div matColumnDef="name">
                     <th
                         mat-header-cell
                         *matHeaderCellDef
@@ -115,7 +115,7 @@
                         (clickOutside)="handleClickOutside($event, searchName, 'name')"
                     >
                         <div (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()">
-                            <ng-container
+                            <div
                                 *ngTemplateOutlet="
                                     searchTemplate;
                                     context: {
@@ -125,7 +125,7 @@
                                         title: localeData?.project_name
                                     }
                                 "
-                            ></ng-container>
+                            ></div>
                         </div>
                     </th>
                     <td mat-cell *matCellDef="let element">
@@ -133,10 +133,10 @@
                             element.name
                         }}</a>
                     </td>
-                </ng-container>
+                </div>
 
                 <!-- Status Column -->
-                <ng-container matColumnDef="status">
+                <div matColumnDef="status">
                     <th
                         mat-header-cell
                         mat-sort-header
@@ -146,7 +146,7 @@
                         (clickOutside)="handleClickOutside($event, searchStatus, 'status')"
                     >
                         <div (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()">
-                            <ng-container
+                            <div
                                 *ngTemplateOutlet="
                                     searchTemplate;
                                     context: {
@@ -156,22 +156,22 @@
                                         title: commonLocaleData?.app_status
                                     }
                                 "
-                            ></ng-container>
+                            ></div>
                         </div>
                     </th>
                     <td mat-cell *matCellDef="let element">{{ element.status }}</td>
-                </ng-container>
+                </div>
 
                 <!-- Symbol Column -->
-                <ng-container matColumnDef="symbol">
+                <div matColumnDef="symbol">
                     <th mat-header-cell *matHeaderCellDef class="text-center">{{ localeData?.profit_and_loss }}</th>
                     <td mat-cell *matCellDef="let element" class="text-center">
-                        <ng-container *ngIf="element.profitAndLoss === profitAndLossStatus; else loadedContent">
+                        <div *ngIf="element.profitAndLoss === profitAndLossStatus; else loadedContent">
                             <mat-spinner class="ml-auto mr-auto" [diameter]="30"></mat-spinner>
-                        </ng-container>
+                        </div>
 
                         <ng-template #loadedContent>
-                            <ng-container *ngIf="element.profitAndLoss == null; else showValue">
+                            <div *ngIf="element.profitAndLoss == null; else showValue">
                                 <button
                                     mat-stroked-button
                                     class="z-index-0"
@@ -180,17 +180,17 @@
                                 >
                                     {{ commonLocaleData?.app_show }}
                                 </button>
-                            </ng-container>
+                            </div>
 
                             <ng-template #showValue>
                                 <span>{{ element.profitAndLoss }}</span>
                             </ng-template>
                         </ng-template>
                     </td>
-                </ng-container>
+                </div>
 
                 <!-- Action Column -->
-                <ng-container *ngIf="!isCompany" matColumnDef="action">
+                <div *ngIf="!isCompany" matColumnDef="action">
                     <th mat-header-cell *matHeaderCellDef class="text-right">{{ commonLocaleData?.app_action }}</th>
                     <td mat-cell *matCellDef="let element" class="text-right">
                         <span [matMenuTriggerFor]="menu" class="cursor-pointer">
@@ -212,7 +212,7 @@
                             </button>
                         </mat-menu>
                     </td>
-                </ng-container>
+                </div>
 
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
@@ -249,7 +249,7 @@
             <section class="mb-custom-80"></section>
         </div>
     </div>
-</ng-container>
+</div>
 
 <!-- Date Picker Menu -->
 <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">

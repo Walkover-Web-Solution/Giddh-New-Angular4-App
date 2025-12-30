@@ -5,21 +5,22 @@ import { FocusMonitor } from '@angular/cdk/a11y';
  * Directive that makes any element focusable and clickable via keyboard navigation
  * Automatically adds tabindex, role, and CDK focus monitoring
  * Executes provided function on Enter and Space key press
- * 
+ *
  * Usage:
  * <div appFocusableClick [clickFunction]="myFunction" [clickArgs]="[arg1, arg2]">Content</div>
- * 
+ *
  * @export
  * @class FocusableClickDirective
  */
 @Directive({
-    selector: '[appFocusableClick]'
+    selector: '[appFocusableClick]',
+    standalone: true
 })
 export class FocusableClickDirective implements OnInit, OnDestroy {
 
     /**
      * Function to execute when Enter or Space is pressed
-     * 
+     *
      * @type {Function}
      * @memberof FocusableClickDirective
      */
@@ -27,7 +28,7 @@ export class FocusableClickDirective implements OnInit, OnDestroy {
 
     /**
      * Arguments to pass to the click function
-     * 
+     *
      * @type {any[]}
      * @memberof FocusableClickDirective
      */
@@ -36,7 +37,7 @@ export class FocusableClickDirective implements OnInit, OnDestroy {
     /**
      * Component context for executing statements (optional)
      * Pass 'this' from your component to enable statement execution
-     * 
+     *
      * @type {any}
      * @memberof FocusableClickDirective
      */
@@ -45,7 +46,7 @@ export class FocusableClickDirective implements OnInit, OnDestroy {
     /**
      * String of statements to execute (alternative to clickFunction)
      * Example: "func1(); func2(); xyzVar = true"
-     * 
+     *
      * @type {string}
      * @memberof FocusableClickDirective
      */
@@ -53,7 +54,7 @@ export class FocusableClickDirective implements OnInit, OnDestroy {
 
     /**
      * Creates an instance of FocusableClickDirective
-     * 
+     *
      * @param {ElementRef} elementRef - Reference to the host element
      * @param {FocusMonitor} focusMonitor - CDK Focus Monitor service
      * @memberof FocusableClickDirective
@@ -65,28 +66,28 @@ export class FocusableClickDirective implements OnInit, OnDestroy {
 
     /**
      * Initialize the directive - set up accessibility attributes and focus monitoring
-     * 
+     *
      * @memberof FocusableClickDirective
      */
     public ngOnInit(): void {
         const element = this.elementRef.nativeElement;
-        
+
         // Add accessibility attributes
         element.setAttribute('tabindex', '0');
         element.setAttribute('role', 'button');
-        
+
         // Add cursor pointer style if not already present
         if (!element.style.cursor) {
             element.style.cursor = 'pointer';
         }
-        
+
         // Start monitoring focus on this element
         this.focusMonitor.monitor(element);
     }
 
     /**
      * Cleanup - stop monitoring focus
-     * 
+     *
      * @memberof FocusableClickDirective
      */
     public ngOnDestroy(): void {
@@ -95,7 +96,7 @@ export class FocusableClickDirective implements OnInit, OnDestroy {
 
     /**
      * Handle keydown events for Enter and Space keys
-     * 
+     *
      * @param {KeyboardEvent} event - The keyboard event
      * @memberof FocusableClickDirective
      */
@@ -105,14 +106,14 @@ export class FocusableClickDirective implements OnInit, OnDestroy {
         // Prevent default behavior (form submission, page scroll, etc.)
         event.preventDefault();
         event.stopPropagation();
-        
+
         // Execute the provided click function
         this.executeClickFunction();
     }
 
     /**
      * Execute the provided click function or statements
-     * 
+     *
      * @private
      * @memberof FocusableClickDirective
      */
@@ -138,7 +139,7 @@ export class FocusableClickDirective implements OnInit, OnDestroy {
 
     /**
      * Execute multiple statements in the component context
-     * 
+     *
      * @private
      * @memberof FocusableClickDirective
      */
@@ -151,7 +152,7 @@ export class FocusableClickDirective implements OnInit, OnDestroy {
         try {
             // Split statements by semicolon and execute each one
             const statements = this.clickStatements.split(';').map(s => s.trim()).filter(s => s);
-            
+
             for (const statement of statements) {
                 this.executeStatement(statement);
             }
@@ -162,7 +163,7 @@ export class FocusableClickDirective implements OnInit, OnDestroy {
 
     /**
      * Execute a single statement in the component context
-     * 
+     *
      * @private
      * @param {string} statement - Statement to execute
      * @memberof FocusableClickDirective
@@ -199,7 +200,7 @@ export class FocusableClickDirective implements OnInit, OnDestroy {
 
     /**
      * Parse function arguments from string
-     * 
+     *
      * @private
      * @param {string} argsString - Arguments string
      * @returns {any[]}
@@ -207,7 +208,7 @@ export class FocusableClickDirective implements OnInit, OnDestroy {
      */
     private parseArguments(argsString: string): any[] {
         if (!argsString.trim()) return [];
-        
+
         try {
             // Simple parsing for basic types
             return argsString.split(',').map(arg => this.parseValue(arg.trim()));
@@ -219,7 +220,7 @@ export class FocusableClickDirective implements OnInit, OnDestroy {
 
     /**
      * Parse a value from string to appropriate type
-     * 
+     *
      * @private
      * @param {string} value - Value to parse
      * @returns {any}
@@ -227,29 +228,29 @@ export class FocusableClickDirective implements OnInit, OnDestroy {
      */
     private parseValue(value: string): any {
         value = value.trim();
-        
+
         // Boolean values
         if (value === 'true') return true;
         if (value === 'false') return false;
-        
+
         // Null/undefined
         if (value === 'null') return null;
         if (value === 'undefined') return undefined;
-        
+
         // Numbers
         if (!isNaN(Number(value)) && value !== '') return Number(value);
-        
+
         // Strings (remove quotes if present)
-        if ((value.startsWith('"') && value.endsWith('"')) || 
+        if ((value.startsWith('"') && value.endsWith('"')) ||
             (value.startsWith("'") && value.endsWith("'"))) {
             return value.slice(1, -1);
         }
-        
+
         // Component property reference
         if (this.componentContext && this.componentContext.hasOwnProperty(value)) {
             return this.componentContext[value];
         }
-        
+
         // Return as string if nothing else matches
         return value;
     }

@@ -14,7 +14,6 @@ import {
     ViewChild,
 } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
-import { each } from 'apps/web-giddh/src/app/lodash-optimized';
 import { Account, ChildGroup } from 'apps/web-giddh/src/app/models/api-models/Search';
 import { BalanceSheetData } from 'apps/web-giddh/src/app/models/api-models/tb-pl-bs';
 import { GIDDH_DATE_FORMAT } from 'apps/web-giddh/src/app/shared/helpers/defaultDateFormat';
@@ -26,13 +25,17 @@ import { ReportType } from 'apps/web-giddh/src/app/multi-currency-reports/multi-
 import { NewConfirmationModalComponent } from 'apps/web-giddh/src/app/theme/new-confirmation-modal/confirmation-modal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
+import { Configuration } from '../../../../../app.constant';
+import { environment } from '../../../../../../environments/environment';
+import { each, forEach } from '../../../../../lodash-optimized';
 
 @Component({
-    selector: 'balance-sheet-grid',
+selector: 'balance-sheet-grid',
     templateUrl: './balance-sheet-grid.component.html',
     styleUrls: [`./balance-sheet-grid.component.scss`],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [FinancialReportsComponentStore]
+    providers: [FinancialReportsComponentStore],
+    standalone: false
 })
 export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
     public noData: boolean;
@@ -119,7 +122,7 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnInit() {
-        this.imgPath = isElectron ? 'assets/images/' : AppUrl + APP_FOLDER + 'assets/images/';
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : environment.AppUrl + environment.APP_FOLDER + 'assets/images/';
         this.bsSearchControl.valueChanges.pipe(
             debounceTime(700), takeUntil(this.destroyed$))
             .subscribe((newValue) => {
@@ -206,7 +209,7 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
             if (this.listOfCheckGroupsAccounts?.length) {
                 const model = {
                     request: {
-                        reportType: ReportType.BalanceSheet,
+                        reportType: ReportType.BALANCE_SHEET,
                         from: this.from,
                         to: this.to,
                         branchUniqueName: this.generalService.currentBranchUniqueName
@@ -228,7 +231,7 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof BalanceSheetGridComponent
      */
     private extractCheckedAccountsGroups(groupAccountDetails: any, entityType: 'group' | 'account'): void {
-        groupAccountDetails.forEach(groupAccount => {
+        (Array.isArray(groupAccountDetails) ? groupAccountDetails : []).forEach(groupAccount => {
             if (groupAccount.checked) {
                 this.listOfCheckGroupsAccounts.push({
                     uniqueName: groupAccount.uniqueName,

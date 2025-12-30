@@ -8,7 +8,8 @@ import { ActivatedRoute, Router } from '@angular/router';
     selector: 'multi-currency-report',
     templateUrl: './multi-currency-reports.component.html',
     styleUrls: ['./multi-currency-reports.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone:false
 })
 export class MultiCurrencyReportsComponent implements OnInit, OnDestroy {
     /** Flag to determine if the Trial Balance (TB) can be loaded */
@@ -71,7 +72,7 @@ export class MultiCurrencyReportsComponent implements OnInit, OnDestroy {
      */
     public tabChanged(selectedTabIndex: any): void {
         this.selectedTabIndex = selectedTabIndex;
-        this.generalService.updateActivatedRouteQueryParams({ val: selectedTabIndex === 0 ? ReportType.TrialBalance : selectedTabIndex === 1 ? ReportType.ProfitLoss : ReportType.BalanceSheet, tabIndex: selectedTabIndex });
+        this.generalService.updateActivatedRouteQueryParams({ val: selectedTabIndex === 0 ? ReportType.TRIAL_BALANCE : selectedTabIndex === 1 ? ReportType.PROFIT_LOSS : ReportType.BALANCE_SHEET, tabIndex: selectedTabIndex });
     }
 }
 

@@ -3,12 +3,15 @@ import { ReplaySubject } from 'rxjs';
 import { HSNSummary } from '../../../../../../models/api-models/GstReconcile';
 import { GstReport } from 'apps/web-giddh/src/app/gst/constants/gst.constant';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
+import { Configuration } from 'apps/web-giddh/src/app/app.constant';
+import { environment } from 'apps/web-giddh/src/environments/environment';
 
 @Component({
     // tslint:disable-next-line:component-selector
     selector: 'hsn-summary',
     templateUrl: './hsn-summary.component.html',
     styleUrls: ['hsn-summary.component.css'],
+    standalone: false
 })
 export class HsnSummaryComponent implements OnInit, OnDestroy {
 
@@ -41,7 +44,7 @@ export class HsnSummaryComponent implements OnInit, OnDestroy {
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     constructor(@Inject(ServiceConfig) private serviceConfig) { }
     public ngOnInit() {
-        this.imgPath = isElectron ? 'assets/images/gst/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/gst/';
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : environment.AppUrl + environment.APP_FOLDER + 'assets/images/gst/';
         if (this.selectedGst !== GstReport.Gstr1) {
             this.displayedColumns = this.displayedColumns?.filter(column => column !== 'rt');
         }

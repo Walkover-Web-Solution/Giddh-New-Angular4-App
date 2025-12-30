@@ -1,5 +1,5 @@
 <!--new inventory header-->
-<ng-container
+<div
     appTranslate
     [file]="'inventory'"
     (commonLocaleData)="commonLocaleData = $event"
@@ -345,16 +345,16 @@
                             [matSortDirection]="stockReportRequest?.sort"
                             class="table giddh-table on-mobile-view"
                         >
-                            <ng-container matColumnDef="entry_date">
+                            <div matColumnDef="entry_date">
                                 <th class="date-column" mat-header-cell *matHeaderCellDef mat-sort-header>
                                     {{ localeData?.reports?.date }}
                                 </th>
                                 <td data-title="Date" mat-cell *matCellDef="let element" class="common-column-width">
                                     {{ element?.entryDate ?? "-" }}
                                 </td>
-                            </ng-container>
+                            </div>
 
-                            <ng-container matColumnDef="voucherType">
+                            <div matColumnDef="voucherType">
                                 <th mat-header-cell *matHeaderCellDef [matMenuTriggerFor]="voucherTypesMenu">
                                     {{ localeData?.reports?.voucher_type }}
                                     <i
@@ -366,7 +366,7 @@
                                         class="columns-wrapper"
                                         (closed)="filterByVoucherTypes()"
                                     >
-                                        <ng-container *ngFor="let item of voucherTypes; let idx = index">
+                                        <div *ngFor="let item of voucherTypes; let idx = index">
                                             <button
                                                 mat-menu-item
                                                 (click)="$event?.stopPropagation()"
@@ -382,14 +382,14 @@
                                                     {{ item?.label }}</mat-checkbox
                                                 >
                                             </button>
-                                        </ng-container>
+                                        </div>
                                     </mat-menu>
                                 </th>
                                 <td date-title="Voucher Type" mat-cell *matCellDef="let element">
                                     {{ element?.voucherType }}
                                 </td>
-                            </ng-container>
-                            <ng-container matColumnDef="account_name">
+                            </div>
+                            <div matColumnDef="account_name">
                                 <th
                                     class="td-search-box text-left report-column"
                                     mat-header-cell
@@ -397,7 +397,7 @@
                                     *matHeaderCellDef
                                     (clickOutside)="handleClickOutside($event, searchCustomerContainer, 'name')"
                                 >
-                                    <ng-container
+                                    <div
                                         *ngTemplateOutlet="
                                             searchTemplate;
                                             context: {
@@ -407,7 +407,7 @@
                                                 title: localeData?.reports?.account_name
                                             }
                                         "
-                                    ></ng-container>
+                                    ></div>
                                 </th>
                                 <td
                                     [data-title]="localeData?.reports?.account_name"
@@ -419,8 +419,8 @@
                                 >
                                     {{ element?.account?.name ?? "-" }}
                                 </td>
-                            </ng-container>
-                            <ng-container matColumnDef="stock_name">
+                            </div>
+                            <div matColumnDef="stock_name">
                                 <th class="text-left report-column" mat-header-cell *matHeaderCellDef>
                                     {{ localeData?.reports?.stock_name }}
                                 </th>
@@ -434,8 +434,8 @@
                                 >
                                     {{ element?.stock?.name ?? "-" }}
                                 </td>
-                            </ng-container>
-                            <ng-container matColumnDef="variant_name">
+                            </div>
+                            <div matColumnDef="variant_name">
                                 <th class="text-left report-column" mat-header-cell *matHeaderCellDef>
                                     {{ localeData?.reports?.variant_name }}
                                 </th>
@@ -449,8 +449,8 @@
                                 >
                                     {{ element?.variant?.name ?? "-" }}
                                 </td>
-                            </ng-container>
-                            <ng-container matColumnDef="inward_quantity">
+                            </div>
+                            <div matColumnDef="inward_quantity">
                                 <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>
                                     {{ localeData?.reports?.inwards }}
                                 </th>
@@ -477,8 +477,8 @@
                                     </span>
                                     <span *ngIf="element?.type === 'cr'">-</span>
                                 </td>
-                            </ng-container>
-                            <ng-container matColumnDef="outward_quantity">
+                            </div>
+                            <div matColumnDef="outward_quantity">
                                 <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>
                                     {{ localeData?.reports?.outwards }}
                                 </th>
@@ -505,8 +505,8 @@
                                     </span>
                                     <span *ngIf="element?.type === 'dr'">-</span>
                                 </td>
-                            </ng-container>
-                            <ng-container matColumnDef="rate">
+                            </div>
+                            <div matColumnDef="rate">
                                 <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>
                                     {{ localeData?.reports?.rate }}
                                 </th>
@@ -533,8 +533,8 @@
                                         </amount-field>
                                     </span>
                                 </td>
-                            </ng-container>
-                            <ng-container matColumnDef="transaction_val">
+                            </div>
+                            <div matColumnDef="transaction_val">
                                 <th class="text-right" mat-header-cell *matHeaderCellDef mat-sort-header>
                                     {{ localeData?.reports?.value }}
                                 </th>
@@ -561,7 +561,7 @@
                                         </amount-field>
                                     </span>
                                 </td>
-                            </ng-container>
+                            </div>
                             <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                             <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                         </table>
@@ -618,4 +618,4 @@
             </div>
         </ng-template>
     </div>
-</ng-container>
+</div>

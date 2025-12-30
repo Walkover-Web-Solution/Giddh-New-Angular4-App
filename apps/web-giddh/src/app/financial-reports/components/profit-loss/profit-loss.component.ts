@@ -3,7 +3,6 @@ import { select, Store } from '@ngrx/store';
 import { combineLatest, Observable, ReplaySubject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { TBPlBsActions } from '../../../actions/tl-pl.actions';
-import { cloneDeep, each } from '../../../lodash-optimized';
 import { CompanyResponse } from '../../../models/api-models/Company';
 import { Account, ChildGroup } from '../../../models/api-models/Search';
 import { GetCogsResponse, ProfitLossData, ProfitLossDateRangeResponse, ProfitLossRequest } from '../../../models/api-models/tb-pl-bs';
@@ -12,11 +11,13 @@ import { AppState } from '../../../store';
 import { ProfitLossGridComponent } from './components/profit-loss-grid/profit-loss-grid.component';
 import { ProjectWiseAccountingComponentStore } from '../../../project-wise-accounting/project-wise-accounting.store';
 import { TlPlService } from '../../../services/tl-pl.service';
+import { cloneDeep, each, filter, findIndex, forEach, includes, keys } from '../../../lodash-optimized';
 
 @Component({
-    selector: 'profit-loss',
+selector: 'profit-loss',
     templateUrl: './profit-loss.component.html',
-    providers: [ProjectWiseAccountingComponentStore]
+    providers: [ProjectWiseAccountingComponentStore],
+    standalone: false
 })
 export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
     /** This will hold local JSON data */
@@ -169,13 +170,13 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
 
         if (data && data.expArr) {
             this.initData(data.expArr, "expenses");
-            data.expArr.forEach(group => {
+            (Array.isArray(data.expArr) ? data.expArr : []).forEach(group => {
                 group.category = "expenses";
                 group.isVisible = true;
                 group.isCreated = true;
                 group.isIncludedInSearch = true;
                 group.isOpen = true;
-                group.childGroups.forEach(childGroups => {
+                (Array.isArray(group.childGroups) ? group.childGroups : []).forEach(childGroups => {
                     childGroups.category = "expenses";
                     childGroups.isVisible = true;
                     childGroups.isCreated = true;
@@ -185,13 +186,13 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
         }
         if (data && data.incArr) {
             this.initData(data.incArr, "income");
-            data.incArr.forEach(group => {
+            (Array.isArray(data.incArr) ? data.incArr : []).forEach(group => {
                 group.category = "income";
                 group.isVisible = true;
                 group.isCreated = true;
                 group.isIncludedInSearch = true;
                 group.isOpen = true;
-                group.childGroups.forEach(childGroups => {
+                (Array.isArray(group.childGroups) ? group.childGroups : []).forEach(childGroups => {
                     childGroups.category = "income";
                     childGroups.isVisible = true;
                     childGroups.isCreated = true;
@@ -219,12 +220,12 @@ export class ProfitLossComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof ProfitLossComponent
      */
     public initData(groupList: ChildGroup[], category: string): void {
-        groupList.forEach((childGroup: ChildGroup) => {
+        (Array.isArray(groupList) ? groupList : []).forEach((childGroup: ChildGroup) => {
             childGroup.category = category;
             childGroup.isVisible = false;
             childGroup.isCreated = false;
             childGroup.isIncludedInSearch = true;
-            childGroup.accounts.forEach((account: Account) => {
+            (Array.isArray(childGroup.accounts) ? childGroup.accounts : []).forEach((account: Account) => {
                 account.isIncludedInSearch = true;
                 account.isCreated = false;
                 account.isVisible = false;

@@ -1,4 +1,4 @@
-<ng-container appTranslate [file]="'proforma-invoice/add-bulk-items'" (localeData)="localeData = $event"
+<div appTranslate [file]="'proforma-invoice/add-bulk-items'" (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <div class="bulk-entry" *ngIf="localeData?.add_bulk_items">
         <div class="dialog-header">
@@ -123,4 +123,4 @@
             </div>
         </div>
     </div>
-</ng-container>
+</div>

@@ -41,7 +41,8 @@ export const IsyncData = [
 @Component({
     selector: 'inventory',
     templateUrl: './inventory.component.html',
-    styleUrls: ['./inventory.component.scss']
+    styleUrls: ['./inventory.component.scss'],
+    standalone:false
 })
 export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
     @ViewChild('companyadd', { static: true }) public companyadd: ElementViewContainerRef;
@@ -284,7 +285,7 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         let type: string;
         tabIndex = event.index;
         this.activeTabIndex = tabIndex;
-        
+
         switch (tabIndex) {
             case 0:
                 type = 'inventory';

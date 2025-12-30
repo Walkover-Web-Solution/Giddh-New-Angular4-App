@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'trial-profit-balance/balance-sheet/grid'"
     (localeData)="localeData = $event"
@@ -111,13 +111,13 @@
                                         [to]="to"
                                         [expandAll]="expandAll"
                                     >
-                                        <ng-container
+                                        <div
                                             *ngTemplateOutlet="
                                                 groupDetails;
                                                 context: { $implicit: grp.childGroups, padding: padding + 20 }
                                             "
                                         >
-                                        </ng-container>
+                                        </div>
                                     </section>
                                 </ng-container>
                             </ng-template>
@@ -239,4 +239,3 @@
             </div>
         </div>
     </div>
-</ng-container>

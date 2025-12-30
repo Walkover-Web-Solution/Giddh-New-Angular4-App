@@ -3,13 +3,12 @@ import { AfterViewInit, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit,
 import { Store, select } from '@ngrx/store';
 import { AppState } from './store/roots';
 import { GeneralService } from './services/general.service';
-import { pick } from './lodash-optimized';
 import { VersionCheckService } from './version-check.service';
 import { ReplaySubject } from 'rxjs';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { DbService } from './services/db.service';
 import { reassignNavigationalArray } from './models/default-menus'
-import { BREAKPOINT_SCREEN_SIZE, Configuration, COUNTRY_REGION_MAP } from "./app.constant";
+import { BREAKPOINT_SCREEN_SIZE, Configuration } from "./app.constant";
 import { filter, take, takeUntil } from 'rxjs/operators';
 import { LoaderService } from './loader/loader.service';
 import { CompanyActions } from './actions/company.actions';
@@ -22,6 +21,8 @@ import { LoginActions } from './actions/login.action';
 import { InvoiceActions } from './actions/invoice/invoice.actions';
 import { WarehouseActions } from './settings/warehouse/action/warehouse.action';
 import { CompanyService } from './services/company.service';
+import { environment } from '../environments/environment';
+import { clone, get, includes, pick, remove, startsWith  } from './lodash-optimized';
 
 /**
  * App Component
@@ -33,13 +34,14 @@ import { CompanyService } from './services/company.service';
     styleUrls: [
         './app.component.css'
     ],
-    templateUrl: './app.component.html'
+    templateUrl: './app.component.html',
+    standalone: false
 })
 export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     public sideMenu: { isopen: boolean } = { isopen: true };
     public companyMenu: { isopen: boolean } = { isopen: false };
     public isProdMode: boolean = false;
-    public isElectron: boolean = false;
+    public isElectron: boolean = Configuration.isElectron;
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     public IAmLoaded: boolean = false;
     private newVersionAvailableForWebApp: boolean = false;
@@ -68,8 +70,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         private warehouseActions: WarehouseActions,
         private companyService: CompanyService
     ) {
-        this.isProdMode = PRODUCTION_ENV;
-        this.isElectron = isElectron;
+        this.isProdMode = environment.production;
+        // Configuration.isElectron is already available via import
 
         // Bind the method for proper event listener cleanup
         this.boundHandleQueryParamsCompanySwitch = (event: any) => this.handleQueryParamsCompanySwitch(event.detail);
@@ -104,7 +106,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             // Generate returnUrl for any non-login-like path (including root path)
             if (!isLoginLike) {
                 const isLocalHost = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
-                if (PRODUCTION_ENV && !isElectron && !isLocalHost) {
+                if (environment.production && !Configuration.isElectron && !isLocalHost) {
                     const currentUrl = path + search;
                     let returnUrl = '';
                     if (currentUrl.startsWith('/pages/')) {
@@ -124,7 +126,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                         returnUrl = currentUrl.startsWith('/') ? currentUrl.substring(1) : currentUrl;
                     }
                     if (returnUrl && returnUrl !== 'login' && returnUrl !== 'token-verify' && returnUrl !== '') {
-                        try { sessionStorage.setItem('returnUrl', returnUrl); } catch (_) {}
+                        try { sessionStorage.setItem('returnUrl', returnUrl); } catch (_) { }
                         this.router.navigate(['/login'], { queryParams: { returnUrl } });
                     } else {
                         this.router.navigate(['/login']);
@@ -138,24 +140,52 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         });
 
         if (Configuration.isElectron) {
-            // electronOauth2
-            const { ipcRenderer } = (window as any).require("electron");
-            // google
-            const t = ipcRenderer.send("take-server-environment", {
-                'STAGING_ENV': STAGING_ENV,
-                'LOCAL_ENV': LOCAL_ENV,
-                'TEST_ENV': TEST_ENV,
-                'PRODUCTION_ENV': PRODUCTION_ENV,
-                'AppUrl': (this.serviceConfig.AppUrl || AppUrl),
-                'APP_FOLDER': APP_FOLDER
-            });
-            ipcRenderer.on('app-close-requested', () => {
-                this.pageLeaveUtilityService.confirmPageLeave((confirmed: boolean) => {
-                    if (confirmed) {
-                        ipcRenderer.send('force-close');
+            // electronOauth2 - Use secure Electron API
+            try {
+                const electron = (window as any).require("electron");
+                if (electron && electron.ipcRenderer) {
+                    const { ipcRenderer } = electron;
+                    // Send server environment to main process
+                    ipcRenderer.send("take-server-environment", {
+                        'production': environment.production,
+                        'isLocalEnv': !environment.production,
+                        'AppUrl': (this.serviceConfig.AppUrl || Configuration.AppUrl),
+                        'APP_FOLDER': environment.APP_FOLDER
+                    });
+                    // Handle app close requests
+                    ipcRenderer.on('app-close-requested', () => {
+                        this.pageLeaveUtilityService.confirmPageLeave((confirmed: boolean) => {
+                            if (confirmed) {
+                                ipcRenderer.send('force-close');
+                            }
+                        });
+                    });
+                } else if ((window as any).electronAPI) {
+                    // Fallback: Use secure electronAPI if available
+                    const electronAPI = (window as any).electronAPI;
+                    // Send server environment to main process
+                    electronAPI.send("take-server-environment", {
+                        'production': environment.production,
+                        'isLocalEnv': !environment.production,
+                        'AppUrl': (this.serviceConfig.AppUrl || Configuration.AppUrl),
+                        'APP_FOLDER': environment.APP_FOLDER
+                    });
+                    // Handle app close requests (note: electronAPI.on might not support this channel)
+                    if (electronAPI.on) {
+                        electronAPI.on('app-close-requested', () => {
+                            this.pageLeaveUtilityService.confirmPageLeave((confirmed: boolean) => {
+                                if (confirmed) {
+                                    electronAPI.send('force-close');
+                                }
+                            });
+                        });
                     }
-                });
-            });
+                } else {
+                    console.warn('Electron IPC not available - some Electron features may not work');
+                }
+            } catch (error) {
+                console.warn('Electron require failed - running in fallback mode:', error);
+            }
         }
 
         /** This will be use for dialog close on route event */
@@ -210,7 +240,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         this.breakpointObserver.observe([
             BREAKPOINT_SCREEN_SIZE.TABLET
         ]).pipe(takeUntil(this.destroyed$)).subscribe(result => {
-                this.changeOnMobileView(result?.breakpoints[BREAKPOINT_SCREEN_SIZE.TABLET]);
+            this.changeOnMobileView(result?.breakpoints[BREAKPOINT_SCREEN_SIZE.TABLET]);
         });
         this.breakpointObserver.observe([
             BREAKPOINT_SCREEN_SIZE.UNSUPPORTED
@@ -235,7 +265,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         });
 
         this.store.pipe(select(state => state.session.activeTheme), takeUntil(this.destroyed$)).subscribe(response => {
-            if (response?.value) {
+            if (response) {
                 document.querySelector("body")?.classList?.remove("dark-theme");
                 document.querySelector("body")?.classList?.remove("default-theme");
                 document.querySelector("body")?.classList?.add(response?.value);
@@ -298,15 +328,15 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
         this._generalService.IAmLoaded.next(true);
         this._cdr.detectChanges();
-        this.router.events.pipe(takeUntil(this.destroyed$)).subscribe((event) => {
-            if ((event instanceof NavigationStart) && this.newVersionAvailableForWebApp && !isElectron) {
+        this.router.events.pipe(takeUntil(this.destroyed$)).subscribe((evt) => {
+            if ((evt instanceof NavigationStart) && this.newVersionAvailableForWebApp && !Configuration.isElectron) {
                 // need to save last state
-                const redirectState = this.getLastStateFromUrl(event.url);
+                const redirectState = this.getLastStateFromUrl(evt.url);
                 localStorage.setItem('lastState', redirectState);
                 window.location.reload();
                 return;
             }
-            if (!(event instanceof NavigationEnd)) {
+            if (!(evt instanceof NavigationEnd)) {
                 return;
             }
             window.scrollTo(0, 0);
@@ -319,7 +349,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             if (raw && raw.trim()) {
                 try {
                     const decoded = decodeURIComponent(raw);
-                    if (!isElectron) {
+                    if (!Configuration.isElectron) {
                         const target = decoded.startsWith('pages/') ? decoded : `pages/${decoded.startsWith('/') ? decoded.substring(1) : decoded}`;
                         this.router.navigateByUrl(`/${target}`);
                         return;
@@ -340,7 +370,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                     this.router.navigateByUrl(`/${target}`);
                     return;
                 }
-            } catch (_) {}
+            } catch (_) { }
         }
 
         const lastState = localStorage.getItem('lastState');
@@ -350,11 +380,11 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             return this.router.navigate([lastState]);
         }
 
-        if (!LOCAL_ENV && !isElectron) {
-            this._versionCheckService.initVersionCheck((this.serviceConfig.AppUrl || AppUrl) + 'version.json');
+        if (environment.production && !Configuration.isElectron) {
+            this._versionCheckService.initVersionCheck((this.serviceConfig.AppUrl || Configuration.AppUrl) + 'version.json');
             this._versionCheckService.onVersionChange$.pipe(takeUntil(this.destroyed$)).subscribe((isChanged: boolean) => {
                 if (isChanged) {
-                    this.newVersionAvailableForWebApp = _.clone(isChanged);
+                    this.newVersionAvailableForWebApp = clone(isChanged);
                 }
             });
         }

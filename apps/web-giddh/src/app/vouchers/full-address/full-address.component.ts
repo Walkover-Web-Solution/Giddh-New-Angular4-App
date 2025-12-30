@@ -4,7 +4,8 @@ import { TaxType } from "../utility/vouchers.const";
 @Component({
     selector: "full-address",
     templateUrl: "./full-address.component.html",
-    styleUrls: ["./full-address.component.scss"]
+    styleUrls: ["./full-address.component.scss"],
+    standalone: false
 })
 export class FullAddressComponent {
     /** Address details */

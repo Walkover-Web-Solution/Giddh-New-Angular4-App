@@ -24,7 +24,8 @@ import { ASIDE_PANE_CONFIG, IOption } from '../../../app.constant';
 @Component({
     selector: 'app-expense-details',
     templateUrl: './expense-details.component.html',
-    styleUrls: ['./expense-details.component.scss']
+    styleUrls: ['./expense-details.component.scss'],
+    standalone:false
 })
 
 export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
@@ -202,7 +203,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         this.imageURL = [];
 
         if (imgs) {
-            imgs.forEach(imgUniqueName => {
+            (Array.isArray(imgs) ? imgs : []).forEach(imgUniqueName => {
                 const image = {
                     src: imgPrefix + imgUniqueName
                 };

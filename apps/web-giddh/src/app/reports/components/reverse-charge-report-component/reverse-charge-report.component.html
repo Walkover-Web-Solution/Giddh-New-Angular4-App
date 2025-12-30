@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'reports/reverse-charge'"
     (localeData)="localeData = $event"
@@ -89,7 +89,7 @@
                 <table
                     mat-table
                     matSort
-                    [dataSource]="reverseChargeReportResults?.items"
+                    [dataSource]="dataSource"
                     (matSortChange)="sortChange($event)"
                     [matSortActive]="reverseChargeReportGetRequest.sortBy"
                     [matSortDirection]="reverseChargeReportGetRequest.sort"
@@ -304,14 +304,15 @@
                     !isLoading &&
                     (!reverseChargeReportResults ||
                         !reverseChargeReportResults.items ||
-                        reverseChargeReportResults.items?.length === 0)
+                        reverseChargeReportResults.items?.length === 0 ||
+                        dataSource.data?.length === 0)
                 "
                 [secondaryMessageClass]="'p-0'"
             >
             </no-data>
         </div>
     </div>
-</ng-container>
+</div>
 
 <!-- Universal Date Picker Menu -->
 <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">

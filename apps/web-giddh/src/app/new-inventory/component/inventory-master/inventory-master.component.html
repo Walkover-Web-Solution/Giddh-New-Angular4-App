@@ -1,4 +1,4 @@
-<ng-container
+<div
     appTranslate
     [file]="'inventory/master'"
     (commonLocaleData)="commonLocaleData = $event"
@@ -38,7 +38,7 @@
                                 [maxBufferPx]="800"
                                 id="0"
                             >
-                                <ng-container
+                                <div
                                     *cdkVirtualFor="let topLevelGroup of topLevelGroups?.results; let i = index"
                                 >
                                     <a
@@ -58,10 +58,10 @@
                                     >
                                         <mat-list-item class="items">{{ topLevelGroup?.name }}</mat-list-item>
                                     </a>
-                                </ng-container>
+                                </div>
                             </cdk-virtual-scroll-viewport>
                         </mat-list>
-                        <ng-container *ngFor="let masterColumnData of masterColumnsData; let i = index">
+                        <div *ngFor="let masterColumnData of masterColumnsData; let i = index">
                             <mat-list class="item-list border-grid pt-0">
                                 <a
                                     href="javascript:;"
@@ -76,7 +76,7 @@
                                     [maxBufferPx]="800"
                                     [id]="i + 1"
                                 >
-                                    <ng-container
+                                    <div
                                         *cdkVirtualFor="let masterData of masterColumnData?.results; let j = index"
                                     >
                                         <a
@@ -103,10 +103,10 @@
                                         >
                                             <mat-list-item class="items">{{ masterData?.name }}</mat-list-item>
                                         </a>
-                                    </ng-container>
+                                    </div>
                                 </cdk-virtual-scroll-viewport>
                             </mat-list>
-                        </ng-container>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -175,4 +175,4 @@
             </div>
         </div>
     </div>
-</ng-container>
+</div>

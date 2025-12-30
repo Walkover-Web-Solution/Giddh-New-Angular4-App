@@ -8,6 +8,7 @@ import { GeneralService } from './general.service';
 import { HttpWrapperService } from './http-wrapper.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
 import { WareHouseResponse } from '../models/api-models/Warehouse';
+import { concat, get } from '../lodash-optimized';
 
 /**
  * Provider to carry out warehouse related operations
@@ -54,6 +55,7 @@ export class SettingsWarehouseService {
      * @memberof SettingsWarehouseService
      */
     public fetchAllWarehouse(params: any, branchUniqueName?: any): Observable<BaseResponse<any, any>> {
+        console.log(params)
         const companyUniqueName: string = this.generalService.companyUniqueName;
         let contextPath: string = `${this.config.apiUrl}${WAREHOUSE_API.FETCH
             ?.replace(':companyUniqueName', encodeURIComponent(companyUniqueName))

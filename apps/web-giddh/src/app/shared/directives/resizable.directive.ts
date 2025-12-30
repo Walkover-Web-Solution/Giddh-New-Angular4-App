@@ -3,14 +3,14 @@ import { Directive, ElementRef, Input, OnDestroy, OnInit, Renderer2 } from '@ang
 /**
  * A reusable Angular directive that adds drag-to-resize functionality to any element
  * with per-page width persistence using localStorage.
- * 
+ *
  * Features:
  * - Drag to resize with min/max constraints and 3px drag threshold
  * - Click to toggle between current and default width
  * - Per-page persistence using moduleName identifier
  * - Responsive behavior that adapts to window size changes
  * - Performance optimized with requestAnimationFrame and pointer capture
- * 
+ *
  * @example
  * ```html
  * <div appResizable
@@ -26,27 +26,28 @@ import { Directive, ElementRef, Input, OnDestroy, OnInit, Renderer2 } from '@ang
  * ```
  */
 @Directive({
-  selector: '[appResizable]'
+  selector: '[appResizable]',
+  standalone: true
 })
 export class ResizableDirective implements OnInit, OnDestroy {
   /** CSS selector for the target element to resize. If empty, uses first child element */
   @Input() resizableTarget: string = '';
-  
+
   /** Minimum width in pixels */
   @Input() minWidth: number = 250;
-  
+
   /** Maximum width as ratio of window width (0.75 = 75%) */
   @Input() maxWidthRatio: number = 0.75;
-  
+
   /** Default width as ratio of window width (0.4 = 40%) */
   @Input() defaultWidthRatio: number = 0.4;
-  
+
   /** Width of the resizer handle in pixels */
   @Input() resizerWidth: number = 6;
-  
+
   /** localStorage key for storing UI preferences object */
   @Input() storageKey: string = 'giddh-ui-settings';
-  
+
   /** Unique identifier for per-page width storage */
   @Input() moduleName: string = 'default';
 
@@ -71,7 +72,7 @@ export class ResizableDirective implements OnInit, OnDestroy {
   ngOnInit(): void {
     // Initialize last window width
     this.lastWindowWidth = window.innerWidth;
-    
+
     this.createResizer();
     this.initializeEventListeners();
     this.setInitialWidth();
@@ -82,7 +83,7 @@ export class ResizableDirective implements OnInit, OnDestroy {
    */
   ngOnDestroy(): void {
     this.removeEventListeners();
-    
+
     // Clean up resize timeout
     if (this.resizeTimeout) {
       clearTimeout(this.resizeTimeout);
@@ -168,10 +169,10 @@ export class ResizableDirective implements OnInit, OnDestroy {
 
     // Try to get saved width percentage from localStorage first
     const savedWidthRatio = this.getSavedWidthRatio();
-    
+
     const widthRatio = savedWidthRatio || this.defaultWidthRatio;
     const initialWidth = window.innerWidth * widthRatio;
-    
+
     this.renderer.setStyle(this.targetElement, 'width', `${initialWidth}px`);
     this.renderer.setStyle(this.targetElement, 'flex-shrink', '0');
     this.newWidth = initialWidth;
@@ -209,15 +210,15 @@ export class ResizableDirective implements OnInit, OnDestroy {
     event.stopPropagation();
 
     const delta = event.clientX - this.startX;
-    
+
     // Check if we've moved enough to consider this a drag (not just a click)
     if (!this.dragStarted && Math.abs(delta) > this.dragThreshold) {
       this.dragStarted = true;
-      
+
       // Now we know it's a drag, so set the cursor and pointer events
       document.body.style.cursor = 'col-resize';
       document.body.style.pointerEvents = 'none';
-      
+
       // Enable pointer capture for better tracking
       if (this.resizerElement && this.resizerElement.setPointerCapture) {
         try {
@@ -227,7 +228,7 @@ export class ResizableDirective implements OnInit, OnDestroy {
         }
       }
     }
-    
+
     // Only update width if we've started dragging
     if (this.dragStarted) {
       let newWidth = this.startWidth + delta;
@@ -256,7 +257,7 @@ export class ResizableDirective implements OnInit, OnDestroy {
       if (this.dragStarted) {
         const widthRatio = this.newWidth / window.innerWidth;
         this.saveWidthRatio(widthRatio);
-        
+
         // Set flag to prevent click event from firing after drag
         this.justFinishedDrag = true;
         setTimeout(() => {
@@ -268,7 +269,7 @@ export class ResizableDirective implements OnInit, OnDestroy {
       document.body.style.cursor = '';
       document.body.style.userSelect = '';
       document.body.style.pointerEvents = ''; // Restore pointer events
-      
+
       // Release pointer capture if it was set
       if (this.resizerElement && this.resizerElement.releasePointerCapture) {
         try {
@@ -278,7 +279,7 @@ export class ResizableDirective implements OnInit, OnDestroy {
           console.error('ResizableDirective: Failed to release pointer capture:', e);
         }
       }
-      
+
       // Reset drag state
       this.dragStarted = false;
     }
@@ -307,16 +308,16 @@ export class ResizableDirective implements OnInit, OnDestroy {
 
     this.resizeTimeout = setTimeout(() => {
       this.lastWindowWidth = currentWindowWidth;
-      
+
       // Get saved ratio from localStorage (user's preferred ratio)
       const savedRatio = this.getSavedWidthRatio();
       const currentRatio = savedRatio || this.defaultWidthRatio;
-      
+
       // Calculate minimum ratio for new window size
       const newMinRatio = this.minWidth / currentWindowWidth;
-      
+
       let targetWidth: number;
-      
+
       // Check if current ratio is too small for new window size
       if (currentRatio < newMinRatio) {
         targetWidth = currentWindowWidth * newMinRatio;
@@ -326,11 +327,11 @@ export class ResizableDirective implements OnInit, OnDestroy {
         // Ratio is valid, maintain the same ratio for new window size
         targetWidth = currentWindowWidth * currentRatio;
       }
-      
+
       // Always update width to maintain user's preferred ratio
       this.renderer.setStyle(this.targetElement, 'width', `${targetWidth}px`);
       this.newWidth = targetWidth;
-      
+
       // If we had to adjust the ratio due to window constraints, save the new ratio
       if (currentRatio < newMinRatio || currentRatio > this.maxWidthRatio) {
         const finalRatio = targetWidth / currentWindowWidth;
@@ -357,10 +358,10 @@ export class ResizableDirective implements OnInit, OnDestroy {
       // Use current width ratio if available, otherwise default ratio
       const currentRatio = this.newWidth > 0 ? (this.newWidth / window.innerWidth) : this.defaultWidthRatio;
       const targetWidth = window.innerWidth * currentRatio;
-      
+
       this.renderer.setStyle(this.targetElement, 'width', `${targetWidth}px`);
       this.renderer.setStyle(this.targetElement, 'flex-shrink', '0');
-      
+
       // Save the toggled width ratio to localStorage
       this.saveWidthRatio(currentRatio);
       this.newWidth = targetWidth;
@@ -385,15 +386,15 @@ export class ResizableDirective implements OnInit, OnDestroy {
           uiPreferences = {};
         }
       }
-      
+
       // Ensure resizable-width section exists
       if (!uiPreferences['resizable-width']) {
         uiPreferences['resizable-width'] = {};
       }
-      
+
       // Update the specific voucher type width
       uiPreferences['resizable-width'][this.moduleName] = widthRatio;
-      
+
       // Save back to localStorage
       localStorage.setItem(this.storageKey, JSON.stringify(uiPreferences));
     } catch (error) {
@@ -407,7 +408,7 @@ export class ResizableDirective implements OnInit, OnDestroy {
   private getSavedWidthRatio(): number | null {
     try {
       const savedData = localStorage.getItem(this.storageKey);
-      
+
       if (savedData) {
         let uiPreferences: any = {};
         try {
@@ -416,14 +417,14 @@ export class ResizableDirective implements OnInit, OnDestroy {
           console.error('ResizableDirective: Failed to parse localStorage data:', parseError);
           return null;
         }
-        
+
         // Check if resizable-width section exists
         if (uiPreferences['resizable-width']) {
           const ratio = uiPreferences['resizable-width'][this.moduleName];
           if (ratio !== undefined) {
             // Validate the saved ratio is within acceptable bounds
             const minRatio = this.minWidth / window.innerWidth;
-            
+
             if (ratio >= minRatio && ratio <= this.maxWidthRatio) {
               return ratio;
             }
