@@ -170,6 +170,11 @@ console.log('✅ Environment build completed successfully!');
 function getAppUrl(config, env) {
     if (env.APP_URL) return env.APP_URL;
 
+    // For Electron builds, use relative path
+    if (env.IS_ELECTRON === 'true') {
+        return './';
+    }
+
     switch (config) {
         case 'prod': return 'https://books.giddh.com';
         case 'stage': return 'https://stage.giddh.com';
