@@ -992,9 +992,10 @@ export class TemplateEditFilterComponent implements OnInit {
     /**
      * Get custom fields API call
      * 
+     * @private
      * @memberof TemplateEditFilterComponent
      */
-    public getCustomFields(): void {
+    private getCustomFields(): void {
         this.customFieldsService.list({
                 page: 1,
                 count: API_BULK_FETCH_LIMIT,
