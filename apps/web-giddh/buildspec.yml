@@ -3,22 +3,43 @@ version: 0.2
 phases:
   pre_build:
     commands:
+      - echo "Node version:" && node --version
+      - echo "NPM version:" && npm --version
+      - echo "Available memory:" && free -h || echo "Memory info not available"
+      - echo "Configuring memory settings for Angular 21 build..."
+      - node .codebuild-memory-config.js
       - rm -rf node_modules
       - npm cache clean --force
       - npm install --force
   build:
     commands:
+      - echo "Starting build process for branch: $BRANCH"
+      - echo "Setting memory-optimized environment variables..."
+      - export NODE_OPTIONS="--max-old-space-size=6144 --optimize-for-size"
+      - export NG_CLI_ANALYTICS=false
+      - export CI=true
       - |
-        if [ "${AWS_BRANCH}" = "giddh-2.0" ]; then
-          npm run build-test
-        elif [ "${AWS_BRANCH}" = "beta-stage" ]; then
-          npm run build-stage
-        elif [ "${AWS_BRANCH}" = "beta-branch" ]; then
-          npm run build-prod
-        elif [ "${AWS_BRANCH}" = "production" ]; then
-          npm run build-prod
+        if [ "${BRANCH}" = "giddh-2.0" ]; then
+          echo "For giddh-2.0 branch";
+          NODE_ENV=test node --max_old_space_size=6144 scripts/build-env.js test && node --max_old_space_size=6144 node_modules/@angular/cli/bin/ng build web-giddh --configuration=test --output-hashing=all --source-map=false --optimization=true && node scripts/inject-env-vars.js dist/apps/web-giddh/index.html && node tools/web/postbuild --path=dist/apps/web-giddh && npm run rm_bak_files
+        elif [ "${BRANCH}" = "86d0fexwc-test" ]; then
+          echo "For beta-stage branch";
+          NODE_ENV=staging node --max_old_space_size=6144 scripts/build-env.js stage && node --max_old_space_size=6144 node_modules/@angular/cli/bin/ng build web-giddh --configuration=stage --output-hashing=all --source-map=false --optimization=true && node scripts/inject-env-vars.js dist/apps/web-giddh/index.html && node tools/web/postbuild --path=dist/apps/web-giddh && npm run rm_bak_files
+        elif [ "${BRANCH}" = "books-production" ]; then
+          echo "For production branch";
+          NODE_ENV=production node --max_old_space_size=6144 scripts/build-env.js prod && node --max_old_space_size=6144 node_modules/@angular/cli/bin/ng build web-giddh --configuration=prod --output-hashing=all --source-map=false --optimization=true && node scripts/inject-env-vars.js dist/apps/web-giddh/index.html && node tools/web/postbuild --path=dist/apps/web-giddh && npm run rm_bak_files
         fi
+  post_build:
+    commands:
+      - echo "Build process completed successfully."
+      - echo "Checking if dist directory exists:"
+      - ls -la dist/ || echo "dist directory not found"
+      - ls -la dist/apps/ || echo "dist/apps directory not found"
+      - ls -la dist/apps/web-giddh/ || echo "dist/apps/web-giddh directory not found"
+      - echo "Build artifacts summary:"
+      - du -sh dist/apps/web-giddh/ || echo "Could not get directory size"
 
 artifacts:
-    baseDirectory: /dist/apps/web-giddh/
-    files: '**/*'
+  base-directory: ./dist/apps/web-giddh/
+  files:
+    - '**/*'
