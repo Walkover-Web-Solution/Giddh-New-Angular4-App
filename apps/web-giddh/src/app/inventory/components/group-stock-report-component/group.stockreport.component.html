@@ -28,12 +28,8 @@
                         <i class="icon-download-circle strong"></i>
                     </button>
                     <mat-menu #downloadMenu="matMenu" class="download-menu" xPosition="before" yPosition="below">
-                        <button mat-menu-item (click)="downloadAllInventoryReports('group', 'csv')">
-                            CSV
-                        </button>
-                        <button mat-menu-item (click)="downloadAllInventoryReports('group', 'xlsx')">
-                            XLS
-                        </button>
+                        <button mat-menu-item (click)="downloadAllInventoryReports('group', 'csv')">CSV</button>
+                        <button mat-menu-item (click)="downloadAllInventoryReports('group', 'xlsx')">XLS</button>
                     </mat-menu>
                 </div>
                 <!-- <button
@@ -79,13 +75,14 @@
                             *ngIf="GroupStockReportRequest.branchDetails != 'allEntity'"
                         >
                             <div class="custom-datepicker-wrapper-group">
-                                <div class="custom-datepicker"
-                                [matMenuTriggerFor]="universalDatepicker"
-                                #universalDatepickerTrigger="matMenuTrigger"
-                                role="button"
-                                aria-haspopup="true"
-                                aria-controls="universalDatepicker"
-                            >
+                                <div
+                                    class="custom-datepicker"
+                                    [matMenuTriggerFor]="universalDatepicker"
+                                    #universalDatepickerTrigger="matMenuTrigger"
+                                    role="button"
+                                    aria-haspopup="true"
+                                    aria-controls="universalDatepicker"
+                                >
                                     <input
                                         matInput
                                         type="text"
@@ -98,7 +95,9 @@
                             </div>
                         </th>
                         <ng-container *ngIf="groupStockReport?.count">
-                            <th class="text-center border-right border-bottom" width="20%" colspan="2">Opening stock</th>
+                            <th class="text-center border-right border-bottom" width="20%" colspan="2">
+                                Opening stock
+                            </th>
                             <th class="text-center border-right border-bottom" width="20%" colspan="2">Inwards</th>
                             <th class="text-center border-right border-bottom" width="20%" colspan="2">Outwards</th>
                             <th class="text-center border-bottom" width="20%" colspan="2">Closing Stock</th>
@@ -546,41 +545,23 @@
                                 {{ txn.openingBalance?.amount | giddhNumberFormat }}
                             </td>
 
-                            <td
-                                data-title="inwards -"
-                                class="td-mobile-head"
-                            ></td>
+                            <td data-title="inwards -" class="td-mobile-head"></td>
 
-                            <td
-                                class="border-bottom border-right text-right border-right-none mb-0"
-                                data-title="Qty"
-                            >
+                            <td class="border-bottom border-right text-right border-right-none mb-0" data-title="Qty">
                                 <span [ngClass]="{ 'text-danger': txn.inwards?.quantity < 0 }">{{
                                     txn.inwards?.quantity | giddhNumberFormat
                                 }}</span>
                             </td>
-                            <td
-                                class="border-bottom border-right text-right mb-0"
-                                data-title="Value"
-                            >
+                            <td class="border-bottom border-right text-right mb-0" data-title="Value">
                                 {{ txn.inwards?.amount | giddhNumberFormat }}
                             </td>
 
-                            <td
-                                data-title="Outwards -"
-                                class="td-mobile-head"
-                            ></td>
+                            <td data-title="Outwards -" class="td-mobile-head"></td>
 
-                            <td
-                                class="border-bottom border-right text-right border-right-none mb-0"
-                                data-title="Qty"
-                            >
+                            <td class="border-bottom border-right text-right border-right-none mb-0" data-title="Qty">
                                 {{ txn.outwards?.quantity | giddhNumberFormat }}
                             </td>
-                            <td
-                                class="border-bottom border-right text-right mb-0"
-                                data-title="Value"
-                            >
+                            <td class="border-bottom border-right text-right mb-0" data-title="Value">
                                 {{ txn.outwards?.amount | giddhNumberFormat }}
                             </td>
 
@@ -780,9 +761,6 @@
 <ng-template #advanceSearchDialog>
     <div class="dialog-header">
         <span>Advance Search</span>
-        <button mat-icon-button aria-label="close" (click)="advanceSearchAction('cancel')">
-            <i class="icon-cross"></i>
-        </button>
     </div>
     <mat-dialog-content class="dialog-body">
         <div class="clear-both" [hidden]="!showAdvanceSearchModal">
@@ -790,7 +768,8 @@
                 <div class="row">
                     <div class="col-sm-4">Date Range</div>
                     <div class="col-sm-8">
-                        <div class="custom-datepicker"
+                        <div
+                            class="custom-datepicker"
                             [matMenuTriggerFor]="universalDatepicker"
                             #universalDatepickerTrigger="matMenuTrigger"
                             role="button"
@@ -811,7 +790,7 @@
                 <div class="row mt-4">
                     <div class="col-sm-4">Select Category</div>
                     <div class="col-sm-4">
-                        <div class="select-style vertical-align-middle ">
+                        <div class="select-style vertical-align-middle">
                             <reactive-dropdown-field
                                 [options]="CategoryOptions"
                                 (onClear)="clearShSelect('filterCategory')"
@@ -822,7 +801,7 @@
                         </div>
                     </div>
                     <div class="col-sm-4">
-                        <div class="select-style vertical-align-middle ">
+                        <div class="select-style vertical-align-middle">
                             <reactive-dropdown-field
                                 [options]="CategoryTypeOptions"
                                 (onClear)="clearShSelect('filterCategoryType')"
@@ -836,7 +815,7 @@
                 <div class="row mt-4">
                     <div class="col-sm-4">Value</div>
                     <div class="col-sm-4">
-                        <div class="select-style vertical-align-middle ">
+                        <div class="select-style vertical-align-middle">
                             <reactive-dropdown-field
                                 [options]="FilterValueCondition"
                                 (onClear)="clearShSelect('filterValueCondition')"
@@ -878,8 +857,14 @@
                         >
                             Search
                         </button>
-                        <button mat-stroked-button type="button" (click)="advanceSearchAction('clear')">
-                            Clear
+                        <button mat-stroked-button type="button" (click)="advanceSearchAction('clear')">Clear</button>
+                        <button
+                            mat-icon-button
+                            aria-label="close"
+                            role="button"
+                            (click)="advanceSearchAction('cancel')"
+                        >
+                            Cancel
                         </button>
                     </div>
                 </div>

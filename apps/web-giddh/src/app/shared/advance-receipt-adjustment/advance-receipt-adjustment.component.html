@@ -8,9 +8,6 @@
     <!-- Adjust Payment modal start -->
     <div class="dialog-header" *ngIf="isModal">
         <span>{{ localeData?.page_heading }}</span>
-        <button mat-icon-button aria-label="close" (click)="onCancel()">
-            <i class="icon-cross"></i>
-        </button>
     </div>
     <mat-dialog-content class="dialog-body font-size-15 adjustments-list">
         <div class="row h-100">
@@ -40,7 +37,7 @@
                                     ? commonLocaleData?.app_voucher_types?.receipt
                                     : adjustedVoucherType === "advance-receipt"
                                     ? commonLocaleData?.app_voucher_types?.advance_receipt
-                                    : (localeData?.voucher_label | replace: "[VOUCHER_TYPE]":currentVoucherLabel)
+                                    : (localeData?.voucher_label | replace : "[VOUCHER_TYPE]" : currentVoucherLabel)
                             }}
                             Total: <i class="icon-font-10"></i>
                             <span class="d-inline-flex justify-content-end">
@@ -121,7 +118,7 @@
                         </p>
                     </div>
                 </div>
-                <form #adjustAdvancePaymentForm="ngForm" autocomplete="off">
+                <form #adjustAdvancePaymentForm="ngForm" autocomplete="off" class="d-flex flex-column flex-grow-1">
                     <div class="row voucher-form">
                         <div class="col-sm-3">
                             <div class="form-group">
@@ -153,7 +150,9 @@
                                 <div class="form-group">
                                     <reactive-dropdown-field
                                         [autocomplete]="'off'"
-                                        [readonly]="shouldDisableEdit(entry) || entry.linkingAdjustment ? 'disabled' : null"
+                                        [readonly]="
+                                            shouldDisableEdit(entry) || entry.linkingAdjustment ? 'disabled' : null
+                                        "
                                         *ngIf="voucherApiVersion === 2"
                                         [cssClass]="'text-left'"
                                         [name]="'voucherName' + entry?.uniqueName"
@@ -243,12 +242,7 @@
                                     >
                                 </div>
                             </div>
-                            <div
-                                *ngIf="
-                                    voucherApiVersion === 2
-                                "
-                                class="col-sm-3"
-                            >
+                            <div *ngIf="voucherApiVersion === 2" class="col-sm-3">
                                 <a
                                     href="javascript:void(0)"
                                     aria-label="delete icon"
@@ -261,12 +255,16 @@
                     </ng-container>
 
                     <p>
-                        <a href="javascript:void(0)" aria-label="new line" (click)="addNewBlankAdjustVoucherRow()" class="font-size-15"
+                        <a
+                            href="javascript:void(0)"
+                            aria-label="new line"
+                            (click)="addNewBlankAdjustVoucherRow()"
+                            class="font-size-15"
                             ><span class="font-size-15">+</span> {{ commonLocaleData?.app_add_new_line }}</a
                         >
                     </p>
 
-                    <div class="clear-both flex-grow-1 d-flex flex-column">
+                    <div class="clear-both flex-grow-1 d-flex flex-column mt-auto">
                         <span class="theme-foreground-color" *ngIf="exceedDueAmount < 0">
                             {{ localeData?.excess_amount }}:
                             <span class="d-inline-flex">
@@ -284,12 +282,11 @@
                             <p>{{ commonLocaleData?.app_note }}:</p>
                             <p>{{ localeData?.adjustment_note }}</p>
                         </div>
-                        <div class="mt-auto" *ngIf="isModal">
+                        <div class="mt-auto d-flex column-gap-1" *ngIf="isModal">
                             <button
                                 mat-raised-button
                                 color="primary"
                                 *ngIf="!isUpdateMode"
-                                class="mr-2"
                                 [disabled]="isInvalidForm"
                                 (click)="saveAdjustAdvanceReceipt(adjustAdvancePaymentForm)"
                             >
@@ -299,7 +296,6 @@
                                 mat-raised-button
                                 color="primary"
                                 *ngIf="isUpdateMode"
-                                class="mr-2"
                                 [disabled]="isInvalidForm"
                                 (click)="saveAdjustAdvanceReceipt(adjustAdvancePaymentForm)"
                             >
@@ -307,6 +303,9 @@
                             </button>
                             <button mat-stroked-button (click)="onClear(true)">
                                 {{ commonLocaleData?.app_reset }}
+                            </button>
+                            <button mat-stroked-button type="button" (click)="onCancel()">
+                                {{ commonLocaleData?.app_cancel }}
                             </button>
                         </div>
                     </div>

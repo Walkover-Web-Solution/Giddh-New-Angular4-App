@@ -9,7 +9,8 @@ import {
     OnChanges,
     OnDestroy,
     OnInit,
-    Output
+    Output,
+    Renderer2
 } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { digitsOnly } from '../../../helpers';
@@ -232,6 +233,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     private activeSalePersonIsTransfer: any;
     /** True if sales person is created */
     public salesPersonCreated: boolean = false;
+    /** Holds active portal index */
+    public activePortalIndex: number | null = null;
 
     constructor(
         private _fb: FormBuilder,
@@ -251,7 +254,8 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         private commonService: CommonService,
         private readonly componentStore: AccountAddNewDetailsComponentStore,
         private settingsBranchAction: SettingsBranchActions,
-        private salesPersonStore: SalesPersonComponentStore
+        private salesPersonStore: SalesPersonComponentStore,
+        private renderer: Renderer2
     ) {
         this.activeGroup$ = this.store.pipe(select(state => state.groupwithaccounts.activeGroup), takeUntil(this.destroyed$));
     }
@@ -691,13 +695,14 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         return gstFields;
     }
 
-    /**
+     /**
      * This will be use for add new portal user
      *
      * @param {*} [user]
+     * @param {boolean} [highLightInput]
      * @memberof AccountAddNewDetailsComponent
      */
-    public addNewPortalUser(user?: any): void {
+    public addNewPortalUser(user?: any, highLightInput?: boolean): void {
         let mappings = this.addAccountForm.get('portalDomain') as FormArray;
         let mappingForm = this._fb.group({
             name: [''],
@@ -717,6 +722,10 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     control?.get('uniqueName').setValue('');
                 }
             });
+        }
+        if (highLightInput) {
+            const lastIndex = mappings.controls.length - 1;
+            this.activePortalIndex = lastIndex;
         }
     }
 
@@ -765,9 +774,22 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         return;
     }
 
-    public removeGstDetailsForm(i: number) {
+    /**
+     * Removes GST details form at specified index and focuses on submit button
+     * @param i - Index of the form to remove
+     * @memberof AccountAddNewDetailsComponent
+     */
+    public removeGstDetailsForm(i: number): void {
         const addresses = this.addAccountForm.get('addresses') as FormArray;
         addresses.removeAt(i);
+        
+        // Focus on submit button after removing address
+        setTimeout(() => {
+           const submitBtn = this.renderer.selectRootElement('button[type="submit"], button[aria-label="save"]', true);
+            if (submitBtn) {
+                submitBtn.focus();
+            }
+        }, 100);
     }
 
     public addBlankGstForm() {
@@ -850,6 +872,9 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
      * @memberof AccountAddNewDetailsComponent
      */
     public openingBalanceTypeChanged(type: string): void {
+        if (this.company?.isActive) {
+            return;
+        }
         if (Number(this.addAccountForm.get('openingBalance')?.value) > 0 || Number(this.addAccountForm.get('foreignOpeningBalance')?.value) > 0) {
             this.addAccountForm.get('openingBalanceType')?.patchValue(type);
         }
@@ -1503,15 +1528,15 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     }
 
     /**
-     * To render custom field form
+     * Renders custom field form controls with enhanced type safety validation
      *
-     * @param {*} obj
-     * @param {*} customFieldLength
+     * @param {any} obj - Custom field object containing field configuration
+     * @param {number} customFieldLength - Expected number of custom fields
      * @memberof AccountAddNewDetailsComponent
      */
-    public renderCustomFieldDetails(obj: any, customFieldLength: any): void {
+    public renderCustomFieldDetails(obj: any, customFieldLength: number): void {
         const customField = this.addAccountForm.get('customFields') as FormArray;
-        if (customField?.length < customFieldLength) {
+        if (Array.isArray(customField?.value) && customField?.value.length < customFieldLength) {
             customField.push(this.initialCustomFieldDetailsForm(obj));
         }
     }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { TaxResponse } from '../../models/api-models/Company';
 import { Observable, of as observableOf, ReplaySubject } from 'rxjs';
 import { AppState } from '../../store';
@@ -14,6 +14,7 @@ import { GeneralService } from '../../services/general.service';
 import { TaxAuthorityComponentStore } from '../../theme/tax-authority/utility/tax-authority.store';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { IOption } from '../../app.constant';
+import { ReactiveDropdownFieldComponent } from '../../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component';
 
 @Component({
     selector: 'aside-menu-create-tax-component',
@@ -22,7 +23,9 @@ import { IOption } from '../../app.constant';
     providers: [TaxAuthorityComponentStore],
     standalone: false
 })
-export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy {
+export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
+    /** Reference to the reactive dropdown field component for tax authority selection */
+    @ViewChild('dropdownRef') public dropdownRef: ReactiveDropdownFieldComponent;
     @Output() public closeEvent: EventEmitter<boolean> = new EventEmitter();
     @Input() public tax: TaxResponse;
     @Input() public asidePaneState: string;
@@ -133,6 +136,17 @@ export class AsideMenuCreateTaxComponent implements OnInit, OnChanges, OnDestroy
         this.store
             .pipe(select(p => p.company && p.company.isTaxUpdatingInProcess), takeUntil(this.destroyed$))
             .subscribe(result => this.isUpdateTaxInProcess = result);
+    }
+
+    /**
+     * Listens to the input change event of warehouse search filter
+     *
+     * @memberof AsideMenuCreateTaxComponent
+     */
+    public ngAfterViewInit(): void {
+        setTimeout(() => {
+            this.dropdownRef?.selectField?.nativeElement?.focus();
+        }, 200);
     }
 
     public ngOnChanges(changes: SimpleChanges): void {

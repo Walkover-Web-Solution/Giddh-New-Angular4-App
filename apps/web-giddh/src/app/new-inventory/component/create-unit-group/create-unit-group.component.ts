@@ -18,6 +18,8 @@ import { get, set } from '../../../lodash-optimized';
 export class CreateUnitGroupComponent implements OnInit, OnChanges, OnDestroy {
     /** Holds selected group data */
     @Input() public unitGroupDetails: any = {};
+    /** Holds true is open inside dialog */
+    @Input() public isInsideDialog: boolean = false;
     /** Emits close unit form */
     @Output() public closeAsideEvent: EventEmitter<any> = new EventEmitter(true);
     /* This will hold local JSON data */

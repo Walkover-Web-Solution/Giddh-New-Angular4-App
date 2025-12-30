@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from "@angular/core";
+import { Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from "@angular/core";
 import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
+import { MatMenuTrigger, MenuCloseReason } from "@angular/material/menu";
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 import { ReplaySubject, takeUntil } from "rxjs";
@@ -38,6 +39,8 @@ export class TaxDropdownComponent implements OnChanges {
     @Output() public selectedTaxes: EventEmitter<any> = new EventEmitter<any>();
     /** Emitter for taxes total */
     @Output() public totalTax: EventEmitter<any> = new EventEmitter<any>();
+    /** Emitter for close tax dropdown */
+    @Output() public closeTaxDropdown: EventEmitter<any> = new EventEmitter<any>();
     /** Form Group for tax form */
     public taxForm: FormGroup;
     /** Total tax amount */
@@ -46,6 +49,12 @@ export class TaxDropdownComponent implements OnChanges {
     private balanceDecimalPlaces: number = 2;
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
+    /** Element ref for mat menu */
+    @ViewChild('taxMenuTrigger') public taxMenuTrigger: MatMenuTrigger;
+    /** Element ref for tax input */
+    @ViewChild('taxInput') public taxInput: ElementRef<HTMLInputElement>;
+    /** Stores last saved form values when menu opens */
+    private lastSavedFormValues: any = null;
 
     constructor(
         private formBuilder: FormBuilder,
@@ -147,7 +156,7 @@ export class TaxDropdownComponent implements OnChanges {
     public enableDisableTaxes(): void {
         const selectedTaxTypes = [];
         let taxes = this.taxForm.get('taxes') as FormArray;
-        for (let i = 0; i <= taxes.length; i++) {
+        for (let i = 0; i < taxes.length; i++) {
             taxes.controls[i]?.enable();
             taxes.controls[i]?.get('disableForDate')?.patchValue(false);
 
@@ -156,7 +165,7 @@ export class TaxDropdownComponent implements OnChanges {
             }
         }
 
-        for (let i = 0; i <= taxes.length; i++) {
+        for (let i = 0; i < taxes.length; i++) {
             if (selectedTaxTypes[taxes.controls[i]?.get('taxType')?.value] && selectedTaxTypes[taxes.controls[i]?.get('taxType')?.value] !== taxes.controls[i]?.get('uniqueName')?.value) {
                 taxes.controls[i]?.disable();
                 taxes.controls[i]?.get('disableForDate')?.patchValue(false);
@@ -180,7 +189,7 @@ export class TaxDropdownComponent implements OnChanges {
         this.totalTaxAmount = 0;
 
         const taxes = this.taxForm.get('taxes') as FormArray;
-        for (let i = 0; i <= taxes.length; i++) {
+        for (let i = 0; i < taxes.length; i++) {
             if (taxes.controls[i]?.get('isChecked')?.value) {
                 const taxRate = Number(taxes.controls[i].get('taxDetail')?.value?.taxValue);
                 if (this.calculateTaxInclusively && !calculateTax) {
@@ -217,5 +226,111 @@ export class TaxDropdownComponent implements OnChanges {
      */
     public createNew(): void {
         this.createNewTax.emit();
+    }
+
+    /**
+     * Handles menu opened event and saves current form values
+     *
+     * @memberof TaxDropdownComponent
+     */
+    public handleMenuOpened(): void {
+        this.lastSavedFormValues = {
+            taxes: this.taxForm.get('taxes')?.value
+        };
+    }
+
+    /**
+     * Handles menu closed event and resets menu state
+     *
+     * @param reason The reason the menu was closed
+     * @memberof TaxDropdownComponent
+     */
+    public handleMenuClosed(reason: MenuCloseReason): void {
+        if (!reason) return;
+        
+        const isClosedByEscape = reason === 'keydown';
+        if (isClosedByEscape && this.lastSavedFormValues) {
+            const taxesArray = this.taxForm.get('taxes') as FormArray;
+            this.lastSavedFormValues.taxes?.forEach((tax: any) => {
+                const index = taxesArray?.controls?.findIndex(control => control.value.uniqueName === tax.uniqueName);
+                if (index > -1) {
+                    taxesArray.controls[index].patchValue(tax);
+                }
+            });
+            
+            this.calculateTaxAmount(true);
+        }
+        this.lastSavedFormValues = null;
+    }
+
+    /**
+     * Close tax menu
+     *
+     * @memberof TaxDropdownComponent
+     */
+    public closeTaxMenu(): void {
+        this.taxMenuTrigger?.closeMenu();
+    }
+
+    /**
+     * Emits close tax dropdown event with the trigger element
+     *
+     * @memberof TaxDropdownComponent
+     */
+    protected emitCloseTaxDropdown(): void {
+        // Create a synthetic event object with the input element as target
+        const triggerElement = this.taxInput?.nativeElement || null;
+        const syntheticEvent = {
+            target: triggerElement
+        };
+        this.closeTaxDropdown.emit(syntheticEvent);
+    }
+
+    /**
+     * Focuses the next available checkbox in the tax list
+     *
+     * @param {HTMLElement} currentElement - The currently focused checkbox element
+     * @param {number} currentIndex - The index of the current checkbox
+     * @memberof TaxDropdownComponent
+     */
+    public focusNextCheckbox(currentElement: HTMLElement, currentIndex: number): void {
+        setTimeout(() => {
+            // Find the tax wrapper container
+            const taxWrapper = document.querySelector('.discount-checkbox-wrapper');
+            if (taxWrapper) {
+                // Get all mat-checkbox elements (Angular Material checkboxes)
+                const checkboxes = taxWrapper.querySelectorAll('mat-checkbox');
+                
+                if (checkboxes.length > 0) {
+                    const nextIndex = currentIndex + 1;
+                    
+                    if (nextIndex < checkboxes.length) {
+                        // Focus next checkbox - target the actual input element inside mat-checkbox
+                        const nextCheckbox = checkboxes[nextIndex] as HTMLElement;
+                        const inputElement = nextCheckbox.querySelector('input[type="checkbox"]') as HTMLElement;
+                        if (inputElement) {
+                            inputElement.focus();
+                        } else {
+                            nextCheckbox.focus();
+                        }
+                    } else {
+                        // If at the end, try to focus "Create New" button or cycle back to first checkbox
+                        const createNewButton = document.querySelector('.create-new span[tabindex="0"]');
+                        if (createNewButton) {
+                            (createNewButton as HTMLElement)?.focus();
+                        } else if (checkboxes.length > 0) {
+                            // Cycle back to first checkbox
+                            const firstCheckbox = checkboxes[0] as HTMLElement;
+                            const firstInputElement = firstCheckbox.querySelector('input[type="checkbox"]') as HTMLElement;
+                            if (firstInputElement) {
+                                firstInputElement.focus();
+                            } else {
+                                firstCheckbox.focus();
+                            }
+                        }
+                    }
+                }
+            }
+        }, 150);
     }
 }

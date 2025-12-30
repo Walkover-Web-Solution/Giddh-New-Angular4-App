@@ -17,8 +17,9 @@
 
                 .list-item {
                     min-height: 40px;
-                    max-width: 80%;
                     cursor: pointer;
+                    transition: background-color 0.2s ease;
+                    outline: none;
 
                     .stock-icon {
                         margin-bottom: 2px;
@@ -31,16 +32,6 @@
                     .list-item {
                         padding-left: 0 !important;
                         max-width: 86%;
-                    }
-                }
-
-                .mat-expansion-panel {
-                    box-shadow: unset !important;
-                }
-
-                .mat-expansion-panel-header {
-                    &.mat-expanded {
-                        height: unset;
                     }
                 }
             }
@@ -91,5 +82,19 @@
                 }
             }
         }
+    }
+}
+:host ::ng-deep .accordion-header {
+    > .icon-arrow-down {
+            top: 18px;
+            right: 10px;
+            transition: transform 300ms ease-in-out;
+            transform: rotate(0deg);
+    }
+
+    &.opened {
+        > .icon-arrow-down {
+            transform: rotate(180deg);
+    }
     }
 }

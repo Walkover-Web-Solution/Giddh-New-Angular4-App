@@ -9,9 +9,11 @@ import {
     OnDestroy,
     OnInit,
     Output,
+    Renderer2,
     TemplateRef,
     ViewChild,
 } from '@angular/core';
+import { ConnectedPosition } from '@angular/cdk/overlay';
 import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { createSelector, select, Store } from '@ngrx/store';
 import { GroupWithAccountsAction } from 'apps/web-giddh/src/app/actions/groupwithaccounts.actions';
@@ -277,6 +279,16 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public isParentSundryCreditors: boolean = false;
     /** Flag to determine if the parent group is "bank accounts". */
     public isParentBankAccounts: boolean = false;
+    /** CDK overlay positions for discount and tax tooltips */
+    public overlayPositions: ConnectedPosition[] = [
+        {
+            originX: 'end',
+            originY: 'center',
+            overlayX: 'start',
+            overlayY: 'center',
+            offsetX: 8
+        }
+    ];
     /** Enum representing the types of accounting group type */
     public accountingGroupEnum: typeof AccountingGroupEnum = AccountingGroupEnum;
     /** Stores the list of selected tax labels to display in the UI. */
@@ -299,6 +311,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public currentTax: any;
     /** Stores the current discount to display in the UI. */
     public currentDiscount: any;
+    /** Holds active portal index */
+    public activePortalIndex: number | null = null;
 
     constructor(
         private _fb: FormBuilder,
@@ -321,7 +335,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         public dialog: MatDialog,
         private settingsBranchAction: SettingsBranchActions,
         private readonly componentStore: AccountAddNewDetailsComponentStore,
-        private salesPersonStore: SalesPersonComponentStore
+        private salesPersonStore: SalesPersonComponentStore,
+        private renderer: Renderer2
     ) {
 
     }
@@ -420,7 +435,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                     change.get('email')?.updateValueAndValidity();
                 }
                 // change.get('contactNo')?.setValue(mobileNo);
-                
+
                 // Email validation
                 let lastEmailOccurrenceIndex = -1;
                 let currentEmail = change.get('email')?.value;
@@ -465,7 +480,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
                 this.lastDuplicateEmailIndex = lastEmailOccurrenceIndex;
                 this.lastDuplicateContactIndex = lastContactOccurrenceIndex;
-                
+
                 // Update duplicate contact errors flag
                 this.hasDuplicateContactErrors = this.checkForDuplicateContactErrors();
                 if (this.lastDuplicateEmailIndex === -1 && this.lastDuplicateContactIndex === -1) {
@@ -717,7 +732,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     /**
      * Handles tab change
      *
-     * @param {any} event 
+     * @param {any} event
      * @memberof AccountUpdateNewDetailsComponent
      */
     public tabChanged(event: MatTabChangeEvent): void {
@@ -730,7 +745,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
             } else {
                 this.isOtherSelectedTab = false;
             }
-            
+
             // Mark this tab as activated
             this.activatedTabs.add(event.tab.textLabel);
             this.changeDetectorRef.detectChanges();
@@ -814,7 +829,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     /**
      * Initializes the GST details form with default values and validators.
-     * 
+     *
      * @returns FormGroup
      * @memberof AccountUpdateNewDetailsComponent
      */
@@ -879,9 +894,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      * This will be use for add new portal user
      *
      * @param {*} [user]
+     * @param {boolean} [highLightInput]
      * @memberof AccountUpdateNewDetailsComponent
      */
-    public addNewPortalUser(user?: any): void {
+    public addNewPortalUser(user?: any, highLightInput?: boolean): void {
         const mobileStartWithPlus = user?.contactNo?.startsWith('+');
         let mobileNo = '';
         if (user?.contactNo && mobileStartWithPlus) {
@@ -909,8 +925,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 }
             });
         }
-        const lastIndex = mappings.controls.length - 1;
-        // Removed interval and fallback timeout
+        if (highLightInput) {
+            const lastIndex = mappings.controls.length - 1;
+            this.activePortalIndex = lastIndex;
+        }
     }
 
     /**
@@ -958,9 +976,29 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         return;
     }
 
-    public removeGstDetailsForm(i: number) {
+    /**
+     * Removes GST details form at specified index and focuses on submit button
+     * @param i - Index of the form to remove
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    public removeGstDetailsForm(i: number): void {
         const addresses = this.addAccountForm.get('addresses') as FormArray;
         addresses.removeAt(i);
+        this.focusSubmitButton();
+    }
+
+    /**
+     * Focuses on the submit button after a delay
+     * @private
+     * @memberof AccountUpdateNewDetailsComponent
+     */
+    private focusSubmitButton(): void {
+        setTimeout(() => {
+            const submitBtn = this.renderer.selectRootElement('button[type="submit"], button[ aria-label="update"]', true);
+            if (submitBtn) {
+                submitBtn.focus();
+            }
+        }, 100);
     }
 
     public addBlankGstForm() {
@@ -989,7 +1027,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     /**
      * Validates and extracts the state code from the GST number entered in the given form.
-     * 
+     *
      * @param gstForm The `FormGroup` containing the GST-related form controls.
      * @memberof AccountUpdateNewDetailsComponent
      */
@@ -1037,6 +1075,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     public openingBalanceTypeChanged(type: string) {
+        if (this.company?.isActive) {
+            return;
+        }
         if (Number(this.addAccountForm.get('openingBalance')?.value) > 0 || Number(this.addAccountForm.get('foreignOpeningBalance')?.value) > 0) {
             this.addAccountForm.get('openingBalanceType')?.patchValue(type);
         }
@@ -1059,10 +1100,10 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public submit() {
         // Check for duplicate contact errors
         this.hasDuplicateContactErrors = this.checkForDuplicateContactErrors();
-        
+
         if (this.addAccountForm.invalid || !this.isGstValid || this.isMobileNumberInvalid || this.hasDuplicateContactErrors) {
             this.isValidForm = false;
-            
+
             // If duplicate contact errors exist, navigate to portal tab
             if (this.hasDuplicateContactErrors) {
                 this.goToPortalTab();
@@ -1257,7 +1298,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     /**
      * Handles the selection of a state from a dropdown or similar UI component.
-     * 
+     *
      * @param gstForm The `FormGroup` containing GST-related form controls.
      * @param event The event object containing the selected state's label and value.
      * @memberof AccountUpdateNewDetailsComponent
@@ -1273,7 +1314,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     /**
      * Updates the county information in the GST form based on the selected county event.
-     * 
+     *
      * @param gstForm The `FormGroup` containing GST-related form controls.
      * @param event The event object containing the selected county's label and value.
      * @memberof AccountUpdateNewDetailsComponent
@@ -1496,6 +1537,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
         this.store.dispatch(this.accountsAction.moveAccount(grpObject, activeAcc?.uniqueName, this.activeGroupUniqueName));
         this.moveAccountForm.reset();
+        this.focusSubmitButton();
     }
 
     /**
@@ -1808,15 +1850,15 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     }
 
     /**
-     * To render custom field form
+     * Renders custom field form controls with enhanced type safety validation
      *
-     * @param {*} obj
-     * @param {*} customFieldLength
+     * @param {any} obj - Custom field object containing field configuration
+     * @param {number} customFieldLength - Expected number of custom fields
      * @memberof AccountUpdateNewDetailsComponent
      */
-    public renderCustomFieldDetails(obj: any, customFieldLength: any): void {
+    public renderCustomFieldDetails(obj: any, customFieldLength: number): void {
         const customField = this.addAccountForm.get('customFields') as FormArray;
-        if (customField?.length < customFieldLength) {
+        if (Array.isArray(customField?.value) && customField?.value.length < customFieldLength) {
             customField.push(this.initialCustomFieldDetailsForm(obj));
         }
     }
@@ -2178,7 +2220,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     /**
      * Checks whether a given unique group name exists within the list of parent groups.
-     * 
+     *
      * @param parentGroups - Array of parent group objects, each having a `uniqueName` field.
      * @param uniqueName - The unique name to search for in the parent groups.
      * @returns `true` if any parent group matches the given unique name, otherwise `false`.
@@ -2372,7 +2414,8 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 } else if (acc.sacNumber) {
                     this.addAccountForm.get('hsnOrSac')?.patchValue('sac');
                 }
-                this.openingBalanceTypeChanged(accountDetails.openingBalanceType);
+                const accountData = acc.accountOpeningBalance?.[0]?.openingBalanceType;
+                this.addAccountForm.get('openingBalanceType')?.patchValue(this.company.isActive ? accountDetails.openingBalanceType : (accountData || accountDetails.openingBalanceType));
                 if (accountDetails.mobileNo) {
 
                     if (accountDetails.mobileNo.indexOf('-') > -1) {
@@ -2530,7 +2573,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
 
     /**
      * Handles toggling the archive status of an account
-     * 
+     *
      * @memberof AccountUpdateNewDetailsComponent
      */
     public accountArchiveUnarchive(): void {

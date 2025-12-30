@@ -191,3 +191,10 @@ export enum PaymentTableColumnsEnum {
     TotalAmount = 'grandTotal',
     BalanceDue = 'balanceDue'
 };
+
+/** Enum for user interaction types */
+export enum InteractionType {
+    KEYBOARD = 'keyboard',
+    MOUSE = 'mouse',
+    PROGRAMMATICALLY = 'programmatically'
+}

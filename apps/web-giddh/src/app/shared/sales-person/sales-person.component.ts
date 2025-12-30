@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { filter, Observable, ReplaySubject, takeUntil, tap } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
@@ -22,6 +22,7 @@ import { PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from '../../app.constant';
 import { MatMenuModule } from '@angular/material/menu';
 import { ArchiveSalesPersonComponent } from './archive/archive.component';
 import { MobileNumberInputComponent } from '../mobile-number-input';
+import { KeyboardNavigationModule } from '../helpers/directives/enter-next/keyboard-navigation.module';
 
 @Component({
     selector: 'app-sales-person',
@@ -40,14 +41,15 @@ import { MobileNumberInputComponent } from '../mobile-number-input';
         GiddhPageLoaderModule,
         ElementViewChildModule,
         MatMenuModule,
-        MobileNumberInputComponent
+        MobileNumberInputComponent,
+        KeyboardNavigationModule
     ],
     templateUrl: './sales-person.component.html',
     styleUrls: ['./sales-person.component.scss'],
     providers: [SalesPersonService, SalesPersonComponentStore]
 })
 
-export class SalesPersonComponent implements OnInit, OnDestroy {
+export class SalesPersonComponent implements OnInit, OnDestroy, AfterViewInit {
     /** ViewChild reference for name field */
     @ViewChild('nameField') nameField: InputFieldComponent;
     /** Subject to release subscription memory */
@@ -170,6 +172,7 @@ export class SalesPersonComponent implements OnInit, OnDestroy {
                 } else {
                     this.salesPersonUniqueName = null;
                 }
+                this.focusInputField();
             });
             this.componentStore.patchState({ openTransferAndArchiveDialog: false });
         })).subscribe();
@@ -183,6 +186,15 @@ export class SalesPersonComponent implements OnInit, OnDestroy {
             }
             this.salesPersonAction(SalesPersonActionEnum.GET_ALL);
         })).subscribe();
+    }
+
+    /**
+     * Lifecycle hook runs after component view initialization
+     * 
+     * @memberof SalesPersonComponent
+     */
+    public ngAfterViewInit(): void {
+        this.focusInputField();
     }
 
     /**
@@ -245,6 +257,7 @@ export class SalesPersonComponent implements OnInit, OnDestroy {
                             this.salesPersonUniqueName = element?.uniqueName;
                             this.componentStore.deleteSalesPerson(element?.uniqueName);
                         }
+                        this.focusInputField();
                     });
                 } else {    
                      if (element?.linkedEntities && element?.linkedEntities.includes(SalesPersonErrorDetailsEnum.ENTRY_VOUCHER)) {
@@ -287,6 +300,7 @@ export class SalesPersonComponent implements OnInit, OnDestroy {
                         if (response === this.commonLocaleData?.app_yes) {
                             this.componentStore.archiveUnarchiveSalesPerson({ model: { action: ActionTypeEnum.UNARCHIVED }, uniqueName: element?.uniqueName });
                         }
+                        this.focusInputField();
                     });
                 } else {
                     this.salesPersonUniqueName = element?.uniqueName;
@@ -368,6 +382,7 @@ export class SalesPersonComponent implements OnInit, OnDestroy {
             if (model) {
                 this.componentStore.archiveUnarchiveSalesPerson({ model: model, uniqueName: this.salesPersonUniqueName });
             }
+            this.focusInputField();
         });
     }
 

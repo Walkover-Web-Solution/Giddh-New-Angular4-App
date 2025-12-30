@@ -14,8 +14,9 @@ import {
 import { ActivatedRoute, Router } from "@angular/router";
 import { VoucherComponentStore } from "../utility/vouchers.store";
 import { AppState } from "../../store";
-import { Store } from "@ngrx/store";
+import { select, Store } from "@ngrx/store";
 import {
+    BehaviorSubject,
     Observable,
     ReplaySubject,
     combineLatest,
@@ -52,6 +53,7 @@ import { GIDDH_DATE_FORMAT } from "../../shared/helpers/defaultDateFormat";
 import {
     AccountType,
     BriedAccountsGroup,
+    InteractionType,
     OtherTaxTypeEnum,
     OtherTaxTypes,
     SearchType,
@@ -112,10 +114,10 @@ import { AiOcrService } from "../../services/ai-ocr.service";
 import { EWayBillCreateComponent } from "../../shared/eWayBill/create/e-way-bill-create-component";
 import { ReactiveDropdownFieldComponent } from "../../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component";
 import { ActionTypeEnum } from "../../shared/sales-person/utility/sales-person.constant";
-import { Country } from "../../shared/mobile-number-input/countries-data";
 import { GiddhDatepickerComponent } from "../../theme/giddh-datepicker/giddh-datepicker.component";
 import { FocusMonitor } from "@angular/cdk/a11y";
 import { Platform } from "@angular/cdk/platform";
+import { GeneralActions } from "../../actions/general/general.actions";
 import { environment } from "apps/web-giddh/src/environments/environment";
 
 @Component({
@@ -152,6 +154,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     @ViewChild('shippingDetailsTrigger') shippingDetailsTrigger!: MatMenuTrigger;
     /** Copy Voucher div element for focusing */
     @ViewChild('copyVoucherElement') copyVoucherElement!: ElementRef<HTMLDivElement>;
+    /** Description textarea element for focusing */
+    @ViewChild('inputDescription', { static: false }) inputDescription?: ElementRef<HTMLTextAreaElement>;
+    /** Reference to the "Add new row/line" span element for focusing */
+    @ViewChild('addNewParticular') addNewParticular!: ElementRef<HTMLSpanElement>;
+    /** Reference to the "Add new row/line" span element for focusing */
+    @ViewChild('addNewDeposit') addNewDeposit!: ElementRef<HTMLSpanElement>;
+    /** Reference to the "Add new row/line" span element for focusing */
+    @ViewChild('customerVendorDropdown') customerVendorDropdown!: ReactiveDropdownFieldComponent;
     /**  This will use for dayjs */
     public dayjs: any = dayjs;
     /** Holds current voucher type */
@@ -443,6 +453,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public startTime: number = 0;
     /**Hold barcode scan end time */
     public endTime: number = 0;
+    /** Tracks the last interaction type for conditional focus behavior */
+    public lastInteraction: InteractionType | null = null;
+    /** Timestamp of last interaction to prevent rapid overrides */
+    private lastInteractionTimestamp: number = 0;
+    /** Global event listeners for cleanup */
+    private globalKeydownListener?: (event: KeyboardEvent) => void;
+    private globalMousedownListener?: () => void;
+    private globalClickListener?: () => void;
     /**Hold barcode scan total time */
     public totalTime: number = 0;
     /** This will hold barcode value*/
@@ -519,6 +537,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public forceClear: boolean = false;
     /** Holds active deposit index */
     public activeDepositIndex: number | null = null;
+    /** Tracks if sidebar was previously open to restore it on component destroy */
+    private wasSidebarOpen = false;
+    /** Invoice templates */
+    public sampleTemplates$: BehaviorSubject<IOption[]> = new BehaviorSubject<IOption[]>([]);
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -652,9 +674,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         private salesPersonStore: SalesPersonComponentStore,
         private focusMonitor: FocusMonitor,
         private platform: Platform,
-        private ngZone: NgZone
+        private ngZone: NgZone,
+        private generalActions: GeneralActions
     ) {
-        this.imgPath = isElectron ? "assets/images/" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + "assets/images/";
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
     }
 
     /**
@@ -663,6 +686,16 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public ngOnInit(): void {
+        // Set up global interaction tracking
+        this.setupGlobalInteractionTracking();
+
+        // Close side menu on voucher create/update page
+        this.store.pipe(select(state => state.general.openSideMenu), take(1)).subscribe(response => {
+            if (response) {
+                this.wasSidebarOpen = true;
+                this.store.dispatch(this.generalActions.openSideMenu(false));
+            }
+        });
         this.getVoucherVersion();
         this.initVoucherForm();
         this.getCountryList();
@@ -1214,6 +1247,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.invoiceForm
                             .get("templateDetails.other.trackingNumber")
                             ?.patchValue(voucherDetails.templateDetails?.other?.trackingNumber);
+                        this.invoiceForm
+                            .get("templateDetails.templateUniqueName")
+                            ?.patchValue(voucherDetails.templateDetails?.templateUniqueName);
 
                         if (voucherDetails.attachedFiles) {
                             this.invoiceForm.get("attachedFiles")?.patchValue(voucherDetails.attachedFiles);
@@ -1254,6 +1290,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         this.invoiceForm
                             .get("templateDetails.other.trackingNumber")
                             ?.patchValue(voucherDetails.templateDetails?.other?.trackingNumber);
+                        this.invoiceForm
+                            .get("templateDetails.templateUniqueName")
+                            ?.patchValue(voucherDetails.templateDetails?.templateUniqueName);
 
                         if (voucherDetails.attachedFiles) {
                             this.invoiceForm.get("attachedFiles")?.patchValue(voucherDetails.attachedFiles);
@@ -1347,6 +1386,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         setTimeout(() => {
                             this.copyVoucherElement?.nativeElement?.focus();
                         }, 100);
+                    } else if (this.isUpdateMode) {
+                        setTimeout(() => {
+                            this.customerVendorDropdown.focusInputField();
+                        }, 100);
                     } else {
                         this.openAccountDropdown = false;
                         setTimeout(() => {
@@ -1354,7 +1397,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         }, 100);
                     }
                     this.startLoader(false);
-                    this.changeDetection.detectChanges();
                     this.changeDetection.detectChanges();
                 }
             });
@@ -1506,7 +1548,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     if (response) {
                         response = response as ProformaResponse;
                         if (response?.items?.length) {
-                            (Array.isArray(response.items) ? response.items : []).forEach((item) => {
+                            response.items.forEach((item) => {
                                 lastVouchers.push({
                                     voucherNumber: this.invoiceType.isProformaInvoice
                                         ? item.proformaNumber
@@ -2186,11 +2228,26 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     private getCreatedTemplates(): void {
         this.componentStore.createdTemplates$.pipe(takeUntil(this.destroyed$)).subscribe((response) => {
+            let templateType = VoucherTypeEnum.invoice;
+            if (this.voucherType === VoucherTypeEnum.purchase) {
+                templateType = VoucherTypeEnum.purchase_bill;
+            } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
+                templateType = VoucherTypeEnum.purchase_order;
+            } else if (this.voucherType === VoucherTypeEnum.debitNote || this.voucherType === VoucherTypeEnum.creditNote) {
+                templateType = VoucherTypeEnum.voucher;
+            }
+
             if (!response) {
-                this.componentStore.getCreatedTemplates(
-                    this.invoiceType.isDebitNote || this.invoiceType.isCreditNote ? "voucher" : "invoice"
-                );
+                this.componentStore.createdTemplatesIsLoading$.pipe(take(1)).subscribe((isLoading) => {
+                    if (!isLoading) {
+                        this.componentStore.getCreatedTemplates(templateType);
+                    }
+                });
             } else {
+                // Convert templates to IOption format for dropdown
+                const templateOptions = this.convertTemplatesToOptions(response);
+                this.sampleTemplates$.next(templateOptions);
+
                 const defaultTemplate = response.find((template) => template.isDefault || template.isDefaultForVoucher);
                 if (defaultTemplate && defaultTemplate.sections) {
                     const sections = defaultTemplate.sections;
@@ -2841,6 +2898,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     shippingDate: [""],
                     trackingNumber: [""],
                 }),
+                templateUniqueName: [""]
             }),
             entries: this.formBuilder.array([this.getEntriesFormGroup()]),
             uniqueName: [""],
@@ -3087,7 +3145,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     private getStockMaxQuantity(entryData: any): number | undefined {
         let maxQuantity = undefined;
         if (this.invoiceType.isPurchaseInvoice && entryData?.purchaseOrderLinkSummaries?.length > 0) {
-            (Array.isArray(entryData.purchaseOrderLinkSummaries) ? entryData.purchaseOrderLinkSummaries : []).forEach((summary) => {
+            entryData.purchaseOrderLinkSummaries.forEach((summary) => {
                 if (!isNaN(Number(summary.unUsedQuantity))) {
                     if (entryData?.transactions[0]?.stock) {
                         maxQuantity = summary.unUsedQuantity + entryData?.transactions[0]?.stock?.quantity;
@@ -3114,8 +3172,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     highPrecisionRate: this.highPrecisionRate,
                     customerUniqueName: this.invoiceForm.get("account.uniqueName")?.value
                 },
-                disableClose: true,
-                width: '1203px',
+                disableClose: true
             })
         );
 
@@ -3327,7 +3384,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
                         for (let taxIndex = 0; taxIndex < taxesFormArray.length; taxIndex++) {
                             const taxFormGroup = taxesFormArray.at(taxIndex) as FormGroup;
-
                             if (
                                 taxFormGroup.get("uniqueName")?.value ===
                                 entryFormGroup.get("otherTax.uniqueName")?.value
@@ -3335,8 +3391,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                                 taxesFormArray.removeAt(taxIndex);
                             }
                         }
-
                         entryFormGroup.get("otherTax").reset();
+                        entryFormGroup.get("otherTax.isChecked")?.setValue(false);
                         this.calculateReceiptPaymentAmount(entryFormGroup);
                     }
                 }
@@ -3431,6 +3487,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public toggleAccountAsidePane(accountType: AccountType, createNewAccount: boolean = true, customFocusElement?: any): void {
+        if (this.accountAsideMenuRef) return;
+
         this.createNewAccount = createNewAccount;
         if (accountType === this.accountType.customer) {
             this.getParentGroupForCreateAccount();
@@ -3475,7 +3533,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         group: BriedAccountsGroup,
                     });
                 }
-                this.restoreFocus();
+                this.accountAsideMenuRef = null;
+                if (this.lastInteraction === InteractionType.KEYBOARD) {
+                    this.openAccountDropdown = false;
+                    setTimeout(() => {
+                        this.openAccountDropdown = true;
+                    }, 50);
+                }
             });
     }
 
@@ -3658,7 +3722,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         const dialogRef = this.dialog.open(NewConfirmationModalComponent, {
             width: "630px",
             data: {
-                configuration: this.rcmConfiguration
+                configuration: this.rcmConfiguration,
             },
         });
 
@@ -3794,6 +3858,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             this.invoiceForm.get("attachedFiles")?.patchValue([response.body?.uniqueName]);
                             if (!this.ocrDataEnabled) {
                                 this.toasterService.showSnackBar("success", this.localeData?.file_uploaded);
+                                setTimeout(() => {
+                                    const deleteAttachmentButton = document.getElementById("deleteAttachment");
+                                    if (deleteAttachmentButton) {
+                                        deleteAttachmentButton?.focus();
+                                    }
+                                }, 200);
                             }
                         } else {
                             this.selectedFileName = "";
@@ -3818,10 +3888,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.commonLocaleData
         );
         let dialogRef = this.dialog.open(NewConfirmationModalComponent, {
-                    width: "630px",
-                    data: {
-                configuration: attachmentDeleteConfiguration
-                },
+            width: "630px",
+            data: {
+                configuration: attachmentDeleteConfiguration,
+            },
         });
 
         dialogRef
@@ -3846,8 +3916,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.saveVoucher((voucher) => {
             this.voucherDetails = voucher?.body;
             this.emailDialogRef = this.dialog.open(this.sendEmailModal, {
-                        width: "650px",
-                    });
+                width: "650px",
+            });
             this.emailDialogRef.afterClosed().subscribe(() => {
                 this.openAccountDropdown = true;
             });
@@ -3864,9 +3934,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.saveVoucher((voucher) => {
             this.voucherDetails = voucher?.body;
             const dialogRef = this.dialog.open(this.printVoucherModal, {
-                        width: "60vw",
-                        height: "80vh"
-                    });
+                width: "60vw",
+                height: "80vh",
+            });
             dialogRef.afterClosed().subscribe(() => {
                 this.openAccountDropdown = true;
             });
@@ -3914,6 +3984,26 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
+     * Sets interaction type with timestamp protection
+     *
+     * @private
+     * @param {InteractionType} type - Interaction type
+     * @param {string} source - Source of the interaction for debugging
+     * @memberof VoucherCreateComponent
+     */
+    private setInteractionType(type: InteractionType, source: string): void {
+        const now = Date.now();
+        const timeSinceLastInteraction = now - this.lastInteractionTimestamp;
+
+        // If this is a keyboard interaction, always accept it (keyboard has priority)
+        // If this is a mouse interaction, only accept it if enough time has passed or if the last interaction wasn't keyboard
+        if (type === InteractionType.KEYBOARD || (type === InteractionType.MOUSE && (this.lastInteraction !== InteractionType.KEYBOARD || timeSinceLastInteraction > 500))) {
+            this.lastInteraction = type;
+            this.lastInteractionTimestamp = now;
+        }
+    }
+
+    /**
      * Voucher date change callback
      *
      * @memberof VoucherCreateComponent
@@ -3953,10 +4043,36 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             });
             dialogRef.afterClosed().subscribe((response) => {
                 this.handleDateChangeConfirmation(response);
-                setTimeout(() => {
-                    if (this.voucherDatePicker) {
-                        this.voucherDatePicker.focus();
-                    }
+                // Conditional focus based on last interaction type
+                this.ngZone.runOutsideAngular(() => {
+                    setTimeout(() => {
+                        this.ngZone.run(() => {
+                            if (this.voucherDatePicker) {
+                                if (this.lastInteraction === InteractionType.KEYBOARD) {
+                                    // Keyboard interaction - move to next element
+                                    this.voucherDatePicker.focus();
+
+                                    setTimeout(() => {
+                                        const datePickerInput = this.voucherDatePicker.dateInput?.nativeElement;
+                                        if (datePickerInput) {
+                                            const enterEvent = new KeyboardEvent('keydown', {
+                                                key: 'Enter',
+                                                code: 'Enter',
+                                                keyCode: 13,
+                                                which: 13,
+                                                bubbles: true,
+                                                cancelable: true
+                                            });
+                                            datePickerInput.dispatchEvent(enterEvent);
+                                        }
+                                    }, 100);
+                                } else {
+                                    // Mouse or programmatic interaction - stay on datepicker
+                                    this.voucherDatePicker.focus();
+                                }
+                            }
+                        });
+                    });
                 });
             });
         }
@@ -4030,8 +4146,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public handleHsnSacMenuClosed(reason: MenuCloseReason, entry: FormGroup): void {
-        if (!reason) return;
+        // Focus to description field after closing HSN/SAC menu
+        setTimeout(() => {
+            if (this.lastInteraction === InteractionType.KEYBOARD && this.inputDescription?.nativeElement) {
+                this.inputDescription.nativeElement.focus();
+            }
+        }, 150);
 
+        if (!reason) return;
         const isClosedByEscape = reason === 'keydown';
         if (isClosedByEscape) {
             // Reset to saved values when closed by escape key
@@ -4077,7 +4199,15 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (deposits?.length === 1) {
             deposits.reset();
             this.calculateBalanceDue();
+            this.activeDepositIndex = null;
+            setTimeout(() => {
+                this.activeDepositIndex = 0;
+            }, 50);
             return;
+        } else if (this.lastInteraction === InteractionType.KEYBOARD && deposits?.length > 1 && this.addNewDeposit.nativeElement) {
+            setTimeout(() => {
+                this.addNewDeposit.nativeElement.focus();
+            }, 100);
         }
         deposits.removeAt(entryIndex);
         this.calculateBalanceDue();
@@ -4098,6 +4228,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         }
         this.checkIfEntriesHasStock();
         this.calculateVoucherTotals();
+        if (this.lastInteraction === InteractionType.KEYBOARD && entries.length >= 1 && this.addNewParticular.nativeElement) {
+            setTimeout(() => {
+                this.addNewParticular.nativeElement.focus();
+            }, 100);
+        }
     }
 
     /**
@@ -4135,7 +4270,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         const discountsFormArray = entryFormGroup.get("discounts") as FormArray;
         discountsFormArray.clear();
         if (discounts?.length) {
-            (Array.isArray(discounts) ? discounts : []).forEach((discount) => {
+            discounts.forEach((discount) => {
                 discountsFormArray.push(this.getTransactionDiscountFormGroup(discount));
             });
         }
@@ -4739,7 +4874,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         const entries = [];
         this.invoiceForm.get("entries")["controls"]?.forEach((control) => {
             if (control?.value?.transactions[0]?.account?.uniqueName) {
-                entries.push(control?.value);
+                entries.push(cloneDeep(control?.value));
             }
         });
         return entries;
@@ -4868,7 +5003,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         if (!this.isFormValid(invoiceForm)) {
             this.startLoader(false);
-            this.changeDetection.detectChanges();
             return;
         }
 
@@ -4902,7 +5036,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             if (this.advanceReceiptAdjustmentData.adjustments.length && !this.invoiceForm.get('voucherUniqueName')?.value) {
                 const adjustments = cloneDeep(this.advanceReceiptAdjustmentData.adjustments);
                 if (adjustments) {
-                    (Array.isArray(adjustments) ? adjustments : []).forEach((adjustment) => {
+                    adjustments.forEach((adjustment) => {
                         if (adjustment.balanceDue !== undefined) {
                             delete adjustment.balanceDue;
                         }
@@ -5009,7 +5143,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     .pipe(takeUntil(this.destroyed$))
                     .subscribe((response) => {
                         this.startLoader(false);
-                        this.changeDetection.detectChanges();
                         if (response && response.status === "success") {
                             this.toasterService.showSnackBar("success", this.localeData?.po_updated);
                             if (callback) {
@@ -5027,7 +5160,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     .pipe(takeUntil(this.destroyed$))
                     .subscribe((response) => {
                         this.startLoader(false);
-                        this.changeDetection.detectChanges();
                         if (response && response.status === "success") {
                             this.aiOcrService.saveAndNextSuccess$.next({
                                 token: this.aiOcrToken,
@@ -5084,7 +5216,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     .pipe(takeUntil(this.destroyed$))
                     .subscribe((response) => {
                         this.startLoader(false);
-                        this.changeDetection.detectChanges();
                         if (response?.status === "success") {
                             this.toasterService.showSnackBar("success", this.localeData?.voucher_updated);
                             if (callback) {
@@ -5103,7 +5234,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     .pipe(takeUntil(this.destroyed$))
                     .subscribe((response) => {
                         this.startLoader(false);
-                        this.changeDetection.detectChanges();
                         if (response?.status === "success") {
                             this.aiOcrService.saveAndNextSuccess$.next({
                                 token: this.aiOcrToken,
@@ -5216,7 +5346,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     .pipe(takeUntil(this.destroyed$))
                     .subscribe((response) => {
                         this.startLoader(false);
-                        this.changeDetection.detectChanges();
                         if (response?.status === "success") {
                             this.toasterService.showSnackBar("success", this.localeData?.voucher_updated);
                             if (callback) {
@@ -5238,7 +5367,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     .pipe(takeUntil(this.destroyed$))
                     .subscribe((response) => {
                         this.startLoader(false);
-                        this.changeDetection.detectChanges();
                         if (response?.status === "success") {
                             this.aiOcrService.saveAndNextSuccess$.next({
                                 token: this.aiOcrToken,
@@ -5460,6 +5588,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             totalAdjustedAmount: 0,
             convertedTotalAdjustedAmount: 0,
         };
+        this.totalDepositAmount = 0;
+        this.advanceReceiptAdjustmentData = null;
+        this.vouchersForAdjustment = [];
 
         this.invoiceForm.get("type").patchValue(this.voucherType);
         this.invoiceForm.get("date")?.patchValue(this.universalDate);
@@ -5565,6 +5696,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      */
     public ngOnDestroy(): void {
         this.componentStore.resetAll();
+        if (this.wasSidebarOpen) {
+            this.store.dispatch(this.generalActions.openSideMenu(true));
+        }
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -5607,8 +5741,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.calculateAdjustedVoucherTotal(this.originalVoucherAdjustments?.adjustments);
             }
             this.dialog.open(this.adjustmentModal, {
-                        width: "800px",
-                    });
+                width: "800px",
+            });
         } else {
             this.isAdjustAmount = false;
             this.adjustPaymentBalanceDueData = 0;
@@ -5672,7 +5806,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             let adjustments = cloneDeep(voucherObjectArray);
             let totalAmount = 0;
             if (adjustments) {
-                (Array.isArray(adjustments) ? adjustments : []).forEach((item) => {
+                adjustments.forEach((item) => {
                     if (
                         (this.voucherType === AdjustedVoucherType.SalesInvoice &&
                             item?.voucherType === AdjustedVoucherType.DebitNote) ||
@@ -6116,7 +6250,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         let voucherEntries = this.getEntries();
 
                         if (entries && entries.length > 0 && voucherEntries?.length > 0) {
-                            (Array.isArray(entries) ? entries : []).forEach((entry) => {
+                            entries.forEach((entry) => {
                                 entry.transactions?.forEach((item) => {
                                     let entryLoop = 0;
                                     let remainingQuantity =
@@ -6701,8 +6835,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.purchaseOrderPreviewAccountUniqueName = accountUniqueName;
 
         this.dialog.open(template, {
-                    width: "980px",
-                });
+            width: "980px",
+        });
     }
 
     /**
@@ -7154,6 +7288,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private openDialogWithFocusManagement<T>(dialogOpener: () => MatDialogRef<T>): MatDialogRef<T> {
+        if (this.lastInteraction !== InteractionType.KEYBOARD) {
+            return dialogOpener();
+        }
         // Store current focus
         this.lastFocusedElement = document.activeElement as HTMLElement;
 
@@ -7167,23 +7304,79 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     }
 
     /**
-     * Restores focus to the previously focused element
+     * Restores focus to the next focusable element after dialog closes
      *
      * @private
      * @memberof VoucherCreateComponent
      */
     private restoreFocus(): void {
-        if (!this.lastFocusedElement?.focus) return;
+        if (this.lastInteraction !== InteractionType.KEYBOARD) {
+            return;
+        }
+        if (!this.lastFocusedElement) return;
 
         setTimeout(() => {
             try {
-                this.lastFocusedElement?.focus();
+                // Find the next focusable element using simple utility logic
+                const nextElement = this.findNextFocusableElementSimple(this.lastFocusedElement);
+                if (nextElement) {
+                    nextElement.focus();
+                } else {
+                    // Fallback to the original element if no next element found
+                    this.lastFocusedElement?.focus();
+                }
             } catch {
                 // Fallback to first focusable element
                 document.querySelector<HTMLElement>('input, button, select, textarea, [tabindex]:not([tabindex="-1"])')?.focus();
             }
             this.lastFocusedElement = null;
         }, 100);
+    }
+
+    /**
+     * Finds the next focusable element after the given element using simple logic
+     *
+     * @private
+     * @param {HTMLElement} currentElement - The current element
+     * @returns {HTMLElement | null} The next focusable element or null
+     * @memberof VoucherCreateComponent
+     */
+    private findNextFocusableElementSimple(currentElement: HTMLElement): HTMLElement | null {
+        const form = currentElement.closest('form');
+        if (!form) return null;
+
+        const selector = 'input:not([tabindex="-1"]):not([disabled]), select:not([tabindex="-1"]):not([disabled]), textarea:not([tabindex="-1"]):not([disabled]), button:not([tabindex="-1"]):not([disabled]), [tabindex]:not([tabindex="-1"])';
+        const elements = Array.from(form.querySelectorAll(selector)) as HTMLElement[];
+        const currentIndex = elements.indexOf(currentElement);
+
+        for (let i = currentIndex + 1; i < elements.length; i++) {
+            if (this.isElementAvailableSimple(elements[i])) {
+                return elements[i];
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Checks if an element is available for focus using simple logic
+     *
+     * @private
+     * @param {HTMLElement} element - Element to check
+     * @returns {boolean} True if element is available for focus
+     * @memberof VoucherCreateComponent
+     */
+    private isElementAvailableSimple(element: HTMLElement): boolean {
+        if (element.offsetParent === null) return false;
+        const style = window.getComputedStyle(element);
+        if (style.display === 'none' || style.visibility === 'hidden') return false;
+
+        if (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement) {
+            return !element.disabled && !element.readOnly;
+        }
+        if (element instanceof HTMLSelectElement || element instanceof HTMLButtonElement) {
+            return !element.disabled;
+        }
+        return true;
     }
 
     /**
@@ -7208,10 +7401,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public focusNextElement(event: Event): void {
+        if (this.lastInteraction !== InteractionType.KEYBOARD) {
+            return;
+        }
         if (!this.platform.isBrowser) {
             return;
         }
-
         const currentElement = event.target as HTMLElement;
         if (!currentElement) {
             return;
@@ -7260,5 +7455,63 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 !element.hasAttribute('aria-hidden') && // Not hidden from screen readers
                 element.tabIndex !== -1; // Can receive focus
         });
+    }
+
+    /**
+     * Checks if customer/vendor is selected
+     *
+     * @returns {boolean} True if customer/vendor is selected
+     * @memberof VoucherCreateComponent
+     */
+    public isCustomerVendorSelected(): boolean {
+        return this.invoiceType.isCashInvoice
+            ? this.invoiceForm.controls['account'].get('customerName')?.value
+            : this.invoiceForm.controls['account'].get('uniqueName')?.value;
+    }
+
+    /**
+     * Converts sample templates to IOption format for dropdown usage
+     *
+     * @param {any[]} templates - Array of template objects
+     * @returns {IOption[]} Converted templates in IOption format
+     * @memberof VoucherCreateComponent
+     */
+    public convertTemplatesToOptions(templates: any[]): IOption[] {
+        if (!templates || !Array.isArray(templates)) {
+            return [];
+        }
+
+        return templates.map(template => ({
+            value: template?.uniqueName || template?.templateType,
+            label: template?.name || template?.templateType
+        }));
+    }
+
+    /**
+     * Sets up global interaction tracking for the entire page
+     *
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private setupGlobalInteractionTracking(): void {
+        // Create event listeners with proper binding
+        this.globalKeydownListener = (event: KeyboardEvent) => {
+            if (['Enter', ' ', 'ArrowDown', 'ArrowUp', 'Tab', 'Escape'].includes(event.key)) {
+                this.setInteractionType(InteractionType.KEYBOARD, 'Global keydown');
+            }
+        };
+
+        this.globalMousedownListener = () => {
+            this.setInteractionType(InteractionType.MOUSE, 'Global mousedown');
+        };
+
+        this.globalClickListener = () => {
+            this.setInteractionType(InteractionType.MOUSE, 'Global click');
+        };
+
+        // Add event listeners to document
+        document.addEventListener('keydown', this.globalKeydownListener);
+        document.addEventListener('mousedown', this.globalMousedownListener);
+        document.addEventListener('click', this.globalClickListener);
     }
 }

@@ -56,9 +56,6 @@
             <div>
                 <div class="dialog-header">
                     <span>{{ localeData?.reject }}</span>
-                    <button mat-icon-button aria-label="close" (click)="closeReject($event)">
-                        <i class="icon-cross"></i>
-                    </button>
                 </div>
                 <mat-dialog-content class="dialog-body">
                     <form [formGroup]="rejectForm">
@@ -77,7 +74,7 @@
                         <button aria-label="yes" mat-raised-button color="primary" (click)="onSubmit($event, true)">
                             {{ localeData?.submit }}
                         </button>
-                        <button aria-label="no" mat-stroked-button (click)="closeReject($event)">
+                        <button aria-label="no" type="button" mat-stroked-button (click)="closeReject($event)">
                             {{ localeData?.cancel }}
                         </button>
                     </div>

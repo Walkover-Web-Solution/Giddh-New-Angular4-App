@@ -6,9 +6,27 @@
 >
     <span *ngIf="translatedText">
         <div *ngIf="showIcon">
-            <i class="icon-info1" (click)="openVideoTutorialDialog()" [ngClass]="iconCssClass"  [matTooltip]="translatedText" matTooltipPosition="above"></i>
+            <i
+                class="icon-info1"
+                tabindex="0"
+                cdkMonitorElementFocus
+                (click)="openVideoTutorialDialog()"
+                (keydown.enter)="$event.preventDefault(); openVideoTutorialDialog()"
+                (keydown.space)="$event.preventDefault(); openVideoTutorialDialog()"
+                [ngClass]="iconCssClass"
+                [matTooltip]="translatedText"
+                matTooltipPosition="above"
+            ></i>
         </div>
-        <span *ngIf="!showIcon" (click)="openVideoTutorialDialog()" [ngClass]="iconCssClass">
+        <span
+            *ngIf="!showIcon"
+            tabindex="0"
+            cdkMonitorElementFocus
+            (click)="openVideoTutorialDialog()"
+            (keydown.enter)="$event.preventDefault(); openVideoTutorialDialog()"
+            (keydown.space)="$event.preventDefault(); openVideoTutorialDialog()"
+            [ngClass]="iconCssClass"
+        >
             {{ translatedText }}
         </span>
     </span>

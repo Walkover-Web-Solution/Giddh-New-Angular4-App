@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
+import { Component, Inject, OnDestroy, OnInit, HostListener } from "@angular/core";
 import { AddBulkItemsComponentStore } from "./utility/add-bulk-items.store";
 import { VouchersUtilityService } from "../../vouchers/utility/vouchers.utility.service";
 import { cloneDeep } from "../../lodash-optimized";
@@ -36,6 +36,10 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
     public commonLocaleData: any = {};
     /** List of items in process to add */
     public itemsInProcess: any[] = [];
+    /** Current focused item index for keyboard navigation */
+    private currentFocusIndex: number = 0;
+    /** Total number of focusable items */
+    private totalFocusableItems: number = 0;
 
     constructor(
         private vouchersUtilityService: VouchersUtilityService,
@@ -66,6 +70,11 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
                 this.stockVariants[response.entryIndex] = of(response.results);
             }
         });
+
+        // Initialize focus state when stock results change
+        this.stockResults$.pipe(takeUntil(this.destroyed$)).subscribe(() => {
+            setTimeout(() => this.initializeFocusState(), 100);
+        });
     }
 
     /**
@@ -92,6 +101,139 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
     }
 
     /**
+     * Handles arrow key navigation for list items when focus is within the list area
+     *
+     * @param {KeyboardEvent} event - The keyboard event
+     * @memberof AddBulkItemsComponent
+     */
+    @HostListener('keydown', ['$event'])
+    public handleKeyboardNavigation(event: KeyboardEvent): void {
+        if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+            // Check if the focus is within the list area
+            const target = event.target as HTMLElement;
+            const listContainer = target.closest('.list-viewport') || target.closest('mat-list-item');
+
+            if (listContainer) {
+                event.preventDefault();
+                event.stopPropagation();
+
+                const direction = event.key === 'ArrowDown' ? 1 : -1;
+                this.navigateList(direction);
+            }
+        }
+    }
+
+    /**
+     * Navigates through the list items using arrow keys
+     *
+     * @param {number} direction - Direction to navigate (1 for down, -1 for up)
+     * @memberof AddBulkItemsComponent
+     */
+    public navigateList(direction: number): void {
+        const listContainer = document.querySelector('.list-viewport');
+        if (!listContainer) return;
+
+        const focusableElements = listContainer.querySelectorAll('mat-list-item[role="button"]');
+        this.totalFocusableItems = focusableElements.length;
+
+        if (this.totalFocusableItems === 0) return;
+
+        // Calculate new focus index
+        this.currentFocusIndex += direction;
+
+        // Handle wrapping
+        if (this.currentFocusIndex >= this.totalFocusableItems) {
+            this.currentFocusIndex = 0; // Wrap to first item
+        } else if (this.currentFocusIndex < 0) {
+            this.currentFocusIndex = this.totalFocusableItems - 1; // Wrap to last item
+        }
+
+        // Update tabindex and focus
+        this.updateFocusStates(focusableElements);
+        (focusableElements[this.currentFocusIndex] as HTMLElement)?.focus();
+    }
+
+    /**
+     * Updates tabindex attributes for proper keyboard navigation
+     *
+     * @param {NodeListOf<Element>} elements - List of focusable elements
+     * @memberof AddBulkItemsComponent
+     */
+    private updateFocusStates(elements: NodeListOf<Element>): void {
+        elements.forEach((element, index) => {
+            if (index === this.currentFocusIndex) {
+                element.setAttribute('tabindex', '0');
+            } else {
+                element.setAttribute('tabindex', '-1');
+            }
+        });
+    }
+
+    /**
+     * Handles item click and updates current focus index
+     *
+     * @param {SalesAddBulkStockItems} item - The selected item
+     * @param {number} index - The index of the clicked item
+     * @memberof AddBulkItemsComponent
+     */
+    public onItemClick(item: SalesAddBulkStockItems, index: number): void {
+        this.currentFocusIndex = index;
+        this.addItem(item, index);
+    }
+
+    /**
+     * Handles variant click and updates focus
+     *
+     * @param {SalesAddBulkStockItems} item - The parent item
+     * @param {any} variant - The selected variant
+     * @param {number} index - The index of the parent item
+     * @memberof AddBulkItemsComponent
+     */
+    public onVariantClick(item: SalesAddBulkStockItems, variant: any, index: number): void {
+        // Find the actual index of the variant in the flattened list
+        const listContainer = document.querySelector('.list-viewport');
+        if (listContainer) {
+            const focusableElements = listContainer.querySelectorAll('mat-list-item[role="button"]');
+            const variantElement = Array.from(focusableElements).find(el =>
+                el.textContent?.trim() === variant?.label
+            );
+            if (variantElement) {
+                this.currentFocusIndex = Array.from(focusableElements).indexOf(variantElement);
+            }
+        }
+        this.variantChanged(item, variant, index);
+    }
+
+    /**
+     * TrackBy function for stock items to improve virtual scrolling performance
+     *
+     * @param {number} index - The index of the item
+     * @param {OptionInterface} item - The stock item
+     * @returns {string} Unique identifier for the item
+     * @memberof AddBulkItemsComponent
+     */
+    public trackByStockItem(index: number, item: OptionInterface): string {
+        return item?.value || index.toString();
+    }
+
+    /**
+     * Initializes the focus state for keyboard navigation
+     *
+     * @memberof AddBulkItemsComponent
+     */
+    public initializeFocusState(): void {
+        const listContainer = document.querySelector('.list-viewport');
+        if (!listContainer) return;
+
+        const focusableElements = listContainer.querySelectorAll('mat-list-item[role="button"]');
+        this.totalFocusableItems = focusableElements.length;
+        this.currentFocusIndex = 0;
+
+        // Set initial tabindex states
+        this.updateFocusStates(focusableElements);
+    }
+
+    /**
      * Focuses the next available element in the list after selection
      *
      * @param {HTMLElement} currentElement - The currently focused element
@@ -115,6 +257,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
             }
         }, 100);
     }
+
 
     /**
      * Initializes add bulk form

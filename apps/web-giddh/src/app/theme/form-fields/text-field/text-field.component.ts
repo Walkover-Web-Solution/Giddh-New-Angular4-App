@@ -27,7 +27,6 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
     @Input() public min: number = null;
     @Input() public max: number = null;
     @Input() public allowDecimalDigitsOnly: boolean = false;
-    @Input() public allowDigitsOnly: boolean = false;
     @Input() public cssClass: string = "";
     @Input() public cssStyle: string = "";
     /** Taking placeholder as input */
@@ -90,10 +89,19 @@ export class TextFieldComponent implements OnInit, OnChanges, OnDestroy, Control
      */
     public ngOnChanges(changes: SimpleChanges): void {
         if (this.autoFocus) {
-            setTimeout(() => {
-                this.textField?.nativeElement?.focus();
-            }, 20);
+           this.inputFocus();
         }
+    }
+
+    /**
+     * Focus on the text field
+     *
+     * @memberof TextFieldComponent
+     */
+    public inputFocus(): void {
+        setTimeout(() => {
+            this.textField?.nativeElement?.focus();
+        }, 50);
     }
 
     /**

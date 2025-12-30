@@ -15,20 +15,34 @@
             <div class="p-3">
                 <form class="create-acc-form d-flex flex-column row-gap-15" [formGroup]="bulkAddAccountForm">
                     <ng-container formArrayName="customFields">
-                        <div class="d-grid column-gap-1 pb-2" [ngClass]="data?.foreignCurrency ? 'grid-columns-4' : 'grid-columns-3'">
+                        <div
+                            class="d-grid column-gap-1 pb-2"
+                            [ngClass]="data?.foreignCurrency ? 'grid-columns-4' : 'grid-columns-3'"
+                        >
                             <p class="font-weight-semibold w100">{{ commonLocaleData?.app_branch_name }}</p>
                             <p class="font-weight-semibold text-left" *ngIf="data?.foreignCurrency">
                                 {{ localeData?.foreign_opening_balance }}
                             </p>
                             <p class="font-weight-semibold text-left">{{ localeData?.opening_balance }}</p>
-                            <p class="font-weight-semibold text-right justify-self-end">{{ localeData?.opening_balance_type }}</p>
+                            <p class="font-weight-semibold text-right justify-self-end">
+                                {{ localeData?.opening_balance_type }}
+                            </p>
                         </div>
                         <ng-container
-                            *ngFor="let item of bulkAddAccountForm.get('customFields')['controls']; let bulkIndex = index"
+                            *ngFor="
+                                let item of bulkAddAccountForm.get('customFields')['controls'];
+                                let bulkIndex = index
+                            "
                             [formGroupName]="bulkIndex"
                         >
-                            <div class="d-grid column-gap-1" [ngClass]="data?.foreignCurrency ? 'grid-columns-4' : 'grid-columns-3'">
-                                <p matTooltip="{{ branches[bulkIndex]?.name }}" class="word-wrap-dots text-ellipsis w100">
+                            <div
+                                class="d-grid column-gap-1"
+                                [ngClass]="data?.foreignCurrency ? 'grid-columns-4' : 'grid-columns-3'"
+                            >
+                                <p
+                                    matTooltip="{{ branches[bulkIndex]?.name }}"
+                                    class="word-wrap-dots text-ellipsis w100"
+                                >
                                     {{ branches[bulkIndex]?.name }}
                                 </p>
                                 <div *ngIf="data?.foreignCurrency" class="bulk-input-width">
@@ -36,7 +50,7 @@
                                         type="number"
                                         min="0"
                                         class="form-control text-right mr-1 m-auto"
-                                        digitsOnlyDirective
+                                        decimalDigitsDirective
                                         formControlName="foreignOpeningBalance"
                                         [placeholder]="'0.00'"
                                     />
@@ -46,7 +60,7 @@
                                         type="number"
                                         min="0"
                                         class="form-control text-right mr-1"
-                                        digitsOnlyDirective
+                                        decimalDigitsDirective
                                         formControlName="openingBalance"
                                         [placeholder]="'0.00'"
                                     />

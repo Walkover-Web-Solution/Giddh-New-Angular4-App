@@ -683,7 +683,7 @@
                                                             [readonly]="selectTableRowIndex !== i"
                                                             [matTooltip]="row.get('hsnNo').value"
                                                             matTooltipPosition="above"
-                                                            [allowDigitsOnly]="true"
+                                                            [allowDecimalDigitsOnly]="true"
                                                         >
                                                         </text-field>
                                                     </div>
@@ -700,7 +700,7 @@
                                                             formControlName="sacNo"
                                                             [readonly]="selectTableRowIndex !== i"
                                                             [matTooltip]="row.get('sacNo').value"
-                                                            [allowDigitsOnly]="true"
+                                                            [allowDecimalDigitsOnly]="true"
                                                             matTooltipPosition="above"
                                                         >
                                                         </text-field>
@@ -1361,7 +1361,9 @@
                                                             [showLabel]="false"
                                                             [options]="discountsList"
                                                             [openDropdown]="selectTableRowName === 'discountName'"
-                                                            (selectedOption)="row.get('discountName').patchValue($event.label)"
+                                                            (selectedOption)="
+                                                                row.get('discountName').patchValue($event.label)
+                                                            "
                                                             (onClear)="row.get('discountName').patchValue('')"
                                                         ></reactive-dropdown-field>
                                                     </div>
@@ -1464,6 +1466,7 @@
                                 [hidePageSize]="false"
                                 (page)="handlePageEvent($event)"
                             ></mat-paginator>
+                            <section class="mr-b8"></section>
                         </div>
                     </ng-container>
                     <div *ngIf="!(!noDataFound || searchString) && !isLoading" class="no-data mb-5">

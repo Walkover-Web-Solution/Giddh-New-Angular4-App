@@ -46,6 +46,7 @@
                                     <div class="row row-gap-1">
                                         <div class="col-sm-6 col-lg-6">
                                             <input-field
+                                                appEnterNext
                                                 [name]="'productName'"
                                                 [placeholder]="
                                                     stockForm.type === 'PRODUCT'
@@ -55,6 +56,7 @@
                                                         : localeData?.enter_fixed
                                                 "
                                                 [type]="'text'"
+                                                [autoFocus]="true"
                                                 [(ngModel)]="stockForm.name"
                                                 (ngModelChange)="checkSpacingValidation(stockForm.name)"
                                                 [autocomplete]="'off'"
@@ -64,6 +66,7 @@
                                         </div>
                                         <div class="col-sm-6 col-lg-6">
                                             <input-field
+                                                appEnterNext
                                                 [name]="'uniqueName'"
                                                 [placeholder]="commonLocaleData?.app_unique_name"
                                                 [type]="'text'"
@@ -75,6 +78,7 @@
                                         </div>
                                         <div class="col-sm-6 col-lg-6">
                                             <reactive-dropdown-field
+                                                appEnterNext
                                                 [name]="'stockUnitGroup'"
                                                 [placeholder]="localeData?.select_unit_group"
                                                 [label]="localeData?.unit_group"
@@ -94,6 +98,7 @@
                                         </div>
                                         <div class="col-sm-6 col-lg-6">
                                             <reactive-dropdown-field
+                                                appEnterNext
                                                 [name]="'stockUnitCode'"
                                                 [placeholder]="localeData?.select_unit"
                                                 [label]="commonLocaleData?.app_unit"
@@ -143,6 +148,7 @@
                                             class="col-sm-6 col-lg-6 under-group-field-button-wrapper position-relative"
                                         >
                                             <reactive-dropdown-field
+                                                appEnterNext
                                                 class="w-100"
                                                 [name]="'stockGroupUniqueName'"
                                                 [placeholder]="commonLocaleData?.app_select_group"
@@ -173,12 +179,15 @@
                                     <div class="row">
                                         <div class="col-6">
                                             <reactive-dropdown-field
+                                                appEnterNext
                                                 [name]="'discounts'"
                                                 [placeholder]="localeData?.select_discounts"
                                                 [label]="commonLocaleData?.app_discount"
                                                 [options]="discountsList"
                                                 [(ngModel)]="discountValue"
-                                                (selectedOption)="stockForm.discounts = [$event?.value]; discountValue = $event?.value"
+                                                (selectedOption)="
+                                                    stockForm.discounts = [$event?.value]; discountValue = $event?.value
+                                                "
                                                 (onClear)="stockForm.discounts = []; discountValue = ''"
                                                 [labelValue]="stockForm.discountLabel ?? ''"
                                             >
@@ -191,8 +200,15 @@
                                                         class="variant-attachment mat-form-field-border d-flex align-items-center column-gap-1 p-2 position-relative"
                                                         [matTooltip]="localeData?.no_file_chosen"
                                                         matTooltipPosition="right"
+                                                        tabindex="0"
+                                                        role="button"
+                                                        [attr.aria-label]="localeData?.add_image"
+                                                        cdkMonitorElementFocus
+                                                        (keydown.enter)="$event.preventDefault(); triggerFileInput()"
+                                                        (keydown.space)="$event.preventDefault(); triggerFileInput()"
                                                     >
                                                         <input
+                                                            #fileInput
                                                             accept="image/png, image/jpeg"
                                                             [ngClass]="{
                                                                 'cursor-disable': uploadAttachmentInProgress$ | async
@@ -266,7 +282,7 @@
                                 class="mat-tab-them account-inventory-other-tab"
                             >
                                 <mat-tab [label]="localeData?.linked_account">
-                                    <div class="tab-container-new">
+                                    <div class="tab-container-new px-1">
                                         <div class="sales-purchase-details">
                                             <div class="row">
                                                 <div class="col-12 col-lg-12">
@@ -301,10 +317,10 @@
                                                                                     )
                                                                                 "
                                                                             >
-                                                                                <mat-radio-button [value]="true">
+                                                                                <mat-radio-button [value]="true" appEnterNext>
                                                                                     {{ localeData?.inclusive }}
                                                                                 </mat-radio-button>
-                                                                                <mat-radio-button [value]="false">
+                                                                                <mat-radio-button [value]="false" appEnterNext>
                                                                                     {{ localeData?.exclusive }}
                                                                                 </mat-radio-button>
                                                                             </mat-radio-group>
@@ -312,6 +328,7 @@
                                                                     </div>
                                                                     <div class="col-sm-6 col-lg-12 pt-3">
                                                                         <reactive-dropdown-field
+                                                                            appEnterNext
                                                                             [name]="'fixedAssetsAccounts'"
                                                                             [placeholder]="localeData?.linked_accounts"
                                                                             [options]="fixedAssetsAccounts"
@@ -354,6 +371,7 @@
                                                                                 }"
                                                                             >
                                                                                 <input-field
+                                                                                    appEnterNext
                                                                                     [cssClass]="
                                                                                         'text-right unit-amount'
                                                                                     "
@@ -384,6 +402,7 @@
                                                                                 }"
                                                                             >
                                                                                 <reactive-dropdown-field
+                                                                                    appEnterNext
                                                                                     [cssClass]="
                                                                                         (!variantFixedAssetsUnitRate?.stockUnitName &&
                                                                                         checkUnitRateValidation[0]
@@ -472,10 +491,10 @@
                                                                                         )
                                                                                     "
                                                                                 >
-                                                                                    <mat-radio-button [value]="true">
+                                                                                    <mat-radio-button [value]="true" appEnterNext>
                                                                                         {{ localeData?.inclusive }}
                                                                                     </mat-radio-button>
-                                                                                    <mat-radio-button [value]="false">
+                                                                                    <mat-radio-button [value]="false" appEnterNext>
                                                                                         {{ localeData?.exclusive }}
                                                                                     </mat-radio-button>
                                                                                 </mat-radio-group>
@@ -483,6 +502,7 @@
                                                                         </div>
                                                                         <div class="col-12 pt-3 which-tab">
                                                                             <reactive-dropdown-field
+                                                                                appEnterNext
                                                                                 [name]="'purchaseAccount'"
                                                                                 [placeholder]="
                                                                                     localeData?.linked_purchase_accounts
@@ -527,6 +547,7 @@
                                                                                     }"
                                                                                 >
                                                                                     <input-field
+                                                                                        appEnterNext
                                                                                         [cssClass]="
                                                                                             'text-right unit-amount'
                                                                                         "
@@ -558,6 +579,7 @@
                                                                                     }"
                                                                                 >
                                                                                     <reactive-dropdown-field
+                                                                                        appEnterNext
                                                                                         [cssClass]="'unit-rates'"
                                                                                         [name]="
                                                                                             'variantPurchaseUnit' + j
@@ -646,10 +668,10 @@
                                                                                         )
                                                                                     "
                                                                                 >
-                                                                                    <mat-radio-button [value]="true">
+                                                                                    <mat-radio-button [value]="true" appEnterNext>
                                                                                         {{ localeData?.inclusive }}
                                                                                     </mat-radio-button>
-                                                                                    <mat-radio-button [value]="false">
+                                                                                    <mat-radio-button [value]="false" appEnterNext>
                                                                                         {{ localeData?.exclusive }}
                                                                                     </mat-radio-button>
                                                                                 </mat-radio-group>
@@ -657,6 +679,7 @@
                                                                         </div>
                                                                         <div class="col-12 pt-3">
                                                                             <reactive-dropdown-field
+                                                                                appEnterNext
                                                                                 [name]="'salesAccount'"
                                                                                 [placeholder]="
                                                                                     localeData?.linked_sales_accounts
@@ -698,6 +721,7 @@
                                                                                     }"
                                                                                 >
                                                                                     <input-field
+                                                                                        appEnterNext
                                                                                         [cssClass]="'text-right'"
                                                                                         [type]="'text'"
                                                                                         [name]="
@@ -725,6 +749,7 @@
                                                                                     }"
                                                                                 >
                                                                                     <reactive-dropdown-field
+                                                                                        appEnterNext
                                                                                         [name]="'variantSalesUnit' + j"
                                                                                         [placeholder]="
                                                                                             commonLocaleData?.app_unit
@@ -791,11 +816,24 @@
                                     </div>
                                 </mat-tab>
                                 <mat-tab [label]="localeData?.variant">
-                                    <div class="tab-container-new inventory-tab">
+                                    <div class="tab-container-new inventory-tab px-1">
                                         <a
                                             href="javascript:;"
                                             class="option-color"
                                             *ngIf="!isVariantAvailable"
+                                            role="button"
+                                            tabindex="0"
+                                            cdkMonitorElementFocus
+                                            (keydown.enter)="
+                                                $event.preventDefault();
+                                                isVariantAvailable = !isVariantAvailable;
+                                                !stockForm.options?.length ? addVariantOption() : ''
+                                            "
+                                            (keydown.space)="
+                                                $event.preventDefault();
+                                                isVariantAvailable = !isVariantAvailable;
+                                                !stockForm.options?.length ? addVariantOption() : ''
+                                            "
                                             (click)="
                                                 isVariantAvailable = !isVariantAvailable;
                                                 !stockForm.options?.length ? addVariantOption() : ''
@@ -820,6 +858,7 @@
                                                                         <div class="col-lg-4 option-delete pr-0 mt-2">
                                                                             <div class="w-100">
                                                                                 <input-field
+                                                                                    appEnterNext
                                                                                     [placeholder]="
                                                                                         localeData?.option_name
                                                                                     "
@@ -864,6 +903,7 @@
                                                                         <div class="col-lg-4 option-delete pr-0">
                                                                             <div class="w-100 option-value-field">
                                                                                 <text-field
+                                                                                    appEnterNext
                                                                                     [name]="
                                                                                         'option-value-' + i + '-' + j
                                                                                     "
@@ -1065,8 +1105,23 @@
                                                                                     localeData?.no_file_chosen
                                                                                 "
                                                                                 matTooltipPosition="right"
+                                                                                tabindex="0"
+                                                                                role="button"
+                                                                                [attr.aria-label]="
+                                                                                    localeData?.add_image
+                                                                                "
+                                                                                cdkMonitorElementFocus
+                                                                                (keydown.enter)="
+                                                                                    $event.preventDefault();
+                                                                                    triggerFileInput()
+                                                                                "
+                                                                                (keydown.space)="
+                                                                                    $event.preventDefault();
+                                                                                    triggerFileInput()
+                                                                                "
                                                                             >
                                                                                 <input
+                                                                                    #fileInput
                                                                                     accept="image/png, image/jpeg"
                                                                                     [ngClass]="{
                                                                                         'cursor-disable':
@@ -1127,7 +1182,7 @@
                                                                                         )
                                                                                     "
                                                                                     [src]="variant.attachmentName"
-                                                                                    alt="Variant Image{{ index }}"
+                                                                                    alt="Variant Image{{ i }}"
                                                                                 />
                                                                                 <button
                                                                                     mat-icon-button
@@ -1146,6 +1201,7 @@
                                                                     </td>
                                                                     <td class="unit-name">
                                                                         <select-field
+                                                                            appEnterNext
                                                                             [name]="'variantUnit' + i"
                                                                             [placeholder]="commonLocaleData?.app_unit"
                                                                             [options]="stockUnits"
@@ -1162,6 +1218,7 @@
                                                                     </td>
                                                                     <td class="opening-qty">
                                                                         <text-field
+                                                                            appEnterNext
                                                                             [cssClass]="'text-right form-control'"
                                                                             [placeholder]="'0.00'"
                                                                             [name]="'variantOpeningQuantity' + i"
@@ -1175,6 +1232,7 @@
                                                                     </td>
                                                                     <td class="opening-amount">
                                                                         <text-field
+                                                                            appEnterNext
                                                                             [cssClass]="'text-right form-control'"
                                                                             [placeholder]="'0.00'"
                                                                             [name]="'variantOpeningAmount' + i"
@@ -1191,6 +1249,7 @@
                                                                     </td>
                                                                     <td class="sku-code">
                                                                         <text-field
+                                                                            appEnterNext
                                                                             [cssClass]="'text-right form-control'"
                                                                             [placeholder]="'-'"
                                                                             [name]="'variantSkuCode' + i"
@@ -1214,6 +1273,7 @@
                                                                         >
                                                                             <div class="sales-purchase-wrapper d-flex">
                                                                                 <text-field
+                                                                                    appEnterNext
                                                                                     [cssClass]="
                                                                                         'text-right unit-amount form-control'
                                                                                     "
@@ -1234,6 +1294,7 @@
                                                                                 >
                                                                                 </text-field>
                                                                                 <select-field
+                                                                                    appEnterNext
                                                                                     [name]="
                                                                                         'variantPurchaseUnit' +
                                                                                         i +
@@ -1281,6 +1342,7 @@
                                                                         >
                                                                             <div class="sales-purchase-wrapper d-flex">
                                                                                 <text-field
+                                                                                    appEnterNext
                                                                                     [cssClass]="
                                                                                         'text-right unit-amount form-control'
                                                                                     "
@@ -1301,6 +1363,7 @@
                                                                                 >
                                                                                 </text-field>
                                                                                 <select-field
+                                                                                    appEnterNext
                                                                                     [name]="
                                                                                         'variantSalesUnit' + i + '_' + j
                                                                                     "
@@ -1344,6 +1407,7 @@
                                                                         >
                                                                             <div class="sales-purchase-wrapper d-flex">
                                                                                 <text-field
+                                                                                    appEnterNext
                                                                                     [cssClass]="
                                                                                         'text-right unit-amount form-control'
                                                                                     "
@@ -1364,6 +1428,7 @@
                                                                                 >
                                                                                 </text-field>
                                                                                 <select-field
+                                                                                    appEnterNext
                                                                                     [name]="
                                                                                         'variantFixedAssetsUnit' +
                                                                                         j +
@@ -1407,6 +1472,7 @@
                                                                         >
                                                                             <div class="sales-purchase-wrapper">
                                                                                 <text-field
+                                                                                    appEnterNext
                                                                                     class="d-block w-100 text-left"
                                                                                     *ngIf="
                                                                                         customField.fieldType?.type ===
@@ -1438,6 +1504,7 @@
                                                                                 >
                                                                                 </text-field>
                                                                                 <text-field
+                                                                                    appEnterNext
                                                                                     *ngIf="
                                                                                         customField.fieldType?.type ===
                                                                                         availableFieldTypes.Number
@@ -1477,10 +1544,10 @@
                                                                                         availableFieldTypes.Boolean
                                                                                     "
                                                                                 >
-                                                                                    <mat-radio-button value="true">
+                                                                                    <mat-radio-button value="true" appEnterNext>
                                                                                         {{ commonLocaleData?.app_true }}
                                                                                     </mat-radio-button>
-                                                                                    <mat-radio-button value="false">
+                                                                                    <mat-radio-button value="false" appEnterNext>
                                                                                         {{
                                                                                             commonLocaleData?.app_false
                                                                                         }}
@@ -1509,36 +1576,40 @@
                                     </div>
                                 </mat-tab>
                                 <mat-tab [label]="localeData?.manufacturing">
-                                    <div class="pl-4 pt-3" *ngIf="!queryParams?.stockUniqueName">
-                                        <button
-                                            aria-label="recipe btn"
-                                            mat-raised-button
-                                            color="primary"
-                                            (click)="createStock(true)"
+                                    <div class="px-1">
+                                        <div class="pl-4 pt-3" *ngIf="!queryParams?.stockUniqueName">
+                                            <button
+                                                aria-label="recipe btn"
+                                                mat-raised-button
+                                                color="primary"
+                                                (click)="createStock(true)"
+                                            >
+                                                {{ localeData?.save_stock_for_recipe }}
+                                            </button>
+                                        </div>
+                                        <div
+                                            class="d-flex align-items-center column-gap-1 pl-4 mt-3"
+                                            [ngClass]="queryParams?.stockUniqueName ? 'mb-2' : 'mb-5'"
                                         >
-                                            {{ localeData?.save_stock_for_recipe }}
-                                        </button>
+                                            <mat-slide-toggle
+                                                class="mb-1"
+                                                color="primary"
+                                                name="runtimeManufacturing"
+                                                [(ngModel)]="stockForm.runtimeManufacturing"
+                                                aria-label="runtime manufacturing"
+                                            >
+                                            </mat-slide-toggle>
+                                            <span>{{
+                                                commonLocaleData?.app_allow_manufacturing_sales_transactions
+                                            }}</span>
+                                        </div>
+                                        <create-recipe
+                                            #createRecipe
+                                            *ngIf="queryParams?.stockUniqueName && stockForm?.uniqueName"
+                                            [stock]="stockForm"
+                                            [variants]="stockForm.variants"
+                                        ></create-recipe>
                                     </div>
-                                    <div
-                                        class="d-flex align-items-center column-gap-1 pl-4 mt-3"
-                                        [ngClass]="queryParams?.stockUniqueName ? 'mb-2' : 'mb-5'"
-                                    >
-                                        <mat-slide-toggle
-                                            class="mb-1"
-                                            color="primary"
-                                            name="runtimeManufacturing"
-                                            [(ngModel)]="stockForm.runtimeManufacturing"
-                                            aria-label="runtime manufacturing"
-                                        >
-                                        </mat-slide-toggle>
-                                        <span>{{ commonLocaleData?.app_allow_manufacturing_sales_transactions }}</span>
-                                    </div>
-                                    <create-recipe
-                                        #createRecipe
-                                        *ngIf="queryParams?.stockUniqueName && stockForm?.uniqueName"
-                                        [stock]="stockForm"
-                                        [variants]="stockForm.variants"
-                                    ></create-recipe>
                                 </mat-tab>
                                 <mat-tab [label]="localeData?.other">
                                     <div class="tab-container-new px-3">
@@ -1550,36 +1621,39 @@
                                                         name="hsn_sac"
                                                         [(ngModel)]="hsnSac"
                                                     >
-                                                        <mat-radio-button value="HSN">
+                                                        <mat-radio-button value="HSN" appEnterNext>
                                                             {{ commonLocaleData?.app_hsn }}
                                                         </mat-radio-button>
-                                                        <mat-radio-button value="SAC">
+                                                        <mat-radio-button value="SAC" appEnterNext>
                                                             {{ commonLocaleData?.app_sac }}
                                                         </mat-radio-button>
                                                     </mat-radio-group>
                                                 </div>
                                                 <div class="col-sm-6 col-lg-3">
                                                     <input-field
+                                                        appEnterNext
                                                         *ngIf="hsnSac === 'HSN'"
                                                         [name]="'hsnNumber'"
                                                         [type]="'number'"
                                                         [placeholder]="localeData?.enter_hsn_code"
                                                         [(ngModel)]="stockForm.hsnNumber"
-                                                        [allowDigitsOnly]="true"
+                                                        [allowDecimalDigitsOnly]="true"
                                                     >
                                                     </input-field>
                                                     <input-field
+                                                        appEnterNext
                                                         *ngIf="hsnSac === 'SAC'"
                                                         [name]="'sacNumber'"
                                                         [type]="'number'"
                                                         [placeholder]="localeData?.enter_sac_code"
                                                         [(ngModel)]="stockForm.sacNumber"
-                                                        [allowDigitsOnly]="true"
+                                                        [allowDecimalDigitsOnly]="true"
                                                     >
                                                     </input-field>
                                                 </div>
                                                 <div class="col-sm-6 col-lg-3" *ngIf="!isVariantAvailable">
                                                     <input-field
+                                                        appEnterNext
                                                         [name]="'skuCode'"
                                                         [type]="'text'"
                                                         [placeholder]="commonLocaleData?.app_sku_code"
@@ -1606,6 +1680,7 @@
                                                         ></i>
                                                     </span>
                                                     <input-field
+                                                        appEnterNext
                                                         *ngIf="inlineEditCustomField === 1"
                                                         [name]="'customField1Heading'"
                                                         [placeholder]="localeData?.custom_field"
@@ -1628,6 +1703,7 @@
                                                 <div class="col-sm-6 col-lg-3">
                                                     <div>
                                                         <input-field
+                                                            appEnterNext
                                                             [name]="'customField1Value'"
                                                             [placeholder]="localeData?.custom_field"
                                                             [type]="'text'"
@@ -1640,6 +1716,7 @@
                                                 <ng-container *ngIf="!isVariantAvailable">
                                                     <div class="col-sm-6 col-lg-3">
                                                         <input-field
+                                                            appEnterNext
                                                             [name]="'openingQuantity'"
                                                             [type]="'number'"
                                                             [placeholder]="localeData?.opening_quantity"
@@ -1652,6 +1729,7 @@
                                                     </div>
                                                     <div class="col-sm-6 col-lg-3">
                                                         <input-field
+                                                            appEnterNext
                                                             [name]="'openingAmount'"
                                                             [type]="'text'"
                                                             [placeholder]="localeData?.opening_amount"
@@ -1667,6 +1745,7 @@
                                                 </ng-container>
                                                 <div class="col-sm-6 col-lg-3" *ngIf="isVariantAvailable">
                                                     <input-field
+                                                        appEnterNext
                                                         [name]="'skuCode'"
                                                         [type]="'text'"
                                                         [placeholder]="commonLocaleData?.app_sku_code"
@@ -1693,6 +1772,7 @@
                                                         ></i>
                                                     </span>
                                                     <input-field
+                                                        appEnterNext
                                                         *ngIf="inlineEditCustomField === 2"
                                                         [name]="'customField2Heading'"
                                                         [placeholder]="localeData?.custom_field"
@@ -1714,6 +1794,7 @@
                                                 </div>
                                                 <div class="col-sm-6 col-lg-3">
                                                     <input-field
+                                                        appEnterNext
                                                         [name]="'customField2Value'"
                                                         [placeholder]="localeData?.custom_field"
                                                         [type]="'text'"
@@ -1746,6 +1827,7 @@
                                                     </div>
                                                     <div class="col-sm-6 col-lg-3 mt-4">
                                                         <text-field
+                                                            appEnterNext
                                                             *ngIf="
                                                                 customField.fieldType?.type ===
                                                                     availableFieldTypes.String ||
@@ -1768,6 +1850,7 @@
                                                         >
                                                         </text-field>
                                                         <text-field
+                                                            appEnterNext
                                                             *ngIf="
                                                                 customField.fieldType?.type ===
                                                                 availableFieldTypes.Number
@@ -1798,10 +1881,10 @@
                                                                 availableFieldTypes.Boolean
                                                             "
                                                         >
-                                                            <mat-radio-button value="true">
+                                                            <mat-radio-button value="true" appEnterNext>
                                                                 {{ commonLocaleData?.app_true }}
                                                             </mat-radio-button>
-                                                            <mat-radio-button value="false">
+                                                            <mat-radio-button value="false" appEnterNext>
                                                                 {{ commonLocaleData?.app_false }}
                                                             </mat-radio-button>
                                                         </mat-radio-group>
@@ -1812,7 +1895,7 @@
                                     </div>
                                 </mat-tab>
                                 <mat-tab *ngIf="false" [label]="localeData?.variant">
-                                    <div class="tab-container-new">
+                                    <div class="tab-container-new px-1">
                                         <div class="mb-4 variant-form">
                                             <div class="row">
                                                 <div class="col-xl-12">
@@ -1821,6 +1904,7 @@
                                                             <label> {{ localeData?.variant_1 }} </label>
                                                             <!-- vaiant will be auto fill and readonly view -->
                                                             <input-field
+                                                                appEnterNext
                                                                 type="text"
                                                                 id="variant-name"
                                                                 [placeholder]="localeData?.variant_name"
@@ -1831,6 +1915,7 @@
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> {{ commonLocaleData?.app_sku }} </label>
                                                             <input-field
+                                                                appEnterNext
                                                                 type="text"
                                                                 id="variant-sku"
                                                                 [placeholder]="commonLocaleData?.app_sku"
@@ -1839,6 +1924,7 @@
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> {{ localeData?.opening_balance }} </label>
                                                             <input-field
+                                                                appEnterNext
                                                                 type="text"
                                                                 id="variant-opening-balance"
                                                                 [placeholder]="localeData?.enter_amount"
@@ -1848,6 +1934,7 @@
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> {{ localeData?.opening_quantity }} </label>
                                                             <input-field
+                                                                appEnterNext
                                                                 type="text"
                                                                 id="variant-qty"
                                                                 [placeholder]="localeData?.enter_qty"
@@ -1857,6 +1944,7 @@
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> {{ commonLocaleData?.app_rate }} </label>
                                                             <input-field
+                                                                appEnterNext
                                                                 type="text"
                                                                 id="variant-rate"
                                                                 [placeholder]="localeData?.enter_rate"
@@ -1878,7 +1966,7 @@
                                     </div>
                                 </mat-tab>
                                 <mat-tab *ngIf="false" label="Addon">
-                                    <div class="tab-container-new">
+                                    <div class="tab-container-new px-1">
                                         <div class="mb-4 addon-form">
                                             <div class="row">
                                                 <div class="col-xl-12">
@@ -1886,6 +1974,7 @@
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> {{ localeData?.add_item }} </label>
                                                             <input-field
+                                                                appEnterNext
                                                                 type="text"
                                                                 id="addon-item"
                                                                 [placeholder]="localeData?.add_item"
@@ -1895,6 +1984,7 @@
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> {{ localeData?.quantity }} </label>
                                                             <input-field
+                                                                appEnterNext
                                                                 type="text"
                                                                 id="addon-qty"
                                                                 [placeholder]="localeData?.enter_qty"
@@ -1904,6 +1994,7 @@
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> {{ commonLocaleData?.app_sku }} </label>
                                                             <input-field
+                                                                appEnterNext
                                                                 type="text"
                                                                 id="addon-sku"
                                                                 [placeholder]="localeData?.enter_sku_number"
@@ -1913,6 +2004,7 @@
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> {{ commonLocaleData?.app_unit }} </label>
                                                             <input-field
+                                                                appEnterNext
                                                                 type="text"
                                                                 id="addon-unit"
                                                                 [placeholder]="commonLocaleData?.app_unit_cm_mm"
@@ -1922,6 +2014,7 @@
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> {{ commonLocaleData?.app_rate }} </label>
                                                             <input-field
+                                                                appEnterNext
                                                                 type="text"
                                                                 id="addon-rate"
                                                                 [placeholder]="localeData?.enter_rate"
@@ -1932,6 +2025,7 @@
                                                             <label> {{ localeData?.avail_on_variant }} </label>
                                                             <!-- All available variant list show with checkbox -->
                                                             <reactive-dropdown-field
+                                                                appEnterNext
                                                                 placeholder=""
                                                                 id="addon-available"
                                                             ></reactive-dropdown-field>
@@ -1952,7 +2046,7 @@
                                     </div>
                                 </mat-tab>
                                 <mat-tab *ngIf="false" label="Bill of Material">
-                                    <div class="tab-container-new">
+                                    <div class="tab-container-new px-1">
                                         <div class="mb-4">
                                             <div class="final-product-recipe">
                                                 <div class="row align-items-center">
@@ -1963,6 +2057,7 @@
                                                                     <label> {{ commonLocaleData?.app_sku }} </label>
                                                                     <!-- All variant list will show in dropdown -->
                                                                     <input-field
+                                                                        appEnterNext
                                                                         type="text"
                                                                         id="variant-sku-number"
                                                                         [placeholder]="localeData?.enter_sku_number"
@@ -1974,6 +2069,7 @@
                                                                     <label> {{ localeData?.variant_name }}</label>
                                                                     <!-- All variant list will show in dropdown -->
                                                                     <reactive-dropdown-field
+                                                                        appEnterNext
                                                                         placeholder=""
                                                                         id="variant-name"
                                                                     >
@@ -1996,6 +2092,7 @@
                                                                 <div class="width-30-percent">
                                                                     <label> {{ localeData?.final_product_1 }} </label>
                                                                     <input-field
+                                                                        appEnterNext
                                                                         type="text"
                                                                         id="final-product-1"
                                                                         [placeholder]="localeData?.product_1"
@@ -2006,6 +2103,7 @@
                                                                 <div class="width-30-percent" hidden>
                                                                     <label> {{ localeData?.final_product_2 }} </label>
                                                                     <input-field
+                                                                        appEnterNext
                                                                         type="text"
                                                                         id="final-product-2"
                                                                         [placeholder]="localeData?.product_2"
@@ -2015,6 +2113,7 @@
                                                                 <div class="width-30-percent">
                                                                     <label> {{ localeData?.output_qty }} </label>
                                                                     <input-field
+                                                                        appEnterNext
                                                                         type="text"
                                                                         id="recipe-output-qty"
                                                                         [placeholder]="localeData?.enter_qty"
@@ -2024,6 +2123,7 @@
                                                                 <div class="width-30-percent">
                                                                     <label> {{ localeData?.output_unit }} </label>
                                                                     <input-field
+                                                                        appEnterNext
                                                                         type="text"
                                                                         id="recipe-output-unit"
                                                                         [placeholder]="commonLocaleData?.app_unit_cm_mm"
@@ -2055,6 +2155,7 @@
                                                                 <div class="width-30-percent">
                                                                     <label> {{ localeData?.attribute }} </label>
                                                                     <input-field
+                                                                        appEnterNext
                                                                         type="text"
                                                                         id="recipe-input-attribute"
                                                                         [placeholder]="localeData?.add_item"
@@ -2064,6 +2165,7 @@
                                                                 <div class="width-30-percent">
                                                                     <label> {{ localeData?.input_qty }} </label>
                                                                     <input-field
+                                                                        appEnterNext
                                                                         type="text"
                                                                         id="recipe-input-qty"
                                                                         [placeholder]="localeData?.enter_qty"
@@ -2073,6 +2175,7 @@
                                                                 <div class="width-30-percent">
                                                                     <label>{{ localeData?.input_unit }} </label>
                                                                     <input-field
+                                                                        appEnterNext
                                                                         type="text"
                                                                         id="recipe-input-unit"
                                                                         [placeholder]="commonLocaleData?.app_unit_cm_mm"
@@ -2121,6 +2224,7 @@
                                                     >
                                                         <div class="width-30-percent">
                                                             <input-field
+                                                                appEnterNext
                                                                 type="text"
                                                                 id="expense-assets"
                                                                 [placeholder]="localeData?.liability_assets"
@@ -2130,6 +2234,7 @@
                                                         <span class="to-span"> {{ localeData?.to }} </span>
                                                         <div class="width-30-percent">
                                                             <input-field
+                                                                appEnterNext
                                                                 type="text"
                                                                 id="expense-account"
                                                                 [placeholder]="localeData?.expense_acc"
@@ -2137,6 +2242,7 @@
                                                         </div>
                                                         <div class="width-30-percent">
                                                             <input-field
+                                                                appEnterNext
                                                                 id="expense-amount"
                                                                 type="text"
                                                                 [placeholder]="commonLocaleData?.app_amount"
@@ -2189,6 +2295,7 @@
                                             </div>
                                             <div class="col-sm-12 col-md-6 col-lg-6">
                                                 <input-field
+                                                    appEnterNext
                                                     id="combo-name"
                                                     type="text"
                                                     [placeholder]="localeData?.enter_name"
@@ -2204,6 +2311,7 @@
                                             </div>
                                             <div class="col-sm-12 col-md-6 col-lg-6">
                                                 <reactive-dropdown-field
+                                                    appEnterNext
                                                     id="select-combo-unit"
                                                     [placeholder]="localeData?.select_unit"
                                                 ></reactive-dropdown-field>
@@ -2218,6 +2326,7 @@
                                             </div>
                                             <div class="col-sm-12 col-md-6 col-lg-6">
                                                 <reactive-dropdown-field
+                                                    appEnterNext
                                                     id="select-under-group"
                                                     [placeholder]="commonLocaleData?.app_select_group"
                                                 ></reactive-dropdown-field>
@@ -2232,6 +2341,7 @@
                                             </div>
                                             <div class="col-sm-12 col-md-6 col-lg-6">
                                                 <input-field
+                                                    appEnterNext
                                                     id="combo-unique-name"
                                                     type="text"
                                                     [placeholder]="commonLocaleData?.app_unique_name_placeholder"
@@ -2245,10 +2355,11 @@
                                             </div>
                                             <div class="col-sm-12 col-md-6 col-lg-6">
                                                 <input-field
+                                                    appEnterNext
                                                     id="combo-unique-name"
                                                     [type]="'number'"
                                                     [placeholder]="localeData?.enter_hsn_code"
-                                                    [allowDigitsOnly]="true"
+                                                    [allowDecimalDigitsOnly]="true"
                                                 ></input-field>
                                             </div>
                                         </div>
@@ -2258,6 +2369,7 @@
                                             </div>
                                             <div class="col-sm-12 col-md-6 col-lg-6">
                                                 <input-field
+                                                    appEnterNext
                                                     id="combo-unique-name"
                                                     type="text"
                                                     [placeholder]="localeData?.enter_sku_code"
@@ -2291,6 +2403,7 @@
                                             </td>
                                             <td width="20%">
                                                 <input-field
+                                                    appEnterNext
                                                     id="select-product"
                                                     type="text"
                                                     [placeholder]="localeData?.product_service"
@@ -2298,6 +2411,7 @@
                                             </td>
                                             <td width="20%">
                                                 <input-field
+                                                    appEnterNext
                                                     id="unit-field"
                                                     type="text"
                                                     [placeholder]="commonLocaleData?.app_unit"
@@ -2305,6 +2419,7 @@
                                             </td>
                                             <td width="16%">
                                                 <input-field
+                                                    appEnterNext
                                                     id="value-field"
                                                     type="text"
                                                     value="2"
@@ -2337,6 +2452,7 @@
                                             </td>
                                             <td width="20%">
                                                 <input-field
+                                                    appEnterNext
                                                     id="select-product"
                                                     type="text"
                                                     [placeholder]="localeData?.product_service"
@@ -2344,6 +2460,7 @@
                                             </td>
                                             <td width="20%">
                                                 <input-field
+                                                    appEnterNext
                                                     id="unit-field"
                                                     type="text"
                                                     [placeholder]="commonLocaleData?.app_unit"
@@ -2351,6 +2468,7 @@
                                             </td>
                                             <td width="16%">
                                                 <input-field
+                                                    appEnterNext
                                                     id="value-field"
                                                     type="text"
                                                     value="2"
@@ -2417,6 +2535,7 @@
                                                             <div class="row add-new-field mb-4">
                                                                 <div class="col-sm-6 col-6">
                                                                     <input-field
+                                                                        appEnterNext
                                                                         type="text"
                                                                         id="select-unit"
                                                                         [placeholder]="localeData?.select_unit"
@@ -2425,6 +2544,7 @@
                                                                 </div>
                                                                 <div class="col-sm-6 col-6">
                                                                     <input-field
+                                                                        appEnterNext
                                                                         type="text"
                                                                         id="rate"
                                                                         [placeholder]="commonLocaleData?.app_rate"
@@ -2444,6 +2564,7 @@
                                                             <div class="row add-new-field">
                                                                 <div class="col-sm-6 col-6">
                                                                     <input-field
+                                                                        appEnterNext
                                                                         type="text"
                                                                         id="select-unit"
                                                                         [placeholder]="localeData?.select_unit"
@@ -2452,6 +2573,7 @@
                                                                 </div>
                                                                 <div class="col-sm-6 col-6">
                                                                     <input-field
+                                                                        appEnterNext
                                                                         type="text"
                                                                         id="rate"
                                                                         [placeholder]="commonLocaleData?.app_rate"
@@ -2500,6 +2622,7 @@
                                                             <div class="row add-new-field mb-4">
                                                                 <div class="col-sm-6 col-6">
                                                                     <input-field
+                                                                        appEnterNext
                                                                         type="text"
                                                                         id="sales-select-unit"
                                                                         [placeholder]="localeData?.select_unit"
@@ -2508,6 +2631,7 @@
                                                                 </div>
                                                                 <div class="col-sm-6 col-6">
                                                                     <input-field
+                                                                        appEnterNext
                                                                         type="text"
                                                                         id="sales-rate"
                                                                         [placeholder]="commonLocaleData?.app_rate"
@@ -2528,6 +2652,7 @@
                                                             <div class="row add-new-field">
                                                                 <div class="col-sm-6 col-6">
                                                                     <input-field
+                                                                        appEnterNext
                                                                         type="text"
                                                                         id="sales-select-unit"
                                                                         [placeholder]="localeData?.select_unit"
@@ -2536,6 +2661,7 @@
                                                                 </div>
                                                                 <div class="col-sm-6 col-6">
                                                                     <input-field
+                                                                        appEnterNext
                                                                         type="text"
                                                                         id="sales-rate"
                                                                         [placeholder]="commonLocaleData?.app_rate"
@@ -2582,6 +2708,7 @@
                                                                     </div>
                                                                     <div class="col-sm-6 col-lg-6">
                                                                         <input-field
+                                                                            appEnterNext
                                                                             id="inventory-account"
                                                                             type="text"
                                                                             value=""
@@ -2600,6 +2727,7 @@
                                                                     </div>
                                                                     <div class="col-sm-6 col-lg-6">
                                                                         <input-field
+                                                                            appEnterNext
                                                                             id="opening-quantity"
                                                                             type="text"
                                                                             value=""
@@ -2618,6 +2746,7 @@
                                                                     </div>
                                                                     <div class="col-sm-6 col-lg-6">
                                                                         <input-field
+                                                                            appEnterNext
                                                                             id="rate"
                                                                             type="text"
                                                                             value="Auto Calculate"
@@ -2640,6 +2769,7 @@
                                                                     </div>
                                                                     <div class="col-sm-6 col-lg-6">
                                                                         <input-field
+                                                                            appEnterNext
                                                                             id="low-stock-report"
                                                                             type="text"
                                                                             value=""
@@ -2658,6 +2788,7 @@
                                                                     </div>
                                                                     <div class="col-sm-6 col-lg-6">
                                                                         <input-field
+                                                                            appEnterNext
                                                                             id="amount"
                                                                             type="text"
                                                                             value="200"
@@ -2689,6 +2820,7 @@
                                                                     </div>
                                                                     <div class="col-sm-6 col-lg-6">
                                                                         <input-field
+                                                                            appEnterNext
                                                                             id="stock-output-qty"
                                                                             type="text"
                                                                             [placeholder]="localeData?.enter_qty"
@@ -2704,6 +2836,7 @@
                                                                     </div>
                                                                     <div class="col-sm-6 col-lg-6">
                                                                         <reactive-dropdown-field
+                                                                            appEnterNext
                                                                             id="stock-output-unit"
                                                                             [placeholder]="localeData?.enter_qty"
                                                                         >
@@ -2720,6 +2853,7 @@
                                                             </div>
                                                             <div class="col-lg-6 col-sm-6 col-xl-4">
                                                                 <input-field
+                                                                    appEnterNext
                                                                     type="text"
                                                                     [placeholder]="commonLocaleData?.app_stock_name"
                                                                 >
@@ -2730,11 +2864,13 @@
                                                             </div>
                                                             <div class="qty-unit col-sm-6 col-lg-6 col-xl-4">
                                                                 <input-field
+                                                                    appEnterNext
                                                                     type="text"
                                                                     id="enter-qty"
                                                                     [placeholder]="localeData?.enter_qty"
                                                                 ></input-field>
                                                                 <reactive-dropdown-field
+                                                                    appEnterNext
                                                                     id="select-stock-unit"
                                                                     class="ml-3"
                                                                     [placeholder]="localeData?.select_unit"
@@ -2783,6 +2919,7 @@
                                                             </div>
                                                             <div class="col-sm-6 col-lg-6 pl-0 mb-4">
                                                                 <reactive-dropdown-field
+                                                                    appEnterNext
                                                                     id="applicable-tax"
                                                                     [placeholder]="commonLocaleData?.app_select_tax"
                                                                 >
@@ -2803,6 +2940,7 @@
                                                                 <div class="row add-new-field mb-4">
                                                                     <div class="col-sm-6 col-6">
                                                                         <input-field
+                                                                            appEnterNext
                                                                             type="text"
                                                                             id="select-unit"
                                                                             [placeholder]="localeData?.select_unit"
@@ -2810,6 +2948,7 @@
                                                                     </div>
                                                                     <div class="col-sm-6 col-6">
                                                                         <input-field
+                                                                            appEnterNext
                                                                             type="text"
                                                                             id="rate"
                                                                             [placeholder]="commonLocaleData?.app_rate"
@@ -2829,6 +2968,7 @@
                                                                 <div class="row add-new-field">
                                                                     <div class="col-sm-6 col-6">
                                                                         <input-field
+                                                                            appEnterNext
                                                                             type="text"
                                                                             id="select-unit"
                                                                             [placeholder]="localeData?.select_unit"
@@ -2836,6 +2976,7 @@
                                                                     </div>
                                                                     <div class="col-sm-6 col-6">
                                                                         <input-field
+                                                                            appEnterNext
                                                                             type="text"
                                                                             id="rate"
                                                                             [placeholder]="commonLocaleData?.app_rate"
@@ -2882,6 +3023,7 @@
                                                             </div>
                                                             <div class="col-sm-6 col-lg-6 pl-0 mb-4">
                                                                 <reactive-dropdown-field
+                                                                    appEnterNext
                                                                     id="sales-applicable-tax"
                                                                     [placeholder]="commonLocaleData?.app_select_tax"
                                                                     disabled
@@ -2900,6 +3042,7 @@
                                                                 <div class="row add-new-field mb-4">
                                                                     <div class="col-sm-6 col-6">
                                                                         <input-field
+                                                                            appEnterNext
                                                                             type="text"
                                                                             id="sales-select-unit"
                                                                             [placeholder]="localeData?.select_unit"
@@ -2909,6 +3052,7 @@
                                                                     </div>
                                                                     <div class="col-sm-6 col-6">
                                                                         <input-field
+                                                                            appEnterNext
                                                                             type="text"
                                                                             id="sales-rate"
                                                                             [placeholder]="commonLocaleData?.app_rate"
@@ -2919,6 +3063,7 @@
                                                                 <div class="row add-new-field">
                                                                     <div class="col-sm-6 col-6">
                                                                         <input-field
+                                                                            appEnterNext
                                                                             type="text"
                                                                             id="sales-select-unit"
                                                                             [placeholder]="localeData?.select_unit"
@@ -2928,6 +3073,7 @@
                                                                     </div>
                                                                     <div class="col-sm-6 col-6">
                                                                         <input-field
+                                                                            appEnterNext
                                                                             type="text"
                                                                             id="sales-rate"
                                                                             [placeholder]="commonLocaleData?.app_rate"
@@ -2967,6 +3113,7 @@
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6 mb-4">
                                                             <input-field
+                                                                appEnterNext
                                                                 type="text"
                                                                 id="output-qty"
                                                                 placeholder="Enter"
@@ -2979,6 +3126,7 @@
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6 mb-4">
                                                             <input-field
+                                                                appEnterNext
                                                                 type="text"
                                                                 id="stock-unit"
                                                                 placeholder="Amount"
@@ -2995,6 +3143,7 @@
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6 mb-4">
                                                             <input-field
+                                                                appEnterNext
                                                                 type="text"
                                                                 id="select-stock-nme"
                                                                 placeholder="Select Stock"
@@ -3008,6 +3157,7 @@
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6 mb-4">
                                                             <input-field
+                                                                appEnterNext
                                                                 type="text"
                                                                 id="select-stock-qty"
                                                                 placeholder="Qty."
@@ -3020,6 +3170,7 @@
                                                         </div>
                                                         <div class="col-sm-6 col-lg-6 mb-4">
                                                             <input-field
+                                                                appEnterNext
                                                                 type="text"
                                                                 id="select-stock-unit"
                                                                 [placeholder]="localeData?.select_unit"
@@ -3065,6 +3216,7 @@
                                                             <div class="col-sm-6 col-lg-4">
                                                                 <label>Option 1</label>
                                                                 <input-field
+                                                                    appEnterNext
                                                                     type="text"
                                                                     placeholder="Size"
                                                                     id="select-option"
@@ -3083,6 +3235,7 @@
                                                         <div class="row mb-4">
                                                             <div class="col-sm-6 col-lg-4">
                                                                 <input-field
+                                                                    appEnterNext
                                                                     type="text"
                                                                     placeholder="Ex: Size, Color"
                                                                     id="select-size-color"
@@ -3091,6 +3244,7 @@
                                                             </div>
                                                             <div class="col-sm-6 col-lg-6">
                                                                 <input-field
+                                                                    appEnterNext
                                                                     type="text"
                                                                     placeholder="Separate options with a comma"
                                                                 >
@@ -3118,7 +3272,8 @@
                                                         <label>Combo Display Name</label>
                                                     </div>
                                                     <div class="col-sm-6 col-lg-6">
-                                                        <input-field type="text" id="stock-display-name"></input-field>
+                                                        <input-field
+                                                            appEnterNext type="text" id="stock-display-name"></input-field>
                                                     </div>
                                                 </div>
                                             </div>
@@ -3133,12 +3288,14 @@
                                                                 color="primary"
                                                                 (click)="selectCode(true)"
                                                                 value="HSN_Code"
+                                                                appEnterNext
                                                                 >HSN Code
                                                             </mat-radio-button>
                                                             <mat-radio-button
                                                                 color="primary"
                                                                 (click)="selectCode(false)"
                                                                 value="SAC_Code"
+                                                                appEnterNext
                                                                 >SAC Code
                                                             </mat-radio-button>
                                                         </mat-radio-group>
@@ -3146,18 +3303,20 @@
 
                                                     <div class="col-sm-6 col-lg-6" *ngIf="isHSN">
                                                         <input-field
+                                                            appEnterNext
                                                             id="product-name"
                                                             [type]="'number'"
                                                             placeholder="Enter HSN Code"
-                                                            [allowDigitsOnly]="true"
+                                                            [allowDecimalDigitsOnly]="true"
                                                         ></input-field>
                                                     </div>
                                                     <div class="col-sm-6 col-lg-6" *ngIf="!isHSN">
                                                         <input-field
+                                                            appEnterNext
                                                             id="product-name"
                                                             [type]="'number'"
                                                             placeholder="Enter SAC Code"
-                                                            [allowDigitsOnly]="true"
+                                                            [allowDecimalDigitsOnly]="true"
                                                         ></input-field>
                                                     </div>
                                                 </div>
@@ -3168,7 +3327,8 @@
                                                         <label>Barcode (ISBN, UPC, GTIN, etc.)</label>
                                                     </div>
                                                     <div class="col-sm-6 col-lg-6">
-                                                        <input-field id="bar-code" type="text"> </input-field>
+                                                        <input-field
+                                                            appEnterNext id="bar-code" type="text"> </input-field>
                                                     </div>
                                                 </div>
                                             </div>
@@ -3178,7 +3338,8 @@
                                                         <label>Custom Field</label>
                                                     </div>
                                                     <div class="col-sm-6 col-lg-6">
-                                                        <input-field id="expiry-code" type="text"></input-field>
+                                                        <input-field
+                                                            appEnterNext id="expiry-code" type="text"></input-field>
                                                     </div>
                                                 </div>
                                             </div>
@@ -3195,6 +3356,7 @@
                                                             <label> variant 1 </label>
                                                             <!-- vaiant will be auto fill and readonly view -->
                                                             <input-field
+                                                                appEnterNext
                                                                 type="text"
                                                                 id="combo-variant-name"
                                                                 placeholder="Variant Name"
@@ -3205,6 +3367,7 @@
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> SKU </label>
                                                             <input-field
+                                                                appEnterNext
                                                                 type="text"
                                                                 id="combo-variant-sku"
                                                                 placeholder="SKU"
@@ -3213,6 +3376,7 @@
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> Opening Balance </label>
                                                             <input-field
+                                                                appEnterNext
                                                                 type="text"
                                                                 id="combo-variant-opening-balance"
                                                                 placeholder="Enter amount"
@@ -3222,6 +3386,7 @@
                                                         <div class="col-xl-2 col-md-6">
                                                             <label>{{ localeData?.opening_quantity }} </label>
                                                             <input-field
+                                                                appEnterNext
                                                                 type="text"
                                                                 id="combo-variant-qty"
                                                                 placeholder="Enter Qty"
@@ -3231,6 +3396,7 @@
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> {{ commonLocaleData?.app_rate }} </label>
                                                             <input-field
+                                                                appEnterNext
                                                                 type="text"
                                                                 id="combo-variant-rate"
                                                                 [placeholder]="localeData?.enter_rate"
@@ -3260,6 +3426,7 @@
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> Item </label>
                                                             <input-field
+                                                                appEnterNext
                                                                 type="text"
                                                                 id="combo-addon-item"
                                                                 placeholder="Add item"
@@ -3269,6 +3436,7 @@
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> Quantity </label>
                                                             <input-field
+                                                                appEnterNext
                                                                 type="text"
                                                                 id="combo-addon-qty"
                                                                 placeholder="Enter Quantity"
@@ -3278,6 +3446,7 @@
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> SKU </label>
                                                             <input-field
+                                                                appEnterNext
                                                                 type="text"
                                                                 id="combo-sku"
                                                                 placeholder="Enter SKU Number"
@@ -3287,6 +3456,7 @@
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> Unit </label>
                                                             <input-field
+                                                                appEnterNext
                                                                 type="text"
                                                                 id="addon-unit"
                                                                 placeholder="eg. cm, kg, m, box"
@@ -3296,6 +3466,7 @@
                                                         <div class="col-xl-2 col-md-6">
                                                             <label> {{ commonLocaleData?.app_rate }} </label>
                                                             <input-field
+                                                                appEnterNext
                                                                 type="text"
                                                                 id="combo-addon-rate"
                                                                 [placeholder]="localeData?.enter_rate"
@@ -3306,6 +3477,7 @@
                                                             <label> Available on variant </label>
                                                             <!-- All available variant list show with checkbox -->
                                                             <reactive-dropdown-field
+                                                                appEnterNext
                                                                 placeholder=""
                                                                 id="combo-addon-available"
                                                             >
@@ -3338,6 +3510,7 @@
                                                                     <label> SKU </label>
                                                                     <!-- All variant list will show in dropdown -->
                                                                     <input-field
+                                                                        appEnterNext
                                                                         type="text"
                                                                         id="combo-sku-number"
                                                                         placeholder="Enter SKU Number"
@@ -3348,6 +3521,7 @@
                                                                     <label> Variant Name </label>
                                                                     <!-- All variant list will show in dropdown -->
                                                                     <reactive-dropdown-field
+                                                                        appEnterNext
                                                                         placeholder=""
                                                                         id="combo-variant-name"
                                                                     >
@@ -3370,6 +3544,7 @@
                                                                 <div class="width-30-percent">
                                                                     <label> Final Product 1 </label>
                                                                     <input-field
+                                                                        appEnterNext
                                                                         type="text"
                                                                         id="combo-final-product-1"
                                                                         placeholder="Product 1"
@@ -3380,6 +3555,7 @@
                                                                 <div class="width-30-percent" hidden>
                                                                     <label> Final Product 2 </label>
                                                                     <input-field
+                                                                        appEnterNext
                                                                         type="text"
                                                                         id="combo-final-product-2"
                                                                         placeholder="Product 2"
@@ -3389,6 +3565,7 @@
                                                                 <div class="width-30-percent">
                                                                     <label> Output Qty </label>
                                                                     <input-field
+                                                                        appEnterNext
                                                                         type="text"
                                                                         id="combo-recipe-output-qty"
                                                                         placeholder="Enter Qty"
@@ -3398,6 +3575,7 @@
                                                                 <div class="width-30-percent">
                                                                     <label> Output Unit </label>
                                                                     <input-field
+                                                                        appEnterNext
                                                                         type="text"
                                                                         id="combo-recipe-output-unit"
                                                                         placeholder="eg. cm, kg, m, box"
@@ -3426,6 +3604,7 @@
                                                                 <div class="width-30-percent">
                                                                     <label> Attribute </label>
                                                                     <input-field
+                                                                        appEnterNext
                                                                         type="text"
                                                                         id="combo-recipe-input-attribute"
                                                                         placeholder="Add item"
@@ -3435,6 +3614,7 @@
                                                                 <div class="width-30-percent">
                                                                     <label> Input Qty </label>
                                                                     <input-field
+                                                                        appEnterNext
                                                                         type="text"
                                                                         id="combo-recipe-input-qty"
                                                                         placeholder="Enter Qty"
@@ -3444,6 +3624,7 @@
                                                                 <div class="width-30-percent">
                                                                     <label> Input Unit </label>
                                                                     <input-field
+                                                                        appEnterNext
                                                                         type="text"
                                                                         id="combo-recipe-input-unit"
                                                                         placeholder="eg. cm, kg, m, box"
@@ -3488,6 +3669,7 @@
                                                     >
                                                         <div class="width-30-percent">
                                                             <input-field
+                                                                appEnterNext
                                                                 type="text"
                                                                 id="combo-expense-assets"
                                                                 placeholder="Liability/Asset A/c"
@@ -3497,6 +3679,7 @@
                                                         <span class="to-span"> to </span>
                                                         <div class="width-30-percent">
                                                             <input-field
+                                                                appEnterNext
                                                                 type="text"
                                                                 id="combo-expense-account"
                                                                 placeholder="Expense A/c"
@@ -3505,6 +3688,7 @@
                                                         </div>
                                                         <div class="width-30-percent">
                                                             <input-field
+                                                                appEnterNext
                                                                 id="combo-expense-amount"
                                                                 type="text"
                                                                 placeholder="Amount"
@@ -3600,6 +3784,7 @@
                                     <div class="input-group search-text-padding">
                                         <i class="icon-search input-addon"></i>
                                         <input-field
+                                            appEnterNext
                                             [cssClass]="'form-check'"
                                             [cssStyle]="'padding-left: 28px !important;'"
                                             type="text"
@@ -3641,10 +3826,12 @@
                                         <tr>
                                             <td data-title="#" class="p-1 list-number">1</td>
                                             <td data-title="Stock Name">
-                                                <input-field type="text" id="stock-name-field" readonly> </input-field>
+                                                <input-field
+                                                    appEnterNext type="text" id="stock-name-field" readonly> </input-field>
                                             </td>
                                             <td data-title="Unique Name">
                                                 <input-field
+                                                    appEnterNext
                                                     type="text"
                                                     placeholder="Enter"
                                                     id="stock-unique-name"
@@ -3653,27 +3840,34 @@
                                             </td>
                                             <td data-title="Inventory Type">
                                                 <reactive-dropdown-field
+                                                    appEnterNext
                                                     placeholder="Select"
                                                     readonly
                                                 ></reactive-dropdown-field>
                                             </td>
                                             <td data-title="Inventory Unit">
-                                                <reactive-dropdown-field placeholder="Select"></reactive-dropdown-field>
+                                                <reactive-dropdown-field
+                                                    appEnterNext placeholder="Select"></reactive-dropdown-field>
                                             </td>
                                             <td data-title="Parent Group">
-                                                <reactive-dropdown-field placeholder="Select"></reactive-dropdown-field>
+                                                <reactive-dropdown-field
+                                                    appEnterNext placeholder="Select"></reactive-dropdown-field>
                                             </td>
                                             <td data-title="Inventory Account">
-                                                <reactive-dropdown-field placeholder="Select"></reactive-dropdown-field>
+                                                <reactive-dropdown-field
+                                                    appEnterNext placeholder="Select"></reactive-dropdown-field>
                                             </td>
                                             <td data-title="Low Stock Alert">
-                                                <reactive-dropdown-field placeholder="Select"></reactive-dropdown-field>
+                                                <reactive-dropdown-field
+                                                    appEnterNext placeholder="Select"></reactive-dropdown-field>
                                             </td>
                                             <td data-title="Opening Qty">
-                                                <reactive-dropdown-field placeholder="Select"></reactive-dropdown-field>
+                                                <reactive-dropdown-field
+                                                    appEnterNext placeholder="Select"></reactive-dropdown-field>
                                             </td>
                                             <td data-title="Opening Amount">
                                                 <input-field
+                                                    appEnterNext
                                                     type="text"
                                                     placeholder="Enter"
                                                     id="opening-amount"
@@ -3681,62 +3875,72 @@
                                             </td>
                                             <td data-title="Purchase Account Name">
                                                 <reactive-dropdown-field
+                                                    appEnterNext
                                                     placeholder="Select"
                                                     id="purchase-account-name"
                                                 ></reactive-dropdown-field>
                                             </td>
                                             <td data-title="Linked Tax">
                                                 <reactive-dropdown-field
+                                                    appEnterNext
                                                     placeholder="Select"
                                                     id="purchase-linked-tax"
                                                 ></reactive-dropdown-field>
                                             </td>
                                             <td data-title="Purchase Unit">
                                                 <reactive-dropdown-field
+                                                    appEnterNext
                                                     placeholder="Select"
                                                     id="purchase-unit"
                                                 ></reactive-dropdown-field>
                                             </td>
                                             <td data-title="Purchase Rate">
                                                 <reactive-dropdown-field
+                                                    appEnterNext
                                                     placeholder="Select"
                                                     id="purchase-rate"
                                                 ></reactive-dropdown-field>
                                             </td>
                                             <td data-title="Sales Account Name">
                                                 <reactive-dropdown-field
+                                                    appEnterNext
                                                     placeholder="Select"
                                                     id="sales-account-name"
                                                 ></reactive-dropdown-field>
                                             </td>
                                             <td data-title="Linked Tax">
                                                 <reactive-dropdown-field
+                                                    appEnterNext
                                                     placeholder="Select"
                                                     id="sales-linked-tax"
                                                 ></reactive-dropdown-field>
                                             </td>
                                             <td data-title="Sales unit">
                                                 <reactive-dropdown-field
+                                                    appEnterNext
                                                     placeholder="Select"
                                                     id="sales-unit"
                                                 ></reactive-dropdown-field>
                                             </td>
                                             <td data-title="Sales Rate">
                                                 <reactive-dropdown-field
+                                                    appEnterNext
                                                     placeholder="Select"
                                                     id="sales-rate"
                                                 ></reactive-dropdown-field>
                                             </td>
                                             <td data-title="HSN/SAC Code">
                                                 <input-field
+                                                    appEnterNext
                                                     [type]="'number'"
                                                     placeholder="Enter"
                                                     id="hsn-sac-code"
-                                                    [allowDigitsOnly]="true"
+                                                    [allowDecimalDigitsOnly]="true"
                                                 ></input-field>
                                             </td>
                                             <td data-title="SAC Code">
                                                 <input-field
+                                                    appEnterNext
                                                     type="text"
                                                     placeholder="Enter"
                                                     id="sku-code"
@@ -3744,6 +3948,7 @@
                                             </td>
                                             <td data-title="Barcode">
                                                 <input-field
+                                                    appEnterNext
                                                     type="text"
                                                     placeholder="Enter"
                                                     id="bar-code"
@@ -3761,7 +3966,8 @@
                                     <i class="icon-plus text-primary"></i>
                                 </button>
                                 <span class="d-flex align-items-center">
-                                    <input-field class="mr-1" id="fill-number" placeholder="0"> </input-field>
+                                    <input-field
+                                        appEnterNext class="mr-1" id="fill-number" placeholder="0"> </input-field>
                                     <span class="font-size-15">More rows at bottom</span>
                                 </span>
                             </div>

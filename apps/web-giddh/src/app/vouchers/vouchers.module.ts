@@ -73,7 +73,7 @@ import { GenerateEWayBillModule } from "../invoice/preview/models/generateEWayBi
 import { DatepickerWrapperModule } from "../shared/datepicker-wrapper/datepicker.wrapper.module";
 import { MatDatepickerModule } from "@angular/material/datepicker";
 import { MatNativeDateModule } from "@angular/material/core";
-// import { PurchaseSettingModule } from "../purchase/purchase-setting/purchase-setting.module";
+import { PurchaseSettingModule } from "../purchase/purchase-setting/purchase-setting.module";
 import { InvoiceSettingModule } from "../invoice/settings/invoice-setting.module";
 import { CdkScrollModule } from "../theme/form-fields/cdk-scroll/cdk-scroll.module";
 import { DownloadVoucherComponent } from "./download-voucher/download-voucher.component";
@@ -93,6 +93,8 @@ import { AllTemplatesComponent } from "./template/all-templates/all-templates.co
 import { TemplateEditFilterComponent } from "./template/template-edit-filter/template-edit-filter.component";
 import { MobileNumberInputComponent } from "../shared/mobile-number-input/mobile-number-input.component";
 import { GiddhNumberFormatModule } from "../shared/helpers/pipes/number-format/number-format.module";
+import { KeyboardNavigationModule } from "../shared/helpers/directives/enter-next/keyboard-navigation.module";
+import { ResizableDirective } from "../shared/directives/resizable.directive";
 
 @NgModule({
     declarations: [
@@ -178,7 +180,7 @@ import { GiddhNumberFormatModule } from "../shared/helpers/pipes/number-format/n
         DatepickerWrapperModule,
         MatDatepickerModule,
         MatNativeDateModule,
-        // PurchaseSettingModule,
+        PurchaseSettingModule,
         InvoiceSettingModule,
         CdkScrollModule,
         TrimPipeModule,
@@ -190,7 +192,8 @@ import { GiddhNumberFormatModule } from "../shared/helpers/pipes/number-format/n
         MatButtonToggleModule,
         TributeMentionModule,
         MobileNumberInputComponent,
-        // KeyboardNavigationModule 
+        KeyboardNavigationModule,
+        ResizableDirective
     ],
     exports: [
         VoucherCreateComponent,

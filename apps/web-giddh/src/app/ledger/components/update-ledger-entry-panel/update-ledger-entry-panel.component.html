@@ -180,8 +180,6 @@
                                                                     [id]="'debit-select-' + i"
                                                                     [cssClass]="'form-control bg-transparent'"
                                                                     [showCreateNew]="true"
-                                                                    [showKeyboardCommand]="commonLocaleData?.app_alt_c"
-                                                                    [createNewText]="commonLocaleData?.app_create_new"
                                                                     (createOption)="showQuickAccountModal()"
                                                                     [readonly]="isEinvoiceGenerated"
                                                                     [ngClass]="{ 'read-only': isEinvoiceGenerated }"
@@ -487,8 +485,6 @@
                                                                     [cssClass]="'form-control bg-transparent'"
                                                                     class="w-100"
                                                                     [showCreateNew]="true"
-                                                                    [showKeyboardCommand]="commonLocaleData?.app_alt_c"
-                                                                    [createNewText]="commonLocaleData?.app_create_new"
                                                                     (createOption)="showQuickAccountModal()"
                                                                     [readonly]="isEinvoiceGenerated"
                                                                     [ngClass]="{ 'read-only': isEinvoiceGenerated }"
@@ -798,8 +794,6 @@
                                                             [id]="'debit-select-' + i"
                                                             [cssClass]="'form-control'"
                                                             [showCreateNew]="true"
-                                                            [showKeyboardCommand]="commonLocaleData?.app_alt_c"
-                                                            [createNewText]="commonLocaleData?.app_create_new"
                                                             (createOption)="showQuickAccountModal()"
                                                             [readonly]="isEinvoiceGenerated"
                                                             [ngClass]="{ 'read-only': isEinvoiceGenerated }"
@@ -1094,8 +1088,6 @@
                                                             [cssClass]="'form-control bg-transparent'"
                                                             class="w-100"
                                                             [showCreateNew]="true"
-                                                            [showKeyboardCommand]="commonLocaleData?.app_alt_c"
-                                                            [createNewText]="commonLocaleData?.app_create_new"
                                                             (createOption)="showQuickAccountModal()"
                                                             [readonly]="isEinvoiceGenerated"
                                                             [ngClass]="{ 'read-only': isEinvoiceGenerated }"
@@ -1621,9 +1613,10 @@
                                     class="text-center icon-box"
                                     *ngIf="
                                         (vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields) &&
-                                        (!vm.isPaymentReceipt ||
-                                            (vm.isPaymentReceipt &&
-                                                vm.selectedLedger.voucher.shortCode === 'advance-receipt'))
+                                        (vm.companyTaxesList$ | async)?.length &&
+                                        (!vm.isPaymentReceipt || 
+                                        (vm.isPaymentReceipt && 
+                                        vm.selectedLedger.voucher.shortCode === 'advance-receipt'))
                                     "
                                 >
                                     <label class="icon-plus"></label>
@@ -1631,7 +1624,7 @@
 
                                 <div
                                     class="text-center icon-box"
-                                    *ngIf="vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields"
+                                    *ngIf="!(vm.companyTaxesList$ | async)?.length &&(vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields)"
                                 >
                                     <label class="font-size-16 mt-1">=</label>
                                 </div>
@@ -2596,7 +2589,6 @@
         [placeholder]="commonLocaleData?.app_sales_person_placeholder"
         [options]="salesPersonList$ | async"
         [showCreateNew]="true"
-        [createNewText]="commonLocaleData?.app_create_new"
         (createOption)="openSalesPersonDialog()"
         (selectedOption)="handleSalesPersonSelection($event)"
         (onClear)="clearSalesPerson()"

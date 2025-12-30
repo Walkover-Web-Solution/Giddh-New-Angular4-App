@@ -636,7 +636,7 @@
                     "description": "ओव्हरड्यूज, पी अँड एल, बँक खाते, प्रमाण विश्लेषण"
                 },
                 {
-                    "label": "जर्नल नोंदी *",
+                    "label": "जर्नल नोंदी",
                     "link": "/pages/journal-voucher",
                     "icon": "icon-journal-voucher-new",
                     "description": "जर्नल व्हाउचरच्या नोंदी"

@@ -463,7 +463,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
                 this.aiOcrStore.getExtractDocuments(req);
             } else {
                 this.aiOcrService.ocrListToCreate$.next(null);
-                this.aiOcrStore.getExtractDocuments({ocrType: this.ocrType});
+                this.aiOcrStore.getExtractDocuments({ ocrType: this.ocrType });
             }
         } else if (value === OcrAction.List) {
             this.selectedToggle = value;

@@ -19,13 +19,14 @@
                 >
                     <i class="icon-refresh"></i> {{ commonLocaleData?.app_clear_filter }}
                 </button>
-                <button mat-icon-button aria-label="close" (click)="onCancel()">
-                    <i class="icon-cross"></i>
-                </button>
             </div>
         </div>
         <mat-dialog-content class="max-height-65vh">
-            <div class="modal-body theme-foreground-color p-0 clear-both ledger-advance-search-field" id="export-body" *ngIf="advanceSearchForm">
+            <div
+                class="modal-body theme-foreground-color p-0 clear-both ledger-advance-search-field"
+                id="export-body"
+                *ngIf="advanceSearchForm"
+            >
                 <form [formGroup]="advanceSearchForm">
                     <div class="clear-both">
                         <div class="row mb-2 ml-0 mr-0">
@@ -33,7 +34,7 @@
                                 <label>{{ commonLocaleData?.app_date_range }}</label>
                             </div>
                             <div class="col-sm-7">
-                                  <div class="custom-datepicker-wrapper w-100">
+                                <div class="custom-datepicker-wrapper w-100">
                                     <div
                                         class="custom-datepicker w-100"
                                         [matMenuTriggerFor]="universalDatepicker"
@@ -52,7 +53,11 @@
                                         />
                                     </div>
                                 </div>
-                                <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
+                                <mat-menu
+                                    #universalDatepicker="matMenu"
+                                    class="universal-datepicker-menu-panel"
+                                    xPosition="after"
+                                >
                                     <ng-template matMenuContent>
                                         <app-datepicker-wrapper
                                             [inputStartDate]="selectedDateRange?.startDate"
@@ -61,7 +66,11 @@
                                             [showClearButton]="false"
                                             [showApplyButton]="false"
                                             [ranges]="datePickerOptions"
-                                            [locale]="{ applyLabel: commonLocaleData?.app_apply, cancelLabel: commonLocaleData?.app_cancel, customRangeLabel: commonLocaleData?.app_custom_range }"
+                                            [locale]="{
+                                                applyLabel: commonLocaleData?.app_apply,
+                                                cancelLabel: commonLocaleData?.app_cancel,
+                                                customRangeLabel: commonLocaleData?.app_custom_range
+                                            }"
                                             [linkedCalendars]="false"
                                             [singleDatePicker]="false"
                                             [showCancel]="true"
@@ -271,14 +280,21 @@
                                                 >
                                                     <mat-option class="mt-0">
                                                         <ngx-mat-select-search
-                                                            [placeholderLabel]="commonLocaleData?.app_sales_person_placeholder"
-                                                            [noEntriesFoundLabel]="commonLocaleData?.app_no_result_found"
+                                                            [placeholderLabel]="
+                                                                commonLocaleData?.app_sales_person_placeholder
+                                                            "
+                                                            [noEntriesFoundLabel]="
+                                                                commonLocaleData?.app_no_result_found
+                                                            "
                                                             [formControl]="salesPersonDropdown"
                                                         >
                                                             <i class="icon-cross" ngxMatSelectSearchClear></i>
                                                         </ngx-mat-select-search>
                                                     </mat-option>
-                                                    <mat-option *ngFor="let salesPerson of filteredSalesPersonList" [value]="salesPerson?.value">
+                                                    <mat-option
+                                                        *ngFor="let salesPerson of filteredSalesPersonList"
+                                                        [value]="salesPerson?.value"
+                                                    >
                                                         {{ salesPerson?.label }}
                                                     </mat-option>
                                                 </mat-select>
@@ -304,7 +320,8 @@
                                                 [placeholder]="commonLocaleData?.app_select_range"
                                                 [formControl]="advanceSearchForm?.controls['amountOption']"
                                                 [options]="comparisonFilterDropDown$ | async"
-                                                (selectedOption)="onRangeSelect('amount', $event)">
+                                                (selectedOption)="onRangeSelect('amount', $event)"
+                                            >
                                             </reactive-dropdown-field>
                                         </div>
                                     </div>
@@ -334,7 +351,10 @@
                                 <div class="row">
                                     <div class="col-6 col-md-6">
                                         <div class="form-group">
-                                            <mat-slide-toggle color="primary" [formControl]="advanceSearchForm?.controls['cancelledEntries']">
+                                            <mat-slide-toggle
+                                                color="primary"
+                                                [formControl]="advanceSearchForm?.controls['cancelledEntries']"
+                                            >
                                                 <span
                                                     class="pull-left"
                                                     *ngIf="advanceSearchForm.get('cancelledEntries')?.value"
@@ -374,7 +394,9 @@
                                                         <mat-slide-toggle
                                                             color="primary"
                                                             id="includeInventory"
-                                                            [formControl]="advanceSearchForm.get('inventory.includeInventory')"
+                                                            [formControl]="
+                                                                advanceSearchForm.get('inventory.includeInventory')
+                                                            "
                                                         >
                                                             <span
                                                                 class="pull-left"
@@ -401,8 +423,12 @@
                                                             [appearance]="'outline'"
                                                             [showMatLabel]="true"
                                                             [commonLocaleData]="commonLocaleData"
-                                                            [formControl]="advanceSearchForm.get('inventory.inventories')"
-                                                            [selectedValues]="advanceSearchForm.get('inventory.inventories')?.value"
+                                                            [formControl]="
+                                                                advanceSearchForm.get('inventory.inventories')
+                                                            "
+                                                            [selectedValues]="
+                                                                advanceSearchForm.get('inventory.inventories')?.value
+                                                            "
                                                             [name]="'inventories'"
                                                             [label]="commonLocaleData?.app_inventory"
                                                             [placeholder]="commonLocaleData?.app_select_accounts"
@@ -421,9 +447,12 @@
                                                             class="w-100"
                                                             [name]="'particulars'"
                                                             [placeholder]="commonLocaleData?.app_select_range"
-                                                            [formControl]="advanceSearchForm.get('inventory.inventoryQty')"
+                                                            [formControl]="
+                                                                advanceSearchForm.get('inventory.inventoryQty')
+                                                            "
                                                             [options]="comparisonFilterDropDown$ | async"
-                                                            (selectedOption)="onRangeSelect('inventoryQty', $event)">
+                                                            (selectedOption)="onRangeSelect('inventoryQty', $event)"
+                                                        >
                                                         </reactive-dropdown-field>
                                                     </div>
                                                 </div>
@@ -448,9 +477,12 @@
                                                             class="w-100"
                                                             [name]="'particulars'"
                                                             [placeholder]="commonLocaleData?.app_select_range"
-                                                            [formControl]="advanceSearchForm.get('inventory.inventoryVal')"
+                                                            [formControl]="
+                                                                advanceSearchForm.get('inventory.inventoryVal')
+                                                            "
                                                             [options]="comparisonFilterDropDown$ | async"
-                                                            (selectedOption)="onRangeSelect('inventoryVal', $event)">
+                                                            (selectedOption)="onRangeSelect('inventoryVal', $event)"
+                                                        >
                                                         </reactive-dropdown-field>
                                                     </div>
                                                 </div>
@@ -528,9 +560,12 @@
             </div>
         </mat-dialog-content>
         <mat-dialog-actions>
-            <div class="text-right my-2 w-100">
+            <div class="my-2 w-100 d-flex justify-content-end column-gap-1">
                 <button mat-raised-button color="primary" type="button" (click)="onSearch()">
                     {{ commonLocaleData?.app_search }}
+                </button>
+                <button mat-stroked-button type="button" (click)="onCancel()">
+                    {{ commonLocaleData?.app_cancel }}
                 </button>
             </div>
         </mat-dialog-actions>

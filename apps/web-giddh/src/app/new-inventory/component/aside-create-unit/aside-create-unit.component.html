@@ -2,15 +2,9 @@
     <section class="aside-dialog-wrapper">
         <div class="header-create-unit dialog-header">
             <span>{{ commonLocaleData?.app_create_unit }}</span>
-            <button mat-icon-button aria-label="close" mat-dialog-close>
-                <i class="icon-cross"></i>
-            </button>
         </div>
         <mat-dialog-content class="dialog-body">
-            <create-unit
-                [unitGroupDetails]="unitGroupDetails"
-                (closeAsideEvent)="closeAsidePane($event)"
-            ></create-unit>
+            <create-unit [unitGroupDetails]="unitGroupDetails" (closeAsideEvent)="closeAsidePane($event)"></create-unit>
         </mat-dialog-content>
     </section>
 </div>

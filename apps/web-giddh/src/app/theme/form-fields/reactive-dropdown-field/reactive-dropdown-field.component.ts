@@ -1,7 +1,8 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild, forwardRef } from "@angular/core";
+import { AfterViewInit, ChangeDetectorRef, Component, ContentChild, ElementRef, EventEmitter, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild, forwardRef } from "@angular/core";
 import { BehaviorSubject, Observable, Subject, debounceTime, of, skip, Subscription, ReplaySubject, takeUntil } from "rxjs";
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from "@angular/forms";
 import { MatAutocompleteTrigger } from "@angular/material/autocomplete";
+import { MatAutocomplete } from "@angular/material/autocomplete";
 import { IOption } from "../../../app.constant";
 import { isEqual } from "../../../lodash-optimized";
 
@@ -23,6 +24,8 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     @ContentChild('optionTemplate', { static: false }) public optionTemplate: TemplateRef<any>;
     /** Trigger instance for auto complete */
     @ViewChild('trigger', { static: false, read: MatAutocompleteTrigger }) trigger: MatAutocompleteTrigger;
+    /** Autocomplete instance for focus management */
+    @ViewChild('auto', { static: false }) matAutocomplete: MatAutocomplete;
     /** Select Field instance for auto focus */
     @ViewChild('selectField', { static: false }) public selectField: ElementRef;
     /** CSS class name to add on the field */
@@ -87,6 +90,8 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     @Input() public showClearIcon: boolean = false;
     /** Use custom label value */
     @Input() public useCustomLabelValue: boolean = false;
+    /** Show dropdown list in sidebar */
+    @Input() public sidebarListView: boolean = false;
     /** Emits the scroll to bottom event when pagination is required  */
     @Output() public scrollEnd: EventEmitter<void> = new EventEmitter();
     /** Emits dynamic searched query */
@@ -115,6 +120,12 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     private onTouched: () => void = () => { };
     /** Next observable */
     private next$: Subject<any> = new Subject();
+    /** Tracks the currently active option index for focus preservation */
+    private activeOptionIndex: number = -1;
+    /** Flag to indicate if pagination is in progress */
+    private isPaginationInProgress: boolean = false;
+    /** Previous options count for pagination detection */
+    private previousOptionsCount: number = 0;
 
     constructor(
         private changeDetection: ChangeDetectorRef
@@ -196,25 +207,38 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      */
     public ngOnChanges(changes: SimpleChanges): void {
         if (changes?.options) {
+            // Detect if this is pagination (new options added to existing list)
+            const currentOptionsCount = this.options?.length || 0;
+            this.isPaginationInProgress = this.previousOptionsCount > 0 && currentOptionsCount > this.previousOptionsCount;
+            this.previousOptionsCount = currentOptionsCount;
+
             this.fieldFilteredOptions$ = of(this.options);
+
+            if (this.showCreateNew) {
+                setTimeout(() => {
+                    this.focusSecondOption();
+                }, 100);
+            }
+
+            // Preserve focus during pagination
+            if (this.isPaginationInProgress && this.activeOptionIndex >= 0) {
+                setTimeout(() => {
+                    this.restoreFocusAfterPagination();
+                }, 100);
+            }
+
             // Always try to set label value when options change, regardless of previous value
             if (changes?.options) {
-                // Use setTimeout to ensure the value is properly set before trying to find the label
-                setTimeout(() => {
-                    this.setLabelValue(null);
-                }, 0);
+            // Use setTimeout to ensure the value is properly set before trying to find the label
+            setTimeout(() => {
+                this.setLabelValue(null);
+            }, 0);
             }
         }
         if (changes?.forceClear && !changes.forceClear.firstChange && changes.forceClear.currentValue !== changes.forceClear.previousValue) {
-            this.writeValue("", false);
-            this.controlLabelValue = "";
-            this.clearDropdownValue();
-            this.fieldFilteredOptions$ = of([]);
-            setTimeout(() => {
-                this.fieldFilteredOptions$ = of(this.options);
-            }, 100);
+           this.handleForceClear();
         }
-        if (changes?.openDropdown?.currentValue && !changes?.openDropdown?.previousValue) {
+        if (changes?.openDropdown?.currentValue && !changes?.openDropdown?.previousValue && changes.openDropdown.currentValue !== changes.openDropdown.previousValue) {
             this.openDropdownPanel();
         }
 
@@ -230,6 +254,22 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     }
 
     /**
+     * Handle force clear and reset dropdown list
+     *
+     * @private
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    private handleForceClear(): void {
+         this.writeValue("", false);
+        this.controlLabelValue = "";
+        this.clearDropdownValue();
+        this.fieldFilteredOptions$ = of([]);
+        setTimeout(() => {
+            this.fieldFilteredOptions$ = of(this.options);
+        }, 100);
+    }
+
+    /**
      * Common method to handle dropdown panel operations with error handling
      *
      * @private
@@ -240,8 +280,16 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         if (!this.isDestroyed && this.trigger) {
             try {
                 if (operation === 'open') {
+                    // If dropdown is already open, do not reopen
+                    if (this.trigger.panelOpen) {
+                        return;
+                    }
                     this.trigger.openPanel();
                 } else {
+                    // If dropdown is already closed, do not reclose
+                    if (!this.trigger.panelOpen) {
+                        return;
+                    }
                     this.trigger.closePanel();
                 }
             } catch (error) {
@@ -281,8 +329,52 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      * @memberof ReactiveDropdownFieldComponent
      */
     public onScroll(): void {
+        // Store current active option index before pagination
+        this.storeActiveOptionIndex();
         this.next$.next(true);
         this.scrollEnd.emit();
+    }
+
+    /**
+     * Stores the currently active option index for focus preservation
+     *
+     * @private
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    private storeActiveOptionIndex(): void {
+        if (this.matAutocomplete && (this.matAutocomplete as any)._keyManager) {
+            this.activeOptionIndex = (this.matAutocomplete as any)._keyManager.activeItemIndex || -1;
+        }
+    }
+
+    /**
+     * Restores focus to the previously active option after pagination
+     *
+     * @private
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    private restoreFocusAfterPagination(): void {
+        if (this.matAutocomplete && (this.matAutocomplete as any)._keyManager && this.activeOptionIndex >= 0) {
+            try {
+                // Set the active item to maintain focus position
+                (this.matAutocomplete as any)._keyManager.setActiveItem(this.activeOptionIndex);
+
+                // Ensure the active option is visible in the viewport
+                const activeOption = (this.matAutocomplete as any)._keyManager.activeItem;
+                if (activeOption && (activeOption as any)._element) {
+                    (activeOption as any)._element.nativeElement.scrollIntoView({
+                        behavior: 'auto',
+                        block: 'nearest',
+                        inline: 'nearest'
+                    });
+                }
+            } catch (error) {
+                console.warn('Could not restore focus after pagination:', error);
+            }
+        }
+
+        // Reset pagination flag
+        this.isPaginationInProgress = false;
     }
 
     /**
@@ -370,6 +462,55 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     }
 
     /**
+     * Handles create new option selection change event
+     *
+     * @param {any} event - Selection change event from mat-option
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    public handleCreateNewSelection(event: any): void {
+        if (event.isUserInput && event.source.selected) {
+            this.createNewRecord();
+        }
+    }
+
+    /**
+     * Handles Alt+N keyboard shortcut for create new functionality
+     *
+     * @param {KeyboardEvent} event - The keyboard event
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    @HostListener('keydown', ['$event'])
+    public onKeyDown(event: KeyboardEvent): void {
+        // Early exit if create new is not enabled
+        if (!this.showCreateNew) return;
+
+        // Check for Alt+Shift+N combination (cross-platform)
+        const isAltShiftN = event.altKey && event.shiftKey && event.code === 'KeyN';
+
+        // Check if dropdown is focused or open
+        const isFocused = this.selectField?.nativeElement === document.activeElement || this.trigger?.panelOpen;
+
+        if (isAltShiftN && isFocused) {
+            event.preventDefault();
+            event.stopPropagation();
+            event.stopImmediatePropagation();
+            this.createNewRecord();
+        }
+    }
+
+    /**
+     * Handles keydown events on the input field
+     *
+     * @param {KeyboardEvent} event - The keyboard event
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    public onInputKeyDown(event: KeyboardEvent): void {
+        if (event.key === 'Enter' && this.trigger?.panelOpen) {
+            this.closeDropdownPanel();
+        }
+    }
+
+    /**
      * This will use for open dropdown panel
      *
      * @memberof ReactiveDropdownFieldComponent
@@ -379,10 +520,29 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             return;
         }
 
-        this.selectField?.nativeElement?.focus();
+        this.focusInputField();
         setTimeout(() => {
             this.handleDropdownPanelOperation('open');
         }, 10);
+    }
+
+    /**
+     * Focuses the input field without opening the dropdown
+     *
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    public focusInputField(): void {
+        if (this.trigger) {
+            // Temporarily disable autocomplete to prevent dropdown from opening
+            this.trigger.autocompleteDisabled = true;
+            this.selectField?.nativeElement?.focus();
+            // Re-enable autocomplete after a short delay
+            setTimeout(() => {
+                this.trigger.autocompleteDisabled = false;
+            }, 100);
+        } else {
+            this.selectField?.nativeElement?.focus();
+        }
     }
 
     /**
@@ -421,6 +581,18 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     public panelOpened(): void {
         if (!this.enableDynamicSearch) {
             this.fieldFilteredOptions$ = this.filterOptions("");
+        }
+
+        // Reset pagination tracking when panel opens
+        this.activeOptionIndex = -1;
+        this.isPaginationInProgress = false;
+        this.previousOptionsCount = this.options?.length || 0;
+
+        // Focus on second option (first filtered option) when showCreateNew is true
+        if (this.showCreateNew) {
+            setTimeout(() => {
+                this.focusSecondOption();
+            }, 100);
         }
     }
 
@@ -463,6 +635,55 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             if (this.showCreateNew && this.createNewText === '') {
                 this.createNewText = this.commonLocaleData?.app_create_new;
             }
+            if (this.showCreateNew && this.showKeyboardCommand === '') {
+                this.showKeyboardCommand = this.commonLocaleData?.app_alt_shift_n;
+            }
         }
+    }
+
+    /**
+     * Focuses on the second option (first filtered option) when showCreateNew is true
+     * This ensures the first actual option gets focus instead of the "Create New" option
+     *
+     * @private
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    private focusSecondOption(): void {
+        if (this.matAutocomplete && (this.matAutocomplete as any)._keyManager) {
+            try {
+                const keyManager = (this.matAutocomplete as any)._keyManager;
+                const options = keyManager._items;
+
+                // If we have options and showCreateNew is true, focus on index 1 (second option)
+                // Index 0 would be the "Create New" option, index 1 is the first filtered option
+                if (options && options.length > 1) {
+                    keyManager.setActiveItem(1);
+
+                    // Ensure the focused option is visible
+                    const activeOption = keyManager.activeItem;
+                    if (activeOption && (activeOption as any)._element) {
+                        (activeOption as any)._element.nativeElement.scrollIntoView({
+                            behavior: 'auto',
+                            block: 'nearest',
+                            inline: 'nearest'
+                        });
+                    }
+                }
+            } catch (error) {
+                console.warn('Could not focus on second option:', error);
+            }
+        }
+    }
+
+    /**
+     * TrackBy function for ngFor to improve performance
+     *
+     * @param {number} index
+     * @param {IOption} option
+     * @returns {any}
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    public trackByOption(index: number, option: IOption): any {
+        return option?.value || option?.label || index;
     }
 }

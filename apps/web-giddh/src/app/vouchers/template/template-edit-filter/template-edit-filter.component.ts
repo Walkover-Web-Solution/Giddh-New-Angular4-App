@@ -8,7 +8,7 @@ import { CommonService } from '../../../services/common.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store';
-import { Configuration, IOption } from '../../../app.constant';
+import { API_BULK_FETCH_LIMIT, Configuration, IOption } from '../../../app.constant';
 import { InvoiceService } from '../../../services/invoice.service';
 import { NgForm } from '@angular/forms';
 import { CountryNames } from '../../../shared/Enums/common.enum';
@@ -16,6 +16,7 @@ import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { TemplateModeEnum, TemplateTypeEnum, VoucherTypeEnum } from '../../../models/api-models/Sales';
 import { environment } from 'apps/web-giddh/src/environments/environment';
 import { ServiceConfig } from '../../../services/service.config';
+import { CustomFieldsService } from '../../../services/custom-fields.service';
 
 @Component({
     selector: 'template-edit-filter',
@@ -159,7 +160,8 @@ export class TemplateEditFilterComponent implements OnInit {
     public mainLogoSelectedFile: any;
     /** Holds the file object after selection */
     public mainLogoFile: any;
-
+    /** Hold list of account custom fields */
+    public accountCustomFields: IOption[] = [];
 
     constructor(
         private generalService: GeneralService,
@@ -168,7 +170,9 @@ export class TemplateEditFilterComponent implements OnInit {
         private store: Store<AppState>,
         private invoiceService: InvoiceService,
         @Inject(ServiceConfig) private serviceConfig,
-        private templateService: InvoiceUiDataService) {
+        private templateService: InvoiceUiDataService,
+        private customFieldsService: CustomFieldsService
+    ) {
     }
 
     /**
@@ -334,6 +338,7 @@ export class TemplateEditFilterComponent implements OnInit {
             const suggestions = response?.body?.accountSuggestions;
             this.suggestionList = suggestions ? suggestions.map((item: string) => ({ label: item, value: item })) : [];
         });
+        this.getCustomFields();
 
         // Subscribe to UI section visibility changes
         this.templateService.selectedSection.pipe(takeUntil(this.destroyed$)).subscribe((info: TemplateContentUISectionVisibility) => {
@@ -504,23 +509,6 @@ export class TemplateEditFilterComponent implements OnInit {
                     });
             });
         }
-    }
-
-    /**
-     * Replaces new line characters with <br /> tags in specific template fields.
-     *
-     * @param {*} template The template object to update
-     * @returns {*} The updated template object
-     * @memberof TemplateEditFilterComponent
-     */
-    public newLineToBR(template: any): any {
-        const footerData = template.sections?.footer?.data;
-        if (footerData) {
-            if (footerData['message1']?.label) footerData['message1'].label = footerData['message1'].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
-            if (footerData['companyAddress']?.label) footerData['companyAddress'].label = footerData['companyAddress'].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
-            if (footerData['slogan']?.label) footerData['slogan'].label = footerData['slogan'].label.replace(/(?:\r\n|\r|\n)/g, '<br />');
-        }
-        return template;
     }
 
     /**
@@ -1004,4 +992,30 @@ export class TemplateEditFilterComponent implements OnInit {
         this.customTemplate.sections['header'].data['formNameInvoice'].display = event;
     }
 
+    /**
+     * Get custom fields API call
+     *
+     * @memberof TemplateEditFilterComponent
+     */
+    public getCustomFields(): void {
+        this.customFieldsService.list({
+                page: 1,
+                count: API_BULK_FETCH_LIMIT,
+                moduleUniqueName: 'account'
+            }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                if (response.status === 'success') {
+                    const customFields = response.body?.results?.map(customField => {
+                        return {
+                            label: customField.fieldName,
+                            value: customField.uniqueName
+                        };
+                    }) || [];
+                    this.accountCustomFields = customFields;
+                } else if (response.message) {
+                    this.toasty.errorToast(response.message);
+                }
+            }
+        });
+    }
 }

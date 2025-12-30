@@ -48,6 +48,8 @@ import { SelectTableColumnModule } from '../shared/select-table-column/select-ta
 import { SharedModule } from '../shared/shared.module';
 import { FroalaTemplateEditorModule } from '../shared/template-froala/template-froala.module';
 import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/hamburger-menu.module';
+import { DecimalDigitsModule } from '../shared/helpers/directives/decimalDigits/decimalDigits.module';
+import { ResizableDirective } from '../shared/directives/resizable.directive';
 @NgModule({
     declarations: [
         ContactComponent,
@@ -73,6 +75,7 @@ import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/
         SharedModule,
         ClickOutsideModule,
         DigitsOnlyModule,
+        DecimalDigitsModule,
         ElementViewChildModule,
         GiddhNumberFormatModule,
         Daterangepicker,
@@ -106,7 +109,8 @@ import { HamburgerMenuModule } from '../shared/header/components/hamburger-menu/
         LedgerModule,
         MatCardModule,
         AmountFieldComponentModule,
-        HamburgerMenuModule
+        HamburgerMenuModule,
+        ResizableDirective
     ],
     providers: [
         GiddhNumberFormatPipe

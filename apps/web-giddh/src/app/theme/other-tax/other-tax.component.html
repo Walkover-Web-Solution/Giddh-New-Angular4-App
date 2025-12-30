@@ -1,39 +1,62 @@
-<div 
+<div
     appTranslate
     [file]="'settings/taxes'"
-    (localeData)="localeData = $event" 
+    (localeData)="localeData = $event"
     (commonLocaleData)="commonLocaleData = $event"
-    (translationComplete)="translationComplete($event)">
-    <div class="other-tax aside-dialog-wrapper">
+    (translationComplete)="translationComplete($event)"
+>
+    <div
+        class="other-tax aside-dialog-wrapper"
+        [keyboardShortcut]="'esc'"
+        [config]="{ dialogMode: true }"
+        (onShortcutPress)="dialogRef?.close()"
+    >
         <div class="dialog-header">
             <span class="font-size-16">{{ commonLocaleData?.app_tax_applicable }}</span>
-            <i mat-dialog-close class="icon-cross"></i>
         </div>
         <div mat-dialog-content class="dialog-body">
             <form autocomplete="off" novalidate name="otherTaxForm" [formGroup]="otherTaxForm">
                 <div class="row mt-2">
                     <div class="col-6">
-                        <reactive-dropdown-field [label]="localeData?.select_tax" [placeholder]="localeData?.select_tax"
-                            [labelValue]="otherTaxForm.get('name')?.value" formControlName="tax" [name]="'tax'" [options]="taxesList$ | async" (onClear)="otherTaxForm.get('tax')?.patchValue(null)"
-                            [showError]="isFormSubmitted && !otherTaxForm.get('tax')?.value"
-                            (createOption)="createTaxDialog()" [createNewText]="commonLocaleData?.app_create_new" [showCreateNew]="true">
+                        <reactive-dropdown-field
+                            appEnterNext
+                            [label]="localeData?.select_tax"
+                            [placeholder]="localeData?.select_tax"
+                            [labelValue]="otherTaxForm.get('name')?.value"
+                            formControlName="tax"
+                            [openDropdown]="openAccountDropdown"
+                            [name]="'tax'"
+                            [options]="taxesList$ | async"
+                            (onClear)="otherTaxForm.get('tax')?.patchValue(null)"
+                            [showError]="isFormSubmitted && !otherTaxForm.get('tax')?.value?.uniqueName"
+                            (createOption)="createTaxDialog()"
+                            [showCreateNew]="true"
+                        >
                         </reactive-dropdown-field>
                     </div>
                     <div class="col-6">
                         <span class="custom-mat-form-field">
                             <reactive-dropdown-field
+                                appEnterNext
                                 [options]="calculationMethodOptions"
                                 [label]="commonLocaleData?.app_calculation_method"
                                 [appearance]="'outline'"
                                 [required]="true"
-                                formControlName="calculationMethod">
+                                [showError]="isFormSubmitted && !otherTaxForm.get('calculationMethod')?.value"
+                                formControlName="calculationMethod"
+                            >
                             </reactive-dropdown-field>
                         </span>
                     </div>
                 </div>
                 <div class="row mt-4">
                     <div class="col-12">
-                        <button mat-raised-button color="primary" (click)="saveTax()">{{ commonLocaleData?.app_apply }}</button>
+                        <button mat-raised-button color="primary" (click)="saveTax()">
+                            {{ commonLocaleData?.app_apply }}
+                        </button>
+                        <button mat-stroked-button mat-dialog-close class="ml-2">
+                            {{ commonLocaleData?.app_cancel }}
+                        </button>
                     </div>
                 </div>
             </form>
@@ -42,7 +65,13 @@
 
     <!-- Create Tax Aside Pane -->
     <ng-template #createTax>
-        <aside-menu-create-tax-component [class]="'in'" [tax]="selectedTax" [localeData]="localeData" [otherTax]="otherTax"
-            [commonLocaleData]="commonLocaleData" (closeEvent)="closeCreateTaxDialog()"></aside-menu-create-tax-component>
+        <aside-menu-create-tax-component
+            [class]="'in'"
+            [tax]="selectedTax"
+            [localeData]="localeData"
+            [otherTax]="otherTax"
+            [commonLocaleData]="commonLocaleData"
+            (closeEvent)="closeCreateTaxDialog()"
+        ></aside-menu-create-tax-component>
     </ng-template>
 </div>

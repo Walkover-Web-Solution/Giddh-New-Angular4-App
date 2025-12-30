@@ -14,7 +14,7 @@ import { FocusMonitor } from '@angular/cdk/a11y';
  */
 @Directive({
     selector: '[appFocusableClick]',
-    standalone:false
+    standalone: true
 })
 export class FocusableClickDirective implements OnInit, OnDestroy {
 

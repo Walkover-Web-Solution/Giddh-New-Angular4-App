@@ -199,6 +199,14 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
             this.getVisibleMenuItems();
         }
 
+         // Additional check: Try to load menu items if we have apiMenuItems but no allItems yet
+        if ('apiMenuItems' in changes && changes.apiMenuItems.currentValue.length && (!this.allItems || this.allItems.length === 0)) {
+            setTimeout(() => {
+                if (this.localeData?.page_heading && this.apiMenuItems.length > 0) {
+                    this.getVisibleMenuItems();
+                }
+            }, 100);
+        }
 
         if ('showCommandDialog' in changes && changes.showCommandDialog.previousValue !== changes.showCommandDialog.currentValue && changes.showCommandDialog.currentValue) {
             this.showNavigationModal();

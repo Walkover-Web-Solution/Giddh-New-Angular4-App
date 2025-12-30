@@ -1,7 +1,10 @@
 <div appTranslate (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <ng-container *ngIf="showLabel">
-        <div [ngClass]="{ 'readonly-field': readonly || disabled, 'dropdown-without-label': !showMatLabel}">
-            <mat-form-field [appearance]="appearance" [ngClass]="{ 'mat-form-field-invalid': showError }" (click)="!readonly ? trigger?.openPanel() : trigger?.closePanel()">
+        <div [ngClass]="{ 'readonly-field': readonly || disabled, 'dropdown-without-label': !showMatLabel }">
+            <mat-form-field
+                [appearance]="appearance"
+                [ngClass]="{ 'mat-form-field-invalid': showError }"
+            >
                 <mat-label *ngIf="showMatLabel">{{ label ? label : placeholder }}</mat-label>
                 <input
                     type="text"
@@ -9,47 +12,72 @@
                     class="select-field-input"
                     [placeholder]="placeholder"
                     matInput
-                    [readonly]="readonly" [disabled]="disabled" [matAutocomplete]="auto" [name]="name" [autocomplete]="autocomplete"
-                    [required]="required" [attr.aria-expanded]="readonly ? false : true"
+                    [readonly]="readonly"
+                    [disabled]="disabled"
+                    [matAutocomplete]="auto"
+                    [name]="name"
+                    [autocomplete]="autocomplete"
+                    [required]="required"
                     (input)="searchFormControl.next($event.target.value)"
                     (blur)="onBlur()"
+                    (keydown)="onInputKeyDown($event)"
                     #trigger="matAutocompleteTrigger"
                     [style.padding-right]="showCaretIcon ? '18px' : '0'"
-                    #selectField matAutocompletePosition="auto" (focusout)="
-                        closeOnFocusOut &&
-                        $event?.relatedTarget?.nodeName !== 'MAT-OPTION' &&
-                        $event?.relatedTarget?.nodeName !== 'A'
-                            ? trigger.closePanel()
-                            : null
-                    " [value]="controlLabelValue ?? ''" />
-                <mat-autocomplete (opened)="panelOpened()" (optionSelected)="optionSelected($event)" optionsScroll class="py-0"
-                    [enableDynamicSearch]="enableDynamicSearch" (optionsScroll)="onScroll()" autoActiveFirstOption
-                    [displayWith]="displayLabel" #auto="matAutocomplete">
-                    <span class="position-relative ">
-                        <ng-container *ngFor="let option of fieldFilteredOptions$ | async">
-                            <mat-option [value]="option"
-                                [matTooltip]="option?.label" matTooltipPosition="right" (click)="$event.stopPropagation()" [disabled]="option?.additional?.disabled">
-                                <ng-template [ngTemplateOutletContext]="{ option: option }"
-                                    [ngTemplateOutlet]="optionTemplate"></ng-template>
-                                <ng-container *ngIf="!optionTemplate">
-                                    {{ option?.label }}
-                                </ng-container>
-                            </mat-option>
-                            <mat-divider *ngIf="showOptionDivider"></mat-divider>
-                        </ng-container>
-                        <mat-option disabled *ngIf="!(fieldFilteredOptions$ | async)?.length">
-                            {{ noResultsFoundMessage || commonLocaleData?.app_no_result_found }}
-                        </mat-option>
-                        <a href="javascript:;" *ngIf="showCreateNew && createNewText" (click)="createNewRecord()"
-                            class="position-sticky create-new-wrapper d-flex justify-content-between px-3 py-2">
+                    #selectField
+                    matAutocompletePosition="auto"
+                    [value]="controlLabelValue ?? ''"
+                />
+                <mat-autocomplete
+                    (opened)="panelOpened()"
+                    (optionSelected)="optionSelected($event)"
+                    optionsScroll
+                    [class]="'py-0' + (sidebarListView ? ' sidebar-list-view' : '')"
+                    [enableDynamicSearch]="enableDynamicSearch"
+                    (optionsScroll)="onScroll()"
+                    [autoActiveFirstOption]="!showCreateNew"
+                    [displayWith]="displayLabel"
+                    #auto="matAutocomplete"
+                >
+                    <mat-option
+                        *ngIf="showCreateNew && createNewText"
+                        class="create-new-option"
+                        (onSelectionChange)="handleCreateNewSelection($event)"
+                        [attr.aria-label]="createNewText"
+                    >
+                        <div class="theme-primary-color d-flex justify-content-between">
                             <div class="item create-new">{{ createNewText }}</div>
                             <div class="item create-new-command" *ngIf="showKeyboardCommand">
                                 {{ showKeyboardCommand }}
                             </div>
-                        </a>
-                    </span>
+                        </div>
+                    </mat-option>
+                    <ng-container *ngFor="let option of fieldFilteredOptions$ | async; trackBy: trackByOption">
+                        <mat-option
+                            [value]="option"
+                            [matTooltip]="option?.label"
+                            matTooltipPosition="right"
+                            (click)="$event.stopPropagation()"
+                            [disabled]="option?.additional?.disabled"
+                        >
+                            <ng-template
+                                [ngTemplateOutletContext]="{ option: option }"
+                                [ngTemplateOutlet]="optionTemplate"
+                            ></ng-template>
+                            <ng-container *ngIf="!optionTemplate">
+                                {{ option?.label }}
+                            </ng-container>
+                        </mat-option>
+                        <mat-divider *ngIf="showOptionDivider"></mat-divider>
+                    </ng-container>
+                    <mat-option disabled *ngIf="!(fieldFilteredOptions$ | async)?.length">
+                        {{ noResultsFoundMessage || commonLocaleData?.app_no_result_found }}
+                    </mat-option>
                 </mat-autocomplete>
-                <div *ngIf="showCaretIcon && !value" class="dropdown-bg position-absolute" (click)="!readonly ? openDropdownPanel() : $event.stopPropagation()">
+                <div
+                    *ngIf="showCaretIcon && !value"
+                    class="dropdown-bg position-absolute"
+                    (click)="!readonly ? openDropdownPanel() : $event.stopPropagation()"
+                >
                     <span class="arrow-dropdown position-absolute"></span>
                 </div>
                 <i
@@ -67,31 +95,58 @@
         </div>
     </ng-container>
     <ng-container *ngIf="!showLabel">
-        <input type="text" [ngClass]="cssClass" class="select-field-input" [placeholder]="placeholder" matInput
-            [readonly]="readonly" [disabled]="disabled" [matAutocomplete]="auto" [name]="name" [autocomplete]="autocomplete"
-            [required]="required" [attr.aria-expanded]="readonly ? false : true"
+        <input
+            type="text"
+            [ngClass]="cssClass"
+            class="select-field-input"
+            [placeholder]="placeholder"
+            matInput
+            [readonly]="readonly"
+            [disabled]="disabled"
+            [matAutocomplete]="auto"
+            [name]="name"
+            [autocomplete]="autocomplete"
+            [required]="required"
+            [attr.aria-expanded]="readonly ? false : true"
             (input)="searchFormControl.next($event.target.value)"
-            (click)="!readonly ? trigger?.openPanel() : trigger?.closePanel()" #trigger="matAutocompleteTrigger"
-            #selectField matAutocompletePosition="auto" (focusout)="
-                closeOnFocusOut &&
-                $event?.relatedTarget?.nodeName !== 'MAT-OPTION' &&
-                $event?.relatedTarget?.nodeName !== 'A'
-                    ? trigger.closePanel()
-                    : null
-            " [value]="controlLabelValue ?? ''" />
-        <mat-autocomplete (optionSelected)="optionSelected($event)" optionsScroll
-            [enableDynamicSearch]="enableDynamicSearch" (optionsScroll)="onScroll()" autoActiveFirstOption
-            [displayWith]="displayLabel" #auto="matAutocomplete">
-            <a href="javascript:;" *ngIf="showCreateNew && createNewText" (click)="createNewRecord()"
-                class="d-flex justify-content-between px-3 py-2">
-                <div class="item create-new">{{ createNewText }}</div>
-                <div class="item create-new-command" *ngIf="showKeyboardCommand">
-                    {{ showKeyboardCommand }}
+            (keydown)="onInputKeyDown($event)"
+            #trigger="matAutocompleteTrigger"
+            #selectField
+            matAutocompletePosition="auto"
+            [value]="controlLabelValue ?? ''"
+        />
+        <mat-autocomplete
+            (optionSelected)="optionSelected($event)"
+            optionsScroll
+            class="py-0"
+            [ngClass]="{ 'sidebar-list-view': sidebarListView }"
+            [enableDynamicSearch]="enableDynamicSearch"
+            (optionsScroll)="onScroll()"
+            [autoActiveFirstOption]="!showCreateNew"
+            [displayWith]="displayLabel"
+            #auto="matAutocomplete"
+        >
+            <mat-option
+                *ngIf="showCreateNew && createNewText"
+                class="create-new-option"
+                (onSelectionChange)="handleCreateNewSelection($event)"
+                [attr.aria-label]="createNewText"
+                >
+                <div class="theme-primary-color d-flex justify-content-between">
+                    <div class="item create-new">{{ createNewText }}</div>
+                    <div class="item create-new-command" *ngIf="showKeyboardCommand">
+                        {{ showKeyboardCommand }}
+                    </div>
                 </div>
-            </a>
-            <mat-option *ngFor="let option of fieldFilteredOptions$ | async" [value]="option"
-                [matTooltip]="option?.label" matTooltipPosition="right" (click)="$event.stopPropagation()">
-                {{option?.label}}
+            </mat-option>
+            <mat-option
+                *ngFor="let option of fieldFilteredOptions$ | async; trackBy: trackByOption"
+                [value]="option"
+                [matTooltip]="option?.label"
+                matTooltipPosition="right"
+                (click)="$event.stopPropagation()"
+            >
+                {{ option?.label }}
             </mat-option>
             <mat-option disabled *ngIf="!(fieldFilteredOptions$ | async)?.length">
                 {{ noResultsFoundMessage || commonLocaleData?.app_no_result_found }}

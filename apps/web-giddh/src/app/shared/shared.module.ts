@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { LaddaModule } from 'angular2-ladda';
 import { DigitsOnlyModule } from 'apps/web-giddh/src/app/shared/helpers/directives/digitsOnly/digitsOnly.module';
+import { KeyboardNavigationModule } from './helpers/directives/enter-next/keyboard-navigation.module';
 import { HighlightModule } from 'apps/web-giddh/src/app/shared/helpers/pipes/highlightPipe/highlight.module';
 import { ClickOutsideModule } from 'ng-click-outside';
 import { MfReportComponent } from '../manufacturing/report/mf.report.component';
@@ -104,6 +105,7 @@ export function provideConfig() {
         ElementViewChildModule,
         DecimalDigitsModule,
         DigitsOnlyModule,
+        KeyboardNavigationModule,
         MatPaginatorModule,
         Daterangepicker,
         TextCaseChangeModule,
@@ -141,6 +143,7 @@ export function provideConfig() {
     exports: [
         CommonModule,
         DecimalDigitsModule,
+        KeyboardNavigationModule,
         FormsModule,
         ReactiveFormsModule,
         LaddaModule,

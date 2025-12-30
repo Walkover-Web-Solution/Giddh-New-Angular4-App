@@ -3,9 +3,8 @@
     <div class="tax-authority h-100">
         <div class="dialog-header">
             <span class="font-size-16">
-                {{ commonLocaleData?.app_create + ' ' + commonLocaleData?.app_tax_authority }}  
+                {{ commonLocaleData?.app_create + " " + commonLocaleData?.app_tax_authority }}
             </span>
-            <i mat-dialog-close class="icon-cross"></i>
         </div>
         <div mat-dialog-content class="tax-authority-body dialog-body">
             <form [formGroup]="taxAuthorityForm">
@@ -42,7 +41,10 @@
                 </div>
                 <div class="mt-5">
                     <button mat-raised-button color="primary" (click)="createUpdateTaxAuthority()">
-                        {{taxAuthorityInfo?.uniqueName ? commonLocaleData?.app_update : commonLocaleData?.app_create}}
+                        {{ taxAuthorityInfo?.uniqueName ? commonLocaleData?.app_update : commonLocaleData?.app_create }}
+                    </button>
+                    <button mat-stroked-button mat-dialog-close type="button">
+                        {{ commonLocaleData?.app_cancel }}
                     </button>
                 </div>
             </form>

@@ -2,6 +2,7 @@
     appTranslate
     (commonLocaleData)="commonLocaleData = $event"
     [keyboardShortcut]="'esc'"
+    [config]="{ dialogMode: true }"
     (onShortcutPress)="closeDialog()"
 >
     <div class="dialog-header">
@@ -13,7 +14,9 @@
             }}
             details
         </p>
-        <i (click)="closeDialog()" aria-label="close icon" class="icon-cross cursor-pointer"></i>
+        <button mat-icon-button aria-label="Close dialog" (click)="closeDialog()">
+            <i class="icon-cross"></i>
+        </button>
     </div>
     <mat-dialog-content class="dialog-content">
         <div class="d-flex mb-3 p-0 align-items-center">
@@ -23,7 +26,7 @@
                 </mat-label>
                 <input
                     matInput
-                    tabindex="1"
+                    tabindex="0"
                     #nameField
                     type="text"
                     name="name"

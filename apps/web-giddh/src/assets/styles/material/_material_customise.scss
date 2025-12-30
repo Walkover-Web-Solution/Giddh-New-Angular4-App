@@ -88,3 +88,37 @@
         }
     }
 }
+
+/*
+* Styles for reactive dropdown list positioning in sidebar
+* CSS variables --sidebar-list-right-position and --sidebar-list-top-position are set dynamically via JavaScript
+* to control dropdown positioning relative to sidebar elements
+*/
+.cdk-overlay-container {
+    &:has(.sidebar-list-view) {
+        .cdk-overlay-pane:not([class*="mat-mdc-tooltip-panel"]) {
+            --common-top-position: calc(var(--top-distance, 0px) + var(--header-height, 60px));
+            top: var(--sidebar-list-top-position, var(--common-top-position)) !important;
+            right: var(--sidebar-list-right-position, 0) !important;
+            left: unset !important;
+            bottom: unset !important;
+            width: min(40vw, 600px) !important;
+
+            .sidebar-list-view {
+                &.mat-mdc-autocomplete-panel {
+                    max-height: unset !important;
+                    height: calc(100vh - var(--sidebar-list-top-position, var(--common-top-position))) !important;
+                    border: 1px solid rgba(0, 0, 0, 0.08);
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.12),
+                                0 10px 20px rgba(0,0,0,0.18),
+                                0 15px 40px rgba(0,0,0,0.15) !important;
+                    padding-bottom: 10px !important;
+                    transform: unset !important;
+                    .mat-divider:last-child {
+                        display: none !important;
+                    }
+                }
+            }
+        }
+    }
+}

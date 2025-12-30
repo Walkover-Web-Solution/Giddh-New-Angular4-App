@@ -79,7 +79,55 @@
 // Component-specific styles
 // @import 'components/buttons'; // Main.scss - 1. ABSTRACTS (must come first with @use)
 // --------------------------------------------------------------------------
-// Variables, functions, mixins - no actual CSS output // 2. VENDORS ( // 8. PAGES
+// Page-specific styles
+@import "pages/utility.scss";
+@import "pages/ngx-bs-datepicker.scss";
+@import "pages/add-company.scss";
+@import "pages/aside-modal.scss";
+@import "pages/onboarding.scss";
+@import "pages/setting.profile.scss";
+@import "pages/user-details.scss";
+@import "pages/permission-list.scss";
+@import "pages/aside-menu-account.scss";
+@import "pages/subscription.component.scss";
+@import "pages/custom-fields.scss";
+@import "pages/inventory.scss";
+@import "pages/all-items.scss";
+@import "pages/header.scss";
+@import "pages/search.scss";
+@import "pages/mat-button.scss";
+@import "pages/vat-report.scss";
+@import "pages/help-support.scss";
+@import "pages/sales-register-expand.scss";
+@import "pages/setting-integration.scss";
+@import "pages/input-dropdown-field.scss";
+@import "pages/voucher.scss";
+@import "pages/tabs.scss";
+@import "pages/table.scss";
+@import "pages/custom-price.scss";
+@import "pages/inventory-adjustment.scss";
+@import "pages/global-variable.scss";
+@import "pages/vouchers.scss";
+@import "pages/tax-dropdown.scss";
+@import "pages/discount-dropdown.scss";
+@import "pages/dialog.scss";
+@import "pages/add-bulk-entry.scss";
+@import "pages/settings-sidebar.scss";
+@import "pages/mat-menu.scss";
+@import "pages/tax-authority.scss";
+@import "pages/adjustment-inventory.scss";
+@import "pages/d3-tree-chart.scss";
+@import "pages/vouchers-preview.scss";
+@import "pages/custom-paginator.scss";
+@import "pages/mat-chip.scss";
+@import "pages/select-multiple-fields.scss";
+@import "pages/override-material-theme-variables";
+@import "pages/tribute-js.scss";
+@import "pages/ledger.scss";
+@import "pages/focus.scss";
+
+
+// 9. UTILITIES
 // --------------------------------------------------------------------------
 // Page-specific styles (loaded via @use statements at top of file) // 9. UTILITIES
 // --------------------------------------------------------------------------

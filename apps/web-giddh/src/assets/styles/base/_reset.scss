@@ -13,7 +13,6 @@
 }
 
 * {
-
     &:focus,
     &:focus-visible {
         outline: none;
@@ -41,14 +40,16 @@ body {
 
     .cdk-keyboard-focused,
     .cdk-program-focused {
-
-        &:not(.mat-calendar-content,
-            .mat-mdc-radio-button,
-            .mat-mdc-list-item,
-            .mat-expansion-panel-header,
-            .mat-mdc-icon-button,
-            .mat-mdc-slide-toggle,
-            .mat-mdc-menu-item) {
+        &:not(
+                .border-none,
+                .mat-calendar-content,
+                .mat-mdc-radio-button,
+                .mat-mdc-list-item,
+                .mat-expansion-panel-header,
+                .mat-mdc-icon-button,
+                .mat-mdc-slide-toggle,
+                .mat-mdc-menu-item
+            ) {
             border-radius: 2px;
             outline-offset: 1px;
             outline: 2px solid var(--theme-primary-color) !important;

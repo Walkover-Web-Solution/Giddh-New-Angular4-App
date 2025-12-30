@@ -154,7 +154,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
         archive: true,
         taxes: false,
         customFields: false,
-        discountName: false,
+        discountName: false
     };
     /** This will use for report custom fields column check values */
     public newCustomFieldsColumns: any[] = [];

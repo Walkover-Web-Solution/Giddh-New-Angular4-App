@@ -365,7 +365,6 @@
                     [placeholder]="commonLocaleData?.app_sales_person_placeholder"
                     [options]="salesPersonList$ | async"
                     [showCreateNew]="true"
-                    [createNewText]="commonLocaleData?.app_create_new"
                     (createOption)="openSalesPersonDialog()"
                     (selectedOption)="blankLedger.salesPersonName = $event.label"
                 ></reactive-dropdown-field>

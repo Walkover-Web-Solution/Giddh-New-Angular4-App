@@ -5,10 +5,14 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div class="aside-dialog-wrapper">
+    <div
+        class="aside-dialog-wrapper"
+        [keyboardShortcut]="'esc'"
+        [config]="{ dialogMode: true }"
+        (onShortcutPress)="cancelDiscount()"
+    >
         <div class="dialog-header">
             <span class="font-size-16">{{ localeData?.tab_heading }}</span>
-            <i mat-dialog-close class="icon-cross icon-font-size-16"></i>
         </div>
         <div mat-dialog-content class="create-discount-aside dialog-body">
             <div *ngIf="isLoading">
@@ -23,38 +27,74 @@
                                     [options]="discountTypeOptions"
                                     [label]="localeData?.discount_type"
                                     [appearance]="'outline'"
-                                    formControlName="type">
+                                    formControlName="type"
+                                    [openDropdown]="true"
+                                >
                                 </reactive-dropdown-field>
                             </span>
                         </div>
                         <div class="col-6">
-                            <input-field [type]="'text'" [showError]="isFormSubmitted && !createDiscountForm.get('name')?.value"
-                                [name]="'discount-name'" formControlName="name" [placeholder]="commonLocaleData?.app_name_placeholder" [label]="commonLocaleData?.app_name"></input-field>
+                            <input-field
+                                [type]="'text'"
+                                [showError]="isFormSubmitted && !createDiscountForm.get('name')?.value"
+                                [name]="'discount-name'"
+                                formControlName="name"
+                                [placeholder]="commonLocaleData?.app_name_placeholder"
+                                [label]="commonLocaleData?.app_name"
+                            ></input-field>
                         </div>
                         <div class="col-6">
-                            <input-field [type]="'number'"
+                            <input-field
+                                [type]="'number'"
                                 [showError]="isFormSubmitted && !createDiscountForm.get('discountValue')?.value"
-                                [name]="'discountValue'" formControlName="discountValue" [placeholder]="localeData?.discount_value_placeholder"
-                                [label]="commonLocaleData?.app_value"></input-field>
+                                [name]="'discountValue'"
+                                formControlName="discountValue"
+                                [placeholder]="localeData?.discount_value_placeholder"
+                                [label]="commonLocaleData?.app_value"
+                            ></input-field>
                         </div>
                         <div class="col-6">
-                            <reactive-dropdown-field [label]="localeData?.linked_accounts_label" [placeholder]="localeData?.linked_accounts_placeholder"
-                                formControlName="accountUniqueName" [name]="'accountUniqueName'"
+                            <reactive-dropdown-field
+                                [label]="localeData?.linked_accounts_label"
+                                [placeholder]="localeData?.linked_accounts_placeholder"
+                                formControlName="accountUniqueName"
+                                [name]="'accountUniqueName'"
                                 [options]="discountsAccountList$ | async"
                                 [showError]="isFormSubmitted && !createDiscountForm.get('accountUniqueName')?.value"
                                 [labelValue]="createDiscountForm.get('accountName')?.value"
                                 (selectedOption)="selectDiscount($event)"
-                                (onClear)="clearAccount()">
+                                (onClear)="clearAccount()"
+                            >
                             </reactive-dropdown-field>
                         </div>
                     </div>
                 </form>
                 <div class="row mt-4" *ngIf="voucherApiVersion === 2">
                     <div class="col-12 d-flex column-gap-1">
-                        <button *ngIf="!isUpdateMode" mat-raised-button color="primary" (click)="saveDiscount()" [ladda]="createDiscountInProgress$ | async">{{ commonLocaleData?.app_save }}</button>
-                        <button *ngIf="isUpdateMode" mat-raised-button color="primary" (click)="updateDiscount()" [ladda]="createDiscountInProgress$ | async">{{ commonLocaleData?.app_update }}</button>
-                        <button mat-stroked-button (click)="cancelDiscount()">{{ commonLocaleData?.app_cancel }}</button>
-                        <button *ngIf="!isUpdateMode" mat-stroked-button (click)="clearDiscount()">{{ commonLocaleData?.app_clear }}</button>
+                        <button
+                            *ngIf="!isUpdateMode"
+                            mat-raised-button
+                            color="primary"
+                            (click)="saveDiscount()"
+                            [ladda]="createDiscountInProgress$ | async"
+                        >
+                            {{ commonLocaleData?.app_save }}
+                        </button>
+                        <button
+                            *ngIf="isUpdateMode"
+                            mat-raised-button
+                            color="primary"
+                            (click)="updateDiscount()"
+                            [ladda]="createDiscountInProgress$ | async"
+                        >
+                            {{ commonLocaleData?.app_update }}
+                        </button>
+                        <button mat-stroked-button (click)="cancelDiscount()">
+                            {{ commonLocaleData?.app_cancel }}
+                        </button>
+                        <button *ngIf="!isUpdateMode" mat-stroked-button (click)="clearDiscount()">
+                            {{ commonLocaleData?.app_clear }}
+                        </button>
                     </div>
                 </div>
             </ng-container>

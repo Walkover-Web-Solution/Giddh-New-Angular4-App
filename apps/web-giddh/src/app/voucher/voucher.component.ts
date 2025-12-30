@@ -26,7 +26,7 @@ import { cloneDeep, find, forEach, isEqual, isUndefined, omit, orderBy, uniqBy }
 import { InvoiceSetting } from '../models/interfaces/invoice.setting.interface';
 import { BaseResponse } from '../models/api-models/BaseResponse';
 import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
-import { SubVoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION, SearchResultText, TCS_TDS_TAXES_TYPES, ENTRY_DESCRIPTION_LENGTH, EMAIL_REGEX_PATTERN, AdjustedVoucherType, API_BULK_FETCH_LIMIT, BranchHierarchyType, IOption, ASIDE_PANE_CONFIG, BREAKPOINT_SCREEN_SIZE } from '../app.constant';
+import { SubVoucher, RATE_FIELD_PRECISION, HIGH_RATE_FIELD_PRECISION, SearchResultText, TCS_TDS_TAXES_TYPES, ENTRY_DESCRIPTION_LENGTH, EMAIL_REGEX_PATTERN, AdjustedVoucherType, API_BULK_FETCH_LIMIT, BranchHierarchyType, IOption, ASIDE_PANE_CONFIG, BREAKPOINT_SCREEN_SIZE, Configuration } from '../app.constant';
 import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { ProformaActions } from '../actions/proforma/proforma.actions';
 import { PreviousInvoicesVm, ProformaFilter, ProformaGetRequest, ProformaResponse } from '../models/api-models/proforma';
@@ -889,7 +889,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
                 this.isConsolidatedBranch = response.isBranchConsolidated;
             }
         });
-        this.imgPath = isElectron ? "assets/images/" : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + "assets/images/";
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         /** This will use for filter link purchase orders  */
         this.linkPoDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {
             this.filterPurchaseOrder(search);

@@ -4,7 +4,7 @@ import { VoucherComponentStore } from '../utility/vouchers.store';
 import { Observable, ReplaySubject, of, takeUntil } from 'rxjs';
 import * as dayjs from 'dayjs';
 import { AdjustedVoucherType, SubVoucher } from '../../app.constant';
-import { VoucherTypeEnum } from '../utility/vouchers.const';
+import { VoucherTypeEnum, InteractionType } from '../utility/vouchers.const';
 import { AdjustmentUtilityService } from '../../shared/advance-receipt-adjustment/services/adjustment-utility.service';
 import { IOption } from '../../app.constant';
 import { AdjustAdvancePaymentModal, Adjustment, AdvanceReceiptRequest, VoucherAdjustments } from '../../models/api-models/AdvanceReceiptsAdjust';
@@ -123,6 +123,14 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
         inputMaskFormat: '',
         giddhBalanceDecimalPlaces: 2
     };
+    /** Tracks the last interaction type for conditional focus behavior */
+    public lastInteraction: InteractionType | null = null;
+    /** Timestamp of last interaction to prevent rapid overrides */
+    private lastInteractionTimestamp: number = 0;
+    /** Global event listeners for cleanup */
+    private globalKeydownListener?: (event: KeyboardEvent) => void;
+    private globalMousedownListener?: () => void;
+    private globalClickListener?: () => void;
 
     constructor(
         private componentStore: VoucherComponentStore,
@@ -138,6 +146,9 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public ngOnInit() {
+        // Set up global interaction tracking
+        this.setupGlobalInteractionTracking();
+
         this.adjustVoucherForm = new VoucherAdjustments();
         this.onClear();
 
@@ -380,6 +391,11 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
         });
         if (this.adjustVoucherForm?.adjustments?.length > 1 || this.adjustVoucherForm?.adjustments.every(adjustment => adjustment?.uniqueName !== '')) {
             this.adjustVoucherForm.adjustments.splice(index, 1);
+
+            if (this.adjustVoucherForm.adjustments.length === 0) {
+                this.onClear(true);
+                this.addNewBlankAdjustVoucherRow();
+            }
         } else {
             this.onClear();
         }
@@ -553,11 +569,14 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
                 this.adjustVoucherForm.adjustments[index] = new Adjustment();
             }
             this.checkValidations();
-            setTimeout(() => {
-                if (this.amountInput) {
-                    this.amountInput.inputFocus();
-                }
-            }, 200);
+
+            if (this.lastInteraction === InteractionType.KEYBOARD) {
+                setTimeout(() => {
+                    if (this.amountInput) {
+                        this.amountInput.inputFocus();
+                    }
+                }, 200);
+            }
         }
     }
 
@@ -869,11 +888,22 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
     }
 
     /**
-     * Unsubscribe from all listeners
+     * Lifecycle hook for component destruction
      *
      * @memberof AdvanceReceiptAdjustmentComponent
      */
     public ngOnDestroy(): void {
+        // Clean up global interaction tracking listeners
+        if (this.globalKeydownListener) {
+            document.removeEventListener('keydown', this.globalKeydownListener);
+        }
+        if (this.globalMousedownListener) {
+            document.removeEventListener('mousedown', this.globalMousedownListener);
+        }
+        if (this.globalClickListener) {
+            document.removeEventListener('click', this.globalClickListener);
+        }
+
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -1136,4 +1166,53 @@ export class AdjustPaymentDialogComponent implements OnInit, OnDestroy {
             }
         });
     }
+
+    /**
+     * Sets up global interaction tracking for the entire page
+     *
+     * @private
+     * @memberof AdjustPaymentDialogComponent
+     */
+    private setupGlobalInteractionTracking(): void {
+        // Create event listeners with proper binding
+        this.globalKeydownListener = (event: KeyboardEvent) => {
+            if (['Enter', ' ', 'ArrowDown', 'ArrowUp', 'Tab', 'Escape'].includes(event.key)) {
+                this.setInteractionType(InteractionType.KEYBOARD, 'Global keydown');
+            }
+        };
+
+        this.globalMousedownListener = () => {
+            this.setInteractionType(InteractionType.MOUSE, 'Global mousedown');
+        };
+
+        this.globalClickListener = () => {
+            this.setInteractionType(InteractionType.MOUSE, 'Global click');
+        };
+
+        // Add event listeners to document
+        document.addEventListener('keydown', this.globalKeydownListener);
+        document.addEventListener('mousedown', this.globalMousedownListener);
+        document.addEventListener('click', this.globalClickListener);
+    }
+
+    /**
+     * Sets interaction type with timestamp protection
+     *
+     * @private
+     * @param {InteractionType} type - Interaction type
+     * @param {string} source - Source of the interaction for debugging
+     * @memberof AdjustPaymentDialogComponent
+     */
+    private setInteractionType(type: InteractionType, source: string): void {
+        const now = Date.now();
+        const timeSinceLastInteraction = now - this.lastInteractionTimestamp;
+
+        // If this is a keyboard interaction, always accept it (keyboard has priority)
+        // If this is a mouse interaction, only accept it if enough time has passed or if the last interaction wasn't keyboard
+        if (type === InteractionType.KEYBOARD || (type === InteractionType.MOUSE && (this.lastInteraction !== InteractionType.KEYBOARD || timeSinceLastInteraction > 500))) {
+            this.lastInteraction = type;
+            this.lastInteractionTimestamp = now;
+        }
+    }
+
 }

@@ -32,7 +32,14 @@
                                     [labelValue]="currentBranch?.name"
                                 ></reactive-dropdown-field>
                             </div>
-                            <div class="custom-datepicker" [matMenuTriggerFor]="universalDatepicker" #universalDatepickerTrigger="matMenuTrigger" role="button" aria-haspopup="true" aria-controls="universalDatepicker">
+                            <div
+                                class="custom-datepicker"
+                                [matMenuTriggerFor]="universalDatepicker"
+                                #universalDatepickerTrigger="matMenuTrigger"
+                                role="button"
+                                aria-haspopup="true"
+                                aria-controls="universalDatepicker"
+                            >
                                 <input
                                     matInput
                                     type="text"
@@ -277,9 +284,7 @@
                 </table>
             </form>
 
-            <div
-                *ngIf="branchTransferPaginationObject?.totalItems > pageSizeOptions[0] && !isLoading"
-            >
+            <div *ngIf="branchTransferPaginationObject?.totalItems > pageSizeOptions[0] && !isLoading">
                 <mat-paginator
                     [length]="branchTransferPaginationObject?.totalItems"
                     [pageSize]="branchTransferPaginationObject.count"
@@ -308,9 +313,6 @@
         <div class="advance-search-dialog">
             <div class="dialog-header">
                 <span>{{ commonLocaleData?.app_advanced_filter }}</span>
-                <button mat-icon-button aria-label="close" mat-dialog-close>
-                    <i class="icon-cross"></i>
-                </button>
             </div>
             <mat-dialog-content class="dialog-body">
                 <form class="col-md-12 pl-0 pr-0 mb-1">
@@ -357,7 +359,7 @@
                                         [placeholder]="'0'"
                                         [name]="'amount'"
                                         [(ngModel)]="branchTransferAdvanceSearchFormObj.amount"
-                                        [allowDigitsOnly]="true"
+                                        [allowDecimalDigitsOnly]="true"
                                         (onClear)="branchTransferAdvanceSearchFormObj.amount = ''"
                                         [autocomplete]="'off'"
                                         [label]="commonLocaleData?.app_total_amount"
@@ -421,7 +423,7 @@
                 [keepCalendarOpeningWithRange]="false"
                 [showRangeLabelOnInput]="false"
             >
-        </app-datepicker-wrapper>
+            </app-datepicker-wrapper>
         </ng-template>
     </mat-menu>
 </div>

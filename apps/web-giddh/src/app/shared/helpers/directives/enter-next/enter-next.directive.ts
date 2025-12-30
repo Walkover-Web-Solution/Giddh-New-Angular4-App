@@ -10,7 +10,7 @@ import { Directive, HostListener, ElementRef, OnDestroy, AfterViewInit } from '@
  */
 @Directive({
     selector: '[appEnterNext]',
-    standalone:false
+    standalone: true
 })
 export class EnterNextDirective implements OnDestroy, AfterViewInit {
 
@@ -108,7 +108,7 @@ export class EnterNextDirective implements OnDestroy, AfterViewInit {
                 if (matAutocomplete) {
                     // Listen for option selection events on the autocomplete
                     const options = matAutocomplete.querySelectorAll('mat-option');
-                    (Array.isArray(options) ? options : []).forEach(option => {
+                    options.forEach(option => {
                         option.addEventListener('click', () => {
                             setTimeout(() => {
                                 this.focusNextElement();

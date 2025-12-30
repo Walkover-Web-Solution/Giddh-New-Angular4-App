@@ -6,11 +6,8 @@
     (translationComplete)="translationComplete($event)"
 >
     <section class="aside-dialog-wrapper">
-        <div class="dialog-header d-flex align-items-center form-header position-sticky top-0">
-            <p>{{ commonLocaleData?.app_custom_email_template }}</p>
-            <button mat-icon-button cdkFocusInitial (click)="handleDialogClose()" aria-label="close icon" class="p-0">
-                <i class="icon-cross"></i>
-            </button>
+        <div class="dialog-header position-sticky top-0">
+            <span>{{ commonLocaleData?.app_custom_email_template }}</span>
         </div>
 
         <mat-dialog-content class="dialog-body d-flex flex-column template-froala-wrapper">
@@ -363,7 +360,7 @@
                                     [commonLocaleData]="commonLocaleData"
                                 ></select-multiple-fields>
                                 <div
-                                    *ngIf="clickedInsideEmailSection && !showCc && !showBcc"
+                                    *ngIf="clickedInsideEmailSection && !showCc && !showBcc && !showReplyTo"
                                     class="d-flex column-gap-1 justify-content-end"
                                 >
                                     <a
@@ -377,6 +374,12 @@
                                         href="javascript:;"
                                         (click)="$event.stopPropagation(); toggleBccCc(emailType.Bcc)"
                                         >{{ localeData?.bcc }}</a
+                                    >
+                                    <a
+                                        class="btn-link"
+                                        href="javascript:;"
+                                        (click)="$event.stopPropagation(); toggleBccCc(emailType.ReplyTo)"
+                                        >{{ localeData?.reply_to }}</a
                                     >
                                 </div>
                             </div>
@@ -415,6 +418,13 @@
                                         (click)="$event.stopPropagation(); toggleBccCc(emailType.Bcc)"
                                         >{{ localeData?.bcc }}</a
                                     >
+                                    <a
+                                        *ngIf="!showReplyTo && !showBcc"
+                                        class="btn-link"
+                                        href="javascript:;"
+                                        (click)="$event.stopPropagation(); toggleBccCc(emailType.ReplyTo)"
+                                        >{{ localeData?.reply_to }}</a
+                                    >
                                 </div>
                             </div>
                         </div>
@@ -452,9 +462,59 @@
                                         (click)="$event.stopPropagation(); toggleBccCc(emailType.Cc)"
                                         >{{ localeData?.cc }}</a
                                     >
+                                    <a
+                                        *ngIf="!showReplyTo"
+                                        class="btn-link"
+                                        href="javascript:;"
+                                        (click)="$event.stopPropagation(); toggleBccCc(emailType.ReplyTo)"
+                                        >{{ localeData?.reply_to }}</a
+                                    >
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div
+                        class="form-group position-relative"
+                        *ngIf="showReplyTo && clickedInsideEmailSection"
+                        (click)="setEmailFocus(emailType.ReplyTo)"
+                    >
+                        <div class="d-flex border-bottom">
+                            <label class="mr-2 width-80">{{ localeData?.reply_to }}</label>
+                            <div
+                                class="d-flex w-100 mat-form-field-clean"
+                                [ngClass]="{ 'flex-column': selectedReplyToEmails.length }"
+                            >
+                                <select-multiple-fields
+                                    [options]="replyToEmails"
+                                    (selectedOption)="selectedReplyToEmails = $event"
+                                    [selectedValues]="selectedReplyToEmails"
+                                    [validations]="['email']"
+                                    [chipPrefix]="emailSuggestionPrefix"
+                                    [chipSuffix]="emailSuggestionSuffix"
+                                    [autoFocus]="emailFocusStates.isReplyTo"
+                                    [name]="emailType.ReplyTo"
+                                    class="select-multiple-chiplist w-100"
+                                    [optionClass]="'email-dropdown-width'"
+                                    [commonLocaleData]="commonLocaleData"
+                                ></select-multiple-fields>
+
+                                <div class="d-flex column-gap-1 justify-content-end" *ngIf="!showCc && !showBcc">
+                                    <a
+                                        class="btn-link"
+                                        href="javascript:;"
+                                        (click)="$event.stopPropagation(); toggleBccCc(emailType.Cc)"
+                                        >{{ localeData?.cc }}</a
+                                    >
+                                    <a
+                                        class="btn-link"
+                                        href="javascript:;"
+                                        (click)="$event.stopPropagation(); toggleBccCc(emailType.Bcc)"
+                                        >{{ localeData?.bcc }}</a
+                                    >
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                     <div class="form-group" (click)="$event.stopPropagation()">
                         <input
@@ -503,6 +563,9 @@
                     (click)="onSubmit('send')"
                 >
                     {{ localeData?.save_and_send }}
+                </button>
+                <button mat-stroked-button type="button" aria-label="cancel" (click)="handleDialogClose()">
+                    {{ commonLocaleData?.app_cancel }}
                 </button>
             </div>
         </mat-dialog-content>

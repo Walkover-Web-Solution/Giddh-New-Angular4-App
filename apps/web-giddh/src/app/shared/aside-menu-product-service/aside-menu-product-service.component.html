@@ -1,5 +1,10 @@
 <div appTranslate (commonLocaleData)="commonLocaleData = $event">
-    <section class="aside-dialog-wrapper">
+    <section
+        class="aside-dialog-wrapper"
+        [keyboardShortcut]="'esc'"
+        [config]="{ dialogMode: true }"
+        (onShortcutPress)="closeAsidePane()"
+    >
         <div class="dialog-header">
             <span>
                 {{ commonLocaleData?.app_add }}
@@ -73,7 +78,6 @@
         [isDebtorCreditor]="false"
         [isBankAccount]="false"
         [includeSearchedGroup]="includeSearchedGroup"
-        [keyboardShortcut]="{ 'esc': !hasUnsavedChanges }"
         (addEvent)="addNewServiceAccount($event)"
     ></generic-aside-menu-account>
 </ng-template>
