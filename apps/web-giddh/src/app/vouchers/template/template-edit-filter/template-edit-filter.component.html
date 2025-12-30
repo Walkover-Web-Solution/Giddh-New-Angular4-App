@@ -1495,10 +1495,10 @@
                                                 <mat-label>{{ localeData?.account_custom_fields }}</mat-label>
                                                 <mat-select
                                                     panelClass="py-0"
-                                                    name="accountCustomFieldUniqNames"
+                                                    name="accountCustomFieldUniqueNames"
                                                     [multiple]="true"
                                                     [placeholder]="localeData?.select_custom_fields"
-                                                    [(ngModel)]="customTemplate.accountCustomFieldUniqNames"
+                                                    [(ngModel)]="customTemplate.accountCustomFieldUniqueNames"
                                                     (ngModelChange)="onChangeFieldVisibility()"
                                                 >
                                                     <mat-option
