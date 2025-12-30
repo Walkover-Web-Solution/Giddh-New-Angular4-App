@@ -24,7 +24,7 @@ const envFileMap = {
     'local': '.env.local',
     'stage': '.env.stage',
     'prod': '.env.prod',
-    'test': '.env.electron', // Use electron for test builds (electron-giddh)
+    'test': '.env.test', // Use web test environment for test builds
     'electron': '.env.electron' // Explicit electron environment
 };
 
@@ -178,8 +178,8 @@ function getAppUrl(config, env) {
     switch (config) {
         case 'prod': return 'https://books.giddh.com';
         case 'stage': return 'https://stage.giddh.com';
+        case 'test': return 'https://test.giddh.com';
         case 'local':
-        case 'test':
         default: return 'http://localhost:3000/';
     }
 }
