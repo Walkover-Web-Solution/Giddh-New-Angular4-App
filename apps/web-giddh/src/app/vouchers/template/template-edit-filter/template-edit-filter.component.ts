@@ -8,12 +8,13 @@ import { CommonService } from '../../../services/common.service';
 import { ToasterService } from '../../../services/toaster.service';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../../store';
-import { IOption } from '../../../app.constant';
+import { API_BULK_FETCH_LIMIT, IOption } from '../../../app.constant';
 import { InvoiceService } from '../../../services/invoice.service';
 import { NgForm } from '@angular/forms';
 import { CountryNames } from '../../../shared/Enums/common.enum';
 import { CurrentCompanyState } from '../../../store/company/company.reducer';
 import { TemplateModeEnum, TemplateTypeEnum, VoucherTypeEnum } from '../../../models/api-models/Sales';
+import { CustomFieldsService } from '../../../services/custom-fields.service';
 
 @Component({
     selector: 'template-edit-filter',
@@ -157,7 +158,8 @@ export class TemplateEditFilterComponent implements OnInit {
     public mainLogoSelectedFile: any;
     /** Holds the file object after selection */
     public mainLogoFile: any;
-
+    /** Hold list of account custom fields */
+    public accountCustomFields: IOption[] = [];
 
     constructor(
         private generalService: GeneralService,
@@ -165,7 +167,9 @@ export class TemplateEditFilterComponent implements OnInit {
         private commonService: CommonService,
         private store: Store<AppState>,
         private invoiceService: InvoiceService,
-        private templateService: InvoiceUiDataService) {
+        private templateService: InvoiceUiDataService,
+        private customFieldsService: CustomFieldsService
+    ) {
     }
 
     /**
@@ -331,6 +335,7 @@ export class TemplateEditFilterComponent implements OnInit {
             const suggestions = response?.body?.accountSuggestions;
             this.suggestionList = suggestions ? suggestions.map((item: string) => ({ label: item, value: item })) : [];
         });
+        this.getCustomFields();
 
         // Subscribe to UI section visibility changes
         this.templateService.selectedSection.pipe(takeUntil(this.destroyed$)).subscribe((info: TemplateContentUISectionVisibility) => {
@@ -984,4 +989,30 @@ export class TemplateEditFilterComponent implements OnInit {
         this.customTemplate.sections['header'].data['formNameInvoice'].display = event;
     }
 
+    /**
+     * Get custom fields API call
+     * 
+     * @memberof TemplateEditFilterComponent
+     */
+    public getCustomFields(): void {
+        this.customFieldsService.list({
+                page: 1,
+                count: API_BULK_FETCH_LIMIT,
+                moduleUniqueName: 'account'
+            }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                if (response.status === 'success') {
+                    const customFields = response.body?.results?.map(customField => {
+                        return {
+                            label: customField.fieldName,
+                            value: customField.uniqueName
+                        };
+                    }) || [];
+                    this.accountCustomFields = customFields;
+                } else if (response.message) {
+                    this.toasty.errorToast(response.message);
+                }
+            }
+        });
+    }
 }
