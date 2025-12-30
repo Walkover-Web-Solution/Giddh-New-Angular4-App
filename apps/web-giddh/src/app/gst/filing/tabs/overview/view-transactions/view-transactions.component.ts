@@ -376,7 +376,8 @@ export class ViewTransactionsComponent implements OnInit, OnDestroy {
                     height: '80vh',
                     width: '80vw',
                     disableClose: true,
-                    autoFocus: false
+            autoFocus: false,
+            panelClass: 'download-send-mail-dialog'
                 });
     }
 

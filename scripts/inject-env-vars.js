@@ -29,7 +29,7 @@ function getEnvFile() {
         'production': '.env.prod',
         'staging': '.env.stage',
         'test': '.env.test',
-        'local': '.env.local'
+        'local': '.env'
     };
 
     return envFileMap[environment] || '.env';
@@ -78,11 +78,11 @@ function generateEnvScript(envVars) {
         PORTAL_URL: envVars.PORTAL_URL || 'https://master.d2n1i21e52r793.amplifyapp.com/',
         isElectron: isElectron,
         APP_FOLDER: envVars.APP_FOLDER || '',
-        GOOGLE_CLIENT_ID: envVars.GOOGLE_CLIENT_ID || '',
-        GOOGLE_CLIENT_SECRET: envVars.GOOGLE_CLIENT_SECRET || '',
+        GOOGLE_CLIENT_ID: envVars.GOOGLE_CLIENT_ID || envVars.GOOGLE_CLIENT_ID_TEST || '',
+        GOOGLE_CLIENT_SECRET: envVars.GOOGLE_CLIENT_SECRET || envVars.GOOGLE_CLIENT_SECRET_TEST || '',
         OTP_WIDGET_ID: envVars.OTP_WIDGET_ID || '',
         OTP_TOKEN_AUTH: envVars.OTP_TOKEN_AUTH || '',
-        RAZORPAY_KEY: envVars.RAZORPAY_KEY || ''
+        RAZORPAY_KEY: envVars.RAZORPAY_KEY || envVars.RAZORPAY_KEY_TEST || ''
     };
 
     // Generate script content

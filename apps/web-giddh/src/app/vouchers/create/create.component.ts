@@ -5003,6 +5003,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         if (!this.isFormValid(invoiceForm)) {
             this.startLoader(false);
+            this.changeDetection.detectChanges();
             return;
         }
 
@@ -5143,6 +5144,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     .pipe(takeUntil(this.destroyed$))
                     .subscribe((response) => {
                         this.startLoader(false);
+                        this.changeDetection.detectChanges();
                         if (response && response.status === "success") {
                             this.toasterService.showSnackBar("success", this.localeData?.po_updated);
                             if (callback) {
@@ -5160,6 +5162,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     .pipe(takeUntil(this.destroyed$))
                     .subscribe((response) => {
                         this.startLoader(false);
+                        this.changeDetection.detectChanges();
                         if (response && response.status === "success") {
                             this.aiOcrService.saveAndNextSuccess$.next({
                                 token: this.aiOcrToken,
@@ -5216,6 +5219,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     .pipe(takeUntil(this.destroyed$))
                     .subscribe((response) => {
                         this.startLoader(false);
+                        this.changeDetection.detectChanges();
                         if (response?.status === "success") {
                             this.toasterService.showSnackBar("success", this.localeData?.voucher_updated);
                             if (callback) {
@@ -5234,6 +5238,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     .pipe(takeUntil(this.destroyed$))
                     .subscribe((response) => {
                         this.startLoader(false);
+                        this.changeDetection.detectChanges();
                         if (response?.status === "success") {
                             this.aiOcrService.saveAndNextSuccess$.next({
                                 token: this.aiOcrToken,
@@ -5346,6 +5351,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     .pipe(takeUntil(this.destroyed$))
                     .subscribe((response) => {
                         this.startLoader(false);
+                        this.changeDetection.detectChanges();
                         if (response?.status === "success") {
                             this.toasterService.showSnackBar("success", this.localeData?.voucher_updated);
                             if (callback) {
@@ -5367,6 +5373,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     .pipe(takeUntil(this.destroyed$))
                     .subscribe((response) => {
                         this.startLoader(false);
+                        this.changeDetection.detectChanges();
                         if (response?.status === "success") {
                             this.aiOcrService.saveAndNextSuccess$.next({
                                 token: this.aiOcrToken,

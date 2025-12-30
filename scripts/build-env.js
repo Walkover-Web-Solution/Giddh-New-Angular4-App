@@ -86,10 +86,10 @@ const envConfig = {
     // Feature flags
     enableVoucherAdjustmentMultiCurrency: env.ENABLE_VOUCHER_ADJUSTMENT_MULTI_CURRENCY === 'true' || true,
 
-    // External service keys
-    GOOGLE_CLIENT_ID: env.GOOGLE_CLIENT_ID || '',
-    GOOGLE_CLIENT_SECRET: env.GOOGLE_CLIENT_SECRET || '',
-    RAZORPAY_KEY: env.RAZORPAY_KEY || '',
+    // External service keys - map environment-specific keys
+    GOOGLE_CLIENT_ID: env.GOOGLE_CLIENT_ID || (environment === 'prod' ? env.GOOGLE_CLIENT_ID_PROD : env.GOOGLE_CLIENT_ID_TEST) || '',
+    GOOGLE_CLIENT_SECRET: env.GOOGLE_CLIENT_SECRET || (environment === 'prod' ? env.GOOGLE_CLIENT_SECRET_PROD : env.GOOGLE_CLIENT_SECRET_TEST) || '',
+    RAZORPAY_KEY: env.RAZORPAY_KEY || (environment === 'prod' ? env.RAZORPAY_KEY_PROD : env.RAZORPAY_KEY_TEST) || '',
     OTP_WIDGET_ID: env.OTP_WIDGET_ID || '',
     OTP_TOKEN_AUTH: env.OTP_TOKEN_AUTH || '',
     TWITTER_CLIENT_ID: env.TWITTER_CLIENT_ID || '',
