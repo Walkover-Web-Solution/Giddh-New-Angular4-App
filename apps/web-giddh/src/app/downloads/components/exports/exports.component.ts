@@ -16,11 +16,11 @@ import { GIDDH_DATE_RANGE_PICKER_RANGES, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } f
 import { PageEvent } from '@angular/material/paginator';
 import { ExportsJsonComponent } from '../exports-json/exports-json.component';
 import { download } from '@giddh-workspaces/utils';
-// import { exportTypeEnum } from '../../../new-inventory/inventory.enum';
+import { exportTypeEnum } from '../../../new-inventory/inventory.enum';
 import { ServiceConfig } from '../../../services/service.config';
 import { Configuration } from '../../../app.constant';
 import { environment } from '../../../../environments/environment';
-import { cloneDeep, forEach, includes, remove } from '../../../lodash-optimized';
+import { cloneDeep } from '../../../lodash-optimized';
 
 /** Hold information of Download  */
 const ELEMENT_DATA: DownloadData[] = [];
@@ -86,14 +86,10 @@ export class ExportsComponent implements OnInit, OnDestroy {
     public isElectron: any = Configuration.isElectron;
     /** Instance for export data in inventory */
     public exportType: any = [
-        // exportTypeEnum.ItemWise,
-        // exportTypeEnum.VariantWise,
-        // exportTypeEnum.GroupWise,
-        // exportTypeEnum.TransactionWise
-        'ItemWise',
-        'VariantWise',
-        'GroupWise',
-        'TransactionWise'
+        exportTypeEnum.ItemWise,
+        exportTypeEnum.VariantWise,
+        exportTypeEnum.GroupWise,
+        exportTypeEnum.TransactionWise
     ];
 
     constructor(@Inject(ServiceConfig) private serviceConfig,  public dialog: MatDialog, private downloadsService: DownloadsService, private changeDetection: ChangeDetectorRef, private generalService: GeneralService, private store: Store<AppState>) {
