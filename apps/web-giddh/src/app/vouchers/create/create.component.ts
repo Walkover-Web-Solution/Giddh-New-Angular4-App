@@ -4185,6 +4185,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             const entries = this.invoiceForm.get("entries") as FormArray;
             setTimeout(() => {
                 this.activeEntryIndex = entries?.length - 1;
+                this.changeDetection.detectChanges();
             }, 10);
         }
     }
