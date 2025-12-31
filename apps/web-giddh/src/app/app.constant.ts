@@ -994,3 +994,11 @@ export const DEFAULT_NUMBER_FORMAT_LOCALE = 'en-IN';
 
 /** Default display format for number formatting */
 export const DEFAULT_NUMBER_DISPLAY_FORMAT = 'IND_COMMA_SEPARATED';
+
+/** Holds all possible field types for form fields */
+export enum FormFieldsType {
+    BOOLEAN = 'BOOLEAN',
+    STRING = 'STRING',
+    NUMBER = 'NUMBER',
+    BARCODE = 'BARCODE'
+}
