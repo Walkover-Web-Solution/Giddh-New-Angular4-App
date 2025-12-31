@@ -92,7 +92,8 @@ import {
     ASIDE_PANE_CONFIG,
     IOption,
     API_BULK_FETCH_LIMIT,
-    Configuration
+    Configuration,
+    FormFieldsType
 } from "../../app.constant";
 import { SalesOtherTaxesCalculationMethodEnum } from "../../models/api-models/Sales";
 import { giddhRoundOff } from "../../shared/helpers/helperFunctions";
@@ -121,6 +122,7 @@ import { FocusMonitor } from "@angular/cdk/a11y";
 import { Platform } from "@angular/cdk/platform";
 import { GeneralActions } from "../../actions/general/general.actions";
 import { environment } from 'apps/web-giddh/src/environments/environment.generated';
+import { CustomFieldsService } from "../../services/custom-fields.service";
 
 @Component({
     selector: "create",
@@ -234,7 +236,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         taxTypeLabel: '',
         mobileNumber: '',
         branch: null,
-        duePeriod: null
+        duePeriod: null,
+        customFields: null
     };
     /** Invoice Settings */
     public activeCompany: any;
@@ -545,6 +548,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     private wasSidebarOpen = false;
     /** Invoice templates */
     public sampleTemplates$: BehaviorSubject<IOption[]> = new BehaviorSubject<IOption[]>([]);
+    /** Account custom fields */
+    public accountCustomFields$: BehaviorSubject<IOption[]> = new BehaviorSubject<IOption[]>([]);
+    /** Holds enum of FormFieldsType */
+    public formFieldsType: typeof FormFieldsType = FormFieldsType;
 
     /**
      * Returns true, if invoice type is sales, proforma or estimate, for these vouchers we
@@ -679,7 +686,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         private focusMonitor: FocusMonitor,
         private platform: Platform,
         private ngZone: NgZone,
-        private generalActions: GeneralActions
+        private generalActions: GeneralActions,
+        private customFieldsService: CustomFieldsService
     ) {
         this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
     }
@@ -702,6 +710,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         });
         this.getVoucherVersion();
         this.initVoucherForm();
+        this.getCustomFields();        
         this.getCountryList();
         this.getDiscountsList();
         this.getCompanyBranches();
@@ -2713,6 +2722,25 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.account.otherApplicableTaxes = accountData.otherApplicableTaxes;
         this.account.applicableDiscounts = accountData.applicableDiscounts || accountData.inheritedDiscounts;
         this.account.applicableTaxes = accountData.applicableTaxes;
+        const customFieldsFormArray = this.customFieldsFormArray;
+        if (customFieldsFormArray) {
+            this.resetCustomFieldsValue(customFieldsFormArray);
+        }
+        if (accountData.customFields?.length) {
+            this.account.customFields = accountData.customFields;
+            const customFieldsMap = new Map(
+                accountData.customFields.map((field: any) => [field.uniqueName, field])
+            );
+
+            customFieldsFormArray.controls.forEach((customField: FormGroup) => {
+                const uniqueName = customField.get('uniqueName')?.value;
+                const matchingCustomField = customFieldsMap.get(uniqueName);
+                
+                if (matchingCustomField) {
+                    customField.patchValue(matchingCustomField);
+                }
+            });
+        }
         this.account.excludeTax = !this.showTaxColumn;
         this.isMultiCurrencyVoucher = this.account.baseCurrency !== this.company.baseCurrency;
 
@@ -2872,6 +2900,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 email: ["", Validators.email],
                 billingDetails: this.getAddressFormGroup(),
                 shippingDetails: this.getAddressFormGroup(),
+                customFields: this.formBuilder.array([])
             }),
             company: this.formBuilder.group({
                 billingDetails: this.getAddressFormGroup(),
@@ -5111,6 +5140,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             invoiceForm = this.vouchersUtilityService.copyAccountStateToCounty(invoiceForm);
         }
 
+        // Filter out custom fields with empty values
+        if (invoiceForm.account?.customFields?.length) {
+            invoiceForm.account.customFields = invoiceForm.account.customFields.filter((field: { uniqueName: string; value: string }) => field.value);
+        } 
+
         if (!this.invoiceType.isPurchaseOrder) {
             if (this.isUkAccount) {
                 if (invoiceForm.account?.billingDetails) {
@@ -5556,7 +5590,26 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         entriesFormArray.clear();
         const depositFormArray = this.invoiceForm.get("deposits") as FormArray;
         depositFormArray.clear();
+        
+        // Store custom fields data before form reset
+        const customFieldsFormArray = this.customFieldsFormArray;
+        let customFieldsData: any[] = [];
+        if (customFieldsFormArray && customFieldsFormArray.length > 0) {
+            customFieldsData = customFieldsFormArray.controls.map((control: FormGroup) => ({
+                uniqueName: control.get('uniqueName')?.value,
+                value: '' // Clear the value but preserve uniqueName
+            }));
+        }
+        
         this.invoiceForm.reset();
+        
+        // Restore custom fields with preserved uniqueName but cleared values
+        if (customFieldsData.length > 0) {
+            const restoredCustomFieldsFormArray = this.customFieldsFormArray;
+            if (restoredCustomFieldsFormArray) {
+                this.resetCustomFieldsValue(restoredCustomFieldsFormArray, customFieldsData);
+            }
+        }
 
         this.copyAccountBillingInShippingAddress =
             this.invoiceType.isReceiptInvoice || this.invoiceType.isPaymentInvoice ? false : true;
@@ -7606,5 +7659,105 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.openAccountDropdown = true;
             this.changeDetection.detectChanges();
         }, 50);
+    }
+
+    /**
+     * Get custom fields API call
+     * 
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private getCustomFields(): void {
+        this.customFieldsService.list({
+                page: 1,
+                count: API_BULK_FETCH_LIMIT,
+                moduleUniqueName: 'account'
+            }).pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                if (response.status === 'success') {
+                    const customFields = response.body?.results || [];
+                    this.accountCustomFields$.next(customFields);
+                    this.populateCustomFieldsFormArray(customFields);
+                } else if (response.message) {
+                    this.toasterService.errorToast(response.message);
+                }
+            }
+        });
+    }
+
+    /**
+     * Populates the custom fields form array with form groups containing uniqueName and value
+     *
+     * @private
+     * @param {any[]} customFields - Array of custom field definitions
+     * @memberof VoucherCreateComponent
+     */
+    private populateCustomFieldsFormArray(customFields: any[]): void {
+        const customFieldsArray = this.customFieldsFormArray;
+        
+        if (!customFieldsArray) {
+            return;
+        }
+        
+        // Clear existing form controls
+        while (customFieldsArray.length !== 0) {
+            customFieldsArray.removeAt(0);
+        }
+        
+        // Create form groups for each custom field
+        customFields.forEach(field => {
+            const customFieldGroup = this.formBuilder.group({
+                uniqueName: [field.uniqueName || ''],
+                value: ['']
+            });
+            customFieldsArray.push(customFieldGroup);
+        });
+    }
+
+    /**
+     * Checks if custom field should show validation errors
+     * 
+     * @param {number} index - The index of the custom field in the FormArray
+     * @returns {boolean} - True if field is dirty, has value, and is invalid
+     * @memberof VoucherCreateComponent
+     */
+    public shouldShowCustomFieldError(index: number): boolean {
+        const customFieldControl = this.invoiceForm.get(`account.customFields.${index}.value`);
+        return !!(customFieldControl?.dirty && customFieldControl?.value && customFieldControl?.invalid);
+    }
+
+    /**
+     * Gets the custom fields form array safely
+     *
+     * @public
+     * @returns {FormArray} The custom fields form array
+     * @memberof VoucherCreateComponent
+     */
+    public get customFieldsFormArray(): FormArray {
+        return this.invoiceForm?.get('account.customFields') as FormArray;
+    }
+
+    /**
+     * Reset the value of custom fields while preserving uniqueName
+     * 
+     * @param {FormArray} customFieldsArray - The FormArray containing custom field controls
+     * @param {any[]} customFieldsData - Optional array of custom field data to restore uniqueName values
+     * @memberof VoucherCreateComponent
+     */
+    private resetCustomFieldsValue(customFieldsArray: FormArray, customFieldsData?: any[]): void {
+        if (customFieldsData && customFieldsData.length > 0) {
+            // Restore custom fields with preserved uniqueName but cleared values
+            customFieldsArray.controls.forEach((customField: FormGroup, index: number) => {
+                if (customFieldsData[index]) {
+                    customField.get('uniqueName')?.patchValue(customFieldsData[index].uniqueName);
+                    customField.get('value')?.patchValue('');
+                }
+            });
+        } else {
+            // Just clear the values, preserve existing uniqueName
+            customFieldsArray.controls.forEach((customField: FormGroup) => {  
+                customField.get('value')?.patchValue('');
+            });
+        }
     }
 }
