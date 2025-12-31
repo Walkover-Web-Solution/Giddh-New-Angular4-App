@@ -28,7 +28,7 @@
                 </div>
             </div>
             <div class="clear-filter">
-                <button mat-stroked-button *ngIf="isFilterCorrect" (click)="resetFilter()">
+                <button matButton="elevated" *ngIf="isFilterCorrect" (click)="resetFilter()">
                     <span class="icon-cross"></span> Clear Filter
                 </button>
             </div>
@@ -192,7 +192,7 @@
                                 <button
                                     type="button"
                                     [matMenuTriggerFor]="voucherTypeMenu"
-                                    mat-raised-button color="primary" class="cursor-pointer c-3"
+                                    matButton="filled" class="cursor-pointer c-3"
                                 >
                                     Voucher Type
                                     <i class="fa fa-ellipsis-v pull-right text-light" aria-hidden="true"></i>
@@ -653,7 +653,7 @@
 <ng-template #advanceSearchTemplate>
     <div class="dialog-header">
         <span>Advance Search</span>
-        <button mat-icon-button aria-label="close" (click)="advanceSearchAction('cancel')">
+        <button matIconButton aria-label="close" (click)="advanceSearchAction('cancel')">
             <i class="icon-cross"></i>
         </button>
     </div>

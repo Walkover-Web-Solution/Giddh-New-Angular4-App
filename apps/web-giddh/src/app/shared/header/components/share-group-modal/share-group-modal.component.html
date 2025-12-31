@@ -39,14 +39,13 @@
                     <div class="col-12">
                         <div class="d-flex justify-content-end column-gap-1">
                             <button
-                                mat-raised-button
-                                color="primary"
+                                matButton="filled"
                                 [disabled]="shareGroupForm.invalid || isUserRestricted"
                                 (click)="shareGroup()"
                             >
                                 {{ commonLocaleData?.app_share }}
                             </button>
-                            <button mat-stroked-button type="button" mat-dialog-close (click)="closeModal()">
+                            <button matButton="elevated" type="button" mat-dialog-close (click)="closeModal()">
                                 {{ commonLocaleData?.app_cancel }}
                             </button>
                         </div>
@@ -85,7 +84,7 @@
                                 >
                                 </reactive-dropdown-field>
                                 <button
-                                    mat-stroked-button
+                                    matButton="elevated"
                                     color="primary"
                                     (click)="unShareGroup(val?.uniqueName, val?.entityUniqueName)"
                                     aria-label="delete icon"

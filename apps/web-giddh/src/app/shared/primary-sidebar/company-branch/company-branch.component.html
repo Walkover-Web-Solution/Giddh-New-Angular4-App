@@ -113,8 +113,7 @@
                         </span>
                     </p>
                     <button
-                        mat-raised-button
-                        color="primary"
+                        matButton="filled"
                         class="mr-0"
                         (click)="createBranch()"
                         *ngIf="activeCompany?.uniqueName && companyBranches?.uniqueName && activeCompany.uniqueName === companyBranches.uniqueName && !currentBranchUniqueName"

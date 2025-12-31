@@ -48,7 +48,7 @@
                         [placeholder]="commonLocaleData?.app_select_branch"></reactive-dropdown-field>
                 </div>
                 <div class="col flex-grow-0">
-                    <button mat-raised-button color="primary" (click)="getVatObligations()">{{
+                    <button matButton="filled" (click)="getVatObligations()">{{
                         commonLocaleData?.app_search }}</button>
                 </div>
             </div>
@@ -99,10 +99,10 @@
                                 {{ commonLocaleData?.app_action }}
                             </th>
                             <td mat-cell *matCellDef="let element">
-                                <button class="action-btn" *ngIf="element.status ===  'F'" mat-stroked-button
+                                <button class="action-btn" *ngIf="element.status ===  'F'" matButton="elevated"
                                     (click)="openViewReturnDialog(element?.start, element?.end, element?.periodKey)">{{
                                     localeData?.view_return }}</button>
-                                <button class="action-btn" *ngIf="element.status ===  'O'" mat-stroked-button
+                                <button class="action-btn" *ngIf="element.status ===  'O'" matButton="elevated"
                                     (click)="openFileReturnDialog(element?.start, element?.end, element?.periodKey)">
                                     {{ localeData?.file_return }}</button>
                             </td>
@@ -114,7 +114,7 @@
                         <div *ngIf="hasTaxNumber">
                             <div *ngIf="connectToHMRCUrl || isTaxRestrictedModule" class="position-center position-absolute">
                                 <div class="text-center">
-                                    <a [disabled]="isTaxRestrictedModule" mat-raised-button color="primary" [href]="connectToHMRCUrl">
+                                    <a [disabled]="isTaxRestrictedModule" matButton="filled" [href]="connectToHMRCUrl">
                                         {{ localeData?.connect_to_hmrc }}
                                     </a>
                                 </div>

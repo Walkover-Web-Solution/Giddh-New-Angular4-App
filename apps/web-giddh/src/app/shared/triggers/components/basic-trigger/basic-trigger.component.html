@@ -13,15 +13,13 @@
             </div>
             <div class="d-flex">
                 <button
-                    mat-raised-button
-                    color="primary"
+                    matButton="filled"
                     (click)="openCreateEditTriggerDialog()"
                 >
                     + {{ commonLocaleData?.app_create_new }}
                 </button>
                 <button
-                    mat-raised-button
-                    color="primary"
+                    matButton="filled"
                     routerLink="/pages/settings/trigger/advance"
                     [disabled]="isLoading$ | async"
                     class="ml-auto"
@@ -98,7 +96,7 @@
                         <ng-container matColumnDef="other_action">
                             <th mat-header-cell *matHeaderCellDef class="max-width-80">&nbsp;</th>
                             <td mat-cell *matCellDef="let element" class="text-right max-width-80">
-                                <button mat-icon-button [matMenuTriggerFor]="actionsMenu">
+                                <button matIconButton [matMenuTriggerFor]="actionsMenu">
                                     <i class="icon-dots-three-vertical font-size-15"></i>
                                 </button>
                                 <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">

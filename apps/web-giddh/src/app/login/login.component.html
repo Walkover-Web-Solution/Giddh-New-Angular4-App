@@ -51,8 +51,7 @@
                                                 autocomplete="new-password"
                                             />
                                             <button
-                                                mat-raised-button
-                                                color="primary"
+                                                matButton="filled"
                                                 class="mt-2"
                                                 type="submit"
                                                 [disabled]="
@@ -88,8 +87,7 @@
                                             <div class="clear-both mb-4">
                                                 <button
                                                     [disabled]="!signupVerifyForm.controls['verificationCode'].valid"
-                                                    mat-raised-button
-                                                    color="primary"
+                                                    matButton="filled"
                                                     (click)="
                                                         VerifyEmail(
                                                             loginWithPasswdForm.controls['uniqueKey']?.value,
@@ -100,7 +98,7 @@
                                                     Verify Email
                                                 </button>
                                                 <a
-                                                    mat-stroked-button
+                                                    matButton="elevated"
                                                     class="cursor-pointer pull-right"
                                                     (click)="
                                                         LoginWithEmail(loginWithPasswdForm.controls['uniqueKey']?.value)
@@ -131,8 +129,7 @@
                                                 />
                                             </div>
                                             <button
-                                                mat-raised-button
-                                                color="primary"
+                                                matButton="filled"
                                                 class="mt-2"
                                                 type="submit"
                                                 (click)="forgotPassword(forgotPasswordForm.controls['userId']?.value)"
@@ -172,8 +169,7 @@
                                                 </div>
                                             </div>
                                             <button
-                                                mat-raised-button
-                                                color="primary"
+                                                matButton="filled"
                                                 class="mt-2"
                                                 type="submit"
                                                 (click)="resetPassword(resetPasswordForm)"
@@ -219,7 +215,7 @@
                                     </p>
                                     <div class="d-flex align-items-center account mt-1">
                                         <p class="mb-0 mr-2 font-weight-semibold">Don't have an account?</p>
-                                        <a mat-stroked-button routerLink="/signup" href="javascript:void(0);">
+                                        <a matButton="elevated" routerLink="/signup" href="javascript:void(0);">
                                             Signup</a
                                         >
                                     </div>
@@ -253,14 +249,13 @@
                     <button
                         [disabled]="!emailVerifyForm.controls['email'].valid"
                         [ladda]="isLoginWithEmailInProcess$ | async"
-                        mat-raised-button
-                        color="primary"
+                        matButton="filled"
                         class="sharp mt-2"
                         (click)="LoginWithEmail(emailVerifyForm.controls['email']?.value)"
                     >
                         Submit
                     </button>
-                    <button mat-stroked-button class="sharp mt-2" (click)="hideEmailModal()">Cancel</button>
+                    <button matButton="elevated" class="sharp mt-2" (click)="hideEmailModal()">Cancel</button>
                 </div>
             </div>
             <div *ngIf="isLoginWithEmailSubmited$ | async" class="clear-both form-group form-group-lg">
@@ -275,8 +270,7 @@
                 <div class="d-flex justify-content-end column-gap-1 mt-2">
                     <button
                         [disabled]="!emailVerifyForm.controls['token'].valid"
-                        mat-raised-button
-                        color="primary"
+                        matButton="filled"
                         class="sharp"
                         [ladda]="isVerifyEmailInProcess$ | async"
                         (click)="
@@ -288,10 +282,10 @@
                     >
                         Last step to go
                     </button>
-                    <button mat-stroked-button class="sharp" (click)="hideEmailModal()">Cancel</button>
+                    <button matButton="elevated" class="sharp" (click)="hideEmailModal()">Cancel</button>
                 </div>
                 <a
-                    mat-stroked-button
+                    matButton="elevated"
                     class="cursor-pointer pull-right"
                     (click)="LoginWithEmail(emailVerifyForm.controls['email']?.value)"
                     href="javascript:void(0);"
@@ -330,8 +324,7 @@
             </div>
             <div *ngIf="!(isLoginWithMobileSubmited$ | async)" class="d-flex column-gap-1 justify-content-end">
                 <button
-                    mat-raised-button
-                    color="primary"
+                    matButton="filled"
                     class="sharp mt-2"
                     (click)="
                         getOtp(
@@ -344,7 +337,7 @@
                 >
                     {{ !(isLoginWithMobileInProcess$ | async) ? "Get Otp" : "Resend" }}
                 </button>
-                <button mat-stroked-button class="sharp mt-2" (click)="hideMobileModal()">Cancel</button>
+                <button matButton="elevated" class="sharp mt-2" (click)="hideMobileModal()">Cancel</button>
             </div>
             <div class="clear-both form-group form-group-lg" *ngIf="isLoginWithMobileSubmited$ | async">
                 <hr class="mrtb10" />
@@ -352,8 +345,7 @@
                 <div class="d-flex justify-content-end column-gap-1 mt-2">
                     <button
                         type="login"
-                        mat-raised-button
-                        color="primary"
+                        matButton="filled"
                         class="sharp"
                         [ladda]="isVerifyMobileInProcess$ | async"
                         (click)="
@@ -366,7 +358,7 @@
                     >
                         Login
                     </button>
-                    <button mat-stroked-button class="sharp" type="button" (click)="hideMobileModal()">Cancel</button>
+                    <button matButton="elevated" class="sharp" type="button" (click)="hideMobileModal()">Cancel</button>
                 </div>
             </div>
         </form>
@@ -388,8 +380,7 @@
                 <div class="d-flex justify-content-end column-gap-1 mt-2">
                     <button
                         type="login"
-                        mat-raised-button
-                        color="primary"
+                        matButton="filled"
                         class="sharp"
                         [ladda]="isTwoWayAuthInProcess$ | async"
                         (click)="verifyTwoWayCode()"
@@ -397,7 +388,7 @@
                     >
                         Submit
                     </button>
-                    <button mat-stroked-button class="sharp" type="button" (click)="resetTwoWayAuthModal()">
+                    <button matButton="elevated" class="sharp" type="button" (click)="resetTwoWayAuthModal()">
                         Cancel
                     </button>
                 </div>

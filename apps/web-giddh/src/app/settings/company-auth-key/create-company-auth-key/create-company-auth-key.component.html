@@ -270,17 +270,16 @@
                 <div class="col-12 d-flex column-gap-1">
                     <button
                         *ngIf="!isUpdateMode"
-                        mat-raised-button
-                        color="primary"
+                        matButton="filled"
                         (click)="saveCompanyAuthKey()"
                         [ladda]="createCompanyAuthKeyInProgress$ | async"
                     >
                         {{ commonLocaleData?.app_save }}
                     </button>
-                    <button *ngIf="isUpdateMode" mat-raised-button color="primary" (click)="saveCompanyAuthKey()">
+                    <button *ngIf="isUpdateMode" matButton="filled" (click)="saveCompanyAuthKey()">
                         {{ commonLocaleData?.app_update }}
                     </button>
-                    <button mat-stroked-button (click)="cancel()">
+                    <button matButton="elevated" (click)="cancel()">
                         {{ commonLocaleData?.app_cancel }}
                     </button>
                 </div>

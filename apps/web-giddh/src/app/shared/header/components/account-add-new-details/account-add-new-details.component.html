@@ -317,7 +317,7 @@
                                     <div class="remove-radio-btn">
                                         <span class="pr-2" *ngIf="!firstItem">
                                             <button
-                                                mat-stroked-button
+                                                matButton="elevated"
                                                 (click)="removeGstDetailsForm(i)"
                                                 class="bg-white mr-3"
                                             >
@@ -475,8 +475,7 @@
                             "
                         >
                             <button
-                                mat-raised-button
-                                color="primary"
+                                matButton="filled"
                                 class="text-left w-50 pr-4"
                                 (click)="showMoreGst()"
                             >
@@ -484,13 +483,13 @@
                                     addAccountForm.get("addresses")["controls"]?.length
                                 }})
                             </button>
-                            <button mat-raised-button color="primary" class="text-left w-50" (click)="showLessGst()">
+                            <button matButton="filled" class="text-left w-50" (click)="showLessGst()">
                                 {{ commonLocaleData?.app_show_less }}
                             </button>
                         </div>
                         <div *ngIf="lastItem">
                             <button
-                                mat-stroked-button
+                                matButton="elevated"
                                 (click)="addGstDetailsForm(gst.get('gstNumber')?.value); openConfirmLeaveDialog()"
                             >
                                 + {{ localeData?.add_address }}
@@ -644,7 +643,7 @@
                         </div>
                         <div class="pl-2 mt-1">
                             <button
-                                mat-stroked-button
+                                matButton="elevated"
                                 color="primary"
                                 type="button"
                                 aria-label="delete icon"
@@ -1049,7 +1048,7 @@
 <ng-template #templateForSaveButton>
     <div class="row pt-4" *ngIf="voucherApiVersion === 2">
         <div class="col-sm-12">
-            <button mat-raised-button color="primary" aria-label="save" type="submit">
+            <button matButton="filled" aria-label="save" type="submit">
                 {{ commonLocaleData?.app_save }}
             </button>
         </div>

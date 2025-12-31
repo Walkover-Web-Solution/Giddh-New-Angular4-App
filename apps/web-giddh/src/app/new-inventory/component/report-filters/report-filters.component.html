@@ -1,6 +1,6 @@
 <div class="inventory-filter-bar d-flex top-main-bar align-items-center">
     <div class="back-btnn" *ngIf="reportUniqueName">
-        <button mat-stroked-button class="report-back-button" (click)="backToPreviousPage()">
+        <button matButton="elevated" class="report-back-button" (click)="backToPreviousPage()">
             {{ commonLocaleData?.app_back }}
         </button>
     </div>
@@ -68,7 +68,7 @@
         </mat-select>
     </div>
     <div class="clear-filter d-flex" *ngIf="showClearFilter">
-        <button mat-stroked-button class="create-btn-inventory ml-3 mr-0" (click)="resetFilter()">
+        <button matButton="elevated" class="create-btn-inventory ml-3 mr-0" (click)="resetFilter()">
             <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
         </button>
     </div>
@@ -178,11 +178,11 @@
             <i class="icon-search search-icon ml-2 mr-2" matIconPrefix *ngIf="!filtersChipList?.length"></i>
             </mat-form-field>
         <div class="menu-btn-control d-flex justify-content-end align-items-center">
-            <button mat-stroked-button aria-hidden="true" class="advance-filter-button font-size-14" (click)="exportReport()" [disabled]="isLoading$ | async">
+            <button matButton="elevated" aria-hidden="true" class="advance-filter-button font-size-14" (click)="exportReport()" [disabled]="isLoading$ | async">
                 <i class="icon-download-circle mr-1"></i>
                 {{ commonLocaleData?.app_export }}
             </button>
-            <button mat-stroked-button (click)="openModal()" class="advance-filter-button">
+            <button matButton="elevated" (click)="openModal()" class="advance-filter-button">
                 <i class="icon-advance-filter mr-1"></i>
                 {{ localeData?.header?.advance_filter }}
             </button>

@@ -24,7 +24,7 @@
                         </giddh-datepicker>
                     </div>
 
-                    <button class="ml-5" mat-stroked-button (click)="initializeForm()" *ngIf="customMonthSelected">
+                    <button class="ml-5" matButton="elevated" (click)="initializeForm()" *ngIf="customMonthSelected">
                         <i class="icon-cross"></i> {{ commonLocaleData?.app_clear_filter }}
                     </button>
                 </div>
@@ -56,8 +56,7 @@
                                 commonLocaleData?.app_status }} </th>
                             <td mat-cell *matCellDef="let element" width="10%" class="text-center">
                                 <button
-                                    mat-raised-button
-                                    color="primary"
+                                    matButton="filled"
                                     (click)="getGstFilingStatus(element.referenceId)"
                                 >
                                     {{ localeData?.filing?.get_status }}

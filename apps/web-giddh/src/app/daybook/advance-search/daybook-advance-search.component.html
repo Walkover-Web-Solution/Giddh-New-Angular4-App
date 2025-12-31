@@ -476,15 +476,14 @@
 
                 <div class="col-xs-12 col-sm-12 text-right pt-3">
                     <button
-                        mat-raised-button
-                        color="primary"
+                        matButton="filled"
                         class="mr-3"
                         type="button"
                         (click)="emitAdvanceSearchParams()"
                     >
                         {{ commonLocaleData?.app_search }}
                     </button>
-                    <button mat-stroked-button type="button" (click)="onCancel()">
+                    <button matButton="elevated" type="button" (click)="onCancel()">
                         {{ commonLocaleData?.app_cancel }}
                     </button>
                 </div>

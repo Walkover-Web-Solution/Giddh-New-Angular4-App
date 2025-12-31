@@ -98,7 +98,7 @@
                     <ng-container *ngIf="!isSubscriptionModule">
                         <li>
                             <button
-                                mat-icon-button
+                                matIconButton
                                 aria-label="Search"
                                 class="icon-circle"
                                 (click)="showNavigationModal()"
@@ -111,7 +111,7 @@
                         <li>
                             <button
                                 *ngIf="voucherApiVersion === 2"
-                                mat-icon-button
+                                matIconButton
                                 aria-label="menu-option"
                                 #menuTrigger="matMenuTrigger"
                                 [matMenuTriggerFor]="menu"
@@ -342,8 +342,7 @@
                                         >
                                             <span>{{ localeData?.go_to_branch_information }} </span>
                                             <button
-                                                mat-raised-button
-                                                color="primary"
+                                                matButton="filled"
                                                 class="mt-4"
                                                 (click)="gotToBranchTab()"
                                             >
@@ -450,7 +449,7 @@
                             [matTooltip]="localeData?.notifications"
                             [matTooltipPosition]="'below'"
                         >
-                            <button mat-icon-button aria-label="notification" class="icon-circle notification" (click)="openNotifications()">
+                            <button matIconButton aria-label="notification" class="icon-circle notification" (click)="openNotifications()">
                                 <i class="icon-bell-new"></i>
                             </button>
                         </li>
@@ -510,7 +509,7 @@
                         </li>
                         <li class="header-utility-icons">
                             <button
-                                mat-icon-button
+                                matIconButton
                                 aria-label="settings"
                                 [matTooltip]="commonLocaleData?.app_settings"
                                 [matTooltipPosition]="'below'"
@@ -524,7 +523,7 @@
                     <li class="header-utility-icons">
                         <a href="javascript:void(0);" aria-label="help-info" (click)="toggleHelpSupportPane(true)">
                             <button
-                                mat-icon-button
+                                matIconButton
                                 aria-label="help"
                                 [matTooltip]="commonLocaleData?.app_help"
                                 [matTooltipPosition]="'below'"
@@ -680,7 +679,7 @@
     <ng-template #expiredPlanModel>
         <div class="dialog-header">
             <span>{{ localeData?.ready_to_upgrade }}</span>
-            <button mat-icon-button aria-label="close" mat-dialog-close>
+            <button matIconButton aria-label="close" mat-dialog-close>
                 <i class="icon-cross"></i>
             </button>
         </div>
@@ -691,12 +690,12 @@
             <div class="clear-both">
                 <ul class="list-inline upgrade-plan">
                     <li>
-                        <button mat-raised-button color="primary" *ngIf="currentCompanyPlanAmount" (click)="goToSelectPlan()">
+                        <button matButton="filled" *ngIf="currentCompanyPlanAmount" (click)="goToSelectPlan()">
                             {{ localeData?.renew_plan }}
                         </button>
                     </li>
                     <li>
-                        <button mat-raised-button color="primary" (click)="goToSelectPlan()">
+                        <button matButton="filled" (click)="goToSelectPlan()">
                             {{ localeData?.change_plan }}
                         </button>
                     </li>
@@ -718,7 +717,7 @@
     <ng-template #crossedTxLimitModel>
         <div class="dialog-header">
             <span>{{ localeData?.ready_to_upgrade }}</span>
-            <button mat-icon-button aria-label="close" mat-dialog-close>
+            <button matIconButton aria-label="close" mat-dialog-close>
                 <i class="icon-cross"></i>
             </button>
         </div>
@@ -730,7 +729,7 @@
             <div class="clear-both">
                 <ul class="list-inline">
                     <li>
-                        <button mat-raised-button color="primary" (click)="goToSelectPlan()">
+                        <button matButton="filled" (click)="goToSelectPlan()">
                             {{ commonLocaleData?.app_buy_plan }}
                         </button>
                     </li>
@@ -770,7 +769,7 @@
     <div id="scheduleCall" class="tab-pane active vertical-center modal-body">
         <div class="calendly-box" #reder>
             <div class="calendly-inline-widget">
-                <button mat-stroked-button class="close-2" (click)="hideScheduleCalendlyModel()" aria-label="close">
+                <button matButton="elevated" class="close-2" (click)="hideScheduleCalendlyModel()" aria-label="close">
                     <i class="icon-cross text-black"></i>
                 </button>
                 <object [data]="calendlyUrl" title="calendar"></object>

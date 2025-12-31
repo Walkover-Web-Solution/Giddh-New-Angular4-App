@@ -247,8 +247,7 @@
                             <div class="pt-4">
                                 <div class="d-flex column-gap-15 justify-content-center">
                                     <button
-                                        mat-raised-button
-                                        color="primary"
+                                        matButton="filled"
                                         [hidden]="isCompany || isConsolidatedBranch"
                                         #submitButton
                                         (keyup)="keyUpOnSubmitButton($event)"
@@ -261,7 +260,7 @@
                                         {{ commonLocaleData?.app_yes }}
                                     </button>
                                     <button
-                                        mat-stroked-button
+                                        matButton="elevated"
                                         #resetButton
                                         (keyup)="keyUpOnResetButton($event)"
                                         (click)="acceptCancel()"
@@ -271,7 +270,7 @@
                                     </button>
                                 </div>
                                 <br />
-                                <button type="button" mat-stroked-button class="mt-1" (click)="refreshEntry()">
+                                <button type="button" matButton="elevated" class="mt-1" (click)="refreshEntry()">
                                     {{ commonLocaleData?.app_reset }}
                                 </button>
                             </div>
@@ -423,15 +422,14 @@
         </form>
         <div class="d-flex float-end column-gap-15 mt-2">
             <button
-                mat-raised-button
-                color="primary"
+                matButton="filled"
                 class="w-100"
                 (click)="onSubmitChequeDetail(); focusDebitCreditAmount()"
                 #chqFormSubmitBtn
             >
                 {{ commonLocaleData?.app_create }}
             </button>
-            <button mat-stroked-button class="w-100" (click)="closeChequeDetailForm()">
+            <button matButton="elevated" class="w-100" (click)="closeChequeDetailForm()">
                 {{ commonLocaleData?.app_cancel }}
             </button>
         </div>

@@ -93,7 +93,7 @@
                     <div class="file-image">
                         <img src="{{ imgPath }}request-demo.svg" alt="request img" />
                         <p class="text-light">{{ localeData?.request_demo }}:</p>
-                        <button mat-raised-button color="primary" (click)="scheduleNow($event)" aria-label="schedule img">
+                        <button matButton="filled" (click)="scheduleNow($event)" aria-label="schedule img">
                             {{ commonLocaleData?.app_schedule_now }}
                         </button>
                         <br />

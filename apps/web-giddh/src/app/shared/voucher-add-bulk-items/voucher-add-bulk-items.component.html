@@ -86,14 +86,14 @@
 
                                                 <div
                                                     class="d-flex align-items-center justify-content-between column-gap-1">
-                                                    <button mat-stroked-button
+                                                    <button matButton="elevated"
                                                         (click)="alterQuantity(item, 'minus')">
                                                         <i class="icon-minus"></i>
                                                     </button>
                                                     <input matInput type="number" name="quantity"
                                                         class="form-control input-number text-center"
                                                         value="1" min="1" [(ngModel)]="item.quantity" />
-                                                    <button mat-stroked-button (click)="alterQuantity(item)">
+                                                    <button matButton="elevated" (click)="alterQuantity(item)">
                                                         <i class="icon-add font-size-16 font-weight-semibold"></i>
                                                     </button>
                                                     <button mat-button (click)="
@@ -113,10 +113,10 @@
                             </cdk-virtual-scroll-viewport>
                         </div>
                         <div class="selected-item-action d-flex column-gap-1">
-                            <button mat-raised-button color="primary"
+                            <button matButton="filled"
                                 (click)="saveItemsEvent.emit(selectedItems); closeEvent.emit()"> {{
                                 commonLocaleData?.app_add }}</button>
-                            <button mat-stroked-button mat-dialog-close> {{ commonLocaleData?.app_cancel }}</button>
+                            <button matButton="elevated" mat-dialog-close> {{ commonLocaleData?.app_cancel }}</button>
                         </div>
                     </div>
                 </div>

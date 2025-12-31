@@ -5,7 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
 >
     <div id="main" class="welcome-outer p-3">
-        <button aria-label="return" mat-stroked-button class="mb-3" (click)="back()">
+        <button aria-label="return" matButton="elevated" class="mb-3" (click)="back()">
             <i class="icon-left back-left"></i>
             {{ commonLocaleData?.app_back }}
         </button>
@@ -156,10 +156,10 @@
                     </div>
                     <div class="form-group">
                         <div class="pt-2 d-flex column-gap-15">
-                            <button aria-label="submit" mat-raised-button color="primary" (click)="onSubmit()">
+                            <button aria-label="submit" matButton="filled" (click)="onSubmit()">
                                 {{ commonLocaleData?.app_submit }}
                             </button>
-                            <button aria-label="back" mat-stroked-button (click)="back()">
+                            <button aria-label="back" matButton="elevated" (click)="back()">
                                 {{ commonLocaleData?.app_cancel }}
                             </button>
                         </div>

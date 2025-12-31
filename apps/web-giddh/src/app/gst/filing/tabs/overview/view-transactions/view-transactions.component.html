@@ -1,6 +1,6 @@
 <div class="fill scroll-y noscroll-x scrollbox">
     <div class="filter-band px-0">
-        <button mat-stroked-button (click)="redirectToGstFilingReturn()">
+        <button matButton="elevated" (click)="redirectToGstFilingReturn()">
             <svg
                 style="top: 3px; position: relative"
                 version="1.1"
@@ -24,7 +24,7 @@
         >
             <div class="name">{{ localeData?.filing?.transaction_type }}:</div>
             <div class="btn-group filter d-inline-block">
-                <button mat-stroked-button type="button" [matMenuTriggerFor]="entityTypeMenu">
+                <button matButton="elevated" type="button" [matMenuTriggerFor]="entityTypeMenu">
                     {{ selectedFilter?.entityType }} <span class="caret"></span>
                 </button>
                 <mat-menu #entityTypeMenu="matMenu">
@@ -43,7 +43,7 @@
         <div class="filter-row" *ngIf="selectedGst === GstReport.Gstr2 && filterParam.type === 'b2bur'">
             <div class="name">{{ localeData?.filing?.transaction_type }}:</div>
             <div class="btn-group filter d-inline-block">
-                <button mat-stroked-button type="button" [matMenuTriggerFor]="entityTypeMenu">
+                <button matButton="elevated" type="button" [matMenuTriggerFor]="entityTypeMenu">
                     {{ selectedFilter?.entityType }} <span class="caret"></span>
                 </button>
                 <mat-menu #entityTypeMenu="matMenu">

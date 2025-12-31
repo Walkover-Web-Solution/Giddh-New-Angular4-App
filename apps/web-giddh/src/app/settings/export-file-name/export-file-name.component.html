@@ -57,8 +57,7 @@
 
 <ng-template #saveButton>
   <button
-    mat-raised-button
-    color="primary"
+    matButton="filled"
     (click)="updateModuleExportSetting()"
     [disabled]="exportModuleSettingForm.invalid"
   >

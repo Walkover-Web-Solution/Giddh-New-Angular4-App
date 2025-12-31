@@ -5,7 +5,7 @@
                 <div class="clear-both d-flex">
                     <!-- <button
                         *ngIf="!(currentOrganizationType !== 'BRANCH' && currentCompanyBranches?.length > 2)"
-                        mat-raised-button color="primary"
+                        matButton="filled"
                         class="mr-2 pull-right mobile-none"
                         matTooltip="Alt+N"
                         (click)="openTransferAsidePaneDialog()"
@@ -49,7 +49,7 @@
                 </div>
                 <div class="text-center d-lg-flex d-none">
                     <div class="clear-filter" *ngIf="checkIfFiltersApplied()">
-                        <button mat-stroked-button class="mr-0" (click)="clearFilters()">
+                        <button matButton="elevated" class="mr-0" (click)="clearFilters()">
                             <span class="icon-cross"></span> Clear Filter
                         </button>
                     </div>
@@ -65,7 +65,7 @@
             </div>
             <div class="d-lg-none mb-2">
                 <div class="clear-filter" *ngIf="checkIfFiltersApplied()">
-                    <button mat-stroked-button class="mr-0" (click)="clearFilters()">
+                    <button matButton="elevated" class="mr-0" (click)="clearFilters()">
                         <span class="icon-cross"></span> Clear Filter
                     </button>
                 </div>
@@ -246,7 +246,7 @@
                             <div class="btn-group">
                                 <button
                                     type="button"
-                                    mat-stroked-button
+                                    matButton="elevated"
                                     class="select-action-button"
                                     [matMenuTriggerFor]="actionMenu"
                                 >
@@ -304,7 +304,7 @@
 <ng-template #searchDialog>
     <div class="dialog-header">
         <span>Advance Search</span>
-        <button mat-icon-button aria-label="close" (click)="closeSearchDialog()">
+        <button matIconButton aria-label="close" (click)="closeSearchDialog()">
             <i class="icon-cross"></i>
         </button>
     </div>
@@ -345,9 +345,9 @@
                 </div>
             </div>
             <div class="pull-right mt-2">
-                <button mat-raised-button color="primary" class="mr-2" type="button" (click)="search()">Search</button>
+                <button matButton="filled" class="mr-2" type="button" (click)="search()">Search</button>
                 <button
-                    mat-stroked-button
+                    matButton="elevated"
                     class="mr-0"
                     type="button"
                     (click)="refreshTempPostParams(); hideModal(false)"

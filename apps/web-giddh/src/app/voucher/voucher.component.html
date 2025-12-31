@@ -2422,8 +2422,7 @@
                                                                                 class="d-inline-flex mt-2 pt-1 column-gap-05"
                                                                             >
                                                                                 <button
-                                                                                    mat-raised-button
-                                                                                    color="primary"
+                                                                                    matButton="filled"
                                                                                     class="btn-sm"
                                                                                     type="button"
                                                                                     (click)="
@@ -2435,7 +2434,7 @@
                                                                                     {{ commonLocaleData?.app_save }}
                                                                                 </button>
                                                                                 <button
-                                                                                    mat-stroked-button
+                                                                                    matButton="elevated"
                                                                                     class="mr-0"
                                                                                     (click)="
                                                                                         hideHsnSacEditPopup(transaction)
@@ -3386,7 +3385,7 @@
                                                                                     selectedFileName
                                                                                 }}</span>
                                                                                 <button
-                                                                                    mat-icon-button
+                                                                                    matIconButton
                                                                                     (click)="
                                                                                         deleteAttachementConfirmation()
                                                                                     "
@@ -3679,7 +3678,7 @@
                                         *ngIf="!isUpdateMode"
                                     >
                                         <button
-                                            mat-stroked-button
+                                            matButton="elevated"
                                             (click)="resetInvoiceForm(invoiceForm)"
                                             class="d-inline-block"
                                         >
@@ -3688,8 +3687,7 @@
                                         <!-- region purchase invoice -->
                                         <span *ngIf="isPurchaseInvoice">
                                             <button
-                                                mat-raised-button
-                                                color="primary"
+                                                matButton="filled"
                                                 *ngIf="!isCompany && !isConsolidatedBranch"
                                                 [disabled]="
                                                     isFileUploading ||
@@ -3709,7 +3707,7 @@
                                             *ngIf="!isPurchaseInvoice && !isProformaInvoice && !isEstimateInvoice"
                                         >
                                             <button
-                                                mat-stroked-button
+                                                matButton="elevated"
                                                 [disabled]="
                                                     !hasVoucherEntry ||
                                                     (invoiceForm?.controls)['message2']?.errors?.maxlength ||
@@ -3736,7 +3734,7 @@
                                                 "
                                             >
                                                 <button
-                                                    mat-stroked-button
+                                                    matButton="elevated"
                                                     [disabled]="
                                                         !hasVoucherEntry ||
                                                         (invoiceForm?.controls)['message2']?.errors?.maxlength ||
@@ -3797,7 +3795,7 @@
                                                     [matMenuTriggerFor]="dropdownMenu"
                                                     id="button-dropup"
                                                     *ngIf="invoiceType === 'sales'"
-                                                    mat-stroked-button
+                                                    matButton="elevated"
                                                     class="min-width-auto"
                                                     aria-label="dropdown"
                                                 >
@@ -3824,7 +3822,7 @@
                                             >
                                                 <button
                                                     *ngIf="!isCompany && !isConsolidatedBranch"
-                                                    mat-stroked-button
+                                                    matButton="elevated"
                                                     [disabled]="
                                                         !hasVoucherEntry ||
                                                         (invoiceForm?.controls)['message2']?.errors?.maxlength
@@ -3837,7 +3835,7 @@
                                                 <button
                                                     [matMenuTriggerFor]="dropdownMenu2"
                                                     id="button-dropup"
-                                                    mat-stroked-button
+                                                    matButton="elevated"
                                                     class="min-width-auto dropdown-toggle-split"
                                                 >
                                                     <span class="caret"></span>
@@ -3881,13 +3879,12 @@
                                     <!-- endregion -->
                                     <!-- region update mode -->
                                     <div class="pull-right position-relative d-flex column-gap-15" *ngIf="isUpdateMode">
-                                        <button mat-stroked-button class="d-inline-block" (click)="cancelUpdate()">
+                                        <button matButton="elevated" class="d-inline-block" (click)="cancelUpdate()">
                                             {{ commonLocaleData?.app_cancel }}
                                         </button>
                                         <button
                                             *ngIf="!isCompany && !isConsolidatedBranch"
-                                            mat-raised-button
-                                            color="primary"
+                                            matButton="filled"
                                             [disabled]="
                                                 isFileUploading ||
                                                 !hasVoucherEntry ||

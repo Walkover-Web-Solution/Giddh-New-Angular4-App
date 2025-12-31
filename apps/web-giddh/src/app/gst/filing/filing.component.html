@@ -79,8 +79,7 @@
                                             <img src="assets/images/return-date.svg" />
                                             <p>{{ localeData?.filing?.click_to_proceed }}</p>
                                             <button
-                                                mat-raised-button
-                                                color="primary"
+                                                matButton="filled"
                                                 (click)="fileReturn = { isAuthenticate: true }"
                                                 [disabled]="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.TaxFilling)"
                                             >

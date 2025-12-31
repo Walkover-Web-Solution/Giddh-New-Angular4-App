@@ -187,7 +187,7 @@
 <ng-template #mailSmsDialog>
     <div class="dialog-header">
         <span>{{ messageBody.header.set }}</span>
-        <button mat-icon-button aria-label="close" mat-dialog-close>
+        <button matIconButton aria-label="close" mat-dialog-close>
             <i class="icon-cross"></i>
         </button>
     </div>
@@ -229,7 +229,7 @@
             </div>
         </div>
         <div class="mt-5">
-            <button mat-raised-button color="primary" class="pull-right ml-2 mr-0" (click)="send()">
+            <button matButton="filled" class="pull-right ml-2 mr-0" (click)="send()">
                 {{ messageBody.btn.set }}
             </button>
         </div>

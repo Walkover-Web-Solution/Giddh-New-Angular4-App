@@ -21,7 +21,7 @@
     ></reactive-dropdown-field>
 
     <div class="d-flex column-gap-15 justify-content-end mt-4">
-        <button mat-raised-button color="primary" type="submit" (click)="submit()">{{ inputData?.button?.primaryText }}</button>
-        <button mat-stroked-button mat-dialog-close type="button">{{ inputData?.button?.secondaryText }}</button>
+        <button matButton="filled" type="submit" (click)="submit()">{{ inputData?.button?.primaryText }}</button>
+        <button matButton="elevated" mat-dialog-close type="button">{{ inputData?.button?.secondaryText }}</button>
     </div>
 </mat-dialog-content>

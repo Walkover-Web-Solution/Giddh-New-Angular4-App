@@ -454,7 +454,7 @@
                             </ng-container>
                             <div class="col-sm-12 mb-4" *ngIf="!firstItem">
                                 <button
-                                    mat-stroked-button
+                                    matButton="elevated"
                                     (click)="removeGstDetailsForm(i)"
                                     class="grey-color btn-danger text-left"
                                 >
@@ -470,18 +470,18 @@
                                 !moreGstDetailsVisible
                             "
                         >
-                            <button mat-stroked-button class="text-left w-50 pr-4" (click)="showMoreGst()">
+                            <button matButton="elevated" class="text-left w-50 pr-4" (click)="showMoreGst()">
                                 {{ commonLocaleData?.app_show_all }} ({{
                                     addAccountForm.get("addresses")["controls"]?.length
                                 }})
                             </button>
-                            <button mat-stroked-button class="text-left w-50" (click)="showLessGst()">
+                            <button matButton="elevated" class="text-left w-50" (click)="showLessGst()">
                                 {{ commonLocaleData?.app_show_less }}
                             </button>
                         </div>
                         <div *ngIf="lastItem">
                             <button
-                                mat-stroked-button
+                                matButton="elevated"
                                 (click)="addGstDetailsForm(gst.get('gstNumber')?.value); openConfirmLeaveDialog()"
                             >
                                 + {{ localeData?.add_address }}
@@ -634,7 +634,7 @@
                         </div>
                         <div class="pl-2 mt-1">
                             <button
-                                mat-stroked-button
+                                matButton="elevated"
                                 (click)="removePortalUser(domain, i)"
                                 class="btn-stroked-icon"
                                 aria-label="delete icon"
@@ -1068,8 +1068,7 @@
                                     >
                                     </reactive-dropdown-field>
                                     <button
-                                        mat-raised-button
-                                        color="primary"
+                                        matButton="filled"
                                         type="submit"
                                         [disabled]="moveAccountForm.invalid"
                                         aria-label="move"
@@ -1105,8 +1104,7 @@
                             </reactive-dropdown-field>
                             <button
                                 appEnterNext
-                                mat-raised-button
-                                color="primary"
+                                matButton="filled"
                                 type="submit"
                                 (click)="mergeAccounts()"
                                 aria-label="merge"
@@ -1154,8 +1152,7 @@
                         ></reactive-dropdown-field>
                         <button
                             appEnterNext
-                            mat-raised-button
-                            color="primary"
+                            matButton="filled"
                             [disabled]="isDiscountSaveDisable$ | async"
                             (click)="applyDiscounts()"
                             aria-label="apply"
@@ -1226,8 +1223,7 @@
                             <button
                                 [disabled]="isTaxesSaveDisable$ | async"
                                 type="submit"
-                                mat-raised-button
-                                color="primary"
+                                matButton="filled"
                                 aria-label="save"
                             >
                                 {{ commonLocaleData?.app_save }}
@@ -1278,14 +1274,13 @@
             <button
                 (click)="submit()"
                 *ngIf="voucherApiVersion === 2"
-                mat-raised-button
-                color="primary"
+                matButton="filled"
                 aria-label="update"
             >
                 {{ commonLocaleData?.app_update }}
             </button>
 
-            <button class="ml-auto" mat-raised-button color="primary" (click)="accountArchiveUnarchive()">
+            <button class="ml-auto" matButton="filled" (click)="accountArchiveUnarchive()">
                 {{
                     addAccountForm.get("archive")?.value
                         ? commonLocaleData?.app_unarchive
@@ -1295,7 +1290,7 @@
             <button
                 type="button"
                 *ngIf="showDeleteButton && voucherApiVersion === 2"
-                mat-stroked-button
+                matButton="elevated"
                 (click)="deleteClicked.emit(true)"
                 aria-label="delete"
             >
@@ -1310,20 +1305,19 @@
         <button
             *ngIf="voucherApiVersion === 2"
             (click)="submit()"
-            mat-raised-button
-            color="primary"
+            matButton="filled"
             type="submit"
             aria-label="update"
         >
             {{ commonLocaleData?.app_update }}
         </button>
-        <button class="ml-auto" mat-raised-button color="primary" (click)="accountArchiveUnarchive()">
+        <button class="ml-auto" matButton="filled" (click)="accountArchiveUnarchive()">
             {{ addAccountForm.get("archive")?.value ? commonLocaleData?.app_unarchive : commonLocaleData?.app_archive }}
         </button>
         <button
             *ngIf="showDeleteButton && voucherApiVersion === 2"
             type="button"
-            mat-stroked-button
+            matButton="elevated"
             (click)="deleteClicked.emit(true)"
             aria-label="delete"
         >

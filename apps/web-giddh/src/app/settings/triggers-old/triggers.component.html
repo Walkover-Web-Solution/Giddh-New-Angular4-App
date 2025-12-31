@@ -19,8 +19,7 @@
                 </div>
             </div>
             <button
-                mat-raised-button
-                color="primary"
+                matButton="filled"
                 (click)="isShowIntegrated = true;"
             >
                 + {{ localeData?.communication?.integrate_now }}
@@ -31,7 +30,7 @@
     <div class="msg91-container" *ngIf="!showTriggerForm && !(editCommunicationPlatform === 'MSG91')">
         <div class="menu" *ngIf="communicationPlatforms?.MSG91?.isConnected">
             <button
-                mat-icon-button
+                matIconButton
                 disableRipple
                 id="edit-model-basic"
                 [matMenuTriggerFor]="beforeMenu"
@@ -97,8 +96,7 @@
                 ></input-field>
             </div>
             <button
-                mat-raised-button
-                color="primary"
+                matButton="filled"
                 class="font-size-15"
                 [disabled]="isCommunicationPlatformVerificationInProcess"
                 (click)="verifyCommunicationPlatform('MSG91')"
@@ -110,8 +108,7 @@
     <ng-container *ngIf="!editCommunicationPlatform">
         <button
             class="new-trigger font-size-15"
-            mat-raised-button
-            color="primary"
+            matButton="filled"
             *ngIf="!showTriggerForm && communicationPlatforms?.MSG91?.isConnected"
             (click)="toggleTriggerForm()"
         >
@@ -165,8 +162,7 @@
                     <td mat-cell *matCellDef="let element">
                         <button
                             class="small-button"
-                            mat-raised-button
-                            color="primary"
+                            matButton="filled"
                             (click)="updateTriggerStatus(element?.uniqueName)"
                         >
                             {{
@@ -315,8 +311,7 @@
             </div>
             <button
                 *ngIf="triggerMode === 'create' || triggerMode === 'copy'"
-                mat-raised-button
-                color="primary"
+                matButton="filled"
                 (click)="createNewTrigger()"
                 [disabled]="disableSubmitButton"
                 class="button-trigger-form"
@@ -325,8 +320,7 @@
             </button>
             <button
                 *ngIf="triggerMode === 'update'"
-                mat-raised-button
-                color="primary"
+                matButton="filled"
                 (click)="updateTrigger()"
                 [disabled]="disableSubmitButton"
                 class="button-trigger-form"

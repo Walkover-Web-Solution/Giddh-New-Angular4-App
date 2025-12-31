@@ -1,7 +1,7 @@
 <section [keyboardShortcut]="'esc'" (onShortcutPress)="closeEvent.emit()">
     <div class="dialog-header">
         <span>{{ localeData?.subscription?.company_details }}</span>
-        <button mat-icon-button aria-label="close" (click)="closeEvent?.emit()">
+        <button matIconButton aria-label="close" (click)="closeEvent?.emit()">
             <i class="icon-cross"></i>
         </button>
     </div>

@@ -165,11 +165,11 @@
                     </div>
                 </ng-container>
                 <div class="d-flex justify-content-end column-gap-1">
-                    <button mat-raised-button color="primary" type="submit" (click)="exportLedger()">
+                    <button matButton="filled" type="submit" (click)="exportLedger()">
                         {{ commonLocaleData?.app_export }}
                     </button>
                     <button
-                        mat-stroked-button
+                        matButton="elevated"
                         aria-label="close"
                         mat-dialog-close
                         type="button"

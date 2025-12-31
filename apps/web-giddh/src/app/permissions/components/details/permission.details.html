@@ -8,10 +8,9 @@
     <section id="single-role" *ngIf="roleObj && localeData?.page_heading">
         <div class="p-2 border-bottom clear-both text-center mb-3">
             <span class="lead">{{ newRole?.name }}</span>
-            <button mat-stroked-button class="pull-left" (click)="goToRoles()">{{commonLocaleData?.app_back}}</button>
+            <button matButton="elevated" class="pull-left" (click)="goToRoles()">{{commonLocaleData?.app_back}}</button>
             <button
-                mat-raised-button
-                color="primary"
+                matButton="filled"
                 *ngIf="!newRole?.isUpdateCase"
                 class="pull-right ml-2"
                 (click)="addNewRole()"
@@ -19,8 +18,7 @@
                 {{commonLocaleData?.app_save}}
             </button>
             <button
-                mat-raised-button
-                color="primary"
+                matButton="filled"
                 *ngIf="newRole?.isUpdateCase"
                 [disabled]="newRole.isFixed"
                 class="mr-0 pull-right"
@@ -48,8 +46,7 @@
                     </div>
                     <div class="form-group">
                         <button
-                            mat-raised-button
-                            color="primary"
+                            matButton="filled"
                             (click)="addNewPage(pageName)"
                             [disabled]="!pageName"
                         >

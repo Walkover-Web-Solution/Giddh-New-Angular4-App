@@ -3,7 +3,7 @@ import { AddBulkItemsComponentStore } from "./utility/add-bulk-items.store";
 import { VouchersUtilityService } from "../../vouchers/utility/vouchers.utility.service";
 import { cloneDeep } from "../../lodash-optimized";
 import { SearchService } from "../../services/search.service";
-import { Observable, ReplaySubject, debounceTime, of, takeUntil } from "rxjs";
+import { Observable, ReplaySubject, debounceTime, of, takeUntil, BehaviorSubject } from "rxjs";
 import { OptionInterface } from "../../models/api-models/Voucher";
 import { SearchType } from "../../vouchers/utility/vouchers.const";
 import { FormArray, FormBuilder, FormGroup } from "@angular/forms";
@@ -25,7 +25,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
     /** Observable to unsubscribe all the store listeners to avoid memory leaks */
     private destroyed$: ReplaySubject<boolean> = new ReplaySubject(1);
     /** Stock results Observable */
-    public stockResults$: Observable<OptionInterface[]> = of(null);
+    public stockResults$: BehaviorSubject<OptionInterface[]> = new BehaviorSubject<OptionInterface[]>([]);
     /** Form Group for invoice form */
     public addBulkForm: FormGroup;
     /** List of stock variants */
@@ -69,11 +69,6 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
             if (response) {
                 this.stockVariants[response.entryIndex] = of(response.results);
             }
-        });
-
-        // Initialize focus state when stock results change
-        this.stockResults$.pipe(takeUntil(this.destroyed$)).subscribe(() => {
-            setTimeout(() => this.initializeFocusState(), 100);
         });
     }
 
@@ -325,7 +320,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
                 this.stockSearchRequest.loadMore = true;
                 let stockResults = [];
                 if (page > 1) {
-                    this.stockResults$.subscribe(res => stockResults = res);
+                    stockResults = this.stockResults$.value;
                 }
                 const newResults = response?.body?.results?.map(result => {
                     return {
@@ -336,7 +331,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
                         additional: result
                     };
                 }) || [];
-                this.stockResults$ = of(stockResults.concat(...newResults));
+                this.stockResults$.next(stockResults.concat(...newResults));
             } else {
                 this.stockSearchRequest.loadMore = false;
             }

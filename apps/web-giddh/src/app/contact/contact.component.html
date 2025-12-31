@@ -67,8 +67,7 @@
                                     <div class="dis pull-left on-desktop-view align-items-center">
                                         <div class="btn-group pull-right d-flex column-gap-15">
                                             <button
-                                                mat-raised-button
-                                                color="primary"
+                                                matButton="filled"
                                                 *ngIf="activeTab == 'customer' && voucherApiVersion === 2"
                                                 class="mr-0"
                                                 (click)="openAddAndManage('customer')"
@@ -77,8 +76,7 @@
                                                 {{ localeData?.new_customer }}
                                             </button>
                                             <button
-                                                mat-raised-button
-                                                color="primary"
+                                                matButton="filled"
                                                 *ngIf="activeTab == 'vendor' && voucherApiVersion === 2"
                                                 class="mr-0"
                                                 (click)="openAddAndManage('vendor')"
@@ -94,7 +92,7 @@
                                     *ngIf="showClearFilter"
                                 >
                                     <button
-                                        mat-stroked-button
+                                        matButton="elevated"
                                         class="mr-0"
                                         (click)="resetAdvanceSearch()"
                                         aria-label="filter"
@@ -105,7 +103,7 @@
                                 <!-- Invoice filter section ends -->
                                 <div class="button-content" *ngIf="selectedCheckedContacts?.length > 0">
                                     <button
-                                        mat-stroked-button
+                                        matButton="elevated"
                                         class="desktop-button-filter"
                                         (click)="clearSelectedContacts()"
                                         aria-label="clear"
@@ -141,7 +139,7 @@
                                         </div>
                                         <div class="customer-footer-box pull-right">
                                             <button
-                                                mat-stroked-button
+                                                matButton="elevated"
                                                 class="btn-filter mobile-button-filter"
                                                 *ngIf="selectedAccountsList?.length > 0"
                                                 (click)="clearSelectedContacts()"
@@ -202,7 +200,7 @@
                                     </h5>
                                     <div class="more-button align-items-center">
                                         <button
-                                            mat-icon-button
+                                            matIconButton
                                             class="position-absolute arrow-icon d-flex justify-content-center align-items-center"
                                             [matMenuTriggerFor]="downloadCsvEmail"
                                             id="button-basic"
@@ -386,10 +384,10 @@
                     </mat-chip-listbox>
                 </div>
                 <div class="mt-5 d-flex justify-content-end column-gap-1">
-                    <button mat-raised-button color="primary" (click)="send('sundrycreditors')" aria-label="set">
+                    <button matButton="filled" (click)="send('sundrycreditors')" aria-label="set">
                         {{ messageBody.btn.set }}
                     </button>
-                    <button role="button" mat-stroked-button (click)="closeAllDialogs()">
+                    <button role="button" matButton="elevated" (click)="closeAllDialogs()">
                         {{ commonLocaleData?.app_cancel }}
                     </button>
                 </div>
@@ -437,10 +435,10 @@
                 </div>
 
                 <div class="mt-5 d-flex justify-content-end column-gap-1">
-                    <button mat-raised-button color="primary" (click)="send('sundrydebtors')" aria-label="set">
+                    <button matButton="filled" (click)="send('sundrydebtors')" aria-label="set">
                         {{ messageBody.btn.set }}
                     </button>
-                    <button role="button" mat-stroked-button (click)="closeAllDialogs()">
+                    <button role="button" matButton="elevated" (click)="closeAllDialogs()">
                         {{ commonLocaleData?.app_cancel }}
                     </button>
                 </div>
@@ -557,7 +555,7 @@
                                         {{ account.name }}
                                     </a>
                                     <button
-                                        mat-icon-button
+                                        matIconButton
                                         [disableRipple]="true"
                                         [matMenuTriggerFor]="editModelBasic"
                                         #trigger="matMenuTrigger"
@@ -1021,7 +1019,7 @@
                                         {{ account.name }}
                                     </a>
                                     <button
-                                        mat-icon-button
+                                        matIconButton
                                         [disableRipple]="true"
                                         [matMenuTriggerFor]="dropdownBasic2"
                                         #trigger="matMenuTrigger"
@@ -1123,8 +1121,7 @@
                                                 </div>
                                                 <div class="mt-5 d-flex justify-content-end column-gap-1">
                                                     <button
-                                                        mat-raised-button
-                                                        color="primary"
+                                                        matButton="filled"
                                                         (click)="send('sundrycreditors')"
                                                         aria-label="set"
                                                     >
@@ -1132,7 +1129,7 @@
                                                     </button>
                                                     <button
                                                         role="button"
-                                                        mat-stroked-button
+                                                        matButton="elevated"
                                                         (click)="closeAllDialogs()"
                                                     >
                                                         {{ commonLocaleData?.app_cancel }}
@@ -1430,7 +1427,7 @@
                             <td mat-cell *matCellDef="let account" [attr.data-title]="commonLocaleData?.app_action">
                                 <div class="d-flex column-gap-15 justify-content-center">
                                     <button
-                                        mat-stroked-button
+                                        matButton="elevated"
                                         *ngIf="isGetAllIntegratedBankInProgress"
                                         class="btn-small min-width-150 contact-ipad-responsive"
                                         aria-label="loading"
@@ -1438,7 +1435,7 @@
                                         {{ commonLocaleData?.app_loading }}
                                     </button>
                                     <button
-                                        mat-stroked-button
+                                        matButton="elevated"
                                         *ngIf="!isGetAllIntegratedBankInProgress && isIciciAccountPendingForApproval"
                                         class="btn-small min-width-150 pending-approval-button contact-ipad-responsive"
                                         (click)="showIntegrationProcess()"
@@ -1447,7 +1444,7 @@
                                         {{ localeData?.pending_approval }}
                                     </button>
                                     <button
-                                        mat-stroked-button
+                                        matButton="elevated"
                                         *ngIf="isPlaidSupportedCountry && !isGetAllIntegratedBankInProgress"
                                         class="btn-small min-width-150 contact-ipad-responsive"
                                         [routerLink]="['/pages/settings/integration/payment']"
@@ -1465,8 +1462,7 @@
                                 >
                                     <div class="d-flex column-gap-15 justify-content-center">
                                         <button
-                                            mat-raised-button
-                                            color="primary"
+                                            matButton="filled"
                                             *ngIf="account?.bankPaymentDetails && account?.country?.code === 'IN'"
                                             class="btn-small min-width-150 contact-ipad-responsive"
                                             (click)="openBulkPaymentModal(account)"
@@ -1478,7 +1474,7 @@
                                             >-</span
                                         >
                                         <button
-                                            mat-stroked-button
+                                            matButton="elevated"
                                             *ngIf="!account?.bankPaymentDetails"
                                             class="btn-small min-width-150 contact-ipad-responsive"
                                             (click)="updateCustomerAcc('vendor', account)"
@@ -1684,7 +1680,7 @@
             </div>
             <h4>{{ commonLocaleData?.app_payment_proceed }}</h4>
             <p>{{ paymentSuccessfulMessage }}</p>
-            <button mat-raised-button color="primary" mat-dialog-close aria-label="done">
+            <button matButton="filled" mat-dialog-close aria-label="done">
                 {{ commonLocaleData?.app_done }}
             </button>
         </div>

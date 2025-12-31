@@ -74,7 +74,7 @@
         <div class="form-btn-field">
             <label class="d-block">&nbsp;</label>
             <button
-                mat-raised-button color="primary" class="mr-0"
+                matButton="filled" class="mr-0"
                 [ladda]="auditLogFormVM.getLogsInprocess$ | async"
                 [disabled]="!auditLogFormVM.selectedEntity"
                 (click)="getLogFilters()"

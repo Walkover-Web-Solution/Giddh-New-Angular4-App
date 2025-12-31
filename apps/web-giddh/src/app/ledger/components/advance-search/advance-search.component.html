@@ -561,10 +561,10 @@
         </mat-dialog-content>
         <mat-dialog-actions>
             <div class="my-2 w-100 d-flex justify-content-end column-gap-1">
-                <button mat-raised-button color="primary" type="button" (click)="onSearch()">
+                <button matButton="filled" type="button" (click)="onSearch()">
                     {{ commonLocaleData?.app_search }}
                 </button>
-                <button mat-stroked-button type="button" (click)="onCancel()">
+                <button matButton="elevated" type="button" (click)="onCancel()">
                     {{ commonLocaleData?.app_cancel }}
                 </button>
             </div>

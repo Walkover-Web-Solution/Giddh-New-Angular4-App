@@ -38,7 +38,7 @@
                                     searchString !== null) &&
                                 !isLoading
                             "
-                            mat-stroked-button
+                            matButton="elevated"
                             (click)="isApiCalled = true; resetSearch()"
                             aria-label="cross icon"
                         >
@@ -51,7 +51,7 @@
                                 {{ localeData?.total_inventory_count }} : <span>{{ totalInventoryCount }}</span>
                             </p>
                             <button
-                                mat-stroked-button
+                                matButton="elevated"
                                 class="btn-stroked-icon bulk-stock-hide-show-button p-0 ml-2"
                                 (click)="openAdvanceFilter()"
                                 [matTooltip]="commonLocaleData?.app_advanced_filter"
@@ -96,7 +96,7 @@
                                                         </div>
                                                     </div>
                                                     <button
-                                                        mat-icon-button
+                                                        matIconButton
                                                         class="sort-btn icon-font-22 p-0"
                                                         (click)="sort('variant_name')"
                                                         aria-label="sort icon"
@@ -132,7 +132,7 @@
                                                         </div>
                                                     </div>
                                                     <button
-                                                        mat-icon-button
+                                                        matIconButton
                                                         class="sort-btn icon-font-22 p-0"
                                                         (click)="sort('variant_unique_name')"
                                                         aria-label="sort icon"
@@ -166,7 +166,7 @@
                                                         </div>
                                                     </div>
                                                     <button
-                                                        mat-icon-button
+                                                        matIconButton
                                                         class="sort-btn icon-font-22 p-0"
                                                         (click)="sort('stock_name')"
                                                         aria-label="sort icon"
@@ -202,7 +202,7 @@
                                                         </div>
                                                     </div>
                                                     <button
-                                                        mat-icon-button
+                                                        matIconButton
                                                         class="sort-btn icon-font-22 p-0"
                                                         (click)="sort('stock_unique_name')"
                                                         aria-label="sort icon"
@@ -241,7 +241,7 @@
                                                         </div>
                                                     </div>
                                                     <button
-                                                        mat-icon-button
+                                                        matIconButton
                                                         class="sort-btn icon-font-22 p-0"
                                                         (click)="sort('stock_group_name')"
                                                         aria-label="sort icon"
@@ -362,7 +362,7 @@
                                                 <div class="d-flex align-items-center justify-content-between">
                                                     <p>{{ localeData?.purchase_rate }}</p>
                                                     <button
-                                                        mat-icon-button
+                                                        matIconButton
                                                         class="sort-btn icon-font-22 p-0"
                                                         (click)="sort('purchase_rate')"
                                                         aria-label="sort icon"
@@ -408,7 +408,7 @@
                                                 <div class="d-flex align-items-center justify-content-between">
                                                     <p>{{ localeData?.sales_rate }}</p>
                                                     <button
-                                                        mat-icon-button
+                                                        matIconButton
                                                         class="sort-btn icon-font-22 p-0"
                                                         (click)="sort('sales_rate')"
                                                         aria-label="sort icon"
@@ -445,7 +445,7 @@
                                                 <div class="d-flex align-items-center justify-content-between">
                                                     <p>{{ localeData?.fixed_asset_rate }}</p>
                                                     <button
-                                                        mat-icon-button
+                                                        matIconButton
                                                         class="sort-btn icon-font-22 p-0"
                                                         (click)="sort('fixed_asset_rate')"
                                                         aria-label="sort icon"

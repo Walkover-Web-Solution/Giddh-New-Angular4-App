@@ -10,7 +10,7 @@
     <div class="aside-dialog-wrapper">
         <div class="dialog-header">
             <p class="modal-title">{{ commonLocaleData?.app_sales_person }}</p>
-            <button mat-icon-button aria-label="close" (click)="closeDialog()">
+            <button matIconButton aria-label="close" (click)="closeDialog()">
                 <i aria-label="close icon" class="icon-cross"></i>
             </button>
         </div>
@@ -65,14 +65,13 @@
                             </mobile-number-input>
                             <div class="grid-child-column-full d-flex justify-content-end column-gap-15">
                                 <button
-                                    mat-raised-button
-                                    color="primary"
+                                    matButton="filled"
                                     [disabled]="(salesPersonSaveInProgress$ | async) || salesPersonForm?.invalid"
                                 >
                                     {{ isEditMode ? commonLocaleData?.app_update : commonLocaleData?.app_save }}
                                 </button>
                                 <button
-                                    mat-stroked-button
+                                    matButton="elevated"
                                     type="button"
                                     (click)="
                                         salesPersonForm?.reset();
@@ -138,7 +137,7 @@
                                 <button
                                     *ngIf="voucherApiVersion === 2"
                                     [ngClass]="{ 'invisible': activeRowIndex !== i }"
-                                    mat-icon-button
+                                    matIconButton
                                     [matMenuTriggerFor]="menu"
                                     aria-label="Sales person actions"
                                 >

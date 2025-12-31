@@ -93,16 +93,14 @@
 
                         <div *ngIf="showChannelCreateBtn" class="no-results-actions">
                             <button
-                                mat-raised-button
-                                color="primary"
+                                matButton="filled"
                                 (click)="newTeamCreationEmitter.emit(['group', ''])"
                                 mat-dialog-close
                             >
                                 {{ commonLocaleData?.app_create_group }}
                             </button>
                             <button
-                                mat-raised-button
-                                color="primary"
+                                matButton="filled"
                                 (click)="newTeamCreationEmitter.emit(['account', ''])"
                                 mat-dialog-close
                             >

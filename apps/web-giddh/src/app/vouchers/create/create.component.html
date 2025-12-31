@@ -76,7 +76,7 @@
                             </mat-slide-toggle>
                             <button
                                 class="ml-1 p-0"
-                                mat-icon-button
+                                matIconButton
                                 [matTooltip]="commonLocaleData?.app_filter"
                                 [matTooltipPosition]="'above'"
                                 [matMenuTriggerFor]="menu"
@@ -110,7 +110,7 @@
                                 ></watch-video>
                             </div>
                             <button
-                                mat-stroked-button
+                                matButton="elevated"
                                 *ngIf="
                                     ocrDataEnabled && !(invoiceType.isReceiptInvoice || invoiceType.isPaymentInvoice)
                                 "
@@ -2253,8 +2253,7 @@
 
                                                                                 <div class="mt-3">
                                                                                     <button
-                                                                                        mat-raised-button
-                                                                                        color="primary"
+                                                                                        matButton="filled"
                                                                                         class="mr-2"
                                                                                         (click)="
                                                                                             hsnSacTrigger?.closeMenu()
@@ -2263,7 +2262,7 @@
                                                                                         {{ commonLocaleData?.app_save }}
                                                                                     </button>
                                                                                     <button
-                                                                                        mat-stroked-button
+                                                                                        matButton="elevated"
                                                                                         (click)="
                                                                                             cancelHsnSacEdit(entry);
                                                                                             hsnSacTrigger?.closeMenu()
@@ -3554,7 +3553,7 @@
                                                                                 }}</span>
                                                                                 <button
                                                                                     id="deleteAttachment"
-                                                                                    mat-icon-button
+                                                                                    matIconButton
                                                                                     (click)="
                                                                                         deleteAttachementConfirmation()
                                                                                     "
@@ -3861,52 +3860,46 @@
                                     *ngIf="isMainVoucher"
                                 >
                                     <ng-container *ngIf="!isUpdateMode">
-                                        <button mat-stroked-button (click)="resetVoucherForm()">
+                                        <button matButton="elevated" (click)="resetVoucherForm()">
                                             {{ commonLocaleData?.app_clear }}
                                         </button>
                                         <button
-                                            mat-raised-button
-                                            color="primary"
+                                            matButton="filled"
                                             *ngIf="invoiceType.isSalesInvoice && !isPendingEntries"
                                             (click)="updateAccountAndGenerateVoucher()"
                                         >
                                             {{ localeData?.generate_sales_update_account }}
                                         </button>
                                         <button
-                                            mat-raised-button
-                                            color="primary"
+                                            matButton="filled"
                                             *ngIf="invoiceType.isEstimateInvoice"
                                             (click)="generateVoucher()"
                                         >
                                             {{ commonLocaleData?.app_create }}
                                         </button>
                                         <button
-                                            mat-raised-button
-                                            color="primary"
+                                            matButton="filled"
                                             *ngIf="invoiceType.isProformaInvoice"
                                             (click)="generateVoucher()"
                                         >
                                             {{ commonLocaleData?.app_create }}
                                         </button>
                                         <button
-                                            mat-raised-button
-                                            color="primary"
+                                            matButton="filled"
                                             *ngIf="invoiceType.isSalesInvoice && !isPendingEntries"
                                             (click)="generateVoucher()"
                                         >
                                             {{ localeData?.generate_sales }}
                                         </button>
                                         <button
-                                            mat-raised-button
-                                            color="primary"
+                                            matButton="filled"
                                             *ngIf="isPendingEntries && !invoiceType.isCashInvoice"
                                             (click)="generateVoucher()"
                                         >
                                             {{ localeData?.generate_invoice }}
                                         </button>
                                         <button
-                                            mat-raised-button
-                                            color="primary"
+                                            matButton="filled"
                                             *ngIf="
                                                 invoiceType.isCashInvoice &&
                                                 !invoiceType.isPurchaseInvoice &&
@@ -3918,48 +3911,42 @@
                                             {{ localeData?.generate_cash }}
                                         </button>
                                         <button
-                                            mat-raised-button
-                                            color="primary"
+                                            matButton="filled"
                                             *ngIf="invoiceType.isCashInvoice && invoiceType.isPurchaseInvoice"
                                             (click)="generateVoucher()"
                                         >
                                             {{ localeData?.generate_cash_bill }}
                                         </button>
                                         <button
-                                            mat-raised-button
-                                            color="primary"
+                                            matButton="filled"
                                             *ngIf="!invoiceType.isCashInvoice && invoiceType.isCreditNote"
                                             (click)="updateAccountAndGenerateVoucher()"
                                         >
                                             {{ localeData?.generate_cn_update_account }}
                                         </button>
                                         <button
-                                            mat-raised-button
-                                            color="primary"
+                                            matButton="filled"
                                             *ngIf="invoiceType.isCreditNote"
                                             (click)="generateVoucher()"
                                         >
                                             {{ localeData?.generate_cn }}
                                         </button>
                                         <button
-                                            mat-raised-button
-                                            color="primary"
+                                            matButton="filled"
                                             *ngIf="!invoiceType.isCashInvoice && invoiceType.isDebitNote"
                                             (click)="updateAccountAndGenerateVoucher()"
                                         >
                                             {{ localeData?.generate_dn_update_account }}
                                         </button>
                                         <button
-                                            mat-raised-button
-                                            color="primary"
+                                            matButton="filled"
                                             *ngIf="invoiceType.isDebitNote"
                                             (click)="generateVoucher()"
                                         >
                                             {{ localeData?.generate_dn }}
                                         </button>
                                         <button
-                                            mat-raised-button
-                                            color="primary"
+                                            matButton="filled"
                                             *ngIf="
                                                 !invoiceType.isCashInvoice &&
                                                 (invoiceType.isPurchaseInvoice || invoiceType.isPurchaseOrder)
@@ -3969,23 +3956,21 @@
                                             {{ commonLocaleData?.app_save }}
                                         </button>
                                         <button
-                                            mat-raised-button
-                                            color="primary"
+                                            matButton="filled"
                                             *ngIf="invoiceType.isReceiptInvoice"
                                             (click)="generateVoucher()"
                                         >
                                             {{ localeData?.create_receipt }}
                                         </button>
                                         <button
-                                            mat-raised-button
-                                            color="primary"
+                                            matButton="filled"
                                             *ngIf="invoiceType.isPaymentInvoice"
                                             (click)="generateVoucher()"
                                         >
                                             {{ localeData?.create_payment }}
                                         </button>
                                         <button
-                                            mat-stroked-button
+                                            matButton="elevated"
                                             [matMenuTriggerFor]="moreOptions"
                                             class="min-width-unset"
                                             *ngIf="
@@ -4008,10 +3993,10 @@
                                         </mat-menu>
                                     </ng-container>
                                     <ng-container *ngIf="isUpdateMode">
-                                        <button mat-stroked-button (click)="cancelUpdateVoucher()">
+                                        <button matButton="elevated" (click)="cancelUpdateVoucher()">
                                             {{ commonLocaleData?.app_cancel }}
                                         </button>
-                                        <button mat-raised-button color="primary" (click)="updateVoucher()">
+                                        <button matButton="filled" (click)="updateVoucher()">
                                             {{ updateVoucherText }}
                                         </button>
                                     </ng-container>
@@ -4020,13 +4005,13 @@
                                     class="vouchers-actions d-flex justify-content-end column-gap-1 pt-4 pb-4 mt-4"
                                     *ngIf="!isMainVoucher"
                                 >
-                                    <button mat-stroked-button (click)="resetVoucherForm()">
+                                    <button matButton="elevated" (click)="resetVoucherForm()">
                                         {{ commonLocaleData?.app_clear }}
                                     </button>
-                                    <button mat-raised-button color="primary" (click)="generateVoucher('skip')">
+                                    <button matButton="filled" (click)="generateVoucher('skip')">
                                         {{ commonLocaleData?.app_skip_and_next }}
                                     </button>
-                                    <button mat-raised-button color="primary" (click)="generateVoucher('save')">
+                                    <button matButton="filled" (click)="generateVoucher('save')">
                                         {{ commonLocaleData?.app_save_and_next }}
                                     </button>
                                 </div>

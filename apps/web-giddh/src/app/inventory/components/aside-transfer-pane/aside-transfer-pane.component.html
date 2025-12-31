@@ -2,10 +2,10 @@
     <div class="form-header" *ngIf="selectedAsideView == 'mainview'">
         <p>Create</p>
     </div>
-    <button mat-stroked-button (click)="closeAsidePane($event)" *ngIf="selectedAsideView == 'mainview'">
+    <button matButton="elevated" (click)="closeAsidePane($event)" *ngIf="selectedAsideView == 'mainview'">
         <i class="icon-cross"></i>
     </button>
-    <button mat-stroked-button id="back" (click)="backButtonPressed()" *ngIf="selectedAsideView != 'mainview'">Back</button>
+    <button matButton="elevated" id="back" (click)="backButtonPressed()" *ngIf="selectedAsideView != 'mainview'">Back</button>
     <div [ngSwitch]="selectedAsideView">
         <ng-container *ngSwitchCase="'inward'">
             <transfer-inward-note
@@ -51,22 +51,22 @@
         <ng-container *ngSwitchDefault>
             <div class="aside-body flexy-child vertical-align-middle aside-panel-ledger" vr-item>
                 <div class="p-2 text-center">
-                    <button mat-raised-button color="primary" type="button" (click)="selectView('inward')">
+                    <button matButton="filled" type="button" (click)="selectView('inward')">
                         Inward Note
                     </button>
                 </div>
                 <div class="p-2 text-center">
-                    <button mat-raised-button color="primary" type="button" (click)="selectView('outward')">
+                    <button matButton="filled" type="button" (click)="selectView('outward')">
                         Outward Note
                     </button>
                 </div>
                 <div class="p-2 text-center">
-                    <button mat-raised-button color="primary" type="button" (click)="selectView('createStock')">
+                    <button matButton="filled" type="button" (click)="selectView('createStock')">
                         Create Stock
                     </button>
                 </div>
                 <div class="p-2 text-center">
-                    <button mat-raised-button color="primary" type="button" (click)="selectView('createAccount')">
+                    <button matButton="filled" type="button" (click)="selectView('createAccount')">
                         Create Account
                     </button>
                 </div>

@@ -36,8 +36,7 @@
                 <ng-container *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2">
                     <ng-container *ngIf="voucherType === voucherTypeEnum.sales; else other">
                         <button
-                            mat-raised-button
-                            color="primary"
+                            matButton="filled"
                             [matMenuTriggerFor]="newInvoice"
                             class="invoice-btn width-150"
                         >
@@ -57,8 +56,7 @@
                     </ng-container>
                     <ng-template #other>
                         <button
-                            mat-raised-button
-                            color="primary"
+                            matButton="filled"
                             class="invoice-btn width-150"
                             [routerLink]="[createNewVoucher.link]"
                         >
@@ -150,8 +148,7 @@
                     </div>
                     <div class="d-flex column-gap-1 flex-wrap row-gap-1">
                         <button
-                            mat-raised-button
-                            color="primary"
+                            matButton="filled"
                             (click)="toggleActivityHistoryAsidePane()"
                             *ngIf="!(invoiceType.isEstimateInvoice || invoiceType.isProformaInvoice)"
                         >
@@ -160,7 +157,7 @@
                         </button>
                         <div class="d-flex action-btn">
                             <button
-                                mat-stroked-button
+                                matButton="elevated"
                                 *ngIf="voucherApiVersion === 2"
                                 class="btn-stroked-icon"
                                 [matTooltip]="commonLocaleData?.app_edit"
@@ -170,7 +167,7 @@
                                 <i class="icon-edit-pencil"></i>
                             </button>
                             <button
-                                mat-stroked-button
+                                matButton="elevated"
                                 class="btn-stroked-icon"
                                 [matTooltip]="commonLocaleData?.app_send_email"
                                 [matTooltipPosition]="'above'"
@@ -179,7 +176,7 @@
                                 <i class="icon-envelope"></i>
                             </button>
                             <button
-                                mat-stroked-button
+                                matButton="elevated"
                                 class="btn-stroked-icon"
                                 [matTooltip]="commonLocaleData?.app_print"
                                 [matTooltipPosition]="'above'"
@@ -192,7 +189,7 @@
                                     defaultThermalTemplate?.templateType === 'thermal_template' &&
                                     !invoiceType.isPurchaseOrder
                                 "
-                                mat-stroked-button
+                                matButton="elevated"
                                 class="btn-stroked-icon"
                                 [matTooltip]="commonLocaleData?.app_print_thermal"
                                 [matTooltipPosition]="'above'"
@@ -201,7 +198,7 @@
                                 <i class="fa fa-print"></i>
                             </button>
                             <button
-                                mat-stroked-button
+                                matButton="elevated"
                                 class="btn-stroked-icon"
                                 [matTooltip]="commonLocaleData?.app_download_pdf"
                                 [matTooltipPosition]="'above'"
@@ -211,7 +208,7 @@
                             </button>
                             <button
                                 *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
-                                mat-stroked-button
+                                matButton="elevated"
                                 class="btn-stroked-icon"
                                 [matTooltip]="commonLocaleData?.app_delete"
                                 [matTooltipPosition]="'above'"
@@ -221,8 +218,7 @@
                             </button>
                         </div>
                         <button
-                            mat-raised-button
-                            color="primary"
+                            matButton="filled"
                             [matMenuTriggerFor]="changeStatus"
                             *ngIf="
                                 selectedInvoice?.balanceStatus !== 'CANCEL' &&
@@ -324,7 +320,7 @@
                         <span *ngIf="isShowInvoiceStatus()" class="invoice-status border-radius-4 text-capitalize">
                             {{ selectedInvoice?.balanceStatus ?? selectedInvoice?.action ?? selectedInvoice?.status }}
                         </span>
-                        <button mat-stroked-button (click)="redirectToGetAllPage()">
+                        <button matButton="elevated" (click)="redirectToGetAllPage()">
                             {{ commonLocaleData?.app_back }}
                         </button>
                     </div>

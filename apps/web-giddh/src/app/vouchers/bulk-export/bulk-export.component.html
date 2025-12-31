@@ -415,14 +415,13 @@
 
                 <div class="mt-4 w-100 d-flex justify-content-end column-gap-1">
                     <button
-                        mat-raised-button
-                        color="primary"
+                        matButton="filled"
                         (click)="exportVouchers(false)"
                         [disabled]="!exportForm.get('attachmentExport').value && !exportForm.get('voucherExport').value"
                     >
                         {{ commonLocaleData?.app_download }}
                     </button>
-                    <button mat-stroked-button mat-dialog-close>
+                    <button matButton="elevated" mat-dialog-close>
                         {{ commonLocaleData?.app_cancel }}
                     </button>
                 </div>

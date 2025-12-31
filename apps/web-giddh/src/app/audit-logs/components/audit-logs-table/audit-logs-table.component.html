@@ -877,7 +877,7 @@
         </div>
     </section>
     <button
-        mat-raised-button color="primary" class="pull-left mt-4 mb-4"
+        matButton="filled" class="pull-left mt-4 mb-4"
         [ladda]="loadMoreInProcess$ | async"
         (click)="loadMoreLogs()"
         *ngIf="(page$ | async) > 0 && (page$ | async) < (totalPages$ | async)"

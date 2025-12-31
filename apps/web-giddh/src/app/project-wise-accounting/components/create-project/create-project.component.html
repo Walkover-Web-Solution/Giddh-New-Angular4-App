@@ -39,10 +39,10 @@
 
                 <!-- Form Buttons -->
                 <div class="col-12 d-flex column-gap-1 mt-4">
-                    <button mat-raised-button color="primary" type="submit" [disabled]="isSavingProject$ | async">
+                    <button matButton="filled" type="submit" [disabled]="isSavingProject$ | async">
                         {{ inputData.isCreateFlow ? commonLocaleData?.app_save : commonLocaleData?.app_update }}
                     </button>
-                    <button mat-stroked-button mat-dialog-close>
+                    <button matButton="elevated" mat-dialog-close>
                         {{ commonLocaleData?.app_cancel }}
                     </button>
                 </div>

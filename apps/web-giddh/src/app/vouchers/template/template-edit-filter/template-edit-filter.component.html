@@ -106,7 +106,7 @@
                                         type="button"
                                         class="start-upload-btn ml-4"
                                         (click)="deleteLogo()"
-                                        mat-stroked-button
+                                        matButton="elevated"
                                         [matTooltip]="localeData?.delete_image_from_server"
                                     >
                                         {{ commonLocaleData?.app_delete }}
@@ -118,7 +118,7 @@
                                                 <button
                                                     *ngFor="let size of imageSizes"
                                                     [disabled]="!customTemplate?.logoUniqueName"
-                                                    mat-mini-fab
+                                                    matMiniFab
                                                     [disabled]="!customTemplate?.logoUniqueName"
                                                     [color]="defaultImageSize === size?.label ? 'primary' : ''"
                                                     (click)="
@@ -3900,7 +3900,7 @@
                                                                     type="button"
                                                                     class="start-upload-btn ml-4"
                                                                     (click)="removeFile()"
-                                                                    mat-stroked-button
+                                                                    matButton="elevated"
                                                                     [matTooltip]="localeData?.delete_image_from_server"
                                                                 >
                                                                     {{ commonLocaleData?.app_delete }}

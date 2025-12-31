@@ -54,8 +54,7 @@
                         *ngIf="!isCompany && !isConsolidatedBranch && !isLoading && !drAccounts?.length"
                     >
                         <button
-                            mat-raised-button
-                            color="primary"
+                            matButton="filled"
                             class="min-width-130"
                             [routerLink]="[
                                 voucherApiVersion === 2
@@ -157,8 +156,7 @@
                         *ngIf="!isCompany && !isConsolidatedBranch && !isLoading && !crAccounts?.length"
                     >
                         <button
-                            mat-raised-button
-                            color="primary"
+                            matButton="filled"
                             class="min-width-130"
                             [routerLink]="[
                                 voucherApiVersion === 2

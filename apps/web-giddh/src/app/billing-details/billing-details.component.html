@@ -10,7 +10,7 @@
             <div class="row display-line">
                 <div class="col-sm-1" [ngClass]="{ 'skeleton-common-class': showLoader }">
                     <div class="back-btnn">
-                        <button mat-stroked-button (click)="backToSubscriptions()" *ngIf="!showLoader">
+                        <button matButton="elevated" (click)="backToSubscriptions()" *ngIf="!showLoader">
                             <span class="d-inline-flex align-items-center justify-content-center column-gap-1">
                                 <i class="icon-left back-left"></i>
                                 {{ commonLocaleData?.app_back }}
@@ -317,8 +317,7 @@
                                 ></div>
                                 <button
                                     class="pay-now"
-                                    mat-raised-button
-                                    color="primary"
+                                    matButton="filled"
                                     [ngClass]="{ 'pay-now-content': showLoader }"
                                     (click)="payWithRazor(billingForm)"
                                     [disabled]="

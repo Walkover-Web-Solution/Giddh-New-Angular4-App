@@ -2,7 +2,7 @@
     <section class="w-100">
         <div class="dialog-header">
             <span>{{ isUpdatingStockForm ? "Update Stock" : "Create Stock" }}</span>
-            <button mat-icon-button aria-label="close" (click)="closeAsidePane()">
+            <button matIconButton aria-label="close" (click)="closeAsidePane()">
                 <i class="icon-cross"></i>
             </button>
         </div>
@@ -27,7 +27,7 @@
                             <label class="d-block">&nbsp;</label>
                             <button
                                 type="button"
-                                mat-stroked-button
+                                matButton="elevated"
                                 (click)="moveStock()"
                                 [disabled]="addStockForm.get('parentGroup')?.value === activeGroup?.uniqueName"
                             >
@@ -372,14 +372,14 @@
                                     </div>
                                     <div class="pull-right unit-add">
                                         <button
-                                            mat-stroked-button
+                                            matButton="elevated"
                                             class="mr-0"
                                             (click)="addPurchaseUnitRates(i)"
                                             *ngIf="l"
                                         >
                                             <i class="icon-plus text-green"></i>
                                         </button>
-                                        <button mat-stroked-button (click)="removePurchaseUnitRates(i)" *ngIf="!l">
+                                        <button matButton="elevated" (click)="removePurchaseUnitRates(i)" *ngIf="!l">
                                             <i class="icon-cross text-red"></i>
                                         </button>
                                     </div>
@@ -444,10 +444,10 @@
                                         />
                                     </div>
                                     <div class="pull-right unit-add">
-                                        <button mat-stroked-button class="mr-0" (click)="addSaleUnitRates(i)" *ngIf="l">
+                                        <button matButton="elevated" class="mr-0" (click)="addSaleUnitRates(i)" *ngIf="l">
                                             <i class="icon-plus text-green"></i>
                                         </button>
-                                        <button mat-stroked-button (click)="removeSaleUnitRates(i)" *ngIf="!l">
+                                        <button matButton="elevated" (click)="removeSaleUnitRates(i)" *ngIf="!l">
                                             <i class="icon-cross text-red"></i>
                                         </button>
                                     </div>
@@ -575,14 +575,14 @@
                                         </td>
                                         <td>
                                             <button
-                                                mat-stroked-button
+                                                matButton="elevated"
                                                 (click)="addItemInLinkedStocks(list, i, i)"
                                                 *ngIf="l"
                                                 [disabled]="disableStockButton"
                                             >
                                                 <i class="icon-plus text-green"></i>
                                             </button>
-                                            <button mat-stroked-button (click)="removeItemInLinkedStocks(i)" *ngIf="!l">
+                                            <button matButton="elevated" (click)="removeItemInLinkedStocks(i)" *ngIf="!l">
                                                 <i class="icon-cross text-red"></i>
                                             </button>
                                         </td>
@@ -601,8 +601,7 @@
                                 *ngIf="!isUpdatingStockForm"
                                 [ladda]="isStockAddInProcess$ | async"
                                 (click)="submit()"
-                                mat-raised-button
-                                color="primary"
+                                matButton="filled"
                                 [disabled]="addStockForm.invalid || disableStockButton"
                             >
                                 Save
@@ -611,8 +610,7 @@
                                 type="button"
                                 *ngIf="isUpdatingStockForm"
                                 [ladda]="isStockUpdateInProcess$ | async"
-                                mat-raised-button
-                                color="primary"
+                                matButton="filled"
                                 (click)="update()"
                                 [disabled]="addStockForm.invalid || disableStockButton"
                             >
@@ -621,7 +619,7 @@
                             <button
                                 *ngIf="isUpdatingStockForm"
                                 [ladda]="isStockDeleteInProcess$ | async"
-                                mat-stroked-button
+                                matButton="elevated"
                                 (click)="openDialog(deleteGroupStockTemplate)"
                             >
                                 Delete Stock
@@ -630,7 +628,7 @@
                                 type="button"
                                 *ngIf="!isUpdatingStockForm"
                                 (click)="resetStockForm()"
-                                mat-stroked-button
+                                matButton="elevated"
                             >
                                 Reset
                             </button>

@@ -1,6 +1,6 @@
 <div class="dialog-header d-flex align-items-center flex-row-reverse">
     <span>{{ localeData?.connect_banks }}</span>
-    <button mat-icon-button aria-label="close" (click)="onCancel()">
+    <button matIconButton aria-label="close" (click)="onCancel()">
         <i class="icon-cross"></i>
     </button>
 </div>
@@ -19,7 +19,7 @@
             >
             </reactive-dropdown-field>
         </div>
-        <button mat-raised-button color="primary" (click)="onSelectProvider()" [disabled]="!selectedProvider.id">
+        <button matButton="filled" (click)="onSelectProvider()" [disabled]="!selectedProvider.id">
             {{ commonLocaleData?.app_next }}
         </button>
     </div>
@@ -93,7 +93,7 @@
             </div>
 
             <button
-                mat-stroked-button
+                matButton="elevated"
                 type="button"
                 (click)="resetBankForm()"
                 [disabled]="bankSyncInProgress"
@@ -102,7 +102,7 @@
                 {{ commonLocaleData?.app_back }}
             </button>
             <button
-                mat-raised-button color="primary"
+                matButton="filled"
                 type="submit"
                 *ngIf="isRefreshWithCredentials"
                 [disabled]="bankSyncInProgress"
@@ -110,7 +110,7 @@
                 {{ commonLocaleData?.app_submit }}
             </button>
             <button
-                mat-raised-button color="primary"
+                matButton="filled"
                 type="button"
                 *ngIf="!isRefreshWithCredentials"
                 (click)="refreshAccount(loginForm)"

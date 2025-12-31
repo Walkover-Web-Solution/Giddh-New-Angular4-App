@@ -20,7 +20,7 @@
                         <button
                             *ngIf="searchWarehouseQuery"
                             class="ml-2"
-                            mat-stroked-button
+                            matButton="elevated"
                             (click)="resetFilter()"
                             aria-label="cross icon"
                             [matTooltip]="localeData?.reset_search"
@@ -32,8 +32,7 @@
                     <button
                         *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
                         aria-label="create warehouse"
-                        mat-raised-button
-                        color="primary"
+                        matButton="filled"
                         class="btn mr-0"
                         [routerLink]="['/pages/settings/create-warehouse']"
                     >
@@ -70,7 +69,7 @@
                                     }}</span
                                 >
                                 <div class="btn-group" dropdown>
-                                    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="vertical dots">
+                                    <button matIconButton [matMenuTriggerFor]="menu" aria-label="vertical dots">
                                         <span class="icon-dots-three-vertical mr-0 font-size-14 d-block"></span>
                                     </button>
                                     <mat-menu #menu="matMenu">

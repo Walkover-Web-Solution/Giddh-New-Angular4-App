@@ -16,7 +16,7 @@
             >
                 {{ commonLocaleData?.app_back }}
             </button>
-            <button mat-icon-button aria-label="close" (click)="closeAsidePane()">
+            <button matIconButton aria-label="close" (click)="closeAsidePane()">
                 <i class="icon-cross"></i>
             </button>
         </div>
@@ -24,13 +24,12 @@
     <mat-dialog-content class="dialog-body">
         <div class="aside-panel-ledger" *ngIf="!hideFirstScreen">
             <div class="buttons-wrapper column-gap-15">
-                <button mat-raised-button color="primary" class="mb-2" (click)="toggleAccountPane()">
+                <button matButton="filled" class="mb-2" (click)="toggleAccountPane()">
                     {{ commonLocaleData?.app_add_account }}
                 </button>
                 <button
                     *ngIf="voucherApiVersion === 2"
-                    mat-raised-button
-                    color="primary"
+                    matButton="filled"
                     class="mb-2"
                     (click)="toggleStockPane('product')"
                 >
@@ -38,8 +37,7 @@
                 </button>
                 <button
                     *ngIf="voucherApiVersion === 2"
-                    mat-raised-button
-                    color="primary"
+                    matButton="filled"
                     class="mb-2"
                     (click)="toggleStockPane('service')"
                 >
@@ -47,8 +45,7 @@
                 </button>
                 <button
                     *ngIf="voucherApiVersion === 2"
-                    mat-raised-button
-                    color="primary"
+                    matButton="filled"
                     class="mb-2"
                     (click)="toggleStockPane('fixed_assets')"
                 >

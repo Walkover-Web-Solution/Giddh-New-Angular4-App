@@ -74,12 +74,11 @@
         </div>
 
         <div class="d-flex column-gap-15">
-            <button mat-stroked-button (click)="approveEntry.emit(false)">
+            <button matButton="elevated" (click)="approveEntry.emit(false)">
                 {{ commonLocaleData?.app_no }}
             </button>
             <button
-                mat-raised-button
-                color="primary"
+                matButton="filled"
                 (click)="confirmApproveEntry()"
                 [ladda]="approveEntryRequestInProcess"
             >

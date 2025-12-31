@@ -104,8 +104,8 @@
                                         "
                                     >
                                     </reactive-dropdown-field>
-                                    <button 
-                                        mat-stroked-button 
+                                    <button
+                                        matButton="elevated"
                                         class="btn-stroked-icon"
                                         *ngIf="razorPayObj?.account?.uniqueName && razorPayObj?.account?.name"
                                         (click)="unlinkAccountFromRazorPay()">
@@ -130,8 +130,7 @@
                             <div class="col-sm-12">
                                 <div class="d-flex column-gap-1">
                                     <button
-                                        mat-raised-button
-                                        color="primary"
+                                        matButton="filled"
                                         aria-label="save"
                                         *ngIf="!updateRazor"
                                         [disabled]="razorPayform.invalid"
@@ -140,8 +139,7 @@
                                         {{ commonLocaleData?.app_save }}
                                     </button>
                                     <button
-                                        mat-raised-button
-                                        color="primary"
+                                        matButton="filled"
                                         aria-label="update"
                                         *ngIf="updateRazor"
                                         [disabled]="razorPayform.invalid"
@@ -150,7 +148,7 @@
                                         {{ commonLocaleData?.app_update }}
                                     </button>
                                     <button
-                                        mat-stroked-button
+                                        matButton="elevated"
                                         aria-label="delete"
                                         *ngIf="updateRazor"
                                         (click)="deleteRazorPayDetails()"
@@ -195,7 +193,7 @@
                                     >
                                     </reactive-dropdown-field>
                                     <button
-                                        mat-stroked-button
+                                        matButton="elevated"
                                         class="min-width-unset"
                                         (click)="unlinkAccountFromPaypal()"
                                         *ngIf="paypalObj?.account?.uniqueName && paypalObj?.account?.name"
@@ -212,8 +210,7 @@
                                         aria-label="save"
                                         type="button"
                                         *ngIf="!updatePaypal"
-                                        mat-raised-button
-                                        color="primary"
+                                        matButton="filled"
                                         [disabled]="paypalForm.invalid"
                                         (click)="savePaypalDetails()"
                                     >
@@ -223,8 +220,7 @@
                                         aria-label="update"
                                         *ngIf="updatePaypal"
                                         type="button"
-                                        mat-raised-button
-                                        color="primary"
+                                        matButton="filled"
                                         [disabled]="paypalForm.invalid"
                                         (click)="updatePaypalDetails()"
                                     >
@@ -233,7 +229,7 @@
                                     <button
                                         aria-label="delete"
                                         *ngIf="updatePaypal"
-                                        mat-stroked-button
+                                        matButton="elevated"
                                         type="button"
                                         (click)="deletePaypalDetails()"
                                     >
@@ -300,15 +296,14 @@
                             <div class="col-sm-12 form-group">
                                 <div class="d-flex column-gap-1">
                                     <button
-                                        mat-raised-button
-                                        color="primary"
+                                        matButton="filled"
                                         aria-label="save"
                                         (click)="savePayuDetails()"
                                     >
                                         {{ !updatePayu ? commonLocaleData?.app_save : commonLocaleData?.app_update }}
                                     </button>
                                     <button
-                                        mat-stroked-button
+                                        matButton="elevated"
                                         aria-label="delete"
                                         *ngIf="updatePayu"
                                         (click)="deletePayuDetails()"

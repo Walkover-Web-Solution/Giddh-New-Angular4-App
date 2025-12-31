@@ -2,7 +2,7 @@
     (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <div validateSectionPermission [hasPermission]="hasInvoiceSettingPermissions" validateSubscription>
         <section id="invoice-setting">
-            <mat-tab-group 
+            <mat-tab-group
                 class="tab-integration"
                 mat-stretch-tabs="false"
                 mat-align-tabs="start"
@@ -129,7 +129,7 @@
                                                     <div
                                                         class="btn-wrapper d-flex align-items-center justify-content-center">
                                                         <button aria-label="verify"
-                                                            mat-raised-button color="primary"
+                                                            matButton="filled"
                                                             class="ml-3 mr-3"
                                                             (click)="verfiyEmail(invoiceSetting.email)" [disabled]="
                                                                 !isEmailChanged &&
@@ -731,9 +731,9 @@
                                                     }}</mat-label>
                                             </div>
                                             <div class="col-sm-12 col-md-9 form-group user-authenticate d-flex">
-                                                <mat-slide-toggle 
+                                                <mat-slide-toggle
                                                     aria-label="gst invoice"
-                                                    [(ngModel)]="invoiceSetting.gstEInvoiceEnable" 
+                                                    [(ngModel)]="invoiceSetting.gstEInvoiceEnable"
                                                     (ngModelChange)="gstEInvoiceEnableChange()"
                                                     color="primary"
                                                     (change)="handleEInvoiceChange($event)"
@@ -1023,10 +1023,10 @@
 
         <ng-template #buttonsSection>
             <div class="btn-group mt-4" role="group" aria-label="Basic example">
-                <button mat-raised-button color="primary" aria-label="save" type="button" class="mr-2" (click)="UpdateForm()">
+                <button matButton="filled" aria-label="save" type="button" class="mr-2" (click)="UpdateForm()">
                     {{ commonLocaleData?.app_save }}
                 </button>
-                <button mat-stroked-button aria-label="cancel" type="button" (click)="resetForm()">
+                <button matButton="elevated" aria-label="cancel" type="button" (click)="resetForm()">
                     {{ commonLocaleData?.app_cancel }}
                 </button>
             </div>

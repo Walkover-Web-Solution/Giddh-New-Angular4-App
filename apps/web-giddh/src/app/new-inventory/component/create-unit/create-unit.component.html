@@ -139,7 +139,7 @@
                         <div class="inc-dec">
                             <div class="plus-minus">
                                 <button
-                                    mat-stroked-button
+                                    matButton="elevated"
                                     class="mr-0"
                                     aria-label="delete icon"
                                     (click)="removeMappedUnit(i)"
@@ -152,7 +152,7 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-12">
-                        <button mat-stroked-button aria-label="add new" (click)="addNewMappedUnit()">
+                        <button matButton="elevated" aria-label="add new" (click)="addNewMappedUnit()">
                             {{ localeData?.add_new }}
                         </button>
                     </div>
@@ -163,8 +163,7 @@
                     <div class="d-flex column-gap-1">
                         <button
                             aria-label="save"
-                            mat-raised-button
-                            color="primary"
+                            matButton="filled"
                             type="button"
                             (click)="saveUnit()"
                             *ngIf="!unitDetails?.uniqueName"
@@ -173,8 +172,7 @@
                         </button>
                         <button
                             aria-label="update"
-                            mat-raised-button
-                            color="primary"
+                            matButton="filled"
                             type="button"
                             (click)="saveUnit()"
                             *ngIf="unitDetails?.uniqueName"
@@ -183,7 +181,7 @@
                         </button>
                         <button
                             aria-label="clear"
-                            mat-stroked-button
+                            matButton="elevated"
                             type="button"
                             (click)="resetForm()"
                             *ngIf="!unitDetails?.uniqueName"
@@ -192,7 +190,7 @@
                         </button>
                         <button
                             aria-label="close"
-                            mat-stroked-button
+                            matButton="elevated"
                             type="button"
                             (click)="closeAsideEvent.emit(false)"
                         >
@@ -204,7 +202,7 @@
                     <div class="pull-right d-flex column-gap-15">
                         <button
                             aria-label="delete"
-                            mat-stroked-button
+                            matButton="elevated"
                             type="button"
                             class="btn-sm mr-0"
                             (click)="deleteUnit()"

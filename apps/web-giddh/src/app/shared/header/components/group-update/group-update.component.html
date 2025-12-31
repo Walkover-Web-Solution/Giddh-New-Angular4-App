@@ -96,7 +96,7 @@
 
         <div class="text-right" *ngIf="voucherApiVersion === 2">
             <button
-                mat-stroked-button
+                matButton="elevated"
                 *ngIf="(showEditGroup$ | async) && !(activeGroup$ | async)?.fixed"
                 (click)="openDeleteGroupDialog()"
                 aria-label="delete"
@@ -107,8 +107,7 @@
 
             <button
                 *ngIf="showEditGroup$ | async"
-                mat-raised-button
-                color="primary"
+                matButton="filled"
                 class="ml-2"
                 type="submit"
                 aria-label="update"
@@ -150,8 +149,7 @@
                         >
                         </reactive-dropdown-field>
                         <button
-                            mat-raised-button
-                            color="primary"
+                            matButton="filled"
                             type="submit"
                             [disabled]="moveGroupForm.invalid"
                             aria-label="move"
@@ -194,8 +192,7 @@
                         <button
                             [disabled]="isTaxesSaveDisable$ | async"
                             type="submit"
-                            mat-raised-button
-                            color="primary"
+                            matButton="filled"
                             aria-label="save"
                             [matTooltip]="commonLocaleData?.app_save"
                             matTooltipPosition="above"
@@ -270,8 +267,7 @@
                     class="adjusted-content-width select-multiple-chiplist mobile-margin border-bottom mat-form-field-clean"
                 ></select-multiple-fields>
                 <button
-                    mat-raised-button
-                    color="primary"
+                    matButton="filled"
                     [disabled]="isDiscountSaveDisable$ | async"
                     (click)="applyDiscounts()"
                     aria-label="apply"

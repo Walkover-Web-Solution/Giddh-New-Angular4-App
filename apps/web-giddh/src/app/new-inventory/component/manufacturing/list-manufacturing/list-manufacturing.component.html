@@ -63,8 +63,7 @@
                                 <button
                                     type="button"
                                     class="mr-0 search-btn"
-                                    mat-raised-button
-                                    color="primary"
+                                    matButton="filled"
                                     (click)="getReport()"
                                 >
                                     {{ commonLocaleData?.app_search }}
@@ -75,7 +74,7 @@
                                 <button
                                     type="button"
                                     class="mr-0"
-                                    mat-stroked-button
+                                    matButton="elevated"
                                     (click)="initializeSearchReqObj()"
                                     *ngIf="showClearButton"
                                 >
@@ -87,8 +86,7 @@
                                 <button
                                     type="button"
                                     (click)="openAdvanceFilterDialog()"
-                                    mat-raised-button
-                                    color="primary"
+                                    matButton="filled"
                                 >
                                     {{ commonLocaleData?.app_filter }}
                                     <span class="icon-advance-filter"></span>
@@ -316,14 +314,13 @@
                         <div class="d-flex justify-content-end column-gap-1 mt-4">
                             <button
                                 type="button"
-                                mat-raised-button
-                                color="primary"
+                                matButton="filled"
                                 mat-dialog-close
                                 (click)="getReport()"
                             >
                                 {{ commonLocaleData?.app_search }}
                             </button>
-                            <button type="button" mat-dialog-close mat-stroked-button>
+                            <button type="button" mat-dialog-close matButton="elevated">
                                 {{ commonLocaleData?.app_cancel }}
                             </button>
                         </div>

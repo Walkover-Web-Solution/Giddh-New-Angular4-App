@@ -52,14 +52,14 @@
                 ></reactive-dropdown-field>
                 <button
                     *ngIf="projectName.value?.length || projectStatus.value?.length"
-                    mat-stroked-button
+                    matButton="elevated"
                     class="min-width-100 ml-2"
                     (click)="resetFilter()"
                 >
                     <span class="icon-cross icon-font-size-14"></span> {{ commonLocaleData?.app_clear_filter }}
                 </button>
             </div>
-            <button *ngIf="!isCompany" mat-raised-button color="primary" (click)="openCreateProjectDialog(true)">
+            <button *ngIf="!isCompany" matButton="filled" (click)="openCreateProjectDialog(true)">
                 + {{ localeData?.create_project }}
             </button>
         </div>
@@ -67,12 +67,12 @@
             *ngIf="!(isFetchingProjects$ | async) && !(totalResults || isSearch)"
             class="min-height d-flex align-items-center justify-content-center"
         >
-            <button *ngIf="!isCompany" mat-raised-button color="primary" (click)="openCreateProjectDialog(true)">
+            <button *ngIf="!isCompany" matButton="filled" (click)="openCreateProjectDialog(true)">
                 + {{ localeData?.create_project }}
             </button>
             <div class="d-flex justify-content-center align-items-center" *ngIf="isCompany">
                 <span class="font-size-24 mr-2">{{ localeData?.go_to_branch_information }} </span>
-                <button mat-raised-button color="primary" (click)="gotToBranchTab()">
+                <button matButton="filled" (click)="gotToBranchTab()">
                     {{ localeData?.go_to_branch }}
                 </button>
             </div>
@@ -173,7 +173,7 @@
                         <ng-template #loadedContent>
                             <div *ngIf="element.profitAndLoss == null; else showValue">
                                 <button
-                                    mat-stroked-button
+                                    matButton="elevated"
                                     class="z-index-0"
                                     (click)="getProfitLoss(element)"
                                     aria-label="Show profit and loss"
@@ -231,7 +231,7 @@
                     class="d-flex justify-content-center align-items-center"
                 >
                     <span class="font-size-24 mr-2">{{ localeData?.go_to_branch_information }} </span>
-                    <button mat-raised-button color="primary" (click)="gotToBranchTab()">
+                    <button matButton="filled" (click)="gotToBranchTab()">
                         {{ localeData?.go_to_branch }}
                     </button>
                 </div>
@@ -284,7 +284,7 @@
 >
     <div class="align-items-center d-flex column-gap-05" [hidden]="show">
         <button
-            mat-icon-button
+            matIconButton
             aria-label="search"
             (click)="toggleSearch(fieldName)"
             class="project-search-icon font-size-16"

@@ -113,10 +113,10 @@
         (onClear)="resetUser()">
     </reactive-dropdown-field>
 </div>
-<button mat-raised-button color="primary" class="pull-left mt-3" [ladda]="vm.getLogsInprocess$ | async" (click)="getLogfilters()">
+<button matButton="filled" class="pull-left mt-3" [ladda]="vm.getLogsInprocess$ | async" (click)="getLogfilters()">
     {{ localeData?.get_logs }}
 </button>
-<button mat-stroked-button class="pull-left mt-3 ml-1" (click)="resetFilters()">
+<button matButton="elevated" class="pull-left mt-3 ml-1" (click)="resetFilters()">
     {{ commonLocaleData?.app_reset }}
 </button>
 <br />

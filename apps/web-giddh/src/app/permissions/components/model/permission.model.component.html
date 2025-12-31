@@ -64,10 +64,10 @@
                     ></reactive-dropdown-field>
                 </div>
                 <div class="clear-both text-right mt-5">
-                    <button mat-raised-button color="primary" type="submit" [disabled]="!isFormValid">
+                    <button matButton="filled" type="submit" [disabled]="!isFormValid">
                         {{ commonLocaleData?.app_next }}
                     </button>
-                    <button mat-stroked-button class="ml-2" type="button" (click)="closePopupEvent()">
+                    <button matButton="elevated" class="ml-2" type="button" (click)="closePopupEvent()">
                         {{ commonLocaleData?.app_cancel }}
                     </button>
                 </div>

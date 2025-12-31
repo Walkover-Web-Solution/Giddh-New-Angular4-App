@@ -45,7 +45,7 @@
                             readonly
                         />
                     </div>
-                    <button mat-stroked-button (click)="resetFilters()" *ngIf="isDateFilterApplied()">
+                    <button matButton="elevated" (click)="resetFilters()" *ngIf="isDateFilterApplied()">
                         <i class="icon-cross"></i> {{ commonLocaleData?.app_clear_filter }}
                     </button>
                 </div>

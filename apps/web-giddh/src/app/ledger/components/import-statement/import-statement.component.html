@@ -20,7 +20,7 @@
             {{ inputData?.commonLocaleData?.app_back }}
         </button>
     </div>
-    <button *ngIf="importStep === importStepEnum.First" mat-icon-button aria-label="close" mat-dialog-close>
+    <button *ngIf="importStep === importStepEnum.First" matIconButton aria-label="close" mat-dialog-close>
         <i class="icon-cross"></i>
     </button>
 </div>
@@ -146,8 +146,7 @@
                 </div>
                 <div class="d-flex column-gap-1">
                     <button
-                        mat-raised-button
-                        color="primary"
+                        matButton="filled"
                         [matTooltip]="inputData?.commonLocaleData?.app_upload"
                         matTooltipPosition="above"
                         [disabled]="!postRequest.file"
@@ -157,7 +156,7 @@
                     >
                         {{ inputData?.commonLocaleData?.app_upload }}
                     </button>
-                    <button mat-stroked-button mat-dialog-close type="button">
+                    <button matButton="elevated" mat-dialog-close type="button">
                         {{ inputData?.commonLocaleData?.app_cancel }}
                     </button>
                 </div>

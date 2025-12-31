@@ -66,7 +66,7 @@
                         <ul class="d-flex column-gap-1 align-items-center">
                             <li>
                                 <div>
-                                    <button mat-raised-button color="primary" [matMenuTriggerFor]="menu">
+                                    <button matButton="filled" [matMenuTriggerFor]="menu">
                                         <i class="icon-download"></i>
                                         {{ commonLocaleData?.app_download }}
                                     </button>
@@ -94,8 +94,7 @@
                                             <div>
                                                 <button
                                                     class="flex-grow-0"
-                                                    mat-raised-button
-                                                    color="primary"
+                                                    matButton="filled"
                                                     (click)="emailGSTR3bSheet(false)"
                                                     [disabled]="!userEmail"
                                                     aria-label="emailGST"
@@ -111,8 +110,7 @@
                                 <div *ngIf="showTaxPro">
                                     <button
                                         *ngIf="isCompany && showGstFiling"
-                                        mat-raised-button
-                                        color="primary"
+                                        matButton="filled"
                                         (click)="checkAuthenticationAndFileGstr3B()"
                                         [disabled]="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.TaxFilling)"
                                     >
@@ -124,8 +122,7 @@
                                 <div *ngIf="showTaxPro">
                                     <button
                                         *ngIf="isCompany && showGstFiling"
-                                        mat-raised-button
-                                        color="primary"
+                                        matButton="filled"
                                         (click)="openSettingAsidePane()"
                                         [disabled]="(activeCompany$ | async)?.subscription?.planDetails?.restrictedModules.hasOwnProperty(restrictedModules.TaxFilling)"
                                     >
@@ -780,7 +777,7 @@
                         <div class="gst-return-date">
                             <img src="assets/images/return-date.svg" />
                             <p>{{ localeData?.gstr3b?.click_proceed }}</p>
-                            <button mat-raised-button color="primary" (click)="returnGstr3B = { via: 'TAXPRO' }">
+                            <button matButton="filled" (click)="returnGstr3B = { via: 'TAXPRO' }">
                                 {{ localeData?.gstr3b?.push_to_portal }}
                             </button>
                         </div>

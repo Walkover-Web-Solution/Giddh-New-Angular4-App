@@ -16,7 +16,7 @@
                 <button mat-raised-button *ngIf="hideFirstStep && !isAddServiceOpen" (click)="backButtonPressed()">
                     {{ commonLocaleData?.app_back }}
                 </button>
-                <button mat-icon-button aria-label="close" (click)="closeAsidePane()">
+                <button matIconButton aria-label="close" (click)="closeAsidePane()">
                     <i class="icon-cross"></i>
                 </button>
             </div>
@@ -25,14 +25,13 @@
             <div class="aside-panel-ledger" *ngIf="!hideFirstStep">
                 <div class="d-inline-grid">
                     <ng-container *ngIf="inputData !== 'receipt-note' && inputData !== 'delivery-challan'">
-                        <button mat-raised-button color="primary" class="mb-2" (click)="toggleAccountPane()">
+                        <button matButton="filled" class="mb-2" (click)="toggleAccountPane()">
                             {{ commonLocaleData?.app_add_account }}
                         </button>
                     </ng-container>
                     <button
                         *ngIf="voucherApiVersion === 2"
-                        mat-raised-button
-                        color="primary"
+                        matButton="filled"
                         class="mb-2"
                         (click)="toggleStockPane('product')"
                     >
@@ -40,8 +39,7 @@
                     </button>
                     <button
                         *ngIf="voucherApiVersion === 2"
-                        mat-raised-button
-                        color="primary"
+                        matButton="filled"
                         class="mb-2"
                         (click)="toggleStockPane('service')"
                     >
@@ -49,8 +47,7 @@
                     </button>
                     <button
                         *ngIf="voucherApiVersion === 2"
-                        mat-raised-button
-                        color="primary"
+                        matButton="filled"
                         class="mb-2"
                         (click)="toggleStockPane('fixed_assets')"
                     >

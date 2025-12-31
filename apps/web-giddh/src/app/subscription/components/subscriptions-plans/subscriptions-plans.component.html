@@ -2,7 +2,7 @@
     <div class="row">
         <div [ngClass]="{ 'skeleton-common-class': showLoader, 'redeem-back': showLoader }"></div>
         <div class="col-md-2 col-sm-2" *ngIf="!showLoader">
-            <button (click)="backClicked()" class="mb-2 mr-0" color="primary" mat-raised-button>
+            <button (click)="backClicked()" class="mb-2 mr-0" matButton="filled">
                 <i class="icon-left back-left"></i>
                 {{ commonLocaleData?.app_back }}
             </button>
@@ -10,12 +10,12 @@
     </div>
     <ng-container *ngIf="!isSwitchPlanInProcess">
         <div class="scroll-left" [ngClass]="{ 'skeleton-common-class': showLoader, 'left-icon': showLoader }">
-            <button mat-raised-button color="primary" (click)="scrollLeft()" *ngIf="!showLoader">
+            <button matButton="filled" (click)="scrollLeft()" *ngIf="!showLoader">
                 <i class="icon-left"></i>
             </button>
         </div>
         <div class="scroll-right" [ngClass]="{ 'skeleton-common-class': showLoader, 'right-icon': showLoader }">
-            <button mat-raised-button color="primary" (click)="scrollRight()" *ngIf="!showLoader">
+            <button matButton="filled" (click)="scrollRight()" *ngIf="!showLoader">
                 <i class="icon-right"></i>
             </button>
         </div>
@@ -86,8 +86,7 @@
                     <button
                         (click)="buyPlanClicked(plan)"
                         class="all-feature-button"
-                        mat-raised-button
-                        color="primary"
+                        matButton="filled"
                         *ngIf="plan?.uniqueName === activeCompany?.subscription?.planDetails?.uniqueName"
                     >
                         {{ localeData?.subscription?.renew }}
@@ -95,8 +94,7 @@
                     <button
                         (click)="buyPlanClicked(plan)"
                         class="all-feature-button"
-                        mat-raised-button
-                        color="primary"
+                        matButton="filled"
                         *ngIf="plan?.uniqueName !== activeCompany?.subscription?.planDetails?.uniqueName"
                     >
                         {{ localeData?.subscription?.buy_plan }}
@@ -256,8 +254,7 @@
                                     <button
                                         *ngIf="!showLoader"
                                         class="mt-2 pl-3 pr-3"
-                                        color="primary"
-                                        mat-raised-button
+                                        matButton="filled"
                                         [disabled]="!licenceKey?.value"
                                         (click)="createCompanyViaActivationKey()"
                                     >

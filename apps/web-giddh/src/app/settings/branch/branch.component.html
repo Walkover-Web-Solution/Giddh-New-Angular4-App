@@ -8,7 +8,7 @@
     <div class="relative">
         <div class="clear-both">
             <div class="col-sm-12 mt-2 text-right">
-                <button mat-raised-button color="primary" class="mr-0" (click)="openAddBranchModal()">
+                <button matButton="filled" class="mr-0" (click)="openAddBranchModal()">
                     {{ localeData?.create_branch }}
                 </button>
             </div>
@@ -41,7 +41,7 @@
                                                 <button
                                                     *ngIf="searchBranchQuery.value"
                                                     class="w-100 ml-2"
-                                                    mat-stroked-button
+                                                    matButton="elevated"
                                                     (click)="resetFilter()"
                                                     aria-label="cross icon"
                                                     [matTooltip]="localeData?.reset_search"
@@ -302,14 +302,13 @@
                                             <div [innerHTML]="confirmationMessage"></div>
                                             <div class="d-flex justify-content-end column-gap-1 mt-3">
                                                 <button
-                                                    mat-raised-button
-                                                    color="primary"
+                                                    matButton="filled"
                                                     (click)="onUserConfirmation(true)"
                                                 >
                                                     {{ commonLocaleData?.app_yes }}
                                                 </button>
                                                 <button
-                                                    mat-stroked-button
+                                                    matButton="elevated"
                                                     role="button"
                                                     (click)="onUserConfirmation(false)"
                                                 >

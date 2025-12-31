@@ -69,10 +69,10 @@
                 </div>
             </ng-container>
             <div class="d-flex column-gap-1">
-                <button mat-raised-button color="primary" (click)="exportLedger()">
+                <button matButton="filled" (click)="exportLedger()">
                     {{ commonLocaleData?.app_download }}
                 </button>
-                <button mat-stroked-button (click)="closeExportDaybookModal.emit('close')">
+                <button matButton="elevated" (click)="closeExportDaybookModal.emit('close')">
                     {{ commonLocaleData?.app_cancel }}
                 </button>
             </div>

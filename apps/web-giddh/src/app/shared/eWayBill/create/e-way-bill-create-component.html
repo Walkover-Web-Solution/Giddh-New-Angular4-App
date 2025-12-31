@@ -196,13 +196,13 @@
                         </div>
                     </div>
                     <div class="row clear-both d-flex justify-content-end column-gap-1">
-                        <button mat-raised-button color="primary" (click)="onSubmitEwaybill()">
+                        <button matButton="filled" (click)="onSubmitEwaybill()">
                             {{ localeData?.save_generate }}
                         </button>
-                        <button mat-stroked-button (click)="onResetGenerateBillForm()">
+                        <button matButton="elevated" (click)="onResetGenerateBillForm()">
                             {{ commonLocaleData?.app_reset }}
                         </button>
-                        <button mat-stroked-button type="button" mat-dialog-close>
+                        <button matButton="elevated" type="button" mat-dialog-close>
                             {{ commonLocaleData?.app_cancel }}
                         </button>
                     </div>
@@ -259,35 +259,33 @@
                     <div class="form-group mt-3">
                         <div class="clear-both d-flex justify-content-end column-gap-1" *ngIf="!transportEditMode">
                             <button
-                                mat-raised-button
-                                color="primary"
+                                matButton="filled"
                                 [disabled]="generateNewTransporterForm.invalid"
                                 (click)="generateTransporter()"
                                 type="submit"
                             >
                                 {{ commonLocaleData?.app_save }}
                             </button>
-                            <button mat-raised-button color="primary" (click)="clearTransportForm()" type="button">
+                            <button matButton="filled" (click)="clearTransportForm()" type="button">
                                 {{ commonLocaleData?.app_clear }}
                             </button>
-                            <button mat-stroked-button type="button" mat-dialog-close>
+                            <button matButton="elevated" type="button" mat-dialog-close>
                                 {{ commonLocaleData?.app_cancel }}
                             </button>
                         </div>
                         <div class="clear-both d-flex justify-content-end column-gap-1" *ngIf="transportEditMode">
                             <button
-                                mat-raised-button
-                                color="primary"
+                                matButton="filled"
                                 [disabled]="generateNewTransporterForm.invalid"
                                 (click)="updateTransporter()"
                                 type="submit"
                             >
                                 {{ commonLocaleData?.app_update }}
                             </button>
-                            <button mat-stroked-button (click)="clearTransportForm()">
+                            <button matButton="elevated" (click)="clearTransportForm()">
                                 {{ commonLocaleData?.app_clear }}
                             </button>
-                            <button mat-stroked-button type="button" mat-dialog-close>
+                            <button matButton="elevated" type="button" mat-dialog-close>
                                 {{ commonLocaleData?.app_cancel }}
                             </button>
                         </div>
@@ -353,10 +351,10 @@
                             <td>{{ item?.transporterName }}</td>
                             <td>{{ item?.transporterId }}</td>
                             <td class="d-flex justify-content-center column-gap-15 border-top-none">
-                                <button mat-icon-button color="primary" (click)="editTransporter(item)">
+                                <button matIconButton color="primary" (click)="editTransporter(item)">
                                     <i class="icon-edit theme-foreground-color"></i>
                                 </button>
-                                <button mat-icon-button color="primary" (click)="deleteTransporter(item)">
+                                <button matIconButton color="primary" (click)="deleteTransporter(item)">
                                     <i class="icon-trash theme-foreground-color"></i>
                                 </button>
                             </td>

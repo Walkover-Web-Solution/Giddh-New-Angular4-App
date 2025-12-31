@@ -109,8 +109,7 @@
                 <div class="clear-both text-left mt-2">
                     <div *ngIf="addGroup">
                         <button
-                            mat-raised-button
-                            color="primary"
+                            matButton="filled"
                             type="submit"
                             [ladda]="isAddNewGroupInProcess$ | async"
                             (click)="addNewGroup()"
@@ -118,12 +117,11 @@
                         >
                             Save
                         </button>
-                        <button mat-stroked-button type="button" (click)="closeAsidePane()">Cancel</button>
+                        <button matButton="elevated" type="button" (click)="closeAsidePane()">Cancel</button>
                     </div>
                     <div *ngIf="!addGroup" class="d-flex justify-content-end column-gap-1">
                         <button
-                            mat-raised-button
-                            color="primary"
+                            matButton="filled"
                             type="submit"
                             [disabled]="addGroupForm.invalid || defaultGrpActive"
                             [ladda]="isUpdateGroupInProcess$ | async"
@@ -132,14 +130,14 @@
                             Update
                         </button>
                         <button
-                            mat-stroked-button
+                            matButton="elevated"
                             type="submit"
                             [ladda]="isDeleteGroupInProcess$ | async"
                             (click)="openDialog(deleteGroupModalTemplate)"
                         >
                             Delete
                         </button>
-                        <button mat-stroked-button type="button" (click)="closeAsidePane()">Cancel</button>
+                        <button matButton="elevated" type="button" (click)="closeAsidePane()">Cancel</button>
                     </div>
                 </div>
             </div>

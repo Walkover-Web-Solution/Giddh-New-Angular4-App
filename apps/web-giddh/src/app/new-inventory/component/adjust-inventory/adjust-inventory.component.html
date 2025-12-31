@@ -374,20 +374,18 @@
                                 <button
                                     aria-label="create"
                                     *ngIf="!referenceNumber"
-                                    mat-raised-button
-                                    color="primary"
+                                    matButton="filled"
                                     (click)="createInventoryAdjustment()"
                                 >
                                     {{ commonLocaleData?.app_create }}
                                 </button>
-                                <button aria-label="clear" mat-stroked-button (click)="resetForm()">
+                                <button aria-label="clear" matButton="elevated" (click)="resetForm()">
                                     {{ commonLocaleData?.app_clear }}
                                 </button>
                                 <button
                                     aria-label="update"
                                     *ngIf="referenceNumber"
-                                    mat-raised-button
-                                    color="primary"
+                                    matButton="filled"
                                     class="min-width-100"
                                     (click)="updateInventoryAdjustment()"
                                 >
@@ -396,7 +394,7 @@
 
                                 <button
                                     aria-label="close icon"
-                                    mat-stroked-button
+                                    matButton="elevated"
                                     *ngIf="referenceNumber"
                                     class="min-width-100"
                                     (click)="back(true)"

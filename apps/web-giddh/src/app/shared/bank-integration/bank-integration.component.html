@@ -37,8 +37,7 @@
                         <div class="form-group ml-4">
                             <button
                                 type="button"
-                                mat-raised-button
-                                color="primary"
+                                matButton="filled"
                                 class="mr-4"
                                 (click)="openCreateNewAccountModal()"
                             >
@@ -142,7 +141,7 @@
                                     <ng-container *ngIf="bankAccount.reLoginRequired">
                                         <button
                                             aria-label="dots"
-                                            mat-icon-button
+                                            matIconButton
                                             [matMenuTriggerFor]="menu"
                                             class="company-name bank-menu"
                                         >
@@ -291,8 +290,7 @@
                                     <button
                                         aria-label="users"
                                         type="button"
-                                        mat-raised-button
-                                        color="primary"
+                                        matButton="filled"
                                         class="font-weight-semibold font-size-15 mt-2 ml-3"
                                         (click)="openCreateNewAccountUserModal(bankAccount)"
                                     >
