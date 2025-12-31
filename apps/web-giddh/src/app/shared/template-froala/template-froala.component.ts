@@ -1,4 +1,4 @@
-import { Component, ElementRef, Inject, NgZone, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, ElementRef, Inject, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import FroalaEditor from 'froala-editor';
 import { debounceTime, distinctUntilChanged, filter, Observable, pipe, ReplaySubject, skip, take, takeUntil } from 'rxjs';
@@ -172,8 +172,7 @@ export class TemplateFroalaComponent implements OnInit {
         public dialogRef: MatDialogRef<any>,
         private generalService: GeneralService,
         private titleCasePipe: TitleCasePipe,
-        private pageLeaveUtilityService: PageLeaveUtilityService,
-        private ngZone: NgZone
+        private pageLeaveUtilityService: PageLeaveUtilityService
     ) {
         // Initialize Froala options after environment detection
         this.froalaOptions = this.getFroalaOptions();
@@ -305,7 +304,7 @@ export class TemplateFroalaComponent implements OnInit {
                     this.selectedToEmails = response.to;
                 }
                 this.clickedOutsideEmail();
-
+                
                 // Patch existing form instead of recreating it
                 this.emailForm.patchValue({
                     to: response.to ?? [],
@@ -371,7 +370,7 @@ export class TemplateFroalaComponent implements OnInit {
      */
     public getFroalaOptions() : any {
         return {
-            key: '', // TODO: Replace with actual Froala editor key
+            key: null,
             attribution: false,
             heightMin: 300,
             heightMax: 300,
@@ -413,38 +412,29 @@ export class TemplateFroalaComponent implements OnInit {
             htmlAllowedAttrs: ['.*'],
             events: {
                 initialized: (event) => {
-                    this.ngZone.runOutsideAngular(() => {
-                        this.froalaEditor = event.getEditor();
+                    this.froalaEditor = event.getEditor();
+                    
+                    // Add additional delay for Electron environment
+                    const setupDelay = this.isElectron ? 200 : 0;
+                    setTimeout(() => {
+                        this.setupFroalaEventHandlers();
                         
-                        // Add additional delay for Electron environment
-                        const setupDelay = this.isElectron ? 200 : 0;
+                        // Set initial content from form control with additional delay for Electron
+                        const contentDelay = this.isElectron ? 300 : 0;
                         setTimeout(() => {
-                            this.ngZone.run(() => {
-                                this.setupFroalaEventHandlers();
-                            });
-                            
-                            // Set initial content from form control with additional delay for Electron
-                            const contentDelay = this.isElectron ? 300 : 0;
-                            setTimeout(() => {
-                                const currentForm = this.isTrigger ? this.customTriggerForm : this.emailForm;
-                                const htmlValue = currentForm?.get('html')?.value;
-                                if (htmlValue) {
-                                    this.froalaEditor.html.set(htmlValue);
-                                }
-                            }, contentDelay);
-                        }, setupDelay);
-                    });
+                            const currentForm = this.isTrigger ? this.customTriggerForm : this.emailForm;
+                            const htmlValue = currentForm?.get('html')?.value;
+                            if (htmlValue) {
+                                this.froalaEditor.html.set(htmlValue);
+                            }
+                        }, contentDelay);
+                    }, setupDelay);
                 },
-                blur: () => {
-                    this.ngZone.runOutsideAngular(() => {
-                        // Handles changes made in the code view when focus is lost
-                        if (this.froalaEditor?.codeView?.isActive()) {
-                            this.froalaEditor?.html?.set(this.froalaEditor?.codeView?.get());
-                            this.ngZone.run(() => {
-                                this.updateFormControl();
-                            });
-                        }
-                    });
+                blur: () => { // Handles changes made in the code view when focus is lost
+                    if (this.froalaEditor?.codeView?.isActive()) {
+                        this.froalaEditor?.html?.set(this.froalaEditor?.codeView?.get());
+                        this.updateFormControl();
+                    }
                 },
                 'contentChanged': () => {
                     this.updateFormControl();
@@ -483,9 +473,7 @@ export class TemplateFroalaComponent implements OnInit {
             this.froalaEditor.events.on(
                 'keydown',
                 (e) => {
-                    console.log("Triggered : ", e);
                     if ((e.which == FroalaEditor.KEYCODE.ENTER || e.which == FroalaEditor.KEYCODE.BACKSPACE) && this.froalaTribute?.isActive) {
-                        console.log("Run : ", e);
                         return false;
                     }
                 }
@@ -523,7 +511,7 @@ export class TemplateFroalaComponent implements OnInit {
                 this.initializeTribute(tributeSuggestions);
             } else if (attempt < this.maxFroalaInitRetries) {
                 setTimeout(() => attemptInitialization(attempt + 1), this.froalaInitRetryDelay);
-            }
+            } 
         };
         attemptInitialization();
     }
@@ -559,11 +547,11 @@ export class TemplateFroalaComponent implements OnInit {
             values: tributeSuggestions,
             selectTemplate: (item) => `${item?.original?.value ? this.emailSuggestionPrefix + item.original.value + this.emailSuggestionSuffix : ""}`
         });
-
+        
         if (this.froalaEditor) {
             this.froalaTribute.attach(this.froalaEditor.el);
         }
-
+        
         if (this.subjectInputField && this.subjectInputField.nativeElement) {
             this.subjectTribute.attach(this.subjectInputField.nativeElement);
         }
@@ -779,7 +767,7 @@ export class TemplateFroalaComponent implements OnInit {
 
         // Prepare request based on type
         const req = this.prepareRequest(type, formValue);
-
+        
         // Reset unsaved changes flag as we're saving
         this.hasUnsavedChanges = false;
         this.componentStore.updateCustomTemplate(req);
@@ -822,10 +810,10 @@ export class TemplateFroalaComponent implements OnInit {
                 }
             });
         }
-
+        
         // Reset unsaved changes flag as we're saving
         this.hasUnsavedChanges = false;
-
+        
         if (this.inputData?.triggerUniqueName) {
             this.triggerStore.updateTrigger({ model: formValue, uniqueName: this.inputData.triggerUniqueName });
         } else {
@@ -1027,7 +1015,7 @@ export class TemplateFroalaComponent implements OnInit {
 
     /**
      * Handles the change of time action
-     *
+     * 
      * @param event - Selected option
      * @memberof TemplateFroalaComponent
      */
@@ -1115,7 +1103,7 @@ export class TemplateFroalaComponent implements OnInit {
      * @returns {string}
      * @memberof TemplateFroalaComponent
      */
-    public getDayActionLabelValue(): string {
+    public getDayActionLabelValue(): string {  
         const executionTime = this.customTriggerForm?.get('executionTime');
         if (!executionTime) return '';
 
@@ -1176,14 +1164,14 @@ export class TemplateFroalaComponent implements OnInit {
     private validateEmailRecipientsUnchanged(): boolean {
         const currentForm = this.isTrigger ? this.customTriggerForm.value : this.emailForm.value;
         const { to, bcc, cc } = currentForm;
-
+        
         const formRecipients = { to, bcc, cc };
         const selectedRecipients = {
             to: this.selectedToEmails,
             bcc: this.selectedBccEmails,
             cc: this.selectedCcEmails
         };
-
+        
         return isEqual(formRecipients, selectedRecipients);
     }
 }

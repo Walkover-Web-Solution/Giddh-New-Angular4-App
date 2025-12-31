@@ -113,7 +113,7 @@ export class CustomEmailComponentStore extends ComponentStore<CustomEmailState> 
                         (res: BaseResponse<any, any>) => {
                             if (res?.status === 'success') {
                                 this.patchState({
-                                    emailContentSuggestions: res.body?.suggestions ?? []
+                                    emailContentSuggestions: res.body ?? []
                                 });
                             } else {
                                 if (res.message) {
