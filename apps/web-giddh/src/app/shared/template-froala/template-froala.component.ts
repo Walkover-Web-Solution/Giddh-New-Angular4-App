@@ -379,15 +379,6 @@ export class TemplateFroalaComponent implements OnInit {
             toolbarSticky: true,
             // Add Electron-specific configurations
             requestWithCORS: this.isElectron ? false : true,
-            // Prevent editor collapse configurations
-            keepFormatOnDelete: true,
-            enter: FroalaEditor.ENTER_P,
-            multiLine: true,
-            htmlRemoveTags: [],
-            htmlAllowComments: false,
-            // Ensure minimum content is maintained
-            htmlUntouched: false,
-            htmlSimpleAmpersand: false,
             toolbarButtons: {
                 moreText: {
                     buttons: [
@@ -456,22 +447,13 @@ export class TemplateFroalaComponent implements OnInit {
                     });
                 },
                 'contentChanged': () => {
-                    this.ngZone.runOutsideAngular(() => {
-                        // Run form update inside Angular zone since it affects form state
-                        this.ngZone.run(() => {
-                            this.updateFormControl();
-                        });
-                    });
+                    this.updateFormControl();
                 },
                 // Add error handling for Electron
                 'error': (error) => {
-                    this.ngZone.runOutsideAngular(() => {
-                        if (this.isElectron && this.froalaInitRetryCount < this.maxFroalaInitRetries) {
-                            this.ngZone.run(() => {
-                                this.retryFroalaInitialization();
-                            });
-                        }
-                    });
+                    if (this.isElectron && this.froalaInitRetryCount < this.maxFroalaInitRetries) {
+                        this.retryFroalaInitialization();
+                    }
                 }
             }
         }
@@ -509,94 +491,6 @@ export class TemplateFroalaComponent implements OnInit {
                 }
             );
         }
-    }
-
-    /**
-     * Prevents the editor from becoming completely empty and collapsing
-     *
-     * @private
-     * @memberof TemplateFroalaComponent
-     */
-    private preventEmptyEditor(): void {
-        if (this.froalaEditor) {
-            const currentContent = this.froalaEditor.html.get();
-            const textContent = this.froalaEditor.el.textContent || this.froalaEditor.el.innerText || '';
-            
-            // Check if content is minimal or empty
-            if (this.isContentEmpty(currentContent) || this.isContentMinimal(currentContent, textContent)) {
-                // Maintain minimum viable content to prevent editor collapse
-                const minContent = '<p><br></p>';
-                this.froalaEditor.html.set(minContent);
-                
-                // Position cursor at the beginning
-                this.froalaEditor.selection.setAtStart(this.froalaEditor.el.querySelector('p'));
-            }
-        }
-    }
-
-    /**
-     * Handles the insertHR command to prevent editor collapse
-     *
-     * @private
-     * @memberof TemplateFroalaComponent
-     */
-    private handleInsertHRCommand(): void {
-        if (this.froalaEditor) {
-            setTimeout(() => {
-                const currentContent = this.froalaEditor.html.get();
-                
-                // Ensure there's always content after HR insertion
-                if (currentContent && !currentContent.includes('<p>')) {
-                    // Add a paragraph after HR if none exists
-                    const updatedContent = currentContent + '<p><br></p>';
-                    this.froalaEditor.html.set(updatedContent);
-                }
-                
-                // Prevent empty editor state
-                this.preventEmptyEditor();
-            }, 100);
-        }
-    }
-
-    /**
-     * Checks if the content is empty or contains only empty tags
-     *
-     * @private
-     * @param {string} content - HTML content to check
-     * @returns {boolean} True if content is empty
-     * @memberof TemplateFroalaComponent
-     */
-    private isContentEmpty(content: string): boolean {
-        if (!content) return true;
-        
-        // Remove HTML tags and check if there's any actual content
-        const textOnly = content.replace(/<[^>]*>/g, '').trim();
-        return textOnly.length === 0;
-    }
-
-    /**
-     * Checks if the content is minimal (very short content that might cause issues)
-     *
-     * @private
-     * @param {string} htmlContent - HTML content to check
-     * @param {string} textContent - Text content to check
-     * @returns {boolean} True if content is minimal
-     * @memberof TemplateFroalaComponent
-     */
-    private isContentMinimal(htmlContent: string, textContent: string): boolean {
-        if (!htmlContent || !textContent) return true;
-        
-        // Check for minimal content patterns that might cause editor collapse
-        const minimalPatterns = [
-            /^<p><\/p>$/,
-            /^<p><br><\/p>$/,
-            /^<p>\s*<\/p>$/,
-            /^<br>$/,
-            /^\s*$/
-        ];
-        
-        return minimalPatterns.some(pattern => pattern.test(htmlContent.trim())) || 
-               textContent.trim().length <= 1;
     }
 
     /**
@@ -1016,50 +910,12 @@ export class TemplateFroalaComponent implements OnInit {
     }
 
     /**
-     * Releases the memory and properly cleans up Froala editor and Tribute instances
+     * Releases the memory
      *
      * @memberof TemplateFroalaComponent
      */
     public ngOnDestroy(): void {
         document.querySelector('body').classList.remove('hide-chat-widget');
-        
-        // Clean up Froala editor instance
-        if (this.froalaEditor) {
-            try {
-                // Remove all event listeners
-                this.froalaEditor.events.off('keydown');
-                this.froalaEditor.events.off('blur');
-                this.froalaEditor.events.off('contentChanged');
-                this.froalaEditor.events.off('error');
-                
-                // Destroy the editor instance
-                this.froalaEditor.destroy();
-                this.froalaEditor = null;
-            } catch (error) {
-                console.warn('Error destroying Froala editor:', error);
-            }
-        }
-        
-        // Clean up Tribute instances
-        if (this.froalaTribute) {
-            try {
-                this.froalaTribute.detach();
-                this.froalaTribute = null;
-            } catch (error) {
-                console.warn('Error detaching Froala tribute:', error);
-            }
-        }
-        
-        if (this.subjectTribute) {
-            try {
-                this.subjectTribute.detach();
-                this.subjectTribute = null;
-            } catch (error) {
-                console.warn('Error detaching subject tribute:', error);
-            }
-        }
-        
-        // Complete observables
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
