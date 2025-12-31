@@ -20,6 +20,7 @@ import { GeneralService } from "../../../services/general.service";
 import { IDiscountList } from "../../../models/api-models/SettingsDiscount";
 import { ServiceConfig } from "../../../services/service.config";
 import { IOption } from "../../../app.constant";
+import { CrudOperationEnum } from "../../../shared/Enums/common.enum";
 
 @Component({
     selector: 'create-update-group',
@@ -406,7 +407,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                         this.resetTaxes();
                     } else {
                         this.resetGroupForm();
-                        this.closeAsideEvent.emit();
+                        this.closeAsideEvent.emit(CrudOperationEnum.CREATE);
                     }
                 } else {
                     this.toggleLoader(false);
