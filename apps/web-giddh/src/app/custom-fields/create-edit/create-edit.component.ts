@@ -44,7 +44,7 @@ export class CustomFieldsCreateEditComponent implements OnInit, OnDestroy {
     /** List custom row data type  */
     public fieldTypes: any[] = [];
     /** Available field modules list */
-    public fieldModules: IOption[] = [];
+    public fieldModules: any[] = [];
     /** Conditionally visible fields in form */
     public visibleFields: any = {
         fieldInfo: true,
@@ -91,7 +91,7 @@ export class CustomFieldsCreateEditComponent implements OnInit, OnDestroy {
             if (selectedModules) {
                 let modules: any[] = [];
                 (Array.isArray(this.selectedModules.value) ? this.selectedModules.value : []).forEach(uniqueName => {
-                    modules.push(this.fieldModules?.find(module => module.value === uniqueName));
+                    modules.push(this.fieldModules?.find(module => module.uniqueName === uniqueName));
                 });
                 this.customFieldRequest.modules = modules;
             }
@@ -152,12 +152,12 @@ export class CustomFieldsCreateEditComponent implements OnInit, OnDestroy {
             ];
             if (this.voucherApiVersion === 2) {
                 this.fieldModules = [
-                    { label: this.localeData?.modules?.account, value: FieldModules.Account },
-                    { label: this.commonLocaleData?.app_variant, value: FieldModules.Variant }
+                    { name: this.localeData?.modules?.account, uniqueName: FieldModules.Account },
+                    { name: this.commonLocaleData?.app_variant, uniqueName: FieldModules.Variant }
                 ];
             } else {
                 this.fieldModules = [
-                    { label: this.localeData?.modules?.account, value: FieldModules.Account }
+                    { name: this.localeData?.modules?.account, uniqueName: FieldModules.Account }
                 ];
             }
         }
