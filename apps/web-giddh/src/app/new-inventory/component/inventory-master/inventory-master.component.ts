@@ -11,7 +11,8 @@ import { PageLeaveUtilityService } from "../../../services/page-leave-utility.se
 import { CreateUpdateGroupComponent } from "../create-update-group/create-update-group.component";
 import { GeneralService } from "../../../services/general.service";
 import { StockCreateEditComponent } from "../stock-create-edit/stock-create-edit.component";
-import { cloneDeep, concat, filter, forEach, map, slice } from '../../../lodash-optimized';
+import { cloneDeep} from '../../../lodash-optimized';
+import { CrudOperationEnum } from "../../../shared/Enums/common.enum";
 
 @Component({
     selector: "inventory-master",
@@ -574,11 +575,14 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         this.showCreateButtons = false;
         this.createUpdateStock = false;
 
-        if (!event) {
+        if (!event || event == CrudOperationEnum.CREATE) {
             this.getMasters(this.masterColumnsData[this.activeIndex]?.stockGroup, this.activeIndex - 1);
         } else {
             this.resetCurrentStockAndGroup();
             this.createBreadcrumbs();
+        }
+        if (event == CrudOperationEnum.CREATE) {
+            this.activeIndex -= 1;
         }
     }
 
@@ -605,7 +609,7 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
                 }
             } else {
                 let createUpdateGroup = false;
-                if (!this.currentGroup?.uniqueName || !event) {
+                if (!this.currentGroup?.uniqueName) {
                     createUpdateGroup = false;
                 } else {
                     createUpdateGroup = true;
@@ -613,12 +617,10 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
 
                 const currentGroup = cloneDeep(this.currentGroup);
 
-                if (!createUpdateGroup) {
-                    this.getMasters(this.masterColumnsData[this.activeIndex]?.stockGroup, this.activeIndex - 1);
-                } else {
-                    this.masterColumnsData[this.activeIndex].page = 0;
-                    this.masterColumnsData[this.activeIndex].results = [];
-                    this.getMasters(this.masterColumnsData[this.activeIndex]?.stockGroup, this.activeIndex, false, true);
+                this.getMasters(this.masterColumnsData[this.activeIndex]?.stockGroup, this.activeIndex - 1);
+
+                if (event == CrudOperationEnum.CREATE) {
+                    this.activeIndex -= 1;
                 }
 
                 if (this.activeIndex <= 1) {

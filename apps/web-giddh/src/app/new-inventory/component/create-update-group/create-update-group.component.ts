@@ -21,7 +21,8 @@ import { ServiceConfig } from "../../../services/service.config";
 import { IOption } from "../../../app.constant";
 import { Configuration } from '../../../app.constant';
 import { environment } from '../../../../environments/environment.generated';
-import { cloneDeep, filter, find, findIndex, forEach, get, includes, isArray, isEqual, map, remove, set } from '../../../lodash-optimized';
+import { cloneDeep, findIndex, forEach, isEqual } from '../../../lodash-optimized';
+import { CrudOperationEnum } from "../../../shared/Enums/common.enum";
 
 @Component({
     selector: 'create-update-group',
@@ -410,7 +411,7 @@ export class CreateUpdateGroupComponent implements OnInit, OnDestroy {
                         this.resetTaxes();
                     } else {
                         this.resetGroupForm();
-                        this.closeAsideEvent.emit();
+                        this.closeAsideEvent.emit(CrudOperationEnum.CREATE);
                     }
                 } else {
                     this.toggleLoader(false);
