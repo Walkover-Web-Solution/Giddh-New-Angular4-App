@@ -17,7 +17,7 @@ import { GiddhNumberFormatPipe } from "../../shared/helpers/pipes/number-format/
     templateUrl: "./add-bulk-items.component.html",
     styleUrls: ["./add-bulk-items.component.scss"],
     providers: [AddBulkItemsComponentStore],
-    standalone:false
+    standalone: false
 })
 export class AddBulkItemsComponent implements OnInit, OnDestroy {
     /** Stock search request */
