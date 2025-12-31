@@ -847,6 +847,7 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         private pageLeaveUtilityService: PageLeaveUtilityService,
         private commonService: CommonService
     ) {
+        this.router.navigate(['pages', 'home']);
         this.advanceReceiptAdjustmentData = new VoucherAdjustments();
         this.advanceReceiptAdjustmentData.adjustments = [];
         this.enableVoucherAdjustmentMultiCurrency = (window as any).enableVoucherAdjustmentMultiCurrency || false;
@@ -879,7 +880,6 @@ export class VoucherComponent implements OnInit, OnDestroy, AfterViewInit, OnCha
         this.getOnboardingFormInProcess$ = this.store.pipe(select(s => s.common.getOnboardingFormInProcess), takeUntil(this.destroyed$));
         this.exceptTaxTypes = ['tdsrc', 'tdspay', 'tcspay', 'tcsrc'];
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        this.router.navigate(['pages', 'home']);
     }
 
     public ngOnInit() {
