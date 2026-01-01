@@ -2989,7 +2989,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
             if (key === this.KEYS.ENTER || key === this.KEYS.TAB) {
                 event.preventDefault();
                 const selectCurrentElement = () => {
-                    if (this.virtualScrollViewport) {
+                    if (this.virtualScrollViewport && typeof this.virtualScrollViewport.getRenderedRange === 'function') {
                         const renderedRange = this.virtualScrollViewport.getRenderedRange();
                         const relativeIndex = this.selectedIndex - renderedRange.start;
                         const selectedElement = elements[relativeIndex];

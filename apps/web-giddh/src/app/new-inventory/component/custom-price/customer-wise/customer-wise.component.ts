@@ -158,7 +158,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
 
         this.scrollDispatcher.scrolled().pipe(takeUntil(this.destroyed$)).subscribe((event: any) => {
             const dataLength = event?.getDataLength ? event.getDataLength() : event?.dataLength || 0;
-            if (event && (dataLength - event?.getRenderedRange().end) < 10 && !this.isLoading && (this.pagination.user.totalPages > this.pagination.user.page)) {
+            if (event && typeof event.getRenderedRange === 'function' && (dataLength - event.getRenderedRange().end) < 10 && !this.isLoading && (this.pagination.user.totalPages > this.pagination.user.page)) {
                 this.pagination.user.page++;
                 this.getCustomerVendorDiscountUserList(true);
             }

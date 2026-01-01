@@ -782,12 +782,17 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
     public removeGstDetailsForm(i: number): void {
         const addresses = this.addAccountForm.get('addresses') as FormArray;
         addresses.removeAt(i);
-        
+
         // Focus on submit button after removing address
         setTimeout(() => {
-           const submitBtn = this.renderer.selectRootElement('button[type="submit"], button[aria-label="save"]', true);
-            if (submitBtn) {
-                submitBtn.focus();
+            try {
+                const submitBtn = this.renderer.selectRootElement('button[type="submit"], button[aria-label="save"]', true);
+                if (submitBtn) {
+                    submitBtn.focus();
+                }
+            } catch (error) {
+                // Silently handle case where submit button doesn't exist
+                console.debug('Submit button not found for focus');
             }
         }, 100);
     }

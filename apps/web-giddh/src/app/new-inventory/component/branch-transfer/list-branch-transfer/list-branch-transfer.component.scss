@@ -1,6 +1,6 @@
 #branch-transfer-list {
     .mat-raised-button,
-    .matButton="elevated" {
+    .mat-stroked-button{
         &:focus {
             box-shadow: none !important;
         }
