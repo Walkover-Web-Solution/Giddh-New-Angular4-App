@@ -5,9 +5,9 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <giddh-page-loader *ngIf="(showLoader && isUpdateMode) || isShowLoader"></giddh-page-loader>
+    <giddh-page-loader *ngIf="true"></giddh-page-loader>
     <hamburger-menu></hamburger-menu>
-    <div class="vouchers" [ngStyle]="{ 'display': (!isUpdateMode || !showLoader) && !isShowLoader ? 'block' : 'none' }">
+    <div *ngIf="false" class="vouchers" [ngStyle]="{ 'display': (!isUpdateMode || !showLoader) && !isShowLoader ? 'block' : 'none' }">
         <mat-card class="container-lg">
             <mat-card-content class="vouchers-content w-100 h-100">
                 <!-- Voucher Page Heading -->

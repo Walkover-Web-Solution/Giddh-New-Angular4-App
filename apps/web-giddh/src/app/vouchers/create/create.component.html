@@ -27,7 +27,7 @@
                                     'cursor-pointer':
                                         invoiceType.isCashInvoice &&
                                         !invoiceType.isDebitNote &&
-                                        !invoiceType.isCreditNote
+                                        !invoiceType.isCreditNote,
                                 }"
                                 (click)="
                                     invoiceType.isCashInvoice && !invoiceType.isDebitNote && !invoiceType.isCreditNote
@@ -41,12 +41,12 @@
                                     invoiceType.isCashInvoice && invoiceType.isSalesInvoice
                                         ? localeData?.invoice_types?.cash_invoice
                                         : invoiceType.isCashInvoice && invoiceType.isPurchaseInvoice
-                                        ? localeData?.invoice_types?.cash_bill
-                                        : invoiceType.isCashInvoice && invoiceType.isDebitNote
-                                        ? localeData?.invoice_types?.cash_debit_note
-                                        : invoiceType.isCashInvoice && invoiceType.isCreditNote
-                                        ? localeData?.invoice_types?.cash_credit_note
-                                        : (voucherType | voucherName : localeData | titlecase)
+                                          ? localeData?.invoice_types?.cash_bill
+                                          : invoiceType.isCashInvoice && invoiceType.isDebitNote
+                                            ? localeData?.invoice_types?.cash_debit_note
+                                            : invoiceType.isCashInvoice && invoiceType.isCreditNote
+                                              ? localeData?.invoice_types?.cash_credit_note
+                                              : (voucherType | voucherName: localeData | titlecase)
                                 }}
                             </p>
 
@@ -63,7 +63,7 @@
                             >
                                 <span
                                     [ngClass]="{
-                                        'voucher-heading': invoiceForm.get('salesPurchaseAsReceiptPayment')?.value
+                                        'voucher-heading': invoiceForm.get('salesPurchaseAsReceiptPayment')?.value,
                                     }"
                                     class="ml-4"
                                 >
@@ -123,20 +123,20 @@
                                     !invoiceType.isCashInvoice && invoiceType.isSalesInvoice
                                         ? localeData?.invoice_types?.cash_invoice
                                         : !invoiceType.isCashInvoice && invoiceType.isPurchaseInvoice
-                                        ? localeData?.invoice_types?.cash_bill
-                                        : !invoiceType.isCashInvoice && invoiceType.isDebitNote
-                                        ? localeData?.invoice_types?.cash_debit_note
-                                        : !invoiceType.isCashInvoice && invoiceType.isCreditNote
-                                        ? localeData?.invoice_types?.cash_credit_note
-                                        : invoiceType.isSalesInvoice
-                                        ? localeData?.invoice_types?.invoice
-                                        : invoiceType.isPurchaseInvoice
-                                        ? localeData?.invoice_types?.purchase
-                                        : invoiceType.isDebitNote
-                                        ? localeData?.invoice_types?.debit_note
-                                        : invoiceType.isCreditNote
-                                        ? localeData?.invoice_types?.credit_note
-                                        : (voucherType | voucherName : localeData | titlecase)
+                                          ? localeData?.invoice_types?.cash_bill
+                                          : !invoiceType.isCashInvoice && invoiceType.isDebitNote
+                                            ? localeData?.invoice_types?.cash_debit_note
+                                            : !invoiceType.isCashInvoice && invoiceType.isCreditNote
+                                              ? localeData?.invoice_types?.cash_credit_note
+                                              : invoiceType.isSalesInvoice
+                                                ? localeData?.invoice_types?.invoice
+                                                : invoiceType.isPurchaseInvoice
+                                                  ? localeData?.invoice_types?.purchase
+                                                  : invoiceType.isDebitNote
+                                                    ? localeData?.invoice_types?.debit_note
+                                                    : invoiceType.isCreditNote
+                                                      ? localeData?.invoice_types?.credit_note
+                                                      : (voucherType | voucherName: localeData | titlecase)
                                 }}</span>
                             </button>
                         </div>
@@ -155,7 +155,10 @@
                                             <reactive-dropdown-field
                                                 *ngIf="!invoiceType.isCashInvoice"
                                                 #customerVendorDropdown
-                                                (keydown.enter)="isCustomerVendorSelected() && focusNextElement($event); customerVendorDropdown?.closeDropdownPanel()"
+                                                (keydown.enter)="
+                                                    isCustomerVendorSelected() && focusNextElement($event);
+                                                    customerVendorDropdown?.closeDropdownPanel()
+                                                "
                                                 [label]="
                                                     invoiceType.isPurchaseOrder ||
                                                     invoiceType.isPurchaseInvoice ||
@@ -245,7 +248,7 @@
                                                 class="vouchers-copy-sales ml-5 cursor-pointer"
                                             >
                                                 <i class="icon-copy-file"></i>
-                                                {{ voucherType | voucherCopyLink : localeData | titlecase }}
+                                                {{ voucherType | voucherCopyLink: localeData | titlecase }}
                                             </div>
                                             <mat-menu #copyLastVouchers="matMenu">
                                                 <div class="mat-menu-width-large">
@@ -268,10 +271,10 @@
                                                                         invoiceType.isProformaInvoice
                                                                             ? voucher?.proformaNumber
                                                                             : invoiceType.isEstimateInvoice
-                                                                            ? voucher?.estimateNumber
-                                                                            : voucher?.voucherNumber
-                                                                            ? voucher?.voucherNumber
-                                                                            : commonLocaleData?.app_not_available
+                                                                              ? voucher?.estimateNumber
+                                                                              : voucher?.voucherNumber
+                                                                                ? voucher?.voucherNumber
+                                                                                : commonLocaleData?.app_not_available
                                                                     }}</span>
                                                                     <span>{{
                                                                         voucher?.grandTotal?.amountForAccount
@@ -336,7 +339,9 @@
                                         class="vouchers-form-fields-detail cursor-pointer"
                                         appFocusableClick
                                         [componentContext]="this"
-                                        [clickStatements]="'toggleAccountAsidePane(' + accountType.customer + ', false)'"
+                                        [clickStatements]="
+                                            'toggleAccountAsidePane(' + accountType.customer + ', false)'
+                                        "
                                         (click)="toggleAccountAsidePane(accountType.customer, false)"
                                     >
                                         {{
@@ -438,7 +443,7 @@
                         <div
                             class="vouchers-secondary-form position-relative"
                             [ngClass]="{
-                                'vouchers-form-disable': !invoiceForm.controls['account'].get('customerName')?.value
+                                'vouchers-form-disable': !invoiceForm.controls['account'].get('customerName')?.value,
                             }"
                         >
                             <div class="vouchers-small-container">
@@ -456,7 +461,7 @@
                                                 [ngClass]="{
                                                     'p-0':
                                                         invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled ||
-                                                        invoiceType.isCashInvoice
+                                                        invoiceType.isCashInvoice,
                                                 }"
                                             >
                                                 <span>{{ localeData?.billing_address }}</span>
@@ -761,7 +766,7 @@
                                                 class="vouchers-address-form p-3 border-radius-4"
                                                 [ngClass]="{
                                                     'form-disabled': copyAccountBillingInShippingAddress,
-                                                    'without-taxnumber': !account?.taxTypeLabel
+                                                    'without-taxnumber': !account?.taxTypeLabel,
                                                 }"
                                                 *ngIf="
                                                     invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled ||
@@ -983,7 +988,7 @@
                                             [ngClass]="{
                                                 'p-0':
                                                     invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled ||
-                                                    invoiceType.isCashInvoice
+                                                    invoiceType.isCashInvoice,
                                             }"
                                         >
                                             <span>{{ localeData?.billing_address }}</span>
@@ -1237,7 +1242,7 @@
                                             class="vouchers-address-form p-3 border-radius-4"
                                             [ngClass]="{
                                                 'form-disabled': copyCompanyBillingInShippingAddress,
-                                                'without-taxnumber': !company?.taxTypeLabel
+                                                'without-taxnumber': !company?.taxTypeLabel,
                                             }"
                                             *ngIf="
                                                 invoiceSettings?.invoiceSettings?.voucherAddressManualEnabled ||
@@ -1696,8 +1701,8 @@
                                                         invoiceType.isReceiptInvoice
                                                             ? localeData?.receipt_mode
                                                             : invoiceType.isPaymentInvoice
-                                                            ? localeData?.payment_mode
-                                                            : localeData?.product_service
+                                                              ? localeData?.payment_mode
+                                                              : localeData?.product_service
                                                     }}
                                                 </th>
                                                 <th
@@ -2023,7 +2028,7 @@
                                                                 'justify-content-between':
                                                                     !invoiceType.isPurchaseOrder &&
                                                                     !invoiceType.isEstimateInvoice &&
-                                                                    !invoiceType.isProformaInvoice
+                                                                    !invoiceType.isProformaInvoice,
                                                             }"
                                                         >
                                                             <div
@@ -2093,7 +2098,7 @@
                                                                     'w-100':
                                                                         invoiceType.isPurchaseOrder ||
                                                                         invoiceType.isEstimateInvoice ||
-                                                                        invoiceType.isProformaInvoice
+                                                                        invoiceType.isProformaInvoice,
                                                                 }"
                                                             >
                                                                 <div class="mt-2 font-size-12">
@@ -2179,7 +2184,11 @@
                                                                                         color="primary"
                                                                                         value="hsn"
                                                                                         tabindex="0"
-                                                                                        (keydown.enter)="$event.target.click(); inputHsn.inputFocus(); inputSac.inputFocus()"
+                                                                                        (keydown.enter)="
+                                                                                            $event.target.click();
+                                                                                            inputHsn.inputFocus();
+                                                                                            inputSac.inputFocus()
+                                                                                        "
                                                                                         >{{
                                                                                             commonLocaleData?.app_hsn_code
                                                                                         }}</mat-radio-button
@@ -2187,7 +2196,11 @@
                                                                                     <mat-radio-button
                                                                                         color="primary"
                                                                                         value="sac"
-                                                                                        (keydown.enter)="$event.target.click(); inputSac.inputFocus(); inputHsn.inputFocus()"
+                                                                                        (keydown.enter)="
+                                                                                            $event.target.click();
+                                                                                            inputSac.inputFocus();
+                                                                                            inputHsn.inputFocus()
+                                                                                        "
                                                                                         >{{
                                                                                             commonLocaleData?.app_sac_code
                                                                                         }}</mat-radio-button
@@ -2197,7 +2210,10 @@
                                                                                 <div class="mt-3">
                                                                                     <text-field
                                                                                         #inputHsn
-                                                                                        (keydown.enter)="$event.preventDefault(); focusNextElement($event)"
+                                                                                        (keydown.enter)="
+                                                                                            $event.preventDefault();
+                                                                                            focusNextElement($event)
+                                                                                        "
                                                                                         (keydown.space)="
                                                                                             $event.preventDefault();
                                                                                             focusNextElement($event)
@@ -2224,7 +2240,10 @@
                                                                                     </text-field>
                                                                                     <text-field
                                                                                         #inputSac
-                                                                                        (keydown.enter)="$event.preventDefault(); focusNextElement($event)"
+                                                                                        (keydown.enter)="
+                                                                                            $event.preventDefault();
+                                                                                            focusNextElement($event)
+                                                                                        "
                                                                                         (keydown.space)="
                                                                                             $event.preventDefault();
                                                                                             focusNextElement($event)
@@ -2682,7 +2701,9 @@
                                                                                 activeEntryIndex === entryIndex
                                                                             )
                                                                         "
-                                                                        (closeDiscountDropdown)="focusNextElement($event)"
+                                                                        (closeDiscountDropdown)="
+                                                                            focusNextElement($event)
+                                                                        "
                                                                     ></discount-dropdown>
                                                                     <span
                                                                         class="font-size-14 text-light mt-1 d-inline-block wrap-td-data"
@@ -2720,7 +2741,7 @@
                                                             'error-box':
                                                                 rcmCheckbox?.checked &&
                                                                 !entry.get('taxes')?.value?.length &&
-                                                                entry.get('requiredTax')?.value
+                                                                entry.get('requiredTax')?.value,
                                                         }"
                                                         *ngIf="
                                                             showTaxColumn || invoiceForm.get('isAdvanceReceipt')?.value
@@ -2931,7 +2952,7 @@
                                                             [ngClass]="{
                                                                 'mb-4':
                                                                     entry.get('otherTax.name')?.value &&
-                                                                    isMultiCurrencyVoucher
+                                                                    isMultiCurrencyVoucher,
                                                             }"
                                                         >
                                                             <div class="d-flex justify-content-end column-gap-05">
@@ -3569,8 +3590,18 @@
                                                             </mat-expansion-panel>
                                                         </mat-accordion>
                                                     </div>
-                                                    <!-- Sample Templates not visible when there is only one sample template -->
-                                                    <div class="col-6 mt-3" formGroupName="templateDetails" *ngIf="(sampleTemplates$ | async)?.length > 1">
+                                                    <!-- Sample Templates not visible when there is only one sample template and we do not have multiple templates for receipt and payment so hide in that case  -->
+                                                    <div
+                                                        class="col-6 mt-3"
+                                                        formGroupName="templateDetails"
+                                                        *ngIf="
+                                                            (sampleTemplates$ | async)?.length > 1 &&
+                                                            !(
+                                                                invoiceType.isReceiptInvoice ||
+                                                                invoiceType.isPaymentInvoice
+                                                            )
+                                                        "
+                                                    >
                                                         <reactive-dropdown-field
                                                             appEnterNext
                                                             [label]="localeData?.template"
@@ -4091,7 +4122,7 @@
         [selectedItem]="{
             voucherNumber: voucherDetails?.number,
             uniqueName: voucherDetails?.account?.uniqueName,
-            voucherUniqueName: voucherDetails?.uniqueName
+            voucherUniqueName: voucherDetails?.uniqueName,
         }"
         (cancelEvent)="cancelPrintModal()"
     ></print-voucher>

@@ -304,7 +304,7 @@ export class TemplateFroalaComponent implements OnInit {
                     this.selectedToEmails = response.to;
                 }
                 this.clickedOutsideEmail();
-
+                
                 // Patch existing form instead of recreating it
                 this.emailForm.patchValue({
                     to: response.to ?? [],
@@ -370,7 +370,7 @@ export class TemplateFroalaComponent implements OnInit {
      */
     public getFroalaOptions() : any {
         return {
-            key: '', // TODO: Replace with actual Froala editor key
+            key: null,
             attribution: false,
             heightMin: 300,
             heightMax: 300,
@@ -378,15 +378,6 @@ export class TemplateFroalaComponent implements OnInit {
             toolbarSticky: true,
             // Add Electron-specific configurations
             requestWithCORS: this.isElectron ? false : true,
-            // Prevent editor collapse configurations
-            keepFormatOnDelete: true,
-            enter: FroalaEditor.ENTER_P,
-            multiLine: true,
-            htmlRemoveTags: [],
-            htmlAllowComments: false,
-            // Ensure minimum content is maintained
-            htmlUntouched: false,
-            htmlSimpleAmpersand: false,
             toolbarButtons: {
                 moreText: {
                     buttons: [
@@ -422,12 +413,12 @@ export class TemplateFroalaComponent implements OnInit {
             events: {
                 initialized: (event) => {
                     this.froalaEditor = event.getEditor();
-
+                    
                     // Add additional delay for Electron environment
                     const setupDelay = this.isElectron ? 200 : 0;
                     setTimeout(() => {
                         this.setupFroalaEventHandlers();
-
+                        
                         // Set initial content from form control with additional delay for Electron
                         const contentDelay = this.isElectron ? 300 : 0;
                         setTimeout(() => {
@@ -447,17 +438,9 @@ export class TemplateFroalaComponent implements OnInit {
                 },
                 'contentChanged': () => {
                     this.updateFormControl();
-                    this.preventEmptyEditor();
-                },
-                'commands.after': (cmd, param1, param2) => {
-                    // Handle insertHR command specifically
-                    if (cmd === 'insertHR') {
-                        this.handleInsertHRCommand();
-                    }
                 },
                 // Add error handling for Electron
                 'error': (error) => {
-                    console.warn('Froala editor error:', error);
                     if (this.isElectron && this.froalaInitRetryCount < this.maxFroalaInitRetries) {
                         this.retryFroalaInitialization();
                     }
@@ -490,102 +473,12 @@ export class TemplateFroalaComponent implements OnInit {
             this.froalaEditor.events.on(
                 'keydown',
                 (e) => {
-                    console.log("Triggered : ", e);
                     if ((e.which == FroalaEditor.KEYCODE.ENTER || e.which == FroalaEditor.KEYCODE.BACKSPACE) && this.froalaTribute?.isActive) {
-                        console.log("Run : ", e);
                         return false;
                     }
                 }
             );
         }
-    }
-
-    /**
-     * Prevents the editor from becoming completely empty and collapsing
-     *
-     * @private
-     * @memberof TemplateFroalaComponent
-     */
-    private preventEmptyEditor(): void {
-        if (this.froalaEditor) {
-            const currentContent = this.froalaEditor.html.get();
-            const textContent = this.froalaEditor.el.textContent || this.froalaEditor.el.innerText || '';
-            
-            // Check if content is minimal or empty
-            if (this.isContentEmpty(currentContent) || this.isContentMinimal(currentContent, textContent)) {
-                // Maintain minimum viable content to prevent editor collapse
-                const minContent = '<p><br></p>';
-                this.froalaEditor.html.set(minContent);
-                
-                // Position cursor at the beginning
-                this.froalaEditor.selection.setAtStart(this.froalaEditor.el.querySelector('p'));
-            }
-        }
-    }
-
-    /**
-     * Handles the insertHR command to prevent editor collapse
-     *
-     * @private
-     * @memberof TemplateFroalaComponent
-     */
-    private handleInsertHRCommand(): void {
-        if (this.froalaEditor) {
-            setTimeout(() => {
-                const currentContent = this.froalaEditor.html.get();
-                
-                // Ensure there's always content after HR insertion
-                if (currentContent && !currentContent.includes('<p>')) {
-                    // Add a paragraph after HR if none exists
-                    const updatedContent = currentContent + '<p><br></p>';
-                    this.froalaEditor.html.set(updatedContent);
-                }
-                
-                // Prevent empty editor state
-                this.preventEmptyEditor();
-            }, 100);
-        }
-    }
-
-    /**
-     * Checks if the content is empty or contains only empty tags
-     *
-     * @private
-     * @param {string} content - HTML content to check
-     * @returns {boolean} True if content is empty
-     * @memberof TemplateFroalaComponent
-     */
-    private isContentEmpty(content: string): boolean {
-        if (!content) return true;
-        
-        // Remove HTML tags and check if there's any actual content
-        const textOnly = content.replace(/<[^>]*>/g, '').trim();
-        return textOnly.length === 0;
-    }
-
-    /**
-     * Checks if the content is minimal (very short content that might cause issues)
-     *
-     * @private
-     * @param {string} htmlContent - HTML content to check
-     * @param {string} textContent - Text content to check
-     * @returns {boolean} True if content is minimal
-     * @memberof TemplateFroalaComponent
-     */
-    private isContentMinimal(htmlContent: string, textContent: string): boolean {
-        if (!htmlContent || !textContent) return true;
-        
-        // Check for minimal content patterns that might cause editor collapse
-        const minimalPatterns = [
-            /^<p><\/p>$/,
-            /^<p><br><\/p>$/,
-            /^<p>\s*<\/p>$/,
-            /^<br>$/,
-            /^\s*$/
-        ];
-        
-        return minimalPatterns.some(pattern => pattern.test(htmlContent.trim())) || 
-               textContent.trim().length <= 1;
     }
 
     /**
@@ -618,7 +511,7 @@ export class TemplateFroalaComponent implements OnInit {
                 this.initializeTribute(tributeSuggestions);
             } else if (attempt < this.maxFroalaInitRetries) {
                 setTimeout(() => attemptInitialization(attempt + 1), this.froalaInitRetryDelay);
-            }
+            } 
         };
         attemptInitialization();
     }
@@ -654,11 +547,11 @@ export class TemplateFroalaComponent implements OnInit {
             values: tributeSuggestions,
             selectTemplate: (item) => `${item?.original?.value ? this.emailSuggestionPrefix + item.original.value + this.emailSuggestionSuffix : ""}`
         });
-
+        
         if (this.froalaEditor) {
             this.froalaTribute.attach(this.froalaEditor.el);
         }
-
+        
         if (this.subjectInputField && this.subjectInputField.nativeElement) {
             this.subjectTribute.attach(this.subjectInputField.nativeElement);
         }
@@ -874,7 +767,7 @@ export class TemplateFroalaComponent implements OnInit {
 
         // Prepare request based on type
         const req = this.prepareRequest(type, formValue);
-
+        
         // Reset unsaved changes flag as we're saving
         this.hasUnsavedChanges = false;
         this.componentStore.updateCustomTemplate(req);
@@ -917,10 +810,10 @@ export class TemplateFroalaComponent implements OnInit {
                 }
             });
         }
-
+        
         // Reset unsaved changes flag as we're saving
         this.hasUnsavedChanges = false;
-
+        
         if (this.inputData?.triggerUniqueName) {
             this.triggerStore.updateTrigger({ model: formValue, uniqueName: this.inputData.triggerUniqueName });
         } else {
@@ -1005,50 +898,12 @@ export class TemplateFroalaComponent implements OnInit {
     }
 
     /**
-     * Releases the memory and properly cleans up Froala editor and Tribute instances
+     * Releases the memory
      *
      * @memberof TemplateFroalaComponent
      */
     public ngOnDestroy(): void {
         document.querySelector('body').classList.remove('hide-chat-widget');
-        
-        // Clean up Froala editor instance
-        if (this.froalaEditor) {
-            try {
-                // Remove all event listeners
-                this.froalaEditor.events.off('keydown');
-                this.froalaEditor.events.off('blur');
-                this.froalaEditor.events.off('contentChanged');
-                this.froalaEditor.events.off('error');
-                
-                // Destroy the editor instance
-                this.froalaEditor.destroy();
-                this.froalaEditor = null;
-            } catch (error) {
-                console.warn('Error destroying Froala editor:', error);
-            }
-        }
-        
-        // Clean up Tribute instances
-        if (this.froalaTribute) {
-            try {
-                this.froalaTribute.detach();
-                this.froalaTribute = null;
-            } catch (error) {
-                console.warn('Error detaching Froala tribute:', error);
-            }
-        }
-        
-        if (this.subjectTribute) {
-            try {
-                this.subjectTribute.detach();
-                this.subjectTribute = null;
-            } catch (error) {
-                console.warn('Error detaching subject tribute:', error);
-            }
-        }
-        
-        // Complete observables
         this.destroyed$.next(true);
         this.destroyed$.complete();
     }
@@ -1160,7 +1015,7 @@ export class TemplateFroalaComponent implements OnInit {
 
     /**
      * Handles the change of time action
-     *
+     * 
      * @param event - Selected option
      * @memberof TemplateFroalaComponent
      */
@@ -1248,7 +1103,7 @@ export class TemplateFroalaComponent implements OnInit {
      * @returns {string}
      * @memberof TemplateFroalaComponent
      */
-    public getDayActionLabelValue(): string {
+    public getDayActionLabelValue(): string {  
         const executionTime = this.customTriggerForm?.get('executionTime');
         if (!executionTime) return '';
 
@@ -1309,14 +1164,14 @@ export class TemplateFroalaComponent implements OnInit {
     private validateEmailRecipientsUnchanged(): boolean {
         const currentForm = this.isTrigger ? this.customTriggerForm.value : this.emailForm.value;
         const { to, bcc, cc } = currentForm;
-
+        
         const formRecipients = { to, bcc, cc };
         const selectedRecipients = {
             to: this.selectedToEmails,
             bcc: this.selectedBccEmails,
             cc: this.selectedCcEmails
         };
-
+        
         return isEqual(formRecipients, selectedRecipients);
     }
 }
