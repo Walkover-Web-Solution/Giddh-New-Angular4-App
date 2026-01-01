@@ -3346,6 +3346,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 });
 
                 this.checkIfEntriesHasStock();
+                this.changeDetection.detectChanges();
             }
         });
     }

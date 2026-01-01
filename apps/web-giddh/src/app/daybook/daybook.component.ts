@@ -484,6 +484,7 @@ export class DaybookComponent implements OnInit, OnDestroy {
             } else if (isInventory && !entry.isExpanded) {
                 this.checkIsStockEntryAvailable();
             }
+            this.changeDetectorRef.detectChanges();
         });
     }
 
