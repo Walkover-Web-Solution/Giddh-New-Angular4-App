@@ -4,7 +4,7 @@ import { MatTableDataSource } from "@angular/material/table";
 import { SelectionModel } from "@angular/cdk/collections";
 import { ServiceConfig } from "../../../services/service.config";
 import { Configuration } from '../../../app.constant';
-import { environment } from '../../../../environments/environment';
+import { environment } from '../../../../environments/environment.generated';
 
 export interface PeriodicElement {
     name: string;

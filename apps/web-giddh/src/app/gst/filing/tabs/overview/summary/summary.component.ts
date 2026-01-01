@@ -11,7 +11,7 @@ import { GstReconcileActions } from 'apps/web-giddh/src/app/actions/gst-reconcil
 import { cloneDeep, sortBy } from '../../../../../lodash-optimized';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { Configuration } from 'apps/web-giddh/src/app/app.constant';
-import { environment } from 'apps/web-giddh/src/environments/environment';
+import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
 interface SequenceConfig {
     name: string;

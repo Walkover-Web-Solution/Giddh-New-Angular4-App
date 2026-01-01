@@ -3,7 +3,7 @@ import * as quarterOfYear from 'dayjs/plugin/quarterOfYear' // load on demand
 dayjs.extend(quarterOfYear) // use plugin
 import { CountryCodeService } from './services/country-code.service';
 import { MatDialogConfig } from '@angular/material/dialog';
-import { environment } from '../environments/environment';
+import { environment } from '../environments/environment.generated';
 
 // ENVIRONMENT AND CORE CONSTANTS - Now using webpack DefinePlugin and environment variables
 // These are injected at build time via webpack.partial.js

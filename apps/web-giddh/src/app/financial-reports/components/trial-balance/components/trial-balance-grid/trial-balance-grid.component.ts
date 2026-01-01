@@ -26,7 +26,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { ASIDE_PANE_CONFIG } from 'apps/web-giddh/src/app/app.constant';
 import { Configuration } from '../../../../../app.constant';
-import { environment } from '../../../../../../environments/environment';
+import { environment } from '../../../../../../environments/environment.generated';
 import { each, forEach } from '../../../../../lodash-optimized';
 
 @Component({

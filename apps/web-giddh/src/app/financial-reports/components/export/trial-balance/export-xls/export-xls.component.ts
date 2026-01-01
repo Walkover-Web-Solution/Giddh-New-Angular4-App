@@ -5,7 +5,7 @@ import { TrialBalanceExportExcelRequest, TrialBalanceRequest } from 'apps/web-gi
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { Configuration } from '../../../../../app.constant';
-import { environment } from '../../../../../../environments/environment';
+import { environment } from '../../../../../../environments/environment.generated';
 
 @Component({
 selector: 'trial-balance-export-xls',

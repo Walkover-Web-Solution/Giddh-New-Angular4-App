@@ -56,7 +56,7 @@ import { TemplateFroalaComponent } from '../shared/template-froala/template-froa
 import { ServiceConfig } from '../services/service.config';
 import { ContactsTab, ContactsColumn } from './contacts.enum';
 import { GiddhNumberFormatPipe } from '../shared/helpers/pipes/number-format/number-format.pipe';
-import { environment } from '../../environments/environment';
+import { environment } from '../../environments/environment.generated';
 
 @Component({
     selector: "contact-detail",

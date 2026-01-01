@@ -21,7 +21,7 @@ import * as printJS from 'print-js';
 import { OrganizationType } from "../../models/user-login-state";
 import { VoucherTypeEnum } from "../../models/api-models/Sales";
 import { ServiceConfig } from "../../services/service.config";
-import { environment } from "apps/web-giddh/src/environments/environment";
+import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
 @Component({
     selector: "attachments",

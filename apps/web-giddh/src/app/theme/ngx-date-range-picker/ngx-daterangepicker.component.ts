@@ -27,7 +27,7 @@ import { ServiceConfig } from '../../services/service.config';
 import { MatDialog } from '@angular/material/dialog';
 import { NewConfirmationModalComponent } from '../new-confirmation-modal/confirmation-modal.component';
 import { GeneralService } from '../../services/general.service';
-import { environment } from 'apps/web-giddh/src/environments/environment';
+import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
 export enum DateType {
     start = 'start',

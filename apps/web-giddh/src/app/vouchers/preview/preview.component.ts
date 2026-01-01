@@ -26,7 +26,7 @@ import { AdjustAdvancePaymentModal, VoucherAdjustments } from "../../models/api-
 import { AdjustmentUtilityService } from "../../shared/advance-receipt-adjustment/services/adjustment-utility.service";
 import { DownloadVoucherComponent } from "../download-voucher/download-voucher.component";
 import { ServiceConfig } from "../../services/service.config";
-import { environment } from "apps/web-giddh/src/environments/environment";
+import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
 @Component({
     selector: "preview",

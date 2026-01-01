@@ -119,7 +119,7 @@ import { GiddhDatepickerComponent } from "../../theme/giddh-datepicker/giddh-dat
 import { FocusMonitor } from "@angular/cdk/a11y";
 import { Platform } from "@angular/cdk/platform";
 import { GeneralActions } from "../../actions/general/general.actions";
-import { environment } from "apps/web-giddh/src/environments/environment";
+import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
 @Component({
     selector: "create",

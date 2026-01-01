@@ -70,7 +70,7 @@ import { CommonService } from '../services/common.service';
 import { ConfirmModalComponent } from '../theme/new-confirm-modal/confirm-modal.component';
 import { ServiceConfig } from '../services/service.config';
 import { ReactiveDropdownFieldComponent } from '../theme/form-fields/reactive-dropdown-field/reactive-dropdown-field.component';
-import { environment } from '../../environments/environment';
+import { environment } from '../../environments/environment.generated';
 
 /** Type of search: customer and item (product/service) search */
 const SEARCH_TYPE = {

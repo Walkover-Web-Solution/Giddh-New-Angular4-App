@@ -17,7 +17,7 @@ import { PageLeaveUtilityService } from '../../../services/page-leave-utility.se
 import { ComponentCanDeactivate } from '../../../decorators/page-leave-confirmation-guard';
 import { CommonActions } from '../../../actions/common.actions';
 import { Configuration } from '../../../app.constant';
-import { environment } from '../../../../environments/environment';
+import { environment } from '../../../../environments/environment.generated';
 import { filter, forEach, includes } from '../../../lodash-optimized';
 
 /**

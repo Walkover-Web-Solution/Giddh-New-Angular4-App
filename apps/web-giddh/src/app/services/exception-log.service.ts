@@ -8,7 +8,7 @@ import { GiddhErrorHandler } from './catchManager/catchmanger';
 import { GeneralService } from './general.service';
 import { HttpWrapperService } from './http-wrapper.service';
 import { IServiceConfigArgs, ServiceConfig } from './service.config';
-import { environment } from '../../environments/environment';
+import { environment } from '../../environments/environment.generated';
 import { get, includes } from '../lodash-optimized';
 
 @Injectable({

@@ -12,7 +12,7 @@ import { OrganizationType } from "../models/user-login-state";
 import { GIDDH_DATE_FORMAT, GIDDH_NEW_DATE_FORMAT_UI } from "../shared/helpers/defaultDateFormat";
 import { cloneDeep } from "../lodash-optimized";
 import { ActivatedRoute, Router } from "@angular/router";
-import { environment } from "../../environments/environment";
+import { environment } from '../../environments/environment.generated';
 import { ServiceConfig } from "../services/service.config";
 dayjs.extend(duration);
 

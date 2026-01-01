@@ -13,7 +13,7 @@ import { GIDDH_DATE_FORMAT } from '../helpers/defaultDateFormat';
 import * as dayjs from 'dayjs';
 import { GstReconcileActions } from '../../actions/gst-reconcile/gst-reconcile.actions';
 import { ServiceConfig } from '../../services/service.config';
-import { environment } from 'apps/web-giddh/src/environments/environment';
+import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
 @Component({
     selector: 'tax-sidebar',

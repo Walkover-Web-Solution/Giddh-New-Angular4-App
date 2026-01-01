@@ -10,7 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { VoucherType } from '../../ledger/components/import-statement/import-statement.const';
 import { ServiceConfig } from '../../services/service.config';
 import { Configuration } from '../../app.constant';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.generated';
 
 @Component({
     selector: 'import-type-select',

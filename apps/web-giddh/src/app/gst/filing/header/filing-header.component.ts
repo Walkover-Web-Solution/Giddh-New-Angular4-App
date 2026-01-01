@@ -18,7 +18,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormControl } from '@angular/forms';
 import { ServiceConfig } from '../../../services/service.config';
 import { ASIDE_PANE_CONFIG, Configuration, RestrictedModules } from '../../../app.constant';
-import { environment } from 'apps/web-giddh/src/environments/environment';
+import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
 @Component({
     // tslint:disable-next-line:component-selector

@@ -24,7 +24,7 @@ import { SettingsUtilityService } from '../services/settings-utility.service';
 import { FormControl } from '@angular/forms';
 import { ASIDE_PANE_CONFIG, BranchHierarchyType, Configuration } from '../../app.constant';
 import { ServiceConfig } from '../../services/service.config';
-import { environment } from 'apps/web-giddh/src/environments/environment';
+import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 @Component({
     selector: 'setting-branch',
     templateUrl: './branch.component.html',

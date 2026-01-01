@@ -7,7 +7,7 @@ import { ReplaySubject, interval, Subject, BehaviorSubject, Observable } from 'r
 import { filter, takeUntil, switchMap, debounceTime } from 'rxjs/operators';
 import { EmailForwardingResponse, YOU_ARE_NOT_ALLOWED } from '../../models/email-forwarding.model';
 import { API_BULK_FETCH_LIMIT, ASIDE_PANE_CONFIG, BANK_STATEMENT_HELP_DOC_URL, EMAIL_VALIDATION_REGEX, Configuration } from '../../../app.constant';
-import { environment } from '../../../../environments/environment';
+import { environment } from '../../../../environments/environment.generated';
 import { EmailForwardingComponentStore } from '../../store/email-forwarding.store';
 import { GeneralService } from '../../../services/general.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';

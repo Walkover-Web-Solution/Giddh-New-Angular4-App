@@ -7,7 +7,7 @@ import { GeneralService } from "../services/general.service";
 import { ServiceConfig } from "../services/service.config";
 import { BREAKPOINT_SCREEN_SIZE } from "../app.constant";
 import { Configuration } from '../app.constant';
-import { environment } from '../../environments/environment';
+import { environment } from '../../environments/environment.generated';
 
 @Component({
     selector: 'mobile-restricted',

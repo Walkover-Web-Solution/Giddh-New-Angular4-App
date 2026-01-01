@@ -26,7 +26,7 @@ import { ICurrencyResponse } from "../../models/api-models/Company";
 import { AccountResponse, AccountResponseV2 } from "../../models/api-models/Account";
 import { LedgerService } from "../../services/ledger.service";
 import { ServiceConfig } from "../../services/service.config";
-import { environment } from "apps/web-giddh/src/environments/environment";
+import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 @Component({
     selector: 'ledger-statement',
     templateUrl: './ledger-statement.component.html',

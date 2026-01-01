@@ -7,7 +7,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 import { COUNTRY_REGION_MAP, Configuration } from '../app.constant';
 import { GeneralService } from '../services/general.service';
 import { ServiceConfig } from '../services/service.config';
-import { environment } from '../../environments/environment';
+import { environment } from '../../environments/environment.generated';
 
 @Component({
     selector: 'verify-subscription-transfer-ownership',

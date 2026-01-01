@@ -20,7 +20,7 @@ import { WarehouseActions } from '../action/warehouse.action';
 import { PageLeaveUtilityService } from '../../../services/page-leave-utility.service';
 import { ServiceConfig } from '../../../services/service.config';
 import { ASIDE_PANE_CONFIG, Configuration } from '../../../app.constant';
-import { environment } from 'apps/web-giddh/src/environments/environment';
+import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
 @Component({
     selector: 'create-warehouse',

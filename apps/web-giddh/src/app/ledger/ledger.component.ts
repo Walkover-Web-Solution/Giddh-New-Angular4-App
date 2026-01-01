@@ -64,7 +64,7 @@ import { LedgerDiscountClass } from '../models/api-models/SettingsDiscount';
 import { OtherTaxTypeEnum } from '../vouchers/utility/vouchers.const';
 import { LedgerDropdownTypeEnum } from '../models/api-models/Ledger';
 import { IOption } from '../app.constant';
-import { environment } from '../../environments/environment';
+import { environment } from '../../environments/environment.generated';
 
 @Component({
     selector: 'ledger',

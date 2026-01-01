@@ -10,7 +10,7 @@ import { Observable, ReplaySubject } from 'rxjs';
 import { LocaleService } from 'apps/web-giddh/src/app/services/locale.service';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { Configuration, ICICI_ALLOWED_COMPANIES } from 'apps/web-giddh/src/app/app.constant';
-import { environment } from 'apps/web-giddh/src/environments/environment';
+import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
 @Component({
     selector: 'aside-setting',

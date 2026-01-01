@@ -4,7 +4,7 @@ import { ReplaySubject, takeUntil } from 'rxjs';
 import { cloneDeep } from '../lodash-optimized';
 import { GeneralService } from '../services/general.service';
 import { ServiceConfig } from '../services/service.config';
-import { environment } from '../../environments/environment';
+import { environment } from '../../environments/environment.generated';
 import { Configuration } from '../app.constant';
 
 @Component({

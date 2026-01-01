@@ -26,7 +26,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { GeneralService } from 'apps/web-giddh/src/app/services/general.service';
 import { NewConfirmationModalComponent } from 'apps/web-giddh/src/app/theme/new-confirmation-modal/confirmation-modal.component';
 import { Configuration } from '../../../../../app.constant';
-import { environment } from '../../../../../../environments/environment';
+import { environment } from '../../../../../../environments/environment.generated';
 import { each, forEach, indexOf, keys } from '../../../../../lodash-optimized';
 
 @Component({

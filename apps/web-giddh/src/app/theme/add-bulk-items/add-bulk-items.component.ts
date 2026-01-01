@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit, HostListener } from "@angular/core";
+import { Component, Inject, OnDestroy, OnInit, HostListener, ChangeDetectionStrategy, ChangeDetectorRef } from "@angular/core";
 import { AddBulkItemsComponentStore } from "./utility/add-bulk-items.store";
 import { VouchersUtilityService } from "../../vouchers/utility/vouchers.utility.service";
 import { cloneDeep } from "../../lodash-optimized";
@@ -17,6 +17,7 @@ import { GiddhNumberFormatPipe } from "../../shared/helpers/pipes/number-format/
     templateUrl: "./add-bulk-items.component.html",
     styleUrls: ["./add-bulk-items.component.scss"],
     providers: [AddBulkItemsComponentStore],
+    changeDetection: ChangeDetectionStrategy.Default,
     standalone: false
 })
 export class AddBulkItemsComponent implements OnInit, OnDestroy {
@@ -49,7 +50,8 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
         private componentStore: AddBulkItemsComponentStore,
         @Inject(MAT_DIALOG_DATA) public inputData,
         public dialogRef: MatDialogRef<any>,
-        private giddhCurrencyPipe: GiddhNumberFormatPipe
+        private giddhCurrencyPipe: GiddhNumberFormatPipe,
+        private changeDetectorRef: ChangeDetectorRef
     ) { }
 
     /**
@@ -68,6 +70,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
         this.componentStore.stockVariants$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.stockVariants[response.entryIndex] = of(response.results);
+                this.changeDetectorRef.detectChanges();
             }
         });
     }
@@ -334,8 +337,13 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
                 this.stockResults$.next(stockResults.concat(...newResults));
             } else {
                 this.stockSearchRequest.loadMore = false;
+                // Clear results when no data is found for new search (page 1)
+                if (page === 1) {
+                    this.stockResults$.next([]);
+                }
             }
             this.stockSearchRequest.isLoading = false;
+            this.changeDetectorRef.detectChanges();
         });
     }
 
@@ -414,6 +422,7 @@ export class AddBulkItemsComponent implements OnInit, OnDestroy {
                 this.getDataControls.push(itemFormGroup);
 
                 this.itemsInProcess[item.uniqueName] = false;
+                this.changeDetectorRef.detectChanges();
             }
         });
     }

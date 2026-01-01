@@ -17,7 +17,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { COMMON_ACTIONS } from './common.const';
 import { AppState } from '../store';
 import { Inject, Injectable, NgZone } from '@angular/core';
-import { environment } from '../../environments/environment';
+import { environment } from '../../environments/environment.generated';
 import { Configuration } from '../app.constant';
 import { map, switchMap, take, tap } from 'rxjs/operators';
 import { OrganizationType, userLoginStateEnum } from '../models/user-login-state';
