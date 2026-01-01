@@ -18,7 +18,7 @@ import { IForceClear } from '../../models/api-models/Sales';
 import { ServiceConfig } from '../../services/service.config';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Configuration, IOption } from '../../app.constant';
-import { environment } from 'apps/web-giddh/src/environments/environment';
+import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
 @Component({
     selector: 'payment-aside',

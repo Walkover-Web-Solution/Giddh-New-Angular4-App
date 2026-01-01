@@ -26,7 +26,7 @@ import * as dayjs from 'dayjs';
 import { Observable, ReplaySubject, of as observableOf } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { Configuration } from '../../../../app.constant';
-import { environment } from '../../../../../environments/environment';
+import { environment } from '../../../../../environments/environment.generated';
 import { cloneDeep, concat, filter, find, forEach, get, includes, isEmpty, keys, map, remove, set, some } from '../../../../lodash-optimized';
 
 @Component({

@@ -15,7 +15,7 @@ import { Chart, registerables } from 'chart.js';
 import { ServiceConfig } from '../../../services/service.config';
 import { GiddhNumberFormatPipe } from '../../../shared/helpers/pipes/number-format/number-format.pipe';
 import { Configuration } from '../../../app.constant';
-import { environment } from '../../../../environments/environment';
+import { environment } from '../../../../environments/environment.generated';
 import { cloneDeep } from '../../../lodash-optimized';
 Chart.register(...registerables);
 

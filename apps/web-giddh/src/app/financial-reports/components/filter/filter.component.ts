@@ -24,7 +24,7 @@ import { FinancialReportsComponentStore } from '../../financial-reports.store';
 import { NewConfirmationModalComponent } from '../../../theme/new-confirmation-modal/confirmation-modal.component';
 import { TlPlService } from '../../../services/tl-pl.service';
 import { Configuration } from '../../../app.constant';
-import { environment } from '../../../../environments/environment';
+import { environment } from '../../../../environments/environment.generated';
 import { cloneDeep, find, findIndex, get, map, orderBy } from '../../../lodash-optimized';
 
 @Component({

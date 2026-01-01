@@ -45,7 +45,7 @@ import { ScrollDispatcher } from "@angular/cdk/scrolling";
 import { SettingsFinancialYearActions } from "../../actions/settings/financial-year/financial-year.action";
 import { DomSanitizer } from "@angular/platform-browser";
 import { ServiceConfig } from "../../services/service.config";
-import { environment } from "apps/web-giddh/src/environments/environment";
+import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
 @Component({
     selector: "aging-report",

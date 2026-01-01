@@ -32,7 +32,7 @@ import { WarehouseState } from './reducer/warehouse.reducer';
 import { OrganizationType } from '../../models/user-login-state';
 import { VoucherComponentStore } from '../../vouchers/utility/vouchers.store';
 import { ServiceConfig } from '../../services/service.config';
-import { environment } from 'apps/web-giddh/src/environments/environment';
+import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
 /**
  * Warehouse component

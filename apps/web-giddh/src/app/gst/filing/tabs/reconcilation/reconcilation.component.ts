@@ -10,7 +10,7 @@ import { GstReport } from '../../../constants/gst.constant';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { Configuration, PAGE_SIZE_OPTIONS, PAGINATION_LIMIT } from 'apps/web-giddh/src/app/app.constant';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
-import { environment } from 'apps/web-giddh/src/environments/environment';
+import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
 @Component({
     selector: 'reconcile',

@@ -27,7 +27,7 @@ import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { NAVIGATION_ITEM_LIST, reassignNavigationalArray } from '../../models/default-menus';
 import { userLoginStateEnum, OrganizationType } from '../../models/user-login-state';
 import { SubscriptionsUser } from '../../models/api-models/Subscriptions';
-import { environment } from 'apps/web-giddh/src/environments/environment';
+import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 import { CurrentPage, OnboardingFormRequest } from '../../models/api-models/Common';
 import { ACCOUNTING_BREAKPOINTS, ASIDE_PANE_CONFIG, BranchHierarchyType, BREAKPOINT_SCREEN_SIZE, CALENDLY_URL, Configuration, GIDDH_DATE_RANGE_PICKER_RANGES, ROUTES_WITH_HEADER_BACK_BUTTON } from '../../app.constant';
 import { CommonService } from '../../services/common.service';

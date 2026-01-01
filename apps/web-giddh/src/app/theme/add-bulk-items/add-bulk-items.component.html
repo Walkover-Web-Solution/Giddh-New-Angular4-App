@@ -26,6 +26,11 @@
                                 [label]="commonLocaleData?.app_search"
                             ></input-field>
                             <div class="list-wrapper mt-2">
+                                <section class="no-logs" *ngIf="!(stockResults$ | async)?.length && !stockSearchRequest?.isLoading">
+                                    <div class="no-data">
+                                        <h2>{{ commonLocaleData?.app_no_record_found }}</h2>
+                                    </div>
+                                </section>
                                 <mat-list class="p-0">
                                     <cdk-virtual-scroll-viewport
                                         [itemSize]="40"

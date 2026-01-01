@@ -20,7 +20,7 @@ import { IDiscountList } from "../../../models/api-models/SettingsDiscount";
 import { ServiceConfig } from "../../../services/service.config";
 import { IOption } from "../../../app.constant";
 import { Configuration } from '../../../app.constant';
-import { environment } from '../../../../environments/environment';
+import { environment } from '../../../../environments/environment.generated';
 import { cloneDeep, filter, find, findIndex, forEach, get, includes, isArray, isEqual, map, remove, set } from '../../../lodash-optimized';
 
 @Component({

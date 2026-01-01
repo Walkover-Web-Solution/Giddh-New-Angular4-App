@@ -5,7 +5,7 @@ import { orderBy } from '../../../../../../lodash-optimized';
 import { PageEvent } from '@angular/material/paginator';
 import { Configuration, DROPDOWN_ITEMS_COUNT_LIMIT, PAGE_SIZE_OPTIONS } from '../../../../../../app.constant';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
-import { environment } from 'apps/web-giddh/src/environments/environment';
+import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
 @Component({
     // tslint:disable-next-line:component-selector

@@ -25,7 +25,7 @@ import { cloneDeep } from '../../../lodash-optimized';
 import { InventoryService } from '../../../services/inventory.service';
 import { ASIDE_PANE_CONFIG, BranchHierarchyType, Configuration } from '../../../app.constant';
 import { ServiceConfig } from '../../../services/service.config';
-import { environment } from 'apps/web-giddh/src/environments/environment';
+import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
 @Component({
     selector: 'create-branch',

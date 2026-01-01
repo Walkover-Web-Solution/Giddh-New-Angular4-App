@@ -20,7 +20,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { VoucherTypeEnum } from 'apps/web-giddh/src/app/vouchers/utility/vouchers.const';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { PageEvent } from '@angular/material/paginator';
-import { environment } from 'apps/web-giddh/src/environments/environment';
+import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 import { cloneDeep, find } from '../../../../../lodash-optimized';
 
 export const filterTransaction = {

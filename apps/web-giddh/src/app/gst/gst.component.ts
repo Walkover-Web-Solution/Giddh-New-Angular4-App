@@ -18,7 +18,7 @@ import { Configuration, IOption } from '../app.constant';
 import { GstReport } from './constants/gst.constant';
 import { FormControl } from '@angular/forms';
 import { ServiceConfig } from '../services/service.config';
-import { environment } from '../../environments/environment';
+import { environment } from '../../environments/environment.generated';
 @Component({
     templateUrl: './gst.component.html',
     styleUrls: ['./gst.component.scss'],

@@ -20,7 +20,7 @@ import { ServiceConfig } from '../../../services/service.config';
 import { CompanyActions } from '../../../actions/company.actions';
 import { PageEvent } from '@angular/material/paginator';
 import { Configuration } from '../../../app.constant';
-import { environment } from '../../../../environments/environment';
+import { environment } from '../../../../environments/environment.generated';
 import { forEach, includes, map, set } from '../../../lodash-optimized';
 
 @Component({

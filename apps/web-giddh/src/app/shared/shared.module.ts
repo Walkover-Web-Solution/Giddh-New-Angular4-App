@@ -25,7 +25,7 @@ import { ElementViewChildModule } from './helpers/directives/elementViewChild/el
 import { KeyboardShortutModule } from './helpers/directives/keyboardShortcut/keyboardShortut.module';
 import { NgxMaskModule } from './helpers/directives/ngx-mask';
 import { Configuration } from '../app.constant';
-import { environment } from '../../environments/environment';
+import { environment } from '../../environments/environment.generated';
 import { TextCaseChangeModule } from './helpers/directives/textCaseChange/textCaseChange.module';
 import { NgxDaterangepickerMd } from '../theme/ngx-date-range-picker';
 import { TranslateDirectiveModule } from '../theme/translate/translate.directive.module';

@@ -295,12 +295,12 @@
                                 "output": "/index.html"
                             },
                             "optimization": {
-                                "scripts": true,
-                                "styles": true,
-                                "fonts": true
+                                "scripts": false,
+                                "styles": false,
+                                "fonts": false
                             },
-                            "outputHashing": "all",
-                            "sourceMap": false,
+                            "outputHashing": "none",
+                            "sourceMap": true,
                             "vendorChunk": false,
                             "budgets": [
                                 {

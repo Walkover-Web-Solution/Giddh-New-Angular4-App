@@ -43,7 +43,7 @@ import { MatMenuTrigger } from "@angular/material/menu";
 import { ConfirmModalComponent } from "../../theme/new-confirm-modal/confirm-modal.component";
 import { InvoiceUiDataService, TemplateContentUISectionVisibility } from '../../services/invoice.ui.data.service';
 import { TemplateModeEnum } from "../../models/api-models/Sales";
-import { environment } from "apps/web-giddh/src/environments/environment";
+import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
 export interface VoucherBalances {
     grandTotal: Number;

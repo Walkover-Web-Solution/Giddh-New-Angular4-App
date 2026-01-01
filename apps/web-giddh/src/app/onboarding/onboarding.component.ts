@@ -12,7 +12,7 @@ import { ASIDE_PANE_CONFIG, SYNC_TALLY_HELP_DOC_URL } from '../app.constant';
 import { ServiceConfig } from '../services/service.config';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Configuration } from '../app.constant';
-import { environment } from '../../environments/environment';
+import { environment } from '../../environments/environment.generated';
 import { cloneDeep } from '../lodash-optimized';
 
 

@@ -4,7 +4,7 @@ import { TBPlBsActions } from 'apps/web-giddh/src/app/actions/tl-pl.actions';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { AppState } from 'apps/web-giddh/src/app/store';
 import { Configuration } from '../../../../../app.constant';
-import { environment } from '../../../../../../environments/environment';
+import { environment } from '../../../../../../environments/environment.generated';
 
 @Component({
 selector: 'profit-loss-export-xls',

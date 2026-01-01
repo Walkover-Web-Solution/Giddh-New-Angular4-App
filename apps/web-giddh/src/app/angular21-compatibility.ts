@@ -1,5 +1,6 @@
 // Angular 21 Compatibility Layer - OnDestroy Lifecycle Fix
 import { ErrorHandler, Injectable } from '@angular/core';
+import { environment } from '../environments/environment.generated';
 
 @Injectable()
 export class Angular21CompatibilityErrorHandler implements ErrorHandler {

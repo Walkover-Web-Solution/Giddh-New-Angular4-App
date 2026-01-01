@@ -20,7 +20,7 @@ import { AppState } from '../../../store';
 import { ImportsService } from '../../../services/imports.service';
 import { ServiceConfig } from '../../../services/service.config';
 import { Configuration } from '../../../app.constant';
-import { environment } from '../../../../environments/environment';
+import { environment } from '../../../../environments/environment.generated';
 import { cloneDeep, find, forEach, keys, map, remove } from '../../../lodash-optimized';
 /** Hold information of import  */
 const ELEMENT_DATA: ImportsData[] = [];

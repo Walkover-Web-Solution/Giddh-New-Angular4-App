@@ -22,7 +22,7 @@ import { InventoryModuleName, InventoryReportType } from "../../inventory.enum";
 import { OrganizationType } from "../../../models/user-login-state";
 import { ServiceConfig } from "../../../services/service.config";
 import { Configuration } from '../../../app.constant';
-import { environment } from '../../../../environments/environment';
+import { environment } from '../../../../environments/environment.generated';
 import { cloneDeep, filter, forEach, includes, set } from '../../../lodash-optimized';
 
 @Component({

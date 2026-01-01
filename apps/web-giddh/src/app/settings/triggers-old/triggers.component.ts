@@ -11,7 +11,7 @@ import { GIDDH_NEW_DATE_FORMAT_UI } from 'apps/web-giddh/src/app/shared/helpers/
 import * as dayjs from 'dayjs';
 import { cloneDeep  } from '../../lodash-optimized';
 import { SelectMultipleFieldsComponent } from 'apps/web-giddh/src/app/theme/form-fields/select-multiple-fields/select-multiple-fields.component';
-import { environment } from 'apps/web-giddh/src/environments/environment';
+import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 import { ServiceConfig } from '../../services/service.config';
 
 export interface ActiveTriggers {

@@ -3,7 +3,7 @@ import { HeaderItem, ImportExcelResponseData, Mappings } from '../../models/api-
 import { IOption } from '../../app.constant';
 import { ServiceConfig } from '../../services/service.config';
 import { Configuration } from '../../app.constant';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.generated';
 import { cloneDeep, filter, findIndex, indexOf, map } from '../../lodash-optimized';
 
 interface DataModel {

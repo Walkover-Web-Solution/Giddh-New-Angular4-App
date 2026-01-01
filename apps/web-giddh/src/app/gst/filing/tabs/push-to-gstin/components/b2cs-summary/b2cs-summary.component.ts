@@ -3,7 +3,7 @@ import { ReplaySubject } from 'rxjs';
 import { B2CSSummary } from '../../../../../../models/api-models/GstReconcile';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { Configuration } from 'apps/web-giddh/src/app/app.constant';
-import { environment } from 'apps/web-giddh/src/environments/environment';
+import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 
 @Component({
     // tslint:disable-next-line:component-selector

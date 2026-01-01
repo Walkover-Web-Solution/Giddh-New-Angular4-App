@@ -25,7 +25,7 @@ import { Configuration, IOption, PAGINATION_LIMIT, SALES_TAX_SUPPORTED_COUNTRIES
 import { ServiceConfig } from '../../services/service.config';
 import { LedgerViewEnum } from '../../models/api-models/Ledger';
 import { ExportFileNameComponent } from '../export-file-name/export-file-name.component';
-import { environment } from 'apps/web-giddh/src/environments/environment';
+import { environment } from 'apps/web-giddh/src/environments/environment.generated';
 export interface IGstObj {
     newGstNumber: string;
     newstateCode: number;

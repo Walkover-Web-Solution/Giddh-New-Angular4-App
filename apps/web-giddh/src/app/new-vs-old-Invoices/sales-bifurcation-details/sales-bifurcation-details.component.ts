@@ -8,7 +8,7 @@ import { SalesBifurcationDetailsService } from './utility/sales-bifurcation-deta
 import { SalesBifurcationDetailsActionEnum } from './utility/sales-bifurcation-details.constant';
 import { PageEvent } from '@angular/material/paginator';
 import { Configuration } from '../../app.constant';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.generated';
 
 @Component({
     selector: 'sales-bifurcation-details',

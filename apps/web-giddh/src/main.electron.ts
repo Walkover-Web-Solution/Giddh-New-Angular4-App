@@ -2,7 +2,7 @@ import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { AppModule } from './app/app.module';
-import { environment } from './environments/environment';
+import { environment } from './environments/environment.generated';
 import './app/angular21-compatibility';
 import './app/electron-compatibility';
 import { AppElectronModule } from './app/app.electron.module';

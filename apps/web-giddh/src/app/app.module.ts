@@ -11,7 +11,7 @@ import { Configuration } from 'apps/web-giddh/src/app/app.constant';
 import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 import { localStorageSync } from 'ngrx-store-localstorage';
 import { ToastrModule } from 'ngx-toastr';
-import { environment } from '../environments/environment';
+import { environment } from '../environments/environment.generated';
 import { ActionModule } from './actions/action.module';
 import { AppLoginSuccessComponent } from './app-login-success/app-login-success';
 import { AppComponent } from './app.component';

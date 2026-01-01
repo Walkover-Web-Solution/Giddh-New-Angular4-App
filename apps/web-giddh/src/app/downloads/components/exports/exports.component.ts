@@ -19,7 +19,7 @@ import { download } from '@giddh-workspaces/utils';
 import { exportTypeEnum } from '../../../new-inventory/inventory.enum';
 import { ServiceConfig } from '../../../services/service.config';
 import { Configuration } from '../../../app.constant';
-import { environment } from '../../../../environments/environment';
+import { environment } from '../../../../environments/environment.generated';
 import { cloneDeep } from '../../../lodash-optimized';
 
 /** Hold information of Download  */

@@ -23,7 +23,7 @@ import { OrganizationType } from '../../../models/user-login-state';
 import { ServiceConfig } from '../../../services/service.config';
 import { InventoryComponentStore } from '../inventory.store';
 import { Configuration } from '../../../app.constant';
-import { environment } from '../../../../environments/environment';
+import { environment } from '../../../../environments/environment.generated';
 import { cloneDeep, filter, find, map } from '../../../lodash-optimized';
 
 @Component({

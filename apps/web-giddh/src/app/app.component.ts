@@ -21,7 +21,7 @@ import { LoginActions } from './actions/login.action';
 import { InvoiceActions } from './actions/invoice/invoice.actions';
 import { WarehouseActions } from './settings/warehouse/action/warehouse.action';
 import { CompanyService } from './services/company.service';
-import { environment } from '../environments/environment';
+import { environment } from '../environments/environment.generated';
 import { clone, get, includes, pick, remove, startsWith  } from './lodash-optimized';
 
 /**
