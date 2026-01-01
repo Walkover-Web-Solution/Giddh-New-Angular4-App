@@ -280,6 +280,7 @@ export class BulkStockEditComponent implements OnInit, OnDestroy, AfterViewInit 
                     this.dropdownValues[index].fixedAssetUnits = [{ code: row?.fixedAssetUnits?.[0]?.code ?? null, uniqueName: row?.fixedAssetUnits?.[0]?.uniqueName ?? null }];
                     this.addRow(row);
                 });
+                this.cdr.detectChanges();
             }
         });
 

@@ -1332,8 +1332,8 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public openChequeDetailForm(): void {
         const dialogRef = this.dialog.open(this.dialogBox);
-        dialogRef.afterOpened().subscribe(() => {
-                this.chequeNumberInput?.inputFocus();
+        dialogRef.afterOpened().pipe(takeUntil(this.destroyed$)).subscribe(() => {
+            this.chequeNumberInput?.inputFocus();
         });
     }
 

@@ -34,10 +34,8 @@ selector: 'trial-balance-report-grid',
 export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDestroy {
     /** Reference to the search input element */
     @ViewChild('searchInputEl', { static: true }) public searchInputEl: ElementRef;
-    /** Holds Create New Account Dialog Template Ref - COMMENTED OUT FOR ANGULAR 21 COMPATIBILITY */
-    // @ViewChild('createNew', { static: true }) public createNew: TemplateRef<any>;
-    /** Holds Create New Account Dialog Ref - COMMENTED OUT FOR ANGULAR 21 COMPATIBILITY */
-    // public createNewAccountDialogRef: MatDialogRef<any>;
+    @ViewChild('createNew', { static: true }) public createNew: TemplateRef<any>;
+    public createNewAccountDialogRef: MatDialogRef<any>;
     /** The search query for filtering data */
     @Input() public search: string = '';
     /** The input search value for custom search */
@@ -235,9 +233,7 @@ export class TrialBalanceReportGridComponent implements OnInit, OnChanges, OnDes
         if (account) {
             this.accountDetails = account;
             this.activeGroupUniqueName = account?.parentGroups[account?.parentGroups?.length - 1]?.uniqueName;
-            // TODO: Replace with component-based dialog to avoid JIT compilation in Angular 21
-            // this.createNewAccountDialogRef = this.dialog.open(this.createNew, ASIDE_PANE_CONFIG);
-            console.warn('Account dialog temporarily disabled for Angular 21 compatibility');
+            this.createNewAccountDialogRef = this.dialog.open(this.createNew, ASIDE_PANE_CONFIG);
         }
     }
 }
