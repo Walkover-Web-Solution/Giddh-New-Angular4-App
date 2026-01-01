@@ -258,6 +258,7 @@ export class ExpensesComponent implements OnInit, OnDestroy {
                 this.toasterService.errorToast(response?.message);
             }
             this.isPettyCashPendingReportLoading = false;
+            this.detectChanges();
         });
     }
 
@@ -274,6 +275,7 @@ export class ExpensesComponent implements OnInit, OnDestroy {
                 this.toasterService.errorToast(response?.message);
             }
             this.isPettyCashRejectedReportLoading = false;
+            this.detectChanges();
         });
     }
 

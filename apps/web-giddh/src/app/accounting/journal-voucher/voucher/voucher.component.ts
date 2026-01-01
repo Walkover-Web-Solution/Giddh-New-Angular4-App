@@ -14,7 +14,8 @@ import {
     ViewChild,
     ViewChildren,
     ChangeDetectorRef,
-    HostListener
+    HostListener,
+    signal
 } from '@angular/core';
 import { FormArray, FormGroup, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -77,7 +78,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     @ViewChild("chequeEntryModal") public dialogBox: TemplateRef<any>;
     @ViewChild('particular', { static: false }) public accountField: ElementRef;
     @ViewChild('dateField', { static: true }) public dateField: ElementRef;
-    @ViewChild('chequeNumberInput', { static: true }) public chequeNumberInput: ElementRef;
+    @ViewChild('chequeNumberInput', { static: false }) public chequeNumberInput: any;
     @ViewChild('chequeClearanceInputField', { static: true }) public chequeClearanceInputField: ElementRef;
     @ViewChild('chqFormSubmitBtn', { static: true }) public chqFormSubmitBtn: ElementRef;
     @ViewChild('submitButton', { static: false }) public submitButton: ElementRef;
@@ -229,7 +230,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     /** Stores the current searched account keyboard event */
     public searchedAccountQuery: Subject<any> = new Subject();
     /** True if api call in progress */
-    public isLoading: boolean = false;
+    public isLoading = signal<boolean>(false);
     /** Decimal places from company settings */
     public giddhBalanceDecimalPlaces: number = 2;
     /** From Group for jv */
@@ -448,7 +449,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
         });
 
         this.store.pipe(select(state => state?.ledger?.ledgerCreateInProcess), takeUntil(this.destroyed$)).subscribe((response: boolean) => {
-            this.isLoading = (response) ? true : false;
+            this.isLoading.set(!!response);
         });
 
         this.store.pipe(select(p => p?.ledger?.ledgerCreateSuccess), takeUntil(this.destroyed$)).subscribe((response: boolean) => {
@@ -1330,10 +1331,10 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      * @memberof AccountAsVoucherComponent
      */
     public openChequeDetailForm(): void {
-        this.dialog.open(this.dialogBox);
-        setTimeout(() => {
-            this.chequeNumberInput?.nativeElement?.focus();
-        }, 200);
+        const dialogRef = this.dialog.open(this.dialogBox);
+        dialogRef.afterOpened().subscribe(() => {
+                this.chequeNumberInput?.inputFocus();
+        });
     }
 
     /**

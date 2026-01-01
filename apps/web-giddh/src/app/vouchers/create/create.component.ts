@@ -10,6 +10,7 @@ import {
     OnInit,
     TemplateRef,
     ViewChild,
+    signal,
 } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { VoucherComponentStore } from "../utility/vouchers.store";
@@ -438,7 +439,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     /* This will hold the existing PO entries with quantity */
     public existingPoEntries: any[] = [];
     /** Show/Hide page loader */
-    public showLoader: boolean = false;
+    public showLoader = signal<boolean>(false);
     /** Holds true if table entry has at least single stock is selected  */
     public hasStock: boolean = false;
     /** This will hold if voucher date is manually changed */
@@ -1397,7 +1398,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         }, 100);
                     }
                     this.startLoader(false);
-                    this.changeDetection.detectChanges();
                 }
             });
 
@@ -5004,7 +5004,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
 
         if (!this.isFormValid(invoiceForm)) {
             this.startLoader(false);
-            this.changeDetection.detectChanges();
             return;
         }
 
@@ -5145,7 +5144,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     .pipe(takeUntil(this.destroyed$))
                     .subscribe((response) => {
                         this.startLoader(false);
-                        this.changeDetection.detectChanges();
                         if (response && response.status === "success") {
                             this.toasterService.showSnackBar("success", this.localeData?.po_updated);
                             if (callback) {
@@ -5163,7 +5161,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     .pipe(takeUntil(this.destroyed$))
                     .subscribe((response) => {
                         this.startLoader(false);
-                        this.changeDetection.detectChanges();
                         if (response && response.status === "success") {
                             this.aiOcrService.saveAndNextSuccess$.next({
                                 token: this.aiOcrToken,
@@ -5220,7 +5217,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     .pipe(takeUntil(this.destroyed$))
                     .subscribe((response) => {
                         this.startLoader(false);
-                        this.changeDetection.detectChanges();
                         if (response?.status === "success") {
                             this.toasterService.showSnackBar("success", this.localeData?.voucher_updated);
                             if (callback) {
@@ -5239,7 +5235,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     .pipe(takeUntil(this.destroyed$))
                     .subscribe((response) => {
                         this.startLoader(false);
-                        this.changeDetection.detectChanges();
                         if (response?.status === "success") {
                             this.aiOcrService.saveAndNextSuccess$.next({
                                 token: this.aiOcrToken,
@@ -5352,7 +5347,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     .pipe(takeUntil(this.destroyed$))
                     .subscribe((response) => {
                         this.startLoader(false);
-                        this.changeDetection.detectChanges();
                         if (response?.status === "success") {
                             this.toasterService.showSnackBar("success", this.localeData?.voucher_updated);
                             if (callback) {
@@ -5374,7 +5368,6 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     .pipe(takeUntil(this.destroyed$))
                     .subscribe((response) => {
                         this.startLoader(false);
-                        this.changeDetection.detectChanges();
                         if (response?.status === "success") {
                             this.aiOcrService.saveAndNextSuccess$.next({
                                 token: this.aiOcrToken,
@@ -6356,7 +6349,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public startLoader(isLoading: boolean): void {
-        this.showLoader = isLoading;
+        this.showLoader.set(isLoading);
     }
 
     /**

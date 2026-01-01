@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatPaginator } from "@angular/material/paginator";
@@ -385,7 +385,8 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         private invoiceActions: InvoiceActions,
         private salesAction: SalesActions,
         private settingsIntegrationActions: SettingsIntegrationActions,
-        private commonActions: CommonActions
+        private commonActions: CommonActions,
+        private changeDetectorRef: ChangeDetectorRef
     ) {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.store.dispatch(this.settingsIntegrationActions.GetGmailIntegrationStatus());
@@ -3403,6 +3404,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             } else {
                 this.createdTemplatesList = [];
             }
+            this.changeDetectorRef.detectChanges();
         });
     }
 
@@ -3427,6 +3429,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             } else {
                 this.toasterService.showSnackBar('error', res?.message);
             }
+            this.changeDetectorRef.detectChanges();
         });
     }
 

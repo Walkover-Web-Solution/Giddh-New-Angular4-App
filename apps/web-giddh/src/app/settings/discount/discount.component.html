@@ -6,18 +6,18 @@
     (translationComplete)="translationComplete($event)"
 >
     <div class="discount p-3 clear-both section-center position-relative overflow-visible">
-        <div *ngIf="isLoading" class="mt-5">
+        <div *ngIf="isLoading()" class="mt-5">
             <giddh-page-loader></giddh-page-loader>
         </div>
-        <div class="initial-screen position-absolute text-center" *ngIf="!discountList?.length && !isLoading">
+        <div class="initial-screen position-absolute text-center" *ngIf="!discountList?.length && !isLoading()">
             <div class="mb-5">
                 <img src="assets/images/create-discounts.png" alt="create discount banner image" width="500px" height="auto">
             </div>
             <button matButton="filled" *ngIf="voucherApiVersion === 2" (click)="openCreateEditDiscountAsidePane()">+ {{ localeData?.tab_heading }}</button>
         </div>
-        <button *ngIf="discountList?.length && !isLoading && voucherApiVersion === 2" matButton="filled" (click)="openCreateEditDiscountAsidePane()">+ {{ localeData?.tab_heading }}</button>
-
-        <div class="mt-4 overflow-visible table-header-sticky" *ngIf="discountList?.length && !isLoading">
+        <button *ngIf="discountList?.length && !isLoading() && voucherApiVersion === 2" matButton="filled" color="primary" (click)="openCreateEditDiscountAsidePane()">+ {{ localeData?.tab_heading }}</button>
+    
+        <div class="mt-4 overflow-visible table-header-sticky" *ngIf="discountList?.length && !isLoading()">
             <table mat-table [dataSource]="discountList" class="border table basic mb-1 on-mobile-view w-100">
                 <ng-container matColumnDef="number">
                     <th mat-header-cell *matHeaderCellDef class="serial-no-column">#</th>

@@ -141,8 +141,8 @@
                             </button>
                         </div>
                     </div>
-                    <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
-                    <div class="vouchers-content-wrapper" [hidden]="showLoader">
+                    <giddh-page-loader *ngIf="showLoader()"></giddh-page-loader>
+                    <div class="vouchers-content-wrapper" [hidden]="showLoader()">
                         <!-- Voucher Form Top Section -->
                         <div class="vouchers-primary-form" formGroupName="account">
                             <div class="row">
@@ -1377,7 +1377,7 @@
                                                 *ngFor="let option of fieldFilteredOptions"
                                                 [value]="option?.value"
                                                 class="po-options-line"
-                                                [disabled]="showLoader"
+                                                [disabled]="showLoader()"
                                             >
                                                 <span class="po-option-label"> {{ option?.label }}</span>
                                                 <span class="po-option-value" *ngIf="option?.additional?.pending">
