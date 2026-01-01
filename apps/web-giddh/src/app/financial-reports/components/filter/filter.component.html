@@ -58,7 +58,7 @@
                     <div
                         *ngIf="filterForm.get('selectedDateOption')?.value == '1'"
                     >
-                        <div 
+                        <div
                             class="custom-datepicker"
                             [matMenuTriggerFor]="universalDatepicker"
                             #universalDatepickerTrigger="matMenuTrigger"
@@ -126,7 +126,7 @@
                         </div>
                         <!-- Filter by Tag -->
                          <button
-                            mat-stroked-button
+                            matButton="elevated"
                             class="btn-stroked-icon"
                             (click)="emitExpand(!expandAll)"
                             type="button"
@@ -136,7 +136,7 @@
                             <i [ngClass]="expandAll ? 'icon-collapse' : 'icon-expandIcon'"></i>
                          </button>
                     </ng-container>
-                    <button mat-raised-button color="primary" type="submit">
+                    <button matButton="filled" type="submit">
                         {{ commonLocaleData?.app_search }}
                     </button>
                 </form>
@@ -147,7 +147,7 @@
                             <button
                                 *ngIf="!isReconciled"
                                 aria-label="show reconcile options"
-                                mat-stroked-button
+                                matButton="elevated"
                                 type="button"
                                 (click)="showTallyReportOptions()"
                                 [disabled]="voucherApiVersion === 1"
@@ -157,8 +157,7 @@
                             <button
                                 *ngIf="isReconciled"
                                 aria-label="show reconcile options"
-                                mat-raised-button
-                                color="primary"
+                                matButton="filled"
                                 type="button"
                                 (click)="showTallyReportOptions()"
                                 [disabled]="voucherApiVersion === 1"
@@ -170,8 +169,7 @@
                         <button
                             *ngIf="isReconcileModeDateRange && !showReconcileOptions"
                             aria-label="show reconcile options"
-                            mat-raised-button
-                            color="primary"
+                            matButton="filled"
                             type="button"
                             (click)="goToReconcileDateRange()"
                         >
@@ -179,7 +177,7 @@
                         </button>
                     </ng-container>
                     <button
-                        mat-stroked-button
+                        matButton="elevated"
                         class="btn-stroked-icon"
                         (click)="refreshData()"
                         [matTooltip]="localeData?.reload_data"
@@ -191,7 +189,7 @@
                         class="ml-1"
                         *ngIf="isProjectWiseAccounting"
                         [routerLink]="'/pages/project-wise-accounting/list'"
-                        mat-stroked-button
+                        matButton="elevated"
                     >
                         {{ commonLocaleData?.app_back }}
                     </button>

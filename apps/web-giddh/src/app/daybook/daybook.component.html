@@ -45,7 +45,7 @@
                 </div>
                 <div class="expand-collapse-btn">
                     <button
-                        mat-stroked-button
+                        matButton="elevated"
                         aria-label="expand icon"
                         [matTooltip]="commonLocaleData?.app_expand_all"
                         [matTooltipPosition]="'above'"
@@ -55,7 +55,7 @@
                         <span [ngClass]="isAllExpanded ? 'icon-collapse' : 'icon-expandIcon'"></span>
                     </button>
                 </div>
-                <button *ngIf="showAdvanceSearchIcon" mat-stroked-button (click)="initialRequest()" class="mx-0">
+                <button *ngIf="showAdvanceSearchIcon" matButton="elevated" (click)="initialRequest()" class="mx-0">
                     <span class="icon-cross icon-font-size-14"></span> {{ commonLocaleData?.app_clear_filter }}
                 </button>
                 <div class="d-flex align-items-center column-gap-1 ml-auto">
@@ -64,15 +64,13 @@
                         [matTooltip]="commonLocaleData?.app_advance_search"
                         [matTooltipPosition]="'above'"
                         (click)="onOpenAdvanceSearch()"
-                        mat-raised-button
-                        color="primary"
+                        matButton="filled"
                     >
                         <span class="pr-1">{{ commonLocaleData?.app_filter }}</span>
                         <i class="icon-advance-filter"></i>
                     </button>
                     <button
-                        mat-raised-button
-                        color="primary"
+                        matButton="filled"
                         type="button"
                         (click)="exportDaybook()"
                         *ngIf="daybookData?.entries?.length > 0"

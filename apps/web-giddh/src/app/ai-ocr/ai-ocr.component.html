@@ -19,7 +19,7 @@
                 <button
                     *ngIf="listCount > 0 || showClearFilter"
                     aria-label="show"
-                    mat-stroked-button
+                    matButton="elevated"
                     [disabled]="isCompany || isConsolidatedBranch"
                     class="icomoon-ico d-flex align-items-center cursor-pointer"
                     [matTooltip]="commonLocaleData?.app_upload"
@@ -122,7 +122,7 @@
                     </div>
                     <button
                         *ngIf="showClearFilter"
-                        mat-stroked-button
+                        matButton="elevated"
                         class="min-width-160 ml-2"
                         color="primary"
                         (click)="resetData()"
@@ -132,10 +132,10 @@
                 </div>
             </div>
             <div *ngIf="selectedToggle === ocrAction.Create">
-                <button mat-raised-button color="primary" (click)="onChangeVoucher('skip')" class="mr-3">
+                <button matButton="filled" (click)="onChangeVoucher('skip')" class="mr-3">
                     {{ commonLocaleData?.app_skip_and_next }}
                 </button>
-                <button mat-raised-button color="primary" (click)="onChangeVoucher('save')">
+                <button matButton="filled" (click)="onChangeVoucher('save')">
                     {{ commonLocaleData?.app_save_and_next }}
                 </button>
             </div>
@@ -178,8 +178,7 @@
                                 <img src="assets/images/ai-ocr.png" alt="upload image" width="350px" height="auto" />
                             </div>
                             <button
-                                mat-raised-button
-                                color="primary"
+                                matButton="filled"
                                 (click)="onUploadFile($event, fileInput, true)"
                                 *ngIf="!isCompany && !isConsolidatedBranch"
                             >
@@ -190,7 +189,7 @@
                                 *ngIf="!ocrMainList?.items?.length && (isCompany || isConsolidatedBranch)"
                             >
                                 <span class="font-size-24 mr-2">{{ localeData?.go_to_branch_information }} </span>
-                                <button mat-raised-button color="primary" (click)="gotToBranchTab()">
+                                <button matButton="filled" (click)="gotToBranchTab()">
                                     {{ localeData?.go_to_branch }}
                                 </button>
                             </div>

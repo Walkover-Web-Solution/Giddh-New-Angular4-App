@@ -547,8 +547,7 @@
             <div class="d-flex column-gap-1">
                 <button
                     aria-label="save"
-                    mat-raised-button
-                    color="primary"
+                    matButton="filled"
                     type="button"
                     (click)="isTrigger ? createUpdateTrigger() : onSubmit('save')"
                 >
@@ -557,14 +556,13 @@
                 <button
                     *ngIf="inputData?.activeTab"
                     aria-label="save and send email"
-                    mat-raised-button
-                    color="primary"
+                    matButton="filled"
                     type="button"
                     (click)="onSubmit('send')"
                 >
                     {{ localeData?.save_and_send }}
                 </button>
-                <button mat-stroked-button type="button" aria-label="cancel" (click)="handleDialogClose()">
+                <button matButton="elevated" type="button" aria-label="cancel" (click)="handleDialogClose()">
                     {{ commonLocaleData?.app_cancel }}
                 </button>
             </div>

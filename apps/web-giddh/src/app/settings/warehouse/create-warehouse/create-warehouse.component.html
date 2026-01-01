@@ -59,7 +59,7 @@
                         </div>
                     </div>
                     <div class="warehouse-form-field">
-                        <div class="form-group mb-0"> 
+                        <div class="form-group mb-0">
                             <reactive-dropdown-field
                                 #address
                                 [options]="addresses.addressToShow"
@@ -79,13 +79,12 @@
                 </div>
                 <div class="footer-btn row">
                     <div class="button-group">
-                        <button mat-stroked-button type="button" aria-label="clear" (click)="handleFormClear()" class="btn custom-btn">
+                        <button matButton="elevated" type="button" aria-label="clear" (click)="handleFormClear()" class="btn custom-btn">
                             {{ commonLocaleData?.app_clear }}
                         </button>
                         <button
                             aria-label="create warehouse"
-                            mat-raised-button
-                            color="primary"
+                            matButton="filled"
                             type="submit"
                             [disabled]="warehouseForm?.invalid"
                             class="btn"

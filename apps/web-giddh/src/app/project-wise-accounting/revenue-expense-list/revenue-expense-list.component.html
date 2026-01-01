@@ -32,8 +32,8 @@
 <ng-template #commonTemplateForIncomeAndExpense>
     <div class="section-center p-3">
        <header class="d-flex align-items-center justify-content-between">
-            <div class="custom-datepicker" 
-                 [matMenuTriggerFor]="universalDatepicker" 
+            <div class="custom-datepicker"
+                 [matMenuTriggerFor]="universalDatepicker"
                  #universalDatepickerTrigger="matMenuTrigger"
                  role="button"
                  aria-haspopup="true"
@@ -54,7 +54,7 @@
                     <span>&nbsp;&nbsp; | &nbsp;&nbsp;</span>
                     <span>{{ localeData?.total_fixed_asset }} : {{ tre.assetsTotal }}</span>&nbsp;&nbsp;
                 </span>
-                <button [routerLink]="'/pages/project-wise-accounting/list'" mat-stroked-button>
+                <button [routerLink]="'/pages/project-wise-accounting/list'" matButton="elevated">
                     {{ commonLocaleData?.app_back }}
                 </button>
             </div>
@@ -170,8 +170,7 @@
                         </td>
                         <td>
                             <button
-                                mat-raised-button
-                                color="primary"
+                                matButton="filled"
                                 (click)="createEntry(createAccountEntryForm.get('value')?.value)"
                             >
                             {{ commonLocaleData?.app_save }}</button>
@@ -287,7 +286,7 @@
                                     </td>
                                     <td *ngIf="!isCompany" class="position-relative ">
                                         <span class="editable-table-hide-element">
-                                            <button mat-raised-button color="primary" (click)="entry?.valid && entry.get('value')?.value !== '0' && updateSingleEntry(i)">{{ commonLocaleData?.app_update }}</button>
+                                            <button matButton="filled" (click)="entry?.valid && entry.get('value')?.value !== '0' && updateSingleEntry(i)">{{ commonLocaleData?.app_update }}</button>
                                             <i (click)="openDeleteEntryDialog(i)" color="primary" class="cursor-pointer icon-trash font-size-16 position-absolute"></i>
                                         </span>
                                     </td>

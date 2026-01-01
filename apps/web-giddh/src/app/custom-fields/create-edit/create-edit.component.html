@@ -9,7 +9,7 @@
     <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
     <div *ngIf="!showLoader">
         <div class="position-relative create-custom-field-page mt-4">
-            <button mat-stroked-button [disableRipple]="true" class="back-to-page" (click)="redirectToGetAllPage()">
+            <button matButton="elevated" [disableRipple]="true" class="back-to-page" (click)="redirectToGetAllPage()">
                 <i class="back-left icon-left"></i>
                 {{ commonLocaleData?.app_back }}
             </button>
@@ -141,8 +141,7 @@
                                         <div *ngIf="customFieldUniqueName">
                                             <div class="d-flex column-gap-15">
                                                 <button
-                                                    mat-raised-button
-                                                    color="primary"
+                                                    matButton="filled"
                                                     class="min-width-100"
                                                     [disabled]="
                                                         customFieldCreateEditForm.invalid ||
@@ -154,7 +153,7 @@
                                                     {{ commonLocaleData?.app_update }}
                                                 </button>
                                                 <button
-                                                    mat-stroked-button
+                                                    matButton="elevated"
                                                     class="min-width-100 mr-0"
                                                     (click)="redirectToGetAllPage()"
                                                 >
@@ -165,8 +164,7 @@
                                         <div *ngIf="!customFieldUniqueName">
                                             <div class="d-flex column-gap-15">
                                                 <button
-                                                    mat-raised-button
-                                                    color="primary"
+                                                    matButton="filled"
                                                     class="min-width-100"
                                                     [disabled]="
                                                         customFieldCreateEditForm.invalid ||
@@ -178,7 +176,7 @@
                                                     {{ commonLocaleData?.app_save }}
                                                 </button>
                                                 <button
-                                                    mat-stroked-button
+                                                    matButton="elevated"
                                                     class="min-width-100 mr-0"
                                                     (click)="resetForm(customFieldCreateEditForm)"
                                                 >

@@ -84,7 +84,7 @@
                                 </p>
                             </ng-container>
                             <ng-container *ngIf="bankaccount.reLoginRequired">
-                                <button mat-icon-button [matMenuTriggerFor]="menu" class="company-name bank-menu">
+                                <button matIconButton [matMenuTriggerFor]="menu" class="company-name bank-menu">
                                     <span class="icon-dots-three-vertical"></span>
                                 </button>
                                 <mat-menu #menu="matMenu">
@@ -101,8 +101,7 @@
                     <p>{{ localeData?.no_banks_found }}</p>
                     <button
                         type="button"
-                        mat-raised-button
-                        color="primary"
+                        matButton="filled"
                         class="w-50"
                         *ngIf="isGocardlessSupportedCountry && hasIntegrationScope"
                         (click)="openInstitutionsDialog()"

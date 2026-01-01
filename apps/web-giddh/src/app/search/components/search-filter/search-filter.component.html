@@ -2,8 +2,7 @@
     <div class="d-flex column-gap-15">
         <button
             type="button"
-            mat-raised-button
-            color="primary"
+            matButton="filled"
             [matMenuTriggerFor]="filterByAccountMenu"
             #filterMenu="matMenuTrigger"
         >
@@ -127,20 +126,19 @@
                 <div class="clear-both mt-5 d-flex column-gap-15">
                     <button
                         [disabled]="searchQueryForm.invalid"
-                        mat-raised-button
-                        color="primary"
+                        matButton="filled"
                         class="pull-right"
                         (click)="filterData(); filterMenu?.closeMenu()"
                     >
                         {{ commonLocaleData?.app_search }}
                     </button>
-                    <button mat-stroked-button (click)="addSearchRow()">
+                    <button matButton="elevated" (click)="addSearchRow()">
                         {{ localeData?.add_new_query }}
                     </button>
                     <button
-                        mat-stroked-button
+                        matButton="elevated"
                         *ngIf="searchDataSet?.controls?.length > 1"
-                        mat-stroked-button
+                        matButton="elevated"
                         class="mr-2"
                         (click)="removeSearchRow()"
                     >
@@ -150,15 +148,14 @@
                 <!-- end of second row -->
             </form>
         </mat-menu>
-        <button *ngIf="isFiltered | async" (click)="resetQuery()" mat-stroked-button>
+        <button *ngIf="isFiltered | async" (click)="resetQuery()" matButton="elevated">
             <i class="icon-refresh"></i>
             {{ commonLocaleData?.app_reset }}
         </button>
         <button
             class="ml-auto"
             type="button"
-            mat-raised-button
-            color="primary"
+            matButton="filled"
             *ngIf="showDownloadCsv"
             (click)="createCSV()"
         >

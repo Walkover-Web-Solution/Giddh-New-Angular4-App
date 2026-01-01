@@ -11,7 +11,7 @@
             <div class="btn-group">
                 <button
                     type="button"
-                    mat-stroked-button
+                    matButton="elevated"
                     [matMenuTriggerFor]="downloadMenu"
                     class="btn ml-0"
                 >
@@ -28,7 +28,7 @@
                         Download all account wise
                     </button>
                 </mat-menu>
-                
+
                 <mat-menu #groupWiseMenu="matMenu">
                     <button mat-menu-item (click)="downloadAllInventoryReports('allgroup', 'xlsx')">
                         XLS
@@ -37,7 +37,7 @@
                         CSV
                     </button>
                 </mat-menu>
-                
+
                 <mat-menu #stockWiseMenu="matMenu">
                     <button mat-menu-item (click)="downloadAllInventoryReports('allstock', 'xlsx')">
                         XLS
@@ -46,7 +46,7 @@
                         CSV
                     </button>
                 </mat-menu>
-                
+
                 <mat-menu #accountWiseMenu="matMenu">
                     <button mat-menu-item (click)="downloadAllInventoryReports('account', 'xlsx')">
                         XLS

@@ -21,12 +21,12 @@
                                 >
                             </p>
                             <div class="form-group margin-datepicker">
-                                <div 
-                                    class="custom-datepicker"  
-                                    [matMenuTriggerFor]="universalDatepicker" 
-                                    #universalDatepickerTrigger="matMenuTrigger" 
-                                    role="button" 
-                                    aria-haspopup="true" 
+                                <div
+                                    class="custom-datepicker"
+                                    [matMenuTriggerFor]="universalDatepicker"
+                                    #universalDatepickerTrigger="matMenuTrigger"
+                                    role="button"
+                                    aria-haspopup="true"
                                     aria-controls="universalDatepicker"
                                 >
                                     <input
@@ -47,7 +47,7 @@
                             </div>
                         </div>
                         <div class="clear-filter" *ngIf="isFilterCorrect" (click)="resetFilter()">
-                            <button mat-stroked-button><span class="icon-cross"></span> Clear Filter</button>
+                            <button matButton="elevated"><span class="icon-cross"></span> Clear Filter</button>
                         </div>
                         <div >
                             <div class="pull-right">
@@ -55,7 +55,7 @@
                                     <button
                                         type="button"
                                         class="btn mb-1 cursor-pointer mr-1"
-                                        mat-stroked-button
+                                        matButton="elevated"
                                         [matMenuTriggerFor]="downloadMenu"
                                     >
                                         <i class="icon-download"></i> Download
@@ -70,7 +70,7 @@
                                     </mat-menu>
                                 </div>
 
-                                <!-- <button mat-raised-button color="primary" class="mr-0"
+                                <!-- <button matButton="filled" class="mr-0"
                                     matTooltip="Alt+i"
                                     (click)="openTransferAsidePaneDialog()"
                                 >
@@ -308,7 +308,7 @@
 <ng-template #advanceSearchTemplate>
     <div class="theme-bg clear-both">
         <p class="modal-title bg" id="modal-title">Advance Search</p>
-        <button aria-hidden="true" mat-stroked-button class="close" mat-dialog-close (click)="advanceSearchAction('cancel')">
+        <button aria-hidden="true" matButton="elevated" class="close" mat-dialog-close (click)="advanceSearchAction('cancel')">
             ×
         </button>
     </div>
@@ -344,14 +344,14 @@
     </div>
     <div mat-dialog-actions class="text-right">
         <button
-            mat-raised-button color="primary"
+            matButton="filled"
             type="button"
             [disabled]="!isFilterCorrect && !filter.quantity"
             (click)="advanceSearchAction('search')"
         >
             Search
         </button>
-        <button mat-stroked-button type="button" (click)="advanceSearchAction('clear')">
+        <button matButton="elevated" type="button" (click)="advanceSearchAction('clear')">
             Clear
         </button>
     </div>

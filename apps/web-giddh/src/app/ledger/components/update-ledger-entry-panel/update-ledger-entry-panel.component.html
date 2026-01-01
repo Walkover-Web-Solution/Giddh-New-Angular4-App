@@ -85,7 +85,7 @@
             <div class="col d-flex justify-content-end align-items-center pr-0">
                 <button
                     mat-dialog-close
-                    mat-icon-button
+                    matIconButton
                     aria-label="close"
                     [attr.aria-label]="commonLocaleData?.app_close"
                 >
@@ -1614,8 +1614,8 @@
                                     *ngIf="
                                         (vm.showNewEntryPanel || shouldShowAdvanceReceiptMandatoryFields) &&
                                         (vm.companyTaxesList$ | async)?.length &&
-                                        (!vm.isPaymentReceipt || 
-                                        (vm.isPaymentReceipt && 
+                                        (!vm.isPaymentReceipt ||
+                                        (vm.isPaymentReceipt &&
                                         vm.selectedLedger.voucher.shortCode === 'advance-receipt'))
                                     "
                                 >
@@ -2452,8 +2452,7 @@
                                     >
                                         <div class="d-flex column-gap-15 w-100">
                                             <button
-                                                mat-raised-button
-                                                color="primary"
+                                                matButton="filled"
                                                 id="update-ledger-update-button"
                                                 [disabled]="isFileUploading"
                                                 [ladda]="isTxnUpdateInProcess$ | async"
@@ -2471,7 +2470,7 @@
                                                     )
                                                 "
                                                 aria-label="Duplicate entry button"
-                                                mat-stroked-button
+                                                matButton="elevated"
                                                 (click)="duplicateEntry()"
                                             >
                                                 {{ localeData?.duplicate }}
@@ -2479,7 +2478,7 @@
 
                                             <button
                                                 class="ml-auto"
-                                                mat-stroked-button
+                                                matButton="elevated"
                                                 id="update-ledger-delete-button"
                                                 (click)="showDeleteEntryModal()"
                                             >

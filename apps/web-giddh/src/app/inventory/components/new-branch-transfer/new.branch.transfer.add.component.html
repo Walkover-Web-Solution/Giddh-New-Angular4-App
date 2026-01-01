@@ -605,15 +605,14 @@
                                                     />
                                                     <div class="btn-group mt-2 pt-1 d-flex">
                                                         <button
-                                                            mat-raised-button
-                                                            color="primary"
+                                                            matButton="filled"
                                                             type="button"
                                                             (click)="saveSkuNumberPopup(product)"
                                                         >
                                                             Save
                                                         </button>
                                                         <button
-                                                            mat-stroked-button
+                                                            matButton="elevated"
                                                             type="button"
                                                             (click)="hideSkuNumberPopup()"
                                                         >
@@ -706,15 +705,14 @@
                                                 />
                                                 <div class="btn-group mt-2 pt-1 d-flex">
                                                     <button
-                                                        mat-raised-button
-                                                        color="primary"
+                                                        matButton="filled"
                                                         type="button"
                                                         (click)="saveHsnNumberPopup(product)"
                                                     >
                                                         Save
                                                     </button>
                                                     <button
-                                                        mat-stroked-button
+                                                        matButton="elevated"
                                                         class="mr-0"
                                                         type="button"
                                                         (click)="hideHsnNumberPopup()"
@@ -1211,7 +1209,7 @@
                         <div class="pull-right position-relative d-flex column-gap-15">
                             <button
                                 type="button"
-                                mat-stroked-button
+                                matButton="elevated"
                                 class="d-inline-block vertical-align-middle"
                                 [disabled]="isLoading"
                                 (click)="closeBranchTransferPopup()"
@@ -1221,8 +1219,7 @@
                             <button
                                 *ngIf="isBranch || isCompanyWithSingleBranch"
                                 type="button"
-                                mat-raised-button
-                                color="primary"
+                                matButton="filled"
                                 class="d-inline-block vertical-align-middle {{ newBranchTransferForm.invalid }}-{{
                                     isValidSourceTaxNumber
                                 }}-{{ isValidDestinationTaxNumber }}"
@@ -1310,8 +1307,7 @@
                 <div class="form-group mt-3">
                     <div class="clear-both" *ngIf="!transportEditMode">
                         <button
-                            mat-raised-button
-                            color="primary"
+                            matButton="filled"
                             class="mr-2"
                             [disabled]="generateTransporterForm.invalid"
                             [ladda]="isGenarateTransporterInProcess$ | async"
@@ -1320,12 +1316,11 @@
                         >
                             Save
                         </button>
-                        <button mat-stroked-button (click)="clearTransportForm()" type="submit">Clear</button>
+                        <button matButton="elevated" (click)="clearTransportForm()" type="submit">Clear</button>
                     </div>
                     <div class="clear-both d-flex column-gap-1" *ngIf="transportEditMode">
                         <button
-                            mat-raised-button
-                            color="primary"
+                            matButton="filled"
                             [disabled]="generateTransporterForm.invalid"
                             [ladda]="updateTransporterInProcess$ | async"
                             (click)="updateTransporter(generateTransporterForm)"
@@ -1333,8 +1328,8 @@
                         >
                             Update
                         </button>
-                        <button mat-stroked-button (click)="clearTransportForm()">Clear</button>
-                        <button mat-stroked-button (click)="openTransporterPopupDialog()">Cancel</button>
+                        <button matButton="elevated" (click)="clearTransportForm()">Clear</button>
+                        <button matButton="elevated" (click)="openTransporterPopupDialog()">Cancel</button>
                     </div>
                 </div>
             </div>
@@ -1396,8 +1391,8 @@
                     <td>{{ item?.transporterName }}</td>
                     <td>{{ item?.transporterId }}</td>
                     <td class="nowrap">
-                        <button mat-stroked-button (click)="editTransporter(item)"><i class="icon-edit"></i></button>
-                        <button mat-stroked-button (click)="deleteTransporter(item)"><i class="icon-trash"></i></button>
+                        <button matButton="elevated" (click)="editTransporter(item)"><i class="icon-edit"></i></button>
+                        <button matButton="elevated" (click)="deleteTransporter(item)"><i class="icon-trash"></i></button>
                     </td>
                 </tr>
             </table>

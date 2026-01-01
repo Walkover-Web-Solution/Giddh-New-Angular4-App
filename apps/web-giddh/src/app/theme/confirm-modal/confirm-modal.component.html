@@ -6,8 +6,8 @@
         {{ body }}
         <p class="font-size-15 mt-1">{{ permanentlyDeleteMessage }}</p>
         <div class="d-flex column-gap-1 justify-content-end mt-3">
-            <button aria-label="yes" mat-raised-button color="primary" (click)="onSuccess($event)">{{ ok }}</button>
-            <button aria-label="no" mat-stroked-button (click)="onCancel($event)">{{ cancel }}</button>
+            <button aria-label="yes" matButton="filled" (click)="onSuccess($event)">{{ ok }}</button>
+            <button aria-label="no" matButton="elevated" (click)="onCancel($event)">{{ cancel }}</button>
         </div>
     </mat-dialog-content>
 </div>

@@ -26,14 +26,13 @@
                     <div class="d-flex column-gap-1">
                         <button
                             aria-label="save"
-                            mat-raised-button
-                            color="primary"
+                            matButton="filled"
                             type="button"
                             (click)="savePaymentProvider()"
                         >
                             {{ commonLocaleData?.app_save }}
                         </button>
-                         <button mat-stroked-button mat-dialog-close type="button">
+                         <button matButton="elevated" mat-dialog-close type="button">
                             {{ commonLocaleData?.app_cancel }}
                         </button>
                     </div>
@@ -42,7 +41,7 @@
                     <div class="pull-right">
                         <button
                             aria-label="clear"
-                            mat-stroked-button
+                            matButton="elevated"
                             type="button"
                             class="btn-sm mr-0"
                             (click)="resetForm()"

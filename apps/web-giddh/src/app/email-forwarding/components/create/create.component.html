@@ -17,7 +17,7 @@
                 <div class="p-3 d-flex justify-content-start align-items-center flex-column h-100">
                     <button
                         *ngIf="!firstTimeCreate && !isLoading"
-                        mat-stroked-button
+                        matButton="elevated"
                         (click)="navigateBack()"
                         class="position-absolute top-0 left-16"
                     >
@@ -54,7 +54,7 @@
                                                     </div>
                                                     <div class="d-flex align-items-center justify-content-center">
                                                         <button
-                                                            mat-stroked-button
+                                                            matButton="elevated"
                                                             (click)="copyEmail()"
                                                             ngxClipboard
                                                             [cbContent]="getCompleteEmail()"
@@ -74,8 +74,7 @@
                                                         </span>
                                                     </div>
                                                     <button
-                                                        mat-raised-button
-                                                        color="primary"
+                                                        matButton="filled"
                                                         class="mt-5"
                                                         (click)="nextStep(stepper, emailForwardingForm, 1)"
                                                     >
@@ -96,14 +95,13 @@
                                                     ></input-field>
                                                     <div class="d-flex justify-content-center">
                                                         <button
-                                                            mat-raised-button
-                                                            color="primary"
+                                                            matButton="filled"
                                                             (click)="toggleEmailEdit(); replaceUrlEmail()"
                                                             class="mr-2"
                                                         >
                                                             {{ commonLocaleData?.app_save }}
                                                         </button>
-                                                        <button mat-stroked-button (click)="toggleEmailEdit(true)">
+                                                        <button matButton="elevated" (click)="toggleEmailEdit(true)">
                                                             {{ commonLocaleData?.app_cancel }}
                                                         </button>
                                                     </div>
@@ -152,14 +150,13 @@
                                                         class="d-flex justify-content-center align-items-center column-gap-1 p-4 mt-3"
                                                     >
                                                         <button
-                                                            mat-raised-button
-                                                            color="primary"
+                                                            matButton="filled"
                                                             (click)="handleVerifyAndNext()"
                                                         >
                                                             {{ localeData?.verify_and_next }}
                                                         </button>
                                                         <button
-                                                            mat-stroked-button
+                                                            matButton="elevated"
                                                             color="warn"
                                                             (click)="handleCancel()"
                                                         >
@@ -213,8 +210,7 @@
                                                         formControlName="password"
                                                     ></input-field>
                                                     <button
-                                                        mat-raised-button
-                                                        color="primary"
+                                                        matButton="filled"
                                                         (click)="submitForm()"
                                                         [disabled]="isLoading"
                                                         class="mt-1"

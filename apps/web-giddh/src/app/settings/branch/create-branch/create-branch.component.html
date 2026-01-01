@@ -172,10 +172,10 @@
                 <div class="pl-3 pr-3">
                     <div class="row">
                         <div class="button-group">
-                            <button mat-stroked-button type="reset" (click)="handleFormClear()" class="btn custom-btn">
+                            <button matButton="elevated" type="reset" (click)="handleFormClear()" class="btn custom-btn">
                                 {{ commonLocaleData?.app_clear }}
                             </button>
-                            <button mat-raised-button color="primary" type="submit" [disabled]="branchForm?.invalid">
+                            <button matButton="filled" type="submit" [disabled]="branchForm?.invalid">
                                 {{ localeData?.create_branch }}
                             </button>
                         </div>

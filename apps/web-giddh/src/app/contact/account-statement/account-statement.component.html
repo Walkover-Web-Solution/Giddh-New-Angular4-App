@@ -187,7 +187,7 @@
                         </div>
                     </div>
                     <button
-                        mat-stroked-button
+                        matButton="elevated"
                         (click)="setInitialAdvanceFilter()"
                         class="mx-auto"
                         *ngIf="(advanceFiltersApplied || clearFilter) && !isLoading"
@@ -199,7 +199,7 @@
                     </button>
                     <div class="d-flex justify-content-between">
                         <button
-                            mat-stroked-button
+                            matButton="elevated"
                             class="mr-2"
                             [matTooltip]="commonLocaleData?.app_export"
                             [matTooltipPosition]="'above'"
@@ -209,7 +209,7 @@
                         </button>
                         <button
                             aria-label="filter"
-                            mat-stroked-button
+                            matButton="elevated"
                             (click)="onOpenAdvanceSearch()"
                             class="d-flex advance-search-filter icon-button-width pointer mx-0 ml-auto"
                             [matTooltip]="commonLocaleData?.app_advance_search"

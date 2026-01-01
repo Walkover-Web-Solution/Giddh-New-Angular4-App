@@ -20,8 +20,7 @@
                         {{ groupSharedWith }}
                     </p>
                     <button 
-                        mat-raised-button
-                        color="primary"
+                        matButton="filled"
                         (click)="exportGroupLedger()"
                         aria-label="export" 
                     >
@@ -151,13 +150,12 @@
 <!--add new buttons-->
 <div class="inline-table new-form ng-scope" *ngIf="showNewForm$ | async">
     <div class="vertical-center groups-buttons">
-        <button mat-raised-button color="primary" aria-label="create group" class="w125 mb-4" (click)="showAddGroupForm()">
+        <button matButton="filled" aria-label="create group" class="w125 mb-4" (click)="showAddGroupForm()">
             {{ commonLocaleData?.app_create_group }}
         </button>
         <span class="clear-both"></span>
         <button
-            mat-raised-button
-            color="primary"
+            matButton="filled"
             class="w125"
             aria-label="create account"
             *ngIf="!isRootLevelGroup"
@@ -226,7 +224,7 @@
         )
     "
 >
-    <button mat-raised-button color="primary" (click)="exportMasterDialog()">
+    <button matButton="filled" (click)="exportMasterDialog()">
         {{ commonLocaleData?.app_export }}
     </button>
 </div>

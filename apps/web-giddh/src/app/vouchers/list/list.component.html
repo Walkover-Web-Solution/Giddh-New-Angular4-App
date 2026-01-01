@@ -23,8 +23,7 @@
                     <div class="invoice-header d-flex align-items-center justify-content-between mb-3">
                         <div class="d-flex align-items-center column-gap-1">
                             <button
-                                mat-raised-button
-                                color="primary"
+                                matButton="filled"
                                 [routerLink]="['/pages/vouchers/estimates/create']"
                                 *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
                             >
@@ -51,7 +50,7 @@
                             </div>
                         </div>
                         <button
-                            mat-stroked-button
+                            matButton="elevated"
                             (click)="setInitialAdvanceFilter()"
                             class="mx-auto"
                             *ngIf="advanceFiltersApplied && !(getVouchersInProgress$ | async)"
@@ -63,8 +62,7 @@
                         </button>
                         <div class="d-flex align-items-center column-gap-1">
                             <button
-                                mat-raised-button
-                                color="primary"
+                                matButton="filled"
                                 [matMenuTriggerFor]="moreEstimate"
                                 *ngIf="selectedVouchers?.length === 1 && !isCompany && !isConsolidatedBranch"
                             >
@@ -76,13 +74,13 @@
                                     {{ commonLocaleData?.app_delete }}
                                 </button>
                             </mat-menu>
-                            <button mat-raised-button color="primary" (click)="advanceSearchDialog()">
+                            <button matButton="filled" (click)="advanceSearchDialog()">
                                 <span class="d-inline-flex align-items-center column-gap-05">
                                     {{ commonLocaleData?.app_filter }}
                                     <i class="icon-advance-filter"></i>
                                 </span>
                             </button>
-                            <button mat-raised-button color="primary" (click)="showBulkExportDialog()">
+                            <button matButton="filled" (click)="showBulkExportDialog()">
                                 {{ commonLocaleData?.app_export }}
                             </button>
                             <select-table-column
@@ -488,8 +486,7 @@
                     <div class="invoice-header d-flex align-items-center justify-content-between mb-3">
                         <div class="d-flex align-items-center column-gap-1">
                             <button
-                                mat-raised-button
-                                color="primary"
+                                matButton="filled"
                                 [routerLink]="['/pages/vouchers/proformas/create']"
                                 *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
                             >
@@ -516,7 +513,7 @@
                             </div>
                         </div>
                         <button
-                            mat-stroked-button
+                            matButton="elevated"
                             (click)="setInitialAdvanceFilter()"
                             class="mx-auto"
                             *ngIf="advanceFiltersApplied && !(getVouchersInProgress$ | async)"
@@ -528,8 +525,7 @@
                         </button>
                         <div class="d-flex align-items-center column-gap-1">
                             <button
-                                mat-raised-button
-                                color="primary"
+                                matButton="filled"
                                 [matMenuTriggerFor]="moreProforma"
                                 *ngIf="selectedVouchers?.length === 1 && !isCompany && !isConsolidatedBranch"
                             >
@@ -541,13 +537,13 @@
                                     {{ commonLocaleData?.app_delete }}
                                 </button>
                             </mat-menu>
-                            <button mat-raised-button color="primary" (click)="advanceSearchDialog()">
+                            <button matButton="filled" (click)="advanceSearchDialog()">
                                 <span class="d-inline-flex align-items-center column-gap-05">
                                     {{ commonLocaleData?.app_filter }}
                                     <i class="icon-advance-filter"></i>
                                 </span>
                             </button>
-                            <button mat-raised-button color="primary" (click)="showBulkExportDialog()">
+                            <button matButton="filled" (click)="showBulkExportDialog()">
                                 {{ commonLocaleData?.app_export }}
                             </button>
                             <select-table-column
@@ -953,8 +949,7 @@
                     >
                         <div class="d-flex align-items-center column-gap-1">
                             <button
-                                mat-raised-button
-                                color="primary"
+                                matButton="filled"
                                 [matMenuTriggerFor]="createNewVoucher"
                                 *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
                                 class="width-200"
@@ -991,7 +986,7 @@
                             </div>
                         </div>
                         <button
-                            mat-stroked-button
+                            matButton="elevated"
                             (click)="setInitialAdvanceFilter()"
                             class="mx-auto"
                             *ngIf="advanceFiltersApplied && !(getVouchersInProgress$ | async)"
@@ -1004,8 +999,7 @@
                         <div class="d-flex align-items-center column-gap-1">
                             <!-- Cancel e-invoice button -->
                             <button
-                                mat-raised-button
-                                color="primary"
+                                matButton="filled"
                                 *ngIf="
                                     isEInvoiceEnabled && selectedVouchers?.length === 1 && selectedVouchers[0].irnNumber
                                 "
@@ -1014,8 +1008,7 @@
                                 {{ localeData?.cancel_e_invoice }}
                             </button>
                             <button
-                                mat-raised-button
-                                color="primary"
+                                matButton="filled"
                                 [matMenuTriggerFor]="moreInvoice"
                                 *ngIf="
                                     selectedVouchers?.length &&
@@ -1045,13 +1038,13 @@
                                     {{ commonLocaleData?.app_delete }}
                                 </button>
                             </mat-menu>
-                            <button mat-raised-button color="primary" (click)="advanceSearchDialog()">
+                            <button matButton="filled" (click)="advanceSearchDialog()">
                                 <span class="d-inline-flex align-items-center column-gap-05">
                                     {{ commonLocaleData?.app_filter }}
                                     <i class="icon-advance-filter"></i>
                                 </span>
                             </button>
-                            <button mat-raised-button color="primary" (click)="showBulkExportDialog()">
+                            <button matButton="filled" (click)="showBulkExportDialog()">
                                 {{ commonLocaleData?.app_export }}
                             </button>
                             <select-table-column
@@ -1530,8 +1523,7 @@
                     <div class="invoice-header d-flex align-items-center justify-content-between mb-3">
                         <div class="d-flex align-items-center column-gap-1">
                             <button
-                                mat-raised-button
-                                color="primary"
+                                matButton="filled"
                                 [routerLink]="['/pages/vouchers/debit-note/create']"
                                 *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
                             >
@@ -1558,7 +1550,7 @@
                             </div>
                         </div>
                         <button
-                            mat-stroked-button
+                            matButton="elevated"
                             (click)="setInitialAdvanceFilter()"
                             class="mx-auto"
                             *ngIf="advanceFiltersApplied && !(getVouchersInProgress$ | async)"
@@ -1571,8 +1563,7 @@
                         <div class="d-flex align-items-center column-gap-1">
                             <!-- Cancel e-invoice button -->
                             <button
-                                mat-raised-button
-                                color="primary"
+                                matButton="filled"
                                 *ngIf="
                                     isEInvoiceEnabled && selectedVouchers?.length === 1 && selectedVouchers[0].irnNumber
                                 "
@@ -1581,8 +1572,7 @@
                                 {{ localeData?.cancel_e_invoice }}
                             </button>
                             <button
-                                mat-raised-button
-                                color="primary"
+                                matButton="filled"
                                 [matMenuTriggerFor]="morepurchase"
                                 *ngIf="
                                     selectedVouchers?.length &&
@@ -1605,13 +1595,13 @@
                                     {{ commonLocaleData?.app_delete }}
                                 </button>
                             </mat-menu>
-                            <button mat-raised-button color="primary" (click)="advanceSearchDialog()">
+                            <button matButton="filled" (click)="advanceSearchDialog()">
                                 <span class="d-inline-flex align-items-center column-gap-05">
                                     {{ commonLocaleData?.app_filter }}
                                     <i class="icon-advance-filter"></i>
                                 </span>
                             </button>
-                            <button mat-raised-button color="primary" (click)="showBulkExportDialog()">
+                            <button matButton="filled" (click)="showBulkExportDialog()">
                                 {{ commonLocaleData?.app_export }}
                             </button>
                             <select-table-column
@@ -1775,7 +1765,7 @@
                                                             }}
                                                         </p>
                                                         <button
-                                                            mat-mini-fab
+                                                           matMiniFab
                                                             color="primary"
                                                             (click)="editAccount(element)"
                                                             class="item-wise-common-btn d-flex align-items-center justify-content-center ml-2"
@@ -2012,8 +2002,7 @@
                     <div class="invoice-header d-flex align-items-center justify-content-between mb-3">
                         <div class="d-flex align-items-center column-gap-1">
                             <button
-                                mat-raised-button
-                                color="primary"
+                                matButton="filled"
                                 class="w-100 new-cr-width"
                                 [routerLink]="['/pages/vouchers/credit-note/create']"
                                 *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
@@ -2041,7 +2030,7 @@
                             </div>
                         </div>
                         <button
-                            mat-stroked-button
+                            matButton="elevated"
                             (click)="setInitialAdvanceFilter()"
                             class="mx-auto"
                             *ngIf="advanceFiltersApplied && !(getVouchersInProgress$ | async)"
@@ -2054,8 +2043,7 @@
                         <div class="d-flex align-items-center column-gap-1">
                             <!-- Cancel e-invoice button -->
                             <button
-                                mat-raised-button
-                                color="primary"
+                                matButton="filled"
                                 *ngIf="
                                     isEInvoiceEnabled && selectedVouchers?.length === 1 && selectedVouchers[0].irnNumber
                                 "
@@ -2064,8 +2052,7 @@
                                 {{ localeData?.cancel_e_invoice }}
                             </button>
                             <button
-                                mat-raised-button
-                                color="primary"
+                                matButton="filled"
                                 [matMenuTriggerFor]="morepurchase"
                                 *ngIf="
                                     selectedVouchers?.length &&
@@ -2088,13 +2075,13 @@
                                     {{ commonLocaleData?.app_delete }}
                                 </button>
                             </mat-menu>
-                            <button mat-raised-button color="primary" (click)="advanceSearchDialog()">
+                            <button matButton="filled" (click)="advanceSearchDialog()">
                                 <span class="d-inline-flex align-items-center column-gap-05">
                                     {{ commonLocaleData?.app_filter }}
                                     <i class="icon-advance-filter"></i>
                                 </span>
                             </button>
-                            <button mat-raised-button color="primary" (click)="showBulkExportDialog()">
+                            <button matButton="filled" (click)="showBulkExportDialog()">
                                 {{ commonLocaleData?.app_export }}
                             </button>
                             <select-table-column
@@ -2524,24 +2511,21 @@
                                     </div>
                                 </div>
                                 <button
-                                    mat-raised-button
-                                    color="primary"
+                                    matButton="filled"
                                     *ngIf="!isCompany && selectedPendingVouchers?.length > 0"
                                     (click)="generateBulkInvoice(false)"
                                 >
                                     {{ localeData?.generate_multiple }}
                                 </button>
                                 <button
-                                    mat-raised-button
-                                    color="primary"
+                                    matButton="filled"
                                     *ngIf="!isCompany && selectedPendingVouchers?.length > 0"
                                     (click)="generateBulkInvoice(true)"
                                 >
                                     {{ localeData?.generate_compound }}
                                 </button>
                                 <button
-                                    mat-raised-button
-                                    color="primary"
+                                    matButton="filled"
                                     *ngIf="!isCompany && selectedPendingVouchers?.length && hasSameVoucherAccount"
                                     (click)="invoiceGenerate()"
                                 >
@@ -2549,7 +2533,7 @@
                                 </button>
                             </div>
                             <button
-                                mat-stroked-button
+                                matButton="elevated"
                                 [ngClass]="{ 'width-auto': selectedPendingVouchers?.length === 0 }"
                                 class="mx-auto"
                                 *ngIf="customDateSelected && !(isGetAllRequestInProcess$ | async)"
@@ -2741,8 +2725,7 @@
                     <div class="invoice-header d-flex align-items-center justify-content-between mb-3">
                         <div class="d-flex align-items-center column-gap-1">
                             <button
-                                mat-raised-button
-                                color="primary"
+                                matButton="filled"
                                 [routerLink]="['/pages/vouchers/purchase-order/create']"
                                 *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
                             >
@@ -2769,7 +2752,7 @@
                             </div>
                         </div>
                         <button
-                            mat-stroked-button
+                            matButton="elevated"
                             (click)="setInitialAdvanceFilter()"
                             class="mx-auto"
                             *ngIf="advanceFiltersApplied && !(getVouchersInProgress$ | async)"
@@ -2781,8 +2764,7 @@
                         </button>
                         <div class="d-flex align-items-center column-gap-1">
                             <button
-                                mat-raised-button
-                                color="primary"
+                                matButton="filled"
                                 [matMenuTriggerFor]="morepurchase"
                                 *ngIf="selectedVouchers?.length && !isCompany && !isConsolidatedBranch"
                             >
@@ -2803,13 +2785,13 @@
                                     {{ commonLocaleData?.app_delete }}
                                 </button>
                             </mat-menu>
-                            <button mat-raised-button color="primary" (click)="advanceSearchDialog()">
+                            <button matButton="filled" (click)="advanceSearchDialog()">
                                 <span class="d-inline-flex align-items-center column-gap-05">
                                     {{ commonLocaleData?.app_filter }}
                                     <i class="icon-advance-filter"></i>
                                 </span>
                             </button>
-                            <button mat-raised-button color="primary" (click)="showBulkExportDialog()">
+                            <button matButton="filled" (click)="showBulkExportDialog()">
                                 {{ commonLocaleData?.app_export }}
                             </button>
                             <select-table-column
@@ -3105,7 +3087,7 @@
                                     <div class="d-flex action-btn column-gap-05">
                                         <button
                                             *ngIf="element?.status === 'open' && !isCompany && !isConsolidatedBranch"
-                                            mat-stroked-button
+                                            matButton="elevated"
                                             class="icon-font-11"
                                             [matTooltip]="localeData?.convert_to_bill"
                                             [matTooltipPosition]="'above'"
@@ -3114,7 +3096,7 @@
                                             <i class="icon-tick"></i>
                                         </button>
                                         <button
-                                            mat-stroked-button
+                                            matButton="elevated"
                                             class="icon-font-11"
                                             [matTooltip]="commonLocaleData?.app_send_email"
                                             [matTooltipPosition]="'above'"
@@ -3124,7 +3106,7 @@
                                         </button>
                                         <button
                                             *ngIf="!isCompany && !isConsolidatedBranch"
-                                            mat-stroked-button
+                                            matButton="elevated"
                                             class="mat-icon-sm-btn"
                                             [matTooltip]="commonLocaleData?.app_copy"
                                             [matTooltipPosition]="'above'"
@@ -3134,7 +3116,7 @@
                                         </button>
                                         <button
                                             *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
-                                            mat-stroked-button
+                                            matButton="elevated"
                                             class="mat-icon-sm-btn"
                                             [matTooltip]="commonLocaleData?.app_delete"
                                             [matTooltipPosition]="'above'"
@@ -3177,8 +3159,7 @@
                     <div class="invoice-header d-flex align-items-center justify-content-between mb-3">
                         <div class="d-flex align-items-center column-gap-1">
                             <button
-                                mat-raised-button
-                                color="primary"
+                                matButton="filled"
                                 [routerLink]="['/pages/vouchers/purchase/create']"
                                 *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
                             >
@@ -3205,13 +3186,13 @@
                             </div>
                         </div>
                         <div class="d-flex align-items-center column-gap-1">
-                            <button mat-raised-button color="primary" (click)="advanceSearchDialog()">
+                            <button matButton="filled" (click)="advanceSearchDialog()">
                                 <span class="d-inline-flex align-items-center column-gap-05">
                                     {{ commonLocaleData?.app_filter }}
                                     <i class="icon-advance-filter"></i>
                                 </span>
                             </button>
-                            <button mat-raised-button color="primary" (click)="showBulkExportDialog()">
+                            <button matButton="filled" (click)="showBulkExportDialog()">
                                 {{ commonLocaleData?.app_export }}
                             </button>
                             <select-table-column
@@ -3619,8 +3600,7 @@
                     <div class="invoice-header d-flex align-items-center justify-content-between mb-3">
                         <div class="d-flex align-items-center column-gap-1">
                             <button
-                                mat-raised-button
-                                color="primary"
+                                matButton="filled"
                                 [routerLink]="['/pages/vouchers/receipt/create']"
                                 *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
                             >
@@ -3647,7 +3627,7 @@
                             </div>
                         </div>
                         <button
-                            mat-stroked-button
+                            matButton="elevated"
                             (click)="setInitialAdvanceFilter()"
                             class="mx-auto"
                             *ngIf="advanceFiltersApplied && !(getVouchersInProgress$ | async)"
@@ -3659,8 +3639,7 @@
                         </button>
                         <div class="d-flex align-items-center column-gap-1">
                             <button
-                                mat-raised-button
-                                color="primary"
+                                matButton="filled"
                                 [matMenuTriggerFor]="moreProforma"
                                 *ngIf="
                                     selectedVouchers?.length &&
@@ -3677,13 +3656,13 @@
                                     {{ commonLocaleData?.app_delete }}
                                 </button>
                             </mat-menu>
-                            <button mat-raised-button color="primary" (click)="advanceSearchDialog()">
+                            <button matButton="filled" (click)="advanceSearchDialog()">
                                 <span class="d-inline-flex align-items-center column-gap-05">
                                     {{ commonLocaleData?.app_filter }}
                                     <i class="icon-advance-filter"></i>
                                 </span>
                             </button>
-                            <button mat-raised-button color="primary" (click)="showBulkExportDialog()">
+                            <button matButton="filled" (click)="showBulkExportDialog()">
                                 {{ commonLocaleData?.app_export }}
                             </button>
                             <select-table-column
@@ -4044,8 +4023,7 @@
                     <div class="invoice-header d-flex align-items-center justify-content-between mb-3">
                         <div class="d-flex align-items-center column-gap-1">
                             <button
-                                mat-raised-button
-                                color="primary"
+                                matButton="filled"
                                 [routerLink]="['/pages/vouchers/payment/create']"
                                 *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
                             >
@@ -4072,7 +4050,7 @@
                             </div>
                         </div>
                         <button
-                            mat-stroked-button
+                            matButton="elevated"
                             (click)="setInitialAdvanceFilter()"
                             class="mx-auto"
                             *ngIf="advanceFiltersApplied && !(getVouchersInProgress$ | async)"
@@ -4084,8 +4062,7 @@
                         </button>
                         <div class="d-flex align-items-center column-gap-1">
                             <button
-                                mat-raised-button
-                                color="primary"
+                                matButton="filled"
                                 [matMenuTriggerFor]="moreProforma"
                                 *ngIf="
                                     selectedVouchers?.length &&
@@ -4102,13 +4079,13 @@
                                     {{ commonLocaleData?.app_delete }}
                                 </button>
                             </mat-menu>
-                            <button mat-raised-button color="primary" (click)="advanceSearchDialog()">
+                            <button matButton="filled" (click)="advanceSearchDialog()">
                                 <span class="d-inline-flex align-items-center column-gap-05">
                                     {{ commonLocaleData?.app_filter }}
                                     <i class="icon-advance-filter"></i>
                                 </span>
                             </button>
-                            <button mat-raised-button color="primary" (click)="showBulkExportDialog()">
+                            <button matButton="filled" (click)="showBulkExportDialog()">
                                 {{ commonLocaleData?.app_export }}
                             </button>
                             <select-table-column
@@ -4425,8 +4402,7 @@
                                     </div>
                                 </div>
                                 <button
-                                    mat-raised-button
-                                    color="primary"
+                                    matButton="filled"
                                     *ngIf="!isCompany"
                                     [hidden]="selectedPendingVouchers?.length === 0"
                                     (click)="generateBulkInvoice(false)"
@@ -4434,8 +4410,7 @@
                                     {{ localeData?.generate_multiple }}
                                 </button>
                                 <button
-                                    mat-raised-button
-                                    color="primary"
+                                    matButton="filled"
                                     *ngIf="!isCompany"
                                     [hidden]="selectedPendingVouchers?.length === 0"
                                     (click)="generateBulkInvoice(true)"
@@ -4444,7 +4419,7 @@
                                 </button>
                             </div>
                             <button
-                                mat-stroked-button
+                                matButton="elevated"
                                 [ngClass]="{ 'width-auto': selectedPendingVouchers?.length === 0 }"
                                 class="mx-auto"
                                 *ngIf="customDateSelected && !(isGetAllRequestInProcess$ | async)"
@@ -4730,7 +4705,7 @@
                                                     ></input-field>
                                                     <button
                                                         *ngIf="!settingForm.get('invoiceSettings.emailVerified').value"
-                                                        mat-stroked-button
+                                                        matButton="elevated"
                                                         [disabled]="
                                                             !isEmailChanged &&
                                                             (!settingForm.get('invoiceSettings.email').value ||
@@ -4753,7 +4728,7 @@
                                                         {{ localeData?.verified }}
                                                     </span>
                                                     <button
-                                                        mat-stroked-button
+                                                        matButton="elevated"
                                                         *ngIf="voucherApiVersion === 2"
                                                         class="btn-stroked-icon"
                                                         [ngClass]="{
@@ -5573,7 +5548,7 @@
                                                 ></input-field>
                                                 <button
                                                     *ngIf="!settingForm.get('purchaseBillSettings.emailVerified').value"
-                                                    mat-stroked-button
+                                                    matButton="elevated"
                                                     [disabled]="
                                                         !isEmailChanged &&
                                                         (!settingForm.get('purchaseBillSettings.email').value ||
@@ -5597,7 +5572,7 @@
                                                     {{ localeData?.verified }}
                                                 </span>
                                                 <button
-                                                    mat-stroked-button
+                                                    matButton="elevated"
                                                     *ngIf="voucherApiVersion === 2"
                                                     class="btn-stroked-icon"
                                                     [ngClass]="{
@@ -5953,8 +5928,7 @@
                                     {{ localeData?.template_gallery_info }}
                                 </p>
                                 <button
-                                    mat-raised-button
-                                    color="primary"
+                                    matButton="filled"
                                     (click)="templateAction(null, 'create')"
                                     *ngIf="voucherApiVersion === 2"
                                 >
@@ -6003,7 +5977,7 @@
                                     </span>
                                     <div class="d-flex column-gap-1 justify-content-center">
                                         <button
-                                            mat-stroked-button
+                                            matButton="elevated"
                                             class="btn-stroked-icon"
                                             matTooltip="{{ localeData?.preview }}"
                                             matTooltipPosition="above"
@@ -6012,7 +5986,7 @@
                                             <i class="icon-eye"></i>
                                         </button>
                                         <button
-                                            mat-stroked-button
+                                            matButton="elevated"
                                             class="btn-stroked-icon"
                                             [matTooltip]="localeData?.edit_template"
                                             matTooltipPosition="above"
@@ -6021,7 +5995,7 @@
                                             <i class="icon-edit-pencil"></i>
                                         </button>
                                         <button
-                                            mat-stroked-button
+                                            matButton="elevated"
                                             class="btn-stroked-icon cursor-pointer"
                                             [disabled]="template.isDefault"
                                             [matTooltip]="localeData?.delete"
@@ -6081,7 +6055,7 @@
                                     </span>
                                     <div class="d-flex column-gap-1 justify-content-center">
                                         <button
-                                            mat-stroked-button
+                                            matButton="elevated"
                                             class="btn-stroked-icon"
                                             matTooltip="{{ localeData?.preview }}"
                                             matTooltipPosition="above"
@@ -6090,7 +6064,7 @@
                                             <i class="icon-eye"></i>
                                         </button>
                                         <button
-                                            mat-stroked-button
+                                            matButton="elevated"
                                             class="btn-stroked-icon"
                                             matTooltip="{{ localeData?.edit_template }}"
                                             matTooltipPosition="above"
@@ -6099,7 +6073,7 @@
                                             <i class="icon-edit-pencil"></i>
                                         </button>
                                         <button
-                                            mat-stroked-button
+                                            matButton="elevated"
                                             [disabled]="template.isDefaultForVoucher"
                                             class="btn-stroked-icon cursor-pointer"
                                             matTooltip="{{ localeData?.delete }}"
@@ -6224,8 +6198,8 @@
     <!-- setting-tab-btn -->
     <ng-template #actionButtons>
         <div class="d-flex column-gap-1 mt-4">
-            <button (click)="onSubmit()" mat-raised-button color="primary">{{ commonLocaleData?.app_save }}</button>
-            <button (click)="resetForm()" mat-stroked-button>{{ commonLocaleData?.app_cancel }}</button>
+            <button (click)="onSubmit()" matButton="filled">{{ commonLocaleData?.app_save }}</button>
+            <button (click)="resetForm()" matButton="elevated">{{ commonLocaleData?.app_cancel }}</button>
         </div>
     </ng-template>
 

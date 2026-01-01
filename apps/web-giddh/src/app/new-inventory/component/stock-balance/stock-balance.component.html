@@ -11,7 +11,7 @@
         <div class="stock-balance-top-bar">
             <div class="stock-balance-top-bar-left-side column-gap-15">
                 <div *ngIf="voucherApiVersion == 2">
-                    <button aria-label="new stock" mat-raised-button color="primary" [matMenuTriggerFor]="newStock" class="stock-btn-height">
+                    <button aria-label="new stock" matButton="filled" [matMenuTriggerFor]="newStock" class="stock-btn-height">
                         {{ localeData?.warehouse_opening_balance?.new_stock }}
                         <span class="caret"></span>
                     </button>

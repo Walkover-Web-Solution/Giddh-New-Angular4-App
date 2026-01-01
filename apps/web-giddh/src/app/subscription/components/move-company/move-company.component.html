@@ -1,6 +1,6 @@
 <div class="dialog-header">
     <span>{{ localeData?.subscription?.move_company }}</span>
-    <button mat-icon-button aria-label="close" mat-dialog-close>
+    <button matIconButton aria-label="close" mat-dialog-close>
         <i class="icon-cross"></i>
     </button>
 </div>
@@ -30,8 +30,7 @@
             </div>
             <div class="clear-both">
                 <button
-                    mat-raised-button
-                    color="primary"
+                    matButton="filled"
                     mat-dialog-close
                     (click)="moveCompanyInNewPlan()"
                     [disabled]="!selectedPlan"

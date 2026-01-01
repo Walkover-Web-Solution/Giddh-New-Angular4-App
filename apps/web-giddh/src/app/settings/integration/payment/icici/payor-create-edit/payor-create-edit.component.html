@@ -16,7 +16,7 @@
             <span>
                 {{ activePayorAccount ? localeData?.payment?.edit_user : localeData?.payment?.add_user }}
             </span>
-            <button mat-icon-button aria-label="close" (click)="closeAccountUserModal()">
+            <button matIconButton aria-label="close" (click)="closeAccountUserModal()">
                 <i class="icon-cross"></i>
             </button>
         </div>
@@ -86,8 +86,7 @@
             </ng-container>
             <div class="d-flex justify-content-end mt-3" *ngIf="localeData?.payment">
                 <button
-                    mat-raised-button
-                    color="primary"
+                    matButton="filled"
                     type="submit"
                     class="btn mr-1"
                     [disabled]="accountUserForm?.invalid"

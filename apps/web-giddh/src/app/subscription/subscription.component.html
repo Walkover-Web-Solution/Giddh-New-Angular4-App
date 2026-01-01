@@ -10,8 +10,7 @@
         </div>
         <button
             class="buy-plan-btn position-absolute"
-            mat-raised-button
-            color="primary"
+            matButton="filled"
             [routerLink]="['/pages/user-details/subscription/buy-plan/' + subscriptionId]"
             *ngIf="activeTabIndex === 3 && profileData?.planVersion === 1 && !isSubscriptionLoading"
         >
@@ -39,7 +38,7 @@
                                     [readonly]="true"
                                 ></input-field>
                             </div>
-                            <button type="button" mat-raised-button color="primary" (click)="toggleIsCopied()">
+                            <button type="button" matButton="filled" (click)="toggleIsCopied()">
                                 {{ commonLocaleData?.app_copy }}
                             </button>
                         </div>
@@ -50,8 +49,7 @@
                         </div>
                         <div class="form-group clear-both mb-0">
                             <button
-                                mat-raised-button
-                                color="primary"
+                                matButton="filled"
                                 type="submit"
                                 (click)="regenerateKey()"
                                 class="mr-4"
@@ -87,8 +85,7 @@
                             </div>
                             <div class="col-lg-4 pl-1">
                                 <button
-                                    mat-raised-button
-                                    color="primary"
+                                    matButton="filled"
                                     class="btn ml-2 margin-top"
                                     [ladda]="isAddNewMobileNoInProcess$ | async"
                                     (click)="addNumber(phoneNumber)"
@@ -111,8 +108,7 @@
                             </div>
                             <div class="col-lg-4 pl-1 pt-2">
                                 <button
-                                    mat-raised-button
-                                    color="primary"
+                                    matButton="filled"
                                     class="btn ml-2 mt-2"
                                     [ladda]="isVerifyAddNewMobileNoInProcess$ | async"
                                     (click)="verifyNumber()"
@@ -288,7 +284,7 @@
                     <div class=" p-3 clear-both mt-1 overflow-visible">
                         <div class="d-flex pb-2 activity-title">
                             <p class="section-head pt-0">{{ localeData?.session?.section_heading }}</p>
-                            <button mat-stroked-button class="mr-0" (click)="clearAllSession()">
+                            <button matButton="elevated" class="mr-0" (click)="clearAllSession()">
                                 {{ commonLocaleData?.app_delete_all }}
                             </button>
                         </div>
@@ -325,7 +321,7 @@
                                         }}</span>
                                         <button
                                             type="button"
-                                            mat-stroked-button
+                                            matButton="elevated"
                                             class="min-width-unset"
                                             (click)="deleteSession(element.sessionId, sessionIndex)"
                                             *ngIf="userSessionId !== element.sessionId"

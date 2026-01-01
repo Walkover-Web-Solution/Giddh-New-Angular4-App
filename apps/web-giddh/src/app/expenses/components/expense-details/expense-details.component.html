@@ -7,8 +7,7 @@
             <div class="col-sm-6 text-right xs-left">
                 <div class="d-flex justify-content-end align-items-center column-gap-1">
                     <button
-                        mat-raised-button
-                        color="primary"
+                        matButton="filled"
                         class="mb-1 d-flex align-items-center"
                         type="button"
                         (click)="showApproveConfirmPopup(approveConfirm)"
@@ -16,7 +15,7 @@
                         {{ localeData?.approve }}
                     </button>
                     <button
-                        mat-stroked-button
+                        matButton="elevated"
                         class="mb-1"
                         type="button"
                         (click)="openModal(rejectionReason)"
@@ -150,7 +149,7 @@
 <!-- endregion -->
 
 <!-- region other taxes aside menu -->
-<ng-template #asideMenuStateForOtherTaxes>    
+<ng-template #asideMenuStateForOtherTaxes>
     <app-aside-menu-sales-other-taxes
         [class]="asideMenuStateForOtherTaxes"
         [taxes]="companyTaxesList"

@@ -64,7 +64,7 @@
                                                     class="btn-wrapper d-flex align-items-center justify-content-center ml-3"
                                                 >
                                                     <button
-                                                        mat-raised-button color="primary"
+                                                        matButton="filled"
                                                         class="mr-3"
                                                         (click)="
                                                             verifyEmail(invoiceSettings.purchaseBillSettings.email)
@@ -515,10 +515,10 @@
     </section>
     <ng-template #buttonsSection>
         <div class="d-flex column-gap-1">
-            <button mat-raised-button color="primary" type="button" (click)="updateForm()">
+            <button matButton="filled" type="button" (click)="updateForm()">
                 {{ commonLocaleData?.app_save }}
             </button>
-            <button mat-stroked-button type="button" (click)="resetForm()">
+            <button matButton="elevated" type="button" (click)="resetForm()">
                 {{ commonLocaleData?.app_cancel }}
             </button>
         </div>

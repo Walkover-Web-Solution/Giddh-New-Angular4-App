@@ -8,43 +8,43 @@
     <div class="aside-dialog-wrapper">
         <div class="dialog-header">
             <span>{{ commonLocaleData?.app_create_new }}</span>
-            <button mat-icon-button aria-label="close" (click)="closeAsidePane($event)">
+            <button matIconButton aria-label="close" (click)="closeAsidePane($event)">
                 <i class="icon-cross"></i>
             </button>
         </div>
         <mat-dialog-content class="dialog-body d-flex flex-column justify-content-center align-items-center">
             <div *ngIf="moduleType === 'branch-transfer'">
                 <div class="pb-3">
-                    <button mat-raised-button color="primary" (click)="openCreateBranchTransfer('receipt-note')">
+                    <button matButton="filled" (click)="openCreateBranchTransfer('receipt-note')">
                         {{commonLocaleData?.app_receipt_note}}
                     </button>
                 </div>
                 <div>
-                    <button mat-raised-button color="primary" (click)="openCreateBranchTransfer('delivery-challan')">
+                    <button matButton="filled" (click)="openCreateBranchTransfer('delivery-challan')">
                         {{commonLocaleData?.app_delivery_challan}}
                     </button>
                 </div>
             </div>
             <div *ngIf="moduleType !== 'branch-transfer' && moduleType !== 'inventory-adjustment'">
                 <div class="pb-3">
-                    <button mat-raised-button color="primary" (click)="createNewByAsidePanel('stock')">
+                    <button matButton="filled" (click)="createNewByAsidePanel('stock')">
                         {{ commonLocaleData?.app_create_stock }}
                     </button>
                 </div>
                 <div>
-                    <button mat-raised-button color="primary" (click)="createNewByAsidePanel('group')">
+                    <button matButton="filled" (click)="createNewByAsidePanel('group')">
                         {{ commonLocaleData?.app_create_group }}
                     </button>
                 </div>
             </div>
             <div *ngIf="moduleType === 'inventory-adjustment'">
                 <div class="pb-3">
-                    <button mat-raised-button color="primary" (click)="closeAsidePane()" [routerLink]="['/pages/inventory/v2/adjust-product-and-service']" >
+                    <button matButton="filled" (click)="closeAsidePane()" [routerLink]="['/pages/inventory/v2/adjust-product-and-service']" >
                         Adjust Group
                     </button>
                 </div>
                 <div>
-                    <button mat-raised-button color="primary" (click)="closeAsidePane()" [routerLink]="['/pages/inventory/v2/adjust-product-and-service']">
+                    <button matButton="filled" (click)="closeAsidePane()" [routerLink]="['/pages/inventory/v2/adjust-product-and-service']">
                         Adjust Stock
                     </button>
                 </div>

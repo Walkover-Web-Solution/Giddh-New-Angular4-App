@@ -71,8 +71,7 @@
                         <div class="button-group d-flex justify-content-end column-gap-1">
                             <button
                                 id="search-btn"
-                                mat-raised-button
-                                color="primary"
+                                matButton="filled"
                                 (click)="advanceSearchAction()"
                                 [disabled]="
                                     !advanceSearchFormObj.filterBy ||
@@ -83,10 +82,10 @@
                             >
                                 {{ commonLocaleData?.app_search }}
                             </button>
-                            <button mat-stroked-button (click)="initializeForm()">
+                            <button matButton="elevated" (click)="initializeForm()">
                                 {{ commonLocaleData?.app_reset }}
                             </button>
-                            <button mat-stroked-button type="button" (click)="advanceFilterClose()">
+                            <button matButton="elevated" type="button" (click)="advanceFilterClose()">
                                 {{ commonLocaleData?.app_cancel }}
                             </button>
                         </div>

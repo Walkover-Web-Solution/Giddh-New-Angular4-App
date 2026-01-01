@@ -1,6 +1,6 @@
 <div class="dialog-header">
     <span>{{ localeData?.file_return }}</span>
-    <button mat-icon-button mat-dialog-close aria-label="close">
+    <button matIconButton mat-dialog-close aria-label="close">
         <i class="icon-cross"></i>
     </button>
 </div>
@@ -92,8 +92,8 @@
         </div>
     </ng-container>
     <div class="d-flex justify-content-end column-gap-1 mt-3">
-        <button mat-raised-button color="primary" [disabled]="isLoading" (click)="submitVatReturn()">{{
+        <button matButton="filled" [disabled]="isLoading" (click)="submitVatReturn()">{{
             localeData?.submit_file_return }}</button>
-        <button mat-stroked-button mat-dialog-close>{{ commonLocaleData?.app_cancel }}</button>
+        <button matButton="elevated" mat-dialog-close>{{ commonLocaleData?.app_cancel }}</button>
     </div>
 </mat-dialog-content>

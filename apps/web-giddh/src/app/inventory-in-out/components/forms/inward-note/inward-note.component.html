@@ -137,13 +137,13 @@
 
                             <div class="pull-right mt-1 unit-add">
                                 <button
-                                    mat-stroked-button
+                                    matButton="elevated"
                                     (click)="addTransactionItem(transactions.controls[i])"
                                     *ngIf="last"
                                 >
                                     <i class="icon-plus text-green"></i>
                                 </button>
-                                <button mat-stroked-button (click)="deleteTransactionItem(i)" *ngIf="!last">
+                                <button matButton="elevated" (click)="deleteTransactionItem(i)" *ngIf="!last">
                                     <i class="icon-cross text-red"></i>
                                 </button>
                             </div>
@@ -275,14 +275,14 @@
                                         </div>
                                         <div class="pull-right mt-1 unit-add">
                                             <button
-                                                mat-stroked-button
+                                                matButton="elevated"
                                                 (click)="addItemInLinkedStocks(list, i, i)"
                                                 *ngIf="l"
                                                 [disabled]="disableStockButton"
                                             >
                                                 <i class="icon-plus text-green"></i>
                                             </button>
-                                            <button mat-stroked-button (click)="removeItemInLinkedStocks(i)" *ngIf="!l">
+                                            <button matButton="elevated" (click)="removeItemInLinkedStocks(i)" *ngIf="!l">
                                                 <i class="icon-cross text-red"></i>
                                             </button>
                                         </div>
@@ -303,8 +303,8 @@
 
             <div class="row">
                 <div class="col-12 text-left mt-2">
-                    <button mat-stroked-button (click)="onCancel.emit($event)">Cancel</button>
-                    <button mat-raised-button color="primary" [ladda]="isLoading" [disabled]="form.invalid" (click)="save()">
+                    <button matButton="elevated" (click)="onCancel.emit($event)">Cancel</button>
+                    <button matButton="filled" [ladda]="isLoading" [disabled]="form.invalid" (click)="save()">
                         Save
                     </button>
                 </div>

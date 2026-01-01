@@ -50,10 +50,10 @@
     </div>
 
     <div class="d-flex column-gap-1">
-        <button mat-raised-button color="primary" [disabled]="!rejectReason?.value" (click)="submitReject()">
+        <button matButton="filled" [disabled]="!rejectReason?.value" (click)="submitReject()">
             {{ commonLocaleData?.app_submit }}
         </button>
-        <button mat-stroked-button role="button" (click)="rejectEntry?.emit(false)">
+        <button matButton="elevated" role="button" (click)="rejectEntry?.emit(false)">
             {{ commonLocaleData?.app_cancel }}
         </button>
     </div>

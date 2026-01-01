@@ -73,8 +73,7 @@
                     <div class="col-12 d-flex column-gap-1">
                         <button
                             *ngIf="!isUpdateMode"
-                            mat-raised-button
-                            color="primary"
+                            matButton="filled"
                             (click)="saveDiscount()"
                             [ladda]="createDiscountInProgress$ | async"
                         >
@@ -82,17 +81,16 @@
                         </button>
                         <button
                             *ngIf="isUpdateMode"
-                            mat-raised-button
-                            color="primary"
+                            matButton="filled"
                             (click)="updateDiscount()"
                             [ladda]="createDiscountInProgress$ | async"
                         >
                             {{ commonLocaleData?.app_update }}
                         </button>
-                        <button mat-stroked-button (click)="cancelDiscount()">
+                        <button matButton="elevated" (click)="cancelDiscount()">
                             {{ commonLocaleData?.app_cancel }}
                         </button>
-                        <button *ngIf="!isUpdateMode" mat-stroked-button (click)="clearDiscount()">
+                        <button *ngIf="!isUpdateMode" matButton="elevated" (click)="clearDiscount()">
                             {{ commonLocaleData?.app_clear }}
                         </button>
                     </div>

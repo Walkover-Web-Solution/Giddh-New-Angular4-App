@@ -1645,8 +1645,7 @@
                                                                     <div class="d-flex mt-3 column-gap-1">
                                                                         <button
                                                                             aria-label="save"
-                                                                            mat-raised-button
-                                                                            color="primary"
+                                                                            matButton="filled"
                                                                             class="w-100"
                                                                             (click)="saveSkuNumberPopup()"
                                                                         >
@@ -1654,7 +1653,7 @@
                                                                         </button>
                                                                         <button
                                                                             aria-label="cancel"
-                                                                            mat-stroked-button
+                                                                            matButton="elevated"
                                                                             class="w-100"
                                                                             (click)="closeShowCodeMenu(product)"
                                                                         >
@@ -1792,8 +1791,7 @@
                                                                     <div class="d-flex mt-3 column-gap-1">
                                                                         <button
                                                                             aria-label="save"
-                                                                            mat-raised-button
-                                                                            color="primary"
+                                                                            matButton="filled"
                                                                             class="w-100"
                                                                             (click)="saveHsnNumberPopup()"
                                                                         >
@@ -1801,7 +1799,7 @@
                                                                         </button>
                                                                         <button
                                                                             aria-label="cancel"
-                                                                            mat-stroked-button
+                                                                            matButton="elevated"
                                                                             class="w-100"
                                                                             (click)="closeSacNumber(product)"
                                                                         >
@@ -2361,7 +2359,7 @@
                             <div class="action-btn-wrapper text-right w-100 d-flex column-gap-1 justify-content-end">
                                 <button
                                     aria-label="clear"
-                                    mat-stroked-button
+                                    matButton="elevated"
                                     (click)="resetForm()"
                                     *ngIf="!isUpdateMode"
                                 >
@@ -2370,15 +2368,14 @@
                                 <button
                                     aria-label="cancel"
                                     *ngIf="isUpdateMode"
-                                    mat-stroked-button
+                                    matButton="elevated"
                                     (click)="navigateToList()"
                                 >
                                     {{ commonLocaleData?.app_cancel }}
                                 </button>
                                 <button
                                     aria-label="uniqueName"
-                                    mat-raised-button
-                                    color="primary"
+                                    matButton="filled"
                                     *ngIf="isBranch || isCompanyWithSingleBranch"
                                     class="d-inline-block vertical-align-middle {{
                                         branchTransferCreateEditForm.invalid

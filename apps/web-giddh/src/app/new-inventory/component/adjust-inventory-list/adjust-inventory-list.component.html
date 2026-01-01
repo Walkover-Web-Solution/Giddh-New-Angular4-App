@@ -26,12 +26,12 @@
                 >
                 </reactive-dropdown-field>
             </div>
-            <div 
+            <div
                 class="custom-datepicker"
-                [matMenuTriggerFor]="universalDatepicker" 
-                #universalDatepickerTrigger="matMenuTrigger" 
-                role="button" 
-                aria-haspopup="true" 
+                [matMenuTriggerFor]="universalDatepicker"
+                #universalDatepickerTrigger="matMenuTrigger"
+                role="button"
+                aria-haspopup="true"
                 aria-controls="universalDatepicker"
             >
                 <input
@@ -43,7 +43,7 @@
                     readonly
                 />
             </div>
-            <button mat-stroked-button
+            <button matButton="elevated"
                 *ngIf="
                     showClearFilter ||
                     adjustInventoryListForm?.controls['referenceNo']?.value ||
@@ -54,7 +54,7 @@
                     adjustInventoryListForm?.controls['adjustedBy']?.value ||
                     adjustInventoryListForm?.controls['entity']?.value
                 "
-                mat-stroked-button
+                matButton="elevated"
                 class="min-width-160 mx-auto"
                 (click)="clearFilter()"
             >
@@ -66,8 +66,7 @@
             <button
                 *ngIf="!isCompany && !isConsolidatedBranch"
                 id="add-adjustment-btn"
-                mat-raised-button
-                color="primary"
+                matButton="filled"
                 class="ml-auto"
                 (click)="addInventory()"
             >

@@ -26,8 +26,7 @@
             </div>
 
             <button
-                mat-raised-button
-                color="primary"
+                matButton="filled"
                 [ngClass]="{ 'position-center': false }"
                 (click)="openAddDomainDialog()"
             >
@@ -44,13 +43,13 @@
         >
             <p>{{ localeData?.domain_registrar }}</p>
             <div class="d-flex column-gap-1">
-                <button mat-stroked-button (click)="deleteConfirmationDialog()">
+                <button matButton="elevated" (click)="deleteConfirmationDialog()">
                     {{ commonLocaleData?.app_delete }}
                 </button>
-                <button mat-raised-button color="primary" *ngIf="!allVerifiedDomain" (click)="verifyDomain()">
+                <button matButton="filled" *ngIf="!allVerifiedDomain" (click)="verifyDomain()">
                     {{ commonLocaleData?.app_verify }}
                 </button>
-                <button mat-raised-button color="primary" (click)="openShareDomainDialog()">
+                <button matButton="filled" (click)="openShareDomainDialog()">
                     {{ commonLocaleData?.app_share }}
                 </button>
             </div>
@@ -124,7 +123,7 @@
     <div class="dialog">
         <div class="dialog-header">
             <span>{{ localeData?.share_dns_record_to_developer }}</span>
-            <button mat-icon-button aria-label="close" mat-dialog-close (click)="shareEmailForm.reset()">
+            <button matIconButton aria-label="close" mat-dialog-close (click)="shareEmailForm.reset()">
                 <i class="icon-cross"></i>
             </button>
         </div>
@@ -142,12 +141,11 @@
                 </div>
             </form>
             <div class="mt-3 d-flex column-gap-1 justify-content-end">
-                <button mat-stroked-button mat-dialog-close (click)="shareEmailForm.reset()">
+                <button matButton="elevated" mat-dialog-close (click)="shareEmailForm.reset()">
                     {{ commonLocaleData?.app_cancel }}
                 </button>
                 <button
-                    mat-raised-button
-                    color="primary"
+                    matButton="filled"
                     (click)="sendEmail()"
                     [disabled]="
                         !this.shareEmailForm.get('recipients')?.value ||
@@ -165,7 +163,7 @@
     <div class="dialog">
         <div class="dialog-header">
             <span>{{ localeData?.add_domain }}</span>
-            <button mat-icon-button aria-label="close" mat-dialog-close (click)="portalWhilteLabelForm.reset()">
+            <button matIconButton aria-label="close" mat-dialog-close (click)="portalWhilteLabelForm.reset()">
                 <i class="icon-cross"></i>
             </button>
         </div>
@@ -184,10 +182,10 @@
                 </div>
             </form>
             <div class="d-flex column-gap-1 justify-content-end mt-3">
-                <button mat-stroked-button mat-dialog-close (click)="portalWhilteLabelForm.reset()">
+                <button matButton="elevated" mat-dialog-close (click)="portalWhilteLabelForm.reset()">
                     {{ commonLocaleData?.app_cancel }}
                 </button>
-                <button mat-raised-button color="primary" (click)="submitForm()">
+                <button matButton="filled" (click)="submitForm()">
                     {{ commonLocaleData?.app_add }}
                 </button>
             </div>

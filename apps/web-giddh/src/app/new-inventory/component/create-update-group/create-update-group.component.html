@@ -19,8 +19,7 @@
                                     *ngIf="groupUniqueName"
                                     (click)="backClicked()"
                                     class="mr-0"
-                                    mat-raised-button
-                                    color="primary"
+                                    matButton="filled"
                                 >
                                     <i class="icon-left back-left"></i>
                                     {{ commonLocaleData?.app_back }}
@@ -202,7 +201,7 @@
                                 <div class="col-sm-12 col-lg-12 ml-lg-2">
                                     <div class="d-flex align-items-center w-100">
                                         <div>
-                                            <button mat-raised-button color="primary" (click)="saveGroup()">
+                                            <button matButton="filled" (click)="saveGroup()">
                                                 {{
                                                     groupUniqueName
                                                         ? commonLocaleData?.app_update
@@ -213,7 +212,7 @@
                                         <div class="ml-auto right-aligned-buttons d-flex column-gap-15">
                                             <button
                                                 *ngIf="!groupUniqueName"
-                                                mat-stroked-button
+                                                matButton="elevated"
                                                 (click)="resetGroupForm()"
                                                 type="button"
                                             >
@@ -222,7 +221,7 @@
 
                                             <button
                                                 *ngIf="groupUniqueName && !addGroup"
-                                                mat-stroked-button
+                                                matButton="elevated"
                                                 class="min-width-100"
                                                 (click)="cancelEdit()"
                                             >
@@ -230,7 +229,7 @@
                                             </button>
                                             <button
                                                 *ngIf="groupUniqueName"
-                                                mat-stroked-button
+                                                matButton="elevated"
                                                 class="min-width-100"
                                                 (click)="deleteGroup()"
                                             >

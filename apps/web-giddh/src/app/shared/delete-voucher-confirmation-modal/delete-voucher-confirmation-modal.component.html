@@ -8,7 +8,7 @@
     <div *ngIf="translationLoaded">
         <div class="dialog-header theme-bg p-2 pl-4 pr-4 clear-both">
             <span>{{ confirmationMessages[module]?.title }}</span>
-            <button mat-icon-button aria-label="close" (click)="onCancel()">
+            <button matIconButton aria-label="close" (click)="onCancel()">
                 <i class="icon-cross"></i>
             </button>
         </div>
@@ -19,10 +19,10 @@
                     <p class="text-light font-size-15 mt-1">{{ confirmationMessages[module]?.message2 }}</p>
                 </div>
                 <div class="d-flex justify-content-start">
-                    <button mat-raised-button color="primary" type="button" class="mr-2" (click)="onConfirmation()">
+                    <button matButton="filled" type="button" class="mr-2" (click)="onConfirmation()">
                         {{ commonLocaleData?.app_yes }}
                     </button>
-                    <button mat-stroked-button type="button" (click)="onCancel()">
+                    <button matButton="elevated" type="button" (click)="onCancel()">
                         {{ commonLocaleData?.app_no }}
                     </button>
                 </div>

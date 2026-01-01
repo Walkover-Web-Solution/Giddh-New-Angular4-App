@@ -30,8 +30,8 @@
                 <div class="mr-3" *ngIf="mode === 'export' && fileType === '0'">
                     <label class="d-block">{{localeData?.data_range}}</label>
                     <div class="custom-datepicker-wrapper">
-                        <div 
-                            class="custom-datepicker" 
+                        <div
+                            class="custom-datepicker"
                             [matMenuTriggerFor]="universalDatepicker"
                             #universalDatepickerTrigger="matMenuTrigger"
                             role="button"
@@ -50,7 +50,7 @@
                     </div>
                 </div>
                 <button
-                    mat-raised-button color="primary"
+                    matButton="filled"
                     *ngIf="mode === 'export'"
                     (click)="save()"
                     [ladda]="isExportInProcess$ | async"
@@ -79,7 +79,7 @@
                 </div>
                 <div>
                     <button
-                        mat-raised-button color="primary"
+                        matButton="filled"
                         *ngIf="mode === 'import'"
                         (click)="save()"
                         [ladda]="isImportInProcess$ | async"
@@ -91,7 +91,7 @@
             </div>
             <div>
                 <label class="d-block">&nbsp;</label>
-                <button mat-stroked-button class="pull-right back-to-import" (click)="backButtonPressed()">
+                <button matButton="elevated" class="pull-right back-to-import" (click)="backButtonPressed()">
                     {{commonLocaleData?.app_back}}
                 </button>
             </div>

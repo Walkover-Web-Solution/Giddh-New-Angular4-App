@@ -18,8 +18,7 @@
                 </a>
             </div>
             <button
-                mat-raised-button
-                color="primary"
+                matButton="filled"
                 type="button"
                 class="mr-0"
                 *ngIf="voucherApiVersion === 2"
@@ -36,8 +35,7 @@
         >
             <div class="font-size-15">{{ localeData?.address_list }}</div>
             <button
-                mat-raised-button
-                color="primary"
+                matButton="filled"
                 type="button"
                 class="mr-0"
                 *ngIf="voucherApiVersion === 2"
@@ -380,8 +378,7 @@
                         </div>
                         <div class="d-flex justify-content-end column-gap-1">
                             <button
-                                mat-raised-button
-                                color="primary"
+                                matButton="filled"
                                 type="submit"
                                 (click)="onConfirmation()"
                                 [attr.aria-label]="commonLocaleData?.app_yes"
@@ -390,7 +387,7 @@
                             </button>
                             <button
                                 mat-dialog-close
-                                mat-stroked-button
+                                matButton="elevated"
                                 type="button"
                                 class="btn custom-btn"
                                 [attr.aria-label]="commonLocaleData?.app_no"

@@ -28,7 +28,7 @@
                                 <div *ngIf="shouldShowInventoryReport$ | async" class="wrap-top-inventory">
                                     <div *ngIf="isTabletScreen && activeView === 'group'" class="mb-3">
                                         <button
-                                            mat-raised-button color="primary"
+                                            matButton="filled"
                                             [routerLink]="['/pages/inventory/']"
                                             (click)="activeView = null"
                                         >

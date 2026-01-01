@@ -18,7 +18,7 @@
                 {{ activeBankAccount ? localeData?.payment?.edit_account : localeData?.payment?.connect_icici_account }}
             </span>
             <button
-                mat-icon-button
+                matIconButton
                 aria-label="close"
                 type="button"
                 (click)="closeAccountModal()"
@@ -95,8 +95,7 @@
                 </ng-container>
             <div class="d-flex justify-content-end mt-3" *ngIf="!isLoading && localeData?.payment">
                 <button
-                    mat-raised-button
-                    color="primary"
+                    matButton="filled"
                     type="submit"
                     class="btn mr-1"
                     [disabled]="accountForm?.invalid"

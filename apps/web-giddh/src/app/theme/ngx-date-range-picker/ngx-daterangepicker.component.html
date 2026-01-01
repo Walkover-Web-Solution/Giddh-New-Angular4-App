@@ -389,7 +389,7 @@
                                                 <!-- clear button -->
                                                 <button
                                                     *ngIf="showClearButton"
-                                                    mat-stroked-button
+                                                    matButton="elevated"
                                                     class="clear"
                                                     type="button"
                                                     (click)="clear()"
@@ -410,7 +410,7 @@
 
                                                 <!-- cancel button -->
                                                 <button
-                                                    mat-stroked-button
+                                                    matButton="elevated"
                                                     *ngIf="showCancel"
                                                     type="button"
                                                     (click)="clickCancel($event)"
@@ -421,8 +421,7 @@
 
                                                 <!-- apply button -->
                                                 <button
-                                                    mat-raised-button
-                                                    color="primary"
+                                                    matButton="filled"
                                                     [disabled]="applyBtn.disabled"
                                                     type="button"
                                                     (click)="handleDateChange('apply', $event)"

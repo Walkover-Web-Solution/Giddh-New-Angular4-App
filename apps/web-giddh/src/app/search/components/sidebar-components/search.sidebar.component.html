@@ -54,13 +54,12 @@
                 <div class="d-flex column-gap-15">
                     <button
                         [disabled]="!groupUniqueName"
-                        mat-raised-button
-                        color="primary"
+                        matButton="filled"
                         (click)="getClosingBalance(false, $event)"
                     >
                         {{ commonLocaleData?.app_search }}
                     </button>
-                    <button [disabled]="!groupUniqueName" mat-stroked-button (click)="getClosingBalance(true, $event)">
+                    <button [disabled]="!groupUniqueName" matButton="elevated" (click)="getClosingBalance(true, $event)">
                         {{ commonLocaleData?.app_refresh }}
                     </button>
                 </div>

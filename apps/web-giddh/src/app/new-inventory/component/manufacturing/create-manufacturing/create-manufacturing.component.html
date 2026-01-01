@@ -168,8 +168,7 @@
                                         *ngIf="!isCompany && !isConsolidatedBranch"
                                     >
                                         <button
-                                            mat-raised-button
-                                            color="primary"
+                                            matButton="filled"
                                             class="mt-2"
                                             [disabled]="isLoading"
                                             (click)="createManufacturing()"
@@ -178,7 +177,7 @@
                                             {{ commonLocaleData?.app_create }}
                                         </button>
                                         <button
-                                            mat-stroked-button
+                                            matButton="elevated"
                                             class="mt-2"
                                             (click)="resetForm()"
                                             *ngIf="!manufactureUniqueName"
@@ -186,8 +185,7 @@
                                             {{ commonLocaleData?.app_clear }}
                                         </button>
                                         <button
-                                            mat-raised-button
-                                            color="primary"
+                                            matButton="filled"
                                             class="mt-2"
                                             [disabled]="isLoading"
                                             (click)="updateManufacturing()"
@@ -196,7 +194,7 @@
                                             {{ commonLocaleData?.app_update }}
                                         </button>
                                         <button
-                                            mat-stroked-button
+                                            matButton="elevated"
                                             class="mt-2"
                                             (click)="deleteManufacturing()"
                                             *ngIf="manufactureUniqueName"
@@ -204,7 +202,7 @@
                                             {{ commonLocaleData?.app_delete }}
                                         </button>
                                         <button
-                                            mat-stroked-button
+                                            matButton="elevated"
                                             class="mt-2"
                                             [routerLink]="['/pages/inventory/v2/manufacturing/list']"
                                             *ngIf="manufactureUniqueName"

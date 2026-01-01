@@ -11,7 +11,7 @@
         >
             <div class="aging-form-inline">
                 <div class="btn-group pull-left on-desktop-view">
-                    <button mat-raised-button color="primary" *ngIf="voucherApiVersion === 2" (click)="createNewCustomerEvent.emit(true)">
+                    <button matButton="filled" *ngIf="voucherApiVersion === 2" (click)="createNewCustomerEvent.emit(true)">
                         {{ localeData?.new_customer }}
                     </button>
                 </div>
@@ -39,7 +39,7 @@
                 class="clear-filter align-items-center d-flex justify-content-xl-center justify-content-lg-start"
                 *ngIf="showClearFilter || isAdvanceSearchApplied"
             >
-                <button mat-stroked-button class="mr-0" (click)="resetAdvanceSearch()" aria-label="filter">
+                <button matButton="elevated" class="mr-0" (click)="resetAdvanceSearch()" aria-label="filter">
                     <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
                 </button>
             </div>
@@ -61,8 +61,7 @@
                 </div>
                 <div class="cursor-pointer advance-clear-filter-icons d-flex float-right column-gap-1">
                     <button
-                        mat-raised-button
-                        color="primary"
+                        matButton="filled"
                         (click)="showAdvanceSearchPopup()"
                         matTooltip="{{ commonLocaleData?.app_advance_search }}"
                         matTooltipPosition="right"
@@ -75,8 +74,7 @@
                     </button>
                     <button
                         *ngIf="voucherApiVersion === 2"
-                        mat-raised-button
-                        color="primary"
+                        matButton="filled"
                         (click)="exportReport()"
                         aria-label="export"
                     >
@@ -86,8 +84,7 @@
             </div>
             <div class="btn-group mt-3 pull-left mobile-view">
                 <button
-                    mat-raised-button
-                    color="primary"
+                    matButton="filled"
                     class="w-100"
                     *ngIf="voucherApiVersion === 2"
                     (click)="createNewCustomerEvent.emit(true)"
@@ -151,8 +148,7 @@
                 <div class="d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1">
                     <img class="customer-img" src="{{ imgPath }}customer-vendor/stock-photo.png" alt="" />
                     <button
-                        mat-raised-button
-                        color="primary"
+                        matButton="filled"
                         *ngIf="voucherApiVersion === 2"
                         (click)="createNewCustomerEvent.emit(true)"
                         aria-label="new customer"
@@ -551,7 +547,7 @@
 >
     <div class="search-table">
         <div class="align-items-center d-flex" [hidden]="show">
-            <button mat-icon-button (click)="toggleSearch(fieldName)" aria-label="search icon">
+            <button matIconButton (click)="toggleSearch(fieldName)" aria-label="search icon">
                 <span class="icon-search"></span>
             </button>
             <span>{{ title }}</span>
@@ -572,7 +568,7 @@
 <section class="aside-dialog-wrapper unpaid-invoice-aside-pane">
     <div class="dialog-header">
         <span>{{ localeData?.unpaid_invoices }}</span>
-        <button mat-icon-button mat-dialog-close aria-label="cross icon">
+        <button matIconButton mat-dialog-close aria-label="cross icon">
             <i class="icon-cross"></i>
         </button>
     </div>

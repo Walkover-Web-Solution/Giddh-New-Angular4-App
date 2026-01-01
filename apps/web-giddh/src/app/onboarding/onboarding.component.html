@@ -50,8 +50,7 @@
                     <p [innerHTML]="localeData?.giddh_usage"></p>
                     <div class="d-flex column-gap-15">
                         <a
-                            mat-raised-button
-                            color="primary"
+                            matButton="filled"
                             class="mt-2"
                             target="_blank"
                             [href]="syncWithTallyHelpDocUrl"
@@ -59,8 +58,7 @@
                             {{ localeData?.sync_with_tally }}
                         </a>
                         <a
-                            mat-raised-button
-                            color="primary"
+                            matButton="filled"
                             class="mt-2"
                             href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/Walkover+Prod.tcp"
                         >
@@ -71,7 +69,7 @@
                     <div class="right-section">
                         <p class="border-btm mt-5">{{ localeData?.ask_question }}</p>
                         <span>{{ localeData?.request_demo }}</span>
-                        <button mat-raised-button color="primary" class="mt-2" (click)="scheduleNow()">
+                        <button matButton="filled" class="mt-2" (click)="scheduleNow()">
                             {{ commonLocaleData?.app_schedule_now }}
                         </button>
                         <br />

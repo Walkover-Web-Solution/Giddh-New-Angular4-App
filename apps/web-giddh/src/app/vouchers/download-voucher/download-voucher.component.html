@@ -59,8 +59,7 @@
 
         <div class="pt-3">
             <button
-                mat-raised-button
-                color="primary"
+                matButton="filled"
                 (click)="downloadVouchers()"
                 [disabled]="
                     !downloadForm?.get('isOriginal')?.value &&
@@ -71,7 +70,7 @@
             >
                 {{ commonLocaleData?.app_download }}
             </button>
-            <button mat-stroked-button class="ml-3" mat-dialog-close>
+            <button matButton="elevated" class="ml-3" mat-dialog-close>
                 {{ commonLocaleData?.app_cancel }}
             </button>
         </div>

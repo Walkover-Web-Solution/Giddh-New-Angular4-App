@@ -7,11 +7,11 @@
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="container-fluid clear-both" *ngIf="allRoles?.length > 0">
         <div class="col-sm-12 mt-4 mb-4 d-flex justify-content-end column-gap-05">
-            <button mat-raised-button color="primary" (click)="openPermissionDialog()">
+            <button matButton="filled" (click)="openPermissionDialog()">
                 {{localeData?.add_new_role}}
             </button>
             <button
-                mat-stroked-button
+                matButton="elevated"
                 *ngIf="showBackButton"
                 class="btn custom-btn"
                 [routerLink]="['/pages/settings/permission']"
@@ -26,7 +26,7 @@
                         <h1>{{role.name}}</h1>
                         <div class="text-center mt-4 on-hover d-flex column-gap-1">
                             <button
-                                mat-stroked-button
+                                matButton="elevated"
                                 *ngIf="!role.isFixed"
                                 class="custom-btn"
                                 (click)="updateRole(role)"
@@ -34,13 +34,13 @@
                                 {{commonLocaleData?.app_edit}}
                             </button>
                             <button
-                                mat-stroked-button
+                                matButton="elevated"
                                 *ngIf="!role.isFixed"
                                 (click)="deleteRole(role);"
                             >
                                 {{commonLocaleData?.app_delete}}
                             </button>
-                            <button mat-raised-button color="primary" (click)="updateRole(role)">
+                            <button matButton="filled" (click)="updateRole(role)">
                                 {{commonLocaleData?.app_view}}
                             </button>
                         </div>

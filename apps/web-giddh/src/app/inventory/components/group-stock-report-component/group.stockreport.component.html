@@ -10,7 +10,7 @@
                 </div>
             </div>
             <div class="clear-filter" *ngIf="isFilterCorrect && productName?.value?.length > 0">
-                <button mat-stroked-button (click)="resetFilter()">
+                <button matButton="elevated" (click)="resetFilter()">
                     <span class="icon-cross"></span> Clear Filter
                 </button>
             </div>
@@ -33,14 +33,14 @@
                     </mat-menu>
                 </div>
                 <!-- <button
-                    mat-raised-button color="primary" class="transfer-btn mr-3"
+                    matButton="filled" class="transfer-btn mr-3"
                     *ngIf="!(currentOrganizationType !== 'BRANCH' && branches?.length > 1)"
                     matTooltip="Alt+N"
                     (click)="openBranchTransferDialog()"
                 >
                     New Transfer
                 </button> -->
-                <!-- <button mat-raised-button color="primary" class="mr-0" matTooltip="Alt+i" (click)="openAsidePaneDialog()">
+                <!-- <button matButton="filled" class="mr-0" matTooltip="Alt+i" (click)="openAsidePaneDialog()">
                     Create New
                 </button> -->
             </div>
@@ -843,8 +843,7 @@
                 <div class="row mt-5 mb-5">
                     <div class="col-xs-12 col-sm-12 text-right">
                         <button
-                            mat-raised-button
-                            color="primary"
+                            matButton="filled"
                             type="button"
                             [disabled]="
                                 !isFilterCorrect ||
@@ -857,9 +856,9 @@
                         >
                             Search
                         </button>
-                        <button mat-stroked-button type="button" (click)="advanceSearchAction('clear')">Clear</button>
+                        <button matButton="elevated" type="button" (click)="advanceSearchAction('clear')">Clear</button>
                         <button
-                            mat-icon-button
+                            matIconButton
                             aria-label="close"
                             role="button"
                             (click)="advanceSearchAction('cancel')"

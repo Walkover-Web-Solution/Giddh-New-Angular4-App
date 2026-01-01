@@ -208,10 +208,10 @@
         </div>
     </form>
     <div class="d-flex justify-content-end column-gap-1 mt-3">
-        <button mat-raised-button color="primary" (click)="exportInventory()">
+        <button matButton="filled" (click)="exportInventory()">
             {{ inputData?.commonLocaleData?.app_download }}
         </button>
-        <button mat-stroked-button aria-label="close" mat-dialog-close type="button">
+        <button matButton="elevated" aria-label="close" mat-dialog-close type="button">
             {{ inputData?.commonLocaleData?.app_cancel }}
         </button>
     </div>

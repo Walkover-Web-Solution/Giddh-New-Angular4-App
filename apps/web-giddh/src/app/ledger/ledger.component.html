@@ -105,7 +105,7 @@
                                     <div class="d-flex ml-3 column-gap-1">
                                         <button
                                             aria-label="delete"
-                                            mat-stroked-button
+                                            matButton="elevated"
                                             [disabled]="
                                                 (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                                 currentCompanyBranches?.length > 2
@@ -125,7 +125,7 @@
                                                 (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                                 currentCompanyBranches?.length > 2
                                             "
-                                            mat-stroked-button
+                                            matButton="elevated"
                                             id="generate-invoice-mobile-view"
                                             (click)="performBulkAction('generate')"
                                             [matTooltip]="commonLocaleData?.app_generate_voucher"
@@ -136,7 +136,7 @@
                                     </div>
                                     <button
                                         aria-label="attachfile"
-                                        mat-stroked-button
+                                        matButton="elevated"
                                         [disabled]="
                                             (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                             currentCompanyBranches?.length > 2
@@ -225,7 +225,7 @@
                                 <button
                                     aria-label="filter"
                                     id="advance-filter"
-                                    mat-stroked-button
+                                    matButton="elevated"
                                     (click)="onOpenAdvanceSearch()"
                                     class="advance-icon d-flex advance-search-filter icon-button-width pointer mx-0"
                                     [matTooltip]="commonLocaleData?.app_advance_search"
@@ -252,7 +252,7 @@
                                 >
                                     <button
                                         aria-label="delete"
-                                        mat-stroked-button
+                                        matButton="elevated"
                                         [disabled]="
                                             (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                             currentCompanyBranches?.length > 2
@@ -268,7 +268,7 @@
 
                                     <button
                                         aria-label="generate"
-                                        mat-stroked-button
+                                        matButton="elevated"
                                         [disabled]="
                                             (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                             currentCompanyBranches?.length > 2
@@ -284,7 +284,7 @@
 
                                     <button
                                         aria-label="file"
-                                        mat-stroked-button
+                                        matButton="elevated"
                                         [disabled]="
                                             (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                             currentCompanyBranches?.length > 2
@@ -310,7 +310,7 @@
                                 <ng-container *ngIf="isTabletScreen">
                                     <button
                                         aria-label="threedots"
-                                        mat-stroked-button
+                                        matButton="elevated"
                                         id="button-basic"
                                         [matMenuTriggerFor]="menu"
                                         type="button"
@@ -669,8 +669,7 @@
                                     </div>
                                     <div class="d-flex align-items-center column-gap-2">
                                         <button
-                                            mat-raised-button
-                                            color="primary"
+                                            matButton="filled"
                                             type="button"
                                             aria-label="create bulk entry"
                                             *ngIf="transactionCountConvertToEntries > 0"
@@ -682,7 +681,7 @@
                                             >
                                         </button>
                                         <button
-                                            mat-stroked-button
+                                            matButton="elevated"
                                             (click)="hideEledgerWrap()"
                                             type="button"
                                             class="min-width-unset"
@@ -2743,8 +2742,7 @@
                     <div class="text-right mt-2 mb-2" [hidden]="!isBankOrCashAccount">
                         <button
                             aria-label="back"
-                            mat-raised-button
-                            color="primary"
+                            matButton="filled"
                             [hidden]="!closingBalanceBeforeReconcile || showLoader"
                             class="btn-sm mr-0"
                             (click)="getReconciledBack()"
@@ -2787,8 +2785,7 @@
                             </div>
                         </div>
                         <button
-                            mat-raised-button
-                            color="primary"
+                            matButton="filled"
                             aria-label="reconciliation"
                             [hidden]="closingBalanceBeforeReconcile || showLoader"
                             (click)="getReconciliation()"
@@ -3124,7 +3121,7 @@
                 <div class="back-btn text-right pr-1 mt-1 mb-2">
                     <button
                         aria-label="back"
-                        mat-stroked-button
+                        matButton="elevated"
                         class="border"
                         (click)="isShowLedgerColumnarReportTable = false"
                     >

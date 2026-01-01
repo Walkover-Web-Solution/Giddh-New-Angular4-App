@@ -82,7 +82,7 @@
                             </div>
                             <div class="col-6 mobile-no-action-buttons" *ngIf="showMobileField">
                                 <button
-                                    mat-stroked-button
+                                    matButton="elevated"
                                     (click)="reVerifyNumber()"
                                     *ngIf="isMobileNumberVerified || showOtpField"
                                     class="btn-min-width"
@@ -91,8 +91,7 @@
                                 </button>
 
                                 <button
-                                    mat-raised-button
-                                    color="primary"
+                                    matButton="filled"
                                     (click)="sendOtp()"
                                     [disabled]="sendOtpInProgress"
                                     *ngIf="!showOtpField && !isMobileNumberVerified"
@@ -126,8 +125,7 @@
                                 <div class="col-6 mobile-no-action-buttons">
                                     <div class="d-flex align-items-center">
                                         <button
-                                            mat-raised-button
-                                            color="primary"
+                                            matButton="filled"
                                             (click)="verifyOtp()"
                                             [disabled]="verifyOtpInProgress || resendOtpInProgress"
                                             class="btn-min-width"
@@ -143,7 +141,7 @@
                                             <span *ngIf="!verifyOtpInProgress">{{ localeData?.verify }}</span>
                                         </button>
                                         <button
-                                            mat-stroked-button
+                                            matButton="elevated"
                                             (click)="resendOtp()"
                                             [disabled]="resendOtpInProgress || verifyOtpInProgress"
                                             class="ml-auto send-otp-btn"
@@ -164,7 +162,7 @@
                         </div>
                         <div class="d-flex justify-content-between mt-3">
                             <button
-                                mat-stroked-button
+                                matButton="elevated"
                                 *ngIf="isCreateBySubscription"
                                 (click)="back()"
                                 aria-label="back"
@@ -173,13 +171,13 @@
                             </button>
                             <button
                                 *ngIf="companiesList?.length === 0"
-                                mat-stroked-button
+                                matButton="elevated"
                                 aria-label="cancel"
                                 (click)="openLogoutConfirmationDialog()"
                             >
                                 {{ commonLocaleData?.app_cancel }}
                             </button>
-                            <button mat-raised-button color="primary" (click)="nextStepForm()" aria-label="next">
+                            <button matButton="filled" (click)="nextStepForm()" aria-label="next">
                                 {{ commonLocaleData?.app_next }}
                             </button>
                         </div>
@@ -402,7 +400,7 @@
                         </div>
                         <ng-container *ngIf="isNewUserLoggedIn">
                             <div class="d-flex column-gap-15 mt-3">
-                                <button mat-raised-button color="primary" (click)="nextStepForm()">
+                                <button matButton="filled" (click)="nextStepForm()">
                                     {{ commonLocaleData?.app_next }}
                                 </button>
                             </div>
@@ -410,18 +408,18 @@
                         <ng-container *ngIf="!isNewUserLoggedIn">
                             <div class="d-flex justify-content-between mt-3">
                                 <div class="d-flex column-gap-15">
-                                    <button mat-stroked-button matStepperPrevious>
+                                    <button matButton="elevated" matStepperPrevious>
                                         {{ commonLocaleData?.app_back }}
                                     </button>
                                     <button
                                         *ngIf="companiesList?.length === 0"
-                                        mat-stroked-button
+                                        matButton="elevated"
                                         (click)="openLogoutConfirmationDialog()"
                                     >
                                         {{ commonLocaleData?.app_cancel }}
                                     </button>
                                 </div>
-                                <button mat-raised-button color="primary" (click)="onSubmit()">
+                                <button matButton="filled" (click)="onSubmit()">
                                     {{ commonLocaleData?.app_submit }}
                                 </button>
                             </div>
@@ -503,7 +501,7 @@
                                                         aria-label="delete icon"
                                                         class="btn mr-0"
                                                         (click)="removeUser(i)"
-                                                        mat-stroked-button
+                                                        matButton="elevated"
                                                     >
                                                         <i class="icon-trash text-red"></i>
                                                     </button>
@@ -522,15 +520,15 @@
                                 </div>
                             </div>
                             <div class="d-flex column-gap-15 mt-3">
-                                <button mat-stroked-button matStepperPrevious>
+                                <button matButton="elevated" matStepperPrevious>
                                     {{ commonLocaleData?.app_back }}
                                 </button>
-                                <button mat-raised-button color="primary" (click)="onSubmit()">
+                                <button matButton="filled" (click)="onSubmit()">
                                     {{ commonLocaleData?.app_submit }}
                                 </button>
                                 <button
                                     *ngIf="companiesList?.length === 0"
-                                    mat-stroked-button
+                                    matButton="elevated"
                                     (click)="openLogoutConfirmationDialog()"
                                 >
                                     {{ commonLocaleData?.app_cancel }}

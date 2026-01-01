@@ -1,0 +1,248 @@
+// Material 3 Design System Variables
+// Complete set of M3 design tokens for Giddh application
+
+// ===== M3 TYPOGRAPHY VARIABLES =====
+:root {
+    // Font Family
+    --font-family: 'Inter, system-ui, sans-serif';
+
+    // Font Sizes (M3 Typography Scale)
+    --font-size-9: 9px;
+    --font-size-12: 12px;
+    --font-size-14: 14px;
+    --font-size-15: 15px;
+    --font-size-16: 16px;
+    --font-size-20: 20px;
+    --font-size-24: 24px;
+    --font-size-32: 32px;
+    --font-size-48: 48px;
+
+    // Line Heights
+    --line-height-16: 16px;
+    --line-height-20: 20px;
+    --line-height-22: 22px;
+    --line-height-24: 24px;
+    --line-height-28: 28px;
+    --line-height-32: 32px;
+    --line-height-36: 36px;
+    --line-height-40: 40px;
+    --line-height-56: 56px;
+
+    // Font Weights
+    --font-weight-regular: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+
+    // Letter Spacing
+    --letter-spacing-normal: 0px;
+    --letter-spacing-wide: 0.25px;
+    --letter-spacing-wider: 0.4px;
+    --letter-spacing-widest: 1.5px;
+
+    // ===== M3 SPACING VARIABLES =====
+    // Based on 4px grid system
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 12px;
+    --spacing-lg: 16px;
+    --spacing-xl: 20px;
+    --spacing-2xl: 24px;
+    --spacing-3xl: 32px;
+    --spacing-4xl: 40px;
+    --spacing-5xl: 48px;
+    --spacing-6xl: 64px;
+
+    // ===== M3 ELEVATION VARIABLES =====
+    // Material 3 elevation system
+    --elevation-level0: none;
+    --elevation-level1: 0px 1px 2px 0px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+    --elevation-level2: 0px 1px 2px 0px rgba(0, 0, 0, 0.3), 0px 2px 6px 2px rgba(0, 0, 0, 0.15);
+    --elevation-level3: 0px 1px 3px 0px rgba(0, 0, 0, 0.3), 0px 4px 8px 3px rgba(0, 0, 0, 0.15);
+    --elevation-level4: 0px 2px 3px 0px rgba(0, 0, 0, 0.3), 0px 6px 10px 4px rgba(0, 0, 0, 0.15);
+    --elevation-level5: 0px 4px 4px 0px rgba(0, 0, 0, 0.3), 0px 8px 12px 6px rgba(0, 0, 0, 0.15);
+
+    // ===== M3 BORDER RADIUS VARIABLES =====
+    --border-radius-none: 0px;
+    --border-radius-xs: 4px;
+    --border-radius-sm: 8px;
+    --border-radius-md: 12px;
+    --border-radius-lg: 16px;
+    --border-radius-xl: 20px;
+    --border-radius-2xl: 24px;
+    --border-radius-3xl: 28px;
+    --border-radius-full: 50%;
+
+    // ===== M3 STATE LAYER VARIABLES =====
+    // Interaction state overlays
+    --state-layer-hover: rgba(0, 0, 0, 0.08);
+    --state-layer-focus: rgba(0, 0, 0, 0.12);
+    --state-layer-pressed: rgba(0, 0, 0, 0.12);
+    --state-layer-dragged: rgba(0, 0, 0, 0.16);
+
+    // ===== M3 OPACITY VARIABLES =====
+    --opacity-disabled: 0.38;
+    --opacity-hover: 0.08;
+    --opacity-focus: 0.12;
+    --opacity-pressed: 0.12;
+    --opacity-dragged: 0.16;
+
+    // ===== M3 COMPONENT SIZING VARIABLES =====
+    // Button sizes
+    --button-height-sm: 32px;
+    --button-height-md: 40px;
+    --button-height-lg: 48px;
+
+    // Form field sizes
+    --form-field-height-sm: 40px;
+    --form-field-height-md: 48px;
+    --form-field-height-lg: 56px;
+
+    // Icon sizes
+    --icon-size-sm: 16px;
+    --icon-size-md: 20px;
+    --icon-size-lg: 24px;
+    --icon-size-xl: 32px;
+
+    // ===== M3 SURFACE SYSTEM VARIABLES =====
+    // Light theme surface colors
+    --mat-sys-surface: #fef7ff;
+    --mat-sys-surface-dim: #ded8e1;
+    --mat-sys-surface-bright: #fef7ff;
+    --mat-sys-surface-container-lowest: #ffffff;
+    --mat-sys-surface-container-low: #f7f2fa;
+    --mat-sys-surface-container: #f3edf7;
+    --mat-sys-surface-container-high: #ece6f0;
+    --mat-sys-surface-container-highest: #e6e0e9;
+    --mat-sys-surface-variant: #e7e0ec;
+    --mat-sys-inverse-surface: #313033;
+
+    // On-surface colors (text/icons on surfaces)
+    --mat-sys-on-surface: #1d1b20;
+    --mat-sys-on-surface-variant: #49454f;
+    --mat-sys-inverse-on-surface: #f4eff4;
+
+    // Primary colors
+    --mat-sys-primary: #6750a4;
+    --mat-sys-on-primary: #ffffff;
+    --mat-sys-primary-container: #eaddff;
+    --mat-sys-on-primary-container: #21005d;
+    --mat-sys-inverse-primary: #d0bcff;
+
+    // Secondary colors
+    --mat-sys-secondary: #625b71;
+    --mat-sys-on-secondary: #ffffff;
+    --mat-sys-secondary-container: #e8def8;
+    --mat-sys-on-secondary-container: #1d192b;
+
+    // Tertiary colors
+    --mat-sys-tertiary: #7d5260;
+    --mat-sys-on-tertiary: #ffffff;
+    --mat-sys-tertiary-container: #ffd8e4;
+    --mat-sys-on-tertiary-container: #31111d;
+
+    // Error colors
+    --mat-sys-error: #ba1a1a;
+    --mat-sys-on-error: #ffffff;
+    --mat-sys-error-container: #ffdad6;
+    --mat-sys-on-error-container: #410002;
+
+    // Outline colors
+    --mat-sys-outline: #79747e;
+    --mat-sys-outline-variant: #cac4d0;
+
+    // Background colors (deprecated in M3 but kept for compatibility)
+    --mat-sys-background: #fef7ff;
+    --mat-sys-on-background: #1d1b20;
+
+    // Shadow and scrim
+    --mat-sys-shadow: #000000;
+    --mat-sys-scrim: #000000;
+
+    // ===== M3 ANIMATION VARIABLES =====
+    // Duration
+    --duration-short1: 50ms;
+    --duration-short2: 100ms;
+    --duration-short3: 150ms;
+    --duration-short4: 200ms;
+    --duration-medium1: 250ms;
+    --duration-medium2: 300ms;
+    --duration-medium3: 350ms;
+    --duration-medium4: 400ms;
+    --duration-long1: 450ms;
+    --duration-long2: 500ms;
+    --duration-long3: 550ms;
+    --duration-long4: 600ms;
+
+    // Easing
+    --easing-linear: linear;
+    --easing-standard: cubic-bezier(0.2, 0, 0, 1);
+    --easing-standard-accelerate: cubic-bezier(0.3, 0, 1, 1);
+    --easing-standard-decelerate: cubic-bezier(0, 0, 0, 1);
+    --easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
+    --easing-emphasized-accelerate: cubic-bezier(0.3, 0, 0.8, 0.15);
+    --easing-emphasized-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1);
+}
+
+// ===== DARK THEME OVERRIDES =====
+.dark-theme {
+    // M3 Surface system for dark theme
+    --mat-sys-surface: #141218;
+    --mat-sys-surface-dim: #141218;
+    --mat-sys-surface-bright: #3b383e;
+    --mat-sys-surface-container-lowest: #0f0d13;
+    --mat-sys-surface-container-low: #1d1b20;
+    --mat-sys-surface-container: #211f26;
+    --mat-sys-surface-container-high: #2b2930;
+    --mat-sys-surface-container-highest: #36343b;
+    --mat-sys-surface-variant: #49454f;
+    --mat-sys-inverse-surface: #e6e0e9;
+
+    // On-surface colors for dark theme
+    --mat-sys-on-surface: #e6e0e9;
+    --mat-sys-on-surface-variant: #cac4d0;
+    --mat-sys-inverse-on-surface: #313033;
+
+    // Primary colors for dark theme
+    --mat-sys-primary: #d0bcff;
+    --mat-sys-on-primary: #381e72;
+    --mat-sys-primary-container: #4f378b;
+    --mat-sys-on-primary-container: #eaddff;
+    --mat-sys-inverse-primary: #6750a4;
+
+    // Secondary colors for dark theme
+    --mat-sys-secondary: #ccc2dc;
+    --mat-sys-on-secondary: #332d41;
+    --mat-sys-secondary-container: #4a4458;
+    --mat-sys-on-secondary-container: #e8def8;
+
+    // Tertiary colors for dark theme
+    --mat-sys-tertiary: #efb8c8;
+    --mat-sys-on-tertiary: #492532;
+    --mat-sys-tertiary-container: #633b48;
+    --mat-sys-on-tertiary-container: #ffd8e4;
+
+    // Error colors for dark theme
+    --mat-sys-error: #ffb4ab;
+    --mat-sys-on-error: #690005;
+    --mat-sys-error-container: #93000a;
+    --mat-sys-on-error-container: #ffdad6;
+
+    // Outline colors for dark theme
+    --mat-sys-outline: #938f99;
+    --mat-sys-outline-variant: #49454f;
+
+    // Background colors for dark theme (deprecated in M3 but kept for compatibility)
+    --mat-sys-background: #141218;
+    --mat-sys-on-background: #e6e0e9;
+
+    // Shadow and scrim remain the same
+    --mat-sys-shadow: #000000;
+    --mat-sys-scrim: #000000;
+
+    // State layers for dark theme
+    --state-layer-hover: rgba(255, 255, 255, 0.08);
+    --state-layer-focus: rgba(255, 255, 255, 0.12);
+    --state-layer-pressed: rgba(255, 255, 255, 0.12);
+    --state-layer-dragged: rgba(255, 255, 255, 0.16);
+}

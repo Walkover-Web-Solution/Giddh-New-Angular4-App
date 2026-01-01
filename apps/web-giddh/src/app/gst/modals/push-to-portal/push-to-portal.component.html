@@ -1,6 +1,6 @@
 <div class="dialog-header">
     <span>{{ localeData?.filing?.push_to_portal }}</span>
-    <button mat-icon-button aria-label="close icon" role="button" mat-dialog-close>
+    <button matIconButton aria-label="close icon" role="button" mat-dialog-close>
         <i class="icon-cross"></i>
     </button>
 </div>
@@ -11,8 +11,7 @@
             <div class="col-sm-6 p-0 left-side">
                 <div class="left-side-center">
                     <button
-                        mat-raised-button
-                        color="primary"
+                        matButton="filled"
                         class="downloads-button"
                         (click)="onDownloadExcel($event)"
                     >
@@ -35,7 +34,7 @@
             </div>
             <div class="col-sm-6 p-0 right-side">
                 <div class="right-side-center">
-                    <button mat-raised-button color="primary" class="downloads-button" (click)="onDownloadJson($event)">
+                    <button matButton="filled" class="downloads-button" (click)="onDownloadJson($event)">
                         {{ localeData?.filing?.download_json }}
                     </button>
                 </div>

@@ -112,7 +112,7 @@
             </div>
             <div class="inventory-btnside">
                 <div class="d-flex justify-content-end mt-1 mr-2" *ngIf="!breadcrumbs?.length && showExportButton">
-                    <button mat-raised-button color="primary" (click)="exportInventoryMaster()">{{ commonLocaleData?.app_export }}</button>
+                    <button matButton="filled" (click)="exportInventoryMaster()">{{ commonLocaleData?.app_export }}</button>
                 </div>
                 <div class="no-data" *ngIf="isSearching && !masterColumnsData?.length">
                     <no-data
@@ -134,17 +134,16 @@
                         </ol>
                     </div>
                     <div class="d-flex justify-content-end mr-1 pb-1" *ngIf="showExportButton">
-                        <button mat-raised-button color="primary" (click)="exportInventoryMaster()">{{ commonLocaleData?.app_export }}</button>
+                        <button matButton="filled" (click)="exportInventoryMaster()">{{ commonLocaleData?.app_export }}</button>
                     </div>
                 </div>
                 </div>
                 <div class="create-btn-grp create-btn-inventory" *ngIf="showCreateButtons">
-                    <button mat-raised-button color="primary" class="mr-0" (click)="showCreateGroup()">
+                    <button matButton="filled" class="mr-0" (click)="showCreateGroup()">
                         {{ commonLocaleData?.app_create_group }}
                     </button>
                     <button
-                        mat-raised-button
-                        color="primary"
+                        matButton="filled"
                         class="mr-0"
                         *ngIf="!isTopLevel"
                         (click)="showCreateStock()"

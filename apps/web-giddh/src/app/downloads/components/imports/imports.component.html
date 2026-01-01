@@ -55,14 +55,14 @@
                         />
                     </div>
                     <div class="clear-filter form-group mb-0" *ngIf="showClearFilter">
-                        <button mat-stroked-button class="min-width-100 ml-2" (click)="resetFilter()">
+                        <button matButton="elevated" class="min-width-100 ml-2" (click)="resetFilter()">
                             <span class="icon-cross icon-font-size-14"></span> {{ commonLocaleData?.app_clear_filter }}
                         </button>
                     </div>
                 </div>
             </div>
             <button
-                mat-stroked-button
+                matButton="elevated"
                 class="btn-stroked-icon"
                 (click)="getImports()"
                 [matTooltip]="commonLocaleData?.app_refresh"
@@ -99,8 +99,7 @@
                             target="_blank"
                             *ngIf="!isElectron"
                             [href]="element.path"
-                            mat-raised-button
-                            color="primary"
+                            matButton="filled"
                             class="import-button-status"
                         >
                             {{ commonLocaleData?.app_download }}
@@ -108,8 +107,7 @@
                         <a
                             *ngIf="isElectron"
                             (click)="downloadFile(element.path)"
-                            mat-raised-button
-                            color="primary"
+                            matButton="filled"
                             class="import-button-status"
                         >
                             {{ commonLocaleData?.app_download }}</a
@@ -143,8 +141,7 @@
                             *ngIf="element?.status === 'COMPLETED'"
                             target="_blank"
                             (click)="downloadErrorSheet(element)"
-                            mat-raised-button
-                            color="primary"
+                            matButton="filled"
                             class="import-button-status"
                         >
                             {{ commonLocaleData?.app_download }}
@@ -166,8 +163,7 @@
                             *ngIf="element?.status === 'COMPLETED'"
                             target="_blank"
                             (click)="downloadSuccessSheet(element)"
-                            mat-raised-button
-                            color="primary"
+                            matButton="filled"
                             class="import-button-status"
                         >
                             {{ commonLocaleData?.app_download }}

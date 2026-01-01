@@ -7,7 +7,7 @@
     <div class=" p-3 clear-both">
         <p class="section-head pt-0">{{ localeData?.add_bank_account_form_heading }}</p>
         <div>
-            <button mat-raised-button color="primary" (click)="connectBank()">{{ localeData?.connect_bank }}</button>
+            <button matButton="filled" (click)="connectBank()">{{ localeData?.connect_bank }}</button>
         </div>
         <div class="mt-2">
             <p>{{ localeData?.note }}</p>
@@ -42,7 +42,7 @@
                     placeholer="Extra Params"
                     id="extraParams"
                 />
-                <button mat-raised-button color="primary" type="submit">{{ commonLocaleData?.app_submit }}</button>
+                <button matButton="filled" type="submit">{{ commonLocaleData?.app_submit }}</button>
             </form>
         </div>
     </div>
@@ -59,7 +59,7 @@
                     <p class="subHead border-bottom">
                         {{ acc.siteName }}
                         <button
-                            mat-stroked-button class="ml-2"
+                            matButton="elevated" class="ml-2"
                             [matTooltip]="commonLocaleData?.app_refresh"
                             matTooltipPosition="above"
                             (click)="onRefreshToken(acc.yodleeAccounts[0], false)"
@@ -68,7 +68,7 @@
                             <i class="icon-refresh"></i> {{ commonLocaleData?.app_refresh }}
                         </button>
                         <button
-                            mat-stroked-button class="ml-2"
+                            matButton="elevated" class="ml-2"
                             [matTooltip]="commonLocaleData?.app_refresh"
                             matTooltipPosition="above"
                             (click)="
@@ -141,21 +141,21 @@
                                 </div>
                                 <div class="clear-both">
                                     <button
-                                        mat-stroked-button
+                                        matButton="elevated"
                                         *ngIf="card.showAccList"
                                         (click)="card.showAccList = false"
                                     >
                                         {{ localeData?.not_now }}
                                     </button>
                                     <button
-                                        mat-raised-button color="primary"
+                                        matButton="filled"
                                         *ngIf="card.giddhAccount == null && !card.showAccList"
                                         (click)="card.showAccList = true"
                                     >
                                         {{ localeData?.link_account }}
                                     </button>
                                     <button
-                                        mat-stroked-button
+                                        matButton="elevated"
                                         class="mt-2"
                                         *ngIf="card.giddhAccount && card.giddhAccount.name?.length > 0"
                                         (click)="onUnlinkBankAccount(card)"
@@ -164,7 +164,7 @@
                                     </button>
                                 </div>
                                 <button
-                                    mat-stroked-button class="font-size-16 position-absolute bank-delete"
+                                    matButton="elevated" class="font-size-16 position-absolute bank-delete"
                                     (click)="onDeleteAddedBank(acc.siteName, card, acc)"
                                 >
                                     <i
@@ -190,7 +190,7 @@
                                 <div class="balance text-left">{{ card.balanceCurrencyCode }} {{ card.balance }}</div>
                                 <div class="clear-both mt-4"></div>
                                 <button
-                                    mat-stroked-button class="font-size-16 position-absolute bank-delete"
+                                    matButton="elevated" class="font-size-16 position-absolute bank-delete"
                                     (click)="onDeleteAddedBank(acc.siteName, card, acc)"
                                 >
                                     <i class="icon-trash" [matTooltip]="localeData?.delete_bank" matTooltipPosition="above"></i>
@@ -211,14 +211,14 @@
                                 <p>{{ localeData?.reason }}: {{ acc.reason }}</p>
                                 <div class="clear-both mt-4" *ngIf="acc?.status === 'ALREADY_ADDED'">
                                     <button
-                                        mat-stroked-button
+                                        matButton="elevated"
                                         *ngIf="card?.status !== 'INCORRECT_CREDENTIALS'"
                                         (click)="onRefreshToken(card)"
                                     >
                                         {{ localeData?.reconnect }}
                                     </button>
                                     <button
-                                        mat-stroked-button
+                                        matButton="elevated"
                                         *ngIf="card?.status === 'INCORRECT_CREDENTIALS'"
                                         (click)="connectBank(acc.siteId, card?.providerAccount?.providerAccountId)"
                                     >
@@ -227,14 +227,14 @@
                                 </div>
                                 <div class="clear-both mt-4" *ngIf="acc?.status !== 'ALREADY_ADDED'">
                                     <button
-                                        mat-stroked-button
+                                        matButton="elevated"
                                         *ngIf="acc?.status !== 'INCORRECT_CREDENTIALS'"
                                         (click)="onRefreshToken(card)"
                                     >
                                         {{ localeData?.reconnect }}
                                     </button>
                                     <button
-                                        mat-stroked-button
+                                        matButton="elevated"
                                         *ngIf="acc?.status === 'INCORRECT_CREDENTIALS'"
                                         (click)="connectBank(acc.siteId, card?.providerAccount?.providerAccountId)"
                                     >

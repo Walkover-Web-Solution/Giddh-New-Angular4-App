@@ -82,7 +82,7 @@
     <ng-template #consolidateModal>
         <div class="dialog-header">
             <span>{{ localeData?.consolidated_details_heading }}</span>
-            <button mat-icon-button aria-label="close" mat-dialog-close>
+            <button matIconButton aria-label="close" mat-dialog-close>
                 <i class="icon-cross"></i>
             </button>
         </div>
@@ -322,15 +322,14 @@
 
                         <div class="d-flex column-gap-1">
                             <button
-                                mat-raised-button
-                                color="primary"
+                                matButton="filled"
                                 type="submit"
                                 (click)="updateEwayTransport(updateEwayVehicleform)"
                                 aria-label="save"
                             >
                                 {{ commonLocaleData?.app_save }}
                             </button>
-                            <button mat-stroked-button mat-dialog-close type="button" aria-label="cancel">
+                            <button matButton="elevated" mat-dialog-close type="button" aria-label="cancel">
                                 {{ commonLocaleData?.app_cancel }}
                             </button>
                         </div>
@@ -374,15 +373,14 @@
 
                     <div class="d-flex column-gap-1">
                         <button
-                            mat-raised-button
-                            color="primary"
+                            matButton="filled"
                             type="submit"
                             (click)="cancelEwayBill(cancelEwayRequest)"
                             aria-label="confirm"
                         >
                             {{ commonLocaleData?.app_confirm }}
                         </button>
-                        <button mat-stroked-button mat-dialog-close type="button" aria-label="cancel">
+                        <button matButton="elevated" mat-dialog-close type="button" aria-label="cancel">
                             {{ commonLocaleData?.app_cancel }}
                         </button>
                     </div>
@@ -506,7 +504,7 @@
                         </mat-menu>
                     </ng-container>
                     <ng-container *ngIf="activeTabIndex === 1 && voucherApiVersion === 2">
-                        <button mat-raised-button color="primary" (click)="onGenerateEwayBill(item)">
+                        <button matButton="filled" (click)="onGenerateEwayBill(item)">
                             {{ localeData?.generate_eway_bill }}
                         </button>
                     </ng-container>
