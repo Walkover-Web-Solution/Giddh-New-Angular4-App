@@ -30,7 +30,7 @@ import { SettingsUtilityService } from '../services/settings-utility.service';
 import { WarehouseActions } from './action/warehouse.action';
 import { WarehouseState } from './reducer/warehouse.reducer';
 import { OrganizationType } from '../../models/user-login-state';
-// import { VoucherComponentStore } from '../../vouchers/utility/vouchers.store';
+import { VoucherComponentStore } from '../../vouchers/utility/vouchers.store';
 import { ServiceConfig } from '../../services/service.config';
 import { environment } from 'apps/web-giddh/src/environments/environment';
 
@@ -46,7 +46,7 @@ import { environment } from 'apps/web-giddh/src/environments/environment';
     selector: 'setting-warehouse',
     templateUrl: './warehouse.component.html',
     styleUrls: ['./warehouse.component.scss'],
-    // providers: [VoucherComponentStore],
+    providers: [VoucherComponentStore],
     standalone:false
 })
 export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
@@ -134,7 +134,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
         private settingsWarehouseService: SettingsWarehouseService,
         public dialog: MatDialog,
         @Inject(ServiceConfig) private serviceConfig,
-        // private componentStore: VoucherComponentStore
+        private componentStore: VoucherComponentStore
     ) { }
 
     /**
@@ -154,11 +154,11 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
             }
         });
 
-        // this.componentStore.branchList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
-        //     if (response) {
-        //         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response?.length > 1;
-        //     }
-        // });
+        this.componentStore.branchList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response) {
+                this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch && response?.length > 1;
+            }
+        });
 
         this.imgPath2 = isElectron ? 'assets/images/warehouse-vector.svg' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/warehouse-vector.svg';
     }

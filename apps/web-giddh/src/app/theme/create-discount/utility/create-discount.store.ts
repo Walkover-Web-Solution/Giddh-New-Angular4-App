@@ -63,33 +63,25 @@ export class CreateDiscountComponentStore extends ComponentStore<CreateDiscountS
         return data.pipe(
             switchMap((req) => {
                 this.patchState({ createDiscountSuccess: false, createDiscountInProgress: true });
+                
                 return this.settingsDiscountService.CreateDiscount(req as any).pipe(
-                    tap(
-                        (res: BaseResponse<any, any>) => {
+                    tap({
+                        next: (res: BaseResponse<any, CreateDiscountRequest>) => {
                             this.toaster.showSnackBar('success', res.body);
-                            return this.patchState({
+                            this.patchState({
                                 createDiscountInProgress: false,
                                 createDiscountSuccess: true
                             });
                         },
-                        (error: any) => {
+                        error: (error: any) => {
                             this.toaster.showSnackBar('error', error);
-                            return this.patchState({
+                            this.patchState({
                                 createDiscountInProgress: false,
                                 createDiscountSuccess: false
                             });
                         }
-                    ),
-                    tap(
-                        (response: BaseResponse<any, CreateDiscountRequest>) => {
-                            if (response?.status === "success") {
-                                this.toaster.successToast(this.localeService.translate("app_messages.discount_created"));
-                            } else {
-                                this.toaster.errorToast(response?.message);
-                            }
-                        }
-                    ),
-                    catchError((err) => EMPTY)
+                    }),
+                    catchError(() => EMPTY)
                 );
             })
         );

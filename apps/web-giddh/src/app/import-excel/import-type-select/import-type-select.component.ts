@@ -5,9 +5,9 @@ import { GeneralService } from '../../services/general.service';
 import { OrganizationType } from '../../models/user-login-state';
 import { takeUntil } from 'rxjs/operators';
 import { ReplaySubject } from 'rxjs';
-// import { ImportStatementComponent } from '../../ledger/components/import-statement/import-statement.component';
+import { ImportStatementComponent } from '../../ledger/components/import-statement/import-statement.component';
 import { MatDialog } from '@angular/material/dialog';
-// import { VoucherType } from '../../ledger/components/import-statement/import-statement.const';
+import { VoucherType } from '../../ledger/components/import-statement/import-statement.const';
 import { ServiceConfig } from '../../services/service.config';
 import { Configuration } from '../../app.constant';
 import { environment } from '../../../environments/environment';
@@ -31,11 +31,7 @@ export class ImportTypeSelectComponent implements OnInit, OnDestroy {
     /* This will hold common JSON data */
     public commonLocaleData: any = {};
     /** Holds a reference to the `VoucherType` enum */
-    // public voucherType: typeof VoucherType = VoucherType; // Commented out due to missing import
-    public voucherType = {
-        AccountWise: 'AccountWise',
-        VoucherWise: 'VoucherWise'
-    };
+    public voucherType: typeof VoucherType = VoucherType; // Commented out due to missing import
     /** Holds images folder path */
     public imgPath: string = "";
 

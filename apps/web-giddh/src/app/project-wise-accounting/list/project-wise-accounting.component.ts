@@ -150,6 +150,7 @@ export class ProjectWiseAccountingListComponent implements OnInit, OnDestroy {
                     if (project.uniqueName === response.uniqueName)
                         project.profitAndLoss = response.profitAndLoss;
                 })
+                this.changeDetection.detectChanges();
             }
         });
 

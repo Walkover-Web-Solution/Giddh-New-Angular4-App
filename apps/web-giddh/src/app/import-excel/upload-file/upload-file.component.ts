@@ -11,14 +11,14 @@ import { GeneralService } from '../../services/general.service';
 import { ToasterService } from '../../services/toaster.service';
 import { AppState } from '../../store';
 import { cloneDeep, find, forEach, map, some } from '../../lodash-optimized';
-// import { LedgerComponentStore } from '../../ledger/ledger.store';
-// import { VoucherType } from '../../ledger/components/import-statement/import-statement.const';
+import { LedgerComponentStore } from '../../ledger/ledger.store';
+import { VoucherType } from '../../ledger/components/import-statement/import-statement.const';
 
 @Component({
     selector: 'upload-file',
     templateUrl: './upload-file.component.html',
     styleUrls: ['./upload-file.component.scss'],
-    // providers: [LedgerComponentStore], // Commented out due to missing import
+    providers: [LedgerComponentStore], // Commented out due to missing import
     standalone: false
 })
 
@@ -74,11 +74,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
     /** Stores the voucher response */
     public voucherListResponse: IOption[] = [];
     /** Holds a reference to the `VoucherType` enum */
-    // public voucherType: typeof VoucherType = VoucherType; // Commented out due to missing import
-    public voucherType = {
-        AccountWise: 'AccountWise',
-        VoucherWise: 'VoucherWise'
-    };
+    public voucherType: typeof VoucherType = VoucherType; // Commented out due to missing import/
 
     constructor(
         private toasterService: ToasterService,
@@ -87,7 +83,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
         private store: Store<AppState>,
         private generalService: GeneralService,
         private router: Router,
-        // private ledgerComponentStore: LedgerComponentStore // Commented out due to missing import
+        private ledgerComponentStore: LedgerComponentStore // Commented out due to missing import
     ) {
 
     }
@@ -186,25 +182,25 @@ export class UploadFileComponent implements OnInit, OnDestroy {
             }
         });
 
-        // this.ledgerComponentStore.accountSearch$.pipe(takeUntil(this.destroyed$)).subscribe(accountSearchResponse => {
-        //     if (accountSearchResponse) {
-        //         this.accountSearchRequest.count = accountSearchResponse.count;
-        //         const currentOptions = this.accountSearchResponseSubject.value;
-        //         const newOptions = [...currentOptions];
+        this.ledgerComponentStore.accountSearch$.pipe(takeUntil(this.destroyed$)).subscribe(accountSearchResponse => {
+            if (accountSearchResponse) {
+                this.accountSearchRequest.count = accountSearchResponse.count;
+                const currentOptions = this.accountSearchResponseSubject.value;
+                const newOptions = [...currentOptions];
 
-        //         accountSearchResponse.results?.forEach(result => {
-        //             if (result?.uniqueName) {
-        //                 newOptions.push({
-        //                     value: result.uniqueName,
-        //                     label: result.name
-        //                 });
-        //             }
-        //         });
+                accountSearchResponse.results?.forEach(result => {
+                    if (result?.uniqueName) {
+                        newOptions.push({
+                            value: result.uniqueName,
+                            label: result.name
+                        });
+                    }
+                });
 
-        //         this.accountSearchResponseSubject.next(newOptions);
-        //         this.accountSearchRequest.isLoading = false;
-        //     }
-        // });
+                this.accountSearchResponseSubject.next(newOptions);
+                this.accountSearchRequest.isLoading = false;
+            }
+        });
     }
 
     /**
@@ -290,7 +286,7 @@ export class UploadFileComponent implements OnInit, OnDestroy {
     */
     public getProjectAccount(requestObject: any): void {
         requestObject.count = this.defaultCount;
-        // this.ledgerComponentStore.getProjectAccount(requestObject); // Commented out due to missing import
+        this.ledgerComponentStore.getProjectAccount(requestObject); // Commented out due to missing import
     }
 
     /**

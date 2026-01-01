@@ -143,7 +143,6 @@ export class CreateDiscountComponent implements OnInit, OnDestroy {
         if (!model.accountUniqueName) {
             delete model.accountUniqueName;
         }
-
         this.componentStore.saveDiscount(model);
     }
 
