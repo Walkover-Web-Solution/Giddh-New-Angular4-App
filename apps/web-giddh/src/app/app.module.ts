@@ -15,32 +15,8 @@ import { environment } from '../environments/environment';
 import { ActionModule } from './actions/action.module';
 import { AppLoginSuccessComponent } from './app-login-success/app-login-success';
 import { AppComponent } from './app.component';
-import { IS_ELECTRON_WA, APP_FOLDER_WA, APP_URL_WA } from './app.constant';
+import { IS_ELECTRON_WA } from './app.constant';
 import { Angular21CompatibilityErrorHandler } from './angular21-compatibility';
-
-// Debug: Log all environment variables to verify they're loaded correctly
-// console.log('=== ENVIRONMENT VARIABLES DEBUG ===');
-// console.log('🌍 Core Environment:');
-// console.log('  production:', environment.production);
-// console.log('  showDevModule:', environment.showDevModule);
-// console.log('  isElectron:', environment.isElectron);
-// console.log('');
-// console.log('🔗 URLs & Endpoints:');
-// console.log('  AppUrl:', environment.AppUrl);
-// console.log('  ApiUrl:', environment.ApiUrl);
-// console.log('  UkApiUrl:', environment.UkApiUrl);
-// console.log('  PORTAL_URL:', environment.PORTAL_URL);
-// console.log('  APP_FOLDER:', environment.APP_FOLDER);
-// console.log('');
-// console.log('🔑 Authentication & Services:');
-// console.log('  GOOGLE_CLIENT_ID:', environment.GOOGLE_CLIENT_ID);
-// console.log('  GOOGLE_CLIENT_SECRET:', environment.GOOGLE_CLIENT_SECRET ? '***HIDDEN***' : 'NOT SET');
-// console.log('  OTP_WIDGET_ID:', environment.OTP_WIDGET_ID);
-// console.log('  OTP_TOKEN_AUTH:', environment.OTP_TOKEN_AUTH ? '***HIDDEN***' : 'NOT SET');
-// console.log('  RAZORPAY_KEY:', environment.RAZORPAY_KEY);
-// console.log('');
-// console.log('📊 Environment Object Keys:', Object.keys(environment).filter(key => typeof environment[key] !== 'function'));
-// console.log('=== END ENVIRONMENT DEBUG ===');
 import { APP_RESOLVER_PROVIDERS } from './app.resolver';
 import { ROUTES } from './app.routes';
 import { DynamicThemeService } from './shared/services/dynamic-theme.service';
@@ -55,7 +31,6 @@ import { WindowRef } from './shared/helpers/window.object';
 import { reducers } from './store';
 import { QuicklinkModule, QuicklinkStrategy } from 'ngx-quicklink';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-// import { SnackBarModule } from './theme/snackbar/snackbar.module';
 import { MatDialogModule, MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 import { MobileRestrictedComponent } from './mobile-restricted/mobile-restricted.component';
 import { LoaderModule } from './loader/loader.module';
@@ -63,8 +38,32 @@ import { PageModule } from './page/page.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { MatButtonModule } from '@angular/material/button';
 import { FormFieldsModule } from './theme/form-fields/form-fields.module';
-import { filter, find, forEach, get, includes, keys, startsWith  } from './lodash-optimized';
-// import { VerifySubscriptionTransferOwnershipModule } from './verify-subscription-transfer-ownership/verify-subscription-transfer-ownership.module';
+import { VerifySubscriptionTransferOwnershipModule } from './verify-subscription-transfer-ownership/verify-subscription-transfer-ownership.module';
+
+
+// Debug: Log all environment variables to verify they're loaded correctly
+console.log('=== ENVIRONMENT VARIABLES DEBUG ===');
+console.log('🌍 Core Environment:');
+console.log('  production:', environment.production);
+console.log('  showDevModule:', environment.showDevModule);
+console.log('  isElectron:', environment.isElectron);
+console.log('');
+console.log('🔗 URLs & Endpoints:');
+console.log('  AppUrl:', environment.AppUrl);
+console.log('  ApiUrl:', environment.ApiUrl);
+console.log('  UkApiUrl:', environment.UkApiUrl);
+console.log('  PORTAL_URL:', environment.PORTAL_URL);
+console.log('  APP_FOLDER:', environment.APP_FOLDER);
+console.log('');
+console.log('🔑 Authentication & Services:');
+console.log('  GOOGLE_CLIENT_ID:', environment.GOOGLE_CLIENT_ID);
+console.log('  GOOGLE_CLIENT_SECRET:', environment.GOOGLE_CLIENT_SECRET ? '***HIDDEN***' : 'NOT SET');
+console.log('  OTP_WIDGET_ID:', environment.OTP_WIDGET_ID);
+console.log('  OTP_TOKEN_AUTH:', environment.OTP_TOKEN_AUTH ? '***HIDDEN***' : 'NOT SET');
+console.log('  RAZORPAY_KEY:', environment.RAZORPAY_KEY);
+console.log('');
+console.log('📊 Environment Object Keys:', Object.keys(environment).filter(key => typeof environment[key] !== 'function'));
+console.log('=== END ENVIRONMENT DEBUG ===');
 // Get white label configuration from localStorage
 const whiteLabelString = localStorage.getItem('whiteLabel');
 let whiteLabelConfig = whiteLabelString ? JSON.parse(whiteLabelString) : null;
@@ -611,7 +610,7 @@ export function getServiceConfigAfterInit(): () => Promise<any> {
         FormsModule,
         ReactiveFormsModule,
         FormFieldsModule,
-        // VerifySubscriptionTransferOwnershipModule,
+        VerifySubscriptionTransferOwnershipModule,
         ServiceModule.forRoot(),
         ActionModule.forRoot(),
         DecoratorsModule.forRoot(),
@@ -625,7 +624,6 @@ export function getServiceConfigAfterInit(): () => Promise<any> {
         }),
         QuicklinkModule,
         MatSnackBarModule,
-        // SnackBarModule,
         MatDialogModule,
         MatButtonModule,
         LoaderModule,

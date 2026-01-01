@@ -994,9 +994,14 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
      */
     private focusSubmitButton(): void {
         setTimeout(() => {
-            const submitBtn = this.renderer.selectRootElement('button[type="submit"], button[ aria-label="update"]', true);
-            if (submitBtn) {
-                submitBtn.focus();
+            try {
+                const submitBtn = this.renderer.selectRootElement('button[type="submit"], button[ aria-label="update"]', true);
+                if (submitBtn) {
+                    submitBtn.focus();
+                }
+            } catch (error) {
+                // Silently handle case where submit button doesn't exist
+                console.debug('Submit button not found for focus');
             }
         }, 100);
     }
