@@ -342,14 +342,14 @@ export class LoginActions {
     public logoutSuccess$: Observable<Action> = createEffect(() => this.actions$
         .pipe(
             ofType(LoginActions.LogOut),
-            map((action: CustomActions) => {
+            switchMap(async (action: CustomActions) => {
                 if (PRODUCTION_ENV && !isElectron) {
-                    window.location.href = this._generalService.getGiddhRegionUrl();
+                    window.location.href = await this._generalService.getGiddhRegionUrl();
                 } else if (isElectron) {
                     this._router.navigate(['/login']);
                     window.location.reload();
                 } else {
-                    window.location.href = this._generalService.getGiddhRegionUrl();
+                    window.location.href = await this._generalService.getGiddhRegionUrl();
                 }
                 return { type: 'EmptyAction' };
             })));

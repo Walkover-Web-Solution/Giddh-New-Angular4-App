@@ -642,10 +642,40 @@ export class GeneralService {
      * @return {*}  {string}
      * @memberof GeneralService
      */
-    public getGiddhRegionUrl(): string {
+    /**
+     * Attempts to get whiteLabel data from localStorage with retry mechanism
+     * @param maxRetries Maximum number of retry attempts (default: 10)
+     * @param delay Delay between retries in milliseconds (default: 50)
+     * @returns Promise<any> whiteLabel data or null if not found after retries
+     */
+    private async getWhiteLabelWithRetry(maxRetries: number = 10, delay: number = 50): Promise<any> {
+        for (let attempt = 1; attempt <= maxRetries; attempt++) {
+            try {
+                const whiteLabelString = localStorage.getItem('whiteLabel');
+                if (whiteLabelString) {
+                    const whiteLabelData = JSON.parse(whiteLabelString);
+                    if (whiteLabelData && whiteLabelData.giddhWhiteLabel && whiteLabelData.giddhWhiteLabel.domainName) {
+                        return whiteLabelData;
+                    }
+                }
+            } catch (error) {
+                console.warn(`WhiteLabel parse error on attempt ${attempt}:`, error);
+            }
+
+            // Wait before next retry (except on last attempt)
+            if (attempt < maxRetries) {
+                await new Promise(resolve => setTimeout(resolve, delay));
+            }
+        }
+        return null;
+    }
+
+    public async getGiddhRegionUrl(): Promise<string> {
         const countryRegion = localStorage.getItem('Country-Region');
         const region = COUNTRY_REGION_MAP[countryRegion] || null;
-        const whiteLabelData = JSON.parse(localStorage.getItem('whiteLabel'));
+
+        // Try to get whiteLabel data with retry mechanism
+        const whiteLabelData = await this.getWhiteLabelWithRetry();
 
         // Check if white label data exists and has domainName
         if (whiteLabelData && whiteLabelData.giddhWhiteLabel && whiteLabelData.giddhWhiteLabel.domainName) {
@@ -655,11 +685,14 @@ export class GeneralService {
             }
             return whiteLabelData.giddhWhiteLabel.domainName + '/login';
         }
+
+        // Fallback when no whiteLabel data exists after retries
+        return region === 'gl' ? 'https://giddh.com/login' : `https://giddh.com/${region}/login`;
     }
 
     /**
      * Handles the voucher date change modal configuration
-     *n
+     *
      * @param {boolean} isVoucherDateSelected
      * @returns {ConfirmationModalConfiguration}
      * @memberof GeneralService
