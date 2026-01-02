@@ -655,6 +655,8 @@ export class GeneralService {
             }
             return whiteLabelData.giddhWhiteLabel.domainName + '/login';
         }
+
+        return region === 'gl' ? 'https://giddh.com/login' : `https://giddh.com/${region}/login`;
     }
 
     /**
