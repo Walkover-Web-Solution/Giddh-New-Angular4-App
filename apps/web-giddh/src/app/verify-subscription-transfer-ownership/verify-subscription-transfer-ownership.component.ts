@@ -54,6 +54,7 @@ export class VerifySubscriptionTransferOwnershipComponent implements OnInit {
         @Inject(ServiceConfig) private serviceConfig,
         private generalService: GeneralService
     ) {
+        this.loginUrl = this.generalService.getGiddhRegionUrl();
     }
 
 
@@ -62,8 +63,7 @@ export class VerifySubscriptionTransferOwnershipComponent implements OnInit {
    *
    * @memberof VerifySubscriptionTransferOwnershipComponent
    */
-    public async ngOnInit(): Promise<void> {
-        this.loginUrl = await this.generalService.getGiddhRegionUrl();
+    public ngOnInit(): void {
         this.imgPath = isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || AppUrl) + APP_FOLDER + 'assets/images/';
 
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe(response => {

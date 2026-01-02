@@ -801,13 +801,13 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
             }
         }
 
-        this.session$.subscribe(async (s) => {
+        this.session$.subscribe((s) => {
             if (s === userLoginStateEnum.notLoggedIn) {
                 if (isElectron) {
                     this.router.navigate(['/login']);
                 } else {
                     const whiteLabel = this.generalService.getDecodedWhiteLabel();
-                    window.location.href = (environment.production) ? await this.generalService.getGiddhRegionUrl() : whiteLabel?.giddhWhiteLabel?.domainName ? `${whiteLabel.giddhWhiteLabel.domainName}` : `https://test.giddh.com/login`;
+                    window.location.href = (environment.production) ? this.generalService.getGiddhRegionUrl() : whiteLabel?.giddhWhiteLabel?.domainName ? `${whiteLabel.giddhWhiteLabel.domainName}` : `https://test.giddh.com/login`;
                 }
             } else if (s === userLoginStateEnum.newUserLoggedIn) {
 
@@ -1042,7 +1042,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
 
     /**
     * This function is used to open manage groups accounts dialog
-    *
+    * 
     * @returns {void}
     * @memberof HeaderComponent
     */
@@ -1522,7 +1522,7 @@ export class HeaderComponent implements OnInit, AfterViewInit, OnDestroy, AfterV
      * @memberof HeaderComponent
      */
     public toggleGiddhDatepicker(isOpen: boolean = true): void {
-        if (isOpen) {
+        if (isOpen) {            
             this.universalDatepickerTrigger?.openMenu();
         } else {
             this.universalDatepickerTrigger?.closeMenu();
