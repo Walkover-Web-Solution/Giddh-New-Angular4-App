@@ -139,7 +139,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
     /** This will use for branch name */
     public branchName: string = "";
     /** Voucher API version */
-    public voucherApiVersion: number = 1;
+    public voucherApiVersion: number = 1 | 2;
 
     constructor(
         private aiOcrStore: AiOcrStore,
@@ -159,6 +159,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
      * @memberof AiOcrComponent
      */
     public ngOnInit(): void {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.route.params.pipe(delay(100), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.aiOcrStore.reset();
