@@ -229,14 +229,14 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
 
             // Always try to set label value when options change, regardless of previous value
             if (changes?.options) {
-            // Use setTimeout to ensure the value is properly set before trying to find the label
-            setTimeout(() => {
-                this.setLabelValue(null);
-            }, 0);
+                // Use setTimeout to ensure the value is properly set before trying to find the label
+                setTimeout(() => {
+                    this.setLabelValue(null);
+                }, 0);
             }
         }
         if (changes?.forceClear && !changes.forceClear.firstChange && changes.forceClear.currentValue !== changes.forceClear.previousValue) {
-           this.handleForceClear();
+            this.handleForceClear();
         }
         if (changes?.openDropdown?.currentValue && !changes?.openDropdown?.previousValue && changes.openDropdown.currentValue !== changes.openDropdown.previousValue) {
             this.openDropdownPanel();
@@ -260,7 +260,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      * @memberof ReactiveDropdownFieldComponent
      */
     private handleForceClear(): void {
-         this.writeValue("", false);
+        this.writeValue("", false);
         this.controlLabelValue = "";
         this.clearDropdownValue();
         this.fieldFilteredOptions$ = of([]);
@@ -280,16 +280,8 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         if (!this.isDestroyed && this.trigger) {
             try {
                 if (operation === 'open') {
-                    // If dropdown is already open, do not reopen
-                    if (this.trigger.panelOpen) {
-                        return;
-                    }
                     this.trigger.openPanel();
                 } else {
-                    // If dropdown is already closed, do not reclose
-                    if (!this.trigger.panelOpen) {
-                        return;
-                    }
                     this.trigger.closePanel();
                 }
             } catch (error) {
@@ -498,17 +490,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         }
     }
 
-    /**
-     * Handles keydown events on the input field
-     *
-     * @param {KeyboardEvent} event - The keyboard event
-     * @memberof ReactiveDropdownFieldComponent
-     */
-    public onInputKeyDown(event: KeyboardEvent): void {
-        if (event.key === 'Enter' && this.trigger?.panelOpen) {
-            this.closeDropdownPanel();
-        }
-    }
+
 
     /**
      * This will use for open dropdown panel
@@ -520,29 +502,10 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             return;
         }
 
-        this.focusInputField();
+        this.selectField?.nativeElement?.focus();
         setTimeout(() => {
             this.handleDropdownPanelOperation('open');
         }, 10);
-    }
-
-    /**
-     * Focuses the input field without opening the dropdown
-     *
-     * @memberof ReactiveDropdownFieldComponent
-     */
-    public focusInputField(): void {
-        if (this.trigger) {
-            // Temporarily disable autocomplete to prevent dropdown from opening
-            this.trigger.autocompleteDisabled = true;
-            this.selectField?.nativeElement?.focus();
-            // Re-enable autocomplete after a short delay
-            setTimeout(() => {
-                this.trigger.autocompleteDisabled = false;
-            }, 100);
-        } else {
-            this.selectField?.nativeElement?.focus();
-        }
     }
 
     /**

@@ -1389,7 +1389,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         }, 100);
                     } else if (this.isUpdateMode) {
                         setTimeout(() => {
-                            this.customerVendorDropdown.focusInputField();
+                            // this.customerVendorDropdown.focusInputField();
                         }, 100);
                     } else {
                         this.openAccountDropdown = false;

@@ -385,7 +385,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                     tap(
                         (res: Array<IVariant>) => {
                             return this.patchState({
-                                stockVariants: { results: res?.map(res => { return { label: res.name, value: res.uniqueName } }) ?? [], entryIndex: req.index, autoSelectVariant: req.autoSelectVariant, stockUniqueName: req.q }
+                                stockVariants: { results: Array.isArray(res) ? res.map(res => { return { label: res.name, value: res.uniqueName } }) : [], entryIndex: req.index, autoSelectVariant: req.autoSelectVariant, stockUniqueName: req.q }
                             });
                         },
                         (error: any) => {
@@ -463,7 +463,7 @@ export class VoucherComponentStore extends ComponentStore<VoucherState> {
                     tap(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
-                                briefAccounts: res?.body?.results?.map(res => { return { label: res.name, value: res.uniqueName, additional: { currency: res?.currency } } }) ?? []
+                                briefAccounts: Array.isArray(res?.body?.results) ? res.body.results.map(res => { return { label: res.name, value: res.uniqueName, additional: { currency: res?.currency } } }) : []
                             });
                         },
                         (error: any) => {
