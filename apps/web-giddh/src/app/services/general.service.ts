@@ -649,6 +649,10 @@ export class GeneralService {
 
         // Check if white label data exists and has domainName
         if (whiteLabelData && whiteLabelData.giddhWhiteLabel && whiteLabelData.giddhWhiteLabel.domainName) {
+            // If domainName is books.giddh.com, use original region logic
+            if (whiteLabelData.giddhWhiteLabel.domainName === 'https://books.giddh.com') {
+                return region === 'gl' ? 'https://giddh.com/login' : `https://giddh.com/${region}/login`;
+            }
             return whiteLabelData.giddhWhiteLabel.domainName + '/login';
         }
 
