@@ -138,6 +138,8 @@ export class AiOcrComponent implements OnInit, OnDestroy {
     public aiOcrDetails: any;
     /** This will use for branch name */
     public branchName: string = "";
+    /** Voucher API version */
+    public voucherApiVersion: number = 1 | 2;
 
     constructor(
         private aiOcrStore: AiOcrStore,
@@ -157,6 +159,7 @@ export class AiOcrComponent implements OnInit, OnDestroy {
      * @memberof AiOcrComponent
      */
     public ngOnInit(): void {
+        this.voucherApiVersion = this.generalService.voucherApiVersion;
         this.route.params.pipe(delay(100), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.aiOcrStore.reset();
@@ -440,6 +443,17 @@ export class AiOcrComponent implements OnInit, OnDestroy {
             this.rowData = null;
         }
         if (this.shouldPreventChange(value)) {
+            return;
+        }
+
+        // Check if the Create button should be disabled (same conditions as template)
+        if (value === OcrAction.Create && (
+            this.isCompany ||
+            this.isConsolidatedBranch ||
+            this.buttonDisabled ||
+            this.countVariable === 0 ||
+            this.voucherApiVersion === 1
+        )) {
             return;
         }
         if (value === OcrAction.Create && !this.buttonDisabled) {
