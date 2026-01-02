@@ -304,6 +304,7 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
      */
     public saveAddress(form: any): void {
         this.saveNewAddress.emit(form);
+        this.closeAccountAsidePane();
     }
 
     /**
@@ -315,6 +316,7 @@ export class AddressSettingsComponent implements OnInit, OnChanges, OnDestroy {
     public updateAddress(form: any): void {
         form.formValue['uniqueName'] = this.addressToUpdate?.uniqueName;
         this.updatedAddress.emit(form);
+        this.closeAccountAsidePane();
     }
 
     /**
