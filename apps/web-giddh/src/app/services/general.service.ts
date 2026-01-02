@@ -645,12 +645,19 @@ export class GeneralService {
     public getGiddhRegionUrl(): string {
         const countryRegion = localStorage.getItem('Country-Region');
         const region = COUNTRY_REGION_MAP[countryRegion] || null;
+        const whiteLabelData = JSON.parse(localStorage.getItem('whiteLabel'));
+
+        // Check if white label data exists and has domainName
+        if (whiteLabelData && whiteLabelData.giddhWhiteLabel && whiteLabelData.giddhWhiteLabel.domainName) {
+            return whiteLabelData.giddhWhiteLabel.domainName + '/login';
+        }
+
         return region === 'gl' ? 'https://giddh.com/login' : `https://giddh.com/${region}/login`;
     }
 
     /**
      * Handles the voucher date change modal configuration
-     *
+     *n
      * @param {boolean} isVoucherDateSelected
      * @returns {ConfirmationModalConfiguration}
      * @memberof GeneralService

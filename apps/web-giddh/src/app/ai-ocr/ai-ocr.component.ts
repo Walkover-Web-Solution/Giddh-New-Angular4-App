@@ -138,6 +138,8 @@ export class AiOcrComponent implements OnInit, OnDestroy {
     public aiOcrDetails: any;
     /** This will use for branch name */
     public branchName: string = "";
+    /** Voucher API version */
+    public voucherApiVersion: number = 1;
 
     constructor(
         private aiOcrStore: AiOcrStore,
@@ -440,6 +442,17 @@ export class AiOcrComponent implements OnInit, OnDestroy {
             this.rowData = null;
         }
         if (this.shouldPreventChange(value)) {
+            return;
+        }
+
+        // Check if the Create button should be disabled (same conditions as template)
+        if (value === OcrAction.Create && (
+            this.isCompany ||
+            this.isConsolidatedBranch ||
+            this.buttonDisabled ||
+            this.countVariable === 0 ||
+            this.voucherApiVersion === 1
+        )) {
             return;
         }
         if (value === OcrAction.Create && !this.buttonDisabled) {
