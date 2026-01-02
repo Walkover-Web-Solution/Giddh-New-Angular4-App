@@ -349,7 +349,7 @@ export class LoginActions {
                     this._router.navigate(['/login']);
                     window.location.reload();
                 } else {
-                    window.location.href = (this.serviceConfig.AppUrl || AppUrl) + 'login/';
+                    window.location.href = this._generalService.getGiddhRegionUrl();
                 }
                 return { type: 'EmptyAction' };
             })));
@@ -1032,7 +1032,7 @@ export class LoginActions {
         this.store.dispatch(this.companyActions.GetStateDetailsResponse(stateDetail));
         this.store.dispatch(this.companyActions.RefreshCompaniesResponse(companies));
         this.store.dispatch(this.SetLoginStatus(userLoginStateEnum.userLoggedIn));
-        
+
         // Check for returnUrl first, before using lastState
         try {
             const search = window && window.location ? window.location.search : '';
@@ -1052,7 +1052,7 @@ export class LoginActions {
                 return { type: 'EmptyAction' };
             }
         } catch (_) {}
-        
+
         // Fallback to normal lastState navigation
         let route = (stateDetail?.body?.lastUpdated > 7 || !stateDetail?.body?.lastUpdated) ? '/pages/home' : stateDetail.body?.lastState;
         this.finalNavigate(route, false, isSocialLogin);
