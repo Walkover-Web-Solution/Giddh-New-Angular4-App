@@ -3548,13 +3548,7 @@
                                             mat-menu-item
                                             aria-label="copy icon"
                                             *ngIf="!isCompany && !isConsolidatedBranch"
-                                            [routerLink]="[
-                                                '/pages/proforma-invoice/invoice/purchase/' +
-                                                    element.account?.uniqueName +
-                                                    '/' +
-                                                    element?.uniqueName +
-                                                    '/copy'
-                                            ]"
+                                            (click)="copyVoucher(element)"
                                         >
                                             {{ commonLocaleData?.app_copy }}
                                         </button>
