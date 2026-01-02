@@ -165,7 +165,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     // tslint:disable-next-line:no-empty
-    public ngOnInit() {
+    public async ngOnInit() {
         this.store.dispatch(this.commonAction.setActiveTheme(null));
         this.generateRandomBanner();
         this.mobileVerifyForm = this._fb.group({
@@ -279,7 +279,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         });
 
         if (PRODUCTION_ENV && !isElectron) {
-            window.location.href = this.generalService.getGiddhRegionUrl();
+            window.location.href = await this.generalService.getGiddhRegionUrl();
         }
     }
 
@@ -366,7 +366,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             panelClass: 'mat-dialog-md',
             disableClose: true
         });
-        
+
         // Handle dialog close event to replace onHidden functionality
         this.twoWayAuthDialogRef.afterClosed().subscribe(() => {
             this.onHiddenAuthModal({dismissReason: KeyCodesEnum.ESC});
@@ -415,7 +415,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             //  web social authentication
             this.store.dispatch(this.loginAction.resetSocialLogoutAttempt());
             if (provider === "google") {
-                
+
                 this.authService.signIn(GoogleLoginProvider.PROVIDER_ID);
 
                 if (!isElectron) {
