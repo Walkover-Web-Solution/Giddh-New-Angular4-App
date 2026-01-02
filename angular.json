@@ -16,14 +16,8 @@
                     "options": {
                         "index": "apps/web-giddh/src/index.electron.html",
                         "main": "apps/web-giddh/src/main.electron.ts",
-                        "polyfills":[],
+                        "polyfills": [],
                         "tsConfig": "apps/web-giddh/tsconfig.electron.json",
-                        "fileReplacements": [
-                            {
-                                "replace": "apps/web-giddh/src/environments/environment.ts",
-                                "with": "apps/web-giddh/src/environments/environment.generated.ts"
-                            }
-                        ],
                         "assets": [
                             {
                                 "glob": "**/*",
@@ -62,12 +56,6 @@
                     "configurations": {
                         "local": {
                             "outputPath": "dist/apps/web-giddh",
-                            "fileReplacements": [
-                                {
-                                    "replace": "apps/web-giddh/src/environments/environment.ts",
-                                    "with": "apps/web-giddh/src/environments/environment.generated.ts"
-                                }
-                            ],
                             "index": {
                                 "input": "apps/web-giddh/src/index.local.html",
                                 "output": "/index.html"
@@ -91,12 +79,6 @@
                         },
                         "stage": {
                             "outputPath": "dist/apps/web-giddh",
-                            "fileReplacements": [
-                                {
-                                    "replace": "apps/web-giddh/src/environments/environment.ts",
-                                    "with": "apps/web-giddh/src/environments/environment.generated.ts"
-                                }
-                            ],
                             "index": {
                                 "input": "apps/web-giddh/src/index.stage.html",
                                 "output": "/index.html"
@@ -124,12 +106,6 @@
                                 "input": "apps/web-giddh/src/index.electron.html",
                                 "output": "/index.html"
                             },
-                            "fileReplacements": [
-                                {
-                                    "replace": "apps/web-giddh/src/environments/environment.ts",
-                                    "with": "apps/web-giddh/src/environments/environment.generated.ts"
-                                }
-                            ],
                             "optimization": {
                                 "scripts": true,
                                 "styles": true,
@@ -149,12 +125,6 @@
                         },
                         "test": {
                             "outputPath": "dist/apps/web-giddh",
-                            "fileReplacements": [
-                                {
-                                    "replace": "apps/web-giddh/src/environments/environment.ts",
-                                    "with": "apps/web-giddh/src/environments/environment.generated.ts"
-                                }
-                            ],
                             "index": {
                                 "input": "apps/web-giddh/src/index.electron.html",
                                 "output": "/index.html"
@@ -238,7 +208,7 @@
                         "outputPath": "dist/apps/web-giddh",
                         "index": "apps/web-giddh/src/index.html",
                         "main": "apps/web-giddh/src/main.ts",
-                        "polyfills":[],
+                        "polyfills": [],
                         "tsConfig": "apps/web-giddh/tsconfig.app.json",
                         "assets": [
                             {
@@ -284,12 +254,6 @@
                         "local": {
                             "outputPath": "dist/apps/web-giddh",
                             "baseHref": "/",
-                            "fileReplacements": [
-                                {
-                                    "replace": "apps/web-giddh/src/environments/environment.ts",
-                                    "with": "apps/web-giddh/src/environments/environment.generated.ts"
-                                }
-                            ],
                             "index": {
                                 "input": "apps/web-giddh/src/index.local.html",
                                 "output": "/index.html"
@@ -313,12 +277,6 @@
                         "stage": {
                             "outputPath": "dist/apps/web-giddh",
                             "baseHref": "/",
-                            "fileReplacements": [
-                                {
-                                    "replace": "apps/web-giddh/src/environments/environment.ts",
-                                    "with": "apps/web-giddh/src/environments/environment.generated.ts"
-                                }
-                            ],
                             "index": {
                                 "input": "apps/web-giddh/src/index.stage.html",
                                 "output": "/index.html"
@@ -342,12 +300,6 @@
                         "prod": {
                             "outputPath": "dist/apps/web-giddh",
                             "baseHref": "/",
-                            "fileReplacements": [
-                                {
-                                    "replace": "apps/web-giddh/src/environments/environment.ts",
-                                    "with": "apps/web-giddh/src/environments/environment.generated.ts"
-                                }
-                            ],
                             "index": {
                                 "input": "apps/web-giddh/src/index.prod.html",
                                 "output": "/index.html"
@@ -371,12 +323,6 @@
                         "test": {
                             "outputPath": "dist/apps/web-giddh",
                             "baseHref": "/",
-                            "fileReplacements": [
-                                {
-                                    "replace": "apps/web-giddh/src/environments/environment.ts",
-                                    "with": "apps/web-giddh/src/environments/environment.generated.ts"
-                                }
-                            ],
                             "index": {
                                 "input": "apps/web-giddh/src/index.test.html",
                                 "output": "/index.html"
