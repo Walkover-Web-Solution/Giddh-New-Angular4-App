@@ -1,12 +1,12 @@
 @use "@angular/material" as mat;
 @use "./_custom-palette" as palette;
 @use "./custom_typography" as typography;
-@use "../material/material-mixins" as mixins;
+@use "./_m3-variables";
 
 @include mat.core();
 
-// Material Design 3 Theme Configuration with Existing Variables
-// Using existing custom palettes in M3 structure
+// Material Design 3 Azure and Blue Theme Configuration
+// Clean, professional theme using Azure and Blue color scheme
 $light-theme: mat.define-theme((
     color: (
         theme-type: light,
@@ -22,7 +22,7 @@ $light-theme: mat.define-theme((
     ),
 ));
 
-// Material Design 3 Dark Theme Configuration with Existing Variables
+// Material Design 3 Dark Theme Configuration
 $dark-theme: mat.define-theme((
     color: (
         theme-type: dark,
@@ -42,24 +42,18 @@ $dark-theme: mat.define-theme((
 @include mat.all-component-typographies($light-theme);
 @include mat.all-component-densities($light-theme);
 
-// Material 3 Theme Application
-// M3 themes are applied differently - using the new theme system
-
-// Global CSS variables available at root level
+// Material 3 Theme Application - Clean Azure and Blue Theme
 :root {
     @include mat.all-component-themes($light-theme);
-    @include mixins.define-theme-colors($light-theme);
 }
 
 // Apply theme-specific colors based on the class attached to the body tag
 .default-theme {
     @include mat.all-component-colors($light-theme);
-    @include mixins.define-theme-colors($light-theme);
 }
 
 .dark-theme {
     @include mat.all-component-colors($dark-theme);
-    @include mixins.define-theme-colors($dark-theme);
 }
 
 // Specific Angular Material component overrides

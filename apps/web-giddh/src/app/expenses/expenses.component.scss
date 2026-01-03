@@ -6,7 +6,7 @@
     width: 30%;
     max-width: 400px;
     box-shadow: 3px 3px 6px var(--color-shadow-light);
-    background: var(--theme-background-color);
+    background: var(--mat-sys-surface-container);
     position: relative;
     overflow-y: auto;
     max-height: calc(100vh - 135px);

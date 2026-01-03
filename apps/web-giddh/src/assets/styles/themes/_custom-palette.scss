@@ -1,13 +1,16 @@
 @use '@angular/material' as mat;
 
-// Angular 21 Material 3 Color System
-// Using built-in M3 palettes with CSS custom properties for exact brand colors
+// Material 3 Azure and Blue Theme Configuration
+// Clean, professional blue color scheme following M3 design principles
 
-// Use built-in M3 palettes (M3 compatible)
-$giddh-primary-palette: mat.$violet-palette;    // Closest to original #1a237e
-$giddh-secondary-palette: mat.$green-palette;   // Matches original #198754
-$giddh-tertiary-palette: mat.$azure-palette;    // Blue accent
-$giddh-error-palette: mat.$red-palette;         // Matches original #dc3545
+// Primary: Azure Blue - Professional and modern
+$giddh-primary-palette: mat.$azure-palette;
 
-// Export palettes for theme consumption
-// Original brand colors will be applied via CSS custom properties in material-mixins
+// Secondary: Blue Grey - Complementary neutral
+$giddh-secondary-palette: mat.$blue-palette;
+
+// Tertiary: Cyan - Accent color for contrast
+$giddh-tertiary-palette: mat.$cyan-palette;
+
+// Error: Standard Material Red
+$giddh-error-palette: mat.$red-palette;
