@@ -288,7 +288,20 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         // }
     }
 
-    public ngAfterViewInit() {
+    public async ngAfterViewInit() {
+        // Wait for white label data to load before proceeding
+        console.log('🔄 AppComponent: Waiting for white label data...');
+
+        try {
+            // Initialize white label data and wait for completion
+            await this._generalService.initializeWhiteLabel();
+            console.log('✅ AppComponent: White label data loaded successfully');
+        } catch (error) {
+            console.error('❌ AppComponent: White label loading failed:', error);
+            // Continue with app initialization even if white label fails
+        }
+
+        // Now hide the loader since white label data is ready
         this.hideMainGiddhLoader();
 
         if (this._generalService.companyUniqueName && !window.location.href.includes('login') && !window.location.href.includes('token-verify')) {
@@ -362,13 +375,17 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     }
 
     /**
-     * Hides main giddh loader for login/signup/token verify and shows on other pages
+     * Hides main giddh loader after white label data is loaded
      *
      * @private
      * @memberof AppComponent
      */
     private hideMainGiddhLoader(): void {
-        document.getElementById("main-giddh-loader")?.classList.add("d-none");
+        console.log('🎯 AppComponent: Hiding main loader after white label initialization');
+        const loader = document.getElementById("main-giddh-loader");
+        if (loader) {
+            loader.classList.add("d-none");
+        }
     }
 
     private getLastStateFromUrl(url: string): string {
