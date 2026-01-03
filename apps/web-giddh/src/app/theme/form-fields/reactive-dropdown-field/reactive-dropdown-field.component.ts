@@ -331,19 +331,63 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     public onScroll(): void {
         // Store current active option index before pagination
         this.storeActiveOptionIndex();
-        this.next$.next(true);
+        
+        // Set pagination flag to prevent focus issues
+        this.isPaginationInProgress = true;
+        
+        // Emit scroll event for pagination
         this.scrollEnd.emit();
+        
+        // Restore focus after a short delay to allow new options to load
+        setTimeout(() => {
+            this.restoreFocusAfterPagination();
+        }, 100);
     }
 
     /**
-     * Stores the currently active option index for focus preservation
+     * Stores the current active option index for restoration after pagination
      *
      * @private
      * @memberof ReactiveDropdownFieldComponent
      */
     private storeActiveOptionIndex(): void {
-        if (this.matAutocomplete && (this.matAutocomplete as any)._keyManager) {
-            this.activeOptionIndex = (this.matAutocomplete as any)._keyManager.activeItemIndex || -1;
+        try {
+            // Angular 21: Use public API approach instead of private _keyManager
+            if (this.matAutocomplete && this.matAutocomplete.options) {
+                const options = this.matAutocomplete.options.toArray();
+                
+                // Find the currently active/focused option using public APIs
+                const activeOption = options.find((option, index) => {
+                    // Use public getHostElement() method instead of private _element
+                    const element = (option as any).getHostElement?.() || (option as any)._getHostElement?.();
+                    if (element) {
+                        return (
+                            element.classList.contains('mat-option-active') ||
+                            element.classList.contains('mat-active') ||
+                            element === document.activeElement ||
+                            element.getAttribute('aria-selected') === 'true'
+                        );
+                    }
+                    return false;
+                });
+                
+                if (activeOption) {
+                    this.activeOptionIndex = options.indexOf(activeOption);
+                } else {
+                    // Fallback: Try to get from keyManager if still available
+                    const keyManager = (this.matAutocomplete as any)._keyManager;
+                    if (keyManager && typeof keyManager.activeItemIndex === 'number') {
+                        this.activeOptionIndex = keyManager.activeItemIndex;
+                    } else {
+                        this.activeOptionIndex = -1;
+                    }
+                }
+            } else {
+                this.activeOptionIndex = -1;
+            }
+        } catch (error) {
+            console.warn('Could not store active option index:', error);
+            this.activeOptionIndex = -1;
         }
     }
 
@@ -354,27 +398,55 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      * @memberof ReactiveDropdownFieldComponent
      */
     private restoreFocusAfterPagination(): void {
-        if (this.matAutocomplete && (this.matAutocomplete as any)._keyManager && this.activeOptionIndex >= 0) {
-            try {
-                // Set the active item to maintain focus position
-                (this.matAutocomplete as any)._keyManager.setActiveItem(this.activeOptionIndex);
-
-                // Ensure the active option is visible in the viewport
-                const activeOption = (this.matAutocomplete as any)._keyManager.activeItem;
-                if (activeOption && (activeOption as any)._element) {
-                    (activeOption as any)._element.nativeElement.scrollIntoView({
-                        behavior: 'auto',
-                        block: 'nearest',
-                        inline: 'nearest'
-                    });
+        try {
+            if (this.matAutocomplete && this.matAutocomplete.options && this.activeOptionIndex >= 0) {
+                const options = this.matAutocomplete.options.toArray();
+                const targetOption = options[this.activeOptionIndex];
+                
+                if (targetOption) {
+                    // Angular 21 compatible approach: Use public APIs
+                    
+                    // Method 1: Try to use keyManager if available
+                    const keyManager = (this.matAutocomplete as any)._keyManager;
+                    if (keyManager && typeof keyManager.setActiveItem === 'function') {
+                        keyManager.setActiveItem(this.activeOptionIndex);
+                    }
+                    
+                    // Method 2: Manually set active state and focus using public APIs
+                    const targetElement = (targetOption as any).getHostElement?.() || (targetOption as any)._getHostElement?.();
+                    if (targetElement) {
+                        // Remove active class from all options using public APIs
+                        options.forEach(option => {
+                            const element = (option as any).getHostElement?.() || (option as any)._getHostElement?.();
+                            if (element) {
+                                element.classList.remove('mat-option-active', 'mat-active');
+                                element.setAttribute('aria-selected', 'false');
+                            }
+                        });
+                        
+                        // Set active state on target option
+                        targetElement.classList.add('mat-option-active');
+                        targetElement.setAttribute('aria-selected', 'true');
+                        
+                        // Scroll into view
+                        targetElement.scrollIntoView({
+                            behavior: 'auto',
+                            block: 'nearest',
+                            inline: 'nearest'
+                        });
+                        
+                    }
+                    
+                    // Method 3: Use ChangeDetectorRef to trigger view update
+                    this.changeDetection.detectChanges();
                 }
-            } catch (error) {
-                console.warn('Could not restore focus after pagination:', error);
             }
+        } catch (error) {
+            console.warn('Could not restore focus after pagination:', error);
+        } finally {
+            // Reset pagination flag
+            this.isPaginationInProgress = false;
         }
-
-        // Reset pagination flag
-        this.isPaginationInProgress = false;
     }
 
     /**
