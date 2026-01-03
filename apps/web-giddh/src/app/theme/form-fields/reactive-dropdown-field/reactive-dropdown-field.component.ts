@@ -280,8 +280,16 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         if (!this.isDestroyed && this.trigger) {
             try {
                 if (operation === 'open') {
+                    // If dropdown is already open, do not reopen
+                    if (this.trigger.panelOpen) {
+                        return;
+                    }
                     this.trigger.openPanel();
                 } else {
+                    // If dropdown is already closed, do not reclose
+                    if (!this.trigger.panelOpen) {
+                        return;
+                    }
                     this.trigger.closePanel();
                 }
             } catch (error) {
@@ -490,7 +498,52 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         }
     }
 
+    /**
+     * Handles document click events for click-outside functionality
+     * Only runs when sidebarListView is true
+     *
+     * @param {MouseEvent} event - The mouse event
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    @HostListener('document:click', ['$event'])
+    public onDocumentClick(event: MouseEvent): void {
+        // Only handle click-outside when sidebarListView is true
+        if (!this.sidebarListView) {
+            return;
+        }
 
+        // Check if the dropdown is open
+        if (!this.trigger?.panelOpen) {
+            return;
+        }
+
+        // Get the clicked element
+        const clickedElement = event.target as HTMLElement;
+
+        // Check if click is outside the component
+        const componentElement = this.selectField?.nativeElement?.closest('.reactive-dropdown-field') ||
+                                this.selectField?.nativeElement?.parentElement;
+
+        if (componentElement && !componentElement.contains(clickedElement)) {
+            // Check if click is not on the autocomplete panel with sidebar-list-view class
+            const sidebarAutocompletePanel = document.querySelector('.mat-autocomplete-panel.sidebar-list-view');
+            if (!sidebarAutocompletePanel || !sidebarAutocompletePanel.contains(clickedElement)) {
+                this.closeDropdownPanel();
+            }
+        }
+    }
+
+    /**
+     * Handles keydown events on the input field
+     *
+     * @param {KeyboardEvent} event - The keyboard event
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    public onInputKeyDown(event: KeyboardEvent): void {
+        if (event.key === 'Enter' && this.trigger?.panelOpen) {
+            this.closeDropdownPanel();
+        }
+    }
 
     /**
      * This will use for open dropdown panel
@@ -502,10 +555,29 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
             return;
         }
 
-        this.selectField?.nativeElement?.focus();
+        this.focusInputField();
         setTimeout(() => {
             this.handleDropdownPanelOperation('open');
         }, 10);
+    }
+
+    /**
+     * Focuses the input field without opening the dropdown
+     *
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    public focusInputField(): void {
+        if (this.trigger) {
+            // Temporarily disable autocomplete to prevent dropdown from opening
+            this.trigger.autocompleteDisabled = true;
+            this.selectField?.nativeElement?.focus();
+            // Re-enable autocomplete after a short delay
+            setTimeout(() => {
+                this.trigger.autocompleteDisabled = false;
+            }, 100);
+        } else {
+            this.selectField?.nativeElement?.focus();
+        }
     }
 
     /**
@@ -551,6 +623,8 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         this.isPaginationInProgress = false;
         this.previousOptionsCount = this.options?.length || 0;
 
+        // Handle sidebar list view positioning
+
         // Focus on second option (first filtered option) when showCreateNew is true
         if (this.showCreateNew) {
             setTimeout(() => {
@@ -576,6 +650,11 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      */
     public onBlur(): void {
         setTimeout(() => {
+            // Handle closeOnFocusOut functionality - only for sidebarListView or when closeOnFocusOut is enabled
+            if (this.sidebarListView || this.closeOnFocusOut) {
+                this.closeDropdownPanel();
+            }
+
             if (this.allowCustomDropdownValue && !this.searchFormControl?.value && !this.controlLabelValue) {
                 this.selectedOption.emit({ label: '', value: '' });
             }

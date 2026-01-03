@@ -1,4 +1,4 @@
-import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { CommonModule, DecimalPipe } from '@angular/common';
 import { SubscriptionComponent } from './subscription.component';
 import { RouterModule } from '@angular/router';
@@ -32,8 +32,6 @@ import { ClickOutsideModule } from 'ng-click-outside';
 import { CompanyListDialogComponent } from './company-list-dialog/company-list-dialog.component';
 import { TransferDialogComponent } from './transfer-dialog/transfer-dialog.component';
 import { VerifyOwnershipDialogComponent } from './verify-ownership-dilaog/verify-ownership-dilaog.component';
-import { MoveCompanyComponent } from './move-company/move-company.component';
-import { MoveCompanyComponent as ComponentsMoveCompanyComponent } from './components/move-company/move-company.component';
 import { MatSelectModule } from '@angular/material/select';
 import { SubscriptionListComponent } from './subscription-list/subscription-list.component';
 import { CompanyDetailsSidebarComponent } from './components/company-details-sidebar/company-details-sidebar.component';
@@ -57,6 +55,8 @@ import { WatchVideoModule } from '../theme/watch-video/watch-video.module';
 import { PaymentMethodDialogComponent } from './payment-method-dialog/payment-method-dialog.component';
 import { CallBackPageComponent } from '../shared/call-back-page/call-back-page.component';
 import { MobileNumberInputComponent } from '../shared/mobile-number-input';
+import { MoveCompanyComponent } from './move-company/move-company.component';
+// import { MoveCompanyComponent } from './components/move-company/move-company.component';
 
 @NgModule({
     imports: [
@@ -129,7 +129,6 @@ import { MobileNumberInputComponent } from '../shared/mobile-number-input';
         ActivateDialogComponent,
         VerifyOwnershipDialogComponent,
         MoveCompanyComponent,
-        ComponentsMoveCompanyComponent,
         SubscriptionsPlansComponent,
         CompanyDetailsSidebarComponent,
         AllFeaturesComponent,
@@ -137,7 +136,6 @@ import { MobileNumberInputComponent } from '../shared/mobile-number-input';
     ],
     providers: [
         DecimalPipe
-    ],
-    schemas: [CUSTOM_ELEMENTS_SCHEMA]
+    ]
 })
 export class SubscriptionModule { }
