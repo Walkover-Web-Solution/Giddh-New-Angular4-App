@@ -56,7 +56,6 @@ import { PaymentMethodDialogComponent } from './payment-method-dialog/payment-me
 import { CallBackPageComponent } from '../shared/call-back-page/call-back-page.component';
 import { MobileNumberInputComponent } from '../shared/mobile-number-input';
 import { MoveCompanyComponent } from './move-company/move-company.component';
-// import { MoveCompanyComponent } from './components/move-company/move-company.component';
 
 @NgModule({
     imports: [
