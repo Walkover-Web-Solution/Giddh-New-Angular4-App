@@ -686,44 +686,6 @@ export class GeneralService {
             return whiteLabelData.giddhWhiteLabel.domainName + '/login';
         }
 
-        // Priority 2: Handle current URL logic
-        const currentHostname = window.location.hostname;
-
-        // If current URL is books.giddh.com, redirect using region logic
-        if (currentHostname === 'books.giddh.com') {
-            return region === 'gl' ? 'https://giddh.com/login' : `https://giddh.com/${region}/login`;
-        }
-
-        // For non-books.giddh.com URLs, allow page to open and fetch white label data
-        if (currentHostname !== 'books.giddh.com') {
-            try {
-                const response = await fetch(`${this.config.apiUrl}white-label`);
-
-                // Check if response is successful
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                const data = await response.json();
-
-                // Validate response structure
-                if (data && data.giddhWhiteLabel) {
-                    // Store white label data in localStorage if API succeeds
-                    localStorage.setItem('whiteLabel', JSON.stringify(data));
-
-                    // Return current URL to allow page to open properly
-                    return window.location.origin + this.router.url;
-                } else {
-                    // Invalid response structure, treat as error
-                    throw new Error('Invalid white label response structure');
-                }
-            } catch (error) {
-                console.error('Failed to fetch white label data:', error);
-                // If we got error, return to fallback URL
-                return region === 'gl' ? 'https://giddh.com/login' : `https://giddh.com/${region}/login`;
-            }
-        }
-
         // Fallback when no whiteLabel data exists after retries
         return region === 'gl' ? 'https://giddh.com/login' : `https://giddh.com/${region}/login`;
     }
