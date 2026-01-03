@@ -789,46 +789,6 @@ export class InventoryService {
         }
     }
 
-    public downloadJobwork(stockUniqueName: string, reportType: string, format: string, from: string, to: string, reportFilters?: InventoryFilter): Observable<BaseResponse<string, string>> {
-        this.companyUniqueName = this.generalService.companyUniqueName;
-        let url = null;
-        if (reportType === 'person') {
-            url = this.config.apiUrl + INVENTORY_API.DOWNLOAD_JOBWORK_BY_PERSON
-                ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-                ?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName))
-                ?.replace(':format', encodeURIComponent(format))
-                ?.replace(':from', encodeURIComponent(from))
-                ?.replace(':to', encodeURIComponent(to))
-                ?.replace(':sort', encodeURIComponent(reportFilters.sort ? reportFilters.sort?.toString() : ''))
-                ?.replace(':sortBy', encodeURIComponent(reportFilters.sortBy ? reportFilters.sortBy?.toString() : ''))
-            return this.http.post(url, reportFilters)
-                .pipe(map((res) => {
-                    let data: BaseResponse<any, any> = res;
-                    data.request = '';
-                    data.queryString = {};
-                    return data;
-                }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', {})));
-        } else {
-
-            url = this.config.apiUrl + INVENTORY_API.DOWNLOAD_JOBWORK_BY_STOCK
-                ?.replace(':companyUniqueName', encodeURIComponent(this.companyUniqueName))
-                ?.replace(':stockUniqueName', encodeURIComponent(stockUniqueName))
-                ?.replace(':format', encodeURIComponent(format))
-                ?.replace(':from', encodeURIComponent(from))
-                ?.replace(':to', encodeURIComponent(to))
-                ?.replace(':sort', encodeURIComponent(reportFilters.sort ? reportFilters.sort?.toString() : ''))
-                ?.replace(':sortBy', encodeURIComponent(reportFilters.sortBy ? reportFilters.sortBy?.toString() : ''))
-            return this.http.get(url)
-                .pipe(map((res) => {
-                    let data: BaseResponse<any, any> = res;
-                    data.request = '';
-                    data.queryString = {};
-                    return data;
-                }), catchError((e) => this.errorHandler.HandleCatch<any, string>(e, '', {})));
-        }
-
-    }
-
     public updateDescription(uniqueName: string, description: string): Observable<BaseResponse<InventoryUser, string>> {
         this.companyUniqueName = this.generalService.companyUniqueName;
 
