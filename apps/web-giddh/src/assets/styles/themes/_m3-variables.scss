@@ -1,4 +1,4 @@
-// Material 3 Design System Variables
+// Material 3 Azure and Blue Design System Variables
 // Complete set of M3 design tokens for Giddh application
 
 // ===== M3 TYPOGRAPHY VARIABLES =====
@@ -104,44 +104,44 @@
     --icon-size-lg: 24px;
     --icon-size-xl: 32px;
 
-    // ===== M3 SURFACE SYSTEM VARIABLES =====
-    // Light theme surface colors
-    --mat-sys-surface: #fef7ff;
-    --mat-sys-surface-dim: #ded8e1;
-    --mat-sys-surface-bright: #fef7ff;
+    // ===== M3 AZURE & BLUE SURFACE SYSTEM VARIABLES =====
+    // Light theme surface colors - Azure & Blue theme
+    --mat-sys-surface: #fefbff;
+    --mat-sys-surface-dim: #ddd8e0;
+    --mat-sys-surface-bright: #fefbff;
     --mat-sys-surface-container-lowest: #ffffff;
     --mat-sys-surface-container-low: #f7f2fa;
-    --mat-sys-surface-container: #f3edf7;
-    --mat-sys-surface-container-high: #ece6f0;
+    --mat-sys-surface-container: #f1ecf4;
+    --mat-sys-surface-container-high: #ebe6ee;
     --mat-sys-surface-container-highest: #e6e0e9;
     --mat-sys-surface-variant: #e7e0ec;
     --mat-sys-inverse-surface: #313033;
 
     // On-surface colors (text/icons on surfaces)
-    --mat-sys-on-surface: #1d1b20;
+    --mat-sys-on-surface: #1c1b1f;
     --mat-sys-on-surface-variant: #49454f;
     --mat-sys-inverse-on-surface: #f4eff4;
 
-    // Primary colors
-    --mat-sys-primary: #6750a4;
+    // Azure Primary colors (Professional Azure Blue) - Enhanced Contrast
+    --mat-sys-primary: #005a9e;
     --mat-sys-on-primary: #ffffff;
-    --mat-sys-primary-container: #eaddff;
-    --mat-sys-on-primary-container: #21005d;
-    --mat-sys-inverse-primary: #d0bcff;
+    --mat-sys-primary-container: #d6e3ff;
+    --mat-sys-on-primary-container: #001a41;
+    --mat-sys-inverse-primary: #a8c7fa;
 
-    // Secondary colors
-    --mat-sys-secondary: #625b71;
+    // Blue Secondary colors - Enhanced Contrast
+    --mat-sys-secondary: #0f4c75;
     --mat-sys-on-secondary: #ffffff;
-    --mat-sys-secondary-container: #e8def8;
-    --mat-sys-on-secondary-container: #1d192b;
+    --mat-sys-secondary-container: #d3e4ff;
+    --mat-sys-on-secondary-container: #001d36;
 
-    // Tertiary colors
-    --mat-sys-tertiary: #7d5260;
+    // Cyan Tertiary colors (Accent) - Enhanced Contrast
+    --mat-sys-tertiary: #198754;
     --mat-sys-on-tertiary: #ffffff;
-    --mat-sys-tertiary-container: #ffd8e4;
-    --mat-sys-on-tertiary-container: #31111d;
+    --mat-sys-tertiary-container: #198754;
+    --mat-sys-on-tertiary-container: #001f24;
 
-    // Error colors
+    // Error colors (Standard Material Red)
     --mat-sys-error: #ba1a1a;
     --mat-sys-on-error: #ffffff;
     --mat-sys-error-container: #ffdad6;
@@ -152,12 +152,19 @@
     --mat-sys-outline-variant: #cac4d0;
 
     // Background colors (deprecated in M3 but kept for compatibility)
-    --mat-sys-background: #fef7ff;
-    --mat-sys-on-background: #1d1b20;
+    --mat-sys-background: #fefbff;
+    --mat-sys-on-background: #1c1b1f;
 
     // Shadow and scrim
     --mat-sys-shadow: #000000;
     --mat-sys-scrim: #000000;
+
+    // ===== LEGACY THEME VARIABLES FOR BACKWARD COMPATIBILITY =====
+    // These maintain compatibility with existing application code
+    --theme-primary-color: var(--mat-sys-primary);
+    --theme-accent-color: var(--mat-sys-tertiary);
+    --theme-warn-color: var(--mat-sys-error);
+    --theme-border-color: var(--mat-sys-outline-variant);
 
     // ===== M3 ANIMATION VARIABLES =====
     // Duration
@@ -186,41 +193,41 @@
 
 // ===== DARK THEME OVERRIDES =====
 .dark-theme {
-    // M3 Surface system for dark theme
-    --mat-sys-surface: #141218;
-    --mat-sys-surface-dim: #141218;
-    --mat-sys-surface-bright: #3b383e;
-    --mat-sys-surface-container-lowest: #0f0d13;
-    --mat-sys-surface-container-low: #1d1b20;
-    --mat-sys-surface-container: #211f26;
-    --mat-sys-surface-container-high: #2b2930;
-    --mat-sys-surface-container-highest: #36343b;
-    --mat-sys-surface-variant: #49454f;
-    --mat-sys-inverse-surface: #e6e0e9;
+    // M3 Surface system for dark theme - Azure & Blue
+    --mat-sys-surface: #fefbff;
+    --mat-sys-surface-dim: #fefbff;
+    --mat-sys-surface-bright: #363a41;
+    --mat-sys-surface-container-lowest: #0b0e15;
+    --mat-sys-surface-container-low: #181c23;
+    --mat-sys-surface-container: #1c2029;
+    --mat-sys-surface-container-high: #fefbff;
+    --mat-sys-surface-container-highest: #32363e;
+    --mat-sys-surface-variant: #43474e;
+    --mat-sys-inverse-surface: #2f3036;
 
     // On-surface colors for dark theme
-    --mat-sys-on-surface: #e6e0e9;
-    --mat-sys-on-surface-variant: #cac4d0;
-    --mat-sys-inverse-on-surface: #313033;
+    --mat-sys-on-surface: #2f3036;
+    --mat-sys-on-surface-variant: #c3c7cf;
+    --mat-sys-inverse-on-surface: #2f3036;
 
-    // Primary colors for dark theme
-    --mat-sys-primary: #d0bcff;
-    --mat-sys-on-primary: #381e72;
-    --mat-sys-primary-container: #4f378b;
-    --mat-sys-on-primary-container: #eaddff;
-    --mat-sys-inverse-primary: #6750a4;
+    // Azure Primary colors for dark theme - Enhanced Contrast
+    --mat-sys-primary: #b3d1ff;
+    --mat-sys-on-primary: #002d5a;
+    --mat-sys-primary-container: #004080;
+    --mat-sys-on-primary-container: #d6e3ff;
+    --mat-sys-inverse-primary: #005a9e;
 
-    // Secondary colors for dark theme
-    --mat-sys-secondary: #ccc2dc;
-    --mat-sys-on-secondary: #332d41;
-    --mat-sys-secondary-container: #4a4458;
-    --mat-sys-on-secondary-container: #e8def8;
+    // Blue Secondary colors for dark theme - Enhanced Contrast
+    --mat-sys-secondary: #b8d4f0;
+    --mat-sys-on-secondary: #032e47;
+    --mat-sys-secondary-container: #198754;
+    --mat-sys-on-secondary-container: #d3e4ff;
 
-    // Tertiary colors for dark theme
-    --mat-sys-tertiary: #efb8c8;
-    --mat-sys-on-tertiary: #492532;
-    --mat-sys-tertiary-container: #633b48;
-    --mat-sys-on-tertiary-container: #ffd8e4;
+    // Cyan Tertiary colors for dark theme - Enhanced Contrast
+    --mat-sys-tertiary: #198754;
+    --mat-sys-on-tertiary: #198754;
+    --mat-sys-tertiary-container: #198754;
+    --mat-sys-on-tertiary-container: #198754;
 
     // Error colors for dark theme
     --mat-sys-error: #ffb4ab;
@@ -229,12 +236,12 @@
     --mat-sys-on-error-container: #ffdad6;
 
     // Outline colors for dark theme
-    --mat-sys-outline: #938f99;
-    --mat-sys-outline-variant: #49454f;
+    --mat-sys-outline: #8d9199;
+    --mat-sys-outline-variant: #43474e;
 
     // Background colors for dark theme (deprecated in M3 but kept for compatibility)
-    --mat-sys-background: #141218;
-    --mat-sys-on-background: #e6e0e9;
+    --mat-sys-background: #fefbff;
+    --mat-sys-on-background: #fefbff;
 
     // Shadow and scrim remain the same
     --mat-sys-shadow: #000000;
@@ -245,4 +252,10 @@
     --state-layer-focus: rgba(255, 255, 255, 0.12);
     --state-layer-pressed: rgba(255, 255, 255, 0.12);
     --state-layer-dragged: rgba(255, 255, 255, 0.16);
+
+    // Legacy theme variables for dark theme
+    --theme-primary-color: var(--mat-sys-primary);
+    --theme-accent-color: var(--mat-sys-tertiary);
+    --theme-warn-color: var(--mat-sys-error);
+    --theme-border-color: var(--mat-sys-outline-variant);
 }

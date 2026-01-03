@@ -4,7 +4,7 @@
     }
     .mdc-dialog__content,
     .mat-mdc-dialog-actions {
-        background-color: var(--theme-background-color);
+        background-color: var(--mat-sys-surface-container);
     }
     .mat-mdc-dialog-content {
         max-height: unset;

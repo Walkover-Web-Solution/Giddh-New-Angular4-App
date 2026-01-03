@@ -26,7 +26,7 @@
 .mat-datepicker-content {
     .mat-calendar {
         height: 325px !important;
-        background-color: var(--theme-background-color);
+        background-color: var(--mat-sys-surface-container);
     }
     .mat-calendar-next-button,
     .mat-calendar-previous-button {

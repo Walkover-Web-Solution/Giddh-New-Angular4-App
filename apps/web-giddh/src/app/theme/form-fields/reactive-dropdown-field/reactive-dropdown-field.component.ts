@@ -229,14 +229,14 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
 
             // Always try to set label value when options change, regardless of previous value
             if (changes?.options) {
-            // Use setTimeout to ensure the value is properly set before trying to find the label
-            setTimeout(() => {
-                this.setLabelValue(null);
-            }, 0);
+                // Use setTimeout to ensure the value is properly set before trying to find the label
+                setTimeout(() => {
+                    this.setLabelValue(null);
+                }, 0);
             }
         }
         if (changes?.forceClear && !changes.forceClear.firstChange && changes.forceClear.currentValue !== changes.forceClear.previousValue) {
-           this.handleForceClear();
+            this.handleForceClear();
         }
         if (changes?.openDropdown?.currentValue && !changes?.openDropdown?.previousValue && changes.openDropdown.currentValue !== changes.openDropdown.previousValue) {
             this.openDropdownPanel();
@@ -260,7 +260,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      * @memberof ReactiveDropdownFieldComponent
      */
     private handleForceClear(): void {
-         this.writeValue("", false);
+        this.writeValue("", false);
         this.controlLabelValue = "";
         this.clearDropdownValue();
         this.fieldFilteredOptions$ = of([]);
@@ -571,6 +571,41 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     }
 
     /**
+     * Handles document click events for click-outside functionality
+     * Only runs when sidebarListView is true
+     *
+     * @param {MouseEvent} event - The mouse event
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    @HostListener('document:click', ['$event'])
+    public onDocumentClick(event: MouseEvent): void {
+        // Only handle click-outside when sidebarListView is true
+        if (!this.sidebarListView) {
+            return;
+        }
+
+        // Check if the dropdown is open
+        if (!this.trigger?.panelOpen) {
+            return;
+        }
+
+        // Get the clicked element
+        const clickedElement = event.target as HTMLElement;
+
+        // Check if click is outside the component
+        const componentElement = this.selectField?.nativeElement?.closest('.reactive-dropdown-field') ||
+                                this.selectField?.nativeElement?.parentElement;
+
+        if (componentElement && !componentElement.contains(clickedElement)) {
+            // Check if click is not on the autocomplete panel with sidebar-list-view class
+            const sidebarAutocompletePanel = document.querySelector('.mat-autocomplete-panel.sidebar-list-view');
+            if (!sidebarAutocompletePanel || !sidebarAutocompletePanel.contains(clickedElement)) {
+                this.closeDropdownPanel();
+            }
+        }
+    }
+
+    /**
      * Handles keydown events on the input field
      *
      * @param {KeyboardEvent} event - The keyboard event
@@ -660,6 +695,8 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         this.isPaginationInProgress = false;
         this.previousOptionsCount = this.options?.length || 0;
 
+        // Handle sidebar list view positioning
+
         // Focus on second option (first filtered option) when showCreateNew is true
         if (this.showCreateNew) {
             setTimeout(() => {
@@ -685,6 +722,11 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
      */
     public onBlur(): void {
         setTimeout(() => {
+            // Handle closeOnFocusOut functionality - only for sidebarListView or when closeOnFocusOut is enabled
+            if (this.sidebarListView || this.closeOnFocusOut) {
+                this.closeDropdownPanel();
+            }
+
             if (this.allowCustomDropdownValue && !this.searchFormControl?.value && !this.controlLabelValue) {
                 this.selectedOption.emit({ label: '', value: '' });
             }

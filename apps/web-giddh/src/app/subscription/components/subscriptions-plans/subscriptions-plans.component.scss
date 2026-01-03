@@ -69,7 +69,7 @@
         width: 370px;
         line-height: 3;
         border-bottom: 1px solid var(--border-color);
-        background-color: var(--theme-background-color);
+        background-color: var(--mat-sys-surface-container);
     }
 
     .grid-list-div {
@@ -142,7 +142,7 @@
         border-bottom: 1px solid var(--border-color);
     }
     .grid-title-list:nth-child(odd) {
-        background-color: var(--theme-background-color);
+        background-color: var(--mat-sys-surface-container);
         text-align: center;
         line-height: 26px;
         border-bottom: 1px solid var(--border-color);

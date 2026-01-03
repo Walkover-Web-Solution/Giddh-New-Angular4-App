@@ -42,7 +42,7 @@ export class AddBulkItemsComponentStore extends ComponentStore<AddBulkItemsState
                     tap(
                         (res: Array<IVariant>) => {
                             return this.patchState({
-                                stockVariants: { results: res?.map(res => { return { label: res.name, value: res.uniqueName } }) ?? [], entryIndex: req.index }
+                                stockVariants: { results: Array.isArray(res) ? res.map(res => { return { label: res.name, value: res.uniqueName } }) : [], entryIndex: req.index }
                             });
                         },
                         (error: any) => {

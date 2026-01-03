@@ -109,6 +109,7 @@
             [required]="required"
             [attr.aria-expanded]="readonly ? false : true"
             (input)="searchFormControl.next($event.target.value)"
+            (blur)="onBlur()"
             (keydown)="onInputKeyDown($event)"
             #trigger="matAutocompleteTrigger"
             #selectField
@@ -116,10 +117,10 @@
             [value]="controlLabelValue ?? ''"
         />
         <mat-autocomplete
+            (opened)="panelOpened()"
             (optionSelected)="optionSelected($event)"
             optionsScroll
-            class="py-0"
-            [ngClass]="{ 'sidebar-list-view': sidebarListView }"
+            [class]="'py-0' + (sidebarListView ? ' sidebar-list-view' : '')"
             [enableDynamicSearch]="enableDynamicSearch"
             (optionsScroll)="onScroll()"
             [autoActiveFirstOption]="!showCreateNew"

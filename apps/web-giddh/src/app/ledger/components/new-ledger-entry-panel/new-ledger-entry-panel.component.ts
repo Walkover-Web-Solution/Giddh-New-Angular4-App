@@ -1264,9 +1264,9 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
             return;
         }
 
-        let classList = event?.path?.map(m => {
+        let classList = Array.isArray(event?.path) ? event.path.map(m => {
             return m?.classList;
-        }) ?? [];
+        }) : [];
 
         classList = classList.concat(event?.target.classList);
         if (classList && classList instanceof Array) {
@@ -2146,7 +2146,7 @@ export class NewLedgerEntryPanelComponent implements OnInit, OnDestroy, OnChange
      */
     private loadStockVariants(stockUniqueName: string): void {
         this.ledgerService.loadStockVariants(stockUniqueName).pipe(
-            map((variants: IVariant[]) => (variants ?? []).map((variant: IVariant) => ({ label: variant.name, value: variant.uniqueName }))), takeUntil(this.destroyed$)).subscribe(res => {
+            map((variants: IVariant[]) => (Array.isArray(variants) ? variants : []).map((variant: IVariant) => ({ label: variant.name, value: variant.uniqueName }))), takeUntil(this.destroyed$)).subscribe(res => {
                 this.stockVariants.next(res);
             });
     }
