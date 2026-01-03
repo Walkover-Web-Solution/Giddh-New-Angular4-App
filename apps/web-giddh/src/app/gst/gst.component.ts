@@ -148,7 +148,7 @@ export class GstComponent implements OnInit, OnDestroy {
                 this.store.dispatch(this.gstAction.SetSelectedPeriod(this.currentPeriod));
             }
         });
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : environment.AppUrl + environment.APP_FOLDER + 'assets/images/gst/';
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/gst/';
     }
     /**
      * Unsubscribes from subscription

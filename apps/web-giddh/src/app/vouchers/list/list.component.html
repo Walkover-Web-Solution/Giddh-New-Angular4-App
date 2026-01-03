@@ -3087,42 +3087,38 @@
                                     <div class="d-flex action-btn column-gap-05">
                                         <button
                                             *ngIf="element?.status === 'open' && !isCompany && !isConsolidatedBranch"
-                                            matButton="elevated"
-                                            class="icon-font-11"
+                                            matIconButton 
                                             [matTooltip]="localeData?.convert_to_bill"
                                             [matTooltipPosition]="'above'"
                                             (click)="convertBillDialog(element)"
                                         >
-                                            <i class="icon-tick"></i>
+                                            <i class="icon-tick font-size-14"></i>
                                         </button>
                                         <button
-                                            matButton="elevated"
-                                            class="icon-font-11"
+                                            matIconButton 
                                             [matTooltip]="commonLocaleData?.app_send_email"
                                             [matTooltipPosition]="'above'"
                                             (click)="openEmailSendDialog(element)"
                                         >
-                                            <i class="icon-envelope"></i>
+                                            <i class="icon-envelope font-size-14"></i>
                                         </button>
                                         <button
                                             *ngIf="!isCompany && !isConsolidatedBranch"
-                                            matButton="elevated"
-                                            class="mat-icon-sm-btn"
+                                            matIconButton 
                                             [matTooltip]="commonLocaleData?.app_copy"
                                             [matTooltipPosition]="'above'"
                                             (click)="copyVoucher(element)"
                                         >
-                                            <i class="icon-copy-small"></i>
+                                            <i class="icon-copy-small font-size-14"></i>
                                         </button>
                                         <button
                                             *ngIf="!isCompany && !isConsolidatedBranch && voucherApiVersion === 2"
-                                            matButton="elevated"
-                                            class="mat-icon-sm-btn"
+                                            matIconButton 
                                             [matTooltip]="commonLocaleData?.app_delete"
                                             [matTooltipPosition]="'above'"
                                             (click)="deleteVoucherDialog(element)"
                                         >
-                                            <i class="icon-trash"></i>
+                                            <i class="icon-trash font-size-18"></i>
                                         </button>
                                     </div>
                                 </td>

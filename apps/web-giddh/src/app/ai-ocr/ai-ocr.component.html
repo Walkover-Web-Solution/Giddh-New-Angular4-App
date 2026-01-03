@@ -33,7 +33,7 @@
                     ></giddh-progress-spinner>
                     <span *ngIf="!(ocrUploadInProgress$ | async)"> <i class="icon-upload lh-0"></i></span>
                 </button>
-                <mat-button-toggle-group name="fontStyle" aria-label="Font Style" class="overflow-visible">
+                <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
                     <mat-button-toggle
                         [disabled]="
                             isCompany ||
@@ -51,7 +51,6 @@
                         </div>
                     </mat-button-toggle>
                     <mat-button-toggle
-                        class="w125"
                         value="list"
                         [checked]="selectedToggle === ocrAction.List"
                         (click)="onToggleChange(ocrAction.List, false)"
@@ -60,7 +59,7 @@
                     </mat-button-toggle>
                 </mat-button-toggle-group>
                 <div
-                    class="button-wrapper d-flex w-100 ml-2 align-items-baseline"
+                    class="button-wrapper d-flex ml-2 align-items-baseline"
                     *ngIf="selectedToggle === ocrAction.List"
                 >
                     <div class="custom-datepicker-wrapper">

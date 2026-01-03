@@ -12,3 +12,11 @@
     padding: 2px 4px;
     box-shadow: inset 0 0 0 1px var(--color-deep-orange);
 }
+
+// Hide Froala unlicensed message
+:host ::ng-deep .fr-wrapper > div {
+    &[style*="z-index:9999"],
+    > a[href*="froala.com/get-trial-key"] {
+        display: none !important;
+    }
+}

@@ -216,7 +216,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     /** Instance of mail modal */
     @ViewChild("mailModal") public mailModalComponent: TemplateRef<any>;
     /** Instance of bulk payment modal */
-    @ViewChild("template") public bulkPaymentModalRef: TemplateRef<any>;
+    @ViewChild("template", { static: false }) public bulkPaymentModalRef: TemplateRef<any>;
     /** True if we should select all checkbox */
     public showSelectAll: boolean = false;
     /** True, if custom date filter is selected or custom searching or sorting is performed */
@@ -1588,35 +1588,35 @@ export class ContactComponent implements OnInit, OnDestroy {
      * @memberof ContactComponent
      */
     public openBulkPaymentModal(item?: any): void {
-        this.isBulkPaymentShow = true;
-        this.selectedAccForPayment = null;
-        if (this.selectedAccountsList?.length) {
-            this.selectedAccountsList = this.selectedAccountsList?.filter(itemObject => {
-                return itemObject?.bankPaymentDetails === true;
-            });
-            this.selectedAccountsList = this.selectedAccountsList?.filter((data, index) => {
-                return this.selectedAccountsList?.indexOf(data) === index;
-            });
-        }
-        if (!this.selectedAccountsList?.length && item) {
-            if (item.bankPaymentDetails) {
-                this.selectedAccForPayment = item;
-            }
-        }
-        if (this.selectedAccountsList?.length < this.selectedCheckedContacts?.length) {
-            let message = this.localeData?.bank_transactions_message;
-            message = message?.replace("[SUCCESS]", this.selectedCheckedContacts?.length - this.selectedAccountsList?.length);
-            message = message?.replace("[TOTAL]", this.selectedCheckedContacts?.length);
+        // this.isBulkPaymentShow = true;
+        // this.selectedAccForPayment = null;
+        // if (this.selectedAccountsList?.length) {
+        //     this.selectedAccountsList = this.selectedAccountsList?.filter(itemObject => {
+        //         return itemObject?.bankPaymentDetails === true;
+        //     });
+        //     this.selectedAccountsList = this.selectedAccountsList?.filter((data, index) => {
+        //         return this.selectedAccountsList?.indexOf(data) === index;
+        //     });
+        // }
+        // if (!this.selectedAccountsList?.length && item) {
+        //     if (item.bankPaymentDetails) {
+        //         this.selectedAccForPayment = item;
+        //     }
+        // }
+        // if (this.selectedAccountsList?.length < this.selectedCheckedContacts?.length) {
+        //     let message = this.localeData?.bank_transactions_message;
+        //     message = message?.replace("[SUCCESS]", this.selectedCheckedContacts?.length - this.selectedAccountsList?.length);
+        //     message = message?.replace("[TOTAL]", this.selectedCheckedContacts?.length);
 
-            this.toaster.showSnackBar("info", message);
-            return;
-        }
-        if (this.selectedAccountsList?.length || this.selectedAccForPayment) {
+        //     this.toaster.showSnackBar("info", message);
+        //     return;
+        // }
+        // if (this.selectedAccountsList?.length || this.selectedAccForPayment) {
             this.dialog.open(this.bulkPaymentModalRef, {
                         width: '980px',
                         panelClass: 'contact-modal'
                     });
-        }
+        // }
     }
 
     public sort(key: string, ord = "asc") {

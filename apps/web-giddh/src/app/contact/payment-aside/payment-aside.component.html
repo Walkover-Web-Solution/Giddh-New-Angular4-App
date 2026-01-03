@@ -18,7 +18,6 @@
                 </div>
                 <div class="d-flex mb-2">
                     <div class="form-group mr-3 select-bank" *ngIf="selectIntegratedBankList?.length !== 1">
-                        <label>{{ localeData?.select_bank }}<span class="text-red">*</span></label>
                         <div class="relative">
                             <img
                                 *ngIf="isGetAllIntegratedBankInProgress$ | async"
@@ -59,7 +58,7 @@
                             </reactive-dropdown-field>
                         </div>
                         <div>
-                            <p *ngIf="totalAvailableBalance" class="total-balance">
+                            <p class="total-balance pt-1">
                                 <mat-slide-toggle
                                     color="primary"
                                     id="total-balance-id"
@@ -83,7 +82,6 @@
                         </div>
                     </div>
                     <div class="form-group mr-3">
-                        <label>{{ localeData?.select_payor }}<span class="text-red">*</span></label>
                         <div class="relative">
                             <img
                                 *ngIf="isPayorListInProgress"
@@ -103,7 +101,7 @@
                         <div>
                             <p
                                 *ngIf="selectIntegratedBankList?.length === 1 && totalAvailableBalance"
-                                class="total-balance"
+                                class="total-balance pt-1"
                             >
                                 <mat-slide-toggle
                                     color="primary"
@@ -128,16 +126,17 @@
                         </div>
                     </div>
                     <div class="form-group mr-3">
-                        <label>{{ commonLocaleData?.app_total_amount }}<span class="text-red">*</span></label>
-                        <text-field
-                            type="text"
-                            [cssClass]="'form-control border'"
-                            decimalDigitsDirective
+                        <input-field
+                            type="number"
+                            [allowDecimalDigitsOnly]="true"
                             [readonly]="true"
                             [mask]="inputMaskFormat"
                             [(ngModel)]="totalSelectedAccountAmount"
                             name="amount"
-                        ></text-field>
+                            [required]="true"
+                            [label]="commonLocaleData?.app_total_amount"
+                            [placeholder]="commonLocaleData?.app_total_amount"
+                        ></input-field>
                     </div>
                     <div class="form-group mr-3" *ngIf="isPayClicked">
                         <label class="position-relative d-flex"
@@ -161,7 +160,7 @@
                             [(ngModel)]="receivedOtp"
                         ></text-field>
                     </div>
-                    <div class="form-group mr-3 d-flex column-gap-15 confirm-btn" *ngIf="!isPayClicked">
+                    <div class="form-group mr-3 d-flex column-gap-15 mt-2" *ngIf="!isPayClicked">
                         <button
                             matButton="filled"
                             type="button"
@@ -172,7 +171,6 @@
                             [disabled]="!isBankSelectedForBulkPayment || !selectedBankUserId || !isValidData"
                             [ladda]="isRequestInProcess"
                             (click)="payClicked()"
-                            class="pay-btn"
                             aria-label="pay"
                         >
                             {{ commonLocaleData?.app_pay }}

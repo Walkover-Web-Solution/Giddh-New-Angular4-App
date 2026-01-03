@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { AdjustInventoryComponentStore } from './utility/adjust-inventory.store';
 import { AppState } from '../../../store';
 import { Store } from '@ngrx/store';
@@ -136,7 +136,8 @@ export class AdjustInventoryComponent implements OnInit {
         private route: ActivatedRoute,
         private router: Router,
         private location: Location,
-        private settingsFinancialYearActions: SettingsFinancialYearActions
+        private settingsFinancialYearActions: SettingsFinancialYearActions,
+        private changeDetectorRef: ChangeDetectorRef
     ) {
         this.store.dispatch(this.settingsFinancialYearActions.getFinancialYearLimits());
         /** Activate router observable */
@@ -265,6 +266,7 @@ export class AdjustInventoryComponent implements OnInit {
         this.componentStore.stockGroupClosingBalance$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
             if (response && !this.referenceNumber) {
                 this.stockGroupClosingBalance.closing = response;
+                this.changeDetectorRef.detectChanges();
             }
         });
         this.dataSource = new MatTableDataSource<any>([]);
@@ -315,6 +317,7 @@ export class AdjustInventoryComponent implements OnInit {
                 } else {
                     this.dataSource = new MatTableDataSource<any>([]);
                 }
+                this.changeDetectorRef.detectChanges();
             });
 
         /** Create inventory success observable */
@@ -451,6 +454,7 @@ export class AdjustInventoryComponent implements OnInit {
         this.showHideDiv = false;
         setTimeout(() => {
             this.showHideDiv = true;
+            this.changeDetectorRef.detectChanges();
         });
         this.adjustInventoryCreateEditForm.updateValueAndValidity();
     }

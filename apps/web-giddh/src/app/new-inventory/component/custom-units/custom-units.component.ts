@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { InventoryService } from "../../../services/inventory.service";
 import { takeUntil } from "rxjs/operators";
 import { ReplaySubject } from "rxjs";
@@ -51,7 +51,8 @@ export class CustomUnitsComponent implements OnInit, OnDestroy {
     constructor(
         private inventoryService: InventoryService,
         private dialog: MatDialog,
-        private toaster: ToasterService
+        private toaster: ToasterService,
+        private changeDetection: ChangeDetectorRef
     ) {
 
     }
@@ -123,6 +124,7 @@ export class CustomUnitsComponent implements OnInit, OnDestroy {
                 }
             }
             this.isGroupListLoading = false;
+            this.changeDetection.detectChanges();
         });
     }
 
@@ -141,6 +143,7 @@ export class CustomUnitsComponent implements OnInit, OnDestroy {
                 this.unitMappings = response.body;
             }
             this.isUnitListLoading = false;
+            this.changeDetection.detectChanges();
         });
     }
 
@@ -161,6 +164,7 @@ export class CustomUnitsComponent implements OnInit, OnDestroy {
                 this.toaster.showSnackBar("error", response?.message);
             }
             this.isLoading = false;
+            this.changeDetection.detectChanges();
         });
     }
 
