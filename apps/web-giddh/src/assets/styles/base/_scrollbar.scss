@@ -1,0 +1,28 @@
+// Simple Global Scrollbar Styling - Primary Color Only
+
+/* Webkit browsers (Chrome, Safari, Edge) */
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #005a9e;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #004080;
+}
+
+::-webkit-scrollbar-thumb:active {
+    background: #003366;
+}
+
+::-webkit-scrollbar-corner {
+    background: #f1f1f1;
+}
+
+/* Firefox */
+* {
+    scrollbar-color: #005a9e #f1f1f1;
+}
