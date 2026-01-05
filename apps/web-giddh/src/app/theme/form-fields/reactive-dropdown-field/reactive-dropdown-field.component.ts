@@ -124,6 +124,8 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
     private activeOptionIndex: number = -1;
     /** Flag to indicate if pagination is in progress */
     private isPaginationInProgress: boolean = false;
+    /** Flag to indicate if pagination was triggered by keyboard navigation */
+    private isKeyboardTriggeredPagination: boolean = false;
     /** Previous options count for pagination detection */
     private previousOptionsCount: number = 0;
 
@@ -214,14 +216,15 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
 
             this.fieldFilteredOptions$ = of(this.options);
 
-            if (this.showCreateNew) {
+            // Only focus second option if NOT during pagination (to prevent scroll jumping)
+            if (this.showCreateNew && !this.isPaginationInProgress) {
                 setTimeout(() => {
                     this.focusSecondOption();
                 }, 100);
             }
 
-            // Preserve focus during pagination
-            if (this.isPaginationInProgress && this.activeOptionIndex >= 0) {
+            // Preserve focus during pagination ONLY if triggered by keyboard navigation
+            if (this.isPaginationInProgress && this.isKeyboardTriggeredPagination && this.activeOptionIndex >= 0) {
                 setTimeout(() => {
                     this.restoreFocusAfterPagination();
                 }, 100);
@@ -332,16 +335,13 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         // Store current active option index before pagination
         this.storeActiveOptionIndex();
         
-        // Set pagination flag to prevent focus issues
+        // Set pagination flag but mark as NOT keyboard triggered (mouse/scroll triggered)
         this.isPaginationInProgress = true;
+        this.isKeyboardTriggeredPagination = false;
         
         // Emit scroll event for pagination
         this.scrollEnd.emit();
         
-        // Restore focus after a short delay to allow new options to load
-        setTimeout(() => {
-            this.restoreFocusAfterPagination();
-        }, 100);
     }
 
     /**
@@ -444,8 +444,9 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         } catch (error) {
             console.warn('Could not restore focus after pagination:', error);
         } finally {
-            // Reset pagination flag
+            // Reset pagination flags
             this.isPaginationInProgress = false;
+            this.isKeyboardTriggeredPagination = false;
         }
     }
 
@@ -615,6 +616,53 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         if (event.key === 'Enter' && this.trigger?.panelOpen) {
             this.closeDropdownPanel();
         }
+        
+        // Handle down arrow key for keyboard-triggered pagination
+        if (event.key === 'ArrowDown' && this.trigger?.panelOpen) {
+            this.handleKeyboardNavigation();
+        }
+    }
+
+    /**
+     * Handles keyboard navigation and triggers pagination when reaching last element
+     *
+     * @private
+     * @memberof ReactiveDropdownFieldComponent
+     */
+    private handleKeyboardNavigation(): void {
+        try {
+            if (this.matAutocomplete && this.matAutocomplete.options) {
+                const options = this.matAutocomplete.options.toArray();
+                const totalOptions = options.length;
+                
+                // Check if we're near the last few options (trigger pagination early)
+                setTimeout(() => {
+                    if (this.matAutocomplete && this.matAutocomplete.options) {
+                        const currentOptions = this.matAutocomplete.options.toArray();
+                        const activeOption = currentOptions.find(option => option.active);
+                        
+                        if (activeOption) {
+                            const activeIndex = currentOptions.indexOf(activeOption);
+                            const isNearEnd = activeIndex >= (totalOptions - 2); // Trigger when 2 items from end
+                            
+                            if (isNearEnd && this.scrollEnd.observers.length > 0) {
+                                // Store current active option index before pagination
+                                this.storeActiveOptionIndex();
+                                
+                                // Mark as keyboard-triggered pagination
+                                this.isPaginationInProgress = true;
+                                this.isKeyboardTriggeredPagination = true;
+                                
+                                // Emit scroll event for pagination
+                                this.scrollEnd.emit();
+                            }
+                        }
+                    }
+                }, 50); // Small delay to let Angular Material process the key event
+            }
+        } catch (error) {
+            console.warn('Error in keyboard navigation handling:', error);
+        }
     }
 
     /**
@@ -693,12 +741,14 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
         // Reset pagination tracking when panel opens
         this.activeOptionIndex = -1;
         this.isPaginationInProgress = false;
+        this.isKeyboardTriggeredPagination = false;
         this.previousOptionsCount = this.options?.length || 0;
 
         // Handle sidebar list view positioning
 
         // Focus on second option (first filtered option) when showCreateNew is true
-        if (this.showCreateNew) {
+        // Only do this when panel first opens, not during pagination
+        if (this.showCreateNew && !this.isPaginationInProgress) {
             setTimeout(() => {
                 this.focusSecondOption();
             }, 100);
