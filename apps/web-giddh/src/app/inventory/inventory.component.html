@@ -2,10 +2,10 @@
     <div class="relative">
         <hamburger-menu></hamburger-menu>
         <div class="inventory-control">
-            <mat-tab-group 
+            <mat-tab-group
                 #inventoryStaticTabs
                 class="table-header-sticky"
-                mat-stretch-tabs="false" 
+                mat-stretch-tabs="false"
                 mat-align-tabs="start"
                 [selectedIndex]="activeTabIndex"
                 (selectedTabChange)="redirectUrlToActiveTab($event)">
@@ -81,26 +81,12 @@
                     </ng-container>
                 </mat-tab>
 
-                <mat-tab
-                    label="Job Work"
-                >
-                    <ng-container *ngIf="activeTabIndex === 1">
-                        <jobwork></jobwork>
-                    </ng-container>
-                </mat-tab>
 
-                <mat-tab
-                    label="Manufacturing"
-                >
-                    <ng-container *ngIf="activeTabIndex === 2">
-                        <manufacturing></manufacturing>
-                    </ng-container>
-                </mat-tab>
 
                 <mat-tab
                     label="Report"
                 >
-                    <ng-container *ngIf="activeTabIndex === 3">
+                    <ng-container *ngIf="activeTabIndex === 1">
                         <new-branch-transfer-list> </new-branch-transfer-list>
                     </ng-container>
                 </mat-tab>

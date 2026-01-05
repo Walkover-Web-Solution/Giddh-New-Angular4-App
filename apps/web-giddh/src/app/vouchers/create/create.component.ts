@@ -126,7 +126,7 @@ import { environment } from 'apps/web-giddh/src/environments/environment.generat
     templateUrl: "./create.component.html",
     styleUrls: ["./create.component.scss"],
     providers: [VoucherComponentStore, SalesPersonComponentStore, AiOcrStore],
-    standalone:false
+    standalone: false
 })
 export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit {
     /** Instance of voucher date picker */
@@ -5665,7 +5665,20 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             this.rcmCheckbox["checked"] = false;
         }
         this.checkRcm();
-        this.forceClear = true;
+
+        // Only trigger forceClear if not in update mode or if there's no existing account data
+        const accountFormGroup = this.invoiceForm.get('account');
+        const hasExistingAccountData = accountFormGroup?.get('customerName')?.value ||
+                                     accountFormGroup?.get('uniqueName')?.value ||
+                                     accountFormGroup?.get('email')?.value;
+
+
+        // Don't trigger forceClear during initial load or when in update mode with data
+        if (initialLoad || this.isUpdateMode || hasExistingAccountData) {
+            this.forceClear = false;
+        } else {
+            this.forceClear = true;
+        }
         if (openAccountDropdown) {
             this.openAccountDropdown = false;
         }

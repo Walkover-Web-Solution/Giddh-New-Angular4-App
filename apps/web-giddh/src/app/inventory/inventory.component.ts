@@ -201,9 +201,9 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         this.universalDate$ = this.store.pipe(select(appStore => appStore.session.applicationDate), takeUntil(this.destroyed$));
 
         if (this.voucherApiVersion === 2) {
-            this.activeTabIndex = this.router.url?.indexOf('jobwork') > -1 ? 1 : this.router.url?.indexOf('manufacturing') > -1 ? 2 : ((this.router.url?.indexOf('inventory/report')) || (this.router.url?.indexOf('inventory/report/receiptnote')) || (this.router.url?.indexOf('inventory/report/deliverychallan'))) > -1 ? 3 : 0;
+            this.activeTabIndex = ((this.router.url?.indexOf('inventory/report')) || (this.router.url?.indexOf('inventory/report/receiptnote')) || (this.router.url?.indexOf('inventory/report/deliverychallan'))) > -1 ? 1 : 0;
         } else {
-            this.activeTabIndex = this.router.url?.indexOf('jobwork') > -1 ? 1 : this.router.url?.indexOf('manufacturing') > -1 ? 2 : this.router.url?.indexOf('inventory/report') > -1 ? 3 : (this.router.url?.indexOf('inventory/report/receipt') > -1 || this.router.url?.indexOf('inventory/report/delivery') > -1) ? 3 : 0;
+            this.activeTabIndex = this.router.url?.indexOf('inventory/report') > -1 ? 1 : (this.router.url?.indexOf('inventory/report/receipt') > -1 || this.router.url?.indexOf('inventory/report/delivery') > -1) ? 1 : 0;
         }
         this.route.params.pipe(takeUntil(this.destroyed$)).subscribe((params) => {
             if (params.type) {
@@ -220,9 +220,9 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         this.router.events.pipe(takeUntil(this.destroyed$)).subscribe(s => {
             if (s instanceof NavigationEnd) {
                 if (this.voucherApiVersion === 2) {
-                    this.activeTabIndex = this.router.url?.indexOf('jobwork') > -1 ? 1 : this.router.url?.indexOf('manufacturing') > -1 ? 2 : ((this.router.url?.indexOf('inventory/report')) || (this.router.url?.indexOf('inventory/report/receiptnote')) || (this.router.url?.indexOf('inventory/report/deliverychallan'))) > -1 ? 3 : 0;
+                    this.activeTabIndex = ((this.router.url?.indexOf('inventory/report')) || (this.router.url?.indexOf('inventory/report/receiptnote')) || (this.router.url?.indexOf('inventory/report/deliverychallan'))) > -1 ? 1 : 0;
                 } else {
-                    this.activeTabIndex = this.router.url?.indexOf('jobwork') > -1 ? 1 : this.router.url?.indexOf('manufacturing') > -1 ? 2 : this.router.url?.indexOf('inventory/report') > -1 ? 3 : (this.router.url?.indexOf('inventory/report/receipt') > -1 || this.router.url?.indexOf('inventory/report/delivery') > -1) ? 3 : 0;
+                    this.activeTabIndex = this.router.url?.indexOf('inventory/report') > -1 ? 1 : (this.router.url?.indexOf('inventory/report/receipt') > -1 || this.router.url?.indexOf('inventory/report/delivery') > -1) ? 1 : 0;
                 }
             }
         });
@@ -291,12 +291,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
                 type = 'inventory';
                 break;
             case 1:
-                type = 'jobwork';
-                break;
-            case 2:
-                type = 'manufacturing';
-                break;
-            case 3:
                 type = 'report';
                 break;
             default:
@@ -305,12 +299,6 @@ export class InventoryComponent implements OnInit, OnDestroy, AfterViewInit {
         switch (type) {
             case 'inventory':
                 this.navigateToInventoryTab();
-                break;
-            case 'jobwork':
-                this.router.navigate(['/pages', 'inventory', 'jobwork'], { relativeTo: this.route });
-                break;
-            case 'manufacturing':
-                this.router.navigate(['/pages', 'inventory', 'manufacturing'], { relativeTo: this.route });
                 break;
             case 'report':
                 this.router.navigate(['/pages', 'inventory', 'report'], { relativeTo: this.route });
