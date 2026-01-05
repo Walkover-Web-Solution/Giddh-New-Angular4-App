@@ -247,6 +247,8 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public allCompanyTaxes: TaxResponse[] = [];
     /** Holds company tax list  */
     public companyTaxes: TaxResponse[] = [];
+    /** Reference to the current RCM checkbox element for focus management */
+    private currentRcmCheckboxElement: any;
     /** Holds company discounts */
     public discountsList: any[] = [];
     /** Holds company warehouses */
@@ -1389,7 +1391,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                         }, 100);
                     } else if (this.isUpdateMode) {
                         setTimeout(() => {
-                            // this.customerVendorDropdown.focusInputField();
+                            this.customerVendorDropdown.focusInputField();
                         }, 100);
                     } else {
                         this.openAccountDropdown = false;
@@ -3710,6 +3712,9 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public toggleRcmCheckbox(event: any, element: string): void {
+        // Store the checkbox element reference for focus management
+        this.currentRcmCheckboxElement = event;
+        
         let isChecked;
         if (element === "checkbox") {
             isChecked = event?.checked;
@@ -3730,6 +3735,26 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         dialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
             document.querySelector("body").classList.remove("fixed");
             this.handleRcmChange(response);
+            
+            // Focus back on the RCM checkbox after dialog closes
+            setTimeout(() => {
+                if (this.currentRcmCheckboxElement && this.currentRcmCheckboxElement.focus) {
+                    // Use MatCheckbox's built-in focus method
+                    this.currentRcmCheckboxElement.focus();
+                } else {
+                    // Fallback: find the checkbox by selector and focus
+                    const checkboxElement = document.querySelector('mat-checkbox#reverse-charge input');
+                    if (checkboxElement) {
+                        (checkboxElement as HTMLElement).focus();
+                    } else {
+                        // Last fallback: focus the mat-checkbox container
+                        const matCheckboxContainer = document.querySelector('mat-checkbox#reverse-charge');
+                        if (matCheckboxContainer) {
+                            (matCheckboxContainer as HTMLElement).focus();
+                        }
+                    }
+                }
+            }, 150);
         });
         this.changeDetection.detectChanges();
     }
@@ -7269,6 +7294,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         this.activeEntryIndex = null;
         setTimeout(() => {
             this.activeEntryIndex = index;
+            this.changeDetection.detectChanges();
         }, 1);
     }
 

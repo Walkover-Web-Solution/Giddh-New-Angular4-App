@@ -22,7 +22,7 @@
 :host ::ng-deep .single-invoice-detail {
     // Adjust Material MDC list item height for this preview list
     &.mat-mdc-list-item.mdc-list-item--with-one-line {
-        min-height: var(--mdc-list-list-item-one-line-container-height) !important;
+        min-height: var(--mat-list-list-item-one-line-container-height, 48px) !important;
         height: auto;
     }
 }

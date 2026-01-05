@@ -1852,8 +1852,6 @@
                                                                         (createOption)="toggleStockAsidePane()"
                                                                         [openDropdown]="
                                                                             entryIndex === activeEntryIndex &&
-                                                                            !transaction.get('account.uniqueName')
-                                                                                ?.value &&
                                                                             (invoiceType.isCashInvoice
                                                                                 ? invoiceForm.controls['account'].get(
                                                                                       'customerName'
