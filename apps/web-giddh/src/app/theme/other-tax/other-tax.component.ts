@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, Inject, OnDestroy, OnInit, TemplateRef, ViewChild } from "@angular/core";
 import { Observable, ReplaySubject, takeUntil, of as observableOf, of } from "rxjs";
 import { OtherTaxComponentStore } from "./utility/other-tax.store";
 import { AppState } from "../../store";
@@ -16,7 +16,7 @@ import { ASIDE_PANE_CONFIG } from "../../app.constant";
     providers: [OtherTaxComponentStore],
     standalone: false
 })
-export class OtherTaxComponent implements OnInit, OnDestroy {
+export class OtherTaxComponent implements OnInit, OnDestroy, AfterViewInit {
     /** Template Reference for Create Tax aside menu */
     @ViewChild("createTax") public createTax: TemplateRef<any>;
     /** Company taxes Observable */
@@ -64,6 +64,17 @@ export class OtherTaxComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.settingsTaxesAction.CreateTaxResponse(null));
         this.initOtherTaxForm(this.inputData?.appliedOtherTax);
         this.getCompanyTaxes();
+    }
+
+    /**
+     * Hook cycle for component view initialization
+     *
+     * @memberof OtherTaxComponent
+     */
+    public ngAfterViewInit(): void {
+       setTimeout(() => {
+         this.openAccountDropdown = true;
+       }, 50);
     }
 
     /**

@@ -278,12 +278,14 @@ export class TaxDropdownComponent implements OnChanges {
      * @memberof TaxDropdownComponent
      */
     protected emitCloseTaxDropdown(): void {
-        // Create a synthetic event object with the input element as target
-        const triggerElement = this.taxInput?.nativeElement || null;
-        const syntheticEvent = {
-            target: triggerElement
-        };
-        this.closeTaxDropdown.emit(syntheticEvent);
+        // Always emit close event for focus management
+        setTimeout(() => {
+            const triggerElement = this.taxInput?.nativeElement || null;
+            const syntheticEvent = {
+                target: triggerElement
+            };
+            this.closeTaxDropdown.emit(syntheticEvent);
+        }, 50);
     }
 
     /**

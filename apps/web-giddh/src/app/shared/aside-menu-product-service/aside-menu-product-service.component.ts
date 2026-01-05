@@ -203,7 +203,7 @@ export class AsideMenuProductServiceComponent implements OnInit, OnDestroy {
      */
     private focusButton(): void {
          setTimeout(() => {
-                const visibleButton = document.querySelector('.aside-panel-ledger button[mat-raised-button]:not([hidden])') as HTMLButtonElement;
+                const visibleButton = document.querySelector('.aside-panel-ledger button[matButton="filled"]:not([hidden])') as HTMLButtonElement;
                 if (visibleButton) {
                     visibleButton.focus();
                 }
