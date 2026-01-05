@@ -9187,7 +9187,7 @@ activity-compare-json {
             padding-left: 43px !important;
             padding-right: 38px !important;
             font-size: var(--font-size-24) !important;
-            caret-color: var(--color-medium-gray);
+            caret-color: currentColor;
             border-radius: var(--mat-border-radius-8) !important;
 
             &:focus {
