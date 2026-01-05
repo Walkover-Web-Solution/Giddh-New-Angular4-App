@@ -10,7 +10,7 @@
         <div *ngIf="isLoading">
             <giddh-page-loader></giddh-page-loader>
         </div>
-        <ng-container *ngIf="!isLoading">
+        <div *ngIf="!isLoading">
             <div>
                 <p class="text-center p-3">{{ localeData?.create_company_note }}</p>
             </div>
@@ -538,6 +538,6 @@
                     </mat-step>
                 </ng-container>
             </mat-stepper>
-        </ng-container>
+        </div>
     </div>
 </div>

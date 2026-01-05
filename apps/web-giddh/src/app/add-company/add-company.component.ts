@@ -27,8 +27,9 @@ import { HttpClient } from "@angular/common/http";
 import { AddCompanyComponentStore } from "./utility/add-company.store";
 import { userLoginStateEnum } from "../models/user-login-state";
 import { CommonService } from "../services/common.service";
-// import { ChangeBillingComponentStore } from "../subscription/change-billing/utility/change-billing.store"; // Module not found
-// import { ViewSubscriptionComponentStore } from "../subscription/view-subscription/utility/view-subscription.store"; // Module not found
+import { ChangeBillingComponentStore } from "../subscription/change-billing/utility/change-billing.store";
+import { PhoneNumberUtil } from 'google-libphonenumber';
+import { ViewSubscriptionComponentStore } from "../subscription/view-subscription/utility/view-subscription.store";
 import { ServiceConfig } from "../services/service.config";
 
 declare var initSendOTP: any;
@@ -39,7 +40,7 @@ declare var window: any;
     templateUrl: './add-company.component.html',
     styleUrls: ['./add-company.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    providers: [AddCompanyComponentStore], // Removed missing stores: ChangeBillingComponentStore, ViewSubscriptionComponentStore
+    providers: [AddCompanyComponentStore, ChangeBillingComponentStore, ViewSubscriptionComponentStore],
     standalone:false
 })
 
@@ -226,9 +227,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         return !this.isCompanyCreated && this.firstStepForm?.dirty;
     }
     /** Holds Store Get Billing Details observable*/
-    // public getBillingDetails$: Observable<any> = this.changeBillingComponentStore.select(state => state.getBillingDetails); // Module not found
+    public getBillingDetails$: Observable<any> = this.changeBillingComponentStore.select(state => state.getBillingDetails);
     /** Holds View Subscription list observable*/
-    // public viewSubscriptionData$ = this.viewSubscriptionComponentStore.select(state => state.viewSubscription); // Module not found
+    public viewSubscriptionData$ = this.viewSubscriptionComponentStore.select(state => state.viewSubscription);
     /** Holds user module restriction */
     public remainingUsers: number = 0;
 
@@ -253,9 +254,9 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         private socialAuthService: AuthService,
         private activateRoute: ActivatedRoute,
         public router: Router,
-        private commonService: CommonService
-        // private readonly changeBillingComponentStore: ChangeBillingComponentStore, // Module not found
-        // private viewSubscriptionComponentStore: ViewSubscriptionComponentStore // Module not found
+        private commonService: CommonService,
+        private readonly changeBillingComponentStore: ChangeBillingComponentStore,
+        private viewSubscriptionComponentStore: ViewSubscriptionComponentStore
     ) {
         this.isLoggedInWithSocialAccount$ = this.store.pipe(select(state => state.login.isLoggedInWithSocialAccount), takeUntil(this.destroyed$));
         this.session$ = this.store.pipe(select(state => state.session.userLoginState), distinctUntilChanged(), takeUntil(this.destroyed$));
@@ -285,11 +286,11 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             this.isNewUserLoggedIn = response === userLoginStateEnum.newUserLoggedIn;
             if (!this.isNewUserLoggedIn) {
                 this.getBillingDetails();
-                // this.getBillingDetails$.pipe(takeUntil(this.destroyed$)).subscribe(data => { // Module not found
-                //     if (data?.companyName) {
-                //         this.firstStepForm.get('name')?.patchValue(data.companyName);
-                //     }
-                // });
+                this.getBillingDetails$.pipe(takeUntil(this.destroyed$)).subscribe(data => {
+                    if (data?.companyName) {
+                        this.firstStepForm.get('name')?.patchValue(data.companyName);
+                    }
+                });
             }
         });
 
@@ -359,14 +360,14 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             }
         });
 
-        // this.viewSubscriptionData$.pipe(takeUntil(this.destroyed$)).subscribe(response => { // Module not found
-        //     if (response?.moduleRestrictionStatus) {
-        //         const module = response.moduleRestrictionStatus.find(
-        //             (module) => module?.moduleName === RestrictedModules.Users
-        //         );
-        //         this.remainingUsers = module?.remainingUsers;
-        //     }
-        // });
+        this.viewSubscriptionData$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
+            if (response?.moduleRestrictionStatus) {
+                const module = response.moduleRestrictionStatus.find(
+                    (module) => module?.moduleName === RestrictedModules.Users
+                );
+                this.remainingUsers = module?.remainingUsers;
+            }
+        });
         this.changeDetection.detectChanges();
     }
 
@@ -377,7 +378,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof AddCompanyComponent
      */
     public getBillingDetails(): void {
-        // this.changeBillingComponentStore.getBillingDetails(null); // Module not found
+        this.changeBillingComponentStore.getBillingDetails(null);
     }
 
     /**
@@ -387,7 +388,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof AddCompanyComponent
      */
     public getSubscriptionData(id: any): void {
-        // this.viewSubscriptionComponentStore.viewSubscriptionsById(id); // Module not found
+        this.viewSubscriptionComponentStore.viewSubscriptionsById(id);
     }
 
     /**
@@ -435,7 +436,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public initMobileNumberField(): void {
         let configuration = {
-            widgetId: (this.serviceConfig.OTP_WIDGET_ID_NEW || OTP_WIDGET_ID_NEW) ,
+            widgetId: (this.serviceConfig.OTP_WIDGET_ID_NEW || OTP_WIDGET_ID_NEW),
             tokenAuth: (this.serviceConfig.OTP_WIDGET_TOKEN_NEW || OTP_WIDGET_TOKEN_NEW),
             exposeMethods: true,
             success: (data: any) => { },
@@ -706,7 +707,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      * @memberof AddCompanyComponent
      */
     public getStepperIcon(): void {
-         setTimeout(() => {
+        setTimeout(() => {
             if (this.stepperIcon) {
                 this.stepperIcon._getIndicatorType = () => 'number';
                 // Force change detection to update the stepper
@@ -782,14 +783,14 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
             this.commonService.getGstInformationDetails(this.secondStepForm.get('gstin')?.value).pipe(takeUntil(this.destroyed$)).subscribe(result => {
                 if (result?.body) {
                     let dialogRef = this.dialog.open(ConfirmModalComponent, {
-                                width: '40%',
-                                data: {
+                        width: '40%',
+                        data: {
                             title: this.commonLocaleData?.app_confirmation,
-                                body: this.commonLocaleData?.app_gst_confirm_message1,
-                                ok: this.commonLocaleData?.app_yes,
-                                cancel: this.commonLocaleData?.app_no,
-                                permanentlyDeleteMessage: this.commonLocaleData?.app_gst_confirm_message2
-                            }
+                            body: this.commonLocaleData?.app_gst_confirm_message1,
+                            ok: this.commonLocaleData?.app_yes,
+                            cancel: this.commonLocaleData?.app_no,
+                            permanentlyDeleteMessage: this.commonLocaleData?.app_gst_confirm_message2
+                        }
                     });
                     dialogRef.afterClosed().subscribe(response => {
                         if (response) {
@@ -1285,13 +1286,13 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
      */
     public openLogoutConfirmationDialog(): void {
         let dialogRef = this.dialog.open(ConfirmModalComponent, {
-                    width: '40%',
-                    data: {
+            width: '40%',
+            data: {
                 title: this.localeData?.logout,
-                    body: this.localeData?.create_company_close,
-                    ok: this.commonLocaleData?.app_yes,
-                    cancel: this.commonLocaleData?.app_no
-                }
+                body: this.localeData?.create_company_close,
+                ok: this.commonLocaleData?.app_yes,
+                cancel: this.commonLocaleData?.app_no
+            }
         });
 
         dialogRef.afterClosed().subscribe(response => {
@@ -1373,7 +1374,7 @@ export class AddCompanyComponent implements OnInit, AfterViewInit, OnDestroy {
         this.thirdStepForm.get('creatorSuperAdmin').setValue(event?.value);
 
         const permissionRolesArray = this.thirdStepForm.get('permissionRoles') as FormArray;
-        (Array.isArray(permissionRolesArray?.controls) ? permissionRolesArray?.controls : []).forEach((permissionGroup: FormGroup) => {
+        permissionRolesArray?.controls.forEach((permissionGroup: FormGroup) => {
             const roleUniqueNameControl = permissionGroup.get('roleUniqueName');
             if (isSuperAdmin) {
                 roleUniqueNameControl.clearValidators();
