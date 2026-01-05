@@ -226,7 +226,6 @@ export class WhiteLabelService {
         // const dynamicThemeService = new DynamicThemeService();
         // dynamicThemeService.applyThemeFromWhiteLabel(this.whiteLabelConfig);
 
-        console.log('🎨 Applying white label theme configuration');
     }
 
     /**
@@ -270,7 +269,7 @@ export class WhiteLabelService {
             (Array.isArray(warnings) ? warnings : []).forEach(warning => console.warn(`⚠️ ${warning}`));
             console.groupEnd();
         } else {
-            console.log('✅ White label configuration validated successfully');
+
         }
     }
 

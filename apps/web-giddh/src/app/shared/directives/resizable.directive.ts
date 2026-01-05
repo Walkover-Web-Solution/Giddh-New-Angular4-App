@@ -224,7 +224,7 @@ export class ResizableDirective implements OnInit, OnDestroy {
         try {
           this.resizerElement.setPointerCapture((event as any).pointerId);
         } catch (e) {
-          console.error('ResizableDirective: Failed to set pointer capture:', e);
+
         }
       }
     }
@@ -276,7 +276,7 @@ export class ResizableDirective implements OnInit, OnDestroy {
           // We need to release all pointer captures, but we don't have the pointerId
           // This is handled automatically when the mouse is released in most browsers
         } catch (e) {
-          console.error('ResizableDirective: Failed to release pointer capture:', e);
+
         }
       }
 
@@ -382,7 +382,7 @@ export class ResizableDirective implements OnInit, OnDestroy {
         try {
           uiPreferences = JSON.parse(existingData);
         } catch (parseError) {
-          console.error('ResizableDirective: Failed to parse existing localStorage data, creating new object:', parseError);
+
           uiPreferences = {};
         }
       }
@@ -398,7 +398,7 @@ export class ResizableDirective implements OnInit, OnDestroy {
       // Save back to localStorage
       localStorage.setItem(this.storageKey, JSON.stringify(uiPreferences));
     } catch (error) {
-      console.error('ResizableDirective: Failed to save width ratio to localStorage:', error);
+
     }
   }
 
@@ -414,7 +414,7 @@ export class ResizableDirective implements OnInit, OnDestroy {
         try {
           uiPreferences = JSON.parse(savedData);
         } catch (parseError) {
-          console.error('ResizableDirective: Failed to parse localStorage data:', parseError);
+
           return null;
         }
 
@@ -432,7 +432,7 @@ export class ResizableDirective implements OnInit, OnDestroy {
         }
       }
     } catch (error) {
-      console.error('ResizableDirective: Failed to get width ratio from localStorage:', error);
+
     }
     return null;
   }

@@ -1,12 +1,11 @@
 import { ChangeDetectorRef, Component, ElementRef, Inject, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import FroalaEditor from 'froala-editor';
 import { debounceTime, distinctUntilChanged, filter, Observable, pipe, ReplaySubject, skip, take, takeUntil } from 'rxjs';
 import Tribute from 'tributejs';
 import { CustomEmailComponentStore } from './utility/template-froala.store';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
-import 'froala-editor/js/plugins.pkgd.min.js';
-import 'froala-editor/js/froala_editor.pkgd.min.js';
+import { FroalaLoaderService } from '../services/froala-loader.service';
+declare var FroalaEditor: any;
 import { DEFAULT_TRIGGER_TEMPLATE, EmailType, EntityEnum, OtherTimeOptionsEnum, TriggerActionEnum, TriggerModuleEnum } from './utility/template-froala.const';
 import { cloneDeep, isEqual } from '../../lodash-optimized';
 import { SelectMultipleFieldsComponent } from '../../theme/form-fields/select-multiple-fields/select-multiple-fields.component';
@@ -173,10 +172,10 @@ export class TemplateFroalaComponent implements OnInit {
         private generalService: GeneralService,
         private titleCasePipe: TitleCasePipe,
         private pageLeaveUtilityService: PageLeaveUtilityService,
-        private changesDetectionRef: ChangeDetectorRef
+        private changesDetectionRef: ChangeDetectorRef,
+        private froalaLoaderService: FroalaLoaderService
     ) {
-        // Initialize Froala options after environment detection
-        this.froalaOptions = this.getFroalaOptions();
+        // Froala options will be initialized after dynamic loading
     }
 
     /**
@@ -189,9 +188,13 @@ export class TemplateFroalaComponent implements OnInit {
      * @returns {void}
      * @memberof TemplateFroalaComponent
      */
-    public ngOnInit(): void {
+    public async ngOnInit(): Promise<void> {
         document.querySelector('body').classList.add('hide-chat-widget');
         this.isTrigger = this.inputData?.isTrigger;
+        
+        // Load Froala dynamically before initializing the form
+        await this.loadFroalaEditor();
+        
         this.initializeForm();
         this.getEmailContents();
         if (this.isTrigger) {
@@ -1177,5 +1180,25 @@ export class TemplateFroalaComponent implements OnInit {
         };
         
         return isEqual(formRecipients, selectedRecipients);
+    }
+
+    /**
+     * Dynamically load Froala Editor for bundle size optimization
+     * @returns Promise that resolves when Froala is loaded
+     */
+    private async loadFroalaEditor(): Promise<void> {
+        try {
+            console.log('🔄 Loading Froala Editor dynamically...');
+            await this.froalaLoaderService.loadFroala();
+            
+            // Initialize Froala options after dynamic loading
+            this.froalaOptions = this.getFroalaOptions();
+            
+            console.log('✅ Froala Editor loaded successfully');
+        } catch (error) {
+            console.error('❌ Failed to load Froala Editor:', error);
+            // Fallback: Initialize with basic options if dynamic loading fails
+            this.froalaOptions = this.getFroalaOptions();
+        }
     }
 }

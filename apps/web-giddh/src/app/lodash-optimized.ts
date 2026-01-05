@@ -13,7 +13,7 @@ try {
         try {
             lodash = (window as any).electronAPI.require('lodash');
         } catch (e) {
-            console.log('Secure Electron lodash loading failed, using fallbacks');
+
         }
     }
 
@@ -22,17 +22,17 @@ try {
         try {
             lodash = (window as any).require('lodash');
         } catch (e) {
-            console.log('Legacy lodash loading failed, using fallbacks');
+
         }
     }
 
     // If still not available, provide comprehensive fallback implementations
     if (!lodash) {
-        console.warn('Lodash not available, using fallback implementations');
+
         lodash = {
             orderBy: (collection: any[], iteratees: any, orders?: any) => {
                 if (typeof window !== 'undefined' && (window as any).isElectron) {
-                    console.log('🔧 Using ELECTRON orderBy fallback implementation');
+
                 }
                 const iterateesArray = Array.isArray(iteratees) ? iteratees : [iteratees];
                 const ordersArray = Array.isArray(orders) ? orders : [orders || 'asc'];
@@ -78,7 +78,7 @@ try {
         };
     }
 } catch (error) {
-    console.error('Error loading lodash:', error);
+
     lodash = {};
 }
 
@@ -131,7 +131,7 @@ const {
     },
     orderBy = (collection: any[], iteratees: any, orders?: any) => {
         if (typeof window !== 'undefined' && (window as any).isElectron) {
-            console.log('🔧 Using ELECTRON orderBy fallback implementation');
+
         }
         const iterateesArray = Array.isArray(iteratees) ? iteratees : [iteratees];
         const ordersArray = Array.isArray(orders) ? orders : [orders || 'asc'];

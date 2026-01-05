@@ -83,7 +83,7 @@ export class GeolocationService {
                 }
             }),
             catchError((error) => {
-                console.warn('Failed to get geolocation data:', error);
+
                 return of(null);
             })
         );
@@ -158,7 +158,7 @@ export class GeolocationService {
             const now = Date.now();
             return now < cachedData.expiryDate;
         } catch (error) {
-            console.warn('Error checking cache validity:', error);
+
             return false;
         }
     }
@@ -172,7 +172,7 @@ export class GeolocationService {
         try {
             localStorage.removeItem(this.CACHE_KEY);
         } catch (error) {
-            console.warn('Error clearing cache:', error);
+
         }
     }
 
@@ -200,7 +200,7 @@ export class GeolocationService {
             
             return parsedData;
         } catch (error) {
-            console.warn('Error reading cached data:', error);
+
             this.clearCache();
             return null;
         }
@@ -224,7 +224,7 @@ export class GeolocationService {
             
             localStorage.setItem(this.CACHE_KEY, JSON.stringify(cachedData));
         } catch (error) {
-            console.warn('Error caching country data:', error);
+
         }
     }
 }

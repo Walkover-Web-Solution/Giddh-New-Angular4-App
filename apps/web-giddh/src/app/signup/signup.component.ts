@@ -336,7 +336,6 @@ export class SignupComponent implements OnInit, OnDestroy {
         this.store.dispatch(this.loginAction.SignupWithMobileRequest(data));
     }
 
-
     /**
      * This will use for sign with providers
      *
@@ -357,10 +356,10 @@ export class SignupComponent implements OnInit, OnDestroy {
                         if (electron && electron.ipcRenderer && electron.ipcRenderer.send) {
                             ipcRenderer = electron.ipcRenderer;
                             authMethod = 'legacy-require';
-                            console.log('Using legacy require for authentication');
+
                         }
                     } catch (requireError) {
-                        console.warn('Legacy require failed:', requireError);
+
                     }
                 }
 
@@ -373,7 +372,7 @@ export class SignupComponent implements OnInit, OnDestroy {
                             once: electronAPI.once.bind(electronAPI)
                         };
                         authMethod = 'secure-api';
-                        console.log('Using secure electronAPI for authentication');
+
                     }
                 }
 
@@ -384,34 +383,33 @@ export class SignupComponent implements OnInit, OnDestroy {
 
                         // Listen for response
                         ipcRenderer.once('take-your-gmail-token', (sender, arg) => {
-                            console.log('Renderer: Received Google auth response via', authMethod, arg);
 
                             // Handle error response from main process
                             if (arg && arg.error) {
-                                console.error('Renderer: Authentication error from main process:', arg.error);
+
                                 this.toaster.errorToast('Google authentication failed: ' + arg.error);
                                 return;
                             }
 
                             // Handle successful response
                             if (arg && arg.access_token) {
-                                console.log('Renderer: Valid access token received, dispatching signup action');
+
                                 this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
                             } else {
-                                console.error('Renderer: Invalid token received from Electron auth:', arg);
+
                                 this.toaster.errorToast('Google authentication failed - invalid token format');
                             }
                         });
                     } catch (ipcError) {
-                        console.error('IPC communication failed:', ipcError);
+
                         this.toaster.errorToast('Google login communication error');
                     }
                 } else {
-                    console.error('No valid Electron IPC method available');
+
                     this.toaster.errorToast('Google login is not available in this Electron version');
                 }
             } catch (error) {
-                console.error('Electron authentication setup failed:', error);
+
                 this.toaster.errorToast('Google login is not available in this Electron version');
             }
         } else {

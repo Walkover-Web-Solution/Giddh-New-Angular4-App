@@ -179,7 +179,7 @@ export class ActionMenuComponent {
                         (window as any).electronAPI.send('open-url', electronUrl);
                         electronIpcAvailable = true;
                     } catch (ipcError) {
-                        console.warn('ElectronAPI send failed:', ipcError);
+
                     }
                 }
 
@@ -193,17 +193,17 @@ export class ActionMenuComponent {
                             electronIpcAvailable = true;
                         }
                     } catch (requireError) {
-                        console.warn('Electron require failed:', requireError);
+
                     }
                 }
 
                 // Fallback to regular window.open if IPC not available
                 if (!electronIpcAvailable) {
-                    console.warn('Electron IPC not available, using window.open fallback');
+
                     (window as any).open(url);
                 }
             } catch (error) {
-                console.warn('Electron navigation failed, using window.open:', error);
+
                 (window as any).open(url);
             }
         } else {

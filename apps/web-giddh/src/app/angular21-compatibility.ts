@@ -14,12 +14,12 @@ export class Angular21CompatibilityErrorHandler implements ErrorHandler {
             error.message.includes("Cannot read properties of undefined (reading 'nativeElement')") ||
             error.message.includes("Cannot read property 'nativeElement' of undefined")
         )) {
-            console.warn('Suppressed Angular 21 lifecycle error:', error.message.substring(0, 100) + '...');
+
             return;
         }
 
         // Allow other errors to be handled normally
-        console.error('Application Error:', error);
+
     }
 }
 
@@ -36,7 +36,7 @@ export function applyAngular21Patches() {
             message.includes("Cannot read property 'factory' of undefined") ||
             message.includes("Cannot read properties of undefined (reading 'nativeElement')") ||
             message.includes("Cannot read property 'nativeElement' of undefined")) {
-            console.warn('Suppressed Angular 21 lifecycle error:', message.substring(0, 100) + '...');
+
             return;
         }
 
@@ -54,7 +54,7 @@ export function applyAngular21Patches() {
             message.includes("Cannot read properties of undefined (reading 'nativeElement')") ||
             message.includes("Cannot read property 'nativeElement' of undefined")
         )) {
-            console.warn('Suppressed window.onerror Angular 21 lifecycle error:', message.substring(0, 100) + '...');
+
             return true; // Prevent default error handling
         }
 
@@ -74,7 +74,7 @@ export function applyAngular21Patches() {
             event.reason.message.includes("Cannot read properties of undefined (reading 'nativeElement')") ||
             event.reason.message.includes("Cannot read property 'nativeElement' of undefined")
         )) {
-            console.warn('Suppressed unhandled promise rejection Angular 21 lifecycle error:', event.reason.message.substring(0, 100) + '...');
+
             event.preventDefault();
         }
     });
