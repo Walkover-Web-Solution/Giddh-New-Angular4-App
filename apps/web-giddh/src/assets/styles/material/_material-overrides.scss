@@ -60,3 +60,14 @@ table tr { &:hover { background-color: inherit !important; }
 .aside-pane.mat-app-background {
     background-color: var(--mat-sys-surface-container, var(--mat-app-background-color)) !important;
 }
+
+.mat-mdc-card {
+    --mat-card-elevated-container-color: var(--mat-app-background-color) !important;
+}
+.mat-mdc-autocomplete-panel {
+    --mat-autocomplete-background-color : var(--mat-app-background-color) !important;
+}
+
+.mat-expansion-panel {
+    --mat-expansion-container-background-color: var(--mat-sys-surface-container-low) !important;
+}
