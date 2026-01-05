@@ -3602,9 +3602,9 @@ export class LedgerComponent implements OnInit, OnDestroy {
                     isFixed: data.body.isFixed,
                     mergedAccounts: data.body.mergedAccounts,
                     mobileNo: data.body.mobileNo,
-                    nameStr: event.additional?.stock ? data.body.oppositeAccount.parentGroups.join(', ') : data.body.parentGroups.map(parent => parent?.name).join(', '),
+                    nameStr: event.additional?.stock ? data.body.oppositeAccount.parentGroups.join(', ') : (Array.isArray(data.body.parentGroups) ? data.body.parentGroups.map(parent => parent?.name).join(', ') : ''),
                     stock: txn.duplicateEntry ? txn?.inventory?.stock : data.body.stock,
-                    uNameStr: event.additional?.stock ? data.body.oppositeAccount.parentGroups.join(', ') : data.body.parentGroups.map(parent => parent?.uniqueName ?? parent).join(', '),
+                    uNameStr: event.additional?.stock ? data.body.oppositeAccount.parentGroups.join(', ') : (Array.isArray(data.body.parentGroups) ? data.body.parentGroups.map(parent => parent?.uniqueName ?? parent).join(', ') : ''),
                     accountApplicableDiscounts: txn.duplicateEntry ? txn?.discounts : data.body.applicableDiscounts,
                     parentGroups: event.additional?.stock ? data.body.oppositeAccount.parentGroups : data.body.parentGroups, // added due to parentGroups is getting null in search API
                 };
@@ -4118,7 +4118,7 @@ export class LedgerComponent implements OnInit, OnDestroy {
             uniqueName: selectedAccountUniqueName,
             category: particular?.category,
             parentGroups: particular?.parentGroups,
-            uNameStr: particular?.parentGroups?.map(parent => parent?.uniqueName ?? parent)?.join(', '),
+            uNameStr: Array.isArray(particular?.parentGroups) ? particular.parentGroups.map(parent => parent?.uniqueName ?? parent).join(', ') : '',
             additional: {
                 name: selectedAccountName,
                 uniqueName: selectedAccountUniqueName,

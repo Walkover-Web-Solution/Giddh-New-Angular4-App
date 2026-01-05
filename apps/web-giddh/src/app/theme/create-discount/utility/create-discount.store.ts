@@ -43,7 +43,7 @@ export class CreateDiscountComponentStore extends ComponentStore<CreateDiscountS
                     tap(
                         (res: BaseResponse<any, any>) => {
                             return this.patchState({
-                                discountsAccountList: res?.body?.results?.map(res => { return { label: res.name, value: res.uniqueName, additional: { currency: res?.currency } } }) ?? []
+                                discountsAccountList: Array.isArray(res?.body?.results) ? res.body.results.map(res => { return { label: res.name, value: res.uniqueName, additional: { currency: res?.currency } } }) : []
                             });
                         },
                         (error: any) => {
@@ -63,7 +63,7 @@ export class CreateDiscountComponentStore extends ComponentStore<CreateDiscountS
         return data.pipe(
             switchMap((req) => {
                 this.patchState({ createDiscountSuccess: false, createDiscountInProgress: true });
-                
+
                 return this.settingsDiscountService.CreateDiscount(req as any).pipe(
                     tap({
                         next: (res: BaseResponse<any, CreateDiscountRequest>) => {

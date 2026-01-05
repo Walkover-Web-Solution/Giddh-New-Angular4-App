@@ -27,10 +27,6 @@ export class BalanceSheetExportXlsComponent implements OnInit {
     }
 
     public ngOnInit() {
-        console.log('Service config URL:', this.serviceConfig.AppUrl);
-        console.log('Environment URL:', environment.AppUrl);
-        console.log('App folder:', environment.APP_FOLDER);
-        console.log('Full path:', (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER);
         this.imgPath = Configuration.isElectron ? 'assets/images/xls-icon.svg' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/xls-icon.svg';
     }
 

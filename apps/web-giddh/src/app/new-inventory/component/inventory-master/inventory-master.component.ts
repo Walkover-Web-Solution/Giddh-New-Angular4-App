@@ -171,7 +171,6 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         this.searchFormControl.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
             const wasSearching = cloneDeep(this.isSearching);
             this.isSearching = (String(search)?.trim()) ? true : false;
-            console.log('search', search, this.isSearching);
             if (this.isSearching) {
                 this.searchInventory(search);
             } else {

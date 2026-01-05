@@ -1,5 +1,5 @@
 import { debounceTime, takeUntil } from 'rxjs/operators';
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { ReplaySubject } from 'rxjs';
 import { cloneDeep } from '../../../lodash-optimized';
 import { CustomTemplateResponse } from '../../../models/api-models/Invoice';
@@ -32,7 +32,8 @@ export class AllTemplatesComponent implements OnInit {
         private generalService: GeneralService,
         private domSanitizer: DomSanitizer,
         private invoiceTemplatesService: InvoiceTemplatesService,
-        private toasty: ToasterService) {
+        private toasty: ToasterService,
+        private cdr: ChangeDetectorRef) {
     }
 
     /**
@@ -55,6 +56,7 @@ export class AllTemplatesComponent implements OnInit {
                         const pdfUrlWithZoom = `${this.pdfFileURL}${IFRAME_ZOOM_CONFIG.ZOOM_100}`;
                         this.sanitizedPdfFileUrl = this.domSanitizer.bypassSecurityTrustResourceUrl(pdfUrlWithZoom);
                         this.isFileUploading = false;
+                        this.cdr.detectChanges();
                     } else {
                         this.isFileUploading = false;
                         this.toasty.errorToast(response?.message, response?.code);

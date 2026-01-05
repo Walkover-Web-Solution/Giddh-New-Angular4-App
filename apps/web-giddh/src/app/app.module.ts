@@ -657,7 +657,8 @@ export function getServiceConfigAfterInit(): () => Promise<any> {
         {
             provide: MAT_DIALOG_DEFAULT_OPTIONS,
             useValue: {
-                maxWidth: '100%'
+                maxWidth: '100%',
+                autoFocus: true
             }
         },
         CustomPreloadingStrategy

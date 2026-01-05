@@ -984,7 +984,9 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
     public removeGstDetailsForm(i: number): void {
         const addresses = this.addAccountForm.get('addresses') as FormArray;
         addresses.removeAt(i);
-        this.focusSubmitButton();
+        if (i > 0) {
+             this.focusSubmitButton();
+         }
     }
 
     /**

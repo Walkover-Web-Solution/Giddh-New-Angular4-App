@@ -3118,7 +3118,7 @@
                                             [matTooltipPosition]="'above'"
                                             (click)="deleteVoucherDialog(element)"
                                         >
-                                            <i class="icon-trash font-size-18"></i>
+                                            <i class="icon-trash icon-font-18"></i>
                                         </button>
                                     </div>
                                 </td>
@@ -3544,13 +3544,7 @@
                                             mat-menu-item
                                             aria-label="copy icon"
                                             *ngIf="!isCompany && !isConsolidatedBranch"
-                                            [routerLink]="[
-                                                '/pages/proforma-invoice/invoice/purchase/' +
-                                                    element.account?.uniqueName +
-                                                    '/' +
-                                                    element?.uniqueName +
-                                                    '/copy'
-                                            ]"
+                                            (click)="copyVoucher(element)"
                                         >
                                             {{ commonLocaleData?.app_copy }}
                                         </button>

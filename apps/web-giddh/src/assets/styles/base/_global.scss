@@ -875,7 +875,7 @@ no-data,
 }
 
 .ledger-panel {
-    background: var(--theme-background-color);
+    background: var(--mat-sys-surface-container);
     border-radius: var(--mat-border-radius-0);
     position: relative;
     padding: 15px;
@@ -1154,7 +1154,7 @@ no-data,
     margin: 0px 0 0;
     font-size: var(--font-size-15);
     text-align: left;
-    background-color: var(--theme-background-color);
+    background-color: var(--mat-sys-surface-container);
     -webkit-background-clip: padding-box;
     background-clip: padding-box;
     border: 1px solid var(--border-color);
@@ -3854,7 +3854,7 @@ label {
     position: absolute;
     height: 100%;
     z-index: 99;
-    background: var(--theme-background-color);
+    background: var(--mat-sys-surface-container);
     width: 100%;
     left: 0;
     display: table;
@@ -6154,6 +6154,10 @@ hamburger-menu {
 
 .icon-font-14 {
     font-size: 14px;
+}
+
+.icon-font-18 {
+    font-size: 18px;
 }
 
 .icon-arrow-down {

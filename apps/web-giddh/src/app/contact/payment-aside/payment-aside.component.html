@@ -58,7 +58,7 @@
                             </reactive-dropdown-field>
                         </div>
                         <div>
-                            <p class="total-balance pt-1">
+                            <p *ngIf="totalAvailableBalance" class="total-balance pt-1">
                                 <mat-slide-toggle
                                     color="primary"
                                     id="total-balance-id"
@@ -127,7 +127,7 @@
                     </div>
                     <div class="form-group mr-3">
                         <input-field
-                            type="number"
+                            type="text"
                             [allowDecimalDigitsOnly]="true"
                             [readonly]="true"
                             [mask]="inputMaskFormat"
