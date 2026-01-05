@@ -35,7 +35,7 @@ body {
 
     ::-webkit-scrollbar-thumb {
         border-radius: var(--mat-border-radius-8, 8px);
-        background-color: var(--theme-primary-light, lightgray);
+        background-color: var(--mat-sys-primary, lightgray);
     }
 
     .cdk-keyboard-focused,

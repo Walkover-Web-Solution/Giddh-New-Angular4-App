@@ -1,2 +1,7 @@
-.mat-mdc-menu-panel { max-width: unset !important;
+.mat-mdc-menu-panel {
+    max-width: unset !important;
+    .mat-divider {
+        margin-top: 0 !important;
+        margin-bottom: 0 !important;
+    }
 }

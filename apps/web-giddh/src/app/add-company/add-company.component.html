@@ -537,6 +537,17 @@
                         </form>
                     </mat-step>
                 </ng-container>
+                
+                <!-- Custom step icons to display numbers instead of Material icons -->
+                <ng-template matStepperIcon="edit" let-index="index">
+                    <span>{{ index + 1 }}</span>
+                </ng-template>
+                <ng-template matStepperIcon="done" let-index="index">
+                    <span>{{ index + 1 }}</span>
+                </ng-template>
+                <ng-template matStepperIcon="number" let-index="index">
+                    <span>{{ index + 1 }}</span>
+                </ng-template>
             </mat-stepper>
         </div>
     </div>
