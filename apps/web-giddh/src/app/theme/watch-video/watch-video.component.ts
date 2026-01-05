@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input, OnInit, TemplateRef, ViewChild, OnDestroy, ElementRef, HostListener } from '@angular/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { VIDEOLINK } from './video-link.const';
 import { DomSanitizer } from '@angular/platform-browser';
 
@@ -135,7 +135,8 @@ export class WatchVideoComponent implements OnInit, OnDestroy {
             width: '800px',
             height: 'auto',
             role: 'alertdialog',
-            ariaLabel: 'Video'
+            ariaLabel: 'Video',
+            autoFocus: false
         });
 
         // Reset flag when dialog is closed
