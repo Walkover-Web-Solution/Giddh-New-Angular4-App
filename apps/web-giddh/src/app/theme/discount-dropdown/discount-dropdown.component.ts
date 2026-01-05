@@ -269,7 +269,7 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
     public handleMenuClosed(reason: MenuCloseReason): void {
         if (!reason) return;
         this.isMenuOpened = false;
-        const isClosedByEscape = reason === 'keydown';
+        const isClosedByEscape = reason === 'keydown';   
         if (isClosedByEscape && this.lastSavedFormValues) {
             this.allowDiscountValueChanges = false;
             this.discountForm.patchValue({
@@ -296,12 +296,14 @@ export class DiscountDropdownComponent implements OnInit, OnChanges, OnDestroy {
      * @memberof DiscountDropdownComponent
      */
     protected emitCloseDiscountDropdown(): void {
-        // Create a synthetic event object with the input element as target
-        const triggerElement = this.discountInput?.nativeElement || null;
-        const syntheticEvent = {
-            target: triggerElement
-        };
-        this.closeDiscountDropdown.emit(syntheticEvent);
+        // Always emit close event for focus management
+        setTimeout(() => {
+            const triggerElement = this.discountInput?.nativeElement || null;
+            const syntheticEvent = {
+                target: triggerElement
+            };
+            this.closeDiscountDropdown.emit(syntheticEvent);
+        }, 50);
     }
 
     /**

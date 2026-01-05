@@ -3348,6 +3348,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 });
 
                 this.checkIfEntriesHasStock();
+                this.activeEntryIndex = null;
                 this.changeDetection.detectChanges();
             }
         });
@@ -3372,6 +3373,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 entryIndex: entryIndex,
                 appliedOtherTax: entry.get("otherTax")?.value,
             },
+            autoFocus: false
         });
 
         this.otherTaxAsideMenuRef
@@ -3884,12 +3886,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             this.invoiceForm.get("attachedFiles")?.patchValue([response.body?.uniqueName]);
                             if (!this.ocrDataEnabled) {
                                 this.toasterService.showSnackBar("success", this.localeData?.file_uploaded);
-                                setTimeout(() => {
-                                    const deleteAttachmentButton = document.getElementById("deleteAttachment");
-                                    if (deleteAttachmentButton) {
-                                        deleteAttachmentButton?.focus();
-                                    }
-                                }, 200);
+                                this.focusOnDeleteAttachment();
                             }
                         } else {
                             this.selectedFileName = "";
@@ -3898,17 +3895,33 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                                 this.toasterService.showSnackBar("error", response.message);
                             }
                         }
+                        this.changeDetection.detectChanges();
                     });
             });
         }
     }
 
     /**
-     * Shows confirmation modal to delete attachment
+     * Focuses on delete attachment button
      *
      * @memberof VoucherCreateComponent
      */
-    public deleteAttachementConfirmation(): void {
+    private focusOnDeleteAttachment(): void {
+         setTimeout(() => {
+            const deleteAttachmentButton = document.getElementById("deleteAttachment");
+            if (deleteAttachmentButton) {
+                deleteAttachmentButton?.focus();
+            }
+        }, 200);
+    }
+
+    /**
+     * Shows confirmation modal to delete attachment
+     *
+     * @param {any} event
+     * @memberof VoucherCreateComponent
+     */
+    public deleteAttachementConfirmation(event: any): void {
         let attachmentDeleteConfiguration = this.generalService.getAttachmentDeleteConfiguration(
             this.localeData,
             this.commonLocaleData
@@ -3926,9 +3939,12 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             .subscribe((response) => {
                 if (response === this.commonLocaleData?.app_yes) {
                     this.componentStore.deleteAttachment(this.invoiceForm.get("attachedFiles")?.value[0]);
+                    this.focusNextElement(event);
                 } else {
                     this.dialog.closeAll();
+                    this.focusOnDeleteAttachment();
                 }
+                this.changeDetection.detectChanges();
             });
     }
 
@@ -7429,14 +7445,24 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     public focusNextElement(event: Event): void {
-        if (this.lastInteraction !== InteractionType.KEYBOARD) {
-            return;
-        }
         if (!this.platform.isBrowser) {
             return;
         }
+        
         const currentElement = event.target as HTMLElement;
         if (!currentElement) {
+            return;
+        }
+
+        // Check if this is a dropdown close event (from tax-dropdown or discount-dropdown)
+        const isDropdownCloseEvent = currentElement.classList.contains('total-tax-amount') ||
+            currentElement.classList.contains('total-discount-amount');
+        
+        // For dropdown close events, always proceed and set keyboard interaction
+        if (isDropdownCloseEvent) {
+            this.setInteractionType(InteractionType.KEYBOARD, 'Dropdown close event');
+        } else if (this.lastInteraction !== InteractionType.KEYBOARD) {
+            // For non-dropdown events, check interaction type
             return;
         }
 
@@ -7447,11 +7473,14 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (currentIndex !== -1 && currentIndex < focusableElements.length - 1) {
             const nextElement = focusableElements[currentIndex + 1];
 
-            // Use NgZone for Angular-optimized async operations
-            this.ngZone.runOutsideAngular(() => {
-                // Use FocusMonitor for better focus management
-                this.focusMonitor.focusVia(nextElement, 'keyboard');
-            });
+            // Add a small delay to ensure the dropdown has fully closed
+            setTimeout(() => {
+                // Use NgZone for Angular-optimized async operations
+                this.ngZone.run(() => {
+                    // Use FocusMonitor for better focus management
+                    this.focusMonitor.focusVia(nextElement, 'keyboard');
+                });
+            }, 150);
         }
     }
 
