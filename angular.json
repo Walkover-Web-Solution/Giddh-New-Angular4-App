@@ -281,14 +281,10 @@
                                 "input": "apps/web-giddh/src/index.stage.html",
                                 "output": "/index.html"
                             },
-                            "optimization": {
-                                "scripts": true,
-                                "styles": true,
-                                "fonts": true
-                            },
+                            "optimization": false,
                             "outputHashing": "all",
                             "sourceMap": false,
-                            "vendorChunk": false,
+                            "vendorChunk": true,
                             "budgets": [
                                 {
                                     "type": "initial",
@@ -304,7 +300,7 @@
                                 "input": "apps/web-giddh/src/index.prod.html",
                                 "output": "/index.html"
                             },
-                            "optimization": true,
+                            "optimization": false,
                             "outputHashing": "all",
                             "sourceMap": false,
                             "vendorChunk": true,
@@ -330,7 +326,7 @@
                                 "input": "apps/web-giddh/src/index.test.html",
                                 "output": "/index.html"
                             },
-                            "optimization": true,
+                            "optimization": false,
                             "outputHashing": "all",
                             "sourceMap": false,
                             "vendorChunk": true,

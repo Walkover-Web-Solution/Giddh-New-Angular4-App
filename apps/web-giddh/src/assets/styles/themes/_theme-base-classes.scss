@@ -31,7 +31,7 @@ body {
         --color-black: var(--mat-sys-on-surface);
         --color-light-gray: var(--mat-sys-surface-container-low);
         --color-medium-gray: var(--mat-sys-on-surface-variant);
-        --color-dark-gray: var(--mat-sys-on-surface);
+        --color-dark-gray: var(--mat-sys-surface-container-high);
         --color-silver: var(--mat-sys-outline-variant);
         --color-transparent: transparent;
 
@@ -71,7 +71,7 @@ body {
         --filter-image-color-white: brightness(0) invert(0);
         --color-image-filter-quaternary: invert(0%) sepia(0%) saturate(0%) hue-rotate(0deg) brightness(100%) contrast(100%);
         --url-caret-image: url("../../images/caret-light.svg");
-        --table-background-color: var(--mat-sys-surface);
+        --table-background-color: var(--mat-sys-surface-container);
     }
 
     // M3 Dark Theme Configuration
@@ -125,85 +125,104 @@ body {
     }
 }
 
-// M3 Theme Utility Classes with Enhanced Contrast
-.default-theme {
-    .bg-light-gray {
-        background-color: var(--color-light-gray) !important;
-    }
+// M3 Universal Utility Classes (Theme-Agnostic)
+// These classes work for both light and dark themes using Material 3 tokens
 
-    .bg-primary {
-        background-color: var(--mat-sys-primary) !important;
-        color: var(--mat-sys-on-primary) !important;
-    }
-
-    .text-primary {
-        color: var(--mat-sys-primary) !important;
-    }
-
-    .bg-surface {
-        background-color: var(--mat-sys-surface) !important;
-        color: var(--mat-sys-on-surface) !important;
-    }
-
-    .text-on-surface {
-        color: var(--mat-sys-on-surface) !important;
-    }
-
-    // Enhanced Button Contrast
-    .mat-mdc-button, .mat-mdc-raised-button, .mat-mdc-outlined-button {
-        &.mat-primary {
-            --mdc-filled-button-container-color: var(--mat-sys-primary);
-            --mdc-filled-button-label-text-color: var(--mat-sys-on-primary);
-            --mdc-outlined-button-outline-color: var(--mat-sys-primary);
-            --mdc-outlined-button-label-text-color: var(--mat-sys-primary);
-        }
-
-        &.mat-accent {
-            --mdc-filled-button-container-color: var(--mat-sys-tertiary);
-            --mdc-filled-button-label-text-color: var(--mat-sys-on-tertiary);
-            --mdc-outlined-button-outline-color: var(--mat-sys-tertiary);
-            --mdc-outlined-button-label-text-color: var(--mat-sys-tertiary);
-        }
-    }
+// Background Utility Classes
+.bg-light-gray {
+    background-color: var(--color-light-gray) !important;
 }
 
-.dark-theme {
-    .bg-light-gray {
-        background-color: var(--color-light-gray) !important;
+.bg-primary {
+    background-color: var(--mat-sys-primary) !important;
+    color: var(--mat-sys-on-primary) !important;
+}
+
+.bg-surface {
+    background-color: var(--mat-sys-surface) !important;
+    color: var(--mat-sys-on-surface) !important;
+}
+
+.bg-surface-container {
+    background-color: var(--mat-sys-surface-container) !important;
+    color: var(--mat-sys-on-surface) !important;
+}
+
+.bg-tertiary {
+    background-color: var(--mat-sys-tertiary) !important;
+    color: var(--mat-sys-on-tertiary) !important;
+}
+
+.bg-error {
+    background-color: var(--mat-sys-error) !important;
+    color: var(--mat-sys-on-error) !important;
+}
+
+// Custom Color Backgrounds
+.bg-orange {
+    background-color: var(--color-orange) !important;
+    color: var(--color-white) !important;
+}
+
+.bg-green {
+    background-color: var(--color-green) !important;
+    color: var(--mat-sys-on-tertiary) !important;
+}
+
+.bg-red {
+    background-color: var(--color-red) !important;
+    color: var(--mat-sys-on-error) !important;
+}
+
+// Text Color Utility Classes
+.text-primary {
+    color: var(--mat-sys-primary) !important;
+}
+
+.text-on-surface {
+    color: var(--mat-sys-on-surface) !important;
+}
+
+.text-tertiary {
+    color: var(--mat-sys-tertiary) !important;
+}
+
+.text-error {
+    color: var(--mat-sys-error) !important;
+}
+
+.text-orange {
+    color: var(--color-orange) !important;
+}
+
+.text-green {
+    color: var(--color-green) !important;
+}
+
+.text-red {
+    color: var(--color-red) !important;
+}
+
+// Enhanced Button Contrast (Universal)
+.mat-mdc-button, .mat-mdc-raised-button, .mat-mdc-outlined-button {
+    &.mat-primary {
+        --mdc-filled-button-container-color: var(--mat-sys-primary);
+        --mdc-filled-button-label-text-color: var(--mat-sys-on-primary);
+        --mdc-outlined-button-outline-color: var(--mat-sys-primary);
+        --mdc-outlined-button-label-text-color: var(--mat-sys-primary);
     }
 
-    .bg-primary {
-        background-color: var(--mat-sys-primary) !important;
-        color: var(--mat-sys-on-primary) !important;
+    &.mat-accent {
+        --mdc-filled-button-container-color: var(--mat-sys-tertiary);
+        --mdc-filled-button-label-text-color: var(--mat-sys-on-tertiary);
+        --mdc-outlined-button-outline-color: var(--mat-sys-tertiary);
+        --mdc-outlined-button-label-text-color: var(--mat-sys-tertiary);
     }
 
-    .text-primary {
-        color: var(--mat-sys-primary) !important;
-    }
-
-    .bg-surface {
-        background-color: var(--mat-sys-surface) !important;
-        color: var(--mat-sys-on-surface) !important;
-    }
-
-    .text-on-surface {
-        color: var(--mat-sys-on-surface) !important;
-    }
-
-    // Enhanced Button Contrast for Dark Theme
-    .mat-mdc-button, .mat-mdc-raised-button, .mat-mdc-outlined-button {
-        &.mat-primary {
-            --mdc-filled-button-container-color: var(--mat-sys-primary);
-            --mdc-filled-button-label-text-color: var(--mat-sys-on-primary);
-            --mdc-outlined-button-outline-color: var(--mat-sys-primary);
-            --mdc-outlined-button-label-text-color: var(--mat-sys-primary);
-        }
-
-        &.mat-accent {
-            --mdc-filled-button-container-color: var(--mat-sys-tertiary);
-            --mdc-filled-button-label-text-color: var(--mat-sys-on-tertiary);
-            --mdc-outlined-button-outline-color: var(--mat-sys-tertiary);
-            --mdc-outlined-button-label-text-color: var(--mat-sys-tertiary);
-        }
+    &.mat-warn {
+        --mdc-filled-button-container-color: var(--mat-sys-error);
+        --mdc-filled-button-label-text-color: var(--mat-sys-on-error);
+        --mdc-outlined-button-outline-color: var(--mat-sys-error);
+        --mdc-outlined-button-label-text-color: var(--mat-sys-error);
     }
 }
