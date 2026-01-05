@@ -11,7 +11,7 @@
         >
             <div matColumnDef="s_no">
                 <th mat-header-cell [hidden]="!rejectedItems?.length" *matHeaderCellDef class="serial-no-column">#</th>
-                <td mat-cell *matCellDef="let rejected" data-title="#">
+                <td mat-cell *matCellDef="let rejected" data-title="#" class="serial-no-column">
                     <span class="responsive-label" [hidden]="!rejectedItems?.length">#</span>
                     {{ rejected.index + 1 }}
                 </td>

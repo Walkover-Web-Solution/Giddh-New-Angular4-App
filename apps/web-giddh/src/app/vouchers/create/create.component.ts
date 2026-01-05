@@ -1520,6 +1520,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.selectedFileName = "";
                 this.invoiceForm.get("attachedFiles")?.patchValue([]);
                 this.componentStore.resetAttachmentState();
+                this.changeDetection.detectChanges();
             }
         });
 
@@ -3898,6 +3899,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                                 this.toasterService.showSnackBar("error", response.message);
                             }
                         }
+                        this.changeDetection.detectChanges();
                     });
             });
         }

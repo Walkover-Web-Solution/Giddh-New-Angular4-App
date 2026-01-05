@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, SimpleChanges, OnChanges, ViewChild, Inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, TemplateRef, SimpleChanges, OnChanges, ViewChild, Inject, ChangeDetectorRef } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { AppState } from '../../store';
 import { AccountsAction } from '../../actions/accounts.actions';
@@ -147,7 +147,8 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         private generalService: GeneralService,
         @Inject(ServiceConfig) private serviceConfig,
         private settingsIntegrationService: SettingsIntegrationService,
-        private dialog: MatDialog
+        private dialog: MatDialog,
+        private changeDetectorRef: ChangeDetectorRef
     ) {
         this.userDetails$ = this.store.pipe(select(p => p.session.user), takeUntil(this.destroyed$));
         this.userDetails$.pipe(take(1)).subscribe(p => this.user = p);
@@ -459,6 +460,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
                 this.toaster.showSnackBar("error", response.message, response.code);
                 this.paymentRequestId = '';
             }
+            this.changeDetectorRef.detectChanges();
         });
     }
 

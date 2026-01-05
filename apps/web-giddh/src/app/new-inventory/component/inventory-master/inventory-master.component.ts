@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { ReplaySubject } from "rxjs";
 import { InventoryService } from "../../../services/inventory.service";
 import { debounceTime, distinctUntilChanged, takeUntil } from "rxjs/operators";
@@ -76,7 +76,8 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         public dialog: MatDialog,
         private router: Router,
         private pageLeaveUtilityService: PageLeaveUtilityService,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private changeDetectorRef: ChangeDetectorRef
     ) {
     }
 
@@ -170,7 +171,6 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
         this.searchFormControl.valueChanges.pipe(debounceTime(700), distinctUntilChanged(), takeUntil(this.destroyed$)).subscribe(search => {
             const wasSearching = cloneDeep(this.isSearching);
             this.isSearching = (String(search)?.trim()) ? true : false;
-
             if (this.isSearching) {
                 this.searchInventory(search);
             } else {
@@ -180,6 +180,7 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
                     this.showCreateButtons = false;
                 }
             }
+            this.changeDetectorRef.detectChanges();
         });
     }
 
@@ -295,6 +296,7 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
                     this.masterColumnsData[currentIndex].page = response?.body?.page;
                     this.masterColumnsData[currentIndex].results = this.masterColumnsData[currentIndex].results.concat(response?.body?.results);
                 }
+                this.changeDetectorRef.detectChanges();
             }
             this.loadMoreInProgress = false;
             if (!this.isSearching) {
@@ -344,6 +346,7 @@ export class InventoryMasterComponent implements OnInit, OnDestroy {
                 setTimeout(() => {
                     this.scrollToRight();
                 });
+                this.changeDetectorRef.detectChanges();
             }
         });
     }

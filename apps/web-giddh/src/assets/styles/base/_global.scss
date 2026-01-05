@@ -6155,6 +6155,10 @@ hamburger-menu {
     font-size: 14px;
 }
 
+.icon-font-18 {
+    font-size: 18px;
+}
+
 .icon-arrow-down {
     font-size: var(--font-size-15);
 }
@@ -9298,11 +9302,10 @@ body.hide-scroll-body.master-page {
                 border-left: 1px solid var(--color-medium-gray);
                 border-radius: var(--mat-border-radius-0);
                 margin-right: 0 !important;
-                height: calc(100% + 2px);
-                width: 33%;
+                height: 100%;
+                width: 35%;
                 border-top: none;
                 border-bottom: none;
-
                 &:hover {
                     color: var(--text-primary-color) !important;
                     border-radius: 0px 0px 0px 0px;

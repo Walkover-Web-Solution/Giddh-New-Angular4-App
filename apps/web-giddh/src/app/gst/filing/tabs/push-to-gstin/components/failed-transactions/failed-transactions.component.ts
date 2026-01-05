@@ -33,7 +33,7 @@ export class FailedTransactionsComponent implements OnInit, OnChanges, OnDestroy
     }
 
     public ngOnInit() {
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : environment.AppUrl + environment.APP_FOLDER + 'assets/images/gst/';
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/gst/';
     }
 
     /**

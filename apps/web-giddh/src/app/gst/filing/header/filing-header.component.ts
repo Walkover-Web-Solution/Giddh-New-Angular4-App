@@ -127,7 +127,7 @@ export class FilingHeaderComponent implements OnInit, OnChanges, OnDestroy {
                 this.showDate = true;
             }
         });
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : environment.AppUrl + environment.APP_FOLDER + 'assets/images/gst/';
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/gst/';
         this.companyGst$.subscribe(a => {
             if (a) {
                 this.activeCompanyGstNumber = a;

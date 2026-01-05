@@ -49,7 +49,7 @@ export class GroupNameComponent implements OnInit {
   ) { }
 
   public ngOnInit(): void {
-      this.imgPath = Configuration.isElectron ? 'assets/images/' : environment.AppUrl + environment.APP_FOLDER + 'assets/images/';
+      this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
 
     // get branches
     this.branchesDropdown.valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(search => {

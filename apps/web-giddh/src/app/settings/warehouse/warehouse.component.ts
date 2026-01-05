@@ -1,5 +1,6 @@
 import {
     AfterViewInit,
+    ChangeDetectorRef,
     Component,
     ComponentFactoryResolver,
     Inject,
@@ -134,7 +135,8 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
         private settingsWarehouseService: SettingsWarehouseService,
         public dialog: MatDialog,
         @Inject(ServiceConfig) private serviceConfig,
-        private componentStore: VoucherComponentStore
+        private componentStore: VoucherComponentStore,
+        private changeDetection: ChangeDetectorRef
     ) { }
 
     /**
@@ -354,6 +356,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.resetDefaultWarehouse();
                 this.setDefaulWarehouse(warehouseState.defaultWarehouseData);
             }
+            this.changeDetection.detectChanges();
         });
         this.allWarehouses$.pipe(takeUntil(this.destroyed$)).subscribe((warehouseData: any) => {
             if (warehouseData) {
@@ -364,6 +367,7 @@ export class WarehouseComponent implements OnInit, OnDestroy, AfterViewInit {
                     totalPages: warehouseData.totalPages,
                 }
                 this.showLoader = false;
+                this.changeDetection.detectChanges();
             }
         });
     }

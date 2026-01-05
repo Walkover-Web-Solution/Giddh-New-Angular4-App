@@ -216,7 +216,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     /** Instance of mail modal */
     @ViewChild("mailModal") public mailModalComponent: TemplateRef<any>;
     /** Instance of bulk payment modal */
-    @ViewChild("template") public bulkPaymentModalRef: TemplateRef<any>;
+    @ViewChild("template", { static: false }) public bulkPaymentModalRef: TemplateRef<any>;
     /** True if we should select all checkbox */
     public showSelectAll: boolean = false;
     /** True, if custom date filter is selected or custom searching or sorting is performed */

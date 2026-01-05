@@ -579,6 +579,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 } else {
                     this.settingForm.get('invoiceSettings.gstEInvoiceEnable')?.disable();
                 }
+                this.changeDetectorRef.detectChanges();
             }
         });
 

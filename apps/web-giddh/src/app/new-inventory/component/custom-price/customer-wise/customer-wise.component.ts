@@ -111,7 +111,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
         private changeDetectorRef: ChangeDetectorRef,
         private scrollDispatcher: ScrollDispatcher,
         private breakPointObservar: BreakpointObserver,
-        private generalService: GeneralService
+        private generalService: GeneralService,
     ) { }
 
     /**
@@ -234,8 +234,8 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 if (this.userList?.length && !isLoadMore) {
                     this.selectUser(this.userList[0]);
                 }
-                this.changeDetectorRef.detectChanges();
             }
+            this.changeDetectorRef.detectChanges();
         });
     }
 
@@ -371,6 +371,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                 this.currentUserStocks = [];
             }
             this.isStockLoading = false;
+            this.changeDetectorRef.detectChanges();
         });
     }
 
@@ -461,6 +462,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
             });
         });
         this.currentUserStocks = responseData?.body?.results;
+        this.changeDetectorRef.detectChanges();
     }
 
     /**
@@ -576,6 +578,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                     this.showSaveDiscardButton = true;
                     this.toaster.errorToast(response?.body);
                 }
+                this.changeDetectorRef.detectChanges();
             });
         } else {
             if (type === "user") {
@@ -770,6 +773,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                     } else {
                         this.toaster.errorToast(response?.message)
                     }
+                    this.changeDetectorRef.detectChanges();
                 });
             });
         }
@@ -896,6 +900,7 @@ export class CustomerWiseComponent implements OnInit, OnDestroy {
                             top: this.stocksContainer.nativeElement.scrollHeight,
                             behavior: 'smooth'
                         });
+                        this.changeDetectorRef.detectChanges();
                     }
 
                 });

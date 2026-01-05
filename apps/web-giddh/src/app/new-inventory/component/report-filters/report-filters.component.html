@@ -105,10 +105,10 @@
 </div>
 <div class="inventory-filter-bar d-flex">
     <div class="search-control w-100 d-flex align-items-center mat-form-field-clean">
-            <mat-form-field
+        <mat-form-field
             floatLabel="never"
             class="initial-height d-block flex-grow-1 select-multiple-chiplist-inventory"
-            >
+        >
             <mat-chip-grid #matChipList>
                 <mat-chip-row
                 *ngFor="let chip of filtersChipList; let indx = index"
@@ -176,13 +176,13 @@
                 </mat-autocomplete>
 
             <i class="icon-search search-icon ml-2 mr-2" matIconPrefix *ngIf="!filtersChipList?.length"></i>
-            </mat-form-field>
+        </mat-form-field>
         <div class="menu-btn-control d-flex justify-content-end align-items-center">
-            <button matButton="elevated" aria-hidden="true" class="advance-filter-button font-size-14" (click)="exportReport()" [disabled]="isLoading$ | async">
+            <button matButton="elevated" aria-hidden="true" class="advance-filter-button font-size-14 box-shadow-none" (click)="exportReport()" [disabled]="isLoading$ | async">
                 <i class="icon-download-circle mr-1"></i>
                 {{ commonLocaleData?.app_export }}
             </button>
-            <button matButton="elevated" (click)="openModal()" class="advance-filter-button">
+            <button matButton="elevated" (click)="openModal()" class="advance-filter-button box-shadow-none">
                 <i class="icon-advance-filter mr-1"></i>
                 {{ localeData?.header?.advance_filter }}
             </button>
@@ -195,9 +195,9 @@
                 [localeData]="localeData"
                 [commonLocaleData]="commonLocaleData"
                 [iconClass]="'icon-options'"
-                [cssClass]="'border-radius-0 h-100 w-100 font-size-15'"
+                [cssClass]="'border-radius-0 h-100 w-100 font-size-15 box-shadow-none'"
                 [buttonText]="localeData?.header?.customise"
-                class="customise-width d-inline-block h-100"
+                class="customise-width d-inline-block h-100 border-left"
             >
             </select-table-column>
         </div>
