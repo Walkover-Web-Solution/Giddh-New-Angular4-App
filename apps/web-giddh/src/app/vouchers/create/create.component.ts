@@ -3717,7 +3717,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
     public toggleRcmCheckbox(event: any, element: string): void {
         // Store the checkbox element reference for focus management
         this.currentRcmCheckboxElement = event;
-        
+
         let isChecked;
         if (element === "checkbox") {
             isChecked = event?.checked;
@@ -3738,7 +3738,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         dialogRef.afterClosed().pipe(take(1)).subscribe((response) => {
             document.querySelector("body").classList.remove("fixed");
             this.handleRcmChange(response);
-            
+
             // Focus back on the RCM checkbox after dialog closes
             setTimeout(() => {
                 if (this.currentRcmCheckboxElement && this.currentRcmCheckboxElement.focus) {
@@ -6958,7 +6958,13 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
      * @memberof VoucherCreateComponent
      */
     private getVoucherDetails(params: any): void {
+        // Only proceed if params are complete
+        if (!params || !params.uniqueName || !this.voucherType || !this.invoiceType) {
+            return;
+        }
+
         this.startLoader(true);
+
         if (this.invoiceType.isPurchaseOrder) {
             this.componentStore.getPurchaseOrderDetails(params?.uniqueName);
         } else if (this.invoiceType.isEstimateInvoice) {
@@ -7462,7 +7468,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         if (!this.platform.isBrowser) {
             return;
         }
-        
+
         const currentElement = event.target as HTMLElement;
         if (!currentElement) {
             return;
@@ -7471,7 +7477,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         // Check if this is a dropdown close event (from tax-dropdown or discount-dropdown)
         const isDropdownCloseEvent = currentElement.classList.contains('total-tax-amount') ||
             currentElement.classList.contains('total-discount-amount');
-        
+
         // For dropdown close events, always proceed and set keyboard interaction
         if (isDropdownCloseEvent) {
             this.setInteractionType(InteractionType.KEYBOARD, 'Dropdown close event');
