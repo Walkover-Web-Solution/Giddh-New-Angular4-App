@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input, ElementRef, SimpleChanges, Inject } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, ElementRef, SimpleChanges, Inject, ChangeDetectorRef } from '@angular/core';
 import { CustomTemplateResponse } from '../../../models/api-models/Invoice';
 import { ReplaySubject, take, takeUntil } from 'rxjs';
 import { TemplateContentUISectionVisibility, InvoiceUiDataService } from '../../../services/invoice.ui.data.service';
@@ -171,7 +171,8 @@ export class TemplateEditFilterComponent implements OnInit {
         private invoiceService: InvoiceService,
         @Inject(ServiceConfig) private serviceConfig,
         private templateService: InvoiceUiDataService,
-        private customFieldsService: CustomFieldsService
+        private customFieldsService: CustomFieldsService,
+        private changeDetectorRef: ChangeDetectorRef
     ) {
     }
 
@@ -506,6 +507,7 @@ export class TemplateEditFilterComponent implements OnInit {
                         } else {
                             this.toasty.showSnackBar("error", response?.message);
                         }
+                        this.changeDetectorRef.detectChanges();
                     });
             });
         }
