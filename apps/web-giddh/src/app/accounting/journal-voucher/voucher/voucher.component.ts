@@ -1332,7 +1332,7 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
      */
     public openChequeDetailForm(): void {
         const dialogRef = this.dialog.open(this.dialogBox);
-        dialogRef.afterOpened().pipe(takeUntil(this.destroyed$)).subscribe(() => {
+        dialogRef.afterOpened().subscribe(() => {
             this.chequeNumberInput?.inputFocus();
         });
     }
@@ -2765,21 +2765,31 @@ export class AccountAsVoucherComponent implements OnInit, OnDestroy, AfterViewIn
     }
 
     /**
-     * Focuses on entry debit and credit amount
+     * Focuses on entry debit and credit amount for the current active row
      *
      * @memberof AccountAsVoucherComponent
      */
     public focusDebitCreditAmount(): void {
-        const transactionsArray = this.journalVoucherForm.get('transactions') as FormArray;
-        const selectedTransaction = transactionsArray.at(this.activeRowIndex);
-        const type = selectedTransaction.get('type')?.value;
-        if (type === 'by') {
-            this.byAmountFields?.last?.nativeElement?.focus();
-        } else {
-            this.toAmountFields?.last?.nativeElement?.focus();
-        }
-
-
+        setTimeout(() => {
+            // Simple approach: find the amount input for current row using CSS selector
+            const amountInput = document.querySelector(`#transactionAmount_${this.activeRowIndex} input`) as HTMLInputElement;
+            
+            if (amountInput) {
+                amountInput.focus();
+                return;
+            }
+            
+            // Fallback: find any visible amount input in the current row
+            const rowSelector = `tbody tr:nth-child(${(this.activeRowIndex * 2) + 1})`;
+            const currentRow = document.querySelector(rowSelector);
+            
+            if (currentRow) {
+                const amountField = currentRow.querySelector('.amount1 input, .amount2 input') as HTMLInputElement;
+                if (amountField && !amountField.readOnly) {
+                    amountField.focus();
+                }
+            }
+        }, 100);
     }
 
     /**
