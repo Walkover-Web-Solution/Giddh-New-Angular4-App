@@ -106,12 +106,12 @@
 
     // ===== M3 AZURE & BLUE SURFACE SYSTEM VARIABLES =====
     // Light theme surface colors - Azure & Blue theme
-    --mat-sys-surface: #fefbff;
+    --mat-sys-surface: #ffffff;
     --mat-sys-surface-dim: #ddd8e0;
-    --mat-sys-surface-bright: #fefbff;
+    --mat-sys-surface-bright: #ffffff;
     --mat-sys-surface-container-lowest: #ffffff;
-    --mat-sys-surface-container-low: #f7f2fa;
-    --mat-sys-surface-container: #f1ecf4;
+    --mat-sys-surface-container-low: #f5f5f5;
+    --mat-sys-surface-container: #fafafa;
     --mat-sys-surface-container-high: #ebe6ee;
     --mat-sys-surface-container-highest: #e6e0e9;
     --mat-sys-surface-variant: #e7e0ec;
@@ -152,7 +152,7 @@
     --mat-sys-outline-variant: #cac4d0;
 
     // Background colors (deprecated in M3 but kept for compatibility)
-    --mat-sys-background: #fefbff;
+    --mat-sys-background: #ffffff;
     --mat-sys-on-background: #1c1b1f;
 
     // Shadow and scrim
@@ -194,13 +194,13 @@
 // ===== DARK THEME OVERRIDES =====
 .dark-theme {
     // M3 Surface system for dark theme - Azure & Blue
-    --mat-sys-surface: #fefbff;
-    --mat-sys-surface-dim: #fefbff;
+    --mat-sys-surface: #ffffff;
+    --mat-sys-surface-dim: #ffffff;
     --mat-sys-surface-bright: #363a41;
     --mat-sys-surface-container-lowest: #0b0e15;
     --mat-sys-surface-container-low: #181c23;
     --mat-sys-surface-container: #1c2029;
-    --mat-sys-surface-container-high: #fefbff;
+    --mat-sys-surface-container-high: #ffffff;
     --mat-sys-surface-container-highest: #32363e;
     --mat-sys-surface-variant: #43474e;
     --mat-sys-inverse-surface: #2f3036;
@@ -240,8 +240,8 @@
     --mat-sys-outline-variant: #43474e;
 
     // Background colors for dark theme (deprecated in M3 but kept for compatibility)
-    --mat-sys-background: #fefbff;
-    --mat-sys-on-background: #fefbff;
+    --mat-sys-background: #ffffff;
+    --mat-sys-on-background: #ffffff;
 
     // Shadow and scrim remain the same
     --mat-sys-shadow: #000000;
@@ -258,4 +258,24 @@
     --theme-accent-color: var(--mat-sys-tertiary);
     --theme-warn-color: var(--mat-sys-error);
     --theme-border-color: var(--mat-sys-outline-variant);
+}
+
+.theme-primary-color {
+    color: var(--theme-primary-color) ;
+}
+
+.theme-accent-color {
+    color: var(--theme-accent-color) ;
+}
+
+.theme-warn-color {
+    color: var(--theme-warn-color) ;
+}
+
+.theme-border-color {
+    color: var(--theme-border-color) ;
+}
+
+.theme-foreground-color {
+    color: var(--mat-sys-on-surface) ;
 }

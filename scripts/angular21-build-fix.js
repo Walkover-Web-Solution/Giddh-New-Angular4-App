@@ -19,9 +19,7 @@ function setupAngular21Environment() {
         // Reduce optimization pressure compared to Angular 21 defaults
         'NODE_OPTIONS': [
             '--max-old-space-size=8192',
-            '--max-semi-space-size=128',
-            '--optimize-for-size',
-            isAWS ? '--gc-interval=100' : '--gc-interval=200'
+            '--max-semi-space-size=128'
         ].join(' '),
 
         // Angular 21 specific flags
@@ -57,17 +55,12 @@ function buildWithAngular21Fixes(configuration = 'prod') {
             `--configuration=${configuration}`,
             '--output-hashing=all',
             '--source-map=false',
-            '--vendor-chunk=true', // Force vendor chunk separation
-            '--named-chunks=true', // Enable named chunks for debugging
-            '--optimization=true',
-            '--build-optimizer=false', // Disable aggressive optimization causing EPIPE
-            '--aot=true',
-            '--extract-css=true'
+            '--vendor-chunk=true',
+            '--named-chunks=true'
         ];
 
         const ngProcess = spawn('node', [
             '--max-old-space-size=8192',
-            '--max-semi-space-size=128',
             'node_modules/@angular/cli/bin/ng',
             ...buildArgs
         ], {

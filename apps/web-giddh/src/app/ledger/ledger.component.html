@@ -3254,18 +3254,12 @@
                                 <div class="font-size-15">
                                     {{ option?.label }}
                                 </div>
-                                <div *ngIf="ledgerView != ledgerViewEnum.StatementView" class="font-size-15 text-light">
-                                    {{ option.additional?.uniqueName }}
-                                </div>
                             </a>
                         </ng-container>
                         <ng-container *ngIf="option.additional?.stock">
                             <a href="javascript:;" class="py-1 theme-foreground-color">
                                 <div class="font-size-15">
                                     {{ option?.label }}
-                                </div>
-                                <div *ngIf="ledgerView != ledgerViewEnum.StatementView" class="font-size-15 text-light">
-                                    {{ option.additional?.uniqueName }}
                                 </div>
                                 <div class="text-light font-size-12">
                                     {{ commonLocaleData?.app_stock }}: {{ option.additional?.stock?.uniqueName }}
