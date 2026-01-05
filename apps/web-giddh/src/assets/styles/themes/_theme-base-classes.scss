@@ -76,6 +76,7 @@ body {
         // Image url
         --url-caret-image: url("../../images/caret-light.svg");
         --table-background-color: var(--mat-sys-surface-container);
+        --color-apple-search-background: #575150;
     }
 
     // M3 Dark Theme Configuration
@@ -129,6 +130,7 @@ body {
         // Image url
         --url-caret-image: url("../../images/caret-dark.svg");
         --table-background-color: var(--mat-sys-surface-container);
+        --color-apple-search-background: #575150;
     }
 }
 

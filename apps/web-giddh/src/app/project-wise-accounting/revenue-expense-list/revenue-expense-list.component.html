@@ -178,9 +178,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <div *ngIf="totalResults" [formGroup]="accountEntryListForm" >
-                        <div formArrayName="entryList">
-                            <div
+                    <ng-container *ngIf="totalResults" [formGroup]="accountEntryListForm" >
+                        <ng-container formArrayName="entryList">
+                            <ng-container
                                 *ngFor="let entry of accountEntryListForm?.get('entryList')['controls']; let i = index">
                                 <tr [formGroupName]="i" [ngClass]="{'active-row' : activeRowIndex === i || entry?.invalid}" (mouseenter)="activeRowIndex = i" (mouseleave)="activeRowIndex = -1">
                                     <td>
@@ -291,9 +291,9 @@
                                         </span>
                                     </td>
                                 </tr>
-                            </div>
-                        </div>
-                    </div>
+                            </ng-container>
+                        </ng-container>
+                    </ng-container>
                     <tr>
                         <td colspan="100%">
                             <div class="no-data" *ngIf="!totalResults">

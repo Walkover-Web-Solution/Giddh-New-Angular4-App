@@ -44,7 +44,7 @@
                 }
                 .custom-tab {
                     border: 1px solid var(--color-border-medium);
-                    border-radius: var(--mat-border-radius-4);
+                    border-radius: var(--mat-button-text-container-shape, var(--mat-sys-corner-full));
                     button {
                         flex-grow: 1;
                         height: 33px;
