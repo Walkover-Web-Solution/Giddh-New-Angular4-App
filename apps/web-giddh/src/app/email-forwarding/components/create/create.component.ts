@@ -154,22 +154,6 @@ export class CreateComponent implements OnInit, OnDestroy, AfterViewInit {
                 this.targetStepIndex = null;
             }, 100);
         }
-        this.getStepperIcon();
-    }
-
-       /**
-     * This will use for get stepper icon
-     *
-     * @memberof CreateComponent
-     */
-    public getStepperIcon(): void {
-         setTimeout(() => {
-            if (this.stepper) {
-                (this.stepper as any)._getIndicatorType = () => 'number'; // Type assertion for private property access
-                // Force change detection to update the stepper
-                this.changeDetection.detectChanges();
-            }
-        }, 0);
     }
 
     /**

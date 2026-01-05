@@ -12,28 +12,30 @@
             <!--share group/account-->
             <div class="col-lg-4 pr-0 pl-0 full-width" *ngIf="showEditGroup$ | async">
                 <!--group-->
-                <div class="d-flex align-items-center justify-content-end column-gap-1">
-                     <p
-                        class="theme-accent-color"
+                <div class="d-flex flex-column justify-self-end column-gap-1">
+                    <div class="d-flex align-items-center column-gap-1">
+                        <button 
+                            matButton="filled"
+                            (click)="exportGroupLedger()"
+                            aria-label="export" 
+                        >
+                            {{ commonLocaleData?.app_export }}
+                        </button>
+                        <button 
+                            mat-raised-button
+                            aria-label="share" 
+                            (click)="openShareGroupDialog()"
+                            color="primary"
+                        >
+                            {{ commonLocaleData?.app_share }}
+                        </button>
+                    </div>
+                    <div
+                        class="text-primary pt-1 text-right mr-2"
                         *ngIf="isUserSuperAdmin && (showEditGroup$ | async) && (activeGroupSharedWith$ | async)?.length"
                     >
                         {{ groupSharedWith }}
-                    </p>
-                    <button 
-                        matButton="filled"
-                        (click)="exportGroupLedger()"
-                        aria-label="export" 
-                    >
-                        {{ commonLocaleData?.app_export }}
-                    </button>
-                    <button 
-                        mat-raised-button
-                        aria-label="share" 
-                        (click)="openShareGroupDialog()"
-                        color="primary"
-                    >
-                        {{ commonLocaleData?.app_share }}
-                    </button>
+                    </div>
                 </div>
             </div>
             <!--account-->
@@ -48,8 +50,8 @@
                     {{ commonLocaleData?.app_share }}
                 </button>
                 <div
-                    class="text-primary text-right mr-2 clear-both"
-                    *ngIf="isUserSuperAdmin && (showEditAccount$ | async) && (activeAccountSharedWith$ | async)?.length"
+                    class="text-primary text-right mr-2 clear-both pt-1"
+                    
                 >
                     {{ accountSharedWith }}
                 </div>
