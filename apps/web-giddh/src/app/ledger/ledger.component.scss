@@ -108,11 +108,11 @@
     padding: 10px !important;
     border-bottom: 1px solid var(--border-color) !important;
 }
-table.ledger-footer-1 td[class*="col-"] {
+table.ledger-footer-1 td[class*='col-'] {
     justify-content: flex-end;
 }
 
-.ledg-head.entry-popup table td[class*="col-"] {
+.ledg-head.entry-popup table td[class*='col-'] {
     padding: 0px !important;
     padding-bottom: 1px !important;
     border-bottom: 1px solid var(--border-color);
@@ -140,7 +140,7 @@ table.ledger-footer-1 td[class*="col-"] {
                 border-bottom: 1px solid var(--border-color) !important;
                 border-top: none !important;
             }
-            td[class*="col-"] {
+            td[class*='col-'] {
                 padding-left: 0 !important;
                 padding-right: 0 !important;
             }
@@ -314,7 +314,7 @@ table.ledger-footer-1 td[class*="col-"] {
 }
 .input-wrapper:before {
     position: absolute;
-    content: "";
+    content: '';
     display: block;
     height: 36px;
     width: 1px;
@@ -330,8 +330,8 @@ table.ledger-footer-1 td[class*="col-"] {
     justify-content: flex-end;
 }
 
-input[type="date"]::-webkit-inner-spin-button,
-input[type="date"]::-webkit-outer-spin-button {
+input[type='date']::-webkit-inner-spin-button,
+input[type='date']::-webkit-outer-spin-button {
     -webkit-appearance: none;
 }
 ::-webkit-calendar-picker-indicator {
@@ -427,7 +427,7 @@ input[type="date"]::-webkit-outer-spin-button {
 }
 .advance-search-by-date:before {
     position: absolute;
-    content: "";
+    content: '';
     height: 1px;
     width: 32%;
     background-color: var(--color-silver);
@@ -436,7 +436,7 @@ input[type="date"]::-webkit-outer-spin-button {
 }
 .advance-search-by-date:after {
     position: absolute;
-    content: "";
+    content: '';
     height: 1px;
     width: 32%;
     background-color: var(--color-silver);
@@ -662,7 +662,7 @@ input[type="date"]::-webkit-outer-spin-button {
             }
             .d-flex {
                 span {
-                    input[type="checkbox"] {
+                    input[type='checkbox'] {
                         margin-right: 5px;
                         margin-left: 5px;
                         height: 18px;
@@ -686,7 +686,7 @@ input[type="date"]::-webkit-outer-spin-button {
     text-align: right;
     white-space: normal;
 }
-.ledg-head .ledger-main .ledger-row:last-child mat-grid-tile[class*="col-"] {
+.ledg-head .ledger-main .ledger-row:last-child mat-grid-tile[class*='col-'] {
     padding-left: 0 !important;
     padding-right: 0 !important;
 }
@@ -849,7 +849,7 @@ input#ledger-search {
     .advance-search-block {
         padding: 0;
     }
-    .ledg-head input[type="search"] {
+    .ledg-head input[type='search'] {
         min-width: 170px;
     }
     .debit-credit-amount {
@@ -953,7 +953,7 @@ input#ledger-search {
         }
         .single-search-box {
             position: relative;
-            input[type="search"] {
+            input[type='search'] {
                 min-width: 150px;
                 border-radius: var(--mat-border-radius-16) !important;
             }

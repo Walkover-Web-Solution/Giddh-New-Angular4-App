@@ -1,26 +1,28 @@
-<div appTranslate [file]="'vat-report'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
+<div
+    appTranslate
+    [file]="'vat-report'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+    (translationComplete)="translationComplete($event)"
+>
     <hamburger-menu></hamburger-menu>
     <div class="position-relative w-100">
-        <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
-        *ngIf="asideGstSidebarMenuState">
-        <tax-sidebar
-            (navigateEvent)="handleNavigation()"
-            [exclude]="'#primary-new-header'"
-            class="gst-sidebar"
-            ></tax-sidebar>
+        <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper" *ngIf="asideGstSidebarMenuState">
+            <tax-sidebar (navigateEvent)="handleNavigation()" [exclude]="'#primary-new-header'" class="gst-sidebar"></tax-sidebar>
         </div>
     </div>
     <div class="obligations position-relative p-3">
         <div class="container-fluid ml-0">
             <div class="row align-items-center row-gap-15">
                 <div class="col flex-grow-0">
-                    <div class="custom-datepicker"
-                         [matMenuTriggerFor]="universalDatepicker"
-                         #universalDatepickerTrigger="matMenuTrigger"
-                         role="button"
-                         aria-haspopup="true"
-                         aria-controls="universalDatepicker">
+                    <div
+                        class="custom-datepicker"
+                        [matMenuTriggerFor]="universalDatepicker"
+                        #universalDatepickerTrigger="matMenuTrigger"
+                        role="button"
+                        aria-haspopup="true"
+                        aria-controls="universalDatepicker"
+                    >
                         <input
                             matInput
                             type="text"
@@ -32,24 +34,33 @@
                         />
                     </div>
                 </div>
-                <div class="col flex-grow-0" *ngIf="taxesList?.length > 1" >
-                    <reactive-dropdown-field [label]="commonLocaleData?.app_vat" [options]="taxesList"
-                        (selectedOption)="taxNumberSelected($event)" [placeholder]="commonLocaleData?.app_enter_vat">
-                    </reactive-dropdown-field>
+                <div class="col flex-grow-0" *ngIf="taxesList?.length > 1">
+                    <reactive-dropdown-field
+                        [label]="commonLocaleData?.app_vat"
+                        [options]="taxesList"
+                        (selectedOption)="taxNumberSelected($event)"
+                        [placeholder]="commonLocaleData?.app_enter_vat"
+                    ></reactive-dropdown-field>
                 </div>
                 <div class="col flex-grow-0">
-                    <reactive-dropdown-field [label]="commonLocaleData?.app_status" [options]="statusList" (selectedOption)="statusSelected($event)"
+                    <reactive-dropdown-field
+                        [label]="commonLocaleData?.app_status"
+                        [options]="statusList"
+                        (selectedOption)="statusSelected($event)"
                         [placeholder]="localeData?.select_status"
-                        [labelValue]="commonLocaleData?.app_all"></reactive-dropdown-field>
+                        [labelValue]="commonLocaleData?.app_all"
+                    ></reactive-dropdown-field>
                 </div>
                 <div class="col flex-grow-0" *ngIf="(isCompanyMode || isConsolidatedBranch) && isMultipleBranch">
-                    <reactive-dropdown-field [label]="commonLocaleData?.app_branch" [options]="branchList"
+                    <reactive-dropdown-field
+                        [label]="commonLocaleData?.app_branch"
+                        [options]="branchList"
                         (selectedOption)="branchSelected($event)"
-                        [placeholder]="commonLocaleData?.app_select_branch"></reactive-dropdown-field>
+                        [placeholder]="commonLocaleData?.app_select_branch"
+                    ></reactive-dropdown-field>
                 </div>
                 <div class="col flex-grow-0">
-                    <button matButton="filled" (click)="getVatObligations()">{{
-                        commonLocaleData?.app_search }}</button>
+                    <button matButton="filled" (click)="getVatObligations()">{{ commonLocaleData?.app_search }}</button>
                 </div>
             </div>
 
@@ -88,10 +99,8 @@
                                 {{ commonLocaleData?.app_status }}
                             </th>
                             <td mat-cell *matCellDef="let element">
-                                <ng-container *ngIf="element?.status === 'F'">{{ localeData?.status_fulfilled
-                                    }}</ng-container>
-                                <ng-container *ngIf="element?.status === 'O'">{{
-                                    localeData?.status_open}}</ng-container>
+                                <ng-container *ngIf="element?.status === 'F'">{{ localeData?.status_fulfilled }}</ng-container>
+                                <ng-container *ngIf="element?.status === 'O'">{{ localeData?.status_open }}</ng-container>
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="action">
@@ -99,12 +108,22 @@
                                 {{ commonLocaleData?.app_action }}
                             </th>
                             <td mat-cell *matCellDef="let element">
-                                <button class="action-btn" *ngIf="element.status ===  'F'" matButton="elevated"
-                                    (click)="openViewReturnDialog(element?.start, element?.end, element?.periodKey)">{{
-                                    localeData?.view_return }}</button>
-                                <button class="action-btn" *ngIf="element.status ===  'O'" matButton="elevated"
-                                    (click)="openFileReturnDialog(element?.start, element?.end, element?.periodKey)">
-                                    {{ localeData?.file_return }}</button>
+                                <button
+                                    class="action-btn"
+                                    *ngIf="element.status === 'F'"
+                                    matButton="elevated"
+                                    (click)="openViewReturnDialog(element?.start, element?.end, element?.periodKey)"
+                                >
+                                    {{ localeData?.view_return }}
+                                </button>
+                                <button
+                                    class="action-btn"
+                                    *ngIf="element.status === 'O'"
+                                    matButton="elevated"
+                                    (click)="openFileReturnDialog(element?.start, element?.end, element?.periodKey)"
+                                >
+                                    {{ localeData?.file_return }}
+                                </button>
                             </td>
                         </ng-container>
                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -118,11 +137,12 @@
                                         {{ localeData?.connect_to_hmrc }}
                                     </a>
                                 </div>
-                                <restricted-module-message [restrictedModule]="restrictedModules.TaxFilling"
-                                    (onUpgradePlan)="buyPlan($event)">
-                                </restricted-module-message>
+                                <restricted-module-message
+                                    [restrictedModule]="restrictedModules.TaxFilling"
+                                    (onUpgradePlan)="buyPlan($event)"
+                                ></restricted-module-message>
                             </div>
-                            <div class="no-data"  *ngIf="!connectToHMRCUrl && !isTaxRestrictedModule">
+                            <div class="no-data" *ngIf="!connectToHMRCUrl && !isTaxRestrictedModule">
                                 <h2>{{ commonLocaleData?.app_no_data_found }}</h2>
                             </div>
                         </div>
@@ -155,7 +175,6 @@
             (closeCalender)="toggleGiddhDatepicker(false)"
             [keepCalendarOpeningWithRange]="false"
             [showRangeLabelOnInput]="false"
-            >
-        </app-datepicker-wrapper>
+        ></app-datepicker-wrapper>
     </ng-template>
 </mat-menu>

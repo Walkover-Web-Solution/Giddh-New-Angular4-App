@@ -3,7 +3,14 @@
         <!-- Date Picker Header -->
         <div class="date-picker-header mb-3">
             <div class="custom-datepicker">
-                <div class="custom-datepicker" [matMenuTriggerFor]="universalDatepicker" #universalDatepickerTrigger="matMenuTrigger" role="button" aria-haspopup="true" aria-controls="universalDatepicker">
+                <div
+                    class="custom-datepicker"
+                    [matMenuTriggerFor]="universalDatepicker"
+                    #universalDatepickerTrigger="matMenuTrigger"
+                    role="button"
+                    aria-haspopup="true"
+                    aria-controls="universalDatepicker"
+                >
                     <input
                         matInput
                         type="text"
@@ -79,15 +86,25 @@
             <div class="col-lg-3 col-md-6 col-12">
                 <div class="text-left pl-3">
                     <label class="text-light font-size-15">Profit/Loss</label>
-                    <p class="text-primary">1,02,377.50 <span class="by-date">(Apr 1, 2018 - Dec 11, 2020)</span></p>
+                    <p class="text-primary">
+                        1,02,377.50
+                        <span class="by-date">(Apr 1, 2018 - Dec 11, 2020)</span>
+                    </p>
                 </div>
             </div>
             <div class="col-lg-2 col-md-6 col-12">
-                <label class="text-light font-size-15"
-                    >Transaction Count : <span class="total-transction text-primary">1.00</span></label
-                >
-                <p>Inward: <span class="total-inward">0.00</span></p>
-                <p>Outward: <span class="total-outward">0.00</span></p>
+                <label class="text-light font-size-15">
+                    Transaction Count :
+                    <span class="total-transction text-primary">1.00</span>
+                </label>
+                <p>
+                    Inward:
+                    <span class="total-inward">0.00</span>
+                </p>
+                <p>
+                    Outward:
+                    <span class="total-outward">0.00</span>
+                </p>
             </div>
             <div class="col-lg-7 col-md-12">
                 <div class="d-flex justify-content-end stock-value">

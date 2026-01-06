@@ -1,6 +1,11 @@
 <hamburger-menu></hamburger-menu>
-<div appTranslate [file]="'email-forwarding'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event" class="container-fluid p-3 h-100 ">
+<div
+    appTranslate
+    [file]="'email-forwarding'"
+    (localeData)="localeData = $event"
+    (commonLocaleData)="commonLocaleData = $event"
+    class="container-fluid p-3 h-100"
+>
     <!-- Loading Spinner -->
     <div *ngIf="isLoading && isEditMode" class="min-h-400 p-4 d-flex justify-content-center align-items-center">
         <giddh-page-loader></giddh-page-loader>
@@ -10,15 +15,24 @@
     <div [hidden]="isLoading && isEditMode" class="row mx-0 h-100">
         <div class="col-12">
             <div class="p-3 d-flex justify-content-start align-items-center flex-column h-100">
-                <button *ngIf="!firstTimeCreate && !isLoading" matButton="elevated" (click)="navigateBack()"
-                    class="position-absolute top-0 left-16">
+                <button
+                    *ngIf="!firstTimeCreate && !isLoading"
+                    matButton="elevated"
+                    (click)="navigateBack()"
+                    class="position-absolute top-0 left-16"
+                >
                     <span class="d-inline-flex align-items-center column-gap-05">
                         <i class="font-size-16 icon-left"></i>
                         <span>{{ commonLocaleData?.app_back }}</span>
                     </span>
                 </button>
-                <mat-stepper #stepper orientation="horizontal" linear (selectionChange)="onStepSelectionChange($event)"
-                    class="w-100 max-w-800 mx-auto theme-background-bg-color overflow-hidden">
+                <mat-stepper
+                    #stepper
+                    orientation="horizontal"
+                    linear
+                    (selectionChange)="onStepSelectionChange($event)"
+                    class="w-100 max-w-800 mx-auto theme-background-bg-color overflow-hidden"
+                >
                     <!-- Step 1: Create Email -->
                     <mat-step [stepControl]="emailForwardingForm" [label]="localeData?.create_custom_email">
                         <form [formGroup]="emailForwardingForm">
@@ -31,28 +45,26 @@
                                             </h2>
                                             <!-- Display Mode -->
                                             <div *ngIf="!isEditingEmail" class="w-100 max-w-400 mx-auto">
-                                                <div
-                                                    class="border border-radius-4 mb-3 p-3 custom-mat-form-field-height">
+                                                <div class="border border-radius-4 mb-3 p-3 custom-mat-form-field-height">
                                                     <p class="text-left mb-0 font-size-16 font-weight-medium">
                                                         {{ getCompleteEmail() }}
                                                     </p>
                                                 </div>
                                                 <div class="d-flex align-items-center justify-content-center">
-                                                    <button matButton="elevated" (click)="copyEmail()" ngxClipboard
-                                                        [cbContent]="getCompleteEmail()" class="mr-4 cursor-pointer">
-                                                        {{
-                                                        isCopied
-                                                        ? localeData?.copied
-                                                        : commonLocaleData?.app_copy
-                                                        }}
+                                                    <button
+                                                        matButton="elevated"
+                                                        (click)="copyEmail()"
+                                                        ngxClipboard
+                                                        [cbContent]="getCompleteEmail()"
+                                                        class="mr-4 cursor-pointer"
+                                                    >
+                                                        {{ isCopied ? localeData?.copied : commonLocaleData?.app_copy }}
                                                     </button>
-                                                    <span (click)="toggleEmailEdit()"
-                                                        class="text-primary cursor-pointer">
+                                                    <span (click)="toggleEmailEdit()" class="text-primary cursor-pointer">
                                                         {{ commonLocaleData?.app_edit }}
                                                     </span>
                                                 </div>
-                                                <button matButton="filled" class="mt-5"
-                                                    (click)="nextStep(stepper, emailForwardingForm, 1)">
+                                                <button matButton="filled" class="mt-5" (click)="nextStep(stepper, emailForwardingForm, 1)">
                                                     {{ commonLocaleData?.app_next }}
                                                     <i class="icon-arrow-right ml-2"></i>
                                                 </button>
@@ -60,13 +72,16 @@
 
                                             <!-- Edit Mode -->
                                             <div *ngIf="isEditingEmail" class="w-100 max-w-400 mx-auto">
-                                                <input-field class="d-block mb-3" [label]="localeData?.forwarded_mail"
-                                                    formControlName="forwardedMail" [matSuffix]="forwardedMailDomain"
+                                                <input-field
+                                                    class="d-block mb-3"
+                                                    [label]="localeData?.forwarded_mail"
+                                                    formControlName="forwardedMail"
+                                                    [matSuffix]="forwardedMailDomain"
                                                     [matSuffixCssClass]="'text-light user-select-none'"
-                                                    [required]="true"></input-field>
+                                                    [required]="true"
+                                                ></input-field>
                                                 <div class="d-flex justify-content-center">
-                                                    <button matButton="filled"
-                                                        (click)="toggleEmailEdit(); replaceUrlEmail()" class="mr-2">
+                                                    <button matButton="filled" (click)="toggleEmailEdit(); replaceUrlEmail()" class="mr-2">
                                                         {{ commonLocaleData?.app_save }}
                                                     </button>
                                                     <button matButton="elevated" (click)="toggleEmailEdit(true)">
@@ -95,11 +110,10 @@
                                                 <ng-container *ngTemplateOutlet="emailDisplayTemplate"></ng-container>
 
                                                 <h2
-                                                    class="d-flex flex-column align-items-center row-gap-2 font-size-18 justify-content-center my-5">
+                                                    class="d-flex flex-column align-items-center row-gap-2 font-size-18 justify-content-center my-5"
+                                                >
                                                     <mat-spinner diameter="50"></mat-spinner>
-                                                    <span class="text-light">{{
-                                                        localeData?.waiting_verification
-                                                        }}</span>
+                                                    <span class="text-light">{{ localeData?.waiting_verification }}</span>
                                                 </h2>
 
                                                 <ng-container *ngTemplateOutlet="helpDocTemplate"></ng-container>
@@ -109,8 +123,7 @@
                                             <div class="w-100 mx-auto" *ngIf="emailForwardingResponse">
                                                 <ng-container *ngTemplateOutlet="emailDisplayTemplate"></ng-container>
 
-                                                <div
-                                                    class="d-flex justify-content-center align-items-center column-gap-1 p-4 mt-3">
+                                                <div class="d-flex justify-content-center align-items-center column-gap-1 p-4 mt-3">
                                                     <button matButton="filled" (click)="handleVerifyAndNext()">
                                                         {{ localeData?.verify_and_next }}
                                                     </button>
@@ -134,34 +147,35 @@
                                     <mat-card class="border-radius-12 max-w-400 mx-auto">
                                         <mat-card-content class="pt-5 pb-4 px-5 text-center">
                                             <div class="d-flex align-items-center flex-column row-gap-3">
-                                                <reactive-dropdown-field class="d-block w-100"
+                                                <reactive-dropdown-field
+                                                    class="d-block w-100"
                                                     [label]="commonLocaleData?.app_account"
                                                     [placeholder]="commonLocaleData?.app_select_account"
                                                     [options]="accountSearchResponse$ | async"
-                                                    formControlName="accountUniqueName" [required]="true"
-                                                    [showCreateNew]="true" (createOption)="toggleAccountAsidePane()"
+                                                    formControlName="accountUniqueName"
+                                                    [required]="true"
+                                                    [showCreateNew]="true"
+                                                    (createOption)="toggleAccountAsidePane()"
+                                                    [showError]="isFormSubmitted && emailForwardingForm.get('accountUniqueName')?.invalid"
+                                                ></reactive-dropdown-field>
+                                                <input-field
+                                                    class="d-block w-100"
+                                                    [label]="localeData?.original_email"
+                                                    formControlName="originalEmail"
                                                     [showError]="
-                                                            isFormSubmitted &&
-                                                            emailForwardingForm.get('accountUniqueName')?.invalid
-                                                        ">
-                                                </reactive-dropdown-field>
-                                                <input-field class="d-block w-100" [label]="localeData?.original_email"
-                                                    formControlName="originalEmail" [showError]="
-                                                            emailForwardingForm.get('originalEmail')?.value &&
-                                                            emailForwardingForm.get('originalEmail')?.invalid
-                                                        "></input-field>
-                                                <input-field class="d-block w-100"
-                                                    [label]="commonLocaleData?.app_password" [type]="'password'"
-                                                    formControlName="password"></input-field>
-                                                <button matButton="filled" (click)="submitForm()" [disabled]="isLoading"
-                                                    class="mt-1">
-                                                    <mat-spinner *ngIf="isLoading" diameter="20"
-                                                        class="mr-2"></mat-spinner>
-                                                    {{
-                                                    isEditMode
-                                                    ? commonLocaleData?.app_update
-                                                    : commonLocaleData?.app_done
-                                                    }}
+                                                        emailForwardingForm.get('originalEmail')?.value &&
+                                                        emailForwardingForm.get('originalEmail')?.invalid
+                                                    "
+                                                ></input-field>
+                                                <input-field
+                                                    class="d-block w-100"
+                                                    [label]="commonLocaleData?.app_password"
+                                                    [type]="'password'"
+                                                    formControlName="password"
+                                                ></input-field>
+                                                <button matButton="filled" (click)="submitForm()" [disabled]="isLoading" class="mt-1">
+                                                    <mat-spinner *ngIf="isLoading" diameter="20" class="mr-2"></mat-spinner>
+                                                    {{ isEditMode ? commonLocaleData?.app_update : commonLocaleData?.app_done }}
                                                 </button>
                                             </div>
                                         </mat-card-content>
@@ -192,8 +206,14 @@
     <p class="text-light d-inline-flex align-items-center column-gap-05">
         {{ localeData?.forwarded_to }}
         <span class="text-blue">{{ getCompleteEmail() }}</span>
-        <i class="icon-copy cursor-pointer" [matTooltip]="commonLocaleData?.app_copy" matTooltipPosition="after"
-            (click)="copyEmail()" ngxClipboard [cbContent]="getCompleteEmail()"></i>
+        <i
+            class="icon-copy cursor-pointer"
+            [matTooltip]="commonLocaleData?.app_copy"
+            matTooltipPosition="after"
+            (click)="copyEmail()"
+            ngxClipboard
+            [cbContent]="getCompleteEmail()"
+        ></i>
         <span *ngIf="isCopied" class="text-light">{{ localeData?.copied }}</span>
     </p>
 </ng-template>
@@ -214,8 +234,12 @@
 </ng-template>
 
 <ng-template #accountAsideMenu>
-    <generic-aside-menu-account (closeAsideEvent)="accountAsideMenuRef?.close()"
-        [selectedGrpUniqueName]="'bankaccounts'" [allGroups]="false" [keyboardShortcut]="'esc'"
-        (onShortcutPress)="accountAsideMenuRef?.close()" (addEvent)="addNewAccount($event)">
-    </generic-aside-menu-account>
+    <generic-aside-menu-account
+        (closeAsideEvent)="accountAsideMenuRef?.close()"
+        [selectedGrpUniqueName]="'bankaccounts'"
+        [allGroups]="false"
+        [keyboardShortcut]="'esc'"
+        (onShortcutPress)="accountAsideMenuRef?.close()"
+        (addEvent)="addNewAccount($event)"
+    ></generic-aside-menu-account>
 </ng-template>

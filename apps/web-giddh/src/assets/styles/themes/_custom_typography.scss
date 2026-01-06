@@ -10,7 +10,7 @@ $exported-custom-typography: null;
 // These will override M3 defaults where needed
 :root {
     // Original M2 Typography Variables (maintained for compatibility)
-    --font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
     // Font Sizes (matching your original M2 configuration)
     --font-size-48: 48px;
@@ -42,7 +42,8 @@ $exported-custom-typography: null;
 
     // Apply custom typography to Material components
     // Override M3 typography with your original values
-    .mat-headline-1, .mat-h1 {
+    .mat-headline-1,
+    .mat-h1 {
         font-family: var(--font-family) !important;
         font-size: var(--font-size-48) !important;
         line-height: var(--line-height-36) !important;
@@ -50,7 +51,8 @@ $exported-custom-typography: null;
         letter-spacing: var(--letter-spacing-normal) !important;
     }
 
-    .mat-headline-2, .mat-h2 {
+    .mat-headline-2,
+    .mat-h2 {
         font-family: var(--font-family) !important;
         font-size: var(--font-size-32) !important;
         line-height: var(--line-height-32) !important;
@@ -58,7 +60,8 @@ $exported-custom-typography: null;
         letter-spacing: var(--letter-spacing-normal) !important;
     }
 
-    .mat-headline-3, .mat-h3 {
+    .mat-headline-3,
+    .mat-h3 {
         font-family: var(--font-family) !important;
         font-size: var(--font-size-24) !important;
         line-height: var(--line-height-32) !important;
@@ -66,7 +69,8 @@ $exported-custom-typography: null;
         letter-spacing: var(--letter-spacing-normal) !important;
     }
 
-    .mat-headline-4, .mat-h4 {
+    .mat-headline-4,
+    .mat-h4 {
         font-family: var(--font-family) !important;
         font-size: var(--font-size-20) !important;
         line-height: var(--line-height-24) !important;
@@ -74,7 +78,8 @@ $exported-custom-typography: null;
         letter-spacing: var(--letter-spacing-normal) !important;
     }
 
-    .mat-headline-5, .mat-h5 {
+    .mat-headline-5,
+    .mat-h5 {
         font-family: var(--font-family) !important;
         font-size: var(--font-size-16) !important;
         line-height: var(--line-height-24) !important;
@@ -82,7 +87,8 @@ $exported-custom-typography: null;
         letter-spacing: var(--letter-spacing-normal) !important;
     }
 
-    .mat-headline-6, .mat-h6 {
+    .mat-headline-6,
+    .mat-h6 {
         font-family: var(--font-family) !important;
         font-size: var(--font-size-15) !important;
         line-height: var(--line-height-22) !important;
@@ -90,7 +96,8 @@ $exported-custom-typography: null;
         letter-spacing: var(--letter-spacing-normal) !important;
     }
 
-    .mat-body-1, .mat-body {
+    .mat-body-1,
+    .mat-body {
         font-family: var(--font-family) !important;
         font-size: var(--font-size-14) !important;
         line-height: var(--line-height-20) !important;
@@ -114,7 +121,10 @@ $exported-custom-typography: null;
         letter-spacing: var(--letter-spacing-normal) !important;
     }
 
-    .mat-button, .mat-raised-button, .mat-flat-button, .mat-stroked-button {
+    .mat-button,
+    .mat-raised-button,
+    .mat-flat-button,
+    .mat-stroked-button {
         font-family: var(--font-family) !important;
         font-size: var(--font-size-14) !important;
         line-height: var(--line-height-20) !important;

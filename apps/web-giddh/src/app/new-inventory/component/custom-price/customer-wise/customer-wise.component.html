@@ -1,9 +1,4 @@
-<div
-    appTranslate
-    [file]="'inventory/customprice'"
-    (commonLocaleData)="commonLocaleData = $event"
-    (localeData)="localeData = $event"
->
+<div appTranslate [file]="'inventory/customprice'" (commonLocaleData)="commonLocaleData = $event" (localeData)="localeData = $event">
     <hamburger-menu></hamburger-menu>
     <div class="custom-grid-wrapper">
         <div class="mat-list-wrap">
@@ -75,11 +70,9 @@
 
                                                 {{ user?.name }}
                                             </span>
-                                            <span
-                                                (click)="confirmationPopup(user?.uniqueName, 'user')"
-                                                class="customer-delete"
-                                                ><i class="icon-trash"></i
-                                            ></span>
+                                            <span (click)="confirmationPopup(user?.uniqueName, 'user')" class="customer-delete">
+                                                <i class="icon-trash"></i>
+                                            </span>
                                         </a>
                                     </mat-list-item>
                                 </cdk-virtual-scroll-viewport>
@@ -90,12 +83,7 @@
                         </mat-list>
                         <div class="customer-right-side" #stocksContainer>
                             <div class="right-heading" *ngIf="currentUser?.uniqueName">
-                                <button
-                                    mat-raised-button
-                                    aria-label="inventory"
-                                    color="primary"
-                                    (click)="openSearchModal('stocks')"
-                                >
+                                <button mat-raised-button aria-label="inventory" color="primary" (click)="openSearchModal('stocks')">
                                     {{ localeData?.add_inventory }}
                                 </button>
                                 <div class="d-flex align-items-center justify-content-end column-gap-1 w-50">
@@ -104,11 +92,7 @@
                                         [moduleName]="'MRP_DISCOUNT'"
                                         *ngIf="!isTabScreen"
                                     ></watch-video>
-                                    <div
-                                        class="search-list position-relative"
-                                        [formGroup]="searchForm"
-                                        *ngIf="!currentUser?.isTempUser"
-                                    >
+                                    <div class="search-list position-relative" [formGroup]="searchForm" *ngIf="!currentUser?.isTempUser">
                                         <text-field
                                             type="text"
                                             [placeholder]="commonLocaleData?.app_search"
@@ -141,11 +125,7 @@
                                                     >
                                                         {{ localeData?.discard }}
                                                     </button>
-                                                    <button
-                                                        mat-raised-button
-                                                        aria-label="save"
-                                                        (click)="saveDiscount()"
-                                                    >
+                                                    <button mat-raised-button aria-label="save" (click)="saveDiscount()">
                                                         {{ commonLocaleData?.app_save }}
                                                     </button>
                                                 </div>
@@ -153,10 +133,7 @@
                                         </div>
                                     </ng-container>
                                     <ng-container
-                                        *ngFor="
-                                            let discountCollection of discountForm?.get('discountInfo')['controls'];
-                                            let i = index
-                                        "
+                                        *ngFor="let discountCollection of discountForm?.get('discountInfo')['controls']; let i = index"
                                         formArrayName="discountInfo"
                                     >
                                         <ng-container *ngIf="discountCollection?.get('hasVariants')?.value">
@@ -169,10 +146,7 @@
                                                                     <td colspan="4" class="pl-0">
                                                                         <p class="inventory-head">
                                                                             <strong>
-                                                                                {{
-                                                                                    discountCollection?.get("stockName")
-                                                                                        ?.value
-                                                                                }}
+                                                                                {{ discountCollection?.get('stockName')?.value }}
                                                                             </strong>
                                                                         </p>
                                                                     </td>
@@ -184,13 +158,9 @@
                                                                                 class="delete-icon"
                                                                                 (click)="
                                                                                     confirmationPopup(
-                                                                                        discountCollection?.get(
-                                                                                            'stockUniqueName'
-                                                                                        )?.value,
+                                                                                        discountCollection?.get('stockUniqueName')?.value,
                                                                                         'stock',
-                                                                                        discountCollection?.get(
-                                                                                            'isTempStock'
-                                                                                        )?.value,
+                                                                                        discountCollection?.get('isTempStock')?.value,
                                                                                         i
                                                                                     )
                                                                                 "
@@ -204,9 +174,7 @@
                                                             <tbody>
                                                                 <tr
                                                                     *ngFor="
-                                                                        let variant of discountCollection?.get(
-                                                                            'variants'
-                                                                        )['controls'];
+                                                                        let variant of discountCollection?.get('variants')['controls'];
                                                                         let j = index
                                                                     "
                                                                     formArrayName="variants"
@@ -214,13 +182,9 @@
                                                                     <ng-container [formGroupName]="j">
                                                                         <td width="25%" class="variant-name">
                                                                             <ng-container
-                                                                                *ngIf="
-                                                                                    discountCollection?.get(
-                                                                                        'hasVariants'
-                                                                                    )?.value
-                                                                                "
+                                                                                *ngIf="discountCollection?.get('hasVariants')?.value"
                                                                             >
-                                                                                {{ variant?.get("variantName")?.value }}
+                                                                                {{ variant?.get('variantName')?.value }}
                                                                             </ng-container>
                                                                         </td>
 
@@ -232,20 +196,14 @@
                                                                                 [type]="'number'"
                                                                                 [cssClass]="'text-right'"
                                                                                 formControlName="price"
-                                                                                (change)="
-                                                                                    updateDiscountInVariant(variant)
-                                                                                "
+                                                                                (change)="updateDiscountInVariant(variant)"
                                                                             ></input-field>
                                                                         </td>
                                                                         <td class="variant-tax-toggle">
-                                                                            <div
-                                                                                class="d-flex align-items-center column-gap-1"
-                                                                            >
+                                                                            <div class="d-flex align-items-center column-gap-1">
                                                                                 <mat-radio-group
                                                                                     color="primary"
-                                                                                    [name]="
-                                                                                        'taxInclusive' + i + '-' + j
-                                                                                    "
+                                                                                    [name]="'taxInclusive' + i + '-' + j"
                                                                                     formControlName="taxInclusive"
                                                                                 >
                                                                                     <mat-radio-button [value]="true">
@@ -264,27 +222,15 @@
                                                                                 ></span>
                                                                             </div>
                                                                         </td>
-                                                                        <td
-                                                                            class="overflow-visible variant-discount position-relative"
-                                                                        >
+                                                                        <td class="overflow-visible variant-discount position-relative">
                                                                             <reactive-dropdown-field
                                                                                 [name]="'discount' + i + '-' + j"
                                                                                 [label]="commonLocaleData?.app_discount"
-                                                                                [placeholder]="
-                                                                                    localeData?.select_discount
-                                                                                "
+                                                                                [placeholder]="localeData?.select_discount"
                                                                                 [options]="discountsList"
-                                                                                (selectedOption)="
-                                                                                    updateDiscountInVariant(
-                                                                                        variant,
-                                                                                        $event
-                                                                                    )
-                                                                                "
-                                                                                [labelValue]="
-                                                                                    variant?.get('discountName')?.value
-                                                                                "
-                                                                            >
-                                                                            </reactive-dropdown-field>
+                                                                                (selectedOption)="updateDiscountInVariant(variant, $event)"
+                                                                                [labelValue]="variant?.get('discountName')?.value"
+                                                                            ></reactive-dropdown-field>
                                                                         </td>
                                                                         <td class="variant-delete">
                                                                             <div class="delete-show">
@@ -292,20 +238,15 @@
                                                                                     matButton="elevated"
                                                                                     aria-label="delete button"
                                                                                     [disabled]="
-                                                                                        discountCollection?.get(
-                                                                                            'variants'
-                                                                                        )?.value?.length < 2
+                                                                                        discountCollection?.get('variants')?.value?.length <
+                                                                                        2
                                                                                     "
                                                                                     class="delete-icon"
                                                                                     (click)="
                                                                                         confirmationPopup(
-                                                                                            variant?.get(
-                                                                                                'variantUniqueName'
-                                                                                            )?.value,
+                                                                                            variant?.get('variantUniqueName')?.value,
                                                                                             'variant',
-                                                                                            variant?.get(
-                                                                                                'isTemproraryVariant'
-                                                                                            )?.value,
+                                                                                            variant?.get('isTemproraryVariant')?.value,
                                                                                             i,
                                                                                             j
                                                                                         )
@@ -325,18 +266,11 @@
                                                                             <reactive-dropdown-field
                                                                                 [name]="'variantsWithoutDiscount' + i"
                                                                                 [label]="commonLocaleData?.app_variant"
-                                                                                [placeholder]="
-                                                                                    commonLocaleData?.app_select_variant
-                                                                                "
+                                                                                [placeholder]="commonLocaleData?.app_select_variant"
                                                                                 [options]="variantsWithoutDiscount[i]"
-                                                                                (selectedOption)="
-                                                                                    selectVariant($event, i)
-                                                                                "
-                                                                                [labelValue]="
-                                                                                    variantsDropdownDefaultValue
-                                                                                "
-                                                                            >
-                                                                            </reactive-dropdown-field>
+                                                                                (selectedOption)="selectVariant($event, i)"
+                                                                                [labelValue]="variantsDropdownDefaultValue"
+                                                                            ></reactive-dropdown-field>
                                                                         </div>
                                                                     </td>
                                                                 </tr>
@@ -354,19 +288,14 @@
                                                             <tbody>
                                                                 <tr
                                                                     *ngFor="
-                                                                        let variant of discountCollection?.get(
-                                                                            'variants'
-                                                                        )['controls'];
+                                                                        let variant of discountCollection?.get('variants')['controls'];
                                                                         let j = index
                                                                     "
                                                                     formArrayName="variants"
                                                                 >
                                                                     <ng-container [formGroupName]="j">
                                                                         <td width="25%" class="variant-name">
-                                                                            {{
-                                                                                discountCollection?.get("stockName")
-                                                                                    ?.value
-                                                                            }}
+                                                                            {{ discountCollection?.get('stockName')?.value }}
                                                                         </td>
 
                                                                         <td class="variant-price">
@@ -378,20 +307,14 @@
                                                                                 [type]="'number'"
                                                                                 [cssClass]="'text-right'"
                                                                                 formControlName="price"
-                                                                                (change)="
-                                                                                    updateDiscountInVariant(variant)
-                                                                                "
+                                                                                (change)="updateDiscountInVariant(variant)"
                                                                             ></input-field>
                                                                         </td>
                                                                         <td class="variant-tax-toggle">
-                                                                            <div
-                                                                                class="d-flex align-items-center column-gap-1"
-                                                                            >
+                                                                            <div class="d-flex align-items-center column-gap-1">
                                                                                 <mat-radio-group
                                                                                     color="primary"
-                                                                                    [name]="
-                                                                                        'taxInclusive' + i + '-' + j
-                                                                                    "
+                                                                                    [name]="'taxInclusive' + i + '-' + j"
                                                                                     formControlName="taxInclusive"
                                                                                 >
                                                                                     <mat-radio-button [value]="true">
@@ -410,27 +333,15 @@
                                                                                 ></span>
                                                                             </div>
                                                                         </td>
-                                                                        <td
-                                                                            class="overflow-visible variant-discount position-relative"
-                                                                        >
+                                                                        <td class="overflow-visible variant-discount position-relative">
                                                                             <reactive-dropdown-field
                                                                                 [name]="'discount' + i + '-' + j"
                                                                                 [label]="commonLocaleData?.app_discount"
-                                                                                [placeholder]="
-                                                                                    localeData?.select_discount
-                                                                                "
+                                                                                [placeholder]="localeData?.select_discount"
                                                                                 [options]="discountsList"
-                                                                                (selectedOption)="
-                                                                                    updateDiscountInVariant(
-                                                                                        variant,
-                                                                                        $event
-                                                                                    )
-                                                                                "
-                                                                                [labelValue]="
-                                                                                    variant?.get('discountName')?.value
-                                                                                "
-                                                                            >
-                                                                            </reactive-dropdown-field>
+                                                                                (selectedOption)="updateDiscountInVariant(variant, $event)"
+                                                                                [labelValue]="variant?.get('discountName')?.value"
+                                                                            ></reactive-dropdown-field>
                                                                         </td>
                                                                         <td class="variant-delete">
                                                                             <div class="delete-show">
@@ -440,13 +351,10 @@
                                                                                     class="delete-icon"
                                                                                     (click)="
                                                                                         confirmationPopup(
-                                                                                            discountCollection?.get(
-                                                                                                'stockUniqueName'
-                                                                                            )?.value,
+                                                                                            discountCollection?.get('stockUniqueName')
+                                                                                                ?.value,
                                                                                             'stock',
-                                                                                            discountCollection?.get(
-                                                                                                'isTempStock'
-                                                                                            )?.value,
+                                                                                            discountCollection?.get('isTempStock')?.value,
                                                                                             i
                                                                                         )
                                                                                     "
@@ -474,15 +382,11 @@
                                         [showFirstLastButtons]="true"
                                         [hidePageSize]="false"
                                         (page)="handlePageEvent($event)"
-                                    >
-                                    </mat-paginator>
+                                    ></mat-paginator>
                                     <section class="mb-custom-80"></section>
                                 </div>
                             </ng-container>
-                            <div
-                                class="no-data"
-                                *ngIf="!currentUserStocks?.length && !currentUser?.uniqueName && !isStockLoading"
-                            >
+                            <div class="no-data" *ngIf="!currentUserStocks?.length && !currentUser?.uniqueName && !isStockLoading">
                                 <h2>{{ commonLocaleData?.app_no_data_found }}</h2>
                             </div>
                             <div *ngIf="isStockLoading">
@@ -507,11 +411,14 @@
         [showChannelCreateBtn]="false"
     ></items-list-popup>
     <div class="shortcuts">
-        <strong>↑</strong> <strong>↓</strong>&nbsp; {{ localeData?.to_navigate }}
-        <strong class="ml-2" [attr.aria-label]="commonLocaleData?.app_return">↵</strong>&nbsp;
+        <strong>↑</strong>
+        <strong>↓</strong>
+        &nbsp; {{ localeData?.to_navigate }}
+        <strong class="ml-2" [attr.aria-label]="commonLocaleData?.app_return">↵</strong>
+        &nbsp;
         {{ localeData?.to_select }}
-        <strong class="ml-2" [attr.aria-label]="commonLocaleData?.app_escape">{{ commonLocaleData?.app_esc }}</strong
-        >&nbsp;
+        <strong class="ml-2" [attr.aria-label]="commonLocaleData?.app_escape">{{ commonLocaleData?.app_esc }}</strong>
+        &nbsp;
         {{ localeData?.to_dismiss }}
     </div>
 </ng-template>

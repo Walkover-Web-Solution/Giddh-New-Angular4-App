@@ -172,7 +172,7 @@
                                             @include setWidth(150px);
                                         }
                                         &::before {
-                                            content: "";
+                                            content: '';
                                             height: 50px;
                                             width: 1px;
                                             display: inline-block;

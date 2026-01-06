@@ -1,21 +1,11 @@
-<div
-    appTranslate
-    [file]="'permissions'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
-    <hamburger-menu> </hamburger-menu>
+<div appTranslate [file]="'permissions'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+    <hamburger-menu></hamburger-menu>
     <section id="single-role" *ngIf="roleObj && localeData?.page_heading">
         <div class="p-2 border-bottom clear-both text-center mb-3">
             <span class="lead">{{ newRole?.name }}</span>
-            <button matButton="elevated" class="pull-left" (click)="goToRoles()">{{commonLocaleData?.app_back}}</button>
-            <button
-                matButton="filled"
-                *ngIf="!newRole?.isUpdateCase"
-                class="pull-right ml-2"
-                (click)="addNewRole()"
-            >
-                {{commonLocaleData?.app_save}}
+            <button matButton="elevated" class="pull-left" (click)="goToRoles()">{{ commonLocaleData?.app_back }}</button>
+            <button matButton="filled" *ngIf="!newRole?.isUpdateCase" class="pull-right ml-2" (click)="addNewRole()">
+                {{ commonLocaleData?.app_save }}
             </button>
             <button
                 matButton="filled"
@@ -24,7 +14,7 @@
                 class="mr-0 pull-right"
                 (click)="updateRole()"
             >
-                {{commonLocaleData?.app_update}}
+                {{ commonLocaleData?.app_update }}
             </button>
         </div>
         <section class="px-3">
@@ -41,16 +31,11 @@
                             (selectedOption)="$event && (pageName = $event.value)"
                             [showError]="!pageName"
                             [readonly]="newRole?.isFixed"
-                        >
-                        </reactive-dropdown-field>
+                        ></reactive-dropdown-field>
                     </div>
                     <div class="form-group">
-                        <button
-                            matButton="filled"
-                            (click)="addNewPage(pageName)"
-                            [disabled]="!pageName"
-                        >
-                            {{commonLocaleData?.app_add}}
+                        <button matButton="filled" (click)="addNewPage(pageName)" [disabled]="!pageName">
+                            {{ commonLocaleData?.app_add }}
                         </button>
                     </div>
                 </div>
@@ -64,13 +49,14 @@
                             href="javascript:void(0);"
                             (click)="removePageFromScope(page?.name)"
                             *ngIf="!newRole?.isFixed"
-                            >×</a
                         >
+                            ×
+                        </a>
                     </div>
                     <table mat-table [dataSource]="page?.permissions" class="w-100 mb-5">
                         <ng-container matColumnDef="admin">
                             <th mat-header-cell *matHeaderCellDef>{{ newRole?.name }}</th>
-                            <td mat-cell *matCellDef="let element, let i = index">
+                            <td mat-cell *matCellDef="let element; let i = index">
                                 <ng-container *ngIf="element?.code === 'SELECT-ALL'">
                                     <mat-checkbox
                                         color="primary"
@@ -80,9 +66,8 @@
                                         (change)="toggleItems(page.name, $event)"
                                         [(ngModel)]="element.isSelected"
                                         class="mr-2"
-                                    >
-                                    </mat-checkbox>
-                                    <label [for]="page.name + '_' + idx"> {{commonLocaleData?.app_select_all}}</label>
+                                    ></mat-checkbox>
+                                    <label [for]="page.name + '_' + idx">{{ commonLocaleData?.app_select_all }}</label>
                                 </ng-container>
                                 <ng-container *ngIf="element?.code !== 'SELECT-ALL'">
                                     <mat-checkbox
@@ -90,32 +75,32 @@
                                         [checked]="element?.isSelected"
                                         [id]="page.name + '_' + idx"
                                         [disabled]="newRole?.isFixed"
-                                        (change)="toggleItem(page.name,element ,$event)"
+                                        (change)="toggleItem(page.name, element, $event)"
                                         [name]="element?.code + '_' + idx"
                                         [(ngModel)]="element.isSelected"
                                         class="mr-2"
-                                    >
-                                    </mat-checkbox>
-                                    <label [for]="element?.code + '_' + idx"> {{getNameByCode(element?.code)}} </label>
+                                    ></mat-checkbox>
+                                    <label [for]="element?.code + '_' + idx">{{ getNameByCode(element?.code) }}</label>
                                 </ng-container>
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="adminicon">
-                            <th mat-header-cell *matHeaderCellDef>{{commonLocaleData?.app_admin}}</th>
+                            <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_admin }}</th>
                             <td mat-cell *matCellDef="let element">
                                 <i aria-hidden="true" class="fa fa-check"></i>
                             </td>
                         </ng-container>
                         <ng-container matColumnDef="view">
-                            <th mat-header-cell *matHeaderCellDef>{{commonLocaleData?.app_view}}</th>
+                            <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_view }}</th>
                             <td mat-cell *matCellDef="let element">
                                 <i aria-hidden="true" class="fa fa-times"></i>
                             </td>
                         </ng-container>
                         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                     </table>
                 </div>
             </div>
         </section>
     </section>
+</div>

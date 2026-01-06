@@ -22,10 +22,11 @@
                             <span>{{ localeData?.dashboard }}</span>
                         </a>
                     </mat-list-item>
-                    <mat-list-item role="listitem"
+                    <mat-list-item
+                        role="listitem"
                         [ngClass]="{
                             'disabled': !activeCompanyGstNumber || !isMonthSelected,
-                            'active': selectedGstModule === GstReport.Gstr3b
+                            'active': selectedGstModule === GstReport.Gstr3b,
                         }"
                     >
                         <a
@@ -33,7 +34,7 @@
                             [attr.disabled]="!activeCompanyGstNumber || !isMonthSelected"
                             [ngClass]="{
                                 'disabled': !activeCompanyGstNumber || !isMonthSelected,
-                                'active': selectedGstModule === GstReport.Gstr3b
+                                'active': selectedGstModule === GstReport.Gstr3b,
                             }"
                             class="d-block clear-both"
                             (click)="navigate(GstReport.Gstr3b)"
@@ -42,17 +43,18 @@
                             <span>{{ localeData?.gstr3b_summary }}</span>
                         </a>
                     </mat-list-item>
-                    <mat-list-item role="listitem"
+                    <mat-list-item
+                        role="listitem"
                         [ngClass]="{
                             'disabled': !activeCompanyGstNumber,
-                            'active': selectedGstModule === GstReport.Gstr1
+                            'active': selectedGstModule === GstReport.Gstr1,
                         }"
                     >
                         <a
                             href="javascript:;"
                             [ngClass]="{
                                 'disabled': !activeCompanyGstNumber,
-                                'active': selectedGstModule === GstReport.Gstr1
+                                'active': selectedGstModule === GstReport.Gstr1,
                             }"
                             class="d-block clear-both"
                             (click)="navigate(GstReport.Gstr1)"
@@ -61,17 +63,18 @@
                             <span>{{ localeData?.gstr1_label }}</span>
                         </a>
                     </mat-list-item>
-                    <mat-list-item role="listitem"
+                    <mat-list-item
+                        role="listitem"
                         [ngClass]="{
                             'disabled': !activeCompanyGstNumber || !isMonthSelected,
-                            'active': selectedGstModule === GstReport.Gstr2
+                            'active': selectedGstModule === GstReport.Gstr2,
                         }"
                     >
                         <a
                             href="javascript:;"
                             [ngClass]="{
                                 'disabled': !activeCompanyGstNumber || !isMonthSelected,
-                                'active': selectedGstModule === GstReport.Gstr2
+                                'active': selectedGstModule === GstReport.Gstr2,
                             }"
                             class="d-block clear-both"
                             (click)="navigate(GstReport.Gstr2)"
@@ -128,9 +131,7 @@
                         [routerLink]="['/pages/gstfiling/unit-mapping']"
                     >
                         <a href="javascript:;" class="d-block clear-both">
-                            <span
-                                ><img src="{{ imgPath }}unit-mapping.svg" alt="unit-mapping" class="unit-mapping-icon"
-                            /></span>
+                            <span><img src="{{ imgPath }}unit-mapping.svg" alt="unit-mapping" class="unit-mapping-icon" /></span>
                             <span>{{ localeData?.unit_mapping }}</span>
                         </a>
                     </mat-list-item>

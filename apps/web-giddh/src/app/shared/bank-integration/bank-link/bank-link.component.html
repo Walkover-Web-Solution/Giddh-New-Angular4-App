@@ -1,9 +1,4 @@
-<div
-    appTranslate
-    [file]="'settings/integration'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
+<div appTranslate [file]="'settings/integration'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <div class="dialog-header">
         <span>{{ localeData?.payment?.link_bank }}</span>
         <button matIconButton aria-label="close" (click)="closeDialog()">
@@ -25,17 +20,10 @@
                             [options]="bankLinks"
                             (selectedOption)="selectedOption($event)"
                             [labelValue]="defaultSelectedBank"
-                        >
-                        </reactive-dropdown-field>
+                        ></reactive-dropdown-field>
                     </div>
                     <div>
-                        <button
-                            matButton="filled"
-                            class="m-3"
-                            type="submit"
-                            (click)="linkBankAccount()"
-                            [disabled]="!selectedBank"
-                        >
+                        <button matButton="filled" class="m-3" type="submit" (click)="linkBankAccount()" [disabled]="!selectedBank">
                             {{ localeData?.payment?.link }}
                         </button>
                     </div>

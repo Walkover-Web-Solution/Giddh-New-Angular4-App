@@ -1,22 +1,14 @@
 <div class="form-header">
     <div>
-        <p >
+        <p>
             <span>Outward Note</span>
-            <span class="pull-right font-size-15"
-                >Multiple
-                <a
-                    href="javascript:void(0)"
-                    [ngClass]="{ 'text-link': mode === 'receiver' }"
-                    (click)="modeChanged('receiver')"
-                    >Receivers</a
-                >
+            <span class="pull-right font-size-15">
+                Multiple
+                <a href="javascript:void(0)" [ngClass]="{ 'text-link': mode === 'receiver' }" (click)="modeChanged('receiver')">
+                    Receivers
+                </a>
                 /
-                <a
-                    href="javascript:void(0)"
-                    [ngClass]="{ 'text-link': mode === 'product' }"
-                    (click)="modeChanged('product')"
-                    >Products</a
-                >
+                <a href="javascript:void(0)" [ngClass]="{ 'text-link': mode === 'product' }" (click)="modeChanged('product')">Products</a>
             </span>
         </p>
     </div>
@@ -27,25 +19,23 @@
         <form [formGroup]="form" class="form-group">
             <div class="row">
                 <div class="col-6 form-group">
-                    <label>Date <sup>*</sup></label>
-                    <giddh-datepicker
-                        name="entryDate"
-                        formControlName="inventoryEntryDate"
-                        [appearance]="'outline'"
-                    ></giddh-datepicker>
-                    <span
-                        *ngIf="inventoryEntryDate.invalid && (inventoryEntryDate.dirty || inventoryEntryDate.touched)"
-                    >
-                        <span
-                            *ngIf="inventoryEntryDate?.errors && inventoryEntryDate?.errors['required']"
-                            class="text-danger"
-                            >Please select Date.</span
-                        >
+                    <label>
+                        Date
+                        <sup>*</sup>
+                    </label>
+                    <giddh-datepicker name="entryDate" formControlName="inventoryEntryDate" [appearance]="'outline'"></giddh-datepicker>
+                    <span *ngIf="inventoryEntryDate.invalid && (inventoryEntryDate.dirty || inventoryEntryDate.touched)">
+                        <span *ngIf="inventoryEntryDate?.errors && inventoryEntryDate?.errors['required']" class="text-danger">
+                            Please select Date.
+                        </span>
                     </span>
                 </div>
 
                 <div class="col-6 form-group" *ngIf="mode === 'receiver'">
-                    <label class="mb-2">Product Name <sup>*</sup></label>
+                    <label class="mb-2">
+                        Product Name
+                        <sup>*</sup>
+                    </label>
                     <reactive-dropdown-field
                         [options]="stockListOptions"
                         [placeholder]="'Select Product'"
@@ -55,31 +45,45 @@
                 </div>
 
                 <div class="col-6 form-group" *ngIf="mode === 'product'">
-                    <label class="mb-2">Receiver <sup>*</sup></label>
+                    <label class="mb-2">
+                        Receiver
+                        <sup>*</sup>
+                    </label>
                     <reactive-dropdown-field
                         [options]="userListOptions"
                         [placeholder]="'Select Receiver'"
                         formControlName="inventoryUser"
                         (selectedOption)="userChanged($event)"
-                    >
-                    </reactive-dropdown-field>
+                    ></reactive-dropdown-field>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-4" *ngIf="mode === 'receiver'">
-                    <label class="font-size-15">Receiver <sup>*</sup></label>
+                    <label class="font-size-15">
+                        Receiver
+                        <sup>*</sup>
+                    </label>
                 </div>
                 <div class="col-4" *ngIf="mode === 'product'">
-                    <label class="font-size-15">Product Name <sup>*</sup></label>
+                    <label class="font-size-15">
+                        Product Name
+                        <sup>*</sup>
+                    </label>
                 </div>
 
                 <div class="col-4">
-                    <label class="font-size-15">Unit<sup>*</sup></label>
+                    <label class="font-size-15">
+                        Unit
+                        <sup>*</sup>
+                    </label>
                 </div>
 
                 <div class="col-4">
-                    <label class="font-size-15">Quantity <sup>*</sup></label>
+                    <label class="font-size-15">
+                        Quantity
+                        <sup>*</sup>
+                    </label>
                 </div>
             </div>
 
@@ -95,8 +99,7 @@
                             [placeholder]="'Select Receiver'"
                             (selectedOption)="userChanged($event, i)"
                             formControlName="inventoryUser"
-                        >
-                        </reactive-dropdown-field>
+                        ></reactive-dropdown-field>
                     </div>
 
                     <div class="col-4 form-group" *ngIf="mode === 'product'">
@@ -113,8 +116,7 @@
                             [options]="stockUnitsOptions"
                             [placeholder]="'Choose unit'"
                             formControlName="stockUnit"
-                        >
-                        </reactive-dropdown-field>
+                        ></reactive-dropdown-field>
                     </div>
 
                     <div class="col-4 form-group">
@@ -124,11 +126,7 @@
                             </div>
 
                             <div class="pull-right mt-1 unit-add">
-                                <button
-                                    matButton="elevated"
-                                    (click)="addTransactionItem(transactions.controls[i])"
-                                    *ngIf="last"
-                                >
+                                <button matButton="elevated" (click)="addTransactionItem(transactions.controls[i])" *ngIf="last">
                                     <i class="icon-plus text-green"></i>
                                 </button>
                                 <button matButton="elevated" (click)="deleteTransactionItem(i)" *ngIf="!last">
@@ -150,9 +148,7 @@
             <div class="row">
                 <div class="col-md-12 text-left mt-2">
                     <button matButton="elevated" (click)="onCancel.emit($event)">Cancel</button>
-                    <button matButton="filled" [ladda]="isLoading" [disabled]="form.invalid" (click)="save()">
-                        Save
-                    </button>
+                    <button matButton="filled" [ladda]="isLoading" [disabled]="form.invalid" (click)="save()">Save</button>
                 </div>
             </div>
         </form>

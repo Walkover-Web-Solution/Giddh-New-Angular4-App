@@ -6,9 +6,7 @@
         <div class="mat-app-background">
             <div class="d-flex justify-content-between align-items-center w-100">
                 <div class="text-left mb-2" (clickOutside)="showFromDatePicker = false">
-                    <span class="voucher-heading font-size-16">{{
-                        journalVoucherForm.get("voucherType").value | uppercase
-                    }}</span>
+                    <span class="voucher-heading font-size-16">{{ journalVoucherForm.get('voucherType').value | uppercase }}</span>
                 </div>
                 <div
                     class="d-flex justify-content-end align-items-baseline pull-right text-right mb-2 custom-entry-date"
@@ -25,8 +23,7 @@
                             (datepickerState)="onDateFieldFocus()"
                             (dateSelected)="handleVoucherDateChange(); dateEntered()"
                             (keydown.enter)="dateEntered(); activeRowIndex = 0; activeRowType = 'type'"
-                        >
-                        </giddh-datepicker>
+                        ></giddh-datepicker>
                     </div>
                 </div>
             </div>
@@ -48,28 +45,18 @@
                         <br />
                         <tbody>
                             <ng-container
-                                *ngFor="
-                                    let transaction of journalVoucherForm.get('transactions')?.controls;
-                                    let i = index;
-                                    let l = last
-                                "
+                                *ngFor="let transaction of journalVoucherForm.get('transactions')?.controls; let i = index; let l = last"
                                 formArrayName="transactions"
                             >
                                 <ng-container [formGroupName]="i">
                                     <tr (click)="activeRow(i)">
-                                        <td
-                                            class="voucher-type"
-                                            [style.width.px]="55"
-                                        >
+                                        <td class="voucher-type" [style.width.px]="55">
                                             <text-field
                                                 [autoFocus]="activeRowIndex === i && activeRowType === 'type'"
                                                 [id]="'transactionType_' + i"
                                                 [type]="'text'"
                                                 [cssClass]="'form-control text-capitalize byTo'"
-                                                [readonly]="
-                                                    (i === 0 && !isFirstRowDeleted) ||
-                                                    transaction?.get('isDiscountApplied')?.value
-                                                "
+                                                [readonly]="(i === 0 && !isFirstRowDeleted) || transaction?.get('isDiscountApplied')?.value"
                                                 formControlName="type"
                                                 (click)="selectRow('type', i)"
                                                 (input)="resetAccountOnTypeChange(transaction)"
@@ -82,10 +69,7 @@
                                                 (keydown.Tab)="$event.stopPropagation(); changeTab('tab', 'type')"
                                             ></text-field>
                                         </td>
-                                        <td
-                                            class="particular-account"
-                                            formGroupName="selectedAccount"
-                                        >
+                                        <td class="particular-account" formGroupName="selectedAccount">
                                             <text-field
                                                 [autoFocus]="activeRowIndex === i && activeRowType === 'account'"
                                                 [autocomplete]="'off'"
@@ -95,40 +79,37 @@
                                                 [required]="transaction.get('amount')?.value"
                                                 formControlName="account"
                                                 (click)="handleTransactionFocus(i)"
-                                                (input)="
-                                                    searchedAccountQuery.next({event: $event, transaction: transaction});
-                                                "
+                                                (input)="searchedAccountQuery.next({ event: $event, transaction: transaction })"
                                                 (blur)="onAccountBlur($event)"
                                                 [ngClass]="{ 'focus': activeRowIndex === i && activeRowType === 'account' }"
                                                 (keydown.Tab)="
                                                     validateAccount(transaction, $event, i);
-                                                    !(this.showDiscountSidebar || this.showTaxSidebar || this.showLedgerAccountList) && changeTab('tab', 'account')
+                                                    !(this.showDiscountSidebar || this.showTaxSidebar || this.showLedgerAccountList) &&
+                                                        changeTab('tab', 'account')
                                                 "
-                                                (keydown.Shift.Tab)="
-                                                    changeTab('shift', 'account')
+                                                (keydown.Shift.Tab)="changeTab('shift', 'account')"
+                                                (keydown.Enter)="
+                                                    showLedgerAccountList === false &&
+                                                        showDiscountSidebar === false &&
+                                                        showTaxSidebar === false &&
+                                                        ($event.stopPropagation() || handleTransactionFocus(i))
                                                 "
                                                 (keydown.Enter)="
-                                                    showLedgerAccountList === false && showDiscountSidebar === false && showTaxSidebar === false && ($event.stopPropagation() || handleTransactionFocus(i))
-                                                "
-                                                (keydown.Enter)="
-                                                    showLedgerAccountList === false && showDiscountSidebar === false && showTaxSidebar === false && ($event.stopPropagation() || handleTransactionFocus(i))
+                                                    showLedgerAccountList === false &&
+                                                        showDiscountSidebar === false &&
+                                                        showTaxSidebar === false &&
+                                                        ($event.stopPropagation() || handleTransactionFocus(i))
                                                 "
                                                 (change)="removeAmountIfAccountRemoved(transaction, i)"
                                             ></text-field>
                                         </td>
-                                        <td
-                                            class="amount1"
-                                        >
+                                        <td class="amount1">
                                             <text-field
                                                 [readonly]="
-                                                    transaction?.get('isDiscountApplied')?.value ||
-                                                    transaction?.get('isTaxApplied')?.value
+                                                    transaction?.get('isDiscountApplied')?.value || transaction?.get('isTaxApplied')?.value
                                                 "
                                                 [id]="'transactionAmount_' + i"
-                                                (keydown.Tab)="
-                                                    updateTransactionActualAmount(transaction);
-                                                    changeTab('tab', 'amount')
-                                                "
+                                                (keydown.Tab)="updateTransactionActualAmount(transaction); changeTab('tab', 'amount')"
                                                 (keydown.Shift.Tab)="
                                                     $event.stopPropagation();
                                                     updateTransactionActualAmount(transaction);
@@ -154,13 +135,10 @@
                                                 [ngClass]="{ 'focus': activeRowIndex === i && activeRowType === 'amount' }"
                                             ></text-field>
                                         </td>
-                                        <td
-                                            class="amount2"
-                                        >
+                                        <td class="amount2">
                                             <text-field
                                                 [readonly]="
-                                                    transaction?.get('isDiscountApplied')?.value ||
-                                                    transaction?.get('isTaxApplied')?.value
+                                                    transaction?.get('isDiscountApplied')?.value || transaction?.get('isTaxApplied')?.value
                                                 "
                                                 *ngIf="transaction.get('type')?.value?.toLowerCase() === 'to'"
                                                 [autoFocus]="activeRowIndex === i && activeRowType === 'amount'"
@@ -179,10 +157,7 @@
                                                     addNewEntry(transaction.get('amount')?.value, transaction, i);
                                                     changeTab('enter', 'amount')
                                                 "
-                                                (keydown.Tab)="
-                                                    updateTransactionActualAmount(transaction);
-                                                    changeTab('tab', 'amount')
-                                                "
+                                                (keydown.Tab)="updateTransactionActualAmount(transaction); changeTab('tab', 'amount')"
                                                 (keydown.Shift.Tab)="
                                                     $event.stopPropagation();
                                                     updateTransactionActualAmount(transaction);
@@ -197,18 +172,15 @@
                                         <td colspan="100%" formGroupName="selectedAccount">
                                             <span
                                                 *ngIf="
-                                                    journalVoucherForm
-                                                        .get('transactions')
-                                                        .at(i)
-                                                        .get('selectedAccount.account')?.value &&
+                                                    journalVoucherForm.get('transactions').at(i).get('selectedAccount.account')?.value &&
                                                     transaction.get('currentBalance')?.value !== ''
                                                 "
                                                 class="current-balance d-block mb-1"
                                             >
                                                 Current Balance:
-                                                {{ transaction.get("currentBalance")?.value | giddhNumberFormat }}
+                                                {{ transaction.get('currentBalance')?.value | giddhNumberFormat }}
                                                 {{
-                                                    transaction.get("selectedAccount.type")?.value === "DEBIT"
+                                                    transaction.get('selectedAccount.type')?.value === 'DEBIT'
                                                         ? localeData?.dr
                                                         : localeData?.cr
                                                 }}
@@ -279,12 +251,12 @@
                     <div class="d-inline-block float-right min-150">
                         <div class="d-flex flex-column">
                             <div class="total-box text-right pull-right d-flex justify-content-end">
-                                <span
-                                    ><strong>{{ totalDebitAmount | giddhNumberFormat }}</strong></span
-                                >
-                                <span
-                                    ><strong>{{ totalCreditAmount | giddhNumberFormat }}</strong></span
-                                >
+                                <span>
+                                    <strong>{{ totalDebitAmount | giddhNumberFormat }}</strong>
+                                </span>
+                                <span>
+                                    <strong>{{ totalCreditAmount | giddhNumberFormat }}</strong>
+                                </span>
                             </div>
                             <span class="border-bottom custom-border float-right"></span>
                         </div>
@@ -297,12 +269,14 @@
 <!-- Unified Sidebar for Accounts, Discounts, and Taxes -->
 <div class="sidebar-list form-control" *ngIf="showLedgerAccountList || showDiscountSidebar || showTaxSidebar">
     <!-- Dynamic Header -->
-    <div class="border-bottom d-flex justify-content-between align-items-center p-1 mat-app-background" *ngIf="showDiscountSidebar || showTaxSidebar">
+    <div
+        class="border-bottom d-flex justify-content-between align-items-center p-1 mat-app-background"
+        *ngIf="showDiscountSidebar || showTaxSidebar"
+    >
         <h3 class="text-primary">
-            {{ showDiscountSidebar ? localeData?.discount_list : (showTaxSidebar ? localeData?.tax_list : '') }}
+            {{ showDiscountSidebar ? localeData?.discount_list : showTaxSidebar ? localeData?.tax_list : '' }}
         </h3>
-        <i class="icon-cross cursor-pointer"
-           (click)="showDiscountSidebar ? closeDiscountSidebar() : closeTaxSidebar()"></i>
+        <i class="icon-cross cursor-pointer" (click)="showDiscountSidebar ? closeDiscountSidebar() : closeTaxSidebar()"></i>
     </div>
 
     <!-- Simple Header for Accounts -->
@@ -347,10 +321,20 @@
                             [id]="'acc_' + item.label + '_' + j"
                             [matTooltip]="item.label"
                             [matTooltipPosition]="'left'"
-                            (click)="showLedgerAccountList ? onItemSelected(item) :
-                                    (showDiscountSidebar ? toggleDiscountSelected(item) : toggleTaxSelected(item))"
-                            (keydown.enter)="showLedgerAccountList ? onItemSelected(item) :
-                                           (showDiscountSidebar ? toggleDiscountSelected(item) : toggleTaxSelected(item))"
+                            (click)="
+                                showLedgerAccountList
+                                    ? onItemSelected(item)
+                                    : showDiscountSidebar
+                                      ? toggleDiscountSelected(item)
+                                      : toggleTaxSelected(item)
+                            "
+                            (keydown.enter)="
+                                showLedgerAccountList
+                                    ? onItemSelected(item)
+                                    : showDiscountSidebar
+                                      ? toggleDiscountSelected(item)
+                                      : toggleTaxSelected(item)
+                            "
                         >
                             {{ item?.label }}
                         </a>
@@ -402,8 +386,7 @@
                     (keydown.enter)="$event.preventDefault()"
                     #chequeNumberInput
                     cdkFocusInitial
-                >
-                </input-field>
+                ></input-field>
             </div>
             <div class="clear-both mt-2 check-clearance-date">
                 <giddh-datepicker
@@ -416,17 +399,11 @@
                     (dateSelected)="selectDate($event)"
                     [appearance]="'outline'"
                     [cssClass]="'w-100'"
-                >
-                </giddh-datepicker>
+                ></giddh-datepicker>
             </div>
         </form>
         <div class="d-flex float-end column-gap-15 mt-2">
-            <button
-                matButton="filled"
-                class="w-100"
-                (click)="onSubmitChequeDetail(); focusDebitCreditAmount()"
-                #chqFormSubmitBtn
-            >
+            <button matButton="filled" class="w-100" (click)="onSubmitChequeDetail(); focusDebitCreditAmount()" #chqFormSubmitBtn>
                 {{ commonLocaleData?.app_create }}
             </button>
             <button matButton="elevated" class="w-100" (click)="closeChequeDetailForm()">

@@ -11,12 +11,7 @@
     <div *ngIf="(createAdjustInventoryInProgress$ | async) || (apiCallInProgress && referenceNumber)">
         <giddh-page-loader></giddh-page-loader>
     </div>
-    <form
-        autocomplete="off"
-        novalidate
-        name="adjustInventoryCreateEditForm"
-        [formGroup]="adjustInventoryCreateEditForm"
-    >
+    <form autocomplete="off" novalidate name="adjustInventoryCreateEditForm" [formGroup]="adjustInventoryCreateEditForm">
         <div *ngIf="!apiCallInProgress">
             <div class="adjustment container-fluid p-3" *ngIf="showHideDiv">
                 <div class="row">
@@ -29,8 +24,7 @@
                             [showToggleIcon]="false"
                             [appearance]="'outline'"
                             formControlName="date"
-                        >
-                        </giddh-datepicker>
+                        ></giddh-datepicker>
                     </div>
                     <div class="col-xxl-3 mt-3 col-xl-3 col-lg-6 col-md-6">
                         <input-field
@@ -41,8 +35,7 @@
                             [type]="'text'"
                             formControlName="refNo"
                             (onClear)="adjustInventoryCreateEditForm.get('refNo')?.patchValue(null)"
-                        >
-                        </input-field>
+                        ></input-field>
                     </div>
                 </div>
                 <div class="row">
@@ -55,11 +48,8 @@
                             formControlName="expenseAccountUniqueName"
                             (onClear)="adjustInventoryCreateEditForm.get('expenseAccountUniqueName')?.patchValue(null)"
                             [required]="true"
-                            [showError]="
-                                isFormSubmitted && !adjustInventoryCreateEditForm.get('expenseAccountUniqueName')?.value
-                            "
-                        >
-                        </reactive-dropdown-field>
+                            [showError]="isFormSubmitted && !adjustInventoryCreateEditForm.get('expenseAccountUniqueName')?.value"
+                        ></reactive-dropdown-field>
                     </div>
                     <div class="col-xxl-3 mt-3 col-xl-3 col-lg-6 col-md-6">
                         <reactive-dropdown-field
@@ -69,8 +59,7 @@
                             [options]="warehouses$ | async"
                             formControlName="warehouseUniqueName"
                             (onClear)="adjustInventoryCreateEditForm.get('warehouseUniqueName')?.patchValue(null)"
-                        >
-                        </reactive-dropdown-field>
+                        ></reactive-dropdown-field>
                     </div>
                 </div>
                 <div class="row">
@@ -96,11 +85,8 @@
                             [required]="true"
                             (selectedOption)="selectInventory($event, true)"
                             (onClear)="adjustInventoryCreateEditForm.get('entityUniqueName')?.patchValue(null)"
-                            [showError]="
-                                isFormSubmitted && !adjustInventoryCreateEditForm.get('entityUniqueName')?.value
-                            "
-                        >
-                        </reactive-dropdown-field>
+                            [showError]="isFormSubmitted && !adjustInventoryCreateEditForm.get('entityUniqueName')?.value"
+                        ></reactive-dropdown-field>
                     </div>
                     <div class="col-xxl-3 mt-3 col-xl-3 col-lg-6 col-md-6" *ngIf="showHideTable">
                         <reactive-dropdown-field
@@ -117,11 +103,8 @@
                                     : calculateInventory(adjustInventoryCreateEditForm, stockGroupClosingBalance)
                             "
                             (onClear)="adjustInventoryCreateEditForm.get('adjustmentMethod')?.patchValue(null)"
-                            [showError]="
-                                isFormSubmitted && !adjustInventoryCreateEditForm.get('adjustmentMethod')?.value
-                            "
-                        >
-                        </reactive-dropdown-field>
+                            [showError]="isFormSubmitted && !adjustInventoryCreateEditForm.get('adjustmentMethod')?.value"
+                        ></reactive-dropdown-field>
                     </div>
                     <div class="col-xxl-3 mt-3 col-xl-3 col-lg-6 col-md-6">
                         <reactive-dropdown-field
@@ -135,11 +118,8 @@
                             [createNewText]="localeData?.create_reason"
                             [showCreateNew]="true"
                             (onClear)="adjustInventoryCreateEditForm.get('reasonUniqueName')?.patchValue(null)"
-                            [showError]="
-                                isFormSubmitted && !adjustInventoryCreateEditForm.get('reasonUniqueName')?.value
-                            "
-                        >
-                        </reactive-dropdown-field>
+                            [showError]="isFormSubmitted && !adjustInventoryCreateEditForm.get('reasonUniqueName')?.value"
+                        ></reactive-dropdown-field>
                     </div>
                 </div>
                 <div class="row">
@@ -166,11 +146,11 @@
                                         <tr>
                                             <td width="16%">
                                                 {{
-                                                    adjustInventoryCreateEditForm.get("entityName")?.value
-                                                        ? adjustInventoryCreateEditForm.get("entityName")?.value
+                                                    adjustInventoryCreateEditForm.get('entityName')?.value
+                                                        ? adjustInventoryCreateEditForm.get('entityName')?.value
                                                         : entity.entityName
-                                                        ? entity.entityName
-                                                        : localeData?.search_bar
+                                                          ? entity.entityName
+                                                          : localeData?.search_bar
                                                 }}
                                             </td>
                                             <td (click)="$event.preventDefault(); $event.stopPropagation()">
@@ -191,80 +171,60 @@
                                                                       stockGroupClosingBalance
                                                                   )
                                                         "
-                                                    >
-                                                    </reactive-dropdown-field>
+                                                    ></reactive-dropdown-field>
                                                 </div>
                                             </td>
 
                                             <td width="16%" class="text-right">
                                                 <div class="d-flex align-items-center column-gap-05">
                                                     <text-field
-                                                        [cssClass]="
-                                                            'form-control text-left text-control-input bg-transparent'
-                                                        "
+                                                        [cssClass]="'form-control text-left text-control-input bg-transparent'"
                                                         [type]="'number'"
                                                         [name]="'changeInValue'"
                                                         [allowDecimalDigitsOnly]="true"
                                                         (input)="
-                                                            calculateInventory(
-                                                                adjustInventoryCreateEditForm,
-                                                                stockGroupClosingBalance
-                                                            )
+                                                            calculateInventory(adjustInventoryCreateEditForm, stockGroupClosingBalance)
                                                         "
                                                         [readonly]="
-                                                            !adjustInventoryCreateEditForm?.get('adjustmentMethod')
-                                                                ?.value &&
-                                                            !adjustInventoryCreateEditForm?.get('calculationMethod')
-                                                                ?.value
+                                                            !adjustInventoryCreateEditForm?.get('adjustmentMethod')?.value &&
+                                                            !adjustInventoryCreateEditForm?.get('calculationMethod')?.value
                                                         "
                                                         (click)="$event.preventDefault(); $event.stopPropagation()"
                                                         formControlName="changeInValue"
                                                         [showError]="
-                                                            isFormSubmitted &&
-                                                            !adjustInventoryCreateEditForm?.get('changeInValue')?.value
+                                                            isFormSubmitted && !adjustInventoryCreateEditForm?.get('changeInValue')?.value
                                                         "
-                                                    >
-                                                    </text-field>
-                                                    <span>{{
-                                                        adjustInventoryCreateEditForm.get("calculationMethod")
-                                                            ?.value === "PERCENTAGE"
-                                                            ? "%"
-                                                            : ""
-                                                    }}</span>
+                                                    ></text-field>
+                                                    <span>
+                                                        {{
+                                                            adjustInventoryCreateEditForm.get('calculationMethod')?.value === 'PERCENTAGE'
+                                                                ? '%'
+                                                                : ''
+                                                        }}
+                                                    </span>
                                                 </div>
                                             </td>
                                             <td [style.width]="'15.625%'" class="text-right">
                                                 {{
-                                                    adjustInventoryCreateEditForm.get("adjustmentMethod")?.value
-                                                        ? adjustInventoryCreateEditForm.get("adjustmentMethod")
-                                                              ?.value === "QUANTITY_WISE"
+                                                    adjustInventoryCreateEditForm.get('adjustmentMethod')?.value
+                                                        ? adjustInventoryCreateEditForm.get('adjustmentMethod')?.value === 'QUANTITY_WISE'
                                                             ? referenceNumber
                                                                 ? stockGroupClosingBalance?.closing
-                                                                : stockGroupClosingBalance?.closing?.closing
-                                                                      ?.quantity ?? 0
+                                                                : (stockGroupClosingBalance?.closing?.closing?.quantity ?? 0)
                                                             : giddhRoundOff(
                                                                   referenceNumber
                                                                       ? stockGroupClosingBalance?.closing
-                                                                      : stockGroupClosingBalance?.closing.closing
-                                                                            ?.amount ?? 0,
+                                                                      : (stockGroupClosingBalance?.closing.closing?.amount ?? 0),
                                                                   this.giddhBalanceDecimalPlaces
                                                               )
                                                         : 0
                                                 }}
                                             </td>
                                             <td class="px-3" width="15.625%" class="text-right">
-                                                {{
-                                                    stockGroupClosingBalance?.changeValue
-                                                        ? stockGroupClosingBalance?.changeValue
-                                                        : 0
-                                                }}
+                                                {{ stockGroupClosingBalance?.changeValue ? stockGroupClosingBalance?.changeValue : 0 }}
                                             </td>
                                             <td class="px-4" width="15.625%" class="text-right">
-                                                {{
-                                                    stockGroupClosingBalance?.newValue
-                                                        ? stockGroupClosingBalance?.newValue
-                                                        : 0
-                                                }}
+                                                {{ stockGroupClosingBalance?.newValue ? stockGroupClosingBalance?.newValue : 0 }}
                                             </td>
                                         </tr>
                                     </table>
@@ -316,29 +276,28 @@
                                         <th mat-header-cell *matHeaderCellDef></th>
                                         <td mat-cell *matCellDef="let element">
                                             {{
-                                                adjustInventoryCreateEditForm.get("calculationMethod")?.value
-                                                    ? adjustInventoryCreateEditForm.get("calculationMethod")?.value
-                                                    : "-"
+                                                adjustInventoryCreateEditForm.get('calculationMethod')?.value
+                                                    ? adjustInventoryCreateEditForm.get('calculationMethod')?.value
+                                                    : '-'
                                             }}
                                         </td>
                                     </div>
                                     <div matColumnDef="changeValue">
                                         <th mat-header-cell *matHeaderCellDef width="15.625%"></th>
                                         <td mat-cell *matCellDef="let element" class="text-right">
-                                            {{ adjustInventoryCreateEditForm.get("changeInValue")?.value }}
+                                            {{ adjustInventoryCreateEditForm.get('changeInValue')?.value }}
                                         </td>
                                     </div>
                                     <div matColumnDef="closingValue">
                                         <th mat-header-cell *matHeaderCellDef width="15.625%"></th>
                                         <td mat-cell *matCellDef="let element" class="text-right">
                                             {{
-                                                adjustInventoryCreateEditForm.get("adjustmentMethod")?.value ===
-                                                "QUANTITY_WISE"
-                                                    ? element?.closingBeforeAdjustment ?? element?.closing?.quantity
+                                                adjustInventoryCreateEditForm.get('adjustmentMethod')?.value === 'QUANTITY_WISE'
+                                                    ? (element?.closingBeforeAdjustment ?? element?.closing?.quantity)
                                                     : giddhRoundOff(
                                                           element?.closingBeforeAdjustment
-                                                              ? element?.closingBeforeAdjustment ?? 0
-                                                              : element?.closing?.amount ?? 0,
+                                                              ? (element?.closingBeforeAdjustment ?? 0)
+                                                              : (element?.closing?.amount ?? 0),
                                                           this.giddhBalanceDecimalPlaces
                                                       )
                                             }}

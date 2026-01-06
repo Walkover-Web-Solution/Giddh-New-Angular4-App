@@ -1,10 +1,5 @@
-<div
-    appTranslate
-    [file]="'settings/linked-accounts'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
-    <div class=" p-3 clear-both">
+<div appTranslate [file]="'settings/linked-accounts'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+    <div class="p-3 clear-both">
         <p class="section-head pt-0">{{ localeData?.add_bank_account_form_heading }}</p>
         <div>
             <button matButton="filled" (click)="connectBank()">{{ localeData?.connect_bank }}</button>
@@ -12,7 +7,10 @@
         <div class="mt-2">
             <p>{{ localeData?.note }}</p>
             <div class="clear-both mt-4">
-                <small><i class="fa fa-lock"></i> {{ localeData?.privacy }} </small>
+                <small>
+                    <i class="fa fa-lock"></i>
+                    {{ localeData?.privacy }}
+                </small>
                 <img
                     src="https://ssl.comodo.com/images/trusted-site-seal.png"
                     [alt]="localeData?.ssl_seal"
@@ -35,20 +33,14 @@
                 <input type="text" name="app" placeholder="FinappId" formControlName="app" id="finappId" />
                 <input type="text" name="redirectReq" placeholder="true/false" formControlName="redirectReq" />
                 <input type="text" name="token" placeholder="token" id="token" formControlName="token" />
-                <input
-                    type="text"
-                    name="extraParams"
-                    formControlName="extraParams"
-                    placeholer="Extra Params"
-                    id="extraParams"
-                />
+                <input type="text" name="extraParams" formControlName="extraParams" placeholer="Extra Params" id="extraParams" />
                 <button matButton="filled" type="submit">{{ commonLocaleData?.app_submit }}</button>
             </form>
         </div>
     </div>
 
-    <div class=" p-3 clear-both mt-4" *ngIf="ebankAccounts && ebankAccounts.length">
-        <div >
+    <div class="p-3 clear-both mt-4" *ngIf="ebankAccounts && ebankAccounts.length">
+        <div>
             <p class="section-head pt-0">{{ localeData?.added_accounts }}</p>
             <div class="mt-1">
                 <section
@@ -59,24 +51,26 @@
                     <p class="subHead border-bottom">
                         {{ acc.siteName }}
                         <button
-                            matButton="elevated" class="ml-2"
+                            matButton="elevated"
+                            class="ml-2"
                             [matTooltip]="commonLocaleData?.app_refresh"
                             matTooltipPosition="above"
                             (click)="onRefreshToken(acc.yodleeAccounts[0], false)"
                             *ngIf="acc?.status !== 'FAILED'"
                         >
-                            <i class="icon-refresh"></i> {{ commonLocaleData?.app_refresh }}
+                            <i class="icon-refresh"></i>
+                            {{ commonLocaleData?.app_refresh }}
                         </button>
                         <button
-                            matButton="elevated" class="ml-2"
+                            matButton="elevated"
+                            class="ml-2"
                             [matTooltip]="commonLocaleData?.app_refresh"
                             matTooltipPosition="above"
-                            (click)="
-                                connectBank(acc.siteId, acc?.yodleeAccounts[0]?.providerAccount?.providerAccountId)
-                            "
+                            (click)="connectBank(acc.siteId, acc?.yodleeAccounts[0]?.providerAccount?.providerAccountId)"
                             *ngIf="acc?.status === 'FAILED'"
                         >
-                            <i class="icon-refresh"></i> {{ commonLocaleData?.app_refresh }}
+                            <i class="icon-refresh"></i>
+                            {{ commonLocaleData?.app_refresh }}
                         </button>
                     </p>
                     <aside class="body">
@@ -89,19 +83,14 @@
                             <aside class="title">{{ card.accountName }}</aside>
                             <ng-container *ngIf="acc?.status !== 'FAILED'">
                                 <div class="account-number">
-                                    <b>{{ commonLocaleData?.app_account }}</b
-                                    >: {{ card.accountNumber }}
+                                    <b>{{ commonLocaleData?.app_account }}</b>
+                                    : {{ card.accountNumber }}
                                 </div>
                                 <div class="account-date clear-both">
-                                    <b>{{ localeData?.entries_from }}</b
-                                    >:
-                                    <label for="date_{{ accIdx }}_{{ i }}" class="cursor-pointer">{{
-                                        card.transactionDate | date
-                                    }}</label>
-                                    <a
-                                        href="javascript:void(0)"
-                                        (click)="card.isDatePickerOpen = !card.isDatePickerOpen"
-                                    >
+                                    <b>{{ localeData?.entries_from }}</b>
+                                    :
+                                    <label for="date_{{ accIdx }}_{{ i }}" class="cursor-pointer">{{ card.transactionDate | date }}</label>
+                                    <a href="javascript:void(0)" (click)="card.isDatePickerOpen = !card.isDatePickerOpen">
                                         <input
                                             [(ngModel)]="card.transactionDate"
                                             name="transactionDate_{{ accIdx }}_{{ i }}"
@@ -121,9 +110,7 @@
                                 </div>
                                 <div class="balance text-left">{{ card.balanceCurrencyCode }} {{ card.balance }}</div>
                                 <small class="with" *ngIf="card.giddhAccount">
-                                    {{ localeData?.linked_with }}: {{ card.giddhAccount.name }} ({{
-                                        card.giddhAccount?.uniqueName
-                                    }})
+                                    {{ localeData?.linked_with }}: {{ card.giddhAccount.name }} ({{ card.giddhAccount?.uniqueName }})
                                 </small>
                                 <div class="select-account form-group" *ngIf="card.showAccList">
                                     <div class="ng-select-wrap">
@@ -135,16 +122,11 @@
                                             [isPaginationEnabled]="true"
                                             (scrollEnd)="handleScrollEnd()"
                                             (dynamicSearchedQuery)="onAccountSearchQueryChanged($event)"
-                                        >
-                                        </reactive-dropdown-field>
+                                        ></reactive-dropdown-field>
                                     </div>
                                 </div>
                                 <div class="clear-both">
-                                    <button
-                                        matButton="elevated"
-                                        *ngIf="card.showAccList"
-                                        (click)="card.showAccList = false"
-                                    >
+                                    <button matButton="elevated" *ngIf="card.showAccList" (click)="card.showAccList = false">
                                         {{ localeData?.not_now }}
                                     </button>
                                     <button
@@ -164,33 +146,32 @@
                                     </button>
                                 </div>
                                 <button
-                                    matButton="elevated" class="font-size-16 position-absolute bank-delete"
+                                    matButton="elevated"
+                                    class="font-size-16 position-absolute bank-delete"
                                     (click)="onDeleteAddedBank(acc.siteName, card, acc)"
                                 >
-                                    <i
-                                        class="icon-trash text-light"
-                                        [matTooltip]="localeData?.delete_bank"
-                                        matTooltipPosition="above"
-                                    ></i>
+                                    <i class="icon-trash text-light" [matTooltip]="localeData?.delete_bank" matTooltipPosition="above"></i>
                                 </button>
                             </ng-container>
 
                             <ng-container *ngIf="acc?.status === 'FAILED'">
                                 <div class="account-number">
-                                    <b>{{ localeData?.provider_id }}</b
-                                    >: {{ card?.providerAccount?.providerAccountId }}
+                                    <b>{{ localeData?.provider_id }}</b>
+                                    : {{ card?.providerAccount?.providerAccountId }}
                                 </div>
                                 <p class="mt-4">
                                     {{ commonLocaleData?.app_status }}:
-                                    <span class="text-danger font-size-15"
-                                        ><i class="fa fa-exclamation-circle"></i>{{ acc?.status }}</span
-                                    >
+                                    <span class="text-danger font-size-15">
+                                        <i class="fa fa-exclamation-circle"></i>
+                                        {{ acc?.status }}
+                                    </span>
                                 </p>
                                 <p>{{ localeData?.reason }}: {{ acc.reason }}</p>
                                 <div class="balance text-left">{{ card.balanceCurrencyCode }} {{ card.balance }}</div>
                                 <div class="clear-both mt-4"></div>
                                 <button
-                                    matButton="elevated" class="font-size-16 position-absolute bank-delete"
+                                    matButton="elevated"
+                                    class="font-size-16 position-absolute bank-delete"
                                     (click)="onDeleteAddedBank(acc.siteName, card, acc)"
                                 >
                                     <i class="icon-trash" [matTooltip]="localeData?.delete_bank" matTooltipPosition="above"></i>
@@ -199,14 +180,15 @@
 
                             <ng-container *ngIf="acc?.status === 'ALREADY_ADDED' && card?.status !== 'SUCCESS'">
                                 <div class="account-number">
-                                    <b>{{ localeData?.provider_id }}</b
-                                    >: {{ card?.providerAccount?.providerAccountId }}
+                                    <b>{{ localeData?.provider_id }}</b>
+                                    : {{ card?.providerAccount?.providerAccountId }}
                                 </div>
                                 <p class="mt-4">
                                     {{ commonLocaleData?.app_status }}:
-                                    <span class="text-danger font-size-15"
-                                        ><i class="fa fa-exclamation-circle"></i>{{ acc?.status }}</span
-                                    >
+                                    <span class="text-danger font-size-15">
+                                        <i class="fa fa-exclamation-circle"></i>
+                                        {{ acc?.status }}
+                                    </span>
                                 </p>
                                 <p>{{ localeData?.reason }}: {{ acc.reason }}</p>
                                 <div class="clear-both mt-4" *ngIf="acc?.status === 'ALREADY_ADDED'">
@@ -258,8 +240,7 @@
             [providerAccountId]="providerAccountId"
             [localeData]="localeData"
             [commonLocaleData]="commonLocaleData"
-        >
-        </connect-bank-modal>
+        ></connect-bank-modal>
     </ng-template>
 
     <!-- Confirmation Modal -->

@@ -19,7 +19,8 @@
                     (click)="openCreateUpdateDialog()"
                     aria-label="create new tax"
                 >
-                    <i class="icon icon-plus font-size-12 mr-1"></i> {{ localeData?.new_tax }}
+                    <i class="icon icon-plus font-size-12 mr-1"></i>
+                    {{ localeData?.new_tax }}
                 </button>
             </div>
         </div>
@@ -40,7 +41,9 @@
                     <!-- Tax Number Column -->
                     <ng-container matColumnDef="taxNumber">
                         <th mat-header-cell *matHeaderCellDef>{{ localeData?.tax }}</th>
-                        <td mat-cell *matCellDef="let element" [matTooltip]="element?.taxNumber" matTooltipPosition="above">{{ element?.taxNumber }}</td>
+                        <td mat-cell *matCellDef="let element" [matTooltip]="element?.taxNumber" matTooltipPosition="above">
+                            {{ element?.taxNumber }}
+                        </td>
                     </ng-container>
 
                     <!-- Name Column -->

@@ -1,9 +1,4 @@
-<div
-    appTranslate
-    [file]="'ledger/share-ledger'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
+<div appTranslate [file]="'ledger/share-ledger'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <div id="share-modal">
         <div class="dialog-header">
             <span>{{ localeData?.page_heading }}</span>
@@ -29,8 +24,7 @@
                                             [required]="true"
                                             [label]="localeData?.share_with"
                                             [placeholder]="commonLocaleData?.app_email_id"
-                                        >
-                                        </input-field>
+                                        ></input-field>
                                         <span class="input-group-btn ml-5">
                                             <button
                                                 matButton="filled"
@@ -70,11 +64,7 @@
                         <div class="modal-wrap clear-both">
                             <div class="clear-both">
                                 <span>{{ commonLocaleData?.app_or | titlecase }}</span>
-                                <a
-                                    class="btn-link share-link mb-1 font-size-15"
-                                    href="javascript:;"
-                                    (click)="getMagicLink()"
-                                >
+                                <a class="btn-link share-link mb-1 font-size-15" href="javascript:;" (click)="getMagicLink()">
                                     {{ localeData?.get_shareable_link }}
                                 </a>
                                 <span class="success" *ngIf="isCopied">{{ localeData?.copied }}</span>
@@ -88,8 +78,7 @@
                                     [readonly]="true"
                                     [disabled]="true"
                                     [label]="localeData?.url"
-                                >
-                                </input-field>
+                                ></input-field>
                                 <span class="input-group-btn ml-5">
                                     <button
                                         mat-raised-button

@@ -1,9 +1,4 @@
-<div
-    appTranslate
-    [file]="'invoice/send-email'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
+<div appTranslate [file]="'invoice/send-email'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <div class="dialog-header">
         <span>{{ localeData?.page_heading }}</span>
         <button matIconButton aria-label="close" mat-dialog-close>
@@ -32,8 +27,9 @@
                     value="Original"
                     [checked]="downloadCopy.includes('Original')"
                     (change)="selectDownloadOptions($event)"
-                    >{{ localeData?.original }}</mat-checkbox
                 >
+                    {{ localeData?.original }}
+                </mat-checkbox>
             </div>
             <div class="checkbox">
                 <mat-checkbox
@@ -42,8 +38,9 @@
                     value="Transport"
                     [checked]="downloadCopy.includes('Transport')"
                     (change)="selectDownloadOptions($event)"
-                    >{{ localeData?.transport }}</mat-checkbox
                 >
+                    {{ localeData?.transport }}
+                </mat-checkbox>
             </div>
             <div class="checkbox">
                 <mat-checkbox
@@ -52,8 +49,9 @@
                     value="Customer"
                     [checked]="downloadCopy.includes('Customer')"
                     (change)="selectDownloadOptions($event)"
-                    >{{ commonLocaleData?.app_customer }}</mat-checkbox
                 >
+                    {{ commonLocaleData?.app_customer }}
+                </mat-checkbox>
             </div>
         </div>
 

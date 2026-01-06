@@ -1,11 +1,6 @@
 #!/usr/bin/env node
-
 const fs = require('fs');
 const path = require('path');
-
-console.log('🧹 Targeted Debug Cleanup - Removing Console Statements');
-console.log('======================================================');
-
 const filesToClean = [
     'apps/web-giddh/src/app/electron-compatibility.ts',
     'apps/web-giddh/src/app/settings/profile/setting.profile.component.ts',
@@ -45,19 +40,15 @@ const filesToClean = [
     'apps/web-giddh/src/app/lodash-optimized.ts',
     'apps/web-giddh/src/main.ts'
 ];
-
 let totalRemovals = 0;
 let filesModified = 0;
-
 filesToClean.forEach(filePath => {
     const fullPath = path.join(__dirname, '..', filePath);
-    
     if (fs.existsSync(fullPath)) {
         try {
             const content = fs.readFileSync(fullPath, 'utf8');
             let cleanedContent = content;
             let fileRemovals = 0;
-
             // Remove console.log statements
             const consolePattern = /^\s*console\.(log|error|warn|info|debug|trace)\s*\([^;]*\);\s*$/gm;
             const matches = cleanedContent.match(consolePattern);
@@ -65,7 +56,6 @@ filesToClean.forEach(filePath => {
                 cleanedContent = cleanedContent.replace(consolePattern, '');
                 fileRemovals += matches.length;
             }
-
             // Remove multi-line console statements
             const multiLinePattern = /^\s*console\.(log|error|warn|info|debug|trace)\s*\(\s*[\s\S]*?\);\s*$/gm;
             const multiMatches = cleanedContent.match(multiLinePattern);
@@ -73,23 +63,14 @@ filesToClean.forEach(filePath => {
                 cleanedContent = cleanedContent.replace(multiLinePattern, '');
                 fileRemovals += multiMatches.length;
             }
-
             // Clean up empty lines
             cleanedContent = cleanedContent.replace(/\n\s*\n\s*\n/g, '\n\n');
-
             if (fileRemovals > 0) {
                 fs.writeFileSync(fullPath, cleanedContent, 'utf8');
-                console.log(`✅ ${filePath} (${fileRemovals} removals)`);
                 filesModified++;
                 totalRemovals += fileRemovals;
             }
         } catch (error) {
-            console.error(`❌ Error processing ${filePath}: ${error.message}`);
         }
     }
 });
-
-console.log(`\n📊 CLEANUP SUMMARY:`);
-console.log(`✅ Files modified: ${filesModified}`);
-console.log(`🗑️  Total removals: ${totalRemovals}`);
-console.log(`✅ Debug cleanup completed!`);

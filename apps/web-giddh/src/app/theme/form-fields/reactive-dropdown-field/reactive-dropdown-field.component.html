@@ -1,10 +1,7 @@
 <div appTranslate (commonLocaleData)="commonLocaleData = $event" (translationComplete)="translationComplete($event)">
     <ng-container *ngIf="showLabel">
         <div [ngClass]="{ 'readonly-field': readonly || disabled, 'dropdown-without-label': !showMatLabel }">
-            <mat-form-field
-                [appearance]="appearance"
-                [ngClass]="{ 'mat-form-field-invalid': showError }"
-            >
+            <mat-form-field [appearance]="appearance" [ngClass]="{ 'mat-form-field-invalid': showError }">
                 <mat-label *ngIf="showMatLabel">{{ label ? label : placeholder }}</mat-label>
                 <input
                     type="text"
@@ -59,10 +56,7 @@
                             (click)="$event.stopPropagation()"
                             [disabled]="option?.additional?.disabled"
                         >
-                            <ng-template
-                                [ngTemplateOutletContext]="{ option: option }"
-                                [ngTemplateOutlet]="optionTemplate"
-                            ></ng-template>
+                            <ng-template [ngTemplateOutletContext]="{ option: option }" [ngTemplateOutlet]="optionTemplate"></ng-template>
                             <ng-container *ngIf="!optionTemplate">
                                 {{ option?.label }}
                             </ng-container>
@@ -89,8 +83,7 @@
                     matTooltipPosition="above"
                     role="button"
                     [attr.aria-label]="'clear'"
-                >
-                </i>
+                ></i>
             </mat-form-field>
         </div>
     </ng-container>
@@ -132,7 +125,7 @@
                 class="create-new-option"
                 (onSelectionChange)="handleCreateNewSelection($event)"
                 [attr.aria-label]="createNewText"
-                >
+            >
                 <div class="theme-primary-color d-flex justify-content-between">
                     <div class="item create-new">{{ createNewText }}</div>
                     <div class="item create-new-command" *ngIf="showKeyboardCommand">

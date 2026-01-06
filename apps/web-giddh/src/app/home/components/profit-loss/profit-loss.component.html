@@ -1,22 +1,17 @@
-<div
-    id="live"
-    appTranslate
-    [file]="'home/profit-loss'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
+<div id="live" appTranslate [file]="'home/profit-loss'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <mat-card>
         <div class="panel-heading">
             <strong>{{ localeData?.chart_title }}</strong>
             <div class="pull-right dashboard-filter">
                 <i class="icon-refresh" (click)="refreshChart()"></i>
-                <div 
+                <div
                     class="custom-datepicker"
-                    [matMenuTriggerFor]="universalDatepicker" 
+                    [matMenuTriggerFor]="universalDatepicker"
                     #universalDatepickerTrigger="matMenuTrigger"
                     role="button"
                     aria-haspopup="true"
-                    aria-controls="universalDatepicker">
+                    aria-controls="universalDatepicker"
+                >
                     <input
                         matInput
                         type="text"
@@ -29,7 +24,7 @@
             </div>
         </div>
 
-        <mat-card-content class="position-relative ">
+        <mat-card-content class="position-relative">
             <div class="dashboard-reconnect-block" *ngIf="requestInFlight">
                 <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
             </div>
@@ -50,8 +45,7 @@
                                     [amount]="netProfitLoss"
                                     [currencySymbol]="amountSettings.baseCurrencySymbol"
                                     [currencyCode]="activeCompany?.baseCurrency"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </span>
                         </span>
                     </div>
@@ -65,8 +59,7 @@
                                     [amount]="totalIncome"
                                     [currencySymbol]="amountSettings.baseCurrencySymbol"
                                     [currencyCode]="activeCompany?.baseCurrency"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </span>
                             {{ totalIncomeType }}
                         </span>
@@ -81,9 +74,9 @@
                                     [amount]="totalExpense"
                                     [currencySymbol]="amountSettings.baseCurrencySymbol"
                                     [currencyCode]="activeCompany?.baseCurrency"
-                                >
-                                </amount-field> </span
-                            >{{ totalExpenseType }}
+                                ></amount-field>
+                            </span>
+                            {{ totalExpenseType }}
                         </span>
                     </div>
                 </div>

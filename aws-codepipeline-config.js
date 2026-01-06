@@ -4,13 +4,13 @@
 const fs = require('fs');
 const path = require('path');
 
-console.log('🔧 Configuring AWS CodePipeline environment for EPIPE error prevention...');
+// Configuring AWS CodePipeline environment for EPIPE error prevention
 
 // Check if running in AWS CodeBuild
 const isAWSCodeBuild = process.env.CODEBUILD_BUILD_ID || process.env.AWS_CODEBUILD;
 
 if (isAWSCodeBuild) {
-    console.log('✅ AWS CodeBuild environment detected');
+    // AWS CodeBuild environment detected
 
     // Set AWS-specific environment variables
     process.env.AWS_CODEBUILD = 'true';
@@ -35,23 +35,23 @@ if (isAWSCodeBuild) {
 
     process.env.NODE_OPTIONS = mergedOptions;
 
-    console.log('🚀 AWS CodeBuild NODE_OPTIONS:', mergedOptions);
+    // AWS CodeBuild NODE_OPTIONS: ${mergedOptions}
 
     // Create AWS-specific angular.json configuration if needed
     const angularJsonPath = path.join(__dirname, 'angular.json');
     if (fs.existsSync(angularJsonPath)) {
-        console.log('📝 Angular.json configuration already optimized for AWS CodeBuild');
+        // Angular.json configuration already optimized for AWS CodeBuild
     }
 
     // Create AWS-specific webpack configuration if needed
     const webpackConfigPath = path.join(__dirname, 'webpack.config.js');
     if (fs.existsSync(webpackConfigPath)) {
-        console.log('📝 Webpack configuration already optimized for AWS CodeBuild');
+        // Webpack configuration already optimized for AWS CodeBuild
     }
 
-    console.log('✅ AWS CodePipeline configuration completed successfully');
+    // AWS CodePipeline configuration completed successfully
 } else {
-    console.log('ℹ️  Not running in AWS CodeBuild - using local configuration');
+    // Not running in AWS CodeBuild - using local configuration
 }
 
 module.exports = {

@@ -1,8 +1,11 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
     <head>
         <!-- Electron-specific CSP: Allow all sources for Electron environment -->
-        <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob: file:; script-src * 'unsafe-inline' 'unsafe-eval' data: blob: file:; style-src * 'unsafe-inline' data: blob: file:; img-src * data: blob: file:; font-src * data: blob: file:; connect-src * data: blob: file:;">
+        <meta
+            http-equiv="Content-Security-Policy"
+            content="default-src * 'unsafe-inline' 'unsafe-eval' data: blob: file:; script-src * 'unsafe-inline' 'unsafe-eval' data: blob: file:; style-src * 'unsafe-inline' data: blob: file:; img-src * data: blob: file:; font-src * data: blob: file:; connect-src * data: blob: file:;"
+        />
 
         <!-- External scripts loaded first -->
         <script defer src="./assets/js/lodash.min.js"></script>
@@ -41,14 +44,14 @@
     </head>
     <body class="mat-app-background">
         <!-- Google Tag Manager (noscript) -->
-        <noscript
-            ><iframe
+        <noscript>
+            <iframe
                 src="https://www.googletagmanager.com/ns.html?id=GTM-K2L9QG"
                 height="0"
                 width="0"
                 style="display: none; visibility: hidden"
-            ></iframe
-        ></noscript>
+            ></iframe>
+        </noscript>
         <!-- End Google Tag Manager (noscript) -->
         <div id="main-giddh-loader">
             <h1>
