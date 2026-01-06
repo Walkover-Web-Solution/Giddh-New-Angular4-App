@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Inject, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
 import { ActionPettycashRequest, ExpenseActionRequest, ExpenseResults, PettyCashResonse } from '../../../models/api-models/Expences';
 import { ToasterService } from '../../../services/toaster.service';
 import { ExpenseService } from '../../../services/expences.service';
@@ -154,7 +154,8 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
         private companyActions: CompanyActions,
         private lightbox: Lightbox,
         private generalService: GeneralService,
-        private commonService: CommonService
+        private commonService: CommonService,
+        private cdRef: ChangeDetectorRef
     ) {
         this.files = [];
         this.companyUniqueName$ = this.store.pipe(select(p => p.session.companyUniqueName), takeUntil(this.destroyed$));
@@ -896,6 +897,7 @@ export class ExpenseDetailsComponent implements OnInit, OnChanges, OnDestroy {
                 this.preFillData(response?.body);
             }
             this.isPettyCashEntryLoading = false;
+            this.cdRef.detectChanges();
         });
     }
 

@@ -134,9 +134,9 @@ export class AsideManageTransportComponent implements OnInit {
                 } else {
                     this.toasty.showSnackBar("error", response.message);
                 }
+                this.detectChanges();
             });
         }
-        this.detectChanges();
     }
 
     /**
@@ -156,8 +156,8 @@ export class AsideManageTransportComponent implements OnInit {
                 this.dataSource = [];
                 this.transporterObj.totalItems = 0;
             }
+            this.detectChanges();
         });
-        this.detectChanges();
     }
 
     /**
@@ -178,8 +178,8 @@ export class AsideManageTransportComponent implements OnInit {
             } else {
                 this.toasty.showSnackBar("error", response.message);
             }
+            this.detectChanges();
         });
-        this.detectChanges();
     }
 
     /**

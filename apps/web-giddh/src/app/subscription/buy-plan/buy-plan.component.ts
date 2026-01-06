@@ -351,6 +351,7 @@ export class BuyPlanComponent implements OnInit, OnDestroy {
                     }
                 });
             }
+            this.changeDetection.detectChanges();
         });
 
         this.getCountryList$.pipe(takeUntil(this.destroyed$)).subscribe(response => {
