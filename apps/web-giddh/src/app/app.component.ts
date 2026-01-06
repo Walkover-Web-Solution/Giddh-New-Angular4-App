@@ -22,6 +22,7 @@ import { InvoiceActions } from './actions/invoice/invoice.actions';
 import { WarehouseActions } from './settings/warehouse/action/warehouse.action';
 import { CompanyService } from './services/company.service';
 import { environment } from '../environments/environment.generated';
+import { ChunkErrorHandlerService } from './shared/chunk-error-handler.service';
 import { clone, get, includes, pick, remove, startsWith  } from './lodash-optimized';
 
 /**
@@ -68,7 +69,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         private loginActions: LoginActions,
         private invoiceActions: InvoiceActions,
         private warehouseActions: WarehouseActions,
-        private companyService: CompanyService
+        private companyService: CompanyService,
+        private chunkErrorHandler: ChunkErrorHandlerService
     ) {
         this.isProdMode = environment.production;
         // Configuration.isElectron is already available via import
@@ -231,6 +233,9 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        // Initialize chunk error handler and preload critical modules
+        this.chunkErrorHandler.preloadCriticalChunks();
+        
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
