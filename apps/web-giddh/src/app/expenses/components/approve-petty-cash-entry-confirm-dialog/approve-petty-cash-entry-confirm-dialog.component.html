@@ -5,7 +5,8 @@
 <mat-dialog-content class="dialog-body">
     <div class="modal-top">
         <p class="font-size-12 text-light mb-2">
-            <span>{{ selectedEntryForApprove?.entryDate }} </span> |
+            <span>{{ selectedEntryForApprove?.entryDate }}</span>
+            |
             <span>{{ byCreator }}</span>
         </p>
         <div class="row mb-2">
@@ -18,16 +19,12 @@
         </div>
         <div class="row mb-2">
             <div class="col-xs-4 col-sm-4">
-                <p class="font-size-15">
-                    {{ entryAgainstObject ? entryAgainstObject?.base : commonLocaleData?.app_payment_mode }}:
-                </p>
+                <p class="font-size-15">{{ entryAgainstObject ? entryAgainstObject?.base : commonLocaleData?.app_payment_mode }}:</p>
             </div>
             <div class="col-xs-8 col-sm-8">
                 <p class="font-size-15" *ngIf="!showCategoryOption">
                     {{
-                        entryAgainstObject && pettyCashEntry
-                            ? pettyCashEntry?.particular?.name
-                            : selectedEntryForApprove?.baseAccount?.name
+                        entryAgainstObject && pettyCashEntry ? pettyCashEntry?.particular?.name : selectedEntryForApprove?.baseAccount?.name
                     }}
                 </p>
 
@@ -39,9 +36,7 @@
                     [(ngModel)]="entryAgainstObject.model"
                     [name]="'depositAccountUniqueName'"
                     [label]="
-                        entryAgainstObject && pettyCashEntry
-                            ? pettyCashEntry?.particular?.name
-                            : selectedEntryForApprove?.baseAccount?.name
+                        entryAgainstObject && pettyCashEntry ? pettyCashEntry?.particular?.name : selectedEntryForApprove?.baseAccount?.name
                     "
                     [placeholder]="commonLocaleData?.app_select_account"
                     [options]="entryAgainstObject.dropDownOption"
@@ -52,8 +47,7 @@
                     [isPaginationEnabled]="true"
                     (scrollEnd)="handleAccountScrollEnd()"
                     [labelValue]="entryAgainstObject?.name"
-                >
-                </reactive-dropdown-field>
+                ></reactive-dropdown-field>
             </div>
         </div>
         <div class="row mb-2">
@@ -77,11 +71,7 @@
             <button matButton="outlined" (click)="approveEntry.emit(false)">
                 {{ commonLocaleData?.app_no }}
             </button>
-            <button
-                matButton="filled"
-                (click)="confirmApproveEntry()"
-                [ladda]="approveEntryRequestInProcess"
-            >
+            <button matButton="filled" (click)="confirmApproveEntry()" [ladda]="approveEntryRequestInProcess">
                 {{ commonLocaleData?.app_yes }}
             </button>
         </div>

@@ -28,10 +28,7 @@
     <!-- Step first -->
     <div *ngIf="importStep === importStepEnum.First" class="row m-0">
         <div class="col-md-6 p-0">
-            <div
-                class="statement-card"
-                (click)="selectStatementAccount(importStepEnum.Second, importStatementType.Voucher)"
-            >
+            <div class="statement-card" (click)="selectStatementAccount(importStepEnum.Second, importStatementType.Voucher)">
                 <div
                     class="cursor-pointer d-flex justify-content-center flex-column d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1"
                 >
@@ -41,10 +38,7 @@
             </div>
         </div>
         <div class="col-md-6 p-0">
-            <div
-                class="statement-card"
-                (click)="selectStatementAccount(importStepEnum.Second, importStatementType.BankStatement)"
-            >
+            <div class="statement-card" (click)="selectStatementAccount(importStepEnum.Second, importStatementType.BankStatement)">
                 <div
                     class="cursor-pointer d-flex justify-content-center flex-column d-flex flex-column justify-content-center vertical-align-middle align-items-center row-gap-1"
                 >
@@ -58,9 +52,10 @@
     <div *ngIf="importStep === importStepEnum.Second" class="p-3">
         <form name="importStatementForm" novalidate autocomplete="off">
             <div class="pb-4 clear-both browse-file-btn">
-                <mat-label class="import-field-label align-bottom file-upload-label"
-                    >{{ inputData?.commonLocaleData?.app_file }} <sup>*</sup></mat-label
-                >
+                <mat-label class="import-field-label align-bottom file-upload-label">
+                    {{ inputData?.commonLocaleData?.app_file }}
+                    <sup>*</sup>
+                </mat-label>
                 <label class="radio-inline p-0 browse-file-label">
                     {{ inputData?.commonLocaleData?.app_choose_file }}
                     <input
@@ -77,9 +72,7 @@
                 class="pb-4 clear-both password-label d-flex mat-form-field-clean"
                 *ngIf="getRequest.entity === fileType.PDF && selectStatement === importStatementType.BankStatement"
             >
-                <mat-label class="import-field-label align-bottom">{{
-                    inputData?.commonLocaleData?.app_password
-                }}</mat-label>
+                <mat-label class="import-field-label align-bottom">{{ inputData?.commonLocaleData?.app_password }}</mat-label>
                 <mat-form-field appearance="fill" class="w-100 custom-input-field">
                     <input
                         matInput
@@ -90,18 +83,11 @@
                     />
                 </mat-form-field>
             </div>
-            <div
-                class="pb-4 clear-both"
-                *ngIf="[fileType.CSV, fileType.XLS, fileType.XLSX].includes(getRequest.entity)"
-            >
+            <div class="pb-4 clear-both" *ngIf="[fileType.CSV, fileType.XLS, fileType.XLSX].includes(getRequest.entity)">
                 <label class="import-field-label align-bottom">{{ inputData?.localeData?.header_provided }}</label>
                 <mat-slide-toggle color="primary" name="isHeaderProvided" [(ngModel)]="postRequest.isHeaderProvided">
-                    <span class="pull-left" *ngIf="postRequest.isHeaderProvided">{{
-                        inputData?.commonLocaleData?.app_yes
-                    }}</span>
-                    <span class="pull-right" *ngIf="!postRequest.isHeaderProvided">{{
-                        inputData?.commonLocaleData?.app_no
-                    }}</span>
+                    <span class="pull-left" *ngIf="postRequest.isHeaderProvided">{{ inputData?.commonLocaleData?.app_yes }}</span>
+                    <span class="pull-right" *ngIf="!postRequest.isHeaderProvided">{{ inputData?.commonLocaleData?.app_no }}</span>
                 </mat-slide-toggle>
             </div>
             <div
@@ -111,20 +97,14 @@
                     [fileType.CSV, fileType.XLS, fileType.XLSX].includes(getRequest.entity)
                 "
             >
-                <label class="import-field-label align-bottom">{{
-                    inputData?.localeData?.same_debit_credit_column
-                }}</label>
-                <mat-slide-toggle
-                    color="primary"
-                    name="sameDebitCreditAmountColumn"
-                    [(ngModel)]="postRequest.sameDebitCreditAmountColumn"
-                >
-                    <span class="pull-left" *ngIf="postRequest.sameDebitCreditAmountColumn">{{
-                        inputData?.commonLocaleData?.app_yes
-                    }}</span>
-                    <span class="pull-right" *ngIf="!postRequest.sameDebitCreditAmountColumn">{{
-                        inputData?.commonLocaleData?.app_no
-                    }}</span>
+                <label class="import-field-label align-bottom">{{ inputData?.localeData?.same_debit_credit_column }}</label>
+                <mat-slide-toggle color="primary" name="sameDebitCreditAmountColumn" [(ngModel)]="postRequest.sameDebitCreditAmountColumn">
+                    <span class="pull-left" *ngIf="postRequest.sameDebitCreditAmountColumn">
+                        {{ inputData?.commonLocaleData?.app_yes }}
+                    </span>
+                    <span class="pull-right" *ngIf="!postRequest.sameDebitCreditAmountColumn">
+                        {{ inputData?.commonLocaleData?.app_no }}
+                    </span>
                 </mat-slide-toggle>
             </div>
             <div class="d-flex justify-content-between align-items-end">
@@ -150,9 +130,7 @@
                         [matTooltip]="inputData?.commonLocaleData?.app_upload"
                         matTooltipPosition="above"
                         [disabled]="!postRequest.file"
-                        (click)="
-                            selectStatement === importStatementType.Voucher ? uploadFile('voucher') : importStatement()
-                        "
+                        (click)="selectStatement === importStatementType.Voucher ? uploadFile('voucher') : importStatement()"
                     >
                         {{ inputData?.commonLocaleData?.app_upload }}
                     </button>

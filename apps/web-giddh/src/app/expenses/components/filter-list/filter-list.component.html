@@ -8,7 +8,8 @@
             >
                 <div class="left-item">
                     <p class="font-size-12 text-light">
-                        <span>{{ filterItem?.entryDate }}</span> |
+                        <span>{{ filterItem?.entryDate }}</span>
+                        |
                         <span>{{ commonLocaleData?.app_by }} {{ filterItem?.createdBy?.name }}</span>
                     </p>
                     <i class="dot-icon dot-warning" *ngIf="filterItem.entryType === 'sales'"></i>
@@ -22,9 +23,7 @@
                         <i class="icon-cash" *ngIf="filterItem.baseAccountCategory === 'CASH'"></i>
                         <i class="icon-atm-card" *ngIf="filterItem.baseAccountCategory === 'BANK'"></i>
                         <i class="icon-image" *ngIf="filterItem.fileNames"></i>
-                        <i class="text-light" *ngIf="filterItem.baseAccountCategory === 'OTHER'">{{
-                            commonLocaleData?.app_ac
-                        }}</i>
+                        <i class="text-light" *ngIf="filterItem.baseAccountCategory === 'OTHER'">{{ commonLocaleData?.app_ac }}</i>
                     </p>
                 </div>
             </mat-list-item>

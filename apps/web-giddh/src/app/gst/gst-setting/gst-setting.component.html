@@ -5,22 +5,12 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div
-        class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
-        *ngIf="asideGstSidebarMenuState"
-    >
-        <div
-            class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
-            *ngIf="asideGstSidebarMenuState"
-        >
-            <tax-sidebar
-                (navigateEvent)="handleNavigation()"
-                [exclude]="'#primary-new-header'"
-                class="gst-sidebar"
-            ></tax-sidebar>
+    <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper" *ngIf="asideGstSidebarMenuState">
+        <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper" *ngIf="asideGstSidebarMenuState">
+            <tax-sidebar (navigateEvent)="handleNavigation()" [exclude]="'#primary-new-header'" class="gst-sidebar"></tax-sidebar>
         </div>
         <hamburger-menu class="gst-menu-item" [pageHeading]="localeData?.page_heading"></hamburger-menu>
-        <div class=" p-3 ">
+        <div class="p-3">
             <form name="paymentIntegrateForm" autocomplete="off">
                 <div class="w-100">
                     <div class="mt-4 payment-dropdown">
@@ -59,11 +49,8 @@
                                         </thead>
                                         <tbody formArrayName="gstData">
                                             <tr
-                                                *ngFor="
-                                                    let lutItem of gstSettingForm?.get('gstData')['controls'];
-                                                    let i = index
-                                                "
-                                                class="position-relative "
+                                                *ngFor="let lutItem of gstSettingForm?.get('gstData')['controls']; let i = index"
+                                                class="position-relative"
                                                 [ngClass]="{ 'invalid-row': responseArray[i]?.message }"
                                                 [formGroupName]="i"
                                             >
@@ -131,11 +118,7 @@
                         <div class="w-100">
                             <div class="lut-form-wrapper">
                                 <div class="d-flex justify-content-end pt-3">
-                                    <button
-                                        matButton="filled"
-                                        aria-label="save"
-                                        (click)="saveLutNumbers()"
-                                    >
+                                    <button matButton="filled" aria-label="save" (click)="saveLutNumbers()">
                                         {{ commonLocaleData?.app_save }}
                                     </button>
                                 </div>

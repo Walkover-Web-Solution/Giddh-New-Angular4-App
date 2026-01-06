@@ -16,20 +16,14 @@
                             (selectedOption)="$event?.label && (paymentProvideLabel = $event.label)"
                             [required]="true"
                             [showError]="isFormSubmitted && !paymentMethodForm.get('paymentProvider')?.value"
-                        >
-                        </reactive-dropdown-field>
+                        ></reactive-dropdown-field>
                     </form>
                 </div>
             </div>
             <div class="row mt-4">
                 <div class="col-4 pr-0">
                     <div class="d-flex column-gap-1">
-                        <button
-                            aria-label="save"
-                            matButton="filled"
-                            type="button"
-                            (click)="savePaymentProvider()"
-                        >
+                        <button aria-label="save" matButton="filled" type="button" (click)="savePaymentProvider()">
                             {{ commonLocaleData?.app_save }}
                         </button>
                          <button matButton="outlined" mat-dialog-close type="button">
@@ -67,10 +61,7 @@
                                         class="fa fa-star mr-4 default-status cursor-pointer"
                                         [ngClass]="{ 'text-primary': payment?.isDefault }"
                                     ></i>
-                                    <i
-                                        (click)="deletePaymentMethod(payment)"
-                                        class="icon-trash ml-1 mr-4 cursor-pointer"
-                                    ></i>
+                                    <i (click)="deletePaymentMethod(payment)" class="icon-trash ml-1 mr-4 cursor-pointer"></i>
                                 </div>
                             </div>
                             <div class="d-flex justify-content-between mb-4 pt-3">

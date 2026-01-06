@@ -1,14 +1,9 @@
-<div
-    appTranslate
-    [file]="'permissions'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
+<div appTranslate [file]="'permissions'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="container-fluid clear-both" *ngIf="allRoles?.length > 0">
         <div class="col-sm-12 mt-4 mb-4 d-flex justify-content-end column-gap-05">
             <button matButton="filled" (click)="openPermissionDialog()">
-                {{localeData?.add_new_role}}
+                {{ localeData?.add_new_role }}
             </button>
             <button
                 matButton="outlined"
@@ -23,7 +18,7 @@
             <div class="row mr-0 ml-0">
                 <div class="col-md-3 col-sm-3 col-12 p-0 role-head cursor-pointer">
                     <span class="vertical-center">
-                        <h1>{{role.name}}</h1>
+                        <h1>{{ role.name }}</h1>
                         <div class="text-center mt-4 on-hover d-flex column-gap-1">
                             <button
                                 matButton="outlined"
@@ -41,7 +36,7 @@
                                 {{commonLocaleData?.app_delete}}
                             </button>
                             <button matButton="filled" (click)="updateRole(role)">
-                                {{commonLocaleData?.app_view}}
+                                {{ commonLocaleData?.app_view }}
                             </button>
                         </div>
                     </span>
@@ -75,7 +70,7 @@
                 [commonLocaleData]="commonLocaleData"
                 (confirmDeleteEvent)="deleteConfirmedRole()"
                 (closeModelEvent)="closeConfirmationPopup()"
-            >
-            </delete-role-confirmation-model>
+            ></delete-role-confirmation-model>
         </div>
     </ng-template>
+</div>

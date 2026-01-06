@@ -23,7 +23,7 @@ class Angular21CompatibilityPlugin {
 
     apply(compiler) {
         compiler.hooks.beforeCompile.tap('Angular21CompatibilityPlugin', () => {
-            console.log('🔧 Applying Angular 21 EPIPE compatibility fixes...');
+            // Angular 21 EPIPE compatibility fixes applied
         });
 
         // Override Angular 21's aggressive optimization
@@ -34,7 +34,7 @@ class Angular21CompatibilityPlugin {
                     // Apply Angular 16-like chunk splitting logic
                     chunks.forEach(chunk => {
                         if (chunk.size() > 500000) { // 500KB threshold
-                            console.log(`⚠️  Large chunk detected: ${chunk.name} (${chunk.size()} bytes)`);
+                            // Large chunk detected - size monitoring
                         }
                     });
                 }

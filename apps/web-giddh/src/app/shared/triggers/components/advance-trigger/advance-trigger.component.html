@@ -28,9 +28,7 @@
                         <img src="{{ imgPath }}msgTwo.png" class="msg" alt="" />
                     </div>
                 </div>
-                <button matButton="filled" (click)="isShowIntegrated = true">
-                    + {{ localeData?.communication?.integrate_now }}
-                </button>
+                <button matButton="filled" (click)="isShowIntegrated = true">+ {{ localeData?.communication?.integrate_now }}</button>
             </div>
         </div>
         <ng-template [ngIf]="isShowIntegrated">
@@ -49,17 +47,10 @@
                             </button>
                             <mat-menu #beforeMenu="matMenu" xPosition="before">
                                 <button mat-menu-item (click)="editCommunicationPlatform = 'MSG91'">
-                                    <span class="font-size-15 edit-buttons">{{
-                                        localeData?.communication?.edit_platform
-                                    }}</span>
+                                    <span class="font-size-15 edit-buttons">{{ localeData?.communication?.edit_platform }}</span>
                                 </button>
-                                <button
-                                    mat-menu-item
-                                    (click)="deleteCommunicationPlatform(communicationPlatforms?.MSG91?.uniqueName)"
-                                >
-                                    <span class="font-size-15 edit-buttons">{{
-                                        localeData?.communication?.remove_platform
-                                    }}</span>
+                                <button mat-menu-item (click)="deleteCommunicationPlatform(communicationPlatforms?.MSG91?.uniqueName)">
+                                    <span class="font-size-15 edit-buttons">{{ localeData?.communication?.remove_platform }}</span>
                                 </button>
                             </mat-menu>
                         </div>
@@ -95,9 +86,9 @@
                             (click)="backToHomePage($event)"
                             *ngIf="communicationPlatforms?.MSG91?.isConnected"
                         >
-                            <span class="mat-button-wrapper d-flex"
-                                ><i class="icon-left"></i
-                                ><span class="back-text">{{ localeData?.communication?.msg91 }}</span>
+                            <span class="mat-button-wrapper d-flex">
+                                <i class="icon-left"></i>
+                                <span class="back-text">{{ localeData?.communication?.msg91 }}</span>
                             </span>
                         </button>
                         <div class="d-flex align-items-center verify-form mt-3">
@@ -181,11 +172,7 @@
                                 {{ localeData?.communication?.action }}
                             </th>
                             <td mat-cell *matCellDef="let element">
-                                <button
-                                    class="small-button"
-                                    matButton="filled"
-                                    (click)="updateTriggerStatus(element?.uniqueName)"
-                                >
+                                <button class="small-button" matButton="filled" (click)="updateTriggerStatus(element?.uniqueName)">
                                     {{
                                         element?.isActive > 0
                                             ? localeData?.communication?.activated
@@ -250,7 +237,7 @@
                         <img class="return" src="{{ imgPath }}return.svg" alt="" (click)="backToListPage($event)" />
                         <p class="trigger-heading font-size-15">
                             {{
-                                triggerMode === "create" || triggerMode === "copy"
+                                triggerMode === 'create' || triggerMode === 'copy'
                                     ? localeData?.communication?.create_trigger
                                     : localeData?.communication?.edit_trigger
                             }}
@@ -275,9 +262,7 @@
                             [placeholder]="localeData?.communication?.select_condition"
                             [options]="triggerCondition"
                             (selectedOption)="selectConditions($event?.value)"
-                            [labelValue]="
-                                createTrigger.condition.action.length ? createTrigger.condition.action[0] : ''
-                            "
+                            [labelValue]="createTrigger.condition.action.length ? createTrigger.condition.action[0] : ''"
                             [ngClass]="{ 'fields-error': mandatoryFields.condition }"
                             (onClear)="createTrigger.condition.action[0] = ''"
                         ></reactive-dropdown-field>
@@ -314,8 +299,9 @@
                                     *ngFor="let action of subConditionAction"
                                     [selected]="action?.isChecked"
                                     [value]="action"
-                                    >{{ action | titlecase }}</mat-option
                                 >
+                                    {{ action | titlecase }}
+                                </mat-option>
                             </mat-select>
                         </mat-form-field>
                     </div>
@@ -355,9 +341,7 @@
                         <div class="compose-trigger-dropdowns">
                             <div class="chiplist-wrapper">
                                 <div class="pl-4 pr-4 border-bottom mat-form-field-clean">
-                                    <span class="dropdown-heading pb-3 d-block">{{
-                                        localeData?.communication?.receiver
-                                    }}</span>
+                                    <span class="dropdown-heading pb-3 d-block">{{ localeData?.communication?.receiver }}</span>
                                     <select-multiple-fields
                                         [commonLocaleData]="commonLocaleData"
                                         [placeholder]="localeData?.communication?.select_mobile"
@@ -409,16 +393,14 @@
                                     name="voucherpdf"
                                     [(ngModel)]="createTrigger.campaignDetails.sendVoucherPdf"
                                     (change)="selectVoucherPdf($event?.checked)"
-                                    ><span class="compose">{{ localeData?.communication?.send_voucher }}</span>
+                                >
+                                    <span class="compose">{{ localeData?.communication?.send_voucher }}</span>
                                 </mat-checkbox>
                             </div>
                         </div>
                     </div>
                     <div class="dropdown-box-2">
-                        <p
-                            class="compose variables-bottom-border"
-                            *ngIf="createTrigger.campaignDetails.argsMapping?.length"
-                        >
+                        <p class="compose variables-bottom-border" *ngIf="createTrigger.campaignDetails.argsMapping?.length">
                             {{ localeData?.communication?.variables }}
                         </p>
                         <div class="variables-wrapper">

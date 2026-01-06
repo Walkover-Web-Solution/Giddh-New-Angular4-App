@@ -15,8 +15,8 @@
 
 // Hide Froala unlicensed message
 :host ::ng-deep .fr-wrapper > div {
-    &[style*="z-index:9999"],
-    > a[href*="froala.com/get-trial-key"] {
+    &[style*='z-index:9999'],
+    > a[href*='froala.com/get-trial-key'] {
         display: none !important;
     }
 }

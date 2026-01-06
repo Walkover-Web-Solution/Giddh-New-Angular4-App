@@ -6,9 +6,9 @@
         </button>
     </div>
     <mat-dialog-content class="dialog-body">
-        <mat-checkbox *ngIf="this.jsonDifference" class="changes-checkbox" color="primary" [(ngModel)]="showChanged">{{
-            localeData?.show_change_data
-        }}</mat-checkbox>
+        <mat-checkbox *ngIf="this.jsonDifference" class="changes-checkbox" color="primary" [(ngModel)]="showChanged">
+            {{ localeData?.show_change_data }}
+        </mat-checkbox>
         <div
             class="logs-content"
             *ngIf="this.jsonDifference"

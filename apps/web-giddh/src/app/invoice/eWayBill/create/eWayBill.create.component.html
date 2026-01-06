@@ -30,8 +30,7 @@
                                     [(ngModel)]="generateEwayBillform.subSupplyType"
                                     [disabled]="true"
                                     [labelValue]="selectedSubType"
-                                >
-                                </reactive-dropdown-field>
+                                ></reactive-dropdown-field>
                             </div>
                             <div class="col-6">
                                 <reactive-dropdown-field
@@ -44,8 +43,7 @@
                                     [(ngModel)]="generateEwayBillform.docType"
                                     [disabled]="true"
                                     [labelValue]="selectedDocType"
-                                >
-                                </reactive-dropdown-field>
+                                ></reactive-dropdown-field>
                             </div>
                             <div class="col-6">
                                 <input-field
@@ -59,8 +57,7 @@
                                     [maxlength]="15"
                                     [minlength]="15"
                                     [(ngModel)]="generateEwayBillform.toGstIn"
-                                >
-                                </input-field>
+                                ></input-field>
                             </div>
                             <div class="col-6">
                                 <input-field
@@ -74,8 +71,7 @@
                                     [maxlength]="6"
                                     [minlength]="6"
                                     [(ngModel)]="generateEwayBillform.toPinCode"
-                                >
-                                </input-field>
+                                ></input-field>
                             </div>
                             <div class="col-6">
                                 <reactive-dropdown-field
@@ -86,14 +82,11 @@
                                     [name]="'transactionType'"
                                     [(ngModel)]="generateEwayBillform.transactionType"
                                     [labelValue]="transactionSubType?.[0]?.label"
-                                >
-                                </reactive-dropdown-field>
+                                ></reactive-dropdown-field>
                             </div>
                         </div>
 
-                        <strong class="d-block mt-3 mb-3 text-center">{{
-                            commonLocaleData?.app_transport_details
-                        }}</strong>
+                        <strong class="d-block mt-3 mb-3 text-center">{{ commonLocaleData?.app_transport_details }}</strong>
 
                         <div class="row row-gap-15">
                             <div class="col-6" [keyboardShortcut]="'alt+c'" (onShortcutPress)="openTransporterDialog()">
@@ -107,8 +100,7 @@
                                     [(ngModel)]="generateEwayBillform.transporterId"
                                     [showCreateNew]="true"
                                     (createOption)="openTransporterDialog()"
-                                >
-                                </reactive-dropdown-field>
+                                ></reactive-dropdown-field>
                             </div>
                             <div class="col-6">
                                 <input-field
@@ -122,8 +114,7 @@
                                     [maxlength]="4"
                                     [minlength]="4"
                                     [(ngModel)]="generateEwayBillform.transDistance"
-                                >
-                                </input-field>
+                                ></input-field>
                             </div>
                         </div>
 
@@ -139,50 +130,26 @@
                             </div>
 
                             <div class="col-md-8 col-lg-8 col-sm-12 mt-3">
-                                <mat-radio-group
-                                    name="transMode"
-                                    [(ngModel)]="generateEwayBillform.transMode"
-                                    class="d-flex flex-wrap"
-                                >
-                                    <mat-radio-button
-                                        color="primary"
-                                        value="1"
-                                        (change)="selectedModeOfTrans('road')"
-                                        class="mr-3 mb-2"
-                                    >
+                                <mat-radio-group name="transMode" [(ngModel)]="generateEwayBillform.transMode" class="d-flex flex-wrap">
+                                    <mat-radio-button color="primary" value="1" (change)="selectedModeOfTrans('road')" class="mr-3 mb-2">
                                         <div class="d-inline-flex column-gap-05">
                                             <img class="image-as-icon-color" src="assets/icon/4.svg" />
                                             {{ commonLocaleData?.app_road }}
                                         </div>
                                     </mat-radio-button>
-                                    <mat-radio-button
-                                        color="primary"
-                                        value="2"
-                                        (change)="selectedModeOfTrans('rail')"
-                                        class="mr-3 mb-2"
-                                    >
+                                    <mat-radio-button color="primary" value="2" (change)="selectedModeOfTrans('rail')" class="mr-3 mb-2">
                                         <div class="d-inline-flex column-gap-05">
                                             <img class="image-as-icon-color" src="assets/icon/3.svg" />
                                             {{ commonLocaleData?.app_rail }}
                                         </div>
                                     </mat-radio-button>
-                                    <mat-radio-button
-                                        color="primary"
-                                        value="3"
-                                        (change)="selectedModeOfTrans('air')"
-                                        class="mr-3 mb-2"
-                                    >
+                                    <mat-radio-button color="primary" value="3" (change)="selectedModeOfTrans('air')" class="mr-3 mb-2">
                                         <div class="d-inline-flex column-gap-05">
                                             <img class="image-as-icon-color" src="assets/icon/1.svg" />
                                             {{ commonLocaleData?.app_air }}
                                         </div>
                                     </mat-radio-button>
-                                    <mat-radio-button
-                                        color="primary"
-                                        value="4"
-                                        (change)="selectedModeOfTrans('ship')"
-                                        class="mb-2"
-                                    >
+                                    <mat-radio-button color="primary" value="4" (change)="selectedModeOfTrans('ship')" class="mb-2">
                                         <div class="d-inline-flex column-gap-05">
                                             <img class="image-as-icon-color" src="assets/icon/2.svg" />
                                             {{ commonLocaleData?.app_ship }}
@@ -198,11 +165,7 @@
                             </div>
 
                             <div class="col-md-8 col-lg-8 col-sm-12 mt-3">
-                                <mat-radio-group
-                                    name="vehicleType"
-                                    [(ngModel)]="generateEwayBillform.vehicleType"
-                                    class="d-flex"
-                                >
+                                <mat-radio-group name="vehicleType" [(ngModel)]="generateEwayBillform.vehicleType" class="d-flex">
                                     <mat-radio-button color="primary" value="R" class="mr-3">
                                         {{ localeData?.regular }}
                                     </mat-radio-button>
@@ -227,14 +190,11 @@
                                     [minlength]="7"
                                     #name="ngModel"
                                     [(ngModel)]="generateEwayBillform.vehicleNo"
-                                >
-                                </input-field>
+                                ></input-field>
 
-                                <small
-                                    class="text-danger"
-                                    *ngIf="name.value && name.invalid && name.touched && name.dirty"
-                                    >{{ localeData?.vehicle_no_format }}</small
-                                >
+                                <small class="text-danger" *ngIf="name.value && name.invalid && name.touched && name.dirty">
+                                    {{ localeData?.vehicle_no_format }}
+                                </small>
                             </div>
                             <div class="col-6">
                                 <input-field
@@ -244,8 +204,7 @@
                                     [name]="'transDocNo'"
                                     [maxlength]="15"
                                     [(ngModel)]="generateEwayBillform.transDocNo"
-                                >
-                                </input-field>
+                                ></input-field>
                             </div>
                             <div class="col-6">
                                 <giddh-datepicker
@@ -290,14 +249,16 @@
                     </mat-card-title>
                     <mat-card-content>
                         <div class="mb-2">
-                            <label>{{ commonLocaleData?.app_date }}: </label><span>{{ invoice?.voucherDate }}</span>
+                            <label>{{ commonLocaleData?.app_date }}:</label>
+                            <span>{{ invoice?.voucherDate }}</span>
                         </div>
                         <div class="mb-2">
-                            <label>{{ commonLocaleData?.app_to }}: </label><span>{{ invoice?.account.name }}</span>
+                            <label>{{ commonLocaleData?.app_to }}:</label>
+                            <span>{{ invoice?.account.name }}</span>
                         </div>
                         <div class="mb-4">
-                            <label>{{ localeData?.amount }}: </label
-                            ><span>{{ invoice?.grandTotal?.amountForAccount }}</span>
+                            <label>{{ localeData?.amount }}:</label>
+                            <span>{{ invoice?.grandTotal?.amountForAccount }}</span>
                         </div>
                         <button (click)="removeInvoice(invoice)" matButton="filled">
                             {{ commonLocaleData?.app_remove }}
@@ -309,8 +270,7 @@
     </div>
 </ng-container>
 <ng-template #eWayBillCredentialsTemplate>
-    <app-eWayBill-credentials-modal (closeModelEvent)="toggleEwayBillCredentialsPopup()">
-    </app-eWayBill-credentials-modal>
+    <app-eWayBill-credentials-modal (closeModelEvent)="toggleEwayBillCredentialsPopup()"></app-eWayBill-credentials-modal>
 </ng-template>
 
 <ng-template #transporterTemplate>
@@ -332,18 +292,15 @@
                             [autocomplete]="'off'"
                             [pattern]="'[a-zA-Z0-9^ .&]{5,100}'"
                             [(ngModel)]="generateNewTransporter.transporterName"
-                        >
-                        </input-field>
+                        ></input-field>
 
                         <small
                             class="text-danger"
                             *ngIf="
-                                Transportersname.invalid &&
-                                Transportersname.touched &&
-                                Transportersname.dirty &&
-                                Transportersname?.value
+                                Transportersname.invalid && Transportersname.touched && Transportersname.dirty && Transportersname?.value
                             "
-                            >{{ commonLocaleData?.app_invalid_transporter_name_message }}
+                        >
+                            {{ commonLocaleData?.app_invalid_transporter_name_message }}
                         </small>
                     </div>
                 </div>
@@ -360,17 +317,12 @@
                             [minlength]="4"
                             [maxlength]="15"
                             [(ngModel)]="generateNewTransporter.transporterId"
-                        >
-                        </input-field>
+                        ></input-field>
                         <small
                             class="text-danger"
-                            *ngIf="
-                                TransportersID.invalid &&
-                                TransportersID.touched &&
-                                TransportersID.dirty &&
-                                TransportersID?.value
-                            "
-                            >{{ commonLocaleData?.app_invalid_transporter_id_message }}
+                            *ngIf="TransportersID.invalid && TransportersID.touched && TransportersID.dirty && TransportersID?.value"
+                        >
+                            {{ commonLocaleData?.app_invalid_transporter_id_message }}
                         </small>
                     </div>
                 </div>
@@ -462,8 +414,7 @@
             [showFirstLastButtons]="true"
             [hidePageSize]="false"
             (page)="handlePageEvent($event)"
-        >
-        </mat-paginator>
+        ></mat-paginator>
         <section class="mb-custom-80"></section>
     </mat-dialog-content>
 </ng-template>

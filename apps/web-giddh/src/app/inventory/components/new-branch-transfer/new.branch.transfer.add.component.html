@@ -8,13 +8,8 @@
     </div>
     <div class="receipt-note-content">
         <div class="receipt-note-radio-btn pr-3 pl-3 mb-3" *ngIf="!editBranchTransferUniqueName">
-            <mat-radio-group
-                name="transferType"
-                [(ngModel)]="transferType"
-                (change)="changeTransferType()"
-                class="d-flex"
-            >
-                <mat-radio-button color="primary" value="products" class="mr-3"> Multiple Products </mat-radio-button>
+            <mat-radio-group name="transferType" [(ngModel)]="transferType" (change)="changeTransferType()" class="d-flex">
+                <mat-radio-button color="primary" value="products" class="mr-3">Multiple Products</mat-radio-button>
                 <mat-radio-button color="primary" value="senders">
                     <span *ngIf="branchTransferMode === 'receiptnote'">Multiple Senders</span>
                     <span *ngIf="branchTransferMode === 'deliverynote'">Multiple Receivers</span>
@@ -29,16 +24,14 @@
                         <div class="row mb-4">
                             <div class="col-xl-3 col-lg-4">
                                 <label>
-                                    {{ branchTransferMode === "receiptnote" ? "Date of Receipt" : "Date of Supply" }}
+                                    {{ branchTransferMode === 'receiptnote' ? 'Date of Receipt' : 'Date of Supply' }}
                                     <span class="text-red">*</span>
                                 </label>
                             </div>
                             <div class="col-xl-6 col-lg-8">
                                 <giddh-datepicker
                                     name="dateOfSupply"
-                                    [placeholder]="
-                                        branchTransferMode === 'receiptnote' ? 'Date of Receipt' : 'Date of Supply'
-                                    "
+                                    [placeholder]="branchTransferMode === 'receiptnote' ? 'Date of Receipt' : 'Date of Supply'"
                                     [(ngModel)]="tempDateParams.dateOfSupply"
                                     (dateSelected)="selectDateOfSupply($event)"
                                     [required]="true"
@@ -49,7 +42,10 @@
                         </div>
                         <div *ngIf="transferType === 'senders'" class="row mb-4">
                             <div class="col-xl-3 col-lg-4">
-                                <label> Product's Name <span class="text-red">*</span> </label>
+                                <label>
+                                    Product's Name
+                                    <span class="text-red">*</span>
+                                </label>
                             </div>
                             <div class="col-xl-6 col-lg-8">
                                 <reactive-dropdown-field
@@ -61,13 +57,12 @@
                                     [(ngModel)]="branchTransfer.products[0].uniqueName"
                                     (selectedOption)="selectProduct($event, branchTransfer.products[0])"
                                     [required]="true"
-                                >
-                                </reactive-dropdown-field>
+                                ></reactive-dropdown-field>
                             </div>
                         </div>
                         <div *ngIf="transferType === 'senders'" class="row mb-4">
                             <div class="col-xl-3 col-lg-4">
-                                <label> SKU Code </label>
+                                <label>SKU Code</label>
                             </div>
                             <div class="col-xl-6 col-lg-8">
                                 <input
@@ -87,10 +82,8 @@
                                             [(ngModel)]="branchTransfer.products[0].showCodeType"
                                             class="d-flex"
                                         >
-                                            <mat-radio-button color="primary" value="hsn" class="mr-3">
-                                                HSN Code
-                                            </mat-radio-button>
-                                            <mat-radio-button color="primary" value="sac"> SAC Code </mat-radio-button>
+                                            <mat-radio-button color="primary" value="hsn" class="mr-3">HSN Code</mat-radio-button>
+                                            <mat-radio-button color="primary" value="sac">SAC Code</mat-radio-button>
                                         </mat-radio-group>
                                     </div>
                                 </label>
@@ -118,7 +111,10 @@
                         </div>
                         <div class="row mb-4">
                             <div class="col-xl-3 col-lg-4">
-                                <label> Sender's Name <span class="text-red">*</span> </label>
+                                <label>
+                                    Sender's Name
+                                    <span class="text-red">*</span>
+                                </label>
                             </div>
                             <div class="col-xl-6 col-lg-8 position-relative">
                                 <input
@@ -137,13 +133,15 @@
                                     (selectedOption)="selectSource($event, branchTransfer.sources[0])"
                                     [required]="true"
                                     [disabled]="isUpdateMode"
-                                >
-                                </reactive-dropdown-field>
+                                ></reactive-dropdown-field>
                             </div>
                         </div>
                         <div class="row mb-4">
                             <div class="col-xl-3 col-lg-4">
-                                <label class="nowrap"> Sender's Warehouse <span class="text-red">*</span> </label>
+                                <label class="nowrap">
+                                    Sender's Warehouse
+                                    <span class="text-red">*</span>
+                                </label>
                             </div>
                             <div class="col-xl-6 col-lg-8">
                                 <reactive-dropdown-field
@@ -152,8 +150,7 @@
                                     [(ngModel)]="branchTransfer.sources[0].warehouse.uniqueName"
                                     (selectedOption)="selectSourceWarehouse($event, branchTransfer.sources[0])"
                                     [required]="true"
-                                >
-                                </reactive-dropdown-field>
+                                ></reactive-dropdown-field>
                             </div>
                         </div>
                         <div
@@ -166,7 +163,7 @@
                             "
                         >
                             <div class="col-xl-3 col-lg-4">
-                                <label> Sender's {{ formFields["taxName"].label }} </label>
+                                <label>Sender's {{ formFields['taxName'].label }}</label>
                             </div>
                             <div class="col-xl-6 col-lg-8">
                                 <input
@@ -183,7 +180,7 @@
                         </div>
                         <div class="row mb-4">
                             <div class="col-xl-3 col-lg-4">
-                                <label> Sender's Address </label>
+                                <label>Sender's Address</label>
                             </div>
                             <div class="col-xl-6 col-lg-8">
                                 <textarea
@@ -197,7 +194,10 @@
                         </div>
                         <div class="row mb-4" *ngIf="transferType !== 'senders'">
                             <div class="col-xl-3 col-lg-4">
-                                <label> Receiver's Name <span class="text-red">*</span> </label>
+                                <label>
+                                    Receiver's Name
+                                    <span class="text-red">*</span>
+                                </label>
                                 <reactive-dropdown-field
                                     *ngIf="isUpdateMode"
                                     [name]="'destinationName'"
@@ -206,24 +206,23 @@
                                     [options]="branchList"
                                     (selectedOption)="selectDestination($event, branchTransfer.destinations[0])"
                                     [required]="true"
-                                >
-                                </reactive-dropdown-field>
+                                ></reactive-dropdown-field>
                             </div>
                         </div>
                         <div class="row mb-4" *ngIf="transferType !== 'senders'">
                             <div class="col-xl-3 col-lg-4 nowrap">
-                                <label class="nowrap"> Receiver's Warehouse <span class="text-red">*</span> </label>
+                                <label class="nowrap">
+                                    Receiver's Warehouse
+                                    <span class="text-red">*</span>
+                                </label>
                                 <reactive-dropdown-field
                                     [name]="'destinationWarehouse'"
                                     [enableDynamicSearch]="true"
                                     [options]="destinationWarehouses[branchTransfer.destinations[0]?.uniqueName]"
                                     [(ngModel)]="branchTransfer.destinations[0].warehouse.uniqueName"
-                                    (selectedOption)="
-                                        selectDestinationWarehouse($event, branchTransfer.destinations[0])
-                                    "
+                                    (selectedOption)="selectDestinationWarehouse($event, branchTransfer.destinations[0])"
                                     [required]="true"
-                                >
-                                </reactive-dropdown-field>
+                                ></reactive-dropdown-field>
                             </div>
                         </div>
                         <div
@@ -236,7 +235,7 @@
                             "
                         >
                             <div class="col-xl-3 col-lg-4">
-                                <label> Receiver's {{ formFields["taxName"].label }} </label>
+                                <label>Receiver's {{ formFields['taxName'].label }}</label>
                             </div>
                             <div class="col-xl-6 col-lg-8">
                                 <input
@@ -253,7 +252,7 @@
                         </div>
                         <div class="row mb-4" *ngIf="transferType !== 'senders'">
                             <div class="col-xl-3 col-lg-4">
-                                <label> Receiver's Address </label>
+                                <label>Receiver's Address</label>
                             </div>
                             <div class="col-xl-6 col-lg-8">
                                 <textarea
@@ -270,16 +269,14 @@
                         <div class="row mb-4">
                             <div class="col-xl-3 col-lg-4">
                                 <label>
-                                    {{ branchTransferMode === "receiptnote" ? "Date of Receipt" : "Date of Supply" }}
+                                    {{ branchTransferMode === 'receiptnote' ? 'Date of Receipt' : 'Date of Supply' }}
                                     <span class="text-red">*</span>
                                 </label>
                             </div>
                             <div class="col-xl-6 col-lg-8">
                                 <giddh-datepicker
                                     name="dateOfSupply"
-                                    [placeholder]="
-                                        branchTransferMode === 'receiptnote' ? 'Date of Receipt' : 'Date of Supply'
-                                    "
+                                    [placeholder]="branchTransferMode === 'receiptnote' ? 'Date of Receipt' : 'Date of Supply'"
                                     [(ngModel)]="tempDateParams.dateOfSupply"
                                     (dateSelected)="selectDateOfSupply($event)"
                                     [required]="true"
@@ -290,7 +287,10 @@
                         </div>
                         <div *ngIf="transferType === 'senders'" class="row mb-4">
                             <div class="col-xl-3 col-lg-4">
-                                <label> Product's Name <span class="text-red">*</span> </label>
+                                <label>
+                                    Product's Name
+                                    <span class="text-red">*</span>
+                                </label>
                             </div>
                             <div class="col-xl-6 col-lg-8">
                                 <reactive-dropdown-field
@@ -302,13 +302,12 @@
                                     [(ngModel)]="branchTransfer.products[0].uniqueName"
                                     (selectedOption)="selectProduct($event, branchTransfer.products[0])"
                                     [required]="true"
-                                >
-                                </reactive-dropdown-field>
+                                ></reactive-dropdown-field>
                             </div>
                         </div>
                         <div *ngIf="transferType === 'senders'" class="row mb-4">
                             <div class="col-xl-3 col-lg-4">
-                                <label> SKU Code </label>
+                                <label>SKU Code</label>
                             </div>
                             <div class="col-xl-6 col-lg-8">
                                 <input
@@ -328,10 +327,8 @@
                                             [(ngModel)]="branchTransfer.products[0].showCodeType"
                                             class="d-flex"
                                         >
-                                            <mat-radio-button color="primary" value="hsn" class="mr-3">
-                                                HSN Code
-                                            </mat-radio-button>
-                                            <mat-radio-button color="primary" value="sac"> SAC Code </mat-radio-button>
+                                            <mat-radio-button color="primary" value="hsn" class="mr-3">HSN Code</mat-radio-button>
+                                            <mat-radio-button color="primary" value="sac">SAC Code</mat-radio-button>
                                         </mat-radio-group>
                                     </div>
                                 </label>
@@ -359,7 +356,10 @@
                         </div>
                         <div class="row mb-4" *ngIf="transferType !== 'senders'">
                             <div class="col-xl-3 col-lg-4 transfer-type-based">
-                                <label> Sender's Name <span class="text-red">*</span> </label>
+                                <label>
+                                    Sender's Name
+                                    <span class="text-red">*</span>
+                                </label>
                                 <reactive-dropdown-field
                                     [name]="'sourceName'"
                                     [enableDynamicSearch]="true"
@@ -367,8 +367,7 @@
                                     [(ngModel)]="branchTransfer.sources[0].uniqueName"
                                     (selectedOption)="selectSource($event, branchTransfer.sources[0])"
                                     [required]="true"
-                                >
-                                </reactive-dropdown-field>
+                                ></reactive-dropdown-field>
                                 <i
                                     class="icon-info text-light"
                                     *ngIf="
@@ -381,7 +380,10 @@
                         </div>
                         <div class="row mb-4" *ngIf="transferType !== 'senders'">
                             <div class="col-xl-3 col-lg-4">
-                                <label class="nowrap"> Sender's Warehouse <span class="text-red">*</span> </label>
+                                <label class="nowrap">
+                                    Sender's Warehouse
+                                    <span class="text-red">*</span>
+                                </label>
                             </div>
                             <div class="col-xl-6 col-lg-8">
                                 <reactive-dropdown-field
@@ -406,7 +408,7 @@
                             class="row mb-4"
                         >
                             <div class="col-xl-3 col-lg-4">
-                                <label> Sender's {{ formFields["taxName"].label }} </label>
+                                <label>Sender's {{ formFields['taxName'].label }}</label>
                             </div>
                             <div class="col-xl-6 col-lg-8">
                                 <input
@@ -423,7 +425,7 @@
                         </div>
                         <div class="row mb-4" *ngIf="transferType !== 'senders'">
                             <div class="col-xl-3 col-lg-4">
-                                <label> Sender's Address </label>
+                                <label>Sender's Address</label>
                             </div>
                             <div class="col-xl-6 col-lg-8">
                                 <textarea
@@ -437,7 +439,10 @@
                         </div>
                         <div class="row mb-4">
                             <div class="col-xl-3 col-lg-4">
-                                <label> Receiver's Name <span class="text-red">*</span> </label>
+                                <label>
+                                    Receiver's Name
+                                    <span class="text-red">*</span>
+                                </label>
                             </div>
                             <div class="col-xl-6 col-lg-8 position-relative">
                                 <reactive-dropdown-field
@@ -470,7 +475,10 @@
                         </div>
                         <div class="row mb-4">
                             <div class="col-xl-3 col-lg-4 nowrap">
-                                <label class="nowrap"> Receiver's Warehouse <span class="text-red">*</span> </label>
+                                <label class="nowrap">
+                                    Receiver's Warehouse
+                                    <span class="text-red">*</span>
+                                </label>
                             </div>
                             <div class="col-xl-6 col-lg-8">
                                 <reactive-dropdown-field
@@ -494,7 +502,7 @@
                             "
                         >
                             <div class="col-xl-3 col-lg-4">
-                                <label> Receiver's {{ formFields["taxName"].label }} </label>
+                                <label>Receiver's {{ formFields['taxName'].label }}</label>
                             </div>
                             <div class="col-xl-6 col-lg-8">
                                 <input
@@ -511,7 +519,7 @@
                         </div>
                         <div class="row mb-4">
                             <div class="col-xl-3 col-lg-4">
-                                <label> Receiver's Address </label>
+                                <label>Receiver's Address</label>
                             </div>
                             <div class="col-xl-6 col-lg-8">
                                 <textarea
@@ -537,9 +545,7 @@
                             <thead *ngIf="transferType === 'products'">
                                 <tr>
                                     <th class="serial-no-column">#</th>
-                                    <th data-title="Product Description" width="30%" class="min-wid-product">
-                                        Product Description
-                                    </th>
+                                    <th data-title="Product Description" width="30%" class="min-wid-product">Product Description</th>
                                     <th width="20%" class="text-right min-wid-qty">Qty/Unit</th>
                                     <th width="20%" class="text-right min-wid-rate">Rate</th>
                                     <th width="20%" class="text-right min-wid-amt">Amount</th>
@@ -548,9 +554,7 @@
                             <thead *ngIf="transferType !== 'products'">
                                 <tr>
                                     <th class="serial-no-column">#</th>
-                                    <th width="30%" *ngIf="branchTransferMode === 'deliverynote'">
-                                        Receiver’s Details
-                                    </th>
+                                    <th width="30%" *ngIf="branchTransferMode === 'deliverynote'">Receiver’s Details</th>
                                     <th width="30%" *ngIf="branchTransferMode === 'receiptnote'">Sender’s Details</th>
                                     <th width="20%" class="text-right">Qty/Unit</th>
                                     <th width="20%" class="text-right">Rate</th>
@@ -582,9 +586,9 @@
                                                     (click)="focusSkuNumber()"
                                                     *ngIf="activeRow == i && product?.uniqueName"
                                                 >
-                                                    <label>SKU Code: </label>
-                                                    <span
-                                                        >{{ product.skuCode }}
+                                                    <label>SKU Code:</label>
+                                                    <span>
+                                                        {{ product.skuCode }}
                                                         <span class="edit-icon cursor-pointer">
                                                             <img src="assets/images/edit-pencilicon.svg" />
                                                         </span>
@@ -604,11 +608,7 @@
                                                         [(ngModel)]="skuNumber"
                                                     />
                                                     <div class="btn-group mt-2 pt-1 d-flex">
-                                                        <button
-                                                            matButton="filled"
-                                                            type="button"
-                                                            (click)="saveSkuNumberPopup(product)"
-                                                        >
+                                                        <button matButton="filled" type="button" (click)="saveSkuNumberPopup(product)">
                                                             Save
                                                         </button>
                                                         <button
@@ -635,12 +635,8 @@
                                         <div *ngIf="activeRow !== i">
                                             <div *ngIf="product.name">{{ product.name }}</div>
                                             <div *ngIf="product.skuCode">SKU Code: {{ product.skuCode }}</div>
-                                            <div *ngIf="product.showCodeType === 'hsn'">
-                                                HSN Code: {{ product.hsnNumber }}
-                                            </div>
-                                            <div *ngIf="product.showCodeType === 'sac'">
-                                                SAC Code: {{ product.sacNumber }}
-                                            </div>
+                                            <div *ngIf="product.showCodeType === 'hsn'">HSN Code: {{ product.hsnNumber }}</div>
+                                            <div *ngIf="product.showCodeType === 'sac'">SAC Code: {{ product.sacNumber }}</div>
                                             <div *ngIf="product.description">{{ product.description }}</div>
                                             <div
                                                 *ngIf="
@@ -655,20 +651,10 @@
                                             </div>
                                         </div>
                                         <div class="position-relative wrap-hsn-box">
-                                            <div
-                                                class="hsn-code text-right"
-                                                (click)="focusHsnNumber()"
-                                                *ngIf="activeRow == i"
-                                            >
-                                                <label
-                                                    >{{ product.showCodeType === "hsn" ? "HSN" : "SAC" }} Code:
-                                                </label>
-                                                <span
-                                                    >{{
-                                                        product.showCodeType === "hsn"
-                                                            ? product.hsnNumber
-                                                            : product.sacNumber
-                                                    }}
+                                            <div class="hsn-code text-right" (click)="focusHsnNumber()" *ngIf="activeRow == i">
+                                                <label>{{ product.showCodeType === 'hsn' ? 'HSN' : 'SAC' }} Code:</label>
+                                                <span>
+                                                    {{ product.showCodeType === 'hsn' ? product.hsnNumber : product.sacNumber }}
                                                     <span class="edit-icon cursor-pointer">
                                                         <img src="assets/images/edit-pencilicon.svg" />
                                                     </span>
@@ -686,9 +672,7 @@
                                                             <mat-radio-button color="primary" value="hsn" class="mr-3">
                                                                 HSN Code
                                                             </mat-radio-button>
-                                                            <mat-radio-button color="primary" value="sac">
-                                                                SAC Code
-                                                            </mat-radio-button>
+                                                            <mat-radio-button color="primary" value="sac">SAC Code</mat-radio-button>
                                                         </mat-radio-group>
                                                     </div>
                                                 </label>
@@ -696,19 +680,13 @@
                                                     type="number"
                                                     maxlength="10"
                                                     decimalDigitsDirective
-                                                    placeholder="{{
-                                                        product.showCodeType === 'hsn' ? 'HSN' : 'SAC'
-                                                    }} Code"
+                                                    placeholder="{{ product.showCodeType === 'hsn' ? 'HSN' : 'SAC' }} Code"
                                                     name="productHsnNumber{{ i }}"
                                                     #productHsnNumber
                                                     [(ngModel)]="hsnNumber"
                                                 />
                                                 <div class="btn-group mt-2 pt-1 d-flex">
-                                                    <button
-                                                        matButton="filled"
-                                                        type="button"
-                                                        (click)="saveHsnNumberPopup(product)"
-                                                    >
+                                                    <button matButton="filled" type="button" (click)="saveHsnNumberPopup(product)">
                                                         Save
                                                     </button>
                                                     <button
@@ -785,9 +763,9 @@
                                             </div>
                                         </div>
                                         <div class="trash-icon-delete cursor-pointer">
-                                            <a (click)="removeProduct(i)" *ngIf="branchTransfer.products?.length > 1"
-                                                ><i class="fa fa-trash"></i
-                                            ></a>
+                                            <a (click)="removeProduct(i)" *ngIf="branchTransfer.products?.length > 1">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
                                         </div>
                                     </td>
                                 </tr>
@@ -814,9 +792,7 @@
                                                 [options]="destinationWarehouses[destination?.uniqueName]"
                                                 [(ngModel)]="destination.warehouse.uniqueName"
                                                 [name]="'destinationWarehouse' + i"
-                                                (selectedOption)="
-                                                    getWarehouseDetails('destinations', i); focusDestinationQuantity()
-                                                "
+                                                (selectedOption)="getWarehouseDetails('destinations', i); focusDestinationQuantity()"
                                             ></reactive-dropdown-field>
                                             <input
                                                 [disabled]="destination?.warehouse?.uniqueName"
@@ -927,18 +903,15 @@
                                             </div>
                                         </div>
                                         <div class="trash-icon-delete cursor-pointer">
-                                            <a
-                                                (click)="removeReceiver(i)"
-                                                *ngIf="branchTransfer.destinations?.length > 1"
-                                            >
-                                                <i class="fa fa-trash"></i
-                                            ></a>
+                                            <a (click)="removeReceiver(i)" *ngIf="branchTransfer.destinations?.length > 1">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
                                         </div>
                                         <div class="icon-info-on-table">
                                             <i
                                                 class="icon-info"
                                                 [ngClass]="{
-                                                    'change-position': branchTransfer.destinations?.length > 1
+                                                    'change-position': branchTransfer.destinations?.length > 1,
                                                 }"
                                                 *ngIf="
                                                     destinationWarehouses[destination?.uniqueName]?.length !==
@@ -1078,8 +1051,8 @@
                                         </div>
                                         <div class="trash-icon-delete cursor-pointer">
                                             <a (click)="removeSender(i)" *ngIf="branchTransfer.sources?.length > 1">
-                                                <i class="fa fa-trash"></i
-                                            ></a>
+                                                <i class="fa fa-trash"></i>
+                                            </a>
                                         </div>
                                         <div class="icon-info-on-table">
                                             <i
@@ -1102,28 +1075,21 @@
                                             <a
                                                 class="multiple-receivers"
                                                 (click)="addReceiver()"
-                                                *ngIf="
-                                                    transferType !== 'products' && branchTransferMode === 'deliverynote'
-                                                "
+                                                *ngIf="transferType !== 'products' && branchTransferMode === 'deliverynote'"
                                             >
-                                                + Add Multiple Receivers</a
-                                            >
+                                                + Add Multiple Receivers
+                                            </a>
                                             <a
                                                 class="multiple-receivers"
                                                 (click)="addSender()"
-                                                *ngIf="
-                                                    transferType !== 'products' && branchTransferMode === 'receiptnote'
-                                                "
+                                                *ngIf="transferType !== 'products' && branchTransferMode === 'receiptnote'"
                                             >
-                                                + Add Multiple Senders</a
-                                            >
-                                            <a
-                                                class="multiple-receivers"
-                                                (click)="addProduct()"
-                                                *ngIf="transferType === 'products'"
-                                            >
-                                                <i class="icon-plus"></i> Add Multiple Products</a
-                                            >
+                                                + Add Multiple Senders
+                                            </a>
+                                            <a class="multiple-receivers" (click)="addProduct()" *ngIf="transferType === 'products'">
+                                                <i class="icon-plus"></i>
+                                                Add Multiple Products
+                                            </a>
                                         </div>
                                     </td>
                                     <td colspan="4">
@@ -1224,14 +1190,11 @@
                                     isValidSourceTaxNumber
                                 }}-{{ isValidDestinationTaxNumber }}"
                                 [disabled]="
-                                    newBranchTransferForm.invalid ||
-                                    !isValidSourceTaxNumber ||
-                                    !isValidDestinationTaxNumber ||
-                                    isLoading
+                                    newBranchTransferForm.invalid || !isValidSourceTaxNumber || !isValidDestinationTaxNumber || isLoading
                                 "
                                 (click)="submit()"
                             >
-                                {{ editBranchTransferUniqueName ? "Update" : "Create" }}
+                                {{ editBranchTransferUniqueName ? 'Update' : 'Create' }}
                             </button>
                         </div>
                     </div>
@@ -1248,14 +1211,17 @@
         <form #generateTransporterForm="ngForm" autocomplete="off">
             <div class="aside-body pt-2 pb-1 pr-2 pl-2 bg-gray">
                 <div class="form-group">
-                    <label for="transporterName">Transporter Name <span class="text-danger">*</span></label>
+                    <label for="transporterName">
+                        Transporter Name
+                        <span class="text-danger">*</span>
+                    </label>
                     <input
                         #Transportersname="ngModel"
                         type="text"
                         class="form-control"
                         [ngClass]="{
                             'has-error': Transportersname.invalid && Transportersname.touched && Transportersname.dirty,
-                            'has-success': Transportersname.valid
+                            'has-success': Transportersname.valid,
                         }"
                         required
                         placeholder="Mention name"
@@ -1265,18 +1231,16 @@
                     />
                     <small
                         class="text-danger"
-                        *ngIf="
-                            Transportersname.invalid &&
-                            Transportersname.touched &&
-                            Transportersname.dirty &&
-                            Transportersname.value
-                        "
-                        >Transporter name should contain atleast 5 characters and should not contain any special
-                        character.</small
+                        *ngIf="Transportersname.invalid && Transportersname.touched && Transportersname.dirty && Transportersname.value"
                     >
+                        Transporter name should contain atleast 5 characters and should not contain any special character.
+                    </small>
                 </div>
                 <div class="form-group">
-                    <label for="transporterId">Transporter ID <span class="text-danger">*</span></label>
+                    <label for="transporterId">
+                        Transporter ID
+                        <span class="text-danger">*</span>
+                    </label>
                     <input
                         #TransportersID="ngModel"
                         type="text"
@@ -1286,7 +1250,7 @@
                         class="form-control"
                         [ngClass]="{
                             'has-error': TransportersID.invalid && TransportersID.touched && TransportersID.dirty,
-                            'has-success': TransportersID.valid
+                            'has-success': TransportersID.valid,
                         }"
                         name="transporterId"
                         [(ngModel)]="generateNewTransporter.transporterId"
@@ -1295,14 +1259,10 @@
                     />
                     <small
                         class="text-danger"
-                        *ngIf="
-                            TransportersID.invalid &&
-                            TransportersID.touched &&
-                            TransportersID.dirty &&
-                            TransportersID.value
-                        "
-                        >Transporter ID should contain atleast 4 characters.</small
+                        *ngIf="TransportersID.invalid && TransportersID.touched && TransportersID.dirty && TransportersID.value"
                     >
+                        Transporter ID should contain atleast 4 characters.
+                    </small>
                 </div>
                 <div class="form-group mt-3">
                     <div class="clear-both" *ngIf="!transportEditMode">
@@ -1347,7 +1307,7 @@
                                     [ngClass]="{
                                         'active-text-color':
                                             transporterFilterRequest.sortBy === 'transporterName' &&
-                                            transporterFilterRequest.sort === 'asc'
+                                            transporterFilterRequest.sort === 'asc',
                                     }"
                                 ></div>
                                 <div
@@ -1356,7 +1316,7 @@
                                     [ngClass]="{
                                         'active-text-color':
                                             transporterFilterRequest.sortBy === 'transporterName' &&
-                                            transporterFilterRequest.sort === 'desc'
+                                            transporterFilterRequest.sort === 'desc',
                                     }"
                                 ></div>
                             </div>
@@ -1369,8 +1329,7 @@
                                     (click)="sortButtonClicked('asc', 'transporterId')"
                                     [ngClass]="{
                                         'active-text-color':
-                                            transporterFilterRequest.sortBy === 'transporterId' &&
-                                            transporterFilterRequest.sort === 'asc'
+                                            transporterFilterRequest.sortBy === 'transporterId' && transporterFilterRequest.sort === 'asc',
                                     }"
                                 ></div>
                                 <div
@@ -1378,8 +1337,7 @@
                                     (click)="sortButtonClicked('desc', 'transporterId')"
                                     [ngClass]="{
                                         'active-text-color':
-                                            transporterFilterRequest.sortBy === 'transporterId' &&
-                                            transporterFilterRequest.sort === 'desc'
+                                            transporterFilterRequest.sortBy === 'transporterId' && transporterFilterRequest.sort === 'desc',
                                     }"
                                 ></div>
                             </div>
@@ -1411,6 +1369,8 @@
     </div>
 </ng-template>
 <ng-template #asideMenuProductService>
-    <aside-menu-product-service (closeAsideEvent)="closeAsideMenuProductServiceModal()" [selectedVoucherType]="'sales'">
-    </aside-menu-product-service>
+    <aside-menu-product-service
+        (closeAsideEvent)="closeAsideMenuProductServiceModal()"
+        [selectedVoucherType]="'sales'"
+    ></aside-menu-product-service>
 </ng-template>

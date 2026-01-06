@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-
 /**
  * Environment Variable Injection Script
  *
@@ -7,11 +6,9 @@
  * and injects them into the HTML file at build time, ensuring sensitive credentials
  * are not hardcoded in the repository.
  */
-
 const fs = require('fs');
 const path = require('path');
 const dotenv = require('dotenv');
-
 /**
  * Determine which .env file to use based on build environment
  */
@@ -19,11 +16,9 @@ function getEnvFile() {
     const args = process.argv.slice(2);
     const isElectron = args.includes('--electron') || process.env.ELECTRON_ENV;
     const environment = process.env.NODE_ENV || 'local';
-
     if (isElectron) {
         return '.env.electron';
     }
-
     // Map environment to appropriate .env file
     const envFileMap = {
         'production': '.env.prod',
@@ -31,41 +26,28 @@ function getEnvFile() {
         'test': '.env.test',
         'local': '.env'
     };
-
     return envFileMap[environment] || '.env';
 }
-
 /**
  * Load environment variables from the determined .env file
  */
 function loadEnvironmentVariables() {
     const envFile = getEnvFile();
     const envPath = path.resolve(process.cwd(), envFile);
-
-    console.log(`🔧 Loading environment variables from: ${envFile}`);
-
     if (!fs.existsSync(envPath)) {
-        console.warn(`⚠️  Warning: ${envFile} not found, using defaults`);
         return {};
     }
-
     const result = dotenv.config({ path: envPath });
-
     if (result.error) {
-        console.error(`❌ Error loading ${envFile}:`, result.error.message);
         return {};
     }
-
-    console.log(`✅ Successfully loaded environment variables from ${envFile}`);
     return result.parsed || {};
 }
-
 /**
  * Generate JavaScript code to set global variables
  */
 function generateEnvScript(envVars) {
     const isElectron = process.argv.includes('--electron') || process.env.ELECTRON_ENV;
-
     // Set default values with Electron-specific handling
     const config = {
         PRODUCTION_ENV: envVars.PRODUCTION_ENV === 'true' || false,
@@ -84,80 +66,56 @@ function generateEnvScript(envVars) {
         OTP_TOKEN_AUTH: envVars.OTP_TOKEN_AUTH || '',
         RAZORPAY_KEY: envVars.RAZORPAY_KEY || envVars.RAZORPAY_KEY_TEST || ''
     };
-
     // Generate script content
     let script = '<!-- Environment Variables - Injected at Build Time -->\n<script>\n';
-
     Object.keys(config).forEach(key => {
         const value = typeof config[key] === 'string' ? `"${config[key]}"` : config[key];
         script += `  window.${key} = ${value};\n`;
     });
-
     script += '</script>\n';
-
     return script;
 }
-
 /**
  * Inject environment variables into HTML file
  */
 function injectIntoHtml(htmlFilePath, envScript) {
     if (!fs.existsSync(htmlFilePath)) {
-        console.error(`❌ HTML file not found: ${htmlFilePath}`);
         return false;
     }
-
     let htmlContent = fs.readFileSync(htmlFilePath, 'utf8');
-
     // Remove any existing environment script
     htmlContent = htmlContent.replace(/<!-- Environment Variables - Injected at Build Time -->[\s\S]*?<\/script>\n/g, '');
-
     // Inject new environment script before closing </head> tag
     htmlContent = htmlContent.replace('</head>', `  ${envScript}</head>`);
-
     fs.writeFileSync(htmlFilePath, htmlContent);
-    console.log(`✅ Environment variables injected into: ${htmlFilePath}`);
-
     return true;
 }
-
 /**
  * Main execution function
  */
 function main() {
-    console.log('🚀 Starting environment variable injection...\n');
-
     try {
         // Load environment variables
         const envVars = loadEnvironmentVariables();
-
         // Generate environment script
         const envScript = generateEnvScript(envVars);
-
         // Determine HTML file path
         const args = process.argv.slice(2);
         const htmlFile = args.find(arg => arg.endsWith('.html')) || 'dist/apps/web-giddh/index.html';
         const htmlPath = path.resolve(process.cwd(), htmlFile);
-
         // Inject into HTML
         if (injectIntoHtml(htmlPath, envScript)) {
-            console.log('\n✅ Environment variable injection completed successfully!');
         } else {
-            console.error('\n❌ Environment variable injection failed!');
             process.exit(1);
         }
-
     } catch (error) {
-        console.error('\n❌ Environment variable injection failed:', error.message);
         process.exit(1);
     }
 }
-
 // Run if called directly
 if (require.main === module) {
     main();
 }
-
 module.exports = {
     getEnvFile,
     loadEnvironmentVariables,

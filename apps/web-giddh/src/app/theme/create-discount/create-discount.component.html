@@ -5,12 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div
-        class="aside-dialog-wrapper"
-        [keyboardShortcut]="'esc'"
-        [config]="{ dialogMode: true }"
-        (onShortcutPress)="cancelDiscount()"
-    >
+    <div class="aside-dialog-wrapper" [keyboardShortcut]="'esc'" [config]="{ dialogMode: true }" (onShortcutPress)="cancelDiscount()">
         <div class="dialog-header">
             <span class="font-size-16">{{ localeData?.tab_heading }}</span>
         </div>
@@ -29,8 +24,7 @@
                                     [appearance]="'outline'"
                                     formControlName="type"
                                     [openDropdown]="true"
-                                >
-                                </reactive-dropdown-field>
+                                ></reactive-dropdown-field>
                             </span>
                         </div>
                         <div class="col-6">
@@ -64,8 +58,7 @@
                                 [labelValue]="createDiscountForm.get('accountName')?.value"
                                 (selectedOption)="selectDiscount($event)"
                                 (onClear)="clearAccount()"
-                            >
-                            </reactive-dropdown-field>
+                            ></reactive-dropdown-field>
                         </div>
                     </div>
                 </form>

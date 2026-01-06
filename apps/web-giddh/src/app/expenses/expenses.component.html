@@ -1,9 +1,4 @@
-<div
-    appTranslate
-    [file]="'expenses'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
+<div appTranslate [file]="'expenses'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <div class="position-relative overflow-visible">
         <hamburger-menu></hamburger-menu>
         <div class="clear-both petty-cash overflow-visible">
@@ -197,5 +192,4 @@
             </mat-tab-group>
         </div>
     </div>
-
 </div>

@@ -1,9 +1,4 @@
-<div
-    appTranslate
-    [file]="'inventory/unit'"
-    (commonLocaleData)="commonLocaleData = $event"
-    (localeData)="localeData = $event"
->
+<div appTranslate [file]="'inventory/unit'" (commonLocaleData)="commonLocaleData = $event" (localeData)="localeData = $event">
     <giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
     <div *ngIf="!isLoading">
         <form autocomplete="off" novalidate name="unitGroupForm" [formGroup]="unitGroupForm" class="container">
@@ -16,8 +11,7 @@
                         [placeholder]="localeData?.enter_name"
                         formControlName="name"
                         [showError]="!isValidForm && !unitGroupForm?.get('name')?.value"
-                    >
-                    </input-field>
+                    ></input-field>
                 </div>
                 <div class="col-sm-6">
                     <input-field
@@ -28,8 +22,7 @@
                         formControlName="uniqueName"
                         [showError]="!isValidForm && !unitGroupForm?.get('uniqueName')?.value"
                         [readonly]="unitGroupDetails?.uniqueName === 'maingroup'"
-                    >
-                    </input-field>
+                    ></input-field>
                 </div>
             </div>
             <div class="row mt-4">

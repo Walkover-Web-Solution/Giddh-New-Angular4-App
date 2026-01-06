@@ -17,7 +17,7 @@
 }
 
 .icon-estimate .path1:before {
-    content: "\e900";
+    content: '\e900';
     color: var(--color-red-light);
 }
 
@@ -48,7 +48,7 @@
     display: inline-flex;
 }
 
-.heading-name input[type="checkbox"] {
+.heading-name input[type='checkbox'] {
     left: 10px;
 }
 
@@ -196,7 +196,7 @@ span.viasocket a {
         border-radius: var(--mat-border-radius-4) !important;
     }
 }
-.input-group-addon{
+.input-group-addon {
     border-radius: 0 5px 5px 0 !important;
 }
 @media (max-width: 991px) {

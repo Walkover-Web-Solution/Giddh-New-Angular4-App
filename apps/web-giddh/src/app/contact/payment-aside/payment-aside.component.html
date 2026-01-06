@@ -1,11 +1,6 @@
 <div class="dialog-header">
     <span>{{ commonLocaleData?.app_payment }}</span>
-    <button
-        matIconButton
-        mat-dialog-close
-        aria-label="close"
-        (click)="closePaymentModel(false)"
-    >
+    <button matIconButton mat-dialog-close aria-label="close" (click)="closePaymentModel(false)">
         <i class="icon-cross"></i>
     </button>
 </div>
@@ -65,30 +60,20 @@
                                     [(ngModel)]="showBankBalance"
                                     name="showBankBalance"
                                 >
-                                    <span *ngIf="showBankBalance" class="pull-left">{{
-                                        localeData?.hide_bank_balance
-                                    }}</span>
-                                    <span *ngIf="!showBankBalance" class="pull-right">{{
-                                        localeData?.show_bank_balance
-                                    }}</span>
+                                    <span *ngIf="showBankBalance" class="pull-left">{{ localeData?.hide_bank_balance }}</span>
+                                    <span *ngIf="!showBankBalance" class="pull-right">{{ localeData?.show_bank_balance }}</span>
                                 </mat-slide-toggle>
                             </p>
-                                <p *ngIf="totalAvailableBalance && showBankBalance" class="mt-1">
-                                <small class="text-light"
-                                    >{{ localeData?.bal }} {{ totalAvailableBalance | giddhNumberFormat }}
-                                    {{ commonLocaleData?.app_dr }}</small
-                                >
+                            <p *ngIf="totalAvailableBalance && showBankBalance" class="mt-1">
+                                <small class="text-light">
+                                    {{ localeData?.bal }} {{ totalAvailableBalance | giddhNumberFormat }} {{ commonLocaleData?.app_dr }}
+                                </small>
                             </p>
                         </div>
                     </div>
                     <div class="form-group mr-3">
                         <div class="relative">
-                            <img
-                                *ngIf="isPayorListInProgress"
-                                class="dropdown-loader"
-                                src="{{ imgPath }}loader.gif"
-                                alt=""
-                            />
+                            <img *ngIf="isPayorListInProgress" class="dropdown-loader" src="{{ imgPath }}loader.gif" alt="" />
                             <reactive-dropdown-field
                                 [disabled]="isPayClicked"
                                 [required]="isPayorRequired"
@@ -99,29 +84,21 @@
                             ></reactive-dropdown-field>
                         </div>
                         <div>
-                            <p
-                                *ngIf="selectIntegratedBankList?.length === 1 && totalAvailableBalance"
-                                class="total-balance pt-1"
-                            >
+                            <p *ngIf="selectIntegratedBankList?.length === 1 && totalAvailableBalance" class="total-balance pt-1">
                                 <mat-slide-toggle
                                     color="primary"
                                     id="total-balance-single"
                                     [(ngModel)]="showBankBalance"
                                     name="showSingleBankBalance"
                                 >
-                                <span *ngIf="showBankBalance" class="pull-left">{{
-                                    localeData?.hide_bank_balance
-                                }}</span>
-                                <span *ngIf="!showBankBalance" class="pull-right">{{
-                                    localeData?.show_bank_balance
-                                }}</span>
+                                    <span *ngIf="showBankBalance" class="pull-left">{{ localeData?.hide_bank_balance }}</span>
+                                    <span *ngIf="!showBankBalance" class="pull-right">{{ localeData?.show_bank_balance }}</span>
                                 </mat-slide-toggle>
                             </p>
                             <p *ngIf="selectIntegratedBankList?.length === 1 && totalAvailableBalance && showBankBalance" class="mt-1">
-                                <small class="text-light"
-                                    >{{ localeData?.bal }} {{ totalAvailableBalance | giddhNumberFormat }}
-                                    {{ commonLocaleData?.app_dr }}</small
-                                >
+                                <small class="text-light">
+                                    {{ localeData?.bal }} {{ totalAvailableBalance | giddhNumberFormat }} {{ commonLocaleData?.app_dr }}
+                                </small>
                             </p>
                         </div>
                     </div>
@@ -139,12 +116,11 @@
                         ></input-field>
                     </div>
                     <div class="form-group mr-3" *ngIf="isPayClicked">
-                        <label class="position-relative d-flex"
-                            >{{ commonLocaleData?.app_enter_otp }}<span class="text-red">*</span>
+                        <label class="position-relative d-flex">
+                            {{ commonLocaleData?.app_enter_otp }}
+                            <span class="text-red">*</span>
                             <p class="resend-btn" *ngIf="!timerOn">
-                                <a href="javascript:void(0);" (click)="reSendOTP()" class="btn-link">{{
-                                    commonLocaleData?.app_resend
-                                }}</a>
+                                <a href="javascript:void(0);" (click)="reSendOTP()" class="btn-link">{{ commonLocaleData?.app_resend }}</a>
                             </p>
                             <p class="resend-btn timer-count" *ngIf="timerOn">
                                 <a href="javascript:void(0);" class="btn-link">{{ timerCountDown$ | async }}</a>
@@ -165,8 +141,7 @@
                             matButton="filled"
                             type="button"
                             [ngClass]="{
-                                'disabled-ladda-btn':
-                                    !isBankSelectedForBulkPayment || !selectedBankUserId || !isValidData
+                                'disabled-ladda-btn': !isBankSelectedForBulkPayment || !selectedBankUserId || !isValidData,
                             }"
                             [disabled]="!isBankSelectedForBulkPayment || !selectedBankUserId || !isValidData"
                             [ladda]="isRequestInProcess"
@@ -182,18 +157,9 @@
                         <button
                             matButton="filled"
                             [ngClass]="{
-                                'disabled-ladda-btn':
-                                    !isBankSelectedForBulkPayment ||
-                                    !selectedBankUserId ||
-                                    !isValidData ||
-                                    !receivedOtp
+                                'disabled-ladda-btn': !isBankSelectedForBulkPayment || !selectedBankUserId || !isValidData || !receivedOtp,
                             }"
-                            [disabled]="
-                                !isBankSelectedForBulkPayment ||
-                                !selectedBankUserId ||
-                                !isValidData ||
-                                !receivedOtp
-                            "
+                            [disabled]="!isBankSelectedForBulkPayment || !selectedBankUserId || !isValidData || !receivedOtp"
                             [ladda]="isRequestInProcess"
                             (click)="confirmOTP()"
                             aria-label="confirm"
@@ -214,21 +180,14 @@
             </div>
             <div class="col-sm-12" *ngIf="otpReceiverNameMessage">
                 <p class="otp-success-msg mt-1">
-                    <span class="mr-1 d-inline-block"> <img src="{{ imgPath }}checked-success.svg" /> </span
-                    >{{ otpReceiverNameMessage }}
+                    <span class="mr-1 d-inline-block"><img src="{{ imgPath }}checked-success.svg" /></span>
+                    {{ otpReceiverNameMessage }}
                 </p>
             </div>
         </div>
         <div class="selected-bank-details">
             <!-- loop should in below div -->
-            <ng-container
-                *ngFor="
-                    let item of selectedAccForBulkPayment;
-                    let entryIdx = index;
-                    let first = first;
-                    let last = last
-                "
-            >
+            <ng-container *ngFor="let item of selectedAccForBulkPayment; let entryIdx = index; let first = first; let last = last">
                 <div class="mb-2">
                     <div class="account-holder-name">
                         <p>{{ item.name }}</p>
@@ -238,8 +197,10 @@
                                 class="text-red cursor-pointer"
                                 *ngIf="selectedAccForBulkPayment?.length > 1"
                                 (click)="removeSelectedAccount(item); removeTransactionsDetailsForm(entryIdx)"
-                                ><i class="icon-trash mr-1"></i>{{ commonLocaleData?.app_remove }}</span
                             >
+                                <i class="icon-trash mr-1"></i>
+                                {{ commonLocaleData?.app_remove }}
+                            </span>
                         </p>
                     </div>
                     <div class="bank-details-wrapper">
@@ -250,12 +211,8 @@
                             </div>
                             <div class="label-value-data d-flex">
                                 <div class="mr-1">
-                                    <label *ngIf="item.country.code === 'IN'"
-                                        >{{ localeData?.account_number }}:</label
-                                    >
-                                    <label *ngIf="item.country.code !== 'IN'">{{
-                                        commonLocaleData?.app_iban
-                                    }}</label>
+                                    <label *ngIf="item.country.code === 'IN'">{{ localeData?.account_number }}:</label>
+                                    <label *ngIf="item.country.code !== 'IN'">{{ commonLocaleData?.app_iban }}</label>
                                     <label>{{ item?.accountBankDetails?.bankAccountNo }}</label>
                                 </div>
                                 <div *ngIf="item.country.code !== 'IN'">
@@ -271,9 +228,10 @@
                         <div class="amount-remark-section">
                             <div class="d-flex flex-column flex-md-row">
                                 <div class="form-group pr-3">
-                                    <label
-                                        >{{ commonLocaleData?.app_amount }}<span class="text-danger">*</span></label
-                                    >
+                                    <label>
+                                        {{ commonLocaleData?.app_amount }}
+                                        <span class="text-danger">*</span>
+                                    </label>
                                     <div class="input-content">
                                         <text-field
                                             [cssClass]="'form-control amount-input border'"
@@ -295,9 +253,10 @@
                                     </div>
                                 </div>
                                 <div class="form-group remark-block">
-                                    <label
-                                        >{{ commonLocaleData?.app_remark }}<span class="text-danger">*</span></label
-                                    >
+                                    <label>
+                                        {{ commonLocaleData?.app_remark }}
+                                        <span class="text-danger">*</span>
+                                    </label>
                                     <textarea
                                         matInput
                                         rows="1"

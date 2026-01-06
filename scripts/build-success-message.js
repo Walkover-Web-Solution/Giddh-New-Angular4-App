@@ -1,17 +1,13 @@
 #!/usr/bin/env node
-
 /**
  * Build Success Message Script
  * Displays a success message with environment information after build completion
  */
-
 const fs = require('fs');
 const path = require('path');
-
 // Get environment from command line arguments
 const args = process.argv.slice(2);
 const environment = args[0] || 'prod';
-
 // ANSI color codes for terminal output
 const colors = {
     green: '\x1b[32m',
@@ -24,10 +20,8 @@ const colors = {
     bright: '\x1b[1m',
     dim: '\x1b[2m'
 };
-
 // Get current timestamp
 const timestamp = new Date().toLocaleString();
-
 // Get package.json version
 let version = 'Unknown';
 try {
@@ -35,9 +29,7 @@ try {
     const packageJson = JSON.parse(fs.readFileSync(packagePath, 'utf8'));
     version = packageJson.version;
 } catch (error) {
-    console.warn('Could not read package.json version');
 }
-
 // Check if build output exists
 const buildPath = path.join(__dirname, '..', 'dist', 'apps', 'electrongiddh-packages');
 let buildFiles = [];
@@ -48,32 +40,14 @@ try {
         );
     }
 } catch (error) {
-    console.warn('Could not read build directory');
 }
-
 // Create success message
-console.log('\n' + '='.repeat(80));
-console.log(colors.bright + colors.green + '🎉 BUILD SUCCESSFULLY GENERATED 🎉' + colors.reset);
-console.log('='.repeat(80));
-console.log(colors.cyan + '📦 Environment:' + colors.reset + colors.bright + ` ${environment.toUpperCase()}` + colors.reset);
-console.log(colors.cyan + '📅 Build Time:' + colors.reset + ` ${timestamp}`);
-console.log(colors.cyan + '🔢 Version:' + colors.reset + ` ${version}`);
-
 if (buildFiles.length > 0) {
-    console.log(colors.cyan + '📁 Generated Files:' + colors.reset);
     buildFiles.forEach(file => {
         const fileSize = getFileSize(path.join(buildPath, file));
-        console.log(colors.dim + '   ✓ ' + colors.reset + file + colors.dim + ` (${fileSize})` + colors.reset);
     });
 } else {
-    console.log(colors.yellow + '⚠️  No build files detected in output directory' + colors.reset);
 }
-
-console.log(colors.cyan + '📍 Build Location:' + colors.reset + colors.dim + ` ${buildPath}` + colors.reset);
-console.log('='.repeat(80));
-console.log(colors.green + '✅ Electron application ready for distribution!' + colors.reset);
-console.log('='.repeat(80) + '\n');
-
 // Helper function to get file size
 function getFileSize(filePath) {
     try {
@@ -85,6 +59,5 @@ function getFileSize(filePath) {
         return 'Unknown size';
     }
 }
-
 // Exit with success code
 process.exit(0);

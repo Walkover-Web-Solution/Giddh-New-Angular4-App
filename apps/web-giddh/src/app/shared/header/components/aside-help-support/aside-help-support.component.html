@@ -1,9 +1,4 @@
-<div
-    appTranslate
-    [file]="'help-support'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
+<div appTranslate [file]="'help-support'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <div class="aside-pane mat-app-background d-flex flex-column">
         <div class="aside-help-header">
             <p>{{ localeData?.page_heading }}</p>
@@ -22,14 +17,14 @@
                 <div class="feature-block">
                     <mat-list role="list">
                         <mat-list-item role="listitem">
-                            <a href="https://trello.com/b/1cPr6Mkc/giddh-roadmap" target="_blank" aria-label="upcoming">{{
-                                localeData?.upcoming
-                            }}</a>
+                            <a href="https://trello.com/b/1cPr6Mkc/giddh-roadmap" target="_blank" aria-label="upcoming">
+                                {{ localeData?.upcoming }}
+                            </a>
                         </mat-list-item>
                         <mat-list-item role="listitem">
-                            <a href="https://giddh.canny.io/feature-requests" target="_blank" aria-label="feaure request">{{
-                                localeData?.feature_request
-                            }}</a>
+                            <a href="https://giddh.canny.io/feature-requests" target="_blank" aria-label="feaure request">
+                                {{ localeData?.feature_request }}
+                            </a>
                         </mat-list-item>
                         <mat-list-item role="listitem">
                             <a href="https://changelog.giddh.com" target="_blank" aria-label="changelog">{{ localeData?.changelog }}</a>
@@ -47,20 +42,20 @@
                                     [title]="localeData?.android_app"
                                     aria-label="android"
                                 >
-                                    <i class="icon-android"></i> {{ localeData?.android }}</a
-                                >
+                                    <i class="icon-android"></i>
+                                    {{ localeData?.android }}
+                                </a>
                             </mat-list-item>
                             <mat-list-item role="listitem">
                                 <a
-                                    href="https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh-{{
-                                        macAppVersion
-                                    }}.dmg"
+                                    href="https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh-{{ macAppVersion }}.dmg"
                                     target="_blank"
                                     [title]="localeData?.macos_app"
                                     aria-label="mac"
                                 >
-                                    <i class="icon-mac"></i> {{ localeData?.macos }}</a
-                                >
+                                    <i class="icon-mac"></i>
+                                    {{ localeData?.macos }}
+                                </a>
                             </mat-list-item>
                         </div>
                         <div class="d-flex">
@@ -71,20 +66,20 @@
                                     [title]="localeData?.ios_app"
                                     aria-label="ios"
                                 >
-                                    <i class="icon-mac"></i> {{ localeData?.ios }}</a
-                                >
+                                    <i class="icon-mac"></i>
+                                    {{ localeData?.ios }}
+                                </a>
                             </mat-list-item>
                             <mat-list-item role="listitem">
                                 <a
-                                    href="https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh%20Setup%20{{
-                                        apkVersion
-                                    }}.exe"
+                                    href="https://s3-ap-south-1.amazonaws.com/giddh-app-builds/giddh%20Setup%20{{ apkVersion }}.exe"
                                     target="_blank"
                                     [title]="localeData?.windows_app"
                                     aria-label="windows"
                                 >
-                                    <i class="icon-windows"></i> {{ localeData?.windows }}</a
-                                >
+                                    <i class="icon-windows"></i>
+                                    {{ localeData?.windows }}
+                                </a>
                             </mat-list-item>
                         </div>
                     </mat-list>
@@ -100,12 +95,13 @@
                         <p class="text-light">{{ localeData?.contact }}:</p>
                     </div>
                     <div class="contact-block">
-                        <p class="d-flex  align-items-center mb-1  support-mail-tel">
-                            <i class="icon-mail mr-2"></i
-                            ><a href="mailto:support@giddh.com" aria-label="mail">{{ localeData?.contact1 }}</a>
+                        <p class="d-flex align-items-center mb-1 support-mail-tel">
+                            <i class="icon-mail mr-2"></i>
+                            <a href="mailto:support@giddh.com" aria-label="mail">{{ localeData?.contact1 }}</a>
                         </p>
-                        <p class="d-flex  align-items-center support-mail-tel">
-                            <i class="icon-mobile mr-2"></i><a href="tel:9188188 88768" aria-label="contact">+91-88188 88768</a>
+                        <p class="d-flex align-items-center support-mail-tel">
+                            <i class="icon-mobile mr-2"></i>
+                            <a href="tel:9188188 88768" aria-label="contact">+91-88188 88768</a>
                         </p>
                         <br />
                     </div>

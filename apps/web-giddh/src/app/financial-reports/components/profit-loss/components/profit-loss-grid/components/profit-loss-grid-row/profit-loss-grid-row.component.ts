@@ -92,7 +92,7 @@ export class ProfitLossGridRowComponent implements OnInit, OnChanges, OnDestroy 
                         (window as any).electronAPI.send('open-url', electronUrl);
                         electronIpcAvailable = true;
                     } catch (ipcError) {
-                        console.warn('ElectronAPI send failed:', ipcError);
+
                     }
                 }
 
@@ -106,17 +106,17 @@ export class ProfitLossGridRowComponent implements OnInit, OnChanges, OnDestroy 
                             electronIpcAvailable = true;
                         }
                     } catch (requireError) {
-                        console.warn('Electron require failed:', requireError);
+
                     }
                 }
 
                 // Fallback to regular window.open if IPC not available
                 if (!electronIpcAvailable) {
-                    console.warn('Electron IPC not available for page leave utility, opening in new tab');
+
                     (window as any).open(url, '_blank');
                 }
             } catch (error) {
-                console.warn('Electron navigation failed, opening in new tab:', error);
+
                 (window as any).open(url, '_blank');
             }
         } else {

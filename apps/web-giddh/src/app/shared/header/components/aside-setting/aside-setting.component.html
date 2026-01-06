@@ -38,22 +38,21 @@
                                     iciciAllowedCompanies?.includes(selectedCompany?.uniqueName)
                                 "
                             >
-                                <ng-container *ngIf="(tab?.link === '/pages/vouchers/preview/sales/settings' && !isCompany && !isConsolidatedBranch) || tab?.link !== '/pages/vouchers/preview/sales/settings'">
+                                <ng-container
+                                    *ngIf="
+                                        (tab?.link === '/pages/vouchers/preview/sales/settings' && !isCompany && !isConsolidatedBranch) ||
+                                        tab?.link !== '/pages/vouchers/preview/sales/settings'
+                                    "
+                                >
                                     <ng-container *ngIf="tab?.link !== '/pages/settings/tag'; else tagsListItem">
                                         <mat-list-item
                                             role="listitem"
                                             [ngClass]="{
                                                 'active-link':
-                                                    (tab?.link === routerUrl || tab?.linked_pages?.includes(routerUrl)) &&
-                                                    !isTagMenuOpened
+                                                    (tab?.link === routerUrl || tab?.linked_pages?.includes(routerUrl)) && !isTagMenuOpened,
                                             }"
                                         >
-                                            <a
-                                                href="javascript:;"
-                                                aria-label="icon"
-                                                class="d-block clear-both"
-                                                [routerLink]="tab?.link"
-                                            >
+                                            <a href="javascript:;" aria-label="icon" class="d-block clear-both" [routerLink]="tab?.link">
                                                 <span [innerHTML]="tab?.icon"></span>
                                                 <span>{{ tab?.label }}</span>
                                             </a>

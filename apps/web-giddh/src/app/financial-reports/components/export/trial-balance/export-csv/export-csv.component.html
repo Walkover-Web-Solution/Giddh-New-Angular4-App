@@ -1,11 +1,5 @@
-<div
-    appTranslate
-    [file]="'trial-profit-balance/export'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
-    <a href="javascript:void(0);" aria-label="csv download" [matMenuTriggerFor]="csvDownloadMenu"
-        class="cursor-pointer new-icon-img">
+<div appTranslate [file]="'trial-profit-balance/export'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+    <a href="javascript:void(0);" aria-label="csv download" [matMenuTriggerFor]="csvDownloadMenu" class="cursor-pointer new-icon-img">
         <img [src]="imgPath" alt="csv img" />
     </a>
     <!-- Menu -->

@@ -139,13 +139,11 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
                     return localObj; // Return full localStorage data for initial load
                 } else {
                     // No valid company data in localStorage - check if user has companies available
-                    console.warn('HTTP Interceptor: No valid company data found in localStorage for new tab.');
-                    
+
                     // If user has companies available, try to use the first one as fallback
                     if (localObj.companies && localObj.companies.length > 0) {
                         const firstCompany = localObj.companies[0];
-                        console.log('HTTP Interceptor: Using first available company as fallback:', firstCompany.name);
-                        
+
                         const fallbackTabData = {
                             applicationDate: null,
                             companyUniqueName: firstCompany.uniqueName,
@@ -167,14 +165,12 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
                             // Note: Don't update currentBranchUniqueName in localStorage - that stays tab-specific
                         };
                         localStorage.setItem('session', JSON.stringify(updatedLocalData));
-                        console.log('HTTP Interceptor: Updated localStorage with fallback company:', firstCompany.uniqueName);
-                        
+
                         // Return merged data with fallback company
                         return updatedLocalData;
                     } else {
                         // No companies available - initialize with defaults
-                        console.warn('HTTP Interceptor: No companies available for fallback.');
-                        
+
                         const defaultTabData = {
                             applicationDate: null,
                             companyUniqueName: '',
@@ -222,13 +218,13 @@ export class GiddhHttpInterceptor implements HttpInterceptor {
 
             return null;
         } catch (error) {
-            console.warn('Error reading session from hybrid storage:', error);
+
             // Fallback to localStorage only
             try {
                 const fallbackData = localStorage.getItem('session');
                 return fallbackData ? JSON.parse(fallbackData) : null;
             } catch (fallbackError) {
-                console.warn('Error reading fallback session data:', fallbackError);
+
                 return null;
             }
         }

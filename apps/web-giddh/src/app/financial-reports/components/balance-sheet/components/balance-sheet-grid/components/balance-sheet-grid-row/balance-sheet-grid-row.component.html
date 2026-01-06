@@ -4,10 +4,7 @@
     *ngIf="groupDetail.groupName && (groupDetail.isVisible || groupDetail.isCreated)"
     [ngClass]="{ 'isHidden': !groupDetail.isVisible, 'tailed-row': groupDetail.checked }"
 >
-    <div 
-        class="col-4 group d-flex align-items-center row-height" 
-        [style.padding-left]="padding + 'px !important'"
-    >
+    <div class="col-4 group d-flex align-items-center row-height" [style.padding-left]="padding + 'px !important'">
         <mat-checkbox
             *ngIf="!groupDetail.customGroup"
             color="primary"
@@ -16,19 +13,13 @@
             [checked]="groupDetail?.checked"
             (click)="$event.stopPropagation()"
             class="tailed-checkbox"
-        >
-        </mat-checkbox>
-        <span [innerHTML]="groupDetail?.groupName | uppercase | highlight : search"></span>
+        ></mat-checkbox>
+        <span [innerHTML]="groupDetail?.groupName | uppercase | highlight: search"></span>
     </div>
     <div class="col-4 group text-right">
         <span>
             <span class="d-inline-flex">
-                <amount-field
-                    [amount]="groupDetail.closingBalance.amount"
-                    [currencySymbol]="false"
-                    [currencyCode]="false"
-                >
-                </amount-field>
+                <amount-field [amount]="groupDetail.closingBalance.amount" [currencySymbol]="false" [currencyCode]="false"></amount-field>
             </span>
             {{ groupDetail.closingBalance | recType }}
         </span>
@@ -36,12 +27,7 @@
     <div class="col-4 group text-right">
         <span>
             <span class="d-inline-flex">
-                <amount-field
-                    [amount]="groupDetail.forwardedBalance.amount"
-                    [currencySymbol]="false"
-                    [currencyCode]="false"
-                >
-                </amount-field>
+                <amount-field [amount]="groupDetail.forwardedBalance.amount" [currencySymbol]="false" [currencyCode]="false"></amount-field>
             </span>
             {{ groupDetail.forwardedBalance | recType }}
         </span>
@@ -50,7 +36,7 @@
 <cdk-virtual-scroll-viewport
     *ngIf="
         (groupDetail?.isOpen || (search && !isExpandToggledDuringSearch)) &&
-        (groupDetail?.accounts | accountsFilter : !groupDetail?.isOpen && search)?.length >= minimumViewportLimit
+        (groupDetail?.accounts | accountsFilter: !groupDetail?.isOpen && search)?.length >= minimumViewportLimit
     "
     [itemSize]="35"
     minBufferPx="500"
@@ -73,15 +59,9 @@
 </ng-container>
 <ng-content></ng-content>
 <ng-template #templateSection let-account>
-    <section
-        class="row-2 account pl-grid-row"
-        [ngClass]="{ 'isHidden': !account.isVisible, 'tailed-row': account.checked }"
-    >
+    <section class="row-2 account pl-grid-row" [ngClass]="{ 'isHidden': !account.isVisible, 'tailed-row': account.checked }">
         <div class="row" (dblclick)="entryClicked(account)">
-            <div
-                class="col-4 account d-flex align-items-center row-height"
-                [style.padding-left]="padding + 20 + 'px !important'"
-            >
+            <div class="col-4 account d-flex align-items-center row-height" [style.padding-left]="padding + 20 + 'px !important'">
                 <mat-checkbox
                     color="primary"
                     (change)="onItemChecked($event, account?.uniqueName, 'account')"
@@ -90,7 +70,7 @@
                     (click)="$event.stopPropagation()"
                     class="tailed-checkbox"
                 ></mat-checkbox>
-                <span [innerHTML]="account.name | lowercase | highlight : search"></span>
+                <span [innerHTML]="account.name | lowercase | highlight: search"></span>
             </div>
             <div class="col-4 account text-right">
                 <span>
@@ -99,8 +79,7 @@
                             [amount]="account.closingBalance.amount"
                             [currencySymbol]="false"
                             [currencyCode]="false"
-                        >
-                        </amount-field>
+                        ></amount-field>
                     </span>
                     {{ account.closingBalance | recType }}
                 </span>
@@ -112,8 +91,7 @@
                             [amount]="account.openingBalance.amount"
                             [currencySymbol]="false"
                             [currencyCode]="false"
-                        >
-                        </amount-field>
+                        ></amount-field>
                     </span>
                     {{ account.openingBalance | recType }}
                 </span>

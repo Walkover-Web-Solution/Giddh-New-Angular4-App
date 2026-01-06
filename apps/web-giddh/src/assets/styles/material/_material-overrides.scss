@@ -12,6 +12,7 @@
 @use "./components/stepper";
 @use "./components/paginator";
 @use "./components/slide-toggle"; // MDC Disabled Elements and their children
+
 .mdc-checkbox--disabled,
 .mdc-text-field--disabled,
 .mat-mdc-tab-disabled,

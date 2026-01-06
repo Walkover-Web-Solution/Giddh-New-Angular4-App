@@ -1,9 +1,6 @@
 <div class="container-fluid overflow-visible" [ngClass]="{ 'setting-profile-container': !addressOnly }">
     <div class="row overflow-visible">
-        <div
-            *ngIf="organizationType === 'COMPANY'"
-            class="w-100 d-flex justify-content-between mb-4 align-items-start address-list-top"
-        >
+        <div *ngIf="organizationType === 'COMPANY'" class="w-100 d-flex justify-content-between mb-4 align-items-start address-list-top">
             <div class="search-container">
                 <div class="font-size-15">{{ localeData?.company_address_list }}</div>
                 <a
@@ -14,7 +11,8 @@
                     [matTooltip]="localeData?.reset_search"
                     aria-label="filter"
                 >
-                    <i aria-hidden="true" class="icon-refresh"></i> {{ commonLocaleData?.app_clear_filter }}
+                    <i aria-hidden="true" class="icon-refresh"></i>
+                    {{ commonLocaleData?.app_clear_filter }}
                 </a>
             </div>
             <button
@@ -58,9 +56,7 @@
                             #searchAddressNameInputField
                             width="15%"
                             class="td-search-box"
-                            (clickOutside)="
-                                clickedOutside($event, searchAddressNameInputField, 'searchAddressNameInput')
-                            "
+                            (clickOutside)="clickedOutside($event, searchAddressNameInputField, 'searchAddressNameInput')"
                             mat-header-cell
                             *matHeaderCellDef
                         >
@@ -72,11 +68,10 @@
                                             $implicit: showSearchName,
                                             title: commonLocaleData?.app_name,
                                             fieldName: 'searchAddressNameInput',
-                                            formControl: searchAddressNameInput
+                                            formControl: searchAddressNameInput,
                                         }
                                     "
-                                >
-                                </ng-container>
+                                ></ng-container>
                             </div>
                         </th>
                         <td mat-cell *matCellDef="let element">{{ element?.name }}</td>
@@ -98,19 +93,16 @@
                                             $implicit: showSearchAddress,
                                             title: commonLocaleData?.app_address,
                                             fieldName: 'searchAddressInput',
-                                            formControl: searchAddressInput
+                                            formControl: searchAddressInput,
                                         }
                                     "
-                                >
-                                </ng-container>
+                                ></ng-container>
                             </div>
                         </th>
                         <td mat-cell *matCellDef="let element">
                             <div>
                                 <p class="address-row">{{ element?.address }}</p>
-                                <ng-container *ngIf="element.pincode">
-                                    {{ commonLocaleData?.app_pin }}: {{ element?.pincode }}
-                                </ng-container>
+                                <ng-container *ngIf="element.pincode">{{ commonLocaleData?.app_pin }}: {{ element?.pincode }}</ng-container>
                             </div>
                         </td>
                     </ng-container>
@@ -131,11 +123,10 @@
                                             $implicit: showSearchTax,
                                             title: taxType,
                                             fieldName: 'searchTaxInput',
-                                            formControl: searchTaxInput
+                                            formControl: searchTaxInput,
                                         }
                                     "
-                                >
-                                </ng-container>
+                                ></ng-container>
                             </div>
                         </th>
                         <td mat-cell *matCellDef="let element">
@@ -165,20 +156,17 @@
                                                 ? commonLocaleData?.app_region
                                                 : commonLocaleData?.app_state,
                                             fieldName: 'searchStateInput',
-                                            formControl: searchStateInput
+                                            formControl: searchStateInput,
                                         }
                                     "
-                                >
-                                </ng-container>
+                                ></ng-container>
                             </div>
                         </th>
                         <td mat-cell *matCellDef="let element">
                             <div *ngIf="addressConfiguration.countyList?.length">
                                 {{ element?.county?.code }} - {{ element?.county?.name }}
                             </div>
-                            <div *ngIf="!addressConfiguration.countyList?.length">
-                                {{ element?.stateCode }} - {{ element?.stateName }}
-                            </div>
+                            <div *ngIf="!addressConfiguration.countyList?.length">{{ element?.stateCode }} - {{ element?.stateName }}</div>
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="linked">
@@ -203,18 +191,18 @@
                                                 *ngIf="entity.isWarehouse"
                                                 class="icon-warehouse-icon mr-1"
                                             ></i>
-                                            <span class="entity-alias"> {{ entity.name }} </span>
+                                            <span class="entity-alias">{{ entity.name }}</span>
                                         </span>
                                     </div>
 
                                     <div class="ml-auto">
                                         <div class="d-flex column-gap-2">
                                             <span class="cursor-pointer" (click)="handleUpdateAddress(element)">
-                                                <i class="icon-edit font-size-14"></i
-                                            ></span>
+                                                <i class="icon-edit font-size-14"></i>
+                                            </span>
                                             <span class="cursor-pointer" (click)="showConfirmationModal(element)">
-                                                <i class="icon-trash"></i
-                                            ></span>
+                                                <i class="icon-trash"></i>
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -226,11 +214,11 @@
                                     <div class="ml-auto">
                                         <div class="d-flex column-gap-2">
                                             <span class="cursor-pointer" (click)="handleUpdateAddress(element)">
-                                                <i class="icon-edit font-size-14"></i
-                                            ></span>
+                                                <i class="icon-edit font-size-14"></i>
+                                            </span>
                                             <span class="cursor-pointer" (click)="showConfirmationModal(element)">
-                                                <i class="icon-trash"></i
-                                            ></span>
+                                                <i class="icon-trash"></i>
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
@@ -254,15 +242,16 @@
             <div *ngFor="let address of addresses; index as addressIndex">
                 <div class="branch-profile-address-content col-md-12 mb-3">
                     <div class="single-branch-detail mb-3">
-                        <p><i class="icon-branch-icon mr-1"></i>{{ address?.name }}</p>
+                        <p>
+                            <i class="icon-branch-icon mr-1"></i>
+                            {{ address?.name }}
+                        </p>
                         <div class="row">
                             <div class="col-md-4">
                                 <label>{{ commonLocaleData?.app_address }}:</label>
                                 <p>
                                     {{ address.address }}
-                                    <ng-container
-                                        *ngIf="showTaxColumn && address.taxType && address.taxNumber && address.address"
-                                    >
+                                    <ng-container *ngIf="showTaxColumn && address.taxType && address.taxNumber && address.address">
                                         <br />
                                         {{ address.taxType }} : {{ address.taxNumber }}
                                     </ng-container>
@@ -283,18 +272,17 @@
                             <div class="col-md-4">
                                 <div class="set-default float-left w-auto">
                                     <p class="no-selected mb-1 cursor-pointer" hidden>
-                                        <i class="icon-no-selected mr-1"></i>{{ localeData?.set_default }}
+                                        <i class="icon-no-selected mr-1"></i>
+                                        {{ localeData?.set_default }}
                                     </p>
-                                    <p
-                                        (click)="handleSetDefaultAddress(address)"
-                                        class="selected-defualt mb-1 cursor-pointer"
-                                    >
+                                    <p (click)="handleSetDefaultAddress(address)" class="selected-defualt mb-1 cursor-pointer">
                                         <i *ngIf="address.isDefault" class="icon-favorite-selected mr-1"></i>
                                         <i *ngIf="!address.isDefault" class="icon-no-selected mr-1"></i>
                                         {{ localeData?.set_default }}
                                     </p>
                                     <p (click)="showConfirmationModal(address)" class="cursor-pointer">
-                                        <i class="icon-unlink mr-1"></i>{{ localeData?.unlink_address }}
+                                        <i class="icon-unlink mr-1"></i>
+                                        {{ localeData?.unlink_address }}
                                     </p>
                                 </div>
                             </div>
@@ -340,27 +328,18 @@
             [addressConfiguration]="addressConfiguration"
             [localeData]="localeData"
             [commonLocaleData]="commonLocaleData"
-            [hideLinkEntity]="
-                (addressToUpdate && hideLinkEntity) || (!addressToUpdate && addresses?.length <= 0 && hideLinkEntity)
-            "
-        >
-        </create-address>
+            [hideLinkEntity]="(addressToUpdate && hideLinkEntity) || (!addressToUpdate && addresses?.length <= 0 && hideLinkEntity)"
+        ></create-address>
     </div>
 </ng-template>
 
 <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
     <div [hidden]="show">
-        <span> {{ title }}</span>
+        <span>{{ title }}</span>
         <i class="icon-search" (click)="toggleSearch(fieldName, searchBox)"></i>
     </div>
     <div class="input-container w-100" [hidden]="!show">
-        <input
-            type="text"
-            [placeholder]="getSearchFieldText(title)"
-            class="w100"
-            #searchBox
-            [formControl]="formControl"
-        />
+        <input type="text" [placeholder]="getSearchFieldText(title)" class="w100" #searchBox [formControl]="formControl" />
     </div>
 </ng-template>
 

@@ -1,9 +1,4 @@
-<div
-    appTranslate
-    [file]="'inventory/unit'"
-    (commonLocaleData)="commonLocaleData = $event"
-    (localeData)="localeData = $event"
->
+<div appTranslate [file]="'inventory/unit'" (commonLocaleData)="commonLocaleData = $event" (localeData)="localeData = $event">
     <giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
     <div *ngIf="!isLoading">
         <form autocomplete="off" novalidate name="unitForm" [formGroup]="unitForm" class="container p-0">
@@ -18,8 +13,7 @@
                         [labelValue]="unitForm?.get('group')?.get('name')?.value"
                         [showError]="!isValidForm && !unitForm?.get('group')?.get('uniqueName')?.value"
                         [readonly]="unitDetails?.uniqueName"
-                    >
-                    </reactive-dropdown-field>
+                    ></reactive-dropdown-field>
                 </div>
             </div>
             <div class="row mb-3">
@@ -35,8 +29,7 @@
                         [allowCustomDropdownValue]="true"
                         [noResultsFoundMessage]="localeData?.create_unit"
                         [readonly]="unitDetails?.uniqueName"
-                    >
-                    </reactive-dropdown-field>
+                    ></reactive-dropdown-field>
                 </div>
                 <div class="col-xl-7 col-lg-7 col-sm-7">
                     <input-field
@@ -47,8 +40,7 @@
                         formControlName="code"
                         [showError]="!isValidForm && !unitForm?.get('code')?.value"
                         [readonly]="unitDetails?.uniqueName"
-                    >
-                    </input-field>
+                    ></input-field>
                 </div>
             </div>
             <div class="unit-quantity" formArrayName="mappings">
@@ -77,12 +69,9 @@
                                         </div>
                                         <div
                                             class="option-value"
-                                            *ngIf="
-                                                !option.additional?.stockUnitXGroup?.name &&
-                                                unitForm?.get('group')?.get('name')?.value
-                                            "
+                                            *ngIf="!option.additional?.stockUnitXGroup?.name && unitForm?.get('group')?.get('name')?.value"
                                         >
-                                            {{ unitForm?.get("group")?.get("name")?.value }}
+                                            {{ unitForm?.get('group')?.get('name')?.value }}
                                         </div>
                                     </div>
                                 </div>
@@ -100,8 +89,7 @@
                             formControlName="quantity"
                             [allowDecimalDigitsOnly]="true"
                             [showError]="!isValidFormMappings && !mapping?.get('quantity')?.value"
-                        >
-                        </input-field>
+                        ></input-field>
                     </div>
                     <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 pr-0">
                         <reactive-dropdown-field
@@ -123,12 +111,9 @@
                                         </div>
                                         <div
                                             class="option-value"
-                                            *ngIf="
-                                                !option.additional?.stockUnitXGroup?.name &&
-                                                unitForm?.get('group')?.get('name')?.value
-                                            "
+                                            *ngIf="!option.additional?.stockUnitXGroup?.name && unitForm?.get('group')?.get('name')?.value"
                                         >
-                                            {{ unitForm?.get("group")?.get("name")?.value }}
+                                            {{ unitForm?.get('group')?.get('name')?.value }}
                                         </div>
                                     </div>
                                 </div>
@@ -161,22 +146,10 @@
             <div class="row mt-4">
                 <div class="col-sm-4 pr-0">
                     <div class="d-flex column-gap-1">
-                        <button
-                            aria-label="save"
-                            matButton="filled"
-                            type="button"
-                            (click)="saveUnit()"
-                            *ngIf="!unitDetails?.uniqueName"
-                        >
+                        <button aria-label="save" matButton="filled" type="button" (click)="saveUnit()" *ngIf="!unitDetails?.uniqueName">
                             {{ commonLocaleData?.app_save }}
                         </button>
-                        <button
-                            aria-label="update"
-                            matButton="filled"
-                            type="button"
-                            (click)="saveUnit()"
-                            *ngIf="unitDetails?.uniqueName"
-                        >
+                        <button aria-label="update" matButton="filled" type="button" (click)="saveUnit()" *ngIf="unitDetails?.uniqueName">
                             {{ commonLocaleData?.app_update }}
                         </button>
                         <button

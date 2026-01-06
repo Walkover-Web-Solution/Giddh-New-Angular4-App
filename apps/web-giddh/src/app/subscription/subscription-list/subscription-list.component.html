@@ -33,9 +33,14 @@
                     [options]="statusOptions"
                     (selectedOption)="selectStatus($event)"
                     [labelValue]="selectedStatus"
+                ></reactive-dropdown-field>
+                <button
+                    mat-raised-button
+                    class="min-width-160 ml-2"
+                    color="primary"
+                    *ngIf="voucherApiVersion === 2"
+                    (click)="createSubscription()"
                 >
-                </reactive-dropdown-field>
-                <button mat-raised-button class="min-width-160 ml-2" color="primary" *ngIf="voucherApiVersion === 2" (click)="createSubscription()">
                     + {{ commonLocaleData?.app_add }} {{ localeData?.tab_heading }}
                 </button>
             </div>
@@ -65,28 +70,23 @@
                                         $implicit: showName,
                                         fieldName: 'Company',
                                         formControl: subscriptionListForm.controls['companyName'],
-                                        title: commonLocaleData?.app_company
+                                        title: commonLocaleData?.app_company,
                                     }
                                 "
                             ></ng-container>
                         </th>
                         <td class="subscription-td" mat-cell *matCellDef="let element" width="15%">
-                            <a
-                                class="cursor-pointer underline"
-                                *ngIf="element?.companies?.length > 1"
-                                (click)="openCompanyDialog(element)"
-                                >{{ element?.companies?.length }} - {{ commonLocaleData?.app_companies }}</a
-                            >
-                            <span *ngIf="element?.companies && element?.companies?.length === 1">{{
-                                element?.companies[0]?.name
-                            }}</span>
+                            <a class="cursor-pointer underline" *ngIf="element?.companies?.length > 1" (click)="openCompanyDialog(element)">
+                                {{ element?.companies?.length }} - {{ commonLocaleData?.app_companies }}
+                            </a>
+                            <span *ngIf="element?.companies && element?.companies?.length === 1">{{ element?.companies[0]?.name }}</span>
                             <a
                                 class="cursor-pointer"
                                 *ngIf="!element?.companies"
                                 (click)="createCompanyInSubscription(element?.subscriptionId)"
                             >
-                                {{ commonLocaleData?.app_create + " " + commonLocaleData?.app_company }}</a
-                            >
+                                {{ commonLocaleData?.app_create + ' ' + commonLocaleData?.app_company }}
+                            </a>
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="billingAccountName">
@@ -95,9 +95,7 @@
                             *matHeaderCellDef
                             class="td-search-box"
                             #searchBillingAccountContainer
-                            (clickOutside)="
-                                handleClickOutside($event, searchBillingAccountContainer, 'Billing Account')
-                            "
+                            (clickOutside)="handleClickOutside($event, searchBillingAccountContainer, 'Billing Account')"
                         >
                             <ng-container
                                 *ngTemplateOutlet="
@@ -106,13 +104,13 @@
                                         $implicit: showBillingAccount,
                                         fieldName: 'Billing Account',
                                         formControl: subscriptionListForm.controls['billingAccountName'],
-                                        title: localeData?.billing_account
+                                        title: localeData?.billing_account,
                                     }
                                 "
                             ></ng-container>
                         </th>
                         <td class="subscription-td" mat-cell *matCellDef="let element">
-                            {{ element.billingAccount?.name ? element.billingAccount?.name : "-" }}
+                            {{ element.billingAccount?.name ? element.billingAccount?.name : '-' }}
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="subscriberName">
@@ -130,13 +128,13 @@
                                         $implicit: showSubscriber,
                                         fieldName: 'Subscriber',
                                         formControl: subscriptionListForm.controls['subscriberName'],
-                                        title: localeData?.subscriber
+                                        title: localeData?.subscriber,
                                     }
                                 "
                             ></ng-container>
                         </th>
                         <td class="subscription-td" mat-cell *matCellDef="let element">
-                            {{ element.subscriber?.name ? element.subscriber?.name : "-" }}
+                            {{ element.subscriber?.name ? element.subscriber?.name : '-' }}
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="countryName">
@@ -154,13 +152,13 @@
                                         $implicit: showCountry,
                                         fieldName: 'Country',
                                         formControl: subscriptionListForm.controls['countryName'],
-                                        title: commonLocaleData?.app_country
+                                        title: commonLocaleData?.app_country,
                                     }
                                 "
                             ></ng-container>
                         </th>
                         <td class="subscription-td" mat-cell *matCellDef="let element">
-                            {{ element.country?.countryName ? element.country?.countryName : "-" }}
+                            {{ element.country?.countryName ? element.country?.countryName : '-' }}
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="planName">
@@ -178,7 +176,7 @@
                                         $implicit: showPlanSubName,
                                         fieldName: 'Plan Name',
                                         formControl: subscriptionListForm.controls['planName'],
-                                        title: localeData?.plan_sub_name
+                                        title: localeData?.plan_sub_name,
                                     }
                                 "
                             ></ng-container>
@@ -186,27 +184,25 @@
                         <td
                             mat-cell
                             *matCellDef="let element"
-                            class="position-relative "
+                            class="position-relative"
                             [matTooltip]="element?.subscriptionId"
                             [matTooltipPosition]="'above'"
                         >
-                            {{ element.plan?.name ? element.plan?.name : "-" }}
+                            {{ element.plan?.name ? element.plan?.name : '-' }}
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="status">
                         <th mat-header-cell *matHeaderCellDef class="text-center">{{ commonLocaleData?.app_status }}</th>
-                        <td mat-cell *matCellDef="let element" class="position-relative ">
-                            <span [ngClass]="{ 'text-green': element?.status?.toLowerCase() === 'active' }">{{
-                                element?.status | uppercase
-                            }}</span>
+                        <td mat-cell *matCellDef="let element" class="position-relative">
+                            <span [ngClass]="{ 'text-green': element?.status?.toLowerCase() === 'active' }">
+                                {{ element?.status | uppercase }}
+                            </span>
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="renewalDate">
                         <th mat-header-cell *matHeaderCellDef class="text-center">{{ localeData?.renewal_date }}</th>
                         <td mat-cell *matCellDef="let element" class="position-relative word-wrap">
-                            <div
-                                class="renewal-date-column d-flex align-items-center justify-content-center column-gap-1"
-                            >
+                            <div class="renewal-date-column d-flex align-items-center justify-content-center column-gap-1">
                                 {{ element?.renewalDate }}
                                 <button
                                     matIconButton
@@ -252,11 +248,7 @@
                                     >
                                         {{ localeData?.change_billing }}
                                     </button>
-                                    <button
-                                        *ngIf="element?.isOwner"
-                                        mat-menu-item
-                                        (click)="transferSubscription(element?.subscriptionId)"
-                                    >
+                                    <button *ngIf="element?.isOwner" mat-menu-item (click)="transferSubscription(element?.subscriptionId)">
                                         {{ localeData?.request_transfer }}
                                     </button>
                                     <button
@@ -278,7 +270,7 @@
                                         *ngIf="element?.isOwner && element?.companies?.length < element?.totalCompanies"
                                         (click)="createCompanyInSubscription(element?.subscriptionId)"
                                     >
-                                        {{ commonLocaleData?.app_create + " " + commonLocaleData?.app_company }}
+                                        {{ commonLocaleData?.app_create + ' ' + commonLocaleData?.app_company }}
                                     </button>
                                     <button
                                         *ngIf="element?.isOwner && element?.companyCount < element?.totalCompanies"
@@ -290,11 +282,7 @@
                                     <button
                                         mat-menu-item
                                         (click)="managePaymentMethod(element)"
-                                        *ngIf="
-                                            element?.isOwner &&
-                                            element?.region?.code === 'GBR' &&
-                                            activeCompany?.planVersion === 2
-                                        "
+                                        *ngIf="element?.isOwner && element?.region?.code === 'GBR' && activeCompany?.planVersion === 2"
                                     >
                                         {{ localeData?.manage_payment }}
                                     </button>
@@ -302,11 +290,7 @@
                             </mat-menu>
                         </td>
                     </ng-container>
-                    <tr
-                        (clickOutside)="inlineSearch = null"
-                        mat-header-row
-                        *matHeaderRowDef="displayedColumns; sticky: true"
-                    ></tr>
+                    <tr (clickOutside)="inlineSearch = null" mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                     <tr class="table-row" mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                 </table>
             </form>
@@ -314,13 +298,7 @@
         <div class="no-data" *ngIf="!dataSource?.filteredData?.length && !(subscriptionListInProgress$ | async)">
             <h2>{{ commonLocaleData?.app_no_data_found }}</h2>
         </div>
-        <div
-            *ngIf="
-                subscriptionRequestParams.totalItems > pageSizeOptions[0] &&
-                showData &&
-                !(subscriptionListInProgress$ | async)
-            "
-        >
+        <div *ngIf="subscriptionRequestParams.totalItems > pageSizeOptions[0] && showData && !(subscriptionListInProgress$ | async)">
             <mat-paginator
                 (page)="handlePageChange($event)"
                 [length]="subscriptionRequestParams.totalItems"
@@ -329,8 +307,7 @@
                 [pageSizeOptions]="pageSizeOptions"
                 [hidePageSize]="false"
                 [pageIndex]="pageIndex"
-            >
-            </mat-paginator>
+            ></mat-paginator>
             <section class="mb-custom-80"></section>
         </div>
     </div>
@@ -338,7 +315,7 @@
 <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
     <div class="search-table">
         <div [hidden]="show" class="d-flex align-items-center column-gap-1">
-            <span> {{ title }}</span>
+            <span>{{ title }}</span>
             <i class="icon-search cursor-pointer" (click)="toggleSearch(fieldName)"></i>
         </div>
         <div class="input-container" [hidden]="!show">
@@ -360,6 +337,5 @@
         (moveCompany)="addOrMoveCompanyCallback($event)"
         [localeData]="localeData"
         [commonLocaleData]="commonLocaleData"
-    >
-    </move-company>
+    ></move-company>
 </ng-template>

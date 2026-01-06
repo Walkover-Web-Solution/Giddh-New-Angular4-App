@@ -69,7 +69,7 @@ export class AuthService {
                         this._authState.next(user);
                         this.loadingService.hide();
                     }).catch((error) => {
-                        console.error('Google login error:', error);
+
                         reject(error);
                         this.loadingService.hide();
                     });
@@ -84,7 +84,7 @@ export class AuthService {
                                 this._authState.next(u);
                                 this.loadingService.hide();
                             }).catch((error) => {
-                                console.error('Google login error after initialization:', error);
+
                                 reject(error);
                                 this.loadingService.hide();
                             });
@@ -93,7 +93,7 @@ export class AuthService {
                             this.loadingService.hide();
                         }
                     }).catch((initError) => {
-                        console.error('Google Auth initialization error:', initError);
+
                         reject(initError);
                         this.loadingService.hide();
                     });

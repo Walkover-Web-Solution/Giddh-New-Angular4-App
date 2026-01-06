@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
     <head>
         <script type="text/javascript">
@@ -7,21 +7,21 @@
             window.webEnvironment = {
                 type: 'default',
                 appUrl: 'http://localhost:3000/',
-                apiUrl: 'https://apitest.giddh.com/'
+                apiUrl: 'https://apitest.giddh.com/',
             };
         </script>
         <!-- Google Tag Manager -->
         <script>
             (function (w, d, s, l, i) {
                 w[l] = w[l] || [];
-                w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+                w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
                 var f = d.getElementsByTagName(s)[0],
                     j = d.createElement(s),
-                    dl = l != "dataLayer" ? "&l=" + l : "";
+                    dl = l != 'dataLayer' ? '&l=' + l : '';
                 j.async = true;
-                j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+                j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
                 f.parentNode.insertBefore(j, f);
-            })(window, document, "script", "dataLayer", "GTM-5MCXN7C");
+            })(window, document, 'script', 'dataLayer', 'GTM-5MCXN7C');
         </script>
         <!-- End Google Tag Manager -->
         <script defer src="./assets/js/lodash.min.js"></script>
@@ -50,32 +50,32 @@
 
         <script type="text/javascript">
             try {
-                var HW_config = { selector: ".notification", account: "7eB4aJ" };
+                var HW_config = { selector: '.notification', account: '7eB4aJ' };
             } catch (error) {
                 console.error(error);
             }
             // Add preconnect for domainName extracted from cookie
             window.onload = function () {
-                let whiteLabelConfig = JSON.parse(localStorage.getItem("whiteLabel"));
-                const logoUrl = "./assets/images/giddh-big-logo.svg";
-                const apiDomain = whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain || "https://apitest.giddh.com";
+                let whiteLabelConfig = JSON.parse(localStorage.getItem('whiteLabel'));
+                const logoUrl = './assets/images/giddh-big-logo.svg';
+                const apiDomain = whiteLabelConfig?.body?.giddhWhiteLabel?.apiDomain || 'https://apitest.giddh.com';
 
                 if (whiteLabelConfig) {
                     // Remove the h1 tag containing the image
-                    const logoContainer = document.querySelector("#main-giddh-loader h1");
+                    const logoContainer = document.querySelector('#main-giddh-loader h1');
                     if (logoContainer) {
                         logoContainer.remove();
                     }
                 } else {
                     // If no whiteLabel object, set the logo as usual
-                    const logoElement = document.getElementById("dynamic-logo");
+                    const logoElement = document.getElementById('dynamic-logo');
                     if (logoElement) {
                         logoElement.src = logoUrl;
                     }
                 }
                 // Create a new preconnect link element
-                const preconnectLink = document.createElement("link");
-                preconnectLink.rel = "preconnect";
+                const preconnectLink = document.createElement('link');
+                preconnectLink.rel = 'preconnect';
                 preconnectLink.href = apiDomain;
 
                 // Append the preconnect link to the head
@@ -88,14 +88,14 @@
     </head>
     <body>
         <!-- Google Tag Manager (noscript) -->
-        <noscript
-            ><iframe
+        <noscript>
+            <iframe
                 src="https://www.googletagmanager.com/ns.html?id=GTM-5MCXN7C"
                 height="0"
                 width="0"
                 style="display: none; visibility: hidden"
-            ></iframe
-        ></noscript>
+            ></iframe>
+        </noscript>
 
         <!-- End Google Tag Manager (noscript) -->
         <div id="main-giddh-loader">

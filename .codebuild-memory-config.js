@@ -8,9 +8,9 @@ const totalMemory = os.totalmem();
 const freeMemory = os.freemem();
 const memoryInGB = Math.floor(totalMemory / (1024 * 1024 * 1024));
 
-console.log(`🔧 AWS CodeBuild Memory Configuration`);
-console.log(`📊 Total system memory: ${memoryInGB}GB`);
-console.log(`💾 Free memory: ${Math.floor(freeMemory / (1024 * 1024 * 1024))}GB`);
+// AWS CodeBuild Memory Configuration
+// Total system memory: ${memoryInGB}GB
+// Free memory: ${Math.floor(freeMemory / (1024 * 1024 * 1024))}GB
 
 // Enhanced memory allocation for EPIPE error prevention
 let maxOldSpaceSize;
@@ -30,8 +30,8 @@ if (memoryInGB >= 15) {
     maxSemiSpaceSize = 32;
 }
 
-console.log(`🚀 Setting Node.js max-old-space-size to: ${maxOldSpaceSize}MB`);
-console.log(`⚡ Setting Node.js max-semi-space-size to: ${maxSemiSpaceSize}MB`);
+// Setting Node.js max-old-space-size to: ${maxOldSpaceSize}MB
+// Setting Node.js max-semi-space-size to: ${maxSemiSpaceSize}MB
 
 // AWS CodePipeline optimized Node.js options for EPIPE prevention
 const nodeOptions = [
@@ -44,8 +44,8 @@ const nodeOptions = [
 process.env.NODE_OPTIONS = nodeOptions;
 process.env.AWS_CODEBUILD_OPTIMIZED = 'true';
 
-console.log(`🔧 NODE_OPTIONS: ${nodeOptions}`);
-console.log(`✅ AWS CodeBuild memory configuration applied successfully`);
+// NODE_OPTIONS: ${nodeOptions}
+// AWS CodeBuild memory configuration applied successfully
 
 // Export configuration for use in build scripts
 module.exports = {

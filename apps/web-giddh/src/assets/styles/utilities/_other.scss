@@ -1,4 +1,4 @@
-@use "../abstracts/mixins" as *;
+@use '../abstracts/mixins' as *;
 
 .border {
     border: 1px solid var(--border-color) !important;
@@ -254,7 +254,7 @@
     &::after {
         display: block;
         clear: both;
-        content: "";
+        content: '';
     }
 }
 

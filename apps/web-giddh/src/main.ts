@@ -138,9 +138,9 @@ platformBrowserDynamic().bootstrapModule(AppModule)
     const status = validator.getValidationStatus();
 
     if (status.status === 'error') {
-      console.error('🚨 Environment validation failed:', status.message);
+
     } else if (status.status === 'warning') {
-      console.warn('⚠️ Environment validation warnings:', status.message);
+
     }
 
     return moduleRef;
@@ -149,6 +149,6 @@ platformBrowserDynamic().bootstrapModule(AppModule)
     // Only log non-Angular 21 compatibility errors
     if (!err.message ||
         (!err.message.includes('onDestroy') && !err.message.includes('factory'))) {
-      console.error(err);
+
     }
   });

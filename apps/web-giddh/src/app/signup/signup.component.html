@@ -29,12 +29,7 @@
                                 <p class="mb-3">Signup to the new world of accounting</p>
                                 <div class="form-wrapper" *ngIf="loginUsing">
                                     <!-- login with email form -->
-                                    <form
-                                        name="verifyEmailForm"
-                                        novalidate
-                                        [formGroup]="emailVerifyForm"
-                                        *ngIf="loginUsing === 'email'"
-                                    >
+                                    <form name="verifyEmailForm" novalidate [formGroup]="emailVerifyForm" *ngIf="loginUsing === 'email'">
                                         <div *ngIf="!(isLoginWithEmailSubmited$ | async)" class="clear-both">
                                             <input
                                                 class="form-control mb-2"
@@ -79,8 +74,9 @@
                                                     class="cursor-pointer pull-right"
                                                     (click)="LoginWithEmail(emailVerifyForm.controls['email']?.value)"
                                                     href="javascript:void(0);"
-                                                    >Resend code</a
                                                 >
+                                                    Resend code
+                                                </a>
                                             </div>
                                         </div>
                                     </form>
@@ -97,12 +93,7 @@
                                         autocomplete="off"
                                     >
                                         <div class="clear-both form-group">
-                                            <input
-                                                class="form-control mb-2"
-                                                type="text"
-                                                formControlName="email"
-                                                placeholder="Email Id"
-                                            />
+                                            <input class="form-control mb-2" type="text" formControlName="email" placeholder="Email Id" />
                                             <input
                                                 class="form-control"
                                                 type="password"
@@ -159,8 +150,9 @@
                                                     class="cursor-pointer pull-right"
                                                     (click)="LoginWithEmail(signupVerifyForm.controls['email']?.value)"
                                                     href="javascript:void(0);"
-                                                    >Resend code</a
                                                 >
+                                                    Resend code
+                                                </a>
                                             </div>
                                         </div>
                                     </form>
@@ -168,11 +160,12 @@
 
                                 <ul class="social-login">
                                     <li class="google-ico">
-                                        <a href="javascript:void(0);" (click)="signInWithProviders('google')"
-                                            ><i class="ico-google">
-                                                <img src="./assets/images/new/google_ico.svg" alt="google img" /> </i
-                                            ><span>Signup with Google</span></a
-                                        >
+                                        <a href="javascript:void(0);" (click)="signInWithProviders('google')">
+                                            <i class="ico-google">
+                                                <img src="./assets/images/new/google_ico.svg" alt="google img" />
+                                            </i>
+                                            <span>Signup with Google</span>
+                                        </a>
                                     </li>
                                 </ul>
                                 <ul class="social-login">
@@ -181,19 +174,13 @@
                                             <i class="ico-google ico-msg91">
                                                 <img src="./assets/images/msg91-icon-blue.svg" alt="msg91 icon" />
                                             </i>
-                                            <span>Signup with OTP</span></a
-                                        >
+                                            <span>Signup with OTP</span>
+                                        </a>
                                     </li>
                                 </ul>
                                 <div class="d-flex align-items-center account mt-1">
                                     <p class="mb-0 mr-2 font-weight-semibold">Already have an account?</p>
-                                    <a
-                                        matButton="filled"
-                                        routerLink="/login"
-                                        class="btn-sm"
-                                        href="javascript:void(0);"
-                                        >Login</a
-                                    >
+                                    <a matButton="filled" routerLink="/login" class="btn-sm" href="javascript:void(0);">Login</a>
                                 </div>
                             </div>
                         </div>
@@ -212,13 +199,7 @@
     <mat-dialog-content class="dialog-body">
         <form class="col-xs-12" name="verifyEmailForm" novalidate [formGroup]="emailVerifyForm">
             <div *ngIf="!(isLoginWithEmailSubmited$ | async)" class="clear-both form-group form-group-lg">
-                <input
-                    class="form-control mt-2"
-                    formControlName="email"
-                    type="email"
-                    placeholder="Enter your email address"
-                    required
-                />
+                <input class="form-control mt-2" formControlName="email" type="email" placeholder="Enter your email address" required />
                 <div class="d-flex column-gap-1">
                     <button
                         [disabled]="!emailVerifyForm.controls['email'].valid"
@@ -233,13 +214,7 @@
                 </div>
             </div>
             <div *ngIf="isLoginWithEmailSubmited$ | async" class="clear-both form-group form-group-lg">
-                <input
-                    class="form-control mt-2"
-                    formControlName="token"
-                    type="text"
-                    placeholder="Enter verification code here"
-                    required
-                />
+                <input class="form-control mt-2" formControlName="token" type="text" placeholder="Enter verification code here" required />
                 <small>We have sent a verification code to your registered email.</small>
                 <div class="d-flex column-gap-1">
                     <button
@@ -247,12 +222,7 @@
                         matButton="filled"
                         class="sharp mt-2"
                         [ladda]="isVerifyEmailInProcess$ | async"
-                        (click)="
-                            VerifyEmail(
-                                emailVerifyForm.controls['email']?.value,
-                                emailVerifyForm.controls['token']?.value
-                            )
-                        "
+                        (click)="VerifyEmail(emailVerifyForm.controls['email']?.value, emailVerifyForm.controls['token']?.value)"
                     >
                         Last step to go
                     </button>
@@ -263,8 +233,9 @@
                     class="cursor-pointer pull-right"
                     (click)="LoginWithEmail(emailVerifyForm.controls['email']?.value)"
                     href="javascript:void(0);"
-                    >Resend code</a
                 >
+                    Resend code
+                </a>
             </div>
         </form>
     </mat-dialog-content>
@@ -286,8 +257,7 @@
                     [placeholder]="'CC'"
                     formControlName="country"
                     [name]="'country'"
-                >
-                </reactive-dropdown-field>
+                ></reactive-dropdown-field>
                 <input
                     class="form-control input-width-mobile"
                     formControlName="mobileNumber"
@@ -300,16 +270,11 @@
                 <button
                     matButton="filled"
                     class="sharp mt-2"
-                    (click)="
-                        getOtp(
-                            mobileVerifyForm.controls['mobileNumber']?.value,
-                            mobileVerifyForm.controls['country']?.value
-                        )
-                    "
+                    (click)="getOtp(mobileVerifyForm.controls['mobileNumber']?.value, mobileVerifyForm.controls['country']?.value)"
                     [ladda]="isLoginWithMobileInProcess$ | async"
                     [disabled]="!mobileVerifyForm.controls['mobileNumber'].valid"
                 >
-                    {{ !(isLoginWithMobileInProcess$ | async) ? "Get Otp" : "Resend" }}
+                    {{ !(isLoginWithMobileInProcess$ | async) ? 'Get Otp' : 'Resend' }}
                 </button>
                 <button matButton="outlined" class="sharp mt-2" (click)="hideMobileModal()">Cancel</button>
             </div>
@@ -322,12 +287,7 @@
                         matButton="filled"
                         class="sharp mt-2"
                         [ladda]="isVerifyMobileInProcess$ | async"
-                        (click)="
-                            VerifyCode(
-                                mobileVerifyForm.controls['mobileNumber']?.value,
-                                mobileVerifyForm.controls['otp']?.value
-                            )
-                        "
+                        (click)="VerifyCode(mobileVerifyForm.controls['mobileNumber']?.value, mobileVerifyForm.controls['otp']?.value)"
                         [disabled]="!mobileVerifyForm.controls['otp'].valid"
                     >
                         Login

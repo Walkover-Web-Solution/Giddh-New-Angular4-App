@@ -10,8 +10,7 @@
             [defaultValue]="selectedEInvoice?.voucherNumber"
             [readonly]="true"
             class="w-100"
-        >
-        </input-field>
+        ></input-field>
 
         <input-field
             [type]="'text'"
@@ -19,8 +18,7 @@
             [defaultValue]="selectedEInvoice?.irnNumber"
             [readonly]="true"
             class="w-100"
-        >
-        </input-field>
+        ></input-field>
         <reactive-dropdown-field
             [name]="'invoice'"
             [label]="localeData?.cancel_reason"
@@ -30,8 +28,7 @@
             formControlName="cancellationReason"
             class="w-100"
             [required]="true"
-        >
-        </reactive-dropdown-field>
+        ></reactive-dropdown-field>
         <div class="mb-3">
             <mat-form-field appearance="outline" class="initial-height w-100">
                 <mat-label>{{ localeData?.cancel_remarks }}</mat-label>
@@ -47,9 +44,7 @@
             </mat-form-field>
             <ng-container *ngIf="eInvoiceCancelForm.get('cancellationRemarks')?.value">
                 <span class="max-character-label">{{ commonLocaleData?.app_characters_left }}:&nbsp;</span>
-                <span class="max-character-value">{{
-                    100 - eInvoiceCancelForm.get("cancellationRemarks")?.value?.length
-                }}</span>
+                <span class="max-character-value">{{ 100 - eInvoiceCancelForm.get('cancellationRemarks')?.value?.length }}</span>
             </ng-container>
         </div>
     </div>

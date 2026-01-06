@@ -333,7 +333,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
             }
         });
 
-
         this.addAccountForm.get('hsnOrSac').valueChanges.pipe(takeUntil(this.destroyed$)).subscribe(a => {
             const hsn: AbstractControl = this.addAccountForm.get('hsnNumber');
             const sac: AbstractControl = this.addAccountForm.get('sacNumber');
@@ -394,7 +393,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                     delete errors['duplicate'];
                     change.get('email').setErrors(Object.keys(errors).length ? errors : null);
                 }
-
 
                 // Contact number validation
                 let lastContactOccurrenceIndex = -1;
@@ -764,7 +762,6 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         }
     }
 
-
     public addGstDetailsForm(value?: string) {    // commented code because we no need GSTIN No. to add new address
         const addresses = this.addAccountForm.get('addresses') as FormArray;
         addresses.push(this.initialGstDetailsForm());
@@ -792,7 +789,7 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
                 }
             } catch (error) {
                 // Silently handle case where submit button doesn't exist
-                console.debug('Submit button not found for focus');
+
             }
         }, 100);
     }
@@ -2011,5 +2008,4 @@ export class AccountAddNewDetailsComponent implements OnInit, OnChanges, AfterVi
         return salesPersonList.some(salesPerson => salesPerson?.value === uniqueName);
     }
 }
-
 

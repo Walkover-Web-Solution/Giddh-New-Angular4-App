@@ -1,45 +1,34 @@
-<div
-    appTranslate
-    [file]="'inventory/stock'"
-    (commonLocaleData)="commonLocaleData = $event"
-    (localeData)="localeData = $event"
->
-<div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper" *ngIf="asideGstSidebarMenuState">
-    <div
-        class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
-        *ngIf="asideGstSidebarMenuState"
-    >
-        <tax-sidebar
-            (navigateEvent)="handleNavigation()"
-            [exclude]="'#primary-new-header'"
-            class="gst-sidebar"
-        ></tax-sidebar>
-    </div>
-    <mat-grid-list class="unit-mapping-grid-list" cols="2" gutterSize="0px" rowHeight="90px">
-        <mat-grid-tile class="grid-box grid-box-head">
-            <div class="unit-box">Unit</div>
-            <div class="map-unit-box">Map Unit</div>
-        </mat-grid-tile>
-        <mat-grid-tile class="grid-box grid-box-head">
-            <div class="unit-box">Unit</div>
-            <div class="map-unit-box">Map Unit</div>
-        </mat-grid-tile>
-        <form class="map-unit-value-form">
-            <mat-grid-tile class="grid-box grid-box-content" *ngFor="let unit of unitsArray">
-                <div class="unit-value overflow-hidden pl-2">{{ unit.giddhUnitName }} ({{ unit.giddhUnit }})</div>
-                <div class="map-unit-value pr-2">
-                    <reactive-dropdown-field
-                        [label]="commonLocaleData?.app_unit"
-                        [placeholder]="localeData?.select_unit"
-                        [options]="units"
-                        [labelValue]="unit?.mappedGstUnit ?? ''"
-                        (selectedOption)="unit.mappedGstUnit = $event?.value"
-                    ></reactive-dropdown-field>
-                </div>
+<div appTranslate [file]="'inventory/stock'" (commonLocaleData)="commonLocaleData = $event" (localeData)="localeData = $event">
+    <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper" *ngIf="asideGstSidebarMenuState">
+        <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper" *ngIf="asideGstSidebarMenuState">
+            <tax-sidebar (navigateEvent)="handleNavigation()" [exclude]="'#primary-new-header'" class="gst-sidebar"></tax-sidebar>
+        </div>
+        <mat-grid-list class="unit-mapping-grid-list" cols="2" gutterSize="0px" rowHeight="90px">
+            <mat-grid-tile class="grid-box grid-box-head">
+                <div class="unit-box">Unit</div>
+                <div class="map-unit-box">Map Unit</div>
             </mat-grid-tile>
-        </form>
-    </mat-grid-list>
-    <div class="button-wrapper" *ngIf="voucherApiVersion === 2">
-        <button (click)="saveMapping()" matButton="filled" [disabled]="disabled">Save</button>
+            <mat-grid-tile class="grid-box grid-box-head">
+                <div class="unit-box">Unit</div>
+                <div class="map-unit-box">Map Unit</div>
+            </mat-grid-tile>
+            <form class="map-unit-value-form">
+                <mat-grid-tile class="grid-box grid-box-content" *ngFor="let unit of unitsArray">
+                    <div class="unit-value overflow-hidden pl-2">{{ unit.giddhUnitName }} ({{ unit.giddhUnit }})</div>
+                    <div class="map-unit-value pr-2">
+                        <reactive-dropdown-field
+                            [label]="commonLocaleData?.app_unit"
+                            [placeholder]="localeData?.select_unit"
+                            [options]="units"
+                            [labelValue]="unit?.mappedGstUnit ?? ''"
+                            (selectedOption)="unit.mappedGstUnit = $event?.value"
+                        ></reactive-dropdown-field>
+                    </div>
+                </mat-grid-tile>
+            </form>
+        </mat-grid-list>
+        <div class="button-wrapper" *ngIf="voucherApiVersion === 2">
+            <button (click)="saveMapping()" matButton="filled" [disabled]="disabled">Save</button>
+        </div>
     </div>
 </div>

@@ -82,13 +82,13 @@ export class Angular21ChangeDetectionService {
         try {
             this.triggerChangeDetection(cdRef, ngZone);
         } catch (error) {
-            console.warn('Change detection failed:', error);
+
             // Fallback to basic change detection
             setTimeout(() => {
                 try {
                     cdRef.detectChanges();
                 } catch (fallbackError) {
-                    console.warn('Fallback change detection also failed:', fallbackError);
+
                 }
             }, 0);
         }
@@ -123,7 +123,7 @@ export class Angular21ChangeDetectionService {
             try {
                 operation();
             } catch (error) {
-                console.warn('Batch operation failed:', error);
+
             }
         });
 

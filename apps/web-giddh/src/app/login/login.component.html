@@ -1,13 +1,7 @@
 <giddh-loader></giddh-loader>
 <div
     class="flex-container"
-    *ngIf="
-        !(
-            (isLoginWithPasswordInProcess$ | async) ||
-            (isLoginWithEmailInProcess$ | async) ||
-            (isLoginWithGoogleInProcess$ | async)
-        )
-    "
+    *ngIf="!((isLoginWithPasswordInProcess$ | async) || (isLoginWithEmailInProcess$ | async) || (isLoginWithGoogleInProcess$ | async))"
 >
     <div class="login-box">
         <div class="row mx-0">
@@ -66,8 +60,9 @@
                                             href="javascript:void(0)"
                                             class="pull-right btn-link font-size-15 forget-pw"
                                             (click)="showForgotPasswordModal()"
-                                            >Forgot password?</a
                                         >
+                                            Forgot password?
+                                        </a>
                                     </form>
                                     <form
                                         class="mt-2 mb-2"
@@ -100,12 +95,11 @@
                                                 <a
                                                     matButton="outlined"
                                                     class="cursor-pointer pull-right"
-                                                    (click)="
-                                                        LoginWithEmail(loginWithPasswdForm.controls['uniqueKey']?.value)
-                                                    "
+                                                    (click)="LoginWithEmail(loginWithPasswdForm.controls['uniqueKey']?.value)"
                                                     href="javascript:void(0);"
-                                                    >Resend code</a
                                                 >
+                                                    Resend code
+                                                </a>
                                             </div>
                                         </div>
                                     </form>
@@ -189,8 +183,8 @@
                                                 <i class="ico-google">
                                                     <img src="./assets/images/new/google_ico.svg" alt="google img" />
                                                 </i>
-                                                <span>Login with Google</span></a
-                                            >
+                                                <span>Login with Google</span>
+                                            </a>
                                         </li>
                                     </ul>
                                     <ul class="social-login">
@@ -199,8 +193,8 @@
                                                 <i class="ico-google ico-msg91">
                                                     <img src="./assets/images/msg91-icon-blue.svg" alt="giddh logo" />
                                                 </i>
-                                                <span>Login with OTP</span></a
-                                            >
+                                                <span>Login with OTP</span>
+                                            </a>
                                         </li>
                                     </ul>
                                     <p class="login-with" *ngIf="loginUsing !== 'userName'">
@@ -210,8 +204,8 @@
                                             class="font-weight-semibold"
                                             (click)="loginUsing = 'userName'; resetForgotPasswordProcess()"
                                         >
-                                            email and password</a
-                                        >
+                                            email and password
+                                        </a>
                                     </p>
                                     <div class="d-flex align-items-center account mt-1">
                                         <p class="mb-0 mr-2 font-weight-semibold">Don't have an account?</p>
@@ -238,13 +232,7 @@
     <mat-dialog-content class="dialog-body">
         <form class="col-12" name="verifyEmailForm" novalidate [formGroup]="emailVerifyForm">
             <div *ngIf="!(isLoginWithEmailSubmited$ | async)" class="clear-both form-group form-group-lg">
-                <input
-                    class="form-control mt-2"
-                    formControlName="email"
-                    type="email"
-                    placeholder="Enter your email address"
-                    required
-                />
+                <input class="form-control mt-2" formControlName="email" type="email" placeholder="Enter your email address" required />
                 <div class="d-flex justify-content-end column-gap-1">
                     <button
                         [disabled]="!emailVerifyForm.controls['email'].valid"
@@ -259,13 +247,7 @@
                 </div>
             </div>
             <div *ngIf="isLoginWithEmailSubmited$ | async" class="clear-both form-group form-group-lg">
-                <input
-                    class="form-control mt-2"
-                    formControlName="token"
-                    type="text"
-                    placeholder="Enter verification code here"
-                    required
-                />
+                <input class="form-control mt-2" formControlName="token" type="text" placeholder="Enter verification code here" required />
                 <small>We have sent a verification code to your registered email.</small>
                 <div class="d-flex justify-content-end column-gap-1 mt-2">
                     <button
@@ -273,12 +255,7 @@
                         matButton="filled"
                         class="sharp"
                         [ladda]="isVerifyEmailInProcess$ | async"
-                        (click)="
-                            VerifyEmail(
-                                emailVerifyForm.controls['email']?.value,
-                                emailVerifyForm.controls['token']?.value
-                            )
-                        "
+                        (click)="VerifyEmail(emailVerifyForm.controls['email']?.value, emailVerifyForm.controls['token']?.value)"
                     >
                         Last step to go
                     </button>
@@ -289,8 +266,9 @@
                     class="cursor-pointer pull-right"
                     (click)="LoginWithEmail(emailVerifyForm.controls['email']?.value)"
                     href="javascript:void(0);"
-                    >Resend code</a
                 >
+                    Resend code
+                </a>
             </div>
         </form>
     </mat-dialog-content>
@@ -312,8 +290,7 @@
                     [placeholder]="'CC'"
                     formControlName="country"
                     [name]="'country'"
-                >
-                </reactive-dropdown-field>
+                ></reactive-dropdown-field>
                 <input
                     class="form-control input-width-mobile"
                     formControlName="mobileNumber"
@@ -326,16 +303,11 @@
                 <button
                     matButton="filled"
                     class="sharp mt-2"
-                    (click)="
-                        getOtp(
-                            mobileVerifyForm.controls['mobileNumber']?.value,
-                            mobileVerifyForm.controls['country']?.value
-                        )
-                    "
+                    (click)="getOtp(mobileVerifyForm.controls['mobileNumber']?.value, mobileVerifyForm.controls['country']?.value)"
                     [ladda]="isLoginWithMobileInProcess$ | async"
                     [disabled]="!mobileVerifyForm.controls['mobileNumber'].valid"
                 >
-                    {{ !(isLoginWithMobileInProcess$ | async) ? "Get Otp" : "Resend" }}
+                    {{ !(isLoginWithMobileInProcess$ | async) ? 'Get Otp' : 'Resend' }}
                 </button>
                 <button matButton="outlined" class="sharp mt-2" (click)="hideMobileModal()">Cancel</button>
             </div>
@@ -348,12 +320,7 @@
                         matButton="filled"
                         class="sharp"
                         [ladda]="isVerifyMobileInProcess$ | async"
-                        (click)="
-                            VerifyCode(
-                                mobileVerifyForm.controls['mobileNumber']?.value,
-                                mobileVerifyForm.controls['otp']?.value
-                            )
-                        "
+                        (click)="VerifyCode(mobileVerifyForm.controls['mobileNumber']?.value, mobileVerifyForm.controls['otp']?.value)"
                         [disabled]="!mobileVerifyForm.controls['otp'].valid"
                     >
                         Login
@@ -398,12 +365,6 @@
 </ng-template>
 <!-- two way auth popup -->
 
-<div
-    *ngIf="
-        (isLoginWithPasswordInProcess$ | async) ||
-        (isLoginWithEmailInProcess$ | async) ||
-        (isLoginWithGoogleInProcess$ | async)
-    "
->
+<div *ngIf="(isLoginWithPasswordInProcess$ | async) || (isLoginWithEmailInProcess$ | async) || (isLoginWithGoogleInProcess$ | async)">
     <giddh-page-loader></giddh-page-loader>
 </div>

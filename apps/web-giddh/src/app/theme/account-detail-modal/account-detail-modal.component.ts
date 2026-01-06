@@ -164,7 +164,7 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
                         (window as any).electronAPI.send('open-url', url);
                         electronIpcAvailable = true;
                     } catch (ipcError) {
-                        console.warn('ElectronAPI send failed:', ipcError);
+
                     }
                 }
 
@@ -182,13 +182,13 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
                             electronIpcAvailable = true;
                         }
                     } catch (requireError) {
-                        console.warn('Electron require failed:', requireError);
+
                     }
                 }
 
                 // Fallback to regular navigation if IPC not available
                 if (!electronIpcAvailable) {
-                    console.warn('Electron IPC not available for page leave utility, using fallback navigation');
+
                     if (part?.includes('ledger')) {
                         const separator = url.includes('?') ? '&' : '?';
                         url = url + `${separator}redirectUrl=${encodeURIComponent(this.currentUrl)}`;
@@ -197,7 +197,7 @@ export class AccountDetailModalComponent implements OnChanges, OnDestroy {
                     this.router.navigateByUrl(part);
                 }
             } catch (error) {
-                console.warn('Electron navigation failed, using Angular router:', error);
+
                 // Fallback to Angular router
                 this.router.navigateByUrl(part);
             }

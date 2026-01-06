@@ -1,21 +1,10 @@
-<div
-    appTranslate
-    [file]="'ai-ocr'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
+<div appTranslate [file]="'ai-ocr'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <hamburger-menu class="hamburger-menu"></hamburger-menu>
     <giddh-page-loader *ngIf="isLoading"></giddh-page-loader>
     <section class="ai-ocr container-fluid p-3 d-flex flex-column" *ngIf="!isLoading">
         <div class="d-flex justify-content-between">
             <div class="custom-tab d-flex align-items-center">
-                <input
-                    type="file"
-                    #fileInput
-                    accept=".png,.jpg,.jpeg,.pdf,.zip"
-                    style="display: none"
-                    (change)="onFileSelected($event)"
-                />
+                <input type="file" #fileInput accept=".png,.jpg,.jpeg,.pdf,.zip" style="display: none" (change)="onFileSelected($event)" />
                 <button
                     *ngIf="listCount > 0 || showClearFilter"
                     aria-label="show"
@@ -27,21 +16,12 @@
                     [matTooltipPosition]="'above'"
                     (click)="onUploadFile($event, fileInput, false)"
                 >
-                    <giddh-progress-spinner
-                        *ngIf="ocrUploadInProgress$ | async"
-                        [diameter]="20"
-                    ></giddh-progress-spinner>
-                    <span *ngIf="!(ocrUploadInProgress$ | async)"> <i class="icon-upload lh-0"></i></span>
+                    <giddh-progress-spinner *ngIf="ocrUploadInProgress$ | async" [diameter]="20"></giddh-progress-spinner>
+                    <span *ngIf="!(ocrUploadInProgress$ | async)"><i class="icon-upload lh-0"></i></span>
                 </button>
                 <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
                     <mat-button-toggle
-                        [disabled]="
-                            isCompany ||
-                            isConsolidatedBranch ||
-                            buttonDisabled ||
-                            countVariable === 0 ||
-                            voucherApiVersion === 1
-                        "
+                        [disabled]="isCompany || isConsolidatedBranch || buttonDisabled || countVariable === 0 || voucherApiVersion === 1"
                         value="create"
                         (click)="onToggleChange(ocrAction.Create, true)"
                         [checked]="selectedToggle === ocrAction.Create"
@@ -59,10 +39,7 @@
                         <span>{{ localeData?.list }}</span>
                     </mat-button-toggle>
                 </mat-button-toggle-group>
-                <div
-                    class="button-wrapper d-flex ml-2 align-items-baseline"
-                    *ngIf="selectedToggle === ocrAction.List"
-                >
+                <div class="button-wrapper d-flex ml-2 align-items-baseline" *ngIf="selectedToggle === ocrAction.List">
                     <div class="custom-datepicker-wrapper">
                         <div
                             class="custom-datepicker"
@@ -81,11 +58,7 @@
                                 readonly
                             />
                         </div>
-                        <mat-menu
-                            #universalDatepicker="matMenu"
-                            class="universal-datepicker-menu-panel"
-                            xPosition="after"
-                        >
+                        <mat-menu #universalDatepicker="matMenu" class="universal-datepicker-menu-panel" xPosition="after">
                             <ng-template matMenuContent>
                                 <app-datepicker-wrapper
                                     [inputStartDate]="selectedDateRange?.startDate"
@@ -112,9 +85,7 @@
                         <reactive-dropdown-field
                             [label]="commonLocaleData?.app_branch"
                             [options]="branches"
-                            (selectedOption)="
-                                ocrDocumentsRequestParams.branchUniqueName = $event?.value; selectBranch($event)
-                            "
+                            (selectedOption)="ocrDocumentsRequestParams.branchUniqueName = $event?.value; selectBranch($event)"
                             (onClear)="ocrDocumentsRequestParams.branchUniqueName = ''; getAllOcrDocuments(false)"
                             [labelValue]="ocrDocumentsRequestParams.branchUniqueName ? branchName : activeCompany?.name"
                             [placeholder]="commonLocaleData?.app_select_branch"
@@ -141,7 +112,7 @@
             </div>
         </div>
         <div class="mr-t1 d-flex align-items-center" *ngIf="isCompany">
-            <span class="font-size-16 mr-2">{{ localeData?.create_voucher_messgae }} </span>
+            <span class="font-size-16 mr-2">{{ localeData?.create_voucher_messgae }}</span>
         </div>
         <main class="flex-grow-1 overflow-auto main-ocr">
             <ng-container [ngSwitch]="selectedToggle">
@@ -154,12 +125,7 @@
                         <ng-template #noDataFound>
                             <div class="no-data-found d-flex flex-column align-items-center justify-content-center">
                                 <h1>{{ localeData?.no_data_found }}</h1>
-                                <img
-                                    class="mt-2"
-                                    height="200"
-                                    src="{{ imgPath }}no-data.png"
-                                    [alt]="localeData?.no_data_found"
-                                />
+                                <img class="mt-2" height="200" src="{{ imgPath }}no-data.png" [alt]="localeData?.no_data_found" />
                             </div>
                         </ng-template>
                     </ng-container>
@@ -188,7 +154,7 @@
                                 class="m-t1 d-flex justify-content-center align-items-center"
                                 *ngIf="!ocrMainList?.items?.length && (isCompany || isConsolidatedBranch)"
                             >
-                                <span class="font-size-24 mr-2">{{ localeData?.go_to_branch_information }} </span>
+                                <span class="font-size-24 mr-2">{{ localeData?.go_to_branch_information }}</span>
                                 <button matButton="filled" (click)="gotToBranchTab()">
                                     {{ localeData?.go_to_branch }}
                                 </button>

@@ -1,12 +1,8 @@
 <section class="mt-3 mb-3">
     <div class="d-flex column-gap-15">
-        <button
-            type="button"
-            matButton="filled"
-            [matMenuTriggerFor]="filterByAccountMenu"
-            #filterMenu="matMenuTrigger"
-        >
-            {{ localeData?.filter_by_account }} <span class="caret"></span>
+        <button type="button" matButton="filled" [matMenuTriggerFor]="filterByAccountMenu" #filterMenu="matMenuTrigger">
+            {{ localeData?.filter_by_account }}
+            <span class="caret"></span>
         </button>
         <mat-menu #filterByAccountMenu="matMenu">
             <form
@@ -30,17 +26,10 @@
                             [options]="queryTypes"
                             [required]="true"
                             (selectedOption)="item?.get('queryType').patchValue($event.value)"
-                            [labelValue]="
-                                resetValues
-                                    ? item?.get('queryType').value === 'closingBalance'
-                                        ? 'Closing Balance'
-                                        : ''
-                                    : ''
-                            "
+                            [labelValue]="resetValues ? (item?.get('queryType').value === 'closingBalance' ? 'Closing Balance' : '') : ''"
                             [placeholder]="commonLocaleData?.app_select_type"
                             [label]="localeData?.whose"
-                        >
-                        </reactive-dropdown-field>
+                        ></reactive-dropdown-field>
                         <reactive-dropdown-field
                             class="width-query-differs mr-3"
                             [options]="queryDiffers"
@@ -49,15 +38,10 @@
                             [required]="true"
                             [placeholder]="localeData?.select_query"
                             [label]="localeData?.is"
-                        >
-                        </reactive-dropdown-field>
+                        ></reactive-dropdown-field>
                         <input-field
                             class="width-query-differs mr-3"
-                            *ngIf="
-                                item?.value.queryDiffer === 'Less' ||
-                                item?.value.queryDiffer === 'Greater' ||
-                                !item?.value.queryDiffer
-                            "
+                            *ngIf="item?.value.queryDiffer === 'Less' || item?.value.queryDiffer === 'Greater' || !item?.value.queryDiffer"
                             [type]="'text'"
                             formControlName="amount"
                             [required]="true"
@@ -65,8 +49,7 @@
                             [customDecimalPlaces]="2"
                             [placeholder]="commonLocaleData?.app_amount"
                             [label]="localeData?.than"
-                        >
-                        </input-field>
+                        ></input-field>
 
                         <input-field
                             class="width-query-differs mr-3"
@@ -78,47 +61,36 @@
                             [customDecimalPlaces]="2"
                             [placeholder]="commonLocaleData?.app_amount"
                             [label]="localeData?.to"
-                        >
-                        </input-field>
+                        ></input-field>
 
                         <!--By and To: Not required in paginated API -->
-                        <span
-                            class="position-relative form-group option-value-field"
-                            *ngIf="item?.value.queryType === 'openingBalance'"
-                        >
+                        <span class="position-relative form-group option-value-field" *ngIf="item?.value.queryType === 'openingBalance'">
                             <select-field
                                 [closeOnFocusOut]="true"
                                 class="width-balance-type"
                                 [options]="balType"
                                 (selectedOption)="item?.get('openingBalanceType').patchValue($event.value)"
                                 [defaultValue]="
-                                    item.get('queryType')?.value === 'openingBalance' ||
-                                    item.get('queryType')?.value === 'closingBalance'
+                                    item.get('queryType')?.value === 'openingBalance' || item.get('queryType')?.value === 'closingBalance'
                                         ? 'DR'
                                         : ''
                                 "
                             ></select-field>
                         </span>
-                        <span
-                            class="position-relative form-group option-value-field"
-                            *ngIf="item?.value.queryType === 'closingBalance'"
-                        >
+                        <span class="position-relative form-group option-value-field" *ngIf="item?.value.queryType === 'closingBalance'">
                             <select-field
                                 [closeOnFocusOut]="true"
                                 class="width-balance-type"
                                 [options]="balType"
                                 (selectedOption)="item?.get('closingBalanceType').patchValue($event.value)"
                                 [defaultValue]="
-                                    item.get('queryType')?.value === 'openingBalance' ||
-                                    item.get('queryType')?.value === 'closingBalance'
+                                    item.get('queryType')?.value === 'openingBalance' || item.get('queryType')?.value === 'closingBalance'
                                         ? 'DR'
                                         : ''
                                 "
                             ></select-field>
                         </span>
-                        <label *ngIf="searchDataSet?.controls?.length > 1 && !l" class="condition_tag">{{
-                            localeData?.and
-                        }}</label>
+                        <label *ngIf="searchDataSet?.controls?.length > 1 && !l" class="condition_tag">{{ localeData?.and }}</label>
                     </div>
                 </div>
                 <!--end of clear-both first row -->
@@ -152,13 +124,7 @@
             <i class="icon-refresh"></i>
             {{ commonLocaleData?.app_reset }}
         </button>
-        <button
-            class="ml-auto"
-            type="button"
-            matButton="filled"
-            *ngIf="showDownloadCsv"
-            (click)="createCSV()"
-        >
+        <button class="ml-auto" type="button" matButton="filled" *ngIf="showDownloadCsv" (click)="createCSV()">
             {{ commonLocaleData?.app_download_csv }}
         </button>
     </div>

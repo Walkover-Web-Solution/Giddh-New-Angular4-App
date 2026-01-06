@@ -41,18 +41,16 @@
     </div>
     <div
         class="verify-page mt-3"
-        *ngIf="
-            (!isCommunicationPlatformsLoading && !communicationPlatforms?.MSG91?.isConnected) ||
-            editCommunicationPlatform === 'MSG91'
-        "
+        *ngIf="(!isCommunicationPlatformsLoading && !communicationPlatforms?.MSG91?.isConnected) || editCommunicationPlatform === 'MSG91'"
     >
         <button
             class="cursor-pointer font-size-15 d-flex p-0 back-button mat-button msg-btn"
             (click)="backToHomePage($event)"
             *ngIf="communicationPlatforms?.MSG91?.isConnected"
         >
-            <span class="mat-button-wrapper d-flex"
-                ><i class="icon-left"></i><span class="back-text">{{ localeData?.communication?.msg91 }}</span>
+            <span class="mat-button-wrapper d-flex">
+                <i class="icon-left"></i>
+                <span class="back-text">{{ localeData?.communication?.msg91 }}</span>
             </span>
         </button>
         <div class="d-flex align-items-center verify-form mt-3">
@@ -132,16 +130,8 @@
                         {{ localeData?.communication?.action }}
                     </th>
                     <td mat-cell *matCellDef="let element">
-                        <button
-                            class="small-button"
-                            matButton="filled"
-                            (click)="updateTriggerStatus(element?.uniqueName)"
-                        >
-                            {{
-                                element?.isActive > 0
-                                    ? localeData?.communication?.activated
-                                    : localeData?.communication?.deactivated
-                            }}
+                        <button class="small-button" matButton="filled" (click)="updateTriggerStatus(element?.uniqueName)">
+                            {{ element?.isActive > 0 ? localeData?.communication?.activated : localeData?.communication?.deactivated }}
                         </button>
                         <img
                             class="icon-visibility cursor-pointer"
@@ -201,7 +191,7 @@
                 <img class="return" src="{{ imgPath }}return.svg" alt="" (click)="backToListPage($event)" />
                 <p class="trigger-heading font-size-15">
                     {{
-                        triggerMode === "create" || triggerMode === "copy"
+                        triggerMode === 'create' || triggerMode === 'copy'
                             ? localeData?.communication?.create_trigger
                             : localeData?.communication?.edit_trigger
                     }}
@@ -263,8 +253,9 @@
                             *ngFor="let action of subConditionAction"
                             [selected]="action?.isChecked"
                             [value]="action"
-                            >{{ action | titlecase }}</mat-option
                         >
+                            {{ action | titlecase }}
+                        </mat-option>
                     </mat-select>
                 </mat-form-field>
             </div>
@@ -352,7 +343,8 @@
                             name="voucherpdf"
                             [(ngModel)]="createTrigger.campaignDetails.sendVoucherPdf"
                             (change)="selectVoucherPdf($event?.checked)"
-                            ><span class="compose">{{ localeData?.communication?.send_voucher }}</span>
+                        >
+                            <span class="compose">{{ localeData?.communication?.send_voucher }}</span>
                         </mat-checkbox>
                     </div>
                 </div>

@@ -48,13 +48,7 @@
         {{ commonLocaleData?.app_generate_invoice }}
     </button>
 
-    <button
-        mat-menu-item
-        *ngIf="showSendEmail"
-        class="menu-table-item"
-        (click)="performActions(3, account)"
-        aria-label="send email"
-    >
+    <button mat-menu-item *ngIf="showSendEmail" class="menu-table-item" (click)="performActions(3, account)" aria-label="send email">
         {{ commonLocaleData?.app_send_email }}
     </button>
 </mat-menu>
@@ -68,6 +62,5 @@
         (closeAsideEvent)="asideMenuDialogRef?.close()"
         (getUpdateList)="getUpdatedList($event)"
         [isActionMenu]="isActionMenu"
-    >
-    </aside-menu-account>
+    ></aside-menu-account>
 </ng-template>

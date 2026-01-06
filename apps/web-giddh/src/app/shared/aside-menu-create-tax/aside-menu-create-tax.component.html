@@ -5,12 +5,7 @@
     (commonLocaleData)="commonLocaleData = $event"
     (translationComplete)="translationComplete($event)"
 >
-    <div
-        class="dialog-header"
-        [keyboardShortcut]="'esc'"
-        [config]="{ dialogMode: true }"
-        (onShortcutPress)="closeEvent?.emit()"
-    >
+    <div class="dialog-header" [keyboardShortcut]="'esc'" [config]="{ dialogMode: true }" (onShortcutPress)="closeEvent?.emit()">
         <span>
             {{ tax && tax?.uniqueName ? localeData?.update_tax : localeData?.create_new_tax }}
         </span>
@@ -119,9 +114,7 @@
 
             <div
                 class="row my-3"
-                *ngIf="
-                    taxForm?.get('taxType')?.value === 'cess' || (taxForm?.get('taxType')?.value === 'others' && !tax)
-                "
+                *ngIf="taxForm?.get('taxType')?.value === 'cess' || (taxForm?.get('taxType')?.value === 'others' && !tax)"
             >
                 <div class="col-sm-6 col-xs-12" *ngIf="taxForm?.get('taxType')?.value === 'cess'">
                     <reactive-dropdown-field
@@ -171,8 +164,7 @@
                         [placeholder]="localeData?.apply_tax_from"
                         [closeDatepickerOnFocus]="true"
                         [required]="true"
-                    >
-                    </giddh-datepicker>
+                    ></giddh-datepicker>
                 </div>
 
                 <div class="form-group col-sm-4 col-xs-12">
@@ -212,12 +204,7 @@
                     </ng-container>
                 </button>
 
-                <button
-                    matButton="filled"
-                    aria-label="cancel"
-                    type="submit"
-                    *ngIf="tax && tax?.uniqueName"
-                >
+                <button matButton="filled" aria-label="cancel" type="submit" *ngIf="tax && tax?.uniqueName">
                     <ng-container *ngIf="!isUpdateTaxInProcess; else showSpinner">
                         {{ commonLocaleData?.app_update }}
                     </ng-container>

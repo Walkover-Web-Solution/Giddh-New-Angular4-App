@@ -5,7 +5,7 @@
     </button>
 
     <div class="form-header">
-        <h2 class="aside-title">{{commonLocaleData?.app_tax_applicable}}</h2>
+        <h2 class="aside-title">{{ commonLocaleData?.app_tax_applicable }}</h2>
     </div>
 
     <div class="aside-body">
@@ -14,30 +14,39 @@
                 <div class="col-sm-6">
                     <div class="select-tax-dropdown d-flex flex-column">
                         <div class="mb-4">
-                            <reactive-dropdown-field [name]="'selectTax'" [cssClass]="'form-control border'"
+                            <reactive-dropdown-field
+                                [name]="'selectTax'"
+                                [cssClass]="'form-control border'"
                                 [label]="commonLocaleData?.app_select_tax"
-                                [placeholder]="commonLocaleData?.app_select_tax" [options]="taxesOptions"
-                                (selectedOption)="applyTax($event);" [required]="true"
-                                [labelValue]="selectedTaxUniqueName" (onClear)="onClear()">
-                            </reactive-dropdown-field>
+                                [placeholder]="commonLocaleData?.app_select_tax"
+                                [options]="taxesOptions"
+                                (selectedOption)="applyTax($event)"
+                                [required]="true"
+                                [labelValue]="selectedTaxUniqueName"
+                                (onClear)="onClear()"
+                            ></reactive-dropdown-field>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-6">
                     <div class="mb-2">
-                        <reactive-dropdown-field [label]="commonLocaleData?.app_calculation_method"
+                        <reactive-dropdown-field
+                            [label]="commonLocaleData?.app_calculation_method"
                             [cssClass]="'form-control border'"
-                            [placeholder]="commonLocaleData?.app_select_method" [options]="calculationMethodOptions"
-                            [labelValue]="selectedCalculationMethod ? selectedCalculationMethod[0]?.label : calculationMethodOptions[0]?.label"
-                            [name]="'tcsCalculationMethod'" (selectedOption)="onCalculateTax($event);">
-                        </reactive-dropdown-field>
+                            [placeholder]="commonLocaleData?.app_select_method"
+                            [options]="calculationMethodOptions"
+                            [labelValue]="
+                                selectedCalculationMethod ? selectedCalculationMethod[0]?.label : calculationMethodOptions[0]?.label
+                            "
+                            [name]="'tcsCalculationMethod'"
+                            (selectedOption)="onCalculateTax($event)"
+                        ></reactive-dropdown-field>
                     </div>
                 </div>
             </div>
             <div>
-                <button matButton="filled" type="button" [disabled]="!defaultOtherTaxesModal?.tcsCalculationMethod"
-                    (click)="saveTaxes()">
-                    {{commonLocaleData?.app_apply}}
+                <button matButton="filled" type="button" [disabled]="!defaultOtherTaxesModal?.tcsCalculationMethod" (click)="saveTaxes()">
+                    {{ commonLocaleData?.app_apply }}
                 </button>
             </div>
         </div>

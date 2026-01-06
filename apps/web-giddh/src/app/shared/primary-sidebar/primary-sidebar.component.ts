@@ -603,7 +603,7 @@ export class PrimarySidebarComponent implements OnInit, OnChanges, OnDestroy {
                     this.currentOrganizationType === OrganizationType.Company && branches?.length > 1).then((res) => {
                         this.findListFromDb(res);
                     }, (err: any) => {
-                        console.log('%c Error: %c ' + err + '', 'background: #c00; color: #ccc', 'color: #333');
+
                     });
             });
         }

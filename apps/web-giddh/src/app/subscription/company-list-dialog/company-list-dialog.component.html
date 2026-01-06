@@ -17,8 +17,7 @@
                                 [placeholder]="localeData?.company_name"
                                 [type]="'text'"
                                 formControlName="name"
-                            >
-                            </input-field>
+                            ></input-field>
                         </form>
                         <button
                             *ngIf="showClearFilter"
@@ -31,10 +30,7 @@
                         </button>
                     </div>
                     <button
-                        *ngIf="
-                            inputData?.rowData?.isOwner &&
-                            inputData.rowData?.companies?.length < inputData.rowData?.totalCompanies
-                        "
+                        *ngIf="inputData?.rowData?.isOwner && inputData.rowData?.companies?.length < inputData.rowData?.totalCompanies"
                         (click)="createCompanyInSubscription()"
                         mat-raised-button
                         [matTooltip]="localeData?.add_company_subscription"
@@ -149,6 +145,5 @@
         [localeData]="localeData"
         [subscriptionMove]="subscriptionMove"
         [commonLocaleData]="commonLocaleData"
-    >
-    </move-company>
+    ></move-company>
 </ng-template>

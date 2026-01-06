@@ -296,7 +296,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
                     this.trigger.closePanel();
                 }
             } catch (error) {
-                console.warn(`Could not ${operation} dropdown panel:`, error);
+
             }
         }
     }
@@ -386,7 +386,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
                 this.activeOptionIndex = -1;
             }
         } catch (error) {
-            console.warn('Could not store active option index:', error);
+
             this.activeOptionIndex = -1;
         }
     }
@@ -442,7 +442,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
                 }
             }
         } catch (error) {
-            console.warn('Could not restore focus after pagination:', error);
+
         } finally {
             // Reset pagination flags
             this.isPaginationInProgress = false;
@@ -661,7 +661,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
                 }, 50); // Small delay to let Angular Material process the key event
             }
         } catch (error) {
-            console.warn('Error in keyboard navigation handling:', error);
+
         }
     }
 
@@ -834,7 +834,7 @@ export class ReactiveDropdownFieldComponent implements ControlValueAccessor, OnI
                     }
                 }
             } catch (error) {
-                console.warn('Could not focus on second option:', error);
+
             }
         }
     }

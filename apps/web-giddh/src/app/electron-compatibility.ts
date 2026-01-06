@@ -28,7 +28,7 @@ function createSecureRequire() {
               try {
                 window.electronAPI!.send(channel, data);
               } catch (error) {
-                console.warn('ElectronAPI send failed:', error);
+
                 // Return a no-op function to prevent crashes
                 return;
               }
@@ -37,14 +37,14 @@ function createSecureRequire() {
               try {
                 window.electronAPI!.on(channel, listener);
               } catch (error) {
-                console.warn('ElectronAPI on failed:', error);
+
               }
             },
             removeAllListeners: (channel: string) => {
               try {
                 window.electronAPI!.removeAllListeners(channel);
               } catch (error) {
-                console.warn('ElectronAPI removeAllListeners failed:', error);
+
               }
             }
           }
@@ -58,23 +58,23 @@ function createSecureRequire() {
         } catch (error) {
           // Only log in Electron environment, not web
           if ((window as any).isElectron) {
-            console.warn('Legacy window.require failed:', error);
+
           }
         }
       }
 
       // Provide a mock IPC renderer to prevent crashes
-      console.warn('No Electron IPC available - providing mock implementation');
+
       return {
         ipcRenderer: {
           send: (channel: string, data?: any) => {
-            console.warn('Mock IPC send called:', channel, data);
+
           },
           on: (channel: string, listener: (...args: any[]) => void) => {
-            console.warn('Mock IPC on called:', channel);
+
           },
           removeAllListeners: (channel: string) => {
-            console.warn('Mock IPC removeAllListeners called:', channel);
+
           }
         }
       };
@@ -110,7 +110,7 @@ export function initializeElectronCompatibility() {
               } catch (error) {
                 // Only log in Electron environment
                 if ((window as any).isElectron) {
-                  console.warn('Original require failed for electron module:', error);
+
                 }
                 return null;
               }
@@ -127,7 +127,6 @@ export function initializeElectronCompatibility() {
       }
     } catch (error) {
       // Silently handle read-only property errors
-      console.warn('Cannot modify window.require (read-only in secure context) - using fallback approach');
 
       // Create a global fallback function instead
       (window as any).getElectronAPI = createSecureRequire();

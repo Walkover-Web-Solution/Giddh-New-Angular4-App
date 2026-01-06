@@ -1,9 +1,4 @@
-<div
-    appTranslate
-    [file]="'subscription'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
+<div appTranslate [file]="'subscription'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <giddh-page-loader [cssClass]="'mt-0 mb-0'" *ngIf="verifyOwnershipInProgress$ | async"></giddh-page-loader>
     <div class="flex-col" *ngIf="!(verifyOwnershipInProgress$ | async)">
         <div class="inner">
@@ -65,8 +60,7 @@
                                 [placeholder]="localeData?.enter_reason"
                                 [type]="'text'"
                                 formControlName="reason"
-                            >
-                            </input-field>
+                            ></input-field>
                         </div>
                     </form>
                     <div class="d-flex justify-content-end column-gap-1 mt-3">

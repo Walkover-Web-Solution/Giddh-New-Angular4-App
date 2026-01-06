@@ -31,8 +31,7 @@
                             [showError]="isFormSubmitted && !otherTaxForm.get('tax')?.value?.uniqueName"
                             (createOption)="createTaxDialog()"
                             [showCreateNew]="true"
-                        >
-                        </reactive-dropdown-field>
+                        ></reactive-dropdown-field>
                     </div>
                     <div class="col-6">
                         <span class="custom-mat-form-field">
@@ -44,8 +43,7 @@
                                 [required]="true"
                                 [showError]="isFormSubmitted && !otherTaxForm.get('calculationMethod')?.value"
                                 formControlName="calculationMethod"
-                            >
-                            </reactive-dropdown-field>
+                            ></reactive-dropdown-field>
                         </span>
                     </div>
                 </div>

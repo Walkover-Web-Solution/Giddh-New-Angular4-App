@@ -61,23 +61,16 @@
                                 [label]="commonLocaleData?.app_mobile_number"
                                 [required]="false"
                                 [useImageFlags]="true"
-                            >
-                            </mobile-number-input>
+                            ></mobile-number-input>
                             <div class="grid-child-column-full d-flex justify-content-end column-gap-15">
-                                <button
-                                    matButton="filled"
-                                    [disabled]="(salesPersonSaveInProgress$ | async) || salesPersonForm?.invalid"
-                                >
+                                <button matButton="filled" [disabled]="(salesPersonSaveInProgress$ | async) || salesPersonForm?.invalid">
                                     {{ isEditMode ? commonLocaleData?.app_update : commonLocaleData?.app_save }}
                                 </button>
                                 <button
                                     matButton="outlined"
                                     type="button"
                                     (click)="
-                                        salesPersonForm?.reset();
-                                        salesPersonUniqueName = null;
-                                        isEditMode = false;
-                                        nameField?.inputFocus()
+                                        salesPersonForm?.reset(); salesPersonUniqueName = null; isEditMode = false; nameField?.inputFocus()
                                     "
                                     [disabled]="salesPersonSaveInProgress$ | async"
                                 >
@@ -90,16 +83,9 @@
             </mat-accordion>
 
             <section class="table-responsive mt-3" *ngIf="(salesPersonList$ | async)?.results?.length">
-                <giddh-page-loader
-                    *ngIf="salesPersonListInProgress$ | async; else showTable"
-                    class="mt-5"
-                ></giddh-page-loader>
+                <giddh-page-loader *ngIf="salesPersonListInProgress$ | async; else showTable" class="mt-5"></giddh-page-loader>
                 <ng-template #showTable>
-                    <table
-                        class="giddh-table table border"
-                        mat-table
-                        [dataSource]="(salesPersonList$ | async)?.results"
-                    >
+                    <table class="giddh-table table border" mat-table [dataSource]="(salesPersonList$ | async)?.results">
                         <!-- Name Column -->
                         <ng-container matColumnDef="name">
                             <th mat-header-cell *matHeaderCellDef width="30%">{{ commonLocaleData?.app_name }}</th>
@@ -145,23 +131,14 @@
                                 </button>
                                 <mat-menu #menu="matMenu">
                                     <ng-container *ngIf="element?.archiveStatus === salesPersonArchiveEnum.UNARCHIVED">
-                                        <button
-                                            mat-menu-item
-                                            (click)="salesPersonAction(salesPersonActionEnum.EDIT, element)"
-                                        >
+                                        <button mat-menu-item (click)="salesPersonAction(salesPersonActionEnum.EDIT, element)">
                                             {{ commonLocaleData?.app_edit }}
                                         </button>
-                                        <button
-                                            mat-menu-item
-                                            (click)="salesPersonAction(salesPersonActionEnum.DELETE, element)"
-                                        >
+                                        <button mat-menu-item (click)="salesPersonAction(salesPersonActionEnum.DELETE, element)">
                                             {{ commonLocaleData?.app_delete }}
                                         </button>
                                     </ng-container>
-                                    <button
-                                        mat-menu-item
-                                        (click)="salesPersonAction(salesPersonActionEnum.ARCHIVE, element)"
-                                    >
+                                    <button mat-menu-item (click)="salesPersonAction(salesPersonActionEnum.ARCHIVE, element)">
                                         {{
                                             element?.archiveStatus === salesPersonArchiveEnum.UNARCHIVED
                                                 ? commonLocaleData?.app_archive
@@ -181,10 +158,7 @@
                         ></tr>
                     </table>
                     <mat-paginator
-                        *ngIf="
-                            !(salesPersonListInProgress$ | async) &&
-                            (salesPersonList$ | async)?.totalItems > pageSizeOptions[0]
-                        "
+                        *ngIf="!(salesPersonListInProgress$ | async) && (salesPersonList$ | async)?.totalItems > pageSizeOptions[0]"
                         (page)="handlePageChange($event)"
                         [length]="(salesPersonList$ | async)?.totalItems"
                         [pageSize]="requestParams.count"

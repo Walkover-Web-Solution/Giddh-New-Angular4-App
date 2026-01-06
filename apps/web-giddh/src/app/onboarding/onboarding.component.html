@@ -1,9 +1,4 @@
-<div
-    appTranslate
-    [file]="'onboarding'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
+<div appTranslate [file]="'onboarding'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div id="main" class="welcome-container clear-both">
         <div>
@@ -12,25 +7,26 @@
                     <p class="border-btm">{{ localeData?.try_things }}</p>
                     <mat-list role="list" class="manage-invoice pt-0">
                         <mat-list-item role="listitem" class="mb-2 px-0">
-                            <a [routerLink]="[voucherApiVersion === 2 ? '/pages/vouchers/sales/create' : '/pages/proforma-invoice/invoice/sales']">
-                                <img src="{{ imgPath }}create-invoice.svg" alt="" class="mr-2" />{{
-                                    localeData?.create_send_invoice
-                                }}</a
+                            <a
+                                [routerLink]="[
+                                    voucherApiVersion === 2 ? '/pages/vouchers/sales/create' : '/pages/proforma-invoice/invoice/sales',
+                                ]"
                             >
+                                <img src="{{ imgPath }}create-invoice.svg" alt="" class="mr-2" />
+                                {{ localeData?.create_send_invoice }}
+                            </a>
                         </mat-list-item>
                         <mat-list-item role="listitem" class="mb-2 px-0">
                             <a [routerLink]="['/pages', 'contact', 'customer']">
-                                <img src="{{ imgPath }}add-customer.svg" alt="" class="mr-2" />{{
-                                    localeData?.add_customer
-                                }}</a
-                            >
+                                <img src="{{ imgPath }}add-customer.svg" alt="" class="mr-2" />
+                                {{ localeData?.add_customer }}
+                            </a>
                         </mat-list-item>
                         <mat-list-item role="listitem" class="mb-2 px-0">
                             <a [routerLink]="['/pages', 'settings', 'taxes']">
-                                <img src="{{ imgPath }}updateGST.svg" alt="" class="mr-2" />{{
-                                    localeData?.update_taxes
-                                }}</a
-                            >
+                                <img src="{{ imgPath }}updateGST.svg" alt="" class="mr-2" />
+                                {{ localeData?.update_taxes }}
+                            </a>
                         </mat-list-item>
                         <mat-list-item role="listitem" class="mb-2 px-0" *ngIf="isPlaidSupportedCountry">
                             <a (click)="openCreateAccountAsidepan()" class="cursor-pointer">
@@ -38,30 +34,24 @@
                                 {{ localeData?.create_bank_account }}
                             </a>
                         </mat-list-item>
-                        <mat-list-item role="listitem" class="mb-2 px-0" *ngIf="(companyCountry !== 'India') && (isPlaidSupportedCountry || isGoCardlessSupportedCountry)">
+                        <mat-list-item
+                            role="listitem"
+                            class="mb-2 px-0"
+                            *ngIf="companyCountry !== 'India' && (isPlaidSupportedCountry || isGoCardlessSupportedCountry)"
+                        >
                             <a href="javascript:;" (click)="selectConfigureBank()">
-                                <img src="{{ imgPath }}configure-bank-account.svg" alt="" class="mr-2" />{{
-                                    localeData?.configure_bank_account
-                                }}</a
-                            >
+                                <img src="{{ imgPath }}configure-bank-account.svg" alt="" class="mr-2" />
+                                {{ localeData?.configure_bank_account }}
+                            </a>
                         </mat-list-item>
                     </mat-list>
                     <p class="border-btm mt-5">{{ localeData?.have_data_tally }}</p>
                     <p [innerHTML]="localeData?.giddh_usage"></p>
                     <div class="d-flex column-gap-15">
-                        <a
-                            matButton="filled"
-                            class="mt-2"
-                            target="_blank"
-                            [href]="syncWithTallyHelpDocUrl"
-                        >
+                        <a matButton="filled" class="mt-2" target="_blank" [href]="syncWithTallyHelpDocUrl">
                             {{ localeData?.sync_with_tally }}
                         </a>
-                        <a
-                            matButton="filled"
-                            class="mt-2"
-                            href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/Walkover+Prod.tcp"
-                        >
+                        <a matButton="filled" class="mt-2" href="https://s3.ap-south-1.amazonaws.com/giddhbuildartifacts/Walkover+Prod.tcp">
                             {{ localeData?.download_tcp }}
                         </a>
                     </div>
@@ -108,7 +98,6 @@
             [isUpdateAccount]="false"
             [commonLocaleData]="commonLocaleData"
             (closeAsideEvent)="asideMenuDialogRef?.close()"
-        >
-        </aside-menu-account>
+        ></aside-menu-account>
     </ng-template>
 </div>

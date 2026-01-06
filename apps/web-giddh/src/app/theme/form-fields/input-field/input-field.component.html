@@ -6,12 +6,7 @@
     >
         <mat-label>
             {{ label || placeholder }}
-            <i
-                *ngIf="showLabelIcon"
-                [class]="labelIconClass"
-                [matTooltip]="labelIconTooltip"
-                matTooltipPosition="above"
-            ></i>
+            <i *ngIf="showLabelIcon" [class]="labelIconClass" [matTooltip]="labelIconTooltip" matTooltipPosition="above"></i>
         </mat-label>
         <input
             matInput
@@ -102,9 +97,7 @@
         <span matPrefix *ngIf="matPrefix">{{ matPrefix }}</span>
         <i matPrefixIcon *ngIf="matPrefixIcon" [ngClass]="matPrefixIcon" class="position-absolute icon-prefix"></i>
 
-        <span matSuffix *ngIf="matSuffix" [ngClass]="matSuffixCssClass" (click)="handleSuffixClick()">{{
-            matSuffix
-        }}</span>
+        <span matSuffix *ngIf="matSuffix" [ngClass]="matSuffixCssClass" (click)="handleSuffixClick()">{{ matSuffix }}</span>
         <i
             matSuffix
             *ngIf="matSuffixIcon"
@@ -114,7 +107,6 @@
             matTooltipPosition="above"
             role="button"
             [attr.aria-label]="label || placeholder"
-        >
-        </i>
+        ></i>
     </mat-form-field>
 </div>

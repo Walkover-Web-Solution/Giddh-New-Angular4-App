@@ -11,7 +11,7 @@
     <span *ngIf="buttonText" class="pl-3">{{ buttonText }}</span>
 </button>
 <mat-menu #menu="matMenu" [class]="'columns-wrapper ' + additionalMenuCssClass">
-    <ng-container *ngFor="let item of (isDynamicMode ? dynamicCustomColumns : customiseColumns)">
+    <ng-container *ngFor="let item of isDynamicMode ? dynamicCustomColumns : customiseColumns">
         <button
             [ngClass]="{ 'disabled-button': item.checked && (isDynamicMode ? checkedColumnsCount : displayedColumns.length === 2) }"
             mat-menu-item

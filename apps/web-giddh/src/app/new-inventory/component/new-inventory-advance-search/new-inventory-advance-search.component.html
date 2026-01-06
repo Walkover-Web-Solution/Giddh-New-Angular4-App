@@ -47,8 +47,7 @@
                                         [labelValue]="advanceSearchFormObj.param1 ?? ''"
                                         (onClear)="advanceSearchFormObj.param1 = ''"
                                         [label]="localeData?.advance_search_filter?.category"
-                                    >
-                                    </reactive-dropdown-field>
+                                    ></reactive-dropdown-field>
                                 </div>
                                 <div *ngIf="reportType !== 'TRANSACTION'">
                                     <reactive-dropdown-field
@@ -97,8 +96,7 @@
                                     (onClear)="advanceSearchFormObj.val = ''"
                                     [autocomplete]="'off'"
                                     [label]="localeData?.advance_search_filter?.amount"
-                                >
-                                </input-field>
+                                ></input-field>
                             </div>
                         </div>
                     </div>

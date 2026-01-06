@@ -1,3 +1,9 @@
+/**
+ * @fileoverview App component for handling user interface and interactions
+ * @author Giddh Development Team
+ * @since 2026
+ */
+
 import { NavigationEnd, NavigationStart, Router, RouteConfigLoadEnd, RouteConfigLoadStart } from '@angular/router';
 import { AfterViewInit, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { Store, select } from '@ngrx/store';
@@ -22,7 +28,6 @@ import { InvoiceActions } from './actions/invoice/invoice.actions';
 import { WarehouseActions } from './settings/warehouse/action/warehouse.action';
 import { CompanyService } from './services/company.service';
 import { environment } from '../environments/environment.generated';
-import { ChunkErrorHandlerService } from './shared/chunk-error-handler.service';
 import { clone, get, includes, pick, remove, startsWith  } from './lodash-optimized';
 
 /**
@@ -38,6 +43,12 @@ import { clone, get, includes, pick, remove, startsWith  } from './lodash-optimi
     templateUrl: './app.component.html',
     standalone: false
 })
+/**
+ * AppComponent class - Handles appcomponent functionality
+ * @export
+ * @class AppComponent
+ */
+
 export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     public sideMenu: { isopen: boolean } = { isopen: true };
     public companyMenu: { isopen: boolean } = { isopen: false };
@@ -69,8 +80,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         private loginActions: LoginActions,
         private invoiceActions: InvoiceActions,
         private warehouseActions: WarehouseActions,
-        private companyService: CompanyService,
-        private chunkErrorHandler: ChunkErrorHandlerService
+        private companyService: CompanyService
     ) {
         this.isProdMode = environment.production;
         // Configuration.isElectron is already available via import
@@ -183,10 +193,10 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
                         });
                     }
                 } else {
-                    console.warn('Electron IPC not available - some Electron features may not work');
+
                 }
             } catch (error) {
-                console.warn('Electron require failed - running in fallback mode:', error);
+
             }
         }
 
@@ -233,9 +243,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        // Initialize chunk error handler and preload critical modules
-        this.chunkErrorHandler.preloadCriticalChunks();
-        
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
                 this.isConsolidatedBranch = response.isBranchConsolidated;
@@ -300,7 +307,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             }
             /* RAZORPAY */
 
-
             /* Xml */
             if (window['xmlScriptTag'] === undefined) {
                 let xmlScriptTag = document.createElement('script');
@@ -313,7 +319,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
         }, 1000);
 
         this._generalService.addLinkTag("./assets/styles/vendors/code-mirror.css");
-
 
         // if (this._generalService.getUrlParameter("region") === "uk") {
         //     this._generalService.setParameterInLocalStorage("X-Tenant", "GB");
@@ -385,7 +390,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             return this.router.navigate([lastState]);
         }
 
-        if (environment.production && !Configuration.isElectron) {
+        if (environment.PRODUCTION_ENV && !Configuration.isElectron) {
             this._versionCheckService.initVersionCheck((this.serviceConfig.AppUrl || Configuration.AppUrl) + 'version.json');
             this._versionCheckService.onVersionChange$.pipe(takeUntil(this.destroyed$)).subscribe((isChanged: boolean) => {
                 if (isChanged) {
@@ -448,15 +453,13 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
      * @memberof AppComponent
      */
     private handleQueryParamsCompanySwitch(detail: any): void {
-        console.log('handleQueryParamsCompanySwitch called with:', detail);
 
         if (!detail || !detail.companyUniqueName || !detail.company) {
-            console.warn('Invalid detail provided to handleQueryParamsCompanySwitch:', detail);
+
             return;
         }
 
         const { companyUniqueName, branchUniqueName, company } = detail;
-        console.log('Processing company/branch switch:', { companyUniqueName, branchUniqueName, company });
 
         // Reset active company data and warehouse response (same as switchCompany)
         this.store.dispatch(this.companyActions.resetActiveCompanyData());

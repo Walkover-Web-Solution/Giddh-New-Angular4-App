@@ -131,9 +131,8 @@ export class FocusableClickDirective implements OnInit, OnDestroy {
                 return;
             }
 
-            console.warn('FocusableClick: No clickFunction or clickStatements provided');
         } catch (error) {
-            console.error('Error executing click action:', error);
+
         }
     }
 
@@ -145,7 +144,7 @@ export class FocusableClickDirective implements OnInit, OnDestroy {
      */
     private executeStatements(): void {
         if (!this.componentContext) {
-            console.error('FocusableClick: componentContext required for statement execution');
+
             return;
         }
 
@@ -157,7 +156,7 @@ export class FocusableClickDirective implements OnInit, OnDestroy {
                 this.executeStatement(statement);
             }
         } catch (error) {
-            console.error('Error executing statements:', error);
+
         }
     }
 
@@ -194,7 +193,7 @@ export class FocusableClickDirective implements OnInit, OnDestroy {
                 }
             }
         } catch (error) {
-            console.error(`Error executing statement "${statement}":`, error);
+
         }
     }
 
@@ -213,7 +212,7 @@ export class FocusableClickDirective implements OnInit, OnDestroy {
             // Simple parsing for basic types
             return argsString.split(',').map(arg => this.parseValue(arg.trim()));
         } catch (error) {
-            console.error('Error parsing arguments:', error);
+
             return [];
         }
     }

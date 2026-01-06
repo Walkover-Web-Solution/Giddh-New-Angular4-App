@@ -1,7 +1,7 @@
 import { Observable, BehaviorSubject } from 'rxjs';
 import { ILedgerTransactionItem } from '../../../models/interfaces/ledger.interface';
 import { LedgerResponse } from '../../../models/api-models/Ledger';
-import { cloneDeep, forEach, remove, find, filter, sumBy } from '../../../lodash-optimized';
+import { cloneDeep, filter, find, sumBy } from '../../../lodash-optimized';
 import { IFlattenAccountsResultItem } from '../../../models/interfaces/flatten-accounts-result-item.interface';
 import { UpdateLedgerTaxData } from '../update-ledger-tax-control/update-ledger-tax-control.component';
 import { UpdateLedgerDiscountComponent } from '../update-ledger-discount/update-ledger-discount.component';
@@ -591,19 +591,16 @@ export class UpdateLedgerVm {
     }
 
     public unitChanged(stockUnitUniqueName: string) {
-        // let unit = this.stockTrxEntry.unitRate.find(p => p.stockUnitUniqueName === stockUnitUniqueName);
-        // const unitRate = giddhRoundOff(unit.rate / (this.selectedLedger?.exchangeRate ?? 1), this.ratePrecision);
-        // this.stockTrxEntry.inventory.unit = { code: unit.stockUnitCode, rate: unitRate, stockUnitCode: unit.stockUnitCode, uniqueName: unit.stockUnitUniqueName };
-        // this.stockTrxEntry.inventory.rate = this.stockTrxEntry.inventory.unit.rate;
-        // if (this.isInclusiveTax) {
-        //     this.grandTotal = this.stockTrxEntry.inventory.quantity * this.stockTrxEntry.inventory.rate;
-        //     this.inventoryTotalChanged();
-        // } else {
-        //     this.inventoryPriceChanged(Number(this.stockTrxEntry.inventory.unit.rate));
-        // }
-
-        // TODO: Fix IInventoryUnit interface to include missing properties: stockUnitUniqueName, rate, stockUnitCode
-        console.log('unitChanged method temporarily disabled due to interface mismatch');
+        let unit = this.stockTrxEntry.unitRate.find(p => p.stockUnitUniqueName === stockUnitUniqueName);
+        const unitRate = giddhRoundOff(unit.rate / (this.selectedLedger?.exchangeRate ?? 1), this.ratePrecision);
+        this.stockTrxEntry.inventory.unit = { code: unit.stockUnitCode, rate: unitRate, stockUnitCode: unit.stockUnitCode, uniqueName: unit.stockUnitUniqueName };
+        this.stockTrxEntry.inventory.rate = this.stockTrxEntry.inventory.unit.rate;
+        if (this.isInclusiveTax) {
+            this.grandTotal = this.stockTrxEntry.inventory.quantity * this.stockTrxEntry.inventory.rate;
+            this.inventoryTotalChanged();
+        } else {
+            this.inventoryPriceChanged(Number(this.stockTrxEntry.inventory.unit.rate));
+        }
     }
 
     public taxTrxUpdated(taxes: UpdateLedgerTaxData[]) {

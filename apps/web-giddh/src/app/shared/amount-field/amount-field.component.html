@@ -2,11 +2,9 @@
     <p class="d-inline-flex" [dir]="direction">
         <ng-container *ngIf="currencySymbol">
             <span>{{ currencySymbol }}</span>
-            <ng-container *ngIf="spaceAfterCurrencySymbol">
-            &nbsp;
-            </ng-container>
+            <ng-container *ngIf="spaceAfterCurrencySymbol">&nbsp;</ng-container>
         </ng-container>
-        <span class="numeric-value" dir="ltr" *ngIf="useGiddhCurrencyPipe">{{ amount | giddhNumberFormat }} </span>
-        <span class="numeric-value" dir="ltr" *ngIf="!useGiddhCurrencyPipe">{{ formatNumber(amount) }} </span>
+        <span class="numeric-value" dir="ltr" *ngIf="useGiddhCurrencyPipe">{{ amount | giddhNumberFormat }}</span>
+        <span class="numeric-value" dir="ltr" *ngIf="!useGiddhCurrencyPipe">{{ formatNumber(amount) }}</span>
     </p>
 </bdo>

@@ -1,14 +1,8 @@
-<div appTranslate [file]="'vat-report'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event">
+<div appTranslate [file]="'vat-report'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <hamburger-menu></hamburger-menu>
     <div class="position-relative w-100">
-        <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper"
-            *ngIf="asideGstSidebarMenuState">
-            <tax-sidebar
-                (navigateEvent)="handleNavigation()"
-                [exclude]="'#primary-new-header'"
-                class="gst-sidebar"
-            ></tax-sidebar>
+        <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper" *ngIf="asideGstSidebarMenuState">
+            <tax-sidebar (navigateEvent)="handleNavigation()" [exclude]="'#primary-new-header'" class="gst-sidebar"></tax-sidebar>
         </div>
     </div>
     <div class="liability-report mx-auto p-3">
@@ -30,8 +24,8 @@
                         (currentTaxNumber)="getFormControl('taxNumber')?.patchValue($event)"
                         (fromDate)="getFormControl('from')?.patchValue($event)"
                         (toDate)="getFormControl('to')?.patchValue($event)"
-                        (currentBranchChange)="getFormControl('branchUniqueName')?.patchValue($event)">
-                    </vat-report-filters>
+                        (currentBranchChange)="getFormControl('branchUniqueName')?.patchValue($event)"
+                    ></vat-report-filters>
                 </div>
             </div>
             <div class="mt-5" *ngIf="isLoading">
@@ -47,7 +41,7 @@
                                 </span>
                                 <ng-template #clickableItem>
                                     <a href="javascript:;" (click)="viewDetailedReport(vatReport)">
-                                        {{vatReport?.section }}
+                                        {{ vatReport?.section }}
                                     </a>
                                 </ng-template>
                             </td>
@@ -57,8 +51,7 @@
                                     [amount]="vatReport?.vatTotal"
                                     [currencySymbol]="vatReportCurrencySymbol"
                                     [currencyCode]="false"
-                                >
-                                </amount-field>
+                                ></amount-field>
                             </td>
                         </tr>
                     </table>
