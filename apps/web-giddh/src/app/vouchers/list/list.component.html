@@ -50,7 +50,7 @@
                             </div>
                         </div>
                         <button
-                            matButton="elevated"
+                            matButton="outlined"
                             (click)="setInitialAdvanceFilter()"
                             class="mx-auto"
                             *ngIf="advanceFiltersApplied && !(getVouchersInProgress$ | async)"
@@ -513,7 +513,7 @@
                             </div>
                         </div>
                         <button
-                            matButton="elevated"
+                            matButton="outlined"
                             (click)="setInitialAdvanceFilter()"
                             class="mx-auto"
                             *ngIf="advanceFiltersApplied && !(getVouchersInProgress$ | async)"
@@ -986,7 +986,7 @@
                             </div>
                         </div>
                         <button
-                            matButton="elevated"
+                            matButton="outlined"
                             (click)="setInitialAdvanceFilter()"
                             class="mx-auto"
                             *ngIf="advanceFiltersApplied && !(getVouchersInProgress$ | async)"
@@ -1550,7 +1550,7 @@
                             </div>
                         </div>
                         <button
-                            matButton="elevated"
+                            matButton="outlined"
                             (click)="setInitialAdvanceFilter()"
                             class="mx-auto"
                             *ngIf="advanceFiltersApplied && !(getVouchersInProgress$ | async)"
@@ -2030,7 +2030,7 @@
                             </div>
                         </div>
                         <button
-                            matButton="elevated"
+                            matButton="outlined"
                             (click)="setInitialAdvanceFilter()"
                             class="mx-auto"
                             *ngIf="advanceFiltersApplied && !(getVouchersInProgress$ | async)"
@@ -2533,7 +2533,7 @@
                                 </button>
                             </div>
                             <button
-                                matButton="elevated"
+                                matButton="outlined"
                                 [ngClass]="{ 'width-auto': selectedPendingVouchers?.length === 0 }"
                                 class="mx-auto"
                                 *ngIf="customDateSelected && !(isGetAllRequestInProcess$ | async)"
@@ -2752,7 +2752,7 @@
                             </div>
                         </div>
                         <button
-                            matButton="elevated"
+                            matButton="outlined"
                             (click)="setInitialAdvanceFilter()"
                             class="mx-auto"
                             *ngIf="advanceFiltersApplied && !(getVouchersInProgress$ | async)"
@@ -3617,7 +3617,7 @@
                             </div>
                         </div>
                         <button
-                            matButton="elevated"
+                            matButton="outlined"
                             (click)="setInitialAdvanceFilter()"
                             class="mx-auto"
                             *ngIf="advanceFiltersApplied && !(getVouchersInProgress$ | async)"
@@ -4040,7 +4040,7 @@
                             </div>
                         </div>
                         <button
-                            matButton="elevated"
+                            matButton="outlined"
                             (click)="setInitialAdvanceFilter()"
                             class="mx-auto"
                             *ngIf="advanceFiltersApplied && !(getVouchersInProgress$ | async)"
@@ -4409,7 +4409,7 @@
                                 </button>
                             </div>
                             <button
-                                matButton="elevated"
+                                matButton="outlined"
                                 [ngClass]="{ 'width-auto': selectedPendingVouchers?.length === 0 }"
                                 class="mx-auto"
                                 *ngIf="customDateSelected && !(isGetAllRequestInProcess$ | async)"
@@ -4695,7 +4695,7 @@
                                                     ></input-field>
                                                     <button
                                                         *ngIf="!settingForm.get('invoiceSettings.emailVerified').value"
-                                                        matButton="elevated"
+                                                        matButton="outlined"
                                                         [disabled]="
                                                             !isEmailChanged &&
                                                             (!settingForm.get('invoiceSettings.email').value ||
@@ -4718,7 +4718,7 @@
                                                         {{ localeData?.verified }}
                                                     </span>
                                                     <button
-                                                        matButton="elevated"
+                                                        matButton="outlined"
                                                         *ngIf="voucherApiVersion === 2"
                                                         class="btn-stroked-icon"
                                                         [ngClass]="{
@@ -5538,7 +5538,7 @@
                                                 ></input-field>
                                                 <button
                                                     *ngIf="!settingForm.get('purchaseBillSettings.emailVerified').value"
-                                                    matButton="elevated"
+                                                    matButton="outlined"
                                                     [disabled]="
                                                         !isEmailChanged &&
                                                         (!settingForm.get('purchaseBillSettings.email').value ||
@@ -5562,7 +5562,7 @@
                                                     {{ localeData?.verified }}
                                                 </span>
                                                 <button
-                                                    matButton="elevated"
+                                                    matButton="outlined"
                                                     *ngIf="voucherApiVersion === 2"
                                                     class="btn-stroked-icon"
                                                     [ngClass]="{
@@ -5967,7 +5967,7 @@
                                     </span>
                                     <div class="d-flex column-gap-1 justify-content-center">
                                         <button
-                                            matButton="elevated"
+                                            matButton="outlined"
                                             class="btn-stroked-icon"
                                             matTooltip="{{ localeData?.preview }}"
                                             matTooltipPosition="above"
@@ -5976,7 +5976,7 @@
                                             <i class="icon-eye"></i>
                                         </button>
                                         <button
-                                            matButton="elevated"
+                                            matButton="outlined"
                                             class="btn-stroked-icon"
                                             [matTooltip]="localeData?.edit_template"
                                             matTooltipPosition="above"
@@ -5985,7 +5985,7 @@
                                             <i class="icon-edit-pencil"></i>
                                         </button>
                                         <button
-                                            matButton="elevated"
+                                            matButton="outlined"
                                             class="btn-stroked-icon cursor-pointer"
                                             [disabled]="template.isDefault"
                                             [matTooltip]="localeData?.delete"
@@ -6045,7 +6045,7 @@
                                     </span>
                                     <div class="d-flex column-gap-1 justify-content-center">
                                         <button
-                                            matButton="elevated"
+                                            matButton="outlined"
                                             class="btn-stroked-icon"
                                             matTooltip="{{ localeData?.preview }}"
                                             matTooltipPosition="above"
@@ -6054,7 +6054,7 @@
                                             <i class="icon-eye"></i>
                                         </button>
                                         <button
-                                            matButton="elevated"
+                                            matButton="outlined"
                                             class="btn-stroked-icon"
                                             matTooltip="{{ localeData?.edit_template }}"
                                             matTooltipPosition="above"
@@ -6063,7 +6063,7 @@
                                             <i class="icon-edit-pencil"></i>
                                         </button>
                                         <button
-                                            matButton="elevated"
+                                            matButton="outlined"
                                             [disabled]="template.isDefaultForVoucher"
                                             class="btn-stroked-icon cursor-pointer"
                                             matTooltip="{{ localeData?.delete }}"
@@ -6189,7 +6189,7 @@
     <ng-template #actionButtons>
         <div class="d-flex column-gap-1 mt-4">
             <button (click)="onSubmit()" matButton="filled">{{ commonLocaleData?.app_save }}</button>
-            <button (click)="resetForm()" matButton="elevated">{{ commonLocaleData?.app_cancel }}</button>
+            <button (click)="resetForm()" matButton="outlined">{{ commonLocaleData?.app_cancel }}</button>
         </div>
     </ng-template>
 

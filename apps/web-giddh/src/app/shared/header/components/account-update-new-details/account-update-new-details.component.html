@@ -454,7 +454,7 @@
                             </ng-container>
                             <div class="col-sm-12 mb-4" *ngIf="!firstItem">
                                 <button
-                                    matButton="elevated"
+                                    matButton="outlined"
                                     (click)="removeGstDetailsForm(i)"
                                     class="grey-color btn-danger text-left"
                                 >
@@ -470,18 +470,18 @@
                                 !moreGstDetailsVisible
                             "
                         >
-                            <button matButton="elevated" class="text-left w-50 pr-4" (click)="showMoreGst()">
+                            <button matButton="outlined" class="text-left w-50 pr-4" (click)="showMoreGst()">
                                 {{ commonLocaleData?.app_show_all }} ({{
                                     addAccountForm.get("addresses")["controls"]?.length
                                 }})
                             </button>
-                            <button matButton="elevated" class="text-left w-50" (click)="showLessGst()">
+                            <button matButton="outlined" class="text-left w-50" (click)="showLessGst()">
                                 {{ commonLocaleData?.app_show_less }}
                             </button>
                         </div>
                         <div *ngIf="lastItem">
                             <button
-                                matButton="elevated"
+                                matButton="outlined"
                                 (click)="addGstDetailsForm(gst.get('gstNumber')?.value); openConfirmLeaveDialog()"
                             >
                                 + {{ localeData?.add_address }}
@@ -634,7 +634,7 @@
                         </div>
                         <div class="pl-2 mt-1">
                             <button
-                                matButton="elevated"
+                                matButton="outlined"
                                 (click)="removePortalUser(domain, i)"
                                 class="btn-stroked-icon"
                                 aria-label="delete icon"
@@ -1290,7 +1290,7 @@
             <button
                 type="button"
                 *ngIf="showDeleteButton && voucherApiVersion === 2"
-                matButton="elevated"
+                matButton="outlined"
                 (click)="deleteClicked.emit(true)"
                 aria-label="delete"
             >
@@ -1317,7 +1317,7 @@
         <button
             *ngIf="showDeleteButton && voucherApiVersion === 2"
             type="button"
-            matButton="elevated"
+            matButton="outlined"
             (click)="deleteClicked.emit(true)"
             aria-label="delete"
         >

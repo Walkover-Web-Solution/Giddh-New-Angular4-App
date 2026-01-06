@@ -15,6 +15,9 @@ html,
 body {
     font-family: var(--font-family) !important;
     font-size: var(--font-size-15) !important;
+    background-color: var(--theme-background-color);
+    color: var(--theme-foreground-color);
+    overflow: hidden;
 }
 
 [class^="icon-"],
@@ -875,7 +878,7 @@ no-data,
 }
 
 .ledger-panel {
-    background: var(--mat-sys-surface-container);
+    background: var(--theme-background-color);
     border-radius: var(--mat-border-radius-0);
     position: relative;
     padding: 15px;
@@ -1154,7 +1157,7 @@ no-data,
     margin: 0px 0 0;
     font-size: var(--font-size-15);
     text-align: left;
-    background-color: var(--mat-sys-surface-container);
+    background-color: var(--theme-background-color);
     -webkit-background-clip: padding-box;
     background-clip: padding-box;
     border: 1px solid var(--border-color);
@@ -3854,7 +3857,7 @@ label {
     position: absolute;
     height: 100%;
     z-index: 99;
-    background: var(--mat-sys-surface-container);
+    background: var(--theme-background-color);
     width: 100%;
     left: 0;
     display: table;
@@ -5101,12 +5104,6 @@ html {
 }
 
 body {
-    font-family: var(--font-family);
-    font-size: var(--font-size-15);
-    color: var(--color-black);
-    background-color: var(--color-white);
-    height: 100%;
-
     &.fixed {
         overflow-y: hidden;
     }

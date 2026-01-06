@@ -41,7 +41,7 @@
                                                 <button
                                                     *ngIf="searchBranchQuery.value"
                                                     class="w-100 ml-2"
-                                                    matButton="elevated"
+                                                    matButton="outlined"
                                                     (click)="resetFilter()"
                                                     aria-label="cross icon"
                                                     [matTooltip]="localeData?.reset_search"
@@ -308,7 +308,7 @@
                                                     {{ commonLocaleData?.app_yes }}
                                                 </button>
                                                 <button
-                                                    matButton="elevated"
+                                                    matButton="outlined"
                                                     role="button"
                                                     (click)="onUserConfirmation(false)"
                                                 >

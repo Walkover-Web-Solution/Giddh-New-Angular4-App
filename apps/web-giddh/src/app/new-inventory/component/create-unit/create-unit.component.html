@@ -139,7 +139,7 @@
                         <div class="inc-dec">
                             <div class="plus-minus">
                                 <button
-                                    matButton="elevated"
+                                    matButton="outlined"
                                     class="mr-0"
                                     aria-label="delete icon"
                                     (click)="removeMappedUnit(i)"
@@ -152,7 +152,7 @@
                 </div>
                 <div class="row">
                     <div class="col-lg-12">
-                        <button matButton="elevated" aria-label="add new" (click)="addNewMappedUnit()">
+                        <button matButton="outlined" aria-label="add new" (click)="addNewMappedUnit()">
                             {{ localeData?.add_new }}
                         </button>
                     </div>
@@ -181,7 +181,7 @@
                         </button>
                         <button
                             aria-label="clear"
-                            matButton="elevated"
+                            matButton="outlined"
                             type="button"
                             (click)="resetForm()"
                             *ngIf="!unitDetails?.uniqueName"
@@ -190,7 +190,7 @@
                         </button>
                         <button
                             aria-label="close"
-                            matButton="elevated"
+                            matButton="outlined"
                             type="button"
                             (click)="closeAsideEvent.emit(false)"
                         >
@@ -202,7 +202,7 @@
                     <div class="pull-right d-flex column-gap-15">
                         <button
                             aria-label="delete"
-                            matButton="elevated"
+                            matButton="outlined"
                             type="button"
                             class="btn-sm mr-0"
                             (click)="deleteUnit()"

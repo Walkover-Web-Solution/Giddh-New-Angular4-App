@@ -379,7 +379,7 @@
                                 >
                                     {{ commonLocaleData?.app_create }}
                                 </button>
-                                <button aria-label="clear" matButton="elevated" (click)="resetForm()">
+                                <button aria-label="clear" matButton="outlined" (click)="resetForm()">
                                     {{ commonLocaleData?.app_clear }}
                                 </button>
                                 <button
@@ -394,7 +394,7 @@
 
                                 <button
                                     aria-label="close icon"
-                                    matButton="elevated"
+                                    matButton="outlined"
                                     *ngIf="referenceNumber"
                                     class="min-width-100"
                                     (click)="back(true)"

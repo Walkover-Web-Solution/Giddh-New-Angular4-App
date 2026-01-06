@@ -177,7 +177,7 @@
                                             {{ commonLocaleData?.app_create }}
                                         </button>
                                         <button
-                                            matButton="elevated"
+                                            matButton="outlined"
                                             class="mt-2"
                                             (click)="resetForm()"
                                             *ngIf="!manufactureUniqueName"
@@ -194,7 +194,7 @@
                                             {{ commonLocaleData?.app_update }}
                                         </button>
                                         <button
-                                            matButton="elevated"
+                                            matButton="outlined"
                                             class="mt-2"
                                             (click)="deleteManufacturing()"
                                             *ngIf="manufactureUniqueName"
@@ -202,7 +202,7 @@
                                             {{ commonLocaleData?.app_delete }}
                                         </button>
                                         <button
-                                            matButton="elevated"
+                                            matButton="outlined"
                                             class="mt-2"
                                             [routerLink]="['/pages/inventory/v2/manufacturing/list']"
                                             *ngIf="manufactureUniqueName"

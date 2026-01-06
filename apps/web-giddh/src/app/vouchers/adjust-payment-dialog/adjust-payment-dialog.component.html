@@ -277,10 +277,10 @@
                             <p>{{ localeData?.adjustment_note }}</p>
                         </div>
                         <div class="d-flex justify-content-end column-gap-1 mt-2" *ngIf="isModal">
-                            <button matButton="elevated" mat-dialog-close type="button">
+                            <button matButton="outlined" mat-dialog-close type="button">
                                 {{ commonLocaleData?.app_close }}
                             </button>
-                            <button matButton="elevated" (click)="onClear(true)">
+                            <button matButton="outlined" (click)="onClear(true)">
                                 {{ commonLocaleData?.app_reset }}
                             </button>
                             <button

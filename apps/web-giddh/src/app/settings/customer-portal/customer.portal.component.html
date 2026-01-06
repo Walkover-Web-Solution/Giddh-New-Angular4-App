@@ -105,7 +105,7 @@
                                     >
                                     </reactive-dropdown-field>
                                     <button
-                                        matButton="elevated"
+                                        matButton="outlined"
                                         class="btn-stroked-icon"
                                         *ngIf="razorPayObj?.account?.uniqueName && razorPayObj?.account?.name"
                                         (click)="unlinkAccountFromRazorPay()">
@@ -148,7 +148,7 @@
                                         {{ commonLocaleData?.app_update }}
                                     </button>
                                     <button
-                                        matButton="elevated"
+                                        matButton="outlined"
                                         aria-label="delete"
                                         *ngIf="updateRazor"
                                         (click)="deleteRazorPayDetails()"
@@ -193,7 +193,7 @@
                                     >
                                     </reactive-dropdown-field>
                                     <button
-                                        matButton="elevated"
+                                        matButton="outlined"
                                         class="min-width-unset"
                                         (click)="unlinkAccountFromPaypal()"
                                         *ngIf="paypalObj?.account?.uniqueName && paypalObj?.account?.name"
@@ -229,7 +229,7 @@
                                     <button
                                         aria-label="delete"
                                         *ngIf="updatePaypal"
-                                        matButton="elevated"
+                                        matButton="outlined"
                                         type="button"
                                         (click)="deletePaypalDetails()"
                                     >
@@ -303,7 +303,7 @@
                                         {{ !updatePayu ? commonLocaleData?.app_save : commonLocaleData?.app_update }}
                                     </button>
                                     <button
-                                        matButton="elevated"
+                                        matButton="outlined"
                                         aria-label="delete"
                                         *ngIf="updatePayu"
                                         (click)="deletePayuDetails()"

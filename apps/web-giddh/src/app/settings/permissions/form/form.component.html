@@ -270,7 +270,7 @@
                         <span *ngIf="!isUpdtCase">{{ commonLocaleData?.app_add }}</span>
                         <span *ngIf="isUpdtCase">{{ commonLocaleData?.app_update }}</span>
                     </button>
-                    <button *ngIf="isUpdtCase" (click)="closeDialog.emit(false)" matButton="elevated" type="button">
+                    <button *ngIf="isUpdtCase" (click)="closeDialog.emit(false)" matButton="outlined" type="button">
                         {{ commonLocaleData?.app_cancel }}
                     </button>
                 </div>

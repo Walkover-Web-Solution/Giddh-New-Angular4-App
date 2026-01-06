@@ -9,7 +9,7 @@
     <giddh-page-loader *ngIf="showLoader"></giddh-page-loader>
     <div *ngIf="!showLoader">
         <div class="position-relative create-custom-field-page mt-4">
-            <button matButton="elevated" [disableRipple]="true" class="back-to-page" (click)="redirectToGetAllPage()">
+            <button matButton="outlined" [disableRipple]="true" class="back-to-page" (click)="redirectToGetAllPage()">
                 <i class="back-left icon-left"></i>
                 {{ commonLocaleData?.app_back }}
             </button>
@@ -153,7 +153,7 @@
                                                     {{ commonLocaleData?.app_update }}
                                                 </button>
                                                 <button
-                                                    matButton="elevated"
+                                                    matButton="outlined"
                                                     class="min-width-100 mr-0"
                                                     (click)="redirectToGetAllPage()"
                                                 >
@@ -176,7 +176,7 @@
                                                     {{ commonLocaleData?.app_save }}
                                                 </button>
                                                 <button
-                                                    matButton="elevated"
+                                                    matButton="outlined"
                                                     class="min-width-100 mr-0"
                                                     (click)="resetForm(customFieldCreateEditForm)"
                                                 >

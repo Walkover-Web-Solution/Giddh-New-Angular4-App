@@ -98,7 +98,7 @@
                                                     Verify Email
                                                 </button>
                                                 <a
-                                                    matButton="elevated"
+                                                    matButton="outlined"
                                                     class="cursor-pointer pull-right"
                                                     (click)="
                                                         LoginWithEmail(loginWithPasswdForm.controls['uniqueKey']?.value)
@@ -215,7 +215,7 @@
                                     </p>
                                     <div class="d-flex align-items-center account mt-1">
                                         <p class="mb-0 mr-2 font-weight-semibold">Don't have an account?</p>
-                                        <a matButton="elevated" routerLink="/signup" href="javascript:void(0);">
+                                        <a matButton="outlined" routerLink="/signup" href="javascript:void(0);">
                                             Signup</a
                                         >
                                     </div>
@@ -255,7 +255,7 @@
                     >
                         Submit
                     </button>
-                    <button matButton="elevated" class="sharp mt-2" (click)="hideEmailModal()">Cancel</button>
+                    <button matButton="outlined" class="sharp mt-2" (click)="hideEmailModal()">Cancel</button>
                 </div>
             </div>
             <div *ngIf="isLoginWithEmailSubmited$ | async" class="clear-both form-group form-group-lg">
@@ -282,10 +282,10 @@
                     >
                         Last step to go
                     </button>
-                    <button matButton="elevated" class="sharp" (click)="hideEmailModal()">Cancel</button>
+                    <button matButton="outlined" class="sharp" (click)="hideEmailModal()">Cancel</button>
                 </div>
                 <a
-                    matButton="elevated"
+                    matButton="outlined"
                     class="cursor-pointer pull-right"
                     (click)="LoginWithEmail(emailVerifyForm.controls['email']?.value)"
                     href="javascript:void(0);"
@@ -337,7 +337,7 @@
                 >
                     {{ !(isLoginWithMobileInProcess$ | async) ? "Get Otp" : "Resend" }}
                 </button>
-                <button matButton="elevated" class="sharp mt-2" (click)="hideMobileModal()">Cancel</button>
+                <button matButton="outlined" class="sharp mt-2" (click)="hideMobileModal()">Cancel</button>
             </div>
             <div class="clear-both form-group form-group-lg" *ngIf="isLoginWithMobileSubmited$ | async">
                 <hr class="mrtb10" />
@@ -358,7 +358,7 @@
                     >
                         Login
                     </button>
-                    <button matButton="elevated" class="sharp" type="button" (click)="hideMobileModal()">Cancel</button>
+                    <button matButton="outlined" class="sharp" type="button" (click)="hideMobileModal()">Cancel</button>
                 </div>
             </div>
         </form>
@@ -388,7 +388,7 @@
                     >
                         Submit
                     </button>
-                    <button matButton="elevated" class="sharp" type="button" (click)="resetTwoWayAuthModal()">
+                    <button matButton="outlined" class="sharp" type="button" (click)="resetTwoWayAuthModal()">
                         Cancel
                     </button>
                 </div>

@@ -375,7 +375,7 @@
                                                                 firstStepForm.get('planUniqueName').value !==
                                                                 plan?.uniqueName
                                                             "
-                                                            matButton="elevated"
+                                                            matButton="outlined"
                                                             class="selected-plan-button mt-auto"
                                                             aria-label="monthly"
                                                             [class.selected]="
@@ -1135,7 +1135,7 @@
                             </button>
                             <button
                                 aria-label="back"
-                                matButton="elevated"
+                                matButton="outlined"
                                 class="w-100 mt-2"
                                 (click)="selectedStep = 0; backToPreviousPage()"
                                 *ngIf="selectedStep === 1"
@@ -1144,7 +1144,7 @@
                             </button>
                             <button
                                 aria-label="billing"
-                                matButton="elevated"
+                                matButton="outlined"
                                 class="w-100 mt-2"
                                 (click)="selectedStep = 1; backToPreviousPage()"
                                 *ngIf="selectedStep === 2"

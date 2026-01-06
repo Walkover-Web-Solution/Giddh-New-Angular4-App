@@ -284,7 +284,7 @@
                     <div class=" p-3 clear-both mt-1 overflow-visible">
                         <div class="d-flex pb-2 activity-title">
                             <p class="section-head pt-0">{{ localeData?.session?.section_heading }}</p>
-                            <button matButton="elevated" class="mr-0" (click)="clearAllSession()">
+                            <button matButton="outlined" class="mr-0" (click)="clearAllSession()">
                                 {{ commonLocaleData?.app_delete_all }}
                             </button>
                         </div>
@@ -321,7 +321,7 @@
                                         }}</span>
                                         <button
                                             type="button"
-                                            matButton="elevated"
+                                            matButton="outlined"
                                             class="min-width-unset"
                                             (click)="deleteSession(element.sessionId, sessionIndex)"
                                             *ngIf="userSessionId !== element.sessionId"

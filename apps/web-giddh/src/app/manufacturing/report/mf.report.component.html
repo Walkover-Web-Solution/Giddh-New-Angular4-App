@@ -3,7 +3,7 @@
     <div class="clear-both mr-3 create-btn" *ngIf="isTabletScreen">
         <div class="mr-3" *ngIf="showClearFilter()">
             <label class="d-none">&nbsp;</label>
-            <button matButton="elevated" type="button" (click)="clearFilters()">Clear Filter</button>
+            <button matButton="outlined" type="button" (click)="clearFilters()">Clear Filter</button>
         </div>
         <div>
             <label class="d-none">&nbsp;</label>
@@ -100,7 +100,7 @@
                         >
                             <div *ngIf="showClearFilter()">
                                 <label class="d-block">&nbsp;</label>
-                                <button matButton="elevated" type="button" (click)="clearFilters()">
+                                <button matButton="outlined" type="button" (click)="clearFilters()">
                                     Clear Filter
                                 </button>
                             </div>

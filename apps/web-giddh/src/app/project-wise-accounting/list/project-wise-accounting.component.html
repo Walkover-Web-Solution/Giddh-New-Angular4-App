@@ -52,7 +52,7 @@
                 ></reactive-dropdown-field>
                 <button
                     *ngIf="projectName.value?.length || projectStatus.value?.length"
-                    matButton="elevated"
+                    matButton="outlined"
                     class="min-width-100 ml-2"
                     (click)="resetFilter()"
                 >
@@ -173,7 +173,7 @@
                         <ng-template #loadedContent>
                             <div *ngIf="element.profitAndLoss == null; else showValue">
                                 <button
-                                    matButton="elevated"
+                                    matButton="outlined"
                                     class="z-index-0"
                                     (click)="getProfitLoss(element)"
                                     aria-label="Show profit and loss"

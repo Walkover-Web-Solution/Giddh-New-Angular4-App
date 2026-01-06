@@ -49,7 +49,7 @@
                 </div>
                 <div class="text-center d-lg-flex d-none">
                     <div class="clear-filter" *ngIf="checkIfFiltersApplied()">
-                        <button matButton="elevated" class="mr-0" (click)="clearFilters()">
+                        <button matButton="outlined" class="mr-0" (click)="clearFilters()">
                             <span class="icon-cross"></span> Clear Filter
                         </button>
                     </div>
@@ -65,7 +65,7 @@
             </div>
             <div class="d-lg-none mb-2">
                 <div class="clear-filter" *ngIf="checkIfFiltersApplied()">
-                    <button matButton="elevated" class="mr-0" (click)="clearFilters()">
+                    <button matButton="outlined" class="mr-0" (click)="clearFilters()">
                         <span class="icon-cross"></span> Clear Filter
                     </button>
                 </div>
@@ -246,7 +246,7 @@
                             <div class="btn-group">
                                 <button
                                     type="button"
-                                    matButton="elevated"
+                                    matButton="outlined"
                                     class="select-action-button"
                                     [matMenuTriggerFor]="actionMenu"
                                 >
@@ -347,7 +347,7 @@
             <div class="pull-right mt-2">
                 <button matButton="filled" class="mr-2" type="button" (click)="search()">Search</button>
                 <button
-                    matButton="elevated"
+                    matButton="outlined"
                     class="mr-0"
                     type="button"
                     (click)="refreshTempPostParams(); hideModal(false)"

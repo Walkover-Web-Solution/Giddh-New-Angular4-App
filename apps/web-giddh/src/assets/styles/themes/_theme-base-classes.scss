@@ -1,237 +1,91 @@
-// Material 3 Azure and Blue Theme Base Classes
-// Using M3 design tokens for light and dark themes
-
 body {
-    // Legacy Variables for Backward Compatibility
     --text-primary-color: var(--theme-primary-color);
     --bg-primary-color: var(--theme-primary-color);
     --border-color: var(--theme-border-color);
 
-    // M3 Color Mixing for Light Variants using legacy variables
-    --theme-primary-light: color-mix(in oklch, var(--theme-primary-color) 10%, white);
-    --theme-accent-light: color-mix(in oklch, var(--theme-accent-color) 10%, white);
-    --theme-warn-light: color-mix(in oklch, var(--theme-warn-color) 10%, white);
+    &.default-theme {
+        --lighter-percent: 10%;
+    }
+    &.dark-theme {
+        --lighter-percent: 30%;
+    }
+    --theme-primary-light: color-mix(in oklch, var(--theme-primary-color) var(--lighter-percent), white);
+    --theme-accent-light: color-mix(in oklch, var(--theme-accent-color) var(--lighter-percent), white);
+    --theme-warn-light: color-mix(in oklch, var(--theme-warn-color) var(--lighter-percent), white);
 
     .theme-primary-light {
         background-color: var(--theme-primary-light) !important;
     }
-
     .theme-accent-light {
         background-color: var(--theme-accent-light) !important;
     }
-
     .theme-warn-light {
         background-color: var(--theme-warn-light) !important;
     }
+    .mat-app-background { 
+        background-color: var(--theme-background-color, var(--mat-sys-surface));
+        color: var(--theme-foreground-color, var(--mat-sys-on-surface));
+    }
 
-    // M3 Light Theme Configuration
-    &.default-theme {
-        // M3 Surface Colors - Light Theme
-        --color-white: var(--mat-sys-surface);
-        --color-black: var(--mat-sys-on-surface);
-        --color-light-gray: var(--mat-sys-surface-container-low);
-        --color-medium-gray: var(--mat-sys-on-surface-variant);
-        --color-dark-gray: var(--mat-sys-surface-container-high);
-        --color-silver: var(--mat-sys-outline-variant);
-        --color-transparent: transparent;
-
-        // M3 Semantic Colors - Light Theme
-        --color-red: var(--mat-sys-error);
-        --color-blue: var(--mat-sys-primary);
-        --color-green: var(--mat-sys-tertiary);
+    &.default-theme,
+    &.dark-theme {
+        --color-black: #0d0d0d;
+        --color-danger-light: #e545561a;
+        --color-orange-light: #e58a0026;
+        --color-red-light: #e5455626;
+        --color-green-light: #36b28326;
+        --color-dark-black: #212529;
+        --color-white: #ffffff;
+        --color-light-gray: #f5f5f5;
+        --color-border-medium: #dee2e6;
+        --color-success-light: #e0f3e5;
+        --color-silver: #cbcfd2;
+        --color-medium-gray: #9b9b9e;
+        --color-dark-gray: #505159;
+        --color-border-light: #e7e9eb9a;
+        --color-fields-border: #0000001f;
         --color-orange: #e58a00;
         --color-deep-orange: #ff9933;
         --color-brown-gold: #996515;
+        --color-red: #c51e3a;
+        --color-blue: #2196f3;
+        --color-green: #098757;
+        --color-transparent: transparent;
 
-        // M3 State Colors - Light Theme
-        --color-danger-light: color-mix(in oklch, var(--mat-sys-error) 10%, var(--mat-sys-surface));
-        --color-orange-light: color-mix(in oklch, #e58a00 10%, var(--mat-sys-surface));
-        --color-red-light: color-mix(in oklch, var(--mat-sys-error) 10%, var(--mat-sys-surface));
-        --color-green-light: color-mix(in oklch, var(--mat-sys-tertiary) 10%, var(--mat-sys-surface));
-        --color-success-light: var(--mat-sys-tertiary-container);
+        --color-apple-search-background: #575150;
+        --color-field-hover: #000000de;
+        --color-border-focus: #3f51b5;
+        --color-mat-option: #0000000a;
 
-        // M3 Border Colors - Light Theme
-        --color-border-medium: var(--mat-sys-outline-variant);
-        --color-border-light: color-mix(in oklch, var(--mat-sys-outline-variant) 60%, var(--mat-sys-surface));
-        --color-fields-border: var(--mat-sys-outline);
-
-        // M3 Interactive States - Light Theme
-        --color-field-hover: var(--mat-sys-on-surface);
-        --color-border-focus: var(--mat-sys-primary);
-        --color-mat-option: var(--mat-sys-surface-container-high);
-
-        // M3 Elevation - Light Theme
-        --color-shadow-light: color-mix(in oklch, var(--mat-sys-shadow) 20%, transparent);
-        --color-drag-bottom-shadow: color-mix(in oklch, var(--mat-sys-shadow) 14%, transparent);
-        --color-drag-right-shadow: color-mix(in oklch, var(--mat-sys-shadow) 12%, transparent);
+        --color-shadow-light: #00000033;
+        --color-drag-bottom-shadow: #00000024;
+        --color-drag-right-shadow: #0000001f;
         --mat-menu-box-shadow: 0px 5px 5px -3px var(--color-shadow-light),
             0px 8px 10px 1px var(--color-drag-bottom-shadow), 0px 3px 14px 2px var(--color-drag-right-shadow);
 
-        // M3 Assets - Light Theme
         // Filter for Image
         --filter-image-color-white: brightness(0) invert(1);
         // Use this class on black color image (icon) to  change color in dark theme
         --color-image-filter-quaternary: invert(100%) sepia(1%) saturate(2%) hue-rotate(1deg) brightness(33%)
             contrast(100%);
+
         // Image url
         --url-caret-image: url("../../images/caret-light.svg");
-        --table-background-color: var(--mat-sys-surface-container);
-        --color-apple-search-background: #575150;
+
+        --table-background-color: #ffffff;
     }
 
-    // M3 Dark Theme Configuration
     &.dark-theme {
-        // M3 Surface Colors - Dark Theme
-        --color-white: var(--mat-sys-surface);
-        --color-black: var(--mat-sys-on-surface);
-        --color-light-gray: var(--mat-sys-surface-container-low);
-        --color-medium-gray: var(--mat-sys-on-surface-variant);
-        --color-dark-gray: var(--mat-sys-surface-container-high);
-        --color-silver: var(--mat-sys-outline-variant);
-        --color-transparent: transparent;
-
-        // M3 Semantic Colors - Dark Theme
-        --color-red: var(--mat-sys-error);
-        --color-blue: var(--mat-sys-primary);
-        --color-green: var(--mat-sys-tertiary);
-        --color-orange: #ffb74d;
-        --color-deep-orange: #ffcc80;
-        --color-brown-gold: #d4af37;
-
-        // M3 State Colors - Dark Theme
-        --color-danger-light: color-mix(in oklch, var(--mat-sys-error) 10%, var(--mat-sys-surface));
-        --color-orange-light: color-mix(in oklch, #ffb74d 10%, var(--mat-sys-surface));
-        --color-red-light: color-mix(in oklch, var(--mat-sys-error) 10%, var(--mat-sys-surface));
-        --color-green-light: color-mix(in oklch, var(--mat-sys-tertiary) 10%, var(--mat-sys-surface));
-        --color-success-light: var(--mat-sys-tertiary-container);
-
-        // M3 Border Colors - Dark Theme
-        --color-border-medium: var(--mat-sys-outline-variant);
-        --color-border-light: color-mix(in oklch, var(--mat-sys-outline-variant) 60%, var(--mat-sys-surface));
-        --color-fields-border: var(--mat-sys-outline);
-
-        // M3 Interactive States - Dark Theme
-        --color-field-hover: var(--mat-sys-on-surface);
-        --color-border-focus: var(--mat-sys-primary);
-        --color-mat-option: var(--mat-sys-surface-container-high);
-
-        // M3 Elevation - Dark Theme
-        --color-shadow-light: color-mix(in oklch, var(--mat-sys-shadow) 30%, transparent);
-        --color-drag-bottom-shadow: color-mix(in oklch, var(--mat-sys-shadow) 20%, transparent);
-        --color-drag-right-shadow: color-mix(in oklch, var(--mat-sys-shadow) 18%, transparent);
-        --mat-menu-box-shadow: 0px 5px 5px -3px var(--color-shadow-light),
-            0px 8px 10px 1px var(--color-drag-bottom-shadow), 0px 3px 14px 2px var(--color-drag-right-shadow);
-
-        // M3 Assets - Dark Theme
-        // Filter for Image
-        --filter-image-color-white: brightness(0) invert(1);
-        // Use this class on black color image (icon) to  change color in dark theme
+        // --text-primary-color: var(--color-white);
+        --color-dark-gray: var(--color-light-gray);
         --color-image-filter-quaternary: brightness(0) invert(1);
-        // Image url
+        --table-background-color: #424242;
         --url-caret-image: url("../../images/caret-dark.svg");
-        --table-background-color: var(--mat-sys-surface-container);
-        --color-apple-search-background: #575150;
     }
 }
 
-// M3 Universal Utility Classes (Theme-Agnostic)
-// These classes work for both light and dark themes using Material 3 tokens
-
-// Background Utility Classes
-.bg-light-gray {
-    background-color: var(--color-light-gray) !important;
-}
-
-.bg-primary {
-    background-color: var(--mat-sys-primary) !important;
-    color: var(--mat-sys-on-primary) !important;
-}
-
-.bg-surface {
-    background-color: var(--mat-sys-surface) !important;
-    color: var(--mat-sys-on-surface) !important;
-}
-
-.bg-surface-container {
-    background-color: var(--mat-sys-surface-container) !important;
-    color: var(--mat-sys-on-surface) !important;
-}
-
-.bg-tertiary {
-    background-color: var(--mat-sys-tertiary) !important;
-    color: var(--mat-sys-on-tertiary) !important;
-}
-
-.bg-error {
-    background-color: var(--mat-sys-error) !important;
-    color: var(--mat-sys-on-error) !important;
-}
-
-// Custom Color Backgrounds
-.bg-orange {
-    background-color: var(--color-orange) !important;
-    color: var(--color-white) !important;
-}
-
-.bg-green {
-    background-color: var(--color-green) !important;
-    color: var(--mat-sys-on-tertiary) !important;
-}
-
-.bg-red {
-    background-color: var(--color-red) !important;
-    color: var(--mat-sys-on-error) !important;
-}
-
-// Text Color Utility Classes
-.text-primary {
-    color: var(--mat-sys-primary) !important;
-}
-
-.text-on-surface {
-    color: var(--mat-sys-on-surface) !important;
-}
-
-.text-tertiary {
-    color: var(--mat-sys-tertiary) !important;
-}
-
-.text-error {
-    color: var(--mat-sys-error) !important;
-}
-
-.text-orange {
-    color: var(--color-orange) !important;
-}
-
-.text-green {
-    color: var(--color-green) !important;
-}
-
-.text-red {
-    color: var(--color-red) !important;
-}
-
-// Enhanced Button Contrast (Universal)
-.mat-mdc-button, .mat-mdc-raised-button, .mat-mdc-outlined-button {
-    &.mat-primary {
-        --mdc-filled-button-container-color: var(--mat-sys-primary);
-        --mdc-filled-button-label-text-color: var(--mat-sys-on-primary);
-        --mdc-outlined-button-outline-color: var(--mat-sys-primary);
-        --mdc-outlined-button-label-text-color: var(--mat-sys-primary);
-    }
-
-    &.mat-accent {
-        --mdc-filled-button-container-color: var(--mat-sys-tertiary);
-        --mdc-filled-button-label-text-color: var(--mat-sys-on-tertiary);
-        --mdc-outlined-button-outline-color: var(--mat-sys-tertiary);
-        --mdc-outlined-button-label-text-color: var(--mat-sys-tertiary);
-    }
-
-    &.mat-warn {
-        --mdc-filled-button-container-color: var(--mat-sys-error);
-        --mdc-filled-button-label-text-color: var(--mat-sys-on-error);
-        --mdc-outlined-button-outline-color: var(--mat-sys-error);
-        --mdc-outlined-button-label-text-color: var(--mat-sys-error);
+.default-theme {
+    .bg-light-gray {
+        background-color: var(--color-light-gray) !important;
     }
 }

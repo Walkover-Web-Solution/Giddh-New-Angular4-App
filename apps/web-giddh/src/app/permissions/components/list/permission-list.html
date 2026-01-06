@@ -11,7 +11,7 @@
                 {{localeData?.add_new_role}}
             </button>
             <button
-                matButton="elevated"
+                matButton="outlined"
                 *ngIf="showBackButton"
                 class="btn custom-btn"
                 [routerLink]="['/pages/settings/permission']"
@@ -26,7 +26,7 @@
                         <h1>{{role.name}}</h1>
                         <div class="text-center mt-4 on-hover d-flex column-gap-1">
                             <button
-                                matButton="elevated"
+                                matButton="outlined"
                                 *ngIf="!role.isFixed"
                                 class="custom-btn"
                                 (click)="updateRole(role)"
@@ -34,7 +34,7 @@
                                 {{commonLocaleData?.app_edit}}
                             </button>
                             <button
-                                matButton="elevated"
+                                matButton="outlined"
                                 *ngIf="!role.isFixed"
                                 (click)="deleteRole(role);"
                             >

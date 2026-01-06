@@ -38,7 +38,7 @@
                                     searchString !== null) &&
                                 !isLoading
                             "
-                            matButton="elevated"
+                            matButton="outlined"
                             (click)="isApiCalled = true; resetSearch()"
                             aria-label="cross icon"
                         >
@@ -51,7 +51,7 @@
                                 {{ localeData?.total_inventory_count }} : <span>{{ totalInventoryCount }}</span>
                             </p>
                             <button
-                                matButton="elevated"
+                                matButton="outlined"
                                 class="btn-stroked-icon bulk-stock-hide-show-button p-0 ml-2"
                                 (click)="openAdvanceFilter()"
                                 [matTooltip]="commonLocaleData?.app_advanced_filter"

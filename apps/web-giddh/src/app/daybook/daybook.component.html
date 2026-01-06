@@ -45,7 +45,7 @@
                 </div>
                 <div class="expand-collapse-btn">
                     <button
-                        matButton="elevated"
+                        matButton="outlined"
                         aria-label="expand icon"
                         [matTooltip]="commonLocaleData?.app_expand_all"
                         [matTooltipPosition]="'above'"
@@ -55,7 +55,7 @@
                         <span [ngClass]="isAllExpanded ? 'icon-collapse' : 'icon-expandIcon'"></span>
                     </button>
                 </div>
-                <button *ngIf="showAdvanceSearchIcon" matButton="elevated" (click)="initialRequest()" class="mx-0">
+                <button *ngIf="showAdvanceSearchIcon" matButton="outlined" (click)="initialRequest()" class="mx-0">
                     <span class="icon-cross icon-font-size-14"></span> {{ commonLocaleData?.app_clear_filter }}
                 </button>
                 <div class="d-flex align-items-center column-gap-1 ml-auto">

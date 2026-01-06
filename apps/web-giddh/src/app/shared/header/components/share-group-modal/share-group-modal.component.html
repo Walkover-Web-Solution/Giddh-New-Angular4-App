@@ -45,7 +45,7 @@
                             >
                                 {{ commonLocaleData?.app_share }}
                             </button>
-                            <button matButton="elevated" type="button" mat-dialog-close (click)="closeModal()">
+                            <button matButton="outlined" type="button" mat-dialog-close (click)="closeModal()">
                                 {{ commonLocaleData?.app_cancel }}
                             </button>
                         </div>
@@ -84,7 +84,7 @@
                                 >
                                 </reactive-dropdown-field>
                                 <button
-                                    matButton="elevated"
+                                    matButton="outlined"
                                     color="primary"
                                     (click)="unShareGroup(val?.uniqueName, val?.entityUniqueName)"
                                     aria-label="delete icon"

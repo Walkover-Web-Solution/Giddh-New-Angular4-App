@@ -317,7 +317,7 @@
                                     <div class="remove-radio-btn">
                                         <span class="pr-2" *ngIf="!firstItem">
                                             <button
-                                                matButton="elevated"
+                                                matButton="outlined"
                                                 (click)="removeGstDetailsForm(i)"
                                                 class="bg-white mr-3"
                                             >
@@ -489,7 +489,7 @@
                         </div>
                         <div *ngIf="lastItem">
                             <button
-                                matButton="elevated"
+                                matButton="outlined"
                                 (click)="addGstDetailsForm(gst.get('gstNumber')?.value); openConfirmLeaveDialog()"
                             >
                                 + {{ localeData?.add_address }}
@@ -643,7 +643,7 @@
                         </div>
                         <div class="pl-2 mt-1">
                             <button
-                                matButton="elevated"
+                                matButton="outlined"
                                 color="primary"
                                 type="button"
                                 aria-label="delete icon"

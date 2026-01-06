@@ -2,10 +2,10 @@
     <div class="form-header" *ngIf="selectedAsideView == 'mainview'">
         <p>Create</p>
     </div>
-    <button matButton="elevated" (click)="closeAsidePane($event)" *ngIf="selectedAsideView == 'mainview'">
+    <button matButton="outlined" (click)="closeAsidePane($event)" *ngIf="selectedAsideView == 'mainview'">
         <i class="icon-cross"></i>
     </button>
-    <button matButton="elevated" id="back" (click)="backButtonPressed()" *ngIf="selectedAsideView != 'mainview'">Back</button>
+    <button matButton="outlined" id="back" (click)="backButtonPressed()" *ngIf="selectedAsideView != 'mainview'">Back</button>
     <div [ngSwitch]="selectedAsideView">
         <ng-container *ngSwitchCase="'inward'">
             <transfer-inward-note

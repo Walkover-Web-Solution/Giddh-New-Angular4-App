@@ -22,7 +22,7 @@
                             *ngIf="queryParams?.stockUniqueName && !addStock"
                             (click)="backClicked()"
                             class="btn-position-left mr-0"
-                            matButton="elevated"
+                            matButton="outlined"
                             aria-label="back btn"
                         >
                             <i class="icon-left back-left"></i>
@@ -166,7 +166,7 @@
                                             <button
                                                 aria-label="move btn"
                                                 *ngIf="queryParams?.stockUniqueName && stockGroups?.length > 1"
-                                                matButton="elevated"
+                                                matButton="outlined"
                                                 class="min-width-100 move-stock mr-0"
                                                 (click)="moveStock()"
                                                 [disabled]="defaultStockGroupUniqueName === stockGroupUniqueName"
@@ -992,7 +992,7 @@
                                                                                 <div class="edit-btn mt-1">
                                                                                     <button
                                                                                         aria-label="edit icon"
-                                                                                        matButton="elevated"
+                                                                                        matButton="outlined"
                                                                                         (click)="
                                                                                             option.isEdit = true;
                                                                                             editOptionValues(option)
@@ -3988,7 +3988,7 @@
                 <button
                     aria-label="clear"
                     *ngIf="!queryParams?.stockUniqueName"
-                    matButton="elevated"
+                    matButton="outlined"
                     (click)="resetForm(stockCreateEditForm); getVariantCustomFields()"
                 >
                     {{ commonLocaleData?.app_clear }}
@@ -4011,7 +4011,7 @@
                 <button
                     aria-label="close icon"
                     *ngIf="queryParams?.stockUniqueName && !activeGroup?.uniqueName"
-                    matButton="elevated"
+                    matButton="outlined"
                     class="min-width-100"
                     (click)="backClicked(true)"
                 >
@@ -4020,7 +4020,7 @@
                 <button
                     aria-label="delete icon"
                     *ngIf="queryParams?.stockUniqueName"
-                    matButton="elevated"
+                    matButton="outlined"
                     class="min-width-100"
                     (click)="deleteStock()"
                     [disabled]="uploadAttachmentInProgress$ | async"

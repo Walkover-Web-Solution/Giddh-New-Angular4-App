@@ -7,7 +7,7 @@
 >
     <div class="subscription-container mx-auto p-3 overflow-visible">
         <div class="button-wrapper d-flex w-100 pl-2 justify-content-between pt-2">
-            <button matButton="elevated"
+            <button matButton="outlined"
                 *ngIf="
                     showClearFilter ||
                     subscriptionListForm?.controls['companyName']?.value ||
@@ -17,7 +17,7 @@
                     subscriptionListForm?.controls['planName']?.value ||
                     subscriptionListForm?.controls['duration']?.value
                 "
-                matButton="elevated"
+                matButton="outlined"
                 class="min-width-160 ml-2"
                 color="primary"
                 (click)="clearFilter()"

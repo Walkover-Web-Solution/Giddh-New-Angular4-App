@@ -40,7 +40,7 @@
                         <button aria-label="yes" matButton="filled" (click)="onSubmit($event)">
                             {{ localeData?.accept_subscription }}
                         </button>
-                        <button aria-label="no" matButton="elevated" (click)="onReject($event)">
+                        <button aria-label="no" matButton="outlined" (click)="onReject($event)">
                             {{ localeData?.decline_subscription }}
                         </button>
                     </div>
@@ -73,7 +73,7 @@
                         <button aria-label="yes" matButton="filled" (click)="onSubmit($event, true)">
                             {{ localeData?.submit }}
                         </button>
-                        <button aria-label="no" type="button" matButton="elevated" (click)="closeReject($event)">
+                        <button aria-label="no" type="button" matButton="outlined" (click)="closeReject($event)">
                             {{ localeData?.cancel }}
                         </button>
                     </div>

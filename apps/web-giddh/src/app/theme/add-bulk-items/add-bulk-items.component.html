@@ -195,7 +195,7 @@
                                                         class="d-flex align-items-center justify-content-between column-gap-1"
                                                     >
                                                         <button
-                                                            matButton="elevated"
+                                                            matButton="outlined"
                                                             (click)="alterQuantity(item, 'minus')"
                                                         >
                                                             <i class="icon-minus"></i>
@@ -211,7 +211,7 @@
                                                                 'form-control border-radius-0 text-center width-60'
                                                             "
                                                         ></text-field>
-                                                        <button matButton="elevated" (click)="alterQuantity(item)">
+                                                        <button matButton="outlined" (click)="alterQuantity(item)">
                                                             <i class="icon-add font-size-16 font-weight-semibold"></i>
                                                         </button>
                                                         <button mat-button (click)="deleteSelectedItem(bulkIndex)">
@@ -228,7 +228,7 @@
                                 <button matButton="filled" (click)="saveBulkItems()">
                                     {{ commonLocaleData?.app_add }}
                                 </button>
-                                <button matButton="elevated" mat-dialog-close>{{ commonLocaleData?.app_cancel }}</button>
+                                <button matButton="outlined" mat-dialog-close>{{ commonLocaleData?.app_cancel }}</button>
                             </div>
                         </div>
                     </div>

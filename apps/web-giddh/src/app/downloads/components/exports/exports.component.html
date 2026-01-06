@@ -25,13 +25,13 @@
                     </div>
                 </div>
                 <div class="clear-filter" *ngIf="showClearFilter">
-                    <button matButton="elevated" class="min-width-100 ml-2" (click)="resetFilter()">
+                    <button matButton="outlined" class="min-width-100 ml-2" (click)="resetFilter()">
                         <span class="icon-cross icon-font-size-14"></span> {{ commonLocaleData?.app_clear_filter }}
                     </button>
                 </div>
             </div>
             <button
-                matButton="elevated"
+                matButton="outlined"
                 class="btn-stroked-icon"
                 (click)="getDownloads()"
                 [matTooltip]="commonLocaleData?.app_refresh"

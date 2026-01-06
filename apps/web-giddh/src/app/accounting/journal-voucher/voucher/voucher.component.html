@@ -260,7 +260,7 @@
                                         {{ commonLocaleData?.app_yes }}
                                     </button>
                                     <button
-                                        matButton="elevated"
+                                        matButton="outlined"
                                         #resetButton
                                         (keyup)="keyUpOnResetButton($event)"
                                         (click)="acceptCancel()"
@@ -270,7 +270,7 @@
                                     </button>
                                 </div>
                                 <br />
-                                <button type="button" matButton="elevated" class="mt-1" (click)="refreshEntry()">
+                                <button type="button" matButton="outlined" class="mt-1" (click)="refreshEntry()">
                                     {{ commonLocaleData?.app_reset }}
                                 </button>
                             </div>
@@ -429,7 +429,7 @@
             >
                 {{ commonLocaleData?.app_create }}
             </button>
-            <button matButton="elevated" class="w-100" (click)="closeChequeDetailForm()">
+            <button matButton="outlined" class="w-100" (click)="closeChequeDetailForm()">
                 {{ commonLocaleData?.app_cancel }}
             </button>
         </div>

@@ -110,7 +110,7 @@
                                 ></watch-video>
                             </div>
                             <button
-                                matButton="elevated"
+                                matButton="outlined"
                                 *ngIf="
                                     ocrDataEnabled && !(invoiceType.isReceiptInvoice || invoiceType.isPaymentInvoice)
                                 "
@@ -2256,7 +2256,7 @@
                                                                                         {{ commonLocaleData?.app_save }}
                                                                                     </button>
                                                                                     <button
-                                                                                        matButton="elevated"
+                                                                                        matButton="outlined"
                                                                                         (click)="
                                                                                             cancelHsnSacEdit(entry);
                                                                                             hsnSacTrigger?.closeMenu()
@@ -3866,7 +3866,7 @@
                                     *ngIf="isMainVoucher"
                                 >
                                     <ng-container *ngIf="!isUpdateMode">
-                                        <button matButton="elevated" (click)="resetVoucherForm()">
+                                        <button matButton="outlined" (click)="resetVoucherForm()">
                                             {{ commonLocaleData?.app_clear }}
                                         </button>
                                         <button
@@ -3976,7 +3976,7 @@
                                             {{ localeData?.create_payment }}
                                         </button>
                                         <button
-                                            matButton="elevated"
+                                            matButton="outlined"
                                             [matMenuTriggerFor]="moreOptions"
                                             class="min-width-unset"
                                             *ngIf="
@@ -3999,7 +3999,7 @@
                                         </mat-menu>
                                     </ng-container>
                                     <ng-container *ngIf="isUpdateMode">
-                                        <button matButton="elevated" (click)="cancelUpdateVoucher()">
+                                        <button matButton="outlined" (click)="cancelUpdateVoucher()">
                                             {{ commonLocaleData?.app_cancel }}
                                         </button>
                                         <button matButton="filled" (click)="updateVoucher()">
@@ -4011,7 +4011,7 @@
                                     class="vouchers-actions d-flex justify-content-end column-gap-1 pt-4 pb-4 mt-4"
                                     *ngIf="!isMainVoucher"
                                 >
-                                    <button matButton="elevated" (click)="resetVoucherForm()">
+                                    <button matButton="outlined" (click)="resetVoucherForm()">
                                         {{ commonLocaleData?.app_clear }}
                                     </button>
                                     <button matButton="filled" (click)="generateVoucher('skip')">

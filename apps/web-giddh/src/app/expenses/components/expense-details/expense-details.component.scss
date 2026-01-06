@@ -91,9 +91,9 @@ span {
     visibility: hidden;
 }
 .petty-cash {
-    background: var(--mat-sys-surface-container);
+    background: var(--theme-background-color);
     .bg-color{
-        background-color: var(--mat-sys-surface-container) !important;
+        background-color: var(--theme-background-color) !important;
     }
 }
 

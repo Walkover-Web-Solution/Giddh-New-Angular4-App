@@ -132,13 +132,13 @@
                     >
                         {{ commonLocaleData?.app_search }}
                     </button>
-                    <button matButton="elevated" (click)="addSearchRow()">
+                    <button matButton="outlined" (click)="addSearchRow()">
                         {{ localeData?.add_new_query }}
                     </button>
                     <button
-                        matButton="elevated"
+                        matButton="outlined"
                         *ngIf="searchDataSet?.controls?.length > 1"
-                        matButton="elevated"
+                        matButton="outlined"
                         class="mr-2"
                         (click)="removeSearchRow()"
                     >
@@ -148,7 +148,7 @@
                 <!-- end of second row -->
             </form>
         </mat-menu>
-        <button *ngIf="isFiltered | async" (click)="resetQuery()" matButton="elevated">
+        <button *ngIf="isFiltered | async" (click)="resetQuery()" matButton="outlined">
             <i class="icon-refresh"></i>
             {{ commonLocaleData?.app_reset }}
         </button>

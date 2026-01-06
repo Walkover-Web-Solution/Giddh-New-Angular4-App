@@ -43,7 +43,7 @@
         >
             <p>{{ localeData?.domain_registrar }}</p>
             <div class="d-flex column-gap-1">
-                <button matButton="elevated" (click)="deleteConfirmationDialog()">
+                <button matButton="outlined" (click)="deleteConfirmationDialog()">
                     {{ commonLocaleData?.app_delete }}
                 </button>
                 <button matButton="filled" *ngIf="!allVerifiedDomain" (click)="verifyDomain()">
@@ -141,7 +141,7 @@
                 </div>
             </form>
             <div class="mt-3 d-flex column-gap-1 justify-content-end">
-                <button matButton="elevated" mat-dialog-close (click)="shareEmailForm.reset()">
+                <button matButton="outlined" mat-dialog-close (click)="shareEmailForm.reset()">
                     {{ commonLocaleData?.app_cancel }}
                 </button>
                 <button
@@ -182,7 +182,7 @@
                 </div>
             </form>
             <div class="d-flex column-gap-1 justify-content-end mt-3">
-                <button matButton="elevated" mat-dialog-close (click)="portalWhilteLabelForm.reset()">
+                <button matButton="outlined" mat-dialog-close (click)="portalWhilteLabelForm.reset()">
                     {{ commonLocaleData?.app_cancel }}
                 </button>
                 <button matButton="filled" (click)="submitForm()">

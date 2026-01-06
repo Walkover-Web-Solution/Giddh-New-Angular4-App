@@ -13,7 +13,7 @@ $warn-color: #f44336;
     display: flex;
     margin-top: 0;
     font-size: var(--font-size-15);
-    background-color: var(--mat-sys-surface-container);
+    background-color: var(--theme-background-color);
     box-shadow: 0 2px 4px 0 var(--color-shadow-light), 0 2px 8px 0 var(--color-shadow-light);
     &.double {
         width: 100%;
@@ -130,7 +130,7 @@ $warn-color: #f44336;
         border: 1px solid var(--color-transparent);
         padding: 4px;
         border-radius: var(--mat-border-radius-4);
-        background-color: var(--mat-sys-surface-container);
+        background-color: var(--theme-background-color);
     }
 
     table,
@@ -282,13 +282,13 @@ $warn-color: #f44336;
     .td-div {
         color: var(--theme-foreground-color);
         margin: 0em 0;
-        background-color: var(--mat-sys-surface-container) !important;
+        background-color: var(--theme-background-color) !important;
         &.off {
             &,
             &.in-range,
             &.start-date,
             &.end-date {
-                background-color: var(--mat-sys-surface-container);
+                background-color: var(--theme-background-color);
                 border-color: transparent;
                 color: var(--color-medium-gray);
             }
@@ -439,7 +439,7 @@ $warn-color: #f44336;
 
     select {
         display: inline-block;
-        background-color: var(--mat-sys-surface-container);
+        background-color: var(--theme-background-color);
         width: 100%;
         padding: 5px;
         border: 1px solid var(--color-light-gray);
@@ -536,7 +536,7 @@ $warn-color: #f44336;
         display: flex;
         flex-direction: column;
         border-left: 1px solid var(--border-color);
-        background-color: var(--mat-sys-surface-container);
+        background-color: var(--theme-background-color);
         height: 490px !important;
         .range-container {
             ul {
@@ -557,7 +557,7 @@ $warn-color: #f44336;
                         cursor: pointer;
                         font-size: var(--font-size-15);
                         color: var(--theme-foreground-color);
-                        background-color: var(--mat-sys-surface-container);
+                        background-color: var(--theme-background-color);
                         border-left: 3px solid transparent !important;
                         font-family: var(--font-family) !important;
                         transition: all 100ms ease;
@@ -667,7 +667,7 @@ $warn-color: #f44336;
 
     .clear {
         box-shadow: none;
-        background-color: var(--mat-sys-surface-container) !important;
+        background-color: var(--theme-background-color) !important;
         svg {
             color: var(--color-red);
             fill: currentColor;
@@ -680,12 +680,12 @@ $warn-color: #f44336;
     }
     ::-webkit-scrollbar-track {
         border-radius: var(--mat-border-radius-4);
-        background-color: var(--mat-sys-surface-container);
+        background-color: var(--theme-background-color);
     }
 
     ::-webkit-scrollbar-thumb {
         border-radius: var(--mat-border-radius-4);
-        background-color: var(--mat-sys-surface-container);
+        background-color: var(--theme-background-color);
     }
 }
 .md-drppicker td.in-range.in-range-start::before {
@@ -851,12 +851,12 @@ td.in-range.in-range-start.in-range-hovered.in-range-end::before {
             }
             .ranges::-webkit-scrollbar-track {
                 border-radius: var(--mat-border-radius-4);
-                background-color: var(--mat-sys-surface-container);
+                background-color: var(--theme-background-color);
             }
 
             .ranges::-webkit-scrollbar-thumb {
                 border-radius: var(--mat-border-radius-4);
-                background-color: var(--mat-sys-surface-container);
+                background-color: var(--theme-background-color);
             }
         }
         &.rtl {
@@ -922,7 +922,7 @@ td:hover span {
 
 .md-drppicker td.end-date.active,
 .md-drppicker .td-div.end-date.active {
-    background-color: var(--mat-sys-surface-container) !important;
+    background-color: var(--theme-background-color) !important;
 
     span {
         background-color: var(--theme-primary-light) !important;
@@ -1064,7 +1064,7 @@ td span {
 
 .sub-ranges-cal {
     position: static;
-    background-color: var(--mat-sys-surface-container);
+    background-color: var(--theme-background-color);
     right: 0;
     top: 0;
     z-index: 9999;
@@ -1111,12 +1111,12 @@ td span {
     }
     .date-picker-scroll::-webkit-scrollbar-track {
         border-radius: var(--mat-border-radius-4);
-        background-color: var(--mat-sys-surface-container);
+        background-color: var(--theme-background-color);
     }
 
     .date-picker-scroll::-webkit-scrollbar-thumb {
         border-radius: var(--mat-border-radius-4);
-        background-color: var(--mat-sys-surface-container);
+        background-color: var(--theme-background-color);
     }
 }
 
@@ -1161,7 +1161,7 @@ td span {
                 position: sticky;
                 top: 0;
                 z-index: 1;
-                background-color: var(--mat-sys-surface-container);
+                background-color: var(--theme-background-color);
                 .sticky-header {
                     width: calc(100% - 3px) !important;
                     th.days-td {
@@ -1216,7 +1216,7 @@ td span {
                             border: none;
                             border-bottom: none;
                             color: var(--theme-foreground-color);
-                            background-color: var(--mat-sys-surface-container);
+                            background-color: var(--theme-background-color);
                             &.activeSelectedDate {
                                 border-bottom: none;
                             }
@@ -1313,7 +1313,7 @@ td span {
                     position: absolute;
                     z-index: 1017;
                     min-width: 96px;
-                    background-color: var(--mat-sys-surface-container);
+                    background-color: var(--theme-background-color);
                     box-shadow: 0px 2px 8px var(--color-shadow-light);
                     left: 28px;
                     top: -3px;

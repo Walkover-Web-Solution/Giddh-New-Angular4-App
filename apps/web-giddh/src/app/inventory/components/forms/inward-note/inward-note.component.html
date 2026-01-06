@@ -127,13 +127,13 @@
 
                             <div class="pull-right mt-1 unit-add">
                                 <button
-                                    matButton="elevated"
+                                    matButton="outlined"
                                     (click)="addTransactionItem(transactions.controls[i])"
                                     *ngIf="last"
                                 >
                                     <i class="icon-plus text-green"></i>
                                 </button>
-                                <button matButton="elevated" (click)="deleteTransactionItem(i)" *ngIf="!last">
+                                <button matButton="outlined" (click)="deleteTransactionItem(i)" *ngIf="!last">
                                     <i class="icon-cross text-red"></i>
                                 </button>
                             </div>
@@ -261,14 +261,14 @@
                                         </div>
                                         <div class="pull-right mt-1 unit-add">
                                             <button
-                                                matButton="elevated"
+                                                matButton="outlined"
                                                 (click)="addItemInLinkedStocks(list, i, i)"
                                                 *ngIf="l"
                                                 [disabled]="disableStockButton"
                                             >
                                                 <i class="icon-plus text-green"></i>
                                             </button>
-                                            <button matButton="elevated" (click)="removeItemInLinkedStocks(i)" *ngIf="!l">
+                                            <button matButton="outlined" (click)="removeItemInLinkedStocks(i)" *ngIf="!l">
                                                 <i class="icon-cross text-red"></i>
                                             </button>
                                         </div>
@@ -289,8 +289,8 @@
 
             <div class="row">
                 <div class="col-12 text-left mt-2">
-                    <button matButton="elevated" (click)="onCancel.emit($event)">Cancel</button>
-                    <button matButton="elevated" [ladda]="isLoading" [disabled]="form.invalid" (click)="save()">
+                    <button matButton="outlined" (click)="onCancel.emit($event)">Cancel</button>
+                    <button matButton="outlined" [ladda]="isLoading" [disabled]="form.invalid" (click)="save()">
                         Save
                     </button>
                 </div>

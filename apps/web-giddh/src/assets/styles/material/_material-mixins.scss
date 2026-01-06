@@ -1,55 +1,37 @@
 @use "@angular/material" as mat;
 
 /**
- * Clean Azure and Blue Material 3 Theme
- * Simplified configuration using M3 design tokens
+ * Consolidated mixin to define all theme color variables
+ * 
+ * @param {Map} $theme - Angular Material theme map
  */
+@mixin define-theme-colors($theme) {
+    // Define the mapping between your custom names and M3 theme roles
+    $theme-color-map: (
+        "primary":           primary,
+        "primary-contrast":  on-primary,
+        "accent":            tertiary,       // M3 'tertiary' replaces 'accent'
+        "accent-contrast":   on-tertiary,
+        "warn":              error,          // M3 'error' replaces 'warn'
+        "warn-contrast":     on-error,
+        "foreground":        on-surface,
+        "background":        surface,
+        "border":            outline         // M3 'outline' is the standard for borders/dividers
+    );
 
-// Azure and Blue Color Variables for Custom Components
-:root {
-    // Primary Azure Colors
-    --azure-primary: #0078d4;
-    --azure-primary-light: #40e0ff;
-    --azure-primary-dark: #005a9e;
+    // Generate CSS custom properties
+    @each $name, $role in $theme-color-map {
+        --theme-#{$name}-color: #{mat.get-theme-color($theme, $role)};
+    }
 
-    // Blue Accent Colors
-    --blue-accent: #106ebe;
-    --blue-accent-light: #5a9fd4;
-    --blue-accent-dark: #004578;
-
-    // Neutral Blue-Grey
-    --blue-grey: #607d8b;
-    --blue-grey-light: #8eacbb;
-    --blue-grey-dark: #34515e;
-
-    // Surface and Background
-    --surface-light: #fafafa;
-    --surface-dark: #121212;
-    --on-surface-light: #1f1f1f;
-    --on-surface-dark: #e0e0e0;
-}
-
-// Azure and Blue Theme Utility Classes
-.azure-primary {
-    color: var(--azure-primary) !important;
-}
-
-.azure-primary-bg {
-    background-color: var(--azure-primary) !important;
-}
-
-.blue-accent {
-    color: var(--blue-accent) !important;
-}
-
-.blue-accent-bg {
-    background-color: var(--blue-accent) !important;
-}
-
-.blue-grey {
-    color: var(--blue-grey) !important;
-}
-
-.blue-grey-bg {
-    background-color: var(--blue-grey) !important;
+    // Generate utility classes for text color
+    @each $name, $role in $theme-color-map {
+        .theme-#{$name}-color {
+            color: var(--theme-#{$name}-color) !important;
+        }
+        
+        .theme-#{$name}-bg-color {
+            background-color: var(--theme-#{$name}-color) !important;
+        }
+    }
 }

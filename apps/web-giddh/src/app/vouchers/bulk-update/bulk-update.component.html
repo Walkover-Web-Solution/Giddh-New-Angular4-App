@@ -87,7 +87,7 @@
                     <img alt="" required id="signatureImage" [src]="signatureSrc" />
                 </div>
                 <div class="d-flex mt-1 justify-content-center">
-                    <button matButton="elevated" type="button" (click)="clearImage()">
+                    <button matButton="outlined" type="button" (click)="clearImage()">
                         {{ commonLocaleData?.app_clear }}
                     </button>
                 </div>
@@ -141,7 +141,7 @@
             >
                 {{ commonLocaleData?.app_update }}
             </button>
-            <button matButton="elevated" role="button" (click)="onCancel()">{{ commonLocaleData?.app_cancel }}</button>
+            <button matButton="outlined" role="button" (click)="onCancel()">{{ commonLocaleData?.app_cancel }}</button>
         </div>
     </div>
 </ng-container>
@@ -199,14 +199,14 @@
         <p>{{ localeData?.bulk_invoice_update_note }}</p>
         <div class="d-flex column-gap-1 mt-3">
             <button
-                matButton="elevated"
+                matButton="outlined"
                 color="primary"
                 (click)="updateBulkPO()"
                 [disabled]="bulkUpdateVoucherInProgress$ | async"
             >
                 {{ commonLocaleData?.app_update }}
             </button>
-            <button matButton="elevated" (click)="onCancel()" role="button">{{ commonLocaleData?.app_cancel }}</button>
+            <button matButton="outlined" (click)="onCancel()" role="button">{{ commonLocaleData?.app_cancel }}</button>
         </div>
     </div>
 </ng-container>
