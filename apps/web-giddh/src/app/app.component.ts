@@ -390,7 +390,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
             return this.router.navigate([lastState]);
         }
 
-        if (environment.production && !Configuration.isElectron) {
+        if (environment.PRODUCTION_ENV && !Configuration.isElectron) {
             this._versionCheckService.initVersionCheck((this.serviceConfig.AppUrl || Configuration.AppUrl) + 'version.json');
             this._versionCheckService.onVersionChange$.pipe(takeUntil(this.destroyed$)).subscribe((isChanged: boolean) => {
                 if (isChanged) {
