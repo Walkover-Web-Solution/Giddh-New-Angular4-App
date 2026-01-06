@@ -15,7 +15,7 @@
             font-weight: normal;
             line-height: initial;
             width: 95%;
-            background-color: var(--mat-sys-surface-container);;
+            background-color: var(--mat-sys-surface-container);
         }
         .icon-search-icon {
             position: absolute;
@@ -46,7 +46,6 @@
                 text-overflow: ellipsis;
                 direction: ltr;
             }
-
         }
     }
 }
@@ -254,7 +253,7 @@
                     white-space: initial;
                 }
 
-                p{
+                p {
                     display: inline;
                     white-space: initial;
                 }

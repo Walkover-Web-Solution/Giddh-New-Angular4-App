@@ -39,15 +39,9 @@
                                 [(ngModel)]="updateNotesRequest.message2"
                                 name="message2"
                             ></textarea>
-                            <ng-container
-                                *ngIf="
-                                    updateNotesRequest?.message2?.length && !showNotesAtLastPage && message2?.isFocused
-                                "
-                            >
-                                <span class="max-character-label">Characters left:&nbsp;</span
-                                ><span class="max-character-value">{{
-                                    200 - updateNotesRequest?.message2?.length
-                                }}</span>
+                            <ng-container *ngIf="updateNotesRequest?.message2?.length && !showNotesAtLastPage && message2?.isFocused">
+                                <span class="max-character-label">Characters left:&nbsp;</span>
+                                <span class="max-character-value">{{ 200 - updateNotesRequest?.message2?.length }}</span>
                             </ng-container>
                         </div>
 
@@ -100,12 +94,7 @@
                         </div>
                     </div>
                     <div *ngIf="selectedField === 'signature' && signatureOptions === 'slogan'">
-                        <textarea
-                            class="form-control"
-                            required
-                            [(ngModel)]="updateSloganRequest.slogan"
-                            name="slogan"
-                        ></textarea>
+                        <textarea class="form-control" required [(ngModel)]="updateSloganRequest.slogan" name="slogan"></textarea>
                     </div>
 
                     <!-- TODO: under discussion -->
@@ -189,12 +178,7 @@
                 </div>
             </div>
             <div class="d-flex column-gap-1 justify-content-end">
-                <button
-                    matButton="filled"
-                    (click)="updateBulkInvoice()"
-                    [ladda]="updateInProcess"
-                    [disabled]="bulkUpdateForm.invalid"
-                >
+                <button matButton="filled" (click)="updateBulkInvoice()" [ladda]="updateInProcess" [disabled]="bulkUpdateForm.invalid">
                     {{ commonLocaleData?.app_update }}
                 </button>
                 <button matButton="elevated" (click)="onCancel()">{{ commonLocaleData?.app_cancel }}</button>
@@ -211,7 +195,7 @@
     <div mat-dialog-content class="dialog-body max-height-65vh">
         <p>{{ localeData?.bulk_image_note }}</p>
         <p class="mt-4">
-            <b> {{ localeData?.want_proceed }}</b>
+            <b>{{ localeData?.want_proceed }}</b>
         </p>
     </div>
     <div mat-dialog-actions class="text-left mt-4 clear-both">

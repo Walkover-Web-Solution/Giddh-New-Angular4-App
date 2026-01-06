@@ -1,22 +1,13 @@
-<div
-    appTranslate
-    [file]="'ledger/export-ledger'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
+<div appTranslate [file]="'ledger/export-ledger'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <div>
         <div class="dialog-header">
             <span>{{ localeData?.export_group_ledger }}</span>
         </div>
         <mat-dialog-content class="dialog-body">
             <form name="addShareEmailForm" novalidate autocomplete="off">
-                <p class="mb-2">
-                    {{ commonLocaleData?.app_note }}: {{ commonLocaleData?.app_export_file_name_change_note }}
-                </p>
+                <p class="mb-2">{{ commonLocaleData?.app_note }}: {{ commonLocaleData?.app_export_file_name_change_note }}</p>
                 <mat-radio-group color="primary" name="exportType" [(ngModel)]="exportType" class="mb-3">
-                    <mat-radio-button id="ledger-entries" [value]="'ledger'">{{
-                        localeData?.ledger_entries
-                    }}</mat-radio-button>
+                    <mat-radio-button id="ledger-entries" [value]="'ledger'">{{ localeData?.ledger_entries }}</mat-radio-button>
                     <mat-radio-button id="account" [value]="'account'">{{ localeData?.account }}</mat-radio-button>
                 </mat-radio-group>
 
@@ -24,9 +15,7 @@
                     <div class="pb-5">
                         <div class="form-inline">
                             <div class="form-group">
-                                <label class="w100 justify-content-start"
-                                    >{{ commonLocaleData?.app_date_range }}:
-                                </label>
+                                <label class="w100 justify-content-start">{{ commonLocaleData?.app_date_range }}:</label>
                                 <div
                                     class="custom-datepicker"
                                     [matMenuTriggerFor]="universalDatepicker"
@@ -48,107 +37,70 @@
                             </div>
                         </div>
                     </div>
-                    <div
-                        class="pb-4 clear-both d-flex"
-                        [hidden]="emailTypeSelected === 'columnar' || emailTypeSelected === 'billToBill'"
-                    >
-                        <label class="w100 d-sm-inline-flex d-flex">{{ commonLocaleData?.app_export_as }}: </label>
+                    <div class="pb-4 clear-both d-flex" [hidden]="emailTypeSelected === 'columnar' || emailTypeSelected === 'billToBill'">
+                        <label class="w100 d-sm-inline-flex d-flex">{{ commonLocaleData?.app_export_as }}:</label>
                         <mat-radio-group color="primary" name="fileType" [(ngModel)]="fileType">
-                            <mat-radio-button id="csv" [value]="'CSV'">{{
-                                commonLocaleData?.app_csv
-                            }}</mat-radio-button>
-                            <mat-radio-button id="excel" [value]="'XLSX'">{{
-                                commonLocaleData?.app_excel
-                            }}</mat-radio-button>
+                            <mat-radio-button id="csv" [value]="'CSV'">{{ commonLocaleData?.app_csv }}</mat-radio-button>
+                            <mat-radio-button id="excel" [value]="'XLSX'">{{ commonLocaleData?.app_excel }}</mat-radio-button>
                         </mat-radio-group>
                     </div>
                     <div class="pb-4">
                         <label class="w125">{{ commonLocaleData?.app_order }}:</label>
                         <label class="radio-inline p-0">
                             <mat-slide-toggle color="primary" name="sort" [(ngModel)]="exportRequest.sort">
-                                <span class="pull-left">{{
-                                    exportRequest.sort
-                                        ? commonLocaleData?.app_ascending
-                                        : commonLocaleData?.app_descending
-                                }}</span>
+                                <span class="pull-left">
+                                    {{ exportRequest.sort ? commonLocaleData?.app_ascending : commonLocaleData?.app_descending }}
+                                </span>
                             </mat-slide-toggle>
                         </label>
                     </div>
                     <div class="pb-4">
                         <label class="w125">{{ commonLocaleData?.app_voucher_type }}:</label>
                         <label class="radio-inline p-0">
-                            <mat-slide-toggle
-                                color="primary"
-                                name="showEntryVoucherNo"
-                                [(ngModel)]="exportRequest.showEntryVoucherNo"
-                            >
-                                <span class="pull-left">{{
-                                    exportRequest.showEntryVoucherNo
-                                        ? commonLocaleData?.app_yes
-                                        : commonLocaleData?.app_no
-                                }}</span>
+                            <mat-slide-toggle color="primary" name="showEntryVoucherNo" [(ngModel)]="exportRequest.showEntryVoucherNo">
+                                <span class="pull-left">
+                                    {{ exportRequest.showEntryVoucherNo ? commonLocaleData?.app_yes : commonLocaleData?.app_no }}
+                                </span>
                             </mat-slide-toggle>
                         </label>
                     </div>
                     <div class="pb-4">
                         <label class="w125">{{ commonLocaleData?.app_voucher_no }}:</label>
                         <label class="radio-inline p-0">
-                            <mat-slide-toggle
-                                color="primary"
-                                name="showVoucherNumber"
-                                [(ngModel)]="exportRequest.showVoucherNumber"
-                            >
-                                <span class="pull-left">{{
-                                    exportRequest.showVoucherNumber
-                                        ? commonLocaleData?.app_yes
-                                        : commonLocaleData?.app_no
-                                }}</span>
+                            <mat-slide-toggle color="primary" name="showVoucherNumber" [(ngModel)]="exportRequest.showVoucherNumber">
+                                <span class="pull-left">
+                                    {{ exportRequest.showVoucherNumber ? commonLocaleData?.app_yes : commonLocaleData?.app_no }}
+                                </span>
                             </mat-slide-toggle>
                         </label>
                     </div>
                     <div class="pb-4">
                         <label class="w125">{{ localeData?.voucher_total }}:</label>
                         <label class="radio-inline p-0">
-                            <mat-slide-toggle
-                                color="primary"
-                                name="showVoucherTotal"
-                                [(ngModel)]="exportRequest.showVoucherTotal"
-                            >
-                                <span class="pull-left">{{
-                                    exportRequest.showVoucherTotal
-                                        ? commonLocaleData?.app_yes
-                                        : commonLocaleData?.app_no
-                                }}</span>
+                            <mat-slide-toggle color="primary" name="showVoucherTotal" [(ngModel)]="exportRequest.showVoucherTotal">
+                                <span class="pull-left">
+                                    {{ exportRequest.showVoucherTotal ? commonLocaleData?.app_yes : commonLocaleData?.app_no }}
+                                </span>
                             </mat-slide-toggle>
                         </label>
                     </div>
                     <div class="pb-4">
                         <label class="w125">{{ localeData?.entry_no }}:</label>
                         <label class="radio-inline p-0">
-                            <mat-slide-toggle
-                                color="primary"
-                                name="showEntryVoucher"
-                                [(ngModel)]="exportRequest.showEntryVoucher"
-                            >
-                                <span class="pull-left">{{
-                                    exportRequest.showEntryVoucher
-                                        ? commonLocaleData?.app_yes
-                                        : commonLocaleData?.app_no
-                                }}</span>
+                            <mat-slide-toggle color="primary" name="showEntryVoucher" [(ngModel)]="exportRequest.showEntryVoucher">
+                                <span class="pull-left">
+                                    {{ exportRequest.showEntryVoucher ? commonLocaleData?.app_yes : commonLocaleData?.app_no }}
+                                </span>
                             </mat-slide-toggle>
                         </label>
                     </div>
                     <div class="pb-4">
                         <label class="w125">{{ localeData?.description }}:</label>
                         <label class="radio-inline p-0">
-                            <mat-slide-toggle
-                                color="primary"
-                                name="showDescription"
-                                [(ngModel)]="exportRequest.showDescription"
-                            >
-                                <span class="pull-left">{{
-                                    exportRequest.showDescription ? commonLocaleData?.app_yes : commonLocaleData?.app_no
-                                }}</span>
+                            <mat-slide-toggle color="primary" name="showDescription" [(ngModel)]="exportRequest.showDescription">
+                                <span class="pull-left">
+                                    {{ exportRequest.showDescription ? commonLocaleData?.app_yes : commonLocaleData?.app_no }}
+                                </span>
                             </mat-slide-toggle>
                         </label>
                     </div>

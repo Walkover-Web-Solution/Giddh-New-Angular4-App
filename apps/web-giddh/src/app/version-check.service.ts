@@ -57,7 +57,7 @@ export class VersionCheckService {
                     this.currentHash = hash;
                 },
                 (err) => {
-                    console.error(err, 'Could not get version');
+
                 }
             );
     }

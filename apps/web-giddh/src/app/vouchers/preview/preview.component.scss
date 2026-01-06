@@ -29,7 +29,6 @@
             &:hover,
             &.active {
                 background-color: var(--color-light-gray);
-
             }
         }
     }
@@ -81,7 +80,7 @@
                 li {
                     &:not(:last-child) {
                         &::after {
-                            content: "";
+                            content: '';
                             position: absolute;
                             top: 20px;
                             left: -10px;

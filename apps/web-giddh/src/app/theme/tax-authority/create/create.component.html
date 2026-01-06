@@ -1,9 +1,8 @@
-<div appTranslate [file]="'settings/tax-authority'" (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event">
+<div appTranslate [file]="'settings/tax-authority'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <div class="tax-authority h-100">
         <div class="dialog-header">
             <span class="font-size-16">
-                {{ commonLocaleData?.app_create + " " + commonLocaleData?.app_tax_authority }}
+                {{ commonLocaleData?.app_create + ' ' + commonLocaleData?.app_tax_authority }}
             </span>
         </div>
         <div mat-dialog-content class="tax-authority-body dialog-body">
@@ -17,8 +16,7 @@
                         [required]="true"
                         formControlName="name"
                         [showError]="isFormSubmit && !taxAuthorityForm?.get('name')?.value"
-                    >
-                    </input-field>
+                    ></input-field>
                     <reactive-dropdown-field
                         [name]="'country'"
                         [label]="commonLocaleData?.app_state"
@@ -28,16 +26,14 @@
                         [options]="stateList"
                         formControlName="stateCode"
                         [showError]="isFormSubmit && !taxAuthorityForm?.get('stateName')?.value"
-                    >
-                    </reactive-dropdown-field>
+                    ></reactive-dropdown-field>
                     <input-field
                         [name]="'name'"
                         [label]="commonLocaleData?.app_description"
                         [placeholder]="localeData?.enter_description"
                         [type]="'text'"
                         formControlName="description"
-                    >
-                    </input-field>
+                    ></input-field>
                 </div>
                 <div class="mt-5">
                     <button matButton="filled" (click)="createUpdateTaxAuthority()">

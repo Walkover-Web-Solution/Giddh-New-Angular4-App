@@ -170,7 +170,7 @@ export class EnvironmentValidatorService {
         }
 
         if (result.isValid && result.warnings.length === 0) {
-            console.log('✅ Environment validation passed');
+
         }
 
         // Log environment summary in development
@@ -318,12 +318,7 @@ export class EnvironmentValidatorService {
      */
     private logEnvironmentSummary(): void {
         console.group('🌍 Environment Configuration Summary');
-        console.log(`Environment: ${environment.production ? 'Production' : 'Development'}`);
-        console.log(`Platform: ${environment.isElectron ? 'Electron' : 'Web'}`);
-        console.log(`App URL: ${environment.AppUrl}`);
-        console.log(`API URL: ${environment.ApiUrl}`);
-        console.log(`UK API URL: ${environment.UkApiUrl}`);
-        console.log(`Portal URL: ${environment.PORTAL_URL}`);
+
         console.groupEnd();
     }
 

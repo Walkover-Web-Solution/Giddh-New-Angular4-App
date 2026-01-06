@@ -1,9 +1,19 @@
-.adjustment { .mat-expansion-panel { .text-control-input { height: 48px; }
+.adjustment {
+    .mat-expansion-panel {
+        .text-control-input {
+            height: 48px;
+        }
 
-        .table-border-none { tr { th { border-bottom-style: unset !important; }
+        .table-border-none {
+            tr {
+                th {
+                    border-bottom-style: unset !important;
+                }
 
-                td { border-bottom-style: unset; }
-            } }
-
+                td {
+                    border-bottom-style: unset;
+                }
+            }
+        }
     }
 }

@@ -19,7 +19,7 @@
         border-radius: var(--mat-border-radius-4);
         cursor: pointer;
 
-        input:checked+& {
+        input:checked + & {
             background-color: var(--color-white);
             box-shadow: 2px 2px 5px var(--color-shadow-light);
         }

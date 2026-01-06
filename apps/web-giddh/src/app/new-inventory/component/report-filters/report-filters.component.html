@@ -5,7 +5,14 @@
         </button>
     </div>
     <div class="custom-datepicker-wrapper">
-        <div class="custom-datepicker" [matMenuTriggerFor]="universalDatepicker" #universalDatepickerTrigger="matMenuTrigger" role="button" aria-haspopup="true" aria-controls="universalDatepicker">
+        <div
+            class="custom-datepicker"
+            [matMenuTriggerFor]="universalDatepicker"
+            #universalDatepickerTrigger="matMenuTrigger"
+            role="button"
+            aria-haspopup="true"
+            aria-controls="universalDatepicker"
+        >
             <input
                 matInput
                 type="text"
@@ -38,7 +45,7 @@
             </mat-option>
 
             <mat-option class="balance-options" *ngFor="let branch of branches" [value]="branch?.uniqueName">
-                {{ branch?.name ?? "-" }}
+                {{ branch?.name ?? '-' }}
             </mat-option>
         </mat-select>
     </div>
@@ -63,13 +70,14 @@
                 </ngx-mat-select-search>
             </mat-option>
             <mat-option class="balance-options" *ngFor="let warehouse of warehouses" [value]="warehouse?.uniqueName">
-                {{ warehouse?.name ?? "-" }}
+                {{ warehouse?.name ?? '-' }}
             </mat-option>
         </mat-select>
     </div>
     <div class="clear-filter d-flex" *ngIf="showClearFilter">
         <button matButton="elevated" class="create-btn-inventory ml-3 mr-0" (click)="resetFilter()">
-            <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
+            <span class="icon-cross"></span>
+            {{ commonLocaleData?.app_clear_filter }}
         </button>
     </div>
     <div class="ml-auto d-flex align-items-center">
@@ -101,84 +109,77 @@
             <watch-video [cssClass]="'text-primary pr-3'" [moduleName]="'INVENTORY_REPORT_VARIANTWISE'"></watch-video>
         </div>
     </div>
-
 </div>
 <div class="inventory-filter-bar d-flex">
     <div class="search-control w-100 d-flex align-items-center mat-form-field-clean">
-        <mat-form-field
-            floatLabel="never"
-            class="initial-height d-block flex-grow-1 select-multiple-chiplist-inventory"
-        >
+        <mat-form-field floatLabel="never" class="initial-height d-block flex-grow-1 select-multiple-chiplist-inventory">
             <mat-chip-grid #matChipList>
                 <mat-chip-row
-                *ngFor="let chip of filtersChipList; let indx = index"
-                [selectable]="true"
-                [removable]="true"
-                (removed)="removeOption(chip, indx)"
-                class="mr-2"
+                    *ngFor="let chip of filtersChipList; let indx = index"
+                    [selectable]="true"
+                    [removable]="true"
+                    (removed)="removeOption(chip, indx)"
+                    class="mr-2"
                 >
-                {{ chip?.name }}
-                        <span matChipRemove>
-                            <i class="icon-cross font-size-12"></i>
-                        </span>
-                    </mat-chip-row>
-                    <input
-                        type="text"
-                        matInput
-                        [formControl]="searchFilters"
-                        [placeholder]="localeData?.header?.search_bar"
-                        [matAutocomplete]="auto"
-                        [matChipInputFor]="matChipList"
-                        #trigger="matAutocompleteTrigger"
-                        [name]="'q'"
-                        #selectField
-                        autocomplete="off"
-                        matAutocompletePosition="auto"
-                        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                    />
-                </mat-chip-grid>
-                <mat-autocomplete
-                    class="inventory-autocomplete"
-                    #auto="matAutocomplete"
-                    (optionSelected)="selectChiplistValue($event); selectField.value = ''"
-                >
-                    <div *ngIf="fieldFilteredOptions?.length <= 5; else searchedData">
-                        <mat-option *ngFor="let option of fieldFilteredOptions" [value]="option">
-                            {{ option?.name }} ( {{ option?.type }} )
-                        </mat-option>
-                        <mat-option disabled *ngIf="fieldFilteredOptions?.length === 0">{{
-                            localeData?.header?.no_result_found
-                        }}</mat-option>
-                    </div>
-                    <ng-template #searchedData>
-                        <app-cdk-scroll
-                            (fetchNextPage)="searchInventory(false, true)"
-                            [scrollableElementId]="'stock-transaction'"
+                    {{ chip?.name }}
+                    <span matChipRemove>
+                        <i class="icon-cross font-size-12"></i>
+                    </span>
+                </mat-chip-row>
+                <input
+                    type="text"
+                    matInput
+                    [formControl]="searchFilters"
+                    [placeholder]="localeData?.header?.search_bar"
+                    [matAutocomplete]="auto"
+                    [matChipInputFor]="matChipList"
+                    #trigger="matAutocompleteTrigger"
+                    [name]="'q'"
+                    #selectField
+                    autocomplete="off"
+                    matAutocompletePosition="auto"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                />
+            </mat-chip-grid>
+            <mat-autocomplete
+                class="inventory-autocomplete"
+                #auto="matAutocomplete"
+                (optionSelected)="selectChiplistValue($event); selectField.value = ''"
+            >
+                <div *ngIf="fieldFilteredOptions?.length <= 5; else searchedData">
+                    <mat-option *ngFor="let option of fieldFilteredOptions" [value]="option">
+                        {{ option?.name }} ( {{ option?.type }} )
+                    </mat-option>
+                    <mat-option disabled *ngIf="fieldFilteredOptions?.length === 0">{{ localeData?.header?.no_result_found }}</mat-option>
+                </div>
+                <ng-template #searchedData>
+                    <app-cdk-scroll (fetchNextPage)="searchInventory(false, true)" [scrollableElementId]="'stock-transaction'">
+                        <cdk-virtual-scroll-viewport
+                            class="virtual-group-list overflow-x-hidden"
+                            [itemSize]="33"
+                            [id]="'stock-transaction'"
                         >
-                            <cdk-virtual-scroll-viewport
-                                class="virtual-group-list overflow-x-hidden"
-                                [itemSize]="33"
-                                [id]="'stock-transaction'"
-                            >
-                                <mat-option
-                                    class="item-height"
-                                    *ngFor="let option of fieldFilteredOptions"
-                                    [value]="option"
-                                >
-                                    {{ option?.name }} ( {{ option?.type }} )
-                                </mat-option>
-                                <mat-option class="item-height" disabled *ngIf="fieldFilteredOptions?.length === 0">{{
-                                    localeData?.header?.no_result_found
-                                }}</mat-option>
-                            </cdk-virtual-scroll-viewport>
-                        </app-cdk-scroll>
-                    </ng-template>
-                </mat-autocomplete>
+                            <mat-option class="item-height" *ngFor="let option of fieldFilteredOptions" [value]="option">
+                                {{ option?.name }} ( {{ option?.type }} )
+                            </mat-option>
+                            <mat-option class="item-height" disabled *ngIf="fieldFilteredOptions?.length === 0">
+                                {{ localeData?.header?.no_result_found }}
+                            </mat-option>
+                        </cdk-virtual-scroll-viewport>
+                    </app-cdk-scroll>
+                </ng-template>
+            </mat-autocomplete>
 
             <i class="icon-search search-icon ml-2 mr-2" matIconPrefix *ngIf="!filtersChipList?.length"></i>
         </mat-form-field>
         <div class="menu-btn-control d-flex justify-content-end align-items-center">
-            <button matButton="elevated" aria-hidden="true" class="advance-filter-button font-size-14 box-shadow-none" (click)="exportReport()" [disabled]="isLoading$ | async">
+            <button
+                matButton="elevated"
+                aria-hidden="true"
+                class="advance-filter-button font-size-14 box-shadow-none"
+                (click)="exportReport()"
+                [disabled]="isLoading$ | async"
+            >
                 <i class="icon-download-circle mr-1"></i>
                 {{ commonLocaleData?.app_export }}
             </button>
@@ -198,8 +199,7 @@
                 [cssClass]="'border-radius-0 h-100 w-100 font-size-15 box-shadow-none'"
                 [buttonText]="localeData?.header?.customise"
                 class="customise-width d-inline-block h-100 border-left"
-            >
-            </select-table-column>
+            ></select-table-column>
         </div>
     </div>
 </div>

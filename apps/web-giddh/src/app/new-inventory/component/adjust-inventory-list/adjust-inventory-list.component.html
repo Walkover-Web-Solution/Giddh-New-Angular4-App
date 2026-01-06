@@ -1,19 +1,11 @@
-<div
-    appTranslate
-    [file]="'inventory/adjustment'"
-    (commonLocaleData)="commonLocaleData = $event"
-    (localeData)="localeData = $event"
->
+<div appTranslate [file]="'inventory/adjustment'" (commonLocaleData)="commonLocaleData = $event" (localeData)="localeData = $event">
     <div class="relative">
         <hamburger-menu></hamburger-menu>
     </div>
     <div class="adjust-inventory-list-page">
         <div class="d-flex align-items-center column-gap-1 adjust-inventory-header">
             <div
-                *ngIf="
-                    currentCompanyBranches?.length > 2 &&
-                    (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
-                "
+                *ngIf="currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
                 class="branch-width mr-0"
             >
                 <reactive-dropdown-field
@@ -23,8 +15,7 @@
                     (selectedOption)="handleBranchChange($event)"
                     [placeholder]="commonLocaleData?.app_select_entity"
                     [labelValue]="currentBranch?.name"
-                >
-                </reactive-dropdown-field>
+                ></reactive-dropdown-field>
             </div>
             <div
                 class="custom-datepicker"
@@ -43,7 +34,8 @@
                     readonly
                 />
             </div>
-            <button matButton="elevated"
+            <button
+                matButton="elevated"
                 *ngIf="
                     showClearFilter ||
                     adjustInventoryListForm?.controls['referenceNo']?.value ||
@@ -58,10 +50,10 @@
                 class="min-width-160 mx-auto"
                 (click)="clearFilter()"
             >
-            <span class="d-inline-flex align-items-center column-gap-05">
-                <i class="icon-cross font-size-14"></i>
-                {{ commonLocaleData?.app_clear }}
-            </span>
+                <span class="d-inline-flex align-items-center column-gap-05">
+                    <i class="icon-cross font-size-14"></i>
+                    {{ commonLocaleData?.app_clear }}
+                </span>
             </button>
             <button
                 *ngIf="!isCompany && !isConsolidatedBranch"
@@ -102,9 +94,7 @@
                                 *matHeaderCellDef
                                 #searchReferenceNoContainer
                                 class="td-search-box pl-2"
-                                (clickOutside)="
-                                    handleClickOutside($event, searchReferenceNoContainer, localeData?.reference_no)
-                                "
+                                (clickOutside)="handleClickOutside($event, searchReferenceNoContainer, localeData?.reference_no)"
                             >
                                 <div
                                     *ngTemplateOutlet="
@@ -113,7 +103,7 @@
                                             $implicit: showReferenceNo,
                                             fieldName: localeData?.reference_no,
                                             formControl: adjustInventoryListForm.controls['referenceNo'],
-                                            title: localeData?.reference_no
+                                            title: localeData?.reference_no,
                                         }
                                     "
                                 ></div>
@@ -140,7 +130,7 @@
                                             $implicit: showName,
                                             fieldName: localeData?.stock_name,
                                             title: localeData?.stock_name,
-                                            formControl: adjustInventoryListForm.controls['name']
+                                            formControl: adjustInventoryListForm.controls['name'],
                                         }
                                     "
                                 ></div>
@@ -165,7 +155,7 @@
                                             $implicit: showReason,
                                             fieldName: localeData?.reason,
                                             title: localeData?.reason,
-                                            formControl: adjustInventoryListForm.controls['reason']
+                                            formControl: adjustInventoryListForm.controls['reason'],
                                         }
                                     "
                                 ></div>
@@ -181,9 +171,7 @@
                                 *matHeaderCellDef
                                 #searchStatusContainer
                                 class="td-search-box pl-2"
-                                (clickOutside)="
-                                    handleClickOutside($event, searchStatusContainer, localeData?.request_status)
-                                "
+                                (clickOutside)="handleClickOutside($event, searchStatusContainer, localeData?.request_status)"
                             >
                                 <div
                                     *ngTemplateOutlet="
@@ -192,7 +180,7 @@
                                             $implicit: showStatus,
                                             fieldName: localeData?.request_status,
                                             title: localeData?.request_status,
-                                            formControl: adjustInventoryListForm.controls['status']
+                                            formControl: adjustInventoryListForm.controls['status'],
                                         }
                                     "
                                 ></div>
@@ -208,9 +196,7 @@
                                 *matHeaderCellDef
                                 #searchAdjustedByContainer
                                 class="td-search-box pl-2"
-                                (clickOutside)="
-                                    handleClickOutside($event, searchAdjustedByContainer, localeData?.adjusted_by)
-                                "
+                                (clickOutside)="handleClickOutside($event, searchAdjustedByContainer, localeData?.adjusted_by)"
                             >
                                 <div
                                     *ngTemplateOutlet="
@@ -219,7 +205,7 @@
                                             $implicit: showAdjustedBy,
                                             fieldName: localeData?.adjusted_by,
                                             title: localeData?.adjusted_by,
-                                            formControl: adjustInventoryListForm.controls['adjustedBy']
+                                            formControl: adjustInventoryListForm.controls['adjustedBy'],
                                         }
                                     "
                                 ></div>
@@ -235,13 +221,7 @@
                                 *matHeaderCellDef
                                 #searchAdjustmentMethodContainer
                                 class="td-search-box pl-2"
-                                (clickOutside)="
-                                    handleClickOutside(
-                                        $event,
-                                        searchAdjustmentMethodContainer,
-                                        localeData?.adjustment_method
-                                    )
-                                "
+                                (clickOutside)="handleClickOutside($event, searchAdjustmentMethodContainer, localeData?.adjustment_method)"
                             >
                                 <div
                                     *ngTemplateOutlet="
@@ -250,7 +230,7 @@
                                             $implicit: showAdjustmentMethod,
                                             fieldName: localeData?.adjustment_method,
                                             title: localeData?.adjustment_method,
-                                            formControl: adjustInventoryListForm.controls['adjustmentMethod']
+                                            formControl: adjustInventoryListForm.controls['adjustmentMethod'],
                                         }
                                     "
                                 ></div>
@@ -275,7 +255,7 @@
                                             $implicit: showType,
                                             fieldName: localeData?.type,
                                             title: localeData?.type,
-                                            formControl: adjustInventoryListForm.controls['entity']
+                                            formControl: adjustInventoryListForm.controls['entity'],
                                         }
                                     "
                                 ></div>
@@ -297,29 +277,21 @@
                                 <button mat-button [matMenuTriggerFor]="beforeMenu" class="bg-transparent mr-0 px-0">
                                     <span class="d-flex align-items-center justify-content-between">
                                         <span class="text-light pr-2">{{ commonLocaleData?.app_select_action }}</span>
-                                        <span> <i class="icon-dots-three-vertical"></i></span>
+                                        <span><i class="icon-dots-three-vertical"></i></span>
                                     </span>
                                 </button>
                                 <mat-menu #beforeMenu="matMenu" xPosition="before">
                                     <button class="no-box-shadow" mat-menu-item (click)="editInventoryAdjust(element)">
                                         {{ commonLocaleData?.app_edit }}
                                     </button>
-                                    <button
-                                        class="no-box-shadow"
-                                        mat-menu-item
-                                        (click)="showdeleteInventoryAdjustAdjust(element)"
-                                    >
+                                    <button class="no-box-shadow" mat-menu-item (click)="showdeleteInventoryAdjustAdjust(element)">
                                         {{ commonLocaleData?.app_delete }}
                                     </button>
                                 </mat-menu>
                             </td>
                         </div>
 
-                        <tr
-                            (clickOutside)="inlineSearch = null"
-                            mat-header-row
-                            *matHeaderRowDef="displayedColumns"
-                        ></tr>
+                        <tr (clickOutside)="inlineSearch = null" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                         <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
                     </table>
                 </form>
@@ -327,9 +299,7 @@
             <div class="no-data" *ngIf="!dataSource?.filteredData?.length && !(adjustInventoryInProgress$ | async)">
                 <no-data [primaryMessage]="commonLocaleData?.app_no_data_found" [secondaryMessage]="' '"></no-data>
             </div>
-            <div
-                *ngIf="adjustInventoryListRequest.totalItems > pageSizeOptions[0] && showData && !(adjustInventoryInProgress$ | async)"
-            >
+            <div *ngIf="adjustInventoryListRequest.totalItems > pageSizeOptions[0] && showData && !(adjustInventoryInProgress$ | async)">
                 <mat-paginator
                     (page)="handlePageChange($event)"
                     [length]="adjustInventoryListRequest.totalItems"
@@ -338,8 +308,7 @@
                     [pageSizeOptions]="pageSizeOptions"
                     [hidePageSize]="false"
                     [pageIndex]="pageIndex"
-                >
-                </mat-paginator>
+                ></mat-paginator>
                 <section class="mb-custom-80"></section>
             </div>
         </div>
@@ -348,18 +317,17 @@
 <ng-template #searchTemplate let-show let-title="title" let-fieldName="fieldName" let-formControl="formControl">
     <div class="search-table">
         <div class="d-flex" [hidden]="show">
-            <span> {{ title }}</span>
+            <span>{{ title }}</span>
             <i class="icon-search d-flex cursor-pointer align-items-center" (click)="toggleSearch(fieldName)"></i>
         </div>
-        <div class="input-container position-relative " [hidden]="!show">
+        <div class="input-container position-relative" [hidden]="!show">
             <text-field
                 [type]="'text'"
                 [placeholder]="getSearchFieldText(fieldName)"
                 [cssClass]="'form-control border w-100 min-width-unset p-3 pr-0'"
                 [formControl]="formControl"
                 [autoFocus]="show"
-            >
-            </text-field>
+            ></text-field>
         </div>
     </div>
 </ng-template>

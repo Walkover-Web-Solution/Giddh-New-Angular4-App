@@ -1,16 +1,9 @@
 <div appTranslate (commonLocaleData)="commonLocaleData = $event">
-    <section
-        class="aside-dialog-wrapper"
-        [keyboardShortcut]="'esc'"
-        [config]="{ dialogMode: true }"
-        (onShortcutPress)="closeAsidePane()"
-    >
+    <section class="aside-dialog-wrapper" [keyboardShortcut]="'esc'" [config]="{ dialogMode: true }" (onShortcutPress)="closeAsidePane()">
         <div class="dialog-header">
             <span>
                 {{ commonLocaleData?.app_add }}
-                <span *ngIf="voucherApiVersion === 2">{{
-                    stockType !== "fixed_assets" ? (stockType | titlecase) : "Fixed Assets"
-                }}</span>
+                <span *ngIf="voucherApiVersion === 2">{{ stockType !== 'fixed_assets' ? (stockType | titlecase) : 'Fixed Assets' }}</span>
             </span>
             <div class="d-flex align-items-center column-gap-15">
                 <button mat-raised-button *ngIf="hideFirstStep && !isAddServiceOpen" (click)="backButtonPressed()">
@@ -29,28 +22,13 @@
                             {{ commonLocaleData?.app_add_account }}
                         </button>
                     </ng-container>
-                    <button
-                        *ngIf="voucherApiVersion === 2"
-                        matButton="filled"
-                        class="mb-2"
-                        (click)="toggleStockPane('product')"
-                    >
+                    <button *ngIf="voucherApiVersion === 2" matButton="filled" class="mb-2" (click)="toggleStockPane('product')">
                         {{ commonLocaleData?.app_add_product }}
                     </button>
-                    <button
-                        *ngIf="voucherApiVersion === 2"
-                        matButton="filled"
-                        class="mb-2"
-                        (click)="toggleStockPane('service')"
-                    >
+                    <button *ngIf="voucherApiVersion === 2" matButton="filled" class="mb-2" (click)="toggleStockPane('service')">
                         {{ commonLocaleData?.app_add_service }}
                     </button>
-                    <button
-                        *ngIf="voucherApiVersion === 2"
-                        matButton="filled"
-                        class="mb-2"
-                        (click)="toggleStockPane('fixed_assets')"
-                    >
+                    <button *ngIf="voucherApiVersion === 2" matButton="filled" class="mb-2" (click)="toggleStockPane('fixed_assets')">
                         {{ commonLocaleData?.app_add_fixedassets }}
                     </button>
                 </div>

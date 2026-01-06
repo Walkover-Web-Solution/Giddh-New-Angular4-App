@@ -1,3 +1,9 @@
+/**
+ * @fileoverview Contact component for handling user interface and interactions
+ * @author Giddh Development Team
+ * @since 2026
+ */
+
 import { SendBulkEmailTemplateRequest } from './../models/api-models/Contact';
 import {
     ChangeDetectorRef,
@@ -65,6 +71,12 @@ import { environment } from '../../environments/environment.generated';
     providers: [ContactComponentStore],
     standalone:false
 })
+/**
+ * ContactComponent class - Handles contactcomponent functionality
+ * @export
+ * @class ContactComponent
+ */
+
 export class ContactComponent implements OnInit, OnDestroy {
     /** Stores the current range of date picker */
     public selectedDateRange: any;
@@ -343,8 +355,6 @@ export class ContactComponent implements OnInit, OnDestroy {
                 }
             });
 
-
-
         this.store.pipe(select(session => session.session.currentCompanyCurrency), takeUntil(this.destroyed$)).subscribe(res => {
             if (res) {
                 this.isPlaidSupportedCountry = this.generalService.checkCompanySupportPlaid(res.country);
@@ -390,7 +400,6 @@ export class ContactComponent implements OnInit, OnDestroy {
 
             this.cdRef.detectChanges();
         });
-
 
         this.universalDate$.pipe(takeUntil(this.destroyed$)).subscribe(dateObj => {
             if (dateObj) {
@@ -588,7 +597,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                         (window as any).electronAPI.send('open-url', url);
                         electronIpcAvailable = true;
                     } catch (ipcError) {
-                        console.warn('ElectronAPI send failed:', ipcError);
+
                     }
                 }
 
@@ -602,13 +611,13 @@ export class ContactComponent implements OnInit, OnDestroy {
                             electronIpcAvailable = true;
                         }
                     } catch (requireError) {
-                        console.warn('Electron require failed:', requireError);
+
                     }
                 }
 
                 // Fallback to regular window.open if IPC not available
                 if (!electronIpcAvailable) {
-                    console.warn('Electron IPC not available, using window.open fallback');
+
                     if (part === 'ledger') {
                         const separator = url.includes('?') ? '&' : '?';
                         url = url + `${separator}redirectUrl=${encodeURIComponent(this.currentUrl)}`;
@@ -616,7 +625,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                     (window as any).open(url);
                 }
             } catch (error) {
-                console.warn('Electron navigation failed, using window.open:', error);
+
                 if (part === 'ledger') {
                     const separator = url.includes('?') ? '&' : '?';
                     url = url + `${separator}redirectUrl=${encodeURIComponent(this.currentUrl)}`;
@@ -631,7 +640,6 @@ export class ContactComponent implements OnInit, OnDestroy {
             (window as any).open(url);
         }
     }
-
 
     public tabSelected(tabName: "customer" | "aging-report" | "vendor") {
         if (!this.searchStr) {
@@ -759,7 +767,6 @@ export class ContactComponent implements OnInit, OnDestroy {
             return;
         }
     }
-
 
     /**
      * Handles pagination events and updates API parameters
@@ -995,8 +1002,6 @@ export class ContactComponent implements OnInit, OnDestroy {
             this.dialog.closeAll();
         }
     }
-
-
 
     public selectedDate(value?: any): void {
         if (value && value.event === "cancel") {
@@ -1373,7 +1378,6 @@ export class ContactComponent implements OnInit, OnDestroy {
             return false;
         }
     }
-
 
     /**
      * This will toggle datepicker

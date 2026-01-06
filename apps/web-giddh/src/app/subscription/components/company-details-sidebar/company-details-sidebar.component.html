@@ -12,16 +12,14 @@
             <div class="row pb-2 border-bottom mb-2">
                 <div class="col-md-9">
                     <ul class="company-list font-size-15 mb-0">
-                        <li>
-                            {{ localeData?.subscription?.plan }}: {{ selectedCompany?.subscription?.planDetails?.name }}
-                        </li>
+                        <li>{{ localeData?.subscription?.plan }}: {{ selectedCompany?.subscription?.planDetails?.name }}</li>
                         <li>
                             {{ localeData?.subscription?.subscription_id }}:
                             {{ selectedCompany?.subscription?.subscriptionId }}
                         </li>
                         <li>
                             {{ localeData?.subscription?.created_on }}:
-                            {{ dayjs(selectedCompany?.subscription?.createdAt, giddhDateFormat).format("DD/MM/YYYY") }}
+                            {{ dayjs(selectedCompany?.subscription?.createdAt, giddhDateFormat).format('DD/MM/YYYY') }}
                         </li>
                         <li>
                             {{ localeData?.subscription?.total_transactions }}:

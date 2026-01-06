@@ -12,6 +12,7 @@
 @use "./components/stepper";
 @use "./components/paginator";
 @use "./components/slide-toggle"; // MDC Disabled Elements and their children
+
 .mdc-checkbox--disabled,
 .mdc-text-field--disabled,
 .mat-mdc-tab-disabled,
@@ -27,9 +28,21 @@
 .mdc-radio--disabled+label,
 .mdc-switch--disabled,
 .mdc-switch--disabled+label,
-.mat-sort-header-disabled .mat-sort-header-container .form-control:disabled { @include cursor(not-allowed); @include pointer-events(auto); * { @include cursor(not-allowed); @include pointer-events(auto); }
-} // Table
-table tr { &:hover { background-color: inherit !important; }
+.mat-sort-header-disabled .mat-sort-header-container .form-control:disabled {
+    @include cursor(not-allowed);
+    @include pointer-events(auto);
+
+    * {
+        @include cursor(not-allowed);
+        @include pointer-events(auto);
+    }
+}
+
+// Table
+table tr {
+    &:hover {
+        background-color: inherit !important;
+    }
 }
 
 // Angular 21 Material Design 3 compatibility overrides
@@ -54,20 +67,9 @@ table tr { &:hover { background-color: inherit !important; }
 // Specific fixes for inventory sidebar
 .inventory-aside-pane.mat-app-background {
     background-color: var(--mat-sys-surface-container-low, var(--mat-app-background-color)) !important;
-    border-right: 1px solid var(--mat-sys-outline-variant, rgba(0,0,0,0.12));
+    border-right: 1px solid var(--mat-sys-outline-variant, rgba(0, 0, 0, 0.12));
 }
 
 .aside-pane.mat-app-background {
     background-color: var(--mat-sys-surface-container, var(--mat-app-background-color)) !important;
-}
-
-.mat-mdc-card {
-    --mat-card-elevated-container-color: var(--mat-app-background-color) !important;
-}
-.mat-mdc-autocomplete-panel {
-    --mat-autocomplete-background-color : var(--mat-app-background-color) !important;
-}
-
-.mat-expansion-panel {
-    --mat-expansion-container-background-color: var(--mat-sys-surface-container-low) !important;
 }

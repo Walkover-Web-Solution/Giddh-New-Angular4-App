@@ -1,15 +1,5 @@
-<div
-    appTranslate
-    [file]="'vouchers/add-bulk-items'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
-    <div
-        class="bulk-entry"
-        [keyboardShortcut]="'esc'"
-        [config]="{ dialogMode: true }"
-        (onShortcutPress)="handleGlobalEscape()"
-    >
+<div appTranslate [file]="'vouchers/add-bulk-items'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
+    <div class="bulk-entry" [keyboardShortcut]="'esc'" [config]="{ dialogMode: true }" (onShortcutPress)="handleGlobalEscape()">
         <div class="dialog-header">
             <span class="font-size-16">{{ localeData?.add_bulk_items }}</span>
         </div>
@@ -32,12 +22,10 @@
                                     </div>
                                 </section>
                                 <mat-list class="p-0">
-                                    <cdk-virtual-scroll-viewport
-                                        [itemSize]="40"
-                                        class="list-viewport"
-                                        [appendOnly]="true"
-                                    >
-                                        <ng-container *cdkVirtualFor="let item of stockResults$ | async; let i = index; trackBy: trackByStockItem">
+                                    <cdk-virtual-scroll-viewport [itemSize]="40" class="list-viewport" [appendOnly]="true">
+                                        <ng-container
+                                            *cdkVirtualFor="let item of stockResults$ | async; let i = index; trackBy: trackByStockItem"
+                                        >
                                             <ng-container *ngIf="item?.additional?.hasVariants">
                                                 <cdk-accordion>
                                                     <cdk-accordion-item
@@ -56,10 +44,7 @@
                                                             class="list-item px-2"
                                                             [matTooltip]="item.name"
                                                             (click)="onItemClick(item, i)"
-                                                            (keydown.enter)="
-                                                                $event.preventDefault();
-                                                                onItemClick(item, i);
-                                                            "
+                                                            (keydown.enter)="$event.preventDefault(); onItemClick(item, i)"
                                                             (keydown.escape)="handleEscapeKey($event)"
                                                             [tabindex]="i === 0 ? 0 : -1"
                                                             #listElement
@@ -68,9 +53,7 @@
                                                             matTooltipPosition="left"
                                                             cdkMonitorElementFocus
                                                         >
-                                                            <span
-                                                                class="d-inline-flex align-items-center column-gap-1"
-                                                            >
+                                                            <span class="d-inline-flex align-items-center column-gap-1">
                                                                 <img
                                                                     src="assets/images/item-wise.svg"
                                                                     width="18"
@@ -88,31 +71,27 @@
                                                             [attr.aria-labelledby]="'accordion-header-' + i"
                                                             *ngIf="accordionItem.expanded && (stockVariants[i] | async)?.length > 0"
                                                         >
-                                                            <ng-container
-                                                                *ngFor="let variant of stockVariants[i] | async"
-                                                            >
+                                                            <ng-container *ngFor="let variant of stockVariants[i] | async">
                                                                 <mat-list-item
                                                                     class="position-relative"
                                                                     (click)="$event.stopPropagation(); onVariantClick(item, variant, i)"
                                                                     (keydown.enter)="
                                                                         $event.preventDefault();
                                                                         $event.stopPropagation();
-                                                                        onVariantClick(item, variant, i);
-
+                                                                        onVariantClick(item, variant, i)
                                                                     "
                                                                     (keydown.escape)="$event.stopPropagation(); handleEscapeKey($event)"
                                                                     #variantElement
                                                                     [tabindex]="i === 0 ? 0 : -1"
-                                                                    [attr.aria-label]="
-                                                                        'Select variant: ' + variant?.label
-                                                                    "
+                                                                    [attr.aria-label]="'Select variant: ' + variant?.label"
                                                                     role="button"
                                                                     class="list-item pr-2 pl-4"
                                                                     [matTooltip]="variant?.label"
                                                                     matTooltipPosition="left"
                                                                     cdkMonitorElementFocus
-                                                                    >{{ variant?.label }}</mat-list-item
                                                                 >
+                                                                    {{ variant?.label }}
+                                                                </mat-list-item>
                                                             </ng-container>
                                                         </div>
                                                     </cdk-accordion-item>
@@ -123,10 +102,7 @@
                                                     class="list-item px-2"
                                                     [matTooltip]="item.name"
                                                     (click)="onItemClick(item, i)"
-                                                    (keydown.enter)="
-                                                        $event.preventDefault();
-                                                        onItemClick(item, i);
-                                                    "
+                                                    (keydown.enter)="$event.preventDefault(); onItemClick(item, i)"
                                                     (keydown.escape)="handleEscapeKey($event)"
                                                     [tabindex]="i === 0 ? 0 : -1"
                                                     #simpleListElement
@@ -137,12 +113,7 @@
                                                     cdkMonitorElementFocus
                                                 >
                                                     <span class="d-inline-flex align-items-center column-gap-1">
-                                                        <img
-                                                            src="assets/images/item-wise.svg"
-                                                            width="18"
-                                                            height="18"
-                                                            class="stock-icon"
-                                                        />
+                                                        <img src="assets/images/item-wise.svg" width="18" height="18" class="stock-icon" />
                                                         <span>
                                                             {{ item.name }}
                                                         </span>
@@ -155,9 +126,7 @@
                             </div>
                         </div>
                         <div class="bulk-entry-selected-items d-flex flex-column">
-                            <div class="selected-item-title">
-                                {{ localeData?.selected_stocks }} ({{ getDataControls?.length }})
-                            </div>
+                            <div class="selected-item-title">{{ localeData?.selected_stocks }} ({{ getDataControls?.length }})</div>
                             <div class="selected-item-wrapper">
                                 <ng-container
                                     *ngFor="let item of addBulkForm?.get('data')['controls']; let bulkIndex = index"
@@ -169,35 +138,23 @@
                                                 <div class="d-flex align-items-center justify-content-between p-1">
                                                     <div class="w-75">
                                                         <p>
-                                                            {{ item.get("name")?.value }}
-                                                            {{
-                                                                "-" + item.get("variantName")?.value
-                                                                    ? item.get("variantName")?.value
-                                                                    : ""
-                                                            }}
+                                                            {{ item.get('name')?.value }}
+                                                            {{ '-' + item.get('variantName')?.value ? item.get('variantName')?.value : '' }}
                                                         </p>
                                                         <p>
-                                                            <span
-                                                                *ngIf="item.get('additional.skuCode')?.value"
-                                                                class="stockSku mb-1"
-                                                                ><label>{{ commonLocaleData?.app_sku }}: </label
-                                                                >{{ item.get("additional.skuCode")?.value }}</span
-                                                            >
-                                                            <span [class.rate-stock]="item.get('name')?.value"
-                                                                ><label
-                                                                    >{{ commonLocaleData?.app_rate }}:&nbsp;</label
-                                                                > </span
-                                                            >{{ item.get("rate")?.value }}
+                                                            <span *ngIf="item.get('additional.skuCode')?.value" class="stockSku mb-1">
+                                                                <label>{{ commonLocaleData?.app_sku }}:</label>
+                                                                {{ item.get('additional.skuCode')?.value }}
+                                                            </span>
+                                                            <span [class.rate-stock]="item.get('name')?.value">
+                                                                <label>{{ commonLocaleData?.app_rate }}:&nbsp;</label>
+                                                            </span>
+                                                            {{ item.get('rate')?.value }}
                                                         </p>
                                                     </div>
 
-                                                    <div
-                                                        class="d-flex align-items-center justify-content-between column-gap-1"
-                                                    >
-                                                        <button
-                                                            matButton="elevated"
-                                                            (click)="alterQuantity(item, 'minus')"
-                                                        >
+                                                    <div class="d-flex align-items-center justify-content-between column-gap-1">
+                                                        <button matButton="elevated" (click)="alterQuantity(item, 'minus')">
                                                             <i class="icon-minus"></i>
                                                         </button>
                                                         <text-field
@@ -207,9 +164,7 @@
                                                             [name]="'quantity'"
                                                             formControlName="quantity"
                                                             [minlength]="1"
-                                                            [cssClass]="
-                                                                'form-control border-radius-0 text-center width-60'
-                                                            "
+                                                            [cssClass]="'form-control border-radius-0 text-center width-60'"
                                                         ></text-field>
                                                         <button matButton="elevated" (click)="alterQuantity(item)">
                                                             <i class="icon-add font-size-16 font-weight-semibold"></i>

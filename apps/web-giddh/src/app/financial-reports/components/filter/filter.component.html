@@ -31,33 +31,29 @@
                             (selectedOption)="handleBranchChange($event)"
                             [placeholder]="commonLocaleData?.app_select_entity"
                             [labelValue]="currentBranch?.name"
-                        >
-                        </reactive-dropdown-field>
+                        ></reactive-dropdown-field>
                     </div>
                     <div *ngIf="showLabels">
-                            <reactive-dropdown-field
-                                [options]="dateOptions"
-                                (selectedOption)="dateOptionIsSelected($event)"
-                                class="company-branch-dropdown"
-                                [placeholder]="commonLocaleData?.app_select_option"
-                                [labelValue]="selectedDateOption?.label ?? ''"
-                                formControlName="selectedDateOption"
-                            >
-                            </reactive-dropdown-field>
+                        <reactive-dropdown-field
+                            [options]="dateOptions"
+                            (selectedOption)="dateOptionIsSelected($event)"
+                            class="company-branch-dropdown"
+                            [placeholder]="commonLocaleData?.app_select_option"
+                            [labelValue]="selectedDateOption?.label ?? ''"
+                            formControlName="selectedDateOption"
+                        ></reactive-dropdown-field>
                     </div>
                     <div *ngIf="filterForm.get('selectedDateOption')?.value == '0'">
-                            <reactive-dropdown-field
-                                [options]="financialOptions"
-                                formControlName="selectedFinancialYearOption"
-                                (selectedOption)="selectFinancialYearOption($event)"
-                                class="company-branch-dropdown"
-                                [label]="commonLocaleData?.app_financial_year"
-                                [placeholder]="commonLocaleData?.app_datepicker?.select_financial_year"
-                            ></reactive-dropdown-field>
+                        <reactive-dropdown-field
+                            [options]="financialOptions"
+                            formControlName="selectedFinancialYearOption"
+                            (selectedOption)="selectFinancialYearOption($event)"
+                            class="company-branch-dropdown"
+                            [label]="commonLocaleData?.app_financial_year"
+                            [placeholder]="commonLocaleData?.app_datepicker?.select_financial_year"
+                        ></reactive-dropdown-field>
                     </div>
-                    <div
-                        *ngIf="filterForm.get('selectedDateOption')?.value == '1'"
-                    >
+                    <div *ngIf="filterForm.get('selectedDateOption')?.value == '1'">
                         <div
                             class="custom-datepicker"
                             [matMenuTriggerFor]="universalDatepicker"
@@ -105,14 +101,10 @@
                             [startDate]="fromDate"
                             [universalDateRangeLabel]="selectedRangeLabel"
                             (onChange)="handleCompareWithEvent($event)"
-                        >
-                        </giddh-compare-with-date-range-picker>
+                        ></giddh-compare-with-date-range-picker>
                     </div>
                     <ng-container *ngIf="!showLoader">
-                        <div
-                            class="pull-left mr-3 d-inline-flex position-relative"
-                            *ngIf="!isProjectWiseAccounting && tags?.length"
-                        >
+                        <div class="pull-left mr-3 d-inline-flex position-relative" *ngIf="!isProjectWiseAccounting && tags?.length">
                             <i class="glyphicon glyphicon-triangle-bottom"></i>
                             <reactive-dropdown-field
                                 [options]="tags"
@@ -121,20 +113,19 @@
                                 (selectedOption)="onTagSelected($event)"
                                 [label]="commonLocaleData?.app_tag"
                                 [placeholder]="commonLocaleData?.app_select_tag"
-                            >
-                            </reactive-dropdown-field>
+                            ></reactive-dropdown-field>
                         </div>
                         <!-- Filter by Tag -->
-                         <button
+                        <button
                             matButton="elevated"
                             class="btn-stroked-icon"
                             (click)="emitExpand(!expandAll)"
                             type="button"
                             [matTooltip]="expandAll ? commonLocaleData?.app_collapse_all : commonLocaleData?.app_expand_all"
                             matTooltipPosition="above"
-                         >
+                        >
                             <i [ngClass]="expandAll ? 'icon-collapse' : 'icon-expandIcon'"></i>
-                         </button>
+                        </button>
                     </ng-container>
                     <button matButton="filled" type="submit">
                         {{ commonLocaleData?.app_search }}
@@ -200,14 +191,12 @@
                             [selectedCompany]="selectedCompany"
                             (tbExportCsvEvent)="tbExportCsvEvent.emit($event)"
                             class="pull-right"
-                        >
-                        </trial-balance-export-csv>
+                        ></trial-balance-export-csv>
                         <trial-balance-export-xls
                             *ngIf="tbExportXLS"
                             [trialBalanceRequest]="filterForm?.value"
                             class="pull-right mr-1"
-                        >
-                        </trial-balance-export-xls>
+                        ></trial-balance-export-xls>
                         <profit-loss-export-xls
                             *ngIf="plBsExportXLS"
                             [fy]="filterForm.controls['fy']?.value"

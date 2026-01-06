@@ -1,9 +1,4 @@
-<div
-    appTranslate
-    [file]="'command-k'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
+<div appTranslate [file]="'command-k'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <section>
         <section #wrapper [class.isVisible]="isOpen" class="universal-data-list-wrapper">
             <!-- header -->
@@ -30,11 +25,7 @@
                             (mousemove)="onItemMouseMove(i)"
                             (click)="onItemClick(item, $event)"
                         >
-                            <a
-                                [attr.href]="getItemHref(item)"
-                                class="item-link"
-                                tabindex="-1"
-                            >
+                            <a [attr.href]="getItemHref(item)" class="item-link" tabindex="-1">
                                 <!-- Item Icon -->
                                 <div class="item-icon">
                                     <div [ngSwitch]="item.type">
@@ -48,8 +39,13 @@
                                             <span class="icon icon-bar"></span>
                                         </div>
                                         <div *ngSwitchDefault>
-                                            <img class="icon-stock" src="/assets/images/item-wise.svg"
-                                                width="18" height="18" alt="stock icon">
+                                            <img
+                                                class="icon-stock"
+                                                src="/assets/images/item-wise.svg"
+                                                width="18"
+                                                height="18"
+                                                alt="stock icon"
+                                            />
                                         </div>
                                     </div>
                                 </div>
@@ -69,7 +65,8 @@
                                             <div *ngIf="item?.parentGroups" class="item-breadcrumb">
                                                 <small>
                                                     <span *ngFor="let parent of item.parentGroups; let idx = index">
-                                                        <span *ngIf="idx > 0">&nbsp;❯&nbsp;</span>{{ parent.name }}
+                                                        <span *ngIf="idx > 0">&nbsp;❯&nbsp;</span>
+                                                        {{ parent.name }}
                                                     </span>
                                                 </small>
                                             </div>
@@ -92,18 +89,10 @@
                         <p class="no-results-message">{{ localeData?.no_records_found }}</p>
 
                         <div *ngIf="showChannelCreateBtn" class="no-results-actions">
-                            <button
-                                matButton="filled"
-                                (click)="newTeamCreationEmitter.emit(['group', ''])"
-                                mat-dialog-close
-                            >
+                            <button matButton="filled" (click)="newTeamCreationEmitter.emit(['group', ''])" mat-dialog-close>
                                 {{ commonLocaleData?.app_create_group }}
                             </button>
-                            <button
-                                matButton="filled"
-                                (click)="newTeamCreationEmitter.emit(['account', ''])"
-                                mat-dialog-close
-                            >
+                            <button matButton="filled" (click)="newTeamCreationEmitter.emit(['account', ''])" mat-dialog-close>
                                 {{ commonLocaleData?.app_create_account }}
                             </button>
                         </div>

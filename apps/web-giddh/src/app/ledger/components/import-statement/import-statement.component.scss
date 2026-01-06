@@ -25,7 +25,7 @@
         background-color: var(--theme-primary-light);
         margin-left: -34px;
     }
-    input[type="file"] {
+    input[type='file'] {
         display: none;
     }
     .path-name {
@@ -54,7 +54,7 @@
 }
 
 .statement-card {
-    >div {
+    > div {
         height: 230px;
         p {
             color: var(--theme-foreground-color);
@@ -62,7 +62,7 @@
     }
 
     &:hover {
-        >div {
+        > div {
             background-color: var(--theme-primary-light);
         }
     }

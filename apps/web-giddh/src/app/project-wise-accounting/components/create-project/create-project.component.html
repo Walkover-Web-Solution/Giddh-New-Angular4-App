@@ -1,15 +1,8 @@
-<div
-    appTranslate
-    [file]="'project-wise-account'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
+<div appTranslate [file]="'project-wise-account'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <div>
         <!-- Dialog Header -->
         <div class="dialog-header">
-            <span class="font-size-16">{{
-                inputData?.isCreateFlow ? localeData?.create_project : localeData?.update_project
-            }}</span>
+            <span class="font-size-16">{{ inputData?.isCreateFlow ? localeData?.create_project : localeData?.update_project }}</span>
         </div>
 
         <!-- Dialog Body -->

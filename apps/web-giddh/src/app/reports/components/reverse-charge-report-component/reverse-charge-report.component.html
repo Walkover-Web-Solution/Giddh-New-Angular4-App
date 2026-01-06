@@ -1,26 +1,14 @@
-<div
-    appTranslate
-    [file]="'reports/reverse-charge'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
+<div appTranslate [file]="'reports/reverse-charge'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <hamburger-menu [pageHeading]="localeData?.page_heading"></hamburger-menu>
     <div class="help-support-aside setting-sidebar-wrapper gst-sidebar-wrapper" *ngIf="asideGstSidebarMenuState">
-        <tax-sidebar
-            (navigateEvent)="handleNavigation()"
-            [exclude]="'#primary-new-header'"
-            class="gst-sidebar"
-        ></tax-sidebar>
+        <tax-sidebar (navigateEvent)="handleNavigation()" [exclude]="'#primary-new-header'" class="gst-sidebar"></tax-sidebar>
     </div>
     <div class="reverse-table-report overflow-visible p-3">
         <div class="container-fluid overflow-visible px-0">
             <div class="position-sticky left-0 mb-3">
                 <div class="d-flex align-items-center column-gap-1 mb-2">
                     <reactive-dropdown-field
-                        *ngIf="
-                            currentCompanyBranches?.length > 2 &&
-                            (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
-                        "
+                        *ngIf="currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
                         [label]="commonLocaleData?.app_entity"
                         [labelValue]="currentBranch?.name ?? ''"
                         [options]="currentCompanyBranches"
@@ -46,7 +34,8 @@
                         />
                     </div>
                     <button matButton="elevated" (click)="resetFilters()" *ngIf="isDateFilterApplied()">
-                        <i class="icon-cross"></i> {{ commonLocaleData?.app_clear_filter }}
+                        <i class="icon-cross"></i>
+                        {{ commonLocaleData?.app_clear_filter }}
                     </button>
                 </div>
                 <div class="top-content" [hidden]="!reverseChargeReportResults?.items?.length">
@@ -60,8 +49,7 @@
                                             [amount]="reverseChargeReportResults?.totalTaxableValue"
                                             [currencySymbol]="activeCompany?.baseCurrencySymbol"
                                             [currencyCode]="activeCompany?.baseCurrency"
-                                        >
-                                        </amount-field>
+                                        ></amount-field>
                                     </span>
                                 </div>
                             </h5>
@@ -75,8 +63,7 @@
                                             [amount]="reverseChargeReportResults?.totalTaxAmount"
                                             [currencySymbol]="activeCompany?.baseCurrencySymbol"
                                             [currencyCode]="activeCompany?.baseCurrency"
-                                        >
-                                        </amount-field>
+                                        ></amount-field>
                                     </span>
                                 </div>
                             </h5>
@@ -132,17 +119,12 @@
                                         fieldName: 'name',
                                         formControl: searchedName,
                                         placeholder: localeData?.suppliers_name_placeholder,
-                                        title: commonLocaleData?.app_name
+                                        title: commonLocaleData?.app_name,
                                     }
                                 "
                             ></ng-container>
                         </th>
-                        <td
-                            mat-cell
-                            *matCellDef="let element"
-                            [matTooltip]="element?.supplierName"
-                            matTooltipPosition="above"
-                        >
+                        <td mat-cell *matCellDef="let element" [matTooltip]="element?.supplierName" matTooltipPosition="above">
                             {{ element?.supplierName }}
                         </td>
                     </ng-container>
@@ -184,12 +166,12 @@
                                         fieldName: 'invoiceNo',
                                         formControl: searchedInvoiceNo,
                                         placeholder: commonLocaleData?.app_invoice_no,
-                                        title: commonLocaleData?.app_invoice_no
+                                        title: commonLocaleData?.app_invoice_no,
                                     }
                                 "
                             ></ng-container>
                         </th>
-                        <td mat-cell *matCellDef="let element">{{ element?.invoiceNumber || "-" }}</td>
+                        <td mat-cell *matCellDef="let element">{{ element?.invoiceNumber || '-' }}</td>
                     </ng-container>
 
                     <!-- Supplier Invoice Date Column -->
@@ -197,7 +179,7 @@
                         <th mat-header-cell *matHeaderCellDef mat-sort-header class="width-150">
                             {{ localeData?.suppliers_invoice_date }}
                         </th>
-                        <td mat-cell *matCellDef="let element">{{ element?.supplierInvoiceDate || "-" }}</td>
+                        <td mat-cell *matCellDef="let element">{{ element?.supplierInvoiceDate || '-' }}</td>
                     </ng-container>
 
                     <!-- Supplier Country Column with Search -->
@@ -217,7 +199,7 @@
                                         fieldName: 'country',
                                         formControl: searchedCountry,
                                         placeholder: localeData?.suppliers_country_placeholder,
-                                        title: commonLocaleData?.app_country
+                                        title: commonLocaleData?.app_country,
                                     }
                                 "
                             ></ng-container>
@@ -248,12 +230,9 @@
                         </th>
                         <td mat-cell *matCellDef="let element">
                             <span class="d-inline-flex">
-                                <amount-field
-                                    [amount]="element?.taxRate"
-                                    [currencySymbol]="false"
-                                    [currencyCode]="false"
-                                ></amount-field> </span
-                            >%
+                                <amount-field [amount]="element?.taxRate" [currencySymbol]="false" [currencyCode]="false"></amount-field>
+                            </span>
+                            %
                         </td>
                     </ng-container>
 
@@ -308,8 +287,7 @@
                         dataSource.data?.length === 0)
                 "
                 [secondaryMessageClass]="'p-0'"
-            >
-            </no-data>
+            ></no-data>
         </div>
     </div>
 </div>

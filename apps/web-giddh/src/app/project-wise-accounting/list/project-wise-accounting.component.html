@@ -1,18 +1,6 @@
-<div
-    appTranslate
-    [file]="'project-wise-account'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
+<div appTranslate [file]="'project-wise-account'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <hamburger-menu></hamburger-menu>
-    <div
-        *ngIf="
-            (isFetchingProjects$ | async) &&
-            !totalResults &&
-            !isSearch &&
-            !(isShowSearchBox.name || isShowSearchBox.status)
-        "
-    >
+    <div *ngIf="(isFetchingProjects$ | async) && !totalResults && !isSearch && !(isShowSearchBox.name || isShowSearchBox.status)">
         <giddh-page-loader></giddh-page-loader>
     </div>
     <div class="project clear-both section-center position-relative overflow-visible p-3">
@@ -43,9 +31,7 @@
                     *ngIf="isCompany"
                     [label]="commonLocaleData?.app_branch"
                     [options]="branches"
-                    (selectedOption)="
-                        projectListRequest.branchUniqueName = $event?.value; isSearch = true; getAllProjectList()
-                    "
+                    (selectedOption)="projectListRequest.branchUniqueName = $event?.value; isSearch = true; getAllProjectList()"
                     (onClear)="projectListRequest.branchUniqueName = ''; isSearch = false; getAllProjectList()"
                     [labelValue]="activeCompany?.name"
                     [placeholder]="commonLocaleData?.app_select_branch"
@@ -56,7 +42,8 @@
                     class="min-width-100 ml-2"
                     (click)="resetFilter()"
                 >
-                    <span class="icon-cross icon-font-size-14"></span> {{ commonLocaleData?.app_clear_filter }}
+                    <span class="icon-cross icon-font-size-14"></span>
+                    {{ commonLocaleData?.app_clear_filter }}
                 </button>
             </div>
             <button *ngIf="!isCompany" matButton="filled" (click)="openCreateProjectDialog(true)">
@@ -71,7 +58,7 @@
                 + {{ localeData?.create_project }}
             </button>
             <div class="d-flex justify-content-center align-items-center" *ngIf="isCompany">
-                <span class="font-size-24 mr-2">{{ localeData?.go_to_branch_information }} </span>
+                <span class="font-size-24 mr-2">{{ localeData?.go_to_branch_information }}</span>
                 <button matButton="filled" (click)="gotToBranchTab()">
                     {{ localeData?.go_to_branch }}
                 </button>
@@ -122,16 +109,14 @@
                                         $implicit: isShowSearchBox.name,
                                         fieldName: 'name',
                                         formControl: projectName,
-                                        title: localeData?.project_name
+                                        title: localeData?.project_name,
                                     }
                                 "
                             ></div>
                         </div>
                     </th>
                     <td mat-cell *matCellDef="let element">
-                        <a [routerLink]="['/pages/project-wise-accounting', 'income', 'list', element.uniqueName]">{{
-                            element.name
-                        }}</a>
+                        <a [routerLink]="['/pages/project-wise-accounting', 'income', 'list', element.uniqueName]">{{ element.name }}</a>
                     </td>
                 </div>
 
@@ -153,7 +138,7 @@
                                         $implicit: isShowSearchBox.status,
                                         fieldName: 'status',
                                         formControl: projectStatus,
-                                        title: commonLocaleData?.app_status
+                                        title: commonLocaleData?.app_status,
                                     }
                                 "
                             ></div>
@@ -224,13 +209,10 @@
                     [secondaryMessage]="' '"
                 ></no-data>
                 <div
-                    *ngIf="
-                        !(projectName.value?.length || projectStatus.value?.length) &&
-                        !(isShowSearchBox.name || isShowSearchBox.status)
-                    "
+                    *ngIf="!(projectName.value?.length || projectStatus.value?.length) && !(isShowSearchBox.name || isShowSearchBox.status)"
                     class="d-flex justify-content-center align-items-center"
                 >
-                    <span class="font-size-24 mr-2">{{ localeData?.go_to_branch_information }} </span>
+                    <span class="font-size-24 mr-2">{{ localeData?.go_to_branch_information }}</span>
                     <button matButton="filled" (click)="gotToBranchTab()">
                         {{ localeData?.go_to_branch }}
                     </button>
@@ -270,8 +252,7 @@
             (closeCalender)="toggleGiddhDatepicker(false)"
             [keepCalendarOpeningWithRange]="false"
             [showRangeLabelOnInput]="false"
-        >
-        </app-datepicker-wrapper>
+        ></app-datepicker-wrapper>
     </ng-template>
 </mat-menu>
 <ng-template
@@ -283,15 +264,10 @@
     let-formControl="formControl"
 >
     <div class="align-items-center d-flex column-gap-05" [hidden]="show">
-        <button
-            matIconButton
-            aria-label="search"
-            (click)="toggleSearch(fieldName)"
-            class="project-search-icon font-size-16"
-        >
+        <button matIconButton aria-label="search" (click)="toggleSearch(fieldName)" class="project-search-icon font-size-16">
             <span class="icon-search"></span>
         </button>
-        <span> {{ title }}</span>
+        <span>{{ title }}</span>
     </div>
     <div class="align-items-center d-flex" [hidden]="!show">
         <text-field

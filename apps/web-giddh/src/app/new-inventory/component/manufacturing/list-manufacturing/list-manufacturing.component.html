@@ -40,8 +40,7 @@
                                     (selectedOption)="handleBranchChange($event)"
                                     [(ngModel)]="currentBranch.uniqueName"
                                     [labelValue]="selectedBranchName"
-                                >
-                                </reactive-dropdown-field>
+                                ></reactive-dropdown-field>
                             </div>
                             <div class="list-header" *ngIf="warehouses?.length > 1">
                                 <reactive-dropdown-field
@@ -52,20 +51,13 @@
                                     [labelValue]="selectedWarehouseName"
                                     [(ngModel)]="manufacturingSearchRequest.warehouseUniqueName"
                                     (selectedOption)="
-                                        selectedWarehouseName = $event.label;
-                                        manufacturingSearchRequest.warehouseUniqueName = $event.value
+                                        selectedWarehouseName = $event.label; manufacturingSearchRequest.warehouseUniqueName = $event.value
                                     "
-                                >
-                                </reactive-dropdown-field>
+                                ></reactive-dropdown-field>
                             </div>
 
                             <div>
-                                <button
-                                    type="button"
-                                    class="mr-0 search-btn"
-                                    matButton="filled"
-                                    (click)="getReport()"
-                                >
+                                <button type="button" class="mr-0 search-btn" matButton="filled" (click)="getReport()">
                                     {{ commonLocaleData?.app_search }}
                                 </button>
                             </div>
@@ -83,11 +75,7 @@
                             </div>
 
                             <div class="ml-auto">
-                                <button
-                                    type="button"
-                                    (click)="openAdvanceFilterDialog()"
-                                    matButton="filled"
-                                >
+                                <button type="button" (click)="openAdvanceFilterDialog()" matButton="filled">
                                     {{ commonLocaleData?.app_filter }}
                                     <span class="icon-advance-filter"></span>
                                 </button>
@@ -220,11 +208,9 @@
                                     [options]="inventoryTypeFilters"
                                     [labelValue]="selectedInventoryTypeName"
                                     (selectedOption)="
-                                        manufacturingSearchRequest.inventoryType = $event.value;
-                                        selectedInventoryTypeName = $event.label
+                                        manufacturingSearchRequest.inventoryType = $event.value; selectedInventoryTypeName = $event.label
                                     "
-                                >
-                                </reactive-dropdown-field>
+                                ></reactive-dropdown-field>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -242,8 +228,7 @@
                                             getVariants()
                                         "
                                         [labelValue]="selectedStockName"
-                                    >
-                                    </reactive-dropdown-field>
+                                    ></reactive-dropdown-field>
                                 </div>
                             </div>
                         </div>
@@ -257,12 +242,10 @@
                                         [label]="commonLocaleData?.app_variant"
                                         [options]="variantList"
                                         (selectedOption)="
-                                            selectedVariantName = $event.label;
-                                            manufacturingSearchRequest.productVariant = $event.value
+                                            selectedVariantName = $event.label; manufacturingSearchRequest.productVariant = $event.value
                                         "
                                         [labelValue]="selectedVariantName"
-                                    >
-                                    </reactive-dropdown-field>
+                                    ></reactive-dropdown-field>
                                 </div>
                             </div>
                         </div>
@@ -275,11 +258,9 @@
                                     [options]="searchByFilters"
                                     [labelValue]="selectedOperationName"
                                     (selectedOption)="
-                                        manufacturingSearchRequest.searchBy = $event.value;
-                                        selectedOperationName = $event.label
+                                        manufacturingSearchRequest.searchBy = $event.value; selectedOperationName = $event.label
                                     "
-                                >
-                                </reactive-dropdown-field>
+                                ></reactive-dropdown-field>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -291,11 +272,9 @@
                                     [options]="operatorFilters"
                                     [labelValue]="selectedFilterByName"
                                     (selectedOption)="
-                                        manufacturingSearchRequest.searchOperation = $event.value;
-                                        selectedFilterByName = $event.label
+                                        manufacturingSearchRequest.searchOperation = $event.value; selectedFilterByName = $event.label
                                     "
-                                >
-                                </reactive-dropdown-field>
+                                ></reactive-dropdown-field>
                             </div>
                         </div>
                         <div class="row mb-3">
@@ -312,12 +291,7 @@
                         </div>
 
                         <div class="d-flex justify-content-end column-gap-1 mt-4">
-                            <button
-                                type="button"
-                                matButton="filled"
-                                mat-dialog-close
-                                (click)="getReport()"
-                            >
+                            <button type="button" matButton="filled" mat-dialog-close (click)="getReport()">
                                 {{ commonLocaleData?.app_search }}
                             </button>
                             <button type="button" mat-dialog-close matButton="elevated">
@@ -350,8 +324,7 @@
                 (closeCalender)="toggleGiddhDatepicker(false)"
                 [keepCalendarOpeningWithRange]="false"
                 [showRangeLabelOnInput]="false"
-            >
-            </app-datepicker-wrapper>
+            ></app-datepicker-wrapper>
         </ng-template>
     </mat-menu>
 </div>

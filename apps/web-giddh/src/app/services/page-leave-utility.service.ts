@@ -75,7 +75,7 @@ export class PageLeaveUtilityService {
                         (window as any).electronAPI.send('has-unsaved-changes', false);
                         electronIpcAvailable = true;
                     } catch (ipcError) {
-                        console.warn('ElectronAPI send failed:', ipcError);
+
                     }
                 }
 
@@ -88,17 +88,17 @@ export class PageLeaveUtilityService {
                             electronIpcAvailable = true;
                         }
                     } catch (requireError) {
-                        console.warn('Electron require failed:', requireError);
+
                     }
                 }
 
                 // Fallback to regular browser behavior if IPC not available
                 if (!electronIpcAvailable) {
-                    console.warn('Electron IPC not available for page leave utility, using browser fallback');
+
                     window.onbeforeunload = null;
                 }
             } catch (error) {
-                console.warn('Electron page leave utility failed, using browser fallback:', error);
+
                 window.onbeforeunload = null;
             }
         } else {
@@ -127,7 +127,7 @@ export class PageLeaveUtilityService {
                         (window as any).electronAPI.send('has-unsaved-changes', true);
                         electronIpcAvailable = true;
                     } catch (ipcError) {
-                        console.warn('ElectronAPI send failed:', ipcError);
+
                     }
                 }
 
@@ -140,17 +140,17 @@ export class PageLeaveUtilityService {
                             electronIpcAvailable = true;
                         }
                     } catch (requireError) {
-                        console.warn('Electron require failed:', requireError);
+
                     }
                 }
 
                 // Fallback to regular browser behavior if IPC not available
                 if (!electronIpcAvailable) {
-                    console.warn('Electron IPC not available for page leave utility, using browser fallback');
+
                     window.onbeforeunload = () => 'true';
                 }
             } catch (error) {
-                console.warn('Electron page leave utility failed, using browser fallback:', error);
+
                 window.onbeforeunload = () => 'true';
             }
         } else {

@@ -1,3 +1,9 @@
+/**
+ * @fileoverview General service for business logic and data management
+ * @author Giddh Development Team
+ * @since 2026
+ */
+
 import { environment } from './../../environments/environment.generated';
 import { Inject, Injectable, Optional } from '@angular/core';
 import { eventsConst } from 'apps/web-giddh/src/app/shared/header/components/eventsConst';
@@ -28,6 +34,12 @@ import { cloneDeep, concat, find, findIndex, forEach, includes, indexOf, keys, m
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * GeneralService class - Handles generalservice functionality
+ * @export
+ * @class GeneralService
+ */
+
 export class GeneralService {
     invokeEvent: Subject<any> = new Subject();
     public isCurrencyPipeLoaded: boolean = false;
@@ -1149,7 +1161,6 @@ export class GeneralService {
                 grandTotalAmountForAccount = Number(item.grandTotal.amountForAccount) || 0;
             }
 
-
             let grandTotalConversionRate = 0, balanceDueAmountConversionRate = 0;
             if (this.voucherApiVersion === 2) {
                 grandTotalConversionRate = item.exchangeRate ?? 1;
@@ -2249,7 +2260,7 @@ export class GeneralService {
             const whiteLabelData = JSON.parse(localStorage.getItem('whiteLabel'));
             return whiteLabelData?.body || null;
         } catch (error) {
-            console.error('Error parsing whiteLabel data from localStorage:', error);
+
             return null;
         }
     }
@@ -2608,7 +2619,7 @@ export class GeneralService {
             try {
                 return callback();
             } catch (error) {
-                console.warn('Error checking unsaved changes:', error);
+
                 return false;
             }
         });
@@ -2624,7 +2635,7 @@ export class GeneralService {
             try {
                 callback();
             } catch (error) {
-                console.warn('Error marking forms as pristine:', error);
+
             }
         });
     }

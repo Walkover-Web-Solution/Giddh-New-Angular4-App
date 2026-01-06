@@ -415,7 +415,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
             });
 
-
             if (params?.code) {
                 this.saveGmailAuthCode(params.code);
             }
@@ -1768,7 +1767,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         });
     }
 
-
     /**
      * Toggle between table header title and search input field
      *
@@ -2235,7 +2233,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                         (window as any).electronAPI.send('open-url', electronUrl);
                         electronIpcAvailable = true;
                     } catch (ipcError) {
-                        console.warn('ElectronAPI send failed:', ipcError);
+
                     }
                 }
 
@@ -2249,17 +2247,17 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                             electronIpcAvailable = true;
                         }
                     } catch (requireError) {
-                        console.warn('Electron require failed:', requireError);
+
                     }
                 }
 
                 // Fallback to regular window.open if IPC not available
                 if (!electronIpcAvailable) {
-                    console.warn('Electron IPC not available for page leave utility, using window.open');
+
                     (window as any).open(url);
                 }
             } catch (error) {
-                console.warn('Electron navigation failed, using window.open:', error);
+
                 (window as any).open(url);
             }
         } else {
@@ -3193,7 +3191,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                         this.settingForm.get('invoiceSettings.autoPaid')?.setValue(
                             this.settingForm.get('invoiceSettings.autoPaid')?.value === 'runtime'
                         );
-
 
                         const invoiceLockDateValue = this.settingForm.get('invoiceSettings.lockDate').value;
                         if (invoiceLockDateValue === null || invoiceLockDateValue === '') {

@@ -15,9 +15,7 @@
                                 <span class="custom-mat-form-field">
                                     <input-field
                                         [type]="'text'"
-                                        [showError]="
-                                            isFormSubmitted && !createCompanyAuthKeyForm.get('roleName')?.value
-                                        "
+                                        [showError]="isFormSubmitted && !createCompanyAuthKeyForm.get('roleName')?.value"
                                         [name]="'role-name'"
                                         formControlName="roleName"
                                         [placeholder]="localeData?.user_role_name_placeholder"
@@ -33,9 +31,7 @@
                                     [options]="allRoles"
                                     formControlName="roleUniqueName"
                                     [required]="true"
-                                    [showError]="
-                                        isFormSubmitted && !createCompanyAuthKeyForm?.get('roleUniqueName')?.value
-                                    "
+                                    [showError]="isFormSubmitted && !createCompanyAuthKeyForm?.get('roleUniqueName')?.value"
                                 ></reactive-dropdown-field>
                             </div>
                         </div>
@@ -56,9 +52,7 @@
                             >
                                 <span class="d-flex w-100 font-weight-regular">
                                     {{ selectedTimeSpan }}
-                                    <span class="ml-auto"
-                                        ><span class="fa fa-caret-down font-size-15 mr-2"></span
-                                    ></span>
+                                    <span class="ml-auto"><span class="fa fa-caret-down font-size-15 mr-2"></span></span>
                                 </span>
                             </button>
                             <mat-menu #menu="matMenu">

@@ -15,8 +15,7 @@
                             [placeholder]="commonLocaleData?.app_select_entity"
                             [labelValue]="currentBranch?.name"
                             class="entity-dropdown"
-                        >
-                        </reactive-dropdown-field>
+                        ></reactive-dropdown-field>
                     </div>
                 </div>
                 <div class="mr-3">
@@ -30,16 +29,17 @@
                         [enableDynamicSearch]="true"
                         (scrollEnd)="handleGroupScrollEnd()"
                         (dynamicSearchedQuery)="onGroupSearchQueryChanged($event)"
-                    >
-                    </reactive-dropdown-field>
+                    ></reactive-dropdown-field>
                 </div>
                 <div class="mr-3">
-                    <div class="custom-datepicker custom-new-datepicker"
+                    <div
+                        class="custom-datepicker custom-new-datepicker"
                         [matMenuTriggerFor]="universalDatepicker"
                         #universalDatepickerTrigger="matMenuTrigger"
                         role="button"
                         aria-haspopup="true"
-                        aria-controls="universalDatepicker">
+                        aria-controls="universalDatepicker"
+                    >
                         <input
                             matInput
                             type="text"
@@ -52,11 +52,7 @@
                     </div>
                 </div>
                 <div class="d-flex column-gap-15">
-                    <button
-                        [disabled]="!groupUniqueName"
-                        matButton="filled"
-                        (click)="getClosingBalance(false, $event)"
-                    >
+                    <button [disabled]="!groupUniqueName" matButton="filled" (click)="getClosingBalance(false, $event)">
                         {{ commonLocaleData?.app_search }}
                     </button>
                     <button [disabled]="!groupUniqueName" matButton="elevated" (click)="getClosingBalance(true, $event)">

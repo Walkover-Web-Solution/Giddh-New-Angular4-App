@@ -29,8 +29,7 @@
                         [(ngModel)]="customFieldsRequest.moduleUniqueName"
                         (selectedOption)="customFieldsRequest.moduleUniqueName = $event?.value; getCustomFields()"
                         [cssClass]="'form-control'"
-                    >
-                    </reactive-dropdown-field>
+                    ></reactive-dropdown-field>
                 </div>
             </div>
             <watch-video [cssClass]="'text-primary'" [moduleName]="'CUSTOM_FIELD'"></watch-video>
@@ -66,8 +65,9 @@
                                 [matTooltip]="commonLocaleData?.app_edit"
                                 [matTooltipPosition]="'above'"
                                 *ngIf="voucherApiVersion === 2"
-                                ><i class="icon-edit"></i
-                            ></a>
+                            >
+                                <i class="icon-edit"></i>
+                            </a>
                             <a
                                 href="javascript:;"
                                 aria-label="delete icon"
@@ -75,8 +75,9 @@
                                 [matTooltipPosition]="'above'"
                                 (click)="deleteCustomField(element?.uniqueName)"
                                 *ngIf="voucherApiVersion === 2"
-                                ><i class="icon-trash"></i
-                            ></a>
+                            >
+                                <i class="icon-trash"></i>
+                            </a>
                         </td>
                     </div>
                     <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
@@ -96,8 +97,7 @@
                 [showFirstLastButtons]="true"
                 [hidePageSize]="false"
                 (page)="handlePageEvent($event)"
-            >
-            </mat-paginator>
+            ></mat-paginator>
             <section class="mb-custom-80"></section>
         </div>
     </div>

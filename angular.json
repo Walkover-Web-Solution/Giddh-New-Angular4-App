@@ -300,22 +300,30 @@
                                 "input": "apps/web-giddh/src/index.prod.html",
                                 "output": "/index.html"
                             },
-                            "optimization": false,
+                            "optimization": {
+                                "scripts": true,
+                                "styles": {
+                                    "minify": true,
+                                    "inlineCritical": false
+                                },
+                                "fonts": true
+                            },
                             "outputHashing": "all",
                             "sourceMap": false,
+                            "extractLicenses": true,
                             "vendorChunk": true,
-                            "namedChunks": true,
+                            "namedChunks": false,
                             "budgets": [
                                 {
                                     "type": "initial",
-                                    "maximumWarning": "15mb",
-                                    "maximumError": "20mb"
+                                    "maximumWarning": "8mb",
+                                    "maximumError": "12mb"
                                 },
                                 {
                                     "type": "bundle",
                                     "name": "vendor",
-                                    "maximumWarning": "7mb",
-                                    "maximumError": "10mb"
+                                    "maximumWarning": "4mb",
+                                    "maximumError": "6mb"
                                 }
                             ]
                         },

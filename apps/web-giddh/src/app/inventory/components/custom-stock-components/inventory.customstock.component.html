@@ -1,6 +1,6 @@
 <section class="inventory-wrapper">
     <div class="dialog-header">
-        <span>{{ editMode ? "Modify Unit" : "Create Unit" }}</span>
+        <span>{{ editMode ? 'Modify Unit' : 'Create Unit' }}</span>
     </div>
     <mat-dialog-content class="dialog-body">
         <div class="aside-pane-form">
@@ -27,7 +27,7 @@
                                     <a href="javascript:void(0)" class="list-item d-flex">
                                         <span class="entity-details">
                                             <div class="item giddh-limit single-line-clamp">
-                                                {{ option?.label || "-" }} ({{ option?.value || "-" }})
+                                                {{ option?.label || '-' }} ({{ option?.value || '-' }})
                                             </div>
                                         </span>
                                     </a>
@@ -58,8 +58,7 @@
                                 (change)="handleUnitCodeValidation(unitCode?.errors)"
                                 [required]="true"
                                 [disabled]="editMode"
-                            >
-                            </input-field>
+                            ></input-field>
                         </div>
                         <ng-container *ngFor="let mappingField of customUnitObj.mappings; let i = index">
                             <div class="inventory-section d-flex" *ngIf="customUnitObj.name && customUnitObj.code">
@@ -74,14 +73,14 @@
                                             [label]="'Unit Name'"
                                             class="select-unit-x"
                                             [ngClass]="{
-                                                'error-box': !mappingField.stockUnitX.code && !isValidForm
+                                                'error-box': !mappingField.stockUnitX.code && !isValidForm,
                                             }"
                                         >
                                             <ng-template #optionTemplate let-option="option">
                                                 <a href="javascript:void(0)" class="list-item d-flex">
                                                     <span class="entity-details">
                                                         <div class="item giddh-limit single-line-clamp">
-                                                            {{ option?.label || "-" }} ({{ option?.value || "-" }})
+                                                            {{ option?.label || '-' }} ({{ option?.value || '-' }})
                                                         </div>
                                                     </span>
                                                 </a>
@@ -91,7 +90,10 @@
                                 </div>
                                 <span class="equal-sign">=</span>
                                 <div class="form-group col-xs-3 col-sm-3">
-                                    <label>Qty. per Unit <sup>*</sup></label>
+                                    <label>
+                                        Qty. per Unit
+                                        <sup>*</sup>
+                                    </label>
                                     <input
                                         placeholder="Quantity"
                                         type="text"
@@ -115,25 +117,21 @@
                                             [label]="'Mapped Unit'"
                                             class="select-unit"
                                             [ngClass]="{
-                                                'error-box': !mappingField.stockUnitY.code && !isValidForm
+                                                'error-box': !mappingField.stockUnitY.code && !isValidForm,
                                             }"
                                         >
                                             <ng-template #optionTemplate let-option="option">
                                                 <a href="javascript:void(0)" class="list-item d-flex">
                                                     <span class="entity-details">
                                                         <div class="item giddh-limit single-line-clamp">
-                                                            {{ option?.label || "-" }} ({{ option?.value || "-" }})
+                                                            {{ option?.label || '-' }} ({{ option?.value || '-' }})
                                                         </div>
                                                     </span>
                                                 </a>
                                             </ng-template>
                                         </reactive-dropdown-field>
                                         <div class="pull-right unit-add">
-                                            <button
-                                                matButton="elevated"
-                                                class="mr-0"
-                                                (click)="addDefaultMapping(mappingField)"
-                                            >
+                                            <button matButton="elevated" class="mr-0" (click)="addDefaultMapping(mappingField)">
                                                 <i class="icon-plus text-green"></i>
                                             </button>
                                             <button matButton="elevated" class="mr-0" (click)="removeMappedUnit(i)">
@@ -164,12 +162,7 @@
 
                         <div class="col-xs-12 col-sm-12" *ngIf="editMode">
                             <div class="d-flex justify-content-end column-gap-1">
-                                <button
-                                    type="submit"
-                                    matButton="filled"
-                                    (click)="saveUnit()"
-                                    [disabled]="customUnitForm.invalid"
-                                >
+                                <button type="submit" matButton="filled" (click)="saveUnit()" [disabled]="customUnitForm.invalid">
                                     Update
                                 </button>
                                 <button type="button" matButton="elevated" (click)="closeAsidePane()">Cancel</button>
@@ -183,19 +176,15 @@
                     <!-- Unit Name Column -->
                     <ng-container matColumnDef="unitName">
                         <th mat-header-cell *matHeaderCellDef class="text-center">Name</th>
-                        <td mat-cell *matCellDef="let item">
-                            {{ item?.stockUnitX?.name }} ({{ item?.stockUnitX?.code }})
-                        </td>
+                        <td mat-cell *matCellDef="let item">{{ item?.stockUnitX?.name }} ({{ item?.stockUnitX?.code }})</td>
                     </ng-container>
 
                     <!-- Mapped Unit Column -->
                     <ng-container matColumnDef="mappedUnit">
                         <th mat-header-cell *matHeaderCellDef class="text-center">Mapped</th>
                         <td mat-cell *matCellDef="let item">
-                            {{ item?.quantity ? (item?.quantity | giddhRoundOff : giddhDecimalPlaces) : "-" }}
-                            <span *ngIf="item?.stockUnitY?.name">
-                                {{ item?.stockUnitY?.name }} ({{ item?.stockUnitY?.code }})
-                            </span>
+                            {{ item?.quantity ? (item?.quantity | giddhRoundOff: giddhDecimalPlaces) : '-' }}
+                            <span *ngIf="item?.stockUnitY?.name">{{ item?.stockUnitY?.name }} ({{ item?.stockUnitY?.code }})</span>
                             <span *ngIf="!item?.stockUnitY?.name">-</span>
                         </td>
                     </ng-container>
@@ -212,9 +201,7 @@
                                     matButton="elevated"
                                     class="delete-btn"
                                     [disabled]="editMode"
-                                    [ladda]="
-                                        (deleteCustomStockInProcessCode$ | async)?.indexOf(item?.stockUnitX?.code) > -1
-                                    "
+                                    [ladda]="(deleteCustomStockInProcessCode$ | async)?.indexOf(item?.stockUnitX?.code) > -1"
                                     (click)="deleteUnit(item?.stockUnitX?.uniqueName)"
                                 >
                                     <i class="fa fa-trash"></i>
@@ -236,11 +223,7 @@
                         <th mat-header-cell *matHeaderCellDef></th>
                     </ng-container>
 
-                    <tr
-                        mat-header-row
-                        *matHeaderRowDef="['customUnit', 'empty1', 'empty2']"
-                        class="extra-header-row"
-                    ></tr>
+                    <tr mat-header-row *matHeaderRowDef="['customUnit', 'empty1', 'empty2']" class="extra-header-row"></tr>
                     <tr mat-header-row *matHeaderRowDef="displayedColumns" class="inventory-units-mapped"></tr>
                     <tr mat-row *matRowDef="let row; columns: displayedColumns" class="inventory-units-mapped"></tr>
                 </table>

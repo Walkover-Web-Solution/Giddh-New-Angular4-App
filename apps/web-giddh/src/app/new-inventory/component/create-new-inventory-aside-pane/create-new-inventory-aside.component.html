@@ -16,12 +16,12 @@
             <div *ngIf="moduleType === 'branch-transfer'">
                 <div class="pb-3">
                     <button matButton="filled" (click)="openCreateBranchTransfer('receipt-note')">
-                        {{commonLocaleData?.app_receipt_note}}
+                        {{ commonLocaleData?.app_receipt_note }}
                     </button>
                 </div>
                 <div>
                     <button matButton="filled" (click)="openCreateBranchTransfer('delivery-challan')">
-                        {{commonLocaleData?.app_delivery_challan}}
+                        {{ commonLocaleData?.app_delivery_challan }}
                     </button>
                 </div>
             </div>
@@ -39,7 +39,7 @@
             </div>
             <div *ngIf="moduleType === 'inventory-adjustment'">
                 <div class="pb-3">
-                    <button matButton="filled" (click)="closeAsidePane()" [routerLink]="['/pages/inventory/v2/adjust-product-and-service']" >
+                    <button matButton="filled" (click)="closeAsidePane()" [routerLink]="['/pages/inventory/v2/adjust-product-and-service']">
                         Adjust Group
                     </button>
                 </div>

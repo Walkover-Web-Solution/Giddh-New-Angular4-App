@@ -1,3 +1,9 @@
+/**
+ * @fileoverview Environment service for business logic and data management
+ * @author Giddh Development Team
+ * @since 2026
+ */
+
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.generated';
 
@@ -10,6 +16,12 @@ import { environment } from '../../environments/environment.generated';
 @Injectable({
     providedIn: 'root'
 })
+/**
+ * EnvironmentService class - Handles environmentservice functionality
+ * @export
+ * @class EnvironmentService
+ */
+
 export class EnvironmentService {
 
     private readonly _environment = environment;
@@ -177,8 +189,7 @@ export class EnvironmentService {
         });
 
         if (missingVariables.length > 0) {
-            console.error('❌ Missing required environment variables:', missingVariables);
-            console.error('🔧 Please check your environment configuration');
+
         }
 
         // Validate URLs format
@@ -197,7 +208,7 @@ export class EnvironmentService {
 
         (Array.isArray(urls) ? urls : []).forEach(({ name, value }) => {
             if (value && !this.isValidUrl(value)) {
-                console.warn(`⚠️ Invalid URL format for ${name}: ${value}`);
+
             }
         });
     }

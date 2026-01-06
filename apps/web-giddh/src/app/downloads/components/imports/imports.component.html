@@ -1,18 +1,10 @@
-<div
-    appTranslate
-    [file]="'downloads/imports'"
-    (commonLocaleData)="commonLocaleData = $event"
-    (localeData)="localeData = $event"
->
+<div appTranslate [file]="'downloads/imports'" (commonLocaleData)="commonLocaleData = $event" (localeData)="localeData = $event">
     <div class="import-table-container overflow-visible p-3">
         <div class="d-flex align-items-center justify-content-between mb-3">
             <div class="d-flex align-items-center">
                 <div
                     class="activity-filter-wrap"
-                    *ngIf="
-                        currentCompanyBranches?.length > 2 &&
-                        (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)
-                    "
+                    *ngIf="currentCompanyBranches?.length > 2 && (currentOrganizationType === 'COMPANY' || isConsolidatedBranch)"
                 >
                     <div class="clear-both">
                         <div class="col-xs-12 col-sm-12">
@@ -27,8 +19,7 @@
                                             [labelValue]="currentBranch?.name"
                                             class="entity-dropdown"
                                             [name]="'currentBranch'"
-                                        >
-                                        </reactive-dropdown-field>
+                                        ></reactive-dropdown-field>
                                     </div>
                                 </div>
                             </div>
@@ -56,7 +47,8 @@
                     </div>
                     <div class="clear-filter form-group mb-0" *ngIf="showClearFilter">
                         <button matButton="elevated" class="min-width-100 ml-2" (click)="resetFilter()">
-                            <span class="icon-cross icon-font-size-14"></span> {{ commonLocaleData?.app_clear_filter }}
+                            <span class="icon-cross icon-font-size-14"></span>
+                            {{ commonLocaleData?.app_clear_filter }}
                         </button>
                     </div>
                 </div>
@@ -95,23 +87,12 @@
                 <div matColumnDef="importFile">
                     <th mat-header-cell *matHeaderCellDef>{{ localeData?.import_file }}</th>
                     <td mat-cell *matCellDef="let element">
-                        <a
-                            target="_blank"
-                            *ngIf="!isElectron"
-                            [href]="element.path"
-                            matButton="filled"
-                            class="import-button-status"
-                        >
+                        <a target="_blank" *ngIf="!isElectron" [href]="element.path" matButton="filled" class="import-button-status">
                             {{ commonLocaleData?.app_download }}
                         </a>
-                        <a
-                            *ngIf="isElectron"
-                            (click)="downloadFile(element.path)"
-                            matButton="filled"
-                            class="import-button-status"
-                        >
-                            {{ commonLocaleData?.app_download }}</a
-                        >
+                        <a *ngIf="isElectron" (click)="downloadFile(element.path)" matButton="filled" class="import-button-status">
+                            {{ commonLocaleData?.app_download }}
+                        </a>
                     </td>
                 </div>
                 <!-- Count Column -->
@@ -119,11 +100,13 @@
                     <th mat-header-cell *matHeaderCellDef>{{ commonLocaleData?.app_count }}</th>
                     <td mat-cell *matCellDef="let element">
                         <div *ngIf="element?.status !== 'SUBMITTED'">
-                            <span>{{ localeData?.success }} : {{ element.count.success }}</span
-                            ><br /><span>{{ localeData?.failed }} : {{ element.count.failed }}</span
-                            ><br /><span>{{ localeData?.total }} : {{ element.count.total }}</span>
+                            <span>{{ localeData?.success }} : {{ element.count.success }}</span>
+                            <br />
+                            <span>{{ localeData?.failed }} : {{ element.count.failed }}</span>
+                            <br />
+                            <span>{{ localeData?.total }} : {{ element.count.total }}</span>
                         </div>
-                        <div *ngIf="element?.status === 'SUBMITTED'"> - </div>
+                        <div *ngIf="element?.status === 'SUBMITTED'">-</div>
                     </td>
                 </div>
                 <!-- Error Sheet Column -->
@@ -188,8 +171,7 @@
                 (page)="handlePageEvent($event)"
                 [showFirstLastButtons]="true"
                 [hidePageSize]="false"
-            >
-            </mat-paginator>
+            ></mat-paginator>
             <section class="mb-custom-80"></section>
         </div>
         <section class="no-logs" *ngIf="!dataSource?.length && !isLoading">

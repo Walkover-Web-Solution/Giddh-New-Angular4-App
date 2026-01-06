@@ -588,7 +588,7 @@ export class SettingProfileComponent implements OnInit, OnDestroy {
                 });
             } catch (error) {
                 // Silently handle change detection errors during initialization
-                console.debug('Change detection skipped during initialization');
+
             }
         }, 0);
     }

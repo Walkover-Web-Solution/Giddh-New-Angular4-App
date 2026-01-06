@@ -889,7 +889,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         }
     }
 
-
     /**
      * This will be use for add new portal user
      *
@@ -1003,7 +1002,7 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
                 }
             } catch (error) {
                 // Silently handle case where submit button doesn't exist
-                console.debug('Submit button not found for focus');
+
             }
         }, 100);
     }
@@ -2456,7 +2455,6 @@ export class AccountUpdateNewDetailsComponent implements OnInit, OnDestroy, OnCh
         this.store.dispatch(this.groupWithAccountsAction.HideAddAndManageFromOutside());
         document.querySelector('body')?.classList?.remove('master-page');
     }
-
 
     /**
     * Get company branches

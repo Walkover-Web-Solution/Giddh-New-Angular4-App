@@ -1,9 +1,4 @@
-<div
-    appTranslate
-    [file]="'settings/tags'"
-    (localeData)="localeData = $event"
-    (commonLocaleData)="commonLocaleData = $event"
->
+<div appTranslate [file]="'settings/tags'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <div class="p-3 section-center pt-5">
         <form [formGroup]="tagForm">
             <div class="row">

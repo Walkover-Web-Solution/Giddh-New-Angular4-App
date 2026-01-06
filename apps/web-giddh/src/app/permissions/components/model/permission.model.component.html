@@ -30,11 +30,7 @@
                         <mat-label>{{ dropdownHeading }}</mat-label>
                         <mat-select class="px-0" [(ngModel)]="selectedValues" name="page-list" multiple>
                             <div class="custom-select-all-option">
-                                <mat-checkbox
-                                    color="primary"
-                                    (change)="selectAllPages($event)"
-                                    [checked]="newRoleObj.isSelectedAllPages"
-                                >
+                                <mat-checkbox color="primary" (change)="selectAllPages($event)" [checked]="newRoleObj.isSelectedAllPages">
                                     {{ commonLocaleData?.app_select_all }}
                                 </mat-checkbox>
                             </div>

@@ -15,8 +15,7 @@
         [(expandAll)]="expandAll"
         [BsExportXLS]="true"
         (showReportTally)="showReportTallyOption = $event"
-    >
-    </financial-filter>
+    ></financial-filter>
     <div *ngIf="showLoader | async">
         <giddh-page-loader [cssClass]="'mt-0 mb-0'"></giddh-page-loader>
     </div>

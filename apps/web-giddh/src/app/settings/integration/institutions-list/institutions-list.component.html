@@ -18,26 +18,21 @@
                     [label]="localeData?.payment?.banks"
                     (keydown.enter)="$event.preventDefault()"
                     [matPrefixIcon]="'icon-search'"
-                >
-                </input-field>
+                ></input-field>
                 <div class="list-wrapper mt-2">
                     <mat-list class="p-0" *ngIf="filteredBanks?.length">
                         <ng-container *ngFor="let item of filteredBanks">
                             <div class="list-item px-2">
                                 <mat-list-item class="p-0 border-bottom">
-                                    <span
-                                        class="list-item-underline-hover cursor-pointer"
-                                        (click)="openGocardlessDialog(item)"
-                                        >{{ item.name }}</span
-                                    >
+                                    <span class="list-item-underline-hover cursor-pointer" (click)="openGocardlessDialog(item)">
+                                        {{ item.name }}
+                                    </span>
                                 </mat-list-item>
                             </div>
                         </ng-container>
                     </mat-list>
                     <mat-list class="p-0" *ngIf="!filteredBanks?.length">
-                        <mat-list-item class="list-item pr-2 pl-4">{{
-                            commonLocaleData?.app_no_data_found
-                        }}</mat-list-item>
+                        <mat-list-item class="list-item pr-2 pl-4">{{ commonLocaleData?.app_no_data_found }}</mat-list-item>
                     </mat-list>
                 </div>
             </div>

@@ -12,8 +12,7 @@
                 formControlName="selectedField"
                 (selectedOption)="resetFormData(); handleSelectedFieldSelect()"
                 class="w-100"
-            >
-            </reactive-dropdown-field>
+            ></reactive-dropdown-field>
             <!-- pdf-template-click -->
             <reactive-dropdown-field
                 *ngIf="bulkUpdateForm.get('selectedField')?.value === 'pdfTemplate'"
@@ -23,23 +22,17 @@
                 [options]="templatesList"
                 [labelValue]="templateName"
                 formControlName="templateUniqueName"
-            >
-            </reactive-dropdown-field>
+            ></reactive-dropdown-field>
             <!-- notes-click -->
             <mat-form-field
                 appearance="outline"
                 class="initial-height w-100 mb-3"
                 *ngIf="bulkUpdateForm.get('selectedField')?.value === 'notes'"
             >
-                <textarea
-                    matInput
-                    rows="3"
-                    [maxlength]="!showNotesAtLastPage ? 200 : null"
-                    formControlName="message2"
-                ></textarea>
+                <textarea matInput rows="3" [maxlength]="!showNotesAtLastPage ? 200 : null" formControlName="message2"></textarea>
                 <ng-container *ngIf="bulkUpdateForm.get('message2')?.value && !showNotesAtLastPage">
                     <span class="max-character-label">{{ commonLocaleData?.app_characters_left }}:&nbsp;</span>
-                    <span class="max-character-value">{{ 200 - bulkUpdateForm.get("message2")?.value?.length }}</span>
+                    <span class="max-character-value">{{ 200 - bulkUpdateForm.get('message2')?.value?.length }}</span>
                 </ng-container>
             </mat-form-field>
             <!-- due-date-click -->
@@ -53,8 +46,7 @@
                 [appearance]="'outline'"
                 class="w-100"
                 formControlName="dueDate"
-            >
-            </giddh-datepicker>
+            ></giddh-datepicker>
             <!-- signature-click -->
             <reactive-dropdown-field
                 *ngIf="bulkUpdateForm.get('selectedField')?.value === 'signature'"
@@ -69,18 +61,16 @@
         <!-- signature-image-click -->
         <div
             class="bulk-upload mb-3"
-            *ngIf="
-                bulkUpdateForm.get('selectedField')?.value === 'signature' &&
-                bulkUpdateForm.get('signatureOption')?.value === 'image'
-            "
+            *ngIf="bulkUpdateForm.get('selectedField')?.value === 'signature' && bulkUpdateForm.get('signatureOption')?.value === 'image'"
         >
             <ng-container *ngIf="!bulkUpdateForm.get('imageSignatureUniqueName')?.value">
                 <input type="file" name="bulkUploadfileInput" id="bulkUploadfileInput" (change)="uploadImage()" />
                 <label
                     for="bulkUploadfileInput"
                     class="upload-logo cursor-pointer w-100 border d-flex align-items-center justify-content-center overflow-hidden p-3"
-                    >{{ localeData?.upload_logo }}</label
                 >
+                    {{ localeData?.upload_logo }}
+                </label>
             </ng-container>
             <ng-container *ngIf="bulkUpdateForm.get('imageSignatureUniqueName')?.value">
                 <div class="signature-image">
@@ -97,10 +87,7 @@
         <mat-form-field
             appearance="outline"
             class="initial-height w-100 mb-3"
-            *ngIf="
-                bulkUpdateForm.get('selectedField')?.value === 'signature' &&
-                bulkUpdateForm.get('signatureOption')?.value === 'slogan'
-            "
+            *ngIf="bulkUpdateForm.get('selectedField')?.value === 'signature' && bulkUpdateForm.get('signatureOption')?.value === 'slogan'"
         >
             <textarea matInput rows="3" formControlName="slogan"></textarea>
         </mat-form-field>
@@ -113,24 +100,21 @@
                 [label]="localeData?.custom_field1"
                 formControlName="customField1"
                 class="w-100 text-right"
-            >
-            </input-field>
+            ></input-field>
             <input-field
                 [type]="'text'"
                 [placeholder]="localeData?.custom_field2"
                 [label]="localeData?.custom_field2"
                 formControlName="customField2"
                 class="w-100 text-right"
-            >
-            </input-field>
+            ></input-field>
             <input-field
                 [type]="'text'"
                 [placeholder]="localeData?.custom_field3"
                 [label]="localeData?.custom_field3"
                 formControlName="customField3"
                 class="w-100 text-right"
-            >
-            </input-field>
+            ></input-field>
         </div>
         <p>{{ localeData?.bulk_invoice_update_note }}</p>
         <div class="d-flex justify-content-end column-gap-1 mt-3">
@@ -156,8 +140,7 @@
                 formControlName="action"
                 (selectedOption)="resetFormData()"
                 class="w-100"
-            >
-            </reactive-dropdown-field>
+            ></reactive-dropdown-field>
             <ng-container *ngIf="bulkUpdateForm.get('action').value">
                 <giddh-datepicker
                     *ngIf="bulkUpdateForm.get('action').value === 'purchasedate'"
@@ -169,8 +152,7 @@
                     [appearance]="'outline'"
                     formControlName="purchaseDate"
                     class="w-100"
-                >
-                </giddh-datepicker>
+                ></giddh-datepicker>
                 <giddh-datepicker
                     *ngIf="bulkUpdateForm.get('action').value === 'duedate'"
                     (keydown.enter)="$event.preventDefault()"
@@ -181,8 +163,7 @@
                     [appearance]="'outline'"
                     formControlName="dueDate"
                     class="w-100"
-                >
-                </giddh-datepicker>
+                ></giddh-datepicker>
                 <reactive-dropdown-field
                     *ngIf="bulkUpdateForm.get('action').value === 'warehouse'"
                     [name]="'invoice'"
@@ -191,19 +172,13 @@
                     [options]="warehouses"
                     formControlName="warehouseUniqueName"
                     class="w-100"
-                >
-                </reactive-dropdown-field>
+                ></reactive-dropdown-field>
             </ng-container>
         </div>
 
         <p>{{ localeData?.bulk_invoice_update_note }}</p>
         <div class="d-flex column-gap-1 mt-3">
-            <button
-                matButton="elevated"
-                color="primary"
-                (click)="updateBulkPO()"
-                [disabled]="bulkUpdateVoucherInProgress$ | async"
-            >
+            <button matButton="elevated" color="primary" (click)="updateBulkPO()" [disabled]="bulkUpdateVoucherInProgress$ | async">
                 {{ commonLocaleData?.app_update }}
             </button>
             <button matButton="elevated" (click)="onCancel()" role="button">{{ commonLocaleData?.app_cancel }}</button>

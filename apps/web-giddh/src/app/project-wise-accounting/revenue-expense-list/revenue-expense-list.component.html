@@ -21,7 +21,7 @@
                 <div *ngTemplateOutlet="commonTemplateForIncomeAndExpense"></div>
             </mat-tab>
             <mat-tab [label]="localeData?.profit_and_loss">
-                <div class=" p-3 " *ngIf="defaultParamsValue?.projectUniqueName && selectedTabIndex === 2">
+                <div class="p-3" *ngIf="defaultParamsValue?.projectUniqueName && selectedTabIndex === 2">
                     <profit-loss [projectUniqueName]="defaultParamsValue.projectUniqueName" [selectedCompany]="activeCompany"></profit-loss>
                 </div>
             </mat-tab>
@@ -31,13 +31,15 @@
 
 <ng-template #commonTemplateForIncomeAndExpense>
     <div class="section-center p-3">
-       <header class="d-flex align-items-center justify-content-between">
-            <div class="custom-datepicker"
-                 [matMenuTriggerFor]="universalDatepicker"
-                 #universalDatepickerTrigger="matMenuTrigger"
-                 role="button"
-                 aria-haspopup="true"
-                 aria-controls="universalDatepicker">
+        <header class="d-flex align-items-center justify-content-between">
+            <div
+                class="custom-datepicker"
+                [matMenuTriggerFor]="universalDatepicker"
+                #universalDatepickerTrigger="matMenuTrigger"
+                role="button"
+                aria-haspopup="true"
+                aria-controls="universalDatepicker"
+            >
                 <input
                     matInput
                     type="text"
@@ -50,17 +52,25 @@
             </div>
             <div>
                 <span *ngIf="totalRevenueAndExpense$ | async as tre">
-                    <span>{{ defaultParamsValue.category === projectWiseAccountingType.Income ? localeData?.total_revenue : localeData?.total_expense }} : {{ tre.nonAssetsTotal }}</span>
+                    <span>
+                        {{
+                            defaultParamsValue.category === projectWiseAccountingType.Income
+                                ? localeData?.total_revenue
+                                : localeData?.total_expense
+                        }}
+                        :
+                        {{ tre.nonAssetsTotal }}
+                    </span>
                     <span>&nbsp;&nbsp; | &nbsp;&nbsp;</span>
-                    <span>{{ localeData?.total_fixed_asset }} : {{ tre.assetsTotal }}</span>&nbsp;&nbsp;
+                    <span>{{ localeData?.total_fixed_asset }} : {{ tre.assetsTotal }}</span>
+                    &nbsp;&nbsp;
                 </span>
                 <button [routerLink]="'/pages/project-wise-accounting/list'" matButton="elevated">
                     {{ commonLocaleData?.app_back }}
                 </button>
             </div>
-       </header>
-        <giddh-page-loader *ngIf="(isFetchingProjects$ | async)">
-        </giddh-page-loader>
+        </header>
+        <giddh-page-loader *ngIf="isFetchingProjects$ | async"></giddh-page-loader>
         <div class="table-responsive mt-5" *ngIf="!(isFetchingProjects$ | async)">
             <table class="table entry-table editable-table">
                 <thead *ngIf="!isCompany || totalResults">
@@ -83,12 +93,20 @@
                                 [isPaginationEnabled]="true"
                                 (scrollEnd)="handleSearchAccountScrollEnd()"
                                 (dynamicSearchedQuery)="searchAccount($event)"
-                                (selectedOption)="selectAccount($event.value); ($event.label != createAccountEntryForm.get('account')?.value) && (createAccountEntryForm.get('entryUniqueName')?.patchValue(null) || createAccountEntryForm.get('entry')?.patchValue(null)); createAccountEntryForm.get('account')?.patchValue($event.label)"
-                                (onClear)="createAccountEntryForm.get('account')?.patchValue(null); createAccountEntryForm.get('accountUniqueName')?.patchValue(null)"
+                                (selectedOption)="
+                                    selectAccount($event.value);
+                                    $event.label != createAccountEntryForm.get('account')?.value &&
+                                        (createAccountEntryForm.get('entryUniqueName')?.patchValue(null) ||
+                                            createAccountEntryForm.get('entry')?.patchValue(null));
+                                    createAccountEntryForm.get('account')?.patchValue($event.label)
+                                "
+                                (onClear)="
+                                    createAccountEntryForm.get('account')?.patchValue(null);
+                                    createAccountEntryForm.get('accountUniqueName')?.patchValue(null)
+                                "
                                 [showError]="!isCreateAccountValidForm && !createAccountEntryForm.get('accountUniqueName')?.value"
                                 [required]="true"
-                            >
-                            </reactive-dropdown-field>
+                            ></reactive-dropdown-field>
                         </td>
                         <td>
                             <reactive-dropdown-field
@@ -101,9 +119,15 @@
                                 [enableDynamicSearch]="true"
                                 [isPaginationEnabled]="true"
                                 (scrollEnd)="handleSearchEntryScrollEnd(createAccountEntryForm.get('accountUniqueName')?.value)"
-                                (dynamicSearchedQuery)="createAccountEntryForm.get('accountUniqueName')?.value && searchEntry($event, 1, createAccountEntryForm.get('accountUniqueName')?.value)"
+                                (dynamicSearchedQuery)="
+                                    createAccountEntryForm.get('accountUniqueName')?.value &&
+                                        searchEntry($event, 1, createAccountEntryForm.get('accountUniqueName')?.value)
+                                "
                                 (selectedOption)="createAccountEntryForm.get('entry')?.patchValue($event.label)"
-                                (onClear)="createAccountEntryForm.get('entry')?.patchValue(null); createAccountEntryForm.get('entryUniqueName')?.patchValue(null)"
+                                (onClear)="
+                                    createAccountEntryForm.get('entry')?.patchValue(null);
+                                    createAccountEntryForm.get('entryUniqueName')?.patchValue(null)
+                                "
                                 [showError]="!isCreateAccountValidForm && !createAccountEntryForm.get('entryUniqueName')?.value"
                                 [required]="true"
                             >
@@ -117,22 +141,22 @@
                                                     <td class="option-extra-content">: {{ option?.additional?.entryDate }}</td>
                                                 </tr>
                                                 <tr>
-                                                    <td class="option-extra-content" width="75px">{{ commonLocaleData?.app_voucher_no }}</td>
+                                                    <td class="option-extra-content" width="75px">
+                                                        {{ commonLocaleData?.app_voucher_no }}
+                                                    </td>
                                                     <td class="option-extra-content">: {{ option?.additional?.voucherNumber }}</td>
                                                 </tr>
                                                 <tr>
                                                     <td class="option-extra-content" width="75px">{{ commonLocaleData?.app_amount }}</td>
                                                     <td class="option-extra-content">
-                                                        : <span class="d-inline-flex">
-                                                                <amount-field
-                                                                    [amount]="
-                                                                        option?.additional?.amount
-                                                                    "
-                                                                    [currencySymbol]="option?.additional?.currency?.symbol"
-                                                                    [currencyCode]="option?.additional?.currency?.code"
-                                                                >
-                                                                </amount-field>
-                                                            </span>
+                                                        :
+                                                        <span class="d-inline-flex">
+                                                            <amount-field
+                                                                [amount]="option?.additional?.amount"
+                                                                [currencySymbol]="option?.additional?.currency?.symbol"
+                                                                [currencyCode]="option?.additional?.currency?.code"
+                                                            ></amount-field>
+                                                        </span>
                                                         {{ option?.additional?.type | titlecase }}
                                                     </td>
                                                 </tr>
@@ -150,11 +174,10 @@
                                 [options]="selectMethod"
                                 [labelValue]="createAccountEntryForm.get('calculationMethod')?.value"
                                 formControlName="calculationMethod"
-                                (onClear)="createAccountEntryForm.get('calculationMethod')?.patchValue(null);"
+                                (onClear)="createAccountEntryForm.get('calculationMethod')?.patchValue(null)"
                                 [showError]="!isCreateAccountValidForm && !createAccountEntryForm.get('calculationMethod')?.value"
                                 [required]="true"
-                            >
-                            </reactive-dropdown-field>
+                            ></reactive-dropdown-field>
                         </td>
                         <td>
                             <input-field
@@ -163,26 +186,30 @@
                                 [label]="commonLocaleData?.app_amount"
                                 [placeholder]="localeData?.enter_amount"
                                 formControlName="value"
-                                [showError]="!isCreateAccountValidForm &&(!createAccountEntryForm.get('value')?.value || createAccountEntryForm.get('value')?.value === '0')"
+                                [showError]="
+                                    !isCreateAccountValidForm &&
+                                    (!createAccountEntryForm.get('value')?.value || createAccountEntryForm.get('value')?.value === '0')
+                                "
                                 [required]="true"
-                            >
-                            </input-field>
+                            ></input-field>
                         </td>
                         <td>
-                            <button
-                                matButton="filled"
-                                (click)="createEntry(createAccountEntryForm.get('value')?.value)"
-                            >
-                            {{ commonLocaleData?.app_save }}</button>
+                            <button matButton="filled" (click)="createEntry(createAccountEntryForm.get('value')?.value)">
+                                {{ commonLocaleData?.app_save }}
+                            </button>
                         </td>
                     </tr>
                 </thead>
                 <tbody>
-                    <ng-container *ngIf="totalResults" [formGroup]="accountEntryListForm" >
+                    <ng-container *ngIf="totalResults" [formGroup]="accountEntryListForm">
                         <ng-container formArrayName="entryList">
-                            <ng-container
-                                *ngFor="let entry of accountEntryListForm?.get('entryList')['controls']; let i = index">
-                                <tr [formGroupName]="i" [ngClass]="{'active-row' : activeRowIndex === i || entry?.invalid}" (mouseenter)="activeRowIndex = i" (mouseleave)="activeRowIndex = -1">
+                            <ng-container *ngFor="let entry of accountEntryListForm?.get('entryList')['controls']; let i = index">
+                                <tr
+                                    [formGroupName]="i"
+                                    [ngClass]="{ 'active-row': activeRowIndex === i || entry?.invalid }"
+                                    (mouseenter)="activeRowIndex = i"
+                                    (mouseleave)="activeRowIndex = -1"
+                                >
                                     <td>
                                         <reactive-dropdown-field
                                             [readonly]="isCompany"
@@ -195,12 +222,21 @@
                                             [isPaginationEnabled]="true"
                                             (scrollEnd)="handleSearchAccountScrollEnd()"
                                             (dynamicSearchedQuery)="searchAccount($event)"
-                                            (onClear)="entry?.get('accountUniqueName')?.patchValue(null); entry?.get('entryUniqueName')?.patchValue(null) ; entry?.get('entry')?.patchValue(null)"
-                                            (selectedOption)="selectAccount($event.value); ($event.label != entry?.get('account')?.value) && (entry?.get('entryUniqueName')?.patchValue(null) || entry?.get('entry')?.patchValue(null)); entry?.get('account')?.patchValue($event.label)"
+                                            (onClear)="
+                                                entry?.get('accountUniqueName')?.patchValue(null);
+                                                entry?.get('entryUniqueName')?.patchValue(null);
+                                                entry?.get('entry')?.patchValue(null)
+                                            "
+                                            (selectedOption)="
+                                                selectAccount($event.value);
+                                                $event.label != entry?.get('account')?.value &&
+                                                    (entry?.get('entryUniqueName')?.patchValue(null) ||
+                                                        entry?.get('entry')?.patchValue(null));
+                                                entry?.get('account')?.patchValue($event.label)
+                                            "
                                             [showError]="!entry?.get('accountUniqueName')?.value"
                                             [required]="true"
-                                        >
-                                        </reactive-dropdown-field>
+                                        ></reactive-dropdown-field>
                                     </td>
                                     <td>
                                         <reactive-dropdown-field
@@ -216,7 +252,10 @@
                                             (scrollEnd)="handleSearchEntryScrollEnd(entry?.get('accountUniqueName')?.value)"
                                             (selectedOption)="entry?.get('entry')?.patchValue($event.label)"
                                             (onClear)="entry?.get('entryUniqueName')?.patchValue(null)"
-                                            (dynamicSearchedQuery)="entry?.get('accountUniqueName')?.value && searchEntry($event, 1, entry?.get('accountUniqueName')?.value)"
+                                            (dynamicSearchedQuery)="
+                                                entry?.get('accountUniqueName')?.value &&
+                                                    searchEntry($event, 1, entry?.get('accountUniqueName')?.value)
+                                            "
                                             [showError]="!entry?.get('entryUniqueName')?.value"
                                             [required]="true"
                                         >
@@ -226,26 +265,32 @@
                                                     <div class="text-light font-size-12">
                                                         <table class="w-100">
                                                             <tr>
-                                                                <td class="option-extra-content" width="75px">{{ commonLocaleData?.app_dated }}</td>
+                                                                <td class="option-extra-content" width="75px">
+                                                                    {{ commonLocaleData?.app_dated }}
+                                                                </td>
                                                                 <td class="option-extra-content">: {{ option?.additional?.entryDate }}</td>
                                                             </tr>
                                                             <tr>
-                                                                <td class="option-extra-content" width="75px">{{ commonLocaleData?.app_voucher_no }}</td>
-                                                                <td class="option-extra-content">: {{ option?.additional?.voucherNumber }}</td>
+                                                                <td class="option-extra-content" width="75px">
+                                                                    {{ commonLocaleData?.app_voucher_no }}
+                                                                </td>
+                                                                <td class="option-extra-content">
+                                                                    : {{ option?.additional?.voucherNumber }}
+                                                                </td>
                                                             </tr>
                                                             <tr>
-                                                                <td class="option-extra-content" width="75px">{{ commonLocaleData?.app_amount }}</td>
+                                                                <td class="option-extra-content" width="75px">
+                                                                    {{ commonLocaleData?.app_amount }}
+                                                                </td>
                                                                 <td class="option-extra-content">
-                                                                    : <span class="d-inline-flex">
-                                                                            <amount-field
-                                                                                [amount]="
-                                                                                    option?.additional?.amount
-                                                                                "
-                                                                                [currencySymbol]="option?.additional?.currency?.symbol"
-                                                                                [currencyCode]="option?.additional?.currency?.code"
-                                                                            >
-                                                                            </amount-field>
-                                                                        </span>
+                                                                    :
+                                                                    <span class="d-inline-flex">
+                                                                        <amount-field
+                                                                            [amount]="option?.additional?.amount"
+                                                                            [currencySymbol]="option?.additional?.currency?.symbol"
+                                                                            [currencyCode]="option?.additional?.currency?.code"
+                                                                        ></amount-field>
+                                                                    </span>
                                                                     {{ option?.additional?.type | titlecase }}
                                                                 </td>
                                                             </tr>
@@ -267,8 +312,7 @@
                                             (onClear)="entry?.get('calculationMethod')?.patchValue(null)"
                                             [showError]="!entry?.get('calculationMethod')?.value"
                                             [required]="true"
-                                        >
-                                        </reactive-dropdown-field>
+                                        ></reactive-dropdown-field>
                                     </td>
                                     <td>
                                         <input-field
@@ -281,13 +325,21 @@
                                             [min]="1"
                                             [showError]="!entry.get('value')?.value || entry.get('value')?.value === '0'"
                                             [required]="true"
-                                        >
-                                        </input-field>
+                                        ></input-field>
                                     </td>
-                                    <td *ngIf="!isCompany" class="position-relative ">
+                                    <td *ngIf="!isCompany" class="position-relative">
                                         <span class="editable-table-hide-element">
-                                            <button matButton="filled" (click)="entry?.valid && entry.get('value')?.value !== '0' && updateSingleEntry(i)">{{ commonLocaleData?.app_update }}</button>
-                                            <i (click)="openDeleteEntryDialog(i)" color="primary" class="cursor-pointer icon-trash font-size-16 position-absolute"></i>
+                                            <button
+                                                matButton="filled"
+                                                (click)="entry?.valid && entry.get('value')?.value !== '0' && updateSingleEntry(i)"
+                                            >
+                                                {{ commonLocaleData?.app_update }}
+                                            </button>
+                                            <i
+                                                (click)="openDeleteEntryDialog(i)"
+                                                color="primary"
+                                                class="cursor-pointer icon-trash font-size-16 position-absolute"
+                                            ></i>
                                         </span>
                                     </td>
                                 </tr>
@@ -297,7 +349,10 @@
                     <tr>
                         <td colspan="100%">
                             <div class="no-data" *ngIf="!totalResults">
-                                <no-data [primaryMessage]="isCompany ? localeData?.no_entries_found : commonLocaleData?.app_no_data_found" [secondaryMessage]="' '"></no-data>
+                                <no-data
+                                    [primaryMessage]="isCompany ? localeData?.no_entries_found : commonLocaleData?.app_no_data_found"
+                                    [secondaryMessage]="' '"
+                                ></no-data>
                             </div>
                         </td>
                     </tr>
@@ -338,7 +393,6 @@
             (closeCalender)="toggleGiddhDatepicker(false)"
             [keepCalendarOpeningWithRange]="false"
             [showRangeLabelOnInput]="false"
-            >
-        </app-datepicker-wrapper>
+        ></app-datepicker-wrapper>
     </ng-template>
 </mat-menu>

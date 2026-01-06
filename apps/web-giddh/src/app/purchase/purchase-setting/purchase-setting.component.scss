@@ -46,7 +46,6 @@
             z-index: 2;
             top: 10px;
         }
-
     }
     .default-expiry {
         input {
@@ -64,9 +63,7 @@
     .bill-lock-date {
         width: 152px;
         position: relative;
-
     }
-
 }
 .verified-text {
     color: var(--color-green);
@@ -83,7 +80,6 @@
     align-items: center;
     width: 36px;
     height: 36px;
-    
 }
 .verify-tick-icon {
     vertical-align: middle;
@@ -92,7 +88,7 @@
     justify-content: center;
     color: var(--color-medium-gray);
 }
-.input-group-addon{
+.input-group-addon {
     border-radius: 0 5px 5px 0 !important;
 }
 @media (max-width: 991px) {

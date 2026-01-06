@@ -26,16 +26,11 @@
                                 [organizationType]="currentOrganizationType"
                                 [localeData]="localeData"
                                 [commonLocaleData]="commonLocaleData"
-                            >
-                            </personal-information>
+                            ></personal-information>
                         </mat-tab>
                         <mat-tab
                             *ngIf="!isConsolidatedBranch"
-                            [label]="
-                                companyProfileObj?.taxType
-                                    ? localeData?.address + companyProfileObj?.taxType
-                                    : localeData?.addresses
-                            "
+                            [label]="companyProfileObj?.taxType ? localeData?.address + companyProfileObj?.taxType : localeData?.addresses"
                         >
                             <address-settings
                                 [addresses]="addresses"
