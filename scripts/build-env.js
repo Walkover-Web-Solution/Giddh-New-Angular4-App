@@ -25,15 +25,31 @@ const envFileMap = {
 // This prevents credentials from being committed to public repositories
 const isProduction = environment === 'prod';
 const isCI = process.env.CI === 'true' || process.env.NODE_ENV === 'production';
-if (isProduction || isCI) {
+const isElectronBuild = process.env.ELECTRON_ENV === 'true';
+
+if (isElectronBuild) {
+    // For Electron builds, ALWAYS use .env.electron file regardless of environment
+    const envFile = '.env.electron';
+    const envPath = path.resolve(__dirname, '../', envFile);
+    const envResult = dotenv.config({ path: envPath });
+    if (envResult.error) {
+        console.warn(`Warning: Could not load ${envFile} for Electron build`);
+    } else {
+        console.log(`Loaded ${envFile} for Electron build`);
+    }
+} else if (isProduction || isCI) {
+    // For production web builds, use server environment variables only
+    console.log(`Production/CI build - using server environment variables only`);
 } else {
-    // Load .env file only for local development
+    // Load .env file only for local development (WEB ONLY)
     const envFile = envFileMap[environment] || '.env.local';
     const envPath = path.resolve(__dirname, '../', envFile);
     // Load environment variables from .env file
     const envResult = dotenv.config({ path: envPath });
     if (envResult.error) {
+        console.warn(`Warning: Could not load ${envFile} for web build`);
     } else {
+        console.log(`Loaded ${envFile} for web build`);
     }
 }
 // Get environment variables with fallbacks
@@ -50,7 +66,7 @@ const envConfig = {
     LOCAL_ENV: environment === 'local',
     TEST_ENV: environment === 'test',
     // Application configuration
-    isElectron: env.IS_ELECTRON === 'true' || false,
+    isElectron: env.IS_ELECTRON === 'true' || env.ELECTRON_ENV === 'true' || false,
     errlyticsNeeded: env.ERRLYTIC_NEEDED === 'true' || false,
     errlyticsKey: env.ERRLYTIC_KEY || '',
     APP_FOLDER: env.APP_FOLDER || '',
@@ -83,8 +99,8 @@ import { ${environment === 'prod' ? 'disableDebugTools' : 'enableDebugTools'} } 
 import { Environment } from './model';
 ${environment === 'prod' ? 'import { enableProdMode } from \'@angular/core\';\nenableProdMode();' : 'Error.stackTraceLimit = Infinity;'}
 export const environment: Environment = {
-    production: ${envConfig.PRODUCTION_ENV},
-    showDevModule: ${!envConfig.PRODUCTION_ENV},
+    production: true,
+    showDevModule: false,
     AppUrl: '${envConfig.AppUrl}',
     ApiUrl: '${envConfig.ApiUrl}',
     UkApiUrl: '${envConfig.UkApiUrl}',
@@ -114,7 +130,7 @@ export const environment: Environment = {
     ENV_PROVIDERS: []
 };
 // Set global variables for backward compatibility
-(window as any).PRODUCTION_ENV = environment.production;
+(window as any).PRODUCTION_ENV = true;
 (window as any).STAGING_ENV = ${envConfig.STAGING_ENV};
 (window as any).LOCAL_ENV = ${envConfig.LOCAL_ENV};
 (window as any).TEST_ENV = ${envConfig.TEST_ENV};
@@ -130,8 +146,9 @@ fs.writeFileSync(outputPath, envFileContent);
  */
 function getAppUrl(config, env) {
     if (env.APP_URL) return env.APP_URL;
-    // For Electron builds, use relative path
-    if (env.IS_ELECTRON === 'true') {
+    // For Electron builds, ALWAYS use relative path regardless of environment
+    // This ensures proper asset loading in packaged Electron apps and S3 deployments
+    if (env.IS_ELECTRON === 'true' || env.ELECTRON_ENV === 'true') {
         return './';
     }
     switch (config) {
