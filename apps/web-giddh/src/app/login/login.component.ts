@@ -295,7 +295,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             }
         });
 
-        if (environment.production && !Configuration.isElectron) {
+        if (environment.PRODUCTION_ENV && !Configuration.isElectron) {
             window.location.href = this.generalService.getGiddhRegionUrl();
         }
     }
