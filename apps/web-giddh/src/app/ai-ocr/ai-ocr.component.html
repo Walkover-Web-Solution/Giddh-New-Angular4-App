@@ -8,7 +8,7 @@
                 <button
                     *ngIf="listCount > 0 || showClearFilter"
                     aria-label="show"
-                    matButton="elevated"
+                    matButton="outlined"
                     [disabled]="isCompany || isConsolidatedBranch"
                     class="icomoon-ico d-flex align-items-center cursor-pointer"
                     [matTooltip]="commonLocaleData?.app_upload"
@@ -91,7 +91,13 @@
                             [placeholder]="commonLocaleData?.app_select_branch"
                         ></reactive-dropdown-field>
                     </div>
-                    <button *ngIf="showClearFilter" matButton="elevated" class="min-width-160 ml-2" color="primary" (click)="resetData()">
+                    <button
+                        *ngIf="showClearFilter"
+                        matButton="outlined"
+                        class="min-width-160 ml-2"
+                        color="primary"
+                        (click)="resetData()"
+                    >
                         {{ commonLocaleData?.app_clear }}
                     </button>
                 </div>

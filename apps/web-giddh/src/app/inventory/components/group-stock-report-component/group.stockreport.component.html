@@ -11,9 +11,8 @@
                 </div>
             </div>
             <div class="clear-filter" *ngIf="isFilterCorrect && productName?.value?.length > 0">
-                <button matButton="elevated" (click)="resetFilter()">
-                    <span class="icon-cross"></span>
-                    Clear Filter
+                <button matButton="outlined" (click)="resetFilter()">
+                    <span class="icon-cross"></span> Clear Filter
                 </button>
             </div>
             <div class="clear-both right-inventory d-flex">
@@ -823,8 +822,15 @@
                         >
                             Search
                         </button>
-                        <button matButton="elevated" type="button" (click)="advanceSearchAction('clear')">Clear</button>
-                        <button matIconButton aria-label="close" role="button" (click)="advanceSearchAction('cancel')">Cancel</button>
+                        <button matButton="outlined" type="button" (click)="advanceSearchAction('clear')">Clear</button>
+                        <button
+                            matIconButton
+                            aria-label="close"
+                            role="button"
+                            (click)="advanceSearchAction('cancel')"
+                        >
+                            Cancel
+                        </button>
                     </div>
                 </div>
             </form>

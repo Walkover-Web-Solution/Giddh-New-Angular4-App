@@ -223,16 +223,16 @@
                     a {
                         background-color: transparent;
                         padding: 8px 20px;
-                        color: var(--color-dark-gray);
+                        color: var(--color-black);
                         white-space: normal;
                         word-break: break-all;
                         &.active {
-                            color: var(--color-dark-gray) !important;
+                            color: var(--color-black) !important;
                             background-color: var(--theme-primary-light) !important;
                         }
                         &:hover {
                             background-color: initial !important;
-                            color: var(--color-dark-gray) !important;
+                            color: var(--color-black) !important;
                         }
                     }
                     &:hover {

@@ -88,7 +88,7 @@
                 <div class="row">
                     <div class="col-sm-12">
                         <button matButton="filled" type="submit">{{ commonLocaleData?.app_add }}</button>
-                        <button matButton="elevated" type="button" (click)="onCancel()">
+                        <button matButton="outlined" type="button" (click)="onCancel()">
                             {{ commonLocaleData?.app_cancel }}
                         </button>
                     </div>
@@ -202,24 +202,42 @@
                                     <button
                                         *ngIf="!triggerToEdit[i]"
                                         type="button"
-                                        matButton="elevated"
+                                        matButton="outlined"
                                         (click)="triggerToEdit = []; triggerToEdit[i] = true"
                                     >
                                         <i class="icon-edit-pencil" aria-hidden="true" [matTooltip]="commonLocaleData?.app_edit"></i>
                                     </button>
-                                    <button *ngIf="!triggerToEdit[i]" type="button" matButton="elevated" (click)="deleteTax(trigger)">
-                                        <i class="fa fa-trash" aria-hidden="true" [matTooltip]="commonLocaleData?.app_delete"></i>
+                                    <button
+                                        *ngIf="!triggerToEdit[i]"
+                                        type="button"
+                                        matButton="outlined"
+                                        (click)="deleteTax(trigger)"
+                                    >
+                                        <i
+                                            class="fa fa-trash"
+                                            aria-hidden="true"
+                                            [matTooltip]="commonLocaleData?.app_delete"
+                                        ></i>
                                     </button>
                                     <button
                                         *ngIf="triggerToEdit[i]"
                                         type="button"
-                                        matButton="elevated"
+                                        matButton="outlined"
                                         (click)="updateTrigger(i); triggerToEdit[i] = false"
                                     >
                                         <i class="fa fa-check" aria-hidden="true" [matTooltip]="commonLocaleData?.app_save"></i>
                                     </button>
-                                    <button *ngIf="triggerToEdit[i]" type="button" matButton="elevated" (click)="triggerToEdit[i] = false">
-                                        <i class="icon-cross" aria-hidden="true" [matTooltip]="commonLocaleData?.app_reset"></i>
+                                    <button
+                                        *ngIf="triggerToEdit[i]"
+                                        type="button"
+                                        matButton="outlined"
+                                        (click)="triggerToEdit[i] = false"
+                                    >
+                                        <i
+                                            class="icon-cross"
+                                            aria-hidden="true"
+                                            [matTooltip]="commonLocaleData?.app_reset"
+                                        ></i>
                                     </button>
                                 </td>
                             </tr>

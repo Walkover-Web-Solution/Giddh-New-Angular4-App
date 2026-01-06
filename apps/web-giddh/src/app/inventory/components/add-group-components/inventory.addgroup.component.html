@@ -116,7 +116,7 @@
                         >
                             Save
                         </button>
-                        <button matButton="elevated" type="button" (click)="closeAsidePane()">Cancel</button>
+                        <button matButton="outlined" type="button" (click)="closeAsidePane()">Cancel</button>
                     </div>
                     <div *ngIf="!addGroup" class="d-flex justify-content-end column-gap-1">
                         <button
@@ -129,14 +129,14 @@
                             Update
                         </button>
                         <button
-                            matButton="elevated"
+                            matButton="outlined"
                             type="submit"
                             [ladda]="isDeleteGroupInProcess$ | async"
                             (click)="openDialog(deleteGroupModalTemplate)"
                         >
                             Delete
                         </button>
-                        <button matButton="elevated" type="button" (click)="closeAsidePane()">Cancel</button>
+                        <button matButton="outlined" type="button" (click)="closeAsidePane()">Cancel</button>
                     </div>
                 </div>
             </div>

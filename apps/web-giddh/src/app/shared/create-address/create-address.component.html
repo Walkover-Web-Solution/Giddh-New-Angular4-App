@@ -461,10 +461,15 @@
                                     {{ commonLocaleData?.app_update }}
                                 </ng-container>
                             </button>
-                            <button matButton="elevated" type="reset" (click)="clearForm()" aria-label="clear">
+                            <button matButton="outlined" type="reset" (click)="clearForm()" aria-label="clear">
                                 {{ commonLocaleData?.app_clear }}
                             </button>
-                            <button matButton="elevated" aria-label="close" type="button" (click)="closeAsidePane($event)">
+                            <button
+                                matButton="outlined"
+                                aria-label="close"
+                                type="button"
+                                (click)="closeAsidePane($event)"
+                            >
                                 {{ commonLocaleData?.app_cancel }}
                             </button>
                         </div>

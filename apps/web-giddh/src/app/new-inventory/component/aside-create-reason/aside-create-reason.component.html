@@ -24,14 +24,20 @@
                             <button aria-label="save" matButton="filled" type="button" (click)="saveReason()">
                                 {{ commonLocaleData?.app_save }}
                             </button>
-                            <button aria-label="cancel" matButton="elevated" type="button" mat-dialog-close>
+                            <button aria-label="cancel" matButton="outlined" type="button" mat-dialog-close>
                                 {{ commonLocaleData?.app_cancel }}
                             </button>
                         </div>
                     </div>
                     <div class="col-lg-8">
                         <div class="pull-right d-flex column-gap-15">
-                            <button aria-label="clear" matButton="elevated" type="button" class="btn-sm mr-0" (click)="resetForm()">
+                            <button
+                                aria-label="clear"
+                                matButton="outlined"
+                                type="button"
+                                class="btn-sm mr-0"
+                                (click)="resetForm()"
+                            >
                                 {{ commonLocaleData?.app_clear }}
                             </button>
                         </div>

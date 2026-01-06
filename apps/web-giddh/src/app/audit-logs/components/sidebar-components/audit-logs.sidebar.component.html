@@ -116,7 +116,7 @@
 <button matButton="filled" class="pull-left mt-3" [ladda]="vm.getLogsInprocess$ | async" (click)="getLogfilters()">
     {{ localeData?.get_logs }}
 </button>
-<button matButton="elevated" class="pull-left mt-3 ml-1" (click)="resetFilters()">
+<button matButton="outlined" class="pull-left mt-3 ml-1" (click)="resetFilters()">
     {{ commonLocaleData?.app_reset }}
 </button>
 <br />

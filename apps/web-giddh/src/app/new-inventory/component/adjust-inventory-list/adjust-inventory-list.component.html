@@ -34,8 +34,7 @@
                     readonly
                 />
             </div>
-            <button
-                matButton="elevated"
+            <button matButton="outlined"
                 *ngIf="
                     showClearFilter ||
                     adjustInventoryListForm?.controls['referenceNo']?.value ||
@@ -46,7 +45,7 @@
                     adjustInventoryListForm?.controls['adjustedBy']?.value ||
                     adjustInventoryListForm?.controls['entity']?.value
                 "
-                matButton="elevated"
+                matButton="outlined"
                 class="min-width-160 mx-auto"
                 (click)="clearFilter()"
             >

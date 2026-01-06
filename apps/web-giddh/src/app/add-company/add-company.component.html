@@ -72,7 +72,7 @@
                             </div>
                             <div class="col-6 mobile-no-action-buttons" *ngIf="showMobileField">
                                 <button
-                                    matButton="elevated"
+                                    matButton="outlined"
                                     (click)="reVerifyNumber()"
                                     *ngIf="isMobileNumberVerified || showOtpField"
                                     class="btn-min-width"
@@ -128,7 +128,7 @@
                                             <span *ngIf="!verifyOtpInProgress">{{ localeData?.verify }}</span>
                                         </button>
                                         <button
-                                            matButton="elevated"
+                                            matButton="outlined"
                                             (click)="resendOtp()"
                                             [disabled]="resendOtpInProgress || verifyOtpInProgress"
                                             class="ml-auto send-otp-btn"
@@ -147,12 +147,17 @@
                             </ng-container>
                         </div>
                         <div class="d-flex justify-content-between mt-3">
-                            <button matButton="elevated" *ngIf="isCreateBySubscription" (click)="back()" aria-label="back">
+                            <button
+                                matButton="outlined"
+                                *ngIf="isCreateBySubscription"
+                                (click)="back()"
+                                aria-label="back"
+                            >
                                 {{ localeData?.back_to_subscription }}
                             </button>
                             <button
                                 *ngIf="companiesList?.length === 0"
-                                matButton="elevated"
+                                matButton="outlined"
                                 aria-label="cancel"
                                 (click)="openLogoutConfirmationDialog()"
                             >
@@ -352,12 +357,12 @@
                         <ng-container *ngIf="!isNewUserLoggedIn">
                             <div class="d-flex justify-content-between mt-3">
                                 <div class="d-flex column-gap-15">
-                                    <button matButton="elevated" matStepperPrevious>
+                                    <button matButton="outlined" matStepperPrevious>
                                         {{ commonLocaleData?.app_back }}
                                     </button>
                                     <button
                                         *ngIf="companiesList?.length === 0"
-                                        matButton="elevated"
+                                        matButton="outlined"
                                         (click)="openLogoutConfirmationDialog()"
                                     >
                                         {{ commonLocaleData?.app_cancel }}
@@ -430,7 +435,7 @@
                                                         aria-label="delete icon"
                                                         class="btn mr-0"
                                                         (click)="removeUser(i)"
-                                                        matButton="elevated"
+                                                        matButton="outlined"
                                                     >
                                                         <i class="icon-trash text-red"></i>
                                                     </button>
@@ -453,13 +458,17 @@
                                 </div>
                             </div>
                             <div class="d-flex column-gap-15 mt-3">
-                                <button matButton="elevated" matStepperPrevious>
+                                <button matButton="outlined" matStepperPrevious>
                                     {{ commonLocaleData?.app_back }}
                                 </button>
                                 <button matButton="filled" (click)="onSubmit()">
                                     {{ commonLocaleData?.app_submit }}
                                 </button>
-                                <button *ngIf="companiesList?.length === 0" matButton="elevated" (click)="openLogoutConfirmationDialog()">
+                                <button
+                                    *ngIf="companiesList?.length === 0"
+                                    matButton="outlined"
+                                    (click)="openLogoutConfirmationDialog()"
+                                >
                                     {{ commonLocaleData?.app_cancel }}
                                 </button>
                             </div>

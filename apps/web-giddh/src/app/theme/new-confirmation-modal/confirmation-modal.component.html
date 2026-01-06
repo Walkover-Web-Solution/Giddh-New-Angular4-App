@@ -35,7 +35,7 @@
                 <ng-template #elseBlock>
                     <button
                         *ngIf="!inputData?.configuration?.disableRipple"
-                        matButton="elevated"
+                        matButton="outlined"
                         class="confirmation-buttons"
                         (click)="sendResponse(button?.text)"
                         [ngClass]="button?.cssClass"
@@ -46,7 +46,7 @@
                     <button
                         *ngIf="inputData?.configuration?.disableRipple"
                         [disableRipple]="true"
-                        matButton="elevated"
+                        matButton="outlined"
                         class="confirmation-buttons"
                         (click)="sendResponse(button?.text)"
                         [ngClass]="button?.cssClass"

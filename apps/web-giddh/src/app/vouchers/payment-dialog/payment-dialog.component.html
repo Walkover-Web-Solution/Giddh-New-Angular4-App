@@ -130,7 +130,7 @@
         <button matButton="filled" (click)="savePayment()" [disabled]="saveInProgress">
             {{ commonLocaleData?.app_save }}
         </button>
-        <button cdkFocusInitial matButton="elevated" mat-dialog-close (click)="closeModelEvent.emit()">
+        <button cdkFocusInitial matButton="outlined" mat-dialog-close (click)="closeModelEvent.emit()">
             {{ commonLocaleData?.app_cancel }}
         </button>
     </div>

@@ -611,7 +611,11 @@
                                                         <button matButton="filled" type="button" (click)="saveSkuNumberPopup(product)">
                                                             Save
                                                         </button>
-                                                        <button matButton="elevated" type="button" (click)="hideSkuNumberPopup()">
+                                                        <button
+                                                            matButton="outlined"
+                                                            type="button"
+                                                            (click)="hideSkuNumberPopup()"
+                                                        >
                                                             Cancel
                                                         </button>
                                                     </div>
@@ -685,7 +689,12 @@
                                                     <button matButton="filled" type="button" (click)="saveHsnNumberPopup(product)">
                                                         Save
                                                     </button>
-                                                    <button matButton="elevated" class="mr-0" type="button" (click)="hideHsnNumberPopup()">
+                                                    <button
+                                                        matButton="outlined"
+                                                        class="mr-0"
+                                                        type="button"
+                                                        (click)="hideHsnNumberPopup()"
+                                                    >
                                                         Cancel
                                                     </button>
                                                 </div>
@@ -1166,7 +1175,7 @@
                         <div class="pull-right position-relative d-flex column-gap-15">
                             <button
                                 type="button"
-                                matButton="elevated"
+                                matButton="outlined"
                                 class="d-inline-block vertical-align-middle"
                                 [disabled]="isLoading"
                                 (click)="closeBranchTransferPopup()"
@@ -1267,7 +1276,7 @@
                         >
                             Save
                         </button>
-                        <button matButton="elevated" (click)="clearTransportForm()" type="submit">Clear</button>
+                        <button matButton="outlined" (click)="clearTransportForm()" type="submit">Clear</button>
                     </div>
                     <div class="clear-both d-flex column-gap-1" *ngIf="transportEditMode">
                         <button
@@ -1279,8 +1288,8 @@
                         >
                             Update
                         </button>
-                        <button matButton="elevated" (click)="clearTransportForm()">Clear</button>
-                        <button matButton="elevated" (click)="openTransporterPopupDialog()">Cancel</button>
+                        <button matButton="outlined" (click)="clearTransportForm()">Clear</button>
+                        <button matButton="outlined" (click)="openTransporterPopupDialog()">Cancel</button>
                     </div>
                 </div>
             </div>
@@ -1340,8 +1349,8 @@
                     <td>{{ item?.transporterName }}</td>
                     <td>{{ item?.transporterId }}</td>
                     <td class="nowrap">
-                        <button matButton="elevated" (click)="editTransporter(item)"><i class="icon-edit"></i></button>
-                        <button matButton="elevated" (click)="deleteTransporter(item)"><i class="icon-trash"></i></button>
+                        <button matButton="outlined" (click)="editTransporter(item)"><i class="icon-edit"></i></button>
+                        <button matButton="outlined" (click)="deleteTransporter(item)"><i class="icon-trash"></i></button>
                     </td>
                 </tr>
             </table>

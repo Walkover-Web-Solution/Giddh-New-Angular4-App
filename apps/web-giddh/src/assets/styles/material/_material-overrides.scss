@@ -28,48 +28,7 @@
 .mdc-radio--disabled+label,
 .mdc-switch--disabled,
 .mdc-switch--disabled+label,
-.mat-sort-header-disabled .mat-sort-header-container .form-control:disabled {
-    @include cursor(not-allowed);
-    @include pointer-events(auto);
-
-    * {
-        @include cursor(not-allowed);
-        @include pointer-events(auto);
-    }
-}
-
-// Table
-table tr {
-    &:hover {
-        background-color: inherit !important;
-    }
-}
-
-// Angular 21 Material Design 3 compatibility overrides
-// Restore mat-app-background functionality
-
-:root {
-    --mat-app-background-color: var(--mat-sys-surface, #fefbff);
-    --mat-app-text-color: var(--mat-sys-on-surface, #1d1b20);
-}
-
-[data-theme="dark"] {
-    --mat-app-background-color: var(--mat-sys-surface, #141218);
-    --mat-app-text-color: var(--mat-sys-on-surface, #e6e0e9);
-}
-
-// Ensure mat-app-background works across all components
-.mat-app-background {
-    background-color: var(--mat-app-background-color) !important;
-    color: var(--mat-app-text-color) !important;
-}
-
-// Specific fixes for inventory sidebar
-.inventory-aside-pane.mat-app-background {
-    background-color: var(--mat-sys-surface-container-low, var(--mat-app-background-color)) !important;
-    border-right: 1px solid var(--mat-sys-outline-variant, rgba(0, 0, 0, 0.12));
-}
-
-.aside-pane.mat-app-background {
-    background-color: var(--mat-sys-surface-container, var(--mat-app-background-color)) !important;
+.mat-sort-header-disabled .mat-sort-header-container .form-control:disabled { @include cursor(not-allowed); @include pointer-events(auto); * { @include cursor(not-allowed); @include pointer-events(auto); }
+} // Table
+table tr { &:hover { background-color: inherit !important; }
 }

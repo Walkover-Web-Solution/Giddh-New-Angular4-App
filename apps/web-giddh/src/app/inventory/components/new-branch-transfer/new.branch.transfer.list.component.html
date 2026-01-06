@@ -48,9 +48,8 @@
                 </div>
                 <div class="text-center d-lg-flex d-none">
                     <div class="clear-filter" *ngIf="checkIfFiltersApplied()">
-                        <button matButton="elevated" class="mr-0" (click)="clearFilters()">
-                            <span class="icon-cross"></span>
-                            Clear Filter
+                        <button matButton="outlined" class="mr-0" (click)="clearFilters()">
+                            <span class="icon-cross"></span> Clear Filter
                         </button>
                     </div>
                 </div>
@@ -61,9 +60,8 @@
             </div>
             <div class="d-lg-none mb-2">
                 <div class="clear-filter" *ngIf="checkIfFiltersApplied()">
-                    <button matButton="elevated" class="mr-0" (click)="clearFilters()">
-                        <span class="icon-cross"></span>
-                        Clear Filter
+                    <button matButton="outlined" class="mr-0" (click)="clearFilters()">
+                        <span class="icon-cross"></span> Clear Filter
                     </button>
                 </div>
             </div>
@@ -238,7 +236,12 @@
                         </td>
                         <td data-title="Action">
                             <div class="btn-group">
-                                <button type="button" matButton="elevated" class="select-action-button" [matMenuTriggerFor]="actionMenu">
+                                <button
+                                    type="button"
+                                    matButton="outlined"
+                                    class="select-action-button"
+                                    [matMenuTriggerFor]="actionMenu"
+                                >
                                     <span class="text-light">Select Action</span>
                                     <span class="icon-dots-three-vertical"></span>
                                 </button>
@@ -327,7 +330,14 @@
             </div>
             <div class="pull-right mt-2">
                 <button matButton="filled" class="mr-2" type="button" (click)="search()">Search</button>
-                <button matButton="elevated" class="mr-0" type="button" (click)="refreshTempPostParams(); hideModal(false)">Cancel</button>
+                <button
+                    matButton="outlined"
+                    class="mr-0"
+                    type="button"
+                    (click)="refreshTempPostParams(); hideModal(false)"
+                >
+                    Cancel
+                </button>
             </div>
         </form>
     </mat-dialog-content>

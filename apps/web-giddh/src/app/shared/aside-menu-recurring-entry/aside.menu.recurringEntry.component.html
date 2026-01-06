@@ -72,7 +72,7 @@
                         </select-field>
                     </div>
                     <div class="clear-both text-right" *ngIf="mode === 'create'">
-                        <button matButton="elevated" class="border" (click)="closeAsidePane($event)">
+                        <button matButton="outlined" class="border" (click)="closeAsidePane($event)">
                             {{ commonLocaleData?.app_cancel }}
                         </button>
                         <button matButton="filled" [ladda]="isLoading" (click)="saveRecurringInvoice()">
@@ -81,8 +81,8 @@
                     </div>
                     <div class="clear-both text-right" *ngIf="mode === 'update'">
                         <button
-                            matButton="elevated"
-                            *ngIf="!isCompany && !isConsolidatedBranch"
+                            matButton="outlined"
+                            *ngIf="(!isCompany && !isConsolidatedBranch)"
                             class="btn-sm"
                             [ladda]="isDeleteLoading"
                             (click)="deleteInvoice()"

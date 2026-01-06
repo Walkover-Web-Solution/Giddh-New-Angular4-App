@@ -49,7 +49,7 @@
                             {{ commonLocaleData?.app_update }}
                         </button>
                         <button
-                            matButton="elevated"
+                            matButton="outlined"
                             aria-label="clear"
                             type="button"
                             class="btn-sm mr-0"
@@ -61,7 +61,7 @@
                         <button
                             *ngIf="isInsideDialog"
                             aria-label="close"
-                            matButton="elevated"
+                            matButton="outlined"
                             type="button"
                             (click)="closeAsideEvent.emit(false)"
                         >
@@ -72,7 +72,7 @@
                 <div class="col-sm-8">
                     <div class="pull-right d-flex column-gap-15">
                         <button
-                            matButton="elevated"
+                            matButton="outlined"
                             aria-label="delete"
                             type="button"
                             class="btn-sm mr-0"

@@ -178,13 +178,18 @@
                                             </button>
                                         </div>
                                         <div class="ml-auto right-aligned-buttons d-flex column-gap-15">
-                                            <button *ngIf="!groupUniqueName" matButton="elevated" (click)="resetGroupForm()" type="button">
+                                            <button
+                                                *ngIf="!groupUniqueName"
+                                                matButton="outlined"
+                                                (click)="resetGroupForm()"
+                                                type="button"
+                                            >
                                                 {{ commonLocaleData?.app_clear }}
                                             </button>
 
                                             <button
                                                 *ngIf="groupUniqueName && !addGroup"
-                                                matButton="elevated"
+                                                matButton="outlined"
                                                 class="min-width-100"
                                                 (click)="cancelEdit()"
                                             >
@@ -192,7 +197,7 @@
                                             </button>
                                             <button
                                                 *ngIf="groupUniqueName"
-                                                matButton="elevated"
+                                                matButton="outlined"
                                                 class="min-width-100"
                                                 (click)="deleteGroup()"
                                             >

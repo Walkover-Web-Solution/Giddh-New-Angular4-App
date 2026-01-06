@@ -90,7 +90,7 @@
                                     <div class="d-flex ml-3 column-gap-1">
                                         <button
                                             aria-label="delete"
-                                            matButton="elevated"
+                                            matButton="outlined"
                                             [disabled]="
                                                 (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                                 currentCompanyBranches?.length > 2
@@ -110,7 +110,7 @@
                                                 (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                                 currentCompanyBranches?.length > 2
                                             "
-                                            matButton="elevated"
+                                            matButton="outlined"
                                             id="generate-invoice-mobile-view"
                                             (click)="performBulkAction('generate')"
                                             [matTooltip]="commonLocaleData?.app_generate_voucher"
@@ -121,7 +121,7 @@
                                     </div>
                                     <button
                                         aria-label="attachfile"
-                                        matButton="elevated"
+                                        matButton="outlined"
                                         [disabled]="
                                             (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                             currentCompanyBranches?.length > 2
@@ -209,7 +209,7 @@
                                 <button
                                     aria-label="filter"
                                     id="advance-filter"
-                                    matButton="elevated"
+                                    matButton="outlined"
                                     (click)="onOpenAdvanceSearch()"
                                     class="advance-icon d-flex advance-search-filter icon-button-width pointer mx-0"
                                     [matTooltip]="commonLocaleData?.app_advance_search"
@@ -233,7 +233,7 @@
                                 <div class="d-flex xs-mb-1 column-gap-1" *ngIf="checkedTrxWhileHovering?.length > 0 && !isTabletScreen">
                                     <button
                                         aria-label="delete"
-                                        matButton="elevated"
+                                        matButton="outlined"
                                         [disabled]="
                                             (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                             currentCompanyBranches?.length > 2
@@ -249,7 +249,7 @@
 
                                     <button
                                         aria-label="generate"
-                                        matButton="elevated"
+                                        matButton="outlined"
                                         [disabled]="
                                             (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                             currentCompanyBranches?.length > 2
@@ -265,7 +265,7 @@
 
                                     <button
                                         aria-label="file"
-                                        matButton="elevated"
+                                        matButton="outlined"
                                         [disabled]="
                                             (currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
                                             currentCompanyBranches?.length > 2
@@ -291,7 +291,7 @@
                                 <ng-container *ngIf="isTabletScreen">
                                     <button
                                         aria-label="threedots"
-                                        matButton="elevated"
+                                        matButton="outlined"
                                         id="button-basic"
                                         [matMenuTriggerFor]="menu"
                                         type="button"
@@ -631,7 +631,7 @@
                                             <span>{{ transactionCountConvertToEntries }} - {{ localeData?.convert_to_entries }}</span>
                                         </button>
                                         <button
-                                            matButton="elevated"
+                                            matButton="outlined"
                                             (click)="hideEledgerWrap()"
                                             type="button"
                                             class="min-width-unset"
@@ -2635,7 +2635,12 @@
             <!-- modal sections -->
             <div *ngIf="isShowLedgerColumnarReportTable">
                 <div class="back-btn text-right pr-1 mt-1 mb-2">
-                    <button aria-label="back" matButton="elevated" class="border" (click)="isShowLedgerColumnarReportTable = false">
+                    <button
+                        aria-label="back"
+                        matButton="outlined"
+                        class="border"
+                        (click)="isShowLedgerColumnarReportTable = false"
+                    >
                         {{ commonLocaleData?.app_back }}
                     </button>
                 </div>

@@ -5,7 +5,7 @@
             <div class="row display-line">
                 <div class="col-sm-1" [ngClass]="{ 'skeleton-common-class': showLoader }">
                     <div class="back-btnn">
-                        <button matButton="elevated" (click)="backToSubscriptions()" *ngIf="!showLoader">
+                        <button matButton="outlined" (click)="backToSubscriptions()" *ngIf="!showLoader">
                             <span class="d-inline-flex align-items-center justify-content-center column-gap-1">
                                 <i class="icon-left back-left"></i>
                                 {{ commonLocaleData?.app_back }}

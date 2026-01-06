@@ -73,19 +73,13 @@
                             <td mat-cell *matCellDef="let element">
                                 <div class="d-flex column-gap-1 justify-content-end">
                                     <!-- Edit Button -->
-                                    <button
-                                        matButton="elevated"
-                                        class="min-width-unset"
-                                        (click)="openCreateUpdateTaxAuthorityDialog(true, element)"
-                                    >
+                                    <button matButton="outlined" class="min-width-unset"
+                                        (click)="openCreateUpdateTaxAuthorityDialog(true, element)">
                                         <i class="icon-edit"></i>
                                     </button>
                                     <!-- Delete Button -->
-                                    <button
-                                        matButton="elevated"
-                                        class="min-width-unset"
-                                        (click)="deleteTaxAuthority(element?.name, element?.uniqueName)"
-                                    >
+                                    <button matButton="outlined" class="min-width-unset"
+                                        (click)="deleteTaxAuthority(element?.name, element?.uniqueName)">
                                         <i class="icon-trash"></i>
                                     </button>
                                 </div>

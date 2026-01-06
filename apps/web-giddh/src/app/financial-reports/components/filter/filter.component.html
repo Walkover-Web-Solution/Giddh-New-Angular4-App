@@ -116,8 +116,8 @@
                             ></reactive-dropdown-field>
                         </div>
                         <!-- Filter by Tag -->
-                        <button
-                            matButton="elevated"
+                         <button
+                            matButton="outlined"
                             class="btn-stroked-icon"
                             (click)="emitExpand(!expandAll)"
                             type="button"
@@ -138,7 +138,7 @@
                             <button
                                 *ngIf="!isReconciled"
                                 aria-label="show reconcile options"
-                                matButton="elevated"
+                                matButton="outlined"
                                 type="button"
                                 (click)="showTallyReportOptions()"
                                 [disabled]="voucherApiVersion === 1"
@@ -168,7 +168,7 @@
                         </button>
                     </ng-container>
                     <button
-                        matButton="elevated"
+                        matButton="outlined"
                         class="btn-stroked-icon"
                         (click)="refreshData()"
                         [matTooltip]="localeData?.reload_data"
@@ -180,7 +180,7 @@
                         class="ml-1"
                         *ngIf="isProjectWiseAccounting"
                         [routerLink]="'/pages/project-wise-accounting/list'"
-                        matButton="elevated"
+                        matButton="outlined"
                     >
                         {{ commonLocaleData?.app_back }}
                     </button>

@@ -54,7 +54,7 @@
         <button matButton="filled" [disabled]="!rejectReason?.value" (click)="submitReject()">
             {{ commonLocaleData?.app_submit }}
         </button>
-        <button matButton="elevated" role="button" (click)="rejectEntry?.emit(false)">
+        <button matButton="outlined" role="button" (click)="rejectEntry?.emit(false)">
             {{ commonLocaleData?.app_cancel }}
         </button>
     </div>

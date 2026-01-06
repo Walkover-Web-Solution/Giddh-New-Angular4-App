@@ -80,10 +80,10 @@
                         >
                             {{ commonLocaleData?.app_update }}
                         </button>
-                        <button matButton="elevated" (click)="cancelDiscount()">
+                        <button matButton="outlined" (click)="cancelDiscount()">
                             {{ commonLocaleData?.app_cancel }}
                         </button>
-                        <button *ngIf="!isUpdateMode" matButton="elevated" (click)="clearDiscount()">
+                        <button *ngIf="!isUpdateMode" matButton="outlined" (click)="clearDiscount()">
                             {{ commonLocaleData?.app_clear }}
                         </button>
                     </div>

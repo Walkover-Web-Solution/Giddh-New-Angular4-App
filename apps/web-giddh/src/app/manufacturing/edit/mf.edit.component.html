@@ -1,7 +1,7 @@
 <section id="manufacture" class="clear-both" *ngIf="!(isGetManufactureStockInProgress$ | async)">
     <hamburger-menu *ngIf="!isInventoryPage" [pageHeading]="'Manufacture of Product'"></hamburger-menu>
     <div class="col-sm-12 mt-3 clear-both">
-        <button matButton="elevated" class="pull-right" (click)="goBackToListPage()" type="button">Back</button>
+        <button matButton="outlined" class="pull-right" (click)="goBackToListPage()" type="button">Back</button>
     </div>
     <!-- form -->
     <div class="col-xl-10 col-lg-12 col-md-12">
@@ -174,8 +174,12 @@
                                     </td>
                                     <td class="action">
                                         <button
-                                            matButton="elevated"
-                                            [disabled]="linkedStockQuantity.invalid || linkedStockRate.invalid || linkedStockList.invalid"
+                                            matButton="outlined"
+                                            [disabled]="
+                                                linkedStockQuantity.invalid ||
+                                                linkedStockRate.invalid ||
+                                                linkedStockList.invalid
+                                            "
                                             (click)="addConsumption(linkedStocks, $event)"
                                             class="ico-btn p-0"
                                         >
@@ -383,7 +387,7 @@
                                     </td>
                                     <td>
                                         <button
-                                            matButton="elevated"
+                                            matButton="outlined"
                                             [disabled]="transactionAmount.invalid"
                                             *ngIf="
                                                 ((currentOrganizationType === 'COMPANY' || isConsolidatedBranch) &&
@@ -430,8 +434,10 @@
                                     currentOrganizationType === 'BRANCH')
                             "
                         >
-                            <button matButton="filled" type="submit" (click)="createEntry()">Save</button>
-                            <button matButton="elevated" type="button" (click)="goBackToListPage()">Cancel</button>
+                            <button matButton="filled" type="submit" (click)="createEntry()">
+                                Save
+                            </button>
+                            <button matButton="outlined" type="button" (click)="goBackToListPage()">Cancel</button>
                         </div>
                         <div
                             class="pull-right mt-2 clear-both row"
@@ -442,8 +448,10 @@
                                     currentOrganizationType === 'BRANCH')
                             "
                         >
-                            <button matButton="filled" type="submit" (click)="updateEntry()">Update</button>
-                            <button matButton="elevated" type="button" (click)="deleteEntry()">Delete</button>
+                            <button matButton="filled" type="submit" (click)="updateEntry()">
+                                Update
+                            </button>
+                            <button matButton="outlined" type="button" (click)="deleteEntry()">Delete</button>
                         </div>
                     </form>
                 </div>

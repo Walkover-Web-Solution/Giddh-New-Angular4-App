@@ -75,7 +75,9 @@
                         </div>
 
                         <div class="align-self-end">
-                            <a matButton="elevated" (click)="resendOtp()" href="javascript:;">{{ localeData?.aside_menu?.resend_otp }}</a>
+                            <a matButton="outlined" (click)="resendOtp()" href="javascript:;">{{
+                                localeData?.aside_menu?.resend_otp
+                            }}</a>
                         </div>
                     </div>
 
@@ -88,7 +90,7 @@
                         >
                             {{ !otpSentSuccessFully ? localeData?.aside_menu?.get_otp : localeData?.aside_menu?.verify_otp }}
                         </button>
-                        <button matButton="elevated" (click)="toggleCancelModel()">
+                        <button matButton="outlined" (click)="toggleCancelModel()">
                             {{ commonLocaleData?.app_cancel }}
                         </button>
                     </div>
@@ -157,7 +159,7 @@
                             {{ commonLocaleData?.app_submit }}
                         </button>
 
-                        <button matButton="elevated" (click)="toggleCancelModel()">
+                        <button matButton="outlined" (click)="toggleCancelModel()">
                             {{ commonLocaleData?.app_cancel }}
                         </button>
                     </div>
@@ -260,7 +262,7 @@
                         <button matButton="filled" [ladda]="gstReturnInProcess" (click)="submitGstReturn()">
                             {{ commonLocaleData?.app_proceed }}
                         </button>
-                        <button matButton="elevated" role="button" (click)="toggleCancelModel()">
+                        <button matButton="outlined" role="button" (click)="toggleCancelModel()">
                             {{ commonLocaleData?.app_cancel }}
                         </button>
                     </div>

@@ -90,7 +90,7 @@
                                         (onClear)="razorPayObj.account.name = null; razorPayObj.account.uniqueName = null"
                                     ></reactive-dropdown-field>
                                     <button
-                                        matButton="elevated"
+                                        matButton="outlined"
                                         class="btn-stroked-icon"
                                         *ngIf="razorPayObj?.account?.uniqueName && razorPayObj?.account?.name"
                                         (click)="unlinkAccountFromRazorPay()"
@@ -130,7 +130,12 @@
                                     >
                                         {{ commonLocaleData?.app_update }}
                                     </button>
-                                    <button matButton="elevated" aria-label="delete" *ngIf="updateRazor" (click)="deleteRazorPayDetails()">
+                                    <button
+                                        matButton="outlined"
+                                        aria-label="delete"
+                                        *ngIf="updateRazor"
+                                        (click)="deleteRazorPayDetails()"
+                                    >
                                         {{ commonLocaleData?.app_delete }}
                                     </button>
                                 </div>
@@ -170,7 +175,7 @@
                                         (onClear)="paypalObj.account.name = null; paypalObj.account.uniqueName = null"
                                     ></reactive-dropdown-field>
                                     <button
-                                        matButton="elevated"
+                                        matButton="outlined"
                                         class="min-width-unset"
                                         (click)="unlinkAccountFromPaypal()"
                                         *ngIf="paypalObj?.account?.uniqueName && paypalObj?.account?.name"
@@ -206,7 +211,7 @@
                                     <button
                                         aria-label="delete"
                                         *ngIf="updatePaypal"
-                                        matButton="elevated"
+                                        matButton="outlined"
                                         type="button"
                                         (click)="deletePaypalDetails()"
                                     >
@@ -274,7 +279,12 @@
                                     <button matButton="filled" aria-label="save" (click)="savePayuDetails()">
                                         {{ !updatePayu ? commonLocaleData?.app_save : commonLocaleData?.app_update }}
                                     </button>
-                                    <button matButton="elevated" aria-label="delete" *ngIf="updatePayu" (click)="deletePayuDetails()">
+                                    <button
+                                        matButton="outlined"
+                                        aria-label="delete"
+                                        *ngIf="updatePayu"
+                                        (click)="deletePayuDetails()"
+                                    >
                                         {{ commonLocaleData?.app_delete }}
                                     </button>
                                 </div>

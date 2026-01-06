@@ -229,7 +229,7 @@
                                     >
                                         {{ localeData?.save_generate }}
                                     </button>
-                                    <button matButton="elevated" (click)="onCancelGenerateBill()">
+                                    <button matButton="outlined" (click)="onCancelGenerateBill()">
                                         {{ commonLocaleData?.app_cancel }}
                                     </button>
                                 </div>
@@ -339,10 +339,10 @@
                     >
                         {{ commonLocaleData?.app_save }}
                     </button>
-                    <button matButton="elevated" (click)="clearTransportForm()" type="submit">
+                    <button matButton="outlined" (click)="clearTransportForm()" type="submit">
                         {{ commonLocaleData?.app_clear }}
                     </button>
-                    <button matButton="elevated" mat-dialog-close>
+                    <button matButton="outlined" mat-dialog-close>
                         {{ commonLocaleData?.app_cancel }}
                     </button>
                 </ng-container>
@@ -356,10 +356,10 @@
                     >
                         {{ commonLocaleData?.app_update }}
                     </button>
-                    <button matButton="elevated" (click)="clearTransportForm()">
+                    <button matButton="outlined" (click)="clearTransportForm()">
                         {{ commonLocaleData?.app_clear }}
                     </button>
-                    <button matButton="elevated" mat-dialog-close role="button">
+                    <button matButton="outlined" mat-dialog-close role="button">
                         {{ commonLocaleData?.app_cancel }}
                     </button>
                 </ng-container>
@@ -391,10 +391,10 @@
                     <th mat-header-cell *matHeaderCellDef class="nowrap">{{ commonLocaleData?.app_actions }}</th>
                     <td mat-cell *matCellDef="let element">
                         <div class="d-flex column-gap-1">
-                            <button matButton="elevated" (click)="editTransporter(element)">
+                            <button matButton="outlined" (click)="editTransporter(element)">
                                 <i class="icon-edit"></i>
                             </button>
-                            <button matButton="elevated" (click)="deleteTransporter(element)">
+                            <button matButton="outlined" (click)="deleteTransporter(element)">
                                 <i class="fa fa-trash"></i>
                             </button>
                         </div>

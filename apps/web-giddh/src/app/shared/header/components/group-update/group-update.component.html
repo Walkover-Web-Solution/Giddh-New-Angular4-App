@@ -88,7 +88,7 @@
 
         <div class="text-right" *ngIf="voucherApiVersion === 2">
             <button
-                matButton="elevated"
+                matButton="outlined"
                 *ngIf="(showEditGroup$ | async) && !(activeGroup$ | async)?.fixed"
                 (click)="openDeleteGroupDialog()"
                 aria-label="delete"

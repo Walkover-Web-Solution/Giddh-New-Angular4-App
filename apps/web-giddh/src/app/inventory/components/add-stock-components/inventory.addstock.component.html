@@ -27,7 +27,7 @@
                             <label class="d-block">&nbsp;</label>
                             <button
                                 type="button"
-                                matButton="elevated"
+                                matButton="outlined"
                                 (click)="moveStock()"
                                 [disabled]="addStockForm.get('parentGroup')?.value === activeGroup?.uniqueName"
                             >
@@ -352,10 +352,15 @@
                                         />
                                     </div>
                                     <div class="pull-right unit-add">
-                                        <button matButton="elevated" class="mr-0" (click)="addPurchaseUnitRates(i)" *ngIf="l">
+                                        <button
+                                            matButton="outlined"
+                                            class="mr-0"
+                                            (click)="addPurchaseUnitRates(i)"
+                                            *ngIf="l"
+                                        >
                                             <i class="icon-plus text-green"></i>
                                         </button>
-                                        <button matButton="elevated" (click)="removePurchaseUnitRates(i)" *ngIf="!l">
+                                        <button matButton="outlined" (click)="removePurchaseUnitRates(i)" *ngIf="!l">
                                             <i class="icon-cross text-red"></i>
                                         </button>
                                     </div>
@@ -418,10 +423,10 @@
                                         />
                                     </div>
                                     <div class="pull-right unit-add">
-                                        <button matButton="elevated" class="mr-0" (click)="addSaleUnitRates(i)" *ngIf="l">
+                                        <button matButton="outlined" class="mr-0" (click)="addSaleUnitRates(i)" *ngIf="l">
                                             <i class="icon-plus text-green"></i>
                                         </button>
-                                        <button matButton="elevated" (click)="removeSaleUnitRates(i)" *ngIf="!l">
+                                        <button matButton="outlined" (click)="removeSaleUnitRates(i)" *ngIf="!l">
                                             <i class="icon-cross text-red"></i>
                                         </button>
                                     </div>
@@ -541,14 +546,14 @@
                                         </td>
                                         <td>
                                             <button
-                                                matButton="elevated"
+                                                matButton="outlined"
                                                 (click)="addItemInLinkedStocks(list, i, i)"
                                                 *ngIf="l"
                                                 [disabled]="disableStockButton"
                                             >
                                                 <i class="icon-plus text-green"></i>
                                             </button>
-                                            <button matButton="elevated" (click)="removeItemInLinkedStocks(i)" *ngIf="!l">
+                                            <button matButton="outlined" (click)="removeItemInLinkedStocks(i)" *ngIf="!l">
                                                 <i class="icon-cross text-red"></i>
                                             </button>
                                         </td>
@@ -585,12 +590,17 @@
                             <button
                                 *ngIf="isUpdatingStockForm"
                                 [ladda]="isStockDeleteInProcess$ | async"
-                                matButton="elevated"
+                                matButton="outlined"
                                 (click)="openDialog(deleteGroupStockTemplate)"
                             >
                                 Delete Stock
                             </button>
-                            <button type="button" *ngIf="!isUpdatingStockForm" (click)="resetStockForm()" matButton="elevated">
+                            <button
+                                type="button"
+                                *ngIf="!isUpdatingStockForm"
+                                (click)="resetStockForm()"
+                                matButton="outlined"
+                            >
                                 Reset
                             </button>
                         </div>

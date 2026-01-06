@@ -21,21 +21,14 @@
 
 html,
 body {
-    overflow: hidden;
-
-    ::-webkit-scrollbar-track {
-        background-color: var(--mat-sys-surface-container);
-    }
-
     ::-webkit-scrollbar {
         width: 8px;
         height: 8px;
-        background-color: var(--mat-sys-surface-container);
     }
 
     ::-webkit-scrollbar-thumb {
         border-radius: var(--mat-border-radius-8, 8px);
-        background-color: var(--mat-sys-primary, lightgray);
+        background-color: lightgray;
     }
 
     .cdk-keyboard-focused,

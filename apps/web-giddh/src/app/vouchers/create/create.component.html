@@ -103,8 +103,10 @@
                                 ></watch-video>
                             </div>
                             <button
-                                matButton="elevated"
-                                *ngIf="ocrDataEnabled && !(invoiceType.isReceiptInvoice || invoiceType.isPaymentInvoice)"
+                                matButton="outlined"
+                                *ngIf="
+                                    ocrDataEnabled && !(invoiceType.isReceiptInvoice || invoiceType.isPaymentInvoice)
+                                "
                                 class="single-toggle-button mr-0"
                                 (click)="onSingleToggleChange()"
                                 [attr.aria-pressed]="!invoiceType.isCashInvoice ? 'false' : 'true'"
@@ -1893,7 +1895,7 @@
                                                                                         {{ commonLocaleData?.app_save }}
                                                                                     </button>
                                                                                     <button
-                                                                                        matButton="elevated"
+                                                                                        matButton="outlined"
                                                                                         (click)="
                                                                                             cancelHsnSacEdit(entry);
                                                                                             hsnSacTrigger?.closeMenu()
@@ -3109,7 +3111,7 @@
 
                                 <div class="vouchers-actions d-flex justify-content-end column-gap-1 pt-4 pb-4 mt-4" *ngIf="isMainVoucher">
                                     <ng-container *ngIf="!isUpdateMode">
-                                        <button matButton="elevated" (click)="resetVoucherForm()">
+                                        <button matButton="outlined" (click)="resetVoucherForm()">
                                             {{ commonLocaleData?.app_clear }}
                                         </button>
                                         <button
@@ -3194,7 +3196,7 @@
                                             {{ localeData?.create_payment }}
                                         </button>
                                         <button
-                                            matButton="elevated"
+                                            matButton="outlined"
                                             [matMenuTriggerFor]="moreOptions"
                                             class="min-width-unset"
                                             *ngIf="
@@ -3217,7 +3219,7 @@
                                         </mat-menu>
                                     </ng-container>
                                     <ng-container *ngIf="isUpdateMode">
-                                        <button matButton="elevated" (click)="cancelUpdateVoucher()">
+                                        <button matButton="outlined" (click)="cancelUpdateVoucher()">
                                             {{ commonLocaleData?.app_cancel }}
                                         </button>
                                         <button matButton="filled" (click)="updateVoucher()">
@@ -3225,8 +3227,11 @@
                                         </button>
                                     </ng-container>
                                 </div>
-                                <div class="vouchers-actions d-flex justify-content-end column-gap-1 pt-4 pb-4 mt-4" *ngIf="!isMainVoucher">
-                                    <button matButton="elevated" (click)="resetVoucherForm()">
+                                <div
+                                    class="vouchers-actions d-flex justify-content-end column-gap-1 pt-4 pb-4 mt-4"
+                                    *ngIf="!isMainVoucher"
+                                >
+                                    <button matButton="outlined" (click)="resetVoucherForm()">
                                         {{ commonLocaleData?.app_clear }}
                                     </button>
                                     <button matButton="filled" (click)="generateVoucher('skip')">

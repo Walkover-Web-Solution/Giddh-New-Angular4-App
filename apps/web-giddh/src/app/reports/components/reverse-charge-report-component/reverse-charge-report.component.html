@@ -33,9 +33,8 @@
                             readonly
                         />
                     </div>
-                    <button matButton="elevated" (click)="resetFilters()" *ngIf="isDateFilterApplied()">
-                        <i class="icon-cross"></i>
-                        {{ commonLocaleData?.app_clear_filter }}
+                    <button matButton="outlined" (click)="resetFilters()" *ngIf="isDateFilterApplied()">
+                        <i class="icon-cross"></i> {{ commonLocaleData?.app_clear_filter }}
                     </button>
                 </div>
                 <div class="top-content" [hidden]="!reverseChargeReportResults?.items?.length">

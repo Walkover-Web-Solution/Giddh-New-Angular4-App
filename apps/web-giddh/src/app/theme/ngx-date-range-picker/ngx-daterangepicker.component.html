@@ -322,7 +322,7 @@
                                                 <!-- clear button -->
                                                 <button
                                                     *ngIf="showClearButton"
-                                                    matButton="elevated"
+                                                    matButton="outlined"
                                                     class="clear"
                                                     type="button"
                                                     (click)="clear()"
@@ -337,7 +337,12 @@
                                                 <!-- clear button -->
 
                                                 <!-- cancel button -->
-                                                <button matButton="elevated" *ngIf="showCancel" type="button" (click)="clickCancel($event)">
+                                                <button
+                                                    matButton="outlined"
+                                                    *ngIf="showCancel"
+                                                    type="button"
+                                                    (click)="clickCancel($event)"
+                                                >
                                                     {{ commonLocaleData?.app_datepicker?.cancel }}
                                                 </button>
                                                 <!-- cancel button -->

@@ -35,7 +35,7 @@
                     <button matButton="filled" type="submit" [disabled]="isSavingProject$ | async">
                         {{ inputData.isCreateFlow ? commonLocaleData?.app_save : commonLocaleData?.app_update }}
                     </button>
-                    <button matButton="elevated" mat-dialog-close>
+                    <button matButton="outlined" mat-dialog-close>
                         {{ commonLocaleData?.app_cancel }}
                     </button>
                 </div>

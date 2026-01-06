@@ -40,7 +40,7 @@
                             <button matButton="filled" [disabled]="shareAccountForm.invalid || isUserRestricted" (click)="shareAccount()">
                                 {{ commonLocaleData?.app_share }}
                             </button>
-                            <button matButton="elevated" type="button" mat-dialog-close (click)="closeModal()">
+                            <button matButton="outlined" type="button" mat-dialog-close (click)="closeModal()">
                                 {{ commonLocaleData?.app_cancel }}
                             </button>
                         </div>
@@ -80,7 +80,7 @@
                                 ></reactive-dropdown-field>
 
                                 <button
-                                    matButton="elevated"
+                                    matButton="outlined"
                                     (click)="unShareAccount(val?.uniqueName, val?.entityUniqueName)"
                                     aria-label="delete icon"
                                 >

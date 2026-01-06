@@ -1,132 +1,80 @@
-@use 'abstracts/variables';
-@use 'abstracts/functions';
-@use 'abstracts/mixins';
-@use 'vendors/_boostrap.css';
-@use 'vendors/json-tree.scss';
-@use 'vendors/json-diff.scss';
-@use 'base/reset';
-@use 'base/typography';
-@use 'base/global';
-@use 'base/scrollbar';
-@use 'themes/m3-variables';
-@use 'themes/custom-theme';
-@use 'themes/theme-base-classes';
-@use 'material/material-variables';
-@use 'material/material-overrides';
-@use 'material/material_customise';
-@use 'material/material-mixins';
-@use 'layout/header' as layout-header;
-@use 'layout/sidebar';
-@use 'layout/grid';
-@use 'utilities/spacing';
-@use 'utilities/text';
-@use 'utilities/responsive';
-@use 'utilities/other.scss';
-@use './old-material-overide.scss';
-@use 'pages/utility';
-@use 'pages/ngx-bs-datepicker';
-@use 'pages/add-company';
-@use 'pages/aside-modal';
-@use 'pages/onboarding';
-@use 'pages/setting.profile';
-@use 'pages/user-details';
-@use 'pages/permission-list';
-@use 'pages/aside-menu-account';
-@use 'pages/subscription.component';
-@use 'pages/custom-fields';
-@use 'pages/inventory';
-@use 'pages/all-items';
-@use 'pages/header' as pages-header;
-@use 'pages/search';
-@use 'pages/mat-button';
-@use 'pages/vat-report';
-@use 'pages/help-support';
-@use 'pages/sales-register-expand';
-@use 'pages/setting-integration';
-@use 'pages/input-dropdown-field';
-@use 'pages/voucher';
-@use 'pages/tabs';
-@use 'pages/table';
-@use 'pages/custom-price';
-@use 'pages/inventory-adjustment';
-@use 'pages/global-variable';
-@use 'pages/vouchers';
-@use 'pages/tax-dropdown';
-@use 'pages/discount-dropdown';
-@use 'pages/dialog';
-@use 'pages/add-bulk-entry';
-@use 'pages/settings-sidebar';
-@use 'pages/mat-menu';
-@use 'pages/tax-authority';
-@use 'pages/adjustment-inventory';
-@use 'pages/d3-tree-chart';
-@use 'pages/vouchers-preview';
-@use 'pages/custom-paginator';
-@use 'pages/mat-chip';
-@use 'pages/select-multiple-fields';
-@use 'pages/override-material-theme-variables';
-@use 'pages/tribute-js';
-@use 'pages/ledger'; // @import rules must come after @use rules
-@import '../fonts/Inter/_inter_fonts.css'; // --------------------------------------------------------------------------
-// Third-party CSS libraries and frameworks // 3. BASE
-// --------------------------------------------------------------------------
-// Basic styles, resets, typography // 4. THEMES
-// --------------------------------------------------------------------------
-// Theme-specific styles and configurations // 5. MATERIAL DESIGN
-// --------------------------------------------------------------------------
-// Angular Material customizations // 6. LAYOUT
-// --------------------------------------------------------------------------
-// Layout-specific styles (header, sidebar, grid, etc.) // 7. COMPONENTS
-// --------------------------------------------------------------------------
-// Component-specific styles
-// @import 'components/buttons'; // Main.scss - 1. ABSTRACTS (must come first with @use)
-// --------------------------------------------------------------------------
-// Page-specific styles
-@import 'pages/utility.scss';
-@import 'pages/ngx-bs-datepicker.scss';
-@import 'pages/add-company.scss';
-@import 'pages/aside-modal.scss';
-@import 'pages/onboarding.scss';
-@import 'pages/setting.profile.scss';
-@import 'pages/user-details.scss';
-@import 'pages/permission-list.scss';
-@import 'pages/aside-menu-account.scss';
-@import 'pages/subscription.component.scss';
-@import 'pages/custom-fields.scss';
-@import 'pages/inventory.scss';
-@import 'pages/all-items.scss';
-@import 'pages/header.scss';
-@import 'pages/search.scss';
-@import 'pages/mat-button.scss';
-@import 'pages/vat-report.scss';
-@import 'pages/help-support.scss';
-@import 'pages/sales-register-expand.scss';
-@import 'pages/setting-integration.scss';
-@import 'pages/input-dropdown-field.scss';
-@import 'pages/voucher.scss';
-@import 'pages/tabs.scss';
-@import 'pages/table.scss';
-@import 'pages/custom-price.scss';
-@import 'pages/inventory-adjustment.scss';
-@import 'pages/global-variable.scss';
-@import 'pages/vouchers.scss';
-@import 'pages/tax-dropdown.scss';
-@import 'pages/discount-dropdown.scss';
-@import 'pages/dialog.scss';
-@import 'pages/add-bulk-entry.scss';
-@import 'pages/settings-sidebar.scss';
-@import 'pages/mat-menu.scss';
-@import 'pages/tax-authority.scss';
-@import 'pages/adjustment-inventory.scss';
-@import 'pages/d3-tree-chart.scss';
-@import 'pages/vouchers-preview.scss';
-@import 'pages/custom-paginator.scss';
-@import 'pages/mat-chip.scss';
-@import 'pages/select-multiple-fields.scss';
-@import 'pages/override-material-theme-variables';
-@import 'pages/tribute-js.scss';
-@import 'pages/ledger.scss';
-@import 'pages/focus.scss';
+@use '@angular/material' as mat;
+@use "abstracts/variables";
+@use "abstracts/functions";
+@use "abstracts/mixins";
+@use "vendors/_boostrap.css";
+@use "vendors/json-tree.scss";
+@use "vendors/json-diff.scss";
+@use "base/reset";
+@use "base/typography";
+@use "base/global";
+@use "base/scrollbar";
+@use "themes/m3-variables";
+@use "themes/custom-palette";
+@use "themes/custom-theme";
+@use "themes/theme-base-classes";
+@use "material/material-variables";
+@use "material/material-overrides";
+@use "material/material_customise";
+@use "material/material-mixins";
+@use "layout/header" as layout-header;
+@use "layout/sidebar";
+@use "layout/grid";
+@use "utilities/spacing";
+@use "utilities/text";
+@use "utilities/responsive";
+@use "utilities/other.scss";
+@use "./old-material-overide.scss";
+@use "pages/utility";
+@use "pages/ngx-bs-datepicker";
+@use "pages/add-company";
+@use "pages/aside-modal";
+@use "pages/onboarding";
+@use "pages/setting.profile";
+@use "pages/user-details";
+@use "pages/permission-list";
+@use "pages/aside-menu-account";
+@use "pages/subscription.component";
+@use "pages/custom-fields";
+@use "pages/inventory";
+@use "pages/all-items";
+@use "pages/header" as pages-header;
+@use "pages/search";
+@use "pages/mat-button";
+@use "pages/vat-report";
+@use "pages/help-support";
+@use "pages/sales-register-expand";
+@use "pages/setting-integration";
+@use "pages/input-dropdown-field";
+@use "pages/voucher";
+@use "pages/tabs";
+@use "pages/table";
+@use "pages/custom-price";
+@use "pages/inventory-adjustment";
+@use "pages/global-variable";
+@use "pages/vouchers";
+@use "pages/tax-dropdown";
+@use "pages/discount-dropdown";
+@use "pages/dialog";
+@use "pages/add-bulk-entry";
+@use "pages/settings-sidebar";
+@use "pages/mat-menu";
+@use "pages/tax-authority";
+@use "pages/adjustment-inventory";
+@use "pages/d3-tree-chart";
+@use "pages/vouchers-preview";
+@use "pages/custom-paginator";
+@use "pages/mat-chip";
+@use "pages/select-multiple-fields";
+@use "pages/override-material-theme-variables";
+@use "pages/tribute-js";
+@use "pages/ledger";
+
+// Include Angular Material core styles (must be included once)
+@include mat.core(); // @import rules must come after @use rules
+// Import font files (CSS imports are allowed after @use statements)
+@import "../fonts/Inter/_inter_fonts.css";
+
 
 // 9. UTILITIES
 // --------------------------------------------------------------------------
@@ -139,7 +87,8 @@
 // CSS for app-translate-container divs created by fix-app-translate-ng-container.js
 // These styles ensure the div containers behave like ng-container (minimal visual impact)
 .app-translate-container {
-    // Make the container behave like ng-container - no visual impact display: contents;
+    // Make the container behave like ng-container - no visual impact
+    display: contents;
 }
 /* CSS for translate-wrapper spans to minimize DOM impact */
 .translate-wrapper {

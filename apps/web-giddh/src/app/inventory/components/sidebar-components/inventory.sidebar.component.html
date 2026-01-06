@@ -9,7 +9,12 @@
             <input class="form-control" type="search" placeholder="Search Stock/Group" #search />
             <i class="fa fa-search text-light"></i>
             <div class="btn-group">
-                <button type="button" matButton="elevated" [matMenuTriggerFor]="downloadMenu" class="btn ml-0">
+                <button
+                    type="button"
+                    matButton="outlined"
+                    [matMenuTriggerFor]="downloadMenu"
+                    class="btn ml-0"
+                >
                     <i class="fa fa-ellipsis-v"></i>
                 </button>
                 <mat-menu #downloadMenu="matMenu">

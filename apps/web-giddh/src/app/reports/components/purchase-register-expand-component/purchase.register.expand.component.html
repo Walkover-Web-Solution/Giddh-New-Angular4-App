@@ -11,7 +11,7 @@
             <div class="form-inline d-flex justify-content-between top-bar-content">
                 <div class="d-flex align-items-center column-gap-1">
                     <button
-                        matButton="elevated"
+                        matButton="outlined"
                         class="btn-stroked-icon"
                         (click)="emitExpand()"
                         [matTooltip]="expand ? commonLocaleData?.app_collapse_all : commonLocaleData?.app_expand_all"
@@ -42,14 +42,13 @@
                     class="clear-filter align-items-center d-flex justify-content-xl-center justify-content-lg-start"
                     *ngIf="showClearFilter"
                 >
-                    <button matButton="elevated" (click)="resetAdvanceSearch()">
-                        <span class="icon-cross"></span>
-                        {{ commonLocaleData?.app_clear_filter }}
+                    <button matButton="outlined" (click)="resetAdvanceSearch()">
+                        <span class="icon-cross"></span> {{ commonLocaleData?.app_clear_filter }}
                     </button>
                 </div>
                 <div class="d-flex align-items-center column-gap-1">
                     <button
-                        matButton="elevated"
+                        matButton="outlined"
                         (click)="gotoPurchaseRegister()"
                         [matTooltip]="commonLocaleData?.app_back"
                         [matTooltipPosition]="'above'"

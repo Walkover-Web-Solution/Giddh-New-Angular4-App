@@ -14,7 +14,12 @@
                     >
                         {{ localeData?.approve }}
                     </button>
-                    <button matButton="elevated" class="mb-1" type="button" (click)="openModal(rejectionReason)">
+                    <button
+                        matButton="outlined"
+                        class="mb-1"
+                        type="button"
+                        (click)="openModal(rejectionReason)"
+                    >
                         {{ localeData?.reject }}
                     </button>
                     <span class="mb-1 close-modal cursor-pointer pull-right" (click)="closeDetailsMode()">
