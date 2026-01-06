@@ -214,7 +214,7 @@
         <section class="mb-custom-80"></section>
         <!-- no records -->
         <div class="filings-empty-state" *ngIf="!(viewTransactionInProgress$ | async) && !(viewTransaction$ | async)?.results?.length">
-            <img src="{{ imgPath }}nofound.svg" [style.max-width.px]="150" />
+            <img src="{{ imgPath }}gst/nofound.svg" [style.max-width.px]="150" />
             <div class="empty-msg">
                 <span>{{ commonLocaleData?.app_no_records_found }}</span>
             </div>

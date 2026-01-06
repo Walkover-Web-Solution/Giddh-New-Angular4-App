@@ -68,7 +68,7 @@ export class OverviewSummaryComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/gst/';
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         this.gstr1OverviewData$.pipe(takeUntil(this.destroyed$)).subscribe(data => {
             if (data && this.selectedGst === GstReport.Gstr1) {
                 this.gstrOverviewData = this.transformedSummaryData(data);
