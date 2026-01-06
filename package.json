@@ -3,7 +3,7 @@
   "version": "9.1.0",
   "license": "MIT",
   "private": true,
-  "main": "apps/electron-giddh/src/index.js",
+  "main": "dist/apps/web-giddh/index.js",
   "scripts": {
     "ng": "ng",
     "start": "npm run postinstall.web && node --max_old_space_size=8192 scripts/build-env.js local && node --max_old_space_size=8192 node_modules/@angular/cli/bin/ng serve web-giddh --configuration=local",

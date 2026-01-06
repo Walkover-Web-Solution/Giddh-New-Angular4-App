@@ -100,6 +100,7 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
      */
     public ngOnInit(): void {
         document.querySelector('body').classList.add('gst-sidebar-open');
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         this.isCompany = this.generalService.currentOrganizationType !== OrganizationType.Branch;
         this.store.pipe(select(select => select.branchConsolidated), takeUntil(this.destroyed$)).subscribe(response => {
             if (response) {
@@ -163,7 +164,6 @@ export class TaxSidebarComponent implements OnInit, OnDestroy {
                 this.isMonthSelected = true;
             }
         });
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
     }
 
     /**

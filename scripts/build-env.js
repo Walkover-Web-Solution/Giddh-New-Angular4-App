@@ -102,7 +102,7 @@ export const environment: Environment = {
     production: true,
     showDevModule: false,
     AppUrl: '${envConfig.AppUrl}',
-    ApiUrl: '${envConfig.ApiUrl.replace(/\/$/, '')}',
+    ApiUrl: '${envConfig.ApiUrl}',
     UkApiUrl: '${envConfig.UkApiUrl}',
     isElectron: ${envConfig.isElectron},
     APP_FOLDER: '${envConfig.APP_FOLDER}',
