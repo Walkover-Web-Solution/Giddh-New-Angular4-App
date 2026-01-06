@@ -702,7 +702,7 @@
                 <div class="transactions-overview" *ngIf="selectedGstr3BTab === 'filing'">
                     <div class="gstr-transactions-summary mt-5 mb-5 text-center">
                         <div class="gst-return-date">
-                            <img src="assets/images/return-date.svg" />
+                            <img src="{{ imgPath }}return-date.svg" />
                             <p>{{ localeData?.gstr3b?.click_proceed }}</p>
                             <button matButton="filled" (click)="returnGstr3B = { via: 'TAXPRO' }">
                                 {{ localeData?.gstr3b?.push_to_portal }}

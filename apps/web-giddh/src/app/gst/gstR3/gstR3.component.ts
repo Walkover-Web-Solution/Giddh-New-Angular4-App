@@ -1,5 +1,5 @@
 import * as dayjs from 'dayjs';
-import { Component, OnInit, OnDestroy, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, TemplateRef, Inject } from '@angular/core';
 import { Observable, ReplaySubject, of } from 'rxjs';
 import {
     GstOverViewRequest,
@@ -18,9 +18,11 @@ import { GstReport, TaxServiceEnum, TaxServiceType } from '../constants/gst.cons
 import { GeneralService } from '../../services/general.service';
 import { FormControl } from '@angular/forms';
 import { BreakpointObserver } from "@angular/cdk/layout";
-import { ASIDE_PANE_CONFIG, BREAKPOINT_SCREEN_SIZE, RestrictedModules } from '../../app.constant';
+import { ASIDE_PANE_CONFIG, BREAKPOINT_SCREEN_SIZE, RestrictedModules, Configuration } from '../../app.constant';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { GstComponentStore } from '../gst.store';
+import { ServiceConfig } from '../../services/service.config';
+import { environment } from '../../../environments/environment.generated';
 
 @Component({
     selector: 'file-gstr3',
@@ -74,6 +76,8 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     public date: FormControl<string | null> = new FormControl<string | null>('');
     /** Holds displayed columns */
     public gstrUserTableDataDisplayedColumns: string[] = ['number', 'label', 'value'];
+    /** Image path for assets */
+    public imgPath: string = '';
     /** Holds gstr user table data */
     public gstrUserTableData: any[] = []
     /** Holds displayed columns */
@@ -117,7 +121,8 @@ export class FileGstR3Component implements OnInit, OnDestroy {
         private generalService: GeneralService,
         private breakPointObservar: BreakpointObserver,
         private dialog: MatDialog,
-        private componentStore: GstComponentStore
+        private componentStore: GstComponentStore,
+        @Inject(ServiceConfig) private serviceConfig
     ) {
         this.gstAuthenticated$ = this.store.pipe(select(state => state.gstR.gstAuthenticated), takeUntil(this.destroyed$));
         this.activeCompany$ = this.store.pipe(select(state => state.session.activeCompany), takeUntil(this.destroyed$));
@@ -132,6 +137,7 @@ export class FileGstR3Component implements OnInit, OnDestroy {
     }
 
     public ngOnInit(): void {
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         if (this.generalService.voucherApiVersion === 2) {
             this.showGstFiling = true;
         }
@@ -147,7 +153,8 @@ export class FileGstR3Component implements OnInit, OnDestroy {
             }
             this.isCompany = params['isCompany'] === 'true';
             if (!this.selectedMonth) {
-                this.selectedMonth = dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT).toISOString();
+                const fromDate = dayjs(this.currentPeriod.from, GIDDH_DATE_FORMAT);
+                this.selectedMonth = fromDate.isValid() ? fromDate.toISOString() : dayjs().startOf('month').toISOString();
                 this.date.setValue(dayjs(this.selectedMonth).format(GIDDH_DATE_FORMAT_MONTH_YEAR));
             }
             this.store.dispatch(this.gstAction.SetSelectedPeriod(this.currentPeriod));

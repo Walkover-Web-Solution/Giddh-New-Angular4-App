@@ -79,7 +79,7 @@
                     [ngClass]="{ 'content-disabled': !isMonthSelected || !activeCompanyGstNumber }"
                 >
                     <div class="d-flex justify-content-between align-items-center column-gap-1">
-                        <img src="{{ imgPath }}summary.svg" class="icon gstr-icon image-as-icon-color text-middle" alt="summary img" />
+                        <img src="{{ imgPath }}gst/summary.svg" class="icon gstr-icon image-as-icon-color text-middle" alt="summary img" />
                         <b>{{ localeData?.gstr3b_summary }}</b>
                     </div>
                     <button matButton="filled" aria-label="summary" (click)="navigateTogstR3B(GstReport.Gstr3b)">
@@ -98,7 +98,7 @@
                     >
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <img src="{{ imgPath }}cart.svg" class="icon gstr-icon image-as-icon-color text-middle" alt="cart-img" />
+                                <img src="{{ imgPath }}gst/cart.svg" class="icon gstr-icon image-as-icon-color text-middle" alt="cart-img" />
                                 <div class="mt-1">
                                     <div class="font-size-16">
                                         <b class="text-middle">
@@ -253,7 +253,7 @@
                         </button>
 
                         <div>
-                            <img src="{{ imgPath }}bag.svg" class="icon gstr-icon image-as-icon-color text-middle" alt="bag img" />
+                            <img src="{{ imgPath }}gst/bag.svg" class="icon gstr-icon image-as-icon-color text-middle" alt="bag img" />
                             <div class="mt-1">
                                 <div class="font-size-16">
                                     <b>

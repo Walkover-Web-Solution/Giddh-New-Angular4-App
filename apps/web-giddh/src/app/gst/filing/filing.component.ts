@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild, ViewEncapsulation, Inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { select, Store } from '@ngrx/store';
 import { Observable, of, ReplaySubject } from 'rxjs';
@@ -12,7 +12,9 @@ import { GstReport } from '../constants/gst.constant';
 import * as dayjs from 'dayjs';
 import { GIDDH_DATE_FORMAT } from '../../shared/helpers/defaultDateFormat';
 import { MatTabChangeEvent } from '@angular/material/tabs';
-import { RestrictedModules } from '../../app.constant';
+import { RestrictedModules, Configuration } from '../../app.constant';
+import { ServiceConfig } from '../../services/service.config';
+import { environment } from '../../../environments/environment.generated';
 
 @Component({
     // tslint:disable-next-line:component-selector
@@ -67,13 +69,16 @@ export class FilingComponent implements OnInit, OnDestroy {
     public activeCompany$: Observable<any>;
     /** Enum for restricted modules */
     public restrictedModules: any = RestrictedModules;
+    /** Image path for assets */
+    public imgPath: string = '';
 
     constructor(
         private route: Router,
         private activatedRoute: ActivatedRoute,
         private store: Store<AppState>,
         private gstAction: GstReconcileActions,
-        private generalService: GeneralService) {
+        private generalService: GeneralService,
+        @Inject(ServiceConfig) private serviceConfig) {
         this.gstAuthenticated$ = this.store.pipe(select(p => p.gstR.gstAuthenticated), takeUntil(this.destroyed$));
         this.gstFileSuccess$ = this.store.pipe(select(p => p.gstR.gstReturnFileSuccess), takeUntil(this.destroyed$));
         this.gstr1OverviewDataFetchedSuccessfully$ = this.store.pipe(select(p => p.gstR.gstr1OverViewDataFetchedSuccessfully), takeUntil(this.destroyed$));
@@ -90,6 +95,7 @@ export class FilingComponent implements OnInit, OnDestroy {
     }
 
     public ngOnInit() {
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         if (this.generalService.voucherApiVersion === 2) {
             this.showGstFiling = true;
         }

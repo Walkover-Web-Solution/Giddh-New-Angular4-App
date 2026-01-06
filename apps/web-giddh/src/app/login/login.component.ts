@@ -221,7 +221,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
         // get user object when google auth is complete
         if (!Configuration.isElectron) {
-            // COMMENTED OUT - MISSING: Social login functionality
+            // Only enable for web since Electron uses native OAuth
             this.authService.authState.pipe(takeUntil(this.destroyed$)).subscribe((user: SocialUser) => {
                 this.isSocialLogoutAttempted$.pipe(takeUntil(this.destroyed$)).subscribe((res) => {
                     if (!res && user) {
@@ -414,76 +414,36 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     public async signInWithProviders(provider: string) {
         if (Configuration.isElectron) {
-            // Enhanced Electron OAuth with robust error handling
+            // Use native Electron OAuth exclusively for Electron
             try {
-                let ipcRenderer = null;
-                let authMethod = 'none';
+                const { ipcRenderer } = (window as any).require("electron");
 
-                // Method 1: Try legacy require first (most reliable)
-                if ((window as any).require) {
-                    try {
-                        const electron = (window as any).require("electron");
-                        if (electron && electron.ipcRenderer && electron.ipcRenderer.send) {
-                            ipcRenderer = electron.ipcRenderer;
-                            authMethod = 'legacy-require';
+                if (provider === "google") {
+                    // Send authentication request to main process
+                    ipcRenderer.send("authenticate", provider);
 
+                    // Listen for response from main process
+                    ipcRenderer.once('take-your-gmail-token', (sender, arg) => {
+                        // Handle error response from main process
+                        if (arg && arg.error) {
+                            this.toaster.errorToast('Google authentication failed: ' + arg.error);
+                            return;
                         }
-                    } catch (requireError) {
 
-                    }
-                }
-
-                // Method 2: Try secure electronAPI as fallback
-                if (!ipcRenderer && (window as any).electronAPI) {
-                    const electronAPI = (window as any).electronAPI;
-                    if (electronAPI.send && electronAPI.once) {
-                        ipcRenderer = {
-                            send: electronAPI.send.bind(electronAPI),
-                            once: electronAPI.once.bind(electronAPI)
-                        };
-                        authMethod = 'secure-api';
-
-                    }
-                }
-
-                if (ipcRenderer && provider === "google") {
-                    try {
-                        // Send authentication request
-                        ipcRenderer.send("authenticate", provider);
-
-                        // Listen for response
-                        ipcRenderer.once('take-your-gmail-token', (sender, arg) => {
-
-                            // Handle error response from main process
-                            if (arg && arg.error) {
-
-                                this.toaster.errorToast('Google authentication failed: ' + arg.error);
-                                return;
-                            }
-
-                            // Handle successful response
-                            if (arg && arg.access_token) {
-
-                                this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
-                            } else {
-
-                                this.toaster.errorToast('Google authentication failed - invalid token format');
-                            }
-                        });
-                    } catch (ipcError) {
-
-                        this.toaster.errorToast('Google login communication error');
-                    }
-                } else {
-
-                    this.toaster.errorToast('Google login is not available in this Electron version');
+                        // Handle successful response
+                        if (arg && arg.access_token) {
+                            this.store.dispatch(this.loginAction.signupWithGoogle(arg.access_token));
+                        } else {
+                            this.toaster.errorToast('Google authentication failed - invalid token format');
+                        }
+                    });
                 }
             } catch (error) {
-
+                console.error('Electron Google login error:', error);
                 this.toaster.errorToast('Google login is not available in this Electron version');
             }
         } else {
-            //  web social authentication
+            // Web social authentication
             this.store.dispatch(this.loginAction.resetSocialLogoutAttempt());
             if (provider === "google") {
                 // Only call authService.signIn for web (non-Electron) environments

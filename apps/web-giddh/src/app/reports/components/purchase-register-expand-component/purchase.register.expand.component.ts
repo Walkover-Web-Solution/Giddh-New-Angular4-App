@@ -124,7 +124,7 @@ export class PurchaseRegisterExpandComponent implements OnInit, OnDestroy {
 
     public ngOnInit(): void {
         this.voucherApiVersion = this.generalService.voucherApiVersion;
-        this.imgPath = Configuration.isElectron ? "assets/icon/" : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + "assets/icon/";
+        this.imgPath = Configuration.isElectron ? 'assets/icon/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/icon/';
         this.getDetailedPurchaseRequestFilter.page = 1;
         this.getDetailedPurchaseRequestFilter.count = PAGINATION_LIMIT;
         this.getDetailedPurchaseRequestFilter.q = "";

@@ -311,9 +311,13 @@ export class AuditLogsFormComponent implements OnInit, OnDestroy {
      * @memberof AuditLogsFormComponent
      */
     public focusOnEntity(): void {
-        if (this.dropdownRef) {
+        if (this.dropdownRef && typeof this.dropdownRef.openDropdownPanel === 'function') {
             setTimeout(() => {
-                this.dropdownRef.openDropdownPanel();
+                try {
+                    this.dropdownRef.openDropdownPanel();
+                } catch (error) {
+                    console.warn('Failed to open dropdown panel:', error);
+                }
             }, 1000);
         }
     }
