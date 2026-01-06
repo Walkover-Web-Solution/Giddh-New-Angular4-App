@@ -50,7 +50,7 @@
                         <span>{{ exportRequest.ledgerView ? localeData?.t_view : localeData?.statement_view }}</span>
                     </mat-slide-toggle>
                 </div>
-                <div class="pb-4 clear-both export-type">
+                <div class="clear-both export-type" [ngClass]="{ 'pb-4': emailTypeSelected !== emailTypeBillToBill }">
                     <label class="w125">{{ commonLocaleData?.app_type }}:</label>
                     <div>
                         <mat-radio-group

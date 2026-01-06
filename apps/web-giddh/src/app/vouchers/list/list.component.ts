@@ -516,6 +516,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                         this.selectedTemplate = null;
                         this.templateFor = null;
                     }
+                    this.changeDetectorRef.detectChanges();
                 }, 100);
                 if ([VoucherTypeEnum.sales, VoucherTypeEnum.debitNote, VoucherTypeEnum.creditNote, VoucherTypeEnum.generateEstimate, VoucherTypeEnum.generateProforma, VoucherTypeEnum.purchase, VoucherTypeEnum.purchaseOrder, VoucherTypeEnum.receipt, VoucherTypeEnum.payment].includes(this.voucherType)) {
                     this.setModuleType();

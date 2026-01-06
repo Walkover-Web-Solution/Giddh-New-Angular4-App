@@ -521,7 +521,9 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
     public payClicked(): void {
         this.paymentRequestId = '';
         this.prepareRequestObject();
-        this.bulkPayVendor();
+        setTimeout(() => {
+            this.bulkPayVendor();
+        }, 50);
     }
 
     /**
@@ -573,7 +575,7 @@ export class PaymentAsideComponent implements OnInit, OnChanges {
         sec = Number(sec) < 10 ? '0' + sec : Number(sec);
         this.timerCountDown$ = of(min + ':' + sec);
         remaining -= 1;
-
+        this.changeDetectorRef.detectChanges();
         if (remaining >= 0 && this.timerOn) {
             this.countDownTimerRef = setTimeout(() => {
                 this.startTimer(remaining);

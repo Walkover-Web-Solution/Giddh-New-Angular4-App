@@ -1,5 +1,5 @@
 import { take, takeUntil } from 'rxjs/operators';
-import { Component, OnDestroy, OnInit, TemplateRef, ViewChild, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, TemplateRef, ViewChild, signal } from '@angular/core';
 import { IOption } from '../../app.constant';
 import { CreateDiscountRequest, IDiscountList } from '../../models/api-models/SettingsDiscount';
 import { Observable, of, ReplaySubject } from 'rxjs';
@@ -62,7 +62,8 @@ export class DiscountComponent implements OnInit, OnDestroy {
         private settingsDiscountService: SettingsDiscountService,
         private toaster: ToasterService,
         public dialog: MatDialog,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        private cdRef: ChangeDetectorRef
     ) {
         this.createAccountIsSuccess$ = this.store.pipe(select(s => s.groupwithaccounts.createAccountIsSuccess), takeUntil(this.destroyed$));
     }
@@ -212,6 +213,7 @@ export class DiscountComponent implements OnInit, OnDestroy {
                 this.discountList = response?.body;     
             }
             this.isLoading.set(false);
+            this.cdRef.detectChanges();                                                                                                                                                  
         });
     }
 
