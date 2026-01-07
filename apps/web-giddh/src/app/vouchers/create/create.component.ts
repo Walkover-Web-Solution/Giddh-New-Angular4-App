@@ -1394,10 +1394,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                             this.customerVendorDropdown.focusInputField();
                         }, 100);
                     } else {
-                        this.openAccountDropdown = false;
-                        setTimeout(() => {
-                            this.openAccountDropdown = true;
-                        }, 100);
+                        this.customerVendorDropdownOpen();
                     }
                     this.startLoader(false);
                 }
@@ -3957,7 +3954,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 width: "650px",
             });
             this.emailDialogRef.afterClosed().subscribe(() => {
-                this.openAccountDropdown = true;
+                this.customerVendorDropdownOpen();
             });
         });
     }
@@ -3976,7 +3973,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 height: "80vh",
             });
             dialogRef.afterClosed().subscribe(() => {
-                this.openAccountDropdown = true;
+                this.customerVendorDropdownOpen();
             });
         });
     }
@@ -7593,5 +7590,19 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
         document.addEventListener('keydown', this.globalKeydownListener);
         document.addEventListener('mousedown', this.globalMousedownListener);
         document.addEventListener('click', this.globalClickListener);
+    }
+
+    /**
+     * Opens customer/vendor dropdown
+     *
+     * @private
+     * @memberof VoucherCreateComponent
+     */
+    private customerVendorDropdownOpen(): void {
+        this.openAccountDropdown = false;
+        setTimeout(() => {
+            this.openAccountDropdown = true;
+            this.changeDetection.detectChanges();
+        }, 50);
     }
 }
