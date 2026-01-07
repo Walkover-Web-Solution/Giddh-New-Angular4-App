@@ -64,7 +64,7 @@ interface IReportFilterTableColumn {
     templateUrl: "./list.component.html",
     styleUrls: ["./list.component.scss"],
     providers: [VoucherComponentStore],
-    standalone: false
+    standalone:false
 })
 export class VoucherListComponent implements OnInit, OnDestroy {
     /** Hold all voucher list data source for table */
@@ -415,6 +415,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 }
             });
 
+
             if (params?.code) {
                 this.saveGmailAuthCode(params.code);
             }
@@ -512,7 +513,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                         ];
                         this.selectedTemplate = this.purchaseTemplatesList[0];
                         this.templateFor = this.purchaseTemplatesList[0]?.value || null;
-                    }  else {
+                    } else {
                         this.selectedTemplate = null;
                         this.templateFor = null;
                     }
@@ -579,7 +580,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                 } else {
                     this.settingForm.get('invoiceSettings.gstEInvoiceEnable')?.disable();
                 }
-                this.changeDetectorRef.detectChanges();
             }
         });
 
@@ -1379,7 +1379,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     private getAllVouchers(): void {
-        if (this.voucherType?.length) {
+        console.log(this.advanceFilters);
+        console.log(this.advanceSearchTempKeyObj);
+        console.log(cloneDeep(this.advanceFilters));
+        console.log(this.voucherType, VoucherTypeEnum);
+        if (this.voucherTypes?.length) {
             if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
                 this.componentStore.getPreviousProformaEstimates({ model: cloneDeep(this.advanceFilters), type: this.voucherType });
             } else if (this.voucherType === VoucherTypeEnum.purchaseOrder) {
@@ -1768,6 +1772,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         });
     }
 
+
     /**
      * Toggle between table header title and search input field
      *
@@ -1919,9 +1924,9 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         }
 
         this.ewayBillDialogRef = this.dialog.open(this.ewayBill, {
-                    width: '600px',
-                    disableClose: true
-                });
+            width: '600px',
+            disableClose: true
+        });
     }
 
     /**
@@ -1992,11 +1997,12 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.advanceFilters.page = advanceFilters.page;
         this.advanceFilters.count = advanceFilters.count;
         this.advanceFilters.q = advanceFilters.q;
-
-        (Array.isArray(tempKeysInAdvanceFiltersForm) ? tempKeysInAdvanceFiltersForm : []).forEach(keys => {
+        console.log(tempKeysInAdvanceFiltersForm, this.advanceSearchTempKeyObj);
+        tempKeysInAdvanceFiltersForm.forEach(keys => {
             this.advanceSearchTempKeyObj = { ...this.advanceSearchTempKeyObj, [keys]: this.advanceFilters[keys] };
             delete this.advanceFilters[keys];
         });
+        console.log(this.advanceFilters);
         this.advanceFilters = this.vouchersUtilityService.cleanObject(this.advanceFilters);
         this.getVouchers(false);
         this.getVoucherBalances();
@@ -2427,11 +2433,11 @@ export class VoucherListComponent implements OnInit, OnDestroy {
     public convertBillDialog(voucher?: any): void {
         const vouchers = voucher ? [voucher] : this.selectedVouchers;
         this.dialog.open(this.convertBill, {
-                    data: vouchers,
-                    width: '600px',
-                    maxHeight: '80vh',
-                    disableClose: true
-                });
+            data: vouchers,
+            width: '600px',
+            maxHeight: '80vh',
+            disableClose: true
+        });
     }
 
     /**
@@ -3193,6 +3199,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
                             this.settingForm.get('invoiceSettings.autoPaid')?.value === 'runtime'
                         );
 
+
                         const invoiceLockDateValue = this.settingForm.get('invoiceSettings.lockDate').value;
                         if (invoiceLockDateValue === null || invoiceLockDateValue === '') {
                             this.showInvoiceDate = false;
@@ -3418,7 +3425,7 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             if (res?.status === 'success') {
                 this.toasterService.showSnackBar('success', this.localeData?.template_set_as_default_successfully);
                 // Update the UI immediately
-                (Array.isArray(this.createdTemplatesList) ? this.createdTemplatesList : []).forEach(template => {
+                this.createdTemplatesList.forEach(template => {
                     if (this.voucherType === 'credit note' || this.voucherType === 'debit note') {
                         template.isDefaultForVoucher = (template.uniqueName === templateUniqueName);
                     } else {
@@ -3428,7 +3435,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
             } else {
                 this.toasterService.showSnackBar('error', res?.message);
             }
-            this.changeDetectorRef.detectChanges();
         });
     }
 
