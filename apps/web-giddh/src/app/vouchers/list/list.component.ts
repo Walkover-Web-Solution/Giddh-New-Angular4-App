@@ -1379,10 +1379,6 @@ export class VoucherListComponent implements OnInit, OnDestroy {
      * @memberof VoucherListComponent
      */
     private getAllVouchers(): void {
-        console.log(this.advanceFilters);
-        console.log(this.advanceSearchTempKeyObj);
-        console.log(cloneDeep(this.advanceFilters));
-        console.log(this.voucherType, VoucherTypeEnum);
         if (this.voucherTypes?.length) {
             if (this.voucherType === VoucherTypeEnum.generateEstimate || this.voucherType === VoucherTypeEnum.generateProforma) {
                 this.componentStore.getPreviousProformaEstimates({ model: cloneDeep(this.advanceFilters), type: this.voucherType });
@@ -1997,12 +1993,10 @@ export class VoucherListComponent implements OnInit, OnDestroy {
         this.advanceFilters.page = advanceFilters.page;
         this.advanceFilters.count = advanceFilters.count;
         this.advanceFilters.q = advanceFilters.q;
-        console.log(tempKeysInAdvanceFiltersForm, this.advanceSearchTempKeyObj);
         tempKeysInAdvanceFiltersForm.forEach(keys => {
             this.advanceSearchTempKeyObj = { ...this.advanceSearchTempKeyObj, [keys]: this.advanceFilters[keys] };
             delete this.advanceFilters[keys];
         });
-        console.log(this.advanceFilters);
         this.advanceFilters = this.vouchersUtilityService.cleanObject(this.advanceFilters);
         this.getVouchers(false);
         this.getVoucherBalances();
