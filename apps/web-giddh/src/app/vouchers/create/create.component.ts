@@ -5799,9 +5799,11 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                 this.advanceReceiptAdjustmentData = cloneDeep(this.originalVoucherAdjustments);
                 this.calculateAdjustedVoucherTotal(this.originalVoucherAdjustments?.adjustments);
             }
-            this.dialog.open(this.adjustmentModal, {
-                width: "800px",
-            });
+            this.openDialogWithFocusManagement(() =>
+                this.dialog.open(this.adjustmentModal, {
+                    width: "800px",
+                })
+            );
         } else {
             this.isAdjustAmount = false;
             this.adjustPaymentBalanceDueData = 0;
