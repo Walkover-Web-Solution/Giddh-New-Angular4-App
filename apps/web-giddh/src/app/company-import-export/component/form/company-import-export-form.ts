@@ -24,13 +24,7 @@ import { cloneDeep } from '../../../lodash-optimized';
     selector: 'company-import-export-form-component',
     templateUrl: 'company-import-export-form.html',
     styleUrls: [`./company-import-export-form.scss`],
-    standalone: true,
-    imports: [
-        CommonModule,
-        FormsModule,
-        MatMenuModule,
-        FormFieldsModule
-    ]
+    standalone: false
 })
 
 export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
@@ -168,7 +162,7 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
         if (this.mode === 'export') {
             this.isExportInProcess$ = of(true);
 
-            if(parseInt(this.fileType) === CompanyImportExportFileTypes.MASTER_EXCEPT_ACCOUNTS) {
+            if (parseInt(this.fileType) === CompanyImportExportFileTypes.MASTER_EXCEPT_ACCOUNTS) {
                 this.companyImportExportService.ExportRequest(this.currentBranch?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     if (response?.status === 'success') {
                         let res = { body: response?.body };
@@ -202,7 +196,7 @@ export class CompanyImportExportFormComponent implements OnInit, OnDestroy {
         } else {
             this.isImportInProcess$ = of(true);
 
-            if(parseInt(this.fileType) === CompanyImportExportFileTypes.MASTER_EXCEPT_ACCOUNTS) {
+            if (parseInt(this.fileType) === CompanyImportExportFileTypes.MASTER_EXCEPT_ACCOUNTS) {
                 this.companyImportExportService.ImportRequest(this.selectedFile, this.currentBranch?.uniqueName).pipe(takeUntil(this.destroyed$)).subscribe(response => {
                     this.handleImportEntriesResponse(response);
                 });

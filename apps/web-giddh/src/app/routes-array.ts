@@ -1,5 +1,4 @@
 import { Routes } from "@angular/router";
-import { DummyModule } from "./dummy/dummy.module";
 
 export const ROUTES: Routes = [
     { path: 'company/:companyUniqueName/dns', loadChildren: () => import('./dns-records/dns-records.module').then(module => module.DnsRecordsModule) },

@@ -4,14 +4,13 @@ import { OrganizationType } from '../models/user-login-state';
 import { RESTRICTED_BRANCH_ROUTES } from '../app.constant';
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
-import { includes } from '../lodash-optimized';
 
 @Injectable({
     providedIn: 'root'
 })
 export class NeedsAuthorization {
 
-    constructor(public router: Router, /* private permissionDataService: PermissionDataService, */ private generalService: GeneralService) {
+    constructor(public router: Router, private generalService: GeneralService) {
     }
 
     public canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
