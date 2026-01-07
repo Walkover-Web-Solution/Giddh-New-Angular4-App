@@ -122,7 +122,7 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnInit() {
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : environment.AppUrl + environment.APP_FOLDER + 'assets/images/';
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : environment.AppUrl + environment.APP_FOLDER + '/assets/images/';
         this.bsSearchControl.valueChanges.pipe(
             debounceTime(700), takeUntil(this.destroyed$))
             .subscribe((newValue) => {
@@ -195,7 +195,7 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
         });
     }
 
-    
+
     /**
      * Unchecks all the accounts/groups in the balance sheet grid.
      *
@@ -265,7 +265,7 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
                 this.uncheckAll();
             }
         });
-    } 
+    }
 
     /**
      * This will destroy all the memory used by this component
