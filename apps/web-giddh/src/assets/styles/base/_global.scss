@@ -8387,8 +8387,8 @@ ul.dropdown-menu.action-dropdown {
 
 ngx-daterangepicker-material,
 giddh-datepicker {
-    .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mat-icon-button,
-    .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button {
+    .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mdc-icon-button,
+    .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mdc-icon-button {
         width: 26px;
         height: 26px;
     }
@@ -8410,8 +8410,8 @@ giddh-datepicker {
         }
     }
 
-    .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mat-icon-button,
-    .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mat-icon-button {
+    .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-prefix .mdc-icon-button,
+    .mat-form-field:not(.mat-form-field-appearance-legacy) .mat-form-field-suffix .mdc-icon-button {
         width: 36px !important;
         height: 36px !important;
         margin-right: 0;
