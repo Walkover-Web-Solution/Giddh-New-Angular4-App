@@ -2355,7 +2355,7 @@
                                                             (calculatedAmount)="updateEntryOtherTax(entry, $event)"
                                                             formGroupName="otherTax"
                                                         >
-                                                            <ng-container *ngIf="!entry.get('otherTax.name')?.value">
+                                                            <span [hidden]="entry.get('otherTax.name')?.value">
                                                                 <mat-checkbox
                                                                     color="primary"
                                                                     formControlName="isChecked"
@@ -2368,7 +2368,7 @@
                                                                     "
                                                                 ></mat-checkbox>
                                                                 {{ localeData?.other_tax }}
-                                                            </ng-container>
+                                                            </span>
                                                         </div>
                                                         <div
                                                             class="wrap-td-data"
