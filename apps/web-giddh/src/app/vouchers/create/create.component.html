@@ -148,7 +148,7 @@
                                                 *ngIf="!invoiceType.isCashInvoice"
                                                 #customerVendorDropdown
                                                 (keydown.enter)="
-                                                    isCustomerVendorSelected() && focusNextElement($event);
+                                                    isCustomerVendorSelected() && customerVendorDropdown.focusInputField();
                                                     customerVendorDropdown?.closeDropdownPanel()
                                                 "
                                                 [label]="
