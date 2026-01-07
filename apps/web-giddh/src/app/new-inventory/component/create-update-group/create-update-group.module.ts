@@ -15,7 +15,7 @@ import { InventorySidebarModule } from "../inventory-sidebar/inventory-sidebar.m
 import { CreateUpdateGroupComponent } from "./create-update-group.component";
 import { GroupCreateEditRoutingModule } from "./create-update-group.routing.module";
 import { MainGroupComponent } from "./main-group.component";
-// import { WatchVideoModule } from "../../../theme/watch-video/watch-video.module";
+import { WatchVideoModule } from "../../../theme/watch-video/watch-video.module";
 import { PageLeaveConfirmationGuard } from "../../../decorators/page-leave-confirmation-guard";
 
 @NgModule({
@@ -39,7 +39,7 @@ import { PageLeaveConfirmationGuard } from "../../../decorators/page-leave-confi
         MatSlideToggleModule,
         GiddhPageLoaderModule,
         MatAutocompleteModule,
-        // WatchVideoModule
+        WatchVideoModule
     ],
     exports: [
         CreateUpdateGroupComponent
