@@ -3540,12 +3540,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     });
                 }
                 this.accountAsideMenuRef = null;
-                if (this.lastInteraction === InteractionType.KEYBOARD) {
-                    this.openAccountDropdown = false;
-                    setTimeout(() => {
-                        this.openAccountDropdown = true;
-                    }, 50);
-                }
+                this.restoreFocus();
             });
     }
 
