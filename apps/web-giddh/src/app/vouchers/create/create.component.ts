@@ -7473,6 +7473,10 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             return;
         }
 
+        if (this.lastInteraction !== InteractionType.KEYBOARD) {
+            return;
+        }
+
         const currentElement = event.target as HTMLElement;
         if (!currentElement) {
             return;
