@@ -4,6 +4,7 @@ import {
     Component,
     ElementRef,
     EventEmitter,
+    Inject,
     Input,
     NgZone,
     OnChanges,
@@ -28,6 +29,7 @@ import { GeneralService } from 'apps/web-giddh/src/app/services/general.service'
 import { Configuration } from '../../../../../app.constant';
 import { environment } from '../../../../../../environments/environment.generated';
 import { each, forEach } from '../../../../../lodash-optimized';
+import { ServiceConfig } from 'apps/web-giddh/src/app/services/service.config';
 
 @Component({
 selector: 'balance-sheet-grid',
@@ -75,7 +77,8 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
         private zone: NgZone,
         private financialReportsComponentStore: FinancialReportsComponentStore,
         private dialog: MatDialog,
-        private generalService: GeneralService
+        private generalService: GeneralService,
+        @Inject(ServiceConfig) private serviceConfig
     ) {
 
     }
@@ -122,7 +125,7 @@ export class BalanceSheetGridComponent implements OnInit, OnChanges, OnDestroy {
     }
 
     public ngOnInit() {
-        this.imgPath = Configuration.isElectron ? 'assets/images/' : environment.AppUrl + environment.APP_FOLDER + '/assets/images/';
+        this.imgPath = Configuration.isElectron ? 'assets/images/' : (this.serviceConfig.AppUrl || environment.AppUrl) + environment.APP_FOLDER + 'assets/images/';
         this.bsSearchControl.valueChanges.pipe(
             debounceTime(700), takeUntil(this.destroyed$))
             .subscribe((newValue) => {
