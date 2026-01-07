@@ -3770,6 +3770,11 @@ label {
     background: var(--color-border-light);
     float: left;
     border-radius: var(--mat-border-radius-0);
+    &:hover {
+        > span {
+            color: var(--color-red);
+        }
+    }
 }
 
 .accmerge li a.isActive {
@@ -3777,7 +3782,6 @@ label {
 }
 
 .accmerge li > a > span {
-    color: var(--color-medium-gray);
     padding-left: 20px;
     font-weight: 500;
     float: right;

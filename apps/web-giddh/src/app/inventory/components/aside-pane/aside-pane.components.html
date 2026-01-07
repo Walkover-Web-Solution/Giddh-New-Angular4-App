@@ -4,7 +4,7 @@
         <i class="icon-cross"></i>
     </button>
 </div>
-<button mat-raised-button class="back-button position-absolute" (click)="backButtonPressed()" *ngIf="hideFirstScreen">Back</button>
+<button matButton="filled" class="back-button position-absolute" (click)="backButtonPressed()" *ngIf="hideFirstScreen">Back</button>
 
 <div class="dialog-body d-flex flex-column justify-content-center align-items-center" *ngIf="!hideFirstScreen">
     <div class="pb-3 text-center">

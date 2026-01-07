@@ -1,9 +1,9 @@
 <div appTranslate [file]="'attachments'" (localeData)="localeData = $event" (commonLocaleData)="commonLocaleData = $event">
     <div class="dialog-header d-flex align-items-center form-header position-sticky top-0">
         <button
-            mat-raised-button
+            matButton="filled"
             aria-hidden="true"
-            class="cursor-pointer font-size-15 d-flex p-0 attachment-back-button"
+            class="cursor-pointer font-size-15 d-flex p-0 attachment-back-button bg-white text-black width-80"
             [attr.aria-label]="commonLocaleData?.app_back"
             disableRipple
             type="button"
@@ -65,7 +65,7 @@
                                         &nbsp;
                                     </mat-checkbox>
                                     <span
-                                        class="file-name cursor-pointer font-size-15"
+                                        class="file-name cursor-pointer font-size-15 theme-foreground-color"
                                         [ngClass]="{
                                             'active-file': attachment?.uniqueName === previewedFile?.uniqueName,
                                         }"
