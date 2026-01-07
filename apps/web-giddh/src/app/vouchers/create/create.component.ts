@@ -1563,6 +1563,7 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
                     }
                 }
                 this.lastVouchersList$ = observableOf([...lastVouchers]);
+                this.changeDetection.detectChanges();
             }
         });
 
@@ -7469,39 +7470,39 @@ export class VoucherCreateComponent implements OnInit, OnDestroy, AfterViewInit 
             return;
         }
 
-        const currentElement = event.target as HTMLElement;
-        if (!currentElement) {
-            return;
-        }
+            const currentElement = event.target as HTMLElement;
+            if (!currentElement) {
+                return;
+            }
 
-        // Check if this is a dropdown close event (from tax-dropdown or discount-dropdown)
-        const isDropdownCloseEvent = currentElement.classList.contains('total-tax-amount') ||
-            currentElement.classList.contains('total-discount-amount');
+            // Check if this is a dropdown close event (from tax-dropdown or discount-dropdown)
+            const isDropdownCloseEvent = currentElement.classList.contains('total-tax-amount') ||
+                currentElement.classList.contains('total-discount-amount');
 
-        // For dropdown close events, always proceed and set keyboard interaction
-        if (isDropdownCloseEvent) {
-            this.setInteractionType(InteractionType.KEYBOARD, 'Dropdown close event');
+            // For dropdown close events, always proceed and set keyboard interaction
+            if (isDropdownCloseEvent) {
+                this.setInteractionType(InteractionType.KEYBOARD, 'Dropdown close event');
         } else if (this.lastInteraction !== InteractionType.KEYBOARD) {
             // For non-dropdown events, check interaction type
             return;
-        }
+            }
 
-        // Use Angular CDK to find focusable elements within the component's view
-        const focusableElements = this.getFocusableElements();
-        const currentIndex = focusableElements.indexOf(currentElement);
+            // Use Angular CDK to find focusable elements within the component's view
+            const focusableElements = this.getFocusableElements();
+            const currentIndex = focusableElements.indexOf(currentElement);
 
-        if (currentIndex !== -1 && currentIndex < focusableElements.length - 1) {
-            const nextElement = focusableElements[currentIndex + 1];
+            if (currentIndex !== -1 && currentIndex < focusableElements.length - 1) {
+                const nextElement = focusableElements[currentIndex + 1];
 
-            // Add a small delay to ensure the dropdown has fully closed
-            setTimeout(() => {
-                // Use NgZone for Angular-optimized async operations
-                this.ngZone.run(() => {
-                    // Use FocusMonitor for better focus management
-                    this.focusMonitor.focusVia(nextElement, 'keyboard');
-                });
+                // Add a small delay to ensure the dropdown has fully closed
+                setTimeout(() => {
+                    // Use NgZone for Angular-optimized async operations
+                    this.ngZone.run(() => {
+                        // Use FocusMonitor for better focus management
+                        this.focusMonitor.focusVia(nextElement, 'keyboard');
+                    });
             }, 150);
-        }
+            }
     }
 
     /**
