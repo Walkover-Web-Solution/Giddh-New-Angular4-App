@@ -112,6 +112,7 @@
     "d3-shape": "^3.2.0",
     "dayjs": "^1.11.9",
     "dexie": "^3.2.4",
+    "fast-clean": "^1.5.3",
     "file-saver": "^2.0.5",
     "froala-editor": "^4.2.1",
     "google-libphonenumber": "^3.2.43",
